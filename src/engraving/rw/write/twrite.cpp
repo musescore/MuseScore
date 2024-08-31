@@ -400,7 +400,7 @@ void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, b
         if (d.isValid() && std::abs(f1 - d.toReal()) < 0.0001) {            // fuzzy compare
             return;
         }
-        p = PropertyValue(Spatium::fromMM(f1, item->style().spatium()));
+        p = PropertyValue(Spatium::fromMM(f1, item->spatium()));
         d = PropertyValue();
     } else if (P_TYPE::POINT == type) {
         PointF p1 = p.value<PointF>();
@@ -503,7 +503,7 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
         }
     }
 
-    if (!item->hasVoiceApplicationProperties() && item->propertyFlags(Pid::PLACEMENT) == PropertyFlags::NOSTYLE) {
+    if (!item->hasVoiceAssignmentProperties() && item->propertyFlags(Pid::PLACEMENT) == PropertyFlags::NOSTYLE) {
         writeProperty(item, xml, Pid::PLACEMENT);
     }
 
@@ -528,9 +528,7 @@ void TWrite::write(const ActionIcon* item, XmlWriter& xml, WriteContext&)
 {
     xml.startElement(item);
     xml.tag("subtype", int(item->actionType()));
-    if (!item->actionCode().empty()) {
-        xml.tag("action", String::fromStdString(item->actionCode()));
-    }
+    xml.tag("action", String::fromStdString(item->actionCode()));
     xml.endElement();
 }
 
@@ -541,7 +539,7 @@ void TWrite::write(const Ambitus* item, XmlWriter& xml, WriteContext& ctx)
     xml.tagProperty(Pid::HEAD_TYPE,  int(item->noteHeadType()),  int(Ambitus::NOTEHEADTYPE_DEFAULT));
     xml.tagProperty(Pid::MIRROR_HEAD, int(item->direction()),    int(Ambitus::DIRECTION_DEFAULT));
     xml.tag("hasLine",    item->hasLine(), true);
-    xml.tagProperty(Pid::LINE_WIDTH_SPATIUM, item->lineWidth(), Ambitus::LINEWIDTH_DEFAULT);
+    xml.tagProperty(Pid::LINE_WIDTH, item->lineWidth(), Ambitus::LINEWIDTH_DEFAULT);
     xml.tag("topPitch",   item->topPitch());
     xml.tag("topTpc",     item->topTpc());
     xml.tag("bottomPitch", item->bottomPitch());
@@ -750,7 +748,7 @@ void TWrite::writeProperties(const Box* item, XmlWriter& xml, WriteContext& ctx)
 {
     for (Pid id : {
         Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
-        Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE
+        Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE, Pid::SIZE_SPATIUM_DEPENDENT
     }) {
         bool force = (item->isVBox() && id == Pid::BOX_HEIGHT) || (item->isHBox() && id == Pid::BOX_WIDTH);
         writeProperty(item, xml, id, force);
@@ -1119,16 +1117,11 @@ void TWrite::write(const Dynamic* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     writeProperty(item, xml, Pid::DYNAMIC_TYPE);
     writeProperty(item, xml, Pid::VELOCITY);
-    writeProperty(item, xml, Pid::DYNAMIC_RANGE);
     writeProperty(item, xml, Pid::AVOID_BARLINES);
     writeProperty(item, xml, Pid::DYNAMICS_SIZE);
     writeProperty(item, xml, Pid::CENTER_ON_NOTEHEAD);
     writeProperty(item, xml, Pid::PLAY);
     writeProperty(item, xml, Pid::ANCHOR_TO_END_OF_PREVIOUS);
-
-    writeProperty(item, xml, Pid::APPLY_TO_VOICE);
-    writeProperty(item, xml, Pid::DIRECTION);
-    writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
 
     if (item->isVelocityChangeAvailable()) {
         writeProperty(item, xml, Pid::VELO_CHANGE);
@@ -1151,6 +1144,12 @@ void TWrite::write(const Expression* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::writeProperties(const TextBase* item, XmlWriter& xml, WriteContext& ctx, bool writeText)
 {
+    if (item->hasVoiceAssignmentProperties()) {
+        writeProperty(item, xml, Pid::VOICE_ASSIGNMENT);
+        writeProperty(item, xml, Pid::DIRECTION);
+        writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
+    }
+
     writeItemProperties(item, xml, ctx);
     writeProperty(item, xml, Pid::TEXT_STYLE);
 
@@ -1266,7 +1265,7 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
 
-    static const std::array<Pid, 8> pids { {
+    static const std::array<Pid, 10> pids { {
         Pid::MIN_DISTANCE,
         Pid::FRET_OFFSET,
         Pid::FRET_FRETS,
@@ -1274,7 +1273,9 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
         Pid::FRET_NUT,
         Pid::MAG,
         Pid::FRET_NUM_POS,
-        Pid::ORIENTATION
+        Pid::ORIENTATION,
+        Pid::FRET_SHOW_FINGERINGS,
+        Pid::FRET_FINGERING,
     } };
 
     // Write properties first and only once
@@ -1449,7 +1450,7 @@ void TWrite::write(const Glissando* item, XmlWriter& xml, WriteContext& ctx)
         xml.tagProperty("isHarpGliss", PropertyValue(item->isHarpGliss().value()));
     }
 
-    for (auto id : { Pid::GLISS_TYPE, Pid::PLAY, Pid::GLISS_STYLE, Pid::GLISS_SHIFT, Pid::GLISS_EASEIN, Pid::GLISS_EASEOUT }) {
+    for (auto id : { Pid::GLISS_TYPE, Pid::GLISS_STYLE, Pid::GLISS_SHIFT, Pid::GLISS_EASEIN, Pid::GLISS_EASEOUT }) {
         writeProperty(item, xml, id);
     }
     for (const StyledProperty& spp : *item->styledProperties()) {
@@ -1549,6 +1550,7 @@ void TWrite::writeProperties(const Spanner* item, XmlWriter& xml, WriteContext& 
     if (ctx.clipboardmode()) {
         xml.tagFraction("ticks_f", item->ticks());
     }
+    writeProperty(item, xml, Pid::PLAY);
     writeItemProperties(item, xml, ctx);
 }
 
@@ -1559,6 +1561,7 @@ void TWrite::write(const GradualTempoChange* item, XmlWriter& xml, WriteContext&
     writeProperty(item, xml, Pid::TEMPO_EASING_METHOD);
     writeProperty(item, xml, Pid::TEMPO_CHANGE_FACTOR);
     writeProperty(item, xml, Pid::PLACEMENT);
+    writeProperty(item, xml, Pid::SNAP_AFTER);
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
 }
@@ -1591,28 +1594,17 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
     xml.tag("subtype", int(item->hairpinType()));
     writeProperty(item, xml, Pid::VELO_CHANGE);
     writeProperty(item, xml, Pid::HAIRPIN_CIRCLEDTIP);
-    writeProperty(item, xml, Pid::DYNAMIC_RANGE);
-//      writeProperty(xml, Pid::BEGIN_TEXT);
-    writeProperty(item, xml, Pid::END_TEXT);
-//      writeProperty(xml, Pid::CONTINUE_TEXT);
-    writeProperty(item, xml, Pid::LINE_VISIBLE);
     writeProperty(item, xml, Pid::SINGLE_NOTE_DYNAMICS);
     writeProperty(item, xml, Pid::VELO_CHANGE_METHOD);
-    writeProperty(item, xml, Pid::PLAY);
-    writeProperty(item, xml, Pid::BEGIN_TEXT_OFFSET);
-    writeProperty(item, xml, Pid::CONTINUE_TEXT_OFFSET);
-    writeProperty(item, xml, Pid::END_TEXT_OFFSET);
 
-    writeProperty(item, xml, Pid::APPLY_TO_VOICE);
+    writeProperty(item, xml, Pid::VOICE_ASSIGNMENT);
     writeProperty(item, xml, Pid::DIRECTION);
     writeProperty(item, xml, Pid::CENTER_BETWEEN_STAVES);
 
-    for (const StyledProperty& spp : *item->styledProperties()) {
-        if (!item->isStyled(spp.pid)) {
-            writeProperty(item, xml, spp.pid);
-        }
-    }
-    writeProperties(static_cast<const SLine*>(item), xml, ctx);
+    writeProperty(item, xml, Pid::SNAP_BEFORE);
+    writeProperty(item, xml, Pid::SNAP_AFTER);
+
+    writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
 }
 
@@ -2867,7 +2859,7 @@ void TWrite::write(const Symbol* item, XmlWriter& xml, WriteContext& ctx)
 void TWrite::write(const FSymbol* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
-    xml.tag("font",     item->font().family());
+    xml.tag("font",     item->font().family().id());
     xml.tag("fontsize", item->font().pointSizeF());
     xml.tag("code",     item->code());
     writeProperties(static_cast<const BSymbol*>(item), xml, ctx);
@@ -3067,7 +3059,6 @@ void TWrite::write(const Trill* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     xml.tag("subtype", TConv::toXml(item->trillType()));
-    writeProperty(item, xml, Pid::PLAY);
     writeProperty(item, xml, Pid::ORNAMENT_STYLE);
     writeProperty(item, xml, Pid::PLACEMENT);
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
@@ -3111,7 +3102,6 @@ void TWrite::write(const Vibrato* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     xml.tag("subtype", TConv::toXml(item->vibratoType()));
-    writeProperty(item, xml, Pid::PLAY);
     for (const StyledProperty& spp : *item->styledProperties()) {
         writeProperty(item, xml, spp.pid);
     }
@@ -3397,13 +3387,25 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
         // write spanners whose end tick lies outside the clip region
         if (clip) {
             for (Spanner* s : spanners) {
-                if ((s->tick2() == endTick)
-                    && !s->isSlur()
-                    && (s->track2() == track || (s->track2() == muse::nidx && s->track() == track))
-                    && (!clip || s->tick() >= sseg->tick())
-                    ) {
-                    writeSpannerEnd(s, xml, ctx, score->lastMeasure(), track, endTick);
+                Fraction spannerEndTick = s->tick2();
+                bool spannerEndingAtEdgeOfClipZone = spannerEndTick == endTick && !s->isSlur() && s->effectiveTrack2() == track
+                                                     && s->tick() >= sseg->tick();
+                if (!spannerEndingAtEdgeOfClipZone) {
+                    continue;
                 }
+                bool needMove = spannerEndTick != ctx.curTick();
+                if (needMove) {
+                    // If spanner started on a timeTick and there was no other segment in between there and here,
+                    // ctx.curTick hasn't been moved forward, so we must move it forward here.
+                    Location curr = Location::absolute();
+                    Location dest = Location::absolute();
+                    curr.setFrac(ctx.curTick());
+                    dest.setFrac(spannerEndTick);
+                    dest.toRelative(curr);
+                    TWrite::write(&dest, xml, ctx);
+                    ctx.setCurTick(spannerEndTick);
+                }
+                writeSpannerEnd(s, xml, ctx, score->lastMeasure(), track, endTick);
             }
         }
 

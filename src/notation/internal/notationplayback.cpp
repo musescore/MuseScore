@@ -51,7 +51,7 @@ using namespace muse;
 using namespace muse::midi;
 using namespace muse::async;
 
-static constexpr int PLAYBACK_TAIL_SECS = 3;
+static constexpr double PLAYBACK_TAIL_SECS = 3;
 
 NotationPlayback::NotationPlayback(IGetScore* getScore,
                                    muse::async::Notification notationChanged)
@@ -170,10 +170,8 @@ void NotationPlayback::updateTotalPlayTime()
     }
 
     int lastTick = score->repeatList(m_playbackModel.isPlayRepeatsEnabled()).ticks();
-    qreal secs = score->utick2utime(lastTick);
-    secs += PLAYBACK_TAIL_SECS;
-
-    muse::audio::msecs_t newPlayTime = secs * 1000.f;
+    audio::secs_t newPlayTime = score->utick2utime(lastTick);
+    newPlayTime += PLAYBACK_TAIL_SECS;
 
     if (m_totalPlayTime == newPlayTime) {
         return;
@@ -183,22 +181,22 @@ void NotationPlayback::updateTotalPlayTime()
     m_totalPlayTimeChanged.send(m_totalPlayTime);
 }
 
-muse::audio::msecs_t NotationPlayback::totalPlayTime() const
+muse::audio::secs_t NotationPlayback::totalPlayTime() const
 {
     return m_totalPlayTime;
 }
 
-muse::async::Channel<muse::audio::msecs_t> NotationPlayback::totalPlayTimeChanged() const
+muse::async::Channel<muse::audio::secs_t> NotationPlayback::totalPlayTimeChanged() const
 {
     return m_totalPlayTimeChanged;
 }
 
-float NotationPlayback::playedTickToSec(tick_t tick) const
+muse::audio::secs_t NotationPlayback::playedTickToSec(tick_t tick) const
 {
     return score() ? score()->utick2utime(tick) : 0.0;
 }
 
-tick_t NotationPlayback::secToPlayedTick(float sec) const
+tick_t NotationPlayback::secToPlayedTick(muse::audio::secs_t sec) const
 {
     if (!score()) {
         return 0;
@@ -207,7 +205,7 @@ tick_t NotationPlayback::secToPlayedTick(float sec) const
     return score()->utime2utick(sec);
 }
 
-tick_t NotationPlayback::secToTick(float sec) const
+tick_t NotationPlayback::secToTick(muse::audio::secs_t sec) const
 {
     if (!score()) {
         return 0;
@@ -360,7 +358,7 @@ MeasureBeat NotationPlayback::beat(tick_t tick) const
     return measureBeat;
 }
 
-tick_t NotationPlayback::beatToTick(int measureIndex, int beatIndex) const
+tick_t NotationPlayback::beatToRawTick(int measureIndex, int beatIndex) const
 {
     return score() ? score()->sigmap()->bar2tick(measureIndex, beatIndex) : 0;
 }
@@ -470,11 +468,6 @@ void NotationPlayback::removeSoundFlags(const InstrumentTrackIdSet& trackIdSet)
 
     m_playbackModel.reload();
     m_notationChanged.notify();
-}
-
-bool NotationPlayback::hasSoundFlags()
-{
-    return m_playbackModel.hasSoundFlags();
 }
 
 bool NotationPlayback::hasSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet)

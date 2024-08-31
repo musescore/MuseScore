@@ -180,6 +180,9 @@ public:
     bool broken() const { return m_broken; }
     void setBroken(bool v) { m_broken = v; }
 
+    bool playSpanner() const { return m_playSpanner; }
+    void setPlaySpanner(bool p) { m_playSpanner = p; }
+
     Anchor anchor() const { return m_anchor; }
     void setAnchor(Anchor a) { m_anchor = a; }
 
@@ -209,7 +212,7 @@ public:
     PropertyValue propertyDefault(Pid propertyId) const override;
     virtual void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
-    void computeStartElement();
+    virtual void computeStartElement();
     void computeEndElement();
 
     static Note* endElementFromSpanner(Spanner* sp, EngravingItem* newStart);
@@ -239,6 +242,8 @@ public:
 
     Segment* startSegment() const;
     Segment* endSegment() const;
+
+    bool elementAppliesToTrack(const track_idx_t refTrack) const override;
 
     virtual void setSelected(bool f) override;
     virtual void setVisible(bool f) override;
@@ -276,6 +281,8 @@ private:
 
     EngravingItem* m_startElement = nullptr;
     EngravingItem* m_endElement = nullptr;
+
+    bool m_playSpanner = true;
 
     Anchor m_anchor = Anchor::SEGMENT;
     Fraction m_tick = Fraction(-1, 1);

@@ -62,6 +62,8 @@ public:
 
     std::string museScoreUrl() const override;
 
+    bool highResolutionTimers() const override;
+
 private:
     QString resolveAppDataPath() const;
     QString resolveUserAppDataPath() const;

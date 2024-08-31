@@ -66,6 +66,10 @@ static void crashCallback(int signum)
 static void app_init_qrc()
 {
     Q_INIT_RESOURCE(app);
+
+#ifdef Q_OS_WIN
+    Q_INIT_RESOURCE(app_win);
+#endif
 }
 
 int main(int argc, char** argv)
@@ -98,8 +102,6 @@ int main(int argc, char** argv)
 #ifdef Q_OS_WIN
     // NOTE: There are some problems with rendering the application window on some integrated graphics processors
     //       see https://github.com/musescore/MuseScore/issues/8270
-    QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
-
     if (!qEnvironmentVariableIsSet("QT_OPENGL_BUGLIST")) {
         qputenv("QT_OPENGL_BUGLIST", ":/resources/win_opengl_buglist.json");
     }
@@ -116,16 +118,12 @@ int main(int argc, char** argv)
 
     QGuiApplication::styleHints()->setMousePressAndHoldInterval(250);
 
-    // Necessary for QQuickWidget, but potentially suboptimal for performance.
-    // Remove as soon as possible.
-    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
-
     //! Needs to be set because we use transparent windows for PopupView.
     //! Needs to be called before any QQuickWindows are shown.
     QQuickWindow::setDefaultAlphaBuffer(true);
 
-    // Can't use MUSE_APP_TITLE until next major release, because this "application name" is used to determine
-    // where user settings are stored. Changing it would result in all user settings being lost.
+// Can't use MUSE_APP_TITLE until next major release, because this "application name" is used to determine
+// where user settings are stored. Changing it would result in all user settings being lost.
 #ifdef MUSE_APP_UNSTABLE
     QCoreApplication::setApplicationName("MuseScore4Development");
 #else
@@ -144,29 +142,35 @@ int main(int argc, char** argv)
 #endif
 
 #if (defined (_MSCVER) || defined (_MSC_VER))
-    // On MSVC under Windows, we need to manually retrieve the command-line arguments and convert them from UTF-16 to UTF-8.
-    // This prevents data loss if there are any characters that wouldn't fit in the local ANSI code page.
-    int argcUTF16 = 0;
-    LPWSTR* argvUTF16 = CommandLineToArgvW(GetCommandLineW(), &argcUTF16);
+    // // On MSVC under Windows, we need to manually retrieve the command-line arguments and convert them from UTF-16 to UTF-8.
+    // // This prevents data loss if there are any characters that wouldn't fit in the local ANSI code page.
 
-    std::vector<QByteArray> argvUTF8Q;
-    std::for_each(argvUTF16, argvUTF16 + argcUTF16, [&argvUTF8Q](const auto& arg) {
-        argvUTF8Q.emplace_back(QString::fromUtf16(reinterpret_cast<const char16_t*>(arg), -1).toUtf8());
-    });
+    auto utf8_encode = [](const wchar_t* wstr) -> std::string
+    {
+        int size_needed = WideCharToMultiByte(CP_UTF8, 0, &wstr[0], -1, 0, 0, 0, 0);
+        std::string strTo(size_needed, 0);
+        WideCharToMultiByte(CP_UTF8, 0, &wstr[0], -1, &strTo[0], size_needed, 0, 0);
+        return strTo;
+    };
 
-    LocalFree(argvUTF16);
+    int argc_utf16 = 0;
+    wchar_t** argv_utf16 = CommandLineToArgvW(GetCommandLineW(), &argc_utf16);
+    std::vector<std::string> argsUtf8; // store data
+    for (int i = 0; i < argc_utf16; ++i) {
+        argsUtf8.push_back(utf8_encode(argv_utf16[i]));
+    }
 
-    std::vector<char*> argvUTF8;
-    for (auto& arg : argvUTF8Q) {
-        argvUTF8.push_back(arg.data());
+    std::vector<char*> argsUtf8_с; // convert to char*
+    for (std::string& arg : argsUtf8) {
+        argsUtf8_с.push_back(arg.data());
     }
 
     // Don't use the arguments passed to main(), because they're in the local ANSI code page.
     Q_UNUSED(argc);
     Q_UNUSED(argv);
 
-    int argcFinal = argcUTF16;
-    char** argvFinal = argvUTF8.data();
+    int argcFinal = argc_utf16;
+    char** argvFinal = argsUtf8_с.data();
 #else
 
     int argcFinal = argc;
@@ -188,9 +192,9 @@ int main(int argc, char** argv)
     QCoreApplication* qapp = nullptr;
 
     if (runMode == IApplication::RunMode::AudioPluginRegistration) {
-        qapp = new QCoreApplication(argc, argv);
+        qapp = new QCoreApplication(argcFinal, argvFinal);
     } else {
-        qapp = new QApplication(argc, argv);
+        qapp = new QApplication(argcFinal, argvFinal);
     }
 
     commandLineParser.processBuiltinArgs(*qapp);

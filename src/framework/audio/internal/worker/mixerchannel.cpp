@@ -32,8 +32,9 @@ using namespace muse;
 using namespace muse::audio;
 using namespace muse::async;
 
-MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate)
-    : m_trackId(trackId),
+MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate,
+                           const modularity::ContextPtr& iocCtx)
+    : Injectable(iocCtx), m_trackId(trackId),
     m_sampleRate(sampleRate),
     m_audioSource(std::move(source)),
     m_compressor(std::make_unique<dsp::Compressor>(sampleRate))
@@ -43,8 +44,9 @@ MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const 
     setSampleRate(sampleRate);
 }
 
-MixerChannel::MixerChannel(const TrackId trackId, const unsigned int sampleRate, unsigned int audioChannelsCount)
-    : MixerChannel(trackId, nullptr, sampleRate)
+MixerChannel::MixerChannel(const TrackId trackId, const unsigned int sampleRate, unsigned int audioChannelsCount,
+                           const modularity::ContextPtr& iocCtx)
+    : MixerChannel(trackId, nullptr, sampleRate, iocCtx)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -136,7 +138,7 @@ async::Channel<AudioOutputParams> MixerChannel::outputParamsChanged() const
     return m_paramsChanges;
 }
 
-async::Channel<audioch_t, AudioSignalVal> MixerChannel::audioSignalChanges() const
+AudioSignalChanges MixerChannel::audioSignalChanges() const
 {
     return m_audioSignalNotifier.audioSignalChanges;
 }
@@ -236,9 +238,10 @@ void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount) cons
         }
 
         float rms = dsp::samplesRootMeanSquare(singleChannelSquaredSum, samplesCount);
-
-        notifyAboutAudioSignalChanges(audioChNum, rms);
+        m_audioSignalNotifier.updateSignalValues(audioChNum, rms, dsp::dbFromSample(rms));
     }
+
+    m_audioSignalNotifier.notifyAboutChanges();
 
     if (!m_compressor->isActive()) {
         return;
@@ -253,11 +256,8 @@ void MixerChannel::notifyNoAudioSignal()
     unsigned int channelsCount = audioChannelsCount();
 
     for (audioch_t audioChNum = 0; audioChNum < channelsCount; ++audioChNum) {
-        notifyAboutAudioSignalChanges(audioChNum, 0.f);
+        m_audioSignalNotifier.updateSignalValues(audioChNum, 0.f, dsp::dbFromSample(0.f));
     }
-}
 
-void MixerChannel::notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const
-{
-    m_audioSignalNotifier.updateSignalValues(audioChannelNumber, linearRms, dsp::dbFromSample(linearRms));
+    m_audioSignalNotifier.notifyAboutChanges();
 }

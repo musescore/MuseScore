@@ -56,8 +56,8 @@ static bool seekAllowed(const mu::engraving::EngravingItem* element)
     return muse::contains(playableTypes, element->type());
 }
 
-NotationViewInputController::NotationViewInputController(IControlledView* view)
-    : m_view(view)
+NotationViewInputController::NotationViewInputController(IControlledView* view, const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_view(view)
 {
 }
 
@@ -637,7 +637,38 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         } else if (keyState & Qt::ControlModifier) {
             selectType = SelectType::ADD;
         }
-        viewInteraction()->select({ hitElement }, selectType, hitStaffIndex);
+
+        std::vector<EngravingItem*> hitElements = viewInteraction()->hitElements(ctx.logicClickPos, hitWidth());
+        size_t numHitElements = hitElements.size();
+
+        // overlapping elements with ctrl modifier
+        if (numHitElements > 1 && (keyState & Qt::ControlModifier)) {
+            size_t currTop = numHitElements - 1;
+            EngravingItem* e = hitElements[currTop];
+            bool found = false;
+
+            // e is the topmost element in stacking order,
+            // but we want to replace it with "first non-measure element after a selected element"
+            // (if such an element exists)
+            for (size_t i = 0; i <= numHitElements; ++i) {
+                if (found) {
+                    e = hitElements[currTop];
+                    if (!e->isMeasure()) {
+                        break;
+                    }
+                } else if (hitElements[currTop]->selected()) {
+                    found = true;
+                    e = nullptr;
+                }
+                currTop = (currTop + 1) % numHitElements;
+            }
+
+            if (e && !e->selected()) {
+                viewInteraction()->select({ e }, SelectType::SINGLE, hitStaffIndex);
+            }
+        } else {
+            viewInteraction()->select({ hitElement }, selectType, hitStaffIndex);
+        }
     }
 
     EngravingItem* playbackStartElement = resolveStartPlayableElement();
@@ -686,11 +717,14 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
 
     INotationSelectionPtr selection = viewInteraction()->selection();
 
-    if (!selection->isRange()) {
-        if (ctx.hitElement && ctx.hitElement->needStartEditingAfterSelecting()) {
+    bool hitElementIsAlreadyBeingEdited = viewInteraction()->isElementEditStarted() && viewInteraction()->editedItem() == ctx.hitElement;
+    if (!selection->isRange() && ctx.hitElement && ctx.hitElement->needStartEditingAfterSelecting() && !hitElementIsAlreadyBeingEdited) {
+        if (ctx.hitElement->hasGrips()) {
+            viewInteraction()->startEditGrip(ctx.hitElement, ctx.hitElement->gripsCount() > 4 ? Grip::DRAG : Grip::MIDDLE);
+        } else {
             viewInteraction()->startEditElement(ctx.hitElement, false);
-            return;
         }
+        return;
     }
 
     if (!ctx.hitElement) {
@@ -855,6 +889,12 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
         return;
     }
 
+    if (m_shouldStartEditOnLeftClickRelease) {
+        dispatcher()->dispatch("edit-element", ActionData::make_arg1<PointF>(m_logicalBeginPoint));
+        m_shouldStartEditOnLeftClickRelease = false;
+        return;
+    }
+
     const INotationInteraction::HitElementContext& ctx = hitElementContext();
     if (!ctx.element) {
         return;
@@ -870,7 +910,7 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
     interaction->select({ ctx.element }, SelectType::SINGLE, staffIndex);
 
     if (ctx.element && ctx.element->needStartEditingAfterSelecting()) {
-        viewInteraction()->startEditElement(ctx.element);
+        viewInteraction()->startEditElement(ctx.element, /*editTextualProperties*/ false);
         return;
     }
 
@@ -918,16 +958,10 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
         return;
     }
 
-    ActionCode actionCode;
-
     if (hitElement->isMeasure() && event->modifiers() == Qt::NoModifier) {
-        actionCode = "note-input";
+        dispatcher()->dispatch("note-input", ActionData::make_arg1<PointF>(m_logicalBeginPoint));
     } else if (hitElement->isInstrumentName()) {
-        actionCode = "edit-element";
-    }
-
-    if (!actionCode.empty()) {
-        dispatcher()->dispatch(actionCode, ActionData::make_arg1<PointF>(m_logicalBeginPoint));
+        m_shouldStartEditOnLeftClickRelease = true;
     }
 }
 

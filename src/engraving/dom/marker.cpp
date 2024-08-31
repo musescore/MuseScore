@@ -268,4 +268,13 @@ String Marker::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), markerTypeUserName());
 }
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString Marker::subtypeUserName() const
+{
+    return TConv::userName(m_markerType);
+}
 }

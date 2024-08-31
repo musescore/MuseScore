@@ -132,7 +132,7 @@ void PopupView::init()
         return;
     }
 
-    m_window = new PopupWindow_QQuickView(muse::iocCtxForQmlEngine(engine));
+    m_window = new PopupWindow_QQuickView(muse::iocCtxForQmlEngine(engine), this);
     m_window->init(engine, isDialog(), frameless());
     m_window->setOnHidden([this]() { onHidden(); });
     m_window->setContent(m_component, m_contentItem);
@@ -144,7 +144,7 @@ void PopupView::init()
     //connect(m_window, &IPopupWindow::aboutToClose, this, &PopupView::aboutToClose);
     connect(m_window, SIGNAL(aboutToClose(QQuickCloseEvent*)), this, SIGNAL(aboutToClose(QQuickCloseEvent*)));
 
-    connect(this, &PopupView::isContentReadyChanged, this, [this](){
+    connect(this, &PopupView::isContentReadyChanged, this, [this]() {
         if (isContentReady() && m_shouldOpenOnReady) {
             doOpen();
         }
@@ -168,7 +168,7 @@ void PopupView::initCloseController()
     m_closeController->setParentItem(parentItem());
     m_closeController->setWindow(window());
     m_closeController->setPopupHasFocus(!(m_openPolicies & OpenPolicy::NoActivateFocus));
-    m_closeController->setIsCloseOnPressOutsideParent(m_closePolicies & CloseOnPressOutsideParent);
+    m_closeController->setIsCloseOnPressOutsideParent(m_closePolicies & ClosePolicy::CloseOnPressOutsideParent);
 
     m_closeController->closeNotification().onNotify(this, [this]() {
         close(true);
@@ -196,7 +196,7 @@ QWindow* PopupView::qWindow() const
 
 void PopupView::open()
 {
-    if ((m_openPolicies & OpenOnContentReady) && !m_isContentReady) {
+    if ((m_openPolicies & OpenPolicy::OpenOnContentReady) && !m_isContentReady) {
         m_shouldOpenOnReady = true;
         return;
     }
@@ -331,6 +331,11 @@ PopupView::OpenPolicies PopupView::openPolicies() const
 PopupView::ClosePolicies PopupView::closePolicies() const
 {
     return m_closePolicies;
+}
+
+PopupView::Placement PopupView::placement() const
+{
+    return m_placement;
 }
 
 bool PopupView::activateParentOnClose() const
@@ -477,10 +482,20 @@ void PopupView::setClosePolicies(ClosePolicies closePolicies)
     m_closePolicies = closePolicies;
 
     if (m_closeController) {
-        m_closeController->setIsCloseOnPressOutsideParent(closePolicies & CloseOnPressOutsideParent);
+        m_closeController->setIsCloseOnPressOutsideParent(closePolicies & ClosePolicy::CloseOnPressOutsideParent);
     }
 
     emit closePoliciesChanged(closePolicies);
+}
+
+void PopupView::setPlacement(Placement placement)
+{
+    if (m_placement == placement) {
+        return;
+    }
+
+    m_placement = placement;
+    emit placementChanged(placement);
 }
 
 void PopupView::setObjectId(QString objectId)
@@ -729,21 +744,28 @@ void PopupView::updateGeometry()
         viewRect.moveTopLeft(m_globalPos);
     };
 
-    if (viewRect.left() < anchorRect.left()) {
-        // move to the right to an area that doesn't fit
-        movePos(m_globalPos.x() + anchorRect.left() - viewRect.left(), m_globalPos.y());
-    }
+    bool canFitAbove = viewRect.height() < parentTopLeft.y();
+    bool canFitBelow = viewRect.bottom() < anchorRect.bottom();
 
-    if (viewRect.bottom() > anchorRect.bottom()) {
-        qreal newY = parentTopLeft.y() - viewRect.height();
-        if (anchorRect.top() < newY) {
+    if (placement() == Placement::PreferAbove && canFitAbove) {
+        movePos(m_globalPos.x(), parentTopLeft.y() - viewRect.height());
+        setOpensUpward(true);
+    } else if (placement() == Placement::PreferBelow && canFitBelow) {
+        movePos(m_globalPos.x(), parentTopLeft.y() + parent->height());
+    } else if (!canFitBelow) {
+        if (canFitAbove) {
             // move to the top of the parent
-            movePos(m_globalPos.x(), newY);
+            movePos(m_globalPos.x(), parentTopLeft.y() - viewRect.height());
             setOpensUpward(true);
         } else {
             // move to the right of the parent and move to top to an area that doesn't fit
             movePos(parentTopLeft.x() + parent->width(), m_globalPos.y() - (viewRect.bottom() - anchorRect.bottom()) + padding());
         }
+    }
+
+    if (viewRect.left() < anchorRect.left()) {
+        // move to the right to an area that doesn't fit
+        movePos(m_globalPos.x() + anchorRect.left() - viewRect.left(), m_globalPos.y());
     }
 
     if (viewRect.right() > anchorRect.right()) {

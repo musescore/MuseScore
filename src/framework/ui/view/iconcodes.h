@@ -57,6 +57,7 @@ class IconCode
 
 public:
     enum class Code : char16_t {
+        SMALL_ARROW_LEFT = 0xEF0F,
         SMALL_ARROW_UP = 0xEF10,
         SMALL_ARROW_RIGHT = 0xEF11,
         SMALL_ARROW_DOWN = 0xEF12,
@@ -395,7 +396,7 @@ public:
         LYRICS = 0xF441,
         LEARN = 0xF441,
         SPECTROGRAM = 0xF442,
-
+        SPECTROGRAM_BOX_SELECTION = 0xF443,
         BRUSH = 0xF444,
 
         PLAY_FILL = 0xF446,
@@ -417,7 +418,7 @@ public:
         CLOUD_FILL = 0xF454,
         BRAILLE = 0xF455,
 
-        ENVELOPE = 0xF45C,
+        AUTOMATION = 0xF45C,
 
         GUITAR_BEND_REGULAR = 0xF45F,
         GUITAR_PRE_BEND = 0xF460,
@@ -432,6 +433,15 @@ public:
         TIE_CHORD_INSIDE = 0xF467,
 
         TRIANGLE_SYMBOL = 0xF46D,
+
+        FRETBOARD_VERTICAL = 0xF46F,
+        FRETBOARD_EXTENDED = 0xF470,
+        FRETBOARD_HORIZONTAL = 0xF471,
+        FRETBOARD_BARRE_LINE = 0xF472,
+        FRETBOARD_BARRE_SLUR = 0xF473,
+
+        BPM = 0xF474,
+        CLOCK = 0xF475,
 
         NONE = 0xFFFF
     };

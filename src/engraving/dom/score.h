@@ -213,16 +213,28 @@ enum class PlayMode : char {
 };
 
 struct ShowAnchors {
-    staff_idx_t staffIdx;
-    Fraction startTick;
-    Fraction endTick;
+    ShowAnchors() = default;
+    ShowAnchors(voice_idx_t vIdx, staff_idx_t stfIdx, const Fraction& sTickMain, const Fraction& eTickMain,
+                const Fraction& sTickExt, const Fraction& eTickExt)
+        : voiceIdx(vIdx), staffIdx(stfIdx), startTickMainRegion(sTickMain), endTickMainRegion(eTickMain),
+        startTickExtendedRegion(sTickExt), endTickExtendedRegion(eTickExt) {}
 
     void reset()
     {
+        voiceIdx = muse::nidx;
         staffIdx = muse::nidx;
-        startTick = Fraction(-1, 1);
-        endTick = Fraction(-1, 1);
+        startTickMainRegion = Fraction(-1, 1);
+        endTickMainRegion = Fraction(-1, 1);
+        startTickExtendedRegion = Fraction(-1, 1);
+        endTickExtendedRegion = Fraction(-1, 1);
     }
+
+    voice_idx_t voiceIdx = muse::nidx;
+    staff_idx_t staffIdx = muse::nidx;
+    Fraction startTickMainRegion = Fraction(-1, 1);
+    Fraction endTickMainRegion = Fraction(-1, 1);
+    Fraction startTickExtendedRegion = Fraction(-1, 1);
+    Fraction endTickExtendedRegion = Fraction(-1, 1);
 };
 
 //---------------------------------------------------------------------------------------
@@ -295,6 +307,8 @@ public:
     void notifyLoopBoundaryTickChanged(LoopBoundaryType type, unsigned ticks);
 
     muse::async::Channel<EngravingItem*> elementDestroyed();
+
+    muse::async::Channel<float> layoutProgressChannel() const;
 
     void rebuildBspTree();
     bool noStaves() const { return m_staves.empty(); }
@@ -471,6 +485,7 @@ public:
     // undo/redo ops
     void toggleArticulation(SymId);
     bool toggleArticulation(EngravingItem*, Articulation* atr);
+    void toggleOrnament(SymId);
     void toggleAccidental(AccidentalType, const EditData& ed);
     void changeAccidental(AccidentalType);
     void changeAccidental(Note* oNote, AccidentalType);
@@ -542,7 +557,8 @@ public:
     void deleteLater(EngravingObject* e) { m_updateState.deleteList.push_back(e); }
     void deletePostponed();
 
-    void changeSelectedNotesVoice(voice_idx_t);
+    void changeSelectedElementsVoice(voice_idx_t);
+    void changeSelectedElementsVoiceAssignment(VoiceAssignment);
 
     const std::vector<Part*>& parts() const;
     int visiblePartCount() const;
@@ -572,13 +588,13 @@ public:
     void setShowInstrumentNames(bool v) { m_showInstrumentNames = v; }
 
     void hideAnchors() { m_showAnchors.reset(); }
-    void updateShowAnchors(staff_idx_t staffIdx, const Fraction& startTick, const Fraction& endTick);
+    void setShowAnchors(const ShowAnchors& showAnchors);
     const ShowAnchors& showAnchors() const { return m_showAnchors; }
 
     void print(muse::draw::Painter* printer, int page);
     ChordRest* getSelectedChordRest() const;
     std::set<ChordRest*> getSelectedChordRests() const;
-    void getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const;
+    void getSelectedStartEndChordRests(ChordRest*& cr1, ChordRest*& cr2) const;
 
     void select(EngravingItem* item, SelectType = SelectType::SINGLE, staff_idx_t staff = 0);
     void select(const std::vector<EngravingItem*>& items, SelectType = SelectType::SINGLE, staff_idx_t staff = 0);
@@ -860,6 +876,7 @@ public:
         bool needDeselectAll = true;
         bool cloneBoxToAllParts = true;
         bool moveStaffTypeChanges = true;
+        bool ignoreBarLines = false;
     };
 
     MeasureBase* insertMeasure(ElementType type, MeasureBase* beforeMeasure = nullptr,
@@ -894,11 +911,9 @@ public:
     void addUnmanagedSpanner(Spanner*);
     void removeUnmanagedSpanner(Spanner*);
 
-    void addHairpinToChordRest(Hairpin* hairpin, ChordRest* chordRest);
+    Hairpin* addHairpin(HairpinType type, ChordRest* cr1, ChordRest* cr2 = nullptr);
+    void addHairpin(Hairpin* hairpin, ChordRest* cr1, ChordRest* cr2 = nullptr);
     void addHairpinToDynamic(Hairpin* hairpin, Dynamic* dynamic);
-
-    Hairpin* addHairpin(HairpinType, const Fraction& tickStart, const Fraction& tickEnd, track_idx_t track);
-    Hairpin* addHairpin(HairpinType, ChordRest* cr1, ChordRest* cr2 = nullptr);
 
     ChordRest* findCR(Fraction tick, track_idx_t track) const;
     ChordRest* findChordRestEndingBeforeTickInStaff(const Fraction& tick, staff_idx_t staffIdx) const;
@@ -940,7 +955,7 @@ public:
     void cmdSlashFill();
     void cmdSlashRhythm();
     void cmdResequenceRehearsalMarks();
-    void cmdExchangeVoice(int, int);
+    void cmdExchangeVoice(voice_idx_t, voice_idx_t);
     void cmdRemoveEmptyTrailingMeasures();
     void cmdRealizeChordSymbols(bool lit = true, Voicing v = Voicing(-1), HDuration durationType = HDuration(-1));
 
@@ -1041,9 +1056,12 @@ private:
     void resetTempo();
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
     void rebuildTempoAndTimeSigMaps(Measure* m, std::optional<BeatsPerSecond>& tempoPrimo);
+    void fixAnacrusisTempo(const std::vector<Measure*>& measures) const;
 
-    void deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, track_idx_t trackStart, track_idx_t trackEnd,
-                                 const SelectionFilter& filter);
+    void deleteOrShortenOutSpannersFromRange(const Fraction& t1, const Fraction& t2, track_idx_t trackStart, track_idx_t trackEnd,
+                                             const SelectionFilter& filter);
+    void deleteSlursFromRange(const Fraction& t1, const Fraction& t2, track_idx_t trackStart, track_idx_t trackEnd,
+                              const SelectionFilter& filter);
     void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
                                     const SelectionFilter& filter);
     std::vector<ChordRest*> deleteRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
@@ -1129,6 +1147,8 @@ private:
     ShadowNote* m_shadowNote = nullptr;
 
     muse::async::Channel<LoopBoundaryType, unsigned> m_loopBoundaryTickChanged;
+
+    muse::async::Channel<float> m_layoutProgressChannel;
 
     PaddingTable m_paddingTable;
     double m_minimumPaddingUnit = 0.0;

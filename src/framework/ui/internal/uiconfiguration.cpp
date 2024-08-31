@@ -55,6 +55,8 @@ static const QString WINDOW_GEOMETRY_KEY("window");
 
 static const int FLICKABLE_MAX_VELOCITY = 1500;
 
+static const int TOOLTIP_DELAY = 500;
+
 void UiConfiguration::init()
 {
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
@@ -226,6 +228,7 @@ ThemeInfo UiConfiguration::makeStandardTheme(const ThemeCode& codeKey) const
         { BACKGROUND_PRIMARY_COLOR, config.value("background_primary_color").toQString() },
         { BACKGROUND_SECONDARY_COLOR, config.value("background_secondary_color").toQString() },
         { BACKGROUND_TERTIARY_COLOR, config.value("background_tertiary_color").toQString() },
+        { BACKGROUND_QUARTERNARY_COLOR, config.value("background_quarternary_color").toQString() },
         { POPUP_BACKGROUND_COLOR, config.value("popup_background_color").toQString() },
         { PROJECT_TAB_COLOR, config.value("project_tab_color").toQString() },
         { TEXT_FIELD_COLOR, config.value("text_field_color").toQString() },
@@ -234,7 +237,7 @@ ThemeInfo UiConfiguration::makeStandardTheme(const ThemeCode& codeKey) const
         { STROKE_SECONDARY_COLOR, config.value("stroke_secondary_color").toQString() },
         { BUTTON_COLOR, config.value("button_color").toQString() },
         { FONT_PRIMARY_COLOR, config.value("font_primary_color").toQString() },
-        { FONT_SECONDARY_COLOR, config.value("font_primary_color").toQString() },
+        { FONT_SECONDARY_COLOR, config.value("font_secondary_color").toQString() },
         { LINK_COLOR, config.value("link_color").toQString() },
         { FOCUS_COLOR, config.value("focus_color").toQString() },
         { WHITE_COLOR, config.value("white_color").toQString() },
@@ -781,4 +784,9 @@ void UiConfiguration::updateToolConfig(const QString& toolName, ToolConfig& user
 int UiConfiguration::flickableMaxVelocity() const
 {
     return FLICKABLE_MAX_VELOCITY;
+}
+
+int UiConfiguration::tooltipDelay() const
+{
+    return TOOLTIP_DELAY;
 }

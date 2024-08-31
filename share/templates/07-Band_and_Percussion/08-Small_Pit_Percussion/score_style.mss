@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.20">
+<museScore version="4.40">
   <Style>
     <pageWidth>8.26772</pageWidth>
     <pageHeight>11.6929</pageHeight>
@@ -44,7 +44,7 @@
     <lyricsAlignVerseNumber>1</lyricsAlignVerseNumber>
     <lyricsLineThickness>0.1</lyricsLineThickness>
     <lyricsMelismaAlign>left,baseline</lyricsMelismaAlign>
-    <lyricsMelismaPad>0.1</lyricsMelismaPad>
+    <lyricsMelismaPad>0.2</lyricsMelismaPad>
     <lyricsDashPad>0.05</lyricsDashPad>
     <lyricsDashLineThickness>0.1</lyricsDashLineThickness>
     <lyricsDashYposRatio>0.5</lyricsDashYposRatio>
@@ -128,7 +128,7 @@
     <shortestStem>2.5</shortestStem>
     <beginRepeatLeftMargin>1</beginRepeatLeftMargin>
     <minNoteDistance>0.5</minNoteDistance>
-    <barNoteDistance>1.3</barNoteDistance>
+    <barNoteDistance>1.25</barNoteDistance>
     <barAccidentalDistance>0.65</barAccidentalDistance>
     <noteBarDistance>1.5</noteBarDistance>
     <measureSpacing>1.5</measureSpacing>
@@ -165,10 +165,10 @@
     <articulationAnchorOther>0</articulationAnchorOther>
     <lastSystemFillLimit>0.3</lastSystemFillLimit>
     <hairpinPlacement>1</hairpinPlacement>
-    <hairpinPosAbove x="0" y="-2"/>
-    <hairpinPosBelow x="0" y="2"/>
-    <hairpinLinePosAbove x="0" y="-1.5"/>
-    <hairpinLinePosBelow x="0" y="2.5"/>
+    <hairpinPosAbove x="0" y="-1.75"/>
+    <hairpinPosBelow x="0" y="1.75"/>
+    <hairpinLinePosAbove x="0" y="-1.0"/>
+    <hairpinLinePosBelow x="0" y="2.0"/>
     <hairpinHeight>1.15</hairpinHeight>
     <hairpinContHeight>0.5</hairpinContHeight>
     <hairpinWidth>0.12</hairpinWidth>
@@ -346,7 +346,7 @@
     <minMMRestWidth>6</minMMRestWidth>
     <mmRestNumberPos>-0.5</mmRestNumberPos>
     <mmRestNumberMaskHBar>1</mmRestNumberMaskHBar>
-    <multiMeasureRestMargin>1.2</multiMeasureRestMargin>
+    <multiMeasureRestMargin>1.25</multiMeasureRestMargin>
     <mmRestHBarThickness>0.7</mmRestHBarThickness>
     <mmRestHBarVStrokeThickness>0.2</mmRestHBarVStrokeThickness>
     <mmRestHBarVStrokeHeight>2</mmRestHBarVStrokeHeight>
@@ -507,8 +507,8 @@
     <ornamentStyle>0</ornamentStyle>
     <autoplaceHairpinDynamicsDistance>0.5</autoplaceHairpinDynamicsDistance>
     <dynamicsPlacement>1</dynamicsPlacement>
-    <dynamicsPosAbove x="0" y="-1.5"/>
-    <dynamicsPosBelow x="0" y="2.5"/>
+    <dynamicsPosAbove x="0" y="-1.0"/>
+    <dynamicsPosBelow x="0" y="2.0"/>
     <dynamicsMinDistance>0.5</dynamicsMinDistance>
     <autoplaceVerticalAlignRange>2</autoplaceVerticalAlignRange>
     <textLinePlacement>0</textLinePlacement>
@@ -923,7 +923,6 @@
     <textLineTextAlign>left,center</textLineTextAlign>
     <textLineSystemFlag>0</textLineSystemFlag>
     <systemTextLineFontFace>Edwin</systemTextLineFontFace>
-    <systemTextLineFontSize>12</systemTextLineFontSize>
     <systemTextLineFontSpatiumDependent>1</systemTextLineFontSpatiumDependent>
     <systemTextLineFontStyle>0</systemTextLineFontStyle>
     <systemTextLineColor r="0" g="0" b="0" a="255"/>
@@ -962,10 +961,10 @@
     <bendLineWidth>0.15</bendLineWidth>
     <bendArrowWidth>0.5</bendArrowWidth>
     <headerFontFace>Edwin</headerFontFace>
-    <headerFontSize>11</headerFontSize>
+    <headerFontSize>9</headerFontSize>
     <headerLineSpacing>1</headerLineSpacing>
     <headerFontSpatiumDependent>0</headerFontSpatiumDependent>
-    <headerFontStyle>1</headerFontStyle>
+    <headerFontStyle>0</headerFontStyle>
     <headerColor r="0" g="0" b="0" a="255"/>
     <headerAlign>center,center</headerAlign>
     <headerOffset x="0" y="0"/>
@@ -1013,10 +1012,10 @@
     <stickingFontSpatiumDependent>1</stickingFontSpatiumDependent>
     <stickingFontStyle>0</stickingFontStyle>
     <stickingColor r="0" g="0" b="0" a="255"/>
-    <stickingAlign>left,baseline</stickingAlign>
+    <stickingAlign>center,baseline</stickingAlign>
     <stickingOffset x="0" y="0"/>
     <stickingPlacement>1</stickingPlacement>
-    <stickingPosAbove x="0" y="-2"/>
+    <stickingPosAbove x="0" y="-1"/>
     <stickingPosBelow x="0" y="2"/>
     <stickingMinDistance>0.5</stickingMinDistance>
     <stickingFrameType>0</stickingFrameType>

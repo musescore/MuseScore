@@ -21,10 +21,12 @@ corruption:
 "needs review":
     - "Other type of issue"
 
-regression:
-    - "Yes, this used to work in a previous version of MuseScore 4.x"
-regression_ms3:
+"regression MS3":
     - "Yes, this used to work in MuseScore 3.x and now is broken"
+"regression MS4":
+    - "Yes, this used to work in a previous version of MuseScore 4.x"
+"regression nightly":
+    - "Yes, this works in the latest released version and is broken in the nightly builds"
 
 "feature request":
     - "Problem to be solved"

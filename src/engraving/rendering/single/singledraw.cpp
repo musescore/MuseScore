@@ -76,6 +76,7 @@
 #include "dom/layoutbreak.h"
 #include "dom/ledgerline.h"
 #include "dom/letring.h"
+#include "dom/lyrics.h"
 
 #include "dom/marker.h"
 #include "dom/measurenumber.h"
@@ -99,6 +100,7 @@
 #include "dom/score.h"
 #include "dom/shadownote.h"
 #include "dom/slur.h"
+#include "dom/soundflag.h"
 #include "dom/spacer.h"
 #include "dom/stafflines.h"
 #include "dom/staffstate.h"
@@ -107,12 +109,11 @@
 #include "dom/stem.h"
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
-#include "dom/stringtunings.h"
 #include "dom/stretchedbend.h"
+#include "dom/stringtunings.h"
 #include "dom/symbol.h"
 #include "dom/systemdivider.h"
 #include "dom/systemtext.h"
-#include "dom/soundflag.h"
 
 #include "dom/tempotext.h"
 #include "dom/text.h"
@@ -234,6 +235,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::LEDGER_LINE:  draw(item_cast<const LedgerLine*>(item), painter);
         break;
     case ElementType::LET_RING_SEGMENT:     draw(item_cast<const LetRingSegment*>(item), painter);
+        break;
+    case ElementType::LYRICS:       draw(item_cast<const Lyrics*>(item), painter);
         break;
 
     case ElementType::MARKER:               draw(item_cast<const Marker*>(item), painter);
@@ -389,7 +392,7 @@ void SingleDraw::draw(const Arpeggio* item, Painter* painter)
 
     const double y1 = ldata->bbox().top();
     const double y2 = ldata->bbox().bottom();
-    const double lineWidth = item->style().styleMM(Sid::ArpeggioLineWidth);
+    const double lineWidth = item->style().styleMM(Sid::arpeggioLineWidth);
 
     painter->setPen(Pen(item->curColor(), lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->save();
@@ -430,7 +433,7 @@ void SingleDraw::draw(const Arpeggio* item, Painter* painter)
 
     case ArpeggioType::BRACKET:
     {
-        double w = item->style().styleS(Sid::ArpeggioHookLen).val() * item->spatium();
+        double w = item->style().styleS(Sid::arpeggioHookLen).val() * item->spatium();
         painter->drawLine(LineF(0.0, y1, w, y1));
         painter->drawLine(LineF(0.0, y2, w, y2));
         painter->drawLine(LineF(0.0, y1 - lineWidth / 2, 0.0, y2 + lineWidth / 2));
@@ -845,7 +848,7 @@ void SingleDraw::draw(const Bend* item, Painter* painter)
 
     const Bend::LayoutData* ldata = item->ldata();
     double _spatium = item->spatium();
-    double _lw = item->lineWidth();
+    double _lw = item->absoluteFromSpatium(item->lineWidth());
 
     Pen pen(item->curColor(), _lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
@@ -954,7 +957,7 @@ void SingleDraw::draw(const Bracket* item, Painter* painter)
         double h = ldata->bracketHeight;
         double _spatium = item->spatium();
         double w = item->style().styleMM(Sid::bracketWidth);
-        double bd = (item->style().styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
+        double bd = (item->style().styleSt(Sid::musicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
         Pen pen(item->curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
         painter->drawLine(LineF(0.0, -bd - w * .5, 0.0, h + bd + w * .5));
@@ -1011,8 +1014,8 @@ void SingleDraw::draw(const ChordLine* item, Painter* painter)
         painter->drawPath(ldata->path);
     } else {
         painter->save();
-        painter->rotate((item->chordLineType() == ChordLineType::FALL ? 1 : -1) * ChordLine::WAVE_ANGEL);
-        item->drawSymbols(ChordLine::WAVE_SYMBOLS, painter);
+        painter->rotate((item->chordLineType() == ChordLineType::FALL ? 1 : -1));
+        item->drawSymbol(item->waveSym(), painter);
         painter->restore();
     }
 }
@@ -1158,7 +1161,6 @@ void SingleDraw::draw(const Fingering* item, Painter* painter)
 void SingleDraw::draw(const FretDiagram* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-
     const FretDiagram::LayoutData* ldata = item->ldata();
     PointF translation = -PointF(ldata->stringDist * (item->strings() - 1), 0);
     if (item->orientation() == Orientation::HORIZONTAL) {
@@ -1168,7 +1170,6 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter)
     }
 
     // Init pen and other values
-    double _spatium = item->spatium() * item->userMag();
     Pen pen(item->curColor());
     pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setBrush(Brush(Color(painter->pen().color())));
@@ -1177,19 +1178,19 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter)
     double x2 = (item->strings() - 1) * ldata->stringDist;
 
     // Draw the nut
-    pen.setWidthF(ldata->nutLw);
+    pen.setWidthF(ldata->nutLineWidth);
     painter->setPen(pen);
-    painter->drawLine(LineF(-ldata->stringLw * .5, 0.0, x2 + ldata->stringLw * .5, 0.0));
+    painter->drawLine(LineF(-ldata->stringLineWidth * .5, 0.0, x2 + ldata->stringLineWidth * .5, 0.0));
 
     // Draw strings and frets
-    pen.setWidthF(ldata->stringLw);
+    pen.setWidthF(ldata->stringLineWidth);
     painter->setPen(pen);
 
     // y2 is the y val of the bottom fretline
-    double y2 = ldata->fretDist * (item->frets() + .5);
+    double y2 = ldata->fretDist * item->frets();
     for (int i = 0; i < item->strings(); ++i) {
         double x = ldata->stringDist * i;
-        painter->drawLine(LineF(x, item->fretOffset() ? -_spatium * .2 : 0.0, x, y2));
+        painter->drawLine(LineF(x, 0.0, x, y2));
     }
     for (int i = 1; i <= item->frets(); ++i) {
         double y = ldata->fretDist * i;
@@ -1197,12 +1198,12 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter)
     }
 
     // dotd is the diameter of a dot
-    double dotd = _spatium * .49 * item->style().styleD(Sid::fretDotSize);
+    double dotd = item->style().styleMM(Sid::fretDotSpatiumSize);
 
     // Draw dots, sym pen is used to draw them (and markers)
     Pen symPen(pen);
     symPen.setCapStyle(PenCapStyle::RoundCap);
-    double symPenWidth = ldata->stringLw * 1.2;
+    double symPenWidth = ldata->stringLineWidth * 1.2;
     symPen.setWidthF(symPenWidth);
 
     for (auto const& i : item->dots()) {
@@ -1286,13 +1287,8 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter)
 
     // Draw fret offset number
     if (item->fretOffset() > 0) {
-        double fretNumMag = item->style().styleD(Sid::fretNumMag);
-        Font scaledFont(item->font());
-        scaledFont.setPointSizeF(item->font().pointSizeF()
-                                 * item->userMag()
-                                 * (item->spatium() / SPATIUM20)
-                                 * MScore::pixelRatio
-                                 * fretNumMag);
+        Font scaledFont(item->fretNumFont());
+        scaledFont.setPointSizeF(scaledFont.pointSizeF() * (item->spatium() / SPATIUM20) * MScore::pixelRatio);
         painter->setFont(scaledFont);
         String text = String::number(item->fretOffset() + 1);
 
@@ -1319,7 +1315,7 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter)
             }
             painter->restore();
         }
-        painter->setFont(item->font());
+        painter->setFont(item->fretNumFont());
     }
 
     // NOTE:JT possible future todo - draw fingerings
@@ -1342,7 +1338,7 @@ void SingleDraw::draw(const GlissandoSegment* item, Painter* painter)
     const Glissando* glissando = item->glissando();
 
     Pen pen(item->curColor(item->visible(), glissando->lineColor()));
-    pen.setWidthF(glissando->lineWidth());
+    pen.setWidthF(item->absoluteFromSpatium(item->lineWidth()));
     pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setPen(pen);
 
@@ -1497,7 +1493,7 @@ void SingleDraw::draw(const StretchedBend* item, Painter* painter)
     const Color& color = item->curColor();
     const int textFlags = item->textFlags();
 
-    Pen pen(color, item->lineWidth(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
+    Pen pen(color, item->absoluteFromSpatium(item->lineWidth()), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->setBrush(Brush(color));
     Font f = item->font(sp * MScore::pixelRatio);
@@ -1630,7 +1626,7 @@ void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painte
     // color for line (text color comes from the text properties)
     Color color = item->curColor(tl->visible() && tl->lineVisible(), tl->lineColor());
 
-    double lineWidth = tl->lineWidth() * item->mag();
+    double lineWidth = tl->absoluteFromSpatium(tl->lineWidth());
 
     const Pen solidPen(color, lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin);
     Pen pen(solidPen);
@@ -1747,7 +1743,7 @@ void SingleDraw::draw(const HairpinSegment* item, Painter* painter)
 
     if (item->drawCircledTip()) {
         Color color = item->curColor(item->hairpin()->visible(), item->hairpin()->lineColor());
-        double w = item->hairpin()->lineWidth();
+        double w = item->absoluteFromSpatium(item->lineWidth());
         if (item->staff()) {
             w *= item->staff()->staffMag(item->hairpin()->tick());
         }
@@ -1931,7 +1927,7 @@ void SingleDraw::draw(const KeySig* item, Painter* painter)
 
     if (!item->explicitParent() && (item->isAtonal() || item->isCustom()) && ldata->keySymbols.empty()) {
         // empty custom or atonal key signature - draw something for palette
-        painter->setPen(item->configuration()->formattingMarksColor());
+        painter->setPen(item->configuration()->formattingColor());
         item->drawSymbol(SymId::timeSigX, painter, PointF(item->symWidth(SymId::timeSigX) * -0.5, 2.0 * item->spatium()));
     }
 }
@@ -1975,6 +1971,12 @@ void SingleDraw::draw(const LetRingSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+void SingleDraw::draw(const Lyrics* item, muse::draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }
 
 void SingleDraw::draw(const Marker* item, Painter* painter)
@@ -2125,17 +2127,19 @@ void SingleDraw::draw(const ShadowNote* item, Painter* painter)
         double extraLen = item->style().styleS(Sid::ledgerLineLength).val() * sp;
         double x1 = -extraLen;
         double x2 = noteheadWidth + extraLen;
+        double yOffset = item->staffOffsetY();
         double step = sp2 * item->staffType()->lineDistance().val();
 
         lw = item->style().styleMM(Sid::ledgerLineWidth) * item->mag();
         pen.setWidthF(lw);
         painter->setPen(pen);
 
-        for (int i = -2; i >= item->lineIndex(); i -= 2) {
+        const int topLine = -2 + yOffset / step;
+        for (int i = topLine; i >= item->lineIndex(); i -= 2) {
             double y = step * (i - item->lineIndex());
             painter->drawLine(LineF(x1, y, x2, y));
         }
-        int l = item->staffType()->lines() * 2; // first ledger line below staff
+        int l = item->staffType()->lines() * 2 + yOffset / step; // first ledger line below staff
         for (int i = l; i <= item->lineIndex(); i += 2) {
             double y = step * (i - item->lineIndex());
             painter->drawLine(LineF(x1, y, x2, y));
@@ -2164,23 +2168,23 @@ void SingleDraw::draw(const SlurSegment* item, Painter* painter)
         painter->setBrush(Brush(pen.color()));
         pen.setCapStyle(PenCapStyle::RoundCap);
         pen.setJoinStyle(PenJoinStyle::RoundJoin);
-        pen.setWidthF(item->style().styleMM(Sid::SlurEndWidth) * mag);
+        pen.setWidthF(item->style().styleMM(Sid::slurEndWidth) * mag);
         break;
     case SlurStyleType::Dotted:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setCapStyle(PenCapStyle::RoundCap);           // round dots
         pen.setDashPattern(dotted);
-        pen.setWidthF(item->style().styleMM(Sid::SlurDottedWidth) * mag);
+        pen.setWidthF(item->style().styleMM(Sid::slurDottedWidth) * mag);
         break;
     case SlurStyleType::Dashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(dashed);
-        pen.setWidthF(item->style().styleMM(Sid::SlurDottedWidth) * mag);
+        pen.setWidthF(item->style().styleMM(Sid::slurDottedWidth) * mag);
         break;
     case SlurStyleType::WideDashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(wideDashed);
-        pen.setWidthF(item->style().styleMM(Sid::SlurDottedWidth) * mag);
+        pen.setWidthF(item->style().styleMM(Sid::slurDottedWidth) * mag);
         break;
     case SlurStyleType::Undefined:
         break;
@@ -2216,7 +2220,7 @@ void SingleDraw::draw(const StaffState* item, Painter* painter)
     const StaffState::LayoutData* ldata = item->ldata();
     auto conf = item->configuration();
 
-    Pen pen(item->selected() ? conf->selectionColor() : conf->formattingMarksColor(),
+    Pen pen(item->selected() ? conf->selectionColor() : conf->formattingColor(),
             ldata->lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
@@ -2246,7 +2250,7 @@ void SingleDraw::draw(const StaffTypeChange* item, Painter* painter)
     double w  = _spatium * 2.5;
     double lineDist = 0.35;           // line distance for the icon 'staff lines'
     // draw icon rectangle
-    painter->setPen(Pen(item->selected() ? conf->selectionColor() : conf->formattingMarksColor(),
+    painter->setPen(Pen(item->selected() ? conf->selectionColor() : conf->formattingColor(),
                         item->lw(), PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
     painter->setBrush(BrushStyle::NoBrush);
     painter->drawRect(0, 0, w, h);
@@ -2265,7 +2269,7 @@ void SingleDraw::draw(const StaffTypeChange* item, Painter* painter)
     }
     // calculate starting point Y for the lines from half the icon height (2.5) so staff lines appear vertically centered
     double startY = 1.25 - (lines - 1) * lineDist * 0.5;
-    painter->setPen(Pen(item->selected() ? conf->selectionColor() : conf->formattingMarksColor(),
+    painter->setPen(Pen(item->selected() ? conf->selectionColor() : conf->formattingColor(),
                         2.5, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
     for (int i=0; i < lines; i++) {
         int y = (startY + i * lineDist) * _spatium;
@@ -2357,23 +2361,23 @@ void SingleDraw::draw(const TieSegment* item, Painter* painter)
         painter->setBrush(Brush(pen.color()));
         pen.setCapStyle(PenCapStyle::RoundCap);
         pen.setJoinStyle(PenJoinStyle::RoundJoin);
-        pen.setWidthF(item->style().styleMM(Sid::TieEndWidth) * mag);
+        pen.setWidthF(item->style().styleMM(Sid::tieEndWidth) * mag);
         break;
     case SlurStyleType::Dotted:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setCapStyle(PenCapStyle::RoundCap);           // True dots
         pen.setDashPattern(dotted);
-        pen.setWidthF(item->style().styleMM(Sid::TieDottedWidth) * mag);
+        pen.setWidthF(item->style().styleMM(Sid::tieDottedWidth) * mag);
         break;
     case SlurStyleType::Dashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(dashed);
-        pen.setWidthF(item->style().styleMM(Sid::TieDottedWidth) * mag);
+        pen.setWidthF(item->style().styleMM(Sid::tieDottedWidth) * mag);
         break;
     case SlurStyleType::WideDashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(wideDashed);
-        pen.setWidthF(item->style().styleMM(Sid::TieDottedWidth) * mag);
+        pen.setWidthF(item->style().styleMM(Sid::tieDottedWidth) * mag);
         break;
     case SlurStyleType::Undefined:
         break;
@@ -2420,7 +2424,7 @@ void SingleDraw::draw(const TremoloSingleChord* item, Painter* painter)
     // vertical line (stem)
     {
         double x = 0.0;     // bbox().width() * .25;
-        Pen pen(item->curColor(), item->point(item->style().styleS(Sid::stemWidth)));
+        Pen pen(item->curColor(), item->absoluteFromSpatium(item->style().styleS(Sid::stemWidth)));
         painter->setPen(pen);
         const double sp = item->spatium();
         if (item->isBuzzRoll()) {
@@ -2444,7 +2448,8 @@ void SingleDraw::draw(const TremoloBar* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     const TremoloBar::LayoutData* ldata = item->ldata();
-    Pen pen(item->curColor(), item->lineWidth().val(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
+    const double lw = item->absoluteFromSpatium(item->lineWidth());
+    Pen pen(item->curColor(), lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->drawPolyline(ldata->polygon);
 }
@@ -2481,7 +2486,7 @@ void SingleDraw::draw(const Tuplet* item, Painter* painter)
         painter->translate(-pos);
     }
     if (item->hasBracket()) {
-        painter->setPen(Pen(color, item->bracketWidth().val() * item->mag()));
+        painter->setPen(Pen(color, item->absoluteFromSpatium(item->bracketWidth()) * item->mag()));
         if (!item->number()) {
             painter->drawPolyline(item->bracketL, 4);
         } else {

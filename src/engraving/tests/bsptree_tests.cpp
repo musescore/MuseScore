@@ -53,7 +53,7 @@ TEST_F(Engraving_BspTreeTests, NearestNeighbor)
     // [GIVEN] A set of notes in scattered positions, and a BspTree containing those notes
     BspTree bsp;
     std::set<EngravingItem*> notes;
-    bsp.initialize(page->pageBoundingRect(), page->elements().size());
+    bsp.initialize(page->pageBoundingRect(), static_cast<int>(page->elements().size()));
     for (EngravingItem* elem : page->elements()) {
         if (elem->isNote()) {
             notes.emplace(elem);
@@ -76,7 +76,7 @@ TEST_F(Engraving_BspTreeTests, NearestNeighbor)
     EngravingItem* singleNote = *notes.begin();
     EXPECT_TRUE(singleNote);
 
-    bsp.initialize(page->pageBoundingRect(), page->elements().size());
+    bsp.initialize(page->pageBoundingRect(), static_cast<int>(page->elements().size()));
     bsp.insert(singleNote);
 
     // [WHEN] Iterating through the set of notes, and passing each note's position to nearestNeighbor

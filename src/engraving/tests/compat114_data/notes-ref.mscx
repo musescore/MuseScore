@@ -64,11 +64,8 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <leftMargin>5</leftMargin>
-        <rightMargin>5</rightMargin>
-        <topMargin>5</topMargin>
-        <bottomMargin>5</bottomMargin>
         <boxAutoSize>0</boxAutoSize>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <Text>
           <style>title</style>
           <text>notes</text>

@@ -34,7 +34,6 @@ elseif(CC_IS_MSVC)
     set(CMAKE_C_FLAGS_DEBUG             "/MT /Zi /Ob0 /Od /RTC1")
     set(CMAKE_C_FLAGS_RELEASE           "/MT /O2 /Ob2")
     set(CMAKE_C_FLAGS_RELWITHDEBINFO    "/MT /Zi /O2 /Ob1")
-    set(CMAKE_EXE_LINKER_FLAGS          "/DYNAMICBASE:NO")
 
     add_definitions(-DWIN32)
     add_definitions(-D_WINDOWS)
@@ -74,7 +73,7 @@ elseif(CC_IS_CLANG)
         link_libraries("-fsanitize=address")
     endif()
 
-    # On MacOS with clang there are problems with debugging
+    # On macOS with clang there are problems with debugging
     # - the value of the std::u16string is not visible.
     if (BUILD_IS_DEBUG AND MUSE_COMPILE_STRING_DEBUG_HACK)
         add_definitions(-DMUSE_STRING_DEBUG_HACK)
@@ -128,4 +127,3 @@ if (OS_IS_MAC)
     set(MACOSX_DEPLOYMENT_TARGET 10.14)
     set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14)
 endif(OS_IS_MAC)
-

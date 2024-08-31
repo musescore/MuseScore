@@ -326,15 +326,22 @@ PointF Volta::linePos(Grip grip, System** system) const
         return PointF();
     }
 
+    const Measure* measure = segment->measure();
+    bool isAtSystemStart = segment->rtick().isZero() && measure && measure->system() && measure->isFirstInSystem();
+
     if (start && segment->rtick().isZero()) {
-        Segment* prev = segment->prev1enabled();
-        if (prev && prev->isEndBarLineType()) {
-            segment = prev;
+        while (!segment->isType(SegmentType::BarLineType)) {
+            Segment* prev = segment->prev1MMenabled();
+            if (prev && (prev->isType(SegmentType::BarLineType) || (prev->tick() == segment->tick() && !isAtSystemStart))) {
+                segment = prev;
+            } else {
+                break;
+            }
         }
     } else if (!start) {
         Segment* prev = segment;
         while (prev && !prev->isEndBarLineType() && prev->tick() == segment->tick()) {
-            prev = prev->prev1enabled();
+            prev = prev->prev1MMenabled();
         }
         if (prev && prev->isEndBarLineType()) {
             segment = prev;
@@ -347,20 +354,20 @@ PointF Volta::linePos(Grip grip, System** system) const
     if (start) {
         if (segment->isChordRestType()) {
             x -= style().styleMM(Sid::barNoteDistance);
-        } else if (segment->segmentType() & SegmentType::BarLineType) {
+        } else if (segment->segmentType() & SegmentType::BarLineType && !isAtSystemStart) {
             x += segment->width();
         }
-        x -= 0.5 * lineWidth();
+        x += (isAtSystemStart ? 0.5 : -0.5) * absoluteFromSpatium(lineWidth());
     } else {
         if ((*system) && segment->tick() == (*system)->endTick()) {
             x += segment->staffShape(0).right();
-            x -= 0.5 * lineWidth();
+            x -= 0.5 * absoluteFromSpatium(lineWidth());
         } else if (segment->segmentType() & SegmentType::BarLineType) {
             BarLine* barLine = toBarLine(segment->elementAt(track()));
             if (barLine->barLineType() == BarLineType::END_REPEAT || barLine->barLineType() == BarLineType::END_START_REPEAT) {
                 x += symWidth(SymId::repeatDot) + style().styleMM(Sid::repeatBarlineDotSeparation);
             }
-            x += 0.5 * lineWidth();
+            x += 0.5 * absoluteFromSpatium(lineWidth());
         }
     }
 

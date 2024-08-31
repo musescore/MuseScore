@@ -44,6 +44,7 @@ public:
 
     LayoutBreak* clone() const override { return new LayoutBreak(*this); }
     int subtype() const override { return static_cast<int>(m_layoutBreakType); }
+    TranslatableString subtypeUserName() const override;
 
     void setLayoutBreakType(LayoutBreakType);
     LayoutBreakType layoutBreakType() const { return m_layoutBreakType; }

@@ -32,6 +32,8 @@
       <bendFontSize>10</bendFontSize>
       <headerFontSize>10</headerFontSize>
       <footerFontSize>10</footerFontSize>
+      <copyrightFontSize>10</copyrightFontSize>
+      <pageNumberFontSize>10</pageNumberFontSize>
       <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -114,7 +116,7 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>12.5</height>
+        <height>10</height>
         <Text>
           <style>title</style>
           <offset x="0" y="-0.07525"/>
@@ -127,8 +129,6 @@
           </Text>
         <Text>
           <style>composer</style>
-          <align>right,top</align>
-          <offset x="0" y="17.4247"/>
           <text>Henry Ives</text>
           </Text>
         </VBox>
@@ -152,13 +152,14 @@
           <StaffText>
             <text>3rd time senza Invisalign</text>
             </StaffText>
+          <Expression>
+            <direction>down</direction>
+            <text><i>Cantabile</i></text>
+            </Expression>
           <Tempo>
             <tempo>2</tempo>
             <text><font size="12"/><b>Straight</b></text>
             </Tempo>
-          <Expression>
-            <text><i>Cantabile</i></text>
-            </Expression>
           <Beam>
             <StemDirection>down</StemDirection>
             <l1>44</l1>

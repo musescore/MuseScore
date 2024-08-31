@@ -46,6 +46,8 @@ public:
     void close() override;
     bool isOpened() const override;
 
+    const Spec& activeSpec() const override;
+
     AudioDeviceID outputDevice() const override;
     bool selectOutputDevice(const AudioDeviceID& deviceId) override;
     bool resetToDefaultOutputDevice() override;
@@ -59,6 +61,12 @@ public:
     async::Notification outputDeviceBufferSizeChanged() const override;
 
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
+
+    unsigned int outputDeviceSampleRate() const override;
+    bool setOutputDeviceSampleRate(unsigned int bufferSize) override;
+    async::Notification outputDeviceSampleRateChanged() const override;
+
+    std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
 
     void resume() override;
     void suspend() override;

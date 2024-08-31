@@ -111,5 +111,10 @@
         <file>qml/MuseScore/Inspector/notation/stringtunings/StringTuningsSettings.qml</file>
         <file>qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/CrescDimLineStyleSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/HairpinLineSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/GradualTempoChangeSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangePositionSettingsTab.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangeStyleTab.qml</file>
     </qresource>
 </RCC>

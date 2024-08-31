@@ -223,6 +223,7 @@ void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication
             migration.isApplyMigration = isMigration;
             migration.isApplyEdwin = isMigration;
             migration.isApplyLeland = isMigration;
+            migration.isRemapPercussion = isMigration;
         }
 
         //! NOTE Don't write to settings, just on current session
@@ -267,6 +268,7 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
     muse::io::path_t stylePath = task.params[CmdOptions::ParamKey::StylePath].toString();
     bool forceMode = task.params[CmdOptions::ParamKey::ForceMode].toBool();
     String soundProfile = task.params[CmdOptions::ParamKey::SoundProfile].toString();
+    UriQuery extensionUri = UriQuery(task.params[CmdOptions::ParamKey::ExtensionUri].toString().toStdString());
 
     if (!soundProfile.isEmpty() && !soundProfilesRepository()->containsProfile(soundProfile)) {
         LOGE() << "Unknown sound profile: " << soundProfile;
@@ -275,10 +277,10 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
 
     switch (task.type) {
     case ConvertType::Batch:
-        ret = converter()->batchConvert(task.inputFile, stylePath, forceMode, soundProfile);
+        ret = converter()->batchConvert(task.inputFile, stylePath, forceMode, soundProfile, extensionUri);
         break;
     case ConvertType::File:
-        ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode, soundProfile);
+        ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode, soundProfile, extensionUri);
         break;
     case ConvertType::ConvertScoreParts:
         ret = converter()->convertScoreParts(task.inputFile, task.outputFile, stylePath);

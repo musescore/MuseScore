@@ -1,5 +1,35 @@
 #!/usr/bin/env python3
 
+import sys
+def eprint(*args, **kwargs):
+    print(*args, **kwargs, file=sys.stderr)
+
+if __name__ == '__main__' and sys.prefix == sys.base_prefix:
+    # Not running inside a virtual environment. Let's try to load one.
+    import os
+    old_dir = os.path.realpath(__file__)
+    new_dir, script_name = os.path.split(old_dir)
+    rel_pyi = r'.venv\Scripts\python.exe' if sys.platform == 'win32' else '.venv/bin/python'
+    while new_dir != old_dir:
+        abs_pyi = os.path.join(new_dir, rel_pyi)
+        if os.access(abs_pyi, os.X_OK):
+            eprint(f'{script_name}: Loading virtual environment:\n  {abs_pyi}')
+            if sys.platform == 'win32':
+                import subprocess
+                raise SystemExit(subprocess.run([abs_pyi, *sys.argv]).returncode)
+            os.execl(abs_pyi, abs_pyi, *sys.argv)
+        old_dir = new_dir
+        new_dir = os.path.dirname(new_dir)
+    eprint(f'{script_name}: Not running inside a virtual environment.')
+    del old_dir, new_dir, rel_pyi, abs_pyi, script_name
+
+import locale
+if locale.getpreferredencoding().lower() != 'utf-8':
+    encoding = locale.getpreferredencoding()
+    eprint(f"Error: Encoding is '{encoding}': Python is not running in UTF-8 mode.")
+    eprint('  Please set environment variable PYTHONUTF8=1 to enable UTF-8 mode.')
+    raise SystemExit(1)
+
 import argparse
 import csv
 import io
@@ -31,9 +61,6 @@ args = parser.parse_args()
 
 null='[null]' # value used in TSV when attributes or tags are to be omitted in XML
 list_sep=';' # character used as separator in TSV when a cell contains multiple values
-
-def eprint(*args, **kwargs):
-    print(*args, file=sys.stderr, **kwargs)
 
 def download_google_spreadsheet(sheet):
     assert sheet in sheet_ids.keys()
@@ -89,7 +116,7 @@ def google_spreadsheet_to_indexed_dict(sheet, headers_row, primary_index_col, se
     rows = data_by_heading(table, headers_row - 1)
     return index_by_column(rows, primary_index_col, secondary_index_col)
 
-os.chdir(sys.path[0]) # make all paths relative to this script's directory
+os.chdir(os.path.dirname(os.path.realpath(__file__))) # make all paths relative to this script's directory
 os.makedirs('tsv/download', exist_ok=True)
 
 instruments     = google_spreadsheet_to_indexed_dict('Instruments', 3, 'group', 'id')

@@ -79,17 +79,6 @@ static ActionCode actionCodeForNoteInputMethod(NoteInputMethod method)
 NoteInputBarModel::NoteInputBarModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
-    uiConfiguration()->toolConfigChanged(TOOLBAR_NAME).onNotify(this, [this]() {
-        load();
-    });
-
-    context()->currentNotationChanged().onNotify(this, [this]() {
-        onNotationChanged();
-    });
-
-    playbackController()->isPlayingChanged().onNotify(this, [this]() {
-        updateState();
-    });
 }
 
 QVariant NoteInputBarModel::data(const QModelIndex& index, int role) const
@@ -122,6 +111,18 @@ QHash<int, QByteArray> NoteInputBarModel::roleNames() const
 
 void NoteInputBarModel::load()
 {
+    uiConfiguration()->toolConfigChanged(TOOLBAR_NAME).onNotify(this, [this]() {
+        load();
+    });
+
+    context()->currentNotationChanged().onNotify(this, [this]() {
+        onNotationChanged();
+    });
+
+    playbackController()->isPlayingChanged().onNotify(this, [this]() {
+        updateState();
+    });
+
     MenuItemList items;
 
     ToolConfig noteInputConfig = uiConfiguration()->toolConfig(TOOLBAR_NAME, NotationUiActions::defaultNoteInputBarConfig());
@@ -413,9 +414,9 @@ int NoteInputBarModel::resolveCurrentVoiceIndex() const
 
     int voice = INVALID_VOICE;
     for (const EngravingItem* element : selectedElements) {
-        if (element->hasVoiceApplicationProperties()) {
-            VoiceApplication appliedVoice = element->getProperty(Pid::APPLY_TO_VOICE).value<VoiceApplication>();
-            if (appliedVoice == VoiceApplication::ALL_VOICE_IN_INSTRUMENT || appliedVoice == VoiceApplication::ALL_VOICE_IN_STAFF) {
+        if (element->hasVoiceAssignmentProperties()) {
+            VoiceAssignment voiceAssignment = element->getProperty(Pid::VOICE_ASSIGNMENT).value<VoiceAssignment>();
+            if (voiceAssignment == VoiceAssignment::ALL_VOICE_IN_INSTRUMENT || voiceAssignment == VoiceAssignment::ALL_VOICE_IN_STAFF) {
                 return INVALID_VOICE;
             }
         }

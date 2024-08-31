@@ -30,11 +30,10 @@
 #include <assert.h>
 
 #include "translation.h"
-#include "types/translatablestring.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
 
-#include "rendering/dev/horizontalspacing.h"
+#include "rendering/score/horizontalspacing.h"
 
 #include "accidental.h"
 #include "actionicon.h"
@@ -79,7 +78,7 @@
 using namespace mu;
 using namespace muse::draw;
 using namespace mu::engraving;
-using namespace mu::engraving::rendering::dev;
+using namespace mu::engraving::rendering::score;
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -498,40 +497,21 @@ SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t, int tpc
             group = NoteHeadGroup::HEAD_TI_NAME;
         }
     } else if (scheme == NoteHeadScheme::HEAD_SOLFEGE_FIXED) {
-        if (tpc == Tpc::TPC_C) {
+        Char stepName = tpc2stepName(tpc);
+        if (stepName == u'C') {
             group = NoteHeadGroup::HEAD_DO_NAME;
-        } else if (tpc == Tpc::TPC_C_S) {
-            group = NoteHeadGroup::HEAD_DI_NAME;
-        } else if (tpc == Tpc::TPC_D_B) {
-            group = NoteHeadGroup::HEAD_RA_NAME;
-        } else if (tpc == Tpc::TPC_D) {
+        } else if (stepName == u'D') {
             group = NoteHeadGroup::HEAD_RE_NAME;
-        } else if (tpc == Tpc::TPC_D_S) {
-            group = NoteHeadGroup::HEAD_RI_NAME;
-        } else if (tpc == Tpc::TPC_E_B) {
-            group = NoteHeadGroup::HEAD_ME_NAME;
-        } else if (tpc == Tpc::TPC_E) {
+        } else if (stepName == u'E') {
             group = NoteHeadGroup::HEAD_MI_NAME;
-        } else if (tpc == Tpc::TPC_F) {
+        } else if (stepName == u'F') {
             group = NoteHeadGroup::HEAD_FA_NAME;
-        } else if (tpc == Tpc::TPC_F_S) {
-            group = NoteHeadGroup::HEAD_FI_NAME;
-        } else if (tpc == Tpc::TPC_G_B) {
-            group = NoteHeadGroup::HEAD_SE_NAME;
-        } else if (tpc == Tpc::TPC_G) {
+        } else if (stepName == u'G') {
             group = NoteHeadGroup::HEAD_SOL_NAME;
-        } else if (tpc == Tpc::TPC_G_S) {
-            group = NoteHeadGroup::HEAD_SI_NAME;
-        } else if (tpc == Tpc::TPC_A_B) {
-            group = NoteHeadGroup::HEAD_LE_NAME;
-        } else if (tpc == Tpc::TPC_A) {
+        } else if (stepName == u'A') {
             group = NoteHeadGroup::HEAD_LA_NAME;
-        } else if (tpc == Tpc::TPC_A_S) {
-            group = NoteHeadGroup::HEAD_LI_NAME;
-        } else if (tpc == Tpc::TPC_B_B) {
-            group = NoteHeadGroup::HEAD_TE_NAME;
-        } else if (tpc == Tpc::TPC_B) {
-            group = NoteHeadGroup::HEAD_TI_NAME;
+        } else if (stepName == u'B') {
+            group = NoteHeadGroup::HEAD_SI_NAME;
         }
     }
     return noteHeads[direction][int(group)][int(t)];
@@ -944,6 +924,7 @@ SymId Note::noteHead() const
 
     const Staff* st = chord() ? chord()->staff() : nullptr;
 
+    NoteHeadGroup headGroup = m_headGroup;
     if (m_headGroup == NoteHeadGroup::HEAD_CUSTOM) {
         if (st) {
             if (st->staffTypeForElement(chord())->isDrumStaff()) {
@@ -956,6 +937,8 @@ SymId Note::noteHead() const
                     LOGD("no drumset");
                     return noteHead(up, NoteHeadGroup::HEAD_NORMAL, ht);
                 }
+            } else {
+                headGroup = NoteHeadGroup::HEAD_NORMAL;
             }
         } else {
             return ldata()->cachedNoteheadSym.value();
@@ -976,9 +959,9 @@ SymId Note::noteHead() const
     if (scheme == NoteHeadScheme::HEAD_AUTO) {
         scheme = NoteHeadScheme::HEAD_NORMAL;
     }
-    SymId t = noteHead(up, m_headGroup, ht, tpc(), key, scheme);
+    SymId t = noteHead(up, headGroup, ht, tpc(), key, scheme);
     if (t == SymId::noSym) {
-        LOGD("invalid notehead %d/%d", int(m_headGroup), int(ht));
+        LOGD("invalid notehead %d/%d", int(headGroup), int(ht));
         t = noteHead(up, NoteHeadGroup::HEAD_NORMAL, ht);
     }
     return t;
@@ -1002,6 +985,10 @@ double Note::bboxRightPos() const
 //---------------------------------------------------------
 double Note::headBodyWidth() const
 {
+    const StaffType* st = staffType();
+    if (st && st->isTabStaff()) {
+        return tabHeadWidth(st);
+    }
     return headWidth() + 2 * bboxXShift();
 }
 
@@ -1858,6 +1845,13 @@ EngravingItem* Note::drop(EditData& data)
         delete e;
         break;
 
+    case ElementType::GUITAR_BEND:
+    {
+        GuitarBend* newGuitarBend = score()->addGuitarBend(toGuitarBend(e)->type(), this);
+        delete e;
+        return newGuitarBend;
+    }
+
     case ElementType::BAGPIPE_EMBELLISHMENT:
     {
         BagpipeEmbellishment* b = toBagpipeEmbellishment(e);
@@ -2295,6 +2289,7 @@ void Note::setTrack(track_idx_t val)
 void Note::reset()
 {
     undoChangeProperty(Pid::OFFSET, PointF());
+    undoResetProperty(Pid::LEADING_SPACE);
     chord()->undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(PointF()));
     chord()->undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(DirectionV::AUTO));
 }
@@ -2654,8 +2649,10 @@ void Note::verticalDrag(EditData& ed)
             accOffs = Accidental::subtype2value(AccidentalType::NONE);
         }
         int nStep = absStep(ned->line + lineOffset, score()->staff(idx)->clef(_tick));
+        nStep = std::max(0, nStep);
         int octave = nStep / 7;
         int newPitch = step2pitch(nStep) + octave * 12 + int(accOffs);
+        newPitch = std::clamp(newPitch, 0, 127);
 
         if (!concertPitch()) {
             newPitch += interval.chromatic;
@@ -3538,12 +3535,12 @@ EngravingItem* Note::prevSegmentElement()
 //   positionTickOffset is used to indicate this is for a repeat
 //---------------------------------------------------------
 
-const Note* Note::lastTiedNote(const int positionTickOffset) const
+const Note* Note::lastTiedNote(bool ignorePlayback, const int positionTickOffset) const
 {
     std::vector<const Note*> notes;
     const Note* note = this;
     notes.push_back(note);
-    while (note->tieFor()) {
+    while (note->tieFor() && (ignorePlayback || note->tieFor()->playSpanner())) {
         if (std::find(notes.begin(), notes.end(), note->tieFor()->endNote()) != notes.end()) {
             break;
         }
@@ -3575,12 +3572,12 @@ const Note* Note::lastTiedNote(const int positionTickOffset) const
 //    - handle recursion in connected notes
 //---------------------------------------------------------
 
-Note* Note::firstTiedNote() const
+Note* Note::firstTiedNote(bool ignorePlayback) const
 {
     std::vector<const Note*> notes;
     const Note* note = this;
     notes.push_back(note);
-    while (note->tieBack()) {
+    while (note->tieBack() && (ignorePlayback || note->tieBack()->playSpanner())) {
         if (std::find(notes.begin(), notes.end(), note->tieBack()->startNote()) != notes.end()) {
             break;
         }
@@ -3820,5 +3817,11 @@ void Note::addLineAttachPoint(PointF point, EngravingItem* line)
 bool Note::negativeFretUsed() const
 {
     return configuration()->negativeFretsAllowed() && m_fret < 0;
+}
+
+int Note::stringOrLine() const
+{
+    // The number string() returns doesn't count spaces.  This should be used where it is expected even numbers are spaces and odd are lines
+    return staff()->staffType(tick())->isTabStaff() ? string() * 2 : line();
 }
 }

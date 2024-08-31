@@ -70,6 +70,8 @@ public:
     void setBlue(int value);
     void setAlpha(int value);
 
+    void applyTint(double tint);
+
     Color inverted() const;
 
     bool operator==(const Color& other) const;

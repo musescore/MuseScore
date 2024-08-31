@@ -23,13 +23,17 @@
 #define MU_IMPORTEXPORT_VIDEOWRITER_H
 
 #include "modularity/ioc.h"
-#include "project/iprojectwriter.h"
 #include "../ivideoexportconfiguration.h"
+#include "iapplication.h"
+
+#include "project/iprojectwriter.h"
 
 namespace mu::iex::videoexport {
 class VideoWriter : public project::IProjectWriter
 {
-    INJECT(IVideoExportConfiguration, configuration)
+    muse::Inject<IVideoExportConfiguration> configuration;
+    muse::Inject<muse::IApplication> application;
+
 public:
     VideoWriter() = default;
 

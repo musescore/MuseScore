@@ -22,10 +22,7 @@
 #ifndef MU_PLAYBACK_PLAYBACKCONTROLLER_H
 #define MU_PLAYBACK_PLAYBACKCONTROLLER_H
 
-#include <unordered_map>
-
 #include "modularity/ioc.h"
-#include "types/retval.h"
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
@@ -35,8 +32,6 @@
 #include "notation/inotationconfiguration.h"
 #include "notation/inotationplayback.h"
 #include "audio/iplayer.h"
-#include "audio/itracks.h"
-#include "audio/iaudiooutput.h"
 #include "audio/iplayback.h"
 #include "audio/audiotypes.h"
 #include "iinteractive.h"
@@ -68,7 +63,7 @@ public:
 
     void reset() override;
 
-    muse::async::Channel<uint32_t> midiTickPlayed() const override;
+    muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> currentPlaybackPositionChanged() const override;
 
     muse::audio::TrackSequenceId currentTrackSequenceId() const override;
     muse::async::Notification currentTrackSequenceIdChanged() const override;
@@ -92,6 +87,7 @@ public:
     void playElements(const std::vector<const notation::EngravingItem*>& elements) override;
     void playMetronome(int tick) override;
     void seekElement(const notation::EngravingItem* element) override;
+    void seekBeat(int measureIndex, int beatIndex) override;
 
     bool actionChecked(const muse::actions::ActionCode& actionCode) const override;
     muse::async::Channel<muse::actions::ActionCode> actionCheckedChanged() const override;
@@ -103,7 +99,7 @@ public:
     muse::async::Notification currentTempoChanged() const override;
 
     notation::MeasureBeat currentBeat() const override;
-    muse::audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const override;
+    muse::audio::secs_t beatToSecs(int measureIndex, int beatIndex) const override;
 
     double tempoMultiplier() const override;
     void setTempoMultiplier(double multiplier) override;
@@ -116,7 +112,6 @@ public:
     void setIsExportingAudio(bool exporting) override;
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
-
 private:
     muse::audio::IPlayerPtr currentPlayer() const;
 
@@ -130,7 +125,7 @@ private:
 
     void updateCurrentTempo();
 
-    void seek(const muse::midi::tick_t tick);
+    void seekRawTick(const muse::midi::tick_t tick);
     void seek(const muse::audio::secs_t secs);
 
     bool isPaused() const;
@@ -158,8 +153,8 @@ private:
     void stop();
     void resume();
 
-    muse::audio::msecs_t playbackStartMsecs() const;
-    muse::audio::msecs_t playbackEndMsecs() const;
+    muse::audio::secs_t playbackStartSecs() const;
+    muse::audio::secs_t playbackEndSecs() const;
 
     notation::InstrumentTrackIdSet instrumentTrackIdSetForRangePlayback() const;
 
@@ -207,8 +202,7 @@ private:
     void removeNonExistingTracks();
     void removeTrack(const engraving::InstrumentTrackId& instrumentTrackId);
 
-    muse::audio::msecs_t tickToMsecs(int tick) const;
-    muse::audio::secs_t tickToSecs(int tick) const;
+    muse::audio::secs_t playedTickToSecs(int tick) const;
 
     notation::INotationPtr m_notation;
     notation::IMasterNotationPtr m_masterNotation;
@@ -218,7 +212,7 @@ private:
     muse::async::Notification m_isPlayingChanged;
     muse::async::Notification m_totalPlayTimeChanged;
     muse::async::Notification m_currentTempoChanged;
-    muse::async::Channel<uint32_t> m_tickPlayed;
+    muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> m_currentPlaybackPositionChanged;
     muse::async::Channel<muse::actions::ActionCode> m_actionCheckedChanged;
 
     muse::audio::TrackSequenceId m_currentSequenceId = -1;
@@ -242,6 +236,8 @@ private:
     bool m_isRangeSelection = false;
 
     DrumsetLoader m_drumsetLoader;
+
+    bool m_measureInputLag = false;
 };
 }
 

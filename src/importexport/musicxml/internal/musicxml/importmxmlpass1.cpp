@@ -33,7 +33,7 @@
 #include "engraving/dom/text.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/utils.h"
-#include "engraving/rendering/dev/tlayout.h"
+#include "engraving/rendering/score/tlayout.h"
 
 #include "engraving/style/style.h"
 #include "engraving/style/textstyle.h"
@@ -53,7 +53,7 @@ using namespace mu;
 using namespace muse;
 using namespace muse::draw;
 using namespace mu::engraving;
-using namespace mu::engraving::rendering::dev;
+using namespace mu::engraving::rendering::score;
 
 static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
 {
@@ -569,6 +569,8 @@ static bool overrideTextStyleForComposer(const String& creditString)
 //   addText2
 //---------------------------------------------------------
 
+static void scaleTitle(Score* score, Text* text);
+
 /**
  Add text \a strTxt to VBox \a vbx using Tid \a stl.
  Also sets Align and Yoff.
@@ -576,7 +578,7 @@ static bool overrideTextStyleForComposer(const String& creditString)
 
 static void addText2(VBox* vbx, Score* score, const String& strTxt, const TextStyleType stl, const Align align, const double yoffs)
 {
-    if (overrideTextStyleForComposer(strTxt)) {
+    if (stl != TextStyleType::COMPOSER && overrideTextStyleForComposer(strTxt)) {
         // HACK: in some Dolet 8 files the composer is written as a subtitle, which leads to stupid formatting.
         // This overrides the formatting and introduces proper composer text
         Text* text = Factory::createText(vbx, TextStyleType::COMPOSER);
@@ -627,7 +629,7 @@ static void findYMinYMaxInWords(const std::vector<const CreditWords*>& words, in
 //   alignForCreditWords
 //---------------------------------------------------------
 
-static Align alignForCreditWords(const CreditWords* const w, const int pageWidth)
+static Align alignForCreditWords(const CreditWords* const w, const int pageWidth, const TextStyleType tid)
 {
     Align align = AlignH::LEFT;
     if (w->defaultX > (pageWidth / 3)) {
@@ -636,6 +638,9 @@ static Align alignForCreditWords(const CreditWords* const w, const int pageWidth
         } else {
             align = AlignH::RIGHT;
         }
+    }
+    if (tid == TextStyleType::COMPOSER) {
+        align.vertical = AlignV::BOTTOM;
     }
     return align;
 }
@@ -723,68 +728,11 @@ static TextStyleType tidForCreditWords(const CreditWords* const word, std::vecto
 //   createAndAddVBoxForCreditWords
 //---------------------------------------------------------
 
-VBox* MusicXMLParserPass1::createAndAddVBoxForCreditWords(Score* score, const int miny, const int maxy)
+VBox* MusicXMLParserPass1::createAndAddVBoxForCreditWords(Score* score)
 {
-    VBox* vbox = Factory::createVBox(score->dummy()->system());
-    double vboxHeight = 10;                           // default height in tenths
-    double diff = maxy - miny;                       // calculate height in tenths
-    if (diff > vboxHeight) {                         // and size is reasonable
-        vboxHeight = diff;
-    }
-    vboxHeight /= 10;                                // height in spatium
-    vboxHeight += 2.5;                               // guesstimated correction for last line
-
-    vbox->setBoxHeight(Spatium(vboxHeight));
+    VBox* vbox = Factory::createTitleVBox(score->dummy()->system());
     score->measures()->add(vbox);
     return vbox;
-}
-
-//---------------------------------------------------------
-//   reformatHeaderVBox
-//---------------------------------------------------------
-/**
- Due to inconsistencies with spacing and inferred text,
- the header VBox frequently has collisions. This cleans
- those (as a temporary fix for a more robust collision-prevention
- system in Boxes).
- */
-
-void MusicXMLParserPass1::reformatHeaderVBox(MeasureBase* mb)
-{
-    if (!mb->isVBox()) {
-        return;
-    }
-
-    VBox* headerVBox = toVBox(mb);
-    double totalHeight = 0;
-    double offsetHeight = 0;
-    double lineSpacingMultiplier = 0.5;
-
-    for (auto e : headerVBox->el()) {
-        if (!e->isText()) {
-            continue;
-        }
-        Text* t = toText(e);
-        TLayout::layoutText(t, t->mutldata());
-
-        totalHeight += t->height();
-        if (t->align() == AlignV::TOP) {
-            totalHeight += t->lineHeight() * lineSpacingMultiplier;
-            t->setOffset(t->offset().x(), offsetHeight);
-            t->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
-            offsetHeight += t->height();
-            offsetHeight += t->lineHeight() * lineSpacingMultiplier;
-        }
-    }
-
-    // 1mm of
-    static const double VBOX_BOTTOM_PADDING = 1;
-    totalHeight += VBOX_BOTTOM_PADDING;
-    headerVBox->setBottomMargin(VBOX_BOTTOM_PADDING);
-    headerVBox->setPropertyFlags(Pid::BOTTOM_MARGIN, PropertyFlags::UNSTYLED);
-
-    headerVBox->setBoxHeight(Spatium(totalHeight / headerVBox->spatium()));
-    headerVBox->setPropertyFlags(Pid::BOX_HEIGHT, PropertyFlags::UNSTYLED);
 }
 
 //---------------------------------------------------------
@@ -823,6 +771,11 @@ bool isLikelyCreditText(const String& text, const bool caseInsensitive = true)
            || text.trimmed().contains(std::wregex(L"^(Traditional|Trad\\.)", caseOption));
 }
 
+static bool isLikelyRightsText(const String& text)
+{
+    return text.contains(u"all rights reserved", CaseSensitivity::CaseInsensitive) || text.contains(u"\u00A9");
+}
+
 //---------------------------------------------------------
 //   inferSubTitleFromTitle
 //---------------------------------------------------------
@@ -854,16 +807,15 @@ static void inferFromTitle(String& title, String& inferredSubtitle, String& infe
 //   addCreditWords
 //---------------------------------------------------------
 
-static VBox* addCreditWords(Score* score, const CreditWordsList& crWords,
-                            const int pageNr, const Size& pageSize,
-                            const bool top)
+static VBox* addCreditWords(Score* score, const CreditWordsList& crWords, const Size& pageSize,
+                            const bool top, const bool isSibeliusScore)
 {
     VBox* vbox = nullptr;
 
     std::vector<const CreditWords*> headerWords;
     std::vector<const CreditWords*> footerWords;
     for (const CreditWords* w : crWords) {
-        if (w->page == pageNr) {
+        if (w->page == 1) {
             if (w->defaultY > (pageSize.height() / 2)) {
                 headerWords.push_back(w);
             } else {
@@ -873,20 +825,16 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords,
     }
 
     std::vector<const CreditWords*> words;
-    if (pageNr == 1) {
-        // if there are more credit words in the footer than in header,
-        // swap header and footer, assuming this will result in a vertical
-        // frame with the title on top of the page.
-        // Sibelius (direct export) typically exports no header
-        // and puts the title etc. in the footer
-        const bool doSwap = footerWords.size() > headerWords.size();
-        if (top) {
-            words = doSwap ? footerWords : headerWords;
-        } else {
-            words = doSwap ? headerWords : footerWords;
-        }
+    // if there are more credit words in the footer than in header,
+    // swap header and footer, assuming this will result in a vertical
+    // frame with the title on top of the page.
+    // Sibelius (direct export) typically exports no header
+    // and puts the title etc. in the footer
+    const bool doSwap = footerWords.size() > headerWords.size() && isSibeliusScore;
+    if (top) {
+        words = doSwap ? footerWords : headerWords;
     } else {
-        words = top ? headerWords : footerWords;
+        words = doSwap ? headerWords : footerWords;
     }
 
     int miny = 0;
@@ -895,13 +843,19 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords,
 
     for (const CreditWords* w : words) {
         if (mustAddWordToVbox(w->type)) {
-            const Align align = alignForCreditWords(w, pageSize.width());
-            const TextStyleType tid = (pageNr == 1 && top) ? tidForCreditWords(w, words, pageSize.width()) : TextStyleType::DEFAULT;
-            double yoffs = (maxy - w->defaultY) * score->style().spatium() / 10;
+            const TextStyleType tid = top ? tidForCreditWords(w, words, pageSize.width()) : TextStyleType::DEFAULT;
+            const Align align = alignForCreditWords(w, pageSize.width(), tid);
+            double yoffs = tid == TextStyleType::COMPOSER ? 0.0 : (maxy - w->defaultY) * score->style().spatium() / 10;
             if (!vbox) {
-                vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score, miny, maxy);
+                vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score);
             }
             addText2(vbox, score, w->words, tid, align, yoffs);
+        } else if (w->type == u"rights" && score->metaTag(u"copyright").empty()) {
+            // Add rights to footer, not a vbox
+            static const std::regex tagRe("(<.*?>)");
+            String rights = w->words;
+            rights.remove(tagRe);
+            score->setMetaTag(u"copyright", rights);
         }
     }
 
@@ -995,9 +949,12 @@ void MusicXMLParserPass1::createMeasuresAndVboxes(Score* score,
         // add a header vbox if the this measure is the first in the score or the first on a new page
         if (pageStartMeasureNrs.count(int(i)) || i == 0) {
             ++pageNr;
-            vbox = addCreditWords(score, crWords, pageNr, pageSize, true);
-            if (i == 0 && vbox) {
-                vbox->setExcludeFromOtherParts(false);
+
+            if (pageNr == 1) {
+                vbox = addCreditWords(score, crWords, pageSize, true, m_exporterString.contains(u"sibelius"));
+                if (i == 0 && vbox) {
+                    vbox->setExcludeFromOtherParts(false);
+                }
             }
         }
 
@@ -1020,8 +977,8 @@ void MusicXMLParserPass1::createMeasuresAndVboxes(Score* score,
         }
 
         // add a footer vbox if the next measure is on a new page or end of score has been reached
-        if (pageStartMeasureNrs.count(int(i + 1)) || i == (ml.size() - 1)) {
-            addCreditWords(score, crWords, pageNr, pageSize, false);
+        if ((pageStartMeasureNrs.count(int(i + 1)) || i == (ml.size() - 1)) && pageNr == 1) {
+            addCreditWords(score, crWords, pageSize, false, m_exporterString.contains(u"sibelius"));
         }
     }
 }
@@ -1525,6 +1482,7 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
     String valign;
     StringList crtypes;
     String crwords;
+    bool hasRights = false;
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "credit-words") {
             // IMPORT_LAYOUT
@@ -1541,10 +1499,15 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
         } else if (m_e.name() == "credit-type") {
             // multiple credit-type elements may be present, supported by
             // e.g. Finale v26.3 for Mac.
-            crtypes.push_back(m_e.readText());
+            String type = m_e.readText();
+            crtypes.push_back(type);
+            hasRights = hasRights || type == u"rights";
         } else {
             skipLogCurrElem();
         }
+    }
+    if (!hasRights && isLikelyRightsText(crwords)) {
+        crtypes.push_back(u"rights");
     }
     if (!crwords.empty()) {
         // as the meaning of multiple credit-types is undocumented,
@@ -1613,7 +1576,8 @@ static void updateStyles(Score* score,
         // and text types used in the title frame
         // Some further tweaking may still be required.
 
-        if (tid == TextStyleType::LYRICS_ODD || tid == TextStyleType::LYRICS_EVEN) {
+        if (tid == TextStyleType::LYRICS_ODD || tid == TextStyleType::LYRICS_EVEN
+            || tid == TextStyleType::FRET_DIAGRAM_FINGERING || tid == TextStyleType::FRET_DIAGRAM_FRET_NUMBER) {
             continue;
         }
 
@@ -1797,7 +1761,7 @@ void MusicXMLParserPass1::defaults()
         } else if (m_e.name() == "staff-layout") {
             while (m_e.readNextStartElement()) {
                 if (m_e.name() == "staff-distance") {
-                    Spatium val(m_e.readText().toDouble() / 10.0);
+                    const Spatium val(m_e.readText().toDouble() / 10.0);
                     if (isImportLayout) {
                         m_score->style().set(Sid::staffDistance, val);
                     }
@@ -1894,13 +1858,13 @@ void MusicXMLParserPass1::setStyle(const String& type, const double val)
     } else if (type == u"wedge") {
         m_score->style().set(Sid::hairpinLineWidth, Spatium(val / 10));
     } else if (type == u"slur middle") {
-        m_score->style().set(Sid::SlurMidWidth, Spatium(val / 10));
+        m_score->style().set(Sid::slurMidWidth, Spatium(val / 10));
     } else if (type == u"slur tip") {
-        m_score->style().set(Sid::SlurEndWidth, Spatium(val / 10));
+        m_score->style().set(Sid::slurEndWidth, Spatium(val / 10));
     } else if (type == u"tie middle") {
-        m_score->style().set(Sid::TieMidWidth, Spatium(val / 10));
+        m_score->style().set(Sid::tieMidWidth, Spatium(val / 10));
     } else if (type == u"tie tip") {
-        m_score->style().set(Sid::TieEndWidth, Spatium(val / 10));
+        m_score->style().set(Sid::tieEndWidth, Spatium(val / 10));
     } else if ((type == u"cue")) {
         m_score->style().set(Sid::smallNoteMag, val / 100);
     } else if ((type == u"grace")) {
@@ -1999,12 +1963,13 @@ void MusicXMLParserPass1::partList(MusicXmlPartGroupList& partGroupList)
 
     int scoreParts = 0;   // number of score-parts read sofar
     MusicXmlPartGroupMap partGroups;
+    String curPartGroupName;
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "part-group") {
-            partGroup(scoreParts, partGroupList, partGroups);
+            partGroup(scoreParts, partGroupList, partGroups, curPartGroupName);
         } else if (m_e.name() == "score-part") {
-            scorePart();
+            scorePart(curPartGroupName);
             scoreParts++;
         } else {
             skipLogCurrElem();
@@ -2115,7 +2080,7 @@ static void partGroupStop(MusicXmlPartGroupMap& pgs, int n, int p,
 
 void MusicXMLParserPass1::partGroup(const int scoreParts,
                                     MusicXmlPartGroupList& partGroupList,
-                                    MusicXmlPartGroupMap& partGroups)
+                                    MusicXmlPartGroupMap& partGroups, String& curPartGroupName)
 {
     m_logger->logDebugTrace(u"MusicXMLParserPass1::partGroup", &m_e);
     bool barlineSpan = true;
@@ -2128,7 +2093,7 @@ void MusicXMLParserPass1::partGroup(const int scoreParts,
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "group-name") {
-            m_e.skipCurrentElement();        // skip but don't log
+            curPartGroupName = m_e.readText();
         } else if (m_e.name() == "group-abbreviation") {
             symbol = m_e.readText();
         } else if (m_e.name() == "group-symbol") {
@@ -2162,7 +2127,7 @@ void MusicXMLParserPass1::partGroup(const int scoreParts,
  which is invalid MusicXML but is (sometimes ?) generated by NWC2MusicXML.
  */
 
-void MusicXMLParserPass1::scorePart()
+void MusicXMLParserPass1::scorePart(const String& curPartGroupName)
 {
     m_logger->logDebugTrace(u"MusicXMLParserPass1::scorePart", &m_e);
     String id = m_e.attribute("id").trimmed();
@@ -2226,7 +2191,7 @@ void MusicXMLParserPass1::scorePart()
             // TODO
             m_e.skipCurrentElement();          // skip but don't log
         } else if (m_e.name() == "score-instrument") {
-            scoreInstrument(id);
+            scoreInstrument(id, curPartGroupName);
         } else if (m_e.name() == "player") {
             // unsupported
             m_e.skipCurrentElement();          // skip but don't log
@@ -2264,7 +2229,7 @@ void MusicXMLParserPass1::scorePart()
  Parse the /score-partwise/part-list/score-part/score-instrument node.
  */
 
-void MusicXMLParserPass1::scoreInstrument(const String& partId)
+void MusicXMLParserPass1::scoreInstrument(const String& partId, const String& curPartGroupName)
 {
     m_logger->logDebugTrace(u"MusicXMLParserPass1::scoreInstrument", &m_e);
     String instrId = m_e.attribute("id");
@@ -2281,6 +2246,14 @@ void MusicXMLParserPass1::scoreInstrument(const String& partId)
                    muPrintable(instrName)
                    );
              */
+
+            // Finale exports all instrument names as 'Grand Piano' - use part name
+            if (m_exporterString.contains(u"finale")) {
+                instrName = m_parts[partId].getName();
+                if (instrName.size() <= 1) {
+                    instrName = curPartGroupName;
+                }
+            }
             m_instruments[partId].insert({ instrId, MusicXMLInstrument(instrName) });
             // EngravingItem instrument-name is typically not displayed in the score,
             // but used only internally

@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_EXTENSIONSTYPES_H
-#define MUSE_EXTENSIONS_EXTENSIONSTYPES_H
+#pragma once
 
 #include <vector>
 #include <map>
@@ -29,6 +28,10 @@
 #include "global/types/string.h"
 #include "global/io/path.h"
 #include "global/types/translatablestring.h"
+#include "ui/uiaction.h"
+#include "shortcuts/shortcutcontext.h"
+
+#include "log.h"
 
 namespace muse::extensions {
 //! NOTE Api versions:
@@ -38,6 +41,47 @@ constexpr int DEFAULT_API_VERSION = 2;
 
 //! NOTE Default extension dialog modality
 constexpr bool DEFAULT_MODAL = false;
+
+constexpr const char* SINGLE_FILE_EXT = "mext";
+
+//! NOTE Should a project be open...
+//!
+//! Must match contexts in `context/uicontext.h`
+//! Slightly different values ​​were intentionally made
+//! so that it would look neater in the manifest and there would be a conversion function,
+//! i.e. we had the ability to change the internal names.
+//! And the external names (specified in the manifest) remained unchanged.
+//! And there was a list of contexts that we specifically provide for extensions.
+//!
+//! If contexts appear outside the muse framework,
+//! then we need to add an interface for conversion, and require the application to implement it.
+//!
+constexpr const char16_t* DEFAULT_UI_CONTEXT = u"ProjectOpened";
+static inline ui::UiContext toUiContext(const String& ctx)
+{
+    if (ctx == u"ProjectOpened") {
+        return ui::UiCtxProjectOpened;
+    } else if (ctx == u"Any") {
+        return ui::UiCtxAny;
+    }
+    LOGE() << "unknown ui context: " << ctx << ", will be use default: " << DEFAULT_UI_CONTEXT;
+    return ui::UiCtxProjectOpened;
+}
+
+//! NOTE There is currently no separate context shortcut in the manifest properties.
+//! But if needed, it needs to be added.
+//! Also see the comments above for the UiContext
+
+static inline std::string toScContext(const String& uiCtx)
+{
+    if (uiCtx == u"ProjectOpened") {
+        return shortcuts::CTX_PROJECT_OPENED;
+    } else if (uiCtx == u"Any") {
+        return shortcuts::CTX_ANY;
+    }
+    LOGE() << "unknown ui context: " << uiCtx << ", will be use default: " << DEFAULT_UI_CONTEXT;
+    return shortcuts::CTX_PROJECT_OPENED;
+}
 
 enum class Type {
     Undefined = 0,
@@ -74,14 +118,36 @@ enum Filter {
     All
 };
 
+//! NOTE Exec points
+using ExecPointName = std::string;
+struct ExecPoint {
+    ExecPointName name;
+    TranslatableString title;
+
+    inline bool operator==(const ExecPoint& p) const { return p.name == name; }
+    inline bool operator!=(const ExecPoint& p) const { return !this->operator==(p); }
+
+    inline bool isNull() const { return name.empty(); }
+};
+
+static inline const ExecPointName EXEC_DISABLED = "disabled";
+static inline const ExecPointName EXEC_MANUALLY = "manually";
+
 struct Action {
     std::string code;
     Type type = Type::Undefined;
     bool modal = DEFAULT_MODAL;
     String title;
+    String uiCtx = DEFAULT_UI_CONTEXT;
+    bool hidden = false; // hidden from menu, can be called programmatically
     io::path_t main;
     int apiversion = DEFAULT_API_VERSION;
     bool legacyPlugin = false;
+
+    struct Config {
+        ExecPointName execPoint = EXEC_DISABLED;
+        std::string shortcut;
+    };
 
     bool isValid() const { return type != Type::Undefined && !code.empty(); }
 };
@@ -119,16 +185,43 @@ struct Manifest {
     String version;
     int apiversion = DEFAULT_API_VERSION;
     bool legacyPlugin = false;
-    bool requiresProject = true;
 
     std::vector<Action> actions;
 
     struct Config {
-        bool enabled = false;
+        std::map<std::string /*action*/, Action::Config> actions;
+
+        //! TODO remove
         std::string shortcuts;
+
+        const Action::Config& aconfig(const std::string& code) const
+        {
+            auto it = actions.find(code);
+            if (it != actions.end()) {
+                return it->second;
+            }
+            static Action::Config _dummy;
+            return _dummy;
+        }
     } config;
 
     bool isValid() const { return type != Type::Undefined && uri.isValid(); }
+
+    bool enabled() const
+    {
+        //! NOTE If at least one is enabled, then it's enabled.
+        for (const Action& a : actions) {
+            auto it = config.actions.find(a.code);
+            if (it == config.actions.end()) {
+                continue;
+            }
+            const Action::Config& ac = it->second;
+            if (!ac.execPoint.empty() && ac.execPoint != EXEC_DISABLED) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     Action action(const std::string& code) const
     {
@@ -145,5 +238,3 @@ using ManifestList = std::vector<Manifest>;
 
 using KnownCategories = std::map<std::string /*name*/, TranslatableString /*title*/>;
 }
-
-#endif // MUSE_EXTENSIONS_EXTENSIONSTYPES_H

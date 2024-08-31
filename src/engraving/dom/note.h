@@ -272,6 +272,7 @@ public:
     bool negativeFretUsed() const;
     int string() const { return m_string; }
     void setString(int val) { m_string = val; }
+    int stringOrLine() const;
 
     bool ghost() const { return m_ghost; }
     void setGhost(bool val) { m_ghost = val; }
@@ -296,9 +297,13 @@ public:
     Tie* tieBack() const { return m_tieBack; }
     void setTieFor(Tie* t) { m_tieFor = t; }
     void setTieBack(Tie* t) { m_tieBack = t; }
-    Note* firstTiedNote() const;
-    const Note* lastTiedNote(const int positionTickOffset = 0) const;
-    Note* lastTiedNote() { return const_cast<Note*>(static_cast<const Note*>(this)->lastTiedNote()); }
+    Note* firstTiedNote(bool ignorePlayback = true) const;
+    const Note* lastTiedNote(bool ignorePlayback = true, const int positionTickOffset = 0) const;
+    Note* lastTiedNote(bool ignorePlayback = true, const int positionTickOffset = 0)
+    {
+        return const_cast<Note*>(static_cast<const Note*>(this)->lastTiedNote(ignorePlayback, positionTickOffset));
+    }
+
     int unisonIndex() const;
     void disconnectTiedNotes();
     void connectTiedNotes();

@@ -22,15 +22,12 @@
 #ifndef MU_NOTATION_NOTATIONPLAYBACK_H
 #define MU_NOTATION_NOTATIONPLAYBACK_H
 
-#include <memory>
-
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "engraving/playback/playbackmodel.h"
 
 #include "../inotationplayback.h"
 #include "igetscore.h"
-#include "inotationundostack.h"
 #include "inotationconfiguration.h"
 
 namespace mu::engraving {
@@ -59,12 +56,12 @@ public:
     muse::async::Channel<engraving::InstrumentTrackId> trackAdded() const override;
     muse::async::Channel<engraving::InstrumentTrackId> trackRemoved() const override;
 
-    muse::audio::msecs_t totalPlayTime() const override;
-    muse::async::Channel<muse::audio::msecs_t> totalPlayTimeChanged() const override;
+    muse::audio::secs_t totalPlayTime() const override;
+    muse::async::Channel<muse::audio::secs_t> totalPlayTimeChanged() const override;
 
-    float playedTickToSec(muse::midi::tick_t tick) const override;
-    muse::midi::tick_t secToPlayedTick(float sec) const override;
-    muse::midi::tick_t secToTick(float sec) const override;
+    muse::audio::secs_t playedTickToSec(muse::midi::tick_t tick) const override;
+    muse::midi::tick_t secToPlayedTick(muse::audio::secs_t sec) const override;
+    muse::midi::tick_t secToTick(muse::audio::secs_t sec) const override;
 
     muse::RetVal<muse::midi::tick_t> playPositionTickByRawTick(muse::midi::tick_t tick) const override;
     muse::RetVal<muse::midi::tick_t> playPositionTickByElement(const EngravingItem* element) const override;
@@ -76,14 +73,13 @@ public:
 
     const Tempo& tempo(muse::midi::tick_t tick) const override;
     MeasureBeat beat(muse::midi::tick_t tick) const override;
-    muse::midi::tick_t beatToTick(int measureIndex, int beatIndex) const override;
+    muse::midi::tick_t beatToRawTick(int measureIndex, int beatIndex) const override;
 
     double tempoMultiplier() const override;
     void setTempoMultiplier(double multiplier) override;
 
     void addSoundFlags(const std::vector<mu::engraving::StaffText*>& staffTextList) override;
     void removeSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) override;
-    bool hasSoundFlags() override;
     bool hasSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) override;
 
 private:
@@ -108,8 +104,8 @@ private:
     LoopBoundaries m_loopBoundaries;
     muse::async::Notification m_loopBoundariesChanged;
 
-    muse::audio::msecs_t m_totalPlayTime = 0;
-    muse::async::Channel<muse::audio::msecs_t> m_totalPlayTimeChanged;
+    muse::audio::secs_t m_totalPlayTime = 0;
+    muse::async::Channel<muse::audio::secs_t> m_totalPlayTimeChanged;
 
     mutable Tempo m_currentTempo;
 

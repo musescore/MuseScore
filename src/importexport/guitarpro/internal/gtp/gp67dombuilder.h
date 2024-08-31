@@ -5,7 +5,6 @@
 
 #include "igpdombuilder.h"
 #include "gpdommodel.h"
-#include "inoteproperty.h"
 #include "gptrack.h"
 
 namespace mu::iex::guitarpro {

@@ -22,78 +22,15 @@
 import QtQuick 2.15
 
 import Muse.Ui 1.0
-import MuseScore.NotationScene 1.0
 import Muse.UiComponents 1.0
 
-Item {
-    id: root
+import MuseScore.NotationScene 1.0
 
-    signal activeFocusRequested()
+StyledToolBarView {
+    navigationPanel.name: "NotationToolBar"
+    navigationPanel.accessible.name: qsTrc("notation", "Notation toolbar")
 
-    width: view.width
-    height: view.height
+    spacing: 2
 
-    Component.onCompleted: {
-        toolbarModel.load()
-    }
-
-    property NavigationPanel navigationPanel: NavigationPanel {
-        name: "NotationToolBar"
-        enabled: root.enabled && root.visible
-        accessible.name: qsTrc("notation", "Notation toolbar")
-        onActiveChanged: function(active) {
-            if (active) {
-                root.activeFocusRequested()
-                root.forceActiveFocus()
-            }
-        }
-    }
-
-    NotationToolBarModel {
-        id: toolbarModel
-    }
-
-    ListView {
-        id: view
-
-        width: contentWidth
-        height: contentItem.childrenRect.height
-
-        orientation: Qt.Horizontal
-        interactive: false
-        spacing: 2
-
-        model: toolbarModel
-
-        delegate: FlatButton {
-            height: 30
-
-            property var item: Boolean(model) ? model.itemRole : null
-
-            text: Boolean(item) ? item.title : ""
-            icon: Boolean(item) ? item.icon : IconCode.NONE
-            iconFont: ui.theme.toolbarIconsFont
-
-            toolTipTitle: Boolean(item) ? item.title : ""
-            toolTipDescription: Boolean(item) ? item.description : ""
-            toolTipShortcut: Boolean(item) ? item.shortcuts : ""
-
-            enabled: Boolean(item) ? item.enabled : false
-
-            textFont: ui.theme.largeBodyFont
-
-            navigation.panel: root.navigationPanel
-            navigation.name: toolTipTitle
-            navigation.order: model.index
-            accessible.name: (item.checkable ? (item.checked ? item.title + "  " + qsTrc("global", "On") :
-                                                               item.title + "  " + qsTrc("global", "Off")) : item.title)
-
-            transparent: true
-            orientation: Qt.Horizontal
-
-            onClicked: {
-                toolbarModel.handleMenuItem(item.id)
-            }
-        }
-    }
+    model: NotationToolBarModel { }
 }

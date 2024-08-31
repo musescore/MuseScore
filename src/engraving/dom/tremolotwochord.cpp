@@ -22,16 +22,13 @@
 
 #include "tremolotwochord.h"
 
-#include "draw/types/brush.h"
-#include "draw/types/pen.h"
 #include "draw/types/transform.h"
 
-#include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "style/style.h"
 
-#include "rendering/dev/beamtremololayout.h"
+#include "rendering/score/beamtremololayout.h"
 
 #include "beam.h"
 #include "chord.h"
@@ -103,7 +100,7 @@ double TremoloTwoChord::chordMag() const
 
 double TremoloTwoChord::minHeight() const
 {
-    const double sw = style().styleS(Sid::tremoloStrokeWidth).val() * chordMag();
+    const double sw = style().styleS(Sid::tremoloLineWidth).val() * chordMag();
     const double td = style().styleS(Sid::tremoloDistance).val() * chordMag();
     return (lines() - 1) * td + sw;
 }
@@ -114,7 +111,7 @@ double TremoloTwoChord::minHeight() const
 
 PointF TremoloTwoChord::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anchorType) const
 {
-    return rendering::dev::BeamTremoloLayout::chordBeamAnchor(this->ldata(), chord, anchorType);
+    return rendering::score::BeamTremoloLayout::chordBeamAnchor(this->ldata(), chord, anchorType);
 }
 
 //---------------------------------------------------------
@@ -602,7 +599,7 @@ PainterPath TremoloTwoChord::basePath(double stretch) const
 
     // overall width of two-note tremolos should not be changed if chordMag() isn't 1.0
     double w2  = sp * style().styleS(Sid::tremoloWidth).val() * .5 / (twoNotes() ? chordMag() : 1.0);
-    double lw  = sp * style().styleS(Sid::tremoloStrokeWidth).val();
+    double lw  = sp * style().styleS(Sid::tremoloLineWidth).val();
     double td  = sp * style().styleS(Sid::tremoloDistance).val();
 
     PainterPath ppath;

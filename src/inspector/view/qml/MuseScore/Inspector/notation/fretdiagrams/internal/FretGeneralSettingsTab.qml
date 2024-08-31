@@ -62,7 +62,7 @@ FocusableItem {
 
                 enabled: root.model ? !root.model.isMultipleDotsModeOn : false
                 checked: root.model && enabled ? root.model.isBarreModeOn : false
-                text: qsTrc("inspector", "Barre")
+                text: qsTrc("inspector", "Barré")
 
                 navigation.name: "BarreModeCheckBox"
                 navigation.panel: root.navigationPanel

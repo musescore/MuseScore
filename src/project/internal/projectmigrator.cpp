@@ -23,6 +23,8 @@
 
 #include <QVersionNumber>
 
+#include "mdlmigrator.h"
+
 #include "engraving/types/constants.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/excerpt.h"
@@ -98,6 +100,8 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     query.addParam("migrationType", Val(migrationType));
     query.addParam("isApplyLeland", Val(out.isApplyLeland));
     query.addParam("isApplyEdwin", Val(out.isApplyEdwin));
+    query.addParam("isRemapPercussion", Val(out.isRemapPercussion));
+
     RetVal<Val> rv = interactive()->open(query);
     if (!rv.ret) {
         return rv.ret;
@@ -109,6 +113,7 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     out.isAskAgain = vals.value("isAskAgain").toBool();
     out.isApplyLeland = vals.value("isApplyLeland").toBool();
     out.isApplyEdwin = vals.value("isApplyEdwin").toBool();
+    out.isRemapPercussion = vals.value("isRemapPercussion").toBool();
 
     return true;
 }
@@ -160,6 +165,10 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
     if (ok && opt.isApplyEdwin) {
         ok = applyEdwinStyle(score);
         m_resetStyleSettings = false;
+    }
+
+    if (ok && opt.isRemapPercussion) {
+        MdlMigrator(score).remapPercussion();
     }
 
     if (ok && score->mscVersion() < 300) {

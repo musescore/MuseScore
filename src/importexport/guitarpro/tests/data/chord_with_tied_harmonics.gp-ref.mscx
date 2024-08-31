@@ -139,6 +139,13 @@
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
               <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
                 </Spanner>
               <pitch>68</pitch>
               <tpc>22</tpc>
@@ -151,6 +158,13 @@
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
               <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
                 </Spanner>
               <pitch>73</pitch>
               <tpc>21</tpc>
@@ -160,6 +174,13 @@
               </Note>
             <Note>
               <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
                 </Spanner>
               <pitch>77</pitch>
               <tpc>13</tpc>
@@ -241,6 +262,20 @@
               </Note>
             <Note>
               <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
                 </Spanner>
               <pitch>68</pitch>
               <tpc>22</tpc>
@@ -250,6 +285,20 @@
               </Note>
             <Note>
               <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
                 </Spanner>
               <pitch>73</pitch>
               <tpc>21</tpc>
@@ -259,6 +308,20 @@
               </Note>
             <Note>
               <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
                 </Spanner>
               <pitch>77</pitch>
               <tpc>13</tpc>
@@ -340,6 +403,20 @@
               </Note>
             <Note>
               <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
                 </Spanner>
               <pitch>68</pitch>
               <tpc>22</tpc>
@@ -349,6 +426,20 @@
               </Note>
             <Note>
               <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
                 </Spanner>
               <pitch>73</pitch>
               <tpc>21</tpc>
@@ -358,6 +449,20 @@
               </Note>
             <Note>
               <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
                 </Spanner>
               <pitch>77</pitch>
               <tpc>13</tpc>
@@ -451,6 +556,13 @@
                     </location>
                   </next>
                 </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
               <pitch>68</pitch>
               <tpc>22</tpc>
               <head>diamond</head>
@@ -468,6 +580,13 @@
                     </location>
                   </next>
                 </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
               <pitch>73</pitch>
               <tpc>21</tpc>
               <head>diamond</head>
@@ -484,6 +603,13 @@
                     <fractions>-3/4</fractions>
                     </location>
                   </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
                 </Spanner>
               <pitch>77</pitch>
               <tpc>13</tpc>

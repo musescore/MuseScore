@@ -36,7 +36,7 @@ static QStringList prepareArguments(int argc, char** argv)
     QStringList args;
 
     for (int i = 0; i < argc; ++i) {
-        QString arg = QString::fromLocal8Bit(argv[i]);
+        QString arg = QString::fromUtf8(argv[i]);
 
 #ifndef NDEBUG
         if (arg.startsWith("-qmljsdebugger")) {
@@ -83,8 +83,10 @@ void CommandLineParser::init()
 
     // Converter mode
     m_parser.addOption(QCommandLineOption({ "r", "image-resolution" }, "Set output resolution for image export", "DPI"));
-    m_parser.addOption(QCommandLineOption({ "j", "job" }, "Process a conversion job", "file"));
     m_parser.addOption(QCommandLineOption({ "o", "export-to" }, "Export to 'file'. Format depends on file's extension", "file"));
+    m_parser.addOption(QCommandLineOption({ "j", "job" }, "Process a conversion job", "file"));
+    m_parser.addOption(QCommandLineOption("extension", "Use extension to process a conversion job", "uri"));
+
     m_parser.addOption(QCommandLineOption({ "F", "factory-settings" }, "Use factory settings"));
     m_parser.addOption(QCommandLineOption({ "R", "revert-settings" }, "Revert to factory settings, but keep default preferences"));
     m_parser.addOption(QCommandLineOption({ "M", "midi-operations" }, "Specify MIDI import operations file", "file"));
@@ -417,6 +419,10 @@ void CommandLineParser::parse(int argc, char** argv)
 
     if (m_parser.isSet("sound-profile")) {
         m_options.converterTask.params[CmdOptions::ParamKey::SoundProfile] = m_parser.value("sound-profile");
+    }
+
+    if (m_parser.isSet("extension")) {
+        m_options.converterTask.params[CmdOptions::ParamKey::ExtensionUri] = m_parser.value("extension");
     }
 
     if (m_parser.isSet("gp-linked")) {

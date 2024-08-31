@@ -33,6 +33,8 @@
       <bendFontSize>10</bendFontSize>
       <headerFontSize>10</headerFontSize>
       <footerFontSize>10</footerFontSize>
+      <copyrightFontSize>10</copyrightFontSize>
+      <pageNumberFontSize>10</pageNumberFontSize>
       <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -186,7 +188,7 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>12.5</height>
+        <height>10</height>
         <Text>
           <style>title</style>
           <offset x="0" y="-0.00874889"/>
@@ -199,8 +201,6 @@
           </Text>
         <Text>
           <style>composer</style>
-          <align>right,top</align>
-          <offset x="0" y="17.489"/>
           <text>Henry Ives</text>
           </Text>
         </VBox>

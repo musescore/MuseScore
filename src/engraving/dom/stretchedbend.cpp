@@ -146,7 +146,7 @@ bool StretchedBend::setProperty(Pid id, const PropertyValue& v)
         _fontStyle = FontStyle(v.toInt());
         break;
     case Pid::LINE_WIDTH:
-        _lineWidth = v.value<Millimetre>();
+        _lineWidth = v.value<Spatium>();
         break;
     default:
         return EngravingItem::setProperty(id, v);
@@ -542,7 +542,7 @@ RectF StretchedBend::calculateBoundingRect() const
         }
     }
 
-    double lw = lineWidth();
+    double lw = absoluteFromSpatium(lineWidth());
     bRect.adjust(-lw, -lw, lw, lw);
 
     return bRect;

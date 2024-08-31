@@ -58,6 +58,10 @@
 #include "diagnostics/idiagnosticspathsregister.h"
 #endif
 
+#ifdef Q_OS_WIN
+#include "platform/win/waitabletimer.h"
+#endif
+
 #include "log.h"
 
 using namespace muse;
@@ -155,12 +159,12 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
                        + QDateTime::currentDateTime().toString("yyMMdd")
                        + ".log";
     } else {
-        logFileNamePattern = u"MuseScore_yyMMdd_HHmmss.log";
+        logFileNamePattern = BaseApplication::appName() + u"_yyMMdd_HHmmss.log";
 
-        //! This creates a file named "data/logs/MuseScore_yyMMdd_HHmmss.log"
-        logFilePath += "/MuseScore_"
-                       + QDateTime::currentDateTime().toString("yyMMdd_HHmmss")
-                       + ".log";
+        //! This creates a file named "data/logs/AppName_yyMMdd_HHmmss.log"
+        logFilePath += u"/" + BaseApplication::appName() + u"_"
+                       + String::fromQString(QDateTime::currentDateTime().toString("yyMMdd_HHmmss"))
+                       + u".log";
     }
 
     //! Remove old logs
@@ -182,7 +186,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     }
 
     LOGI() << "log path: " << logFilePath;
-    LOGI() << "=== Started " << m_application->name()
+    LOGI() << "=== Started " << m_application->title()
            << " " << m_application->fullVersion().toString()
            << ", build: " << m_application->build() << " ===";
 
@@ -196,6 +200,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 
     Profiler::Options profOpt;
     profOpt.stepTimeEnabled = true;
+    profOpt.timersEnabled = true;
     profOpt.funcsTimeEnabled = true;
     profOpt.funcsTraceEnabled = false;
     profOpt.funcsMaxThreadCount = 100;
@@ -233,11 +238,32 @@ void GlobalModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
     m_systemInfo->init();
+
+    m_endTimePeriod = false;
+
+#ifdef Q_OS_WIN
+    WaitableTimer timer;
+    if (m_configuration->highResolutionTimers() || !timer.init()) {
+        // Improves the accuracy of Sleep() on Windows
+        // Without it, errors up to 15 ms are possible, which is critical for the audio thread
+        // and can significantly degrade sound quality
+        // However, this approach may result in higher CPU usage as a trade-off
+        LOGI() << "Use timeBeginPeriod(1)";
+        timeBeginPeriod(1);
+        m_endTimePeriod = true;
+    }
+#endif
 }
 
 void GlobalModule::onDeinit()
 {
     invokeQueuedCalls();
+
+#ifdef Q_OS_WIN
+    if (m_endTimePeriod) {
+        timeEndPeriod(1);
+    }
+#endif
 }
 
 void GlobalModule::invokeQueuedCalls()

@@ -58,6 +58,7 @@ private:
     static void replaceStaffTextWithCapo(MasterScore* masterScore);
     static void addMissingInitKeyForTransposingInstrument(MasterScore* score);
     static void resetFramesExclusionFromParts(MasterScore* masterScore);
+    static void mapHeaderFooterStyles(MasterScore* masterScore);
 };
 }
 #endif // MU_ENGRAVING_COMPATUTILS_H

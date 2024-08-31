@@ -1,0 +1,3 @@
+module MuseApi.Controls
+StyledTextLabel 1.0 ../../../qml/Muse/UiComponents/StyledTextLabel.qml
+FlatButton 1.0 ../../../qml/Muse/UiComponents/FlatButton.qml

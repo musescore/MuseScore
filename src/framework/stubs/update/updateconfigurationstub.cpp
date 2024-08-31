@@ -98,3 +98,8 @@ muse::io::path_t UpdateConfigurationStub::updateDataPath() const
 {
     return "";
 }
+
+muse::io::path_t UpdateConfigurationStub::updateRequestHistoryJsonPath() const
+{
+    return "";
+}

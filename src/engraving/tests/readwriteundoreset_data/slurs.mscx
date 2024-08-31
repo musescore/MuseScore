@@ -80,6 +80,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <Text>
           <style>title</style>
           <text>slurs</text>
@@ -349,6 +350,9 @@
               <tpc>16</tpc>
               </Note>
             </Chord>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
           </voice>
         </Measure>
       <Measure>

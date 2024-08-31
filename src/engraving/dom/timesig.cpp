@@ -22,8 +22,9 @@
 
 #include "timesig.h"
 
+#include <functional>
+
 #include "style/style.h"
-#include "translation.h"
 
 #include "score.h"
 #include "segment.h"
@@ -296,29 +297,45 @@ EngravingItem* TimeSig::prevSegmentElement()
 }
 
 //---------------------------------------------------------
+//   subtype
+//---------------------------------------------------------
+
+int TimeSig::subtype() const
+{
+    size_t h1 = std::hash<int> {}(numerator());
+    size_t h2 = std::hash<int> {}(denominator());
+    size_t h3 = std::hash<TimeSigType> {}(timeSigType());
+
+    return static_cast<int>(h1 ^ (h2 << 1) ^ (h3 << 2));
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString TimeSig::subtypeUserName() const
+{
+    switch (timeSigType()) {
+    case TimeSigType::FOUR_FOUR:
+        return TranslatableString("engraving/timesig", "Common time");
+    case TimeSigType::ALLA_BREVE:
+        return TranslatableString("engraving/timesig", "Cut time");
+    case TimeSigType::CUT_BACH:
+        return TranslatableString("engraving/timesig", "Cut time (Bach)");
+    case TimeSigType::CUT_TRIPLE:
+        return TranslatableString("engraving/timesig", "Cut triple time (9/8)");
+    default:
+        return TranslatableString("engraving/timesig", "%1/%2 time").arg(numerator(), denominator());
+    }
+}
+
+//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 
 String TimeSig::accessibleInfo() const
 {
-    String timeSigString;
-    switch (timeSigType()) {
-    case TimeSigType::FOUR_FOUR:
-        timeSigString = muse::mtrc("engraving/timesig", "Common time");
-        break;
-    case TimeSigType::ALLA_BREVE:
-        timeSigString = muse::mtrc("engraving/timesig", "Cut time");
-        break;
-    case TimeSigType::CUT_BACH:
-        timeSigString = muse::mtrc("engraving/timesig", "Cut time (Bach)");
-        break;
-    case TimeSigType::CUT_TRIPLE:
-        timeSigString = muse::mtrc("engraving/timesig", "Cut triple time (9/8)");
-        break;
-    default:
-        timeSigString = muse::mtrc("engraving/timesig", "%1/%2 time").arg(numerator(), denominator());
-    }
-    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), timeSigString);
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
 }
 
 //---------------------------------------------------------

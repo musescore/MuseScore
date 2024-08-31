@@ -76,8 +76,8 @@ public:
     void setFontSize(double s) { m_fontSize = s; }
     FontStyle fontStyle() const { return m_fontStyle; }
     void setFontStyle(FontStyle s) { m_fontStyle = s; }
-    Millimetre lineWidth() const { return m_lineWidth; }
-    void setLineWidth(Millimetre w) { m_lineWidth = w; }
+    Spatium lineWidth() const { return m_lineWidth; }
+    void setLineWidth(Spatium w) { m_lineWidth = w; }
 
     muse::draw::Font font(double) const;
 
@@ -108,7 +108,7 @@ private:
     String m_fontFace;
     double m_fontSize = 0.0;
     FontStyle m_fontStyle = FontStyle::Undefined;
-    Millimetre m_lineWidth;
+    Spatium m_lineWidth;
 };
 } // namespace mu::engraving
 #endif

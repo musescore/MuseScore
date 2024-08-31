@@ -27,6 +27,7 @@
 #include <map>
 
 #include "val.h"
+#include "global/logstream.h"
 
 namespace muse {
 class Uri
@@ -95,6 +96,18 @@ private:
     Uri m_uri;
     Params m_params;
 };
+}
+
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::Uri& uri)
+{
+    s << uri.toString();
+    return s;
+}
+
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::UriQuery& q)
+{
+    s << q.toString();
+    return s;
 }
 
 #endif // MUSE_GLOBAL_URI_H

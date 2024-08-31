@@ -68,6 +68,7 @@ class EngravingApiV1 : public muse::api::ApiObject, public muse::extensions::api
     Q_PROPERTY(apiv1::Enum * Spanner READ spannerAnchorEnum CONSTANT)                   // probably unavailable in 2.X
     Q_PROPERTY(apiv1::Enum * SymId READ symIdEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * HarmonyType READ harmonyTypeEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * Cursor READ cursorEnum CONSTANT)
 
 public:
     EngravingApiV1(muse::api::IApiEngine* e);
@@ -111,6 +112,7 @@ public:
     apiv1::Enum* spannerAnchorEnum() const { return api()->get_spannerAnchorEnum(); }
     apiv1::Enum* symIdEnum() const { return api()->get_symIdEnum(); }
     apiv1::Enum* harmonyTypeEnum() const { return api()->get_harmonyTypeEnum(); }
+    apiv1::Enum* cursorEnum() const { return api()->get_cursorEnum(); }
 
     Q_INVOKABLE apiv1::Score* newScore(const QString& name, const QString& part, int measures)
     {

@@ -1408,7 +1408,9 @@ void Braille::brailleMeasureItems(BrailleEngravingItemList* beiz, Measure* measu
 
     //Render the barline
     BarLine* bl = lastBarline(measure, staffCount * VOICES);
-    beiz->addEngravingItem(bl, brailleBarline(bl));
+    if (bl) {
+        beiz->addEngravingItem(bl, brailleBarline(bl));
+    }
 
     //Render repeats and jumps that are on the right
     for (EngravingItem* el : measure->el()) {

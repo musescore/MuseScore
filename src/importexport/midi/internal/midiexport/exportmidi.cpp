@@ -23,6 +23,7 @@
 #include "exportmidi.h"
 
 #include "engraving/dom/key.h"
+#include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
@@ -365,6 +366,38 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                                                                                                 event.dataA(), event.dataB()));
                         } else {
                             LOGD("writeMidi: unknown midi event 0x%02x", event.type());
+                        }
+                    }
+                }
+            }
+        }
+
+        // Export lyrics
+        for (const RepeatSegment* rs : m_score->repeatList()) {
+            int startTick  = rs->tick;
+            int endTick    = startTick + rs->len();
+            int tickOffset = rs->utick - rs->tick;
+
+            SegmentType st = SegmentType::ChordRest;
+            for (Segment* seg = rs->firstMeasure()->first(st); seg && seg->tick().ticks() < endTick; seg = seg->next1(st)) {
+                for (track_idx_t i = part->startTrack(); i < part->endTrack(); ++i) {
+                    ChordRest* cr = toChordRest(seg->element(i));
+                    if (cr) {
+                        for (const auto& lyric : cr->lyrics()) {
+                            muse::ByteArray lyricText = lyric->plainText().toUtf8();
+                            size_t len = lyricText.size() + 1;
+                            unsigned char* data = new unsigned char[len];
+
+                            memcpy(data, lyricText.constData(), len);
+
+                            MidiEvent ev;
+                            ev.setType(ME_META);
+                            ev.setMetaType(META_LYRIC);
+                            ev.setEData(data);
+                            ev.setLen(static_cast<int>(len));
+
+                            int tick = cr->tick().ticks() + tickOffset;
+                            track.insert(CompatMidiRender::tick(context, tick), ev);
                         }
                     }
                 }

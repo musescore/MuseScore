@@ -29,12 +29,10 @@
         <file>qml/MuseScore/NotationScene/Timeline.qml</file>
         <file>qml/MuseScore/NotationScene/SelectionFilterPanel.qml</file>
         <file>qml/MuseScore/NotationScene/EditGridSizeDialog.qml</file>
-        <file>qml/MuseScore/NotationScene/NotationScrollAndZoomArea.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PartsTopPanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/CustomiseView.qml</file>
         <file>qml/MuseScore/NotationScene/internal/NoteInputBarCustomisePopup.qml</file>
-        <file>qml/MuseScore/NotationScene/internal/NotationScrollBar.qml</file>
         <file>qml/MuseScore/NotationScene/PianoKeyboardPanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml</file>
         <file>qml/MuseScore/NotationScene/internal/ElementPopupLoader.qml</file>
@@ -53,6 +51,7 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/octaveSubchord-ON.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/octaveOffset-OFF.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/octaveOffset-ON.png</file>
-
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/BasicStyleSelectorWithSpinboxAndReset.qml</file>
     </qresource>
 </RCC>

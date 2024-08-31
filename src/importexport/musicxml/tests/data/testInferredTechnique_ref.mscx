@@ -33,6 +33,8 @@
       <bendFontSize>10</bendFontSize>
       <headerFontSize>10</headerFontSize>
       <footerFontSize>10</footerFontSize>
+      <copyrightFontSize>10</copyrightFontSize>
+      <pageNumberFontSize>10</pageNumberFontSize>
       <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -128,8 +130,6 @@
           </Text>
         <Text>
           <style>composer</style>
-          <align>right,top</align>
-          <offset x="0" y="17.461"/>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
@@ -262,7 +262,6 @@
       <Measure>
         <voice>
           <PlayTechAnnotation>
-            <playTechType>mute</playTechType>
             <text>con sord</text>
             </PlayTechAnnotation>
           <Chord>
@@ -277,7 +276,6 @@
       <Measure>
         <voice>
           <PlayTechAnnotation>
-            <playTechType>mute</playTechType>
             <text>senza sord</text>
             </PlayTechAnnotation>
           <Chord>

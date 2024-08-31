@@ -57,6 +57,7 @@
 #include "mscoreview.h"
 #include "navigate.h"
 #include "note.h"
+#include "ornament.h"
 #include "page.h"
 #include "part.h"
 #include "pitchspelling.h"
@@ -143,6 +144,7 @@ static void resetElementPosition(void*, EngravingItem* e)
 
     e->undoResetProperty(Pid::AUTOPLACE);
     e->undoResetProperty(Pid::OFFSET);
+    e->undoResetProperty(Pid::LEADING_SPACE);
     e->setOffsetChanged(false);
     if (e->isSpanner()) {
         e->undoResetProperty(Pid::OFFSET2);
@@ -495,34 +497,35 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
         m_needSetUpTempoMap = false;
     }
 
-    {
-        MasterScore* ms = masterScore();
-        CmdState& cs = ms->cmdState();
-        if (updateAll || cs.updateAll()) {
-            for (Score* s : scoreList()) {
-                for (MuseScoreView* v : s->m_viewer) {
-                    v->updateAll();
-                }
+    MasterScore* ms = masterScore();
+    CmdState& cs = ms->cmdState();
+    if (updateAll || cs.updateAll()) {
+        for (Score* s : scoreList()) {
+            for (MuseScoreView* v : s->m_viewer) {
+                v->updateAll();
             }
-        } else if (cs.updateRange()) {
-            // updateRange updates only current score
-            double d = style().spatium() * .5;
-            m_updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
-            for (MuseScoreView* v : m_viewer) {
-                v->dataChanged(m_updateState.refresh);
-            }
-            m_updateState.refresh = RectF();
         }
-        if (playlistDirty()) {
-            masterScore()->setPlaylistClean();
+    } else if (cs.updateRange()) {
+        // updateRange updates only current score
+        double d = style().spatium() * .5;
+        m_updateState.refresh.adjust(-d, -d, 2 * d, 2 * d);
+        for (MuseScoreView* v : m_viewer) {
+            v->dataChanged(m_updateState.refresh);
         }
-        if (resetCmdState) {
-            cs.reset();
-        }
+        m_updateState.refresh = RectF();
+    }
+    if (playlistDirty()) {
+        masterScore()->setPlaylistClean();
+    }
+    if (resetCmdState) {
+        cs.reset();
     }
 
-    if (m_selection.isRange() && !m_selection.isLocked()) {
-        m_selection.updateSelectedElements();
+    for (Score* score : ms->scoreList()) {
+        Selection& sel = score->selection();
+        if (sel.isRange() && !sel.isLocked()) {
+            sel.updateSelectedElements();
+        }
     }
 }
 
@@ -609,7 +612,11 @@ void Score::cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* start
     for (auto ss : spanner->spannerSegments()) {
         ss->setTrack(track);
     }
-    spanner->setTick(startSegment->tick());
+
+    bool isMeasureAnchor = spanner->anchor() == Spanner::Anchor::MEASURE;
+    Fraction tick1 = isMeasureAnchor ? startSegment->measure()->tick() : startSegment->tick();
+    spanner->setTick(tick1);
+
     Fraction tick2;
     if (!endSegment) {
         tick2 = lastSegment()->tick();
@@ -618,63 +625,15 @@ void Score::cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* start
     } else {
         tick2 = endSegment->tick();
     }
+    if (isMeasureAnchor) {
+        Measure* endMeasure = tick2measureMM(tick2);
+        if (endMeasure->tick() != tick2) {
+            tick2 = endMeasure->endTick();
+        }
+    }
+
     spanner->setTick2(tick2);
     undoAddElement(spanner, true, ctrlModifier);
-}
-
-void Score::addHairpinToChordRest(Hairpin* hairpin, ChordRest* chordRest)
-{
-    track_idx_t track = chordRest->track();
-    hairpin->setTrack(track);
-    hairpin->setTrack2(track);
-
-    hairpin->setTick(chordRest->tick());
-
-    // End the hairpin at the end of the chord or, if present, at the next dynamic
-    Fraction endTick = chordRest->tick() + chordRest->actualTicks();
-
-    Segment* startSegment = chordRest->segment();
-    Segment* endSegment = nullptr;
-    for (Segment* segment = startSegment; segment && segment->tick() < endTick;
-         segment = segment->next1(SegmentType::ChordRest | SegmentType::TimeTick)) {
-        if (segment == startSegment) {
-            continue;
-        }
-        if (segment->findAnnotation(ElementType::DYNAMIC, track, track)) {
-            endSegment = segment;
-            break;
-        }
-    }
-    if (endSegment) {
-        endTick = std::min(endTick, endSegment->tick());
-    }
-
-    hairpin->setTick2(endTick);
-
-    undoAddElement(hairpin);
-}
-
-void Score::addHairpinToDynamic(Hairpin* hairpin, Dynamic* dynamic)
-{
-    track_idx_t track = dynamic->track();
-    hairpin->setTrack(track);
-    hairpin->setTrack2(track);
-
-    hairpin->setTick(dynamic->tick());
-
-    ChordRest* startCR = nullptr;
-    for (Segment* segment = dynamic->segment(); segment; segment = segment->prev(SegmentType::ChordRest)) {
-        EngravingItem* element = segment->elementAt(track);
-        if (element && element->isChordRest()) {
-            startCR = toChordRest(element);
-            break;
-        }
-    }
-
-    Fraction endTick = startCR ? startCR->tick() + startCR->actualTicks() : dynamic->segment()->measure()->endTick();
-    hairpin->setTick2(endTick);
-
-    undoAddElement(hairpin);
 }
 
 //---------------------------------------------------------
@@ -1169,7 +1128,7 @@ Segment* Score::setNoteRest(Segment* segment, track_idx_t track, NoteVal nval, F
                 nr = ncr = Factory::createRest(this->dummy()->segment());
                 nr->setTrack(track);
                 ncr->setDurationType(d);
-                ncr->setTicks(d == DurationType::V_MEASURE ? measure->ticks() : d.fraction());
+                ncr->setTicks(d.isMeasure() ? measure->ticks() : d.fraction());
             } else {
                 nr = note = Factory::createNote(this->dummy()->chord());
 
@@ -1473,7 +1432,7 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
         // chord symbols can exist without chord/rest so they should not be removed
         constexpr Sel filter = static_cast<Sel>(int(Sel::ALL) & ~int(Sel::CHORD_SYMBOL));
         deleteAnnotationsFromRange(s1, s2, track, track + 1, filter);
-        deleteSpannersFromRange(t1, t2, track, track + 1, filter);
+        deleteSlursFromRange(t1, t2, track, track + 1, filter);
     }
 
     return accumulated;
@@ -1515,7 +1474,7 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
             // chord symbols can exist without chord/rest so they should not be removed
             constexpr Sel filter = static_cast<Sel>(int(Sel::ALL) & ~int(Sel::CHORD_SYMBOL));
             deleteAnnotationsFromRange(tick2rightSegment(tick), tick2rightSegment(endTick), track, track + 1, filter);
-            deleteSpannersFromRange(tick, endTick, track, track + 1, filter);
+            deleteOrShortenOutSpannersFromRange(tick, endTick, track, track + 1, filter);
         }
 
         seg = m->undoGetSegment(SegmentType::ChordRest, tick);
@@ -1874,17 +1833,23 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
 
 static void upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, int tpc2, int& newPitch, int& newTpc1, int& newTpc2)
 {
+    bool concertPitch = n->concertPitch();
+    AccidentalVal noteAccVal = tpc2alter(concertPitch ? tpc1 : tpc2);
+    AccidentalVal accState = AccidentalVal::NATURAL;
+    if (Measure* m = n->findMeasure()) {
+        accState = m->findAccidental(n);
+    }
     if (up && pitch < 127) {
         newPitch = pitch + 1;
-        if (n->concertPitch()) {
-            if (tpc1 > Tpc::TPC_A + int(key)) {
+        if (concertPitch) {
+            if (tpc1 > Tpc::TPC_A + int(key) && noteAccVal >= accState) {
                 newTpc1 = tpc1 - 5;           // up semitone diatonic
             } else {
                 newTpc1 = tpc1 + 7;           // up semitone chromatic
             }
             newTpc2 = n->transposeTpc(newTpc1);
         } else {
-            if (tpc2 > Tpc::TPC_A + int(key)) {
+            if (tpc2 > Tpc::TPC_A + int(key) && noteAccVal >= accState) {
                 newTpc2 = tpc2 - 5;           // up semitone diatonic
             } else {
                 newTpc2 = tpc2 + 7;           // up semitone chromatic
@@ -1893,15 +1858,15 @@ static void upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, int 
         }
     } else if (!up && pitch > 0) {
         newPitch = pitch - 1;
-        if (n->concertPitch()) {
-            if (tpc1 > Tpc::TPC_C + int(key)) {
+        if (concertPitch) {
+            if (tpc1 > Tpc::TPC_C + int(key) || noteAccVal > accState) {
                 newTpc1 = tpc1 - 7;           // down semitone chromatic
             } else {
                 newTpc1 = tpc1 + 5;           // down semitone diatonic
             }
             newTpc2 = n->transposeTpc(newTpc1);
         } else {
-            if (tpc2 > Tpc::TPC_C + int(key)) {
+            if (tpc2 > Tpc::TPC_C + int(key) || noteAccVal > accState) {
                 newTpc2 = tpc2 - 7;           // down semitone chromatic
             } else {
                 newTpc2 = tpc2 + 5;           // down semitone diatonic
@@ -2148,6 +2113,39 @@ void Score::toggleArticulation(SymId attr)
                 }
             }
             Articulation* na = Factory::createArticulation(this->dummy()->chord());
+            na->setSymId(attr);
+            if (!toggleArticulation(el, na)) {
+                delete na;
+            }
+
+            if (cr) {
+                set.insert(cr);
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   toggleOrnament
+///   Toggle attribute \a attr for all selected notes/rests.
+///
+///   Like toggleArticulation, but for ornaments.
+//---------------------------------------------------------
+
+void Score::toggleOrnament(SymId attr)
+{
+    std::set<Chord*> set;
+    for (EngravingItem* el : selection().elements()) {
+        if (el->isNote() || el->isChord()) {
+            Chord* cr = 0;
+            // apply articulation on a given chord only once
+            if (el->isNote()) {
+                cr = toNote(el)->chord();
+                if (muse::contains(set, cr)) {
+                    continue;
+                }
+            }
+            Ornament* na = Factory::createOrnament(this->dummy()->chord());
             na->setSymId(attr);
             if (!toggleArticulation(el, na)) {
                 delete na;
@@ -2607,7 +2605,7 @@ void Score::cmdResetToDefaultLayout()
         Sid::tenutoGateTime,
         Sid::staccatoGateTime,
         Sid::slurGateTime,
-        Sid::SectionPause,
+        Sid::sectionPause,
         Sid::showHeader,
         Sid::headerFirstPage,
         Sid::headerOddEven,
@@ -2626,7 +2624,7 @@ void Score::cmdResetToDefaultLayout()
         Sid::oddFooterL,
         Sid::oddFooterC,
         Sid::oddFooterR,
-        Sid::tupletOufOfStaff,
+        Sid::tupletOutOfStaff,
         Sid::tupletDirection,
         Sid::tupletBracketType,
         Sid::dynamicsPlacement,
@@ -2971,7 +2969,9 @@ EngravingItem* Score::move(const String& cmd)
         // find next chordrest, which might be a grace note
         // this may override note input cursor
         el = nextChordRest(cr);
-        while (el && el->isRest() && toRest(el)->isGap()) {
+
+        // Skip gap rests if we're not in note entry mode...
+        while (!noteEntryMode() && el && el->isRest() && toRest(el)->isGap()) {
             el = nextChordRest(toChordRest(el));
         }
         if (el && noteEntryMode()) {
@@ -3013,7 +3013,9 @@ EngravingItem* Score::move(const String& cmd)
         // find previous chordrest, which might be a grace note
         // this may override note input cursor
         el = prevChordRest(cr);
-        while (el && el->isRest() && toRest(el)->isGap()) {
+
+        // Skip gap rests if we're not in note entry mode...
+        while (!noteEntryMode() && el && el->isRest() && toRest(el)->isGap()) {
             el = prevChordRest(toChordRest(el));
         }
         if (el && noteEntryMode()) {

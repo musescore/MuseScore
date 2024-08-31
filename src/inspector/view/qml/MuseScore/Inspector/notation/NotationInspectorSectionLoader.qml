@@ -104,16 +104,16 @@ Loader {
             case Inspector.TYPE_FRET_DIAGRAM: return fretDiagramComp
             case Inspector.TYPE_SPACER: return spacerComp
             case Inspector.TYPE_CLEF: return clefComp
-            case Inspector.TYPE_PEDAL:
             case Inspector.TYPE_HAIRPIN:
             case Inspector.TYPE_CRESCENDO:
-            case Inspector.TYPE_DIMINUENDO:
+            case Inspector.TYPE_DIMINUENDO: return hairpinLineComp
+            case Inspector.TYPE_PEDAL:
             case Inspector.TYPE_OTTAVA:
             case Inspector.TYPE_PALM_MUTE:
             case Inspector.TYPE_LET_RING:
             case Inspector.TYPE_VOLTA:
-            case Inspector.TYPE_GRADUAL_TEMPO_CHANGE:
             case Inspector.TYPE_TEXT_LINE: return lineComp
+            case Inspector.TYPE_GRADUAL_TEMPO_CHANGE: return gradualTempoChangeComp
             case Inspector.TYPE_STAFF_TYPE_CHANGES: return staffTypeComp
             case Inspector.TYPE_TEXT_FRAME: return textFrameComp
             case Inspector.TYPE_VERTICAL_FRAME: return verticalFrameComp
@@ -241,6 +241,16 @@ Loader {
     Component {
         id: lineComp
         LineSettings { }
+    }
+
+    Component {
+        id: hairpinLineComp
+        HairpinLineSettings { }
+    }
+
+    Component {
+        id: gradualTempoChangeComp
+        GradualTempoChangeSettings { }
     }
 
     Component {

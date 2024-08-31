@@ -52,7 +52,7 @@ static constexpr int BARLINE_SPAN_SHORT2_TO         = -1;
 
 struct BarLineTableItem {
     BarLineType type;
-    const char* userName;         // user name, translatable
+    const muse::TranslatableString& userName;
 };
 
 //---------------------------------------------------------
@@ -120,6 +120,7 @@ public:
     bool isBottom() const;
 
     int subtype() const override { return int(m_barLineType); }
+    TranslatableString subtypeUserName() const override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

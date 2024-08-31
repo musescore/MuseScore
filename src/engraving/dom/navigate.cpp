@@ -696,7 +696,8 @@ EngravingItem* Score::nextElement()
         case ElementType::NOTE:
         case ElementType::REST:
         case ElementType::MMREST:
-        case ElementType::CHORD: {
+        case ElementType::CHORD:
+        case ElementType::TUPLET: {
             EngravingItem* next = e->nextElement();
             if (next) {
                 return next;
@@ -762,8 +763,14 @@ EngravingItem* Score::nextElement()
             if (seg) {
                 Segment* nextSegment = seg->next1();
                 while (nextSegment) {
-                    EngravingItem* nextEl = nextSegment->firstElementOfSegment(nextSegment, staffId);
-                    if (nextEl) {
+                    if (nextSegment->isTimeTickType()) {
+                        if (EngravingItem* annotation = nextSegment->firstAnnotation(staffId)) {
+                            return annotation;
+                        }
+                        if (Spanner* spanner = nextSegment->firstSpanner(staffId)) {
+                            return spanner->spannerSegments().front();
+                        }
+                    } else if (EngravingItem* nextEl = nextSegment->firstElementOfSegment(staffId)) {
                         return nextEl;
                     }
                     nextSegment = nextSegment->next1MM();
@@ -865,7 +872,8 @@ EngravingItem* Score::prevElement()
         case ElementType::NOTE:
         case ElementType::REST:
         case ElementType::MMREST:
-        case ElementType::CHORD: {
+        case ElementType::CHORD:
+        case ElementType::TUPLET: {
             EngravingItem* prev = e->prevElement();
             if (prev) {
                 return prev;
@@ -924,13 +932,31 @@ EngravingItem* Score::prevElement()
                 return prevSp->spannerSegments().front();
             } else {
                 Segment* startSeg = sp->startSegment();
-                if (!startSeg->annotations().empty()) {
-                    EngravingItem* last = startSeg->lastAnnotation(startSeg, staffId);
-                    if (last) {
-                        return last;
+                if (EngravingItem* annotation = startSeg->lastAnnotation(staffId)) {
+                    return annotation;
+                }
+                if (startSeg->isTimeTickType()) {
+                    startSeg = startSeg->prev1MMenabled();
+                    for (; startSeg && startSeg->isTimeTickType(); startSeg = startSeg->prev1MMenabled()) {
+                        if (Spanner* spanner = startSeg->lastSpanner(staffId)) {
+                            return spanner->spannerSegments().front();
+                        }
+                        if (EngravingItem* annotation = startSeg->lastAnnotation(staffId)) {
+                            return annotation;
+                        }
+                    }
+                    if (!startSeg) {
+                        break;
+                    }
+                    // Also check first non-timeTick segment encountered.
+                    if (Spanner* spanner = startSeg->lastSpanner(staffId)) {
+                        return spanner->spannerSegments().front();
+                    }
+                    if (EngravingItem* annotation = startSeg->lastAnnotation(staffId)) {
+                        return annotation;
                     }
                 }
-                EngravingItem* el = startSeg->lastElementOfSegment(startSeg, staffId);
+                EngravingItem* el = startSeg->lastElementOfSegment(staffId);
                 if (stEl->type() == ElementType::CHORD || stEl->type() == ElementType::REST
                     || stEl->type() == ElementType::MEASURE_REPEAT || stEl->type() == ElementType::MMREST
                     || stEl->type() == ElementType::NOTE) {
@@ -1034,6 +1060,27 @@ Lyrics* prevLyrics(const Lyrics* lyrics)
             Lyrics* prevLyrics = el && el->isChord() ? toChordRest(el)->lyrics(lyrics->no(), lyrics->placement()) : nullptr;
             if (prevLyrics) {
                 return prevLyrics;
+            }
+        }
+    }
+    return nullptr;
+}
+
+Lyrics* nextLyrics(const Lyrics* lyrics)
+{
+    Segment* seg = lyrics->explicitParent() ? lyrics->segment() : nullptr;
+    if (!seg) {
+        return nullptr;
+    }
+    Segment* nextSegment = seg;
+    while ((nextSegment = nextSegment->next1(mu::engraving::SegmentType::ChordRest))) {
+        const track_idx_t strack = lyrics->staffIdx() * VOICES;
+        const track_idx_t etrack = strack + VOICES;
+        for (track_idx_t track = strack; track < etrack; ++track) {
+            EngravingItem* el = nextSegment->element(track);
+            Lyrics* nextLyrics = el && el->isChord() ? toChordRest(el)->lyrics(lyrics->no(), lyrics->placement()) : nullptr;
+            if (nextLyrics) {
+                return nextLyrics;
             }
         }
     }

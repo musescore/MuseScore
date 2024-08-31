@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_NOTATIONSWITCHLISTMODEL_H
-#define MU_NOTATION_NOTATIONSWITCHLISTMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 
@@ -32,12 +31,12 @@
 #include "project/inotationproject.h"
 
 namespace mu::notation {
-class NotationSwitchListModel : public QAbstractListModel, public muse::async::Asyncable
+class NotationSwitchListModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, context)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
+    muse::Inject<context::IGlobalContext> context = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:
     explicit NotationSwitchListModel(QObject* parent = nullptr);
@@ -84,5 +83,3 @@ private:
     std::unique_ptr<muse::async::Asyncable> m_notationChangedReceiver;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONSWITCHLISTMODEL_H

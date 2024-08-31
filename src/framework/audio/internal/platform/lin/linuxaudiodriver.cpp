@@ -207,6 +207,11 @@ bool LinuxAudioDriver::isOpened() const
     return s_alsaData != nullptr;
 }
 
+const LinuxAudioDriver::Spec& LinuxAudioDriver::activeSpec() const
+{
+    return s_format;
+}
+
 AudioDeviceID LinuxAudioDriver::outputDevice() const
 {
     return m_deviceId;
@@ -293,7 +298,7 @@ std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceBufferSizes() c
 {
     std::vector<unsigned int> result;
 
-    unsigned int n = 4096;
+    unsigned int n = MAXIMUM_BUFFER_SIZE;
     while (n >= MINIMUM_BUFFER_SIZE) {
         result.push_back(n);
         n /= 2;
@@ -302,6 +307,51 @@ std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceBufferSizes() c
     std::sort(result.begin(), result.end());
 
     return result;
+}
+
+unsigned int LinuxAudioDriver::outputDeviceSampleRate() const
+{
+    return s_format.sampleRate;
+}
+
+bool LinuxAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
+{
+    if (s_format.sampleRate == sampleRate) {
+        return true;
+    }
+
+    bool reopen = isOpened();
+    close();
+    s_format.sampleRate = sampleRate;
+
+    bool ok = true;
+    if (reopen) {
+        ok = open(s_format, &s_format);
+    }
+
+    if (ok) {
+        m_sampleRateChanged.notify();
+    }
+
+    return ok;
+}
+
+async::Notification LinuxAudioDriver::outputDeviceSampleRateChanged() const
+{
+    return m_sampleRateChanged;
+}
+
+std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceSampleRates() const
+{
+    // ALSA API is not of any help to get sample rates supported by the driver.
+    // (snd_pcm_hw_params_get_rate_[min|max] will return 1 to 384000 Hz)
+    // So just returning a sensible hard-coded list.
+    return {
+        44100,
+        48000,
+        88200,
+        96000,
+    };
 }
 
 void LinuxAudioDriver::resume()

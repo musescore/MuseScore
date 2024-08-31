@@ -154,6 +154,7 @@ public:
     void setBarLineFrom(int val) { m_barLineFrom = val; }
     void setBarLineTo(int val) { m_barLineTo = val; }
     double staffHeight() const;
+    double staffHeight(const Fraction& tick) const;
 
     int channel(const Fraction&, voice_idx_t voice) const;
 
@@ -259,6 +260,9 @@ public:
     void triggerLayout(const Fraction& tick);
 
     Staff* findLinkedInScore(const Score* score) const override;
+
+    track_idx_t getLinkedTrackInStaff(const Staff* linkedStaff, const track_idx_t strack) const;
+    bool trackHasLinksInVoiceZero(track_idx_t track);
 
 private:
 

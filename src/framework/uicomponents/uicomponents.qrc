@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>api/Muse/Controls/qmldir</file>
+        <file>api/MuseApi/Controls/qmldir</file>
         <file>qml/Muse/UiComponents/Border.qml</file>
         <file>qml/Muse/UiComponents/ButtonBox.qml</file>
         <file>qml/Muse/UiComponents/CheckBox.qml</file>
@@ -91,5 +91,8 @@
         <file>qml/Muse/UiComponents/treeview/images/header.png</file>
         <file>qml/Muse/UiComponents/StyledToolBarView.qml</file>
         <file>qml/Muse/UiComponents/StyledToolBarItem.qml</file>
+        <file>qml/Muse/UiComponents/TextInputArea.qml</file>
+        <file>qml/Muse/UiComponents/StyledViewScrollAndZoomArea.qml</file>
+        <file>qml/Muse/UiComponents/internal/ViewScrollBar.qml</file>
     </qresource>
 </RCC>

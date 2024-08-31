@@ -125,7 +125,7 @@ int NotationConfigurationStub::borderWidth() const
     return 1;
 }
 
-QColor NotationConfigurationStub::anchorLineColor() const
+QColor NotationConfigurationStub::anchorColor() const
 {
     return QColor();
 }
@@ -462,6 +462,24 @@ ValCh<int> NotationConfigurationStub::pianoKeyboardNumberOfKeys() const
 }
 
 void NotationConfigurationStub::setPianoKeyboardNumberOfKeys(int)
+{
+}
+
+bool NotationConfigurationStub::useNewPercussionPanel() const
+{
+    return false
+}
+
+void NotationConfigurationStub::setUseNewPercussionPanel(bool)
+{
+}
+
+bool NotationConfigurationStub::autoShowPercussionPanel() const
+{
+    return true;
+}
+
+void NotationConfigurationStub::setAutoShowPercussionPanel(bool)
 {
 }
 

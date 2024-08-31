@@ -59,7 +59,7 @@
           <degree-type>add</degree-type>
           </degree>
         </harmony>
-      <note dynamics="88.89">
+      <note>
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -75,7 +75,7 @@
           <tied type="start"/>
           </notations>
         </note>
-      <note dynamics="88.89">
+      <note>
         <pitch>
           <step>E</step>
           <alter>-1</alter>
@@ -97,7 +97,7 @@
         <voice>1</voice>
         <type>eighth</type>
         </note>
-      <note dynamics="88.89">
+      <note>
         <pitch>
           <step>A</step>
           <alter>-1</alter>

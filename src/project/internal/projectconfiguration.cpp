@@ -455,6 +455,7 @@ MigrationOptions ProjectConfiguration::migrationOptions(MigrationType type) cons
         opt.isAskAgain = optionsObj["isAskAgain"].toBool();
         opt.isApplyLeland = optionsObj["isApplyLeland"].toBool();
         opt.isApplyEdwin = optionsObj["isApplyEdwin"].toBool();
+        opt.isRemapPercussion = optionsObj["isRemapPercussion"].toBool();
 
         m_migrationOptions[migrationType] = opt;
 
@@ -498,6 +499,7 @@ void ProjectConfiguration::setMigrationOptions(MigrationType type, const Migrati
         options["isAskAgain"] = o.isAskAgain;
         options["isApplyLeland"] = o.isApplyLeland;
         options["isApplyEdwin"] = o.isApplyEdwin;
+        options["isRemapPercussion"] = o.isRemapPercussion;
 
         QJsonObject obj;
         obj["migrationType"] = migrationTypeToString(it->first);

@@ -68,7 +68,13 @@ using PlaybackSetupData = mpe::PlaybackSetupData;
 
 static constexpr TrackId INVALID_TRACK_ID = -1;
 
-static constexpr int MINIMUM_BUFFER_SIZE = 1024;
+#ifdef Q_OS_WIN
+static constexpr size_t MINIMUM_BUFFER_SIZE = 256;
+#else
+static constexpr size_t MINIMUM_BUFFER_SIZE = 128;
+#endif
+
+static constexpr size_t MAXIMUM_BUFFER_SIZE = 4096;
 
 enum class SoundTrackType {
     Undefined = -1,
@@ -81,6 +87,7 @@ enum class SoundTrackType {
 struct SoundTrackFormat {
     SoundTrackType type = SoundTrackType::Undefined;
     sample_rate_t sampleRate = 0;
+    samples_t samplesPerChannel = 0;
     audioch_t audioChannelsNumber = 0;
     int bitRate = 0;
 
@@ -89,6 +96,7 @@ struct SoundTrackFormat {
         return type == other.type
                && sampleRate == other.sampleRate
                && audioChannelsNumber == other.audioChannelsNumber
+               && samplesPerChannel == other.samplesPerChannel
                && bitRate == other.bitRate;
     }
 
@@ -96,6 +104,7 @@ struct SoundTrackFormat {
     {
         return type != SoundTrackType::Undefined
                && sampleRate != 0
+               && samplesPerChannel != 0
                && audioChannelsNumber != 0;
     }
 };
@@ -169,20 +178,6 @@ using AudioResourceMetaList = std::vector<AudioResourceMeta>;
 using AudioResourceMetaSet = std::set<AudioResourceMeta>;
 
 static const AudioResourceId MUSE_REVERB_ID("Muse Reverb");
-
-enum class AudioPluginType {
-    Undefined = -1,
-    Instrument,
-    Fx,
-};
-
-struct AudioPluginInfo {
-    AudioPluginType type = AudioPluginType::Undefined;
-    AudioResourceMeta meta;
-    io::path_t path;
-    bool enabled = false;
-    int errorCode = 0;
-};
 
 enum class AudioFxType {
     Undefined = -1,
@@ -347,7 +342,8 @@ struct AudioSignalVal {
     volume_dbfs_t pressure = 0.f;
 };
 
-using AudioSignalChanges = async::Channel<audioch_t, AudioSignalVal>;
+using AudioSignalValuesMap = std::map<audioch_t, AudioSignalVal>;
+using AudioSignalChanges = async::Channel<AudioSignalValuesMap>;
 
 struct AudioSignalsNotifier {
     void updateSignalValues(const audioch_t audioChNumber, const float newAmplitude, const volume_dbfs_t newPressure)
@@ -367,7 +363,15 @@ struct AudioSignalsNotifier {
         signalVal.amplitude = newAmplitude;
         signalVal.pressure = validatedPressure;
 
-        audioSignalChanges.send(audioChNumber, signalVal);
+        m_needNotifyAboutChanges = true;
+    }
+
+    void notifyAboutChanges()
+    {
+        if (m_needNotifyAboutChanges) {
+            audioSignalChanges.send(m_signalValuesMap);
+            m_needNotifyAboutChanges = false;
+        }
     }
 
     AudioSignalChanges audioSignalChanges;
@@ -376,7 +380,8 @@ private:
     static constexpr volume_dbfs_t PRESSURE_MINIMAL_VALUABLE_DIFF = 2.5f;
     static constexpr volume_dbfs_t MINIMUM_OPERABLE_DBFS_LEVEL = -100.f;
 
-    std::map<audioch_t, AudioSignalVal> m_signalValuesMap;
+    AudioSignalValuesMap m_signalValuesMap;
+    bool m_needNotifyAboutChanges = false;
 };
 
 enum class PlaybackStatus {

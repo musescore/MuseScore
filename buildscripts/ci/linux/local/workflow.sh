@@ -12,11 +12,11 @@ DO_BUILD='true'
     #   env:
     #     pull_request_title: ${{ github.event.pull_request.title }}
     #   run: |
-        bash ./buildscripts/ci/tools/make_build_mode_env.sh -e workflow_dispatch -m testing_build
+        bash ./buildscripts/ci/tools/make_build_mode_env.sh -e workflow_dispatch -m testing
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
 
         DO_UPDATE_TS='false'
-        if [[ "$BUILD_MODE" == "testing_build" || "$BUILD_MODE" == "stable_build" ]]; then 
+        if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then 
             DO_UPDATE_TS='true'
             if [ -z "${TRANSIFEX_API_TOKEN}" ]; then 
               echo "warning: not set TRANSIFEX_API_TOKEN, update .ts disabled" 
@@ -26,7 +26,7 @@ DO_BUILD='true'
 
         DO_PLACEHOLDER_TRANSLATIONS='false'
         if [[ "$DO_BUILD" == "true" ]]; then
-          if [[ "$BUILD_MODE" == "nightly_build" || "$BUILD_MODE" == "devel_build" ]]; then
+          if [[ "$BUILD_MODE" == "nightly" || "$BUILD_MODE" == "devel" ]]; then
             DO_PLACEHOLDER_TRANSLATIONS='true'
           fi
         fi

@@ -33,6 +33,7 @@ using namespace mu;
 using namespace mu::notation;
 using namespace muse;
 using namespace muse::async;
+using namespace muse::draw;
 using namespace muse::ui;
 
 static const std::string module_name("notation");
@@ -89,9 +90,14 @@ static const Settings::Key NEED_TO_SHOW_ADD_GUITAR_BEND_ERROR_MESSAGE_KEY(module
 
 static const Settings::Key PIANO_KEYBOARD_NUMBER_OF_KEYS(module_name,  "pianoKeyboard/numberOfKeys");
 
+static const Settings::Key USE_NEW_PERCUSSION_PANEL_KEY(module_name,  "ui/useNewPercussionPanel");
+static const Settings::Key AUTO_SHOW_PERCUSSION_PANEL_KEY(module_name,  "ui/autoShowPercussionPanel");
+
 static const Settings::Key STYLE_FILE_IMPORT_PATH_KEY(module_name, "import/style/styleFile");
 
 static constexpr int DEFAULT_GRID_SIZE_SPATIUM = 2;
+
+static const Settings::Key ANCHOR_COLOR(module_name, "ui/colors/anchorColor");
 
 void NotationConfiguration::init()
 {
@@ -214,7 +220,29 @@ void NotationConfiguration::init()
         m_pianoKeyboardNumberOfKeys.set(val.toInt());
     });
 
+    settings()->setDefaultValue(USE_NEW_PERCUSSION_PANEL_KEY, Val(false));
+    settings()->setDefaultValue(AUTO_SHOW_PERCUSSION_PANEL_KEY, Val(true));
+
+    settings()->setDefaultValue(ANCHOR_COLOR, Val(QColor("#C31989")));
+    settings()->setDescription(ANCHOR_COLOR, muse::qtrc("notation", "Anchor color").toStdString());
+    settings()->setCanBeManuallyEdited(ANCHOR_COLOR, true);
+    settings()->valueChanged(ANCHOR_COLOR).onReceive(nullptr, [this](const Val& val) {
+        m_anchorColorChanged.send(val.toQColor());
+    });
+
+    anchorColorChanged().onReceive(this, [this](const QColor&) {
+        m_foregroundChanged.notify();
+    });
+
     engravingConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
+        m_foregroundChanged.notify();
+    });
+
+    engravingConfiguration()->formattingColorChanged().onReceive(this, [this](const Color&) {
+        m_foregroundChanged.notify();
+    });
+
+    engravingConfiguration()->unlinkedColorChanged().onReceive(this, [this](const Color&) {
         m_foregroundChanged.notify();
     });
 
@@ -230,9 +258,14 @@ void NotationConfiguration::init()
     });
 }
 
-QColor NotationConfiguration::anchorLineColor() const
+QColor NotationConfiguration::anchorColor() const
 {
-    return selectionColor(3);
+    return settings()->value(ANCHOR_COLOR).toQColor();
+}
+
+muse::async::Channel<QColor> NotationConfiguration::anchorColorChanged() const
+{
+    return m_anchorColorChanged;
 }
 
 QColor NotationConfiguration::backgroundColor() const
@@ -859,6 +892,26 @@ void NotationConfiguration::setNeedToShowMScoreError(const std::string& errorKey
 ValCh<int> NotationConfiguration::pianoKeyboardNumberOfKeys() const
 {
     return m_pianoKeyboardNumberOfKeys;
+}
+
+bool NotationConfiguration::useNewPercussionPanel() const
+{
+    return settings()->value(USE_NEW_PERCUSSION_PANEL_KEY).toBool();
+}
+
+void NotationConfiguration::setUseNewPercussionPanel(bool use)
+{
+    settings()->setSharedValue(USE_NEW_PERCUSSION_PANEL_KEY, Val(use));
+}
+
+bool NotationConfiguration::autoShowPercussionPanel() const
+{
+    return settings()->value(AUTO_SHOW_PERCUSSION_PANEL_KEY).toBool();
+}
+
+void NotationConfiguration::setAutoShowPercussionPanel(bool autoShow)
+{
+    settings()->setSharedValue(AUTO_SHOW_PERCUSSION_PANEL_KEY, Val(autoShow));
 }
 
 void NotationConfiguration::setPianoKeyboardNumberOfKeys(int number)

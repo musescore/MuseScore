@@ -67,9 +67,7 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, bool isDialogMode, bool is
                 m_view->setColor(QColor(bgColorStr));
             };
 
-            uiConfiguration()->currentThemeChanged().onNotify(this, [updateBackgroundColor]() {
-                updateBackgroundColor();
-            });
+            uiConfiguration()->currentThemeChanged().onNotify(this, updateBackgroundColor);
 
             updateBackgroundColor();
         }
@@ -77,7 +75,11 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, bool isDialogMode, bool is
     // popup
     else {
         Qt::WindowFlags flags(
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
             Qt::Tool
+#else
+            Qt::Popup // Popups can't be Qt::Tool on Linux Wayland, or they can't be relatvely positioned.
+#endif
             | Qt::FramelessWindowHint            // Without border
             | Qt::NoDropShadowWindowHint         // Without system shadow
             | Qt::BypassWindowManagerHint        // Otherwise, it does not work correctly on Gnome (Linux) when resizing)
@@ -102,7 +104,7 @@ void PopupWindow_QQuickView::setContent(QQmlComponent* component, QQuickItem* it
     m_view->setContent(QUrl(), component, item);
     m_view->setObjectName(item->objectName() + "_(PopupWindow_QQuickView)");
 
-    connect(item, &QQuickItem::implicitWidthChanged, [this, item]() {
+    connect(item, &QQuickItem::implicitWidthChanged, this, [this, item]() {
         if (!m_view->isVisible()) {
             return;
         }
@@ -111,7 +113,7 @@ void PopupWindow_QQuickView::setContent(QQmlComponent* component, QQuickItem* it
         }
     });
 
-    connect(item, &QQuickItem::implicitHeightChanged, [this, item]() {
+    connect(item, &QQuickItem::implicitHeightChanged, this, [this, item]() {
         if (!m_view->isVisible()) {
             return;
         }
@@ -167,7 +169,7 @@ void PopupWindow_QQuickView::show(QScreen* screen, QRect geometry, bool activate
     updateSize(QSize(item->implicitWidth(), item->implicitHeight()));
 
     if (activateFocus) {
-        QTimer::singleShot(0, [this]() {
+        QTimer::singleShot(0, this, [this]() {
             forceActiveFocus();
         });
     }

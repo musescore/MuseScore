@@ -90,7 +90,12 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
     }
 
     // ... and use that here
-    int stepsCount = overallDurationTicks / stepDurationTicks;
+    const int stepsCount = std::round(overallDurationTicks / (float)stepDurationTicks);
+    if (stepsCount == 0) {
+        return;
+    }
+
+    stepDurationTicks = overallDurationTicks / stepsCount;
 
     if (tremolo.two) {
         const Chord* firstTremoloChord = tremolo.two->chord1();
@@ -134,19 +139,25 @@ void TremoloRenderer::buildAndAppendEvents(const Chord* chord, const Articulatio
                                            const int startTick, const RenderingContext& context,
                                            mpe::PlaybackEventList& result)
 {
-    for (size_t noteIdx = 0; noteIdx < chord->notes().size(); ++noteIdx) {
-        const Note* note = chord->notes().at(noteIdx);
+    const Score* score = chord->score();
+    IF_ASSERT_FAILED(score) {
+        return;
+    }
 
+    for (const Note* note : chord->notes()) {
         if (!isNotePlayable(note, context.commonArticulations)) {
             continue;
         }
 
         auto noteTnD = timestampAndDurationFromStartAndDurationTicks(
-            chord->score(), startTick, stepDurationTicks, context.positionTickOffset);
+            score, startTick, stepDurationTicks, context.positionTickOffset);
 
         NominalNoteCtx noteCtx(note, context);
         noteCtx.duration = noteTnD.duration;
         noteCtx.timestamp = noteTnD.timestamp;
+
+        int utick = timestampToTick(score, noteCtx.timestamp);
+        noteCtx.dynamicLevel = context.playbackCtx->appliableDynamicLevel(note->track(), utick);
 
         NoteArticulationsParser::buildNoteArticulationMap(note, context, noteCtx.chordCtx.commonArticulations);
         updateArticulationBoundaries(type, noteCtx.timestamp, noteCtx.duration, noteCtx.chordCtx.commonArticulations);

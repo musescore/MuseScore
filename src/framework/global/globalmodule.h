@@ -62,6 +62,8 @@ private:
     std::optional<muse::logger::Level> m_loggerLevel;
 
     static std::shared_ptr<Invoker> s_asyncInvoker;
+
+    bool m_endTimePeriod = false;
 };
 }
 

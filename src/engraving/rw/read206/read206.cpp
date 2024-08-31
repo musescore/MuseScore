@@ -444,7 +444,7 @@ void Read206::readAccidental206(Accidental* a, XmlReader& e, ReadContext& ctx)
             }
         } else if (tag == "subtype") {
             String text = e.readText();
-            const static std::map<String, AccidentalType> accMap = {
+            static const std::map<String, AccidentalType> accMap = {
                 { u"none",               AccidentalType::NONE },
                 { u"sharp",              AccidentalType::SHARP },
                 { u"flat",               AccidentalType::FLAT },
@@ -1000,7 +1000,8 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
     } else if (tag == "head") {
         read400::TRead::readProperty(note, e, ctx, Pid::HEAD_GROUP);
     } else if (tag == "velocity") {
-        note->setUserVelocity(e.readInt());
+        // TODO: convert to MU4
+        e.skipCurrentElement();
     } else if (tag == "play") {
         note->setPlay(e.readInt());
     } else if (tag == "tuning") {
@@ -2049,7 +2050,7 @@ static void readVolta206(XmlReader& e, ReadContext& ctx, Volta* volta)
                 volta->endings().push_back(i);
             }
         } else if (tag == "lineWidth") {
-            volta->setLineWidth(Millimetre(e.readDouble() * volta->spatium()));
+            volta->setLineWidth(Spatium(e.readDouble()));
         } else if (!readTextLineProperties(e, ctx, volta)) {
             e.unknown();
         }
@@ -2144,7 +2145,7 @@ void Read206::readHairpin206(XmlReader& e, ReadContext& ctx, Hairpin* h)
         if (tag == "subtype") {
             h->setHairpinType(HairpinType(e.readInt()));
         } else if (tag == "lineWidth") {
-            h->setLineWidth(Millimetre(e.readDouble() * h->spatium()));
+            h->setLineWidth(Spatium(e.readDouble()));
             // lineWidthStyle = PropertyFlags::UNSTYLED;
         } else if (tag == "hairpinHeight") {
             h->setHairpinHeight(Spatium(e.readDouble()));
@@ -2195,7 +2196,7 @@ void Read206::readTrill206(XmlReader& e, ReadContext& ctx, Trill* t)
         } else if (tag == "ornamentStyle") {
             read400::TRead::readProperty(t, e, ctx, Pid::ORNAMENT_STYLE);
         } else if (tag == "play") {
-            t->setPlayArticulation(e.readBool());
+            t->setPlaySpanner(e.readBool());
         } else if (!TRead::readProperties(static_cast<SLine*>(t), e, ctx)) {
             e.unknown();
         }
@@ -3021,19 +3022,10 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
 
 static void readBox(Box* b, XmlReader& e, ReadContext& ctx)
 {
-    b->setLeftMargin(0.0);
-    b->setRightMargin(0.0);
-    b->setTopMargin(0.0);
-    b->setBottomMargin(0.0);
-    b->setTopGap(Millimetre(0.0));
-    b->setBottomGap(Millimetre(0.0));
-    b->setAutoSizeEnabled(false);
-    b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::UNSTYLED);
-    b->setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
+    b->setAutoSizeEnabled(false);      // didn't exist in Mu2
 
     b->setBoxHeight(Spatium(0));       // override default set in constructor
     b->setBoxWidth(Spatium(0));
-    bool keepMargins = false;          // whether original margins have to be kept when reading old file
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -3041,12 +3033,10 @@ static void readBox(Box* b, XmlReader& e, ReadContext& ctx)
             HBox* hb = Factory::createHBox(b->score()->dummy()->system());
             read400::TRead::read(hb, e, ctx);
             b->add(hb);
-            keepMargins = true;           // in old file, box nesting used outer box margins
         } else if (tag == "VBox") {
             VBox* vb = Factory::createVBox(b->score()->dummy()->system());
             read400::TRead::read(vb, e, ctx);
             b->add(vb);
-            keepMargins = true;           // in old file, box nesting used outer box margins
         } else if (tag == "Text") {
             Text* t;
             if (b->isTBox()) {
@@ -3064,16 +3054,6 @@ static void readBox(Box* b, XmlReader& e, ReadContext& ctx)
         } else if (!read400::TRead::readBoxProperties(b, e, ctx)) {
             e.unknown();
         }
-    }
-
-    // with .msc versions prior to 1.17, box margins were only used when nesting another box inside this box:
-    // for backward compatibility set them to 0 in all other cases
-
-    if (ctx.mscVersion() <= 114 && (b->isHBox() || b->isVBox()) && !keepMargins) {
-        b->setLeftMargin(0.0);
-        b->setRightMargin(0.0);
-        b->setTopMargin(0.0);
-        b->setBottomMargin(0.0);
     }
 }
 
@@ -3095,7 +3075,7 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
 
             if (tag == "Measure") {
                 if (lastReadBox) {
-                    lastReadBox->setBottomGap(lastReadBox->bottomGap() + lastReadBox->propertyDefault(Pid::BOTTOM_GAP).value<Millimetre>());
+                    lastReadBox->setBottomGap(lastReadBox->bottomGap() + lastReadBox->propertyDefault(Pid::BOTTOM_GAP).value<Spatium>());
                     lastReadBox = nullptr;
                 }
                 readMeasureLast = true;
@@ -3140,10 +3120,10 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
                 // If it's the first box, and comes before any measures, reset to
                 // 301 default.
                 if (!readMeasureLast && !lastReadBox) {
-                    b->setTopGap(b->propertyDefault(Pid::TOP_GAP).value<Millimetre>());
+                    b->setTopGap(b->propertyDefault(Pid::TOP_GAP).value<Spatium>());
                     b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::STYLED);
                 } else if (readMeasureLast) {
-                    b->setTopGap(b->topGap() + b->propertyDefault(Pid::TOP_GAP).value<Millimetre>());
+                    b->setTopGap(b->topGap() + b->propertyDefault(Pid::TOP_GAP).value<Spatium>());
                 }
 
                 lastReadBox = b;
@@ -3287,14 +3267,14 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
             double sp = score->style().value(Sid::spatium).toReal();
             ReadChordListHook clhook(score);
             readStyle206(&score->style(), e, ctx, clhook);
-            if (score->style().styleSt(Sid::MusicalTextFont) == "MuseJazz") {
-                score->style().set(Sid::MusicalTextFont, "MuseJazz Text");
+            if (score->style().styleSt(Sid::musicalTextFont) == "MuseJazz") {
+                score->style().set(Sid::musicalTextFont, "MuseJazz Text");
             }
             if (ctx.overrideSpatium()) {
                 ctx.setOriginalSpatium(score->style().spatium());
                 score->style().set(Sid::spatium, sp);
             }
-            score->setEngravingFont(score->engravingFonts()->fontByName(score->style().styleSt(Sid::MusicalSymbolFont).toStdString()));
+            score->setEngravingFont(score->engravingFonts()->fontByName(score->style().styleSt(Sid::musicalSymbolFont).toStdString()));
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = Factory::createText(score->dummy(), TextStyleType::DEFAULT, false);
             readText206(e, ctx, text, text);

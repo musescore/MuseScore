@@ -4,6 +4,7 @@
 
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
+#include "dom/navigate.h"
 
 namespace mu::engraving {
 void CompatMidiRender::renderScore(Score* score, EventsHolder& events, const CompatMidiRendererInternal::Context& ctx, bool expandRepeats)
@@ -80,7 +81,10 @@ void CompatMidiRender::createPlayEvents(const Score* score, Measure const* start
                 }
 
                 Chord* chord = toChord(item);
-                Chord* nextChord = CompatMidiRender::getChordFromSegment(seg->next(st), track);
+                Chord* nextChord = nullptr;
+                if (ChordRest* chr = nextChordRest(chord, true); chr && chr->isChord()) {
+                    nextChord = static_cast<Chord*>(chr);
+                }
 
                 if (!nextChord) {
                     // check if next chord is in next measure
@@ -599,10 +603,8 @@ void CompatMidiRender::renderGlissando(NoteEventList* events, Note* notestart, d
 {
     std::vector<int> empty = {};
     std::vector<int> body;
-    for (Spanner* spanner : notestart->spannerFor()) {
-        if (spanner->type() == ElementType::GLISSANDO
-            && toGlissando(spanner)->playGlissando()
-            && Glissando::pitchSteps(spanner, body)) {
+    for (Spanner* s : notestart->spannerFor()) {
+        if (s->isGlissando() && s->playSpanner() && Glissando::pitchSteps(s, body)) {
             CompatMidiRender::renderNoteArticulation(events, notestart, true, Constants::DIVISION, empty, body, false, true, empty, 16, 0,
                                                      graceOnBeatProportion, tremoloBefore);
         }
@@ -974,7 +976,7 @@ Trill* CompatMidiRender::findFirstTrill(Chord* chord)
             continue;
         }
         Trill* trill = toTrill(i.value);
-        if (!trill->playArticulation()) {
+        if (!trill->playSpanner()) {
             continue;
         }
         return trill;

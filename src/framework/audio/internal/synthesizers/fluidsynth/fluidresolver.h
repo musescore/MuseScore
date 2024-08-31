@@ -34,11 +34,12 @@
 #include "fluidsynth.h"
 
 namespace muse::audio::synth {
-class FluidResolver : public ISynthResolver::IResolver, public async::Asyncable
+class FluidResolver : public ISynthResolver::IResolver, public muse::Injectable, public async::Asyncable
 {
-    INJECT(ISoundFontRepository, soundFontRepository)
+    muse::Inject<ISoundFontRepository> soundFontRepository = { this };
+
 public:
-    explicit FluidResolver();
+    explicit FluidResolver(const muse::modularity::ContextPtr& iocCtx);
 
     ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioInputParams& params) const override;
     bool hasCompatibleResources(const audio::PlaybackSetupData& setup) const override;

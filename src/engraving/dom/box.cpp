@@ -61,7 +61,7 @@ Box::Box(const ElementType& type, System* parent)
 
 void HBox::computeMinWidth()
 {
-    setWidth(point(boxWidth()) + topGap() + bottomGap());    // top/bottom is really left/right
+    setWidth(absoluteFromSpatium(boxWidth() + topGap() + bottomGap()));    // top/bottom is really left/right
 }
 
 bool Box::isEditAllowed(EditData&) const
@@ -94,18 +94,19 @@ void Box::startEditDrag(EditData& ed)
 
 void Box::editDrag(EditData& ed)
 {
+    const double sp = sizeIsSpatiumDependent() ? spatium() : style().defaultSpatium();
     if (isVBox()) {
-        m_boxHeight += Spatium(ed.delta.y() / spatium());
+        m_boxHeight += Spatium(ed.delta.y() / sp);
         if (ed.vRaster) {
             double vRaster = 1.0 / MScore::vRaster();
             int n = lrint(m_boxHeight.val() / vRaster);
             m_boxHeight = Spatium(vRaster * n);
         }
-        mutldata()->setBbox(0.0, 0.0, system()->width(), point(boxHeight()));
+        mutldata()->setBbox(0.0, 0.0, system()->width(), absoluteFromSpatium(boxHeight()));
         system()->setHeight(height());
         triggerLayout();
     } else {
-        m_boxWidth += Spatium(ed.delta.x() / spatium());
+        m_boxWidth += Spatium(ed.delta.x() / sp);
         if (ed.hRaster) {
             double hRaster = 1.0 / MScore::hRaster();
             int n = lrint(m_boxWidth.val() / hRaster);
@@ -149,6 +150,12 @@ void Box::add(EngravingItem* e)
         toText(e)->setLayoutToParentWidth(true);
     }
     MeasureBase::add(e);
+}
+
+double Box::absoluteFromSpatium(const Spatium& val) const
+{
+    const double sp = sizeIsSpatiumDependent() ? spatium() : style().defaultSpatium();
+    return val.val() * sp;
 }
 
 RectF Box::contentRect() const
@@ -207,10 +214,10 @@ bool Box::setProperty(Pid propertyId, const PropertyValue& v)
         m_boxWidth = v.value<Spatium>();
         break;
     case Pid::TOP_GAP:
-        m_topGap = v.value<Millimetre>();
+        m_topGap = v.value<Spatium>();
         break;
     case Pid::BOTTOM_GAP:
-        m_bottomGap = v.value<Millimetre>();
+        m_bottomGap = v.value<Spatium>();
         break;
     case Pid::LEFT_MARGIN:
         m_leftMargin = v.toDouble();
@@ -246,9 +253,9 @@ PropertyValue Box::propertyDefault(Pid id) const
         return Spatium(0.0);
 
     case Pid::TOP_GAP:
-        return isHBox() ? Millimetre(0.0) : style().styleMM(Sid::systemFrameDistance);
+        return isHBox() ? Spatium(0.0) : style().styleS(Sid::systemFrameDistance);
     case Pid::BOTTOM_GAP:
-        return isHBox() ? Millimetre(0.0) : style().styleMM(Sid::frameSystemDistance);
+        return isHBox() ? Spatium(0.0) : style().styleS(Sid::frameSystemDistance);
 
     case Pid::LEFT_MARGIN:
     case Pid::RIGHT_MARGIN:
@@ -257,9 +264,16 @@ PropertyValue Box::propertyDefault(Pid id) const
         return 0.0;
     case Pid::BOX_AUTOSIZE:
         return true;
+    case Pid::SIZE_SPATIUM_DEPENDENT:
+        return !isTitleFrame();
     default:
         return MeasureBase::propertyDefault(id);
     }
+}
+
+bool Box::isTitleFrame() const
+{
+    return this == score()->first() && type() == ElementType::VBOX;
 }
 
 //---------------------------------------------------------
@@ -278,6 +292,8 @@ void Box::copyValues(Box* origin)
     m_topMargin    = origin->topMargin() * factor;
     m_leftMargin   = origin->leftMargin() * factor;
     m_rightMargin  = origin->rightMargin() * factor;
+
+    setSizeIsSpatiumDependent(origin->sizeIsSpatiumDependent());
 }
 
 //---------------------------------------------------------
@@ -426,7 +442,7 @@ void Box::manageExclusionFromParts(bool exclude)
         toEngravingItem(sectionBreak)->manageExclusionFromParts(true);
     }
 
-    bool titleFrame = this == score()->first() && type() == ElementType::VBOX;
+    bool titleFrame = isTitleFrame();
     if (exclude) {
         const std::list<EngravingObject*> links = linkList();
         for (EngravingObject* linkedObject : links) {
@@ -469,6 +485,7 @@ void Box::manageExclusionFromParts(bool exclude)
             options.cloneBoxToAllParts = false;
             MeasureBase* newFrame = score->insertBox(type(), newMB, options);
             newFrame->setExcludeFromOtherParts(false);
+            // newFrame->setSizeIsSpatiumDependent(!titleFrame);
 
             for (EngravingItem* item : el()) {
                 // Don't add instrument name from current part
@@ -485,7 +502,7 @@ void Box::manageExclusionFromParts(bool exclude)
                 toTBox(newFrame)->resetText(newText);
             }
 
-            if (!score->isMaster() && newFrame == score->first() && newFrame->type() == ElementType::VBOX) {
+            if (!score->isMaster() && titleFrame) {
                 // Title frame - add part name
                 String partLabel = score->name();
                 if (!partLabel.empty()) {
@@ -600,12 +617,12 @@ VBox::VBox(System* parent)
 
 double VBox::minHeight() const
 {
-    return point(Spatium(10));
+    return absoluteFromSpatium(Spatium(10));
 }
 
 double VBox::maxHeight() const
 {
-    return point(Spatium(30));
+    return absoluteFromSpatium(Spatium(30));
 }
 
 PropertyValue VBox::getProperty(Pid propertyId) const
@@ -638,9 +655,10 @@ PropertyValue VBox::propertyDefault(Pid id) const
 
 void VBox::startEditDrag(EditData& ed)
 {
+    const double sp = sizeIsSpatiumDependent() ? spatium() : style().defaultSpatium();
     if (isAutoSizeEnabled()) {
         setAutoSizeEnabled(false);
-        setBoxHeight(Spatium(height() / spatium()));
+        setBoxHeight(Spatium(height() / sp));
     }
     Box::startEditDrag(ed);
 }

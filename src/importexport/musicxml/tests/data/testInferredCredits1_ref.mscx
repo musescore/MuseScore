@@ -32,6 +32,8 @@
       <bendFontSize>10</bendFontSize>
       <headerFontSize>10</headerFontSize>
       <footerFontSize>10</footerFontSize>
+      <copyrightFontSize>10</copyrightFontSize>
+      <pageNumberFontSize>10</pageNumberFontSize>
       <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -115,7 +117,7 @@ the video game: a tone poem</metaTag>
       </Part>
     <Staff id="1">
       <VBox>
-        <height>4.23044</height>
+        <height>10.641</height>
         <Text>
           <style>title</style>
           <offset x="0" y="-0.1505"/>

@@ -208,7 +208,8 @@ function fallback_library()
 # Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
 # or https://github.com/linuxdeploy/linuxdeploy-plugin-qt/issues for Qt libs.
 unwanted_files=(
-  # none
+  # https://github.com/musescore/MuseScore/issues/24068#issuecomment-2297823192
+  lib/libwayland-client.so.0
 )
 
 # ADDITIONAL QT COMPONENTS

@@ -28,10 +28,13 @@
 #include "context/iglobalcontext.h"
 #include "inotationconfiguration.h"
 #include "iinteractive.h"
+#include "ui/iuiconfiguration.h"
 #include "ui/iuiengine.h"
 #include "engraving/iengravingfontsprovider.h"
 
 #include "engraving/style/textstyle.h"
+
+class QQuickView;
 
 namespace mu::notation {
 class EditStyle : public QDialog, private Ui::EditStyleBase, public muse::Injectable
@@ -44,6 +47,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase, public muse::Inject
     muse::Inject<mu::context::IGlobalContext> globalContext = { this };
     muse::Inject<mu::notation::INotationConfiguration> configuration = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
     muse::Inject<muse::ui::IUiEngine> uiEngine = { this };
     muse::Inject<mu::engraving::IEngravingFontsProvider> engravingFonts = { this };
     muse::Inject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
@@ -63,6 +67,7 @@ public slots:
 
     void setCurrentPageCode(const QString& code);
     void setCurrentSubPageCode(const QString& code);
+    void goToTextStylePage(const QString& code);
 
 signals:
     void currentPageChanged();
@@ -77,6 +82,13 @@ private:
     void retranslate();
     void setHeaderFooterToolTip();
     void adjustPagesStackSize(int currentPageIndex);
+
+    struct WidgetAndView {
+        QWidget* widget = nullptr;
+        QQuickView* view = nullptr;
+    };
+
+    WidgetAndView createQmlWidget(QWidget* parent, const QUrl& source);
 
     /// EditStylePage
     /// This is a type for a pointer to any QWidget that is a member of EditStyle.

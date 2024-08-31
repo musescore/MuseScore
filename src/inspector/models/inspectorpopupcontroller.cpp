@@ -46,6 +46,13 @@ void InspectorPopupController::load()
 {
     connect(qApp, &QApplication::applicationStateChanged, this, [this](Qt::ApplicationState state) {
         if (state != Qt::ApplicationActive) {
+            //! NOTE If the application became inactive
+            //! due to opening a color selection dialog,
+            //! then we do not need to close a popup
+            if (interactive()->isSelectColorOpened()) {
+                return;
+            }
+
             closePopup();
         }
     });

@@ -403,7 +403,7 @@ public:
 
     bool isPrintable() const;
     bool isPlayable() const;
-    double point(const Spatium sp) const { return sp.val() * spatium(); }
+    virtual double absoluteFromSpatium(const Spatium& sp) const { return sp.val() * spatium(); }
 
     bool systemFlag() const { return flag(ElementFlag::SYSTEM); }
     void setSystemFlag(bool v) const { setFlag(ElementFlag::SYSTEM, v); }
@@ -489,7 +489,13 @@ public:
     bool colorsInversionEnabled() const;
     void setColorsInverionEnabled(bool enabled);
 
-    std::pair<int, float> barbeat() const;
+    struct BarBeat
+    {
+        int bar;
+        int displayedBar;
+        double beat;
+    };
+    BarBeat barbeat() const;
 
     virtual EngravingItem* findLinkedInScore(const Score* score) const;
     EngravingItem* findLinkedInStaff(const Staff* staff) const;
@@ -568,12 +574,34 @@ public:
 
         void setWidth(double v)
         {
+#ifndef NDEBUG
+            setWidthDebugHook(v);
+#endif
             RectF r = bbox();
             r.setWidth(v);
             setBbox(r);
         }
 
         OffsetChange offsetChanged() const { return autoplace.offsetChanged; }
+
+        void connectItemSnappedBefore(EngravingItem* itemBefore);
+        void disconnectItemSnappedBefore();
+        void connectItemSnappedAfter(EngravingItem* itemAfter);
+        void disconnectItemSnappedAfter();
+        void disconnectSnappedItems() { disconnectItemSnappedBefore(); disconnectItemSnappedAfter(); }
+        EngravingItem* itemSnappedBefore() const { return m_itemSnappedBefore; }
+        EngravingItem* itemSnappedAfter() const { return m_itemSnappedAfter; }
+
+        struct StaffCenteringInfo {
+            double availableVertSpaceAbove = 0.0;
+            double availableVertSpaceBelow = 0.0;
+        };
+        const StaffCenteringInfo& staffCenteringInfo() const { return m_staffCenteringInfo; }
+        void setStaffCenteringInfo(double availSpaceAbove, double availSpaceBelow)
+        {
+            m_staffCenteringInfo.availableVertSpaceAbove = availSpaceAbove;
+            m_staffCenteringInfo.availableVertSpaceBelow = availSpaceBelow;
+        }
 
         void dump(std::stringstream& ss) const;
 
@@ -583,6 +611,7 @@ public:
 
 #ifndef NDEBUG
         void doSetPosDebugHook(double x, double y);
+        void setWidthDebugHook(double w);
 #endif
 
         inline void doSetPos(double x, double y)
@@ -604,6 +633,11 @@ public:
         double m_mag = 1.0;                     // standard magnification (derived value)
         ld_field<PointF> m_pos = "pos";         // Reference position, relative to _parent, set by autoplace
         ld_field<Shape> m_shape = "shape";
+
+        EngravingItem* m_itemSnappedBefore = nullptr;
+        EngravingItem* m_itemSnappedAfter = nullptr;
+
+        StaffCenteringInfo m_staffCenteringInfo;
     };
 
     const LayoutData* ldata() const;
@@ -616,6 +650,9 @@ public:
     RectF abbox(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(pagePos()); }
     RectF pageBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(pagePos()); }
     RectF canvasBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(canvasPos()); }
+
+    PointF staffOffset() const;
+    double staffOffsetY() const { return staffOffset().y(); }
 
     virtual bool isPropertyLinkedToMaster(Pid id) const;
     virtual bool isUnlinkedFromMaster() const;
@@ -644,11 +681,12 @@ public:
 
     virtual bool allowTimeAnchor() const { return false; }
 
-    virtual bool hasVoiceApplicationProperties() const { return false; }
+    virtual bool hasVoiceAssignmentProperties() const { return false; }
     bool appliesToAllVoicesInInstrument() const;
-    void setInitialTrackAndVoiceApplication(track_idx_t track);
-    void checkVoiceApplicationCompatibleWithTrack();
-    void setPlacementBasedOnVoiceApplication(DirectionV styledDirection);
+    void setInitialTrackAndVoiceAssignment(track_idx_t track, bool curVoiceOnlyOverride);
+    void checkVoiceAssignmentCompatibleWithTrack();
+    virtual bool elementAppliesToTrack(const track_idx_t refTrack) const;
+    void setPlacementBasedOnVoiceAssignment(DirectionV styledDirection);
 
     void setOffsetChanged(bool val, bool absolute = true, const PointF& diff = PointF());
     //! ---------------------
@@ -670,6 +708,9 @@ protected:
     Color m_color;                // element color attribute
 
     track_idx_t m_track = muse::nidx;         // staffIdx * VOICES + voice
+
+    static bool elementAppliesToTrack(const track_idx_t elementTrack, const track_idx_t refTrack, const VoiceAssignment voiceAssignment,
+                                      const Part* part);
 
 private:
 

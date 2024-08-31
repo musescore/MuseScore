@@ -38,15 +38,16 @@ class QItemSelectionModel;
 
 namespace mu::notation {
 class NoteInputBarCustomiseItem;
-class NoteInputBarCustomiseModel : public muse::uicomponents::SelectableItemListModel, public muse::async::Asyncable
+class NoteInputBarCustomiseModel : public muse::uicomponents::SelectableItemListModel, public muse::Injectable,
+    public muse::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-    INJECT(muse::ui::IUiActionsRegister, actionsRegister)
-
     Q_PROPERTY(QItemSelectionModel * selectionModel READ selectionModel NOTIFY selectionChanged)
     Q_PROPERTY(bool isAddSeparatorAvailable READ isAddSeparatorAvailable NOTIFY isAddSeparatorAvailableChanged)
+
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
 
 public:
     explicit NoteInputBarCustomiseModel(QObject* parent = nullptr);

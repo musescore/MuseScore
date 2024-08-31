@@ -39,6 +39,9 @@ class Enum : public QQmlPropertyMap
 public:
     /// \cond MS_INTERNAL
     Enum(const QMetaEnum& _enum, QObject* parent = nullptr);
+
+    void add(const QMetaEnum& en);
+
     /// \endcond
 };
 

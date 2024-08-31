@@ -272,26 +272,13 @@ void Measure::fillGap(const Fraction& pos, const Fraction& len, track_idx_t trac
          stretch.numerator(), stretch.denominator(),
          track);
 
-    if (useGapRests) {
-        // fill this gap with a single gap rest, where the duration does not need to correspond to a valid DurationType
-        TDuration d;
-        d.setVal(len.ticks());
-        Rest* rest = Factory::createRest(score()->dummy()->segment());
-        rest->setTicks(len);
-        rest->setDurationType(d);
-        rest->setTrack(track);
-        rest->setGap(useGapRests);
-        score()->undoAddCR(rest, this, (pos / stretch) + tick());
-        return;
-    }
-
     // break the gap into shorter durations if necessary
     std::vector<TDuration> durationList = toRhythmicDurationList(len, true, pos, score()->sigmap()->timesig(tick()).nominal(), this, 0);
 
     Fraction curTick = pos;
     for (TDuration d : durationList) {
         Rest* rest = Factory::createRest(score()->dummy()->segment());
-        rest->setTicks(d.fraction());
+        rest->setTicks(d.isMeasure() ? ticks() : d.fraction());
         rest->setDurationType(d);
         rest->setTrack(track);
         rest->setGap(useGapRests);

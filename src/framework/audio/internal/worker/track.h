@@ -28,8 +28,8 @@
 #include "global/async/asyncable.h"
 #include "global/async/channel.h"
 
-#include "iaudiosource.h"
-#include "audiotypes.h"
+#include "../../iaudiosource.h"
+#include "../../audiotypes.h"
 
 namespace muse::audio {
 enum TrackType {
@@ -58,7 +58,7 @@ public:
     virtual void applyOutputParams(const AudioOutputParams& requiredParams) = 0;
     virtual async::Channel<AudioOutputParams> outputParamsChanged() const = 0;
 
-    virtual async::Channel<audioch_t, AudioSignalVal> audioSignalChanges() const = 0;
+    virtual AudioSignalChanges audioSignalChanges() const = 0;
 };
 
 using ITrackAudioInputPtr = std::shared_ptr<ITrackAudioInput>;

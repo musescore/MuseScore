@@ -240,7 +240,7 @@ static void findTextByType(void* data, mu::engraving::EngravingItem* element)
 QJsonObject NotationMeta::typeDataJson(mu::engraving::Score* score)
 {
     QJsonObject typesData;
-    static std::vector<std::pair<QString, TextStyleType> > namesTypesList {
+    static const std::vector<std::pair<QString, TextStyleType> > namesTypesList {
         { "titles", TextStyleType::TITLE },
         { "subtitles", TextStyleType::SUBTITLE },
         { "composers", TextStyleType::COMPOSER },

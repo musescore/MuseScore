@@ -252,8 +252,8 @@ void AccessibleItem::accessibleSelection(int selectionIndex, int* startOffset, i
         *startOffset = selectionRange.startPosition;
         *endOffset = selectionRange.endPosition;
     } else {
-        *startOffset = 0;
-        *endOffset = 0;
+        *startOffset = -1;
+        *endOffset = -1;
     }
 }
 
@@ -303,15 +303,21 @@ QString AccessibleItem::accessibleText(int startOffset, int endOffset) const
     return text;
 }
 
-QString AccessibleItem::accessibleTextBeforeOffset(int, TextBoundaryType, int*, int*) const
+QString AccessibleItem::accessibleTextBeforeOffset(int, TextBoundaryType, int* startOffset, int* endOffset) const
 {
     NOT_IMPLEMENTED;
+
+    *startOffset = -1;
+    *endOffset = -1;
     return QString();
 }
 
-QString AccessibleItem::accessibleTextAfterOffset(int, TextBoundaryType, int*, int*) const
+QString AccessibleItem::accessibleTextAfterOffset(int, TextBoundaryType, int* startOffset, int* endOffset) const
 {
     NOT_IMPLEMENTED;
+
+    *startOffset = -1;
+    *endOffset = -1;
     return QString();
 }
 

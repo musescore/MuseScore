@@ -82,6 +82,9 @@ public:
                                         bool confirmOverwrite) override;
     RetVal<io::path_t> selectDirectory(const std::string& title, const io::path_t& dir) override;
 
+    RetVal<QColor> selectColor(const QColor& color = Qt::white, const QString& title = "") override;
+    bool isSelectColorOpened() const override;
+
     RetVal<Val> open(const UriQuery& uri) override;
     RetVal<bool> isOpened(const Uri& uri) const override;
     RetVal<bool> isOpened(const UriQuery& uri) const override;
@@ -179,6 +182,8 @@ private:
     async::Channel<Uri> m_opened;
 
     QEventLoop m_fileDialogEventLoop;
+
+    bool m_isSelectColorOpened = false;
 };
 }
 

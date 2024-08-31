@@ -391,8 +391,8 @@ QString AccessibleItemInterface::attributes(int, int* startOffset, int* endOffse
 {
     NOT_IMPLEMENTED;
 
-    *startOffset = 0;
-    *endOffset = 0;
+    *startOffset = -1;
+    *endOffset = -1;
     return QString();
 }
 

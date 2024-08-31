@@ -88,9 +88,15 @@ FocusScope {
 
             orientation: notationNavigator.orientation === Qt.Horizontal ? Qt.Vertical : Qt.Horizontal
 
-            NotationScrollAndZoomArea {
+            StyledViewScrollAndZoomArea {
                 SplitView.fillWidth: true
                 SplitView.fillHeight: true
+
+                horizontalScrollbarSize: view.horizontalScrollbarSize
+                startHorizontalScrollPosition: view.startHorizontalScrollPosition
+
+                verticalScrollbarSize: view.verticalScrollbarSize
+                startVerticalScrollPosition: view.startVerticalScrollPosition
 
                 NotationPaintView {
                     id: notationView
@@ -176,6 +182,18 @@ FocusScope {
                         onClosed: paintView.onElementPopupIsOpenChanged(false)
                     }
                 }
+
+                onPinchToZoom: function(scale, pos) {
+                    view.pinchToZoom(scale, pos)
+                }
+
+                onScrollHorizontal: function(newPos) {
+                    view.scrollHorizontal(newPos)
+                }
+
+                onScrollVertical: function(newPos) {
+                    view.scrollVertical(newPos)
+                }
             }
 
             Loader {
@@ -215,7 +233,7 @@ FocusScope {
                     navigationPanel.section: navSec
                     navigationPanel.order: brailleViewLoader.navigationOrder
 
-                    navigationPanel.onActiveChanged: {
+                    navigationPanel.onActiveChanged: function (active) {
                         if (active) {
                             notationView.navigationPanel.setActive(false);
                             fakeNavCtrl.setActive(false);

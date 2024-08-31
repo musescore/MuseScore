@@ -23,20 +23,19 @@
 #include "abstractsynthesizer.h"
 
 #include "internal/audiosanitizer.h"
-#include "internal/worker/audioengine.h"
 
 using namespace muse;
 using namespace muse::mpe;
 using namespace muse::audio;
 using namespace muse::audio::synth;
 
-AbstractSynthesizer::AbstractSynthesizer(const AudioInputParams& params)
-    : m_params(params)
+AbstractSynthesizer::AbstractSynthesizer(const AudioInputParams& params, const modularity::ContextPtr& iocCtx)
+    : Injectable(iocCtx), m_params(params)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    AudioEngine::instance()->modeChanged().onNotify(this, [this]() {
-        updateRenderingMode(AudioEngine::instance()->mode());
+    audioEngine()->modeChanged().onNotify(this, [this]() {
+        updateRenderingMode(audioEngine()->mode());
     });
 }
 
@@ -78,7 +77,7 @@ RenderMode AbstractSynthesizer::currentRenderMode() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    return AudioEngine::instance()->mode();
+    return audioEngine()->mode();
 }
 
 muse::audio::msecs_t AbstractSynthesizer::samplesToMsecs(const samples_t samplesPerChannel, const samples_t sampleRate) const

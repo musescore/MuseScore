@@ -19,13 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_SHORTCUTS_SHORTCUTSCONFIGURATION_H
-#define MUSE_SHORTCUTS_SHORTCUTSCONFIGURATION_H
+#pragma once
+
+#include "async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
+
 #include "ishortcutsconfiguration.h"
-#include "async/asyncable.h"
+
+#include "global/types/config.h"
 
 namespace muse::shortcuts {
 class ShortcutsConfiguration : public IShortcutsConfiguration, public async::Asyncable
@@ -45,7 +48,8 @@ public:
 
     bool advanceToNextNoteOnKeyRelease() const override;
     void setAdvanceToNextNoteOnKeyRelease(bool value) override;
+
+private:
+    Config m_config;
 };
 }
-
-#endif // MUSE_SHORTCUTS_SHORTCUTSCONTROLLER_H

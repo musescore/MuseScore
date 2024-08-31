@@ -39,6 +39,7 @@ Q_MOC_INCLUDE(< QWindow >)
 #include "extensions/iextensionsprovider.h"
 #include "update/iupdateconfiguration.h"
 #include "global/iglobalconfiguration.h"
+#include "project/iprojectconfiguration.h"
 
 namespace mu::appshell {
 class AppMenuModel : public muse::uicomponents::AbstractMenuModel
@@ -58,6 +59,7 @@ public:
     INJECT(muse::extensions::IExtensionsProvider, extensionsProvider)
     INJECT(muse::update::IUpdateConfiguration, updateConfiguration)
     INJECT(muse::IGlobalConfiguration, globalConfiguration)
+    INJECT(project::IProjectConfiguration, projectConfiguration)
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);

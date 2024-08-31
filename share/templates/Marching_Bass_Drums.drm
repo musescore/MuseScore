@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.40">
+  <Drum pitch="37">
+    <head>normal</head>
+    <line>9</line>
+    <voice>0</voice>
+    <name>Drum 5 Hits</name>
+    <stem>1</stem>
+    <shortcut>A</shortcut>
+    </Drum>
+  <Drum pitch="39">
+    <head>cross</head>
+    <line>9</line>
+    <voice>0</voice>
+    <name>Drum 5 Rims</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="49">
+    <head>normal</head>
+    <line>7</line>
+    <voice>0</voice>
+    <name>Drum 4 Hits</name>
+    <stem>1</stem>
+    <shortcut>B</shortcut>
+    </Drum>
+  <Drum pitch="51">
+    <head>cross</head>
+    <line>7</line>
+    <voice>0</voice>
+    <name>Drum 4 Rims</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="61">
+    <head>normal</head>
+    <line>5</line>
+    <voice>0</voice>
+    <name>Drum 3 Hits</name>
+    <stem>1</stem>
+    <shortcut>C</shortcut>
+    </Drum>
+  <Drum pitch="63">
+    <head>cross</head>
+    <line>5</line>
+    <voice>0</voice>
+    <name>Drum 3 Rims</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="90">
+    <head>slash</head>
+    <line>4</line>
+    <voice>0</voice>
+    <name>Unison Hits</name>
+    <stem>1</stem>
+    <shortcut>F</shortcut>
+    </Drum>
+  <Drum pitch="73">
+    <head>normal</head>
+    <line>3</line>
+    <voice>0</voice>
+    <name>Drum 2 Hits</name>
+    <stem>1</stem>
+    <shortcut>D</shortcut>
+    </Drum>
+  <Drum pitch="75">
+    <head>cross</head>
+    <line>3</line>
+    <voice>0</voice>
+    <name>Drum 2 Rims</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="92">
+    <head>normal</head>
+    <noteheads>
+      <whole>noteheadSlashX</whole>
+      <half>noteheadSlashX</half>
+      <quarter>noteheadSlashX</quarter>
+      <breve>noteheadSlashX</breve>
+      </noteheads>
+    <line>4</line>
+    <voice>0</voice>
+    <name>Unison Rims</name>
+    <stem>1</stem>
+    <shortcut>G</shortcut>
+    </Drum>
+  <Drum pitch="85">
+    <head>normal</head>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Drum 1 Hits</name>
+    <stem>1</stem>
+    <shortcut>E</shortcut>
+    </Drum>
+  <Drum pitch="87">
+    <head>cross</head>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Drum 1 Rims</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="91">
+    <head>normal</head>
+    <noteheads>
+      <whole>noteheadXOrnate</whole>
+      <half>noteheadXOrnate</half>
+      <quarter>noteheadXOrnate</quarter>
+      <breve>noteheadXOrnate</breve>
+      </noteheads>
+    <line>4</line>
+    <voice>0</voice>
+    <name>Unison Rimshots</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="38">
+    <head>normal</head>
+    <noteheads>
+      <whole>noteheadXOrnate</whole>
+      <half>noteheadXOrnate</half>
+      <quarter>noteheadXOrnate</quarter>
+      <breve>noteheadXOrnate</breve>
+      </noteheads>
+    <line>9</line>
+    <voice>0</voice>
+    <name>Drum 5 Rimshots</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="50">
+    <head>normal</head>
+    <noteheads>
+      <whole>noteheadXOrnate</whole>
+      <half>noteheadXOrnate</half>
+      <quarter>noteheadXOrnate</quarter>
+      <breve>noteheadXOrnate</breve>
+      </noteheads>
+    <line>7</line>
+    <voice>0</voice>
+    <name>Drum 4 Rimshots</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="62">
+    <head>normal</head>
+    <noteheads>
+      <whole>noteheadXOrnate</whole>
+      <half>noteheadXOrnate</half>
+      <quarter>noteheadXOrnate</quarter>
+      <breve>noteheadXOrnate</breve>
+      </noteheads>
+    <line>5</line>
+    <voice>0</voice>
+    <name>Drum 3 Rimshots</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="74">
+    <head>normal</head>
+    <noteheads>
+      <whole>noteheadXOrnate</whole>
+      <half>noteheadXOrnate</half>
+      <quarter>noteheadXOrnate</quarter>
+      <breve>noteheadXOrnate</breve>
+      </noteheads>
+    <line>3</line>
+    <voice>0</voice>
+    <name>Drum 2 Rimshots</name>
+    <stem>1</stem>
+    </Drum>
+  <Drum pitch="86">
+    <head>normal</head>
+    <noteheads>
+      <whole>noteheadXOrnate</whole>
+      <half>noteheadXOrnate</half>
+      <quarter>noteheadXOrnate</quarter>
+      <breve>noteheadXOrnate</breve>
+      </noteheads>
+    <line>1</line>
+    <voice>0</voice>
+    <name>Drum 1 Rimshots</name>
+    <stem>1</stem>
+    </Drum>
+  </museScore>

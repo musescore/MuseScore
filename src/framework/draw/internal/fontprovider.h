@@ -19,10 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_FONTPROVIDER_H
-#define MUSE_DRAW_FONTPROVIDER_H
+#pragma once
 
-#include "ifontprovider.h"
+#include "../ifontprovider.h"
 
 #include "global/modularity/ioc.h"
 #include "ifontsdatabase.h"
@@ -38,12 +37,11 @@ public:
     FontProvider() = default;
 
     int addSymbolFont(const String& family, const io::path_t& path) override;
-    int addTextFont(const io::path_t& path) override;
-    void insertSubstitution(const String& familyName, const String& to) override;
 
     double lineSpacing(const Font& f) const override;
     double xHeight(const Font& f) const override;
     double height(const Font& f) const override;
+    double capHeight(const Font& f) const override;
     double ascent(const Font& f) const override;
     double descent(const Font& f) const override;
 
@@ -64,5 +62,3 @@ public:
     double symAdvance(const Font& f, char32_t ucs4, double DPI_F) const override;
 };
 }
-
-#endif // MUSE_DRAW_FONTPROVIDER_H

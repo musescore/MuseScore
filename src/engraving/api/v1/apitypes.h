@@ -558,6 +558,8 @@ enum class Tid {
     INSTRUMENT_CHANGE = int(mu::engraving::TextStyleType::INSTRUMENT_CHANGE),
     HEADER = int(mu::engraving::TextStyleType::HEADER),
     FOOTER = int(mu::engraving::TextStyleType::FOOTER),
+    COPYRIGHT = int(mu::engraving::TextStyleType::COPYRIGHT),
+    PAGE_NUMBER = int(mu::engraving::TextStyleType::PAGE_NUMBER)
 };
 Q_ENUM_NS(Tid);
 

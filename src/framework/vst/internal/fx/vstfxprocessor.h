@@ -26,6 +26,7 @@
 
 #include "async/asyncable.h"
 #include "audio/ifxprocessor.h"
+#include "audio/iaudioconfiguration.h"
 
 #include "internal/vstaudioclient.h"
 #include "internal/vstplugin.h"
@@ -34,6 +35,7 @@
 namespace muse::vst {
 class VstFxProcessor : public muse::audio::IFxProcessor, public async::Asyncable
 {
+    INJECT(muse::audio::IAudioConfiguration, config)
 public:
     explicit VstFxProcessor(VstPluginPtr&& pluginPtr, const muse::audio::AudioFxParams& params);
 

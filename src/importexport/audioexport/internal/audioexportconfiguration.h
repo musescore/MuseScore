@@ -39,6 +39,8 @@ public:
     void setExportSampleRate(int rate) override;
     const std::vector<int>& availableSampleRates() const override;
 
+    muse::audio::samples_t exportBufferSize() const override;
+
 private:
     std::optional<int> m_exportMp3BitrateOverride = std::nullopt;
 };

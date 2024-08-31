@@ -94,7 +94,7 @@ QVariant ExtensionsListModel::data(const QModelIndex& index, int role) const
 
         return QUrl::fromLocalFile(plugin.thumbnail.toQString());
     case rEnabled:
-        return plugin.config.enabled;
+        return plugin.enabled();
     case rCategory:
         return plugin.category.toQString();
     case rVersion:
@@ -121,14 +121,59 @@ QHash<int, QByteArray> ExtensionsListModel::roleNames() const
     return m_roles;
 }
 
-void ExtensionsListModel::setEnable(const QString& uri, bool enable)
+const std::vector<ExecPoint>& ExtensionsListModel::execPoints(const QString& uri) const
 {
-    Ret ret = provider()->setEnable(Uri(uri.toStdString()), enable);
-    emit finished();
-
-    if (!ret) {
-        LOGE() << ret.toString();
+    if (m_execPointsCache.uri != uri) {
+        m_execPointsCache.uri = uri;
+        m_execPointsCache.points = provider()->execPoints(Uri(uri.toStdString()));
     }
+    return m_execPointsCache.points;
+}
+
+int ExtensionsListModel::currentExecPointIndex(const QString& uri) const
+{
+    ExecPointName currentName;
+    Manifest m = provider()->manifest(Uri(uri.toStdString()));
+    IF_ASSERT_FAILED(m.actions.size() > 0) {
+        return 0;
+    }
+
+    //! NOTE For complex extensions, execution point selection is not currently supported.
+    if (m.actions.size() > 1) {
+        currentName = m.enabled() ? EXEC_MANUALLY : EXEC_DISABLED;
+    } else {
+        currentName = m.config.aconfig(m.actions.at(0).code).execPoint;
+    }
+
+    const std::vector<ExecPoint>& points = execPoints(uri);
+    for (size_t i = 0; i < points.size(); ++i) {
+        if (points.at(i).name == currentName) {
+            return int(i);
+        }
+    }
+    return 0;
+}
+
+QVariantList ExtensionsListModel::execPointsModel(const QString& uri) const
+{
+    QVariantList model;
+    const std::vector<ExecPoint>& points = execPoints(uri);
+    for (const ExecPoint& p : points) {
+        QVariantMap item;
+        item["text"] = p.title.qTranslated();
+        item["value"] = QString::fromStdString(p.name);
+        model << item;
+    }
+    return model;
+}
+
+void ExtensionsListModel::selectExecPoint(const QString& uri, int index)
+{
+    const std::vector<ExecPoint>& points = execPoints(uri);
+
+    provider()->setExecPoint(Uri(uri.toStdString()), points.at(index).name);
+
+    emit finished();
 }
 
 void ExtensionsListModel::editShortcut(QString codeKey)
@@ -154,7 +199,7 @@ void ExtensionsListModel::editShortcut(QString codeKey)
 
 void ExtensionsListModel::reloadPlugins()
 {
-    provider()->reloadPlugins();
+    provider()->reloadExtensions();
 }
 
 QVariantList ExtensionsListModel::categories() const

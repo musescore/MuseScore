@@ -51,7 +51,12 @@ public:
     virtual unsigned int driverBufferSize() const = 0; // samples
     virtual void setDriverBufferSize(unsigned int size) = 0;
     virtual async::Notification driverBufferSizeChanged() const = 0;
-    virtual samples_t renderStep() const = 0;
+
+    virtual msecs_t audioWorkerInterval(const samples_t bufferSize, const samples_t sampleRate) const = 0;
+    virtual samples_t minSamplesToReserve(RenderMode mode) const = 0;
+
+    virtual samples_t samplesToPreallocate() const = 0;
+    virtual async::Channel<samples_t> samplesToPreallocateChanged() const = 0;
 
     virtual unsigned int sampleRate() const = 0;
     virtual void setSampleRate(unsigned int sampleRate) = 0;
@@ -67,7 +72,7 @@ public:
     virtual void setUserSoundFontDirectories(const io::paths_t& paths) = 0;
     virtual async::Channel<io::paths_t> soundFontDirectoriesChanged() const = 0;
 
-    virtual io::path_t knownAudioPluginsFilePath() const = 0;
+    virtual bool shouldMeasureInputLag() const = 0;
 };
 }
 

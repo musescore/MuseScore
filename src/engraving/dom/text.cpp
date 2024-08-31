@@ -64,10 +64,32 @@ engraving::PropertyValue Text::propertyDefault(Pid id) const
     }
 }
 
+PropertyValue Text::getProperty(Pid id) const
+{
+    switch (id) {
+    case Pid::VOICE_ASSIGNMENT:
+        if (hasVoiceAssignmentProperties()) {
+            return parentItem()->getProperty(id);
+        }
+    // fallthrough
+    default:
+        return TextBase::getProperty(id);
+    }
+}
+
 String Text::readXmlText(XmlReader& xml, Score* score)
 {
     Text t(score->dummy());
     rw::RWRegister::reader()->readItem(&t, xml);
     return t.xmlText();
+}
+
+bool Text::hasVoiceAssignmentProperties() const
+{
+    const EngravingItem* parent = parentItem();
+    if (parent && parent->isTextLineBaseSegment()) {
+        return parent->hasVoiceAssignmentProperties();
+    }
+    return false;
 }
 }

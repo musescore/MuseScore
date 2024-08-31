@@ -46,12 +46,17 @@ class ToolBarItem : public QObject, public Injectable, public async::Asyncable
 
     Q_PROPERTY(QString title READ translatedTitle NOTIFY actionChanged)
     Q_PROPERTY(bool showTitle READ showTitle WRITE setShowTitle NOTIFY showTitleChanged)
+    Q_PROPERTY(bool isTitleBold READ isTitleBold WRITE setIsTitleBold NOTIFY isTitleBoldChanged)
 
     Q_PROPERTY(QString description READ description_property NOTIFY actionChanged)
 
     Q_PROPERTY(int icon READ icon_property NOTIFY actionChanged)
 
     Q_PROPERTY(bool enabled READ enabled_property NOTIFY stateChanged)
+
+    Q_PROPERTY(bool checkable READ checkable_property NOTIFY actionChanged)
+    Q_PROPERTY(bool checked READ checked_property NOTIFY stateChanged)
+
     Q_PROPERTY(bool selected READ selected_property NOTIFY selectedChanged)
 
     Q_PROPERTY(bool isTransparent READ isTransparent WRITE setIsTransparent NOTIFY isTransparentChanged)
@@ -96,6 +101,9 @@ public:
     bool isTransparent() const;
     void setIsTransparent(bool isTransparent);
 
+    bool isTitleBold() const;
+    void setIsTitleBold(bool newIsTitleBold);
+
 public slots:
     void setId(const QString& id);
     void setTitle(const TranslatableString& title);
@@ -117,6 +125,7 @@ signals:
     void actionChanged();
 
     void showTitleChanged();
+    void isTitleBoldChanged();
     void isTransparentChanged();
 
 private:
@@ -124,6 +133,8 @@ private:
     QString description_property() const;
     int icon_property() const;
     bool enabled_property() const;
+    bool checkable_property() const;
+    bool checked_property() const;
     bool selected_property() const;
     int type_property() const;
 
@@ -135,6 +146,7 @@ private:
     QList<MenuItem*> m_menuItems;
     bool m_isMenuSecondary = false;
     bool m_showTitle = false;
+    bool m_isTitleBold = false;
 
     ui::UiAction m_action;
     bool m_isTransparent = true;

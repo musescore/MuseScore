@@ -634,7 +634,8 @@ static bool scoreContainsSpanner(const Score* score, Spanner* spanner)
     const std::multimap<int, Spanner*>& spanners = score->spanner();
 
     for (auto it = spanners.cbegin(); it != spanners.cend(); ++it) {
-        if (it->second->links()->contains(spanner)) {
+        const Spanner* curSpanner = it->second;
+        if (curSpanner->links() && curSpanner->links()->contains(spanner)) {
             return true;
         }
     }
@@ -694,6 +695,13 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
         }
     } else if (ns->isTrill()) {
         ns->computeStartElement();
+    } else {
+        if (!ns->startElement()) {
+            ns->computeStartElement();
+        }
+        if (!ns->endElement()) {
+            ns->computeEndElement();
+        }
     }
 
     if (!ns->startElement() || !ns->endElement()) {
@@ -707,6 +715,7 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
                 toChord(endElement)->removeEndingSpanner(ns);
             }
         }
+        LOGD() << "No start or end element, can't add spanner: " << ns->tick().toString();
         delete ns;
         return;
     }
@@ -758,6 +767,45 @@ static void processLinkedClone(EngravingItem* ne, Score* score, track_idx_t stra
     ne->setScore(score);
 }
 
+static void addTies(Note* originalNote, Note* newNote, TieMap& tieMap, Score* score)
+{
+    if (originalNote->tieFor()) {
+        Tie* tie = toTie(originalNote->tieFor()->linkedClone());
+        tie->setScore(score);
+        newNote->setTieFor(tie);
+        tie->setStartNote(newNote);
+        tie->setTrack(newNote->track());
+        tieMap.add(originalNote->tieFor(), tie);
+    }
+    if (originalNote->tieBack()) {
+        Tie* tie = tieMap.findNew(originalNote->tieBack());
+        if (tie) {
+            newNote->setTieBack(tie);
+            tie->setEndNote(newNote);
+        } else {
+            LOGD("addTiesToMap: cannot find tie");
+        }
+    }
+}
+
+static void addGraceNoteTies(GraceNotesGroup& originalGraceNotes, Chord* newChord, TieMap& tieMap, Score* score)
+{
+    for (Chord* oldGrace : originalGraceNotes) {
+        Chord* newGrace = newChord->graceNoteAt(oldGrace->graceIndex());
+        if (!newGrace) {
+            continue;
+        }
+
+        size_t notes = oldGrace->notes().size();
+        for (size_t i = 0; i < notes; ++i) {
+            Note* originalNote = oldGrace->notes().at(i);
+            Note* newNote = newGrace->notes().at(i);
+
+            addTies(originalNote, newNote, tieMap, score);
+        }
+    }
+}
+
 static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* oscore,
                                  const std::vector<staff_idx_t>& sourceStavesIndexes,
                                  const TracksMap& trackList, TieMap& tieMap)
@@ -767,7 +815,11 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
     if (mb->isHBox()) {
         nmb = Factory::createHBox(score->dummy()->system());
     } else if (mb->isVBox()) {
-        nmb = Factory::createVBox(score->dummy()->system());
+        if (toBox(mb)->isTitleFrame()) {
+            nmb = Factory::createTitleVBox(score->dummy()->system());
+        } else {
+            nmb = Factory::createVBox(score->dummy()->system());
+        }
     } else if (mb->isTBox()) {
         nmb = Factory::createTBox(score->dummy()->system());
         Text* text = toTBox(mb)->text();
@@ -925,28 +977,13 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                             if (oe->isChord()) {
                                 Chord* och = toChord(ocr);
                                 Chord* nch = toChord(ncr);
-
+                                addGraceNoteTies(och->graceNotesBefore(), nch, tieMap, score);
                                 size_t n = och->notes().size();
                                 for (size_t i = 0; i < n; ++i) {
                                     Note* on = och->notes().at(i);
                                     Note* nn = nch->notes().at(i);
-                                    if (on->tieFor()) {
-                                        Tie* tie = toTie(on->tieFor()->linkedClone());
-                                        tie->setScore(score);
-                                        nn->setTieFor(tie);
-                                        tie->setStartNote(nn);
-                                        tie->setTrack(nn->track());
-                                        tieMap.add(on->tieFor(), tie);
-                                    }
-                                    if (on->tieBack()) {
-                                        Tie* tie = tieMap.findNew(on->tieBack());
-                                        if (tie) {
-                                            nn->setTieBack(tie);
-                                            tie->setEndNote(nn);
-                                        } else {
-                                            LOGD("cloneStaves: cannot find tie");
-                                        }
-                                    }
+
+                                    addTies(on, nn, tieMap, score);
                                     // add back spanners (going back from end to start spanner element
                                     // makes sure the 'other' spanner anchor element is already set up)
                                     // 'on' is the old spanner end note and 'nn' is the new spanner end note
@@ -979,6 +1016,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                         }
                                     }
                                 }
+                                addGraceNoteTies(och->graceNotesAfter(), nch, tieMap, score);
                                 // two note tremolo
                                 if (och->tremoloTwoChord()) {
                                     if (och == och->tremoloTwoChord()->chord1()) {
@@ -1289,27 +1327,12 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                     if (oe->isChord()) {
                         Chord* och = toChord(ocr);
                         Chord* nch = toChord(ncr);
+                        addGraceNoteTies(och->graceNotesBefore(), nch, tieMap, score);
                         size_t n = och->notes().size();
                         for (size_t i = 0; i < n; ++i) {
                             Note* on = och->notes().at(i);
                             Note* nn = nch->notes().at(i);
-                            if (on->tieFor()) {
-                                Tie* tie = toTie(on->tieFor()->linkedClone());
-                                tie->setScore(score);
-                                nn->setTieFor(tie);
-                                tie->setStartNote(nn);
-                                tie->setTrack(nn->track());
-                                tieMap.add(on->tieFor(), tie);
-                            }
-                            if (on->tieBack()) {
-                                Tie* tie = tieMap.findNew(on->tieBack());
-                                if (tie) {
-                                    nn->setTieBack(tie);
-                                    tie->setEndNote(nn);
-                                } else {
-                                    LOGD("cloneStaff: cannot find tie");
-                                }
-                            }
+                            addTies(on, nn, tieMap, score);
                             // add back spanners (going back from end to start spanner element
                             // makes sure the 'other' spanner anchor element is already set up)
                             // 'on' is the old spanner end note and 'nn' is the new spanner end note
@@ -1324,6 +1347,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                                 }
                             }
                         }
+                        addGraceNoteTies(och->graceNotesAfter(), nch, tieMap, score);
                         // two note tremolo
                         if (och->tremoloTwoChord()) {
                             if (och == och->tremoloTwoChord()->chord1()) {
@@ -1484,6 +1508,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             addElement(newEl);
         }
 
+        TremoloTwoChord* tremolo = nullptr;
         for (track_idx_t srcTrack : muse::keys(map)) {
             TupletMap tupletMap;          // tuplets cannot cross measure boundaries
             track_idx_t dstTrack = map.at(srcTrack);
@@ -1512,7 +1537,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     }
                     bool systemObject = e->systemFlag() && e->track() == 0;
                     bool alreadyCloned = bool(e->findLinkedInScore(score));
-                    bool cloneAnnotation = !alreadyCloned && (e->track() == srcTrack || systemObject);
+                    bool cloneAnnotation = !alreadyCloned && (e->elementAppliesToTrack(srcTrack) || systemObject);
 
                     if (!cloneAnnotation) {
                         continue;
@@ -1559,25 +1584,23 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     if (oe->isChord()) {
                         Chord* och = toChord(ocr);
                         Chord* nch = toChord(ncr);
+                        addGraceNoteTies(och->graceNotesBefore(), nch, tieMap, score);
                         size_t n = och->notes().size();
                         for (size_t i = 0; i < n; ++i) {
                             Note* on = och->notes().at(i);
                             Note* nn = nch->notes().at(i);
-                            if (on->tieFor()) {
-                                Tie* tie = toTie(on->tieFor()->linkedClone());
-                                tie->setScore(score);
-                                nn->setTieFor(tie);
-                                tie->setStartNote(nn);
-                                tie->setTrack(nn->track());
-                                tieMap.add(on->tieFor(), tie);
-                            }
-                            if (on->tieBack()) {
-                                Tie* tie = tieMap.findNew(on->tieBack());
-                                if (tie) {
-                                    nn->setTieBack(tie);
-                                    tie->setEndNote(nn);
+                            addTies(on, nn, tieMap, score);
+                            // add back spanners (going back from end to start spanner element
+                            // makes sure the 'other' spanner anchor element is already set up)
+                            // 'on' is the old spanner end note and 'nn' is the new spanner end note
+                            for (Spanner* oldSp : on->spannerBack()) {
+                                Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
+                                if (newStart != nullptr) {
+                                    Spanner* newSp = toSpanner(oldSp->linkedClone());
+                                    newSp->setNoteSpan(newStart, nn);
+                                    score->addElement(newSp);
                                 } else {
-                                    LOGD("cloneStaff2: cannot find tie");
+                                    LOGD("cloneStaff2: cannot find spanner start note");
                                 }
                             }
                             GuitarBend* bendBack = on->bendBack();
@@ -1606,6 +1629,30 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                                 nn->addSpannerFor(newBend);
                             }
                         }
+                        addGraceNoteTies(och->graceNotesAfter(), nch, tieMap, score);
+                        // two note tremolo
+                        if (och->tremoloTwoChord()) {
+                            if (och == och->tremoloTwoChord()->chord1()) {
+                                if (tremolo) {
+                                    LOGD("cloneStaff2: unconnected two note tremolo");
+                                }
+                                tremolo = item_cast<TremoloTwoChord*>(och->tremoloTwoChord()->linkedClone());
+                                tremolo->setScore(nch->score());
+                                tremolo->setParent(nch);
+                                tremolo->setTrack(nch->track());
+                                tremolo->setChords(nch, 0);
+                                nch->setTremoloTwoChord(tremolo);
+                            } else if (och == och->tremoloTwoChord()->chord2()) {
+                                if (!tremolo) {
+                                    LOGD("cloneStaff2: first note for two note tremolo missing");
+                                } else {
+                                    tremolo->setChords(tremolo->chord1(), nch);
+                                    nch->setTremoloTwoChord(tremolo);
+                                }
+                            } else {
+                                LOGD("cloneStaff2: inconsistent two note tremolo");
+                            }
+                        }
                     }
                 }
             }
@@ -1615,6 +1662,9 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             if (seg.empty()) {
                 score->removeElement(&seg);
             }
+        }
+        if (!nm->hasVoices(dstStaffIdx, nm->tick(), nm->ticks())) {
+            promoteGapRestsToRealRests(nm, dstStaffIdx);
         }
     }
 
@@ -1667,6 +1717,23 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         }
 
         score->transposeKeys(dstStaffIdx, dstStaffIdx + 1, startTick, endTick, !scoreConcertPitch);
+    }
+}
+
+void Excerpt::promoteGapRestsToRealRests(const Measure* measure, staff_idx_t staffIdx)
+{
+    track_idx_t startTrack = staff2track(staffIdx);
+    track_idx_t endTrack = startTrack + VOICES;
+    for (const Segment& seg : measure->segments()) {
+        if (!seg.isChordRestType()) {
+            continue;
+        }
+        for (track_idx_t track = startTrack; track < endTrack; ++track) {
+            EngravingItem* item = seg.element(track);
+            if (item && item->isRest() && toRest(item)->isGap()) {
+                toRest(item)->setGap(false);
+            }
+        }
     }
 }
 

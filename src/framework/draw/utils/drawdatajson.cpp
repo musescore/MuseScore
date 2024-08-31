@@ -96,7 +96,7 @@ static void fromObj(const JsonObject& obj, Brush& brush)
 static JsonObject toObj(const Font& font)
 {
     JsonObject obj;
-    obj["family"] = font.family();
+    obj["family"] = font.family().id();
     obj["type"] = static_cast<int>(font.type());
     obj["pointSize"] = font.pointSizeF();
     obj["weight"] = font.weight();

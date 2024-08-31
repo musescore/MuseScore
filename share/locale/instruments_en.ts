@@ -9874,13 +9874,6 @@
         <translation type="unfinished">Helicon</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3340"/>
-        <source>Helicon</source>
-        <comment>helicon shortName</comment>
-        <extracomment>shortName for Helicon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Helicon</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="3343"/>
         <source>Conch shell, sometimes fitted with a mouthpiece.</source>
         <comment>conch description</comment>
@@ -15369,11 +15362,102 @@
         <translation type="unfinished">Very large mountain or Appalachian dulcimer, an octave lower than the regular dulcimer. (Tablature).</translation>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="6070"/>
+        <source>Treble viola da gamba. Second highest member of the viol family.</source>
+        <comment>treble-viol description</comment>
+        <extracomment>description for Treble Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Treble viola da gamba. Second highest member of the viol family.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6085"/>
+        <source>Alto viola da gamba. Third highest member of the viol family.</source>
+        <comment>alto-viol description</comment>
+        <extracomment>description for Alto Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Alto viola da gamba. Third highest member of the viol family.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6115"/>
+        <source>Tenor viola da gamba. Middle member of the viol family.</source>
+        <comment>tenor-viol description</comment>
+        <extracomment>description for Tenor Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Tenor viola da gamba. Middle member of the viol family.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6145"/>
+        <source>Bass viola da gamba (staff notation). Third lowest member of the viol family.</source>
+        <comment>viola-da-gamba description</comment>
+        <extracomment>description for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Bass viola da gamba (staff notation). Third lowest member of the viol family.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6147"/>
+        <source>Bass Viol</source>
+        <comment>viola-da-gamba trackName</comment>
+        <extracomment>trackName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Bass Viol</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6149"/>
+        <source>Bass Viol</source>
+        <comment>viola-da-gamba longName</comment>
+        <extracomment>longName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Bass Viol</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6151"/>
+        <source>B. Vl.</source>
+        <comment>viola-da-gamba shortName</comment>
+        <extracomment>shortName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">B. Vl.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6160"/>
+        <source>Bass viola da gamba (tablature). Third lowest member of the viol family.</source>
+        <comment>viola-da-gamba-tablature description</comment>
+        <extracomment>description for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Bass viola da gamba (tablature). Third lowest member of the viol family.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6162"/>
+        <source>Bass Viol (tablature)</source>
+        <comment>viola-da-gamba-tablature trackName</comment>
+        <extracomment>trackName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Bass Viol (tablature)</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6164"/>
+        <source>Bass Viol</source>
+        <comment>viola-da-gamba-tablature longName</comment>
+        <extracomment>longName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Bass Viol</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6166"/>
+        <source>B. Vl.</source>
+        <comment>viola-da-gamba-tablature shortName</comment>
+        <extracomment>shortName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">B. Vl.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6169"/>
+        <source>Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol. Second lowest member of the viol family.</source>
+        <comment>violone description</comment>
+        <extracomment>description for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol. Second lowest member of the viol family.</translation>
+    </message>
+    <message>
         <location filename="../instruments/instrumentsxml.h" line="6171"/>
         <source>Violone</source>
         <comment>violone trackName</comment>
         <extracomment>trackName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Violone</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6186"/>
+        <source>Large viol with the lowest string tuned to D. Sometimes called the D violone or contrabass viol. Lowest-pitched member of the viol family.</source>
+        <comment>d-violone description</comment>
+        <extracomment>description for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Large viol with the lowest string tuned to D. Sometimes called the D violone or contrabass viol. Lowest-pitched member of the viol family.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6188"/>
@@ -15430,6 +15514,13 @@
         <comment>bb-trumpet traitName</comment>
         <extracomment>traitName for Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">*B♭</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3340"/>
+        <source>Hel.</source>
+        <comment>helicon shortName</comment>
+        <extracomment>shortName for Helicon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Hel.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3832"/>
@@ -18407,13 +18498,6 @@
         <translation type="unfinished">tremolo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6070"/>
-        <source>Treble viol.</source>
-        <comment>treble-viol description</comment>
-        <extracomment>description for Treble Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Treble viol.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="6072"/>
         <source>Treble Viol</source>
         <comment>treble-viol trackName</comment>
@@ -18454,13 +18538,6 @@
         <comment>treble-viol channel</comment>
         <extracomment>channel for Treble Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">tremolo</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6085"/>
-        <source>Alto viol.</source>
-        <comment>alto-viol description</comment>
-        <extracomment>description for Alto Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Alto viol.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6087"/>
@@ -18554,13 +18631,6 @@
         <translation type="unfinished">tremolo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6115"/>
-        <source>Tenor viol.</source>
-        <comment>tenor-viol description</comment>
-        <extracomment>description for Tenor Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Tenor viol.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="6117"/>
         <source>Tenor Viol</source>
         <comment>tenor-viol trackName</comment>
@@ -18652,88 +18722,25 @@
         <translation type="unfinished">tremolo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6145"/>
-        <source>Viola da gamba (staff notation).</source>
-        <comment>viola-da-gamba description</comment>
-        <extracomment>description for Viola da gamba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Viola da gamba (staff notation).</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6147"/>
-        <source>Viola da gamba</source>
-        <comment>viola-da-gamba trackName</comment>
-        <extracomment>trackName for Viola da gamba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Viola da gamba</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6149"/>
-        <source>Viola da gamba</source>
-        <comment>viola-da-gamba longName</comment>
-        <extracomment>longName for Viola da gamba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Viola da gamba</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6151"/>
-        <source>Vla. d. g.</source>
-        <comment>viola-da-gamba shortName</comment>
-        <extracomment>shortName for Viola da gamba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Vla. d. g.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="6153"/>
         <source>arco</source>
         <comment>viola-da-gamba channel</comment>
-        <extracomment>channel for Viola da gamba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>channel for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">arco</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6155"/>
         <source>pizzicato</source>
         <comment>viola-da-gamba channel</comment>
-        <extracomment>channel for Viola da gamba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>channel for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">pizzicato</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6157"/>
         <source>tremolo</source>
         <comment>viola-da-gamba channel</comment>
-        <extracomment>channel for Viola da gamba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>channel for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">tremolo</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6160"/>
-        <source>Viola da gamba (tablature).</source>
-        <comment>viola-da-gamba-tablature description</comment>
-        <extracomment>description for Viola da gamba (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Viola da gamba (tablature).</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6162"/>
-        <source>Viola da gamba (tablature)</source>
-        <comment>viola-da-gamba-tablature trackName</comment>
-        <extracomment>trackName for Viola da gamba (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Viola da gamba (tablature)</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6164"/>
-        <source>Viola da gamba</source>
-        <comment>viola-da-gamba-tablature longName</comment>
-        <extracomment>longName for Viola da gamba (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Viola da gamba</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6166"/>
-        <source>Vla. d. g.</source>
-        <comment>viola-da-gamba-tablature shortName</comment>
-        <extracomment>shortName for Viola da gamba (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Vla. d. g.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6169"/>
-        <source>Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol.</source>
-        <comment>violone description</comment>
-        <extracomment>description for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6173"/>
@@ -18776,13 +18783,6 @@
         <comment>violone channel</comment>
         <extracomment>channel for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">tremolo</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6186"/>
-        <source>Large viol with the lowest string tuned to D. Sometimes called the D violone.</source>
-        <comment>d-violone description</comment>
-        <extracomment>description for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Large viol with the lowest string tuned to D. Sometimes called the D violone.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6190"/>
@@ -19657,8 +19657,8 @@
     <name>engraving/scoreorder</name>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6248"/>
-        <source>Orchestral</source>
-        <translation type="unfinished">Orchestral</translation>
+        <source>Orchestra</source>
+        <translation type="unfinished">Orchestra</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6249"/>

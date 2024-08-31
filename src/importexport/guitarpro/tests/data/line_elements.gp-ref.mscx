@@ -1217,6 +1217,14 @@
                 </location>
               </prev>
             </Spanner>
+          <Spanner type="HarmonicMark">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
           </voice>
         </Measure>
       </Staff>

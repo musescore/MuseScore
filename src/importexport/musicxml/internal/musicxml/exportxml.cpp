@@ -422,6 +422,7 @@ private:
     void wavyLineStartStop(const ChordRest* cr, Notations& notations, Ornaments& ornaments, TrillHash& trillStart, TrillHash& trillStop);
     void print(const Measure* const m, const int partNr, const int firstStaffOfPart, const int nrStavesInPart,
                const MeasurePrintContext& mpc);
+    void measureLayout(const double distance);
     void findAndExportClef(const Measure* const m, const int staves, const track_idx_t strack, const track_idx_t etrack);
     void exportDefaultClef(const Part* const part, const Measure* const m);
     void writeElement(EngravingItem* el, const Measure* m, staff_idx_t sstaff, bool useDrumset);
@@ -1390,12 +1391,12 @@ static void defaults(XmlWriter& xml, const MStyle& s, double& millimeters, const
         xml.tag("line-width", { { "type", "leger" } }, s.styleS(Sid::ledgerLineWidth).val() * 10);
         xml.tag("line-width", { { "type", "pedal" } }, s.styleS(Sid::pedalLineWidth).val() * 10);
         xml.tag("line-width", { { "type", "octave shift" } }, s.styleS(Sid::ottavaLineWidth).val() * 10);
-        xml.tag("line-width", { { "type", "slur middle" } }, s.styleS(Sid::SlurMidWidth).val() * 10);
-        xml.tag("line-width", { { "type", "slur tip" } }, s.styleS(Sid::SlurEndWidth).val() * 10);
+        xml.tag("line-width", { { "type", "slur middle" } }, s.styleS(Sid::slurMidWidth).val() * 10);
+        xml.tag("line-width", { { "type", "slur tip" } }, s.styleS(Sid::slurEndWidth).val() * 10);
         xml.tag("line-width", { { "type", "staff" } }, s.styleS(Sid::staffLineWidth).val() * 10);
         xml.tag("line-width", { { "type", "stem" } }, s.styleS(Sid::stemWidth).val() * 10);
-        xml.tag("line-width", { { "type", "tie middle" } }, s.styleS(Sid::TieMidWidth).val() * 10);
-        xml.tag("line-width", { { "type", "tie tip" } }, s.styleS(Sid::TieEndWidth).val() * 10);
+        xml.tag("line-width", { { "type", "tie middle" } }, s.styleS(Sid::tieMidWidth).val() * 10);
+        xml.tag("line-width", { { "type", "tie tip" } }, s.styleS(Sid::tieEndWidth).val() * 10);
         xml.tag("line-width", { { "type", "tuplet bracket" } }, s.styleS(Sid::tupletBracketWidth).val() * 10);
         xml.tag("line-width", { { "type", "wedge" } }, s.styleS(Sid::hairpinLineWidth).val() * 10);
         // note size values in percent
@@ -1410,7 +1411,7 @@ static void defaults(XmlWriter& xml, const MStyle& s, double& millimeters, const
     // for music, words and lyrics, use Tid STAFF (typically used for words)
     // and LYRIC1 to get MusicXML defaults
 
-    xml.tag("music-font", { { "font-family", s.styleSt(Sid::MusicalSymbolFont) } });
+    xml.tag("music-font", { { "font-family", s.styleSt(Sid::musicalSymbolFont) } });
     xml.tag("word-font", { { "font-family", s.styleSt(Sid::staffTextFontFace) }, { "font-size", s.styleD(Sid::staffTextFontSize) } });
     xml.tag("lyric-font",
             { { "font-family", s.styleSt(Sid::lyricsOddFontFace) }, { "font-size", s.styleD(Sid::lyricsOddFontSize) } });
@@ -1442,7 +1443,7 @@ static void creditWords(XmlWriter& xml, const MStyle& s, const page_idx_t pageNr
         return;
     }
 
-    const String mtf = s.styleSt(Sid::MusicalTextFont);
+    const String mtf = s.styleSt(Sid::musicalTextFont);
     const CharFormat defFmt = formatForWords(s);
 
     // export formatted
@@ -4901,7 +4902,7 @@ static void wordsMetronome(XmlWriter& xml, const MStyle& s, TextBase const* cons
     std::list<TextFragment> wordsRight;         // words right of metronome
 
     // set the default words format
-    const String mtf = s.styleSt(Sid::MusicalTextFont);
+    const String mtf = s.styleSt(Sid::musicalTextFont);
     const CharFormat defFmt = formatForWords(s);
 
     if (findMetronome(list, wordsLeft, hasParen, metroLeft, metroRight, wordsRight)) {
@@ -5091,7 +5092,7 @@ void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const staff_idx
 
     // set the default words format
     const MStyle& style = m_score->style();
-    const String mtf = style.styleSt(Sid::MusicalTextFont);
+    const String mtf = style.styleSt(Sid::musicalTextFont);
     const CharFormat defFmt = formatForWords(style);
 
     m_xml.startElement("direction", { { "placement", (relativePosition.y() < 0) ? "above" : "below" } });
@@ -5136,7 +5137,7 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, staff_idx_t staff
     attr += positioningAttributes(rmk);
     // set the default words format
     const MStyle& style = m_score->style();
-    const String mtf = style.styleSt(Sid::MusicalTextFont);
+    const String mtf = style.styleSt(Sid::musicalTextFont);
     const CharFormat defFmt = formatForWords(style);
     // write formatted
     MScoreTextToMXML mttm(u"rehearsal", attr, defFmt, mtf);
@@ -5306,10 +5307,16 @@ static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool
 void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const Fraction& tick)
 {
     const bool isLineType = hp->isLineType();
+    const bool isStart = hp->tick() == tick;
     int n;
     if (isLineType) {
-        if (!hp->lineVisible() && ((hp->beginText().isEmpty() && hp->tick() == tick)
-                                   || (hp->endText().isEmpty() && hp->tick() != tick))) {
+        if (!hp->lineVisible()) {
+            if ((isStart && hp->beginText().isEmpty()) || (!isStart && hp->endText().isEmpty())) {
+                return;
+            }
+            directionTag(m_xml, m_attr, hp);
+            writeHairpinText(m_xml, hp, isStart);
+            directionETag(m_xml, staff);
             return;
         }
         n = findDashes(hp);
@@ -5340,18 +5347,17 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
     }
 
     directionTag(m_xml, m_attr, hp);
-    const bool hpTick = hp->tick() == tick;
-    if (hpTick) {
-        writeHairpinText(m_xml, hp, hpTick);
+    if (isStart) {
+        writeHairpinText(m_xml, hp, isStart);
     }
     if (isLineType) {
         if (hp->lineVisible()) {
-            if (hpTick) {
+            if (isStart) {
                 m_xml.startElement("direction-type");
                 String tag = u"dashes type=\"start\"";
                 tag += String(u" number=\"%1\"").arg(n + 1);
                 tag += color2xml(hp);
-                tag += positioningAttributes(hp, hpTick);
+                tag += positioningAttributes(hp, isStart);
                 m_xml.tagRaw(tag);
                 m_xml.endElement();
             } else {
@@ -5363,7 +5369,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
     } else {
         m_xml.startElement("direction-type");
         String tag = u"wedge type=";
-        if (hpTick) {
+        if (isStart) {
             if (hp->hairpinType() == HairpinType::CRESC_HAIRPIN) {
                 tag += u"\"crescendo\"";
                 if (hp->hairpinCircledTip()) {
@@ -5373,7 +5379,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
                 tag += u"\"diminuendo\"";
             }
             tag += color2xml(hp);
-            tag += positioningAttributes(hp, hpTick);
+            tag += positioningAttributes(hp, isStart);
         } else {
             tag += u"\"stop\"";
             if (hp->hairpinCircledTip() && hp->hairpinType() == HairpinType::DECRESC_HAIRPIN) {
@@ -5384,8 +5390,8 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
         m_xml.tagRaw(tag);
         m_xml.endElement();
     }
-    if (!hpTick) {
-        writeHairpinText(m_xml, hp, hpTick);
+    if (!isStart) {
+        writeHairpinText(m_xml, hp, isStart);
     }
     directionETag(m_xml, staff);
 }
@@ -5550,8 +5556,14 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
 {
     using namespace muse::draw;
 
-    if (!tl->lineVisible() && ((tl->beginText().isEmpty() && tl->tick() == tick)
-                               || (tl->endText().isEmpty() && tl->tick() != tick))) {
+    bool isStart = tl->tick() == tick;
+    if (!tl->lineVisible()) {
+        if ((isStart && tl->beginText().isEmpty()) || (!isStart && tl->endText().isEmpty())) {
+            return;
+        }
+        directionTag(m_xml, m_attr, tl);
+        writeHairpinText(m_xml, tl, isStart);
+        directionETag(m_xml, staff);
         return;
     }
 
@@ -5697,15 +5709,14 @@ inline std::set<String>& operator<<(std::set<String>& s, const T& v)
 
 void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
 {
-    static std::set<String> set;   // the valid MusicXML dynamics
-    if (set.empty()) {
-        set << u"f" << u"ff" << u"fff" << u"ffff" << u"fffff" << u"ffffff"
-            << u"fp" << u"fz"
-            << u"mf" << u"mp"
-            << u"p" << u"pp" << u"ppp" << u"pppp" << u"ppppp" << u"pppppp"
-            << u"rf" << u"rfz"
-            << u"sf" << u"sffz" << u"sfp" << u"sfpp" << u"sfz";
-    }
+    static const std::set<String> validMusicXmlDynamics {   // the valid MusicXML dynamics
+        u"f", u"ff", u"fff", u"ffff", u"fffff", u"ffffff",
+        u"fp", u"fz",
+        u"mf", u"mp",
+        u"p", u"pp", u"ppp", u"pppp", u"ppppp", u"pppppp",
+        u"rf", u"rfz",
+        u"sf", u"sffz", u"sfp", u"sfpp", u"sfz"
+    };
 
     directionTag(m_xml, m_attr, dyn);
 
@@ -5718,10 +5729,10 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
     const String dynTypeName = String::fromAscii(TConv::toXml(dyn->dynamicType()).ascii());
     bool hasCustomText = dyn->hasCustomText();
 
-    if (muse::contains(set, dynTypeName) && !hasCustomText) {
+    if (muse::contains(validMusicXmlDynamics, dynTypeName) && !hasCustomText) {
         m_xml.tagRaw(dynTypeName);
     } else if (!dynTypeName.empty()) {
-        static std::map<ushort, Char> map = {
+        static const std::map<ushort, Char> map = {
             { 0xE520, u'p' },
             { 0xE521, u'm' },
             { 0xE522, u'f' },
@@ -5757,7 +5768,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
                 // found a non-dynamics character
                 if (inDynamicsSym) {
                     if (!text.empty()) {
-                        if (muse::contains(set, text)) {
+                        if (muse::contains(validMusicXmlDynamics, text)) {
                             m_xml.tagRaw(text);
                         } else {
                             m_xml.tag("other-dynamics", text);
@@ -5770,7 +5781,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
             }
         }
         if (!text.empty()) {
-            if (inDynamicsSym && muse::contains(set, text)) {
+            if (inDynamicsSym && muse::contains(validMusicXmlDynamics, text)) {
                 m_xml.tagRaw(text);
             } else {
                 m_xml.tag("other-dynamics", text);
@@ -5865,10 +5876,10 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>& ll, const track_idx_t tr
                 m_xml.tag("syllabic", s);
                 String attr;         // TODO TBD
                 // set the default words format
-                const String mtf = m_score->style().styleSt(Sid::MusicalTextFont);
+                const String mtf = m_score->style().styleSt(Sid::musicalTextFont);
                 CharFormat defFmt;
-                defFmt.setFontFamily(m_score->style().styleSt(Sid::lyricsEvenFontFace));
-                defFmt.setFontSize(m_score->style().styleD(Sid::lyricsOddFontSize));
+                defFmt.setFontFamily(m_score->style().styleSt(l->isEven() ? Sid::lyricsEvenFontFace : Sid::lyricsOddFontFace));
+                defFmt.setFontSize(m_score->style().styleD(l->isEven() ? Sid::lyricsEvenFontSize : Sid::lyricsOddFontSize));
                 // write formatted
                 MScoreTextToMXML mttm(u"text", attr, defFmt, mtf);
                 mttm.writeTextFragments(l->fragmentList(), m_xml);
@@ -6339,28 +6350,6 @@ static void measureStyle(XmlWriter& xml, Attributes& attr, const Measure* const 
 }
 
 //---------------------------------------------------------
-//  findFretDiagram
-//---------------------------------------------------------
-
-static const FretDiagram* findFretDiagram(track_idx_t strack, track_idx_t etrack, track_idx_t track, Segment* seg)
-{
-    if (seg->segmentType() == SegmentType::ChordRest) {
-        for (const EngravingItem* e : seg->annotations()) {
-            track_idx_t wtrack = muse::nidx;       // track to write annotation
-
-            if (strack <= e->track() && e->track() < etrack) {
-                wtrack = findTrackForAnnotations(e->track(), seg);
-            }
-
-            if (track == wtrack && e->type() == ElementType::FRET_DIAGRAM) {
-                return static_cast<const FretDiagram*>(e);
-            }
-        }
-    }
-    return 0;
-}
-
-//---------------------------------------------------------
 //  commonAnnotations
 //---------------------------------------------------------
 
@@ -6407,47 +6396,104 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
 //  annotations
 //---------------------------------------------------------
 
-/*
- * Write annotations that are attached to chords or rests
- */
-
-// In MuseScore, EngravingItem::FRET_DIAGRAM and EngravingItem::HARMONY are separate annotations,
-// in MusicXML they are combined in the harmony element. This means they have to be matched.
-// TODO: replace/repair current algorithm (which can only handle one FRET_DIAGRAM and one HARMONY)
+// Only handle common annotations, others are handled elsewhere
 
 static void annotations(ExportMusicXml* exp, track_idx_t strack, track_idx_t etrack, track_idx_t track, staff_idx_t sstaff, Segment* seg)
 {
-    if (seg->segmentType() == SegmentType::ChordRest) {
-        const FretDiagram* fd = findFretDiagram(strack, etrack, track, seg);
-        // if (fd) LOGD("annotations seg %p found fretboard diagram %p", seg, fd);
+    for (const EngravingItem* e : seg->annotations()) {
+        track_idx_t wtrack = muse::nidx;       // track to write annotation
 
-        for (const EngravingItem* e : seg->annotations()) {
-            track_idx_t wtrack = muse::nidx;       // track to write annotation
+        if (strack <= e->track() && e->track() < etrack) {
+            wtrack = findTrackForAnnotations(e->track(), seg);
+        }
 
-            if (strack <= e->track() && e->track() < etrack) {
-                wtrack = findTrackForAnnotations(e->track(), seg);
-            }
-
-            if (track == wtrack) {
-                if (commonAnnotations(exp, e, sstaff)) {
-                    // already handled
-                } else if (e->isHarmony()) {
-                    // LOGD("annotations seg %p found harmony %p", seg, e);
-                    exp->harmony(toHarmony(e), fd);
-                    fd = nullptr;           // make sure to write only once ...
-                } else if (e->isFermata() || e->isFiguredBass() || e->isFretDiagram() || e->isJump()) {
-                    // handled separately by chordAttributes(), figuredBass(), findFretDiagram() or ignored
-                } else {
-                    LOGD("direction type %s at tick %d not implemented",
-                         e->typeName(), seg->tick().ticks());
-                }
+        if (track == wtrack) {
+            if (commonAnnotations(exp, e, sstaff)) {
+                // already handled
             }
         }
-        if (fd) {
-            // found fd but no harmony, cannot write (MusicXML would be invalid)
-            LOGD("seg %p found fretboard diagram %p w/o harmony: cannot write",
-                 seg, fd);
+    }
+}
+
+//---------------------------------------------------------
+//  harmonies
+//---------------------------------------------------------
+
+/*
+ * Helper method to export harmonies and chord diagrams for a single segment.
+ */
+
+static void segmentHarmonies(ExportMusicXml* exp, track_idx_t track, Segment* seg, Fraction offset)
+{
+    const std::vector<EngravingItem*> diagrams = seg->findAnnotations(ElementType::FRET_DIAGRAM, track, track);
+    std::vector<EngravingItem*> harmonies = seg->findAnnotations(ElementType::HARMONY, track, track);
+
+    for (const EngravingItem* d : diagrams) {
+        const FretDiagram* diagram = toFretDiagram(d);
+        const Harmony* harmony = diagram->harmony();
+        if (harmony) {
+            exp->harmony(harmony, diagram, offset);
+        } else if (!harmonies.empty()) {
+            const EngravingItem* defaultHarmony = harmonies.back();
+            exp->harmony(toHarmony(defaultHarmony), diagram, offset);
+            harmonies.pop_back();
+        } else {
+            // Found a fret diagram with no harmony, ignore
+            LOGD("segmentHarmonies() seg %p found fretboard diagram %p w/o harmony: cannot write", seg, diagram);
         }
+    }
+
+    for (const EngravingItem* h : harmonies) {
+        exp->harmony(toHarmony(h), 0, offset);
+    }
+}
+
+/*
+ * Write harmonies and fret diagrams that are attached to chords or rests.
+ *
+ * There are fondamental differences between the ways Musescore and MusicXML handle harmonies (Chord symbols)
+ * and fretboard diagrams.
+ *
+ * In MuseScore, the Harmony element is now a child of FretboardDiagram BUT in previous versions,
+ * both elements were independant siblings so we have to handle both cases.
+ * In MusicXML, fretboard diagram is always contained in a harmony element.
+ *
+ * In MuseScore, Harmony elements are not always linked to notes, and each Harmony will be contained
+ * in a `ChordRest` Segment.
+ * In MusicXML, those successive Harmony elements must be exported before the note with different offsets.
+ *
+ * Edge cases that we simply cannot handle:
+ *  - as of MusicXML 3.1, there is no way to represent a diagram without an associated chord symbol,
+ * so when we encounter such an object in MuseScore, we simply cannot export it.
+ *  - If a ChordRest segment contans a FretboardDiagram with no harmonies and several different Harmony siblings,
+ * we simply have to pick a random one to export.
+ */
+
+static void harmonies(ExportMusicXml* exp, track_idx_t track, Segment* seg)
+{
+    Fraction offset = { 0, 1 };
+    segmentHarmonies(exp, track, seg, offset);
+
+    // Edge case: find remaining `harmony` elements.
+    // Suppose you have one single whole note in the measure but several chord symbols.
+    // In MuseScore, each `Harmony` object will be stored in a `ChordRest` Segment that contains
+    // no other Chords.
+    // But in MusicXML, you are supposed to output all `harmony` elements before the first `note`,
+    // with different `offset` parameters.
+    //
+    // That's why we need to explore the remaining segments to find
+    // `Harmony` and `FretDiagram` elements in Segments without Chords and output them now.
+    for (Segment* seg1 = seg->next(); seg1; seg1 = seg1->next()) {
+        if (!seg1->isChordRestType()) {
+            continue;
+        }
+
+        const EngravingItem* el1 = seg1->element(track);
+        if (el1) { // found a ChordRest, next harmony will be attached to this one
+            break;
+        }
+        offset = (seg1->tick() - seg->tick());
+        segmentHarmonies(exp, track, seg1, offset);
     }
 }
 
@@ -7177,11 +7223,31 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                 m_xml.endElement();
             }
 
+            // Measure layout elements.
+            if (m->prev() && m->prev()->isHBox()) {
+                measureLayout(m->prev()->width());
+            }
+
             m_xml.endElement();
         } else if (!newSystemOrPage.empty()) {
             m_xml.tagRaw(String(u"print%1").arg(newSystemOrPage));
         }
+    } else if (m->prev() && m->prev()->isHBox()) {
+        m_xml.startElement("print");
+        measureLayout(m->prev()->width());
+        m_xml.endElement();
     }
+}
+
+//---------------------------------------------------------
+//  measureLayout
+//---------------------------------------------------------
+
+void ExportMusicXml::measureLayout(const double distance)
+{
+    m_xml.startElement("measure-layout");
+    m_xml.tag("measure-distance", String::number(getTenthsFromDots(distance), 2));
+    m_xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -7963,21 +8029,8 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
                     }
                     m_tboxesBelowWritten = true;
                 }
+                harmonies(this, track, seg);
                 annotations(this, strack, etrack, track, partRelStaffNo, seg);
-                // look for more harmony
-                for (Segment* seg1 = seg->next(); seg1; seg1 = seg1->next()) {
-                    if (seg1->isChordRestType()) {
-                        const EngravingItem* el1 = seg1->element(track);
-                        if (el1) {           // found a ChordRest, next harmony will be attach to this one
-                            break;
-                        }
-                        for (EngravingItem* annot : seg1->annotations()) {
-                            if (annot->isHarmony() && annot->track() == track) {
-                                harmony(toHarmony(annot), 0, seg1->tick() - seg->tick());
-                            }
-                        }
-                    }
-                }
                 figuredBass(m_xml, strack, etrack, track, static_cast<const ChordRest*>(el), fbMap, m_div);
                 spannerStart(this, strack, etrack, track, partRelStaffNo, seg);
             }

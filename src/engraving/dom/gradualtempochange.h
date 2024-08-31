@@ -53,6 +53,9 @@ public:
     PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid id) const override;
 
+    bool snapToItemAfter() const { return m_snapToItemAfter; }
+    void setSnapToItemAfter(bool v) { m_snapToItemAfter = v; }
+
 protected:
     void added() override;
     void removed() override;
@@ -63,6 +66,8 @@ private:
     GradualTempoChangeType m_tempoChangeType = GradualTempoChangeType::Undefined;
     ChangeMethod m_tempoEasingMethod = ChangeMethod::NORMAL;
     std::optional<float> m_tempoChangeFactor;
+
+    bool m_snapToItemAfter = true;
 
     friend class GradualTempoChangeSegment;
 };
@@ -83,6 +88,9 @@ public:
     void added() override;
     void removed() override;
     Sid getPropertyStyle(Pid id) const override;
+
+    GradualTempoChangeSegment* findElementToSnapBefore() const;
+    TempoText* findElementToSnapAfter() const;
 
     friend class GradualTempoChange;
 };

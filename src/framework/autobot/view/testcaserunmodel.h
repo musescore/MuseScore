@@ -48,6 +48,7 @@ public:
     QString status() const;
     QVariantList steps() const;
 
+    Q_INVOKABLE void init();
     Q_INVOKABLE bool loadInfo(const QString& path);
     Q_INVOKABLE void perform();
     Q_INVOKABLE void abort();

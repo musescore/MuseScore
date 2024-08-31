@@ -59,16 +59,6 @@ AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
         m_previousVerticalScrollPosition = startVerticalScrollPosition();
     });
 
-    m_inputController = std::make_unique<NotationViewInputController>(this);
-    m_playbackCursor = std::make_unique<PlaybackCursor>();
-    m_playbackCursor->setVisible(false);
-    m_noteInputCursor = std::make_unique<NoteInputCursor>();
-
-    m_loopInMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopIn);
-    m_loopOutMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopOut);
-
-    m_continuousPanel = std::make_unique<ContinuousPanel>();
-
     m_enableAutoScrollTimer.setSingleShot(true);
     connect(&m_enableAutoScrollTimer, &QTimer::timeout, this, [this]() {
         m_autoScrollEnabled = true;
@@ -89,6 +79,16 @@ void AbstractNotationPaintView::load()
 {
     TRACEFUNC;
 
+    m_inputController = std::make_unique<NotationViewInputController>(this, iocContext());
+    m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
+    m_playbackCursor->setVisible(false);
+    m_noteInputCursor = std::make_unique<NoteInputCursor>();
+
+    m_loopInMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopIn, iocContext());
+    m_loopOutMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopOut, iocContext());
+
+    m_continuousPanel = std::make_unique<ContinuousPanel>(iocContext());
+
     //! NOTE For diagnostic tools
     if (!dispatcher()->isReg(this)) {
         dispatcher()->reg(this, "diagnostic-notationview-redraw", [this]() {
@@ -96,6 +96,7 @@ void AbstractNotationPaintView::load()
         });
     }
 
+    m_inputController->setReadonly(m_readonly);
     m_inputController->init();
 
     onNotationSetup();
@@ -621,7 +622,7 @@ void AbstractNotationPaintView::onNotationSetup()
         onPlayingChanged();
     });
 
-    playbackController()->midiTickPlayed().onReceive(this, [this](uint32_t tick) {
+    playbackController()->currentPlaybackPositionChanged().onReceive(this, [this](audio::secs_t, midi::tick_t tick) {
         movePlaybackCursor(tick);
     });
 
@@ -1251,7 +1252,10 @@ void AbstractNotationPaintView::setNotation(INotationPtr notation)
 
 void AbstractNotationPaintView::setReadonly(bool readonly)
 {
-    m_inputController->setReadonly(readonly);
+    m_readonly = readonly;
+    if (m_inputController) {
+        m_inputController->setReadonly(m_readonly);
+    }
 }
 
 void AbstractNotationPaintView::clear()

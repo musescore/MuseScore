@@ -53,8 +53,8 @@
       <measureNumberFontFace>Times New Roman</measureNumberFontFace>
       <mmRestRangeFontFace>Times New Roman</mmRestRangeFontFace>
       <translatorFontFace>Times New Roman</translatorFontFace>
-      <systemFontFace>Times New Roman</systemFontFace>
-      <staffFontFace>Times New Roman</staffFontFace>
+      <systemTextFontFace>Times New Roman</systemTextFontFace>
+      <staffTextFontFace>Times New Roman</staffTextFontFace>
       <rehearsalMarkFontFace>Times New Roman</rehearsalMarkFontFace>
       <repeatLeftFontFace>Times New Roman</repeatLeftFontFace>
       <repeatRightFontFace>Times New Roman</repeatRightFontFace>
@@ -63,6 +63,8 @@
       <bendFontFace>Times New Roman</bendFontFace>
       <headerFontFace>Times New Roman</headerFontFace>
       <footerFontFace>Times New Roman</footerFontFace>
+      <copyrightFontFace>Times New Roman</copyrightFontFace>
+      <pageNumberFontFace>Times New Roman</pageNumberFontFace>
       <instrumentChangeFontFace>Times New Roman</instrumentChangeFontFace>
       <stickingFontFace>Times New Roman</stickingFontFace>
       <user1FontFace>Times New Roman</user1FontFace>
@@ -175,6 +177,9 @@
           <text>James M</text>
           </Text>
         </VBox>
+      <HBox>
+        <width>5</width>
+        </HBox>
       <Measure>
         <voice>
           <Clef>
@@ -189,6 +194,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>3</subtype>
+              <direction>down</direction>
               <lineVisible>0</lineVisible>
               </HairPin>
             <next>
@@ -707,6 +713,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>2</subtype>
+              <direction>down</direction>
               <lineVisible>0</lineVisible>
               </HairPin>
             <next>
@@ -1310,6 +1317,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>3</subtype>
+              <direction>down</direction>
               <lineVisible>0</lineVisible>
               </HairPin>
             <next>

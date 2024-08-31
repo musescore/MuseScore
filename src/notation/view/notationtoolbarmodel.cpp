@@ -22,16 +22,27 @@
 
 #include "notationtoolbarmodel.h"
 
+#include "uicomponents/view/toolbaritem.h"
+
 using namespace mu::notation;
 using namespace muse::uicomponents;
 using namespace muse::actions;
 
 void NotationToolBarModel::load()
 {
-    MenuItemList items = {
-        makeItem("parts"),
-        makeItem("toggle-mixer")
+    muse::actions::ActionCodeList itemsCodes = {
+        "parts",
+        "toggle-mixer"
     };
+
+    ToolBarItemList items;
+    for (const ActionCode& code : itemsCodes) {
+        ToolBarItem* item = makeItem(code);
+        item->setShowTitle(true);
+        item->setIsTitleBold(true);
+
+        items << item;
+    }
 
     setItems(items);
 
@@ -39,16 +50,5 @@ void NotationToolBarModel::load()
         load();
     });
 
-    AbstractMenuModel::load();
-}
-
-MenuItem* NotationToolBarModel::makeItem(const ActionCode& actionCode)
-{
-    MenuItem* item = new MenuItem(actionsRegister()->action(actionCode), this);
-
-    muse::ui::UiActionState state;
-    state.enabled = context()->currentNotation() != nullptr;
-    item->setState(state);
-
-    return item;
+    AbstractToolBarModel::load();
 }

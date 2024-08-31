@@ -33,6 +33,8 @@
       <bendFontSize>10</bendFontSize>
       <headerFontSize>10</headerFontSize>
       <footerFontSize>10</footerFontSize>
+      <copyrightFontSize>10</copyrightFontSize>
+      <pageNumberFontSize>10</pageNumberFontSize>
       <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -161,6 +163,7 @@
       <Measure>
         <voice>
           <Expression>
+            <direction>down</direction>
             <text><i>sub.</i></text>
             </Expression>
           <Chord>
@@ -189,6 +192,7 @@
             <direction>down</direction>
             </Dynamic>
           <Expression>
+            <direction>down</direction>
             <text><i>sub.</i></text>
             </Expression>
           <Chord>
@@ -244,8 +248,8 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>2</subtype>
-              <lineVisible>0</lineVisible>
               <direction>down</direction>
+              <lineVisible>0</lineVisible>
               </HairPin>
             <next>
               <location>

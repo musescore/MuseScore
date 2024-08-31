@@ -685,7 +685,7 @@ struct CapBracket {
 class Capella
 {
     static const char* errmsg[];
-    int curPos;
+    qint64 curPos;
 
     QFile* f;
     char* author;
@@ -738,7 +738,7 @@ protected:
 public:
     enum class Error : char {
         CAP_NO_ERROR, BAD_SIG, CAP_EOF, BAD_VOICE_SIG,
-        BAD_STAFF_SIG, BAD_SYSTEM_SIG
+        BAD_STAFF_SIG, BAD_SYSTEM_SIG, BAD_FORMAT,
     };
 
     Capella();

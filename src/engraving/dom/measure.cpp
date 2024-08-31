@@ -1755,9 +1755,9 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
     }
 
     score()->undoInsertTime(startTick, diff);
-    score()->undo(new InsertTime(score(), startTick, diff));
 
     for (Score* s : score()->scoreList()) {
+        s->undo(new InsertTime(s, startTick, diff));
         Measure* m = s->tick2measure(tick());
         s->undo(new ChangeMeasureLen(m, nf));
         if (nl > ol) {
@@ -1805,15 +1805,17 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                                                                         score()->sigmap()->timesig(tick().ticks()).nominal(), this, 0);
 
                 // set the existing rest to the first value of the duration list
-                rest->undoChangeProperty(Pid::DURATION, durList[0].fraction());
+                TDuration firstDur = durList[0];
+                rest->undoChangeProperty(Pid::DURATION, firstDur.isMeasure() ? ticks() : firstDur.fraction());
                 rest->undoChangeProperty(Pid::DURATION_TYPE_WITH_DOTS, durList[0].typeWithDots());
 
                 // add rests for any other duration list value
                 Fraction tickOffset = tick() + rest->actualTicks();
                 for (unsigned i = 1; i < durList.size(); i++) {
                     Rest* newRest = Factory::createRest(s->dummy()->segment());
-                    newRest->setDurationType(durList.at(i));
-                    newRest->setTicks(durList.at(i).fraction());
+                    TDuration dur = durList.at(i);
+                    newRest->setDurationType(dur);
+                    newRest->setTicks(dur.isMeasure() ? ticks() : dur.fraction());
                     newRest->setTrack(rest->track());
                     score()->undoAddCR(newRest, this, tickOffset);
                     tickOffset += newRest->actualTicks();
@@ -3057,7 +3059,7 @@ EngravingItem* Measure::nextElementStaff(staff_idx_t staff)
     }
     Segment* seg = toSegment(e);
     Segment* nextSegment = seg ? seg->next() : first();
-    EngravingItem* next = seg->firstElementOfSegment(nextSegment, staff);
+    EngravingItem* next = nextSegment->firstElementOfSegment(staff);
     if (next) {
         return next;
     }
@@ -3114,36 +3116,26 @@ String Measure::accessibleInfo() const
 //       return minTick
 //---------------------------------------------------
 
-Fraction Measure::computeTicks()
+void Measure::computeTicks()
 {
-    Fraction minTick = ticks();
-    if (minTick <= Fraction(0, 1)) {
-        LOGD("=====minTick %d measure %p", minTick.ticks(), this);
+    for (Segment* segment = firstActive(); segment; segment = segment->nextActive()) {
+        Segment* nextSegment = segment->nextActive();
+        Fraction nextTick = nextSegment ? nextSegment->rtick() : ticks();
+        segment->setTicks(nextTick - segment->rtick());
     }
-    assert(minTick > Fraction(0, 1));
 
-    Segment* ns = first();
-    while (ns && !ns->enabled()) {
-        ns = ns->next();
-    }
-    while (ns) {
-        Segment* s = ns;
-        Segment* nextSeg = s->nextActive();
-        ns = nextSeg;
-        while (s->isChordRestType() && ns && ns->isTimeTickType()) {
-            // Ignore timeTick segments when computing duration of chordRest segments
-            ns = ns->nextActive();
-        }
-        Fraction nticks = (ns ? ns->rtick() : ticks()) - s->rtick();
-        if (nticks.isNotZero()) {
-            if (nticks < minTick) {
-                minTick = nticks;
+    for (Segment* segment = first(SegmentType::TimeTick); segment; segment = segment->next(SegmentType::TimeTick)) {
+        segment->setTicks(Fraction(0, 1));
+        Segment* nextSegment = segment->next();
+        while (nextSegment) {
+            Fraction tickDiff = nextSegment->rtick() - segment->rtick();
+            if (!tickDiff.isZero()) {
+                segment->setTicks(tickDiff);
+                break;
             }
+            nextSegment = nextSegment->next();
         }
-        s->setTicks(nticks);
-        ns = nextSeg;
     }
-    return minTick;
 }
 
 //---------------------------------------------------------
@@ -3399,8 +3391,11 @@ void Measure::respaceSegments()
     }
     // Start respacing segments
     for (Segment& s : m_segments) {
+        if (s.isTimeTickType()) {
+            continue;
+        }
         s.mutldata()->setPosX(x);
-        if (s.enabled() && s.visible() && !s.allElementsInvisible() && !s.isTimeTickType()) {
+        if (s.enabled() && s.visible() && !s.allElementsInvisible()) {
             x += s.width(LD_ACCESS::BAD);
         }
     }

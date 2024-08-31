@@ -37,6 +37,7 @@ public:
     virtual bool isValid() const = 0;
 
     virtual void setup(const mpe::PlaybackData& playbackData) = 0;
+    virtual const mpe::PlaybackData& playbackData() const = 0;
 
     virtual const audio::AudioInputParams& params() const = 0;
     virtual async::Channel<audio::AudioInputParams> paramsChanged() const = 0;

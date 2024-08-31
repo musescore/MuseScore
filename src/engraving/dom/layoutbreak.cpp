@@ -22,6 +22,8 @@
 
 #include "log.h"
 
+#include "types/typesconv.h"
+
 #include "layoutbreak.h"
 #include "measurebase.h"
 #include "score.h"
@@ -36,7 +38,7 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 static const ElementStyle sectionBreakStyle {
-    { Sid::SectionPause, Pid::PAUSE }
+    { Sid::sectionPause, Pid::PAUSE }
 };
 
 //---------------------------------------------------------
@@ -265,7 +267,7 @@ PropertyValue LayoutBreak::propertyDefault(Pid id) const
     case Pid::LAYOUT_BREAK:
         return PropertyValue();           // LAYOUT_BREAK_LINE;
     case Pid::PAUSE:
-        return style().styleD(Sid::SectionPause);
+        return style().styleD(Sid::sectionPause);
     case Pid::START_WITH_LONG_NAMES:
         return true;
     case Pid::START_WITH_MEASURE_ONE:
@@ -275,6 +277,15 @@ PropertyValue LayoutBreak::propertyDefault(Pid id) const
     default:
         return EngravingItem::propertyDefault(id);
     }
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString LayoutBreak::subtypeUserName() const
+{
+    return TConv::userName(layoutBreakType());
 }
 
 void LayoutBreak::added()

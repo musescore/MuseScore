@@ -104,7 +104,7 @@ muse::audio::AudioResourceMetaList VstModulesRepository::instrumentModulesMeta()
 
     std::lock_guard lock(m_mutex);
 
-    return modulesMetaList(muse::audio::AudioPluginType::Instrument);
+    return modulesMetaList(audioplugins::AudioPluginType::Instrument);
 }
 
 muse::audio::AudioResourceMetaList VstModulesRepository::fxModulesMeta() const
@@ -113,23 +113,23 @@ muse::audio::AudioResourceMetaList VstModulesRepository::fxModulesMeta() const
 
     std::lock_guard lock(m_mutex);
 
-    return modulesMetaList(muse::audio::AudioPluginType::Fx);
+    return modulesMetaList(audioplugins::AudioPluginType::Fx);
 }
 
 void VstModulesRepository::refresh()
 {
 }
 
-muse::audio::AudioResourceMetaList VstModulesRepository::modulesMetaList(const muse::audio::AudioPluginType& type) const
+muse::audio::AudioResourceMetaList VstModulesRepository::modulesMetaList(const audioplugins::AudioPluginType& type) const
 {
-    auto infoAccepted = [type](const muse::audio::AudioPluginInfo& info) {
+    auto infoAccepted = [type](const audioplugins::AudioPluginInfo& info) {
         return info.type == type && info.meta.type == muse::audio::AudioResourceType::VstPlugin && info.enabled;
     };
 
-    std::vector<muse::audio::AudioPluginInfo> infoList = knownPlugins()->pluginInfoList(infoAccepted);
+    std::vector<audioplugins::AudioPluginInfo> infoList = knownPlugins()->pluginInfoList(infoAccepted);
     muse::audio::AudioResourceMetaList result;
 
-    for (const muse::audio::AudioPluginInfo& info : infoList) {
+    for (const audioplugins::AudioPluginInfo& info : infoList) {
         result.push_back(info.meta);
     }
 

@@ -64,6 +64,11 @@ QAccessibleInterface* AccessibilityController::accessibleInterface(QObject*)
     return static_cast<QAccessibleInterface*>(new AccessibleItemInterface(s_rootObject));
 }
 
+void AccessibilityController::setAccesibilityEnabled(bool enabled)
+{
+    m_enabled = enabled;
+}
+
 static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObject* object)
 {
     if (!accessibleInterfaceRegister) {
@@ -92,7 +97,13 @@ void AccessibilityController::init()
 
 void AccessibilityController::reg(IAccessible* item)
 {
+    if (!m_enabled) {
+        return;
+    }
+
     if (!m_inited) {
+        //! This needed to be done here, because we need to init controller (register factory) after UI is start loaded,
+        //! thus we register the factory after qt registers its factory so that our factory is called first
         m_inited = true;
         init();
     }

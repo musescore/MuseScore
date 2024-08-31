@@ -40,7 +40,7 @@ static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDEN
 };
 
 AbstractElementPopupModel::AbstractElementPopupModel(PopupModelType modelType, QObject* parent)
-    : QObject(parent), m_modelType(modelType)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this)), m_modelType(modelType)
 {
 }
 

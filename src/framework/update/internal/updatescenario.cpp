@@ -34,8 +34,6 @@
 #include "defer.h"
 #include "log.h"
 
-static constexpr int AUTO_CHECK_UPDATE_INTERVAL = 1000;
-
 using namespace muse;
 using namespace muse::update;
 using namespace muse::actions;

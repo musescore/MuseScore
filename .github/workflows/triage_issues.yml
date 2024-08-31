@@ -1,0 +1,69 @@
+name: 'Triage: Issues'
+on:
+  issues:
+    types: [opened, labeled, unlabeled]
+
+permissions:
+  issues: write
+
+jobs:
+  add_label:
+    if: github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Add label to issue'
+      uses: github/issue-labeler@v3.0
+      with:
+        repo-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+        configuration-path: '.github/issue_add_label_config.yml'
+        not-before: 2023-02-27T00:00:00Z
+        enable-versioned-regex: 0
+
+  add_to_projects:
+    if: github.event.action == 'labeled' && github.event.issue.state == 'open'
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Engraving'
+      uses: actions/add-to-project@main
+      with:
+        project-url: https://github.com/orgs/musescore/projects/23
+        github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+        labeled: engraving
+
+    - name: 'Cloud saving/loading'
+      uses: actions/add-to-project@main
+      with:
+        project-url: https://github.com/orgs/musescore/projects/22
+        github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+        labeled: cloud
+
+    - name: 'Muse Sounds'
+      uses: actions/add-to-project@main
+      with:
+        project-url: https://github.com/orgs/musescore/projects/21
+        github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+        labeled: 'Muse Sounds'
+
+    - name: 'VST'
+      uses: actions/add-to-project@main
+      with:
+        project-url: https://github.com/orgs/musescore/projects/20
+        github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+        labeled: VST
+
+    - name: 'Design tasks'
+      uses: actions/add-to-project@main
+      with:
+        project-url: https://github.com/orgs/musescore/projects/26
+        github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+        labeled: 'needs design'
+
+  assign:
+    if: (github.event.action == 'labeled' || github.event.action == 'unlabeled') && github.event.issue.state == 'open'
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Set assignees on issue'
+      uses: musescore/github_actions/assign-by-label@main
+      with:
+        github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+        configuration-path: '.github/issue_assign_by_label_config.yml'

@@ -199,6 +199,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-timeline"),
         makeMenuItem("toggle-mixer"),
         makeMenuItem("toggle-piano-keyboard"),
+        // makeMenuItem("toggle-percussion-panel"), // still in development
         makeMenuItem("playback-setup"),
         //makeMenuItem("toggle-scorecmp-tool"), // not implemented
         makeSeparator(),
@@ -362,10 +363,20 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
         makeMenuItem("musesampler-check"),
     };
 
+    if (globalConfiguration()->devModeEnabled()) {
+        museSamplerItems << makeMenuItem("musesampler-reload");
+    }
+
     items << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Muse Sampler"), museSamplerItems, "menu-musesampler");
 #endif
 
     if (globalConfiguration()->devModeEnabled()) {
+        MenuItemList accessibilityItems {
+            makeMenuItem("diagnostic-show-navigation-tree"),
+            makeMenuItem("diagnostic-show-accessible-tree"),
+            makeMenuItem("diagnostic-accessible-tree-dump"),
+        };
+
         MenuItemList engravingItems {
             makeMenuItem("diagnostic-show-engraving-elements"),
             makeSeparator(),
@@ -378,18 +389,17 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
             makeMenuItem("show-corrupted-measures")
         };
 
+        MenuItemList extensionsItems {
+            makeMenuItem("extensions-show-apidump"),
+        };
+
         MenuItemList autobotItems {
             makeMenuItem("autobot-show-scripts"),
         };
 
-        MenuItemList accessibilityItems {
-            makeMenuItem("diagnostic-show-navigation-tree"),
-            makeMenuItem("diagnostic-show-accessible-tree"),
-            makeMenuItem("diagnostic-accessible-tree-dump"),
-        };
-
         items << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Accessibility"), accessibilityItems, "menu-accessibility")
               << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Engraving"), engravingItems, "menu-engraving")
+              << makeMenu(TranslatableString("appshell/menu/diagnostic", "E&xtensions"), extensionsItems, "menu-extensions")
               << makeMenu(TranslatableString("appshell/menu/diagnostic", "Auto&bot"), autobotItems, "menu-autobot")
               << makeMenuItem("multiinstances-dev-show-info");
     }
@@ -409,6 +419,12 @@ MenuItemList AppMenuModel::makeRecentScoresItems()
         UiAction action;
         action.code = "file-open";
         action.title = TranslatableString::untranslatable(file.displayName(/*includingExtension*/ true));
+        bool isCloud = projectConfiguration()->isCloudProject(file.path);
+
+        if (isCloud) {
+            action.iconCode = IconCode::Code::CLOUD;
+        }
+
         item->setAction(action);
 
         item->setId(makeId(item->action().code, index++));
@@ -650,6 +666,9 @@ MenuItemList AppMenuModel::makePluginsItems()
         } else {
             MenuItemList sub;
             for (const muse::extensions::Action& a : m.actions) {
+                if (a.hidden) {
+                    continue;
+                }
                 sub << makeMenuItem(makeUriQuery(m.uri, a.code).toString(), TranslatableString::untranslatable(a.title));
             }
             items << makeMenu(TranslatableString::untranslatable(m.title), sub);

@@ -29,21 +29,22 @@
 #include "global/async/asyncable.h"
 #include "global/types/retval.h"
 
+#include "../../ifxresolver.h"
+#include "../../iaudioconfiguration.h"
+#include "../dsp/limiter.h"
+
 #include "abstractaudiosource.h"
 #include "mixerchannel.h"
-#include "internal/dsp/limiter.h"
-#include "ifxresolver.h"
-#include "iaudioconfiguration.h"
 #include "iclock.h"
 
 namespace muse::audio {
-class Mixer : public AbstractAudioSource, public std::enable_shared_from_this<Mixer>, public async::Asyncable
+class Mixer : public AbstractAudioSource, public Injectable, public async::Asyncable, public std::enable_shared_from_this<Mixer>
 {
-    Inject<fx::IFxResolver> fxResolver;
-    Inject<IAudioConfiguration> configuration;
+    Inject<fx::IFxResolver> fxResolver = { this };
+    Inject<IAudioConfiguration> configuration = { this };
 
 public:
-    Mixer();
+    Mixer(const modularity::ContextPtr& iocCtx);
     ~Mixer();
 
     IAudioSourcePtr mixedSource();
@@ -62,7 +63,7 @@ public:
     void clearMasterOutputParams();
     async::Channel<AudioOutputParams> masterOutputParamsChanged() const;
 
-    async::Channel<audioch_t, AudioSignalVal> masterAudioSignalChanges() const;
+    AudioSignalChanges masterAudioSignalChanges() const;
 
     void setIsIdle(bool idle);
     void setTracksToProcessWhenIdle(std::unordered_set<TrackId>&& trackIds);
@@ -86,14 +87,11 @@ private:
     bool useMultithreading() const;
 
     void notifyNoAudioSignal();
-    void notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const;
 
     msecs_t currentTime() const;
 
     size_t m_minTrackCountForMultithreading = 0;
     size_t m_nonMutedTrackCount = 0;
-
-    std::vector<float> m_writeCacheBuff;
 
     AudioOutputParams m_masterParams;
     async::Channel<AudioOutputParams> m_masterOutputParamsChanged;

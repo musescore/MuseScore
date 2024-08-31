@@ -102,12 +102,12 @@
       <translatorAlign>center,top</translatorAlign>
       <translatorFramePadding>0</translatorFramePadding>
       <translatorFrameWidth>0</translatorFrameWidth>
-      <systemAlign>left,top</systemAlign>
-      <systemFramePadding>0</systemFramePadding>
-      <systemFrameWidth>0</systemFrameWidth>
-      <staffAlign>left,top</staffAlign>
-      <staffFramePadding>0</staffFramePadding>
-      <staffFrameWidth>0</staffFrameWidth>
+      <systemTextAlign>left,top</systemTextAlign>
+      <systemTextFramePadding>0</systemTextFramePadding>
+      <systemTextFrameWidth>0</systemTextFrameWidth>
+      <staffTextAlign>left,top</staffTextAlign>
+      <staffTextFramePadding>0</staffTextFramePadding>
+      <staffTextFrameWidth>0</staffTextFrameWidth>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
       <rehearsalMarkFramePadding>0.1</rehearsalMarkFramePadding>
       <repeatLeftFramePadding>0</repeatLeftFramePadding>
@@ -133,6 +133,13 @@
       <footerFontSize>11</footerFontSize>
       <footerFramePadding>0</footerFramePadding>
       <footerFrameWidth>0</footerFrameWidth>
+      <copyrightFontSize>11</copyrightFontSize>
+      <copyrightFramePadding>0</copyrightFramePadding>
+      <copyrightFrameWidth>0</copyrightFrameWidth>
+      <pageNumberFontSize>11</pageNumberFontSize>
+      <pageNumberOffset x="0" y="0"/>
+      <pageNumberFramePadding>0</pageNumberFramePadding>
+      <pageNumberFrameWidth>0</pageNumberFrameWidth>
       <instrumentChangeAlign>left,bottom</instrumentChangeAlign>
       <instrumentChangeFramePadding>0</instrumentChangeFramePadding>
       <instrumentChangeFrameWidth>0</instrumentChangeFrameWidth>
@@ -182,9 +189,9 @@
     <Staff id="1">
       <VBox>
         <height>25.5926</height>
-        <bottomGap>0</bottomGap>
         <topMargin>3</topMargin>
         <boxAutoSize>0</boxAutoSize>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <Text>
           <style>frame</style>
           <text>îèéààéà</text>
@@ -198,7 +205,6 @@
       <VBox>
         <height>47.762</height>
         <topGap>10</topGap>
-        <bottomGap>0</bottomGap>
         <boxAutoSize>0</boxAutoSize>
         <Text>
           <style>frame</style>

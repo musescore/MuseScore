@@ -64,27 +64,29 @@ namespace muse::musesampler {
 class MuseSamplerSequencer : public muse::audio::AbstractEventSequencer<mpe::NoteEvent, AuditionStartNoteEvent, AuditionStopNoteEvent>
 {
 public:
-    void init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, IMuseSamplerTracksPtr tracks, std::string&& defaultPresetCode);
-
-    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap& params) override;
-    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
-                                const mpe::PlaybackParamMap& params) override;
+    void init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, IMuseSamplerTracks* tracks, std::string&& defaultPresetCode);
 
 private:
+    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) override;
+    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
+                                const mpe::PlaybackParamLayers& params) override;
+
     void clearAllTracks();
     void finalizeAllTracks();
 
-    ms_Track resolveTrack(mpe::staff_layer_idx_t staffLayerIdx);
+    ms_Track resolveTrack(mpe::layer_idx_t layerIdx);
+    ms_Track findTrack(mpe::layer_idx_t layerIdx) const;
 
     const TrackList& allTracks() const;
 
-    void loadParams(const mpe::PlaybackParamMap& changes);
+    void loadParams(const mpe::PlaybackParamLayers& changes);
     void loadNoteEvents(const mpe::PlaybackEventsMap& changes);
-    void loadDynamicEvents(const mpe::DynamicLevelMap& changes);
+    void loadDynamicEvents(const mpe::DynamicLevelLayers& changes);
 
     void addNoteEvent(const mpe::NoteEvent& noteEvent);
-    void addTextArticulation(const std::string& articulationCode, long long startUs, ms_Track track);
-    void addPresets(const std::vector<std::string>& presets, long long startUs, ms_Track track);
+    void addTextArticulation(const String& articulationCode, long long startUs, ms_Track track);
+    void addPresets(const StringList& presets, long long startUs, ms_Track track);
+    void addSyllable(const String& syllable, long long positionUs, ms_Track track);
     void addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
     void addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
 
@@ -95,27 +97,33 @@ private:
     ms_NoteArticulation convertArticulationType(mpe::ArticulationType articulation) const;
     void parseArticulations(const mpe::ArticulationMap& articulations, ms_NoteArticulation& articulationFlag, ms_NoteHead& notehead) const;
 
-    void parseOffStreamParams(const mpe::PlaybackParamMap& params, std::string& presets, std::string& textArticulation) const;
-
-    MuseSamplerLibHandlerPtr m_samplerLib = nullptr;
-    ms_MuseSampler m_sampler = nullptr;
-    IMuseSamplerTracksPtr m_tracks = nullptr;
-
-    using layer_idx_t = size_t;
-    std::unordered_map<layer_idx_t, track_idx_t> m_layerIdxToTrackIdx;
-
-    struct {
+    struct OffStreamParams {
         std::string presets;
         std::string textArticulation;
+        std::string syllable;
+        bool textArticulationStartsAtNote = false;
+        bool syllableStartsAtNote = false;
 
         void clear()
         {
             presets.clear();
             textArticulation.clear();
+            syllable.clear();
+            textArticulationStartsAtNote = false;
+            syllableStartsAtNote = false;
         }
-    } m_offStreamCache;
+    };
+
+    void parseOffStreamParams(const mpe::PlaybackParamList& params, OffStreamParams& out) const;
+
+    MuseSamplerLibHandlerPtr m_samplerLib = nullptr;
+    ms_MuseSampler m_sampler = nullptr;
+    IMuseSamplerTracks* m_tracks = nullptr;
+
+    std::unordered_map<mpe::layer_idx_t, track_idx_t> m_layerIdxToTrackIdx;
 
     std::string m_defaultPresetCode;
+    OffStreamParams m_offStreamCache;
 };
 }
 

@@ -88,8 +88,6 @@ public:
     static String translatedUserName(DynamicType v);
     static AsciiStringView toXml(DynamicType v);
     static DynamicType fromXml(const AsciiStringView& tag, DynamicType def);
-    static String translatedUserName(DynamicRange v);
-    static String toXml(DynamicRange v);
     static DynamicRange fromXml(const AsciiStringView& tag, DynamicRange def);
     static String translatedUserName(DynamicSpeed v);
     static AsciiStringView toXml(DynamicSpeed v);
@@ -131,9 +129,11 @@ public:
     static AsciiStringView toXml(DurationType v);
     static DurationType fromXml(const AsciiStringView& tag, DurationType def);
 
+    static const TranslatableString& userName(PlayingTechniqueType v);
     static AsciiStringView toXml(PlayingTechniqueType v);
     static PlayingTechniqueType fromXml(const AsciiStringView& tag, PlayingTechniqueType def);
 
+    static const TranslatableString& userName(GradualTempoChangeType v);
     static AsciiStringView toXml(GradualTempoChangeType v);
     static GradualTempoChangeType fromXml(const AsciiStringView& tag, GradualTempoChangeType def);
 
@@ -155,6 +155,7 @@ public:
     static AsciiStringView toXml(DirectionH v);
     static DirectionH fromXml(const AsciiStringView& str, DirectionH def);
 
+    static const TranslatableString& userName(LayoutBreakType v);
     static AsciiStringView toXml(LayoutBreakType v);
     static LayoutBreakType fromXml(const AsciiStringView& str, LayoutBreakType def);
 
@@ -174,6 +175,8 @@ public:
     static AsciiStringView toXml(TremoloType v);
     static TremoloType fromXml(const AsciiStringView& str, TremoloType def);
 
+    static const TranslatableString& userName(BracketType v);
+    static String translatedUserName(BracketType v);
     static AsciiStringView toXml(BracketType v);
     static BracketType fromXml(const AsciiStringView& str, BracketType def);
 
@@ -188,7 +191,7 @@ public:
     static StringList embellishmentNotes(EmbellishmentType v);
     static size_t embellishmentsCount();
 
-    static const TranslatableString& userName(ChordLineType v, bool straight);
+    static const TranslatableString& userName(ChordLineType v, bool straight, bool wavy);
     static AsciiStringView toXml(ChordLineType v);
     static ChordLineType fromXml(const AsciiStringView& tag, ChordLineType def);
 
@@ -231,14 +234,14 @@ public:
     static AsciiStringView toXml(LyricsDashSystemStart v);
     static LyricsDashSystemStart fromXml(const AsciiStringView& tag, LyricsDashSystemStart def);
 
-    static const char* userName(Key v, bool isAtonal = false, bool isCustom = false);
+    static const TranslatableString& userName(Key v, bool isAtonal = false, bool isCustom = false);
     static String translatedUserName(Key v, bool isAtonal = false, bool isCustom = false);
 
     static AsciiStringView toXml(TiePlacement interval);
     static TiePlacement fromXml(const AsciiStringView& str, TiePlacement def);
 
-    static AsciiStringView toXml(VoiceApplication voiceAppl);
-    static VoiceApplication fromXml(const AsciiStringView& str, VoiceApplication def);
+    static AsciiStringView toXml(VoiceAssignment voiceAppl);
+    static VoiceAssignment fromXml(const AsciiStringView& str, VoiceAssignment def);
 
     static AsciiStringView toXml(AutoOnOff autoOnOff);
     static AutoOnOff fromXml(const AsciiStringView& str, AutoOnOff def);

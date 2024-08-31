@@ -5,6 +5,8 @@
     <Style>
       <lastSystemFillLimit>0.03</lastSystemFillLimit>
       <showMeasureNumber>0</showMeasureNumber>
+      <pageNumberFontSize>9</pageNumberFontSize>
+      <pageNumberFontStyle>0</pageNumberFontStyle>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -73,6 +75,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <linkedMain/>
         </VBox>
       <Measure>
@@ -366,6 +369,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
+          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <linked>
             </linked>
           <Text>

@@ -48,6 +48,8 @@ public:
     Q_INVOKABLE void load() override;
     Q_INVOKABLE void handleMenuItem(const QString& itemId) override;
     Q_INVOKABLE void openMenu(const QString& menuId, bool byHover);
+    Q_INVOKABLE void openPrevMenu();
+    Q_INVOKABLE void openNextMenu();
 
     bool isNavigationStarted() const;
     bool isMenuOpened() const;

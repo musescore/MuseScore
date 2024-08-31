@@ -60,6 +60,8 @@ inline muse::mpe::dynamic_level_t dynamicLevelFromType(const DynamicType type,
         { DynamicType::SFZ, muse::mpe::dynamicLevelFromType(muse::mpe::DynamicType::f) },
         { DynamicType::SFF, muse::mpe::dynamicLevelFromType(muse::mpe::DynamicType::ff) },
         { DynamicType::SFFZ, muse::mpe::dynamicLevelFromType(muse::mpe::DynamicType::ff) },
+        { DynamicType::SFFF, muse::mpe::dynamicLevelFromType(muse::mpe::DynamicType::fff) },
+        { DynamicType::SFFFZ, muse::mpe::dynamicLevelFromType(muse::mpe::DynamicType::fff) },
         { DynamicType::RFZ, muse::mpe::dynamicLevelFromType(muse::mpe::DynamicType::f) },
         { DynamicType::RF, muse::mpe::dynamicLevelFromType(muse::mpe::DynamicType::f) },
         { DynamicType::FZ, muse::mpe::dynamicLevelFromType(muse::mpe::DynamicType::f) },
@@ -77,7 +79,7 @@ inline muse::mpe::dynamic_level_t dynamicLevelFromType(const DynamicType type,
 
 inline bool isOrdinaryDynamicType(const DynamicType type)
 {
-    static const std::set<DynamicType> ORDINARY_DYNAMIC_TYPES = {
+    static const std::unordered_set<DynamicType> ORDINARY_DYNAMIC_TYPES = {
         DynamicType::PPPPPP,
         DynamicType::PPPPP,
         DynamicType::PPPP,
@@ -99,7 +101,7 @@ inline bool isOrdinaryDynamicType(const DynamicType type)
 
 inline bool isSingleNoteDynamicType(const DynamicType type)
 {
-    static const std::set<DynamicType> SINGLE_NOTE_DYNAMIC_TYPES = {
+    static const std::unordered_set<DynamicType> SINGLE_NOTE_DYNAMIC_TYPES = {
         DynamicType::SF,
         DynamicType::SFZ,
         DynamicType::SFFZ,

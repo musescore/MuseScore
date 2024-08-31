@@ -51,12 +51,12 @@ public:
     virtual muse::async::Channel<engraving::InstrumentTrackId> trackAdded() const = 0;
     virtual muse::async::Channel<engraving::InstrumentTrackId> trackRemoved() const = 0;
 
-    virtual muse::audio::msecs_t totalPlayTime() const = 0;
-    virtual muse::async::Channel<muse::audio::msecs_t> totalPlayTimeChanged() const = 0;
+    virtual muse::audio::secs_t totalPlayTime() const = 0;
+    virtual muse::async::Channel<muse::audio::secs_t> totalPlayTimeChanged() const = 0;
 
-    virtual float playedTickToSec(muse::midi::tick_t tick) const = 0;
-    virtual muse::midi::tick_t secToPlayedTick(float sec) const = 0;
-    virtual muse::midi::tick_t secToTick(float sec) const = 0;
+    virtual muse::audio::secs_t playedTickToSec(muse::midi::tick_t tick) const = 0;
+    virtual muse::midi::tick_t secToPlayedTick(muse::audio::secs_t sec) const = 0;
+    virtual muse::midi::tick_t secToTick(muse::audio::secs_t sec) const = 0;
 
     virtual muse::RetVal<muse::midi::tick_t> playPositionTickByRawTick(muse::midi::tick_t tick) const = 0;
     virtual muse::RetVal<muse::midi::tick_t> playPositionTickByElement(const EngravingItem* element) const = 0;
@@ -74,14 +74,13 @@ public:
 
     virtual const Tempo& tempo(muse::midi::tick_t tick) const = 0;
     virtual MeasureBeat beat(muse::midi::tick_t tick) const = 0;
-    virtual muse::midi::tick_t beatToTick(int measureIndex, int beatIndex) const = 0;
+    virtual muse::midi::tick_t beatToRawTick(int measureIndex, int beatIndex) const = 0;
 
     virtual double tempoMultiplier() const = 0;
     virtual void setTempoMultiplier(double multiplier) = 0;
 
     virtual void addSoundFlags(const std::vector<mu::engraving::StaffText*>& staffTextList) = 0;
     virtual void removeSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) = 0;
-    virtual bool hasSoundFlags() = 0;
     virtual bool hasSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) = 0;
 };
 

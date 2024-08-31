@@ -32,7 +32,9 @@
       <glissandoFontSize>10</glissandoFontSize>
       <bendFontSize>10</bendFontSize>
       <headerFontSize>10</headerFontSize>
-      <footerFontSize>2.3</footerFontSize>
+      <footerFontSize>1</footerFontSize>
+      <copyrightFontSize>10</copyrightFontSize>
+      <pageNumberFontSize>10</pageNumberFontSize>
       <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -117,7 +119,7 @@ copyright copyright</metaTag>
       </Part>
     <Staff id="1">
       <VBox>
-        <height>3.5</height>
+        <height>10</height>
         <Text>
           <style>title</style>
           <size>2.3</size>

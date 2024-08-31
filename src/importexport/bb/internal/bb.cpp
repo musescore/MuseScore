@@ -487,8 +487,7 @@ Err importBB(MasterScore* score, const QString& name)
     text->setPlainText(String::fromUtf8(bb.title()));
 
     if (measureB->type() != ElementType::VBOX) {
-        measureB = Factory::createVBox(score->dummy()->system());
-        measureB->setTick(Fraction(0, 1));
+        measureB = Factory::createTitleVBox(score->dummy()->system());
         measureB->setNext(score->first());
         score->measures()->add(measureB);
     }

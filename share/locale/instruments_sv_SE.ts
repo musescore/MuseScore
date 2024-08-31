@@ -1791,7 +1791,7 @@
         <source>South American traditional flute pitched in G. The most common variant.</source>
         <comment>g-quena description</comment>
         <extracomment>description for Quena; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Traditionell Sydamerikansk flöjt stämd i G. Den mest vanliga varianten.</translation>
+        <translation>Traditionell sydamerikansk flöjt stämd i G. Den vanligaste varianten.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="785"/>
@@ -1924,7 +1924,7 @@
         <source>Oboe in E♭, sounding a minor third above the standard oboe. Historically called the oboe musette.</source>
         <comment>piccolo-oboe description</comment>
         <extracomment>description for Piccolo Oboe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oboe i Ess, klingar en liten ters över den vanliga oboen. Historiskt kallad &quot;oboe musette&quot;.</translation>
+        <translation>Oboe i Ess, klingar en liten ters över den vanliga oboen. Historiskt kallad oboe musette.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="827"/>
@@ -2148,7 +2148,7 @@
         <source>Very rare instrument similar to the heckelphone, with slightly smaller bore and lower range.</source>
         <comment>lupophone description</comment>
         <extracomment>description for Lupophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mycket ovanligt instrument liknande heckelfonen, med en aningen smalare borrning och lägre register.</translation>
+        <translation>Mycket ovanligt instrument liknande heckelfonen, med en aning smalare borrning och lägre register.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="899"/>
@@ -2344,7 +2344,7 @@
         <source>French baroque reed instrument of uncertain identity. Not to be confused with the crumhorn.</source>
         <comment>cromorne description</comment>
         <extracomment>description for Cromorne; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Franskt barockinstrument med rörblad av osäkert ursprung. Inte att blanda ihop med krumhornet.</translation>
+        <translation>Franskt barockinstrument med rörblad av osäkert ursprung. Ej att förväxla med krumhornet.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="962"/>
@@ -2596,7 +2596,7 @@
         <source>Renaissance double-reed instrument with straight end and single bore, pitched in G (a fourth below the soprano cornamuse).</source>
         <comment>alto-cornamuse description</comment>
         <extracomment>description for Alto Cornamuse; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Renässansinstrument med dubbelt rörblad och rak borrning, stämt i G (en kvart under soprankornamusen).</translation>
+        <translation>Renässansinstrument med dubbelt rörblad, rak ände och rak borrning, stämt i G (en kvart under soprankornamusen).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1043"/>
@@ -2624,7 +2624,7 @@
         <source>Renaissance double-reed instrument with straight end and single bore, pitched in C (an octave below the soprano cornamuse).</source>
         <comment>tenor-cornamuse description</comment>
         <extracomment>description for Tenor Cornamuse; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Renässansinstrument med dubbelt rörblad och rak borrning, stämt i C (en oktav under soprankornamusen).</translation>
+        <translation>Renässansinstrument med dubbelt rörblad, rak ände och rak borrning, stämt i C (en oktav under soprankornamusen).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1052"/>
@@ -2652,7 +2652,7 @@
         <source>Renaissance double-reed instrument with straight end and single bore, pitched in F (a ninth below the alto cornamuse).</source>
         <comment>bass-cornamuse description</comment>
         <extracomment>description for Bass Cornamuse; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Renässansinstrument med dubbelt rörblad och rak borrning, stämt i F (en nona under altkornamusen).</translation>
+        <translation>Renässansinstrument med dubbelt rörblad, rak ände och rak borrning, stämt i F (en nona under altkornamusen).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1061"/>
@@ -3044,7 +3044,7 @@
         <source>Armenian double-reed instrument made of apricot wood, pitched in B.</source>
         <comment>b-duduk description</comment>
         <extracomment>description for Duduk; tuning: B; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Armeniskt instrument med dubbelt rörblad, tillverkat av aprikosträ. Stämt i B.</translation>
+        <translation>Armeniskt instrument med dubbelt rörblad, tillverkat av aprikosträ. Stämt i H.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1186"/>
@@ -3079,7 +3079,7 @@
         <source>Armenian double-reed instrument made of apricot wood, pitched in B♭.</source>
         <comment>bb-duduk description</comment>
         <extracomment>description for Duduk; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Armeniskt instrument med dubbelt rörblad, tillverkat av aprikosträ. Stämt i B♭.</translation>
+        <translation>Armeniskt instrument med dubbelt rörblad, tillverkat av aprikosträ. Stämt i B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1197"/>
@@ -3681,7 +3681,7 @@
         <source>Bass clarinet in B♭. An octave lower than the B♭ soprano clarinet. Notated in the treble clef (‘French notation’).</source>
         <comment>bb-bass-clarinet description</comment>
         <extracomment>description for Bass Clarinet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Basklarinett i B. Stämd en oktav lägre än sopranklarinetten i B. Noterad i diskantklav (&quot;Fransk notation&quot;).</translation>
+        <translation>Basklarinett i B. Stämd en oktav lägre än sopranklarinetten i B. Noterad i diskantklav (&quot;Fransk notering&quot;).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1388"/>
@@ -3716,7 +3716,7 @@
         <source>Bass clarinet in B♭. An octave lower than the B♭ soprano clarinet. Notated in the bass clef (‘German notation’).</source>
         <comment>bb-bass-clarinet-bass-clef description</comment>
         <extracomment>description for Bass Clarinet (bass clef); transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Basklarinett i B. Stämd en oktav lägre än sopranklarinetten i B. Noterad i basklav (&quot;Tysk notation&quot;).</translation>
+        <translation>Basklarinett i B. Stämd en oktav lägre än sopranklarinetten i B. Noterad i basklav (&quot;Tysk notering&quot;).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1399"/>
@@ -3751,7 +3751,7 @@
         <source>Bass clarinet in A. Extremely rare and almost never used today. Notated in the treble clef (‘French notation’).</source>
         <comment>a-bass-clarinet description</comment>
         <extracomment>description for Bass Clarinet; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Basklarinett i A. Extremt ovanlig och nästan aldrig använd numera. Noterad i diskantklav (&quot;Fransks notation&quot;).</translation>
+        <translation>Basklarinett i A. Extremt ovanlig och nästan aldrig använd numera. Noterad i diskantklav (&quot;Fransks notering&quot;).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1410"/>
@@ -3786,7 +3786,7 @@
         <source>Bass clarinet in A. Extremely rare and almost never used today. Notated in the bass clef (‘German notation’).</source>
         <comment>a-bass-clarinet-bass-clef) description</comment>
         <extracomment>description for Bass Clarinet (bass clef); transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Basklarinett i A. Extremt ovanlig och nästan aldrig använd numera. Noterad i basklav (&quot;Tysk notation&quot;).</translation>
+        <translation>Basklarinett i A. Extremt ovanlig och nästan aldrig använd numera. Noterad i basklav (&quot;Tysk notering&quot;).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1421"/>
@@ -3877,7 +3877,7 @@
         <source>Predecessor of the modern-day clarinet, pitched in F (an octave above the alto chalumeau).</source>
         <comment>sopranino-chalumeau description</comment>
         <extracomment>description for Sopranino Chalumeau; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Föregångare till den moderna klarinetten, stämd i F (en oktav högre än alt-chalumeau).</translation>
+        <translation>Föregångare till den moderna klarinetten, stämd i F (en oktav högre än altchalumeau).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1450"/>
@@ -3905,7 +3905,7 @@
         <source>Predecessor of the modern-day clarinet, pitched in C (an octave above the tenor chalumeau).</source>
         <comment>soprano-chalumeau description</comment>
         <extracomment>description for Soprano Chalumeau; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Föregångare till den moderna klarinetten, stämd i C (en oktav högre än tenor-chalumeau).</translation>
+        <translation>Föregångare till den moderna klarinetten, stämd i C (en oktav högre än tenorchalumeau).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1459"/>
@@ -3933,7 +3933,7 @@
         <source>Predecessor of the modern-day clarinet, pitched in F (a fourth above the tenor chalumeau).</source>
         <comment>alto-chalumeau description</comment>
         <extracomment>description for Alto Chalumeau; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Föregångare till den moderna klarinetten, stämd i F (en kvart högre än tenor-chalumeau).</translation>
+        <translation>Föregångare till den moderna klarinetten, stämd i F (en kvart högre än tenorchalumeau).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1468"/>
@@ -3989,7 +3989,7 @@
         <source>Predecessor of the modern-day clarinet, pitched in C (an octave below the soprano chalumeau).</source>
         <comment>tenor-chalumeau description</comment>
         <extracomment>description for Tenor Chalumeau; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Föregångare till den moderna klarinetten, stämd i C (en oktav lägre än sopran-chalumeau).</translation>
+        <translation>Föregångare till den moderna klarinetten, stämd i C (en oktav lägre än sopranchalumeau).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1486"/>
@@ -4017,7 +4017,7 @@
         <source>Predecessor of the modern-day clarinet, pitched in F (an fifth below the tenor chalumeau).</source>
         <comment>bass-chalumeau description</comment>
         <extracomment>description for Bass Chalumeau; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Föregångare till den moderna klarinetten, stämd i F (en kvint lägre än tenor-chalumeau).</translation>
+        <translation>Föregångare till den moderna klarinetten, stämd i F (en kvint lägre än tenorchalumeau).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1495"/>
@@ -4115,7 +4115,7 @@
         <source>Keyless single-reed instrument with a cylindrical bore and slightly flared bell, in B♭.</source>
         <comment>bb-xaphoon description</comment>
         <extracomment>description for Pocket Sax; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Instrument utan klaffar, med enkelt rörblad, cylindrisk mensur och aningen utsvängd klocka. Stämt i B♭.</translation>
+        <translation>Instrument utan klaffar, med enkelt rörblad, cylindrisk mensur och aningen utsvängd klocka. Stämt i B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1526"/>
@@ -4752,14 +4752,14 @@
         <source>Rackett</source>
         <comment>rackett trackName</comment>
         <extracomment>trackName for Rackett; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Rackett</translation>
+        <translation>Rankett</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1730"/>
         <source>Rackett</source>
         <comment>rackett longName</comment>
         <extracomment>longName for Rackett; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Rackett</translation>
+        <translation>Rankett</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1732"/>
@@ -5025,7 +5025,7 @@
         <source>Bellows-driven free-reed instrument with a keyboard or buttons on one end, and buttons on the other.</source>
         <comment>accordion description</comment>
         <extracomment>description for Accordion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bälgdrivet instrument med fritungor, ett klaver eller knappar i ena änden, och knappar i den andra.</translation>
+        <translation>Bälgdrivet instrument med fritungor, en klaviatur eller knappar i ena änden, och knappar i den andra.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1821"/>
@@ -5053,7 +5053,7 @@
         <source>Type of concertina particularly popular in Argentina and Uruguay.</source>
         <comment>bandoneon description</comment>
         <extracomment>description for Bandoneon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Konsertinatyp, särskilt populär i Argentina och Uruguay.</translation>
+        <translation>Koncertinatyp, särskilt populär i Argentina och Uruguay.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1830"/>
@@ -5392,153 +5392,6 @@
         <translation>Munsp.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="3875"/>
-        <source>Drum Kit.</source>
-        <comment>drumset description</comment>
-        <extracomment>description for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumset.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3877"/>
-        <source>Large Drum Kit</source>
-        <comment>drumset trackName</comment>
-        <extracomment>trackName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Stort trumset</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3879"/>
-        <source>Drum Kit</source>
-        <comment>drumset longName</comment>
-        <extracomment>longName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumset</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3881"/>
-        <source>D. Kit</source>
-        <comment>drumset shortName</comment>
-        <extracomment>shortName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trs.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3884"/>
-        <source>4 piece drum kit.</source>
-        <comment>drum-kit-4 description</comment>
-        <extracomment>description for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumset (4 trummor).</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3886"/>
-        <source>4-Piece Drum Kit</source>
-        <comment>drum-kit-4 trackName</comment>
-        <extracomment>trackName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumset (4 trummor)</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3888"/>
-        <source>Drum Kit</source>
-        <comment>drum-kit-4 longName</comment>
-        <extracomment>longName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumset</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3890"/>
-        <source>D. Kit</source>
-        <comment>drum-kit-4 shortName</comment>
-        <extracomment>shortName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trs.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3893"/>
-        <source>5 piece drum kit.</source>
-        <comment>drum-kit-5 description</comment>
-        <extracomment>description for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumset (5 trummor).</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3895"/>
-        <source>5-Piece Drum Kit</source>
-        <comment>drum-kit-5 trackName</comment>
-        <extracomment>trackName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumset (5 trummor)</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3897"/>
-        <source>Drum Kit</source>
-        <comment>drum-kit-5 longName</comment>
-        <extracomment>longName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trumset</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3899"/>
-        <source>D. Kit</source>
-        <comment>drum-kit-5 shortName</comment>
-        <extracomment>shortName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trs.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4001"/>
-        <source>China cymbal for drum kit.</source>
-        <comment>chinese-cymbal description</comment>
-        <extracomment>description for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kinacymbal för trumset.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4003"/>
-        <source>China Cymbal</source>
-        <comment>chinese-cymbal trackName</comment>
-        <extracomment>trackName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kinacymbal</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4005"/>
-        <source>China Cymbal</source>
-        <comment>chinese-cymbal longName</comment>
-        <extracomment>longName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kinacymbal</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4019"/>
-        <source>Suspended Cymbal.</source>
-        <comment>crash-cymbal description</comment>
-        <extracomment>description for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Hängande cymbal.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4021"/>
-        <source>Suspended Cymbal</source>
-        <comment>crash-cymbal trackName</comment>
-        <extracomment>trackName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Hängande cymbal</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4023"/>
-        <source>Suspended Cymbal</source>
-        <comment>crash-cymbal longName</comment>
-        <extracomment>longName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Hängande cymbal</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4025"/>
-        <source>Sus. Cym.</source>
-        <comment>crash-cymbal shortName</comment>
-        <extracomment>shortName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Hng. cym.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4028"/>
-        <source>Hand Cymbals.</source>
-        <comment>cymbal description</comment>
-        <extracomment>description for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Handcymbal.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4030"/>
-        <source>Hand Cymbals</source>
-        <comment>cymbal trackName</comment>
-        <extracomment>trackName for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Handcymbaler</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="442"/>
         <source>Fife</source>
         <comment>fife trackName</comment>
@@ -5550,126 +5403,126 @@
         <source>10-Hole Diatonic Harmonica</source>
         <comment>harmonica-d10high-g trackName</comment>
         <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Diatoniskt munspel, tio hål</translation>
+        <translation>Diatoniskt munspel, 10 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1859"/>
         <source>10-Hole High G Diatonic Harmonica</source>
         <comment>harmonica-d10high-g longName</comment>
         <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Diatoniskt munspel höga G, tio hål</translation>
+        <translation>Diatoniskt munspel höga G, 10 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1866"/>
         <source>10-hole diatonic harmonica pitched in F.</source>
         <comment>harmonica-d10f description</comment>
         <extracomment>description for 10-Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Diatoniskt munspel stämt i F, med tio hål.</translation>
+        <translation>Diatoniskt munspel stämt i F, med 10 hål.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1868"/>
         <source>10-Hole Diatonic Harmonica</source>
         <comment>harmonica-d10f trackName</comment>
         <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Diatoniskt munspel, tio hål</translation>
+        <translation>Diatoniskt munspel, 10 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1870"/>
         <source>10-Hole F Diatonic Harmonica</source>
         <comment>harmonica-d10f longName</comment>
         <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Diatoniskt munspel i F, tio hål</translation>
+        <translation>Diatoniskt munspel i F, 10 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1879"/>
         <source>10-Hole Diatonic Harmonica</source>
         <comment>harmonica-d10d trackName</comment>
         <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Diatoniskt munspel, tio hål</translation>
+        <translation>Diatoniskt munspel, 10 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1881"/>
         <source>10-Hole D Diatonic Harmonica</source>
         <comment>harmonica-d10d longName</comment>
         <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Diatoniskt munspel i D, tio hål</translation>
+        <translation>Diatoniskt munspel i D, 10 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1890"/>
         <source>10-Hole Diatonic Harmonica</source>
         <comment>harmonica-d10c trackName</comment>
         <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Diatoniskt munspel, tio hål</translation>
+        <translation>Diatoniskt munspel, 10 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1892"/>
         <source>10-Hole C Diatonic Harmonica</source>
         <comment>harmonica-d10c longName</comment>
         <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Diatoniskt munspel i C, tio hål</translation>
+        <translation>Diatoniskt munspel i C, 10 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1901"/>
         <source>10-Hole Diatonic Harmonica</source>
         <comment>harmonica-d10a trackName</comment>
         <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Diatoniskt munspel, tio hål</translation>
+        <translation>Diatoniskt munspel, 10 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1903"/>
         <source>10-Hole A Diatonic Harmonica</source>
         <comment>harmonica-d10a longName</comment>
         <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Diatoniskt munspel i A, tio hål</translation>
+        <translation>Diatoniskt munspel i A, 10 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1912"/>
         <source>10-Hole Diatonic Harmonica</source>
         <comment>harmonica-d10g trackName</comment>
         <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Diatoniskt munspel, tio hål</translation>
+        <translation>Diatoniskt munspel, 10 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1914"/>
         <source>10-Hole G Diatonic Harmonica</source>
         <comment>harmonica-d10g longName</comment>
         <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Diatoniskt munspel i G, tio hål</translation>
+        <translation>Diatoniskt munspel i G, 10 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1923"/>
         <source>10-Hole Diatonic Harmonica</source>
         <comment>harmonica-d10low-d trackName</comment>
         <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Diatoniskt munspel, tio hål</translation>
+        <translation>Diatoniskt munspel, 10 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1925"/>
         <source>10-Hole Low D Diatonic Harmonica</source>
         <comment>harmonica-d10low-d longName</comment>
         <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Diatoniskt munspel i låga D, tio hål</translation>
+        <translation>Diatoniskt munspel i låga D, 10 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1934"/>
         <source>12-Hole Chromatic Harmonica</source>
         <comment>harmonica-c12c trackName</comment>
         <extracomment>trackName for 12-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kromatiskt munspel, tolv hål</translation>
+        <translation>Kromatiskt munspel, 12 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1936"/>
         <source>12-Hole C Chromatic Harmonica</source>
         <comment>harmonica-c12c longName</comment>
         <extracomment>longName for 12-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kromatiskt munspel i C, tolv hål</translation>
+        <translation>Kromatiskt munspel i C, 12 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1945"/>
         <source>12-Hole Chromatic Harmonica</source>
         <comment>harmonica-c12g trackName</comment>
         <extracomment>trackName for 12-Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kromatiskt munspel, tolv hål</translation>
+        <translation>Kromatiskt munspel, 12 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1947"/>
@@ -5683,14 +5536,14 @@
         <source>12-Hole Chromatic Harmonica</source>
         <comment>harmonica-c12tenor-c trackName</comment>
         <extracomment>trackName for 12-Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kromatiskt munspel, tolv hål</translation>
+        <translation>Kromatiskt munspel, 12 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1958"/>
         <source>12-Hole Tenor C Chromatic Harmonica</source>
         <comment>harmonica-c12tenor-c longName</comment>
         <extracomment>longName for 12-Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kromatiskt tenormunspel i C, tolv hål</translation>
+        <translation>Kromatiskt tenormunspel i C, 12 hål</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1967"/>
@@ -7083,7 +6936,7 @@
         <source>Baritone horn (sometimes just called ‘baritone’). Notated in bass clef, at concert pitch.</source>
         <comment>baritone-horn description</comment>
         <extracomment>description for Baritone Horn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Baryton (ibland ’barytonhorn’). Noterat i basklav, klingande C.</translation>
+        <translation>Barytonhorn (ibland kallat bara ’baryton’). Noterat i basklav, klingande C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2418"/>
@@ -7125,14 +6978,14 @@
         <source>Baritone horn (sometimes just called ‘baritone’). Notated in treble clef, often as a transposing instrument.</source>
         <comment>baritone-horn-treble description</comment>
         <extracomment>description for Baritone Horn (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bariton (ibland ’baritonhorn’). Noterat i diskantklav, oftast transponerat i B.</translation>
+        <translation>Barytonhorn (ibland ’baryton’). Noterat i diskantklav, oftast transponerat i B.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2431"/>
         <source>Baritone Horn (treble clef)</source>
         <comment>baritone-horn-treble trackName</comment>
         <extracomment>trackName for Baritone Horn (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Baryton (diskantklav)</translation>
+        <translation>Barytonhorn (diskantklav)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2433"/>
@@ -9526,7 +9379,7 @@
         <source>Euphonium (notated in bass clef at concert pitch).</source>
         <comment>euphonium description</comment>
         <extracomment>description for Euphonium; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Eufonium (noterad i basklav, klingande i C).</translation>
+        <translation>Eufonium (noterad i basklav, klingande).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3185"/>
@@ -10017,13 +9870,6 @@
         <comment>helicon longName</comment>
         <extracomment>longName for Helicon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Helicon</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="3340"/>
-        <source>Helicon</source>
-        <comment>helicon shortName</comment>
-        <extracomment>shortName for Helicon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Hel.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3343"/>
@@ -10639,14 +10485,14 @@
         <source>Dulcimer</source>
         <comment>dulcimer trackName</comment>
         <extracomment>trackName for Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Dulcimer</translation>
+        <translation>Hackbräde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3543"/>
         <source>Dulcimer</source>
         <comment>dulcimer longName</comment>
         <extracomment>longName for Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Dulcimer</translation>
+        <translation>Hackbräde</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3545"/>
@@ -11255,14 +11101,14 @@
         <source>Musical Saw</source>
         <comment>musical-saw trackName</comment>
         <extracomment>trackName for Musical Saw; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Musiksåg</translation>
+        <translation>Såg</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3741"/>
         <source>Musical Saw</source>
         <comment>musical-saw longName</comment>
         <extracomment>longName for Musical Saw; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Musiksåg</translation>
+        <translation>Såg</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3743"/>
@@ -11283,14 +11129,14 @@
         <source>Musical Glasses</source>
         <comment>musical-glasses trackName</comment>
         <extracomment>trackName for Musical Glasses; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Musikaliska glas</translation>
+        <translation>Glas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3750"/>
         <source>Musical Glasses</source>
         <comment>musical-glasses longName</comment>
         <extracomment>longName for Musical Glasses; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Musikaliska glas</translation>
+        <translation>Glas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3752"/>
@@ -11563,7 +11409,7 @@
         <source>SD</source>
         <comment>snare-drum shortName</comment>
         <extracomment>shortName for Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Virv.</translation>
+        <translation>Vt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3848"/>
@@ -11650,6 +11496,90 @@
         <translation>Cu.</translation>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="3875"/>
+        <source>Drum Kit.</source>
+        <comment>drumset description</comment>
+        <extracomment>description for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trumset.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3877"/>
+        <source>Large Drum Kit</source>
+        <comment>drumset trackName</comment>
+        <extracomment>trackName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Stort trumset</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3879"/>
+        <source>Drum Kit</source>
+        <comment>drumset longName</comment>
+        <extracomment>longName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trumset</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3881"/>
+        <source>D. Kit</source>
+        <comment>drumset shortName</comment>
+        <extracomment>shortName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trs.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3884"/>
+        <source>4 piece drum kit.</source>
+        <comment>drum-kit-4 description</comment>
+        <extracomment>description for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trumset (4 trummor).</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3886"/>
+        <source>4-Piece Drum Kit</source>
+        <comment>drum-kit-4 trackName</comment>
+        <extracomment>trackName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trumset (4 trummor)</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3888"/>
+        <source>Drum Kit</source>
+        <comment>drum-kit-4 longName</comment>
+        <extracomment>longName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trumset</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3890"/>
+        <source>D. Kit</source>
+        <comment>drum-kit-4 shortName</comment>
+        <extracomment>shortName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trs.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3893"/>
+        <source>5 piece drum kit.</source>
+        <comment>drum-kit-5 description</comment>
+        <extracomment>description for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trumset (5 trummor).</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3895"/>
+        <source>5-Piece Drum Kit</source>
+        <comment>drum-kit-5 trackName</comment>
+        <extracomment>trackName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trumset (5 trummor)</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3897"/>
+        <source>Drum Kit</source>
+        <comment>drum-kit-5 longName</comment>
+        <extracomment>longName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trumset</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="3899"/>
+        <source>D. Kit</source>
+        <comment>drum-kit-5 shortName</comment>
+        <extracomment>shortName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Trs.</translation>
+    </message>
+    <message>
         <location filename="../instruments/instrumentsxml.h" line="3902"/>
         <source>Military field drum.</source>
         <comment>military-drum description</comment>
@@ -11731,7 +11661,7 @@
         <source>Picc. Sn.</source>
         <comment>piccolo-snare-drum shortName</comment>
         <extracomment>shortName for Piccolo Snare; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>P-virv.</translation>
+        <translation>P-vt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3929"/>
@@ -11991,6 +11921,48 @@
         <comment>cowbell shortName</comment>
         <extracomment>shortName for Cowbell; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Ksk.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4019"/>
+        <source>Suspended Cymbal.</source>
+        <comment>crash-cymbal description</comment>
+        <extracomment>description for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Hängande cymbal.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4021"/>
+        <source>Suspended Cymbal</source>
+        <comment>crash-cymbal trackName</comment>
+        <extracomment>trackName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Hängande cymbal</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4023"/>
+        <source>Suspended Cymbal</source>
+        <comment>crash-cymbal longName</comment>
+        <extracomment>longName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Hängande cymbal</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4025"/>
+        <source>Sus. Cym.</source>
+        <comment>crash-cymbal shortName</comment>
+        <extracomment>shortName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Hng. cym.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4028"/>
+        <source>Hand Cymbals.</source>
+        <comment>cymbal description</comment>
+        <extracomment>description for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Handcymbal.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4030"/>
+        <source>Hand Cymbals</source>
+        <comment>cymbal trackName</comment>
+        <extracomment>trackName for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Handcymbaler</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4034"/>
@@ -12928,7 +12900,7 @@
         <source>S.D.</source>
         <comment>marching-snare shortName</comment>
         <extracomment>shortName for Marching Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Virv.</translation>
+        <translation>Vt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4346"/>
@@ -15385,7 +15357,91 @@
         <source>Very large mountain or Appalachian dulcimer, an octave lower than the regular dulcimer. (Tablature).</source>
         <comment>mtn-dulcimer-bass-chrom-tab description</comment>
         <extracomment>description for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Väldigt stort bergs- eller appalachiskt hackbräde, en oktav lägre än ett vanligt hackbräde. (Tabulatur.)</translation>
+        <translation>Mycket stor bergs- eller appalachisk dulcimer, en oktav lägre än en vanlig dulcimer. (Tabulatur.)</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6070"/>
+        <source>Treble viola da gamba. Second highest member of the viol family.</source>
+        <comment>treble-viol description</comment>
+        <extracomment>description for Treble Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Diskantgamba. Näst högsta medlemmen i gambafamiljen.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6085"/>
+        <source>Alto viola da gamba. Third highest member of the viol family.</source>
+        <comment>alto-viol description</comment>
+        <extracomment>description for Alto Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Altgamba. Tredje högsta medlemmen i gambafamiljen.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6115"/>
+        <source>Tenor viola da gamba. Middle member of the viol family.</source>
+        <comment>tenor-viol description</comment>
+        <extracomment>description for Tenor Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Tenorgamba. Mellanmedlemmen i gambafamiljen.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6145"/>
+        <source>Bass viola da gamba (staff notation). Third lowest member of the viol family.</source>
+        <comment>viola-da-gamba description</comment>
+        <extracomment>description for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Basgamba (noter). Tredje lägsta medlemmen i gambafamiljen.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6147"/>
+        <source>Bass Viol</source>
+        <comment>viola-da-gamba trackName</comment>
+        <extracomment>trackName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Basgamba</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6149"/>
+        <source>Bass Viol</source>
+        <comment>viola-da-gamba longName</comment>
+        <extracomment>longName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Basgamba</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6151"/>
+        <source>B. Vl.</source>
+        <comment>viola-da-gamba shortName</comment>
+        <extracomment>shortName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>B-gmb.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6160"/>
+        <source>Bass viola da gamba (tablature). Third lowest member of the viol family.</source>
+        <comment>viola-da-gamba-tablature description</comment>
+        <extracomment>description for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Basgamba (tabulatur). Tredje lägsta medlemmen i gambafamiljen.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6162"/>
+        <source>Bass Viol (tablature)</source>
+        <comment>viola-da-gamba-tablature trackName</comment>
+        <extracomment>trackName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Basgamba (tabulatur)</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6164"/>
+        <source>Bass Viol</source>
+        <comment>viola-da-gamba-tablature longName</comment>
+        <extracomment>longName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Basgamba</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6166"/>
+        <source>B. Vl.</source>
+        <comment>viola-da-gamba-tablature shortName</comment>
+        <extracomment>shortName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>B-gmb.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6169"/>
+        <source>Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol. Second lowest member of the viol family.</source>
+        <comment>violone description</comment>
+        <extracomment>description for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Stor gamba med den lägsta strängen stämd till G₁. Ibland kallad G-violone eller storbasgamba. Näst lägsta medlemmen i gambafamiljen.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6171"/>
@@ -15393,6 +15449,13 @@
         <comment>violone trackName</comment>
         <extracomment>trackName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Violone</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="6186"/>
+        <source>Large viol with the lowest string tuned to D. Sometimes called the D violone or contrabass viol. Lowest-pitched member of the viol family.</source>
+        <comment>d-violone description</comment>
+        <extracomment>description for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Stor gamba med den lägsta strängen stämd till D₁. Ibland kallad D-violone eller kontrabasgamba. Den lägsta medlemmen i gambafamiljen.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6188"/>
@@ -15451,6 +15514,13 @@
         <translation>*B</translation>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="3340"/>
+        <source>Hel.</source>
+        <comment>helicon shortName</comment>
+        <extracomment>shortName for Helicon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Hel.</translation>
+    </message>
+    <message>
         <location filename="../instruments/instrumentsxml.h" line="3832"/>
         <source>Bass Drum</source>
         <comment>bass-drum trackName</comment>
@@ -15463,6 +15533,27 @@
         <comment>snare-drum trackName</comment>
         <extracomment>trackName for Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>Virveltrumma</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4001"/>
+        <source>China cymbal for drum kit.</source>
+        <comment>chinese-cymbal description</comment>
+        <extracomment>description for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Kinacymbal för trumset.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4003"/>
+        <source>China Cymbal</source>
+        <comment>chinese-cymbal trackName</comment>
+        <extracomment>trackName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Kinacymbal</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4005"/>
+        <source>China Cymbal</source>
+        <comment>chinese-cymbal longName</comment>
+        <extracomment>longName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation>Kinacymbal</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4032"/>
@@ -15490,21 +15581,21 @@
         <source>Marching Snare Drum</source>
         <comment>marching-snare trackName</comment>
         <extracomment>trackName for Marching Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Marsch-virveltrumma</translation>
+        <translation>Marschvirveltrumma</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4348"/>
         <source>Marching Tenor Drums</source>
         <comment>marching-tenor-drums trackName</comment>
         <extracomment>trackName for Marching Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Marsch-tenortrummor</translation>
+        <translation>Marschtenortrummor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4357"/>
         <source>Marching Bass Drums</source>
         <comment>marching-bass-drums trackName</comment>
         <extracomment>trackName for Marching Bass Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Marsch-bastrummor</translation>
+        <translation>Marschbastrummor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4366"/>
@@ -15826,7 +15917,7 @@
         <source>7-string guitar (staff notation).</source>
         <comment>7-string-guitar description</comment>
         <extracomment>description for 7-string Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sjusträngad gitarr (notsystem).</translation>
+        <translation>Sjusträngad gitarr (noter).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5247"/>
@@ -15966,7 +16057,7 @@
         <source>5-string electric bass guitar (staff notation).</source>
         <comment>5-string-electric-bass description</comment>
         <extracomment>description for 5-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Femsträngad elektrisk basgitarr (notsystem).</translation>
+        <translation>Femsträngad elektrisk basgitarr (noter).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5291"/>
@@ -16008,7 +16099,7 @@
         <source>5-string electric bass guitar, high C tuning (staff notation).</source>
         <comment>5-string-electric-bass-high-c description</comment>
         <extracomment>description for 5-str. Electric Bass (high C/tenor); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Femsträngad elektrisk basgitarr, stämd i höga C (notsystem).</translation>
+        <translation>Femsträngad elektrisk basgitarr, stämd i höga C (noter).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5304"/>
@@ -16155,7 +16246,7 @@
         <source>Bass guitar (staff notation).</source>
         <comment>bass-guitar description</comment>
         <extracomment>description for Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Basgitarr (notsystem).</translation>
+        <translation>Basgitarr (noter).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5351"/>
@@ -16197,7 +16288,7 @@
         <source>Electric bass guitar (staff notation).</source>
         <comment>electric-bass description</comment>
         <extracomment>description for Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Elektrisk basgitarr (notsystem).</translation>
+        <translation>Elektrisk basgitarr (noter).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5364"/>
@@ -16512,7 +16603,7 @@
         <source>Tenor ukulele with bottom string tuned to G4.</source>
         <comment>tenor-ukulele description</comment>
         <extracomment>description for Tenor Ukulele; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tenorukulele med nedersta strängen stämd till G4.</translation>
+        <translation>Tenorukulele med nedersta strängen stämd till g¹.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5464"/>
@@ -16568,14 +16659,14 @@
         <source>Tenor ukulele with bottom string tuned to G3.</source>
         <comment>ukulele-low-g description</comment>
         <extracomment>description for Ukulele (low G); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tenorukulele med nedersta strängen stämd till G3.</translation>
+        <translation>Tenorukulele med nedersta strängen stämd till g.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5482"/>
         <source>Ukulele (low G)</source>
         <comment>ukulele-low-g trackName</comment>
         <extracomment>trackName for Ukulele (low G); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ukulele (låga G)</translation>
+        <translation>Ukulele (låga g)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5484"/>
@@ -16645,7 +16736,7 @@
         <source>Mandolin (staff notation).</source>
         <comment>mandolin description</comment>
         <extracomment>description for Mandolin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mandolin (notsystem).</translation>
+        <translation>Mandolin (noter).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5507"/>
@@ -16834,21 +16925,21 @@
         <source>Also known as the Appalachian dulcimer, among other names. A fretted string instrument of the zither family. (Staff notation).</source>
         <comment>mtn-dulcimer-std description</comment>
         <extracomment>description for Mtn. Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Även känt som appalachiskt hackbräde, bland många namn. Ett stränginstrument med band, medlem i cittrafamiljen. (Notsystem).</translation>
+        <translation>Även känd som appalachisk dulcimer, bland många namn. Ett stränginstrument med band, medlem i cittrafamiljen. (Noter).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5568"/>
         <source>Mtn. Dulcimer</source>
         <comment>mtn-dulcimer-std trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer</translation>
+        <translation>Bergsdulcimer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5570"/>
         <source>Mtn. Dulcimer</source>
         <comment>mtn-dulcimer-std longName</comment>
         <extracomment>longName for Mtn. Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer</translation>
+        <translation>Bergsdulcimer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5572"/>
@@ -16862,42 +16953,42 @@
         <source>Also known as the Appalachian dulcimer, among other names. A fretted string instrument of the zither family. (Tablature).</source>
         <comment>mtn-dulcimer-std-chrom-tab description</comment>
         <extracomment>description for Mtn. Dulcimer (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Även känt som appalachiskt hackbräde, bland många namn. Ett stränginstrument med band, medlem i cittrafamiljen. (Tabulatur.)</translation>
+        <translation>Även känd som appalachisk dulcimer, bland många namn. Ett stränginstrument med band, medlem i cittrafamiljen. (Tabulatur.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5577"/>
         <source>Mtn. Dulcimer (tablature)</source>
         <comment>mtn-dulcimer-std-chrom-tab trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bergshackbräde (tabulatur)</translation>
+        <translation>Bergsdulcimer (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5579"/>
         <source>Mtn. Dulcimer</source>
         <comment>mtn-dulcimer-std-chrom-tab longName</comment>
         <extracomment>longName for Mtn. Dulcimer (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer</translation>
+        <translation>Bergsdulcimer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5582"/>
         <source>Larger version of the mountain or Appalachian dulcimer. (Staff notation).</source>
         <comment>mtn-dulcimer-baritone description</comment>
         <extracomment>description for Mtn. Dulcimer - Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Större variant av bergs- eller appalachiskt hackbräde. (Notsystem).</translation>
+        <translation>Större variant av bergs- eller appalachisk dulcimer. (Noter).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5584"/>
         <source>Mtn. Dulcimer - Baritone</source>
         <comment>mtn-dulcimer-baritone trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Baryton</translation>
+        <translation>Bergsdulcimer - Baryton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5586"/>
         <source>Mtn. Dulcimer - Baritone</source>
         <comment>mtn-dulcimer-baritone longName</comment>
         <extracomment>longName for Mtn. Dulcimer - Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Baryton</translation>
+        <translation>Bergsdulcimer - Baryton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5588"/>
@@ -16911,42 +17002,42 @@
         <source>Larger version of the mountain or Appalachian dulcimer. (Tablature).</source>
         <comment>mtn-dulcimer-bartn-chrom-tab description</comment>
         <extracomment>description for Mtn. Dulcimer - Baritone (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Större variant av bergs- eller appalachiskt hackbräde. (Tabulatur.)</translation>
+        <translation>Större variant av bergs- eller appalachisk dulcimer. (Tabulatur.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5593"/>
         <source>Mtn. Dulcimer - Baritone (tablature)</source>
         <comment>mtn-dulcimer-bartn-chrom-tab trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Baritone (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bergshackbräde - baryton (tabulatur)</translation>
+        <translation>Bergsdulcimer - baryton (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5595"/>
         <source>Mtn. Dulcimer - Baritone</source>
         <comment>mtn-dulcimer-bartn-chrom-tab longName</comment>
         <extracomment>longName for Mtn. Dulcimer - Baritone (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Baryton</translation>
+        <translation>Bergsdulcimer - Baryton</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5598"/>
         <source>Very large mountain or Appalachian dulcimer, an octave lower than the regular dulcimer. (Staff notation).</source>
         <comment>mtn-dulcimer-bass description</comment>
         <extracomment>description for Mtn. Dulcimer - Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Väldigt stort bergs- eller appalachiskt hackbräde, en oktav lägre än ett vanligt hackbräde. (Notsystem).</translation>
+        <translation>Mycket stor bergs- eller appalachisk dulcimer, en oktav lägre än en vanlig dulcimer. (Noter).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5600"/>
         <source>Mtn. Dulcimer - Bass</source>
         <comment>mtn-dulcimer-bass trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Bas</translation>
+        <translation>Bergsdulcimer - Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5602"/>
         <source>Mtn. Dulcimer - Bass</source>
         <comment>mtn-dulcimer-bass longName</comment>
         <extracomment>longName for Mtn. Dulcimer - Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Bas</translation>
+        <translation>Bergsdulcimer - Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5604"/>
@@ -16960,21 +17051,21 @@
         <source>Mtn. Dulcimer - Bass (tablature)</source>
         <comment>mtn-dulcimer-bass-chrom-tab trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bergshackbräde - bas (tabulatur)</translation>
+        <translation>Bergsdulcimer - bas (tabulatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5611"/>
         <source>Mtn. Dulcimer - Bass</source>
         <comment>mtn-dulcimer-bass-chrom-tab longName</comment>
         <extracomment>longName for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mtn. Dulcimer - Bas</translation>
+        <translation>Bergsdulcimer - Bas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5614"/>
         <source>6-course lute (staff notation).</source>
         <comment>lute description</comment>
         <extracomment>description for Lute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Luta med sex körer (notsystem).</translation>
+        <translation>Luta med sex körer (noter).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5616"/>
@@ -17198,7 +17289,7 @@
         <source>10-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-10-course description</comment>
         <extracomment>description for Tenor Lute; course: 10-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tio-körig tenorluta från renässansen</translation>
+        <translation>Tiokörig tenorluta från renässansen</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5687"/>
@@ -17226,7 +17317,7 @@
         <source>10-course</source>
         <comment>ren.-tenor-lute-10-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 10-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tio-körig</translation>
+        <translation>Tiokörig</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5696"/>
@@ -17842,7 +17933,7 @@
         <source>Spanish folk instrument similar to the mandolin. (Staff notation).</source>
         <comment>bandurria description</comment>
         <extracomment>description for Bandurria; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Spanskt folkinstrument som liknar mandolinen. (Notsystem).</translation>
+        <translation>Spanskt folkinstrument som liknar mandolinen. (Noter).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5893"/>
@@ -17891,7 +17982,7 @@
         <source>Spanish lute similar to the bandurria. (Staff notation).</source>
         <comment>laud description</comment>
         <extracomment>description for Laúd; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Spansk luta som liknar bandurria. (Notsystem).</translation>
+        <translation>Spansk luta som liknar bandurria. (Noter).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5909"/>
@@ -18405,13 +18496,6 @@
         <translation>tremolo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6070"/>
-        <source>Treble viol.</source>
-        <comment>treble-viol description</comment>
-        <extracomment>description for Treble Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Diskantgamba.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="6072"/>
         <source>Treble Viol</source>
         <comment>treble-viol trackName</comment>
@@ -18452,13 +18536,6 @@
         <comment>treble-viol channel</comment>
         <extracomment>channel for Treble Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>tremolo</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6085"/>
-        <source>Alto viol.</source>
-        <comment>alto-viol description</comment>
-        <extracomment>description for Alto Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Altgamba.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6087"/>
@@ -18552,13 +18629,6 @@
         <translation>tremolo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6115"/>
-        <source>Tenor viol.</source>
-        <comment>tenor-viol description</comment>
-        <extracomment>description for Tenor Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tenorgamba.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="6117"/>
         <source>Tenor Viol</source>
         <comment>tenor-viol trackName</comment>
@@ -18650,88 +18720,25 @@
         <translation>tremolo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6145"/>
-        <source>Viola da gamba (staff notation).</source>
-        <comment>viola-da-gamba description</comment>
-        <extracomment>description for Viola da gamba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Viola da gamba (notsystem).</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6147"/>
-        <source>Viola da gamba</source>
-        <comment>viola-da-gamba trackName</comment>
-        <extracomment>trackName for Viola da gamba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Viola da gamba</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6149"/>
-        <source>Viola da gamba</source>
-        <comment>viola-da-gamba longName</comment>
-        <extracomment>longName for Viola da gamba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Viola da gamba</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6151"/>
-        <source>Vla. d. g.</source>
-        <comment>viola-da-gamba shortName</comment>
-        <extracomment>shortName for Viola da gamba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Vla. d. g.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="6153"/>
         <source>arco</source>
         <comment>viola-da-gamba channel</comment>
-        <extracomment>channel for Viola da gamba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>channel for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>arco</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6155"/>
         <source>pizzicato</source>
         <comment>viola-da-gamba channel</comment>
-        <extracomment>channel for Viola da gamba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>channel for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>pizzicato</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6157"/>
         <source>tremolo</source>
         <comment>viola-da-gamba channel</comment>
-        <extracomment>channel for Viola da gamba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>channel for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation>tremolo</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6160"/>
-        <source>Viola da gamba (tablature).</source>
-        <comment>viola-da-gamba-tablature description</comment>
-        <extracomment>description for Viola da gamba (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Viola da gamba (tabulatur).</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6162"/>
-        <source>Viola da gamba (tablature)</source>
-        <comment>viola-da-gamba-tablature trackName</comment>
-        <extracomment>trackName for Viola da gamba (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Viola da gamba (tabulatur)</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6164"/>
-        <source>Viola da gamba</source>
-        <comment>viola-da-gamba-tablature longName</comment>
-        <extracomment>longName for Viola da gamba (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Viola da gamba</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6166"/>
-        <source>Vla. d. g.</source>
-        <comment>viola-da-gamba-tablature shortName</comment>
-        <extracomment>shortName for Viola da gamba (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Vla. d. g.</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="6169"/>
-        <source>Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol.</source>
-        <comment>violone description</comment>
-        <extracomment>description for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Stor gamba med den lägsta strängen stämd i G. Ibland kallad G-gamba eller basgamba.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6173"/>
@@ -18745,7 +18752,7 @@
         <source>G Vne.</source>
         <comment>violone shortName</comment>
         <extracomment>shortName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B-gam.</translation>
+        <translation>B-ga.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6177"/>
@@ -18776,25 +18783,18 @@
         <translation>tremolo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="6186"/>
-        <source>Large viol with the lowest string tuned to D. Sometimes called the D violone.</source>
-        <comment>d-violone description</comment>
-        <extracomment>description for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Stor gamba med den lägsta strängen stämd i D. Ibland kallad D-gamba.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="6190"/>
         <source>D Violone</source>
         <comment>d-violone longName</comment>
         <extracomment>longName for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>D-gamba</translation>
+        <translation>D-violone</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6192"/>
         <source>D Vne.</source>
         <comment>d-violone shortName</comment>
         <extracomment>shortName for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ga. D</translation>
+        <translation>D-vne</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6194"/>
@@ -19222,7 +19222,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="137"/>
         <source>Ophicleides</source>
-        <translation>Ofekleider</translation>
+        <translation>Ofikleider</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="138"/>
@@ -19277,7 +19277,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="148"/>
         <source>Rag Dungs</source>
-        <translation>Rag Dungs</translation>
+        <translation>Rag Dunger</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="149"/>
@@ -19447,7 +19447,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="182"/>
         <source>Mtn. Dulcimers</source>
-        <translation>Mtn. Dulcimers</translation>
+        <translation>Bergsdulcimer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="183"/>
@@ -19462,7 +19462,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="185"/>
         <source>Bouzoukis</source>
-        <translation>Bouzoukir</translation>
+        <translation>Bouzoukier</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="186"/>
@@ -19472,7 +19472,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="187"/>
         <source>Ouds</source>
-        <translation>Oud</translation>
+        <translation>Ouder</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="188"/>
@@ -19535,7 +19535,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="75"/>
         <source>Common</source>
-        <translation>Vanlig</translation>
+        <translation>Vanliga instrument</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="76"/>
@@ -19580,12 +19580,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="84"/>
         <source>Early Music</source>
-        <translation>Antik musik</translation>
+        <translation>Tidig musik</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="85"/>
         <source>Classroom</source>
-        <translation>Klassrum</translation>
+        <translation>Skolmusik</translation>
     </message>
 </context>
 <context>
@@ -19655,7 +19655,7 @@
     <name>engraving/scoreorder</name>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6248"/>
-        <source>Orchestral</source>
+        <source>Orchestra</source>
         <translation>Orkester</translation>
     </message>
     <message>

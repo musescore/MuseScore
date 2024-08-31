@@ -1780,7 +1780,8 @@ void ChordList::write(XmlWriter& xml) const
                 if (s.code.isNull()) {
                     xml.tag("sym", { { "name", s.name }, { "value", s.value } });
                 } else {
-                    xml.tag("sym", { { "name", s.name }, { "code", String::number(s.code.unicode(), 16) } });
+                    // write hex numbers with a "0x" prefix, so they can convert back properly on read
+                    xml.tag("sym", { { "name", s.name }, { "code", u"0x" + String::number(s.code.unicode(), 16) } });
                 }
             }
         }

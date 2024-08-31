@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_IFONTSENGINE_H
-#define MUSE_DRAW_IFONTSENGINE_H
+#pragma once
 
 #include <string>
 
@@ -39,6 +38,7 @@ public:
     virtual double lineSpacing(const Font& f) const = 0;
     virtual double xHeight(const Font& f) const = 0;
     virtual double height(const Font& f) const = 0;
+    virtual double capHeight(const Font& ff) const = 0;
     virtual double ascent(const Font& f) const = 0;
     virtual double descent(const Font& f) const = 0;
 
@@ -59,5 +59,3 @@ public:
     virtual std::vector<GlyphImage> render(const Font& f, const std::u32string& text) const = 0;
 };
 }
-
-#endif // MUSE_DRAW_IFONTSENGINE_H

@@ -194,6 +194,7 @@ public:
 
     // color
     virtual QColor selectColor(const QColor& color = Qt::white, const QString& title = "") = 0;
+    virtual bool isSelectColorOpened() const = 0;
 
     // custom
     virtual RetVal<Val> open(const std::string& uri) const = 0;

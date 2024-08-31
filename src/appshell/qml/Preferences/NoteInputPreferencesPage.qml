@@ -99,10 +99,12 @@ PreferencesPage {
 
             width: parent.width
 
-            title: qsTrc("appshell/preferences", "Dynamics & hairpins")
+            title: qsTrc("appshell/preferences", "Voice assignment")
 
             StyledTextLabel {
+                width: parent.width
                 text: qsTrc("appshell/preferences", "When entered, dynamics and hairpins should affect:")
+                horizontalAlignment: Text.AlignLeft
             }
 
             RoundedRadioButton {

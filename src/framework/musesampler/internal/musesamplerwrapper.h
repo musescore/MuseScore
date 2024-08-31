@@ -38,7 +38,8 @@ class MuseSamplerWrapper : public muse::audio::synth::AbstractSynthesizer, publi
     public std::enable_shared_from_this<MuseSamplerWrapper>
 {
 public:
-    MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const InstrumentInfo& instrument, const muse::audio::AudioSourceParams& params);
+    MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const InstrumentInfo& instrument, const muse::audio::AudioSourceParams& params,
+                       const modularity::ContextPtr& iocCtx);
     ~MuseSamplerWrapper() override;
 
     void setSampleRate(unsigned int sampleRate) override;
@@ -56,6 +57,8 @@ public:
 private:
     void setupSound(const mpe::PlaybackSetupData& setupData) override;
     void setupEvents(const mpe::PlaybackData& playbackData) override;
+    const mpe::PlaybackData& playbackData() const override;
+
     void updateRenderingMode(const muse::audio::RenderMode mode) override;
 
     // IMuseSamplerTracks
@@ -67,9 +70,12 @@ private:
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
+    bool initSampler(const muse::audio::sample_rate_t sampleRate, const muse::audio::samples_t blockSize);
+
     InstrumentInfo resolveInstrument(const mpe::PlaybackSetupData& setupData) const;
     std::string resolveDefaultPresetCode(const InstrumentInfo& instrument) const;
 
+    void prepareOutputBuffer(const muse::audio::samples_t samples);
     void handleAuditionEvents(const MuseSamplerSequencer::EventType& event);
     void setCurrentPosition(const muse::audio::samples_t samples);
     void extractOutputSamples(muse::audio::samples_t samples, float* output);
@@ -83,6 +89,7 @@ private:
     ms_OutputBuffer m_bus;
 
     muse::audio::samples_t m_currentPosition = 0;
+    muse::audio::sample_rate_t m_samplerSampleRate = 0;
 
     std::vector<float> m_leftChannel;
     std::vector<float> m_rightChannel;
@@ -90,6 +97,7 @@ private:
     std::array<float*, 2> m_internalBuffer;
 
     bool m_offlineModeStarted = false;
+    bool m_allNotesOffRequested = false;
 
     MuseSamplerSequencer m_sequencer;
 };

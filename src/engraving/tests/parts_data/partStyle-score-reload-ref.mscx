@@ -9,6 +9,8 @@
       <titleFontFace>Arial</titleFontFace>
       <titleFontSize>48</titleFontSize>
       <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
+      <pageNumberFontSize>9</pageNumberFontSize>
+      <pageNumberFontStyle>0</pageNumberFontStyle>
       <Spatium>1.364</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -99,6 +101,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         <Text>
           <style>title</style>
           <text>Style Score</text>
@@ -358,6 +361,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
+          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <Text>
             <style>title</style>
             <text>Style Score</text>
@@ -553,6 +557,7 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
+          <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
           <Text>
             <style>title</style>
             <text>Style Score</text>

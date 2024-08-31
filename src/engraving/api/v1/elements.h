@@ -257,7 +257,7 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(singleNoteDynamics,      SINGLE_NOTE_DYNAMICS)
     API_PROPERTY(veloChangeMethod,        VELO_CHANGE_METHOD)
     API_PROPERTY(veloChangeSpeed,         VELO_CHANGE_SPEED)
-    API_PROPERTY(dynamicRange,            DYNAMIC_RANGE)
+    API_PROPERTY(dynamicRange,            END) // obsolete
     /**
      *    The way a ramp interpolates between values.
      *    \since MuseScore 3.5

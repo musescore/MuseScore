@@ -47,6 +47,12 @@ bool AudioDriverStub::isOpened() const
     return false;
 }
 
+const AudioDriverStub::Spec& AudioDriverStub::activeSpec() const
+{
+    static IAudioDriver::Spec dummySpec;
+    return dummySpec;
+}
+
 std::string AudioDriverStub::outputDevice() const
 {
     return std::string();
@@ -93,6 +99,26 @@ async::Notification AudioDriverStub::outputDeviceBufferSizeChanged() const
 }
 
 std::vector<unsigned int> AudioDriverStub::availableOutputDeviceBufferSizes() const
+{
+    return {};
+}
+
+unsigned int AudioDriverStub::outputDeviceSampleRate() const
+{
+    return 0;
+}
+
+bool AudioDriverStub::setOutputDeviceSampleRate(unsigned int)
+{
+    return false;
+}
+
+async::Notification AudioDriverStub::outputDeviceSampleRateChanged() const
+{
+    return async::Notification();
+}
+
+std::vector<unsigned int> AudioDriverStub::availableOutputDeviceSampleRates() const
 {
     return {};
 }

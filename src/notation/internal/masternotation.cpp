@@ -57,16 +57,16 @@ static ExcerptNotation* get_impl(const IExcerptNotationPtr& excerpt)
     return static_cast<ExcerptNotation*>(excerpt.get());
 }
 
-static IExcerptNotationPtr createAndInitExcerptNotation(mu::engraving::Excerpt* excerpt)
+static IExcerptNotationPtr createAndInitExcerptNotation(mu::engraving::Excerpt* excerpt, const muse::modularity::ContextPtr& iocCtx)
 {
-    auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
+    auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt, iocCtx);
     excerptNotation->init();
 
     return excerptNotation;
 }
 
-MasterNotation::MasterNotation()
-    : Notation()
+MasterNotation::MasterNotation(const muse::modularity::ContextPtr& iocCtx)
+    : Notation(iocCtx)
 {
     m_parts = std::make_shared<MasterNotationParts>(this, interaction(), undoStack());
     m_notationPlayback = std::make_shared<NotationPlayback>(this, m_notationChanged);
@@ -274,7 +274,7 @@ static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions
                                 puRests.append(rest);
                             }
                             rest->setScore(_score);
-                            rest->setTicks(d.fraction());
+                            rest->setTicks(d.isMeasure() ? measure->ticks() : d.fraction());
                             rest->setTrack(staffIdx * mu::engraving::VOICES);
                             seg->add(rest);
                             ltick += rest->actualTicks();
@@ -334,7 +334,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
         mu::engraving::MeasureBase* mb = score->first();
         if (mb && mb->isVBox()) {
             mu::engraving::VBox* tvb = toVBox(mb);
-            nvb = new mu::engraving::VBox(score->dummy()->system());
+            nvb = Factory::createTitleVBox(score->dummy()->system());
             nvb->setBoxHeight(tvb->boxHeight());
             nvb->setBoxWidth(tvb->boxWidth());
             nvb->setTopGap(tvb->topGap());
@@ -371,7 +371,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
         if (!title.isEmpty() || !subtitle.isEmpty() || !composer.isEmpty() || !lyricist.isEmpty()) {
             mu::engraving::MeasureBase* measure = score->measures()->first();
             if (measure->type() != ElementType::VBOX) {
-                mu::engraving::MeasureBase* nm = nvb ? nvb : new mu::engraving::VBox(score->dummy()->system());
+                mu::engraving::MeasureBase* nm = nvb ? nvb : Factory::createTitleVBox(score->dummy()->system());
                 nm->setTick(mu::engraving::Fraction(0, 1));
                 nm->setExcludeFromOtherParts(false);
                 nm->setNext(measure);
@@ -664,7 +664,7 @@ void MasterNotation::updateExcerpts()
             continue;
         }
 
-        IExcerptNotationPtr excerptNotation = createAndInitExcerptNotation(excerpt);
+        IExcerptNotationPtr excerptNotation = createAndInitExcerptNotation(excerpt, iocContext());
         bool open = excerpt->excerptScore()->isOpen();
         if (open) {
             excerptNotation->notation()->elements()->msScore()->doLayout();
@@ -710,7 +710,7 @@ void MasterNotation::updatePotentialExcerpts() const
     std::vector<mu::engraving::Excerpt*> excerpts = mu::engraving::Excerpt::createExcerptsFromParts(partsWithoutExcerpt, masterScore());
 
     for (mu::engraving::Excerpt* excerpt : excerpts) {
-        auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
+        auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt, iocContext());
         potentialExcerpts.push_back(excerptNotation);
     }
 
@@ -720,7 +720,7 @@ void MasterNotation::updatePotentialExcerpts() const
 
 bool MasterNotation::containsExcerpt(const mu::engraving::Excerpt* excerpt) const
 {
-    for (IExcerptNotationPtr excerptNotation : m_excerpts) {
+    for (const IExcerptNotationPtr& excerptNotation : m_excerpts) {
         if (get_impl(excerptNotation)->excerpt() == excerpt) {
             return true;
         }
@@ -737,7 +737,7 @@ void MasterNotation::onPartsChanged()
 
 IExcerptNotationPtr MasterNotation::createEmptyExcerpt(const QString& name) const
 {
-    auto excerptNotation = std::make_shared<ExcerptNotation>(new mu::engraving::Excerpt(masterScore()));
+    auto excerptNotation = std::make_shared<ExcerptNotation>(new mu::engraving::Excerpt(masterScore()), iocContext());
     excerptNotation->setName(name);
 
     return excerptNotation;
@@ -791,7 +791,7 @@ void MasterNotation::initExcerptNotations(const std::vector<mu::engraving::Excer
             masterScore()->initEmptyExcerpt(excerpt);
         }
 
-        IExcerptNotationPtr excerptNotation = createAndInitExcerptNotation(excerpt);
+        IExcerptNotationPtr excerptNotation = createAndInitExcerptNotation(excerpt, iocContext());
         notationExcerpts.push_back(excerptNotation);
     }
 

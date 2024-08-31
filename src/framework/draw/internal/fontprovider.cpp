@@ -23,29 +23,14 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::draw;
 
 int FontProvider::addSymbolFont(const muse::String& family, const io::path_t& path)
 {
-    //! NOTE Adding fonts in the fontsmodule
     UNUSED(family);
     UNUSED(path);
     return 1;
-}
-
-int FontProvider::addTextFont(const io::path_t& path)
-{
-    //! NOTE Adding fonts in the fontsmodule
-    UNUSED(path);
-    return 1;
-}
-
-void FontProvider::insertSubstitution(const muse::String& from, const muse::String& to)
-{
-    //! NOTE Instead of substitution, default fonts are used
-    //! Set in the fontsmodule
-    UNUSED(from);
-    UNUSED(to);
 }
 
 double FontProvider::lineSpacing(const muse::draw::Font& f) const
@@ -66,6 +51,11 @@ double FontProvider::height(const muse::draw::Font& f) const
 double FontProvider::ascent(const muse::draw::Font& f) const
 {
     return fontsEngine()->ascent(f);
+}
+
+double FontProvider::capHeight(const muse::draw::Font& f) const
+{
+    return fontsEngine()->capHeight(f);
 }
 
 double FontProvider::descent(const muse::draw::Font& f) const
@@ -117,14 +107,14 @@ RectF FontProvider::tightBoundingRect(const muse::draw::Font& f, const muse::Str
 }
 
 // Score symbols
-RectF FontProvider::symBBox(const muse::draw::Font& f, char32_t ucs4, double DPI_F) const
+RectF FontProvider::symBBox(const muse::draw::Font& f, char32_t ucs4, double dpi_f) const
 {
-    UNUSED(DPI_F);
+    UNUSED(dpi_f);
     return fontsEngine()->symBBox(f, ucs4);
 }
 
-double FontProvider::symAdvance(const muse::draw::Font& f, char32_t ucs4, double DPI_F) const
+double FontProvider::symAdvance(const muse::draw::Font& f, char32_t ucs4, double dpi_f) const
 {
-    UNUSED(DPI_F);
+    UNUSED(dpi_f);
     return fontsEngine()->symAdvance(f, ucs4);
 }

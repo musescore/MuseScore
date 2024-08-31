@@ -321,6 +321,28 @@ staff_idx_t System::nextVisibleStaff(staff_idx_t staffIdx) const
     return firstVisibleStaffFrom(staffIdx + 1);
 }
 
+staff_idx_t System::prevVisibleStaff(staff_idx_t startStaffIdx) const
+{
+    if (startStaffIdx == 0) {
+        return muse::nidx;
+    }
+
+    for (staff_idx_t i = startStaffIdx - 1;; --i) {
+        Staff* s  = score()->staff(i);
+        SysStaff* ss = m_staves[i];
+
+        if (s->show() && ss->show()) {
+            return i;
+        }
+
+        if (i == 0) {
+            break;
+        }
+    }
+
+    return muse::nidx;
+}
+
 //---------------------------------------------------------
 //   firstVisibleStaff
 //---------------------------------------------------------
@@ -826,8 +848,8 @@ double System::minTop() const
 
 double System::minBottom() const
 {
-    if (vbox()) {
-        return vbox()->bottomGap();
+    if (const Box* vb = vbox()) {
+        return vb->absoluteFromSpatium(vb->bottomGap());
     }
     staff_idx_t si = lastVisibleSysStaff();
     SysStaff* s = si == muse::nidx ? nullptr : staff(si);
@@ -937,7 +959,7 @@ Spacer* System::downSpacer(staff_idx_t staffIdx) const
 
 double System::firstNoteRestSegmentX(bool leading)
 {
-    double margin = style().styleMM(Sid::HeaderToLineStartDistance);
+    double margin = style().styleMM(Sid::headerToLineStartDistance);
     for (const MeasureBase* mb : measures()) {
         if (mb->isMeasure()) {
             const Measure* measure = static_cast<const Measure*>(mb);

@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_EXTENSIONS_IEXTENSIONSPROVIDER_H
-#define MUSE_EXTENSIONS_IEXTENSIONSPROVIDER_H
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 
@@ -38,22 +37,24 @@ public:
 
     virtual ~IExtensionsProvider() = default;
 
-    virtual void reloadPlugins() = 0;
+    virtual void reloadExtensions() = 0;
 
     virtual ManifestList manifestList(Filter filter = Filter::All) const = 0;
     virtual async::Notification manifestListChanged() const = 0;
 
+    virtual bool exists(const Uri& uri) const = 0;
     virtual const Manifest& manifest(const Uri& uri) const = 0;
     virtual async::Channel<Manifest> manifestChanged() const = 0;
     virtual Action action(const UriQuery& q) const = 0;
 
     virtual KnownCategories knownCategories() const = 0;
 
-    virtual Ret setEnable(const Uri& uri, bool enable) = 0;
-
     virtual Ret perform(const UriQuery& uri) = 0;
     virtual Ret run(const UriQuery& uri) = 0;
+
+    virtual Ret setExecPoint(const Uri& uri, const ExecPointName& name) = 0;
+    virtual std::vector<ExecPoint> execPoints(const Uri& uri) const = 0;
+    virtual Ret performPoint(const ExecPointName& name) = 0;
+    virtual void performPointAsync(const ExecPointName& name) = 0;
 };
 }
-
-#endif // MUSE_EXTENSIONS_IEXTENSIONSPROVIDER_H

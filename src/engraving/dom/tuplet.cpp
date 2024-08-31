@@ -29,6 +29,7 @@
 #include "engravingitem.h"
 #include "factory.h"
 #include "measure.h"
+#include "note.h"
 #include "rest.h"
 #include "score.h"
 #include "text.h"
@@ -589,7 +590,7 @@ bool Tuplet::setProperty(Pid propertyId, const PropertyValue& v)
         setBracketType(TupletBracketType(v.toInt()));
         break;
     case Pid::LINE_WIDTH:
-        setBracketWidth(v.value<Millimetre>());
+        setBracketWidth(v.value<Spatium>());
         break;
     case Pid::NORMAL_NOTES:
         m_ratio.setDenominator(v.toInt());
@@ -766,13 +767,17 @@ void Tuplet::addMissingElements()
     if (voice() == 0) {
         return;         // nothing to do for tuplets in voice 1
     }
+
     Fraction missingElementsDuration = ticks() * ratio() - elementsDuration();
     if (missingElementsDuration.isZero()) {
         return;
     }
+
     // first, fill in any holes in the middle of the tuplet
     Fraction expectedTick = elements().front()->tick();
-    for (DurationElement* de : elements()) {
+
+    const std::vector<DurationElement*> elementsCopy = elements(); // mofified during loop
+    for (const DurationElement* de : elementsCopy) {
         if (!de) {
             continue;
         }
@@ -784,6 +789,7 @@ void Tuplet::addMissingElements()
         }
         expectedTick += de->actualTicks();
     }
+
     // calculate the tick where we would expect a tuplet of this duration to start
     // TODO: check:
     expectedTick = elements().front()->tick() - Fraction::fromTicks(elements().front()->tick().ticks() % ticks().ticks());
@@ -838,5 +844,23 @@ int Tuplet::computeTupletDenominator(int numerator, Fraction totalDuration)
         ratio = (totalDuration / baseLen).reduced();
     }
     return ratio.numerator();
+}
+
+EngravingItem* Tuplet::nextElement()
+{
+    ChordRest* firstElement = toChordRest(elements().front());
+    if (firstElement->type() == ElementType::CHORD) {
+        Chord* chord = toChord(firstElement);
+        return chord->firstGraceOrNote();
+    }
+    return firstElement;
+}
+
+EngravingItem* Tuplet::prevElement()
+{
+    ChordRest* firstElement = toChordRest(elements().front());
+    staff_idx_t staffId = firstElement->staffIdx();
+    EngravingItem* prevItem = firstElement->segment()->prevElement(staffId);
+    return prevItem;
 }
 } // namespace mu::engraving

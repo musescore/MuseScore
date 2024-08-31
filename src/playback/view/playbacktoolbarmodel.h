@@ -102,7 +102,7 @@ private:
     void updatePlayPosition(muse::audio::secs_t secs);
     void doSetPlayTime(const QTime& time);
 
-    void rewind(muse::audio::msecs_t milliseconds);
+    void rewind(muse::audio::secs_t secs);
     void rewindToBeat(const notation::MeasureBeat& beat);
 
     bool m_isToolbarFloating = false;

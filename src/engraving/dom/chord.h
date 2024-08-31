@@ -127,10 +127,9 @@ public:
     bool isUiItem() const { return m_isUiItem; }
     void setIsUiItem(bool val) { m_isUiItem = val; }
 
-    LedgerLine* ledgerLines() { return m_ledgerLines; }
-    const LedgerLine* ledgerLines() const { return m_ledgerLines; }
-    void setLedgerLine(LedgerLine* l) { m_ledgerLines = l; }
-    void addLedgerLines();
+    const std::vector<LedgerLine*>& ledgerLines() const { return m_ledgerLines; }
+    void resizeLedgerLinesTo(size_t newSize);
+    void updateLedgerLines();
 
     double defaultStemLength() const { return m_defaultStemLength; }
     void setDefaultStemLength(double l) { m_defaultStemLength = l; }
@@ -193,6 +192,8 @@ public:
     size_t graceIndex() const { return m_graceIndex; }
     void setGraceIndex(size_t val) { m_graceIndex = val; }
 
+    Chord* graceNoteAt(size_t idx) const;
+
     int upLine() const override;
     int downLine() const override;
     PointF stemPos() const override;            ///< page coordinates
@@ -212,7 +213,7 @@ public:
     Note* selectedNote() const;
 
     PointF pagePos() const override;        ///< position in page coordinates
-    void cmdUpdateNotes(AccidentalState*);
+    void cmdUpdateNotes(AccidentalState*, staff_idx_t staffIdx);
 
     NoteType noteType() const { return m_noteType; }
     void setNoteType(NoteType t);
@@ -271,9 +272,9 @@ public:
 
     void sortNotes();
 
-    Chord* nextTiedChord(bool backwards = false, bool sameSize = true);
-    bool containsTieEnd() const;
-    bool containsTieStart() const;
+    Chord* nextTiedChord(bool backwards = false, bool sameSize = true) const;
+
+    Fraction endTickIncludingTied() const;
 
     EngravingItem* nextElement() override;
     EngravingItem* prevElement() override;
@@ -282,6 +283,8 @@ public:
     EngravingItem* prevSegmentElement() override;
 
     String accessibleExtraInfo() const override;
+
+    Note* firstGraceOrNote();
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
@@ -350,7 +353,7 @@ private:
     void processSiblings(std::function<void(EngravingItem*)> func, bool includeTemporarySiblings) const;
 
     std::vector<Note*> m_notes;           // sorted to decreasing line step
-    LedgerLine* m_ledgerLines = nullptr;  // single linked list
+    std::vector<LedgerLine*> m_ledgerLines;
 
     Stem* m_stem = nullptr;
     Hook* m_hook = nullptr;

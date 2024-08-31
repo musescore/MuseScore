@@ -86,7 +86,7 @@ class Segment final : public EngravingItem
     DECLARE_CLASSOF(ElementType::SEGMENT)
 
 protected:
-    EngravingItem* getElement(staff_idx_t staff);       //??
+    EngravingItem* getElement(staff_idx_t staff) const;       //??
 
 public:
 
@@ -101,6 +101,8 @@ public:
     Segment* clone() const override { return new Segment(*this); }
 
     void setScore(Score*) override;
+
+    inline bool isActive() const { return !isTimeTickType() && enabled() && visible(); }
 
     Segment* next() const { return m_next; }
     Segment* next(SegmentType) const;
@@ -122,12 +124,12 @@ public:
     Segment* next1MMenabled() const;
     Segment* next1(SegmentType) const;
     Segment* next1ChordRestOrTimeTick() const;
-    Segment* next1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType = SegmentType::ChordRest);
+    Segment* next1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType = SegmentType::ChordRest) const;
     Segment* next1MM(SegmentType) const;
 
     Segment* prev1() const;
     Segment* prev1ChordRestOrTimeTick() const;
-    Segment* prev1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType = SegmentType::ChordRest);
+    Segment* prev1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType = SegmentType::ChordRest) const;
     Segment* prev1enabled() const;
     Segment* prev1MM() const;
     Segment* prev1MMenabled() const;
@@ -222,21 +224,21 @@ public:
     AccessibleItemPtr createAccessible() override;
 #endif
 
-    EngravingItem* firstInNextSegments(staff_idx_t activeStaff);   //<
-    EngravingItem* lastInPrevSegments(staff_idx_t activeStaff);     //<
-    EngravingItem* firstElementForNavigation(staff_idx_t staff);                //<  These methods are used for navigation
-    EngravingItem* lastElementForNavigation(staff_idx_t staff);                 //<  for next-element and prev-element
-    EngravingItem* firstElementOfSegment(Segment* s, staff_idx_t activeStaff);
-    EngravingItem* nextElementOfSegment(Segment* s, EngravingItem* e, staff_idx_t activeStaff);
-    EngravingItem* prevElementOfSegment(Segment* s, EngravingItem* e, staff_idx_t activeStaff);
-    EngravingItem* lastElementOfSegment(Segment* s, staff_idx_t activeStaff);
-    EngravingItem* nextAnnotation(EngravingItem* e);
-    EngravingItem* prevAnnotation(EngravingItem* e);
-    EngravingItem* firstAnnotation(Segment* s, staff_idx_t activeStaff);
-    EngravingItem* lastAnnotation(Segment* s, staff_idx_t activeStaff);
-    Spanner* firstSpanner(staff_idx_t activeStaff);
-    Spanner* lastSpanner(staff_idx_t activeStaff);
-    bool notChordRestType(Segment* s);
+    EngravingItem* firstInNextSegments(staff_idx_t activeStaff) const;   //<
+    EngravingItem* lastInPrevSegments(staff_idx_t activeStaff) const;     //<
+    EngravingItem* firstElementForNavigation(staff_idx_t staff) const;          //<  These methods are used for navigation
+    EngravingItem* lastElementForNavigation(staff_idx_t staff) const;           //<  for next-element and prev-element
+    EngravingItem* firstElementOfSegment(staff_idx_t activeStaff) const;
+    EngravingItem* nextElementOfSegment(EngravingItem* e, staff_idx_t activeStaff) const;
+    EngravingItem* prevElementOfSegment(EngravingItem* e, staff_idx_t activeStaff) const;
+    EngravingItem* lastElementOfSegment(staff_idx_t activeStaff) const;
+    EngravingItem* nextAnnotation(EngravingItem* e) const;
+    EngravingItem* prevAnnotation(EngravingItem* e) const;
+    EngravingItem* firstAnnotation(staff_idx_t activeStaff) const;
+    EngravingItem* lastAnnotation(staff_idx_t activeStaff) const;
+    Spanner* firstSpanner(staff_idx_t activeStaff) const;
+    Spanner* lastSpanner(staff_idx_t activeStaff) const;
+    bool notChordRestType() const;
     using EngravingItem::nextElement;
     EngravingItem* nextElement(staff_idx_t activeStaff);
     using EngravingItem::prevElement;
@@ -285,6 +287,9 @@ public:
     bool isTimeTickType() const { return m_segmentType == SegmentType::TimeTick; }
     bool isRightAligned() const { return isClefType() || isBreathType(); }
 
+    static constexpr SegmentType CHORD_REST_OR_TIME_TICK_TYPE = SegmentType::ChordRest | SegmentType::TimeTick;
+    static constexpr SegmentType durationSegmentsMask = CHORD_REST_OR_TIME_TICK_TYPE; // segment types which may have non-zero tick length
+
     bool canWriteSpannerStartEnd(track_idx_t track, const Spanner* spanner) const;
 
     Fraction shortestChordRest() const;
@@ -301,8 +306,6 @@ public:
     bool goesBefore(const Segment* nextSegment) const;
 
     void checkEmpty() const;
-
-    static constexpr SegmentType durationSegmentsMask = SegmentType::ChordRest | SegmentType::TimeTick;   // segment types which may have non-zero tick length
 
 private:
 
@@ -333,58 +336,6 @@ private:
 
     CrossBeamType m_crossBeamType; // Will affect segment-to-segment horizontal spacing
 };
-
-//---------------------------------------------------------
-//   nextActive
-//---------------------------------------------------------
-
-inline Segment* Segment::nextActive() const
-{
-    Segment* ns = next();
-    while (ns && !(ns->enabled() && ns->visible())) {
-        ns = ns->next();
-    }
-    return ns;
-}
-
-//---------------------------------------------------------
-//   nextEnabled
-//---------------------------------------------------------
-
-inline Segment* Segment::nextEnabled() const
-{
-    Segment* ns = next();
-    while (ns && !ns->enabled()) {
-        ns = ns->next();
-    }
-    return ns;
-}
-
-//---------------------------------------------------------
-//   prevActive
-//---------------------------------------------------------
-
-inline Segment* Segment::prevActive() const
-{
-    Segment* ps = prev();
-    while (ps && !(ps->enabled() && ps->visible())) {
-        ps = ps->prev();
-    }
-    return ps;
-}
-
-//---------------------------------------------------------
-//   prevEnabled
-//---------------------------------------------------------
-
-inline Segment* Segment::prevEnabled() const
-{
-    Segment* ps = prev();
-    while (ps && !ps->enabled()) {
-        ps = ps->prev();
-    }
-    return ps;
-}
 } // namespace mu::engraving
 
 #ifndef NO_QT_SUPPORT

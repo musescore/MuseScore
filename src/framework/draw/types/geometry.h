@@ -446,10 +446,15 @@ class PolygonX : public std::vector<PointX<T> >
 {
 public:
 
-    inline PolygonX<T>() = default;
-    inline PolygonX<T>(const std::vector<PointX<T> >& v) : std::vector<PointX<T> >(v) {
+    inline PolygonX() = default;
+    inline PolygonX(const std::vector<PointX<T> >& v)
+        : std::vector<PointX<T> >(v)
+    {
     }
-    inline PolygonX<T>(size_t size) : std::vector<PointX<T> >(size) {
+
+    inline PolygonX(size_t size)
+        : std::vector<PointX<T> >(size)
+    {
     }
 
     inline PolygonX<T>& operator<<(const PointX<T>& p)

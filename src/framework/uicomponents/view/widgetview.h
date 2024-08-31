@@ -52,13 +52,14 @@ protected:
 
     void setWidget(std::shared_ptr<IDisplayableWidget> widget);
 
-private:
     void paint(QPainter* painter) override;
     bool event(QEvent* event) override;
     bool handleHoverEvent(QHoverEvent* event);
 
     QWidget* qWidget() const;
     void updateSizeConstraints();
+
+private:
 
     std::shared_ptr<IDisplayableWidget> m_widget = nullptr;
 };

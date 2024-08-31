@@ -45,7 +45,7 @@ LyricsLine::LyricsLine(EngravingItem* parent)
 {
     setGenerated(true);             // no need to save it, as it can be re-generated
     setDiagonal(false);
-    setLineWidth(style().styleMM(Sid::lyricsDashLineThickness));
+    setLineWidth(style().styleS(Sid::lyricsDashLineThickness));
     setAnchor(Spanner::Anchor::SEGMENT);
     m_nextLyrics = 0;
 }
@@ -62,7 +62,7 @@ LyricsLine::LyricsLine(const LyricsLine& g)
 
 void LyricsLine::styleChanged()
 {
-    setLineWidth(style().styleMM(Sid::lyricsDashLineThickness));
+    setLineWidth(style().styleS(Sid::lyricsDashLineThickness));
 }
 
 //---------------------------------------------------------
@@ -145,7 +145,7 @@ LyricsLineSegment::LyricsLineSegment(LyricsLine* sp, System* parent)
 double LyricsLineSegment::baseLineShift() const
 {
     if (lyricsLine()->isEndMelisma()) {
-        return -0.5 * lyricsLine()->lineWidth();
+        return -0.5 * absoluteFromSpatium(lineWidth());
     }
 
     Lyrics* lyrics = lyricsLine()->lyrics();

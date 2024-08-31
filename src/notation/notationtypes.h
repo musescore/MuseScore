@@ -148,7 +148,7 @@ using ChangesRange = mu::engraving::ScoreChangesRange;
 using GuitarBendType = mu::engraving::GuitarBendType;
 using engraving::LoopBoundaryType;
 using Pid = mu::engraving::Pid;
-using VoiceApplication = mu::engraving::VoiceApplication;
+using VoiceAssignment = mu::engraving::VoiceAssignment;
 
 static const muse::String COMMON_GENRE_ID("common");
 
@@ -588,7 +588,7 @@ constexpr bool isNotesIntervalValid(int interval)
            && interval != 0 && interval != -1;
 }
 
-constexpr bool isVoiceIndexValid(size_t voiceIndex)
+constexpr bool isVoiceIndexValid(voice_idx_t voiceIndex)
 {
     return voiceIndex < mu::engraving::VOICES;
 }

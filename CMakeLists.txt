@@ -93,15 +93,17 @@ option(MUE_INSTALL_SOUNDFONT "Install sound font" ON)
 set(MUE_VTEST_MSCORE_REF_BIN "${CMAKE_CURRENT_LIST_DIR}/../MU_ORIGIN/MuseScore/build.debug/install/${INSTALL_SUBDIR}/mscore" CACHE PATH "Path to mscore ref bin")
 
 # === Compile ===
-option(MUE_COMPILE_INSTALL_QTQML_FILES "Whether to bundle qml files along with the installation (relevant on MacOS only)" ON)
+option(MUE_COMPILE_INSTALL_QTQML_FILES "Whether to bundle qml files along with the installation (relevant on macOS only)" ON)
 option(MUE_COMPILE_USE_UNITY "Use unity build." ON)
 option(MUE_COMPILE_USE_CCACHE "Try use ccache" ON)
 option(MUE_COMPILE_USE_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in debug" OFF)
+option(MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH "Path to precompiled dependencies (macOS only; optional: if not specified, some libraries will be used from the system and others will be built from source)" "")
 
 # === System libraries ===
 # Important for the maintainers of Linux distributions
 option(MUE_COMPILE_USE_SYSTEM_FLAC "Try use system flac" OFF)
 option(MUE_COMPILE_USE_SYSTEM_FREETYPE "Try use system freetype" OFF)
+option(MUE_COMPILE_USE_SYSTEM_HARFBUZZ "Try use system harfbuzz" OFF)
 option(MUE_COMPILE_USE_SYSTEM_OPUS "Try use system opus" OFF)
 option(MUE_COMPILE_USE_SYSTEM_OPUSENC "Try use system libopusenc" OFF)
 option(MUE_COMPILE_USE_SYSTEM_TINYXML "Try use system tinyxml" OFF)
@@ -140,6 +142,14 @@ endif(MUE_COMPILE_USE_CCACHE)
 ###########################################
 # Setup external dependencies
 ###########################################
+
+if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
+    list(PREPEND CMAKE_PREFIX_PATH ${MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH})
+
+    # These are included in the precompiled dependencies, so let's use them from there
+    set(MUE_COMPILE_USE_SYSTEM_FLAC ON)
+    set(MUE_COMPILE_USE_SYSTEM_OPUS ON)
+endif()
 
 set(QT_MIN_VERSION "6.2.4")
 include(FindQt6)

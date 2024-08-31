@@ -179,11 +179,11 @@ fi
 
 # CMAKE
 # Get newer CMake (only used cached version if it is the same)
-cmake_version="3.16.0"
+cmake_version="3.24.0"
 cmake_dir="$BUILD_TOOLS/cmake/${cmake_version}"
 if [[ ! -d "$cmake_dir" ]]; then
   mkdir -p "$cmake_dir"
-  cmake_url="https://cmake.org/files/v${cmake_version%.*}/cmake-${cmake_version}-Linux-x86_64.tar.gz"
+  cmake_url="https://cmake.org/files/v${cmake_version%.*}/cmake-${cmake_version}-linux-x86_64.tar.gz" 
   wget -q --show-progress --no-check-certificate -O - "${cmake_url}" | tar --strip-components=1 -xz -C "${cmake_dir}"
 fi
 echo export PATH="$cmake_dir/bin:\${PATH}" >> ${ENV_FILE}
@@ -200,15 +200,6 @@ fi
 echo export PATH="${ninja_dir}:\${PATH}" >> ${ENV_FILE}
 echo "ninja version"
 $ninja_dir/ninja --version
-
-# Dump syms
-echo "Get Breakpad"
-breakpad_dir=$BUILD_TOOLS/breakpad
-if [[ ! -d "$breakpad_dir" ]]; then
-  wget -q --show-progress -O $BUILD_TOOLS/dump_syms.7z "https://s3.amazonaws.com/utils.musescore.org/breakpad/linux/x86-64/dump_syms.7z"
-  7z x -y $BUILD_TOOLS/dump_syms.7z -o"$breakpad_dir"
-fi
-echo export DUMPSYMS_BIN="$breakpad_dir/dump_syms" >> $ENV_FILE
 
 ##########################################################################
 # OTHER

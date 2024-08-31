@@ -8,6 +8,8 @@
       <pagePrintableWidth>7.4826</pagePrintableWidth>
       <minMeasureWidth>12</minMeasureWidth>
       <concertPitch>1</concertPitch>
+      <pageNumberFontSize>9</pageNumberFontSize>
+      <pageNumberFontStyle>0</pageNumberFontStyle>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -97,6 +99,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
         </VBox>
       <Measure>
         <voice>

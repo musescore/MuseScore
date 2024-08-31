@@ -183,13 +183,13 @@ static void collectGlissando(int channel, MidiInstrumentEffect effect,
 static Fraction getPlayTicksForBend(const Note* note)
 {
     Tie* tie = note->tieFor();
-    if (!tie) {
+    if (!tie || !tie->endNote()) {
         return note->chord()->actualTicks();
     }
 
     Fraction stick = note->chord()->tick();
     Note* nextNote = tie->endNote();
-    while (tie) {
+    while (tie && tie->endNote()) {
         nextNote = tie->endNote();
         for (EngravingItem* e : nextNote->el()) {
             if (e && (e->type() == ElementType::BEND)) {
@@ -1167,7 +1167,7 @@ static Trill* findFirstTrill(Chord* chord)
             continue;
         }
         Trill* trill = toTrill(i.value);
-        if (trill->playArticulation() == false) {
+        if (!trill->playSpanner()) {
             continue;
         }
         return trill;

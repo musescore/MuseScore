@@ -32,6 +32,8 @@
       <bendFontSize>10</bendFontSize>
       <headerFontSize>10</headerFontSize>
       <footerFontSize>10</footerFontSize>
+      <copyrightFontSize>10</copyrightFontSize>
+      <pageNumberFontSize>10</pageNumberFontSize>
       <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -114,7 +116,7 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>12.5</height>
+        <height>10</height>
         <Text>
           <style>title</style>
           <offset x="0" y="-0.07525"/>
@@ -127,8 +129,6 @@
           </Text>
         <Text>
           <style>composer</style>
-          <align>right,top</align>
-          <offset x="0" y="17.4247"/>
           <text>Henry Ives</text>
           </Text>
         </VBox>
@@ -246,9 +246,6 @@
               <tpc>13</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           <Spanner type="Trill">
             <prev>
               <location>
@@ -256,6 +253,16 @@
                 </location>
               </prev>
             </Spanner>
+          <Spanner type="Trill">
+            <prev>
+              <location>
+                <fractions>-1/1</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>

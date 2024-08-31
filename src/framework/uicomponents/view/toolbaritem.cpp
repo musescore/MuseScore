@@ -201,6 +201,16 @@ bool ToolBarItem::enabled_property() const
     return m_state.enabled;
 }
 
+bool ToolBarItem::checkable_property() const
+{
+    return m_action.checkable == Checkable::Yes;
+}
+
+bool ToolBarItem::checked_property() const
+{
+    return m_state.checked;
+}
+
 bool ToolBarItem::selected_property() const
 {
     return m_selected;
@@ -239,6 +249,21 @@ void ToolBarItem::setShowTitle(bool show)
 
     m_showTitle = show;
     emit showTitleChanged();
+}
+
+bool ToolBarItem::isTitleBold() const
+{
+    return m_isTitleBold;
+}
+
+void ToolBarItem::setIsTitleBold(bool newIsTitleBold)
+{
+    if (m_isTitleBold == newIsTitleBold) {
+        return;
+    }
+
+    m_isTitleBold = newIsTitleBold;
+    emit isTitleBoldChanged();
 }
 
 bool ToolBarItem::isTransparent() const

@@ -63,7 +63,8 @@ public:
     MOCK_METHOD(QColor, borderColor, (), (const, override));
     MOCK_METHOD(int, borderWidth, (), (const, override));
 
-    MOCK_METHOD(QColor, anchorLineColor, (), (const, override));
+    MOCK_METHOD(QColor, anchorColor, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<QColor>, anchorColorChanged, (), (const, override));
 
     MOCK_METHOD(QColor, playbackCursorColor, (), (const, override));
     MOCK_METHOD(QColor, loopMarkerColor, (), (const, override));
@@ -181,6 +182,12 @@ public:
 
     MOCK_METHOD(muse::ValCh<int>, pianoKeyboardNumberOfKeys, (), (const, override));
     MOCK_METHOD(void, setPianoKeyboardNumberOfKeys, (int), (override));
+
+    MOCK_METHOD(bool, useNewPercussionPanel, (), (const, override));
+    MOCK_METHOD(void, setUseNewPercussionPanel, (bool), (override));
+
+    MOCK_METHOD(bool, autoShowPercussionPanel, (), (const, override));
+    MOCK_METHOD(void, setAutoShowPercussionPanel, (bool), (override));
 
     MOCK_METHOD(muse::io::path_t, styleFileImportPath, (), (const, override));
     MOCK_METHOD(void, setStyleFileImportPath, (const muse::io::path_t&), (override));

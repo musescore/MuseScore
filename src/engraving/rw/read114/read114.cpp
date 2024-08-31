@@ -436,7 +436,7 @@ static void readAccidental(Accidental* a, XmlReader& e, ReadContext& ctx)
                 }
                 a->setAccidentalType(at);
             } else {
-                const static std::map<String, AccidentalType> accMap = {
+                static const std::map<String, AccidentalType> accMap = {
                     { u"none", AccidentalType::NONE }, { u"sharp", AccidentalType::SHARP },
                     { u"flat", AccidentalType::FLAT }, { u"natural", AccidentalType::NATURAL },
                     { u"double sharp", AccidentalType::SHARP2 }, { u"double flat", AccidentalType::FLAT2 },
@@ -1146,7 +1146,7 @@ static void readVolta114(XmlReader& e, ReadContext& ctx, Volta* volta)
         } else if (tag == "subtype") {
             e.readInt();
         } else if (tag == "lineWidth") {
-            volta->setLineWidth(Millimetre(e.readDouble() * volta->spatium()));
+            volta->setLineWidth(Spatium(e.readDouble()));
             volta->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
         } else if (!readTextLineProperties114(e, ctx, volta)) {
             e.unknown();
@@ -1295,7 +1295,7 @@ static void readPedal114(XmlReader& e, ReadContext& ctx, Pedal* pedal)
             pedal->setEndHookHeight(Spatium(e.readDouble()));
             pedal->setPropertyFlags(Pid::END_HOOK_HEIGHT, PropertyFlags::UNSTYLED);
         } else if (tag == "lineWidth") {
-            pedal->setLineWidth(Millimetre(e.readDouble()));
+            pedal->setLineWidth(Spatium(e.readDouble()));
             pedal->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
         } else if (tag == "lineStyle") {
             read400::TRead::readProperty(pedal, e, ctx, Pid::LINE_STYLE);
@@ -1865,7 +1865,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 if (t == "no") {
                     l->setNo(e.readInt());
                     if (l->isEven()) {
-                        l->setEven(true);
                         l->initTextStyleType(TextStyleType::LYRICS_EVEN);
                     }
                 } else if (t == "syllabic") {
@@ -2232,13 +2231,11 @@ static bool readBoxProperties(XmlReader& e, ReadContext& ctx, Box* b)
 
 static void readBox(XmlReader& e, ReadContext& ctx, Box* b)
 {
-    b->setLeftMargin(0.0);
-    b->setRightMargin(0.0);
-    b->setTopMargin(0.0);
-    b->setBottomMargin(0.0);
+    b->setAutoSizeEnabled(false);      // didn't exist in Mu1
+
     b->setBoxHeight(Spatium(0));       // override default set in constructor
     b->setBoxWidth(Spatium(0));
-    b->setAutoSizeEnabled(false);
+    bool keepMargins = false;          // whether original margins have to be kept when reading old file
     System* bSystem = b->system() ? b->system() : ctx.dummy()->system();
 
     while (e.readNextStartElement()) {
@@ -2247,13 +2244,25 @@ static void readBox(XmlReader& e, ReadContext& ctx, Box* b)
             HBox* hb = Factory::createHBox(bSystem);
             readBox(e, ctx, hb);
             b->add(hb);
+            keepMargins = true;           // in old file, box nesting used outer box margins
         } else if (tag == "VBox") {
             VBox* vb = Factory::createVBox(bSystem);
             readBox(e, ctx, vb);
             b->add(vb);
+            keepMargins = true;           // in old file, box nesting used outer box margins
         } else if (!readBoxProperties(e, ctx, b)) {
             e.unknown();
         }
+    }
+
+    // with .msc versions prior to 1.17, box margins were only used when nesting another box inside this box:
+    // for backward compatibility set them to 0.0 in all other cases, the Mu1 defaults of 5.0 just look horrible in Mu3 and Mu4
+
+    if (ctx.mscVersion() <= 114 && (b->isHBox() || b->isVBox()) && !keepMargins) {
+        b->setLeftMargin(0.0);
+        b->setRightMargin(0.0);
+        b->setTopMargin(0.0); // 2.0 would look closest to Mu1 and Mu2, but 0.0 is the default since Mu2
+        b->setBottomMargin(0.0); // 1.0 would look closest to Mu1 and Mu2, but 0.0 is the default since Mu2
     }
 }
 
@@ -3049,7 +3058,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
     for (MeasureBase* mb = masterScore->first(); mb; mb = mb->next()) {
         if (mb->isVBox()) {
             VBox* b  = toVBox(mb);
-            Millimetre y = masterScore->style().styleMM(Sid::staffUpperBorder);
+            Spatium y = masterScore->style().styleS(Sid::staffUpperBorder);
             b->setBottomGap(y);
         }
     }

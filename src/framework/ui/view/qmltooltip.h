@@ -30,6 +30,7 @@
 
 #include "modularity/ioc.h"
 #include "ui/iinteractiveprovider.h"
+#include "ui/iuiconfiguration.h"
 
 namespace muse::ui {
 class QmlToolTip : public QObject, public Injectable, public async::Asyncable
@@ -37,6 +38,7 @@ class QmlToolTip : public QObject, public Injectable, public async::Asyncable
     Q_OBJECT
 
     Inject<IInteractiveProvider> interactiveProvider = { this };
+    Inject<IUiConfiguration> uiConfiguration = { this };
 
 public:
     explicit QmlToolTip(QObject* parent, const modularity::ContextPtr& iocCtx);

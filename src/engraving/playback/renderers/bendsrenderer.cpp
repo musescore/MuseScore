@@ -139,7 +139,7 @@ void BendsRenderer::renderMultibend(const Score* score, const Note* startNote, c
         }
 
         if (currNote->tieFor()) {
-            currBend = currNote->lastTiedNote()->bendFor();
+            currBend = currNote->lastTiedNote(false)->bendFor();
             appendBendTimeFactors(score, currBend, bendTimeFactorMap);
         }
 
@@ -217,7 +217,8 @@ RenderingContext BendsRenderer::buildRenderingContext(const Score* score, const 
                          initialCtx.timeSignatureFraction,
                          initialCtx.persistentArticulation,
                          initialCtx.commonArticulations,
-                         initialCtx.profile);
+                         initialCtx.profile,
+                         initialCtx.playbackCtx);
 
     if (note->isGrace()) {
         GraceNotesMetaParser::parse(note->chord(), ctx, ctx.commonArticulations);

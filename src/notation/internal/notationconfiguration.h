@@ -45,7 +45,8 @@ class NotationConfiguration : public INotationConfiguration, public muse::async:
 public:
     void init();
 
-    QColor anchorLineColor() const override;
+    QColor anchorColor() const override;
+    muse::async::Channel<QColor> anchorColorChanged() const override;
 
     QColor backgroundColor() const override;
     void setBackgroundColor(const QColor& color) override;
@@ -197,6 +198,12 @@ public:
     muse::ValCh<int> pianoKeyboardNumberOfKeys() const override;
     void setPianoKeyboardNumberOfKeys(int number) override;
 
+    bool useNewPercussionPanel() const override;
+    void setUseNewPercussionPanel(bool use) override;
+
+    bool autoShowPercussionPanel() const override;
+    void setAutoShowPercussionPanel(bool autoShow) override;
+
     muse::io::path_t styleFileImportPath() const override;
     void setStyleFileImportPath(const muse::io::path_t& path) override;
 
@@ -224,6 +231,7 @@ private:
     muse::async::Notification m_isPlayRepeatsChanged;
     muse::async::Notification m_isPlayChordSymbolsChanged;
     muse::ValCh<int> m_pianoKeyboardNumberOfKeys;
+    muse::async::Channel<QColor> m_anchorColorChanged;
 
     int m_styleDialogLastPageIndex = 0;
     int m_styleDialogLastSubPageIndex = 0;

@@ -49,6 +49,7 @@ public:
     };
 
     virtual String name() const = 0;
+    virtual String title() const = 0;
 
     virtual bool unstable() const = 0;
     virtual Version version() const = 0;

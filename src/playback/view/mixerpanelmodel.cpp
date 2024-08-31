@@ -98,7 +98,7 @@ int MixerPanelModel::rowCount(const QModelIndex&) const
 
 QHash<int, QByteArray> MixerPanelModel::roleNames() const
 {
-    static QHash<int, QByteArray> roles = {
+    static const QHash<int, QByteArray> roles = {
         { ChannelItemRole, "channelItem" }
     };
 

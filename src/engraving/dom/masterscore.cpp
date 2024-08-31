@@ -569,20 +569,22 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
 
         std::vector<TimeSig*> timeSigList;
         std::vector<KeySig*> keySigList;
-        std::vector<Clef*> clefList;
+        std::vector<Clef*> initClefList;
         std::vector<Clef*> previousClefList;
         std::list<Clef*> specialCaseClefs;
+        std::vector<Clef*> afterBarlineClefs;
         std::vector<BarLine*> previousBarLinesList;
 
         Measure* pm = newMeasure->prevMeasure();
 
         //
-        // remove clef, barlines, time and key signatures
+        // remove clefs, barlines, time and key signatures
         //
         bool headerKeySig = false;
         if (measureInsert) {
             // if inserting before first measure, always preserve clefs and signatures
             // at the begining of the score (move them back)
+
             if (pm && !options.moveSignaturesClef && !isBeginning) {
                 Segment* ps = pm->findSegment(SegmentType::Clef, tick);
                 if (ps && ps->enabled()) {
@@ -606,18 +608,32 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                             continue;
                         }
                         EngravingItem* e = s->element(staffIdx * VOICES);
-                        // if it's a clef, we only add if it's a header clef
-                        bool moveClef = s->isHeaderClefType() && e && e->isClef() && !toClef(e)->forInstrumentChange();
-                        // otherwise, we only add if e exists and is generated
-                        bool moveOther = e && !e->isClef() && (!e->generated() || tick.isZero());
                         bool specialCase = false;
-                        if (e && e->isClef() && !moveClef && isBeginning
-                            && toClef(e)->clefToBarlinePosition() != ClefToBarlinePosition::AFTER) {
-                            // special case:
-                            // there is a non-header clef at global tick 0, and we are inserting at the beginning of the score.
-                            // this clef will be moved with the measure it accompanies, but it will be moved before the barline.
-                            specialCase = true;
-                            moveClef = true;
+                        bool initClef = false;
+                        bool moveClef = false;
+                        bool moveOther = false;
+                        if (e && e->isClef()) {
+                            if (s->isHeaderClefType()) {
+                                // if it's a header clef, we only add if it's an init clef
+                                // (other header clefs are handled by undo(new InsertMeasures())
+                                initClef = isBeginning && !toClef(e)->forInstrumentChange();
+                                moveClef = initClef;
+                            } else {
+                                ClefToBarlinePosition clefPos = toClef(e)->clefToBarlinePosition();
+                                if (clefPos == ClefToBarlinePosition::AFTER) {
+                                    // non header clef at the begining of the measure
+                                    moveClef = true;
+                                } else if (isBeginning) {
+                                    // special case:
+                                    // there is a non-header clef at global tick 0, and we are inserting at the beginning of the score.
+                                    // this clef will be moved with the measure it accompanies, but it will be moved before the barline.
+                                    specialCase = true;
+                                    moveClef = true;
+                                }
+                            }
+                        } else {
+                            // otherwise, we only add if e is not generated
+                            moveOther = e && (!e->generated() || tick.isZero());
                         }
                         if (!moveClef && !moveOther) {
                             continue; // this item will remain with the old measure
@@ -648,13 +664,15 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                             TimeSig* ts = toTimeSig(e);
                             timeSigList.push_back(ts);
                             ee = e;
-                        }
-                        if (specialCase) {
-                            specialCaseClefs.push_back(toClef(e));
-                            ee = e;
-                        } else if (tick.isZero() && e->isClef()) {
+                        } else if (e->isClef()) {
                             Clef* clef = toClef(e);
-                            clefList.push_back(clef);
+                            if (specialCase) {
+                                specialCaseClefs.push_back(clef);
+                            } else if (initClef) {
+                                initClefList.push_back(clef);
+                            } else {
+                                afterBarlineClefs.push_back(toClef(e));
+                            }
                             ee = e;
                         }
                         if (ee) {
@@ -677,7 +695,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
             score->restoreInitialKeySigAndTimeSig();
         }
 
-        if (pm && !options.moveSignaturesClef) {
+        if (pm && !options.moveSignaturesClef && !options.ignoreBarLines) {
             Segment* pbs = pm->findSegment(SegmentType::EndBarLine, tick);
             if (pbs && pbs->enabled()) {
                 for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
@@ -718,9 +736,16 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
             }
             undoAddElement(nks);
         }
-        for (Clef* clef : clefList) {
+        for (Clef* clef : initClefList) {
             Clef* nClef = Factory::copyClef(*clef);
             Segment* s  = newMeasure->undoGetSegmentR(SegmentType::HeaderClef, Fraction(0, 1));
+            s->setHeader(true);
+            nClef->setParent(s);
+            undoAddElement(nClef);
+        }
+        for (Clef* clef : afterBarlineClefs) {
+            Clef* nClef = Factory::copyClef(*clef);
+            Segment* s  = newMeasure->undoGetSegmentR(SegmentType::Clef, Fraction(0, 1));
             s->setHeader(true);
             nClef->setParent(s);
             undoAddElement(nClef);

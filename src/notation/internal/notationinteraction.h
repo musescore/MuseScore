@@ -48,12 +48,12 @@ class QDrag;
 namespace mu::notation {
 class Notation;
 class NotationSelection;
-class NotationInteraction : public INotationInteraction, public muse::async::Asyncable
+class NotationInteraction : public INotationInteraction, public muse::Injectable, public muse::async::Asyncable
 {
-    INJECT(INotationConfiguration, configuration)
-    INJECT(ISelectInstrumentsScenario, selectInstrumentScenario)
-    INJECT(muse::IInteractive, interactive)
-    INJECT(engraving::rendering::ISingleRenderer, engravingRenderer)
+    muse::Inject<INotationConfiguration> configuration = { this };
+    muse::Inject<ISelectInstrumentsScenario> selectInstrumentScenario = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<engraving::rendering::ISingleRenderer> engravingRenderer = { this };
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
@@ -73,6 +73,7 @@ public:
 
     // Hit
     EngravingItem* hitElement(const muse::PointF& pos, float width) const override;
+    std::vector<EngravingItem*> hitElements(const muse::PointF& pos, float width) const override;
     Staff* hitStaff(const muse::PointF& pos) const override;
     const HitElementContext& hitElementContext() const override;
     void setHitElementContext(const HitElementContext& context) override;
@@ -135,6 +136,8 @@ public:
     void moveChordRestToStaff(MoveDirection d) override;
     void moveLyrics(MoveDirection d) override;
     void swapChordRest(MoveDirection d) override;
+    void toggleSnapToPrevious() override;
+    void toggleSnapToNext() override;
 
     // Text edit
     bool isTextSelected() const override;
@@ -163,6 +166,7 @@ public:
     bool isEditAllowed(QKeyEvent* event) override;
     void editElement(QKeyEvent* event) override;
     void endEditElement() override;
+    const EngravingItem* editedItem() const override;
 
     // Measure
     void splitSelectedMeasure() override;
@@ -201,10 +205,11 @@ public:
 
     void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
     bool transpose(const TransposeOptions& options) override;
-    void swapVoices(int voiceIndex1, int voiceIndex2) override;
+    void swapVoices(voice_idx_t voiceIndex1, voice_idx_t voiceIndex2) override;
     void addIntervalToSelectedNotes(int interval) override;
     void addFret(int fretIndex) override;
-    void changeSelectedNotesVoice(int voiceIndex) override;
+    void changeSelectedElementsVoice(voice_idx_t voiceIndex) override;
+    void changeSelectedElementsVoiceAssignment(VoiceAssignment voiceAssignment) override;
     void addAnchoredLineToSelectedNotes() override;
 
     void addTextToTopFrame(TextStyleType type) override;
@@ -275,6 +280,7 @@ public:
     void toggleSubScript() override;
     void toggleSuperScript() override;
     void toggleArticulation(mu::engraving::SymId) override;
+    void toggleOrnament(mu::engraving::SymId) override;
     void toggleAutoplace(bool) override;
 
     bool canInsertClef(mu::engraving::ClefType) const override;
@@ -306,12 +312,13 @@ private:
     void doEndDrag();
 
     bool doDropStandard();
-    bool doDropTextBaseAndSymbols(const PointF& pos, bool applyUserOffset);
+    bool doDropTextBaseAndSymbols(const muse::PointF& pos, bool applyUserOffset);
 
     void onElementDestroyed(EngravingItem* element);
 
     void doSelect(const std::vector<EngravingItem*>& elements, SelectType type, engraving::staff_idx_t staffIndex = 0);
     void selectElementsWithSameTypeOnSegment(mu::engraving::ElementType elementType, mu::engraving::Segment* segment);
+    void selectAndStartEditIfNeeded(EngravingItem* element);
 
     void notifyAboutDragChanged();
     void notifyAboutDropChanged();
@@ -339,7 +346,6 @@ private:
     bool needEndTextEdit() const;
 
     mu::engraving::Page* point2page(const muse::PointF& p, bool useNearestPage = false) const;
-    std::vector<EngravingItem*> hitElements(const muse::PointF& p_in, float w) const;
     std::vector<EngravingItem*> elementsAt(const muse::PointF& p) const;
     EngravingItem* elementAt(const muse::PointF& p) const;
 
@@ -347,7 +353,8 @@ private:
     // interesting to be selected at the end of the list
     static bool elementIsLess(const mu::engraving::EngravingItem* e1, const mu::engraving::EngravingItem* e2);
 
-    void updateAnchorLines();
+    void updateGripAnchorLines();
+    void updateDragAnchorLines();
     void setAnchorLines(const std::vector<muse::LineF>& anchorList);
     void resetAnchorLines();
     double currentScaling(muse::draw::Painter* painter) const;

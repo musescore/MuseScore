@@ -167,12 +167,14 @@ void GuiApp::perform()
                 m->onDelayedInit();
             }
 
+            startupScenario()->runOnSplashScreen();
+
             if (splashScreen) {
                 splashScreen->close();
                 delete splashScreen;
             }
 
-            startupScenario()->run();
+            startupScenario()->runAfterSplashScreen();
         }
     }, Qt::QueuedConnection);
 
@@ -234,6 +236,16 @@ void GuiApp::applyCommandLineOptions(const CmdOptions& options)
 {
     if (options.app.revertToFactorySettings) {
         appshellConfiguration()->revertToFactorySettings(options.app.revertToFactorySettings.value());
+    }
+
+    if (guitarProConfiguration()) {
+        if (options.guitarPro.experimental) {
+            guitarProConfiguration()->setExperimental(true);
+        }
+
+        if (options.guitarPro.linkedTabStaffCreated) {
+            guitarProConfiguration()->setLinkedTabStaffCreated(true);
+        }
     }
 
     startupScenario()->setStartupType(options.startup.type);

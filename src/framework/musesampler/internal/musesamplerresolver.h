@@ -31,12 +31,17 @@
 #include "imusesamplerinfo.h"
 
 namespace muse::musesampler {
-class MuseSamplerResolver : public muse::audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo
+class MuseSamplerResolver : public muse::audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo, public Injectable
 {
-    INJECT(IMuseSamplerConfiguration, configuration)
+    Inject<IMuseSamplerConfiguration> configuration = { this };
 
 public:
+
+    MuseSamplerResolver(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void init();
+    bool reloadMuseSampler();
 
     muse::audio::synth::ISynthesizerPtr resolveSynth(const muse::audio::TrackId trackId,
                                                      const muse::audio::AudioInputParams& params) const override;

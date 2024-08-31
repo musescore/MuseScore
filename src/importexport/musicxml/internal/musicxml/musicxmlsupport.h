@@ -221,11 +221,28 @@ struct MusicXMLInstrument {
      */
 };
 
+struct InferredPercInstr {
+    int pitch;
+    track_idx_t track;
+    String name;
+    Fraction tick;
+
+    InferredPercInstr(int pitch, track_idx_t track, String name, Fraction tick)
+        : pitch(pitch), track(track), name(name), tick(tick) {}
+
+    InferredPercInstr()
+        : pitch(-1), track(muse::nidx), name(u""), tick(Fraction(0, -1)) {}
+};
+
+typedef std::vector<InferredPercInstr> InferredPercList;
+
 /**
  A MusicXML drumset or set of instruments in a multi-instrument part.
  */
 
 typedef std::map<String, MusicXMLInstrument> MusicXMLInstruments;
+
+typedef std::map<String, std::pair<String, DurationType> > MetronomeTextMap;
 
 //---------------------------------------------------------
 //   MxmlSupport -- MusicXML import support functions

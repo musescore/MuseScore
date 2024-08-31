@@ -155,7 +155,6 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::CLEF_TYPE:        return static_cast<int>(value<ClefType>());
     case P_TYPE::CLEF_TO_BARLINE_POS: return static_cast<int>(value<ClefToBarlinePosition>());
     case P_TYPE::DYNAMIC_TYPE:     return static_cast<int>(value<DynamicType>());
-    case P_TYPE::DYNAMIC_RANGE:    return static_cast<int>(value<DynamicRange>());
     case P_TYPE::DYNAMIC_SPEED:    return static_cast<int>(value<DynamicSpeed>());
     case P_TYPE::LINE_TYPE:        return static_cast<int>(value<LineType>());
     case P_TYPE::HOOK_TYPE:        return static_cast<int>(value<HookType>());
@@ -167,7 +166,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::TIE_PLACEMENT:    return static_cast<int>(value<TiePlacement>());
     case P_TYPE::LYRICS_DASH_SYSTEM_START_TYPE: return static_cast<int>(value<LyricsDashSystemStart>());
 
-    case P_TYPE::VOICE_APPLICATION: return static_cast<int>(value<VoiceApplication>());
+    case P_TYPE::VOICE_ASSIGNMENT: return static_cast<int>(value<VoiceAssignment>());
     case P_TYPE::AUTO_ON_OFF:       return static_cast<int>(value<AutoOnOff>());
 
     // Other
@@ -260,7 +259,6 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::CLEF_TYPE:        return PropertyValue(ClefType(v.toInt()));
     case P_TYPE::CLEF_TO_BARLINE_POS: return PropertyValue(ClefToBarlinePosition(v.toInt()));
     case P_TYPE::DYNAMIC_TYPE:     return PropertyValue(DynamicType(v.toInt()));
-    case P_TYPE::DYNAMIC_RANGE:    return PropertyValue(DynamicRange(v.toInt()));
     case P_TYPE::DYNAMIC_SPEED:    return PropertyValue(DynamicSpeed(v.toInt()));
     case P_TYPE::LINE_TYPE:        return PropertyValue(LineType(v.toInt()));
     case P_TYPE::HOOK_TYPE:        return PropertyValue(HookType(v.toInt()));
@@ -271,7 +269,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::SLUR_STYLE_TYPE:  return PropertyValue(SlurStyleType(v.toInt()));
     case P_TYPE::TIE_PLACEMENT:    return PropertyValue(TiePlacement(v.toInt()));
     case P_TYPE::LYRICS_DASH_SYSTEM_START_TYPE:    return PropertyValue(LyricsDashSystemStart(v.toInt()));
-    case P_TYPE::VOICE_APPLICATION: return PropertyValue(VoiceApplication(v.toInt()));
+    case P_TYPE::VOICE_ASSIGNMENT: return PropertyValue(VoiceAssignment(v.toInt()));
     case P_TYPE::AUTO_ON_OFF:      return PropertyValue(AutoOnOff(v.toInt()));
 
     // Other

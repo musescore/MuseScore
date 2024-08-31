@@ -46,36 +46,56 @@ static const std::string PNG_SUFFIX = "png";
 static const std::string SVG_SUFFIX = "svg";
 
 Ret ConverterController::batchConvert(const muse::io::path_t& batchJobFile, const muse::io::path_t& stylePath, bool forceMode,
-                                      const String& soundProfile)
+                                      const String& soundProfile, const muse::UriQuery& extensionUri, muse::ProgressPtr progress)
 {
     TRACEFUNC;
+
+    if (progress) {
+        progress->started.notify();
+    }
 
     RetVal<BatchJob> batchJob = parseBatchJob(batchJobFile);
     if (!batchJob.ret) {
         LOGE() << "failed parse batch job file, err: " << batchJob.ret.toString();
+        if (progress) {
+            progress->finished.send(ProgressResult(batchJob.ret));
+        }
         return batchJob.ret;
     }
 
     StringList errors;
 
+    int64_t current = 0;
+    int64_t total = batchJob.val.size();
     for (const Job& job : batchJob.val) {
-        Ret ret = fileConvert(job.in, job.out, stylePath, forceMode, soundProfile);
+        if (progress) {
+            ++current;
+            progress->progressChanged.send(current, total, job.in.toStdString());
+        }
+
+        Ret ret = fileConvert(job.in, job.out, stylePath, forceMode, soundProfile, extensionUri);
         if (!ret) {
             errors.emplace_back(String(u"failed convert, err: %1, in: %2, out: %3")
                                 .arg(String::fromStdString(ret.toString())).arg(job.in.toString()).arg(job.out.toString()));
         }
     }
 
+    Ret ret;
     if (!errors.empty()) {
-        return make_ret(Err::ConvertFailed, errors.join(u"\n").toStdString());
+        ret = make_ret(Err::ConvertFailed, errors.join(u"\n").toStdString());
+    } else {
+        ret = make_ret(Ret::Code::Ok);
     }
 
-    return make_ret(Ret::Code::Ok);
+    if (progress) {
+        progress->finished.send(ProgressResult(ret));
+    }
+
+    return ret;
 }
 
 Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& stylePath,
-                                     bool forceMode,
-                                     const String& soundProfile)
+                                     bool forceMode, const String& soundProfile, const muse::UriQuery& extensionUri)
 {
     TRACEFUNC;
 
@@ -104,19 +124,29 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
 
     globalContext()->setCurrentProject(notationProject);
 
-    if (suffix == engraving::MSCZ || suffix == engraving::MSCX || suffix == engraving::MSCS) {
-        return notationProject->save(out);
-    }
-
-    if (isConvertPageByPage(suffix)) {
-        ret = convertPageByPage(writer, notationProject->masterNotation()->notation(), out);
+    // use a extension for convert
+    if (extensionUri.isValid()) {
+        ret = convertByExtension(writer, notationProject->masterNotation()->notation(), out, extensionUri);
         if (!ret) {
-            LOGE() << "Failed to convert page by page, err: " << ret.toString();
+            LOGE() << "Failed to convert by extension, err: " << ret.toString();
         }
-    } else {
-        ret = convertFullNotation(writer, notationProject->masterNotation()->notation(), out);
-        if (!ret) {
-            LOGE() << "Failed to convert full notation, err: " << ret.toString();
+    }
+    // standart convert
+    else {
+        if (suffix == engraving::MSCZ || suffix == engraving::MSCX || suffix == engraving::MSCS) {
+            return notationProject->save(out);
+        }
+
+        if (isConvertPageByPage(suffix)) {
+            ret = convertPageByPage(writer, notationProject->masterNotation()->notation(), out);
+            if (!ret) {
+                LOGE() << "Failed to convert page by page, err: " << ret.toString();
+            }
+        } else {
+            ret = convertFullNotation(writer, notationProject->masterNotation()->notation(), out);
+            if (!ret) {
+                LOGE() << "Failed to convert full notation, err: " << ret.toString();
+            }
         }
     }
 
@@ -183,7 +213,7 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
         return io::Dir::fromNativeSeparators(path).toQString();
     };
 
-    for (const QJsonValue v : arr) {
+    for (const QJsonValue& v : arr) {
         QJsonObject obj = v.toObject();
 
         Job job;
@@ -197,6 +227,32 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
 
     rv.ret = make_ret(Ret::Code::Ok);
     return rv;
+}
+
+Ret ConverterController::convertByExtension(INotationWriterPtr writer, INotationPtr notation, const muse::io::path_t& out,
+                                            const muse::UriQuery& extensionUri)
+{
+    //! NOTE First we do the extension, it can modify the notation (score)
+    Ret ret = extensionsProvider()->perform(extensionUri);
+    if (!ret) {
+        return ret;
+    }
+
+    File file(out);
+    if (!file.open(File::WriteOnly)) {
+        return make_ret(Err::OutFileFailedOpen);
+    }
+
+    file.setMeta("file_path", out.toStdString());
+    ret = writer->write(notation, file);
+    if (!ret) {
+        LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
+        return make_ret(Err::OutFileFailedWrite);
+    }
+
+    file.close();
+
+    return make_ret(Ret::Code::Ok);
 }
 
 bool ConverterController::isConvertPageByPage(const std::string& suffix) const

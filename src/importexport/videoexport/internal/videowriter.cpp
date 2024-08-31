@@ -210,7 +210,7 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
 
     const Color CURSOR_COLOR = Color(0, 0, 255, 50);
 
-    PlaybackCursor cursor;
+    PlaybackCursor cursor(application()->iocContext());
     cursor.setNotation(masterNotation->notation());
 
     for (int f = 0; f < frameCount; f++) {

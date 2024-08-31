@@ -69,7 +69,6 @@ public:
     InstrumentTrackId chordSymbolsTrackId(const ID& partId) const;
     bool isChordSymbolsTrack(const InstrumentTrackId& trackId) const;
 
-    bool hasSoundFlags() const;
     bool hasSoundFlags(const InstrumentTrackId& trackId) const;
 
     const muse::mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
@@ -141,6 +140,8 @@ private:
 
     muse::mpe::ArticulationsProfilePtr defaultActiculationProfile(const InstrumentTrackId& trackId) const;
 
+    PlaybackContextPtr playbackCtx(const InstrumentTrackId& trackId);
+
     Score* m_score = nullptr;
     bool m_expandRepeats = true;
     bool m_playChordSymbols = true;
@@ -148,7 +149,7 @@ private:
     PlaybackEventsRenderer m_renderer;
     PlaybackSetupDataResolver m_setupResolver;
 
-    std::unordered_map<InstrumentTrackId, PlaybackContext> m_playbackCtxMap;
+    std::unordered_map<InstrumentTrackId, PlaybackContextPtr> m_playbackCtxMap;
     std::unordered_map<InstrumentTrackId, muse::mpe::PlaybackData> m_playbackDataMap;
 
     muse::async::Notification m_dataChanged;

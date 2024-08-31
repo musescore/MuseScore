@@ -53,6 +53,7 @@ public:
 
     // Hit
     virtual EngravingItem* hitElement(const muse::PointF& pos, float width) const = 0;
+    virtual std::vector<EngravingItem*> hitElements(const muse::PointF& pos, float width) const = 0;
     virtual Staff* hitStaff(const muse::PointF& pos) const = 0;
 
     struct HitElementContext
@@ -130,6 +131,8 @@ public:
     virtual void nudge(MoveDirection d, bool quickly) = 0;
     virtual void moveChordRestToStaff(MoveDirection d) = 0;
     virtual void swapChordRest(MoveDirection d) = 0;
+    virtual void toggleSnapToPrevious() = 0;
+    virtual void toggleSnapToNext() = 0;
 
     // Text edit
     virtual bool isTextSelected() const = 0;
@@ -161,6 +164,7 @@ public:
     virtual bool isEditAllowed(QKeyEvent* event) = 0;
     virtual void editElement(QKeyEvent* event) = 0;
     virtual void endEditElement() = 0;
+    virtual const EngravingItem* editedItem() const = 0;
 
     virtual void splitSelectedMeasure() = 0;
     virtual void joinSelectedMeasures() = 0;
@@ -198,10 +202,11 @@ public:
 
     virtual void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) = 0;
     virtual bool transpose(const TransposeOptions& options) = 0;
-    virtual void swapVoices(int voiceIndex1, int voiceIndex2) = 0;
+    virtual void swapVoices(voice_idx_t voiceIndex1, voice_idx_t voiceIndex2) = 0;
     virtual void addIntervalToSelectedNotes(int interval) = 0;
     virtual void addFret(int fretIndex) = 0;
-    virtual void changeSelectedNotesVoice(int voiceIndex) = 0;
+    virtual void changeSelectedElementsVoice(voice_idx_t voiceIndex) = 0;
+    virtual void changeSelectedElementsVoiceAssignment(VoiceAssignment voiceAssignment) = 0;
     virtual void addAnchoredLineToSelectedNotes() = 0;
 
     virtual void addTextToTopFrame(TextStyleType type) = 0;
@@ -278,6 +283,7 @@ public:
     virtual void insertClef(mu::engraving::ClefType) = 0;
 
     virtual void toggleArticulation(mu::engraving::SymId) = 0;
+    virtual void toggleOrnament(mu::engraving::SymId) = 0;
     virtual void changeAccidental(mu::engraving::AccidentalType) = 0;
     virtual void transposeSemitone(int) = 0;
     virtual void transposeDiatonicAlterations(mu::engraving::TransposeDirection) = 0;

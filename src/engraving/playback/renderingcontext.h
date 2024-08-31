@@ -32,6 +32,7 @@
 
 #include "playback/utils/arrangementutils.h"
 #include "playback/utils/pitchutils.h"
+#include "playback/playbackcontext.h"
 
 namespace mu::engraving {
 struct RenderingContext {
@@ -50,6 +51,8 @@ struct RenderingContext {
     muse::mpe::ArticulationMap commonArticulations;
     muse::mpe::ArticulationsProfilePtr profile;
 
+    const PlaybackContextPtr playbackCtx;
+
     RenderingContext() = default;
 
     explicit RenderingContext(const muse::mpe::timestamp_t timestamp,
@@ -62,7 +65,8 @@ struct RenderingContext {
                               const TimeSigFrac& timeSig,
                               const muse::mpe::ArticulationType persistentArticulationType,
                               const muse::mpe::ArticulationMap& articulations,
-                              const muse::mpe::ArticulationsProfilePtr profilePtr)
+                              const muse::mpe::ArticulationsProfilePtr profilePtr,
+                              const PlaybackContextPtr playbackCtxPtr)
         : nominalTimestamp(timestamp),
         nominalDuration(duration),
         nominalDynamicLevel(dynamicLevel),
@@ -74,12 +78,14 @@ struct RenderingContext {
         timeSignatureFraction(timeSig),
         persistentArticulation(persistentArticulationType),
         commonArticulations(articulations),
-        profile(profilePtr)
+        profile(profilePtr),
+        playbackCtx(playbackCtxPtr)
     {}
 
     bool isValid() const
     {
         return profile
+               && playbackCtx
                && beatsPerSecond > 0
                && nominalDuration > 0
                && nominalDurationTicks > 0;
@@ -101,6 +107,7 @@ struct NominalNoteCtx {
     muse::mpe::timestamp_t timestamp = 0;
     muse::mpe::duration_t duration = 0;
     BeatsPerSecond tempo = 0;
+    muse::mpe::dynamic_level_t dynamicLevel = 0;
     float userVelocityFraction = 0.f;
 
     muse::mpe::pitch_level_t pitchLevel = 0;
@@ -113,20 +120,13 @@ struct NominalNoteCtx {
         timestamp(ctx.nominalTimestamp),
         duration(ctx.nominalDuration),
         tempo(ctx.beatsPerSecond),
+        dynamicLevel(ctx.nominalDynamicLevel),
         userVelocityFraction(note->userVelocityFraction()),
         pitchLevel(notePitchLevel(note->playingTpc(),
                                   note->playingOctave(),
                                   note->playingTuning())),
         chordCtx(ctx)
     {
-        if (muse::RealIsEqual(userVelocityFraction, 0.f)) {
-            return;
-        }
-
-        muse::mpe::dynamic_level_t userDynamicLevel = userVelocityFraction * muse::mpe::MAX_DYNAMIC_LEVEL;
-        chordCtx.nominalDynamicLevel = std::clamp(userDynamicLevel,
-                                                  muse::mpe::MIN_DYNAMIC_LEVEL,
-                                                  muse::mpe::MAX_DYNAMIC_LEVEL);
     }
 };
 
@@ -138,7 +138,7 @@ inline bool isNotePlayable(const Note* note, const muse::mpe::ArticulationMap& a
 
     const Tie* tie = note->tieBack();
 
-    if (tie) {
+    if (tie && tie->playSpanner()) {
         if (!tie->startNote() || !tie->endNote()) {
             return false;
         }
@@ -169,7 +169,7 @@ inline muse::mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx)
                                 static_cast<muse::mpe::voice_layer_idx_t>(ctx.voiceIdx),
                                 static_cast<muse::mpe::staff_layer_idx_t>(ctx.staffIdx),
                                 ctx.pitchLevel,
-                                ctx.chordCtx.nominalDynamicLevel,
+                                ctx.dynamicLevel,
                                 ctx.chordCtx.commonArticulations,
                                 ctx.tempo.val,
                                 ctx.userVelocityFraction);
@@ -182,7 +182,7 @@ inline muse::mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const muse::mpe
                                 static_cast<muse::mpe::voice_layer_idx_t>(ctx.voiceIdx),
                                 static_cast<muse::mpe::staff_layer_idx_t>(ctx.staffIdx),
                                 ctx.pitchLevel,
-                                ctx.chordCtx.nominalDynamicLevel,
+                                ctx.dynamicLevel,
                                 ctx.chordCtx.commonArticulations,
                                 ctx.tempo.val,
                                 ctx.userVelocityFraction,
@@ -211,7 +211,7 @@ inline muse::mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const muse::mpe
                                 static_cast<muse::mpe::voice_layer_idx_t>(ctx.voiceIdx),
                                 static_cast<muse::mpe::staff_layer_idx_t>(ctx.staffIdx),
                                 ctx.pitchLevel + pitchLevelOffset,
-                                ctx.chordCtx.nominalDynamicLevel,
+                                ctx.dynamicLevel,
                                 ctx.chordCtx.commonArticulations,
                                 ctx.tempo.val,
                                 ctx.userVelocityFraction);

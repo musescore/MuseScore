@@ -258,9 +258,6 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::DYNAMIC_TYPE: {
         element(name, TConv::toXml(data.value<DynamicType>()));
     } break;
-    case P_TYPE::DYNAMIC_RANGE: {
-        element(name, TConv::toXml(data.value<DynamicRange>()));
-    } break;
     case P_TYPE::DYNAMIC_SPEED: {
         element(name, TConv::toXml(data.value<DynamicSpeed>()));
     } break;
@@ -294,11 +291,14 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::TIE_PLACEMENT: {
         element(name, TConv::toXml(data.value<TiePlacement>()));
     } break;
-    case P_TYPE::VOICE_APPLICATION: {
-        element(name, TConv::toXml(data.value<VoiceApplication>()));
+    case P_TYPE::VOICE_ASSIGNMENT: {
+        element(name, TConv::toXml(data.value<VoiceAssignment>()));
     } break;
     case P_TYPE::AUTO_ON_OFF: {
         element(name, TConv::toXml(data.value<AutoOnOff>()));
+    } break;
+    case P_TYPE::INT_VEC: {
+        element(name, TConv::toXml(data.value<std::vector<int> >()));
     } break;
     default: {
         UNREACHABLE; //! TODO

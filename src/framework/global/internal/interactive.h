@@ -29,12 +29,14 @@
 #include "ui/imainwindow.h"
 
 #include "../iinteractive.h"
+#include "shortcuts/ishortcutsregister.h"
 
 namespace muse {
 class Interactive : public IInteractive, public Injectable, public async::Asyncable
 {
-    Inject<muse::ui::IInteractiveProvider> provider{ this };
-    Inject<muse::ui::IMainWindow> mainWindow{ this };
+    Inject<muse::ui::IInteractiveProvider> provider = { this };
+    Inject<muse::ui::IMainWindow> mainWindow = { this };
+    Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
 
@@ -91,6 +93,7 @@ public:
 
     // color
     QColor selectColor(const QColor& color = Qt::white, const QString& title = "") override;
+    bool isSelectColorOpened() const override;
 
     // custom
     RetVal<Val> open(const std::string& uri) const override;

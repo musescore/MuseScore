@@ -34,7 +34,10 @@ public:
 
     void regApiCreator(const std::string& module, const std::string& api, ICreator* c) override;
     void regApiSingltone(const std::string& module, const std::string& api, ApiObject* o) override;
-    ApiObject* createApi(const std::string& api, IApiEngine* e) const override;
+    std::pair<ApiObject*, bool /*is need delete*/> createApi(const std::string& api, IApiEngine* e) const override;
+
+    // dev
+    Dump dump() const override;
 
 private:
     struct ApiCreator {

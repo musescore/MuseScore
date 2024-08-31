@@ -108,6 +108,7 @@ void UpdateModule::onInit(const IApplication::RunMode& mode)
     }
 
     m_configuration->init();
+    m_appUpdateService->init();
     m_actionController->init();
 }
 

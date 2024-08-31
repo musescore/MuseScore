@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.20">
-  <programVersion>4.2.0</programVersion>
+<museScore version="4.40">
+  <programVersion>4.4.0</programVersion>
   <programRevision></programRevision>
-  <LastEID>2149</LastEID>
+  <LastEID>3251</LastEID>
   <Score>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
@@ -94,27 +94,97 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <startRepeat/>
-        <endRepeat>2</endRepeat>
         <voice>
           <TimeSig>
-            <eid>47244640280</eid>
+            <eid>9616431775769</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Dynamic>
+            <subtype>p</subtype>
+            <velocity>49</velocity>
+            <eid>11879879540772</eid>
+            </Dynamic>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>0</subtype>
+              <eid>13052405612638</eid>
+              <Segment>
+                <subtype>0</subtype>
+                <offset x="0" y="1.75"/>
+                <off2 x="1.16325" y="0"/>
+                <eid>13056700579905</eid>
+                </Segment>
+              </HairPin>
+            <next>
+              <location>
+                <measures>1</measures>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <eid>9715216023667</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>9710921056276</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>9745280794739</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>9740985827348</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>9783935500403</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>9779640533012</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>9814000271475</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>9809705304084</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <startRepeat/>
+        <endRepeat>2</endRepeat>
+        <voice>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
             <eid>8766028251171</eid>
             </Dynamic>
           <Spanner type="HairPin">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                </location>
+              </prev>
+            </Spanner>
+          <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
+              <direction>down</direction>
               <eid>5549097746526</eid>
               <Segment>
                 <subtype>0</subtype>
                 <offset x="0" y="3.5"/>
-                <off2 x="-6.53595" y="0"/>
+                <off2 x="-0.3776" y="0"/>
                 <eid>7065221201984</eid>
                 </Segment>
               </HairPin>
@@ -155,6 +225,7 @@
             <subtype>fff</subtype>
             <velocity>126</velocity>
             <eid>8774618185763</eid>
+            <visible>0</visible>
             </Dynamic>
           <Spanner type="HairPin">
             <prev>
@@ -184,6 +255,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
+              <direction>down</direction>
               <eid>408021893214</eid>
               <Segment>
                 <subtype>0</subtype>

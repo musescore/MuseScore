@@ -60,13 +60,10 @@ public:
     virtual Color warningSelectedColor() const = 0;
     virtual Color criticalColor() const = 0;
     virtual Color criticalSelectedColor() const = 0;
-    virtual Color formattingMarksColor() const = 0;
     virtual Color thumbnailBackgroundColor() const = 0;
     virtual Color noteBackgroundColor() const = 0;
     virtual Color fontPrimaryColor() const = 0;
-
-    virtual Color timeTickAnchorColorLighter() const = 0;
-    virtual Color timeTickAnchorColorDarker() const = 0;
+    virtual Color voiceColor(voice_idx_t voiceIdx) const = 0;
 
     virtual double guiScaling() const = 0;
 
@@ -80,6 +77,12 @@ public:
 
     virtual bool dynamicsApplyToAllVoices() const = 0;
     virtual void setDynamicsApplyToAllVoices(bool v) = 0;
+
+    virtual Color formattingColor() const = 0;
+    virtual muse::async::Channel<Color> formattingColorChanged() const = 0;
+
+    virtual Color unlinkedColor() const = 0;
+    virtual muse::async::Channel<Color> unlinkedColorChanged() const = 0;
 
     virtual Color highlightSelectionColor(voice_idx_t voiceIndex = 0) const = 0;
 
@@ -115,6 +118,8 @@ public:
 
     /// these configurations will be removed after solving https://github.com/musescore/MuseScore/issues/14294
     virtual bool guitarProImportExperimental() const = 0;
+    virtual bool useStretchedBends() const = 0;
+    virtual bool shouldAddParenthesisOnStandardStaff() const = 0;
     virtual bool negativeFretsAllowed() const = 0;
     virtual bool crossNoteHeadAlwaysBlack() const = 0;
     virtual bool enableExperimentalFretCircle() const = 0;

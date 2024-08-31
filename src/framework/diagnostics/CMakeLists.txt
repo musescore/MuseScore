@@ -84,15 +84,15 @@ if (MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT)
     )
 
     set(MODULE_INCLUDE ${MODULE_INCLUDE}
-        ${PROJECT_SOURCE_DIR}/thirdparty/google_crashpad_client
-        ${PROJECT_SOURCE_DIR}/thirdparty/google_crashpad_client/third_party/mini_chromium/mini_chromium
+        ${CMAKE_CURRENT_LIST_DIR}/thirdparty/google_crashpad_client
+        ${CMAKE_CURRENT_LIST_DIR}/thirdparty/google_crashpad_client/third_party/mini_chromium/mini_chromium
     )
 
     set(MODULE_DEF ${MODULE_DEF}
         -DMUSE_MODULE_DIAGNOSTICS_CRASHREPORT_URL="${MUSE_MODULE_DIAGNOSTICS_CRASHREPORT_URL}"
     )
 
-    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/google_crashpad_client google_crashpad_client)
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/google_crashpad_client google_crashpad_client)
 
     set(MODULE_LINK ${MODULE_LINK}
         gcrashpad
@@ -114,19 +114,19 @@ if (MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT)
             endif()
         endif()
 
-        install(PROGRAMS ${MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH} DESTINATION bin)
+        install(PROGRAMS ${MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH} DESTINATION ${INSTALL_SUBDIR})
     elseif(OS_IS_WIN)
         if (NOT MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH)
             set(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/windows/x86-64/crashpad_handler.exe)
         endif()
 
-        install(PROGRAMS ${MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH} DESTINATION bin)
+        install(PROGRAMS ${MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH} DESTINATION ${INSTALL_SUBDIR})
     elseif(OS_IS_MAC)
         if (NOT MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH)
-            set(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/macos/x86-64/crashpad_handler)
+            set(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH ${CPAD_ROOT_PATH}/macos/crashpad_handler)
         endif()
 
-        install(PROGRAMS ${MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH} DESTINATION ${Mscore_SHARE_NAME}Contents/MacOS)
+        install(PROGRAMS ${MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH} DESTINATION ${INSTALL_SUBDIR})
     endif()
 endif() # MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT
 # ----------------

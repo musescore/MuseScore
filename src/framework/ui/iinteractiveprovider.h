@@ -60,6 +60,10 @@ public:
                                                 bool confirmOverwrite) = 0;
     virtual RetVal<io::path_t> selectDirectory(const std::string& title, const io::path_t& dir) = 0;
 
+    // color
+    virtual RetVal<QColor> selectColor(const QColor& color = Qt::white, const QString& title = "") = 0;
+    virtual bool isSelectColorOpened() const = 0;
+
     virtual RetVal<Val> open(const UriQuery& uri) = 0;
     virtual RetVal<bool> isOpened(const Uri& uri) const = 0;
     virtual RetVal<bool> isOpened(const UriQuery& uri) const = 0;

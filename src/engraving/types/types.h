@@ -331,7 +331,8 @@ enum class AutoOnOff : char {
     OFF
 };
 
-enum class VoiceApplication {
+//! Note: from lowest to highest priority
+enum class VoiceAssignment {
     ALL_VOICE_IN_INSTRUMENT,
     ALL_VOICE_IN_STAFF,
     CURRENT_VOICE_ONLY
@@ -606,6 +607,8 @@ enum class DynamicType : char {
     SFZ,
     SFF,
     SFFZ,
+    SFFF,
+    SFFFZ,
     SFP,
     SFPP,
     RFZ,
@@ -619,10 +622,23 @@ enum class DynamicType : char {
     LAST
 };
 
-// P_TYPE::DYNAMIC_RANGE
+//! OBSOLETE. Use VoiceAssignment
 enum class DynamicRange : char {
     STAFF, PART, SYSTEM
 };
+
+inline VoiceAssignment dynamicRangeToVoiceAssignment(DynamicRange range)
+{
+    switch (range) {
+    case DynamicRange::STAFF:
+        return VoiceAssignment::ALL_VOICE_IN_STAFF;
+    case DynamicRange::PART:
+    case DynamicRange::SYSTEM:
+        break;
+    }
+
+    return VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
+}
 
 // P_TYPE::DYNAMIC_SPEED
 enum class DynamicSpeed : char {
@@ -745,6 +761,8 @@ enum class TextStyleType {
     INSTRUMENT_CHANGE,
     HEADER,
     FOOTER,
+    COPYRIGHT,
+    PAGE_NUMBER,
 
     // Measure-oriented styles
     MEASURE_NUMBER,
@@ -779,6 +797,8 @@ enum class TextStyleType {
     RH_GUITAR_FINGERING,
     STRING_NUMBER,
     STRING_TUNINGS,
+    FRET_DIAGRAM_FINGERING,
+    FRET_DIAGRAM_FRET_NUMBER,
     HARP_PEDAL_DIAGRAM,
     HARP_PEDAL_TEXT_DIAGRAM,
 

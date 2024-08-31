@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_FONTFACEFT_H
-#define MUSE_DRAW_FONTFACEFT_H
+#pragma once
 
 #include "ifontface.h"
 
@@ -44,6 +43,7 @@ public:
     f26dot6_t ascent() const override;
     f26dot6_t descent() const override;
     f26dot6_t xHeight() const override;
+    f26dot6_t capHeight() const override;
 
     std::vector<GlyphPos> glyphs(const char32_t* text, int text_length) const override;
     glyph_idx_t glyphIndex(char32_t ucs4) const override;
@@ -53,7 +53,9 @@ public:
     FBBox glyphBbox(glyph_idx_t idx) const override;
     f26dot6_t glyphAdvance(glyph_idx_t idx) const override;
 
+#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
     const msdfgen::Shape& glyphShape(glyph_idx_t idx) const override;
+#endif
 
 private:
 
@@ -63,8 +65,8 @@ private:
     FaceKey m_key;
     bool m_isSymbolMode = false;
     FData* m_data = nullptr;
+#ifndef MUSE_MODULE_DRAW_USE_QTTEXTDRAW
     mutable std::unordered_map<glyph_idx_t, msdfgen::Shape> m_cache;
+#endif
 };
 }
-
-#endif // MUSE_DRAW_FONTFACEFT_H

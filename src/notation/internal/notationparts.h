@@ -101,6 +101,7 @@ private:
     Staff* staffModifiable(const muse::ID& staffId) const;
 
     std::vector<Staff*> staves(const muse::IDList& stavesIds) const;
+    std::vector<engraving::staff_idx_t> staffIndices(const muse::IDList& stavesIds) const;
     std::vector<Part*> parts(const muse::IDList& partsIds) const;
 
     mu::engraving::InstrumentChange* findInstrumentChange(const Part* part, const Fraction& tick) const;

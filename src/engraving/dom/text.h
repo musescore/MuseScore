@@ -40,10 +40,14 @@ public:
     Text* clone() const override { return new Text(*this); }
 
     PropertyValue propertyDefault(Pid id) const override;
+    PropertyValue getProperty(Pid id) const override;
 
     static String readXmlText(XmlReader& r, Score* score);
 
     void setLayoutToParentWidth(bool v) { m_layoutToParentWidth = v; }
+
+    bool hasVoiceAssignmentProperties() const override;
+    VoiceAssignment voiceAssignment() const;
 
 private:
     friend class Factory;

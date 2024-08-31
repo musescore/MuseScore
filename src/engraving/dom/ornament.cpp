@@ -89,6 +89,15 @@ void Ornament::remove(EngravingItem* e)
     }
 }
 
+muse::TranslatableString Ornament::typeUserName() const
+{
+    if (textType() != ArticulationTextType::NO_TEXT) {
+        return TranslatableString("engraving", "Ornament text");
+    }
+
+    return TranslatableString("engraving", "Ornament");
+}
+
 void Ornament::setTrack(track_idx_t val)
 {
     for (Note* note : m_notesAboveAndBelow) {

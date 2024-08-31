@@ -33,6 +33,11 @@ using namespace mu::engraving::apiv1;
 Enum::Enum(const QMetaEnum& _enum, QObject* parent)
     : QQmlPropertyMap(this, parent)
 {
+    add(_enum);
+}
+
+void Enum::add(const QMetaEnum& _enum)
+{
     IF_ASSERT_FAILED(_enum.isValid()) {
         return;
     }

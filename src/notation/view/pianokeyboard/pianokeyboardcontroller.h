@@ -30,14 +30,12 @@
 #include "pianokeyboardtypes.h"
 
 namespace mu::notation {
-class PianoKeyboardController : public muse::async::Asyncable
+class PianoKeyboardController : public muse::Injectable, public muse::async::Asyncable
 {
-    INJECT(context::IGlobalContext, context)
+    muse::Inject<context::IGlobalContext> context = { this };
 
 public:
-    PianoKeyboardController() = default;
-
-    void init();
+    PianoKeyboardController(const muse::modularity::ContextPtr& iocCtx);
 
     std::optional<piano_key_t> pressedKey() const;
     void setPressedKey(std::optional<piano_key_t> key);

@@ -223,10 +223,12 @@ public:
     bool isBesideTabStaff() const { return m_isBesideTabStaff; }
     void setIsBesideTabStaff(bool val) { m_isBesideTabStaff = val; }
 
-    const std::vector<int>& notes() const { return m_notes; }
-    std::vector<int>& notes() { return m_notes; }
+    const std::vector<NotePosition>& notePositions() const { return m_notePositions; }
+    std::vector<NotePosition>& notePositions() { return m_notePositions; }
 
     const Chord* findChordWithCustomStemDirection() const;
+
+    const BeamSegment* topLevelSegmentForElement(const ChordRest* element) const;
 
     inline int directionIdx() const { return (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1; }
 
@@ -276,7 +278,7 @@ private:
     bool m_noSlope = false;
     real_t m_slope = 0.0;
 
-    std::vector<int> m_notes;
+    std::vector<NotePosition> m_notePositions;
     std::vector<TremAnchor> m_tremAnchors;
 };
 } // namespace mu::engraving

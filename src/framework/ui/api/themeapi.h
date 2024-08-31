@@ -42,6 +42,8 @@ class ThemeApi : public api::ApiObject, public async::Asyncable
 
     Q_PROPERTY(QColor backgroundPrimaryColor READ backgroundPrimaryColor NOTIFY themeChanged)
     Q_PROPERTY(QColor backgroundSecondaryColor READ backgroundSecondaryColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor backgroundTertiaryColor READ backgroundTertiaryColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor backgroundQuarternaryColor READ backgroundQuarternaryColor NOTIFY themeChanged)
     Q_PROPERTY(QColor popupBackgroundColor READ popupBackgroundColor NOTIFY themeChanged)
     Q_PROPERTY(QColor textFieldColor READ textFieldColor NOTIFY themeChanged)
     Q_PROPERTY(QColor strokeColor READ strokeColor NOTIFY themeChanged)
@@ -86,6 +88,8 @@ class ThemeApi : public api::ApiObject, public async::Asyncable
 
     Q_PROPERTY(int flickableMaxVelocity READ flickableMaxVelocity CONSTANT)
 
+    Q_PROPERTY(int tooltipDelay READ tooltipDelay CONSTANT)
+
 public:
 
     Inject<ui::IUiConfiguration> configuration = { this };
@@ -101,6 +105,8 @@ public:
 
     QColor backgroundPrimaryColor() const;
     QColor backgroundSecondaryColor() const;
+    QColor backgroundTertiaryColor() const;
+    QColor backgroundQuarternaryColor() const;
     QColor popupBackgroundColor() const;
     QColor textFieldColor() const;
     QColor accentColor() const;
@@ -142,6 +148,8 @@ public:
 
     int flickableMaxVelocity() const;
 
+    int tooltipDelay() const;
+
 signals:
     void themeChanged();
 
@@ -179,6 +187,8 @@ private:
 
     QColor m_backgroundPrimaryColor;
     QColor m_backgroundSecondaryColor;
+    QColor m_backgroundTertiaryColor;
+    QColor m_backgroundQuarternaryColor;
     QColor m_popupBackgroundColor;
     QColor m_textFieldColor;
     QColor m_accentColor;

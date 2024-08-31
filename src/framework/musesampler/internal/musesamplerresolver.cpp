@@ -92,6 +92,15 @@ void MuseSamplerResolver::init()
     doInit(configuration()->fallbackLibraryPath());
 }
 
+bool MuseSamplerResolver::reloadMuseSampler()
+{
+    if (!m_libHandler) {
+        return false;
+    }
+
+    return m_libHandler->reloadAllInstruments() == ms_Result_OK;
+}
+
 bool MuseSamplerResolver::doInit(const io::path_t& libPath)
 {
     m_libHandler = std::make_shared<MuseSamplerLibHandler>(libPath);
@@ -104,6 +113,8 @@ bool MuseSamplerResolver::doInit(const io::path_t& libPath)
     if (!ok) {
         LOGE() << "Incompatible MuseSampler library; ignoring";
         m_libHandler.reset();
+    } else {
+        LOGI() << "MuseSampler successfully inited: " << libPath;
     }
 
     return ok;
@@ -113,7 +124,7 @@ ISynthesizerPtr MuseSamplerResolver::resolveSynth(const TrackId /*trackId*/, con
 {
     InstrumentInfo instrument = findInstrument(m_libHandler, params.resourceMeta);
     if (instrument.isValid()) {
-        return std::make_shared<MuseSamplerWrapper>(m_libHandler, instrument, params);
+        return std::make_shared<MuseSamplerWrapper>(m_libHandler, instrument, params, iocContext());
     }
 
     return nullptr;
@@ -225,7 +236,13 @@ std::string MuseSamplerResolver::version() const
         return std::string();
     }
 
-    return String::fromUtf8(m_libHandler->getVersionString()).toStdString();
+    String ver = String::fromUtf8(m_libHandler->getVersionString());
+
+    if (configuration()->shouldShowBuildNumber()) {
+        ver += u"." + String::number(m_libHandler->getBuildNumber());
+    }
+
+    return ver.toStdString();
 }
 
 bool MuseSamplerResolver::isInstalled() const

@@ -43,17 +43,16 @@ static constexpr int MIN_SUPPORTED_NOTE = 12; // VST equivalent for C0
 static constexpr mpe::pitch_level_t MAX_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 8);
 static constexpr int MAX_SUPPORTED_NOTE = 108; // VST equivalent for C8
 
-void VstSequencer::init(ParamsMapping&& mapping)
+void VstSequencer::init(ParamsMapping&& mapping, bool useDynamicEvents)
 {
     m_mapping = std::move(mapping);
+    m_useDynamicEvents = useDynamicEvents;
     m_inited = true;
 
-    updateMainStreamEvents(m_playbackEventsMap, m_dynamicLevelMap, {});
-
-    m_playbackEventsMap.clear();
+    updateMainStreamEvents(m_playbackData.originEvents, m_playbackData.dynamics, m_playbackData.params);
 }
 
-void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap&)
+void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList&)
 {
     m_offStreamEvents.clear();
 
@@ -65,13 +64,10 @@ void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, c
     updateOffSequenceIterator();
 }
 
-void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
-                                          const mpe::PlaybackParamMap&)
+void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
+                                          const mpe::PlaybackParamLayers&)
 {
-    m_dynamicLevelMap = dynamics;
-
     if (!m_inited) {
-        m_playbackEventsMap = events;
         return;
     }
 
@@ -85,14 +81,20 @@ void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, 
     updatePlaybackEvents(m_mainStreamEvents, events);
     updateMainSequenceIterator();
 
-    updateDynamicEvents(m_dynamicEvents, dynamics);
-    updateDynamicChangesIterator();
+    if (m_useDynamicEvents) {
+        updateDynamicEvents(m_dynamicEvents, dynamics);
+        updateDynamicChangesIterator();
+    }
 }
 
 muse::audio::gain_t VstSequencer::currentGain() const
 {
-    mpe::dynamic_level_t currentDynamicLevel = dynamicLevel(m_playbackPosition);
-    return expressionLevel(currentDynamicLevel);
+    if (m_useDynamicEvents) {
+        mpe::dynamic_level_t currentDynamicLevel = dynamicLevel(m_playbackPosition);
+        return expressionLevel(currentDynamicLevel);
+    }
+
+    return 0.5f;
 }
 
 void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events)
@@ -121,10 +123,12 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
     }
 }
 
-void VstSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelMap& dynamics)
+void VstSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& layers)
 {
-    for (const auto& pair : dynamics) {
-        destination[pair.first].emplace(expressionLevel(pair.second));
+    for (const auto& layer : layers) {
+        for (const auto& dynamic : layer.second) {
+            destination[dynamic.first].emplace(expressionLevel(dynamic.second));
+        }
     }
 }
 
@@ -152,8 +156,11 @@ void VstSequencer::appendControlSwitch(EventSequenceMap& destination, const mpe:
     const mpe::ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(currentType);
     const mpe::ArticulationMeta& articulationMeta = articulationData.meta;
 
-    destination[noteEvent.arrangementCtx().actualTimestamp].emplace(buildParamInfo(controlIt->second, 1 /*on*/));
-    destination[articulationMeta.timestamp + articulationMeta.overallDuration].emplace(buildParamInfo(controlIt->second, 0 /*off*/));
+    const mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
+    const mpe::timestamp_t timestampTo = articulationMeta.timestamp + articulationMeta.overallDuration;
+
+    destination[timestampFrom].emplace(ParamChangeEvent { controlIt->second, 1 /*on*/ });
+    destination[timestampTo].emplace(ParamChangeEvent { controlIt->second, 0 /*off*/ });
 }
 
 void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
@@ -181,9 +188,9 @@ void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::Not
     mpe::duration_t duration = noteEvent.arrangementCtx().actualDuration;
     mpe::timestamp_t timestampTo = timestampFrom + duration;
 
-    PluginParamInfo event;
-    event.id = pitchBendIt->second;
-    event.defaultNormalizedValue = 0.5f;
+    ParamChangeEvent event;
+    event.paramId = pitchBendIt->second;
+    event.value = 0.5f;
     destination[timestampTo].insert(event);
 
     auto currIt = noteEvent.pitchCtx().pitchCurve.cbegin();
@@ -216,7 +223,7 @@ void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::Not
             mpe::timestamp_t time = static_cast<mpe::timestamp_t>(std::round(point.x));
             if (time < timestampTo) {
                 float bendValue = static_cast<float>(point.y);
-                event.defaultNormalizedValue = bendValue;
+                event.value = bendValue;
                 destination[time].insert(event);
             }
         }
@@ -251,15 +258,6 @@ VstEvent VstSequencer::buildEvent(const VstEvent::EventTypes type, const int32_t
     return result;
 }
 
-PluginParamInfo VstSequencer::buildParamInfo(const PluginParamId id, const PluginParamValue value) const
-{
-    PluginParamInfo info;
-    info.id = id;
-    info.defaultNormalizedValue = value;
-
-    return info;
-}
-
 int32_t VstSequencer::noteIndex(const mpe::pitch_level_t pitchLevel) const
 {
     if (pitchLevel <= MIN_SUPPORTED_PITCH_LEVEL) {
@@ -286,7 +284,14 @@ float VstSequencer::noteTuning(const mpe::NoteEvent& noteEvent, const int noteId
 
 float VstSequencer::noteVelocityFraction(const mpe::NoteEvent& noteEvent) const
 {
-    return std::clamp(noteEvent.expressionCtx().expressionCurve.velocityFraction(), 0.f, 1.f);
+    const mpe::ExpressionContext& expressionCtx = noteEvent.expressionCtx();
+
+    if (expressionCtx.velocityOverride.has_value()) {
+        return std::clamp(expressionCtx.velocityOverride.value(), 0.f, 1.f);
+    }
+
+    mpe::dynamic_level_t dynamicLevel = expressionCtx.expressionCurve.maxAmplitudeLevel();
+    return expressionLevel(dynamicLevel);
 }
 
 float VstSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) const

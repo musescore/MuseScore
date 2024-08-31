@@ -137,7 +137,7 @@ EngravingObject::~EngravingObject()
         bool canMoveToDummy = !this->isType(ElementType::ROOT_ITEM)
                               && !this->isType(ElementType::DUMMY)
                               && !this->isType(ElementType::SCORE)
-                              && score()->dummy() != nullptr;
+                              && score()->rootItem() && score()->rootItem()->dummy();
 
         EngravingObjectList children = m_children;
         for (EngravingObject* c : children) {
@@ -509,6 +509,10 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
             } else {
                 toEngravingItem(this)->manageExclusionFromParts(v.toBool());
             }
+        }
+    } else if (id == Pid::VOICE_ASSIGNMENT) {
+        if (v.value<VoiceAssignment>() != VoiceAssignment::CURRENT_VOICE_ONLY) {
+            changeProperties(this, Pid::VOICE, 0, ps);
         }
     }
     changeProperties(this, id, v, ps);

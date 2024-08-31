@@ -1,19 +1,32 @@
 #!/usr/bin/env python3
 
-import glob
-import subprocess
-import os
-import sys
-import io
-import time
 import hashlib
 import json
+import os
+import subprocess
+import time
 import zipfile
+from urllib.parse import urlparse, urlunparse
 
-#needs to be equal or smaller than the cron
+# needs to be equal or smaller than the cron
 period = 300
 outputDir = "share/locale/"
-s3Urls = ["s3://extensions.musescore.org/4.3/languages/"]
+
+
+def getS3Url():
+    configPath = "src/app/configs/languages.cfg"
+    configFile = open(configPath, "r+")
+    configJson = json.load(configFile)
+    configFile.close()
+
+    rawHttpsUrl = configJson["server_url"]
+    parsedHttpsUrl = urlparse(rawHttpsUrl)
+
+    return urlunparse(('s3', *parsedHttpsUrl[1:]))
+
+
+s3Url = getS3Url()
+
 
 def processTsFile(prefix, langCode, data):
     print("Processing " + langCode)
@@ -23,19 +36,20 @@ def processTsFile(prefix, langCode, data):
 
     lang_time = int(os.path.getmtime(tsFilePath))
     cur_time = int(time.time())
-    #print(cur_time,lang_time,cur_time-lang_time)
+    # print(cur_time,lang_time,cur_time-lang_time)
 
     # if the file has been updated, update or add entry in details.json
     if (cur_time - lang_time < period) or not os.path.isfile(qmFilePath):
         # generate qm file
-        lrelease = subprocess.Popen(['lrelease', tsFilePath, '-qm', qmFilePath])
+        lrelease = subprocess.Popen(
+            ['lrelease', tsFilePath, '-qm', qmFilePath])
         lrelease.communicate()
 
         # get qm file size
         file_size = os.path.getsize(qmFilePath)
         file_size = "%.2f" % (file_size / 1024)
 
-        #compute Qm file hash
+        # compute Qm file hash
         file = open(qmFilePath, 'rb')
         hash_file = hashlib.sha1()
         hash_file.update(file.read())
@@ -59,7 +73,7 @@ def processTsFile(prefix, langCode, data):
 newDetailsFile = False
 translationChanged = False
 
-#read languages.json and store language code and name
+# read languages.json and store language code and name
 langCode_file = open("share/locale/languages.json", "r+")
 langCodeNameDict = json.load(langCode_file)  # language code --> name
 langCode_file.close()
@@ -86,7 +100,7 @@ for lang_code, languageName in langCodeNameDict.items():
     translationChanged = updateInstruments or translationChanged
 
     if (updateMscore or updateInstruments):
-        #create a zip file, compute size, hash, add it to json and save to s3
+        # create a zip file, compute size, hash, add it to json and save to s3
         zipName = 'locale_' + lang_code + '.zip'
         zipPath = outputDir + zipName
         myzip = zipfile.ZipFile(zipPath, mode='w')
@@ -100,7 +114,7 @@ for lang_code, languageName in langCodeNameDict.items():
         file_size = os.path.getsize(zipPath)
         file_size = "%.2f" % (file_size / 1024)
 
-        #compute zip file hash
+        # compute zip file hash
         file = open(zipPath, 'rb')
         hash_file = hashlib.sha1()
         hash_file.update(file.read())
@@ -110,9 +124,10 @@ for lang_code, languageName in langCodeNameDict.items():
         data[lang_code]["name"] = langCodeNameDict[lang_code]
         data[lang_code]["hash"] = str(hash_file.hexdigest())
         data[lang_code]["file_size"] = file_size
-        for s3Url in s3Urls:
-            push_zip = subprocess.Popen(['s3cmd','put', '--acl-public', '--guess-mime-type', zipPath, s3Url + zipName])
-            push_zip.communicate()
+
+        push_zip = subprocess.Popen(
+            ['s3cmd', 'put', '--acl-public', '--guess-mime-type', zipPath, s3Url + zipName])
+        push_zip.communicate()
 
 
 json_file = open(outputDir + "details.json", "w")
@@ -120,6 +135,6 @@ json_file.write(json.dumps(data, sort_keys=True, indent=4))
 json_file.close()
 
 if translationChanged:
-    for s3Url in s3Urls:
-        push_json = subprocess.Popen(['s3cmd','put','--acl-public', '--guess-mime-type', outputDir + 'details.json', s3Url + 'details.json'])
-        push_json.communicate()
+    push_json = subprocess.Popen(
+        ['s3cmd', 'put', '--acl-public', '--guess-mime-type', outputDir + 'details.json', s3Url + 'details.json'])
+    push_json.communicate()

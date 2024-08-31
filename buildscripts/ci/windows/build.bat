@@ -26,10 +26,10 @@ IF NOT %TARGET_PROCESSOR_BITS% == 64 (
 
 SET /p BUILD_MODE=<%ARTIFACTS_DIR%\env\build_mode.env
 SET "MUSE_APP_BUILD_MODE=dev"
-IF %BUILD_MODE% == devel_build   ( SET "MUSE_APP_BUILD_MODE=dev" ) ELSE (
-IF %BUILD_MODE% == nightly_build ( SET "MUSE_APP_BUILD_MODE=dev" ) ELSE (
-IF %BUILD_MODE% == testing_build ( SET "MUSE_APP_BUILD_MODE=testing" ) ELSE (
-IF %BUILD_MODE% == stable_build  ( SET "MUSE_APP_BUILD_MODE=release" ) ELSE (
+IF %BUILD_MODE% == devel   ( SET "MUSE_APP_BUILD_MODE=dev" ) ELSE (
+IF %BUILD_MODE% == nightly ( SET "MUSE_APP_BUILD_MODE=dev" ) ELSE (
+IF %BUILD_MODE% == testing ( SET "MUSE_APP_BUILD_MODE=testing" ) ELSE (
+IF %BUILD_MODE% == stable  ( SET "MUSE_APP_BUILD_MODE=release" ) ELSE (
     ECHO "error: unknown BUILD_MODE: %BUILD_MODE%"
     EXIT /b 1
 ))))

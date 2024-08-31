@@ -41,6 +41,7 @@ static const Settings::Key AUDIO_API_KEY("audio", "io/audioApi");
 static const Settings::Key AUDIO_OUTPUT_DEVICE_ID_KEY("audio", "io/outputDevice");
 static const Settings::Key AUDIO_BUFFER_SIZE_KEY("audio", "io/bufferSize");
 static const Settings::Key AUDIO_SAMPLE_RATE_KEY("audio", "io/sampleRate");
+static const Settings::Key AUDIO_MEASURE_INPUT_LAG("audio", "io/measureInputLag");
 
 static const Settings::Key USER_SOUNDFONTS_PATHS("midi", "application/paths/mySoundfonts");
 
@@ -55,14 +56,17 @@ static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META
 void AudioConfiguration::init()
 {
     int defaultBufferSize = 0;
-#ifdef Q_OS_WASM
+#if defined(Q_OS_WASM)
     defaultBufferSize = 8192;
+#elif defined(Q_OS_MAC)
+    defaultBufferSize = 512;
 #else
     defaultBufferSize = 1024;
 #endif
     settings()->setDefaultValue(AUDIO_BUFFER_SIZE_KEY, Val(defaultBufferSize));
     settings()->valueChanged(AUDIO_BUFFER_SIZE_KEY).onReceive(nullptr, [this](const Val&) {
         m_driverBufferSizeChanged.notify();
+        updateSamplesToPreallocate();
     });
 
     settings()->setDefaultValue(AUDIO_API_KEY, Val("Core Audio"));
@@ -72,6 +76,7 @@ void AudioConfiguration::init()
     });
 
     settings()->setDefaultValue(AUDIO_SAMPLE_RATE_KEY, Val(44100));
+    settings()->setCanBeManuallyEdited(AUDIO_SAMPLE_RATE_KEY, false, Val(44100), Val(192000));
     settings()->valueChanged(AUDIO_SAMPLE_RATE_KEY).onReceive(nullptr, [this](const Val&) {
         m_driverSampleRateChanged.notify();
     });
@@ -84,6 +89,10 @@ void AudioConfiguration::init()
     for (const auto& path : userSoundFontDirectories()) {
         fileSystem()->makePath(path);
     }
+
+    settings()->setDefaultValue(AUDIO_MEASURE_INPUT_LAG, Val(false));
+
+    updateSamplesToPreallocate();
 }
 
 std::vector<std::string> AudioConfiguration::availableAudioApiList() const
@@ -143,9 +152,33 @@ async::Notification AudioConfiguration::driverBufferSizeChanged() const
     return m_driverBufferSizeChanged;
 }
 
-samples_t AudioConfiguration::renderStep() const
+msecs_t AudioConfiguration::audioWorkerInterval(const samples_t samples, const sample_rate_t sampleRate) const
 {
-    return 512;
+    msecs_t interval = float(samples) / 4.f / float(sampleRate) * 1000.f;
+    interval = std::max(interval, msecs_t(1));
+
+    return interval;
+}
+
+samples_t AudioConfiguration::minSamplesToReserve(RenderMode mode) const
+{
+    // Idle: render as little as possible for lower latency
+    if (mode == RenderMode::IdleMode) {
+        return 128;
+    }
+
+    // Active: render more for better quality (rendering is usually much heavier in this scenario)
+    return 1024;
+}
+
+samples_t AudioConfiguration::samplesToPreallocate() const
+{
+    return m_samplesToPreallocate;
+}
+
+async::Channel<samples_t> AudioConfiguration::samplesToPreallocateChanged() const
+{
+    return m_samplesToPreallocateChanged;
 }
 
 unsigned int AudioConfiguration::sampleRate() const
@@ -201,7 +234,19 @@ async::Channel<io::paths_t> AudioConfiguration::soundFontDirectoriesChanged() co
     return m_soundFontDirsChanged;
 }
 
-io::path_t AudioConfiguration::knownAudioPluginsFilePath() const
+bool AudioConfiguration::shouldMeasureInputLag() const
 {
-    return globalConfiguration()->userAppDataPath() + "/known_audio_plugins.json";
+    return settings()->value(AUDIO_MEASURE_INPUT_LAG).toBool();
+}
+
+void AudioConfiguration::updateSamplesToPreallocate()
+{
+    samples_t minToReserve = minSamplesToReserve(RenderMode::RealTimeMode);
+    samples_t driverBufSize = driverBufferSize();
+    samples_t newValue = std::max(minToReserve, driverBufSize);
+
+    if (m_samplesToPreallocate != newValue) {
+        m_samplesToPreallocate = newValue;
+        m_samplesToPreallocateChanged.send(newValue);
+    }
 }

@@ -70,7 +70,7 @@ static QVariantList buildAvailablePlayingTechniquesModel(const std::set<muse::St
     }
 
     QVariantMap ordinaryItem;
-    ordinaryItem["code"] = QString::fromStdString(muse::mpe::ORDINARY_PLAYING_TECHNIQUE_CODE);
+    ordinaryItem["code"] = muse::mpe::ORDINARY_PLAYING_TECHNIQUE_CODE.toQString();
     ordinaryItem["name"] = muse::qtrc("playback", "Ord. (default)");
     model << ordinaryItem;
 
@@ -389,7 +389,7 @@ bool SoundFlagSettingsModel::updateStaffText()
 
     const SoundFlag::PlayingTechniqueCode& techniqueCode = soundFlag->playingTechnique();
     if (!techniqueCode.empty()) {
-        if (techniqueCode.toStdString() == muse::mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
+        if (techniqueCode == muse::mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
             strs << muse::mtrc("playback", "ordinary");
         } else {
             strs << soundFlag->playingTechnique();

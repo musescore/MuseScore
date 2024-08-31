@@ -51,6 +51,8 @@ public:
     MOCK_METHOD(void, setMetricUnit, (bool), (override));
 
     MOCK_METHOD(std::string, museScoreUrl, (), (const, override));
+
+    MOCK_METHOD(bool, highResolutionTimers, (), (const, override));
 };
 }
 

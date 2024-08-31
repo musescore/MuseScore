@@ -126,9 +126,11 @@ void AccidentalSettingsModel::updateIsStackingOrderAvailableAndEnabled()
     setIsStackingOrderEnabled(m_elementList.size() == 1);
 
     for (EngravingItem* item : m_elementList) {
-        if (!item->isAccidental()) {
+        if (!item->isAccidental() || !toAccidental(item)->note()) {
             continue;
         }
+        setIsStackingOrderEnabled(item->addToSkyline());
+
         Segment* segment = toAccidental(item)->note()->chord()->segment();
         track_idx_t startTrack = trackZeroVoice(item->track());
         track_idx_t endTrack = startTrack + VOICES;

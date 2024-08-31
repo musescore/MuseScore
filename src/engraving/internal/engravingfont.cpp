@@ -439,10 +439,10 @@ void EngravingFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObj
         // "beamSpacing" handled separately
         { "legerLineThickness",         { { Sid::ledgerLineWidth } } },
         { "legerLineExtension",         { { Sid::ledgerLineLength } } },
-        { "slurEndpointThickness",      { { Sid::SlurEndWidth } } },
-        { "slurMidpointThickness",      { { Sid::SlurMidWidth } } },
-        { "tieEndpointThickness",       { { Sid::TieEndWidth } } },
-        { "tieMidpointThickness",       { { Sid::TieMidWidth } } },
+        { "slurEndpointThickness",      { { Sid::slurEndWidth } } },
+        { "slurMidpointThickness",      { { Sid::slurMidWidth } } },
+        { "tieEndpointThickness",       { { Sid::tieEndWidth } } },
+        { "tieMidpointThickness",       { { Sid::tieMidWidth } } },
         { "thinBarlineThickness",       { { Sid::barWidth, Sid::doubleBarWidth } } },
         { "thickBarlineThickness",      { { Sid::endBarWidth } } },
         // "dashedBarlineThickness" not supported
@@ -496,7 +496,7 @@ void EngravingFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObj
         applyEngravingDefault(key, engravingDefaultsObject.value(key).toDouble());
     }
 
-    m_engravingDefaults.insert({ Sid::MusicalTextFont, String(u"%1 Text").arg(String::fromStdString(m_family)) });
+    m_engravingDefaults.insert({ Sid::musicalTextFont, String(u"%1 Text").arg(String::fromStdString(m_family)) });
 }
 
 void EngravingFont::computeMetrics(EngravingFont::Sym& sym, const Smufl::Code& code)

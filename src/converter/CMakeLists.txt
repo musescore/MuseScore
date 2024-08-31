@@ -29,6 +29,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/convertermodule.h
     ${CMAKE_CURRENT_LIST_DIR}/convertercodes.h
     ${CMAKE_CURRENT_LIST_DIR}/iconvertercontroller.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/api/converterapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/api/converterapi.h
+
     ${CMAKE_CURRENT_LIST_DIR}/internal/convertercontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/convertercontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/compat/backendapi.cpp

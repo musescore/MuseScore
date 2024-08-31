@@ -30,6 +30,7 @@
 #include "chord.h"
 #include "clef.h"
 #include "cleflist.h"
+#include "excerpt.h"
 #include "factory.h"
 #include "instrtemplate.h"
 #include "linkedobjects.h"
@@ -122,6 +123,99 @@ Staff* Staff::findLinkedInScore(const Score* score) const
     }
 
     return nullptr;
+}
+
+track_idx_t Staff::getLinkedTrackInStaff(const Staff* linkedStaff, const track_idx_t originalTrack) const
+{
+    IF_ASSERT_FAILED(linkedStaff && originalTrack != muse::nidx) {
+        return muse::nidx;
+    }
+
+    Score* thisScore = score();
+    Score* linkedStaffScore = linkedStaff->score();
+    staff_idx_t linkedStaffIdx = linkedStaff->idx();
+
+    if (thisScore == linkedStaffScore) {
+        // For staves linked within the same score, voices are always mapped 1 to 1
+        voice_idx_t voice = track2voice(originalTrack);
+        return staff2track(linkedStaffIdx, voice);
+    }
+
+    // NOTE 1: if linkedStaff has a different id than *this, it means that there isn't direct voice mapping between
+    // the two. Example: if we have guitar+TAB in the score, with corresponding guitar+TAB in the part, *this
+    // may be the notation-staff of the score and linkedStaff may be the TAB-staff of the part. In that case, the
+    // correct voice mapping must be obtained by looking for the staff with same id in thisScore.
+
+    track_idx_t refTrack = originalTrack;
+    if (linkedStaff->id() != id()) {
+        Staff* correspondingStaffInThisScore = linkedStaff->findLinkedInScore(thisScore);
+        if (!correspondingStaffInThisScore) {
+            return muse::nidx;
+        }
+        voice_idx_t originalVoice = track2voice(originalTrack);
+        refTrack = staff2track(correspondingStaffInThisScore->idx(), originalVoice);
+    }
+
+    // NOTE 2: TracksMap is a map from a track in the *score* to track(s) in the *part*.
+    // If we are in the master score, refTrack corresponds to one of the keys in the map, so we can retrieve
+    // the linked tracks by simply querying the map by key. However, if we are in a part, we need to search for
+    // refTrack among the *values* of the map, and the corresponding key gives us the linked track in the score.
+    // If linkedStaff is *also* in a part, we need to do it in two steps: first find the linked track in the score,
+    // then use it to find the linked track in linkeStaff's part.
+
+    if (thisScore->isMaster()) {
+        const TracksMap& tracksMap = linkedStaffScore->excerpt()->tracksMapping();
+        std::vector<track_idx_t> linkedTracks = muse::values(tracksMap, refTrack);
+        for (track_idx_t track : linkedTracks) {
+            if (track2staff(track) == linkedStaffIdx) {
+                return track;
+            }
+        }
+
+        return muse::nidx;
+    }
+
+    const TracksMap& thisTracksMap = thisScore->excerpt()->tracksMapping();
+    track_idx_t linkedTrackInScore = muse::nidx;
+    for (auto pair : thisTracksMap) {
+        track_idx_t trackInScore = pair.first;
+        std::vector<track_idx_t> tracksInPart = muse::values(thisTracksMap, trackInScore);
+        for (track_idx_t trackInPart : tracksInPart) {
+            if (trackInPart == refTrack) {
+                linkedTrackInScore = trackInScore;
+                break;
+            }
+        }
+        if (linkedTrackInScore != muse::nidx) {
+            break;
+        }
+    }
+
+    if (linkedStaffScore->isMaster() || linkedTrackInScore == muse::nidx) {
+        return linkedTrackInScore;
+    }
+
+    const TracksMap& linkedTracksMap = linkedStaffScore->excerpt()->tracksMapping();
+    std::vector<track_idx_t> linkedTracks = muse::values(linkedTracksMap, linkedTrackInScore);
+    for (track_idx_t track : linkedTracks) {
+        if (track2staff(track) == linkedStaffIdx) {
+            return track;
+        }
+    }
+
+    return muse::nidx;
+}
+
+bool Staff::trackHasLinksInVoiceZero(track_idx_t track)
+{
+    for (Staff* linkedStaff : staffList()) {
+        track_idx_t linkedTrack = getLinkedTrackInStaff(linkedStaff, track);
+        if (linkedTrack != muse::nidx && track2voice(linkedTrack) == 0) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 //---------------------------------------------------------
@@ -822,6 +916,11 @@ double Staff::staffHeight() const
     return (lines(tick) - 1) * spatium(tick) * staffType(tick)->lineDistance().val();
 }
 
+double Staff::staffHeight(const Fraction& tick) const
+{
+    return (lines(tick) - 1) * spatium(tick) * staffType(tick)->lineDistance().val();
+}
+
 //---------------------------------------------------------
 //   spatium
 //---------------------------------------------------------
@@ -1254,8 +1353,8 @@ void Staff::updateOttava()
     m_pitchOffsets.clear();
     for (auto i : score()->spanner()) {
         const Spanner* s = i.second;
-        if (s->type() == ElementType::OTTAVA && s->staffIdx() == staffIdx) {
-            const Ottava* o = static_cast<const Ottava*>(s);
+        if (s->isOttava() && s->staffIdx() == staffIdx && s->playSpanner()) {
+            const Ottava* o = toOttava(s);
             m_pitchOffsets.setPitchOffset(o->tick().ticks(), o->pitchShift());
             m_pitchOffsets.setPitchOffset(o->tick2().ticks(), 0);
         }

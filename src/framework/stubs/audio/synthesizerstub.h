@@ -42,6 +42,7 @@ public:
     AudioSourceType type() const override;
 
     void setup(const mpe::PlaybackData& playbackData) override;
+    const mpe::PlaybackData& playbackData() const override;
 
     const audio::AudioInputParams& params() const override;
     async::Channel<audio::AudioInputParams> paramsChanged() const override;

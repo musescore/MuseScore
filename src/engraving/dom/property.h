@@ -187,7 +187,6 @@ enum class Pid {
     VELO_CHANGE_METHOD,
     VELO_CHANGE_SPEED,
     DYNAMIC_TYPE,
-    DYNAMIC_RANGE,
 //100
     SINGLE_NOTE_DYNAMICS,
     CHANGE_METHOD,
@@ -218,7 +217,6 @@ enum class Pid {
     GROUP_NODES,
     LINE_STYLE,
     LINE_WIDTH,
-    LINE_WIDTH_SPATIUM,
     TIME_STRETCH,
     ORNAMENT_STYLE,
     INTERVAL_ABOVE,
@@ -268,6 +266,8 @@ enum class Pid {
     FRET_OFFSET,
     FRET_NUM_POS,
     ORIENTATION,
+    FRET_SHOW_FINGERINGS,
+    FRET_FINGERING,
 
     HARMONY_VOICE_LITERAL,
     HARMONY_VOICING,
@@ -363,10 +363,13 @@ enum class Pid {
     AVOID_BARLINES, // meant for Dynamics
     DYNAMICS_SIZE,
     CENTER_ON_NOTEHEAD,
-    SNAP_TO_DYNAMICS,
     ANCHOR_TO_END_OF_PREVIOUS,
 
-    APPLY_TO_VOICE,
+    SNAP_TO_DYNAMICS, // pre-4.4 version of the property, specific for expression
+    SNAP_BEFORE,
+    SNAP_AFTER,
+
+    VOICE_ASSIGNMENT,
     CENTER_BETWEEN_STAVES,
 
     POS_ABOVE,

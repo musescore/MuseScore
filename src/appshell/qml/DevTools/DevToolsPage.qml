@@ -81,7 +81,7 @@ DockPage {
                         { "name": "corruptscore", "title": "Corrupt score" },
                         { "name": "mpe", "title": "MPE" },
                         { "name": "extensions", "title": "Extensions" },
-                        //{ "name": "navigation", "title": "KeyNav" } broken
+                        { "name": "navigation", "title": "KeyNav" }
                     ]
 
                     onSelected: function(name) {

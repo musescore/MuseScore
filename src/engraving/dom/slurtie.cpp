@@ -288,14 +288,14 @@ void SlurTieSegment::drawEditMode(Painter* p, EditData& ed, double /*currentView
     polygon[4] = PointF(ed.grip[int(Grip::END)].center());
     polygon[5] = PointF(ed.grip[int(Grip::DRAG)].center());
     polygon[6] = PointF(ed.grip[int(Grip::START)].center());
-    p->setPen(Pen(configuration()->formattingMarksColor(), 0.0));
+    p->setPen(Pen(configuration()->formattingColor(), 0.0));
     p->drawPolyline(polygon);
 
     p->setPen(Pen(configuration()->defaultColor(), 0.0));
     for (int i = 0; i < ed.grips; ++i) {
         // Can't use ternary operator, because we want different overloads of `setBrush`
         if (Grip(i) == ed.curGrip) {
-            p->setBrush(configuration()->formattingMarksColor());
+            p->setBrush(configuration()->formattingColor());
         } else {
             p->setBrush(BrushStyle::NoBrush);
         }
@@ -410,5 +410,31 @@ void SlurTie::reset()
     EngravingItem::reset();
     undoResetProperty(Pid::SLUR_DIRECTION);
     undoResetProperty(Pid::SLUR_STYLE_TYPE);
+}
+
+muse::TranslatableString SlurTie::subtypeUserName() const
+{
+    switch (m_styleType) {
+    case SlurStyleType::Solid:
+        return TranslatableString("engraving/slurstyletype", "Solid");
+    case SlurStyleType::Dotted:
+        return TranslatableString("engraving/slurstyletype", "Dotted");
+    case SlurStyleType::Dashed:
+        return TranslatableString("engraving/slurstyletype", "Dashed");
+    case SlurStyleType::WideDashed:
+        return TranslatableString("engraving/slurstyletype", "Wide dashed");
+    default:
+        return TranslatableString("engraving/slurstyletype", "Undefined");
+    }
+}
+
+int SlurTieSegment::subtype() const
+{
+    return slurTie()->subtype();
+}
+
+muse::TranslatableString SlurTieSegment::subtypeUserName() const
+{
+    return slurTie()->subtypeUserName();
 }
 }

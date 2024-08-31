@@ -47,9 +47,6 @@ class ChordLine final : public EngravingItem
 
 public:
 
-    static constexpr double WAVE_ANGEL = 20;
-    static const SymIdList WAVE_SYMBOLS;
-
     ChordLine* clone() const override { return new ChordLine(*this); }
 
     Chord* chord() const { return (Chord*)(explicitParent()); }
@@ -74,6 +71,9 @@ public:
 
     String accessibleInfo() const override;
 
+    int subtype() const override;
+    TranslatableString subtypeUserName() const override;
+
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
@@ -92,6 +92,8 @@ public:
 
     void setNote(Note* note);
     Note* note() const { return m_note; }
+
+    SymId waveSym() const;
 
     struct LayoutData : public EngravingItem::LayoutData {
         muse::draw::PainterPath path;

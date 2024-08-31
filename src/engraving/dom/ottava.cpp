@@ -22,6 +22,8 @@
 
 #include "ottava.h"
 
+#include "types/translatablestring.h"
+
 #include "chordrest.h"
 #include "score.h"
 #include "staff.h"
@@ -301,6 +303,11 @@ PropertyValue Ottava::getProperty(Pid propertyId) const
 bool Ottava::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
+    case Pid::PLAY:
+        setPlaySpanner(val.toBool());
+        staff()->updateOttava();
+        break;
+
     case Pid::OTTAVA_TYPE:
         setOttavaType(OttavaType(val.toInt()));
         break;
@@ -374,6 +381,25 @@ String Ottava::accessibleInfo() const
 }
 
 //---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString Ottava::subtypeUserName() const
+{
+    return ottavaDefault[int(ottavaType())].userName;
+}
+
+muse::TranslatableString OttavaSegment::subtypeUserName() const
+{
+    return ottava()->subtypeUserName();
+}
+
+int OttavaSegment::subtype() const
+{
+    return ottava()->subtype();
+}
+
+//---------------------------------------------------------
 //   ottavaTypeName
 //---------------------------------------------------------
 
@@ -405,11 +431,11 @@ PointF Ottava::linePos(Grip grip, System** system) const
     // End 1sp after the right edge of the end chord, but don't overlap followig segments
     double x = seg->staffShape(endCr->staffIdx()).right() + seg->x() + seg->measure()->x() + spatium();
     Segment* followingCRseg = score()->tick2segment(endCr->tick() + endCr->actualTicks(), true, SegmentType::ChordRest);
-    if (followingCRseg) {
+    if (followingCRseg && followingCRseg->system() == seg->system()) {
         x = std::min(x, followingCRseg->x() + followingCRseg->measure()->x());
     }
 
-    x -= 0.5 * lineWidth();
+    x -= 0.5 * absoluteFromSpatium(lineWidth());
 
     return PointF(x, 0.0);
 }

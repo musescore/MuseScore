@@ -35,15 +35,21 @@ class ExtApi : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QJSValue log READ log CONSTANT)
-    Q_PROPERTY(QJSValue context READ context CONSTANT)
     Q_PROPERTY(QJSValue interactive READ interactive CONSTANT)
     Q_PROPERTY(QJSValue theme READ theme CONSTANT)
+
+    Q_PROPERTY(QJSValue engraving READ engraving CONSTANT)
+
+    Q_PROPERTY(QJSValue converter READ converter CONSTANT)
 
     //! NOTE Providing these APIs requires approval
     //Q_PROPERTY(QJSValue shortcuts READ shortcuts CONSTANT)
     //Q_PROPERTY(QJSValue navigation READ navigation CONSTANT)
     //Q_PROPERTY(QJSValue keyboard READ keyboard CONSTANT)
     //Q_PROPERTY(QJSValue accessibility READ accessibility CONSTANT)
+
+    //! NOTE This is autobot context, should be rework and make general context
+    //Q_PROPERTY(QJSValue context READ context CONSTANT)
 
     //! ATTENTION
     //! Don't add these APIs here.
@@ -56,11 +62,16 @@ class ExtApi : public QObject
 
 public:
     ExtApi(muse::api::IApiEngine* engine, QObject* parent);
+    ~ExtApi();
 
     QJSValue log() const { return api("api.log"); }
     QJSValue context() const { return api("api.context"); }
     QJSValue interactive() const { return api("api.interactive"); }
     QJSValue theme() const { return api("api.theme"); }
+
+    QJSValue engraving() const { return api("api.engraving.v1"); }
+
+    QJSValue converter() const { return api("api.converter"); }
 
     QJSValue dispatcher() const { return api("api.dispatcher"); }
     QJSValue navigation() const { return api("api.navigation"); }
@@ -74,6 +85,7 @@ private:
     struct Api
     {
         muse::api::ApiObject* obj = nullptr;
+        bool isNeedDelete = false;
         QJSValue jsval;
     };
 

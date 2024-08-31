@@ -243,6 +243,42 @@ const TextStyle stringTuningsStyle { { // identical to staffText except for font
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
 } };
 
+const TextStyle fretDiagramFingeringStyle { {
+    { TextStylePropertyType::FontFace,             Sid::fretDiagramFingeringFontFace,                      Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::fretDiagramFingeringFontSize,                      Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::fretDiagramFingeringLineSpacing,                   Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::fretDiagramFingeringFontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::fretDiagramFingeringFontStyle,                     Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::fretDiagramFingeringColor,                         Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::fretDiagramFingeringAlign,                         Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::fretDiagramFingeringPosAbove,                      Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::fretDiagramFingeringFrameType,                     Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::fretDiagramFingeringFramePadding,                  Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::fretDiagramFingeringFrameWidth,                    Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::fretDiagramFingeringFrameRound,                    Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::fretDiagramFingeringFrameFgColor,                  Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::fretDiagramFingeringFrameBgColor,                  Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,                          Pid::MUSICAL_SYMBOLS_SCALE },
+} };
+
+const TextStyle fretDiagramFretNumberStyle { {
+    { TextStylePropertyType::FontFace,             Sid::fretDiagramFretNumberFontFace,                      Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::fretDiagramFretNumberFontSize,                          Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::fretDiagramFretNumberLineSpacing,                   Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::fretDiagramFretNumberFontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::fretDiagramFretNumberFontStyle,                     Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::fretDiagramFretNumberColor,                         Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::fretDiagramFretNumberAlign,                          Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::fretDiagramFretNumberPosAbove,                      Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::fretDiagramFretNumberFrameType,                     Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::fretDiagramFretNumberFramePadding,                  Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::fretDiagramFretNumberFrameWidth,                    Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::fretDiagramFretNumberFrameRound,                    Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::fretDiagramFretNumberFrameFgColor,                  Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::fretDiagramFretNumberFrameBgColor,                  Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,                           Pid::MUSICAL_SYMBOLS_SCALE },
+} };
+
 const TextStyle harpPedalDiagramTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::harpPedalDiagramFontFace,               Pid::FONT_FACE },
     { TextStylePropertyType::FontSize,             Sid::harpPedalDiagramFontSize,               Pid::FONT_SIZE },
@@ -873,6 +909,42 @@ const TextStyle footerTextStyle { {
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
 } };
 
+const TextStyle copyrightTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::copyrightFontFace,                      Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::copyrightFontSize,                      Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::copyrightLineSpacing,                   Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::copyrightFontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::copyrightFontStyle,                     Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::copyrightColor,                         Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::copyrightAlign,                         Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::copyrightOffset,                        Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::copyrightFrameType,                     Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::copyrightFramePadding,                  Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::copyrightFrameWidth,                    Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::copyrightFrameRound,                    Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::copyrightFrameFgColor,                  Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::copyrightFrameBgColor,                  Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+} };
+
+const TextStyle pageNumberTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::pageNumberFontFace,                     Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::pageNumberFontSize,                     Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::pageNumberLineSpacing,                  Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::pageNumberFontSpatiumDependent,         Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::pageNumberFontStyle,                    Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::pageNumberColor,                        Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::pageNumberAlign,                        Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::pageNumberOffset,                       Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::pageNumberFrameType,                    Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::pageNumberFramePadding,                 Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::pageNumberFrameWidth,                   Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::pageNumberFrameRound,                   Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::pageNumberFrameFgColor,                 Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::pageNumberFrameBgColor,                 Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+} };
+
 const TextStyle instrumentChangeTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::instrumentChangeFontFace,               Pid::FONT_FACE },
     { TextStylePropertyType::FontSize,             Sid::instrumentChangeFontSize,               Pid::FONT_SIZE },
@@ -1142,6 +1214,8 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::INSTRUMENT_CHANGE: return &instrumentChangeTextStyle;
     case TextStyleType::HEADER: return &headerTextStyle;
     case TextStyleType::FOOTER: return &footerTextStyle;
+    case TextStyleType::COPYRIGHT: return &copyrightTextStyle;
+    case TextStyleType::PAGE_NUMBER: return &pageNumberTextStyle;
 
     case TextStyleType::MEASURE_NUMBER: return &measureNumberTextStyle;
     case TextStyleType::MMREST_RANGE: return &mmRestRangeTextStyle;
@@ -1172,6 +1246,8 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::RH_GUITAR_FINGERING: return &rhGuitarFingeringTextStyle;
     case TextStyleType::STRING_NUMBER: return &stringNumberTextStyle;
     case TextStyleType::STRING_TUNINGS: return &stringTuningsStyle; // todo
+    case TextStyleType::FRET_DIAGRAM_FINGERING: return &fretDiagramFingeringStyle;
+    case TextStyleType::FRET_DIAGRAM_FRET_NUMBER: return &fretDiagramFretNumberStyle;
     case TextStyleType::HARP_PEDAL_DIAGRAM: return &harpPedalDiagramTextStyle;
     case TextStyleType::HARP_PEDAL_TEXT_DIAGRAM: return &harpPedalTextDiagramTextStyle;
 
@@ -1218,6 +1294,8 @@ static const std::vector<TextStyleType> _primaryTextStyles = {
     TextStyleType::INSTRUMENT_CHANGE,
     TextStyleType::HEADER,
     TextStyleType::FOOTER,
+    TextStyleType::COPYRIGHT,
+    TextStyleType::PAGE_NUMBER,
     TextStyleType::MEASURE_NUMBER,
     TextStyleType::MMREST_RANGE,
     TextStyleType::TEMPO,

@@ -31,6 +31,7 @@
 #include "project/inotationwritersregister.h"
 #include "project/iprojectrwregister.h"
 #include "context/iglobalcontext.h"
+#include "extensions/iextensionsprovider.h"
 
 #include "types/retval.h"
 
@@ -41,6 +42,7 @@ class ConverterController : public IConverterController, public muse::Injectable
     muse::Inject<project::INotationWritersRegister> writers = { this };
     muse::Inject<project::IProjectRWRegister> projectRW = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
 
 public:
     ConverterController(const muse::modularity::ContextPtr& iocCtx)
@@ -48,10 +50,13 @@ public:
 
     muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out,
                           const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
-                          const muse::String& soundProfile = muse::String()) override;
+                          const muse::String& soundProfile = muse::String(),
+                          const muse::UriQuery& extensionUri = muse::UriQuery()) override;
+
     muse::Ret batchConvert(const muse::io::path_t& batchJobFile,
                            const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
-                           const muse::String& soundProfile = muse::String()) override;
+                           const muse::String& soundProfile = muse::String(),
+                           const muse::UriQuery& extensionUri = muse::UriQuery(), muse::ProgressPtr progress = nullptr) override;
 
     muse::Ret convertScoreParts(const muse::io::path_t& in, const muse::io::path_t& out,
                                 const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
@@ -83,6 +88,8 @@ private:
 
     muse::RetVal<BatchJob> parseBatchJob(const muse::io::path_t& batchJobFile) const;
 
+    muse::Ret convertByExtension(project::INotationWriterPtr writer, notation::INotationPtr notation, const muse::io::path_t& out,
+                                 const muse::UriQuery& extensionUri);
     bool isConvertPageByPage(const std::string& suffix) const;
     muse::Ret convertPageByPage(project::INotationWriterPtr writer, notation::INotationPtr notation, const muse::io::path_t& out) const;
     muse::Ret convertFullNotation(project::INotationWriterPtr writer, notation::INotationPtr notation, const muse::io::path_t& out) const;

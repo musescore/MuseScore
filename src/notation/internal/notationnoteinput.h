@@ -38,12 +38,13 @@ class Score;
 
 namespace mu::notation {
 class ScoreCallbacks;
-class NotationNoteInput : public INotationNoteInput, public muse::async::Asyncable
+class NotationNoteInput : public INotationNoteInput, public muse::Injectable, public muse::async::Asyncable
 {
-    INJECT(INotationConfiguration, configuration)
+    muse::Inject<INotationConfiguration> configuration = { this };
 
 public:
-    NotationNoteInput(const IGetScore* getScore, INotationInteraction* interaction, INotationUndoStackPtr undoStack);
+    NotationNoteInput(const IGetScore* getScore, INotationInteraction* interaction, INotationUndoStackPtr undoStack,
+                      const muse::modularity::ContextPtr& iocCtx);
     ~NotationNoteInput() override;
 
     bool isNoteInputMode() const override;
@@ -51,7 +52,7 @@ public:
     NoteInputState state() const override;
 
     void startNoteInput() override;
-    void endNoteInput() override;
+    void endNoteInput(bool resetState = false) override;
     void toggleNoteInputMethod(NoteInputMethod method) override;
     void addNote(NoteName noteName, NoteAddingMode addingMode) override;
     void padNote(const Pad& pad) override;
@@ -74,8 +75,6 @@ public:
     void setDrumNote(int note) override;
     void setCurrentVoice(voice_idx_t voiceIndex) override;
     void setCurrentTrack(track_idx_t trackIndex) override;
-
-    void resetInputPosition() override;
 
     muse::RectF cursorRect() const override;
 

@@ -115,7 +115,6 @@ void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& f
 Fraction missingTupletDuration(const Fraction duration);
 bool isLikelyCreditText(const String& text, const bool caseInsensitive);
 bool isLikelySubtitleText(const String& text, const bool caseInsensitive);
-static void scaleTitle(Score* score, Text* t);
 
 //---------------------------------------------------------
 //   MusicXMLParserPass1
@@ -137,9 +136,9 @@ public:
     void defaults();
     void pageLayout(PageFormat& pf, const double conversion);
     void partList(MusicXmlPartGroupList& partGroupList);
-    void partGroup(const int scoreParts, MusicXmlPartGroupList& partGroupList, MusicXmlPartGroupMap& partGroups);
-    void scorePart();
-    void scoreInstrument(const String& partId);
+    void partGroup(const int scoreParts, MusicXmlPartGroupList& partGroupList, MusicXmlPartGroupMap& partGroups, String& curPartGroupName);
+    void scorePart(const String& curPartGroupName);
+    void scoreInstrument(const String& partId, const String& curPartGroupName);
     void setStyle(const String& type, const double val);
     void midiInstrument(const String& partId);
     void part();
@@ -183,10 +182,9 @@ public:
     int octaveShift(const String& id, const staff_idx_t staff, const Fraction& f) const;
     const CreditWordsList& credits() const { return m_credits; }
     bool hasBeamingInfo() const { return m_hasBeamingInfo; }
-    bool isVocalStaff(const String& id) const { return m_parts.at(id).isVocalStaff(); }
-    bool isPercussionStaff(const String& id) const { return m_parts.at(id).isPercussionStaff(); }
-    static VBox* createAndAddVBoxForCreditWords(Score* score, const int miny = 0, const int maxy = 75);
-    static void reformatHeaderVBox(MeasureBase* mb);
+    bool isVocalStaff(const String& partId) const { return m_parts.at(partId).isVocalStaff(); }
+    bool isPercussionStaff(const String& partId) const { return m_parts.at(partId).isPercussionStaff(); }
+    static VBox* createAndAddVBoxForCreditWords(Score* score);
     void createDefaultHeader(Score* const score);
     void createMeasuresAndVboxes(Score* const score, const std::vector<Fraction>& ml, const std::vector<Fraction>& ms,
                                  const std::set<int>& systemStartMeasureNrs, const std::set<int>& pageStartMeasureNrs,

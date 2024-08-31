@@ -28,44 +28,58 @@
 #include "global/async/notification.h"
 #include "global/types/ret.h"
 
-#include "internal/worker/mixer.h"
+#include "iaudioengine.h"
+#include "mixer.h"
 
 namespace muse::audio {
 class AudioBuffer;
-class AudioEngine : public async::Asyncable
+class AudioEngine : public IAudioEngine, public Injectable, public async::Asyncable
 {
 public:
+    AudioEngine(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
     ~AudioEngine();
 
-    static AudioEngine* instance();
+    struct RenderConstraints {
+        samples_t minSamplesToReserveWhenIdle = 0;
+        samples_t minSamplesToReserveInRealtime = 0;
+    };
 
-    Ret init(std::shared_ptr<AudioBuffer> bufferPtr);
+    Ret init(std::shared_ptr<AudioBuffer> bufferPtr, const RenderConstraints& consts);
     void deinit();
 
-    sample_rate_t sampleRate() const;
+    using OnReadBufferChanged = std::function<void (const samples_t, const sample_rate_t)>;
+    void setOnReadBufferChanged(const OnReadBufferChanged func);
 
-    void setSampleRate(unsigned int sampleRate);
-    void setReadBufferSize(uint16_t readBufferSize);
-    void setAudioChannelsCount(const audioch_t count);
+    sample_rate_t sampleRate() const override;
 
-    RenderMode mode() const;
-    void setMode(const RenderMode newMode);
-    async::Notification modeChanged() const;
+    void setSampleRate(const sample_rate_t sampleRate) override;
+    void setReadBufferSize(const uint16_t readBufferSize) override;
+    void setAudioChannelsCount(const audioch_t count) override;
 
-    MixerPtr mixer() const;
+    RenderMode mode() const override;
+    void setMode(const RenderMode newMode) override;
+    async::Notification modeChanged() const override;
+
+    MixerPtr mixer() const override;
 
 private:
-    AudioEngine();
+
+    void updateBufferConstraints();
 
     bool m_inited = false;
 
     sample_rate_t m_sampleRate = 0;
+    samples_t m_readBufferSize = 0;
 
     MixerPtr m_mixer = nullptr;
     std::shared_ptr<AudioBuffer> m_buffer = nullptr;
+    RenderConstraints m_renderConsts;
 
     RenderMode m_currentMode = RenderMode::Undefined;
     async::Notification m_modeChanges;
+
+    OnReadBufferChanged m_onReadBufferChanged;
 };
 }
 

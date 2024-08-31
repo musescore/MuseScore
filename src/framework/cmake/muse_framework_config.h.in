@@ -2,11 +2,15 @@
 /* App                                            */
 /* ============================================== */
 
+#cmakedefine MUSE_APP_NAME "${MUSE_APP_NAME}"
 #cmakedefine MUSE_APP_TITLE "${MUSE_APP_TITLE}"
 #cmakedefine MUSE_APP_UNSTABLE 1
 #cmakedefine MUSE_APP_REVISION "${MUSE_APP_REVISION}"
 #cmakedefine MUSE_APP_BUILD_NUMBER "${MUSE_APP_BUILD_NUMBER}"
 #cmakedefine MUSE_APP_VERSION "${MUSE_APP_VERSION}"
+#define MUSE_APP_VERSION_MAJOR "${MUSE_APP_VERSION_MAJOR}"
+#define MUSE_APP_VERSION_MINOR "${MUSE_APP_VERSION_MINOR}"
+#define MUSE_APP_VERSION_PATCH "${MUSE_APP_VERSION_PATCH}"
 #cmakedefine MUSE_APP_VERSION_LABEL ${MUSE_APP_VERSION_LABEL}
 #cmakedefine MUSE_APP_INSTALL_SUFFIX "${MUSE_APP_INSTALL_SUFFIX}"
 #cmakedefine MUSE_APP_INSTALL_PREFIX ${MUSE_APP_INSTALL_PREFIX}
@@ -29,6 +33,8 @@
 #cmakedefine MUSE_MODULE_AUDIO_API 1
 #cmakedefine MUSE_MODULE_AUDIO_JACK 1
 #cmakedefine MUSE_MODULE_AUDIO_EXPORT 1
+
+#cmakedefine MUSE_MODULE_AUDIOPLUGINS 1
 
 #cmakedefine MUSE_MODULE_AUTOBOT 1
 #cmakedefine MUSE_MODULE_AUTOBOT_TESTS 1

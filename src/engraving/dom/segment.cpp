@@ -28,15 +28,15 @@
 
 #include "types/typesconv.h"
 
-#include "rendering/dev/tlayout.h"
+#include "rendering/score/tlayout.h"
 
 #include "accidental.h"
 #include "barline.h"
 #include "beam.h"
 #include "chord.h"
+#include "chordrest.h"
 #include "clef.h"
 #include "engravingitem.h"
-#include "harmony.h"
 #include "harppedaldiagram.h"
 #include "hook.h"
 #include "instrchange.h"
@@ -48,7 +48,6 @@
 #include "part.h"
 #include "rest.h"
 #include "score.h"
-#include "sig.h"
 #include "staff.h"
 #include "staffstate.h"
 #include "system.h"
@@ -320,15 +319,15 @@ Segment* Segment::next1(SegmentType types) const
 
 Segment* Segment::next1ChordRestOrTimeTick() const
 {
-    Segment* nextSeg = next1(SegmentType::ChordRest | SegmentType::TimeTick);
+    Segment* nextSeg = next1(CHORD_REST_OR_TIME_TICK_TYPE);
     while (nextSeg && nextSeg->tick() == tick()) {
-        nextSeg = nextSeg->next1(SegmentType::ChordRest | SegmentType::TimeTick);
+        nextSeg = nextSeg->next1(CHORD_REST_OR_TIME_TICK_TYPE);
     }
     if (!nextSeg) {
         return nullptr;
     }
 
-    Segment* nextNextSeg = nextSeg->next1(SegmentType::ChordRest | SegmentType::TimeTick);
+    Segment* nextNextSeg = nextSeg->next1(CHORD_REST_OR_TIME_TICK_TYPE);
     if (!nextNextSeg) {
         return nextSeg;
     }
@@ -340,7 +339,7 @@ Segment* Segment::next1ChordRestOrTimeTick() const
     return nextSeg;
 }
 
-Segment* Segment::next1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType)
+Segment* Segment::next1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType) const
 {
     Segment* next = next1(segType);
 
@@ -435,15 +434,15 @@ Segment* Segment::prev1() const
 
 Segment* Segment::prev1ChordRestOrTimeTick() const
 {
-    Segment* prevSeg = prev1(SegmentType::ChordRest | SegmentType::TimeTick);
+    Segment* prevSeg = prev1(CHORD_REST_OR_TIME_TICK_TYPE);
     while (prevSeg && prevSeg->tick() == tick()) {
-        prevSeg = prevSeg->prev1(SegmentType::ChordRest | SegmentType::TimeTick);
+        prevSeg = prevSeg->prev1(CHORD_REST_OR_TIME_TICK_TYPE);
     }
     if (!prevSeg) {
         return nullptr;
     }
 
-    Segment* prevPrevSeg = prevSeg->prev1(SegmentType::ChordRest | SegmentType::TimeTick);
+    Segment* prevPrevSeg = prevSeg->prev1(CHORD_REST_OR_TIME_TICK_TYPE);
     if (!prevPrevSeg) {
         return prevSeg;
     }
@@ -455,7 +454,7 @@ Segment* Segment::prev1ChordRestOrTimeTick() const
     return prevSeg;
 }
 
-Segment* Segment::prev1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType)
+Segment* Segment::prev1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType) const
 {
     Segment* prev = prev1(segType);
 
@@ -513,6 +512,42 @@ Segment* Segment::prev1MM(SegmentType types) const
         }
     }
     return 0;
+}
+
+Segment* Segment::nextActive() const
+{
+    Segment* ns = next();
+    while (ns && !ns->isActive()) {
+        ns = ns->next();
+    }
+    return ns;
+}
+
+Segment* Segment::nextEnabled() const
+{
+    Segment* ns = next();
+    while (ns && !ns->enabled()) {
+        ns = ns->next();
+    }
+    return ns;
+}
+
+Segment* Segment::prevActive() const
+{
+    Segment* ps = prev();
+    while (ps && !ps->isActive()) {
+        ps = ps->prev();
+    }
+    return ps;
+}
+
+Segment* Segment::prevEnabled() const
+{
+    Segment* ps = prev();
+    while (ps && !ps->enabled()) {
+        ps = ps->prev();
+    }
+    return ps;
 }
 
 //---------------------------------------------------------
@@ -1267,6 +1302,10 @@ bool Segment::hasElements(staff_idx_t staffIdx) const
 
 bool Segment::allElementsInvisible() const
 {
+    if (isType(SegmentType::TimeTick)) {
+        return true;
+    }
+
     if (isType(SegmentType::BarLineType | SegmentType::ChordRest)) {
         return false;
     }
@@ -1444,7 +1483,7 @@ RectF Segment::contentRect() const
 //   segment, or a barline if it spanns in the staff
 //---------------------------------------------------------
 
-EngravingItem* Segment::firstElementForNavigation(staff_idx_t staff)
+EngravingItem* Segment::firstElementForNavigation(staff_idx_t staff) const
 {
     if (isChordRestType()) {
         track_idx_t strack = staff * VOICES;
@@ -1468,7 +1507,7 @@ EngravingItem* Segment::firstElementForNavigation(staff_idx_t staff)
 //   segment, or a barline if it spanns in the staff
 //---------------------------------------------------------
 
-EngravingItem* Segment::lastElementForNavigation(staff_idx_t staff)
+EngravingItem* Segment::lastElementForNavigation(staff_idx_t staff) const
 {
     if (segmentType() == SegmentType::ChordRest) {
         for (int voice = static_cast<int>(staff * VOICES + (VOICES - 1)); voice / static_cast<int>(VOICES) == static_cast<int>(staff);
@@ -1499,7 +1538,7 @@ EngravingItem* Segment::lastElementForNavigation(staff_idx_t staff)
 //   Use firstElement, or lastElement instead of this
 //---------------------------------------------------------
 
-EngravingItem* Segment::getElement(staff_idx_t staff)
+EngravingItem* Segment::getElement(staff_idx_t staff) const
 {
     segmentType();
     if (segmentType() == SegmentType::ChordRest) {
@@ -1525,7 +1564,7 @@ EngravingItem* Segment::getElement(staff_idx_t staff)
 //   return next element in _annotations
 //---------------------------------------------------------
 
-EngravingItem* Segment::nextAnnotation(EngravingItem* e)
+EngravingItem* Segment::nextAnnotation(EngravingItem* e) const
 {
     if (m_annotations.empty() || e == m_annotations.back()) {
         return nullptr;
@@ -1547,7 +1586,7 @@ EngravingItem* Segment::nextAnnotation(EngravingItem* e)
 //   return previous element in _annotations
 //---------------------------------------------------------
 
-EngravingItem* Segment::prevAnnotation(EngravingItem* e)
+EngravingItem* Segment::prevAnnotation(EngravingItem* e) const
 {
     if (e == m_annotations.front()) {
         return nullptr;
@@ -1568,9 +1607,9 @@ EngravingItem* Segment::prevAnnotation(EngravingItem* e)
 //   firstAnnotation
 //---------------------------------------------------------
 
-EngravingItem* Segment::firstAnnotation(Segment* s, staff_idx_t activeStaff)
+EngravingItem* Segment::firstAnnotation(staff_idx_t activeStaff) const
 {
-    for (auto i = s->annotations().begin(); i != s->annotations().end(); ++i) {
+    for (auto i = m_annotations.begin(); i != m_annotations.end(); ++i) {
         // TODO: firstVisibleStaff() for system elements? see Spanner::nextSpanner()
         if ((*i)->staffIdx() == activeStaff) {
             return *i;
@@ -1583,17 +1622,17 @@ EngravingItem* Segment::firstAnnotation(Segment* s, staff_idx_t activeStaff)
 //   lastAnnotation
 //---------------------------------------------------------
 
-EngravingItem* Segment::lastAnnotation(Segment* s, staff_idx_t activeStaff)
+EngravingItem* Segment::lastAnnotation(staff_idx_t activeStaff) const
 {
-    for (auto i = --s->annotations().end(); i != s->annotations().begin(); --i) {
+    for (auto i = m_annotations.rbegin(); i != m_annotations.rend(); ++i) {
         // TODO: firstVisibleStaff() for system elements? see Spanner::nextSpanner()
-        if ((*i)->staffIdx() == activeStaff) {
-            return *i;
+        EngravingItem* e = *i;
+        IF_ASSERT_FAILED(e) {
+            continue;
         }
-    }
-    auto i = s->annotations().begin();
-    if ((*i)->staffIdx() == activeStaff) {
-        return *i;
+        if (e->staffIdx() == activeStaff) {
+            return e;
+        }
     }
     return nullptr;
 }
@@ -1607,10 +1646,10 @@ EngravingItem* Segment::lastAnnotation(Segment* s, staff_idx_t activeStaff)
 //   spans into the active staff
 //--------------------------------------------------------
 
-EngravingItem* Segment::firstInNextSegments(staff_idx_t activeStaff)
+EngravingItem* Segment::firstInNextSegments(staff_idx_t activeStaff) const
 {
     EngravingItem* re = 0;
-    Segment* seg = this;
+    const Segment* seg = this;
     while (!re) {
         seg = seg->next1MMenabled();
         if (!seg) {   //end of staff, or score
@@ -1636,23 +1675,24 @@ EngravingItem* Segment::firstInNextSegments(staff_idx_t activeStaff)
 
 //---------------------------------------------------------
 //   firstElementOfSegment
-//   returns the first non null element in the given segment
+//   returns the first non null element
 //---------------------------------------------------------
 
-EngravingItem* Segment::firstElementOfSegment(Segment* s, staff_idx_t activeStaff)
+EngravingItem* Segment::firstElementOfSegment(staff_idx_t activeStaff) const
 {
-    for (auto i: s->elist()) {
+    for (auto i: m_elist) {
         if (i && i->staffIdx() == activeStaff) {
+            if (i->isDurationElement()) {
+                DurationElement* de = toDurationElement(i);
+                Tuplet* tuplet = de->tuplet();
+                if (tuplet && de == tuplet->elements().front()) {
+                    return tuplet;
+                }
+            }
+
             if (i->type() == ElementType::CHORD) {
                 Chord* chord = toChord(i);
-                GraceNotesGroup& graceNotesBefore = chord->graceNotesBefore();
-                if (!graceNotesBefore.empty()) {
-                    if (Chord* graceNotesBeforeFirstChord = graceNotesBefore.front()) {
-                        return graceNotesBeforeFirstChord->notes().front();
-                    }
-                }
-
-                return toChord(i)->notes().back();
+                return chord->firstGraceOrNote();
             } else {
                 return i;
             }
@@ -1663,21 +1703,21 @@ EngravingItem* Segment::firstElementOfSegment(Segment* s, staff_idx_t activeStaf
 
 //---------------------------------------------------------
 //   nextElementOfSegment
-//   returns the next element in the given segment
+//   returns the next element after the given element
 //---------------------------------------------------------
 
-EngravingItem* Segment::nextElementOfSegment(Segment* s, EngravingItem* e, staff_idx_t activeStaff)
+EngravingItem* Segment::nextElementOfSegment(EngravingItem* e, staff_idx_t activeStaff) const
 {
     for (size_t track = 0; track < score()->nstaves() * VOICES - 1; ++track) {
-        if (s->element(track) == 0) {
+        if (element(track) == 0) {
             continue;
         }
-        EngravingItem* el = s->element(track);
+        EngravingItem* el = element(track);
         if (el == e) {
-            EngravingItem* next = s->element(track + 1);
+            EngravingItem* next = element(track + 1);
             while (track < score()->nstaves() * VOICES - 1
                    && (!next || next->staffIdx() != activeStaff)) {
-                next = s->element(++track);
+                next = element(++track);
             }
             if (!next || next->staffIdx() != activeStaff) {
                 return nullptr;
@@ -1697,10 +1737,10 @@ EngravingItem* Segment::nextElementOfSegment(Segment* s, EngravingItem* e, staff
             if (i != notes.begin()) {
                 return *(i - 1);
             } else {
-                EngravingItem* nextEl = s->element(++track);
+                EngravingItem* nextEl = element(++track);
                 while (track < score()->nstaves() * VOICES - 1
                        && (!nextEl || nextEl->staffIdx() != activeStaff)) {
-                    nextEl = s->element(++track);
+                    nextEl = element(++track);
                 }
                 if (!nextEl || nextEl->staffIdx() != activeStaff) {
                     return nullptr;
@@ -1717,21 +1757,21 @@ EngravingItem* Segment::nextElementOfSegment(Segment* s, EngravingItem* e, staff
 
 //---------------------------------------------------------
 //   prevElementOfSegment
-//   returns the previous element in the given segment
+//   returns the previous element before the given element
 //---------------------------------------------------------
 
-EngravingItem* Segment::prevElementOfSegment(Segment* s, EngravingItem* e, staff_idx_t activeStaff)
+EngravingItem* Segment::prevElementOfSegment(EngravingItem* e, staff_idx_t activeStaff) const
 {
     for (int track = static_cast<int>(score()->nstaves() * VOICES) - 1; track > 0; --track) {
-        if (s->element(track) == 0) {
+        if (element(track) == 0) {
             continue;
         }
-        EngravingItem* el = s->element(track);
+        EngravingItem* el = element(track);
         if (el == e) {
-            EngravingItem* prev = s->element(track - 1);
+            EngravingItem* prev = element(track - 1);
             while (track > 0
                    && (!prev || prev->staffIdx() != activeStaff)) {
-                prev = s->element(--track);
+                prev = element(--track);
             }
             if (!prev) {
                 return nullptr;
@@ -1766,10 +1806,10 @@ EngravingItem* Segment::prevElementOfSegment(Segment* s, EngravingItem* e, staff
             if (i != --notes.end()) {
                 return *(i + 1);
             } else {
-                EngravingItem* prevEl = s->element(--track);
+                EngravingItem* prevEl = element(--track);
                 while (track > 0
                        && (!prevEl || prevEl->staffIdx() != activeStaff)) {
-                    prevEl = s->element(--track);
+                    prevEl = element(--track);
                 }
                 if (!prevEl) {
                     return nullptr;
@@ -1789,12 +1829,12 @@ EngravingItem* Segment::prevElementOfSegment(Segment* s, EngravingItem* e, staff
 
 //---------------------------------------------------------
 //   lastElementOfSegment
-//   returns the last element in the given segment
+//   returns the last element
 //---------------------------------------------------------
 
-EngravingItem* Segment::lastElementOfSegment(Segment* s, staff_idx_t activeStaff)
+EngravingItem* Segment::lastElementOfSegment(staff_idx_t activeStaff) const
 {
-    const std::vector<EngravingItem*>& elements = s->elist();
+    const std::vector<EngravingItem*>& elements = m_elist;
     for (auto it = elements.rbegin(); it != elements.rend(); ++it) {
         EngravingItem* item = *it;
         if (item && item->staffIdx() == activeStaff) {
@@ -1820,7 +1860,7 @@ EngravingItem* Segment::lastElementOfSegment(Segment* s, staff_idx_t activeStaff
 //   firstSpanner
 //---------------------------------------------------------
 
-Spanner* Segment::firstSpanner(staff_idx_t activeStaff)
+Spanner* Segment::firstSpanner(staff_idx_t activeStaff) const
 {
     std::multimap<int, Spanner*> mmap = score()->spanner();
     auto range = mmap.equal_range(tick().ticks());
@@ -1849,7 +1889,7 @@ Spanner* Segment::firstSpanner(staff_idx_t activeStaff)
 //   lastSpanner
 //---------------------------------------------------------
 
-Spanner* Segment::lastSpanner(staff_idx_t activeStaff)
+Spanner* Segment::lastSpanner(staff_idx_t activeStaff) const
 {
     std::multimap<int, Spanner*> mmap = score()->spanner();
     auto range = mmap.equal_range(tick().ticks());
@@ -1881,17 +1921,17 @@ Spanner* Segment::lastSpanner(staff_idx_t activeStaff)
 //   notChordRestType
 //---------------------------------------------------------
 
-bool Segment::notChordRestType(Segment* s)
+bool Segment::notChordRestType() const
 {
-    if (s->segmentType() == SegmentType::KeySig
-        || s->segmentType() == SegmentType::TimeSig
-        || s->segmentType() == SegmentType::Clef
-        || s->segmentType() == SegmentType::HeaderClef
-        || s->segmentType() == SegmentType::BeginBarLine
-        || s->segmentType() == SegmentType::EndBarLine
-        || s->segmentType() == SegmentType::BarLine
-        || s->segmentType() == SegmentType::KeySigAnnounce
-        || s->segmentType() == SegmentType::TimeSigAnnounce) {
+    if (segmentType() == SegmentType::KeySig
+        || segmentType() == SegmentType::TimeSig
+        || segmentType() == SegmentType::Clef
+        || segmentType() == SegmentType::HeaderClef
+        || segmentType() == SegmentType::BeginBarLine
+        || segmentType() == SegmentType::EndBarLine
+        || segmentType() == SegmentType::BarLine
+        || segmentType() == SegmentType::KeySigAnnounce
+        || segmentType() == SegmentType::TimeSigAnnounce) {
         return true;
     } else {
         return false;
@@ -1935,7 +1975,8 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::STAFF_STATE:
     case ElementType::INSTRUMENT_CHANGE:
     case ElementType::HARP_DIAGRAM:
-    case ElementType::STICKING: {
+    case ElementType::STICKING:
+    case ElementType::TUPLET: {
         EngravingItem* next = nullptr;
         if (e->explicitParent() == this) {
             next = nextAnnotation(e);
@@ -1950,7 +1991,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
         }
         Segment* nextSegment = this->next1MMenabled();
         while (nextSegment) {
-            EngravingItem* nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
+            EngravingItem* nextEl = nextSegment->firstElementOfSegment(activeStaff);
             if (nextEl) {
                 return nextEl;
             }
@@ -1960,7 +2001,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     }
     case ElementType::SEGMENT: {
         if (!m_annotations.empty()) {
-            EngravingItem* next = firstAnnotation(this, activeStaff);
+            EngravingItem* next = firstAnnotation(activeStaff);
             if (next) {
                 return next;
             }
@@ -1972,7 +2013,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
 
         Segment* nextSegment = this->next1MMenabled();
         while (nextSegment) {
-            EngravingItem* nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
+            EngravingItem* nextEl = nextSegment->firstElementOfSegment(activeStaff);
             if (nextEl) {
                 return nextEl;
             }
@@ -1998,12 +2039,12 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
         }
         Segment* seg = toSegment(p);
         // next in _elist
-        EngravingItem* nextEl = nextElementOfSegment(seg, el, activeStaff);
+        EngravingItem* nextEl = seg->nextElementOfSegment(el, activeStaff);
         if (nextEl) {
             return nextEl;
         }
         if (!m_annotations.empty()) {
-            EngravingItem* next = firstAnnotation(seg, activeStaff);
+            EngravingItem* next = seg->firstAnnotation(activeStaff);
             if (next) {
                 if (next->isStaffText()) {
                     if (SoundFlag* soundFlag = toStaffText(next)->soundFlag()) {
@@ -2018,7 +2059,15 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
         if (s) {
             return s->spannerSegments().front();
         }
-        Segment* nextSegment =  seg->next1MMenabled();
+        Segment* nextSegment = seg->next1MMenabled();
+        for (; nextSegment && nextSegment->isTimeTickType(); nextSegment = nextSegment->next1MMenabled()) {
+            if (EngravingItem* annotation = nextSegment->firstAnnotation(activeStaff)) {
+                return annotation;
+            }
+            if (Spanner* spanner = nextSegment->firstSpanner(activeStaff)) {
+                return spanner->spannerSegments().front();
+            }
+        }
         if (!nextSegment) {
             MeasureBase* mb = measure()->next();
             return mb && mb->isBox() ? mb : score()->lastElement();
@@ -2039,7 +2088,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
         }
 
         while (nextSegment) {
-            nextEl = nextSegment->firstElementOfSegment(nextSegment, activeStaff);
+            nextEl = nextSegment->firstElementOfSegment(activeStaff);
             if (nextEl) {
                 return nextEl;
             }
@@ -2103,8 +2152,8 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
         if (prev) {
             return prev;
         }
-        if (notChordRestType(this)) {
-            EngravingItem* lastEl = lastElementOfSegment(this, activeStaff);
+        if (notChordRestType()) {
+            EngravingItem* lastEl = lastElementOfSegment(activeStaff);
             if (lastEl) {
                 return lastEl;
             }
@@ -2164,7 +2213,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
             }
         }
 
-        EngravingItem* prev = seg->prevElementOfSegment(seg, el, activeStaff);
+        EngravingItem* prev = seg->prevElementOfSegment(el, activeStaff);
         if (prev) {
             if (prev->type() == ElementType::CHORD || prev->type() == ElementType::REST
                 || prev->type() == ElementType::MMREST || prev->type() == ElementType::MEASURE_REPEAT) {
@@ -2186,6 +2235,14 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
             }
         }
         Segment* prevSeg = seg->prev1MMenabled();
+        for (; prevSeg && prevSeg->isTimeTickType(); prevSeg = prevSeg->prev1MMenabled()) {
+            if (Spanner* spanner = prevSeg->lastSpanner(activeStaff)) {
+                return spanner->spannerSegments().front();
+            }
+            if (EngravingItem* annotation = prevSeg->lastAnnotation(activeStaff)) {
+                return annotation;
+            }
+        }
         if (!prevSeg) {
             MeasureBase* mb = measure()->prev();
             return mb && mb->isBox() ? mb : score()->firstElement();
@@ -2205,17 +2262,17 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
             }
         }
 
-        prev = lastElementOfSegment(prevSeg, activeStaff);
+        prev = prevSeg->lastElementOfSegment(activeStaff);
         while (!prev && prevSeg) {
             prevSeg = prevSeg->prev1MMenabled();
-            prev = lastElementOfSegment(prevSeg, activeStaff);
+            prev = prevSeg->lastElementOfSegment(activeStaff);
         }
         if (!prevSeg) {
             return score()->firstElement();
         }
 
-        if (notChordRestType(prevSeg)) {
-            EngravingItem* lastEl = lastElementOfSegment(prevSeg, activeStaff);
+        if (prevSeg->notChordRestType()) {
+            EngravingItem* lastEl = prevSeg->lastElementOfSegment(activeStaff);
             if (lastEl) {
                 return lastEl;
             }
@@ -2224,7 +2281,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
         if (s1) {
             return s1->spannerSegments().front();
         } else if (!prevSeg->annotations().empty()) {
-            EngravingItem* next = lastAnnotation(prevSeg, activeStaff);
+            EngravingItem* next = prevSeg->lastAnnotation(activeStaff);
             if (next) {
                 return next;
             }
@@ -2272,10 +2329,10 @@ EngravingItem* Segment::firstElement(staff_idx_t staffIdx) const
 //   spans into the active staff
 //--------------------------------------------------------
 
-EngravingItem* Segment::lastInPrevSegments(staff_idx_t activeStaff)
+EngravingItem* Segment::lastInPrevSegments(staff_idx_t activeStaff) const
 {
     EngravingItem* re = 0;
-    Segment* seg = this;
+    const Segment* seg = this;
 
     while (!re) {
         seg = seg->prev1MMenabled();
@@ -2283,7 +2340,7 @@ EngravingItem* Segment::lastInPrevSegments(staff_idx_t activeStaff)
             break;
         }
 
-        re = seg->lastElementOfSegment(seg, activeStaff);
+        re = seg->lastElementOfSegment(activeStaff);
     }
 
     if (re) {
@@ -2416,9 +2473,9 @@ void Segment::createShape(staff_idx_t staffIdx)
         setVisible(true);
         BarLine* bl = toBarLine(element(staffIdx * VOICES));
         if (bl) {
-            rendering::dev::LayoutContext lctx(score());
-            RectF r = rendering::dev::TLayout::layoutRect(bl, lctx);
-            s.add(r.translated(bl->pos()), bl);
+            rendering::score::LayoutContext lctx(score());
+            RectF r = rendering::score::TLayout::layoutRect(bl, lctx);
+            s.add(r.translated(bl->pos() + bl->staffOffset()), bl);
         }
         s.addHorizontalSpacing(bl, 0, 0);
         return;
@@ -2445,14 +2502,14 @@ void Segment::createShape(staff_idx_t staffIdx)
                 continue;
             }
             if (e->addToSkyline()) {
-                s.add(e->shape().translate(e->isClef() ? e->ldata()->pos() : e->pos()));
+                s.add(e->shape().translate((e->isClef() ? e->ldata()->pos() : e->pos()) + e->staffOffset()));
             }
             // Non-standard trills display a cue note that we must add to shape here
             if (e->isChord()) {
                 Ornament* orn = toChord(e)->findOrnament();
                 Chord* cueNoteChord = orn ? orn->cueNoteChord() : nullptr;
                 if (cueNoteChord && cueNoteChord->upNote()->visible()) {
-                    s.add(cueNoteChord->shape().translate(cueNoteChord->pos()));
+                    s.add(cueNoteChord->shape().translate(cueNoteChord->pos() + cueNoteChord->staffOffset()));
                 }
             }
         }
@@ -2495,7 +2552,7 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isStringTunings()) {
             // annotations added here are candidates for collision detection
             // lyrics, ...
-            s.add(e->shape().translate(e->pos()));
+            s.add(e->shape().translate(e->pos() + e->staffOffset()));
         }
     }
 }
@@ -2512,7 +2569,7 @@ void Segment::addPreAppendedToShape()
             toGraceNotesGroup(item)->addToShape();
         } else {
             Shape& shape = m_shapes[item->vStaffIdx()];
-            shape.add(item->shape().translate(item->pos()));
+            shape.add(item->shape().translate(item->pos() + item->staffOffset()));
         }
     }
 }

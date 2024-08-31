@@ -39,8 +39,10 @@ using namespace mu::notation;
 
 static constexpr int PROCESS_INTERVAL = 20;
 
-NotationMidiInput::NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction, INotationUndoStackPtr undoStack)
-    : m_getScore(getScore), m_notationInteraction(notationInteraction), m_undoStack(undoStack)
+NotationMidiInput::NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction,
+                                     INotationUndoStackPtr undoStack, const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_getScore(getScore),
+    m_notationInteraction(notationInteraction), m_undoStack(undoStack)
 {
     QObject::connect(&m_processTimer, &QTimer::timeout, [this]() { doProcessEvents(); });
 
@@ -167,6 +169,10 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
         return nullptr;
     }
 
+    if (!is.isValid()) {
+        return nullptr;
+    }
+
     DEFER {
         m_undoStack->commitChanges();
     };
@@ -175,6 +181,10 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
 
     if (e.opcode() == muse::midi::Event::Opcode::NoteOff) {
         if (isRealtime()) {
+            if (!is.cr()) {
+                return nullptr;
+            }
+
             const Chord* chord = is.cr()->isChord() ? engraving::toChord(is.cr()) : nullptr;
             if (chord) {
                 Note* n = chord->findNote(inputEv.pitch);
@@ -206,7 +216,9 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
 
     sc->activeMidiPitches().push_back(inputEv);
 
-    m_notationInteraction->showItem(is.cr());
+    if (is.cr()) {
+        m_notationInteraction->showItem(is.cr());
+    }
 
     return note;
 }

@@ -31,28 +31,22 @@ using namespace muse::audio;
 using namespace muse::audio::synth;
 using namespace muse::mpe;
 
-EventAudioSource::EventAudioSource(const TrackId trackId, const mpe::PlaybackData& playbackData,
-                                   OnOffStreamEventsReceived onOffStreamReceived)
-    : m_trackId(trackId), m_playbackData(playbackData)
+EventAudioSource::EventAudioSource(const TrackId trackId,
+                                   const mpe::PlaybackData& playbackData,
+                                   OnOffStreamEventsReceived onOffStreamReceived,
+                                   const modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), m_trackId(trackId), m_playbackData(playbackData)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_playbackData.offStream.onReceive(this, [onOffStreamReceived, trackId](const PlaybackEventsMap&, const PlaybackParamMap&) {
+    m_playbackData.offStream.onReceive(this, [onOffStreamReceived, trackId](const PlaybackEventsMap&, const PlaybackParamList&) {
         onOffStreamReceived(trackId);
-    });
-
-    m_playbackData.mainStream.onReceive(this, [this](const PlaybackEventsMap& events, const DynamicLevelMap& dynamics,
-                                                     const PlaybackParamMap& params) {
-        m_playbackData.originEvents = events;
-        m_playbackData.dynamicLevelMap = dynamics;
-        m_playbackData.paramMap = params;
     });
 }
 
 EventAudioSource::~EventAudioSource()
 {
     m_playbackData.offStream.resetOnReceive(this);
-    m_playbackData.mainStream.resetOnReceive(this);
 }
 
 bool EventAudioSource::isActive() const
@@ -132,6 +126,10 @@ void EventAudioSource::seek(const msecs_t newPositionMsecs)
         return;
     }
 
+    if (m_synth->playbackPosition() == newPositionMsecs) {
+        return;
+    }
+
     m_synth->setPlaybackPosition(newPositionMsecs);
     m_synth->revokePlayingNotes();
 }
@@ -148,6 +146,10 @@ void EventAudioSource::applyInputParams(const AudioInputParams& requiredParams)
     }
 
     SynthCtx ctx = currentSynthCtx();
+
+    if (m_synth) {
+        m_playbackData = m_synth->playbackData();
+    }
 
     m_synth = synthResolver()->resolveSynth(m_trackId, requiredParams, m_playbackData.setupData);
 
@@ -166,7 +168,7 @@ void EventAudioSource::applyInputParams(const AudioInputParams& requiredParams)
     setupSource();
 
     if (ctx.isValid()) {
-        restoreSynthCtx(std::move(ctx));
+        restoreSynthCtx(ctx);
     } else {
         m_synth->setIsActive(false);
     }
@@ -189,7 +191,7 @@ EventAudioSource::SynthCtx EventAudioSource::currentSynthCtx() const
     return { m_synth->isActive(), m_synth->playbackPosition() };
 }
 
-void EventAudioSource::restoreSynthCtx(SynthCtx&& ctx)
+void EventAudioSource::restoreSynthCtx(const SynthCtx& ctx)
 {
     m_synth->setPlaybackPosition(ctx.playbackPosition);
     m_synth->setIsActive(ctx.isActive);

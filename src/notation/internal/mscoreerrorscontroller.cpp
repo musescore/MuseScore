@@ -27,6 +27,11 @@ using namespace muse;
 using namespace mu::engraving;
 using namespace mu::notation;
 
+MScoreErrorsController::MScoreErrorsController(const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx)
+{
+}
+
 void MScoreErrorsController::checkAndShowMScoreError()
 {
     TRACEFUNC;
@@ -144,6 +149,10 @@ void MScoreErrorsController::checkAndShowMScoreError()
     case MsError::CANNOT_REMOVE_KEY_SIG:
         title = muse::trc("notation", "This key signature cannot be deleted");
         message = muse::trc("notation", "Please replace it with a key signature from the palettes instead.");
+        break;
+    case MsError::CANNOT_JOIN_MEASURE_STAFFTYPE_CHANGE:
+        title = muse::trc("notation", "These measures cannot be joined");
+        message = muse::trc("notation", "Please remove the staff type change and retry.");
         break;
     }
 

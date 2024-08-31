@@ -190,6 +190,7 @@ public:
     static void utf16to8(std::u16string_view src, std::string& dst);
     static void utf8to32(std::string_view src, std::u32string& dst);
     static void utf32to8(std::u32string_view src, std::string& dst);
+    static void replaceInvalid(std::string_view src, std::string& dst);
     static bool isValidUtf8(const std::string_view& src);
 };
 
@@ -255,6 +256,7 @@ public:
     String& prepend(const String& s);
 
     static String fromUtf16LE(const ByteArray& data);
+    static String fromUtf16BE(const ByteArray& data);
 
     static String fromUtf8(const char* str);
     static String fromUtf8(const ByteArray& data);
@@ -301,9 +303,11 @@ public:
     StringList split(const String& str, SplitBehavior behavior = KeepEmptyParts) const;
     StringList split(const std::regex& re, SplitBehavior behavior = KeepEmptyParts) const;
     StringList search(const std::regex& re, std::initializer_list<int> matches, SplitBehavior behavior = KeepEmptyParts) const;
+    StringList search(const std::wregex& re, std::initializer_list<int> matches, SplitBehavior behavior = KeepEmptyParts) const;
     String& replace(const String& before, const String& after);
     String& replace(char16_t before, char16_t after);
     String& replace(const std::regex& re, const String& after);
+    String& replace(const std::wregex& re, const String& after);
     String& insert(size_t position, const String& str);
     String& remove(const String& str) { return replace(str, String()); }
     String& remove(const std::regex& rx) { return replace(rx, String()); }
@@ -469,7 +473,7 @@ private:
 
 inline String operator+(char16_t s1, const String& s2) { String t(s1); t += s2; return t; }
 inline String operator+(const char16_t* s1, const String& s2) { String t(s1); t += s2; return t; }
-}
+} // namespace muse
 
 // ============================
 // Char (UTF-16)

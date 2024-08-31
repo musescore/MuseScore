@@ -68,6 +68,8 @@
 #include "engraving/dom/volta.h"
 #include "engraving/dom/fretcircle.h"
 
+#include "utils.h"
+
 #include "log.h"
 
 using namespace muse::io;
@@ -76,14 +78,15 @@ using namespace mu::engraving;
 namespace mu::iex::guitarpro {
 static TremoloType tremoloType(int division)
 {
-    static std::map<int, TremoloType> types {
+    static const std::map<int, TremoloType> types {
         { 1, TremoloType::R8 },
         { 2, TremoloType::R16 },
         { 3, TremoloType::R32 }
     };
 
-    if (types.find(division) != types.end()) {
-        return types[division];
+    auto it = types.find(division);
+    if (it != types.end()) {
+        return it->second;
     }
 
     LOGE() << "wrong tremolo type";
@@ -149,8 +152,14 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
         // representation is different in guitar pro 5 - the up/down order below is correct
         if (strokeup > 0) {
             a->setArpeggioType(ArpeggioType::UP_STRAIGHT);
+            if (strokeup < 7) {
+                a->setStretch(1.0 / std::pow(2, 6 - strokeup));
+            }
         } else if (strokedown > 0) {
             a->setArpeggioType(ArpeggioType::DOWN_STRAIGHT);
+            if (strokedown < 7) {
+                a->setStretch(1.0 / std::pow(2, 6 - strokedown));
+            }
         } else {
             delete a;
             a = 0;
@@ -598,10 +607,10 @@ bool GuitarPro5::readTracks()
         if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
             clefId = ClefType::PERC;
             StaffTypes type = StaffTypes::PERC_DEFAULT;
-            if (auto it = PERC_STAFF_LINES_FROM_INSTRUMENT.find(name.toStdString());
-                it != PERC_STAFF_LINES_FROM_INSTRUMENT.end()) {
-                initGuitarProPercussionSet(it->second);
-                setInstrumentDrumset(instr, it->second);
+            if (auto it = drumset::PERC_STAFF_LINES_FROM_INSTRUMENT.find(name.toStdString());
+                it != drumset::PERC_STAFF_LINES_FROM_INSTRUMENT.end()) {
+                drumset::initGuitarProPercussionSet(it->second);
+                drumset::setInstrumentDrumset(instr, it->second);
                 switch (it->second.numLines) {
                 case 1:
                     type = StaffTypes::PERC_1LINE;
@@ -617,8 +626,8 @@ bool GuitarPro5::readTracks()
                     break;
                 }
             } else {
-                GuitarPro::initGuitarProDrumset();
-                instr->setDrumset(gpDrumset);
+                drumset::initGuitarProDrumset();
+                instr->setDrumset(drumset::gpDrumset);
             }
             staff->setStaffType(Fraction(0, 1), *StaffType::preset(type));
         } else {
@@ -1243,7 +1252,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
 
             note->setHarmonic(true);
             float harmonicFret = naturalHarmonicFromFret(fret);
-            int harmonicOvertone = GuitarPro::harmonicOvertone(note, harmonicFret, type);
+            int harmonicOvertone = utils::harmonicOvertone(note, harmonicFret, type);
             note->setDisplayFret(Note::DisplayFretOption::NaturalHarmonic);
             note->setHarmonicFret(harmonicFret);
             auto staff = note->staff();
@@ -1302,7 +1311,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
                 break;
             }
 
-            int overtoneFret = GuitarPro::harmonicOvertone(note, harmonicFret, type);
+            int overtoneFret = utils::harmonicOvertone(note, harmonicFret, type);
             harmonicNote->setString(note->string());
             harmonicNote->setFret(note->fret());
             harmonicNote->setHarmonicFret(harmonicFret + fret);
