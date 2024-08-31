@@ -1120,7 +1120,7 @@ void CompatMidiRendererInternal::doRenderSpanners(EventsHolder& events, Spanner*
         if (t > lastRepeat.utick + lastRepeat.len()) {
             t = lastRepeat.utick + lastRepeat.len();
         }
-        pedalEventList.emplace_back(a, false, staffIdx);
+        pedalEventList.emplace_back(t, false, staffIdx);
     } else if (s->isVibrato()) {
         int stick = s->tick().ticks();
         int etick = s->tick2().ticks();
