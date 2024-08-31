@@ -64,8 +64,11 @@ void ProjectActionsController::init()
     dispatcher()->reg(this, "file-open", this, &ProjectActionsController::openProject);
 
     dispatcher()->reg(this, "file-close", [this]() {
-        bool quitApp = multiInstancesProvider()->instances().size() > 1;
-        closeOpenedProject(quitApp);
+        auto anyInstanceWithoutProject = multiInstancesProvider()->isHasAppInstanceWithoutProject();
+        closeOpenedProject(anyInstanceWithoutProject);
+        if (anyInstanceWithoutProject) {
+            multiInstancesProvider()->activateWindowWithoutProject();
+        }
     });
 
     dispatcher()->reg(this, "file-save", [this]() { saveProject(SaveMode::Save); });

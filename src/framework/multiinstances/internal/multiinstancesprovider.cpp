@@ -210,8 +210,8 @@ bool MultiInstancesProvider::isHasAppInstanceWithoutProject() const
         IF_ASSERT_FAILED(!args.empty()) {
             return false;
         }
-        ret = args.at(0).toInt();
-        if (ret) {
+        if (args.at(0).toInt()) {
+            ret = true;
             return true;
         }
 
