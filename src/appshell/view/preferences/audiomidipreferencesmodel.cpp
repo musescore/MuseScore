@@ -193,12 +193,12 @@ void AudioMidiPreferencesModel::setMuteHiddenInstruments(bool mute)
     playbackConfiguration()->setMuteHiddenInstruments(mute);
 }
 
-bool PlaybackPreferencesModel::jackTransportEnable() const
+bool AudioMidiPreferencesModel::jackTransportEnable() const
 {
     return playbackConfiguration()->jackTransportEnable();
 }
 
-void PlaybackPreferencesModel::setJackTransportEnable(bool enable)
+void AudioMidiPreferencesModel::setJackTransportEnable(bool enable)
 {
     if (enable == jackTransportEnable()) {
         return;
