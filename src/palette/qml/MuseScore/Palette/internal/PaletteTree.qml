@@ -83,7 +83,8 @@ StyledListView {
         }
 
         if (paletteModel) {
-            paletteModel.setFilterFixedString(filter)
+            paletteTree.paletteProvider.setFilter(filter)
+            paletteTree.positionViewAtBeginning() // Scroll to top after a search
         }
     }
 

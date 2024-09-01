@@ -245,6 +245,7 @@ public:
     Q_INVOKABLE bool loadPalette(const QModelIndex&);
 
     Q_INVOKABLE void setSearching(bool searching);
+    Q_INVOKABLE void setFilter(const QString&);
 
     bool paletteChanged() const { return m_userPaletteModel->paletteTreeChanged(); }
 
