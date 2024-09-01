@@ -59,22 +59,15 @@ public:
 
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
 
-    // -------------------------------------------------------------------
-    // FIX-JACK: api-change, WAS:
-    //   unsigned int sampleRate() const override;
-    //   bool setSampleRate(unsigned int sampleRate) override;
-    //   async::Notification sampleRateChanged() const override;
     unsigned int outputDeviceSampleRate() const override;
     bool setOutputDeviceSampleRate(unsigned int sampleRate) override;
     async::Notification outputDeviceSampleRateChanged() const override;
-    // -------------------------------------------------------------------
 
     std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
 
     int audioDelayCompensate(void) const override;
     void setAudioDelayCompensate(const int frames) override;
     bool isPlaying() const override;
-    float playbackPositionInSeconds() const override;
     void remotePlayOrStop(bool) const override;
     void remoteSeek(msecs_t) const override;
     bool pushMidiEvent(muse::midi::Event& e) override;

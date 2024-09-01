@@ -66,14 +66,9 @@ public:
     bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
     async::Notification outputDeviceBufferSizeChanged() const override;
 
-    unsigned int sampleRate() const override;
-    bool setSampleRate(unsigned int sampleRate) override;
-    async::Notification sampleRateChanged() const override;
-
     int audioDelayCompensate() const override;
     void setAudioDelayCompensate(const int frames) override;
     bool isPlaying() const override;
-    float playbackPositionInSeconds() const override;
     void remotePlayOrStop(bool) const override;
     void remoteSeek(msecs_t) const override;
 

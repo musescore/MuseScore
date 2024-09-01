@@ -242,21 +242,6 @@ async::Notification WasapiAudioDriver::availableOutputDevicesChanged() const
     return m_availableOutputDevicesChanged;
 }
 
-unsigned int WasapiAudioDriver::sampleRate() const
-{
-    return 0;
-}
-
-bool WasapiAudioDriver::setSampleRate(unsigned int sampleRate)
-{
-    return true;
-}
-
-async::Notification WasapiAudioDriver::sampleRateChanged() const
-{
-    return m_sampleRateChanged;
-}
-
 unsigned int WasapiAudioDriver::outputDeviceBufferSize() const
 {
     return m_activeSpec.samples;
@@ -365,11 +350,6 @@ void WasapiAudioDriver::setAudioDelayCompensate(const int frames)
 bool WasapiAudioDriver::isPlaying() const
 {
     return false;
-}
-
-float WasapiAudioDriver::playbackPositionInSeconds() const
-{
-    return 0;
 }
 
 void WasapiAudioDriver::remotePlayOrStop(bool ps) const

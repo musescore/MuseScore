@@ -97,11 +97,6 @@ bool AudioDriverStub::isPlaying() const
     return false;
 }
 
-float AudioDriverStub::playbackPositionInSeconds() const
-{
-    return 0;
-}
-
 unsigned int AudioDriverStub::sampleRate() const
 {
     return 0;
