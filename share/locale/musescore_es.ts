@@ -9873,7 +9873,7 @@ altura del texto):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1864"/>
         <source>Add ornament: tremblement appuyé (Couperin)</source>
-        <translation>Añadir adornot: tremblement appuyé (Couperin)</translation>
+        <translation>Añadir adorno: tremblement appuyé (Couperin)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1870"/>
@@ -10199,12 +10199,12 @@ altura del texto):</translation>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="39"/>
         <source>&amp;Manage plugins…</source>
-        <translation>&amp;Administrador de plugins…</translation>
+        <translation>&amp;Administrar complementos…</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="40"/>
         <source>Manage plugins…</source>
-        <translation>Administrador de plugins…</translation>
+        <translation>Administrar complementos…</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="37"/>
@@ -10234,7 +10234,7 @@ altura del texto):</translation>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="73"/>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="97"/>
         <source>Plugins</source>
-        <translation>Plugins</translation>
+        <translation>Complementos</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="92"/>
@@ -10244,7 +10244,7 @@ altura del texto):</translation>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="110"/>
         <source>Plugins search</source>
-        <translation>Buscar plugins</translation>
+        <translation>Buscar complementos</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="129"/>
@@ -10736,7 +10736,7 @@ biblioteca de sonidos Muse Sounds</translation>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="305"/>
         <source>&amp;Plugins</source>
-        <translation>&amp;Plugins</translation>
+        <translation>&amp;Complementos</translation>
     </message>
 </context>
 <context>
@@ -11208,7 +11208,7 @@ biblioteca de sonidos Muse Sounds</translation>
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="103"/>
         <source>Plugins</source>
-        <translation>Plugins</translation>
+        <translation>Complementos</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="107"/>
@@ -11557,7 +11557,7 @@ biblioteca de sonidos Muse Sounds</translation>
         <location filename="../../src/framework/audioplugins/internal/registeraudiopluginsscenario.cpp" line="80"/>
         <location filename="../../src/framework/audioplugins/tests/registeraudiopluginsscenariotest.cpp" line="157"/>
         <source>Scanning audio plugins</source>
-        <translation>Escaneando plugins de audio</translation>
+        <translation>Escaneando complementos de audio</translation>
     </message>
 </context>
 <context>
@@ -13066,12 +13066,12 @@ biblioteca de sonidos Muse Sounds</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1164"/>
         <source>Fretboard diagram fingering</source>
-        <translation type="unfinished"/>
+        <translation>Digitación de diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1166"/>
         <source>Fretboard diagram fret number</source>
-        <translation type="unfinished"/>
+        <translation>Número de traste del diagrama de acorde</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1179"/>
@@ -18142,7 +18142,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="162"/>
         <source>Reload plugins</source>
-        <translation>Recargar plugins</translation>
+        <translation>Recargar complementos</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="116"/>
@@ -18185,12 +18185,12 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="46"/>
         <source>Plugin not found</source>
-        <translation>Plugin no encontrado</translation>
+        <translation>Complemento no encontrado</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="47"/>
         <source>Could not load plugin</source>
-        <translation>No se pudo cargar el plugin</translation>
+        <translation>No se pudo cargar el complemento</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="48"/>
@@ -18200,12 +18200,12 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="72"/>
         <source>The plugin “%1” is currently disabled. Do you want to enable it now?</source>
-        <translation>El plugin &quot;%1&quot; está actualmente deshabilitado. ¿Desea habilitarlo ahora?</translation>
+        <translation>El complemento &quot;%1&quot; está actualmente deshabilitado. ¿Desea habilitarlo ahora?</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="73"/>
         <source>Alternatively, you can enable it at any time from Home &gt; Plugins.</source>
-        <translation>Alternativamente, lo puedes activar en cualquier momento desde Inicio&gt;Plugins.</translation>
+        <translation>Alternativamente, lo puedes activar en cualquier momento desde Inicio&gt;Complementos.</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsprovider.cpp" line="42"/>
@@ -19951,7 +19951,7 @@ anacrusa</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/VerticalFrameSettings.qml" line="55"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="61"/>
         <source>Scale with staff size</source>
-        <translation type="unfinished"/>
+        <translation>Escalar con el tamaño del pentagrama</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="65"/>
@@ -20593,7 +20593,7 @@ anacrusa</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="64"/>
         <source>Show stem slash</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar barra de plica</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="77"/>
@@ -23423,7 +23423,7 @@ e intente de nuevo</translation>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="154"/>
         <source>These measures cannot be joined</source>
-        <translation type="unfinished"/>
+        <translation>No se puede unir estos compases</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="155"/>
@@ -23640,7 +23640,7 @@ e intente de nuevo</translation>
     <message>
         <location filename="../../src/notation/internal/notationconfiguration.cpp" line="221"/>
         <source>Anchor color</source>
-        <translation type="unfinished"/>
+        <translation>Color del ancla</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="74"/>
@@ -23695,7 +23695,7 @@ e intente de nuevo</translation>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="53"/>
         <source>Pair accidentals on seconds</source>
-        <translation type="unfinished"/>
+        <translation>Emparejar alteraciones con segundos</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="61"/>
@@ -28328,7 +28328,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>
         <source>Use our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation>Usar nuestra nueva notación y mapeo de sonidos para&lt;a href=&quot;%1&quot;&gt;MDL de percusión&lt;/a&gt;&quot;Muse Drumline&quot;</translation>
+        <translation>Usar nuestra nueva notación y asignación de sonidos para&lt;a href=&quot;%1&quot;&gt;MDL de percusión&lt;/a&gt;&quot;Muse Drumline&quot;</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="100"/>
@@ -28353,7 +28353,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="138"/>
         <source>Our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation>Nuestra nueva notación y mapeo de sonidos para &lt;a href=&quot;%1&quot;&gt;MDL de percusión&lt;/a&gt; &quot;Muse Drumline&quot;</translation>
+        <translation>Nuestra nueva notación y asignación de sonidos para &lt;a href=&quot;%1&quot;&gt;MDL de percusión&lt;/a&gt; &quot;Muse Drumline&quot;</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="157"/>

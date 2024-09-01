@@ -23061,7 +23061,7 @@ De plus, Maîtriser MuseScore propose une communauté de musiciens solidaires, a
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="188"/>
         <source>Edit fret number text style</source>
-        <translation>Éditer le style de texte</translation>
+        <translation>Éditer le style de texte des numéros de frettes</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="200"/>
@@ -23101,7 +23101,7 @@ De plus, Maîtriser MuseScore propose une communauté de musiciens solidaires, a
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="270"/>
         <source>Edit fingering text style</source>
-        <translation>Éditer le style de texte</translation>
+        <translation>Éditer le style de texte des doigtés</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="284"/>
@@ -28318,7 +28318,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="75"/>
         <source>Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.</source>
-        <translation>Notez que l&apos;apparence de votre partition changera en raison des améliorations que nous avons apportées aux paramètres par défaut des éléments et objets de notation.</translation>
+        <translation>Veuillez noter que l&apos;apparence de votre partition changera en raison des améliorations que nous avons apportées aux paramètres par défaut des ligatures, des liaisons de prolongation, des liaisons de phrasé, des objets système et d&apos;espacement horizontal.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>
@@ -28353,7 +28353,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="157"/>
         <source>Please note: score layouts will be affected by improvements to MuseScore Studio</source>
-        <translation>Remarque : Les mises en page des partitions seront affectées par les améliorations apportées à MuseScore Studio</translation>
+        <translation>Note : Les mises en page sont affectées par les améliorations apportées à MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="162"/>
