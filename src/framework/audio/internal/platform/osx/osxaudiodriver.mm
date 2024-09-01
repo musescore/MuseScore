@@ -335,21 +335,6 @@ async::Notification OSXAudioDriver::outputDeviceBufferSizeChanged() const
     return m_bufferSizeChanged;
 }
 
-unsigned int OSXAudioDriver::sampleRate() const
-{
-    return 0;
-}
-
-bool OSXAudioDriver::setSampleRate(unsigned int sampleRate)
-{
-    return true;
-}
-
-async::Notification OSXAudioDriver::sampleRateChanged() const
-{
-    return m_sampleRateChanged;
-}
-
 std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceBufferSizes() const
 {
     OSXAudioDeviceID osxDeviceId = this->osxDeviceId();
@@ -439,11 +424,6 @@ void OSXAudioDriver::setAudioDelayCompensate(const int frames)
 bool OSXAudioDriver::isPlaying() const
 {
     return false;
-}
-
-float OSXAudioDriver::playbackPositionInSeconds() const
-{
-    return 0;
 }
 
 void OSXAudioDriver::remotePlayOrStop([[maybe_unused]] bool ps) const
