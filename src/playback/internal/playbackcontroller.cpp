@@ -254,6 +254,7 @@ void PlaybackController::seek(const audio::secs_t secs)
 
 void PlaybackController::remoteSeek(const msecs_t msecs)
 {
+    if (!currentPlayer() || !playback()) return;
     IF_ASSERT_FAILED(playback()) {
         return;
     }
