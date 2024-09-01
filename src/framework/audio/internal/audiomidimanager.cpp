@@ -57,8 +57,8 @@ void AudioMidiManager::init()
     });
 
     // HELP: is playbackPositionChanged notified for incremental changes too?
-    playbackController()->playbackPositionChanged().onNotify(this, [this]() {
-        positionChanged();
+    playbackController()->currentPlaybackPositionChanged().onReceive(this, [this](audio::secs_t secs, midi::tick_t tick) {
+        positionChanged(secs, tick);
     });
 }
 
@@ -103,7 +103,7 @@ bool AudioMidiManager::isOpened() const
 
 const AudioMidiManager::Spec& AudioMidiManager::activeSpec() const
 {
-    return s_format;
+    return m_current_audioDriverState->deviceSpec;
 }
 
 AudioDeviceID AudioMidiManager::outputDevice() const
@@ -218,10 +218,10 @@ void AudioMidiManager::isPlayingChanged()
     }
 }
 
-void AudioMidiManager::positionChanged()
+void AudioMidiManager::positionChanged(muse::audio::secs_t secs, muse::midi::tick_t tick)
 {
     if (m_current_audioDriverState) {
-        m_current_audioDriverState->changedPosition();
+        m_current_audioDriverState->changedPosition(secs, tick);
     }
 }
 
@@ -230,10 +230,10 @@ bool AudioMidiManager::isPlaying() const
     return playbackController()->isPlaying();
 }
 
-float AudioMidiManager::playbackPositionInSeconds() const
-{
-    return playbackController()->playbackPositionInSeconds();
-}
+//float AudioMidiManager::playbackPositionInSeconds() const
+//{
+//    return playbackController()->playbackPositionInSeconds();
+//}
 
 void AudioMidiManager::remotePlayOrStop(bool ps) const
 {
@@ -353,6 +353,7 @@ std::vector<unsigned int> AudioMidiManager::availableOutputDeviceSampleRates() c
         88200,
         96000,
     };
+}
 
 bool AudioMidiManager::pushMidiEvent(muse::midi::Event& e)
 {
