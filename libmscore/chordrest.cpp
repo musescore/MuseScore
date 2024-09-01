@@ -45,6 +45,7 @@
 #include "hook.h"
 #include "rehearsalmark.h"
 #include "instrchange.h"
+#include "mcursor.h"
 
 namespace Ms {
 
@@ -1439,6 +1440,63 @@ void ChordRest::undoAddAnnotation(Element* a)
       a->setTrack(a->systemFlag() ? 0 : track());
       a->setParent(seg);
       score()->undoAddElement(a);
+      }
+
+//----------------------------------------------------------------
+//    getNotesAtPosition - Get all notes corresponding
+//          to the vertical segment of a ChordRest input. Only one
+//          instrument - the ChordRest's instrument - is taken into
+//          account if onlyOne = true, else the entire score -
+//          currently not implemented for pianoview
+//----------------------------------------------------------------
+
+void ChordRest::getNotesAtPosition(std::vector<Note*>& notesAtPosition, bool onlyOne)
+      {
+      auto part = staff()->part();
+      auto firstTrackOfPart = onlyOne ? part->startTrack()  : 0;
+      auto lastTrackOfPart  = onlyOne ? part->endTrack()    : score()->ntracks();
+      auto currentPosition = tick();
+
+      MCursor c;
+      c.setScore(score()->masterScore());
+      if (!notesAtPosition.empty())
+            notesAtPosition.clear();
+      for (int track = firstTrackOfPart; track < lastTrackOfPart; track++) {
+            c.move(track, currentPosition);
+            if (auto e = c.currentElement()) {
+                  if (e->isChord()) {
+                        auto notes = toChord(e)->notes();
+                        for (auto note : notes) {
+                              notesAtPosition.emplace_back(note);
+                              }
+                        }
+                  }
+            }
+      }
+
+//----------------------------------------------------------------
+//    getChordRestsAtPosition - same as getNotesAtPosition except
+//          now stores ChordRests to include rests for the purposes
+//          of vertical movement of selection of the same tick
+//----------------------------------------------------------------
+
+void ChordRest::getChordRestsAtPosition(std::vector<ChordRest*>& chordRestsAtPosition, bool onlyOne)
+      {
+      auto part = staff()->part();
+      auto firstTrackOfPart = onlyOne ? part->startTrack() : 0;
+      auto lastTrackOfPart  = onlyOne ? part->endTrack()   : score()->ntracks();
+      auto currentPosition = tick();
+
+      MCursor c;
+      c.setScore(score()->masterScore());
+      if (!chordRestsAtPosition.empty())
+            chordRestsAtPosition.clear();
+      for (int track = firstTrackOfPart; track < lastTrackOfPart; track++) {
+            c.move(track, currentPosition);
+            if (auto e = c.currentElement())
+                  if (e->isChord() || e->isRest())
+                        chordRestsAtPosition.emplace_back(toChordRest(e));
+            }
       }
 
 }

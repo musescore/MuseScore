@@ -2093,6 +2093,75 @@ void ScoreView::cmd(const char* s)
       if (MScore::debugMode)
             qDebug("ScoreView::cmd <%s>", s);
 
+      //-------------------------------------
+      // Lambda: removeDuplicates
+      //-------------------------------------
+      auto removeDuplicates = [](std::vector<Element*>&elements) {
+            std::sort(elements.begin(), elements.end());
+            auto it = std::unique(elements.begin(), elements.end());
+            elements.erase(it, elements.end());
+            };
+
+      //-------------------------------------
+      // Lambda: traverseChord
+      //-------------------------------------
+      auto traverseChord = [&removeDuplicates](ScoreView *cv, Direction dir) {
+            auto& score = *cv->score();
+            auto& selection = score.selection();
+            auto el = selection.element();
+            auto oel = el;
+            bool isRange = selection.isRange();
+            std::vector<Element*> notes;
+
+            if (el && (el->isNote() || el->isRest())) {
+                  cv->cmdGotoElement(score.moveAlt(el, dir));
+                  }
+            else for (auto e : selection.elements()) {
+                  if (e->isNote()) {
+                        auto selectedNote = toNote(e);
+                        if (isRange) {
+                              auto newSelection =
+                                    (dir==Direction::DOWN)
+                                    ? selectedNote->chord()->downNote()
+                                    : selectedNote->chord()->upNote();
+                              notes.emplace_back(newSelection);
+                              }
+                        else {
+                              auto newSelection = score.moveAlt(selectedNote, dir);
+                              bool keepSelection = !newSelection;
+                              if (newSelection) {
+                                    if (newSelection->isNote()) {
+                                          auto newNote = toNote(newSelection);
+                                          bool sameChord = (newNote->chord() == selectedNote->chord());
+                                          if (!sameChord)
+                                                keepSelection = true;
+                                          }
+                                    else if (newSelection->isRest())
+                                          keepSelection = true;
+                                    }
+                              notes.emplace_back(keepSelection ? selectedNote : newSelection);
+                              }
+                        }
+                  removeDuplicates(notes);
+                  }
+            if (!notes.empty()) {
+                  selection.clear();
+                  for (auto& note : notes) {
+                        score.select(note, SelectType::ADD);
+                        }
+                  score.update();
+                  }
+            else el = selection.element();
+            while (el && el->isRest() && toRest(el)->isGap()) {
+                  if (score.moveAlt(el, dir) == el) {
+                        cv->cmdGotoElement(oel);
+                        break;
+                        }
+                  el = score.moveAlt(el, dir);
+                  cv->cmdGotoElement(el);
+                  }
+            };
+
       static const std::vector<ScoreViewCmd> cmdList {
             {{"escape"}, [](ScoreView* cv, const QByteArray&) {
                   cv->escapeCmd();
@@ -2382,35 +2451,11 @@ void ScoreView::cmd(const char* s)
                               cv->score()->moveDown(cr);
                         }
                   }},
-            {{"up-chord"}, [](ScoreView* cv, const QByteArray&) {
-                  Element* el = cv->score()->selection().element();
-                  Element* oel = el;
-                  if (el && (el->isNote() || el->isRest()))
-                        cv->cmdGotoElement(cv->score()->upAlt(el));
-                  el = cv->score()->selection().element();
-                  while (el && el->isRest() && toRest(el)->isGap()) {
-                        if (cv->score()->upAlt(el) == el) {
-                              cv->cmdGotoElement(oel);
-                              break;
-                              }
-                        el = cv->score()->upAlt(el);
-                        cv->cmdGotoElement(el);
-                        }
+            {{"up-chord"}, [&traverseChord](ScoreView* cv, const QByteArray&) {
+                  traverseChord(cv, Direction::UP);
                   }},
-            {{"down-chord"}, [](ScoreView* cv, const QByteArray&) {
-                  Element* el = cv->score()->selection().element();
-                  Element* oel = el;
-                  if (el && (el->isNote() || el->isRest()))
-                        cv->cmdGotoElement(cv->score()->downAlt(el));
-                  el = cv->score()->selection().element();
-                  while (el && el->isRest() && toRest(el)->isGap()) {
-                        if (cv->score()->downAlt(el) == el) {
-                              cv->cmdGotoElement(oel);
-                              break;
-                              }
-                        el = cv->score()->downAlt(el);
-                        cv->cmdGotoElement(el);
-                        }
+            {{"down-chord"}, [&traverseChord](ScoreView* cv, const QByteArray&) {
+                  traverseChord(cv, Direction::DOWN);
                   }},
             {{"top-chord"}, [](ScoreView* cv, const QByteArray&) {
                   Element* el = cv->score()->selection().element();

@@ -179,6 +179,19 @@ void MCursor::saveScore()
       fp.close();
       }
 
+//---------------------------------------------------------
+//   currentElement
+//   returns the element @ cursor position if
+//   a valid track & tick were set
+//---------------------------------------------------------
+
+Element* MCursor::currentElement() const
+      {
+      auto measure = _score->tick2measure(_tick);
+      auto seg = measure->getSegment(SegmentType::ChordRest, _tick);
+      return seg && seg->element(_track) ? seg->element(_track) : nullptr;
+      }
+
 
 }
 

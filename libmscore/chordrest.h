@@ -147,6 +147,9 @@ class ChordRest : public DurationElement {
       void removeDeleteBeam(bool beamed);
       void replaceBeam(Beam* newBeam);
 
+      void getNotesAtPosition(std::vector<Note*>&, bool onlyOne=true);
+      void getChordRestsAtPosition(std::vector<ChordRest*>& chordRestsAtPosition, bool onlyOne=true);
+
       ElementList& el()                            { return _el; }
       const ElementList& el() const                { return _el; }
 
