@@ -69,6 +69,9 @@ static bool running_musescore_state;
 //static std::vector<std::thread> threads;
 static JackDriverState* s_jackDriver;
 
+muse::audio::secs_t g_secs = 0;
+muse::midi::tick_t g_tick = 0;
+
 void musescore_state_check_musescore()
 {
     jack_nframes_t pos = mpos_frame;
@@ -182,8 +185,12 @@ void JackDriverState::changedPlaying() const
     }
 }
 
-void JackDriverState::changedPosition() const
+void JackDriverState::changedPosition(muse::audio::secs_t secs, muse::midi::tick_t tick) const
 {
+    // ugly, but provide position to playbackPositionInSeconds
+    g_secs = secs;
+    g_tick = tick;
+
     if (!g_transportEnable) {
         return;
     }
@@ -668,7 +675,8 @@ bool JackDriverState::isPlaying() const
 
 float JackDriverState::playbackPositionInSeconds() const
 {
-    return m_audiomidiManager->playbackPositionInSeconds();
+    // this round-trip could be avoided if the caller uses info from changedposition
+    return g_secs;
 }
 
 void JackDriverState::remotePlayOrStop(bool ps) const

@@ -43,7 +43,7 @@ public:
     std::string deviceName() const;
     void deviceName(const std::string newDeviceName);
     void changedPlaying() const override;
-    void changedPosition() const override;
+    void changedPosition(muse::audio::secs_t secs, muse::midi::tick_t tick) const override;
 
     void* alsaDeviceHandle = nullptr;
     float* buffer = nullptr;

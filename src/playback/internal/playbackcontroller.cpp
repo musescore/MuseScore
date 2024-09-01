@@ -140,16 +140,6 @@ void PlaybackController::init()
 
     m_measureInputLag = configuration()->shouldMeasureInputLag();
 
-    m_currentPlaybackPositionChanged.onNotify(this, [this]() {
-        updateCurrentTempo();
-
-        msecs_t endMsecs = playbackEndMsecs();
-        const LoopBoundaries& loop = notationPlayback()->loopBoundaries();
-        if (m_currentPlaybackTimeMsecs == endMsecs && m_currentPlaybackTimeMsecs != loop.loopOutTick) {
-            stop();
-        }
-    });
-
     m_remoteSeek.onReceive(this, [this](const muse::audio::msecs_t msecs) {
         seek(msecs);
     });

@@ -91,7 +91,7 @@ public:
 
     virtual std::vector<unsigned int> availableOutputDeviceSampleRates() const = 0;
     virtual bool isPlaying() const = 0;
-    virtual float playbackPositionInSeconds() const = 0;
+    //virtual float playbackPositionInSeconds() const = 0;
     virtual void remotePlayOrStop(bool) const = 0;
     virtual void remoteSeek(msecs_t) const = 0;
 
@@ -118,7 +118,7 @@ public:
     virtual std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection dir) const = 0;
 
     virtual void changedPlaying() const = 0;
-    virtual void changedPosition() const = 0;
+    virtual void changedPosition(muse::audio::secs_t secs, muse::midi::tick_t tick) const = 0;
 
     IAudioDriver::Spec deviceSpec; // current running spec
     std::string deviceId;
