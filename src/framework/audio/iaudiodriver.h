@@ -91,7 +91,6 @@ public:
 
     virtual std::vector<unsigned int> availableOutputDeviceSampleRates() const = 0;
     virtual bool isPlaying() const = 0;
-    //virtual float playbackPositionInSeconds() const = 0;
     virtual void remotePlayOrStop(bool) const = 0;
     virtual void remoteSeek(msecs_t) const = 0;
 

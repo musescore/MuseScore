@@ -229,11 +229,6 @@ bool AudioMidiManager::isPlaying() const
     return playbackController()->isPlaying();
 }
 
-//float AudioMidiManager::playbackPositionInSeconds() const
-//{
-//    return playbackController()->playbackPositionInSeconds();
-//}
-
 void AudioMidiManager::remotePlayOrStop(bool ps) const
 {
     playbackController()->remotePlayOrStop(ps);
