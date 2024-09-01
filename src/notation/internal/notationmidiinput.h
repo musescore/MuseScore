@@ -33,6 +33,7 @@
 #include "igetscore.h"
 #include "inotationinteraction.h"
 #include "inotationundostack.h"
+#include "../playback/iplaybackconfiguration.h"
 
 namespace mu::engraving {
 class Score;
@@ -44,6 +45,7 @@ class NotationMidiInput : public INotationMidiInput, public muse::Injectable
     muse::Inject<playback::IPlaybackController> playbackController = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<INotationConfiguration> configuration = { this };
+    muse::Inject<playback::IPlaybackConfiguration> playbackConfiguration = { this };
 
 public:
     NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction, INotationUndoStackPtr undoStack,

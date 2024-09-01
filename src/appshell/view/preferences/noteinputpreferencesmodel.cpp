@@ -95,6 +95,11 @@ bool NoteInputPreferencesModel::playNotesWhenEditing() const
     return playbackConfiguration()->playNotesWhenEditing();
 }
 
+bool NoteInputPreferencesModel::playNotesOnMidiInput() const
+{
+    return playbackConfiguration()->playNotesOnMidiInput();
+}
+
 int NoteInputPreferencesModel::notePlayDurationMilliseconds() const
 {
     return notationConfiguration()->notePlayDurationMilliseconds();
@@ -193,6 +198,16 @@ void NoteInputPreferencesModel::setPlayChordSymbolWhenEditing(bool value)
 
     playbackConfiguration()->setPlayHarmonyWhenEditing(value);
     emit playChordSymbolWhenEditingChanged(value);
+}
+
+void NoteInputPreferencesModel::setPlayNotesOnMidiInput(bool value)
+{
+    if (value == playNotesOnMidiInput()) {
+        return;
+    }
+
+    playbackConfiguration()->setPlayNotesOnMidiInput(value);
+    emit playNotesOnMidiInputChanged(value);
 }
 
 void NoteInputPreferencesModel::setDynamicsApplyToAllVoices(bool value)

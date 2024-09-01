@@ -31,11 +31,14 @@ BaseSection {
     property alias playChordWhenEditing: playChordBox.checked
     property alias playChordSymbolWhenEditing: playChordSymbolBox.checked
     property alias notePlayDurationMilliseconds: notePlayDurationControl.currentValue
+    property alias playNotesOnMidiInput: playNotesOnMidiInputBox.checked
 
     signal playNotesWhenEditingChangeRequested(bool play)
     signal playChordWhenEditingChangeRequested(bool play)
     signal playChordSymbolWhenEditingChangeRequested(bool play)
+    signal playNotesOnMidiInputChangeRequested(bool play)
     signal notePlayDurationChangeRequested(int duration)
+
 
     CheckBox {
         id: playNotesBox
@@ -106,6 +109,23 @@ BaseSection {
 
         onClicked: {
             root.playChordSymbolWhenEditingChangeRequested(!checked)
+        }
+    }
+
+    CheckBox {
+        id: playNotesOnMidiInputBox
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Play notes with MIDI input")
+
+        enabled: root.playNotesWhenEditing
+
+        navigation.name: "PlayNotesOnMidiInputBox"
+        navigation.panel: root.navigation
+        navigation.row: 4
+
+        onClicked: {
+            root.playNotesOnMidiInputChangeRequested(!checked)
         }
     }
 }
