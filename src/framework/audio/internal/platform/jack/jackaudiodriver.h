@@ -49,7 +49,7 @@ public:
     std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection direction) const;
 
     void changedPlaying() const override;
-    void changedPosition() const override;
+    void changedPosition(muse::audio::secs_t secs, muse::midi::tick_t tick) const override;
 
     bool isPlaying() const;
     float playbackPositionInSeconds() const;

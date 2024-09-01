@@ -65,10 +65,6 @@ public:
     bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
     async::Notification outputDeviceBufferSizeChanged() const override;
 
-    unsigned int sampleRate() const override;
-    bool setSampleRate(unsigned int sampleRate) override;
-    async::Notification sampleRateChanged() const override;
-
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
 
     int audioDelayCompensate() const override;
@@ -84,10 +80,10 @@ public:
     std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
 
     void isPlayingChanged();
-    void positionChanged();
+    void positionChanged(muse::audio::secs_t secs, muse::midi::tick_t tick);
 
     bool isPlaying() const override;
-    float playbackPositionInSeconds() const override;
+    //float playbackPositionInSeconds() const override;
     void remotePlayOrStop(bool) const override;
     void remoteSeek(msecs_t) const override;
 
