@@ -148,7 +148,7 @@ void PlaybackController::init()
 
     m_measureInputLag = configuration()->shouldMeasureInputLag();
 
-    m_playbackPositionChanged.onNotify(this, [this]() {
+    m_currentPlaybackPositionChanged.onNotify(this, [this]() {
         updateCurrentTempo();
 
         msecs_t endMsecs = playbackEndMsecs();
