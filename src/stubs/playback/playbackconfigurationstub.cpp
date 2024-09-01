@@ -38,6 +38,15 @@ muse::async::Notification PlaybackConfigurationStub::playNotesWhenEditingChanged
     return muse::async::Notification();
 }
 
+bool PlaybackConfigurationStub::playNotesOnMidiInput() const
+{
+    return false;
+}
+
+void PlaybackConfigurationStub::setPlayNotesOnMidiInput(bool)
+{
+}
+
 bool PlaybackConfigurationStub::playChordWhenEditing() const
 {
     return false;
