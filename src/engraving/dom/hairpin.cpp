@@ -730,13 +730,9 @@ PointF Hairpin::linePos(Grip grip, System** system) const
 
     if (!start) {
         Fraction curTick = segment->tick();
-        while (true) {
-            Segment* prevSeg = segment->prev1();
-            if (prevSeg && prevSeg->tick() == curTick) {
-                segment = prevSeg;
-            } else {
-                break;
-            }
+        Segment* prevSeg = segment->prev1(SegmentType::BarLineType);
+        if (prevSeg && prevSeg->tick() == curTick) {
+            segment = prevSeg;
         }
     }
 
