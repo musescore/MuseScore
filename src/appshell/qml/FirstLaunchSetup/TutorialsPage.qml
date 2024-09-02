@@ -62,7 +62,7 @@ Page {
                 fillMode: Image.PreserveAspectFit
                 source: "resources/VideoTutorials.png"
 
-                layer.enabled: true
+                layer.enabled: ui.isEffectsAllowed
                 layer.effect: EffectOpacityMask {
                     maskSource: Rectangle {
                         width: image.width

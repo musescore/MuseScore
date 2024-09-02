@@ -46,7 +46,7 @@ Page {
         source: "resources/MuseSounds.png"
         sourceSize: Qt.size(width * Screen.devicePixelRatio, height * Screen.devicePixelRatio)
 
-        layer.enabled: true
+        layer.enabled: ui.isEffectsAllowed
         layer.effect: EffectOpacityMask {
             maskSource: Rectangle {
                 width: image.width
