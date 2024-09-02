@@ -24,6 +24,7 @@
 #include "chordlist.h"
 #include "clef.h"
 #include "drumset.h"
+#include "durationtype.h"
 #include "dynamic.h"
 #include "hairpin.h"
 #include "harmony.h"
@@ -2766,6 +2767,26 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
             pasteStaff(e, selection().startSegment(), selection().staffStart(), scale);
             return;
             }
+      if (selection().isList() && selection().elements().size() > 1) {
+            // List - act as if pressing duration toggle (distinct from range based Half/Double
+            TDuration newDuration(stepDotted
+                                  ? _is.duration().shiftRetainDots(nSteps, stepDotted)
+                                  : _is.duration().shift(nSteps));
+            _is.duration().shiftRetainDots(nSteps, stepDotted);
+            _is.setDuration(newDuration);
+            QSet<ChordRest*> crs = getSelectedChordRests();
+            for (auto cr : getSelectedChordRests()) {
+                  changeCRlen(cr, newDuration);
+                  }
+            for (auto cr : crs) {
+                  Element* e = cr;
+                  if (cr->isChord())
+                        e = toChord(cr)->upNote();
+                  select(e, SelectType::ADD);
+                  }
+            return;
+            }
+
       Element* el = selection().element();
       if (el == 0)
             return;
