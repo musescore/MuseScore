@@ -199,6 +199,12 @@ static UInt32 nativeKeycode(UCKeyboardLayout* keyboard, Qt::Key keyCode, bool& f
         break;
     }
 
+    if (keyCode < 0 || keyCode > 0xFFFF) {
+        LOGW() << "Unhandled key code: " << keyCode;
+        found = false;
+        return 0;
+    }
+
     UTF16Char keyCodeChar = keyCode;
     UCKeyboardTypeHeader* table = keyboard->keyboardTypeList;
 
