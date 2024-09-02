@@ -39,6 +39,7 @@
 #include "barline.h"
 #include "box.h"
 #include "chord.h"
+#include "chordrest.h"
 #include "clef.h"
 #include "drumset.h"
 #include "dynamic.h"
@@ -3289,6 +3290,35 @@ void Score::cmdMirrorNoteHead()
 
 void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
 {
+    if (selection().isRange()) {
+        if (!selection().canCopy()) {
+            return;
+        }
+        ChordRest* firstCR = selection().firstChordRest();
+        if (firstCR->isGrace()) {
+            firstCR = toChordRest(firstCR->parent());
+        }
+        TDuration initialDuration = firstCR->ticks();
+        TDuration d = initialDuration.shiftRetainDots(nSteps, stepDotted);
+        if (!d.isValid()) {
+            return;
+        }
+        Fraction scale = d.ticks() / initialDuration.ticks();
+        for (ChordRest* cr : getSelectedChordRests()) {
+            Fraction newTicks = cr->ticks() * scale;
+            if (newTicks < Fraction(1, 1024)
+                || (stepDotted && cr->durationType().dots() != firstCR->durationType().dots()
+                    && !cr->isGrace())) {
+                return;
+            }
+        }
+        const muse::ByteArray mimeData(selection().mimeData());
+        XmlReader e(mimeData);
+        deleteRange(selection().startSegment(), selection().endSegment(), staff2track(selection().staffStart()),
+                    staff2track(selection().staffEnd()), selectionFilter());
+        pasteStaff(e, selection().startSegment(), selection().staffStart(), scale);
+        return;
+    }
     EngravingItem* el = selection().element();
     if (el == 0) {
         return;
