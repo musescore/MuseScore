@@ -724,7 +724,7 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
 
     bool hitElementIsAlreadyBeingEdited = viewInteraction()->isElementEditStarted() && viewInteraction()->editedItem() == ctx.hitElement;
     if (!selection->isRange() && ctx.hitElement && ctx.hitElement->needStartEditingAfterSelecting() && !hitElementIsAlreadyBeingEdited) {
-        if (ctx.hitElement->hasGrips()) {
+        if (ctx.hitElement->hasGrips() && selection->elements().size() == 1) {
             viewInteraction()->startEditGrip(ctx.hitElement, ctx.hitElement->gripsCount() > 4 ? Grip::DRAG : Grip::MIDDLE);
         } else {
             viewInteraction()->startEditElement(ctx.hitElement, false);
