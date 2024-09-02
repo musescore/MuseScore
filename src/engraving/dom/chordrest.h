@@ -136,6 +136,9 @@ public:
     void removeDeleteBeam(bool beamed);
     void replaceBeam(Beam* newBeam);
 
+    void getNotesAtPosition(std::vector<Note*>&, bool onlyOne = true);
+    void getChordRestsAtPosition(std::vector<ChordRest*>& chordRestsAtPosition, bool onlyOne = true);
+
     const ElementList& el() const { return m_el; }
 
     //! TODO Look like a hack, see using
