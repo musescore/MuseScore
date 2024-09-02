@@ -64,6 +64,14 @@ otool -L ${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
 echo "Remove dSYM files"
 find ${VOLUME}/${APPNAME}.app/Contents -type d -name "*.dSYM" -exec rm -r {} +
 
+# Rename Resources/qml to Resources/qml_mu. This way, VST3 plugins that also use QML
+# won't find these QML files, to prevent crashes because of conflicts.
+# https://github.com/musescore/MuseScore/issues/21372
+# https://github.com/musescore/MuseScore/issues/24331
+echo "Rename Resources/qml to Resources/qml_mu"
+mv ${VOLUME}/${APPNAME}.app/Contents/Resources/qml ${VOLUME}/${APPNAME}.app/Contents/Resources/qml_mu
+sed -i '' 's:Resources/qml:Resources/qml_mu:g' ${VOLUME}/${APPNAME}.app/Contents/Resources/qt.conf
+
 echo "Rename ${APPNAME}.app to ${VOLUME}/${LONGER_NAME}.app"
 mv ${VOLUME}/${APPNAME}.app "${VOLUME}/${LONGER_NAME}.app"
 
