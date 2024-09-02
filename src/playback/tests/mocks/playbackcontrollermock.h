@@ -87,6 +87,7 @@ public:
 
     MOCK_METHOD(void, setNotation, (notation::INotationPtr), (override));
     MOCK_METHOD(void, setIsExportingAudio, (bool), (override));
+    MOCK_METHOD(muse::audio::msecs_t, selectionDuration, (), (const, override));
 };
 }
 

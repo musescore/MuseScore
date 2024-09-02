@@ -494,6 +494,23 @@ void ExportDialogModel::setBitRate(int rate)
     emit bitRateChanged(rate);
 }
 
+bool ExportDialogModel::showSelectionOnlyControl() const
+{
+    auto interaction = context()->currentNotation()->interaction();
+    return interaction && interaction->selection()->isRange();
+}
+
+bool ExportDialogModel::selectionOnly() const
+{
+    return audioExportConfiguration()->selectionOnly();
+}
+
+void ExportDialogModel::setSelectionOnly(bool flag)
+{
+    audioExportConfiguration()->setSelectionOnly(flag);
+    emit selectionOnlyChanged(flag);
+}
+
 bool ExportDialogModel::midiExpandRepeats() const
 {
     return midiImportExportConfiguration()->isExpandRepeats();

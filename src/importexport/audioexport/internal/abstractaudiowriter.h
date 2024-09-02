@@ -52,7 +52,8 @@ public:
     void abort() override;
 
 protected:
-    muse::Ret doWriteAndWait(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format);
+    muse::Ret doWriteAndWait(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format,
+                             bool selectionOnly = false);
 
 private:
     UnitType unitTypeFromOptions(const Options& options) const;

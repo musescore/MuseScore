@@ -111,6 +111,8 @@ public:
     void setNotation(notation::INotationPtr notation) override;
     void setIsExportingAudio(bool exporting) override;
 
+    muse::audio::msecs_t selectionDuration() const override;
+
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 private:
     muse::audio::IPlayerPtr currentPlayer() const;
