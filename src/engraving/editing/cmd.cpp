@@ -42,6 +42,7 @@
 #include "../dom/chordrest.h"
 #include "../dom/clef.h"
 #include "../dom/drumset.h"
+#include "../dom/durationtype.h"
 #include "../dom/dynamic.h"
 #include "../dom/factory.h"
 #include "../dom/glissando.h"
@@ -3332,6 +3333,26 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
                     staff2track(selection().staffEnd()), selectionFilter());
         pasteStaff(e, selection().startSegment(), selection().staffStart(), scale);
         return;
+    } 
+    if (selection().isList() && selection().elements().size() > 1) {
+        // List - act as if pressing duration toggle (distinct from range based Half/Double
+        TDuration newDuration(stepDotted
+                              ? m_is.duration().shiftRetainDots(nSteps, stepDotted)
+                              : m_is.duration().shift(nSteps));
+        m_is.duration().shiftRetainDots(nSteps, stepDotted);
+        m_is.setDuration(newDuration);
+        std::set<ChordRest*> crs = getSelectedChordRests();
+        for (auto cr : getSelectedChordRests()) {
+            changeCRlen(cr, newDuration);
+        }
+        for (auto cr : crs) {
+            EngravingItem* e = cr;
+            if (cr->isChord()) {
+                e = toChord(cr)->upNote();
+            }
+            select(e, SelectType::ADD);
+        }
+        return;
     }
     EngravingItem* el = selection().element();
     if (el == 0) {
@@ -3343,15 +3364,12 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
     if (!el->isChordRest()) {
         return;
     }
-
     ChordRest* cr = toChordRest(el);
-
     // if measure rest is selected as input, then the correct initialDuration will be the
     // duration of the measure's time signature, else is just the ChordRest's duration
     TDuration initialDuration = cr->durationType();
     if (initialDuration == DurationType::V_MEASURE) {
         initialDuration = TDuration(cr->measure()->timesig(), true);
-
         if (initialDuration.fraction() < cr->measure()->timesig() && nSteps > 0) {
             // Duration already shortened by truncation; shorten one step less
             --nSteps;
