@@ -127,6 +127,7 @@ private:
 
     void updateSystemThemeListeningStatus();
     void synchThemeWithSystemIfNecessary();
+    void synchAccentColorWithSystemIfNecessary();
 
     void doSetIsDarkMode(bool dark);
     void doSetCurrentTheme(const ThemeCode& themeCode);

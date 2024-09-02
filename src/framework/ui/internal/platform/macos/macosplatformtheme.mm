@@ -32,9 +32,11 @@ using namespace muse::ui;
 using namespace muse::async;
 
 id<NSObject> darkModeObserverToken = nil;
+id<NSObject> accentColorObserverToken = nil;
 
 void MacOSPlatformTheme::startListening()
 {
+    // set up dark mode observer
     if (!darkModeObserverToken) {
         darkModeObserverToken = [[NSDistributedNotificationCenter defaultCenter]
                                  addObserverForName:@"AppleInterfaceThemeChangedNotification"
@@ -44,13 +46,31 @@ void MacOSPlatformTheme::startListening()
                                      m_platformThemeChanged.notify();
                                  }];
     }
+
+    // set up accent color observer
+    if (!accentColorObserverToken) {
+        accentColorObserverToken = [[NSDistributedNotificationCenter defaultCenter]
+                                    addObserverForName:@"AppleColorPreferencesChangedNotification"
+                                    object:nil
+                                    queue:nil
+                                    usingBlock:^(NSNotification*) {
+                                        m_platformThemeChanged.notify();
+                                    }];
+    }
 }
 
 void MacOSPlatformTheme::stopListening()
 {
+    // clean up dark mode observer
     if (darkModeObserverToken) {
         [[NSDistributedNotificationCenter defaultCenter] removeObserver:darkModeObserverToken];
         darkModeObserverToken = nil;
+    }
+
+    // clean up accent color observer
+    if (accentColorObserverToken) {
+        [[NSDistributedNotificationCenter defaultCenter] removeObserver:accentColorObserverToken];
+        accentColorObserverToken = nil;
     }
 }
 
@@ -69,6 +89,82 @@ bool MacOSPlatformTheme::isSystemThemeDark() const
 bool MacOSPlatformTheme::isGlobalMenuAvailable() const
 {
     return true;
+}
+
+int MacOSPlatformTheme::getAccentColorIndex()
+{
+    // get macOS int representation of system accent color
+    NSNumber* accentNum = [[NSUserDefaults standardUserDefaults] objectForKey:@"AppleAccentColor"];
+    LOGD() << [[NSUserDefaults standardUserDefaults] objectForKey:@"AppleAccentColor"];
+    /*
+     * Notes:
+     *
+     * > The object returned from the call to objectForKey is an NSNumber
+     * > use [nameOfObject intValue] to get the integer value contained within
+     * > HOWEVER, you need to check if the returned NSNumber is null, as THAT value is what
+     *   corresponds to the "Multicolor" option
+     * > Rest of the mappings are as follows:
+     *
+     *   int | color option | MuseScore accent color index
+     *   -------------------------------------------------
+     *   -1  | graphite     | N/A
+     *    0  | red          | 0
+     *    1  | orange       | 1
+     *    2  | yellow       | 2
+     *    3  | green        | 3
+     *    4  | blue         | 4
+     *    5  | purple       | 5
+     *    6  | pink         | 6
+    */
+
+    int MSIndex;
+
+    if (accentNum == 0) {
+        LOGD() << "Color is multicolor, defaulting to blue";
+        MSIndex = 4;
+    } else {
+        LOGD() << "User color is defined, converting index...";
+        switch ([accentNum intValue]) {
+        case -1:
+            LOGD() << "Color is graphite -> switching to blue";
+            MSIndex = 4;
+            break;
+        case 0:
+            LOGD() << "Color is red";
+            MSIndex = 0;
+            break;
+        case 1:
+            LOGD() << "Color is orange";
+            MSIndex = 1;
+            break;
+        case 2:
+            LOGD() << "Color is yellow";
+            MSIndex = 2;
+            break;
+        case 3:
+            LOGD() << "Color is green";
+            MSIndex = 3;
+            break;
+        case 4:
+            LOGD() << "Color is blue";
+            MSIndex = 4;
+            break;
+        case 5:
+            LOGD() << "Color is purple";
+            MSIndex = 5;
+            break;
+        case 6:
+            LOGD() << "Color is pink";
+            MSIndex = 6;
+            break;
+        default:
+            LOGD() << "Unexpected value, defaulting to blue";
+            MSIndex = 4;
+            break;
+        }
+    }
+
+    return MSIndex;
 }
 
 Notification MacOSPlatformTheme::platformThemeChanged() const
