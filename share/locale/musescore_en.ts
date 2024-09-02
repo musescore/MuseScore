@@ -4551,12 +4551,6 @@ text x-height):</translation>
         <translation type="unfinished">Spelling</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12890"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12962"/>
-        <source>Standard</source>
-        <translation type="unfinished">Standard</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12903"/>
         <source>German</source>
         <translation type="unfinished">German</translation>
@@ -4875,6 +4869,18 @@ text x-height):</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13966"/>
         <source>Frame:</source>
         <translation type="unfinished">Frame:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12890"/>
+        <source>Standard</source>
+        <comment>chord symbol spelling</comment>
+        <translation type="unfinished">Standard</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12962"/>
+        <source>Standard</source>
+        <comment>chord symbol style</comment>
+        <translation type="unfinished">Standard</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13857"/>
@@ -5865,12 +5871,12 @@ text x-height):</translation>
         <translation type="unfinished">Text:</translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/timedialog.ui" line="290"/>
+        <location filename="../../src/palette/view/widgets/timedialog.ui" line="293"/>
         <source>Add time signature to master palette</source>
         <translation type="unfinished">Add time signature to master palette</translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/timedialog.ui" line="293"/>
+        <location filename="../../src/palette/view/widgets/timedialog.ui" line="296"/>
         <source>Add</source>
         <translation type="unfinished">Add</translation>
     </message>
@@ -8762,7 +8768,7 @@ text x-height):</translation>
         <translation type="unfinished">Change enharmonic spelling (current mode)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="193"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="201"/>
         <source>Score comparison tool</source>
         <translation type="unfinished">Score comparison tool</translation>
     </message>
@@ -8972,17 +8978,17 @@ text x-height):</translation>
         <translation type="unfinished">Show/hide piano keyboard</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="201"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="209"/>
         <source>&amp;Status bar</source>
         <translation type="unfinished">&amp;Status bar</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="202"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="210"/>
         <source>Show/hide status bar</source>
         <translation type="unfinished">Show/hide status bar</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="210"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="218"/>
         <source>Preferences…</source>
         <translation type="unfinished">Preferences…</translation>
     </message>
@@ -9022,7 +9028,7 @@ text x-height):</translation>
         <translation type="unfinished">Piano &amp;keyboard</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="209"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="217"/>
         <source>&amp;Preferences</source>
         <translation type="unfinished">&amp;Preferences</translation>
     </message>
@@ -10326,6 +10332,11 @@ text x-height):</translation>
         <translation type="unfinished">Drumset tools</translation>
     </message>
     <message>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="424"/>
+        <source>Percussion</source>
+        <translation type="unfinished">Percussion</translation>
+    </message>
+    <message>
         <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="93"/>
         <source>Undo/redo toolbar</source>
         <translation type="unfinished">Undo/redo toolbar</translation>
@@ -10620,42 +10631,42 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/add</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="219"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="220"/>
         <source>&amp;Notes</source>
         <translation type="unfinished">&amp;Notes</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="220"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="221"/>
         <source>&amp;Intervals</source>
         <translation type="unfinished">&amp;Intervals</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="221"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="222"/>
         <source>T&amp;uplets</source>
         <translation type="unfinished">T&amp;uplets</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="223"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="224"/>
         <source>&amp;Measures</source>
         <translation type="unfinished">&amp;Measures</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="224"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="225"/>
         <source>&amp;Frames</source>
         <translation type="unfinished">&amp;Frames</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="225"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="226"/>
         <source>&amp;Text</source>
         <translation type="unfinished">&amp;Text</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="226"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="227"/>
         <source>&amp;Lines</source>
         <translation type="unfinished">&amp;Lines</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="229"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="230"/>
         <source>&amp;Add</source>
         <translation type="unfinished">&amp;Add</translation>
     </message>
@@ -10663,37 +10674,37 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/diagnostic</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="357"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="358"/>
         <source>&amp;System</source>
         <translation type="unfinished">&amp;System</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="369"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="370"/>
         <source>&amp;Muse Sampler</source>
         <translation type="unfinished">&amp;Muse Sampler</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="399"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="400"/>
         <source>&amp;Accessibility</source>
         <translation type="unfinished">&amp;Accessibility</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="400"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="401"/>
         <source>&amp;Engraving</source>
         <translation type="unfinished">&amp;Engraving</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="401"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="402"/>
         <source>E&amp;xtensions</source>
         <translation type="unfinished">E&amp;xtensions</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="402"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="403"/>
         <source>Auto&amp;bot</source>
         <translation type="unfinished">Auto&amp;bot</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="406"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="407"/>
         <source>&amp;Diagnostic</source>
         <translation type="unfinished">&amp;Diagnostic</translation>
     </message>
@@ -10722,12 +10733,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/format</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="245"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="246"/>
         <source>Str&amp;etch</source>
         <translation type="unfinished">Str&amp;etch</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="256"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="257"/>
         <source>F&amp;ormat</source>
         <translation type="unfinished">F&amp;ormat</translation>
     </message>
@@ -10735,7 +10746,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/help</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="345"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="346"/>
         <source>&amp;Help</source>
         <translation type="unfinished">&amp;Help</translation>
     </message>
@@ -10743,7 +10754,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/plugins</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="305"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="306"/>
         <source>&amp;Plugins</source>
         <translation type="unfinished">&amp;Plugins</translation>
     </message>
@@ -10751,17 +10762,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/tools</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="281"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="282"/>
         <source>&amp;Voices</source>
         <translation type="unfinished">&amp;Voices</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="282"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="283"/>
         <source>&amp;Measures</source>
         <translation type="unfinished">&amp;Measures</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="300"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="301"/>
         <source>&amp;Tools</source>
         <translation type="unfinished">&amp;Tools</translation>
     </message>
@@ -10769,22 +10780,22 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/view</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="205"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="206"/>
         <source>&amp;Toolbars</source>
         <translation type="unfinished">&amp;Toolbars</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="206"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="207"/>
         <source>W&amp;orkspaces</source>
         <translation type="unfinished">W&amp;orkspaces</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="208"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="209"/>
         <source>&amp;Show</source>
         <translation type="unfinished">&amp;Show</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="213"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="214"/>
         <source>&amp;View</source>
         <translation type="unfinished">&amp;View</translation>
     </message>
@@ -11738,32 +11749,32 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Quadruple dotted %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1106"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1112"/>
         <source>Start and end of %1</source>
         <translation type="unfinished">Start and end of %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3541"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3553"/>
         <source>Current contents of measures will be replaced</source>
         <translation type="unfinished">Current contents of measures will be replaced</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3542"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3554"/>
         <source>Continue with inserting measure repeat?</source>
         <translation type="unfinished">Continue with inserting measure repeat?</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2517"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2524"/>
         <source>Measure: %1</source>
         <translation type="unfinished">Measure: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2520"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2527"/>
         <source>Displayed measure: %1</source>
         <translation type="unfinished">Displayed measure: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2524"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2531"/>
         <source>Beat: %1</source>
         <translation type="unfinished">Beat: %1</translation>
     </message>
@@ -12045,27 +12056,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">%1; Duration: %2; %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2392"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2394"/>
         <source>Annotations:</source>
         <translation type="unfinished">Annotations:</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/barline.cpp" line="1232"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1108"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1103"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1114"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3225"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3237"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2418"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2420"/>
         <source>Start of %1</source>
         <translation type="unfinished">Start of %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/barline.cpp" line="1235"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1100"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1110"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1106"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1116"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3229"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3245"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2433"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2435"/>
         <source>End of %1</source>
         <translation type="unfinished">End of %1</translation>
     </message>
@@ -17992,29 +18003,29 @@ Fret %1 on strings %2</translation>
     <name>engraving/timesig</name>
     <message>
         <location filename="../../src/engraving/dom/timesig.cpp" line="320"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1683"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1702"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1684"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1703"/>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="200"/>
         <source>Common time</source>
         <translation type="unfinished">Common time</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/timesig.cpp" line="322"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1684"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1703"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1685"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1704"/>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="202"/>
         <source>Cut time</source>
         <translation type="unfinished">Cut time</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/timesig.cpp" line="324"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1707"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1708"/>
         <source>Cut time (Bach)</source>
         <translation type="unfinished">Cut time (Bach)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/timesig.cpp" line="326"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1708"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1709"/>
         <source>Cut triple time (9/8)</source>
         <translation type="unfinished">Cut triple time (9/8)</translation>
     </message>
@@ -18271,7 +18282,7 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml" line="98"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="251"/>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="132"/>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="98"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="96"/>
         <source>OK</source>
         <translation type="unfinished">OK</translation>
     </message>
@@ -18293,7 +18304,7 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="85"/>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="145"/>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="101"/>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="111"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="109"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="340"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="375"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="397"/>
@@ -18355,7 +18366,7 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml" line="52"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PartsDialog.qml" line="101"/>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="266"/>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="110"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="108"/>
         <source>Close</source>
         <translation type="unfinished">Close</translation>
     </message>
@@ -18689,7 +18700,7 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">pt</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="99"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="97"/>
         <source>Save</source>
         <translation type="unfinished">Save</translation>
     </message>
@@ -18736,11 +18747,11 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="111"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="55"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="105"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="201"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="321"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="327"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="333"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="339"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="199"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="317"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="323"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="329"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="335"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="90"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="98"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="100"/>
@@ -18767,77 +18778,77 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">s</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="100"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="98"/>
         <source>Save all</source>
         <translation type="unfinished">Save all</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="101"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="99"/>
         <source>Don’t save</source>
         <translation type="unfinished">Don’t save</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="102"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="100"/>
         <source>Open</source>
         <translation type="unfinished">Open</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="103"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="101"/>
         <source>Yes</source>
         <translation type="unfinished">Yes</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="104"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="102"/>
         <source>Yes to all</source>
         <translation type="unfinished">Yes to all</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="105"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="103"/>
         <source>No</source>
         <translation type="unfinished">No</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="106"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="104"/>
         <source>No to all</source>
         <translation type="unfinished">No to all</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="107"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="105"/>
         <source>Abort</source>
         <translation type="unfinished">Abort</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="108"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="106"/>
         <source>Retry</source>
         <translation type="unfinished">Retry</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="109"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="107"/>
         <source>Ignore</source>
         <translation type="unfinished">Ignore</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="112"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="110"/>
         <source>Discard</source>
         <translation type="unfinished">Discard</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="113"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="111"/>
         <source>Help</source>
         <translation type="unfinished">Help</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="114"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="112"/>
         <source>Apply</source>
         <translation type="unfinished">Apply</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="115"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="113"/>
         <source>Reset</source>
         <translation type="unfinished">Reset</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="116"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="114"/>
         <source>Continue</source>
         <translation type="unfinished">Continue</translation>
     </message>
@@ -22538,104 +22549,104 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="863"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="693"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="695"/>
         <source>Note input mode</source>
         <translation type="unfinished">Note input mode</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="868"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="693"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="695"/>
         <source>Normal mode</source>
         <translation type="unfinished">Normal mode</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="867"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="869"/>
         <source>Cannot create tuplet</source>
         <translation type="unfinished">Cannot create tuplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="867"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="869"/>
         <source>Note value is too short</source>
         <translation type="unfinished">Note value is too short</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1297"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1299"/>
         <source>All Supported Files</source>
         <translation type="unfinished">All Supported Files</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1298"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1300"/>
         <source>Scalable Vector Graphics</source>
         <translation type="unfinished">Scalable Vector Graphics</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1299"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1301"/>
         <source>JPEG</source>
         <translation type="unfinished">JPEG</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1300"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1302"/>
         <source>PNG Bitmap Graphic</source>
         <translation type="unfinished">PNG Bitmap Graphic</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1301"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1303"/>
         <source>Bitmap</source>
         <translation type="unfinished">Bitmap</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1302"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1304"/>
         <source>TIFF</source>
         <translation type="unfinished">TIFF</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1305"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1307"/>
         <source>Insert Image</source>
         <translation type="unfinished">Insert Image</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1655"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1657"/>
         <source>MuseScore style files</source>
         <translation type="unfinished">MuseScore style files</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1656"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1658"/>
         <source>MuseScore style file</source>
         <translation type="unfinished">MuseScore style file</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1659"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1661"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2344"/>
         <source>Load style</source>
         <translation type="unfinished">Load style</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1660"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1662"/>
         <source>Save style</source>
         <translation type="unfinished">Save style</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1670"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1672"/>
         <source>The style file could not be loaded.</source>
         <translation type="unfinished">The style file could not be loaded.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1675"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1677"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
         <translation type="unfinished">Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1677"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1679"/>
         <source>Click OK to load anyway.</source>
         <translation type="unfinished">Click OK to load anyway.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1691"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1693"/>
         <source>The style file could not be saved.</source>
         <translation type="unfinished">The style file could not be saved.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1692"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1694"/>
         <source>An error occurred.</source>
         <translation type="unfinished">An error occurred.</translation>
     </message>
@@ -22965,7 +22976,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">View</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1303"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1305"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="161"/>
         <source>All</source>
         <translation type="unfinished">All</translation>
@@ -23107,82 +23118,82 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Preview:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="188"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="187"/>
         <source>Edit fret number text style</source>
         <translation type="unfinished">Edit fret number text style</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="200"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="198"/>
         <source>Dot size:</source>
         <translation type="unfinished">Dot size:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="207"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="205"/>
         <source>Barré</source>
         <translation type="unfinished">Barré</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="220"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="218"/>
         <source>Appearance:</source>
         <translation type="unfinished">Appearance:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="227"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="225"/>
         <source>Line</source>
         <translation type="unfinished">Line</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="228"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="226"/>
         <source>Slur</source>
         <translation type="unfinished">Slur</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="256"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="254"/>
         <source>Line thickness:</source>
         <translation type="unfinished">Line thickness:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="263"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="261"/>
         <source>Show fingerings</source>
         <translation type="unfinished">Show fingerings</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="270"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="267"/>
         <source>Edit fingering text style</source>
         <translation type="unfinished">Edit fingering text style</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="284"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="280"/>
         <source>Fretboard style:</source>
         <translation type="unfinished">Fretboard style:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="291"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="287"/>
         <source>Trimmed</source>
         <translation type="unfinished">Trimmed</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="292"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="288"/>
         <source>Extended</source>
         <translation type="unfinished">Extended</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="320"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="316"/>
         <source>String spacing:</source>
         <translation type="unfinished">String spacing:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="326"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="322"/>
         <source>Fret spacing:</source>
         <translation type="unfinished">Fret spacing:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="332"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="328"/>
         <source>Maximum shift above:</source>
         <translation type="unfinished">Maximum shift above:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="338"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="334"/>
         <source>Maximum shift below:</source>
         <translation type="unfinished">Maximum shift below:</translation>
     </message>
@@ -23234,22 +23245,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Customize toolbar</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="524"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="525"/>
         <source>Insert &amp;after selection…</source>
         <translation type="unfinished">Insert &amp;after selection…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="525"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="526"/>
         <source>Insert &amp;before selection…</source>
         <translation type="unfinished">Insert &amp;before selection…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="527"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="528"/>
         <source>Insert at &amp;start of score…</source>
         <translation type="unfinished">Insert at &amp;start of score…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="528"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="529"/>
         <source>Insert at &amp;end of score…</source>
         <translation type="unfinished">Insert at &amp;end of score…</translation>
     </message>
@@ -23675,12 +23686,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="174"/>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="177"/>
         <source>Smooth panning</source>
         <translation type="unfinished">Smooth panning</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="221"/>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="227"/>
         <source>Anchor color</source>
         <translation type="unfinished">Anchor color</translation>
     </message>
@@ -24542,7 +24553,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Dynamics</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1161"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1162"/>
         <source>Dynamic + hairpin</source>
         <translation type="unfinished">Dynamic + hairpin</translation>
     </message>
@@ -24570,25 +24581,25 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="482"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1170"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1171"/>
         <source>Prima volta</source>
         <translation type="unfinished">Prima volta</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="491"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1199"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1200"/>
         <source>Seconda volta, open</source>
         <translation type="unfinished">Seconda volta, open</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="500"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1180"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1181"/>
         <source>Seconda volta</source>
         <translation type="unfinished">Seconda volta</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="509"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1189"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1190"/>
         <source>Terza volta</source>
         <translation type="unfinished">Terza volta</translation>
     </message>
@@ -24605,19 +24616,19 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="593"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1834"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1835"/>
         <source>RH guitar fingering %1</source>
         <translation type="unfinished">RH guitar fingering %1</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="601"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1842"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1843"/>
         <source>LH guitar fingering %1</source>
         <translation type="unfinished">LH guitar fingering %1</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="608"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1849"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1850"/>
         <source>String number %1</source>
         <translation type="unfinished">String number %1</translation>
     </message>
@@ -24644,7 +24655,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="774"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1802"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1803"/>
         <source>Tremolo bar</source>
         <translation type="unfinished">Tremolo bar</translation>
     </message>
@@ -24681,7 +24692,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="936"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1314"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1315"/>
         <source>Line</source>
         <translation type="unfinished">Line</translation>
     </message>
@@ -24711,78 +24722,78 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Lines</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1228"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1910"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1229"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1911"/>
         <source>Pedal (with ped and line)</source>
         <translation type="unfinished">Pedal (with ped and line)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1236"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1902"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1237"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1903"/>
         <source>Pedal (with ped and asterisk)</source>
         <translation type="unfinished">Pedal (with ped and asterisk)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1245"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1919"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1246"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1920"/>
         <source>Pedal (straight hooks)</source>
         <translation type="unfinished">Pedal (straight hooks)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1255"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1928"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1256"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1929"/>
         <source>Pedal (angled end hook)</source>
         <translation type="unfinished">Pedal (angled end hook)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1264"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1937"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1265"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1938"/>
         <source>Pedal (both hooks angled)</source>
         <translation type="unfinished">Pedal (both hooks angled)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1273"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1946"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1274"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1947"/>
         <source>Pedal (angled start hook)</source>
         <translation type="unfinished">Pedal (angled start hook)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1308"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1309"/>
         <source>Text line</source>
         <translation type="unfinished">Text line</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1788"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1789"/>
         <source>Barré line</source>
         <translation type="unfinished">Barré line</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="146"/>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="148"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1816"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1817"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1818"/>
         <source>Capo</source>
         <translation type="unfinished">Capo</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="156"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1822"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1823"/>
         <source>String tunings</source>
         <translation type="unfinished">String tunings</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1998"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1999"/>
         <source>Harp pedal diagram</source>
         <translation type="unfinished">Harp pedal diagram</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="2003"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="2004"/>
         <source>Harp pedal text diagram</source>
         <translation type="unfinished">Harp pedal text diagram</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1295"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1525"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1296"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1526"/>
         <source>Staff text line</source>
         <translation type="unfinished">Staff text line</translation>
     </message>
@@ -24797,542 +24808,542 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Arpeggios &amp; glissandos</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1301"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1535"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1302"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1536"/>
         <source>System text line</source>
         <translation type="unfinished">System text line</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1317"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1985"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1318"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1986"/>
         <source>Ambitus</source>
         <translation type="unfinished">Ambitus</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1321"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1796"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1322"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1797"/>
         <source>Let ring</source>
         <translation type="unfinished">Let ring</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1341"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1792"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1342"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1793"/>
         <source>Palm mute</source>
         <translation type="unfinished">Palm mute</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1349"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1350"/>
         <source>Tempo</source>
         <translation type="unfinished">Tempo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1370"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1371"/>
         <source>Half note = 80 BPM</source>
         <translation type="unfinished">Half note = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1373"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1374"/>
         <source>Quarter note = 80 BPM</source>
         <translation type="unfinished">Quarter note = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1376"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1377"/>
         <source>Eighth note = 80 BPM</source>
         <translation type="unfinished">Eighth note = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1379"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1380"/>
         <source>Dotted half note = 80 BPM</source>
         <translation type="unfinished">Dotted half note = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1382"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1383"/>
         <source>Dotted quarter note = 80 BPM</source>
         <translation type="unfinished">Dotted quarter note = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1385"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1386"/>
         <source>Dotted eighth note = 80 BPM</source>
         <translation type="unfinished">Dotted eighth note = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1403"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1404"/>
         <source>Metric modulation: quarter note = dotted quarter note</source>
         <translation type="unfinished">Metric modulation: quarter note = dotted quarter note</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1406"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1407"/>
         <source>Metric modulation: dotted quarter note = quarter note</source>
         <translation type="unfinished">Metric modulation: dotted quarter note = quarter note</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1409"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1410"/>
         <source>Metric modulation: half note = quarter note</source>
         <translation type="unfinished">Metric modulation: half note = quarter note</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1412"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1413"/>
         <source>Metric modulation: quarter note = half note</source>
         <translation type="unfinished">Metric modulation: quarter note = half note</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1415"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1416"/>
         <source>Metric modulation: eighth note = eighth note</source>
         <translation type="unfinished">Metric modulation: eighth note = eighth note</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1418"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1419"/>
         <source>Metric modulation: quarter note = quarter note</source>
         <translation type="unfinished">Metric modulation: quarter note = quarter note</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1421"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1422"/>
         <source>Metric modulation: dotted eighth note = quarter note</source>
         <translation type="unfinished">Metric modulation: dotted eighth note = quarter note</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1442"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1449"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1443"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1450"/>
         <source>accel.</source>
         <translation type="unfinished">accel.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1443"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1450"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1444"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1451"/>
         <source>allarg.</source>
         <translation type="unfinished">allarg.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1444"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1455"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1445"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1456"/>
         <source>rall.</source>
         <translation type="unfinished">rall.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1445"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1456"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1446"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1457"/>
         <source>rit.</source>
         <translation type="unfinished">rit.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1451"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1452"/>
         <source>calando</source>
         <translation type="unfinished">calando</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1452"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1453"/>
         <source>lentando</source>
         <translation type="unfinished">lentando</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1453"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1454"/>
         <source>morendo</source>
         <translation type="unfinished">morendo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1454"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1455"/>
         <source>precipitando</source>
         <translation type="unfinished">precipitando</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1457"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1458"/>
         <source>smorz.</source>
         <translation type="unfinished">smorz.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1458"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1459"/>
         <source>sost.</source>
         <translation type="unfinished">sost.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1459"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1460"/>
         <source>string.</source>
         <translation type="unfinished">string.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1471"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1472"/>
         <source>a tempo</source>
         <translation type="unfinished">a tempo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1478"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1479"/>
         <source>tempo primo</source>
         <translation type="unfinished">tempo primo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1487"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1489"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1488"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1490"/>
         <source>Swing</source>
         <translation type="unfinished">Swing</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1496"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1502"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1497"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1503"/>
         <source>Straight</source>
         <extracomment>System text to switch from swing rhythm back to straight rhythm</extracomment>
         <translation type="unfinished">Straight</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1511"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1512"/>
         <source>Text</source>
         <translation type="unfinished">Text</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1517"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1518"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1519"/>
         <source>Staff text</source>
         <translation type="unfinished">Staff text</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1528"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1529"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1530"/>
         <source>System text</source>
         <translation type="unfinished">System text</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1541"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1542"/>
         <source>Expression text</source>
         <translation type="unfinished">Expression text</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1544"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1545"/>
         <source>Change instr.</source>
         <translation type="unfinished">Change instr.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1545"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1546"/>
         <source>Instrument change</source>
         <translation type="unfinished">Instrument change</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1549"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1550"/>
         <source>Rehearsal mark</source>
         <translation type="unfinished">Rehearsal mark</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1552"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1553"/>
         <source>legato</source>
         <translation type="unfinished">legato</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1554"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1555"/>
         <source>Legato</source>
         <translation type="unfinished">Legato</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1557"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1558"/>
         <source>pizz.</source>
         <translation type="unfinished">pizz.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1559"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1560"/>
         <source>Pizzicato</source>
         <translation type="unfinished">Pizzicato</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1562"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1563"/>
         <source>arco</source>
         <translation type="unfinished">arco</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1564"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1565"/>
         <source>Arco</source>
         <translation type="unfinished">Arco</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1568"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1569"/>
         <source>tremolo</source>
         <translation type="unfinished">tremolo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1570"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1571"/>
         <source>Tremolo</source>
         <translation type="unfinished">Tremolo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1574"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1575"/>
         <source>mute</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation type="unfinished">mute</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1577"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1578"/>
         <source>Mute</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation type="unfinished">Mute</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1581"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1582"/>
         <source>open</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation type="unfinished">open</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1584"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1585"/>
         <source>Open</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation type="unfinished">Open</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1587"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1870"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1588"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1871"/>
         <source>distort</source>
         <translation type="unfinished">distort</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1589"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1590"/>
         <source>Distortion</source>
         <translation type="unfinished">Distortion</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1592"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1871"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1593"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1872"/>
         <source>overdrive</source>
         <translation type="unfinished">overdrive</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1594"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1595"/>
         <source>Overdrive</source>
         <translation type="unfinished">Overdrive</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1597"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1872"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1598"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1873"/>
         <source>harmonics</source>
         <translation type="unfinished">harmonics</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1599"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1600"/>
         <source>Harmonics</source>
         <translation type="unfinished">Harmonics</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1602"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1873"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1603"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1874"/>
         <source>jazz tone</source>
         <translation type="unfinished">jazz tone</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1604"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1605"/>
         <source>Jazz tone</source>
         <translation type="unfinished">Jazz tone</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1607"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1874"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1608"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1875"/>
         <source>normal</source>
         <translation type="unfinished">normal</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1609"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1610"/>
         <source>Normal</source>
         <translation type="unfinished">Normal</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1618"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1619"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1620"/>
         <source>Measure number</source>
         <translation type="unfinished">Measure number</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1622"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1623"/>
         <source>détaché</source>
         <translation type="unfinished">détaché</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1624"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1625"/>
         <source>Détaché</source>
         <translation type="unfinished">Détaché</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1627"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1628"/>
         <source>martelé</source>
         <translation type="unfinished">martelé</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1629"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1630"/>
         <source>Martelé</source>
         <translation type="unfinished">Martelé</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1639"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1640"/>
         <source>Sul ponticello</source>
         <translation type="unfinished">Sul ponticello</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1644"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1645"/>
         <source>Sul tasto</source>
         <translation type="unfinished">Sul tasto</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1735"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1736"/>
         <source>C</source>
         <translation type="unfinished">C</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1736"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1737"/>
         <source>Cm</source>
         <translation type="unfinished">Cm</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1737"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1738"/>
         <source>C7</source>
         <translation type="unfinished">C7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1739"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1740"/>
         <source>D</source>
         <translation type="unfinished">D</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1740"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1741"/>
         <source>Dm</source>
         <translation type="unfinished">Dm</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1741"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1742"/>
         <source>D7</source>
         <translation type="unfinished">D7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1743"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1744"/>
         <source>E</source>
         <translation type="unfinished">E</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1744"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1745"/>
         <source>Em</source>
         <translation type="unfinished">Em</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1745"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1746"/>
         <source>E7</source>
         <translation type="unfinished">E7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1747"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1748"/>
         <source>F</source>
         <translation type="unfinished">F</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1748"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1749"/>
         <source>Fm</source>
         <translation type="unfinished">Fm</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1749"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1750"/>
         <source>F7</source>
         <translation type="unfinished">F7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1751"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1752"/>
         <source>G</source>
         <translation type="unfinished">G</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1752"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1753"/>
         <source>Gm</source>
         <translation type="unfinished">Gm</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1753"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1754"/>
         <source>G7</source>
         <translation type="unfinished">G7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1755"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1756"/>
         <source>A</source>
         <translation type="unfinished">A</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1756"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1757"/>
         <source>Am</source>
         <translation type="unfinished">Am</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1757"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1758"/>
         <source>A7</source>
         <translation type="unfinished">A7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1759"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1760"/>
         <source>B</source>
         <translation type="unfinished">B</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1760"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1761"/>
         <source>Bm</source>
         <translation type="unfinished">Bm</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1761"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1762"/>
         <source>B7</source>
         <translation type="unfinished">B7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1992"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1993"/>
         <source>Harp</source>
         <translation type="unfinished">Harp</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1632"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1633"/>
         <source>col legno</source>
         <translation type="unfinished">col legno</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1539"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1540"/>
         <source>expression</source>
         <translation type="unfinished">expression</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1634"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1635"/>
         <source>Col legno</source>
         <translation type="unfinished">Col legno</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1637"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1638"/>
         <source>sul pont.</source>
         <translation type="unfinished">sul pont.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1642"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1643"/>
         <source>sul tasto</source>
         <translation type="unfinished">sul tasto</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1647"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1648"/>
         <source>vibrato</source>
         <translation type="unfinished">vibrato</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1649"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1650"/>
         <source>Vibrato</source>
         <translation type="unfinished">Vibrato</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1665"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1666"/>
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="169"/>
         <location filename="../../src/palette/view/widgets/timedialog.cpp" line="44"/>
         <source>Time signatures</source>
         <translation type="unfinished">Time signatures</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1723"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1724"/>
         <source>Fretboard diagrams</source>
         <translation type="unfinished">Fretboard diagrams</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1776"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1777"/>
         <source>Guitar</source>
         <translation type="unfinished">Guitar</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1890"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1891"/>
         <source>Keyboard</source>
         <translation type="unfinished">Keyboard</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1955"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1956"/>
         <source>Pitch</source>
         <extracomment>The name of a palette</extracomment>
         <translation type="unfinished">Pitch</translation>
