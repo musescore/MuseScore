@@ -589,11 +589,13 @@ void EngineRpcController::init()
         TrackSequenceId seqId = 0;
         SoundTrackFormat format;
         uintptr_t dstDevicePtr = 0;
-        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId, format, dstDevicePtr)) {
+        secs_t startPosition = 0;
+        secs_t duration = 0;
+        IF_ASSERT_FAILED(RpcPacker::unpack(msg.data, seqId, format, dstDevicePtr, startPosition, duration)) {
             return;
         }
         io::IODevice& dstDevice = *reinterpret_cast<io::IODevice*>(dstDevicePtr);
-        playback()->saveSoundTrack(seqId, dstDevice, format).onResolve(this, [this, msg](const Ret& ret) {
+        playback()->saveSoundTrack(seqId, dstDevice, format, startPosition, duration).onResolve(this, [this, msg](const Ret& ret) {
             channel()->send(rpc::make_response(msg, RpcPacker::pack(ret)));
         });
     });

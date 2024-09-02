@@ -73,6 +73,8 @@ public:
     muse::secs_t totalPlayTime() const override;
     muse::async::Notification totalPlayTimeChanged() const override;
 
+    muse::audio::secs_t selectionDuration() const override { return 0; }
+
     const notation::Tempo& currentTempo() const override;
     muse::async::Notification currentTempoChanged() const override;
 
