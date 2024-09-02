@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "glproblemsdetector.h"
+#include "gsproblemsdetector.h"
 
 #include <QFile>
 
@@ -33,15 +33,12 @@ using namespace muse::logger;
 
 static const std::string BAD_MESSAGE = "Failed to build graphics pipeline state";
 
-//! NOTE This is message just for test
-//static const std::string BAD_MESSAGE = "QML QQuickItem: Binding loop detected for property ";
-
 namespace muse::diagnostics {
-class GlLogDest : public LogDest
+class GSLogDest : public LogDest
 {
 public:
 
-    GlLogDest()
+    GSLogDest()
         : LogDest(LogLayout("")) {}
 
     std::string name() const { return "GlProblemsDetector"; }
@@ -61,23 +58,46 @@ public:
 };
 }
 
-GlProblemsDetector::GlProblemsDetector(const Version& appVersion)
+GSTestObj* GSProblemDetector::gsTestObj = nullptr;
+
+GSProblemDetector::GSProblemDetector(const Version& appVersion)
     : m_appVersion(appVersion)
 {
     Logger* logger = Logger::instance();
 
-    m_logDest = new GlLogDest();
+    m_logDest = new GSLogDest();
     logger->addDest(m_logDest);
+
+    QObject::connect(&m_timer, &QTimer::timeout, [this]() {
+        // fail case
+        if (m_logDest->isProblemDetected) {
+            if (m_onResult) {
+                m_onResult(false);
+            }
+            m_timer.stop();
+        }
+
+        // success case
+        if (gsTestObj && gsTestObj->painted) {
+            if (m_onResult) {
+                m_onResult(true);
+            }
+            m_timer.stop();
+        }
+    });
+
+    qmlRegisterType<GSTestObj>("Muse.Diagnostics", 1, 0, "GSTestObj");
 }
 
-GlProblemsDetector::~GlProblemsDetector()
+GSProblemDetector::~GSProblemDetector()
 {
+    m_timer.stop();
     Logger* logger = Logger::instance();
     logger->removeDest(m_logDest);
     delete m_logDest;
 }
 
-QString GlProblemsDetector::softwareMarkerFilePath() const
+QString GSProblemDetector::softwareMarkerFilePath() const
 {
     GlobalConfiguration conf(modularity::globalCtx());
     return conf.userAppDataPath().toQString()
@@ -86,7 +106,7 @@ QString GlProblemsDetector::softwareMarkerFilePath() const
            + ".dat";
 }
 
-void GlProblemsDetector::setIsNeedUseSoftwareRender(bool arg)
+void GSProblemDetector::setIsNeedUseSoftwareRender(bool arg)
 {
     if (arg) {
         QFile file(softwareMarkerFilePath());
@@ -96,12 +116,46 @@ void GlProblemsDetector::setIsNeedUseSoftwareRender(bool arg)
     }
 }
 
-bool GlProblemsDetector::isNeedUseSoftwareRender() const
+bool GSProblemDetector::isNeedUseSoftwareRender() const
 {
     return QFile::exists(softwareMarkerFilePath());
 }
 
-bool GlProblemsDetector::isProblemWithGl() const
+void GSProblemDetector::listen(const OnResult& f)
 {
-    return m_logDest->isProblemDetected;
+    m_onResult = f;
+    m_timer.start(10);
+}
+
+void GSProblemDetector::destroy()
+{
+    GSProblemDetector* self = this;
+    QTimer::singleShot(1, [self]() {
+        delete self;
+    });
+}
+
+// GSTestObj
+
+GSTestObj::GSTestObj()
+{
+    setWidth(1);
+    setHeight(1);
+
+    GSProblemDetector::gsTestObj = this;
+}
+
+GSTestObj::~GSTestObj()
+{
+    GSProblemDetector::gsTestObj = nullptr;
+}
+
+void GSTestObj::paint(QPainter*)
+{
+    LOGD() << "GSTestObj painted";
+
+    // just for test
+    // LOGDA() << "Failed to build graphics pipeline state";
+
+    painted = true;
 }

@@ -10,7 +10,7 @@
 
 #include "muse_framework_config.h"
 
-#include "diagnostics/glproblemsdetector.h"
+#include "diagnostics/gsproblemsdetector.h"
 
 #include "log.h"
 
@@ -140,10 +140,26 @@ void GuiApp::perform()
     //! Needs to be called before any QQuickWindows are shown.
     QQuickWindow::setDefaultAlphaBuffer(true);
 
-    GlProblemsDetector* glProblemsDetector = new GlProblemsDetector(version());
-    if (glProblemsDetector->isNeedUseSoftwareRender()) {
-        QQuickWindow::setSceneGraphBackend("software");
-        LOGI() << "Used software scene graph backend";
+    {
+        GSProblemDetector* gsProblemDetector = new GSProblemDetector(BaseApplication::appVersion());
+
+        if (gsProblemDetector->isNeedUseSoftwareRender()) {
+            QQuickWindow::setSceneGraphBackend("software");
+            LOGI() << "Used scene graph backend: software";
+            gsProblemDetector->destroy();
+        } else {
+            LOGI() << "Let's try to identify the problem with GS";
+            gsProblemDetector->listen([this, gsProblemDetector](bool res) {
+                if (res) {
+                    LOGI() << "No problem with GS";
+                } else {
+                    gsProblemDetector->setIsNeedUseSoftwareRender(true);
+                    LOGE() << "Detected problems with GS, switch to `software` backend";
+                    this->restart();
+                }
+                gsProblemDetector->destroy();
+            });
+        }
     }
 
     QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
@@ -165,20 +181,7 @@ void GuiApp::perform()
 #endif
 
     QObject::connect(engine, &QQmlApplicationEngine::objectCreated, qApp,
-                     [this, url, splashScreen, glProblemsDetector](QObject* obj, const QUrl& objUrl) {
-        if (glProblemsDetector->isProblemWithGl()) {
-            if (glProblemsDetector->isNeedUseSoftwareRender()) {
-                LOGE() << "Detected problems with GL, but the `software` backend is already in use";
-            } else {
-                glProblemsDetector->setIsNeedUseSoftwareRender(true);
-                LOGE() << "Detected problems with GL, switch to `software` backend";
-                this->restart();
-                delete glProblemsDetector;
-                return;
-            }
-        }
-        delete glProblemsDetector;
-
+                     [this, url, splashScreen](QObject* obj, const QUrl& objUrl) {
         if (!obj && url == objUrl) {
             LOGE() << "failed Qml load\n";
             QCoreApplication::exit(-1);

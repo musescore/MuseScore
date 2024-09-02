@@ -24,6 +24,8 @@ import QtQuick.Controls 2.15
 
 import Muse.Ui 1.0
 import Muse.Shortcuts 1.0
+import Muse.Diagnostics 1.0
+
 import MuseScore.AppShell 1.0
 
 ApplicationWindow {
@@ -64,6 +66,8 @@ ApplicationWindow {
         filePath: titleProvider.filePath
         fileModified: titleProvider.fileModified
     }
+
+    GSTestObj {}
 
     ToolTipProvider { }
 

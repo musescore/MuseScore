@@ -21,28 +21,51 @@
  */
 #pragma once
 
+#include <functional>
 #include <QString>
+#include <QTimer>
+#include <QQuickPaintedItem>
 
 #include "global/types/version.h"
 
 namespace muse::diagnostics {
-class GlLogDest;
-class GlProblemsDetector
+class GSLogDest;
+class GSTestObj;
+class GSProblemDetector
 {
 public:
-    GlProblemsDetector(const Version& appVersion);
-    ~GlProblemsDetector();
+
+    GSProblemDetector(const Version& appVersion);
+    ~GSProblemDetector();
+
+    using OnResult = std::function<void (bool res)>;
 
     bool isNeedUseSoftwareRender() const;
     void setIsNeedUseSoftwareRender(bool arg);
 
-    bool isProblemWithGl() const;
+    void listen(const OnResult& f);
+    void destroy();
+
+    static GSTestObj* gsTestObj;
 
 private:
 
     QString softwareMarkerFilePath() const;
 
     Version m_appVersion;
-    GlLogDest* m_logDest = nullptr;
+    GSLogDest* m_logDest = nullptr;
+    OnResult m_onResult;
+    QTimer m_timer;
+};
+
+class GSTestObj : public QQuickPaintedItem
+{
+public:
+    GSTestObj();
+    ~GSTestObj();
+
+    bool painted = false;
+
+    void paint(QPainter*) override;
 };
 }
