@@ -42,6 +42,7 @@
 #include "chordrest.h"
 #include "clef.h"
 #include "drumset.h"
+#include "durationtype.h"
 #include "dynamic.h"
 #include "factory.h"
 #include "glissando.h"
@@ -3306,32 +3307,49 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
                     staff2track(selection().staffEnd()), selectionFilter());
         pasteStaff(e, selection().startSegment(), selection().staffStart(), scale);
         return;
+    } 
+    if (selection().isList() && selection().elements().size() > 1) {
+        // List - act as if pressing duration toggle (distinct from range based Half/Double
+        TDuration newDuration(stepDotted
+                              ? _is.duration().shiftRetainDots(nSteps, stepDotted)
+                              : _is.duration().shift(nSteps));
+        _is.duration().shiftRetainDots(nSteps, stepDotted);
+        _is.setDuration(newDuration);
+        std::set<ChordRest*> crs = getSelectedChordRests();
+        for (auto cr : getSelectedChordRests()) {
+            changeCRlen(cr, newDuration);
+        }
+        for (auto cr : crs) {
+            EngravingItem* e = cr;
+            if (cr->isChord()) {
+                e = toChord(cr)->upNote();
+            }
+            select(e, SelectType::ADD);
+        }
+        return;
     }
     EngravingItem* el = selection().element();
     if (el == 0) {
         return;
     }
     if (el->isNote()) {
-        el = el->parentItem();
+        el = el->parent();
     }
     if (!el->isChordRest()) {
         return;
     }
-
     ChordRest* cr = toChordRest(el);
-
     // if measure rest is selected as input, then the correct initialDuration will be the
     // duration of the measure's time signature, else is just the input state's duration
     TDuration initialDuration;
     if (cr->durationType() == DurationType::V_MEASURE) {
         initialDuration = TDuration(cr->measure()->timesig(), true);
-
         if (initialDuration.fraction() < cr->measure()->timesig() && nSteps > 0) {
             // Duration already shortened by truncation; shorten one step less
             --nSteps;
         }
     } else {
-        initialDuration = m_is.duration();
+      initialDuration = _is.duration();
     }
     TDuration d = (nSteps != 0) ? initialDuration.shiftRetainDots(nSteps, stepDotted) : initialDuration;
     if (!d.isValid()) {
@@ -3345,7 +3363,7 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
     } else {
         changeCRlen(cr, d);
     }
-    m_is.setDuration(d);
+    _is.setDuration(d);
     nextInputPos(cr, false);
 }
 
