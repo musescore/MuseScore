@@ -2018,7 +2018,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                 Chord* chord = toChord(e);
                 Chord::LayoutData* chordLdata = chord->mutldata();
                 // only centre chords if we are separating voices and this voice has no collision
-                bool combineVoices = chord->combineVoice();
+                const bool combineVoices = chord->shouldCombineVoice();
                 if (!combineVoices && !muse::contains(tracksToAdjust, track)) {
                     if (chord->up()) {
                         chordLdata->moveX(centerUp);
@@ -2352,7 +2352,7 @@ void ChordLayout::setDotX(const std::vector<Chord*>& chords, const std::array<do
         if (chordHasDotsAllInvisible(chord)) {
             continue;
         }
-        const bool combineVoices = chord->combineVoice();
+        const bool combineVoices = chord->shouldCombineVoice();
         const size_t idx = (VOICES * (chord->staffIdx() - staff->idx() + 1)) + chord->voice();
         if (!combineChordConflicts.empty()) {
             // There are conflicts
