@@ -42,6 +42,7 @@
 #include "chordrest.h"
 #include "clef.h"
 #include "drumset.h"
+#include "durationtype.h"
 #include "dynamic.h"
 #include "factory.h"
 #include "glissando.h"
@@ -3303,6 +3304,27 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
         pasteStaff(e, selection().startSegment(), selection().staffStart(), scale);
         return;
     }
+    if (selection().isList() && selection().elements().size() > 1) {
+        // List - act as if pressing duration toggle (distinct from range based Half/Double
+        TDuration newDuration(stepDotted
+                              ? m_is.duration().shiftRetainDots(nSteps, stepDotted)
+                              : m_is.duration().shift(nSteps));
+        m_is.duration().shiftRetainDots(nSteps, stepDotted);
+        m_is.setDuration(newDuration);
+        std::set crs = getSelectedChordRests();
+        for (auto cr : getSelectedChordRests()) {
+            changeCRlen(cr, newDuration);
+        }
+        for (auto cr : crs) {
+            EngravingItem* e = cr;
+            if (cr->isChord()) {
+                e = toChord(cr)->upNote();
+            }
+            select(e, SelectType::ADD);
+        }
+        return;
+    }
+
     EngravingItem* el = selection().element();
     if (el == 0) {
         return;
