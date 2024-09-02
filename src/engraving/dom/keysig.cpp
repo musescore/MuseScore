@@ -186,15 +186,15 @@ void KeySig::undoSetMode(KeyMode v)
     undoChangeProperty(Pid::KEYSIG_MODE, int(v));
 }
 
-bool KeySig::isCourtesy() const
+PointF KeySig::staffOffset() const
 {
     const Segment* seg = segment();
     const Measure* meas = seg ? seg->measure() : nullptr;
-    if (!meas) {
-        return false;
+    if (meas && meas->endTick() == tick()) {
+        // Courtesy key sig should be adjusted by the following staffType's offset
+        return EngravingItem::staffOffset();
     }
-
-    return seg->tick() == meas->endTick();
+    return PointF(0.0, 0.0);
 }
 
 //---------------------------------------------------------
