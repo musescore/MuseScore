@@ -81,7 +81,7 @@ public:
     void setMode(KeyMode v) { m_sig.setMode(v); }
     void undoSetMode(KeyMode v);
 
-    bool isCourtesy() const;
+    PointF staffOffset() const override;
 
     bool hideNaturals() const { return m_hideNaturals; }
     void setHideNaturals(bool hide) { m_hideNaturals = hide; }

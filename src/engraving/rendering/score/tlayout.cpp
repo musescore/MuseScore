@@ -3872,9 +3872,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
         }
     }
 
-    if (item->isCourtesy()) {
-        ldata->moveY(item->staffOffsetY());
-    }
+    ldata->moveY(item->staffOffsetY());
 
     Shape keySigShape;
     for (const KeySym& ks : ldata->keySymbols) {
