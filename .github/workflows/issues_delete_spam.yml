@@ -20,7 +20,7 @@ jobs:
             const comment = payload.comment;
             const commentBody = comment.body;
             const isSpam = commentBody.includes('password: changeme')
-                           || commentBody.includes('mediafire.');
+                           || commentBody.includes('mediafire.')
                            || commentBody.includes('fix your trouble try');
             if (isSpam) {
                 console.log('Deleting spam comment');
