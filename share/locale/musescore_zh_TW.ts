@@ -2422,7 +2422,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="357"/>
         <source>MuseScore Studio will change the style to suit the font better</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio 將更改樣式以更好地適應字體</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1039"/>
@@ -2718,7 +2718,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3839"/>
         <source>Show all clefs on every system</source>
-        <translation type="unfinished"/>
+        <translation>顯示每個譜表的所有譜號</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3846"/>

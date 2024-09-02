@@ -9,7 +9,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="76"/>
         <source>Center text on reference point</source>
-        <translation>文字居中至基准点</translation>
+        <translation>居中文本于参考点</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="101"/>
@@ -1019,7 +1019,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="82"/>
         <source>Hide when empty:</source>
-        <translation>空谱表隐藏模式：</translation>
+        <translation>空时隐藏：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="93"/>
@@ -1091,7 +1091,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="266"/>
         <source>Extra distance above staff:</source>
-        <translation>谱表上方余距：</translation>
+        <translation>谱表上方的额外距离。</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="292"/>
@@ -3181,12 +3181,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7956"/>
         <source>Place above the staff on vocal instruments</source>
-        <translation type="unfinished"/>
+        <translation>放置在声乐乐器的五线谱上方</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7963"/>
         <source>Center on grand staff instruments automatically</source>
-        <translation type="unfinished"/>
+        <translation>自动居中大谱表乐器</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9802"/>
@@ -3221,12 +3221,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11311"/>
         <source>Min. margin to current staff:</source>
-        <translation type="unfinished"/>
+        <translation>当前谱表的最小内边距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11403"/>
         <source>Min. margin to other staves:</source>
-        <translation type="unfinished"/>
+        <translation>其他谱表的最小内边距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11550"/>
@@ -3241,28 +3241,29 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11677"/>
         <source>Max. dash gap:</source>
-        <translation type="unfinished"/>
+        <translation>最大虚线间隙：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11713"/>
         <source>Min. dash gap:</source>
-        <translation type="unfinished"/>
+        <translation>最小虚线间隙：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11893"/>
         <source>Omit dash when space is limited</source>
-        <translation type="unfinished"/>
+        <translation>空间有限时省略虚线</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11913"/>
         <source>Restate dash before syllable on 
 first note of the system</source>
-        <translation type="unfinished"/>
+        <translation>在总谱的第一个音符上
+重申音节前的虚线</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11921"/>
         <source>Dash placement at the start of the system:</source>
-        <translation type="unfinished"/>
+        <translation>总谱开头的虚线位置：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8129"/>
@@ -3734,7 +3735,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="174"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9666"/>
         <source>Vibrato lines</source>
-        <translation>颤音线</translation>
+        <translation>揉颤音线</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="179"/>
@@ -4387,7 +4388,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11703"/>
         <source>Reset &apos;Dash gap&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置‘虚线外边距’值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11855"/>
@@ -4399,22 +4400,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11876"/>
         <source>Reset &apos;Vertical position (% of text x-height)&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置‘垂直位置（文本高度的%）’值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11903"/>
         <source>Reset &apos;Omit dash when space is limited&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置‘空间有限时省略虚线’值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11947"/>
         <source>Reset &apos;Dash placement at the start of the system&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置‘虚线位置位于总谱开头’值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11962"/>
         <source>Extension line</source>
-        <translation type="unfinished"/>
+        <translation>延长线</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12002"/>
@@ -4429,22 +4430,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12048"/>
         <source>Line gap:</source>
-        <translation type="unfinished"/>
+        <translation>行间距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12080"/>
         <source>Reset &apos;Line gap&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置‘行间距’值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12097"/>
         <source>Omit extension line when space is limited</source>
-        <translation type="unfinished"/>
+        <translation>空间有限时省略延长线</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12107"/>
         <source>Reset &apos;Omit extension line when space is limited&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>重置 &apos;空间有限时省略延长线&apos; 值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12545"/>
@@ -8941,7 +8942,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="162"/>
         <source>&amp;Braille</source>
-        <translation>盲文（&amp;M）</translation>
+        <translation>盲文(&amp;B)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="163"/>
@@ -12991,7 +12992,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="276"/>
         <source>Extension line</source>
-        <translation type="unfinished"/>
+        <translation>延长线</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="306"/>
@@ -15251,22 +15252,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="825"/>
         <source>sfpp (Sforzando-pianissimo)</source>
-        <translation type="unfinished"/>
+        <translation>紧张的弱音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="828"/>
         <source>rfz (Rinforzando)</source>
-        <translation type="unfinished"/>
+        <translation>加强的</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="830"/>
         <source>rf (Rinforzando)</source>
-        <translation type="unfinished"/>
+        <translation>加强的</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="832"/>
         <source>fz (Forzando)</source>
-        <translation type="unfinished"/>
+        <translation>迫使</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="834"/>
@@ -15276,22 +15277,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="836"/>
         <source>r (Rinforzando)</source>
-        <translation type="unfinished"/>
+        <translation>加强的</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="838"/>
         <source>s (Sforzando)</source>
-        <translation type="unfinished"/>
+        <translation>紧张的</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="840"/>
         <source>z (Forzando)</source>
-        <translation type="unfinished"/>
+        <translation>迫使</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="842"/>
         <source>n (Niente)</source>
-        <translation type="unfinished"/>
+        <translation>无</translation>
     </message>
 </context>
 <context>
@@ -23693,7 +23694,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="61"/>
         <source>Align accidentals an octave apart across subchords</source>
-        <translation type="unfinished"/>
+        <translation>在子和弦上将变音号相隔一个八度对齐</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="69"/>
@@ -27313,7 +27314,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="158"/>
         <source>Sound flags may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation type="unfinished"/>
+        <translation>声音标志可以重置，但谱表文本将保留。此操作无法撤消。</translation>
     </message>
 </context>
 <context>

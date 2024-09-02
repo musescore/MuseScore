@@ -23417,12 +23417,12 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="154"/>
         <source>These measures cannot be joined</source>
-        <translation type="unfinished"/>
+        <translation>Teh taktov ni mogoče združiti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="155"/>
         <source>Please remove the staff type change and retry.</source>
-        <translation type="unfinished"/>
+        <translation>Povrnite spremembo črtovja in poskusite ponovno.</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="64"/>

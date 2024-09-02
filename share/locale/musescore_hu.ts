@@ -7981,7 +7981,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1425"/>
         <source>Reset s&amp;hapes and positions</source>
-        <translation type="unfinished"/>
+        <translation>Alak és pozíció alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1426"/>
@@ -7991,7 +7991,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1431"/>
         <source>Reset entire score to &amp;default layout</source>
-        <translation type="unfinished"/>
+        <translation>Az egész kotta visszaállítása az eredeti elrendezésre.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1432"/>
@@ -9773,117 +9773,117 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1803"/>
         <source>Toggle turn</source>
-        <translation type="unfinished"/>
+        <translation>Kettős ékesítés ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1804"/>
         <source>Add ornament: turn</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: kettős ékesítés</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1809"/>
         <source>Toggle inverted turn</source>
-        <translation type="unfinished"/>
+        <translation>Fordított kettős ékesítés ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1810"/>
         <source>Add ornament: inverted turn</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: fordított kettős ékesítés</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1815"/>
         <source>Toggle turn with slash</source>
-        <translation type="unfinished"/>
+        <translation>Kettős ékesítés vonással ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1816"/>
         <source>Add ornament: turn with slash</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: kettős ékesítés vonással</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1822"/>
         <source>Add ornament: trill</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: trilla</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1827"/>
         <source>Toggle short trill</source>
-        <translation type="unfinished"/>
+        <translation>Rövid trilla ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1828"/>
         <source>Add ornament: short trill</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: rövid trilla</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1833"/>
         <source>Toggle mordent</source>
-        <translation type="unfinished"/>
+        <translation>Mordent ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1834"/>
         <source>Add ornament: mordent</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: mordent</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1839"/>
         <source>Toggle tremblement</source>
-        <translation type="unfinished"/>
+        <translation>Trembement ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1840"/>
         <source>Add ornament: tremblement</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: tremblement</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1845"/>
         <source>Toggle prall mordent</source>
-        <translation type="unfinished"/>
+        <translation>Prall mordent</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1846"/>
         <source>Add ornament: prall mordent</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: prall mordent</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1851"/>
         <source>Toggle shake</source>
-        <translation type="unfinished"/>
+        <translation>Shake ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1852"/>
         <source>Add ornament: shake</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: shake</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1857"/>
         <source>Toggle shake (Muffat)</source>
-        <translation type="unfinished"/>
+        <translation>Shake (Muffat) ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1858"/>
         <source>Add ornament: shake (Muffat)</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: shake  (Muffat)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1863"/>
         <source>Toggle tremblement appuyé (Couperin)</source>
-        <translation type="unfinished"/>
+        <translation>Trembelement appuyé (Couperin) ki/be</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1864"/>
         <source>Add ornament: tremblement appuyé (Couperin)</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés: tremblement appuyé (Couprerin)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1870"/>
         <source>Add bowing: up bow</source>
-        <translation type="unfinished"/>
+        <translation>Vonásjel hozzáadás: felfelé vonás</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1876"/>
         <source>Add bowing: down bow</source>
-        <translation type="unfinished"/>
+        <translation>Vonásjel hozzáadása: lefelé vonás</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1899"/>
@@ -10056,17 +10056,17 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2403"/>
         <source>Use all voices on instrument</source>
-        <translation type="unfinished"/>
+        <translation>Minden szólam használata a hangszeren</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2408"/>
         <source>All voices on staff</source>
-        <translation type="unfinished"/>
+        <translation>Minden szólam a kottasoron</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2409"/>
         <source>Use all voices on staff</source>
-        <translation type="unfinished"/>
+        <translation>Minden szólam használata a kottasoron</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2488"/>
@@ -12358,7 +12358,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/ornament.cpp" line="95"/>
         <source>Ornament text</source>
-        <translation type="unfinished"/>
+        <translation>Díszítés szövege</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/ornament.cpp" line="98"/>
@@ -17643,7 +17643,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5311"/>
         <source>Tremblement</source>
-        <translation>Remegtetés</translation>
+        <translation>Tremblement</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5312"/>
@@ -17668,7 +17668,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5316"/>
         <source>Turn with slash</source>
-        <translation>Kettős ékesítés vonásal</translation>
+        <translation>Kettős ékesítés vonással</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5614"/>
@@ -19948,7 +19948,7 @@ felismerése</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/VerticalFrameSettings.qml" line="55"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="61"/>
         <source>Scale with staff size</source>
-        <translation type="unfinished"/>
+        <translation>Átméretezés a kottasor méretéhez</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="65"/>
@@ -22424,7 +22424,7 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
         <source>Voices visible on this staff</source>
-        <translation type="unfinished"/>
+        <translation>Ezen a kottasoron látható szólamok</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="55"/>
@@ -23419,12 +23419,12 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="154"/>
         <source>These measures cannot be joined</source>
-        <translation type="unfinished"/>
+        <translation>Ezeket az ütemeket nem lehet egyesíteni</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="155"/>
         <source>Please remove the staff type change and retry.</source>
-        <translation type="unfinished"/>
+        <translation>Törölje a kottasortípus-váltást és próbálja újra.</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="64"/>
@@ -28324,7 +28324,7 @@ palettafájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>
         <source>Use our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Használja az új kottaképet és hangminta hozzárendeléseket az &lt;a href=&quot;%1&quot;&gt;MDL ütőhangszerekhez&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="100"/>
@@ -28349,7 +28349,7 @@ palettafájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="138"/>
         <source>Our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Új kottakép és hangminta hozzárendelések az &lt;a href=&quot;%1&quot;&gt;MDL ütőhangszerekhz&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="157"/>

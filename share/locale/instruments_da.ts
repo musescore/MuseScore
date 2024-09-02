@@ -15133,7 +15133,7 @@
         <source>Cavaquinho (tablature)</source>
         <comment>cavaquinho-tablature trackName</comment>
         <extracomment>trackName for Cavaquinho (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cavaquinho (Tabulatur)</translation>
+        <translation>Cavaquinho (tablatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5078"/>
@@ -15364,84 +15364,84 @@
         <source>Treble viola da gamba. Second highest member of the viol family.</source>
         <comment>treble-viol description</comment>
         <extracomment>description for Treble Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Diskant-gambe. Næsthøjeste medlem af bratsch-familien.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6085"/>
         <source>Alto viola da gamba. Third highest member of the viol family.</source>
         <comment>alto-viol description</comment>
         <extracomment>description for Alto Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Alt-gambe. Tredjehøjeste medlem af bratsch-familien.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6115"/>
         <source>Tenor viola da gamba. Middle member of the viol family.</source>
         <comment>tenor-viol description</comment>
         <extracomment>description for Tenor Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tenor-gambe. Mellemste medlem af bratsch-familien.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6145"/>
         <source>Bass viola da gamba (staff notation). Third lowest member of the viol family.</source>
         <comment>viola-da-gamba description</comment>
         <extracomment>description for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bas-gambe (nodenotation). Tredjedybeste medlem af bratsch-familien.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6147"/>
         <source>Bass Viol</source>
         <comment>viola-da-gamba trackName</comment>
         <extracomment>trackName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bas-bratsch</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6149"/>
         <source>Bass Viol</source>
         <comment>viola-da-gamba longName</comment>
         <extracomment>longName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bas-bratsch</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6151"/>
         <source>B. Vl.</source>
         <comment>viola-da-gamba shortName</comment>
         <extracomment>shortName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>B. Br.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6160"/>
         <source>Bass viola da gamba (tablature). Third lowest member of the viol family.</source>
         <comment>viola-da-gamba-tablature description</comment>
         <extracomment>description for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bas-gambe (tablatur). Tredjedybeste medlem af bratsch-familien.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6162"/>
         <source>Bass Viol (tablature)</source>
         <comment>viola-da-gamba-tablature trackName</comment>
         <extracomment>trackName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bas-bratsch (tablatur)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6164"/>
         <source>Bass Viol</source>
         <comment>viola-da-gamba-tablature longName</comment>
         <extracomment>longName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Bas-bratsch</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6166"/>
         <source>B. Vl.</source>
         <comment>viola-da-gamba-tablature shortName</comment>
         <extracomment>shortName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>B. Vl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6169"/>
         <source>Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol. Second lowest member of the viol family.</source>
         <comment>violone description</comment>
         <extracomment>description for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Stor bratsch med den dybeste streng tunet til G. Af og til kaldet G-violone eller stor bas-bratsch. Andendybeste medlem af bratsch-familien.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6171"/>
@@ -15455,7 +15455,7 @@
         <source>Large viol with the lowest string tuned to D. Sometimes called the D violone or contrabass viol. Lowest-pitched member of the viol family.</source>
         <comment>d-violone description</comment>
         <extracomment>description for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Stor bratsch med den dybeste streng tunet til D. Af og til kaldet D-violone eller kontrabas-bratsch. Det medlem af bratsch-familien, der har den dybeste tone.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6188"/>

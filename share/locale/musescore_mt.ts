@@ -1539,7 +1539,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="826"/>
         <source>Shown as:</source>
-        <translation type="unfinished"/>
+        <translation>Jidher bħala:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="845"/>
@@ -1570,12 +1570,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="944"/>
         <source>At new system</source>
-        <translation type="unfinished"/>
+        <translation>Għand is-sistema ġdida</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="957"/>
         <source>At new meas.</source>
-        <translation type="unfinished"/>
+        <translation>Għand il-miżura ġdida</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="964"/>
@@ -1636,7 +1636,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1233"/>
         <source>Show rests</source>
-        <translation type="unfinished"/>
+        <translation>Uri l-intervalli tas-silenzju</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1314"/>
@@ -1768,7 +1768,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="119"/>
         <source>Rests</source>
-        <translation>Intervali ta&apos; silenzju</translation>
+        <translation>Intervalli ta&apos; silenzju</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="129"/>

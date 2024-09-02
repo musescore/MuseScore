@@ -18367,7 +18367,7 @@ Tasto %1 sulle corde %2</translation>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="52"/>
         <source>%n day(s) ago</source>
-        <translation><numerusform>%n giorno fa</numerusform><numerusform>%n giornoi fa</numerusform><numerusform>%n giorno(i) fa</numerusform></translation>
+        <translation><numerusform>%n giorno fa</numerusform><numerusform>%n giorni fa</numerusform><numerusform>%n giorno(i) fa</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="58"/>
@@ -21105,7 +21105,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/breathplaybackmodel.cpp" line="33"/>
         <source>Breaths &amp; pauses</source>
-        <translation>Respiri &amp; Cesure</translation>
+        <translation>Respiri e Cesure</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/fermataplaybackmodel.cpp" line="33"/>
@@ -24656,7 +24656,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="956"/>
         <source>Breaths &amp; pauses</source>
-        <translation>Respiri &amp; Cesure</translation>
+        <translation>Respiri e Cesure</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1055"/>
@@ -24762,7 +24762,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1003"/>
         <source>Arpeggios &amp; glissandos</source>
-        <translation>Arpeggi &amp; glissando</translation>
+        <translation>Arpeggi e Glissando</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1300"/>
@@ -27366,7 +27366,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="154"/>
         <source>New &amp; recent</source>
-        <translation>Nuovo e recente</translation>
+        <translation>Nuovo e recenti</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="88"/>
@@ -27423,12 +27423,12 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="354"/>
         <source>New</source>
-        <translation>Singola</translation>
+        <translation>Nuovo</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="366"/>
         <source>Open other…</source>
-        <translation>Apri altre...</translation>
+        <translation>Apri altri...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="720"/>
