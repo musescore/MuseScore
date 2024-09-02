@@ -268,6 +268,7 @@ void HorizontalSpacing::spaceRightAlignedSegments(Measure* m, double segmentShap
             raSegment->mutldata()->moveX(-minDistAfter);
             raSegment->setWidth(raSegment->width() + minDistAfter);
         }
+
         // 2) Make sure the segment isn't colliding with anything behind
         double minDistBefore = 0.0;
         for (Segment* seg = raSegment->prevActive(); seg; seg = seg->prevActive()) {
@@ -275,10 +276,45 @@ void HorizontalSpacing::spaceRightAlignedSegments(Measure* m, double segmentShap
             double minDist = minHorizontalCollidingDistance(seg, raSegment, segmentShapeSqueezeFactor);
             minDistBefore = std::max(minDistBefore, minDist - xDiff);
         }
-        Segment* prevSegment = raSegment->prevActive();
-        if (prevSegment) {
-            prevSegment->setWidth(prevSegment->width() + minDistBefore);
+
+        std::vector<staff_idx_t> stavesWithRightAlignedElement;
+        for (EngravingItem* item : raSegment->elist()) {
+            if (item) {
+                stavesWithRightAlignedElement.push_back(item->staffIdx());
+            }
         }
+
+        std::vector<Segment*> chordRestSegmentsToSpread;
+        Segment* prevCrSeg = raSegment->prev(SegmentType::ChordRest);
+        while (prevCrSeg) {
+            // Collect CR segments until one with an element on same staff as clef is found
+            chordRestSegmentsToSpread.push_back(prevCrSeg);
+            bool found = false;
+            for (EngravingItem* item : prevCrSeg->elist()) {
+                if (item && muse::contains(stavesWithRightAlignedElement, item->vStaffIdx())) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                break;
+            }
+            prevCrSeg = prevCrSeg->prev(SegmentType::ChordRest);
+        }
+
+        if (!chordRestSegmentsToSpread.empty()) {
+            // Distribute width by spreading it to all spanned CR segments
+            double widthFraction = minDistBefore / double(chordRestSegmentsToSpread.size());
+            for (Segment* seg : chordRestSegmentsToSpread) {
+                seg->setWidth(seg->width() + widthFraction);
+            }
+        } else {
+            Segment* prevSegment = raSegment->prevActive();
+            if (prevSegment) {
+                prevSegment->setWidth(prevSegment->width() + minDistBefore);
+            }
+        }
+
         for (Segment* seg = raSegment; seg; seg = seg->nextActive()) {
             seg->mutldata()->moveX(minDistBefore);
         }
