@@ -22,8 +22,8 @@ defaults:
 
 jobs:
 
-  get_tag_info:
-    name: Get tag info
+  plan:
+    name: 'Plan: ${{ inputs.release_type}} (tag=${{ inputs.create_tag }})'
     runs-on: ubuntu-latest
     outputs:
       tag_name: ${{ steps.make_tag_info.outputs.TAG_NAME }}
@@ -42,18 +42,18 @@ jobs:
         git tag --list | tail -n 20
         echo ==========
         buildscripts/ci/release/make_tag_name.sh | tee -a "${GITHUB_OUTPUT}"
-        echo ==========
         echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}"
         echo ==========
+        # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions
         if [[ "${CREATE_TAG}" == 'true' ]]; then
-          echo "Tag will be created."
+          echo "::notice ::Tag will be created"
         else
-          echo "Tag will not be created."
+          echo "::warning ::Tag will NOT be created"
         fi
 
   build:
     name: Build
-    needs: get_tag_info
+    needs: plan
     uses: ./.github/workflows/build_all.yml
     secrets: inherit
     with:
@@ -73,15 +73,15 @@ jobs:
       environment: production # requires approval
 
   create_release:
-    name: 'Create release: ${{ needs.get_tag_info.outputs.tag_name }}'
+    name: 'Create release: ${{ needs.plan.outputs.tag_name }}'
     needs:
-      - get_tag_info # to access outputs
+      - plan # to access outputs
       - update_learn_playlists
     if: ${{ ! failure() && ! cancelled() && inputs.create_tag }} # run even if prior jobs were skipped
     runs-on: ubuntu-latest
     environment:
       name: production # requires approval
-      url: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ needs.get_tag_info.outputs.tag_name }}
+      url: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ needs.plan.outputs.tag_name }}
     steps:
     - name: Clone repository
       uses: actions/checkout@v4
@@ -94,7 +94,7 @@ jobs:
         buildscripts/ci/release/collate_release_binaries.sh
     - name: Create tag # do this as late as possible so we're not left with a useless tag if something fails
       env:
-        TAG_NAME: ${{ needs.get_tag_info.outputs.tag_name }}
+        TAG_NAME: ${{ needs.plan.outputs.tag_name }}
       run: |
         int="(0|[1-9][0-9]*)"
         version="${int}\.${int}(\.${int})?"
@@ -114,20 +114,20 @@ jobs:
         draft: true
         prerelease: ${{ inputs.release_type != 'stable' }}
         files: release/*
-        name: ${{ needs.get_tag_info.outputs.release_name }}
-        tag_name: ${{ needs.get_tag_info.outputs.tag_name }}
+        name: ${{ needs.plan.outputs.release_name }}
+        tag_name: ${{ needs.plan.outputs.tag_name }}
         fail_on_unmatched_files: true
         generate_release_notes: false
 
   notify_users:
     name: Notify users
     needs:
-      - get_tag_info # to access outputs
+      - plan # to access outputs
       - create_release
     if: ${{ github.repository == 'musescore/MuseScore' && ! failure() && ! cancelled() && needs.create_release.result == 'success' }}
     uses: ./.github/workflows/update_release_info.yml
     secrets: inherit
     with:
       mode: ${{ inputs.release_type == 'stable' && 'stable' || 'testing' }}
-      tag: ${{ needs.get_tag_info.outputs.tag_name }}
+      tag: ${{ needs.plan.outputs.tag_name }}
       environment: production # requires approval
