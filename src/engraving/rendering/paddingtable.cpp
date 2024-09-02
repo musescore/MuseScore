@@ -73,7 +73,7 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::LEDGER_LINE][ElementType::TIMESIG]
         = std::max(table[ElementType::NOTE][ElementType::TIMESIG] - ledgerLength / 2, ledgerPad);
 
-    table[ElementType::HOOK][ElementType::NOTE] = 0.5 * spatium;
+    table[ElementType::HOOK][ElementType::NOTE] = 0.35 * spatium;
     table[ElementType::HOOK][ElementType::LEDGER_LINE]
         = std::max(table[ElementType::HOOK][ElementType::NOTE] - ledgerLength, ledgerPad);
     table[ElementType::HOOK][ElementType::ACCIDENTAL] = 0.35 * spatium;
