@@ -60,9 +60,14 @@ jobs:
         submodules: 'true'
     - name: "Configure workflow"
       shell: bash
+      env:
+        pull_request_title: ${{ github.event.pull_request.title }}
       run: |
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+
+        bash ./build/ci/tools/make_build_number.sh
+        BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_PUBLISH='false'
         if [[ "${{ inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then
@@ -81,8 +86,16 @@ jobs:
 
         DO_BUILD='true'
 
+        ADD_INFO="_${GITHUB_REF#refs/heads/}"
+        if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
+        if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Win64${ADD_INFO}")"
+
+        echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
         echo "BUILD_MODE: $BUILD_MODE"
+        echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+        echo "BUILD_NUMBER: $BUILD_NUMBER"
         echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
         echo "DO_BUILD: $DO_BUILD"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
@@ -91,6 +104,8 @@ jobs:
         echo "DO_CHECKSUM: $DO_CHECKSUM"
         echo "DO_APPCAST=$DO_APPCAST" >> $GITHUB_ENV
         echo "DO_APPCAST: $DO_APPCAST"
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
     - name: Setup environment
       if: env.DO_BUILD == 'true'
@@ -129,7 +144,7 @@ jobs:
       if: ${{ always() }}
       uses: actions/upload-artifact@v4
       with:
-        name: MuseScore_x64_${{ github.run_id }}
+        name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\
 
   windows_x32:
@@ -149,19 +164,14 @@ jobs:
         git submodule update --init --recursive
     - name: "Configure workflow"
       shell: bash
+      env:
+        pull_request_title: ${{ github.event.pull_request.title }}
       run: |
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
-        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
 
-        DO_BUILD='false'
-        if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then
-          DO_BUILD='true'
-        fi
-        DO_BUILD='true'
-        echo "!! ATTENTION !! Windows x32 build run only for 'testing' and 'stable', and SKIP for 'pull requests' and nightly"
-        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
-        echo "DO_BUILD: $DO_BUILD"
+        bash ./build/ci/tools/make_build_number.sh
+        BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_PUBLISH='false'
         if [ "${{ inputs.publish }}" == "on" ]; then 
@@ -171,8 +181,40 @@ jobs:
             DO_PUBLISH='false'
           fi  
         fi
+
+        DO_CHECKSUM='true'
+        if [ "$BUILD_MODE" == "devel" ]; then DO_CHECKSUM='false'; fi
+
+        DO_APPCAST='true'
+        if [ "$BUILD_MODE" == "devel" ]; then DO_APPCAST='false'; fi
+
+        #DO_BUILD='false'
+        #if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then
+          #DO_BUILD='true'
+        #fi
+        #echo "!! ATTENTION !! Windows x32 build run only for 'testing' and 'stable', and SKIP for 'pull requests' and nightly"
+        DO_BUILD='true'
+
+        ADD_INFO="_${GITHUB_REF#refs/heads/}"
+        if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
+        if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\?' '_' <<<"Mu3.7_${BUILD_NUMBER}_Win32${ADD_INFO}")"
+
+        echo "github.repository: ${{ github.repository }}"
+        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
+        echo "BUILD_MODE: $BUILD_MODE"
+        echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+        echo "BUILD_NUMBER: $BUILD_NUMBER"
+        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
+        echo "DO_BUILD: $DO_BUILD"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
+        echo "DO_CHECKSUM=$DO_CHECKSUM" >> $GITHUB_ENV
+        echo "DO_CHECKSUM: $DO_CHECKSUM"
+        echo "DO_APPCAST=$DO_APPCAST" >> $GITHUB_ENV
+        echo "DO_APPCAST: $DO_APPCAST"
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
     - name: Setup environment
       if: env.DO_BUILD == 'true'
@@ -211,7 +253,7 @@ jobs:
       if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v4
       with:
-        name: MuseScore_x86_${{ github.run_id }}
+        name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\
 
   windows_portable:
@@ -232,20 +274,15 @@ jobs:
         git submodule update --init --recursive
     - name: "Configure workflow"
       shell: bash
+      env:
+        pull_request_title: ${{ github.event.pull_request.title }}
       run: |
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
-        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
 
-        DO_BUILD='false'
-        if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then
-          DO_BUILD='true'  
-        fi
-        echo "!! ATTENTION !! Windows portable build run only for 'testing' and 'stable', and SKIP for 'pull requests' and nightly"
-        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
-        echo "DO_BUILD: $DO_BUILD" 
+        bash ./build/ci/tools/make_build_number.sh
+        BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
-        DO_PUBLISH='false'
         if [ "${{ inputs.publish }}" == "on" ]; then
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
@@ -253,8 +290,40 @@ jobs:
             DO_PUBLISH='false'
           fi  
         fi
+
+        DO_CHECKSUM='true'
+        if [ "$BUILD_MODE" == "devel" ]; then DO_CHECKSUM='false'; fi
+
+        DO_APPCAST='true'
+        if [ "$BUILD_MODE" == "devel" ]; then DO_APPCAST='false'; fi
+
+        DO_BUILD='false'
+        if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then
+          DO_BUILD='true'  
+        fi
+        echo "!! ATTENTION !! Windows portable build run only for 'testing' and 'stable', and SKIP for 'pull requests' and nightly"
+
+        DO_PUBLISH='false'
+        ADD_INFO="_${GITHUB_REF#refs/heads/}"
+        if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
+        if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\?' '_' <<<"Mu3.7_${BUILD_NUMBER}_WinPortable${ADD_INFO}")"
+
+        echo "github.repository: ${{ github.repository }}"
+        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
+        echo "BUILD_MODE=$BUILD_MODE"
+        echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+        echo "BUILD_NUMBER: $BUILD_NUMBER"
+        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
+        echo "DO_BUILD: $DO_BUILD"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
+        echo "DO_CHECKSUM=$DO_CHECKSUM" >> $GITHUB_ENV
+        echo "DO_CHECKSUM: $DO_CHECKSUM"
+        echo "DO_APPCAST=$DO_APPCAST" >> $GITHUB_ENV
+        echo "DO_APPCAST: $DO_APPCAST"
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
     - name: Setup environment
       if: env.DO_BUILD == 'true'
@@ -293,5 +362,5 @@ jobs:
       if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v4
       with:
-        name: MuseScore_Portable_${{ github.run_id }}
+        name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\

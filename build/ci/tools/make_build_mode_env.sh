@@ -41,8 +41,8 @@ if [ $MODE_IS_VALID -ne 1 ] ; then
     exit 1
 fi
 
-mkdir $ARTIFACTS_DIR
-mkdir $ARTIFACTS_DIR/env
+mkdir -p $ARTIFACTS_DIR
+mkdir -p $ARTIFACTS_DIR/env
 
 echo $BUILD_MODE > $ARTIFACTS_DIR/env/build_mode.env
 echo "BUILD_MODE: $(cat $ARTIFACTS_DIR/env/build_mode.env)"
