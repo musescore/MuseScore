@@ -275,7 +275,7 @@ Chord::Chord(Segment* parent)
     m_spaceRw          = 0.;
     m_crossMeasure     = CrossMeasure::UNKNOWN;
     m_graceIndex       = 0;
-    m_combineVoice       = true;
+    m_combineVoice     = style().styleB(Sid::combineVoice);
 }
 
 Chord::Chord(const Chord& c, bool link)
@@ -2157,7 +2157,7 @@ PropertyValue Chord::propertyDefault(Pid propertyId) const
     case Pid::SMALL:           return false;
     case Pid::STEM_DIRECTION:  return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
     case Pid::PLAY: return true;
-    case Pid::COMBINE_VOICE: return true;
+    case Pid::COMBINE_VOICE: return style().styleB(Sid::combineVoice);
     default:
         return ChordRest::propertyDefault(propertyId);
     }
