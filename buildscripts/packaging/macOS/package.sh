@@ -60,6 +60,10 @@ macdeployqt ${VOLUME}/${APPNAME}.app -verbose=2 -qmldir=.
 echo "otool -L post-macdeployqt"
 otool -L ${VOLUME}/${APPNAME}.app/Contents/MacOS/mscore
 
+# Remove dSYM files
+echo "Remove dSYM files"
+find ${VOLUME}/${APPNAME}.app/Contents -type d -name "*.dSYM" -exec rm -r {} +
+
 echo "Rename ${APPNAME}.app to ${VOLUME}/${LONGER_NAME}.app"
 mv ${VOLUME}/${APPNAME}.app "${VOLUME}/${LONGER_NAME}.app"
 
