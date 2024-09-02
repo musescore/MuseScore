@@ -50,6 +50,7 @@ static const std::map<UInt32, QString> specialKeysMap = {
     { kVK_F17, "F17" },
     { kVK_F18, "F18" },
     { kVK_F19, "F19" },
+    { kVK_F20, "F20" },
     { kVK_Space, "Space" },
     { kVK_Escape, "Esc" },
     { kVK_Delete, "Backspace" },
