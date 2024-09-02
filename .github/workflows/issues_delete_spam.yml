@@ -20,7 +20,8 @@ jobs:
             const comment = payload.comment;
             const commentBody = comment.body;
             const isSpam = commentBody.includes('password: changeme')
-                           && commentBody.includes('gcc');
+                           || commentBody.includes('mediafire.');
+                           || commentBody.includes('fix your trouble try');
             if (isSpam) {
                 console.log('Deleting spam comment');
                 await github.rest.issues.deleteComment({
