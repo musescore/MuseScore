@@ -983,6 +983,7 @@ public:
     Note* upAltCtrl(Note*) const;
     EngravingItem* downAlt(EngravingItem*);
     Note* downAltCtrl(Note*) const;
+    EngravingItem* moveAlt(EngravingItem*, DirectionV);
 
     EngravingItem* firstElement(bool frame = true);
     EngravingItem* lastElement(bool frame = true);
