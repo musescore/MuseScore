@@ -427,7 +427,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
             continue;
         }
 
-        if (stick >= ctx.state().endTick() || etick <= ctx.state().startTick()) {
+        if (etick <= ctx.state().startTick() || etick > ctx.state().tick()) {
             continue;
         }
 

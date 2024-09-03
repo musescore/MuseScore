@@ -39,6 +39,7 @@
 #include "dom/tremolotwochord.h"
 #include "dom/part.h"
 #include "dom/box.h"
+#include "dom/slur.h"
 
 #include "passresetlayoutdata.h"
 
@@ -51,6 +52,7 @@
 #include "measurelayout.h"
 #include "horizontalspacing.h"
 #include "tremololayout.h"
+#include "slurtielayout.h"
 
 #include "log.h"
 
@@ -226,6 +228,14 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
             }
         }
         MeasureLayout::layout2(m, ctx);
+    }
+
+    auto spanners = ctx.dom().spannerMap().findOverlapping(system->tick().ticks(), system->endTick().ticks());
+    for (auto interval : spanners) {
+        Spanner* sp = interval.value;
+        if (sp->isSlur() && toSlur(sp)->isCrossStaff()) {
+            SlurTieLayout::layoutSystem(toSlur(sp), system, ctx);
+        }
     }
 
     const double lm = ctx.state().page()->lm();
