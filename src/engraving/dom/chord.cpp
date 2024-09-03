@@ -1685,7 +1685,7 @@ static void updatePercussionNotes(Chord* c, const Drumset* drumset)
 //   cmdUpdateNotes
 //---------------------------------------------------------
 
-void Chord::cmdUpdateNotes(AccidentalState* as)
+void Chord::cmdUpdateNotes(AccidentalState* as, staff_idx_t staffIdx)
 {
     // TAB_STAFF is different, as each note has to be fretted
     // in the context of the all of the chords of the whole segment
@@ -1710,43 +1710,52 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
     if (staffGroup == StaffGroup::STANDARD) {
         const std::vector<Chord*> gnb(graceNotesBefore());
         for (Chord* ch : gnb) {
+            if (ch->vStaffIdx() != staffIdx) {
+                continue;
+            }
             std::vector<Note*> notes(ch->notes());        // we need a copy!
             for (Note* note : notes) {
                 note->updateAccidental(as);
             }
             ch->sortNotes();
         }
-        std::vector<Note*> lnotes(notes());      // we need a copy!
-        for (Note* note : lnotes) {
-            if (note->tieBack() && note->tpc() == note->tieBack()->startNote()->tpc()) {
-                // same pitch
-                if (note->accidental() && note->accidental()->role() == AccidentalRole::AUTO) {
-                    // not courtesy
-                    // TODO: remove accidental only if note is not
-                    // on new system
-                    score()->undoRemoveElement(note->accidental());
+        if (vStaffIdx() == staffIdx) {
+            std::vector<Note*> lnotes(notes());      // we need a copy!
+            for (Note* note : lnotes) {
+                if (note->tieBack() && note->tpc() == note->tieBack()->startNote()->tpc()) {
+                    // same pitch
+                    if (note->accidental() && note->accidental()->role() == AccidentalRole::AUTO) {
+                        // not courtesy
+                        // TODO: remove accidental only if note is not
+                        // on new system
+                        score()->undoRemoveElement(note->accidental());
+                    }
+                }
+                note->updateAccidental(as);
+            }
+            for (Articulation* art : m_articulations) {
+                if (!art->isOrnament()) {
+                    continue;
+                }
+                Ornament* ornament = toOrnament(art);
+                ornament->computeNotesAboveAndBelow(as);
+            }
+            for (Spanner* spanner : startingSpanners()) {
+                if (spanner->isTrill()) {
+                    Ornament* ornament = toTrill(spanner)->ornament();
+                    if (ornament) {
+                        ornament->setParent(this);
+                        ornament->computeNotesAboveAndBelow(as);
+                    }
                 }
             }
-            note->updateAccidental(as);
-        }
-        for (Articulation* art : m_articulations) {
-            if (!art->isOrnament()) {
-                continue;
-            }
-            Ornament* ornament = toOrnament(art);
-            ornament->computeNotesAboveAndBelow(as);
-        }
-        for (Spanner* spanner : startingSpanners()) {
-            if (spanner->isTrill()) {
-                Ornament* ornament = toTrill(spanner)->ornament();
-                if (ornament) {
-                    ornament->setParent(this);
-                    ornament->computeNotesAboveAndBelow(as);
-                }
-            }
+            sortNotes();
         }
         const std::vector<Chord*> gna(graceNotesAfter());
         for (Chord* ch : gna) {
+            if (ch->vStaffIdx() != staffIdx) {
+                continue;
+            }
             std::vector<Note*> notes(ch->notes());        // we need a copy!
             for (Note* note : notes) {
                 note->updateAccidental(as);
@@ -1760,9 +1769,8 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
             LOGW("no drumset");
         }
         updatePercussionNotes(this, drumset);
+        sortNotes();
     }
-
-    sortNotes();
 }
 
 //---------------------------------------------------------
