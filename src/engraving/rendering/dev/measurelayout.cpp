@@ -2207,8 +2207,11 @@ void MeasureLayout::layoutTimeTickAnchors(Measure* m, LayoutContext& ctx)
         Fraction thisDuration = segment.ticks();
         Fraction relativeTick = segment.rtick() - refCRSeg->rtick();
 
-        double relativeX = refCRSeg->width() * (relativeTick.toDouble() / refCRSeg->ticks().toDouble());
-        double relativeWidth = refCRSeg->width() * (thisDuration.toDouble() / refSegDuration.toDouble());
+        Segment* nextCRSeg = m->findSegmentR(SegmentType::ChordRest, refCRSeg->rtick() + refCRSeg->ticks());
+        double width = nextCRSeg ? nextCRSeg->x() - refCRSeg->x() : refCRSeg->width();
+
+        double relativeX = width * (relativeTick.toDouble() / refCRSeg->ticks().toDouble());
+        double relativeWidth = width * (thisDuration.toDouble() / refSegDuration.toDouble());
 
         segment.mutldata()->setPosX(refCRSeg->x() + relativeX);
         segment.setWidth(relativeWidth);
