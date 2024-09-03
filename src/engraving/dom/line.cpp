@@ -548,7 +548,8 @@ LineSegment* LineSegment::rebaseAnchor(Grip grip, Segment* newSeg)
     SLine* l = line();
     const bool left = (grip == Grip::START);
     Segment* const oldSeg = left ? l->startSegment() : l->endSegment();
-    System* const oldSystem = system();
+    System* const oldLineSegSystem = system();
+    System* const oldSpannerSystem = oldSeg->measure()->system();
 
     if (!newSeg || oldSeg == newSeg) {
         return nullptr;
@@ -568,8 +569,8 @@ LineSegment* LineSegment::rebaseAnchor(Grip grip, Segment* newSeg)
 
     bool anchorChanged = false;
 
-    System* sys = system();
-    PointF oldPos = line()->linePos(grip, &sys);
+    System* lineSegSys = system();
+    PointF oldPos = line()->linePos(grip, &lineSegSys);
 
     if (l->tick() != startTick) {
         l->undoChangeProperty(Pid::SPANNER_TICK, startTick);
@@ -582,11 +583,14 @@ LineSegment* LineSegment::rebaseAnchor(Grip grip, Segment* newSeg)
         anchorChanged = true;
     }
 
-    if (newSeg->system() != oldSystem) {
+    const Segment* newTickSeg = left ? l->startSegment() : l->endSegment();
+    const System* newSpannerSystem = newTickSeg->measure()->system();
+
+    if (newSeg->system() != oldLineSegSystem || oldSpannerSystem != newSpannerSystem) {
         renderer()->layoutItem(l);
         return left ? l->frontSegment() : l->backSegment();
     } else if (anchorChanged) {
-        rebaseOffsetsOnAnchorChanged(grip, oldPos, oldSystem);
+        rebaseOffsetsOnAnchorChanged(grip, oldPos, oldLineSegSystem);
     }
 
     return nullptr;
