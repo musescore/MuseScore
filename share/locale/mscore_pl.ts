@@ -1673,7 +1673,7 @@
     <message>
         <location filename="../../mscore/editstaff.ui" line="304"/>
         <source>Merge matching rests</source>
-        <translation>Scal pasujące pauzy</translation>
+        <translation>Połącz pasujące pauzy</translation>
     </message>
     <message>
         <location filename="../../mscore/editstaff.ui" line="388"/>
@@ -17769,7 +17769,7 @@ Ta wtyczka wymaga otwartej partytury do działania.
     <message>
         <location filename="../../mscore/menus.cpp" line="787"/>
         <source>Staff spacer fixed down</source>
-        <translation>Dolny odstęp pięciolinii</translation>
+        <translation>Dolny stały odstęp pięciolinii</translation>
     </message>
     <message>
         <location filename="../../mscore/menus.cpp" line="809"/>
