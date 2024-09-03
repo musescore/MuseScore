@@ -903,7 +903,7 @@ void NotationParts::removeParts(const IDList& partsIds)
         PartInstrument pi;
         pi.isExistingPart = true;
         pi.partId = part->id();
-        parts << pi;
+        parts.push_back(pi);
     }
 
     sortParts(parts);
