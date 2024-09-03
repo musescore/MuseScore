@@ -1208,6 +1208,9 @@ TEST_F(Musicxml_Tests, tuplets8) {
 TEST_F(Musicxml_Tests, tuplets9) {
     mxmlIoTest("testTuplets9");
 }
+TEST_F(Musicxml_Tests, tupletTie) {
+    mxmlImportTestRef("testTupletTie");
+}
 TEST_F(Musicxml_Tests, twoNoteTremoloTuplet) {
     mxmlIoTest("testTwoNoteTremoloTuplet");
 }
