@@ -90,6 +90,10 @@ namespace mu::engraving::compat {
 class WriteScoreHook;
 }
 
+namespace mu::notation {
+enum class MoveDirection : unsigned char;
+}
+
 namespace mu::engraving {
 class Articulation;
 class Audio;
@@ -953,7 +957,7 @@ public:
     Note* upAltCtrl(Note*) const;
     EngravingItem* downAlt(EngravingItem*);
     Note* downAltCtrl(Note*) const;
-    EngravingItem* moveAlt(EngravingItem*, DirectionV);
+    EngravingItem* moveAlt(EngravingItem*, notation::MoveDirection);
 
     EngravingItem* firstElement(bool frame = true);
     EngravingItem* lastElement(bool frame = true);
