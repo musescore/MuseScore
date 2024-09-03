@@ -57,7 +57,8 @@ void VstSynthesiser::init()
     pluginsRegister()->registerInstrPlugin(m_trackId, m_pluginPtr);
     m_pluginPtr->load();
 
-    m_vstAudioClient->init(AudioPluginType::Instrument, m_pluginPtr);
+    m_audioChannelsCount = config()->audioChannelsCount();
+    m_vstAudioClient->init(AudioPluginType::Instrument, m_pluginPtr, m_audioChannelsCount);
 
     const samples_t blockSize = config()->samplesToPreallocate();
 
@@ -184,7 +185,7 @@ void VstSynthesiser::setSampleRate(unsigned int sampleRate)
 
 unsigned int VstSynthesiser::audioChannelsCount() const
 {
-    return config()->audioChannelsCount();
+    return m_audioChannelsCount;
 }
 
 async::Channel<unsigned int> VstSynthesiser::audioChannelsCountChanged() const
@@ -201,33 +202,40 @@ samples_t VstSynthesiser::process(float* buffer, samples_t samplesPerChannel)
     const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
     const VstSequencer::EventSequenceMap sequences = m_sequencer.movePlaybackForward(nextMsecs);
     samples_t sampleOffset = 0;
+    samples_t processedSamples = 0;
 
     for (auto it = sequences.cbegin(); it != sequences.cend(); ++it) {
-        handleSequence(it->second, sampleOffset);
+        samples_t durationInSamples = samplesPerChannel - sampleOffset;
 
         auto nextIt = std::next(it);
         if (nextIt != sequences.cend()) {
             msecs_t duration = nextIt->first - it->first;
-            sampleOffset += microSecsToSamples(duration, m_sampleRate);
-            IF_ASSERT_FAILED(sampleOffset < samplesPerChannel) {
-                break;
-            }
+            durationInSamples = microSecsToSamples(duration, m_sampleRate);
         }
+
+        IF_ASSERT_FAILED(sampleOffset + durationInSamples <= samplesPerChannel) {
+            break;
+        }
+
+        processedSamples += processSequence(it->second, durationInSamples, buffer + sampleOffset * m_audioChannelsCount);
+        sampleOffset += durationInSamples;
     }
 
-    return m_vstAudioClient->process(buffer, samplesPerChannel);
+    return processedSamples;
 }
 
-void VstSynthesiser::handleSequence(const VstSequencer::EventSequence& sequence, const samples_t sampleOffset)
+samples_t VstSynthesiser::processSequence(const VstSequencer::EventSequence& sequence, const samples_t samples, float* buffer)
 {
     for (const VstSequencer::EventType& event : sequence) {
         if (std::holds_alternative<VstEvent>(event)) {
-            m_vstAudioClient->handleEvent(std::get<VstEvent>(event), sampleOffset);
+            m_vstAudioClient->handleEvent(std::get<VstEvent>(event));
         } else if (std::holds_alternative<ParamChangeEvent>(event)) {
-            m_vstAudioClient->handleParamChange(std::get<ParamChangeEvent>(event), sampleOffset);
+            m_vstAudioClient->handleParamChange(std::get<ParamChangeEvent>(event));
         } else {
             muse::audio::gain_t newGain = std::get<muse::audio::gain_t>(event);
             m_vstAudioClient->setVolumeGain(newGain);
         }
     }
+
+    return m_vstAudioClient->process(buffer, samples);
 }
