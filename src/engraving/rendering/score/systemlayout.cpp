@@ -2937,11 +2937,36 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
     const double elementYInSystemCoord = element->pageY() - system->pageY();
     elementShape.translateY(elementYInSystemCoord - element->y() + yMove);
 
+    // When there is enough space, a dynamic may be moved in a way which disrupts the stacking order
+    // This means autoplace leaves space for the dynamic which then gets moved
+    // Instead of recalculating all the element's autoplace positions, we simply disable centring the dynamic
+    static const std::set<ElementType> ELEMENTS_ABOVE_DYNAMICS {
+        ElementType::CLEF,
+        ElementType::TIMESIG,
+        ElementType::KEYSIG,
+        ElementType::BAR_LINE,
+        ElementType::STAFF_LINES,
+        ElementType::TIE_SEGMENT,
+        ElementType::GUITAR_BEND_SEGMENT,
+        ElementType::ARTICULATION,
+        ElementType::FINGERING,
+        ElementType::STRETCHED_BEND,
+        ElementType::TUPLET,
+        ElementType::SLUR_SEGMENT,
+        ElementType::STICKING,
+        ElementType::FERMATA,
+        ElementType::TREMOLOBAR
+    };
+
     for (const ShapeElement& el : skylineOfThisStaff.elements()) {
         const bool checkItem = !isAssociatedElement(el);
         const bool intersects = elementShape.intersects(el);
 
-        if (el.item()->autoplace() && checkItem && intersects) {
+        const Shape s = Shape(el, el.item());
+        const bool dynamicsMovedOutside = el.item()->placeBelow() ? s.clearsVertically(elementShape) : elementShape.clearsVertically(s);
+        const bool elShouldBeOutsideDynamic = !muse::contains(ELEMENTS_ABOVE_DYNAMICS, el.item()->type());
+
+        if (el.item()->autoplace() && checkItem && (intersects || (dynamicsMovedOutside && elShouldBeOutsideDynamic))) {
             // The y offset has moved this to collide with or below an element stacked below the dynamic
             return;
         }
