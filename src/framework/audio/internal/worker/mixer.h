@@ -37,6 +37,10 @@
 #include "mixerchannel.h"
 #include "iclock.h"
 
+namespace muse {
+class TaskScheduler;
+}
+
 namespace muse::audio {
 class Mixer : public AbstractAudioSource, public Injectable, public async::Asyncable, public std::enable_shared_from_this<Mixer>
 {
@@ -89,6 +93,8 @@ private:
     void notifyNoAudioSignal();
 
     msecs_t currentTime() const;
+
+    std::unique_ptr<TaskScheduler> m_taskScheduler;
 
     size_t m_minTrackCountForMultithreading = 0;
     size_t m_nonMutedTrackCount = 0;

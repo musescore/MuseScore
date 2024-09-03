@@ -42,14 +42,6 @@ typedef std::invoke_result_t<decltype(std::thread::hardware_concurrency)> thread
 class TaskScheduler
 {
 public:
-
-    //!Note Would be moved into globalmodule.cpp for better lifetime control
-    static TaskScheduler* instance()
-    {
-        static TaskScheduler s;
-        return &s;
-    }
-
     explicit TaskScheduler(const thread_pool_size_t desiredThreadCount = 0)
         : m_threadPoolSize(vaildateThreadPoolCapacity(desiredThreadCount)),
         m_threadPool(std::make_unique<std::thread[]>(vaildateThreadPoolCapacity(desiredThreadCount)))
@@ -66,6 +58,17 @@ public:
     thread_pool_size_t threadPoolSize() const
     {
         return m_threadPoolSize;
+    }
+
+    std::set<std::thread::id> threadIdSet() const
+    {
+        std::set<std::thread::id> result;
+
+        for (thread_pool_size_t i = 0; i < m_threadPoolSize; ++i) {
+            result.insert(m_threadPool[i].get_id());
+        }
+
+        return result;
     }
 
     template<typename FuncT, typename ... ArgsT>
@@ -112,25 +115,6 @@ public:
         m_isWaitingForAllTasksDone = false;
     }
 
-    const std::set<std::thread::id>& threadIdSet() const
-    {
-        static std::set<std::thread::id> result;
-
-        if (result.empty()) {
-            for (thread_pool_size_t i = 0; i < m_threadPoolSize; ++i) {
-                result.insert(m_threadPool[i].get_id());
-            }
-        }
-
-        return result;
-    }
-
-    bool containsThread(const std::thread::id& id) const
-    {
-        const auto& idSet = threadIdSet();
-        return idSet.find(id) != idSet.cend();
-    }
-
 private:
     void setupThreads()
     {
@@ -149,7 +133,7 @@ private:
         }
     }
 
-    thread_pool_size_t vaildateThreadPoolCapacity(const thread_pool_size_t desiredThreadCount)
+    thread_pool_size_t vaildateThreadPoolCapacity(const thread_pool_size_t desiredThreadCount) const
     {
         thread_pool_size_t maxCapacity = std::thread::hardware_concurrency();
 
