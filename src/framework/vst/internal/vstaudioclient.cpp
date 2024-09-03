@@ -79,32 +79,29 @@ void VstAudioClient::loadSupportedParams()
     }
 }
 
-bool VstAudioClient::handleEvent(const VstEvent& event, const samples_t sampleOffset)
+bool VstAudioClient::handleEvent(const VstEvent& event)
 {
     ensureActivity();
 
-    VstEvent& ev = const_cast<VstEvent&>(event);
-    ev.sampleOffset = sampleOffset;
-
-    if (ev.type == VstEvent::kNoteOnEvent) {
-        size_t key = noteEventKey(ev.noteOn.pitch, ev.noteOn.channel);
-        m_playingNotes.insert_or_assign(key, ev);
-    } else if (ev.type == VstEvent::kNoteOffEvent) {
-        size_t key = noteEventKey(ev.noteOff.pitch, ev.noteOff.channel);
+    if (event.type == VstEvent::kNoteOnEvent) {
+        size_t key = noteEventKey(event.noteOn.pitch, event.noteOn.channel);
+        m_playingNotes.insert_or_assign(key, event);
+    } else if (event.type == VstEvent::kNoteOffEvent) {
+        size_t key = noteEventKey(event.noteOff.pitch, event.noteOff.channel);
         m_playingNotes.erase(key);
     }
 
-    if (m_eventList.addEvent(ev) == Steinberg::kResultTrue) {
+    if (m_eventList.addEvent(const_cast<VstEvent&>(event)) == Steinberg::kResultTrue) {
         return true;
     }
 
     return false;
 }
 
-bool VstAudioClient::handleParamChange(const ParamChangeEvent& param, const samples_t sampleOffset)
+bool VstAudioClient::handleParamChange(const ParamChangeEvent& param)
 {
     ensureActivity();
-    addParamChange(param, sampleOffset);
+    addParamChange(param);
 
     m_playingParams.insert(param.paramId);
 
@@ -197,16 +194,16 @@ void VstAudioClient::allNotesOff()
     }
 
     for (PluginParamId id : m_playingParams) {
-        auto intoIt = m_pluginParamInfoMap.find(id);
-        if (intoIt == m_pluginParamInfoMap.end()) {
+        auto infoIt = m_pluginParamInfoMap.find(id);
+        if (infoIt == m_pluginParamInfoMap.end()) {
             continue;
         }
 
         ParamChangeEvent paramOff;
         paramOff.paramId = id;
-        paramOff.value = intoIt->second.defaultNormalizedValue;
+        paramOff.value = infoIt->second.defaultNormalizedValue;
 
-        addParamChange(paramOff, 0);
+        addParamChange(paramOff);
     }
 
     m_playingNotes.clear();
@@ -525,11 +522,11 @@ void VstAudioClient::flushBuffers()
     }
 }
 
-void VstAudioClient::addParamChange(const ParamChangeEvent& param, const samples_t sampleOffset)
+void VstAudioClient::addParamChange(const ParamChangeEvent& param)
 {
     Steinberg::int32 dummyIdx = 0;
     Steinberg::Vst::IParamValueQueue* queue = m_paramChanges.addParameterData(param.paramId, dummyIdx);
     if (queue) {
-        queue->addPoint(sampleOffset, param.value, dummyIdx);
+        queue->addPoint(0, param.value, dummyIdx);
     }
 }
