@@ -116,6 +116,8 @@ public:
 
     bool isLocal() const { return m_stretch != Fraction(1, 1); }
 
+    PointF staffOffset() const override;
+
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
