@@ -403,6 +403,13 @@ void Dynamic::manageBarlineCollisions()
             break;
         }
     }
+
+    bool isOnTimeTickSegAtBarline = rightBarLineSegment && thisSegment->isTimeTickType()
+                                    && thisSegment->tick() == rightBarLineSegment->tick();
+    if (isOnTimeTickSegAtBarline) {
+        return;
+    }
+
     if (rightBarLineSegment) {
         EngravingItem* e = rightBarLineSegment->elementAt(barLineStaff * VOICES);
         if (e) {
