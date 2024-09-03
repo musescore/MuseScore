@@ -27,9 +27,9 @@
 #include <QStringList>
 #include <QDir>
 #include <QQmlContext>
-#include <QQuickWindow>
 
 #include "draw/types/color.h"
+#include "graphicsapiprovider.h"
 
 #include "log.h"
 
@@ -69,15 +69,6 @@ private:
     QQmlEngine* m_engine = nullptr;
     const modularity::ContextPtr& m_iocContext;
 };
-
-bool UiEngine::isEffectsAllowed() const
-{
-    if (m_isEffectsAllowed == -1) {
-        bool isSoftware = QQuickWindow::sceneGraphBackend() == "software";
-        m_isEffectsAllowed = isSoftware ? 0 : 1;
-    }
-    return m_isEffectsAllowed;
-}
 }
 
 UiEngine::UiEngine(const modularity::ContextPtr& iocCtx)
@@ -154,6 +145,14 @@ void UiEngine::setRootItem(QQuickItem* rootItem)
 
     m_rootItem = rootItem;
     emit rootItemChanged(m_rootItem);
+}
+
+bool UiEngine::isEffectsAllowed() const
+{
+    if (m_isEffectsAllowed == -1) {
+        m_isEffectsAllowed = GraphicsApiProvider::graphicsApi() != GraphicsApiProvider::Software;
+    }
+    return m_isEffectsAllowed;
 }
 
 void UiEngine::addSourceImportPath(const QString& path)

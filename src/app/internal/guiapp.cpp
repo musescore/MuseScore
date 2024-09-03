@@ -10,12 +10,12 @@
 
 #include "muse_framework_config.h"
 
-#include "diagnostics/gsproblemsdetector.h"
+#include "ui/graphicsapiprovider.h"
 
 #include "log.h"
 
 using namespace muse;
-using namespace muse::diagnostics;
+using namespace muse::ui;
 using namespace mu;
 using namespace mu::app;
 using namespace mu::appshell;
@@ -140,24 +140,36 @@ void GuiApp::perform()
     //! Needs to be called before any QQuickWindows are shown.
     QQuickWindow::setDefaultAlphaBuffer(true);
 
+    //! NOTE Adjust GS Api
+    //! We can hide this algorithm in GSApiProvider,
+    //! but it is intentionally left here to illustrate what is happening.
     {
-        GSProblemDetector* gsProblemDetector = new GSProblemDetector(BaseApplication::appVersion());
+        GraphicsApiProvider* gApiProvider = new GraphicsApiProvider(BaseApplication::appVersion());
 
-        if (gsProblemDetector->isNeedUseSoftwareRender()) {
-            QQuickWindow::setSceneGraphBackend("software");
-            LOGI() << "Used scene graph backend: software";
-            gsProblemDetector->destroy();
+        GraphicsApiProvider::Api required = gApiProvider->requiredGraphicsApi();
+        if (required != GraphicsApiProvider::Default) {
+            LOGI() << "Setting required graphics api: " << GraphicsApiProvider::apiName(required);
+            GraphicsApiProvider::setGraphicsApi(required);
+        }
+
+        LOGI() << "Using graphics api: " << GraphicsApiProvider::graphicsApiName();
+
+        if (GraphicsApiProvider::graphicsApi() == GraphicsApiProvider::Software) {
+            gApiProvider->destroy();
         } else {
-            LOGI() << "Let's try to identify the problem with GS";
-            gsProblemDetector->listen([this, gsProblemDetector](bool res) {
+            LOGI() << "Detecting problems with graphics api";
+            gApiProvider->listen([this, gApiProvider, required](bool res) {
                 if (res) {
-                    LOGI() << "No problem with GS";
+                    LOGI() << "No problems detected with graphics api";
+                    gApiProvider->setGraphicsApiStatus(required, GraphicsApiProvider::Status::Checked);
                 } else {
-                    gsProblemDetector->setIsNeedUseSoftwareRender(true);
-                    LOGE() << "Detected problems with GS, switch to `software` backend";
+                    GraphicsApiProvider::Api next = gApiProvider->switchToNextGraphicsApi(required);
+                    LOGE() << "Detected problems with graphics api; switching from " << GraphicsApiProvider::apiName(required)
+                           << " to " << GraphicsApiProvider::apiName(next);
+
                     this->restart();
                 }
-                gsProblemDetector->destroy();
+                gApiProvider->destroy();
             });
         }
     }
