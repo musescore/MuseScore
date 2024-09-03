@@ -2372,6 +2372,7 @@ void EngravingItem::endEditDrag(EditData& ed)
 
 void EngravingItem::endEdit(EditData&)
 {
+    score()->hideAnchors();
 }
 
 //---------------------------------------------------------
