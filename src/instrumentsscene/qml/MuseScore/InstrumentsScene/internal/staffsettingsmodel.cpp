@@ -115,7 +115,7 @@ QVariantList StaffSettingsModel::allStaffTypes() const
         if (isTypeAllowed(type)) {
             QVariantMap obj;
 
-            obj["text"] = staffTypeToString(type.type());
+            obj["text"] = staffTypeToString(type.type()).toQString();
             obj["value"] = static_cast<int>(type.type());
 
             result << obj;

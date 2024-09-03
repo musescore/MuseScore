@@ -864,16 +864,15 @@ void NotationInteraction::moveChordNoteSelection(MoveDirection d)
     EngravingItem* oldSingle = currentSingle;
     bool isRange = selection.isRange();
     std::vector<EngravingItem*> notes;
-    DirectionV dir = d == MoveDirection::Up ? DirectionV::UP : DirectionV::DOWN;
 
     // Single traverse:
     if (currentSingle && (currentSingle->isNote() || currentSingle->isRest())) {
-        EngravingItem* newSingle = _score.moveAlt(currentSingle, dir);
+        EngravingItem* newSingle = _score.moveAlt(currentSingle, d);
         if (newSingle == currentSingle) {
             return;
         }
         while (newSingle && newSingle->isRest() && toRest(newSingle)->isGap()) {
-            newSingle = _score.moveAlt(newSingle, dir);
+            newSingle = _score.moveAlt(newSingle, d);
             if (newSingle == oldSingle) {
                 break;
             }
@@ -895,7 +894,7 @@ void NotationInteraction::moveChordNoteSelection(MoveDirection d)
                                         : selectedNote->chord()->upNote();
                     notes.emplace_back(newSelection);
                 } else { // List
-                    auto newSelection = _score.moveAlt(selectedNote, dir);
+                    auto newSelection = _score.moveAlt(selectedNote, d);
                     bool keepSelection = !newSelection;
                     if (newSelection) {
                         if (newSelection->isNote()) {

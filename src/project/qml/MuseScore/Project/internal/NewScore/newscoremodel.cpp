@@ -116,7 +116,7 @@ ProjectCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
         pi.isExistingPart = objMap["isExistingPart"].toBool();
         pi.isSoloist = objMap["isSoloist"].toBool();
 
-        scoreOptions.parts << pi;
+        scoreOptions.parts.push_back(pi);
     }
 
     QVariantMap orderMap = info["scoreOrder"].toMap();
