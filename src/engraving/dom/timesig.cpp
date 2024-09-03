@@ -278,6 +278,16 @@ PropertyValue TimeSig::propertyDefault(Pid id) const
     }
 }
 
+PointF TimeSig::staffOffset() const
+{
+    const Segment* seg = segment();
+    const Measure* meas = seg ? seg->measure() : nullptr;
+    const Fraction tsTick = meas ? meas->tick() : tick();
+    const StaffType* st = staff()->constStaffType(tsTick);
+    const double yOffset = st ? st->yoffset().val() * spatium() : 0.0;
+    return PointF(0.0, yOffset);
+}
+
 //---------------------------------------------------------
 //   nextSegmentElement
 //---------------------------------------------------------
