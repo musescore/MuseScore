@@ -990,7 +990,7 @@ void NotationParts::removeParts(const IDList& partsIds)
         PartInstrument pi;
         pi.isExistingPart = true;
         pi.partId = part->id();
-        parts << pi;
+        parts.push_back(pi);
     }
 
     sortParts(parts);
@@ -1150,7 +1150,7 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
         PartInstrument pi;
         pi.isExistingPart = true;
         pi.partId = partId;
-        parts << pi;
+        parts.push_back(pi);
     }
 
     endInteractionWithScore();

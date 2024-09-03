@@ -40,6 +40,8 @@
 #include "staff.h"
 #include "tapping.h"
 
+#include "notation/notationtypes.h"
+
 using namespace mu;
 
 namespace mu::engraving {
@@ -404,12 +406,12 @@ Note* Score::downAltCtrl(Note* note) const
 //    or top/bottom of next/previous track's chord if at wit's end
 //---------------------------------------------------------
 
-EngravingItem* Score::moveAlt(EngravingItem* element, DirectionV direction)
+EngravingItem* Score::moveAlt(EngravingItem* element, notation::MoveDirection direction)
 {
     EngravingItem* result = nullptr;
     ChordRest* cr = nullptr;
     auto originalTrack = element->track();
-    bool moveUp = (direction == DirectionV::UP);
+    bool moveUp = (direction == notation::MoveDirection::Up);
     bool isNote = element->isNote();
     bool isRest = element->isRest();
 
