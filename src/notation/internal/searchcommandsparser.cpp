@@ -37,8 +37,8 @@ static const std::string PAGE_CODE("p");
 SearchCommands SearchCommandsParser::availableCommands()
 {
     SearchCommands commands;
-    commands << SearchCommand(ElementType::REHEARSAL_MARK, REHEARSAL_MARK_CODE, muse::trc("notation", "Rehearsal marks"))
-             << SearchCommand(ElementType::PAGE, PAGE_CODE, muse::trc("notation", "Pages"));
+    commands.push_back(SearchCommand(ElementType::REHEARSAL_MARK, REHEARSAL_MARK_CODE, muse::trc("notation", "Rehearsal marks")));
+    commands.push_back(SearchCommand(ElementType::PAGE, PAGE_CODE, muse::trc("notation", "Pages")));
 
     return commands;
 }
