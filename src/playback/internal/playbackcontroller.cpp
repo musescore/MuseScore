@@ -483,7 +483,11 @@ uint64_t PlaybackController::notationPlaybackKey() const
 
 void PlaybackController::onNotationChanged()
 {
-    m_masterNotation = globalContext()->currentMasterNotation();
+    if (globalContext()->currentMasterNotation() != m_masterNotation) {
+        m_masterNotation = globalContext()->currentMasterNotation();
+        notifyActionCheckedChanged(LOOP_CODE);
+    }
+
     setNotation(globalContext()->currentNotation());
 
     DEFER {
