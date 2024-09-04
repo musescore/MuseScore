@@ -243,3 +243,13 @@ void UiEngine::clearComponentCache()
 {
     m_engine->clearComponentCache();
 }
+
+GraphicsApiProvider::Api UiEngine::graphicsApi() const
+{
+    return GraphicsApiProvider::graphicsApi();
+}
+
+QString UiEngine::graphicsApiName() const
+{
+    return GraphicsApiProvider::graphicsApiName();
+}

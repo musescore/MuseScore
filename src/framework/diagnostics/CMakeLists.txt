@@ -54,6 +54,8 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/view/system/profilerviewmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/system/profilerviewmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/system/graphicsinfomodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/system/graphicsinfomodel.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/keynav/diagnosticnavigationmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/keynav/diagnosticnavigationmodel.h

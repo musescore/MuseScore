@@ -19,38 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import QtQuick 2.15
+import Muse.Ui 1.0
+import Muse.UiComponents 1.0
 
-#ifndef MUSE_UI_IUIENGINE_H
-#define MUSE_UI_IUIENGINE_H
+StyledDialogView {
+    id: root
 
-#include <QString>
+    title: "Diagnostic: Graphics Info"
 
-#include "modularity/imoduleinterface.h"
+    contentHeight: 480
+    contentWidth: 600
+    resizable: true
 
-#include "graphicsapiprovider.h"
-
-class QQmlEngine;
-class QQmlApplicationEngine;
-
-namespace muse::ui {
-class IUiEngine : MODULE_EXPORT_INTERFACE
-{
-    INTERFACE_ID(IUiEngine)
-
-public:
-    virtual ~IUiEngine() {}
-
-    virtual void updateTheme() = 0;
-    virtual QQmlApplicationEngine* qmlAppEngine() const = 0;
-    virtual QQmlEngine* qmlEngine() const = 0;
-    virtual void quit() = 0;
-    virtual void clearComponentCache() = 0;
-
-    virtual GraphicsApiProvider::Api graphicsApi() const = 0;
-    virtual QString graphicsApiName() const = 0;
-
-    virtual void addSourceImportPath(const QString& path) = 0;
-};
+    DiagnosticGraphicsInfoPanel {
+        anchors.fill: parent
+    }
 }
-
-#endif // MUSE_UI_UIENGINEMODULE_H
