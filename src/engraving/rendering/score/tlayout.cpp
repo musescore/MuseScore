@@ -3120,56 +3120,7 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
 
     ldata->disconnectSnappedItems();
 
-    EngravingItem* possibleSnapBeforeElement = nullptr;
-    EngravingItem* possibleSnapAfterElement = nullptr;
-    if (item->isSingleBeginType()) {
-        possibleSnapBeforeElement = item->findElementToSnapBefore();
-    }
-    if (item->isSingleEndType() && item->hairpin()->ticks().isNotZero()) {
-        possibleSnapAfterElement = item->findElementToSnapAfter();
-    }
-
-    // In case of dynamics/expressions before or after, make space for them horizontally
-    double hairpinDistToDynOrExpr = ctx.conf().style().styleMM(Sid::autoplaceHairpinDynamicsDistance);
-    if (possibleSnapBeforeElement && possibleSnapBeforeElement->findAncestor(ElementType::SYSTEM) == item->system()
-        && (possibleSnapBeforeElement->isDynamic() || possibleSnapBeforeElement->isExpression())) {
-        double xItemPos = possibleSnapBeforeElement->pageX() - item->system()->pageX();
-        double itemRightEdge = xItemPos + possibleSnapBeforeElement->ldata()->bbox().right();
-        double xMinHairpinStart = itemRightEdge + hairpinDistToDynOrExpr;
-        double xStartDiff = ldata->pos().x() - xMinHairpinStart;
-        if (xStartDiff < 0) {
-            ldata->setPosX(xMinHairpinStart);
-            item->rxpos2() += xStartDiff;
-        }
-    }
-    if (possibleSnapAfterElement && possibleSnapAfterElement->findAncestor(ElementType::SYSTEM) == item->system()
-        && (possibleSnapAfterElement->isDynamic() || possibleSnapAfterElement->isExpression())) {
-        double xItemPos = possibleSnapAfterElement->pageX() - item->system()->pageX();
-        double itemLeftEdge = xItemPos + possibleSnapAfterElement->ldata()->bbox().left();
-        double xMaxHairpinEnd = itemLeftEdge - hairpinDistToDynOrExpr;
-        double xEndDiff = xMaxHairpinEnd - (item->pos().x() + item->pos2().x());
-        const double EXTEND_THRESHOLD = 3.0 * _spatium;
-        if (xEndDiff < 0) {
-            item->rxpos2() += xEndDiff;
-        } else if (item->hairpin()->snapToItemAfter() && xEndDiff > EXTEND_THRESHOLD) {
-            item->rxpos2() += xEndDiff;
-        }
-    }
-
-    if (item->hairpin()->snapToItemBefore() && possibleSnapBeforeElement) {
-        if (possibleSnapBeforeElement->isExpression() || possibleSnapBeforeElement->isDynamic()
-            || (possibleSnapBeforeElement->isHairpinSegment()
-                && toHairpinSegment(possibleSnapBeforeElement)->hairpin()->snapToItemAfter())) {
-            ldata->connectItemSnappedBefore(possibleSnapBeforeElement);
-        }
-    }
-    if (item->hairpin()->snapToItemAfter() && possibleSnapAfterElement) {
-        if (possibleSnapAfterElement->isExpression() || possibleSnapAfterElement->isDynamic()
-            || (possibleSnapAfterElement->isHairpinSegment()
-                && toHairpinSegment(possibleSnapAfterElement)->hairpin()->snapToItemBefore())) {
-            ldata->connectItemSnappedAfter(possibleSnapAfterElement);
-        }
-    }
+    manageHairpinSnapping(item, ctx);
 
     HairpinType type = item->hairpin()->hairpinType();
     if (item->hairpin()->isLineType()) {
@@ -3308,6 +3259,71 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
     }
 
     Autoplace::setOffsetChanged(item, ldata, false);
+}
+
+void TLayout::manageHairpinSnapping(HairpinSegment* item, LayoutContext& ctx)
+{
+    HairpinSegment::LayoutData* ldata = item->mutldata();
+
+    EngravingItem* possibleSnapBeforeElement = nullptr;
+    EngravingItem* possibleSnapAfterElement = nullptr;
+    if (item->isSingleBeginType()) {
+        possibleSnapBeforeElement = item->findElementToSnapBefore();
+    }
+    if (item->isSingleEndType() && item->hairpin()->ticks().isNotZero()) {
+        possibleSnapAfterElement = item->findElementToSnapAfter();
+    }
+
+    bool doSnapBefore = possibleSnapBeforeElement && item->hairpin()->snapToItemBefore();
+    if (doSnapBefore && possibleSnapBeforeElement->isHairpinSegment()) {
+        doSnapBefore = doSnapBefore && toHairpinSegment(possibleSnapBeforeElement)->hairpin()->snapToItemAfter();
+    }
+
+    if (doSnapBefore) {
+        ldata->connectItemSnappedBefore(possibleSnapBeforeElement);
+    }
+
+    bool doSnapAfter = possibleSnapAfterElement && item->hairpin()->snapToItemAfter();
+    if (doSnapAfter && possibleSnapAfterElement->isHairpinSegment()) {
+        doSnapAfter = doSnapAfter && toHairpinSegment(possibleSnapAfterElement)->hairpin()->snapToItemBefore();
+    }
+
+    if (doSnapAfter) {
+        ldata->connectItemSnappedAfter(possibleSnapAfterElement);
+    }
+
+    // In case of dynamics/expressions before or after, make space for them horizontally
+    double hairpinDistToDynOrExpr = ctx.conf().style().styleMM(Sid::autoplaceHairpinDynamicsDistance);
+
+    bool makeSpaceBefore = (doSnapBefore && possibleSnapBeforeElement->isTextBase())
+                           || (possibleSnapBeforeElement && possibleSnapBeforeElement->isDynamic());
+
+    if (makeSpaceBefore && possibleSnapBeforeElement->findAncestor(ElementType::SYSTEM) == item->system()) {
+        double xItemPos = possibleSnapBeforeElement->pageX() - item->system()->pageX();
+        double itemRightEdge = xItemPos + possibleSnapBeforeElement->ldata()->bbox().right();
+        double xMinHairpinStart = itemRightEdge + hairpinDistToDynOrExpr;
+        double xStartDiff = ldata->pos().x() - xMinHairpinStart;
+        if (xStartDiff < 0) {
+            ldata->setPosX(xMinHairpinStart);
+            item->rxpos2() += xStartDiff;
+        }
+    }
+
+    bool makeSpaceAfter = (doSnapAfter && possibleSnapAfterElement->isTextBase())
+                          || (possibleSnapAfterElement && possibleSnapAfterElement->isDynamic());
+
+    if (makeSpaceAfter && possibleSnapAfterElement->findAncestor(ElementType::SYSTEM) == item->system()) {
+        double xItemPos = possibleSnapAfterElement->pageX() - item->system()->pageX();
+        double itemLeftEdge = xItemPos + possibleSnapAfterElement->ldata()->bbox().left();
+        double xMaxHairpinEnd = itemLeftEdge - hairpinDistToDynOrExpr;
+        double xEndDiff = xMaxHairpinEnd - (item->pos().x() + item->pos2().x());
+        const double EXTEND_THRESHOLD = 3.0 * item->spatium();
+        if (xEndDiff < 0) {
+            item->rxpos2() += xEndDiff;
+        } else if (item->hairpin()->snapToItemAfter() && xEndDiff > EXTEND_THRESHOLD) {
+            item->rxpos2() += xEndDiff;
+        }
+    }
 }
 
 void TLayout::layoutHairpin(Hairpin* item, LayoutContext& ctx)
