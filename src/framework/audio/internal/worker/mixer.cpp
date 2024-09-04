@@ -33,14 +33,17 @@ using namespace muse;
 using namespace muse::audio;
 using namespace muse::async;
 
-static constexpr size_t DEFAULT_AUX_BUFFER_SIZE = 1024;
-
 Mixer::Mixer(const modularity::ContextPtr& iocCtx)
     : muse::Injectable(iocCtx)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
     m_taskScheduler = std::make_unique<TaskScheduler>();
+
+    if (!m_taskScheduler->setThreadsPriority(ThreadPriority::High)) {
+        LOGE() << "Unable to change audio threads priority";
+    }
+
     AudioSanitizer::setMixerThreads(m_taskScheduler->threadIdSet());
 
     m_minTrackCountForMultithreading = configuration()->minTrackCountForMultithreading();
