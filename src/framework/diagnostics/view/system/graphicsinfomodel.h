@@ -21,28 +21,32 @@
  */
 #pragma once
 
-#include <QString>
+#include <QObject>
 
-#include "global/types/version.h"
+#include "modularity/ioc.h"
+#include "ui/iuiengine.h"
 
 namespace muse::diagnostics {
-class GlLogDest;
-class GlProblemsDetector
+class GraphicsInfoModel : public QObject
 {
+    Q_OBJECT
+
+    Q_PROPERTY(QString info READ info NOTIFY infoChanged FINAL)
+
+    muse::Inject<ui::IUiEngine> uiengine;
+
 public:
-    GlProblemsDetector(const Version& appVersion);
-    ~GlProblemsDetector();
+    GraphicsInfoModel();
 
-    bool isNeedUseSoftwareRender() const;
-    void setIsNeedUseSoftwareRender(bool arg);
+    QString info() const;
 
-    bool isProblemWithGl() const;
+    Q_INVOKABLE void init();
+    Q_INVOKABLE void copyToClipboard();
+
+signals:
+    void infoChanged();
 
 private:
-
-    QString softwareMarkerFilePath() const;
-
-    Version m_appVersion;
-    GlLogDest* m_logDest = nullptr;
+    QString m_info;
 };
 }

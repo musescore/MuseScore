@@ -10,12 +10,12 @@
 
 #include "muse_framework_config.h"
 
-#include "diagnostics/glproblemsdetector.h"
+#include "ui/graphicsapiprovider.h"
 
 #include "log.h"
 
 using namespace muse;
-using namespace muse::diagnostics;
+using namespace muse::ui;
 using namespace mu;
 using namespace mu::app;
 using namespace mu::appshell;
@@ -140,10 +140,38 @@ void GuiApp::perform()
     //! Needs to be called before any QQuickWindows are shown.
     QQuickWindow::setDefaultAlphaBuffer(true);
 
-    GlProblemsDetector* glProblemsDetector = new GlProblemsDetector(version());
-    if (glProblemsDetector->isNeedUseSoftwareRender()) {
-        QQuickWindow::setSceneGraphBackend("software");
-        LOGI() << "Used software scene graph backend";
+    //! NOTE Adjust GS Api
+    //! We can hide this algorithm in GSApiProvider,
+    //! but it is intentionally left here to illustrate what is happening.
+    {
+        GraphicsApiProvider* gApiProvider = new GraphicsApiProvider(BaseApplication::appVersion());
+
+        GraphicsApiProvider::Api required = gApiProvider->requiredGraphicsApi();
+        if (required != GraphicsApiProvider::Default) {
+            LOGI() << "Setting required graphics api: " << GraphicsApiProvider::apiName(required);
+            GraphicsApiProvider::setGraphicsApi(required);
+        }
+
+        LOGI() << "Using graphics api: " << GraphicsApiProvider::graphicsApiName();
+
+        if (GraphicsApiProvider::graphicsApi() == GraphicsApiProvider::Software) {
+            gApiProvider->destroy();
+        } else {
+            LOGI() << "Detecting problems with graphics api";
+            gApiProvider->listen([this, gApiProvider, required](bool res) {
+                if (res) {
+                    LOGI() << "No problems detected with graphics api";
+                    gApiProvider->setGraphicsApiStatus(required, GraphicsApiProvider::Status::Checked);
+                } else {
+                    GraphicsApiProvider::Api next = gApiProvider->switchToNextGraphicsApi(required);
+                    LOGE() << "Detected problems with graphics api; switching from " << GraphicsApiProvider::apiName(required)
+                           << " to " << GraphicsApiProvider::apiName(next);
+
+                    this->restart();
+                }
+                gApiProvider->destroy();
+            });
+        }
     }
 
     QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
@@ -165,20 +193,7 @@ void GuiApp::perform()
 #endif
 
     QObject::connect(engine, &QQmlApplicationEngine::objectCreated, qApp,
-                     [this, url, splashScreen, glProblemsDetector](QObject* obj, const QUrl& objUrl) {
-        if (glProblemsDetector->isProblemWithGl()) {
-            if (glProblemsDetector->isNeedUseSoftwareRender()) {
-                LOGE() << "Detected problems with GL, but the `software` backend is already in use";
-            } else {
-                glProblemsDetector->setIsNeedUseSoftwareRender(true);
-                LOGE() << "Detected problems with GL, switch to `software` backend";
-                this->restart();
-                delete glProblemsDetector;
-                return;
-            }
-        }
-        delete glProblemsDetector;
-
+                     [this, url, splashScreen](QObject* obj, const QUrl& objUrl) {
         if (!obj && url == objUrl) {
             LOGE() << "failed Qml load\n";
             QCoreApplication::exit(-1);
