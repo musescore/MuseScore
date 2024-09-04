@@ -50,6 +50,7 @@ static const std::map<UInt32, QString> specialKeysMap = {
     { kVK_F17, "F17" },
     { kVK_F18, "F18" },
     { kVK_F19, "F19" },
+    { kVK_F20, "F20" },
     { kVK_Space, "Space" },
     { kVK_Escape, "Esc" },
     { kVK_Delete, "Backspace" },
@@ -109,8 +110,10 @@ static UCKeyboardLayout* keyboardLayout()
     return (UCKeyboardLayout*)CFDataGetBytePtr(uchr);
 }
 
-static UInt32 nativeKeycode(UCKeyboardLayout* keyboard, Qt::Key keyCode)
+static UInt32 nativeKeycode(UCKeyboardLayout* keyboard, Qt::Key keyCode, bool& found)
 {
+    found = true;
+
     switch (keyCode) {
     case Qt::Key_Return:
         return kVK_Return;
@@ -196,6 +199,12 @@ static UInt32 nativeKeycode(UCKeyboardLayout* keyboard, Qt::Key keyCode)
         break;
     }
 
+    if (keyCode < 0 || keyCode > 0xFFFF) {
+        LOGW() << "Unhandled key code: " << keyCode;
+        found = false;
+        return 0;
+    }
+
     UTF16Char keyCodeChar = keyCode;
     UCKeyboardTypeHeader* table = keyboard->keyboardTypeList;
 
@@ -234,10 +243,11 @@ static UInt32 nativeKeycode(UCKeyboardLayout* keyboard, Qt::Key keyCode)
         }
     }
 
+    found = false;
     return 0;
 }
 
-UInt32 nativeModifiers(Qt::KeyboardModifiers modifiers)
+static UInt32 nativeModifiers(Qt::KeyboardModifiers modifiers)
 {
     UInt32 result = 0;
     if (modifiers & Qt::ShiftModifier) {
@@ -259,7 +269,7 @@ UInt32 nativeModifiers(Qt::KeyboardModifiers modifiers)
     return result;
 }
 
-QString keyCodeToString(UCKeyboardLayout* keyboard, UInt32 keyNativeCode)
+static QString keyCodeToString(UCKeyboardLayout* keyboard, UInt32 keyNativeCode)
 {
     if (muse::contains(specialKeysMap, keyNativeCode)) {
         return specialKeysMap.at(keyNativeCode);
@@ -297,7 +307,7 @@ QString keyCodeToString(UCKeyboardLayout* keyboard, UInt32 keyNativeCode)
     return "";
 }
 
-QString keyModifiersToString(UInt32 keyNativeModifiers)
+static QString keyModifiersToString(UInt32 keyNativeModifiers)
 {
     static const QMap<int, QString> qtModifiers = {
         { shiftKey, "Shift" },
@@ -326,7 +336,7 @@ QString keyModifiersToString(UInt32 keyNativeModifiers)
     return result;
 }
 
-QString translateToCurrentKeyboardLayout(const QKeySequence& sequence)
+static QString translateToCurrentKeyboardLayout(const QKeySequence& sequence)
 {
     const QKeyCombination keyCombination = sequence[0];
 
@@ -338,7 +348,12 @@ QString translateToCurrentKeyboardLayout(const QKeySequence& sequence)
         return {};
     }
 
-    UInt32 keyNativeCode = nativeKeycode(keyboard, qKey);
+    bool found = false;
+    UInt32 keyNativeCode = nativeKeycode(keyboard, qKey, found);
+    if (!found) {
+        LOGW() << "Key " << qKey << " not found in the keyboard layout";
+        return {};
+    }
 
     Qt::KeyboardModifiers modifiers = keyCombination.keyboardModifiers();
     UInt32 keyNativeModifiers = nativeModifiers(modifiers);
@@ -369,6 +384,10 @@ void MacOSShortcutsInstanceModel::doLoadShortcuts()
             QString sequence = QString::fromStdString(seq);
 
             QString seqStr = translateToCurrentKeyboardLayout(QKeySequence::fromString(sequence, QKeySequence::PortableText));
+            if (seqStr.isEmpty()) {
+                LOGW() << "Failed to translate sequence " << sequence;
+                continue;
+            }
 
             // RULE: If a sequence is used for several shortcuts but the values for autoRepeat vary depending on
             // the context, then we should force autoRepeat to false for all shortcuts sharing the sequence in
