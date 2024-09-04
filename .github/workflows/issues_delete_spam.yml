@@ -21,6 +21,7 @@ jobs:
             const commentBody = comment.body;
             const isSpam = commentBody.includes('password: changeme')
                            || commentBody.includes('mediafire.')
+                           || commentBody.includes('gofile')
                            || commentBody.includes('fix your trouble try');
             if (isSpam) {
                 console.log('Deleting spam comment');
