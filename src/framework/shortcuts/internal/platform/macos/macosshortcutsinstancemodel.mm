@@ -50,6 +50,7 @@ static const std::map<UInt32, QString> specialKeysMap = {
     { kVK_F17, "F17" },
     { kVK_F18, "F18" },
     { kVK_F19, "F19" },
+    { kVK_F20, "F20" },
     { kVK_Space, "Space" },
     { kVK_Escape, "Esc" },
     { kVK_Delete, "Backspace" },
@@ -196,6 +197,12 @@ static UInt32 nativeKeycode(UCKeyboardLayout* keyboard, Qt::Key keyCode, bool& f
         return kVK_UpArrow;
     default:
         break;
+    }
+
+    if (keyCode < 0 || keyCode > 0xFFFF) {
+        LOGW() << "Unhandled key code: " << keyCode;
+        found = false;
+        return 0;
     }
 
     UTF16Char keyCodeChar = keyCode;
