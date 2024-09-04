@@ -315,7 +315,12 @@ void MuseScore::cmdInsertMeasures()
                         tr("No measure selected:\n" "Please select a measure and try again"));
                   }
             else {
-                  insertMeasuresDialog = new InsertMeasuresDialog;
+                  if (!insertMeasuresDialog)
+                        insertMeasuresDialog = new InsertMeasuresDialog;
+                  else {
+                        insertMeasuresDialog->insmeasures->setFocus();
+                        insertMeasuresDialog->insmeasures->selectAll();
+                        }
                   insertMeasuresDialog->show();
                   }
             }
@@ -3107,8 +3112,12 @@ void MuseScore::showPlayPanel(bool visible)
 void MuseScore::cmdAppendMeasures()
       {
       if (cs) {
-            if (measuresDialog == 0)
+            if (!measuresDialog)
                   measuresDialog = new MeasuresDialog;
+            else {
+                  measuresDialog->measures->setFocus();
+                  measuresDialog->measures->selectAll();
+                  }
             measuresDialog->show();
             }
       }

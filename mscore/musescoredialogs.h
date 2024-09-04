@@ -77,6 +77,7 @@ class InsertMeasuresDialog : public QDialog, public Ui::InsertMeasuresDialogBase
 class MeasuresDialog : public QDialog, public Ui::MeasuresDialogBase {
       Q_OBJECT
 
+      void hideEvent(QHideEvent*) override;
       void accept() override;
 
    private slots:

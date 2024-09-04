@@ -36,6 +36,7 @@ InsertMeasuresDialog::InsertMeasuresDialog(QWidget* parent)
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
+      insmeasures->setFocus();
       insmeasures->selectAll();
       connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
       }
@@ -86,9 +87,11 @@ void InsertMeasuresDialog::hideEvent(QHideEvent* event)
 MeasuresDialog::MeasuresDialog(QWidget* parent)
    : QDialog(parent)
       {
+      setObjectName("MeasuresDialog");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
       setModal(true);
+      measures->setFocus();
       measures->selectAll();
       connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
       }
@@ -120,6 +123,16 @@ void MeasuresDialog::accept()
       if (mscore->currentScore())
             mscore->currentScoreView()->cmdAppendMeasures(n, ElementType::MEASURE);
       done(1);
+      }
+
+//---------------------------------------------------------
+// MeasuresDialog hideEvent
+//---------------------------------------------------------
+
+void MeasuresDialog::hideEvent(QHideEvent* event)
+      {
+      MuseScore::saveGeometry(this);
+      QDialog::hideEvent(event);
       }
 
 
