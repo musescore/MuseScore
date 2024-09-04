@@ -42,6 +42,7 @@ static const Settings::Key AUDIO_OUTPUT_DEVICE_ID_KEY("audio", "io/outputDevice"
 static const Settings::Key AUDIO_BUFFER_SIZE_KEY("audio", "io/bufferSize");
 static const Settings::Key AUDIO_SAMPLE_RATE_KEY("audio", "io/sampleRate");
 static const Settings::Key AUDIO_MEASURE_INPUT_LAG("audio", "io/measureInputLag");
+static const Settings::Key AUDIO_DESIRED_THREAD_NUMBER_KEY("audio", "io/audioThreads");
 
 static const Settings::Key USER_SOUNDFONTS_PATHS("midi", "application/paths/mySoundfonts");
 
@@ -91,6 +92,8 @@ void AudioConfiguration::init()
     }
 
     settings()->setDefaultValue(AUDIO_MEASURE_INPUT_LAG, Val(false));
+
+    settings()->setDefaultValue(AUDIO_DESIRED_THREAD_NUMBER_KEY, Val(0));
 
     updateSamplesToPreallocate();
 }
@@ -197,6 +200,11 @@ void AudioConfiguration::setSampleRate(unsigned int sampleRate)
 async::Notification AudioConfiguration::sampleRateChanged() const
 {
     return m_driverSampleRateChanged;
+}
+
+size_t AudioConfiguration::desiredAudioThreadNumber() const
+{
+    return settings()->value(AUDIO_DESIRED_THREAD_NUMBER_KEY).toInt();
 }
 
 size_t AudioConfiguration::minTrackCountForMultithreading() const
