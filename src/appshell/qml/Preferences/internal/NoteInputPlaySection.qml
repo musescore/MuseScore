@@ -27,6 +27,8 @@ import Muse.UiComponents 1.0
 BaseSection {
     id: root
 
+    title: qsTrc("appshell/preferences", "Note preview")
+
     property alias playNotesWhenEditing: playNotesBox.checked
     property alias playChordWhenEditing: playChordBox.checked
     property alias playChordSymbolWhenEditing: playChordSymbolBox.checked
@@ -45,7 +47,6 @@ BaseSection {
         width: parent.width
 
         text: qsTrc("appshell/preferences", "Play notes when editing")
-        font: ui.theme.bodyBoldFont
 
         navigation.name: "PlayNotesBox"
         navigation.panel: root.navigation
@@ -53,28 +54,6 @@ BaseSection {
 
         onClicked: {
             root.playNotesWhenEditingChangeRequested(!checked)
-        }
-    }
-
-    IncrementalPropertyControlWithTitle {
-        id: notePlayDurationControl
-
-        title: qsTrc("appshell/preferences", "Default duration:")
-
-        enabled: root.playNotesWhenEditing
-
-        columnWidth: root.columnWidth
-        spacing: root.columnSpacing
-
-        //: Abbreviation of "milliseconds"
-        measureUnitsSymbol: qsTrc("global", "ms")
-
-        navigation.name: "NotePlayDurationControl"
-        navigation.panel: root.navigation
-        navigation.row: 1
-
-        onValueEdited: function(newValue) {
-            root.notePlayDurationChangeRequested(newValue)
         }
     }
 
@@ -88,7 +67,7 @@ BaseSection {
 
         navigation.name: "PlayChordBox"
         navigation.panel: root.navigation
-        navigation.row: 2
+        navigation.row: 1
 
         onClicked: {
             root.playChordWhenEditingChangeRequested(!checked)
@@ -105,7 +84,7 @@ BaseSection {
 
         navigation.name: "PlayChordSymbolBox"
         navigation.panel: root.navigation
-        navigation.row: 3
+        navigation.row: 2
 
         onClicked: {
             root.playChordSymbolWhenEditingChangeRequested(!checked)
@@ -116,16 +95,36 @@ BaseSection {
         id: playNotesOnMidiInputBox
         width: parent.width
 
-        text: qsTrc("appshell/preferences", "Play notes with MIDI input")
-
-        enabled: root.playNotesWhenEditing
+        text: qsTrc("appshell/preferences", "Play MIDI input")
 
         navigation.name: "PlayNotesOnMidiInputBox"
         navigation.panel: root.navigation
-        navigation.row: 4
+        navigation.row: 3
 
         onClicked: {
             root.playNotesOnMidiInputChangeRequested(!checked)
+        }
+    }
+
+    IncrementalPropertyControlWithTitle {
+        id: notePlayDurationControl
+
+        title: qsTrc("appshell/preferences", "Default duration:")
+
+        enabled: (root.playNotesWhenEditing || root.playNotesOnMidiInput)
+
+        columnWidth: root.columnWidth
+        spacing: root.columnSpacing
+
+        //: Abbreviation of "milliseconds"
+        measureUnitsSymbol: qsTrc("global", "ms")
+
+        navigation.name: "NotePlayDurationControl"
+        navigation.panel: root.navigation
+        navigation.row: 4
+
+        onValueEdited: function(newValue) {
+            root.notePlayDurationChangeRequested(newValue)
         }
     }
 }
