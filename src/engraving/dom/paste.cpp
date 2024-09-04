@@ -398,6 +398,7 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
             addRefresh(target->abbox());         // layout() ?!
             EditData ddata(view);
             ddata.dropElement = el.get();
+            ddata.pos = target->abbox().topLeft();
             if (target->acceptDrop(ddata)) {
                 if (!el->isNote() || (target = prepareTarget(target, toNote(el.get()), duration))) {
                     ddata.dropElement = el->clone();

@@ -1570,7 +1570,7 @@ bool NotationInteraction::doDropStandard()
 //! NOTE: Helper method for NotationInteraction::drop. Handles drop logic for text base items & symbols (returns "accepted")
 bool NotationInteraction::doDropTextBaseAndSymbols(const PointF& pos, bool applyUserOffset)
 {
-    EngravingItem* el = elementAt(pos);
+    EngravingItem* el = m_dropData.dropTarget ? const_cast<EngravingItem*>(m_dropData.dropTarget) : elementAt(pos);
     if (el == 0 || el->type() == ElementType::STAFF_LINES) {
         mu::engraving::staff_idx_t staffIdx;
         mu::engraving::Segment* seg;
@@ -1597,6 +1597,7 @@ bool NotationInteraction::doDropTextBaseAndSymbols(const PointF& pos, bool apply
             LOGD("drop %s onto %s not accepted", m_dropData.ed.dropElement->typeName(), el->typeName());
             return false;
         }
+        m_dropData.ed.pos = pos;
         EngravingItem* dropElement = el->drop(m_dropData.ed);
         score()->addRefresh(el->canvasBoundingRect());
         if (dropElement) {
