@@ -34,6 +34,7 @@
 #include <type_traits>
 #include <utility>
 
+#include "threadutils.h"
 #include "log.h"
 
 namespace muse {
@@ -69,6 +70,17 @@ public:
         }
 
         return result;
+    }
+
+    bool setThreadsPriority(ThreadPriority priority)
+    {
+        for (thread_pool_size_t i = 0; i < m_threadPoolSize; ++i) {
+            if (!muse::setThreadPriority(m_threadPool[i], priority)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     template<typename FuncT, typename ... ArgsT>
