@@ -48,11 +48,10 @@ SegmentList SegmentList::clone() const
 
 Segment* SegmentList::firstActive() const
 {
-    Segment* segment = m_first;
-    if (segment->isActive()) {
-        return segment;
+    if (Segment* segment = m_first) {
+        return segment->isActive() ? segment : segment->nextActive();
     }
-    return segment->nextActive();
+    return nullptr;
 }
 
 //---------------------------------------------------------
