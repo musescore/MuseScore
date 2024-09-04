@@ -273,7 +273,7 @@ void Measure::fillGap(const Fraction& pos, const Fraction& len, track_idx_t trac
          track);
 
     // break the gap into shorter durations if necessary
-    std::vector<TDuration> durationList = toRhythmicDurationList(len, true, pos, score()->sigmap()->timesig(tick()).nominal(), this, 0);
+    std::vector<TDuration> durationList = toRhythmicDurationList(len, true, pos, timesig(), this, 0);
 
     Fraction curTick = pos;
     for (TDuration d : durationList) {

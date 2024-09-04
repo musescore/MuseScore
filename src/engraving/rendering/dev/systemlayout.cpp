@@ -1170,6 +1170,17 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     AlignmentLayout::alignItemsWithTheirSnappingChain(dynamicsExprAndHairpinsToAlign, system);
 
     processLines(system, ctx, spanner, false);
+    for (MeasureNumber* mno : measureNumbers) {
+        Autoplace::autoplaceMeasureElement(mno, mno->mutldata());
+        system->staff(mno->staffIdx())->skyline().add(mno->ldata()->bbox().translated(mno->measure()->pos() + mno->pos()
+                                                                                      + mno->staffOffset()), mno);
+    }
+
+    for (MMRestRange* mmrr : mmrRanges) {
+        Autoplace::autoplaceMeasureElement(mmrr, mmrr->mutldata());
+        system->staff(mmrr->staffIdx())->skyline().add(mmrr->ldata()->bbox().translated(mmrr->measure()->pos() + mmrr->pos()), mmrr);
+    }
+
     processLines(system, ctx, ottavas, false);
     processLines(system, ctx, pedal,   true);
 
@@ -1400,17 +1411,6 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                 TLayout::layoutItem(e, ctx);
             }
         }
-    }
-
-    for (MeasureNumber* mno : measureNumbers) {
-        Autoplace::autoplaceMeasureElement(mno, mno->mutldata());
-        system->staff(mno->staffIdx())->skyline().add(mno->ldata()->bbox().translated(mno->measure()->pos() + mno->pos()
-                                                                                      + mno->staffOffset()), mno);
-    }
-
-    for (MMRestRange* mmrr : mmrRanges) {
-        Autoplace::autoplaceMeasureElement(mmrr, mmrr->mutldata());
-        system->staff(mmrr->staffIdx())->skyline().add(mmrr->ldata()->bbox().translated(mmrr->measure()->pos() + mmrr->pos()), mmrr);
     }
 }
 
