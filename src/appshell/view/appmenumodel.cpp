@@ -350,6 +350,7 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
 {
     MenuItemList systemItems {
         makeMenuItem("diagnostic-show-paths"),
+        makeMenuItem("diagnostic-show-graphicsinfo"),
         makeMenuItem("diagnostic-show-profiler"),
     };
 
