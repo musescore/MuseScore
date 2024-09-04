@@ -140,9 +140,8 @@ void NotationMidiInput::doProcessEvents()
         for (const Note* note : notes) {
             notesItems.push_back(note);
         }
-        if (playbackConfiguration()->playNotesOnMidiInput()) {
-            playbackController()->playElements(notesItems);
-        }
+
+        playbackController()->playElements(notesItems, true);
         m_notesReceivedChannel.send(notes);
     }
 

@@ -320,7 +320,7 @@ void PlaybackController::setTrackSoloMuteState(const InstrumentTrackId& trackId,
     m_notation->soloMuteState()->setTrackSoloMuteState(trackId, state);
 }
 
-void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements)
+void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements, bool isMidi)
 {
     IF_ASSERT_FAILED(notationPlayback()) {
         return;

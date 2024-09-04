@@ -75,7 +75,7 @@ public:
     virtual void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId,
                                        const notation::INotationSoloMuteState::SoloMuteState& state) = 0;
 
-    virtual void playElements(const std::vector<const notation::EngravingItem*>& elements) = 0;
+    virtual void playElements(const std::vector<const notation::EngravingItem*>& elements, bool isMidi = false) = 0;
     virtual void playMetronome(int tick) = 0;
     virtual void seekElement(const notation::EngravingItem* element) = 0;
     virtual void seekBeat(int measureIndex, int beatIndex) = 0;
