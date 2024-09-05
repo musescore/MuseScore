@@ -208,7 +208,7 @@ void MuseData::readChord(Part*, QStringView s)
 //   openSlur
 //---------------------------------------------------------
 
-void MuseData::openSlur(int idx, const Fraction& tick, Staff* staff, int voc)
+void MuseData::openSlur(int idx, const Fraction& tick, Staff* staff, int voc, EngravingItem* startChord)
 {
     staff_idx_t staffIdx = staff->idx();
     if (slur[idx]) {
@@ -218,6 +218,7 @@ void MuseData::openSlur(int idx, const Fraction& tick, Staff* staff, int voc)
     slur[idx] = Factory::createSlur(score->dummy());
     slur[idx]->setTick(tick);
     slur[idx]->setTrack(staffIdx * VOICES + voc);
+    slur[idx]->setStartElement(startChord);
     score->addElement(slur[idx]);
 }
 
@@ -225,12 +226,13 @@ void MuseData::openSlur(int idx, const Fraction& tick, Staff* staff, int voc)
 //   closeSlur
 //---------------------------------------------------------
 
-void MuseData::closeSlur(int idx, const Fraction& tick, Staff* staff, int voc)
+void MuseData::closeSlur(int idx, const Fraction& tick, Staff* staff, int voc, engraving::EngravingItem* endChord)
 {
     staff_idx_t staffIdx = staff->idx();
     if (slur[idx]) {
         slur[idx]->setTick2(tick);
         slur[idx]->setTrack2(staffIdx * VOICES + voc);
+        slur[idx]->setEndElement(endChord);
         slur[idx] = 0;
     } else {
         LOGD("%06d: slur %d not open", tick.ticks(), idx + 1);
@@ -356,21 +358,21 @@ void MuseData::readNote(Part* part, QStringView s)
     QStringView an = s.mid(31, 11);
     for (int i = 0; i < an.size(); ++i) {
         if (an[i] == '(') {
-            openSlur(0, tick, staff, voice);
+            openSlur(0, tick, staff, voice, chord);
         } else if (an[i] == ')') {
-            closeSlur(0, tick, staff, voice);
+            closeSlur(0, tick, staff, voice, chord);
         } else if (an[i] == '[') {
-            openSlur(1, tick, staff, voice);
+            openSlur(1, tick, staff, voice, chord);
         } else if (an[i] == ']') {
-            closeSlur(1, tick, staff, voice);
+            closeSlur(1, tick, staff, voice, chord);
         } else if (an[i] == '{') {
-            openSlur(2, tick, staff, voice);
+            openSlur(2, tick, staff, voice, chord);
         } else if (an[i] == '}') {
-            closeSlur(2, tick, staff, voice);
+            closeSlur(2, tick, staff, voice, chord);
         } else if (an[i] == 'z') {
-            openSlur(3, tick, staff, voice);
+            openSlur(3, tick, staff, voice, chord);
         } else if (an[i] == 'x') {
-            closeSlur(3, tick, staff, voice);
+            closeSlur(3, tick, staff, voice, chord);
         } else if (an[i] == '.') {
             Articulation* atr = Factory::createArticulation(chord);
             atr->setSymId(SymId::articStaccatoAbove);
