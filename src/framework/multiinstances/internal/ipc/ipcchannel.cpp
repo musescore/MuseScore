@@ -109,7 +109,7 @@ Code IpcChannel::syncRequestToAll(const QString& method, const QStringList& args
         }
 
         ++received;
-        bool success = onReceived(msg.args);
+        bool success = onReceived(msg.args, msg.srcID);
         if (success) {
             loop.exit(Code::Success);
             return;
