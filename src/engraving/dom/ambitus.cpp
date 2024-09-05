@@ -72,8 +72,13 @@ Ambitus::Ambitus(const Ambitus& a)
     m_direction = a.m_direction;
     m_hasLine = a.m_hasLine;
     m_lineWidth = a.m_lineWidth;
+
     m_topAccidental = a.m_topAccidental->clone();
+    m_topAccidental->setParent(this);
+
     m_bottomAccidental = a.m_bottomAccidental->clone();
+    m_bottomAccidental->setParent(this);
+
     m_topPitch = a.m_topPitch;
     m_topTpc = a.m_topTpc;
     m_bottomPitch = a.m_bottomPitch;
