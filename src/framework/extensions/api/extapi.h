@@ -52,6 +52,9 @@ class ExtApi : public QObject
     //Q_PROPERTY(QJSValue process READ process CONSTANT)
     //Q_PROPERTY(QJSValue filesystem READ filesystem CONSTANT)
 
+    Q_PROPERTY(QJSValue websocket READ websocket CONSTANT)
+    Q_PROPERTY(QJSValue websocketserver READ websocketserver CONSTANT)
+
     Inject<muse::api::IApiRegister> apiRegister;
 
 public:
@@ -67,6 +70,9 @@ public:
     QJSValue shortcuts() const { return api("api.shortcuts"); }
     QJSValue keyboard() const { return api("api.keyboard"); }
     QJSValue accessibility() const { return api("api.accessibility"); }
+
+    QJSValue websocket() const { return api("api.websocket"); }
+    QJSValue websocketserver() const { return api("api.websocketserver"); }
 
 private:
     QJSValue api(const std::string& name) const;
