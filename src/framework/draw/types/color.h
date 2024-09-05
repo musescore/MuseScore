@@ -84,6 +84,8 @@ public:
     int blue() const;
     int alpha() const;
 
+    double luminance() const;
+
 #ifndef NO_QT_SUPPORT
     static Color fromQColor(const QColor& color);
     QColor toQColor() const;
