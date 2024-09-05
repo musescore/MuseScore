@@ -39,7 +39,8 @@ MKDIR %TEMP_DIR%
 :: Install Qt
 ECHO "=== Install Qt ==="
 
-SET "Qt_ARCHIVE=Qt624_msvc2019_64.7z"
+:: r2 - added websocket module
+SET "Qt_ARCHIVE=Qt624_msvc2019_64_r2.7z"
 SET "QT_DIR=C:\Qt\6.2.4"
 SET "QT_URL=https://s3.amazonaws.com/utils.musescore.org/%Qt_ARCHIVE%"
 

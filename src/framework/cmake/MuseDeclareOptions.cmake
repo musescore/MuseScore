@@ -41,7 +41,10 @@ declare_muse_module_opt(MIDI ON)
 declare_muse_module_opt(MPE ON)
 declare_muse_module_opt(MULTIINSTANCES ON)
 declare_muse_module_opt(MUSESAMPLER ON)
+
 declare_muse_module_opt(NETWORK ON)
+option(MUSE_MODULE_NETWORK_WEBSOCKET "Enable websocket support" OFF)
+
 declare_muse_module_opt(SHORTCUTS ON)
 
 declare_muse_module_opt(UI ON)

@@ -37,6 +37,9 @@ class ExtApiV1 : public QObject, public Injectable
     Q_PROPERTY(QJSValue log READ log CONSTANT)
     Q_PROPERTY(QJSValue engraving READ engraving CONSTANT)
 
+    Q_PROPERTY(QJSValue websocket READ websocket CONSTANT)
+    Q_PROPERTY(QJSValue websocketserver READ websocketserver CONSTANT)
+
     Inject<muse::api::IApiRegister> apiRegister = { this };
 
 public:
@@ -48,6 +51,8 @@ public:
 
     QJSValue log() const { return api("api.log"); }
     QJSValue engraving() const { return api("api.engraving.v1"); }
+    QJSValue websocket() const { return api("api.websocket"); }
+    QJSValue websocketserver() const { return api("api.websocketserver"); }
 
     static void registerQmlTypes();
 
