@@ -46,6 +46,13 @@ if (OS_IS_LIN)
     )
 endif()
 
+if (QT_ADD_WEBSOCKET)
+    set(_components
+        ${_components}
+        WebSockets
+    )
+endif()
+
 foreach(_component ${_components})
     find_package(Qt6${_component} REQUIRED)
     list(APPEND QT_LIBRARIES ${Qt6${_component}_LIBRARIES})
