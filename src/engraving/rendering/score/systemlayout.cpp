@@ -1193,6 +1193,9 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     bool dashOnFirstNoteSyllable = ctx.conf().style().styleB(Sid::lyricsShowDashIfSyllableOnFirstNote);
     std::set<Spanner*> unmanagedSpanners = ctx.dom().unmanagedSpanners();
     for (Spanner* sp : unmanagedSpanners) {
+        if (!sp->systemFlag() && sp->staff() && !sp->staff()->show()) {
+            continue;
+        }
         bool dashOnFirst = dashOnFirstNoteSyllable && !toLyricsLine(sp)->isEndMelisma();
         if (sp->tick() >= etick || sp->tick2() < stick || (sp->tick2() == stick && !dashOnFirst)) {
             continue;
