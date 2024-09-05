@@ -1735,7 +1735,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             spanner->styleChanged();
             if (spanner->isHairpin()) {
                 score->addHairpin(toHairpin(spanner), cr1, cr2);
-                if (!spanner->segmentsEmpty()) {
+                if (!spanner->segmentsEmpty() && !score->noteEntryMode()) {
                     SpannerSegment* frontSegment = spanner->frontSegment();
                     score->select(frontSegment);
                     startEditElement(frontSegment);
