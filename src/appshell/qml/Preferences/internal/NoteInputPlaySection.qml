@@ -59,7 +59,9 @@ BaseSection {
 
     CheckBox {
         id: playChordBox
-        width: parent.width
+        anchors.left: parent.left;
+        anchors.leftMargin: 24;
+        anchors.right: parent.right;
 
         text: qsTrc("appshell/preferences", "Play chord when editing")
 
@@ -76,7 +78,9 @@ BaseSection {
 
     CheckBox {
         id: playChordSymbolBox
-        width: parent.width
+        anchors.left: parent.left;
+        anchors.leftMargin: 24;
+        anchors.right: parent.right;
 
         text: qsTrc("appshell/preferences", "Play chord symbol when editing")
 
