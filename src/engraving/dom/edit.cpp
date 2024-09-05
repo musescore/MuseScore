@@ -5074,8 +5074,6 @@ void Score::undoChangeElement(EngravingItem* oldElement, EngravingItem* newEleme
 {
     if (!oldElement) {
         undoAddElement(newElement);
-    } else if (oldElement->isSpanner()) {
-        undo(new ChangeElement(oldElement, newElement));
     } else {
         const std::list<EngravingObject*> links = oldElement->linkList();
         for (EngravingObject* obj : links) {
@@ -5084,7 +5082,8 @@ void Score::undoChangeElement(EngravingItem* oldElement, EngravingItem* newEleme
                 undo(new ChangeElement(oldElement, newElement));
             } else {
                 if (item->score()) {
-                    item->score()->undo(new ChangeElement(item, newElement->linkedClone()));
+                    EngravingItem* newClone = newElement->clone();
+                    item->score()->undo(new ChangeElement(item, newClone));
                 }
             }
         }
