@@ -6023,7 +6023,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::FERMATA
             && et != ElementType::HARMONY
             && et != ElementType::HARP_DIAGRAM
-            && et != ElementType::FIGURED_BASS)
+            && et != ElementType::FIGURED_BASS
+            && et != ElementType::CLEF)
         ) {
         doUndoAddElement(element);
         return;
@@ -6065,7 +6066,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             ElementType::VIBRATO,
             ElementType::TEXTLINE,
             ElementType::PEDAL,
-            ElementType::LYRICS
+            ElementType::LYRICS,
+            ElementType::CLEF
         };
 
         track_idx_t linkedTrack = ostaff->getLinkedTrackInStaff(staff, strack);
@@ -6203,13 +6205,14 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                  || element->isFermata()
                  || element->isHarmony()
                  || element->isHarpPedalDiagram()
-                 || element->isFiguredBass()) {
+                 || element->isFiguredBass()
+                 || element->isClef()) {
             Segment* segment
                 = element->explicitParent()->isFretDiagram() ? toSegment(element->explicitParent()->explicitParent()) : toSegment(
                       element->explicitParent());
             Fraction tick    = segment->tick();
             Measure* m       = score->tick2measure(tick);
-            if ((segment->segmentType() == SegmentType::EndBarLine) && (m->tick() == tick)) {
+            if ((segment->segmentType() & (SegmentType::EndBarLine | SegmentType::Clef)) && (m->tick() == tick)) {
                 m = m->prevMeasure();
             }
             Segment* seg     = m->undoGetSegment(segment->segmentType(), tick);
