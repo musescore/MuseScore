@@ -3153,7 +3153,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                         TimeSig* nts = new TimeSig(*ts);
                         Segment* s   = m->undoGetSegmentR(SegmentType::TimeSig, Fraction(0,1));
                         nts->setParent(s);
-                        undoAddElement(nts);
+                        undo(new AddElement(nts));
                         }
                   for (KeySig* ks : ksl) {
                         KeySig* nks = new KeySig(*ks);
@@ -3161,21 +3161,21 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                         if (headerKeySig || m->tick().isZero())
                               s->setHeader(true);
                         nks->setParent(s);
-                        undoAddElement(nks);
+                        undo(new AddElement(nks));
                         }
                   for (Clef* clef : cl) {
                         Clef* nClef = new Clef(*clef);
                         Segment* s  = m->undoGetSegmentR(SegmentType::HeaderClef, Fraction(0,1));
                         s->setHeader(true);
                         nClef->setParent(s);
-                        undoAddElement(nClef);
+                        undo(new AddElement(nClef));
                         }
                   Measure* pm = m->prevMeasure();
                   for (Clef* clef : pcl) {
                         Clef* nClef = new Clef(*clef);
                         Segment* s  = pm->undoGetSegment(SegmentType::Clef, tick);
                         nClef->setParent(s);
-                        undoAddElement(nClef);
+                        undo(new AddElement(nClef));
                         }
                   }
             else {
@@ -4581,7 +4581,8 @@ void Score::undoAddElement(Element* element)
          && et != ElementType::FRET_DIAGRAM
          && et != ElementType::FERMATA
          && et != ElementType::HARMONY
-         && et != ElementType::FIGURED_BASS)
+         && et != ElementType::FIGURED_BASS
+         && et != ElementType::CLEF)
             ) {
             undo(new AddElement(element));
             return;
@@ -4758,11 +4759,12 @@ void Score::undoAddElement(Element* element)
                      || element->isFretDiagram()
                      || element->isFermata()
                      || element->isHarmony()
-                     || element->isFiguredBass()) {
+                     || element->isFiguredBass()
+                     || element->isClef()) {
                         Segment* segment = element->parent()->isFretDiagram() ? toSegment(element->parent()->parent()) : toSegment(element->parent());
                         Fraction tick    = segment->tick();
                         Measure* m       = score->tick2measure(tick);
-                        if ((segment->segmentType() == SegmentType::EndBarLine) && (m->tick() == tick))
+                        if ((segment->segmentType() & (SegmentType::EndBarLine | SegmentType::Clef)) && (m->tick() == tick))
                               m = m->prevMeasure();
                         Segment* seg     = m->undoGetSegment(segment->segmentType(), tick);
                         ne->setTrack(ntrack);
