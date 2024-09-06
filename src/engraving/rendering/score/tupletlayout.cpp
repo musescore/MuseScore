@@ -205,11 +205,11 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     double rightNoteEdge = 0.0;
     if (cr1->isChord()) {
         const Chord* chord1 = toChord(cr1);
-        leftNoteEdge = chord1->up() ? chord1->downNote()->abbox().left() : chord1->upNote()->abbox().left();
+        leftNoteEdge = chord1->up() ? chord1->downNote()->pageBoundingRect().left() : chord1->upNote()->pageBoundingRect().left();
     }
     if (cr2->isChord()) {
         const Chord* chord2 = toChord(cr2);
-        rightNoteEdge = chord2->up() ? chord2->downNote()->abbox().right() : chord2->upNote()->abbox().right();
+        rightNoteEdge = chord2->up() ? chord2->downNote()->pageBoundingRect().right() : chord2->upNote()->pageBoundingRect().right();
     }
 
     if (item->isUp()) {
@@ -217,14 +217,14 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
             const Chord* chord1 = toChord(cr1);
             Stem* stem = chord1->stem();
             if (stem) {
-                xx1 = stem->abbox().x();
+                xx1 = stem->pageBoundingRect().x();
             }
             if (chord1->up() && stem) {
-                item->p1().ry() = stem->abbox().y();
+                item->p1().ry() = stem->pageBoundingRect().y();
                 l2l = vStemDistance;
-                item->p1().rx() = stem->abbox().left() - stemLeft;
+                item->p1().rx() = stem->pageBoundingRect().left() - stemLeft;
             } else {
-                item->p1().ry() = chord1->upNote()->abbox().top();
+                item->p1().ry() = chord1->upNote()->pageBoundingRect().top();
                 item->p1().rx() = leftNoteEdge - noteLeft;
             }
         }
@@ -233,11 +233,11 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
             const Chord* chord2 = toChord(cr2);
             Stem* stem = chord2->stem();
             if (stem && chord2->up()) {
-                item->p2().ry() = stem->abbox().top();
+                item->p2().ry() = stem->pageBoundingRect().top();
                 l2r = vStemDistance;
-                item->p2().rx() = stem->abbox().right() + stemRight;
+                item->p2().rx() = stem->pageBoundingRect().right() + stemRight;
             } else {
-                item->p2().ry() = chord2->upNote()->abbox().top();
+                item->p2().ry() = chord2->upNote()->pageBoundingRect().top();
                 item->p2().rx() = rightNoteEdge + noteRight;
             }
         }
@@ -261,12 +261,12 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
 
         // outOfStaff
         if (outOfStaff) {
-            double min = cr1->measure()->staffabbox(cr1->staffIdx() + move).y();
+            double min = cr1->measure()->staffPageBoundingRect(cr1->staffIdx() + move).y();
             if (min < item->p1().y()) {
                 item->p1().ry() = min;
                 l2l = vStemDistance;
             }
-            min = cr2->measure()->staffabbox(cr2->staffIdx() + move).y();
+            min = cr2->measure()->staffPageBoundingRect(cr2->staffIdx() + move).y();
             if (min < item->p2().y()) {
                 item->p2().ry() = min;
                 l2r = vStemDistance;
@@ -293,7 +293,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
                     const Chord* chord = toChord(e);
                     const Stem* stem = chord->stem();
                     if (stem) {
-                        RectF r(chord->up() ? stem->abbox() : chord->upNote()->abbox());
+                        RectF r(chord->up() ? stem->pageBoundingRect() : chord->upNote()->pageBoundingRect());
                         double y3 = r.top();
                         double x3 = r.x() + r.width() * .5;
                         double y0 = item->p1().y() + (x3 - item->p1().x()) * d;
@@ -311,14 +311,14 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
             const Chord* chord1 = toChord(cr1);
             Stem* stem = chord1->stem();
             if (stem) {
-                xx1 = stem->abbox().x();
+                xx1 = stem->pageBoundingRect().x();
             }
             if (!chord1->up() && stem) {
-                item->p1().ry() = stem->abbox().bottom();
+                item->p1().ry() = stem->pageBoundingRect().bottom();
                 l2l = vStemDistance;
-                item->p1().rx() = stem->abbox().left() - stemLeft;
+                item->p1().rx() = stem->pageBoundingRect().left() - stemLeft;
             } else {
-                item->p1().ry() = chord1->downNote()->abbox().bottom();
+                item->p1().ry() = chord1->downNote()->pageBoundingRect().bottom();
                 item->p1().rx() = leftNoteEdge - noteLeft;
             }
         }
@@ -327,11 +327,11 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
             const Chord* chord2 = toChord(cr2);
             Stem* stem = chord2->stem();
             if (stem && !chord2->up()) {
-                item->p2().ry() = stem->abbox().bottom();
+                item->p2().ry() = stem->pageBoundingRect().bottom();
                 l2r = vStemDistance;
-                item->p2().rx() = stem->abbox().right() + stemRight;
+                item->p2().rx() = stem->pageBoundingRect().right() + stemRight;
             } else {
-                item->p2().ry() = chord2->downNote()->abbox().bottom();
+                item->p2().ry() = chord2->downNote()->pageBoundingRect().bottom();
                 item->p2().rx() = rightNoteEdge + noteRight;
             }
         }
@@ -354,12 +354,12 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         }
         // outOfStaff
         if (outOfStaff) {
-            double max = cr1->measure()->staffabbox(cr1->staffIdx() + move).bottom();
+            double max = cr1->measure()->staffPageBoundingRect(cr1->staffIdx() + move).bottom();
             if (max > item->p1().y()) {
                 item->p1().ry() = max;
                 l2l = vStemDistance;
             }
-            max = cr2->measure()->staffabbox(cr2->staffIdx() + move).bottom();
+            max = cr2->measure()->staffPageBoundingRect(cr2->staffIdx() + move).bottom();
             if (max > item->p2().y()) {
                 item->p2().ry() = max;
                 l2r = vStemDistance;
@@ -385,7 +385,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
                     const Chord* chord = toChord(e);
                     const Stem* stem = chord->stem();
                     if (stem) {
-                        RectF r(chord->up() ? chord->downNote()->abbox() : stem->abbox());
+                        RectF r(chord->up() ? chord->downNote()->pageBoundingRect() : stem->pageBoundingRect());
                         double y3 = r.bottom();
                         double x3 = r.x() + r.width() * .5;
                         double y0 = item->p1().y() + (x3 - item->p1().x()) * d;
@@ -401,7 +401,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     }
 
     if (!cr1->isChord()) {
-        item->p1().rx() = cr1->abbox().left() - noteLeft;
+        item->p1().rx() = cr1->pageBoundingRect().left() - noteLeft;
     }
     if (!cr2->isChord()) {
         Shape shape = cr2->ldata()->shape();

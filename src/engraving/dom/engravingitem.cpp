@@ -984,7 +984,7 @@ void EngravingItem::dump() const
          "\n  parent: %p",
          typeName(), ldata->pos().x(), ldata->pos().y(),
          ldata->bbox().x(), ldata->bbox().y(), ldata->bbox().width(), ldata->bbox().height(),
-         abbox().x(), abbox().y(), abbox().width(), abbox().height(),
+         pageBoundingRect().x(), pageBoundingRect().y(), pageBoundingRect().width(), pageBoundingRect().height(),
          explicitParent());
 }
 

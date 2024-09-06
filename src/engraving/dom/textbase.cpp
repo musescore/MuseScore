@@ -2323,7 +2323,7 @@ RectF TextBase::pageRectangle() const
 {
     if (explicitParent() && (explicitParent()->isHBox() || explicitParent()->isVBox() || explicitParent()->isTBox())) {
         Box* box = toBox(explicitParent());
-        RectF r = box->abbox();
+        RectF r = box->pageBoundingRect();
         double x = r.x() + box->leftMargin() * DPMM;
         double y = r.y() + box->topMargin() * DPMM;
         double h = r.height() - (box->topMargin() + box->bottomMargin()) * DPMM;
@@ -2336,14 +2336,14 @@ RectF TextBase::pageRectangle() const
     }
     if (explicitParent() && explicitParent()->isPage()) {
         Page* box  = toPage(explicitParent());
-        RectF r = box->abbox();
+        RectF r = box->pageBoundingRect();
         double x = r.x() + box->lm();
         double y = r.y() + box->tm();
         double h = r.height() - box->tm() - box->bm();
         double w = r.width() - box->lm() - box->rm();
         return RectF(x, y, w, h);
     }
-    return abbox();
+    return pageBoundingRect();
 }
 
 void TextBase::computeHighResShape(const FontMetrics& fontMetrics)

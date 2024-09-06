@@ -306,7 +306,7 @@ void Page::doRebuildBspTree()
         }
         r = RectF(0.0, 0.0, w, h);
     } else {
-        r = abbox();
+        r = pageBoundingRect();
     }
 
     bspTree.initialize(r, n);
@@ -627,7 +627,7 @@ RectF Page::tbbox() const
     if (x1 < x2 && y1 < y2) {
         return RectF(x1, y1, x2 - x1, y2 - y1);
     } else {
-        return abbox();
+        return pageBoundingRect();
     }
 }
 

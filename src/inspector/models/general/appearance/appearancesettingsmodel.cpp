@@ -170,9 +170,9 @@ std::vector<EngravingItem*> AppearanceSettingsModel::allElementsInPage() const
 
 std::vector<EngravingItem*> AppearanceSettingsModel::allOverlappingElements() const
 {
-    RectF bbox = m_elementsForArrangeProperty.first()->abbox();
+    RectF bbox = m_elementsForArrangeProperty.first()->pageBoundingRect();
     for (EngravingItem* element : m_elementsForArrangeProperty) {
-        bbox |= element->abbox();
+        bbox |= element->pageBoundingRect();
     }
     if (bbox.width() == 0 || bbox.height() == 0) {
         LOGD() << "Bounding box appears to have a size of 0, so we'll get all the elements in the page";

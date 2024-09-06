@@ -147,7 +147,7 @@ RectF Rest::drag(EditData& ed)
     }
 
     PointF s(ed.delta);
-    RectF r(abbox());
+    RectF r(pageBoundingRect());
 
     // Limit horizontal drag range
     static const double xDragRange = spatium() * 5;
@@ -159,7 +159,7 @@ RectF Rest::drag(EditData& ed)
     renderer()->layoutItem(this);
 
     score()->rebuildBspTree();
-    return abbox().united(r);
+    return pageBoundingRect().united(r);
 }
 
 //---------------------------------------------------------

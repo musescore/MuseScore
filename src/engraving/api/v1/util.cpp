@@ -172,7 +172,7 @@ void ScoreView::setScore(mu::engraving::Score* s)
         score->doLayout();
 
         mu::engraving::Page* page = score->pages()[_currentPage];
-        RectF pr(page->abbox());
+        RectF pr(page->pageBoundingRect());
         qreal m1 = width() / pr.width();
         qreal m2 = height() / pr.height();
         mag = qMax(m1, m2);
