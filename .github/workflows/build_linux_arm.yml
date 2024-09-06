@@ -50,7 +50,7 @@ on:
         required: false
 
 #env:
-#  CURRENT_RELEASE_BRANCH: 4.4.1
+#  CURRENT_RELEASE_BRANCH: 4.4.2
 
 jobs:
 
