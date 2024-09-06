@@ -5317,7 +5317,7 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/exportdialog.ui" line="67"/>
         <source>Export options</source>
-        <translation>Opcje eksportowania</translation>
+        <translation>Opcje eksportu</translation>
     </message>
     <message>
         <location filename="../../mscore/exportdialog.ui" line="103"/>
@@ -20155,7 +20155,7 @@ Dostosowanie opóźnienia może pomóc zsynchronizować Twoje urządzenie MIDI z
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3325"/>
         <source>Style Used for Import</source>
-        <translation>Styl używany dla importowania</translation>
+        <translation>Styl używany dla importu</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3365"/>
@@ -20326,7 +20326,7 @@ Dostosowanie opóźnienia może pomóc zsynchronizować Twoje urządzenie MIDI z
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3488"/>
         <source>Overture import character set:</source>
-        <translation>Zestaw znaków przy importowaniu pliku Overture&apos;a:</translation>
+        <translation>Zestaw znaków przy imporcie pliku Overture&apos;a:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3495"/>
@@ -20341,7 +20341,7 @@ Dostosowanie opóźnienia może pomóc zsynchronizować Twoje urządzenie MIDI z
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3471"/>
         <source>Guitar Pro import character set:</source>
-        <translation>Zestaw znaków przy importowaniu pliku Guitar Pro:</translation>
+        <translation>Zestaw znaków przy imporcie pliku Guitar Pro:</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3478"/>
