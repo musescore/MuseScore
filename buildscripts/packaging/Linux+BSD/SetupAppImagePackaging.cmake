@@ -61,7 +61,11 @@ endif(${MUSE_APP_INSTALL_SUFFIX} MATCHES "portable")
 # Identify App's main window so that it receives the correct name
 # and icon in the OS dock / taskbar. Run `xprop WM_CLASS` and click on
 # App's main window to find out what string to use here.
-set(WINDOW_MANAGER_CLASS ${MUSE_APP_NAME_VERSION})
+if(MUSE_APP_UNSTABLE)
+    set(WINDOW_MANAGER_CLASS "${MUSE_APP_NAME_MACHINE_READABLE_COMPAT}${MUSE_APP_VERSION_MAJOR}Development")
+else()
+    set(WINDOW_MANAGER_CLASS "${MUSE_APP_NAME_MACHINE_READABLE_COMPAT}${MUSE_APP_VERSION_MAJOR}")
+endif()
 
 # Install desktop file (perform variable substitution first)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/org.musescore.MuseScore.desktop.in org.musescore.MuseScore${MUSE_APP_INSTALL_SUFFIX}.desktop)
