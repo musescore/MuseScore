@@ -171,6 +171,36 @@ void NotationViewInputController::initZoom()
     currentNotation()->viewState()->setMatrixInited(true);
 }
 
+void NotationViewInputController::initCanvasPos()
+{
+    if (currentNotation()->viewState()->zoomType().val != ZoomType::Percentage) {
+        return;
+    }
+
+    const std::vector<Page*>& pages = currentNotation()->elements()->msScore()->pages();
+    IF_ASSERT_FAILED(!pages.empty()) {
+        return;
+    }
+
+    const Page* lastPage = pages.back();
+    double curScaling = m_view->currentScaling();
+
+    double totalScoreWidth = lastPage->x() + lastPage->width();
+    double totalScoreHeight = lastPage->y() + lastPage->height();
+    double viewWidth = m_view->width() / curScaling;
+    double viewHeight = m_view->height() / curScaling;
+
+    bool centerHorizontally = totalScoreWidth < viewWidth;
+    bool centerVertically = totalScoreHeight < viewHeight;
+
+    const double canvasMargin = MScore::horizontalPageGapOdd;
+
+    double xMove = centerHorizontally ? 0.5 * (viewWidth - totalScoreWidth) : canvasMargin;
+    double yMove = centerVertically ? 0.5 * (viewHeight - totalScoreHeight) : canvasMargin;
+
+    m_view->moveCanvas(xMove, yMove);
+}
+
 void NotationViewInputController::updateZoomAfterSizeChange()
 {
     IF_ASSERT_FAILED(currentNotation()) {
