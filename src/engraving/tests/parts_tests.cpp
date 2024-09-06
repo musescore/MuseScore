@@ -42,6 +42,7 @@
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
+#include "utils/testutils.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -51,8 +52,6 @@ static const String PARTS_DATA_DIR("parts_data/");
 class Engraving_PartsTests : public ::testing::Test
 {
 public:
-    Score* createPart(MasterScore* score);
-    void createParts(MasterScore* score);
     void testPartCreation(const String& test);
     void createLinkedStaff(MasterScore* score);
 
@@ -69,69 +68,6 @@ public:
     MasterScore* doAddImage();
     MasterScore* doRemoveImage();
 };
-
-Score* Engraving_PartsTests::createPart(MasterScore* masterScore)
-{
-    std::vector<Part*> parts;
-    parts.push_back(masterScore->parts().at(0));
-    Score* nscore = masterScore->createScore();
-
-    Excerpt* ex = new Excerpt(masterScore);
-    ex->setExcerptScore(nscore);
-    ex->setParts(parts);
-    ex->setName(parts.front()->partName());
-    Excerpt::createExcerpt(ex);
-
-    masterScore->excerpts().push_back(ex);
-    masterScore->setExcerptsChanged(true);
-
-    return nscore;
-}
-
-//---------------------------------------------------------
-//   createParts
-//---------------------------------------------------------
-
-void Engraving_PartsTests::createParts(MasterScore* masterScore)
-{
-    //
-    // create first part
-    //
-    std::vector<Part*> parts;
-    parts.push_back(masterScore->parts().at(0));
-    Score* nscore = masterScore->createScore();
-
-    Excerpt* ex = new Excerpt(masterScore);
-    ex->setExcerptScore(nscore);
-    ex->setParts(parts);
-    ex->setName(parts.front()->partName());
-    Excerpt::createExcerpt(ex);
-    masterScore->excerpts().push_back(ex);
-    //ex->setName(parts.front()->longName());
-    EXPECT_TRUE(nscore);
-
-    //nscore->setName(parts.front()->partName());
-
-    //
-    // create second part
-    //
-    parts.clear();
-    parts.push_back(masterScore->parts().at(1));
-    nscore = masterScore->createScore();
-
-    ex = new Excerpt(masterScore);
-    ex->setExcerptScore(nscore);
-    ex->setParts(parts);
-    ex->setName(parts.front()->partName());
-    Excerpt::createExcerpt(ex);
-    masterScore->excerpts().push_back(ex);
-    //ex->setName(parts.front()->longName());
-    EXPECT_TRUE(nscore);
-
-    //nscore->setName(parts.front()->partName());
-
-    masterScore->setExcerptsChanged(true);
-}
 
 void Engraving_PartsTests::createLinkedStaff(MasterScore* masterScore)
 {
@@ -237,7 +173,7 @@ void Engraving_PartsTests::testPartCreation(const String& test)
     MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + test + u".mscx");
     ASSERT_TRUE(score);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, test + u"-1.mscx", PARTS_DATA_DIR + test + u".mscx"));
-    createParts(score);
+    TestUtils::createParts(score, 2);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, test + u"-parts.mscx", PARTS_DATA_DIR + test + u"-parts.mscx"));
     delete score;
 }
@@ -251,7 +187,7 @@ TEST_F(Engraving_PartsTests, appendMeasure)
     MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
     ASSERT_TRUE(score);
 
-    createParts(score);
+    TestUtils::createParts(score, 2);
 
     score->startCmd();
     score->insertMeasure(0);
@@ -274,7 +210,7 @@ TEST_F(Engraving_PartsTests, insertMeasure)
     MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"part-all.mscx");
     ASSERT_TRUE(score);
 
-    createParts(score);
+    TestUtils::createParts(score, 2);
 
     score->startCmd();
     Measure* m = score->firstMeasure();
@@ -298,7 +234,7 @@ TEST_F(Engraving_PartsTests, styleScore)
     MasterScore* score = ScoreRW::readScore(PARTS_DATA_DIR + u"partStyle.mscx");
     ASSERT_TRUE(score);
 
-    createParts(score);
+    TestUtils::createParts(score, 2);
     score->style().set(Sid::clefLeftMargin, 4.0);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"partStyle-score-test.mscx", PARTS_DATA_DIR + u"partStyle-score-ref.mscx"));
     delete score;
@@ -1185,7 +1121,7 @@ TEST_F(Engraving_PartsTests, partExclusion)
 
     EXPECT_TRUE(masterScore);
 
-    Score* partScore = createPart(masterScore);
+    Score* partScore = TestUtils::createPart(masterScore);
     EXPECT_TRUE(partScore);
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partExclusion-part-0.mscx", PARTS_DATA_DIR + u"partExclusion-part-0.mscx"));
@@ -1242,7 +1178,7 @@ TEST_F(Engraving_PartsTests, partPropertyLinking)
 
     EXPECT_TRUE(masterScore);
 
-    Score* partScore = createPart(masterScore);
+    Score* partScore = TestUtils::createPart(masterScore);
     EXPECT_TRUE(partScore);
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partPropertyLinking-part-0.mscx",
@@ -1291,7 +1227,7 @@ TEST_F(Engraving_PartsTests, partTies) {
     ASSERT_TRUE(score);
     createLinkedStaff(score);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, test + u"-1.mscx", PARTS_DATA_DIR + test + u"-1.mscx"));
-    createPart(score);
+    TestUtils::createPart(score);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, test + u"-parts.mscx", PARTS_DATA_DIR + test + u"-parts.mscx"));
     delete score;
 }

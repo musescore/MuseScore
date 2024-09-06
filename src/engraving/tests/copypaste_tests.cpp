@@ -52,7 +52,6 @@ public:
     void copypastevoice(const char*, int);
     void copypastetuplet(const char*);
     void copypastenote(const String&, Fraction = Fraction(1, 1));
-    void copypastesplit(const String&);
 };
 
 //---------------------------------------------------------
