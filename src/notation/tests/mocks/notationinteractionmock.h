@@ -74,7 +74,7 @@ public:
     MOCK_METHOD(bool, startDrop, (const QUrl&), (override));
     MOCK_METHOD(bool, isDropAccepted, (const muse::PointF&, Qt::KeyboardModifiers), (override));
     MOCK_METHOD(bool, drop, (const muse::PointF&, Qt::KeyboardModifiers), (override));
-    MOCK_METHOD(void, setDropTarget, (const EngravingItem*, bool), (override));
+    MOCK_METHOD(void, setDropTarget, (EngravingItem*, bool), (override));
     MOCK_METHOD(void, setDropRect, (const muse::RectF&), (override));
     MOCK_METHOD(void, endDrop, (), (override));
     MOCK_METHOD(muse::async::Notification, dropChanged, (), (const, override));
