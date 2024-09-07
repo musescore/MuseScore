@@ -490,6 +490,21 @@ StyledGridView {
         }
     }
 
+    MouseArea {
+        id: rightClickArea
+        anchors.fill: parent
+        acceptedButtons: Qt.RightButton
+        onClicked: function(mouseEvent) {
+            var paletteCell = paletteView.itemAt(mouseEvent.x, mouseEvent.y)
+            if (Boolean(paletteCell)) {
+                contextMenu.modelIndex = paletteCell.modelIndex
+                contextMenu.canEdit = paletteView.paletteController.canEdit(paletteView.paletteRootIndex)
+                contextMenu.parent = paletteCell
+                contextMenu.toggleOpened(contextMenu.items, mouseEvent.x, mouseEvent.y)
+            }
+        }
+    }
+
     model: DelegateModel {
         id: paletteCellDelegateModel
         //         model: paletteView.visible ? paletteView.paletteModel : null // TODO: use this optimization? TODO: apply it manually where appropriate (Custom palette breaks)
@@ -568,13 +583,6 @@ StyledGridView {
                 removeSelectedCells()
             }
 
-            MouseArea {
-                id: rightClickArea
-                anchors.fill: parent
-                acceptedButtons: Qt.RightButton
-                onClicked: showCellMenu(true)
-            }
-
             Drag.active: mouseArea.drag.active
             Drag.dragType: Drag.Automatic
             Drag.supportedActions: Qt.CopyAction | (model.editable ? Qt.MoveAction : 0)
@@ -627,13 +635,6 @@ StyledGridView {
                     Drag.hotSpot.y = paletteCell.mouseArea.mouseY
                     dragDropReorderTimer.restart();
                 })
-            }
-
-            function showCellMenu() {
-                contextMenu.modelIndex = modelIndex
-                contextMenu.canEdit = paletteView.paletteController.canEdit(paletteView.paletteRootIndex)
-                contextMenu.parent = paletteCell
-                contextMenu.toggleOpened(contextMenu.items, mouseArea.mouseX, mouseArea.mouseY)
             }
 
             /* TODO?
