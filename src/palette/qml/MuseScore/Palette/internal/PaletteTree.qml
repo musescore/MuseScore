@@ -82,9 +82,11 @@ StyledListView {
             expandedPopupIndex = null
         }
 
-        if (paletteModel) {
-            paletteTree.paletteProvider.setFilter(filter)
-            paletteTree.positionViewAtBeginning() // Scroll to top after a search
+        if (paletteProvider) {
+            paletteProvider.setFilter(filter)
+            if (paletteTree) {
+                paletteTree.positionViewAtBeginning()   // Scroll to the top after a search
+            }
         }
     }
 
