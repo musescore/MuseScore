@@ -463,6 +463,33 @@ StyledGridView {
         visible: false
     }
 
+    StyledMenuLoader {
+        id: contextMenu
+
+        property var modelIndex: null
+        property bool canEdit: true
+
+        property var items: [
+            { id: "delete", title: qsTrc("palette", "Delete"), icon: IconCode.DELETE_TANK, enabled: contextMenu.canEdit },
+            { id: "properties", title: qsTrc("palette", "Properties…"), enabled: contextMenu.canEdit }
+        ]
+
+        onHandleMenuItem: function(itemId) {
+            switch(itemId) {
+            case "delete":
+                paletteView.paletteController.remove(contextMenu.modelIndex)
+                break
+            case "properties":
+                Qt.callLater(paletteView.paletteController.editCellProperties, contextMenu.modelIndex)
+                break
+            }
+        }
+
+        onClosed: function(force) {
+            contextMenu.parent = paletteView
+        }
+    }
+
     model: DelegateModel {
         id: paletteCellDelegateModel
         //         model: paletteView.visible ? paletteView.paletteModel : null // TODO: use this optimization? TODO: apply it manually where appropriate (Custom palette breaks)
@@ -605,30 +632,8 @@ StyledGridView {
             function showCellMenu() {
                 contextMenu.modelIndex = modelIndex
                 contextMenu.canEdit = paletteView.paletteController.canEdit(paletteView.paletteRootIndex)
+                contextMenu.parent = paletteCell
                 contextMenu.toggleOpened(contextMenu.items, mouseArea.mouseX, mouseArea.mouseY)
-            }
-
-            StyledMenuLoader {
-                id: contextMenu
-
-                property var modelIndex: null
-                property bool canEdit: true
-
-                property var items: [
-                    { id: "delete", title: qsTrc("palette", "Delete"), icon: IconCode.DELETE_TANK, enabled: contextMenu.canEdit },
-                    { id: "properties", title: qsTrc("palette", "Properties…"), enabled: contextMenu.canEdit }
-                ]
-
-                onHandleMenuItem: function(itemId) {
-                    switch(itemId) {
-                    case "delete":
-                        paletteView.paletteController.remove(contextMenu.modelIndex)
-                        break
-                    case "properties":
-                        Qt.callLater(paletteView.paletteController.editCellProperties, contextMenu.modelIndex)
-                        break
-                    }
-                }
             }
 
             /* TODO?
