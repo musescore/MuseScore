@@ -365,6 +365,8 @@ void AbstractNotationPaintView::onMatrixChanged(const Transform& oldMatrix, cons
     emit horizontalScrollChanged();
     emit verticalScrollChanged();
     emit viewportChanged();
+
+    onPlaybackCursorRectChanged();
 }
 
 void AbstractNotationPaintView::onViewSizeChanged()
@@ -390,6 +392,8 @@ void AbstractNotationPaintView::onViewSizeChanged()
     emit horizontalScrollChanged();
     emit verticalScrollChanged();
     emit viewportChanged();
+
+    onPlaybackCursorRectChanged();
 }
 
 void AbstractNotationPaintView::updateLoopMarkers()
@@ -593,7 +597,6 @@ void AbstractNotationPaintView::paint(QPainter* qp)
     bool isPrinting = publishMode() || m_inputController->readonly();
     notation()->painting()->paintView(painter, toLogical(rect), isPrinting);
 
-    m_playbackCursor->paint(painter);
     m_noteInputCursor->paint(painter);
     m_loopInMarker->paint(painter);
     m_loopOutMarker->paint(painter);
@@ -1323,6 +1326,10 @@ void AbstractNotationPaintView::onPlayingChanged()
     bool isPlaying = playbackController()->isPlaying();
     m_playbackCursor->setVisible(isPlaying);
 
+    if (m_playbackCursorItem) {
+        m_playbackCursorItem->setVisible(isPlaying);
+    }
+
     m_autoScrollEnabled = true;
     m_enableAutoScrollTimer.stop();
 
@@ -1347,6 +1354,10 @@ void AbstractNotationPaintView::movePlaybackCursor(muse::midi::tick_t tick)
     m_playbackCursor->move(tick);
     const RectF& newCursorRect = m_playbackCursor->rect();
 
+    if (newCursorRect != oldCursorRect) {
+        onPlaybackCursorRectChanged();
+    }
+
     if (!m_playbackCursor->visible() || newCursorRect.isNull()) {
         return;
     }
@@ -1363,21 +1374,6 @@ void AbstractNotationPaintView::movePlaybackCursor(muse::midi::tick_t tick)
                 return;
             }
         }
-    }
-
-    //! NOTE: redraw in a slightly larger area than the cursor rect to avoid graphical artifacts
-    RectF dirtyRect1 = fromLogical(oldCursorRect).adjusted(-1, -1, 2, 1);
-    RectF dirtyRect2 = fromLogical(newCursorRect).adjusted(-1, -1, 2, 1);
-
-    double dx = std::abs(dirtyRect2.x() - dirtyRect1.x());
-    double dy = std::abs(dirtyRect2.y() - dirtyRect1.y());
-
-    //! NOTE: the difference between the old cursor rect and the new one is not big, so we redraw their united rect
-    if (dx < 1.0 && dy < 1.0) {
-        scheduleRedraw(dirtyRect1.united(dirtyRect2));
-    } else {
-        scheduleRedraw(dirtyRect1);
-        scheduleRedraw(dirtyRect2);
     }
 }
 
@@ -1401,6 +1397,23 @@ bool AbstractNotationPaintView::needAdjustCanvasVerticallyWhilePlayback(const Re
     }
 
     return nonEmptySystemCount > 1;
+}
+
+void AbstractNotationPaintView::onPlaybackCursorRectChanged()
+{
+    if (!m_playbackCursor || !m_playbackCursorItem) {
+        return;
+    }
+
+    QRectF cursorRect = fromLogical(m_playbackCursor->rect()).toQRectF();
+    cursorRect.setWidth(std::max(std::round(cursorRect.width()), 1.0)); // makes it move more smoothly
+
+    QRectF viewRect(0.0, 0.0, width(), height());
+    QRectF newRect = cursorRect.intersected(viewRect);
+
+    m_playbackCursorItem->setX(newRect.x());
+    m_playbackCursorItem->setY(newRect.y());
+    m_playbackCursorItem->setSize(newRect.size());
 }
 
 const Page* AbstractNotationPaintView::pageByPoint(const PointF& point) const
@@ -1463,4 +1476,23 @@ void AbstractNotationPaintView::setIsMainView(bool isMainView)
 
     m_isMainView = isMainView;
     emit isMainViewChanged(m_isMainView);
+}
+
+void AbstractNotationPaintView::setPlaybackCursorItem(QQuickItem* cursor)
+{
+    if (m_playbackCursorItem == cursor) {
+        return;
+    }
+
+    m_playbackCursorItem = cursor;
+
+    if (m_playbackCursorItem) {
+        m_playbackCursorItem->setVisible(false);
+        m_playbackCursorItem->setEnabled(false); // ignore mouse & keyboard events
+        m_playbackCursorItem->setProperty("color", configuration()->playbackCursorColor());
+
+        connect(m_playbackCursorItem, &QObject::destroyed, this, [this]() {
+            m_playbackCursorItem = nullptr;
+        });
+    }
 }
