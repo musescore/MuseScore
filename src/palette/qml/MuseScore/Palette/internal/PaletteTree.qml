@@ -272,6 +272,104 @@ StyledListView {
         }
     }
 
+    Loader {
+        id: palettePopup
+        active: false
+
+        property var control: null
+        property var model: null
+        property alias isOpened: palettePopup.active
+
+        sourceComponent: MoreElementsPopup {
+            id: moreElementsPopup
+
+            property var control: palettePopup.control
+            property var model: palettePopup.model
+
+            maxHeight: Math.min(0.75 * paletteTree.height, 500)
+
+            // TODO: change settings to "hidden" model?
+            cellSize: control.cellSize
+            drawGrid: control.drawGrid
+
+            paletteName: model.display
+            paletteIsCustom: model.custom
+            paletteEditingEnabled: model.editable
+
+            onIsOpenedChanged: {
+                // build pool model on first popup appearance
+                if (visible && !poolPalette) {
+                    poolPalette = paletteTree.paletteProvider.poolPaletteModel(control.modelIndex);
+                    poolPaletteRootIndex = paletteTree.paletteProvider.poolPaletteIndex(control.modelIndex, poolPalette);
+                    poolPaletteController = paletteTree.paletteProvider.poolPaletteController(poolPalette, control.modelIndex);
+
+                    customPalette = paletteTree.paletteProvider.customElementsPaletteModel
+                    customPaletteRootIndex = paletteTree.paletteProvider.customElementsPaletteIndex(control.modelIndex) // TODO: make a property binding? (but that works incorrectly)
+                    customPaletteController = paletteTree.paletteProvider.customElementsPaletteController
+                }
+            }
+
+            property bool needScrollToBottom: false
+
+            onOpened: {
+                scrollToPopupBottom();
+                needScrollToBottom = false;
+                enablePaletteAnimations = true;
+            }
+
+            onClosed: {
+                enablePaletteAnimations = false;
+                palettePopup.active = false;
+            }
+
+            function scrollToPopupBottom() {
+                //! FIXME Not worked as should
+//                        const popupBottom = implicitHeight + y + control.y + 14; // 14 for DropShadow in StyledPopup: depends on blur radius and vertical offset
+//                        paletteTree.ensureYVisible(popupBottom);
+            }
+
+            onContentHeightChanged: {
+                if (visible && (needScrollToBottom || atYEnd))
+                    scrollToPopupBottom();
+            }
+
+            onAddElementsRequested: function(mimeDataList) {
+                const parentIndex = control.modelIndex;
+                var idx = paletteTree.paletteModel.rowCount(parentIndex);
+
+                for (var i = 0; i < mimeDataList.length; i++) {
+                    const mimeData = mimeDataList[i];
+
+                    if (paletteTree.paletteController.insert(parentIndex, idx, mimeData, Qt.MoveAction)) {
+                        idx++;
+                    }
+                }
+            }
+        }
+
+        function close() {
+            if (palettePopup.active) {
+                palettePopup.item.close();
+            }
+        }
+
+        function toggleOpened(model, control, parent) {
+            if (palettePopup.active) {
+                palettePopup.close();
+                return;
+            }
+
+            palettePopup.parent = parent;
+            palettePopup.model = model;
+            palettePopup.control = control;
+
+            palettePopup.active = true;
+            palettePopup.item.setParentItem(parent);
+
+            palettePopup.item.toggleOpened();
+        }
+    }
+
     model: DelegateModel {
         id: paletteTreeDelegateModel
         model: paletteTree.paletteModel
@@ -397,10 +495,7 @@ StyledListView {
             function togglePopup(btn) {
                 const expand = !popupExpanded;
                 paletteTree.expandedPopupIndex = expand ? modelIndex : null;
-                if (btn) {
-                    palettePopup.parent = btn
-                }
-                palettePopup.toggleOpened()
+                palettePopup.toggleOpened(model, control, btn)
             }
 
             property size cellSize: model.gridSize
@@ -620,70 +715,6 @@ StyledListView {
 
                         enableAnimations: paletteTree.enableAnimations
                         externalDropBlocked: paletteTree.expandedPopupIndex && !control.popupExpanded // FIXME: find another way to prevent drops go under a popup
-                    }
-                }
-
-                MoreElementsPopup {
-                    id: palettePopup
-
-                    maxHeight: Math.min(0.75 * paletteTree.height, 500)
-
-                    // TODO: change settings to "hidden" model?
-                    cellSize: control.cellSize
-                    drawGrid: control.drawGrid
-
-                    paletteName: model.display
-                    paletteIsCustom: model.custom
-                    paletteEditingEnabled: model.editable
-
-                    onIsOpenedChanged: {
-                        // build pool model on first popup appearance
-                        if (visible && !poolPalette) {
-                            poolPalette = paletteTree.paletteProvider.poolPaletteModel(control.modelIndex);
-                            poolPaletteRootIndex = paletteTree.paletteProvider.poolPaletteIndex(control.modelIndex, poolPalette);
-                            poolPaletteController = paletteTree.paletteProvider.poolPaletteController(poolPalette, control.modelIndex);
-
-                            customPalette = paletteTree.paletteProvider.customElementsPaletteModel
-                            customPaletteRootIndex = paletteTree.paletteProvider.customElementsPaletteIndex(control.modelIndex) // TODO: make a property binding? (but that works incorrectly)
-                            customPaletteController = paletteTree.paletteProvider.customElementsPaletteController
-                        }
-                        if (!isOpened) {
-                            paletteTree.expandedPopupIndex = null
-                        }
-                    }
-
-                    property bool needScrollToBottom: false
-
-                    onOpened: {
-                        scrollToPopupBottom();
-                        needScrollToBottom = false;
-                        enablePaletteAnimations = true;
-                    }
-
-                    onClosed: enablePaletteAnimations = false
-
-                    function scrollToPopupBottom() {
-                        //! FIXME Not worked as should
-//                        const popupBottom = implicitHeight + y + control.y + 14; // 14 for DropShadow in StyledPopup: depends on blur radius and vertical offset
-//                        paletteTree.ensureYVisible(popupBottom);
-                    }
-
-                    onContentHeightChanged: {
-                        if (visible && (needScrollToBottom || atYEnd))
-                            scrollToPopupBottom();
-                    }
-
-                    onAddElementsRequested: function(mimeDataList) {
-                        const parentIndex = control.modelIndex;
-                        var idx = paletteTree.paletteModel.rowCount(parentIndex);
-
-                        for (var i = 0; i < mimeDataList.length; i++) {
-                            const mimeData = mimeDataList[i];
-
-                            if (paletteTree.paletteController.insert(parentIndex, idx, mimeData, Qt.MoveAction)) {
-                                idx++;
-                            }
-                        }
                     }
                 }
             }
