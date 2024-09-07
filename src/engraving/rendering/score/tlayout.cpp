@@ -3656,7 +3656,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
         Clef* c = nullptr;
         if (item->segment()) {
             for (Segment* seg = item->segment()->prev1(); !c && seg && seg->tick() == item->tick(); seg = seg->prev1()) {
-                if (seg->isClefType() || seg->isHeaderClefType()) {
+                if (seg->enabled() && (seg->isClefType() || seg->isHeaderClefType())) {
                     c = toClef(seg->element(item->track()));
                 }
             }
