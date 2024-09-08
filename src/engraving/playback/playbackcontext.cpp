@@ -426,7 +426,9 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
 
         if (hasNominalLevelTo) {
             const dynamic_level_t dynamicLevelAtEndTick = nominalDynamicLevel(trackIdx, spannerTo + tickPositionOffset);
-            if (dynamicLevelAtEndTick != nominalLevelTo) {
+            const bool hasDynamicAtEndTick = dynamicLevelAtEndTick != mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+
+            if (hasDynamicAtEndTick && dynamicLevelAtEndTick != nominalLevelTo) {
                 // Fix overlap with the following dynamic by subtracting a small fraction
                 spannerTo -= Fraction::eps().ticks();
             }
