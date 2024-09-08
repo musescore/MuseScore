@@ -394,79 +394,83 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
             continue; // ignore linked staves
         }
 
-        int spannerFrom = spanner->tick().ticks();
-        int spannerTo = spannerFrom + std::abs(spanner->ticks().ticks());
+        handleHairpin(toHairpin(spanner), tickPositionOffset);
+    }
+}
 
-        const Hairpin* hairpin = toHairpin(spanner);
-        const track_idx_t trackIdx = hairpin->track();
+void PlaybackContext::handleHairpin(const Hairpin* hairpin, const int tickPositionOffset)
+{
+    int spannerFrom = hairpin->tick().ticks();
+    int spannerTo = spannerFrom + std::abs(hairpin->ticks().ticks());
 
-        {
-            const Segment* startSegment = hairpin->startSegment();
-            const Dynamic* startDynamic = startSegment
-                                          ? toDynamic(startSegment->findAnnotation(ElementType::DYNAMIC, trackIdx, trackIdx))
-                                          : nullptr;
-            if (startDynamic) {
-                const DynamicType dynamicType = startDynamic->dynamicType();
+    const track_idx_t trackIdx = hairpin->track();
 
-                if (dynamicType != DynamicType::OTHER
-                    && !isOrdinaryDynamicType(dynamicType)
-                    && !isSingleNoteDynamicType(dynamicType)) {
-                    // The hairpin starts with a transition dynamic; we should start the hairpin after the transition is complete
-                    // This solution should be replaced once we have better infrastructure to see relations between Dynamics and Hairpins.
-                    spannerFrom += startDynamic->velocityChangeLength().ticks();
-                }
+    {
+        const Segment* startSegment = hairpin->startSegment();
+        const Dynamic* startDynamic = startSegment
+                                      ? toDynamic(startSegment->findAnnotation(ElementType::DYNAMIC, trackIdx, trackIdx))
+                                      : nullptr;
+        if (startDynamic) {
+            const DynamicType dynamicType = startDynamic->dynamicType();
+
+            if (dynamicType != DynamicType::OTHER
+                && !isOrdinaryDynamicType(dynamicType)
+                && !isSingleNoteDynamicType(dynamicType)) {
+                // The hairpin starts with a transition dynamic; we should start the hairpin after the transition is complete
+                // This solution should be replaced once we have better infrastructure to see relations between Dynamics and Hairpins.
+                spannerFrom += startDynamic->velocityChangeLength().ticks();
             }
         }
+    }
 
-        const DynamicType dynamicTypeFrom = hairpin->dynamicTypeFrom();
-        const DynamicType dynamicTypeTo = findEndDynamicType(hairpin);
+    const DynamicType dynamicTypeFrom = hairpin->dynamicTypeFrom();
+    const DynamicType dynamicTypeTo = findEndDynamicType(hairpin);
 
-        const dynamic_level_t nominalLevelTo = dynamicLevelFromType(dynamicTypeTo);
-        const bool hasNominalLevelTo = nominalLevelTo != mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+    const dynamic_level_t nominalLevelTo = dynamicLevelFromType(dynamicTypeTo);
+    const bool hasNominalLevelTo = nominalLevelTo != mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
 
-        if (hasNominalLevelTo) {
-            const dynamic_level_t dynamicLevelAtEndTick = nominalDynamicLevel(trackIdx, spannerTo + tickPositionOffset);
-            const bool hasDynamicAtEndTick = dynamicLevelAtEndTick != mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+    if (hasNominalLevelTo) {
+        const dynamic_level_t dynamicLevelAtEndTick = nominalDynamicLevel(trackIdx, spannerTo + tickPositionOffset);
+        const bool hasDynamicAtEndTick = dynamicLevelAtEndTick != mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
 
-            if (hasDynamicAtEndTick && dynamicLevelAtEndTick != nominalLevelTo) {
-                // Fix overlap with the following dynamic by subtracting a small fraction
-                spannerTo -= Fraction::eps().ticks();
-            }
+        if (hasDynamicAtEndTick && dynamicLevelAtEndTick != nominalLevelTo) {
+            // Fix overlap with the following dynamic by subtracting a small fraction
+            spannerTo -= Fraction::eps().ticks();
         }
+    }
 
-        const int spannerDurationTicks = spannerTo - spannerFrom;
-        if (spannerDurationTicks <= 0) {
-            continue;
-        }
+    const int spannerDurationTicks = spannerTo - spannerFrom;
+    if (spannerDurationTicks <= 0) {
+        return;
+    }
 
-        // For the start level, use the currently-applicable level at the start tick of the hairpin
-        const dynamic_level_t levelFrom
-            = dynamicLevelFromType(dynamicTypeFrom, appliableDynamicLevel(trackIdx, spannerFrom + tickPositionOffset));
+    // For the start level, use the currently-applicable level at the start tick of the hairpin
+    const dynamic_level_t levelFrom
+        = dynamicLevelFromType(dynamicTypeFrom, appliableDynamicLevel(trackIdx, spannerFrom + tickPositionOffset));
 
-        // If there is an end dynamic marking, check if it matches the 'direction' of the hairpin (cresc. vs decresc.)
-        const bool isCrescendo = hairpin->isCrescendo();
-        const bool useNominalLevelTo = hasNominalLevelTo && (isCrescendo
-                                                             ? nominalLevelTo > levelFrom
-                                                             : nominalLevelTo < levelFrom);
+    // If there is an end dynamic marking, check if it matches the 'direction' of the hairpin (cresc. vs decresc.)
+    const bool isCrescendo = hairpin->isCrescendo();
+    const bool useNominalLevelTo = hasNominalLevelTo && (isCrescendo
+                                                         ? nominalLevelTo > levelFrom
+                                                         : nominalLevelTo < levelFrom);
 
-        const dynamic_level_t levelTo = useNominalLevelTo
-                                        ? nominalLevelTo
-                                        : levelFrom + (isCrescendo ? mpe::DYNAMIC_LEVEL_STEP : -mpe::DYNAMIC_LEVEL_STEP);
+    const dynamic_level_t levelTo = useNominalLevelTo
+                                    ? nominalLevelTo
+                                    : levelFrom + (isCrescendo ? mpe::DYNAMIC_LEVEL_STEP : -mpe::DYNAMIC_LEVEL_STEP);
 
-        std::map<int, int> dynamicsCurve = TConv::easingValueCurve(spannerDurationTicks,
-                                                                   24 /*stepsCount*/,
-                                                                   static_cast<int>(levelTo - levelFrom),
-                                                                   hairpin->veloChangeMethod());
+    std::map<int, int> dynamicsCurve = TConv::easingValueCurve(spannerDurationTicks,
+                                                               24 /*stepsCount*/,
+                                                               static_cast<int>(levelTo - levelFrom),
+                                                               hairpin->veloChangeMethod());
 
-        for (const auto& pair : dynamicsCurve) {
-            applyDynamic(hairpin, levelFrom + pair.second, spannerFrom + pair.first + tickPositionOffset);
-        }
+    for (const auto& pair : dynamicsCurve) {
+        applyDynamic(hairpin, levelFrom + pair.second, spannerFrom + pair.first + tickPositionOffset);
+    }
 
-        if (hasNominalLevelTo && !useNominalLevelTo) {
-            // If there is a dynamic at the end of the hairpin that we couldn't use because it didn't match the direction of the hairpin,
-            // insert that dynamic directly after the hairpin
-            applyDynamic(hairpin, nominalLevelTo, spannerTo + tickPositionOffset);
-        }
+    if (hasNominalLevelTo && !useNominalLevelTo) {
+        // If there is a dynamic at the end of the hairpin that we couldn't use because it didn't match the direction of the hairpin,
+        // insert that dynamic directly after the hairpin
+        applyDynamic(hairpin, nominalLevelTo, spannerTo + tickPositionOffset);
     }
 }
 
