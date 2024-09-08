@@ -25237,7 +25237,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1991"/>
         <source>Harp</source>
-        <translation>Harpa</translation>
+        <translation>Harpbeteckningar</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1631"/>
@@ -25289,7 +25289,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1775"/>
         <source>Guitar</source>
-        <translation>Gitarr</translation>
+        <translation>Gitarrbeteckningar</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1889"/>
