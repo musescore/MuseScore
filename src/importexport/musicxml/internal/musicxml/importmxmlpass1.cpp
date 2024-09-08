@@ -805,7 +805,7 @@ static void inferFromTitle(String& title, String& inferredSubtitle, String& infe
     StringList subtitleLines;
     StringList creditLines;
     StringList titleLines = title.split(std::regex("\\n"));
-    for (size_t i = titleLines.size(); i > 0; --i) {
+    for (size_t i = titleLines.size(); i > 1; --i) {
         String line = titleLines[i - 1];
         if (isLikelyCreditText(line, true)) {
             creditLines.insert(0, line);
