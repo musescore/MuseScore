@@ -595,8 +595,15 @@ void populateRhythmicList(std::vector<TDuration>* dList, const Fraction& l, bool
         // no single TDuration fits so must split anyway
     }
 
+    // Prevent infinite recursion if there is no splitting point other than the start and end ticks
+    IF_ASSERT_FAILED(rtickStart.ticks() < rtickSplit && rtickSplit < rtickEnd.ticks()) {
+        std::vector<TDuration> dList2 = toDurationList(l, maxDots > 0, maxDots, false);
+        dList->insert(dList->end(), dList2.begin(), dList2.end());
+        return;
+    }
+
     // Split on the strongest beat or subbeat crossed
-    Fraction leftSplit   = Fraction::fromTicks(rtickSplit) - rtickStart;
+    Fraction leftSplit = Fraction::fromTicks(rtickSplit) - rtickStart;
     Fraction rightSplit = l - leftSplit;
 
     // Recurse to see if we need to split further before adding to list
