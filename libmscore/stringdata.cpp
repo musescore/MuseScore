@@ -173,9 +173,8 @@ void StringData::fretChords(Chord * chord) const
       QMap<int, Note *> sortedNotes;
       int   count = 0;
       // store staff pitch offset at this tick, to speed up actual note pitch calculations
-      // (ottavas not implemented yet)
-      int transp = chord->staff() ? chord->part()->instrument(chord->tick())->transpose().chromatic : 0;     // TODO: tick?
-      int pitchOffset = /*chord->staff()->pitchOffset(chord->segment()->tick())*/ - transp;
+      int transp = chord->staff() ? chord->part()->instrument(chord->tick())->transpose().chromatic : 0;
+      int pitchOffset = -transp + chord->staff()->pitchOffset(chord->segment()->tick());
       // if chord parent is not a segment, the chord is special (usually a grace chord):
       // fret it by itself, ignoring the segment
       if (chord->parent()->type() != ElementType::SEGMENT)
@@ -425,20 +424,21 @@ int StringData::fret(int pitch, int string, int pitchOffset) const
 
 void StringData::sortChordNotes(QMap<int, Note *>& sortedNotes, const Chord *chord, int pitchOffset, int* count) const
 {
-      int   key, string, fret;
+      Ms::Staff* staff = chord->staff();
 
-      foreach(Note * note, chord->notes()) {
-            string      = note->string();
-            fret        = note->fret();
+      for (Note* note : chord->notes()) {
+            int string = note->string();
+            int fret = note->fret();
+            int capo = staff->capo(note->chord()->tick());
             // if note not fretted yet or current fretting no longer valid,
             // use most convenient string as key
             if (string <= INVALID_STRING_INDEX || fret <= INVALID_FRET_INDEX
-                        || getPitch(string, fret, pitchOffset) != note->pitch()) {
+                        || getPitch(string, fret, pitchOffset) + capo != note->pitch()) {
                   note->setString(INVALID_STRING_INDEX);
                   note->setFret(INVALID_FRET_INDEX);
                   convertPitch(note->pitch(), pitchOffset, &string, &fret);
                   }
-            key = string * 100000;
+            int key = string * 100000;
             key += -(note->pitch()+pitchOffset) * 100 + *count;     // disambiguate notes of equal pitch
             sortedNotes.insert(key, note);
             (*count)++;
