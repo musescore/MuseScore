@@ -747,21 +747,18 @@ static void inferFromTitle(QString& title, QString& inferredSubtitle, QString& i
       QStringList subtitleLines;
       QStringList creditLines;
       QStringList titleLines = title.split(QRegularExpression("\\n"));
-      for (int i = titleLines.length() - 1; i > 0; --i) {
-            QString line = titleLines[i];
+      int nrOfTitleLines = titleLines.size();
+      if (nrOfTitleLines == 1)
+            return;
+      for (int i = nrOfTitleLines; i > 0; --i) {
+            QString line = titleLines[i - 1];
             if (isLikelyCreditText(line, true)) {
-                  for (int j = titleLines.length() - 1; j >= i; --j) {
-                        creditLines.push_front(titleLines[j]);
-                        titleLines.removeAt(j);
-                        }
-                  continue;
+                  creditLines.insert(0, line);
+                  titleLines.erase(titleLines.begin() + i - 1);
                   }
             if (isLikelySubtitleText(line, true)) {
-                  for (int j = titleLines.length() - 1; j >= i; --j) {
-                        subtitleLines.push_front(titleLines[j]);
-                        titleLines.removeAt(j);
-                        }
-                  continue;
+                  subtitleLines.insert(0, line);
+                  titleLines.erase(titleLines.begin() + i - 1);
                   }
             }
       title = titleLines.join("\n");
