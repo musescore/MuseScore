@@ -511,7 +511,7 @@ std::vector<TDuration> toRhythmicDurationList(const Fraction& l, bool isRest, Fr
     dList.reserve(8);
 
     if (msr->isAnacrusis()) {
-        rtickStart = Fraction::fromTicks(nominal.ticksPerMeasure()) - rtickStart;
+        rtickStart += msr->anacrusisOffset();
     } else if (isRest && l == msr->ticks()) {
         TDuration d = TDuration(DurationType::V_MEASURE);
         dList.push_back(d);
@@ -519,9 +519,9 @@ std::vector<TDuration> toRhythmicDurationList(const Fraction& l, bool isRest, Fr
     }
 
     if (nominal.isCompound()) {
-        splitCompoundBeatsForList(&dList, l, isRest, rtickStart + msr->anacrusisOffset(), nominal, maxDots);
+        splitCompoundBeatsForList(&dList, l, isRest, rtickStart, nominal, maxDots);
     } else {
-        populateRhythmicList(&dList, l, isRest, rtickStart + msr->anacrusisOffset(), nominal, maxDots);
+        populateRhythmicList(&dList, l, isRest, rtickStart, nominal, maxDots);
     }
 
     return dList;
