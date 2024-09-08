@@ -80,6 +80,7 @@ inline muse::mpe::dynamic_level_t dynamicLevelFromType(const DynamicType type,
 inline bool isOrdinaryDynamicType(const DynamicType type)
 {
     static const std::unordered_set<DynamicType> ORDINARY_DYNAMIC_TYPES = {
+        DynamicType::N,
         DynamicType::PPPPPP,
         DynamicType::PPPPP,
         DynamicType::PPPP,
