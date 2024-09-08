@@ -490,12 +490,20 @@ Hairpin::Hairpin(Segment* parent)
 
 DynamicType Hairpin::dynamicTypeFrom() const
 {
+    if (m_hairpinType == HairpinType::CRESC_HAIRPIN && hairpinCircledTip()) {
+        return DynamicType::N;
+    }
+
     muse::ByteArray ba = beginText().toAscii();
     return TConv::dynamicType(ba.constChar());
 }
 
 DynamicType Hairpin::dynamicTypeTo() const
 {
+    if (m_hairpinType == HairpinType::DECRESC_HAIRPIN && hairpinCircledTip()) {
+        return DynamicType::N;
+    }
+
     muse::ByteArray ba = endText().toAscii();
     return TConv::dynamicType(ba.constChar());
 }
