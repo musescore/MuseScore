@@ -4675,8 +4675,11 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
             if (sp->staff() && !sp->staff()->show())
                 continue;
             if (sp->tick() < etick && sp->tick2() > stick) {
-                  if (sp->isOttava())
+                  if (sp->isOttava()) {
+                        if (sp->staff()->staffType(sp->tick())->isTabStaff())
+                              continue;
                         ottavas.push_back(sp);
+                        }
                   else if (sp->isPedal())
                         pedal.push_back(sp);
                   else if (sp->isVolta())
