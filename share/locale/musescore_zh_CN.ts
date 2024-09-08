@@ -3181,12 +3181,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7956"/>
         <source>Place above the staff on vocal instruments</source>
-        <translation>放置在声乐乐器的五线谱上方</translation>
+        <translation>力度记号放置在声乐乐器谱表上方</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7963"/>
         <source>Center on grand staff instruments automatically</source>
-        <translation>自动居中大谱表乐器</translation>
+        <translation>力度记号居中于大谱表乐器</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9802"/>
@@ -7355,7 +7355,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="245"/>
         <source>Snap to &amp;previous</source>
-        <translation type="unfinished"/>
+        <translation>吸附到上一个(&amp;S)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="246"/>
@@ -7980,7 +7980,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1425"/>
         <source>Reset s&amp;hapes and positions</source>
-        <translation type="unfinished"/>
+        <translation>重置形状和位置(&amp;h)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1426"/>
@@ -7990,7 +7990,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1431"/>
         <source>Reset entire score to &amp;default layout</source>
-        <translation type="unfinished"/>
+        <translation>将整个乐谱恢复为默认版面(&amp;r)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1432"/>
@@ -9752,12 +9752,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1624"/>
         <source>Go to next text element</source>
-        <translation>下一元素</translation>
+        <translation>前往下一文本元素</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1630"/>
         <source>Go to previous text element</source>
-        <translation>前往上一元素</translation>
+        <translation>前往上一文本元素</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1642"/>
@@ -10055,7 +10055,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2403"/>
         <source>Use all voices on instrument</source>
-        <translation type="unfinished"/>
+        <translation>使用乐器的所有声部</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2408"/>
@@ -10065,7 +10065,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2409"/>
         <source>Use all voices on staff</source>
-        <translation type="unfinished"/>
+        <translation>使用谱表上的所有声部</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2488"/>
@@ -12326,7 +12326,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="194"/>
         <source>Dead slapped</source>
-        <translation>死亡拍弦</translation>
+        <translation>拍弦消音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="195"/>
@@ -14736,7 +14736,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="711"/>
         <source>Bass clef 8va alta</source>
-        <translation>低音谱号 低八度</translation>
+        <translation>高八度 低音谱号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="712"/>
@@ -15137,22 +15137,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="775"/>
         <source>pppppp (Pianissississississimo)</source>
-        <translation type="unfinished"/>
+        <translation>pppppp（极极极极极弱）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="777"/>
         <source>ppppp (Pianississississimo)</source>
-        <translation type="unfinished"/>
+        <translation>ppppp（极极极极弱）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="779"/>
         <source>pppp (Pianissississimo)</source>
-        <translation type="unfinished"/>
+        <translation>pppp（极极极弱）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="781"/>
         <source>ppp (Pianississimo)</source>
-        <translation type="unfinished"/>
+        <translation>ppp（极极弱）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="783"/>
@@ -15172,7 +15172,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="790"/>
         <source>mf (Mezzo-forte)</source>
-        <translation>次强</translation>
+        <translation>mf（次强）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="793"/>
@@ -15187,87 +15187,87 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="797"/>
         <source>fff (Fortississimo)</source>
-        <translation>极强</translation>
+        <translation>fff（极极强）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="799"/>
         <source>ffff (Fortissississimo)</source>
-        <translation>四强</translation>
+        <translation>ffff（极极极强）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="801"/>
         <source>fffff (Fortississississimo)</source>
-        <translation>五强</translation>
+        <translation>fffff（极极极极强）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="803"/>
         <source>ffffff (Fortissississississimo)</source>
-        <translation>六强</translation>
+        <translation>ffffff（极极极极极强）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="806"/>
         <source>fp (Fortepiano)</source>
-        <translation>强弱</translation>
+        <translation>fp（强后即弱）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="808"/>
         <source>pf (Pianoforte)</source>
-        <translation>弱强</translation>
+        <translation>pf（弱后即强）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="811"/>
         <source>sf (Sforzando)</source>
-        <translation>突强</translation>
+        <translation>sf（突强）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="813"/>
         <source>sfz (Sforzato)</source>
-        <translation type="unfinished"/>
+        <translation>sfz（突强）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="815"/>
         <source>sff (Sforzando)</source>
-        <translation type="unfinished"/>
+        <translation>sff（突极强）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="817"/>
         <source>sffz (Sforzato)</source>
-        <translation type="unfinished"/>
+        <translation>sffz（突极强）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="819"/>
         <source>sfff (Sforzando)</source>
-        <translation type="unfinished"/>
+        <translation>sfff（突极极强）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="821"/>
         <source>sfffz (Sforzato)</source>
-        <translation type="unfinished"/>
+        <translation>sfffz（突极极强）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="823"/>
         <source>sfp (Sforzando-piano)</source>
-        <translation type="unfinished"/>
+        <translation>sfp（突强后即弱）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="825"/>
         <source>sfpp (Sforzando-pianissimo)</source>
-        <translation>紧张的弱音</translation>
+        <translation>sfpp（突强后即极弱）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="828"/>
         <source>rfz (Rinforzando)</source>
-        <translation>加强的</translation>
+        <translation>rfz（加强到强）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="830"/>
         <source>rf (Rinforzando)</source>
-        <translation>加强的</translation>
+        <translation>rf（加强到强）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="832"/>
         <source>fz (Forzando)</source>
-        <translation>迫使</translation>
+        <translation>fz（突强）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="834"/>
@@ -15277,22 +15277,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="836"/>
         <source>r (Rinforzando)</source>
-        <translation>加强的</translation>
+        <translation>r（加强）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="838"/>
         <source>s (Sforzando)</source>
-        <translation>紧张的</translation>
+        <translation>s（突显）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="840"/>
         <source>z (Forzando)</source>
-        <translation>迫使</translation>
+        <translation>z（加重）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="842"/>
         <source>n (Niente)</source>
-        <translation>无</translation>
+        <translation>n（无声）</translation>
     </message>
 </context>
 <context>
@@ -15421,7 +15421,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1725"/>
         <source>Keep measures on the same system</source>
-        <translation>将小节保持在相同总谱</translation>
+        <translation>静止此处换行</translation>
     </message>
 </context>
 <context>
@@ -21767,7 +21767,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/expressions/ExpressionsSettings.qml" line="82"/>
         <source>Align with preceding dynamic</source>
-        <translation type="unfinished"/>
+        <translation>对齐前一个力度记号</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangePositionSettingsTab.qml" line="63"/>
@@ -22162,11 +22162,11 @@ pickup measure</source>
 Whether you are just getting started with music notation software, or are a power user eager to explore advanced engraving and playback techniques, my flagship online course Mastering MuseScore covers everything you need to know to get the most out of MuseScore. 
 
 In addition, Mastering MuseScore features a supportive community of musicians, with discussion spaces, live streams, and other related courses and services to help you create your best music. Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!</source>
-        <translation>欢迎来到《MuseScore大师级教程》——这是学习全球最受欢迎的音乐符号软件的最全面资源！我是Marc Sabatella，自十多年前MuseScore首次发布以来，我一直在帮助开发、支持和推广MuseScore。
+        <translation>欢迎来到《精通MuseScore》——这里有学习全球最受欢迎的记谱软件：Musescore 的最全面的资源！我是Marc Sabatella，自十多年前MuseScore首次发布以来，我一直在帮助开发、支持和推广MuseScore。
 
-无论您是刚开始使用音乐符号软件，还是渴望探索高级制谱和播放技巧的高级用户，我的旗舰在线课程《MuseScore大师级教程》涵盖了您需要了解的MuseScore的一切。
+无论您是刚开始使用软件，还是渴望探索高级制谱和播放技巧的高级用户，我的旗舰在线课程《精通MuseScore》涵盖了您需要了解的MuseScore的一切。
 
-此外，《MuseScore大师级教程》还设有一个支持性的音乐家社区，包括讨论区、直播和其他相关课程和服务，以帮助您创作出最好的音乐。利用这个机会从MuseScore最知名的专家之一那里学习MuseScore！</translation>
+此外，《精通MuseScore》还设有一个支持性的音乐家社区，包括讨论区、直播和其他相关课程和服务，以帮助您创作出最好的音乐。利用这个机会从MuseScore最知名的专家之一那里学习MuseScore！</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="96"/>
@@ -23006,7 +23006,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="104"/>
         <source>Nut line thickness:</source>
-        <translation type="unfinished"/>
+        <translation>弦枕线粗细：</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="111"/>
@@ -23689,7 +23689,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="53"/>
         <source>Pair accidentals on seconds</source>
-        <translation type="unfinished"/>
+        <translation>二度音程间变音号紧贴</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="61"/>
@@ -24794,32 +24794,32 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1369"/>
         <source>Half note = 80 BPM</source>
-        <translation>2分音符 = 80 BPM</translation>
+        <translation>每分钟80个2分音符</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1372"/>
         <source>Quarter note = 80 BPM</source>
-        <translation>4分音符 = 80 BPM</translation>
+        <translation>每分钟80个4分音符</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1375"/>
         <source>Eighth note = 80 BPM</source>
-        <translation>8分音符 = 80 BPM</translation>
+        <translation>每分钟80个8分音符</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1378"/>
         <source>Dotted half note = 80 BPM</source>
-        <translation>附点2分音符 = 80 BPM</translation>
+        <translation>每分钟80个附点2分音符</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1381"/>
         <source>Dotted quarter note = 80 BPM</source>
-        <translation>附点4分音符 = 80 BPM</translation>
+        <translation>每分钟80个附点4分音符</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1384"/>
         <source>Dotted eighth note = 80 BPM</source>
-        <translation>附点8分音符 = 80 BPM</translation>
+        <translation>每分钟80个附点8分音符</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1402"/>
@@ -25065,7 +25065,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1596"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1871"/>
         <source>harmonics</source>
-        <translation>泛音</translation>
+        <translation>harmonics</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1598"/>
@@ -25076,7 +25076,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1601"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1872"/>
         <source>jazz tone</source>
-        <translation>爵士调</translation>
+        <translation>jazz tone</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1603"/>

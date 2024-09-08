@@ -21947,7 +21947,7 @@ předtaktí</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsView.qml" line="136"/>
         <source>traits</source>
-        <translation type="unfinished"/>
+        <translation>vlastnosti</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="67"/>
@@ -27072,7 +27072,7 @@ se nezdařil:</translation>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="46"/>
         <source>Audio FX</source>
         <extracomment>FX is an abbreviation of &quot;effects&quot;.</extracomment>
-        <translation>Zvukové efekty</translation>
+        <translation>Efekty</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerMuteAndSoloSection.qml" line="60"/>
@@ -27252,7 +27252,7 @@ se nezdařil:</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerAuxSendsSection.qml" line="31"/>
         <source>Aux sends</source>
-        <translation>Pomocný výstup</translation>
+        <translation>Aux výstup</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="55"/>
