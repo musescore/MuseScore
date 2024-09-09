@@ -4582,7 +4582,8 @@ void Score::undoAddElement(Element* element)
          && et != ElementType::FERMATA
          && et != ElementType::HARMONY
          && et != ElementType::FIGURED_BASS
-         && et != ElementType::CLEF)
+         && et != ElementType::CLEF
+         && et != ElementType::AMBITUS)
             ) {
             undo(new AddElement(element));
             return;
@@ -4648,7 +4649,8 @@ void Score::undoAddElement(Element* element)
                 || element->isVibrato()
                 || element->isTextLine()
                 || element->isPedal()
-                || element->isLyrics())) {
+                || element->isLyrics()
+                || element->isAmbitus())) {
                   tr.append(staffIdx * VOICES);
                   }
 
@@ -4760,7 +4762,8 @@ void Score::undoAddElement(Element* element)
                      || element->isFermata()
                      || element->isHarmony()
                      || element->isFiguredBass()
-                     || element->isClef()) {
+                     || element->isClef()
+                     || element->isAmbitus()) {
                         Segment* segment = element->parent()->isFretDiagram() ? toSegment(element->parent()->parent()) : toSegment(element->parent());
                         Fraction tick    = segment->tick();
                         Measure* m       = score->tick2measure(tick);
