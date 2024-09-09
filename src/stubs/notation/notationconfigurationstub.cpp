@@ -465,13 +465,13 @@ void NotationConfigurationStub::setPianoKeyboardNumberOfKeys(int)
 {
 }
 
-ValCh<bool> NotationConfigurationStub::pianoKeyboardPitchState() const
+ValCh<bool> NotationConfigurationStub::pianoKeyboardUsingNotatedPitch() const
 {
     static ValCh<bool> vch;
     return vch;
 }
 
-void NotationConfigurationStub::setPianoKeyboardPitchState(bool)
+void NotationConfigurationStub::setPianoKeyboardUseNotatedPitch(bool)
 {
 }
 

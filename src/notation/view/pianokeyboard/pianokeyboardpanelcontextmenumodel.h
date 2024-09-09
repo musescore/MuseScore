@@ -54,8 +54,6 @@ public:
 
     int numberOfKeys() const;
 
-    bool pianoKeyboardPitchState() const;
-
 signals:
     void keyWidthScalingChanged();
     void setKeyWidthScalingRequested(qreal scaling);

@@ -73,11 +73,6 @@ int PianoKeyboardPanelContextMenuModel::numberOfKeys() const
     return configuration()->pianoKeyboardNumberOfKeys().val;
 }
 
-bool PianoKeyboardPanelContextMenuModel::pianoKeyboardPitchState() const
-{
-    return configuration()->pianoKeyboardPitchState().val;
-}
-
 MenuItem* PianoKeyboardPanelContextMenuModel::makePitchMenu()
 {
     MenuItemList items;
@@ -91,7 +86,7 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makePitchMenu()
         items << makeToggleNotatedPitchItem(title, notationState);
     }
 
-    configuration()->pianoKeyboardPitchState().ch.onReceive(this, [this](bool) {
+    configuration()->pianoKeyboardUsingNotatedPitch().ch.onReceive(this, [this](bool) {
         emit pianoKeyboardPitchStateChanged();
     });
 
@@ -100,7 +95,7 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makePitchMenu()
             return;
         }
 
-        configuration()->setPianoKeyboardPitchState(args.arg<bool>(0));
+        configuration()->setPianoKeyboardUseNotatedPitch(args.arg<bool>(0));
         emit pianoKeyboardPitchStateChanged();
     });
 
@@ -213,7 +208,7 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makeToggleNotatedPitchItem(const m
     MenuItem* item = new MenuItem(action, this);
     item->setId(QString::fromStdString(SET_NOTATED_PITCH_CODE) + (isNotatedPitch ? "-notated" : "-playback"));
 
-    ValCh<bool> currentState = configuration()->pianoKeyboardPitchState();
+    ValCh<bool> currentState = configuration()->pianoKeyboardUsingNotatedPitch();
 
     bool checked = !(isNotatedPitch ^ currentState.val);
     item->setState(UiActionState::make_enabled(checked));

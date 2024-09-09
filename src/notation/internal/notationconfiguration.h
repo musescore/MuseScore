@@ -197,8 +197,8 @@ public:
     muse::ValCh<int> pianoKeyboardNumberOfKeys() const override;
     void setPianoKeyboardNumberOfKeys(int number) override;
 
-    muse::ValCh<bool> pianoKeyboardPitchState() const override;
-    void setPianoKeyboardPitchState(bool useNotatedPitch) override;
+    muse::ValCh<bool> pianoKeyboardUsingNotatedPitch() const override;
+    void setPianoKeyboardUseNotatedPitch(bool useNotatedPitch) override;
 
     muse::io::path_t styleFileImportPath() const override;
     void setStyleFileImportPath(const muse::io::path_t& path) override;
@@ -227,7 +227,7 @@ private:
     muse::async::Notification m_isPlayRepeatsChanged;
     muse::async::Notification m_isPlayChordSymbolsChanged;
     muse::ValCh<int> m_pianoKeyboardNumberOfKeys;
-    muse::ValCh<bool> m_pianoKeyboardPitchState;
+    muse::ValCh<bool> m_pianoKeyboardUsingNotatedPitch;
 
     int m_styleDialogLastPageIndex = 0;
     int m_styleDialogLastSubPageIndex = 0;

@@ -217,9 +217,9 @@ void NotationConfiguration::init()
     });
 
     settings()->setDefaultValue(PIANO_KEYBOARD_PITCH_STATE, Val(true));
-    m_pianoKeyboardPitchState.val = settings()->value(PIANO_KEYBOARD_PITCH_STATE).toBool();
+    m_pianoKeyboardUsingNotatedPitch.val = settings()->value(PIANO_KEYBOARD_PITCH_STATE).toBool();
     settings()->valueChanged(PIANO_KEYBOARD_PITCH_STATE).onReceive(this, [this](const Val& val) {
-        m_pianoKeyboardPitchState.set(val.toBool());
+        m_pianoKeyboardUsingNotatedPitch.set(val.toBool());
     });
 
     engravingConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
@@ -872,12 +872,12 @@ void NotationConfiguration::setPianoKeyboardNumberOfKeys(int number)
     settings()->setSharedValue(PIANO_KEYBOARD_NUMBER_OF_KEYS, Val(number));
 }
 
-ValCh<bool> NotationConfiguration::pianoKeyboardPitchState() const
+ValCh<bool> NotationConfiguration::pianoKeyboardUsingNotatedPitch() const
 {
-    return m_pianoKeyboardPitchState;
+    return m_pianoKeyboardUsingNotatedPitch;
 }
 
-void NotationConfiguration::setPianoKeyboardPitchState(bool useNotatedPitch)
+void NotationConfiguration::setPianoKeyboardUseNotatedPitch(bool useNotatedPitch)
 {
     settings()->setSharedValue(PIANO_KEYBOARD_PITCH_STATE, Val(useNotatedPitch));
 }
