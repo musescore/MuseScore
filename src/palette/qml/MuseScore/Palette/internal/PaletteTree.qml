@@ -84,9 +84,7 @@ StyledListView {
 
         if (paletteProvider) {
             paletteProvider.setFilter(filter)
-            if (paletteTree) {
-                paletteTree.positionViewAtBeginning()   // Scroll to the top after a search
-            }
+            paletteTree.positionViewAtBeginning()   // Scroll to the top after a search
         }
     }
 
