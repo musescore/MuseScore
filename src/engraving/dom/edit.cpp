@@ -6032,7 +6032,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::HARMONY
             && et != ElementType::HARP_DIAGRAM
             && et != ElementType::FIGURED_BASS
-            && et != ElementType::CLEF)
+            && et != ElementType::CLEF
+            && et != ElementType::AMBITUS)
         ) {
         doUndoAddElement(element);
         return;
@@ -6075,7 +6076,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             ElementType::TEXTLINE,
             ElementType::PEDAL,
             ElementType::LYRICS,
-            ElementType::CLEF
+            ElementType::CLEF,
+            ElementType::AMBITUS
         };
 
         track_idx_t linkedTrack = ostaff->getLinkedTrackInStaff(staff, strack);
@@ -6214,7 +6216,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                  || element->isHarmony()
                  || element->isHarpPedalDiagram()
                  || element->isFiguredBass()
-                 || element->isClef()) {
+                 || element->isClef()
+                 || element->isAmbitus()) {
             Segment* segment
                 = element->explicitParent()->isFretDiagram() ? toSegment(element->explicitParent()->explicitParent()) : toSegment(
                       element->explicitParent());
