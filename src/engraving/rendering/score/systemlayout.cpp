@@ -2955,18 +2955,29 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
         ElementType::SLUR_SEGMENT,
         ElementType::STICKING,
         ElementType::FERMATA,
-        ElementType::TREMOLOBAR
+        ElementType::TREMOLOBAR,
+        ElementType::NOTE,
+        ElementType::NOTEDOT,
+        ElementType::STEM,
+        ElementType::BEAM,
+        ElementType::HOOK,
+        ElementType::LEDGER_LINE
     };
 
-    for (const ShapeElement& el : skylineOfThisStaff.elements()) {
-        const bool checkItem = !isAssociatedElement(el);
-        const bool intersects = elementShape.intersects(el);
+    for (const ShapeElement& elToCompare : skylineOfThisStaff.elements()) {
+        const bool checkItem = !isAssociatedElement(elToCompare);
+        const bool intersects = elementShape.intersects(elToCompare);
 
-        const Shape s = Shape(el, el.item());
-        const bool dynamicsMovedOutside = el.item()->placeBelow() ? s.clearsVertically(elementShape) : elementShape.clearsVertically(s);
-        const bool elShouldBeOutsideDynamic = !muse::contains(ELEMENTS_ABOVE_DYNAMICS, el.item()->type());
+        const Shape shapeToCompare = Shape(elToCompare, elToCompare.item());
+        const bool dynamicsMovedOutside
+            = elToCompare.item()->placeBelow() ? shapeToCompare.clearsVertically(elementShape) : elementShape.clearsVertically(
+                  shapeToCompare);
+        const bool elShouldBeOutsideDynamic = !muse::contains(ELEMENTS_ABOVE_DYNAMICS, elToCompare.item()->type());
+        const bool horizontalIntersect = elToCompare.left() < elementShape.bbox().right()
+                                         && elToCompare.right() > elementShape.bbox().left();
 
-        if (el.item()->autoplace() && checkItem && (intersects || (dynamicsMovedOutside && elShouldBeOutsideDynamic))) {
+        if (elToCompare.item()->autoplace() && checkItem
+            && (intersects || (dynamicsMovedOutside && elShouldBeOutsideDynamic && horizontalIntersect))) {
             // The y offset has moved this to collide with or below an element stacked below the dynamic
             return;
         }
