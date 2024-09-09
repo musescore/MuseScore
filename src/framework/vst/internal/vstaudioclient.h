@@ -38,8 +38,8 @@ public:
 
     void loadSupportedParams();
 
-    bool handleEvent(const VstEvent& event, const audio::samples_t sampleOffset);
-    bool handleParamChange(const ParamChangeEvent& param, const audio::samples_t sampleOffset);
+    bool handleEvent(const VstEvent& event);
+    bool handleParamChange(const ParamChangeEvent& param);
     void setVolumeGain(const muse::audio::gain_t newVolumeGain);
 
     muse::audio::samples_t process(float* output, muse::audio::samples_t samplesPerChannel);
@@ -78,7 +78,7 @@ private:
 
     void flushBuffers();
 
-    void addParamChange(const ParamChangeEvent& param, const audio::samples_t sampleOffset);
+    void addParamChange(const ParamChangeEvent& param);
 
     bool m_isActive = false;
     muse::audio::gain_t m_volumeGain = 1.f; // 0.0 - 1.0
