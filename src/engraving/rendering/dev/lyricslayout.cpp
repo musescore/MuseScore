@@ -451,8 +451,11 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
         EngravingItem* endSegmentElement = endSegment->element(track);
         if (endSegment->tick() == endTick && endSegmentElement && endSegmentElement->type() == ElementType::CHORD) {
             // everything is OK if we have reached a chord at right tick on right track
-            // advance to next CR, or last segment if no next CR
-            endSegment = endSegment->nextCR(track, false);
+            // advance to next CR after duration of note, or last segment if no next CR
+            const Score* score = item->score();
+            const Chord* endChord = toChord(endSegmentElement);
+
+            endSegment = score ? score->tick2segment(endSegment->tick() + endChord->ticks(), true, SegmentType::ChordRest) : nullptr;
         } else {
             // FIXUP - lyrics tick count not valid
             // this happens if edits to score have removed the original end segment
