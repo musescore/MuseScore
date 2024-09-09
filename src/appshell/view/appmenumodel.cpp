@@ -89,14 +89,14 @@ void AppMenuModel::updateUndoRedoItems()
     MenuItem& undoItem = findItem(ActionCode("undo"));
     const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
     undoItem.setTitle(undoActionName.isEmpty()
-                            ? TranslatableString("action", "Undo")
-                            : TranslatableString("action", "Undo '%1'").arg(undoActionName));
+                      ? TranslatableString("action", "Undo")
+                      : TranslatableString("action", "Undo ‘%1’").arg(undoActionName));
 
     MenuItem& redoItem = findItem(ActionCode("redo"));
     const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
     redoItem.setTitle(redoActionName.isEmpty()
-                            ? TranslatableString("action", "Redo")
-                            : TranslatableString("action", "Redo '%1'").arg(redoActionName));
+                      ? TranslatableString("action", "Redo")
+                      : TranslatableString("action", "Redo ‘%1’").arg(redoActionName));
 }
 
 void AppMenuModel::setupConnections()

@@ -168,8 +168,9 @@ muse::TranslatableString NotationUndoStack::topMostUndoActionName() const
         return {};
     }
 
-    if (auto current = undoStack()->last())
+    if (auto current = undoStack()->last()) {
         return current->actionName();
+    }
 
     return {};
 }
@@ -180,8 +181,9 @@ muse::TranslatableString NotationUndoStack::topMostRedoActionName() const
         return {};
     }
 
-    if (auto current = undoStack()->next())
+    if (auto current = undoStack()->next()) {
         return current->actionName();
+    }
 
     return {};
 }

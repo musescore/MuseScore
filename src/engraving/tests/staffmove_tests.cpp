@@ -103,7 +103,7 @@ TEST_F(Engraving_StaffMoveTests, linkedStaff)
     EXPECT_TRUE(c1);
     Chord* c2 = toChord(s->element(8));
     EXPECT_TRUE(c2);
-    
+
     score->startCmd(TranslatableString("undoableAction", "Engraving staff move tests"));
     score->moveDown(c1);
     score->endCmd();

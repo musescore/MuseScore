@@ -244,8 +244,8 @@ void Score::startCmd(const QString& qActionName)
     }
 
     muse::TranslatableString actionName = qActionName.isEmpty()
-        ? TranslatableString("undoableAction", "Plugin edit")
-        : TranslatableString::untranslatable(qActionName);
+                                          ? TranslatableString("undoableAction", "Plugin edit")
+                                          : TranslatableString::untranslatable(qActionName);
 
     undoStack()->prepareChanges(actionName);
 }

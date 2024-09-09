@@ -74,15 +74,14 @@ void UndoRedoModel::updateItems()
 {
     auto stack = undoStack();
 
-
     if (m_undoItem) {
         const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
         ui::UiActionState state;
         state.enabled = stack ? stack->canUndo() : false;
         m_undoItem->setState(state);
         m_undoItem->setTitle(undoActionName.isEmpty()
-            ? TranslatableString("action", "Undo")
-            : TranslatableString("action", "Undo '%1'").arg(undoActionName));
+                             ? TranslatableString("action", "Undo")
+                             : TranslatableString("action", "Undo ‘%1’").arg(undoActionName));
     }
 
     if (m_redoItem) {
@@ -91,8 +90,8 @@ void UndoRedoModel::updateItems()
         state.enabled = stack ? stack->canRedo() : false;
         m_redoItem->setState(state);
         m_redoItem->setTitle(redoActionName.isEmpty()
-             ? TranslatableString("action", "Redo")
-             : TranslatableString("action", "Redo '%1'").arg(redoActionName));
+                             ? TranslatableString("action", "Redo")
+                             : TranslatableString("action", "Redo ‘%1’").arg(redoActionName));
     }
 }
 

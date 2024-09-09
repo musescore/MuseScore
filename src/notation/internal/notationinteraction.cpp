@@ -4737,7 +4737,8 @@ void NotationInteraction::removeSelectedMeasures()
     doSelect({ firstMeasure }, SelectType::REPLACE);
     doSelect({ lastMeasure }, SelectType::RANGE);
 
-    startEdit(TranslatableString("undoableAction", "Delete %1 measure(s)").arg(1 + lastMeasure->measureIndex() - firstMeasure->measureIndex()));
+    startEdit(TranslatableString("undoableAction",
+                                 "Delete %1 measure(s)").arg(1 + lastMeasure->measureIndex() - firstMeasure->measureIndex()));
     score()->cmdTimeDelete();
     apply();
 }
@@ -6147,7 +6148,8 @@ void NotationInteraction::transposeSemitone(int steps)
 
 void NotationInteraction::transposeDiatonicAlterations(mu::engraving::TransposeDirection direction)
 {
-    execute(&mu::engraving::Score::transposeDiatonicAlterations, direction, TranslatableString("undoableAction", "Transpose diatonic alterations"));
+    execute(&mu::engraving::Score::transposeDiatonicAlterations, direction,
+            TranslatableString("undoableAction", "Transpose diatonic alterations"));
 }
 
 void NotationInteraction::getLocation()

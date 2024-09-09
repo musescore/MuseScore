@@ -320,7 +320,7 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
     }
 
     auto calcActionName = [](const SharpFlat& sharpFlat) -> TranslatableString {
-        switch(sharpFlat) {
+        switch (sharpFlat) {
         case SharpFlat::NONE: return TranslatableString("undoableAction", "Set sharp/flat no preference");
         case SharpFlat::FLATS: return TranslatableString("undoableAction", "Set prefer flats");
         case SharpFlat::SHARPS: return TranslatableString("undoableAction", "Set prefer sharps");
