@@ -207,6 +207,16 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_NORMAL,
+         "paste-clone",
+         QT_TRANSLATE_NOOP("action","Paste (Clone)"),
+         0,
+         0,
+         Icons::paste_ICON,
+         Qt::ApplicationShortcut
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL,
          "paste-half",
          QT_TRANSLATE_NOOP("action","Paste Half Duration"),
          QT_TRANSLATE_NOOP("action","Paste half duration"),

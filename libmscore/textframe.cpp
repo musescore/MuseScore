@@ -43,6 +43,7 @@ TBox::TBox(const TBox& tbox)
    : VBox(tbox)
       {
       _text = new Text(*(tbox._text));
+      _text->setParent(this);
       }
 
 TBox::~TBox()
@@ -59,7 +60,8 @@ TBox::~TBox()
 void TBox::layout()
       {
       setPos(QPointF());      // !?
-      bbox().setRect(0.0, 0.0, system()->width(), 0);
+      auto w = system() ? system()->width() : 0;
+      bbox().setRect(0.0, 0.0, w, 0);
       _text->layout();
 
       qreal h = _text->height();
@@ -80,7 +82,7 @@ void TBox::layout()
 #endif
       _text->setPos(leftMargin() * DPMM, y);
       h += topMargin() * DPMM + bottomMargin() * DPMM;
-      bbox().setRect(0.0, 0.0, system()->width(), h);
+      bbox().setRect(0.0, 0.0, w, h);
 
       MeasureBase::layout();  // layout LayoutBreak's
       }

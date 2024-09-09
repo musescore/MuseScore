@@ -1409,6 +1409,10 @@ bool Measure::acceptDrop(EditData& data) const
             case ElementType::SYMBOL:
             case ElementType::CLEF:
             case ElementType::STAFFTYPE_CHANGE:
+            case ElementType::VBOX:
+            case ElementType::HBOX:
+            case ElementType::TBOX:
+
                   viewer->setDropRectangle(staffR);
                   return true;
 
@@ -1695,6 +1699,19 @@ Element* Measure::drop(EditData& data)
                   {
                   delete e;
                   return cmdInsertRepeatMeasure(staffIdx);
+                  }
+            case ElementType::HBOX:
+            case ElementType::VBOX:
+            case ElementType::TBOX:
+                  {
+                  if (auto mbSource = e->findMeasureBase()) {
+                        auto mbDestination = this->findMeasureBase();
+                        auto boxClone = mbSource->clone();
+                        boxClone->setPrev(this->prevMM());
+                        boxClone->setNext(mbDestination);
+                        score()->undo(new InsertMeasures(boxClone, boxClone));
+                        }
+                  break;
                   }
             case ElementType::ICON:
                   switch(toIcon(e)->iconType()) {
@@ -3195,6 +3212,126 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
       for (Element* e : el()) {
             Element* ne = e->clone();
             ne->setScore(sc);
+            ne->setOffset(e->offset());
+            m->add(ne);
+            }
+      return m;
+      }
+
+//---------------------------------------------------------
+//   cloneMeasure
+//---------------------------------------------------------
+
+Measure* Measure::cloneMeasureLimited(Score* scoreDest, const Fraction& tick, TieMap* tieMap, int startStaff, int endStaff)
+      {
+      Measure* m      = new Measure(scoreDest);
+      m->_timesig     = _timesig;
+      m->_len         = _len;
+      m->_repeatCount = _repeatCount;
+
+      // Limited edition: Allow discrepancy of staves amount, to be limited by start/endStaff during cloning
+      // Code reuse: nearly identical to above cloneMeasure()
+
+      m->setNo(no());
+      m->setNoOffset(noOffset());
+      m->setIrregular(irregular());
+      m->_userStretch           = _userStretch;
+      m->_breakMultiMeasureRest = _breakMultiMeasureRest;
+      m->_playbackCount         = _playbackCount;
+
+      m->setTick(tick);
+      m->setLineBreak(lineBreak());
+      m->setPageBreak(pageBreak());
+      m->setSectionBreak(sectionBreak() ? new LayoutBreak(*sectionBreakElement()) : 0);
+
+      m->setHeader(header()); m->setTrailer(trailer());
+      TupletMap tupletMap;
+
+      auto fcr = scoreDest->selection().firstChordRest();
+      auto destStaffStart = fcr ? fcr->staffIdx() : 0;
+      int initTrack  = (startStaff * VOICES);
+      int limitTrack = (endStaff * VOICES);
+      int destTrack  = (destStaffStart * VOICES);
+
+      for (Segment* oseg = first(); oseg; oseg = oseg->next()) {
+            Segment* s = new Segment(m, oseg->segmentType(), oseg->rtick());
+            s->setEnabled(oseg->enabled()); s->setVisible(oseg->visible());
+            s->setHeader(oseg->header()); s->setTrailer(oseg->trailer());
+
+            m->_segments.push_back(s);
+            for (int track = initTrack; track < limitTrack; ++track) {
+                  int newTrack = track - initTrack + destTrack;
+                  Element* oe = oseg->element(track);
+                  for (Element* e : oseg->annotations()) {
+                        if (e->generated() || e->track() != track)
+                              continue;
+                        Element* ne = e->clone();
+                        ne->setTrack(newTrack);
+                        ne->setOffset(e->offset());
+                        ne->setScore(scoreDest);
+                        s->add(ne);
+                        }
+                  if (!oe)
+                        continue;
+                  Element* ne = oe->clone();
+                  ne->setTrack(newTrack);
+                  if (oe->isChordRest()) {
+                        ChordRest* ocr = toChordRest(oe);
+                        ChordRest* ncr = toChordRest(ne);
+                        Tuplet* ot     = ocr->tuplet();
+                        ncr->setTrack(newTrack);
+                        if (ot) {
+                              Tuplet* nt = tupletMap.findNew(ot);
+                              if (nt == 0) {
+                                    nt = new Tuplet(*ot);
+                                    nt->clear();
+                                    nt->setTrack(newTrack);
+                                    nt->setScore(scoreDest);
+                                    nt->setParent(m);
+                                    nt->setTick(m->tick() + ot->rtick());
+                                    tupletMap.add(ot, nt);
+                                    }
+                              ncr->setTuplet(nt);
+                              nt->add(ncr);
+                              }
+                        if (oe->isChord()) {
+                              Chord* och = toChord(ocr);
+                              Chord* nch = toChord(ncr);
+                              nch->setTrack(newTrack);
+                              size_t n = och->notes().size();
+                              for (size_t i = 0; i < n; ++i) {
+                                    Note* on = och->notes().at(i);
+                                    Note* nn = nch->notes().at(i);
+                                    if (on->tieFor()) {
+                                          Tie* tie = on->tieFor()->clone();
+                                          tie->setScore(scoreDest);
+                                          tie->setTrack(newTrack);
+                                          nn->setTieFor(tie);
+                                          tie->setStartNote(nn);
+                                          tieMap->add(on->tieFor(), tie);
+                                          }
+                                    if (on->tieBack()) {
+                                          Tie* tie = tieMap->findNew(on->tieBack());
+                                          if (tie) {
+                                                tie->setTrack(nch->track());
+                                                nn->setTieBack(tie);
+                                                tie->setEndNote(nn);
+                                                }
+                                          else {
+                                                qDebug("cloneMeasure: cannot find tie, track %d", newTrack);
+                                                }
+                                          }
+                                    }
+                              }
+                        }
+                  ne->setOffset(oe->offset());
+                  ne->setScore(scoreDest);
+                  s->add(ne);
+                  }
+            }
+      for (Element* e : el()) {
+            Element* ne = e->clone();
+            ne->setScore(scoreDest);
             ne->setOffset(e->offset());
             m->add(ne);
             }

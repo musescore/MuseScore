@@ -644,6 +644,9 @@ class Score : public QObject, public ScoreElement {
       bool trKeys, bool transposeChordNames, bool useDoubleSharpsFlats);
 
       bool appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick);
+
+      MeasureBase* insertMeasuresFromScore (Score* scoreSource, const Selection& selectionSource, MeasureBase& mbInsert);
+
       bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
       void write(XmlWriter&, bool onlySelection);

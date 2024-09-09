@@ -515,6 +515,11 @@ bool Box::acceptDrop(EditData& data) const
             case ElementType::STAFF_TEXT:
             case ElementType::IMAGE:
             case ElementType::SYMBOL:
+            case ElementType::VBOX:
+            case ElementType::HBOX:
+            case ElementType::TBOX:
+            case ElementType::MEASURE_LIST:
+            case ElementType::MEASURE:
                   return true;
             case ElementType::ICON:
                   switch (toIcon(data.dropElement)->iconType()) {
@@ -587,6 +592,19 @@ Element* Box::drop(EditData& data)
                   return text;
                   }
 
+            case ElementType::HBOX:
+            case ElementType::VBOX:
+            case ElementType::TBOX:
+                  {
+                  if (auto mbSource = e->findMeasureBase()) {
+                        auto mbDestination = this->findMeasureBase();
+                        auto boxClone = mbSource->clone();
+                        boxClone->setPrev(this->prevMM());
+                        boxClone->setNext(mbDestination);
+                        score()->undo(new InsertMeasures(boxClone, boxClone));
+                        }
+                  break;
+                  }
             case ElementType::ICON:
                   switch (toIcon(e)->iconType()) {
                         case IconType::VFRAME:

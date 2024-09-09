@@ -302,6 +302,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       popup->addAction(getAction("cut"));
       popup->addAction(getAction("copy"));
       popup->addAction(getAction("paste"));
+      popup->addAction(getAction("paste-clone"));
       popup->addAction(getAction("swap"));
       popup->addAction(getAction("delete"));
       if (obj->isNote() || obj->isRest()) {
@@ -338,7 +339,7 @@ void ScoreView::objectPopup(const QPoint& pos, Element* obj)
       if (a == 0)
             return;
       const QByteArray& cmd(a->data().toByteArray());
-      if (cmd == "cut" || cmd =="copy" || cmd == "paste" || cmd == "swap"
+      if (cmd == "cut" || cmd =="copy" || cmd == "paste" || cmd == "paste-clone" || cmd == "swap"
          || cmd == "delete" || cmd == "time-delete") {
             // these actions are already activated
             return;
@@ -426,6 +427,7 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       popup->addAction(getAction("cut"));
       popup->addAction(getAction("copy"));
       popup->addAction(getAction("paste"));
+      popup->addAction(getAction("paste-clone"));
       popup->addAction(getAction("swap"));
       popup->addAction(getAction("delete"));
       popup->addAction(getAction("time-delete"));
@@ -1924,6 +1926,9 @@ void ScoreView::normalCopy()
       {
       if (!checkCopyOrCut())
             return;
+
+      mscore->setLastScoreSelection(_score->selection());
+
       QString mimeType = _score->selection().mimeType();
       if (!mimeType.isEmpty()) {
             QMimeData* mimeData = new QMimeData;
@@ -1942,6 +1947,9 @@ void ScoreView::normalCut()
       {
       if (!checkCopyOrCut())
             return;
+
+      mscore->setLastScoreSelection(_score->selection());
+
       _score->startCmd();
       normalCopy();
       _score->cmdDeleteSelection();
@@ -2030,9 +2038,91 @@ void ScoreView::normalSwap()
 bool ScoreView::normalPaste(Fraction scale)
       {
       _score->startCmd();
+
+      // Also allow for H/V/T boxes to be copied with their contents and be pasted (back inserted)
+      auto srcSelection = mscore->getLastScoreSelection();
+      auto srcScore = srcSelection.score();
+      MeasureBase* insertionMeasureBase = nullptr;
+      if (auto e = _score->selection().element()) {
+            if (auto mb = e->findMeasureBase()) {
+                  insertionMeasureBase = mb;
+                  }
+            }
+      else if (auto seg = _score->selection().startSegment()) {
+            if (auto mb = seg->findMeasureBase()) {
+                  insertionMeasureBase = mb;
+                  }
+            }
+      if (insertionMeasureBase) {
+            if (auto oe = srcSelection.element()) {
+                  if (oe->isBox() && !oe->isFBox()) {
+                        // Allow normal paste to insert clone of V/H/T boxes
+                        _score->insertMeasuresFromScore(srcScore, srcSelection, *insertionMeasureBase);
+                        _score->endCmd();
+                        return MScore::_error == MS_NO_ERROR;
+                        }
+                  }
+            }
+
       const QMimeData* ms = QApplication::clipboard()->mimeData();
       _score->cmdPaste(ms, this, scale);
       bool rv = MScore::_error == MS_NO_ERROR;
+      _score->endCmd();
+      return rv;
+      }
+
+//---------------------------------------------------------
+//   clonePaste
+//---------------------------------------------------------
+
+bool ScoreView::clonePaste()
+      {
+      MeasureBase* mbFirstInsertion = nullptr;
+      auto currentStaff = _score->selection().staffStart();
+      _score->startCmd();
+
+      auto srcScore = mscore->getLastScoreSelection().score();
+      auto copiedSel = mscore->getLastScoreSelection();
+      if (!copiedSel.isRange() && !copiedSel.isSingle()) {
+            QMessageBox::warning(0, "MuseScore",
+                   tr("A valid range or single selection required for measure position."));
+            return false;
+            }
+      if (!srcScore) {
+            QMessageBox::warning(0, "MuseScore",
+                                 tr("Invalid source score."));
+            return false;
+            }
+
+      MeasureBase* insertionMeasureBase = nullptr;
+      bool rv;
+
+      if (auto e = _score->selection().element()) {
+            if (auto mb = e->findMeasureBase()) {
+                  insertionMeasureBase = mb;
+                  }
+            }
+      else if (auto seg = _score->selection().startSegment()) {
+            if (auto mb = seg->findMeasureBase()) {
+                  insertionMeasureBase = mb;
+                  }
+            }
+      if (insertionMeasureBase) {
+            mbFirstInsertion = _score->insertMeasuresFromScore(srcScore, copiedSel, *insertionMeasureBase);
+            rv = MScore::_error == MS_NO_ERROR;
+            }
+      else rv = MScore::_error == NO_DEST;
+
+      // Circumvent spanners not cloning node offsets by a work-around regular pasting after clone....
+      if (mbFirstInsertion) {
+            if (auto mFirstInsertion = mbFirstInsertion->findMeasure()) {
+                  _score->select(mFirstInsertion, SelectType::RANGE, currentStaff);
+                  const QMimeData* ms = QApplication::clipboard()->mimeData();
+                  _score->cmdPaste(ms, this);
+                  rv = MScore::_error == MS_NO_ERROR;
+                  }
+            }
+
       _score->endCmd();
       return rv;
       }
@@ -2189,6 +2279,9 @@ void ScoreView::cmd(const char* s)
                         cv->normalPaste();
                   else if (cv->state == ViewState::EDIT)
                         cv->editPaste();
+                  }},
+            {{"paste-clone"}, [](ScoreView* cv, const QByteArray&) {
+                  cv->clonePaste();
                   }},
             {{"paste-half"}, [](ScoreView* cv, const QByteArray&) {
                   cv->normalPaste(Fraction(1, 2));
@@ -4327,7 +4420,7 @@ void ScoreView::cmdChangeEnharmonic(bool both)
 
 void ScoreView::cloneElement(Element* e)
       {
-      if (e->isMeasure() || e->isNote() || e->isVBox())
+      if (e->isMeasure() || e->isNote())
             return;
       QDrag* drag = new QDrag(this);
       QMimeData* mimeData = new QMimeData;

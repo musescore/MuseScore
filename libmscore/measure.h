@@ -101,6 +101,7 @@ class Measure final : public MeasureBase {
       ElementType type() const override { return ElementType::MEASURE; }
       void setScore(Score* s) override;
       Measure* cloneMeasure(Score*, const Fraction& tick, TieMap*);
+      Measure* cloneMeasureLimited(Score*, const Fraction& tick, TieMap*, int startStaff, int endStaff);
 
       void read(XmlReader&, int idx);
       void read(XmlReader& d) override { read(d, 0); }

@@ -113,6 +113,7 @@ struct PaletteTree;
 class PaletteWidget;
 class PaletteWorkspace;
 class QmlDockWidget;
+class Selection;
 
 struct PluginDescription;
 enum class SelState : char;
@@ -203,6 +204,8 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       QSettings settings;
       ScoreView* cv                        { 0 };
       ScoreTab* ctab                       { 0 };
+      Score* copiedFromScore               { 0 };
+      Selection copiedSelection;
       QMap<MasterScore*, bool> scoreWasShown; // whether each score in scoreList has ever been shown
       ScoreState _sstate;
       UpdateChecker* ucheck;
@@ -680,6 +683,11 @@ class MuseScore : public QMainWindow, public MuseScoreCore {
       void changeState(ScoreState);
       void updateInputState(Score*);
       void updateShadowNote();
+
+      Score* getLastScoreCopiedFrom(void)       { return copiedFromScore;}
+      void setLastScoreCopiedFrom(Score* s)     { copiedFromScore = s;   }
+      Selection& getLastScoreSelection(void)    { return copiedSelection;}
+      void setLastScoreSelection(Selection& s)  { copiedSelection = s;   }
 
       bool readLanguages(const QString& path);
       void setRevision(QString& r)  {rev = r;}

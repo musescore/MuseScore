@@ -362,6 +362,7 @@ class ScoreView : public QWidget, public MuseScoreView {
       void normalCopy();
       void fotoModeCopy(bool includeLink = false);
       bool normalPaste(Fraction scale = Fraction(1, 1));
+      bool clonePaste();
       void normalSwap();
 
       void setControlCursorVisible(bool v);

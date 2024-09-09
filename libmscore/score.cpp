@@ -2222,6 +2222,327 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
       }
 
 //---------------------------------------------------------
+//   insertMeasuresFromScore
+//     Objective: clone measures from any score between a
+//     copied range selection, to be inserted [before mbInsert]
+//     (not appended). This provides a means of "deep copying"
+//     Time signatures, barlines, key signatures, etc.
+//     - Supports only entire measures
+//     - Frames included "within" range selection
+//     - Single frame will copy/paste via insertion
+//     - Instead of deep cloning entire staves, destination selection
+//       and source range is considered
+//     - Spanners don't keep node customizations during cloning, so
+//       resorting to a regular paste afterwards as a workaround
+//---------------------------------------------------------
+
+MeasureBase* Score::insertMeasuresFromScore(Score* scoreSource, const Selection& selectionSource, MeasureBase& mbInsert) {
+      auto scoreDest = this;
+      Measure* mFirst;
+      Measure* mLast;
+      selectionSource.measureRange(&mFirst, &mLast);
+      MeasureBase* mbSingle =
+            selectionSource.element() ? selectionSource.element()->findMeasureBase() : nullptr;
+      if (!mFirst && !mbSingle)
+            return nullptr;
+
+      // staffEnd here is not inclusive - e.g. one grand staff provides [2] as staffEnd
+      auto staffStart = selectionSource.staffStart();
+      auto staffEnd   = selectionSource.staffEnd();
+      auto szStavesSelected = staffEnd - staffStart;
+      auto fcr = scoreDest->selection().firstChordRest();
+      auto destStaffStart = fcr ? fcr->staffIdx() : scoreDest->selection().staffStart();
+      auto szDestStaves = scoreDest->nstaves() - destStaffStart;
+      auto destStaffEnd = (destStaffStart + szStavesSelected);
+
+      if ( !(szDestStaves >= szStavesSelected) ) {
+            QMessageBox::warning(0, "MuseScore",
+                   tr("Clone paste error: insufficient staves available at given position"));
+            return nullptr;
+            }
+
+      auto mbStart = mbSingle ? mbSingle : mFirst->findMeasureBase();
+      auto mbEnd   = mbSingle ? mbSingle : mLast->findMeasureBase();
+
+      Fraction tickOfInsert = mbInsert.tick();
+
+      auto mbPrevious = mbInsert.prevMM();
+      auto mInsert = mbInsert.findMeasure();
+
+      TieMap tieMap;
+
+      // Store current sigs at entry point before cloning
+      auto tickCurrent = tickOfInsert;
+      std::vector<KeySigEvent> oldKeySigs, originalKeySigs;
+      std::vector<ClefType> oldClefTypes,  originalClefTypes;
+      std::vector<TimeSig*> oldTimeSigs,  originalTimeSigs;
+
+      // Store start of range selection status:
+      auto tickStartOfRange = mbStart->tick();
+      int index = 0;
+      for (int staffIdx = selectionSource.staffStart(); staffIdx < selectionSource.staffEnd(); ++staffIdx) {
+            auto staffSource = scoreSource->staff(staffIdx);
+            KeySigEvent nkse =
+                  staffSource->keySigEvent(tickStartOfRange);
+            TimeSig* timeSig =
+                  staffSource->timeSig(tickStartOfRange);
+            ClefType clef =
+                  staffSource->clef(tickStartOfRange);
+            originalKeySigs.emplace_back(nkse);
+            originalClefTypes.emplace_back(clef);
+            originalTimeSigs.emplace_back(timeSig->clone());
+
+            index++;
+            }
+
+      // Store insertion point status:
+      index = 0;
+      for (int staffIdx = destStaffStart; staffIdx < destStaffEnd; ++staffIdx) {
+            if (!mInsert || mbSingle)
+                  break;
+
+            auto staffDest   = scoreDest->staff(staffIdx);
+            auto tickInsertion = mInsert->tick();
+            KeySigEvent nkse = staffDest->keySigEvent(tickInsertion);
+            TimeSig* timeSig = staffDest->timeSig(tickInsertion);
+            ClefType clef = staffDest->clef(tickInsertion);
+            oldKeySigs.emplace_back(nkse);
+            oldClefTypes.emplace_back(clef);
+            oldTimeSigs.emplace_back(timeSig->clone());
+            index++;
+            }
+
+      // Clone & Insert measures:
+      std::vector<MeasureBase*> insertedMeasures;
+      int safeGuard = 0;
+      const int maxIterations = 1888;
+      for (auto mbCurrent = mbStart; mbCurrent && (mbCurrent->no() <= mbEnd->no()); mbCurrent = mbCurrent->next()) {
+            bool firstIteration = insertedMeasures.empty();
+            MeasureBase* mbNext;
+
+            // Sanity Safeguards - these should never occur
+            if (++safeGuard > maxIterations) {
+                  qDebug() << "error:" << "hit max iterations" << maxIterations << "while cloning measures";
+                  return nullptr;
+                  }
+            else if (mbCurrent == mbCurrent->next()) {
+                  qDebug() << "error:" << "next measure = current measure";
+                  return nullptr;
+                  }
+            if (!firstIteration) {
+                  if ((mbCurrent->no() == mbStart->no()) && !mbCurrent->isBox()) {
+                        qDebug() << "error:" << "restart or invalid interaction with insertion point.";
+                        break;
+                        }
+                  else if (!mbCurrent->no()) {
+                        qDebug() << "error:" << "reached a measure #0 mid-way" ;
+                        break;
+                        }
+                  else if (mbCurrent == mbStart) {
+                        qDebug() << "error:" << "reached first measure more than once";
+                        return nullptr;
+                        }
+                  }
+
+            if (mbCurrent->isMeasure()) {
+                  auto mNext =
+                        toMeasure(mbCurrent)
+                        ->cloneMeasureLimited
+                              (scoreDest,
+                               tickCurrent,
+                               &tieMap,
+                               staffStart,
+                               staffEnd);
+
+                  tickCurrent += mNext->ticks();
+                  mbNext = toMeasureBase(mNext);
+                  }
+            else { // frames don't contribute to tick counter
+                  mbNext = mbCurrent->clone();
+                  }
+
+            mbNext->setScore(scoreDest);
+            mbNext->setPrev(mbPrevious);
+            mbNext->setNext(&mbInsert);
+            mbPrevious = mbNext;
+
+            scoreDest->undo(new InsertMeasures(mbNext, mbNext));
+
+            if (mbSingle)
+                  return mbSingle;
+
+            insertedMeasures.emplace_back(mbNext);
+            }
+
+      if (insertedMeasures.empty())
+            return nullptr;
+
+      auto mbStartInsertion = insertedMeasures.front();
+      auto mbEndInsertion = insertedMeasures.back();
+      auto firstInsertedMeasure = mbStartInsertion->findMeasure();
+      auto lastInsertedMeasure = mbEndInsertion->findMeasure();
+      if (!firstInsertedMeasure || !lastInsertedMeasure) {
+            // insanity check
+            return nullptr;
+            }
+
+      // Update full measure rests:
+      for (auto m = firstInsertedMeasure; m; m = m->nextMeasure()) {
+            if (m->nextMeasure() == m) {
+                  // insanity check
+                  break;
+                  }
+
+            for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                  Fraction f;
+                  for (auto s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                        for (int v = 0; v < VOICES; ++v) {
+                              auto cr = toChordRest(s->element(staffIdx * VOICES + v));
+                              if (cr == 0) {
+                                    continue;
+                                    }
+                              f += cr->actualTicks();
+                              }
+                        }
+                  if (f.isZero()) {
+                        addRest(m->tick(), staffIdx*VOICES, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                        }
+                  }
+            if (m->findMeasureBase() == mbEndInsertion)
+                  break;
+            }
+
+      // Iterate destination staves and re-apply information at end of insertion if appropriate
+      auto tickInsertionPoint = mInsert->tick();
+      auto tickFirstInsertion = firstInsertedMeasure->tick();
+      index = 0;
+      for (int staffIdx = destStaffStart; staffIdx < destStaffEnd; ++staffIdx) {
+            if (!mInsert)
+                  break;
+
+            int trackIdx = staff2track(staffIdx);
+            auto staffDest = scoreDest->staff(staffIdx);
+
+            // Apply measure information if not in accord with score
+
+            // [After insertion point]:
+            KeySigEvent nkse  = oldKeySigs.at(index);
+            KeySigEvent oNkse = staffDest->keySigEvent(tickInsertionPoint);
+            if (nkse.key() != oNkse.key())
+                  undoChangeKeySig(staffDest, tickInsertionPoint, nkse);
+
+            TimeSig* newTimeSig = oldTimeSigs.at(index);
+            TimeSig* oldTimeSig = staffDest->timeSig(tickInsertionPoint);
+            if (newTimeSig->sig() != oldTimeSig->sig()) {
+                  newTimeSig->setScore(scoreDest);
+                  newTimeSig->setTrack(trackIdx);
+                  cmdAddTimeSig(mInsert, staffIdx, newTimeSig, false);
+                  }
+
+            ClefType clefType = oldClefTypes.at(index);
+            ClefType oldClefType = staffDest->clef(tickInsertionPoint);
+            if (clefType != oldClefType)
+                  undoChangeClef(staffDest, mInsert, clefType);
+
+            // [Beginning of inserted measures]
+            nkse = originalKeySigs.at(index);
+            oNkse = staffDest->keySigEvent(tickFirstInsertion);
+            if (nkse.key() != oNkse.key())
+                  undoChangeKeySig(staffDest, tickFirstInsertion, nkse);
+
+            newTimeSig = originalTimeSigs.at(index);
+            oldTimeSig = staffDest->timeSig(tickFirstInsertion);
+            if (newTimeSig->sig() != oldTimeSig->sig()) {
+                  newTimeSig->setScore(scoreDest);
+                  newTimeSig->setTrack(trackIdx);
+                  cmdAddTimeSig(firstInsertedMeasure, staffIdx, newTimeSig, false);
+                  }
+
+            clefType = originalClefTypes.at(index);
+            oldClefType = staffDest->clef(tickFirstInsertion);
+            if (clefType != oldClefType)
+                  undoChangeClef(staffDest, firstInsertedMeasure, clefType);
+
+            // Code to convert header clefs to regular measure clefs
+            #if 0
+            Finally, convert header clefs to regular measure clefs if need be:
+            if (auto clefSeg = firstInsertedMeasure->undoGetSegment(SegmentType::HeaderClef, firstInsertedMeasure->tick())) {
+                  qDebug() << "Got header clef @ track: " << trackIdx;
+                  if (auto e = clefSeg->element(trackIdx)) {
+                        if (e->isClef()) {
+                              auto clef = toClef(e);
+                              qDebug() << "header clef @ staff: " << clef->staffIdx();
+                              auto clefType = clef->clefType();
+                              bool explicitClef = (clef->tick() == firstInsertedMeasure->tick());
+                              if (explicitClef) {
+                                    if (firstInsertedMeasure->system() && firstInsertedMeasure->isFirstInSystem())
+                                          ;
+                                    else {
+                                          clefSeg->remove(clef);
+                                          undoChangeClef(staffDest, firstInsertedMeasure, clefType);
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            #endif
+
+            index++;
+            }
+
+      // Anacrusis
+      auto beforeInsertedMeasures = firstInsertedMeasure->prevMeasureMM();
+      if (beforeInsertedMeasures && beforeInsertedMeasures->timesig() == firstInsertedMeasure->timesig()) {
+            auto combinedTicks = beforeInsertedMeasures->ticks() + firstInsertedMeasure->ticks();
+            if (combinedTicks == firstInsertedMeasure->timesig()) {
+                  cmdJoinMeasure(beforeInsertedMeasures, firstInsertedMeasure);
+                  }
+            }
+
+      // Spanners: Clone within range
+      // This currently doesn't clone grip-node alterations - resorting to regular copy/paste after cloning
+      auto tickStart = mFirst->tick();
+      auto tickEnd = mLast->tick() + mLast->ticks();
+      auto spannersSource = scoreSource->spanner();
+      auto lb = spannersSource.lower_bound(tickStart.ticks());
+      auto ub = spannersSource.upper_bound(tickEnd.ticks());
+      for (auto sp = lb; sp != ub; sp++) {
+            auto spanner = sp->second;
+            if (spanner->tick2() > tickEnd) {
+                  // Spanner map is by tick(), so this can theoretically happen
+                  continue;
+                  }
+            auto ns = toSpanner(spanner->clone());
+
+            ns->setScore(scoreDest);
+            ns->setParent(nullptr);
+
+            auto resultingTick = (spanner->tick() - tickStart) + tickOfInsert;
+            auto cr1 = findCR(resultingTick, ns->track());
+            ns->setTick(resultingTick);
+
+            resultingTick = (spanner->tick2() - tickStart) + tickOfInsert;
+            auto cr2 = findCR(resultingTick, ns->track());
+            ns->setTick2(resultingTick);
+
+            if (cr1 && cr2) {
+                  ns->setStartElement(cr1);
+                  ns->setEndElement(cr2);
+                  }
+            else {
+                  ns->computeStartElement();
+                  ns->computeEndElement();
+                  }
+            undoAddElement(ns);
+            }
+
+      fixTicks();
+      setLayoutAll();
+      doLayout();
+      return firstInsertedMeasure;
+      }
+
+//---------------------------------------------------------
 //   splitStaff
 //---------------------------------------------------------
 

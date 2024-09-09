@@ -641,6 +641,8 @@ void Segment::remove(Element* el)
       {
 // qDebug("%p Segment::remove %s %p", this, el->name(), el);
 
+      if (!el) return;
+
       int track = el->track();
 
       switch(el->type()) {

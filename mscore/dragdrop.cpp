@@ -334,8 +334,9 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
       QPointF pos(imatrix.map(QPointF(event->pos())));
       editData.pos       = pos;
       editData.modifiers = event->keyboardModifiers();
+      auto dropType = editData.dropElement->type();
 
-      switch (editData.dropElement->type()) {
+      switch (dropType) {
             case ElementType::VOLTA:
                   event->setAccepted(dragMeasureAnchorElement(pos));
                   break;
@@ -394,6 +395,9 @@ void ScoreView::dragMoveEvent(QDragMoveEvent* event)
             case ElementType::LYRICS:
             case ElementType::FRET_DIAGRAM:
             case ElementType::STAFFTYPE_CHANGE:
+            case ElementType::VBOX:
+            case ElementType::TBOX:
+            case ElementType::HBOX:
                   event->setAccepted(getDropTarget(editData));
                   break;
             default:
@@ -496,6 +500,7 @@ void ScoreView::dropEvent(QDropEvent* event)
                         break;
                   case ElementType::HBOX:
                   case ElementType::VBOX:
+                  case ElementType::TBOX:
                   case ElementType::KEYSIG:
                   case ElementType::CLEF:
                   case ElementType::TIMESIG:

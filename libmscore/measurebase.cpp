@@ -155,7 +155,9 @@ void MeasureBase::add(Element* e)
             if (next())
                   next()->triggerLayout();
             }
-      triggerLayout();
+      // Observation: Cloning a MeasureBase has an issue with triggerlayout here,
+      // Will keep comment in case there's a problem later to refer back here
+      // triggerLayout()
       _el.push_back(e);
       }
 
