@@ -5641,7 +5641,7 @@ By default, they will be placed such as that their right end are at the same lev
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Rest 'Note to dot distance' value</string>
+              <string>Reset 'Note to dot distance' value</string>
              </property>
              <property name="text">
               <string/>
@@ -5672,7 +5672,7 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="6" column="2">
             <widget class="QToolButton" name="resetStemWidth">
              <property name="accessibleName">
-              <string>Teset 'Stem thinckness' value</string>
+              <string>Reset 'Stem thickness' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -6815,9 +6815,6 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QLabel" name="label_28">
              <property name="text">
               <string>Hook length:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
              <property name="buddy">
               <cstring>arpeggioHookLen</cstring>
@@ -11949,7 +11946,7 @@ By default, they will be placed such as that their right end are at the same lev
                   <item row="3" column="2">
                    <widget class="QToolButton" name="resetMaxChordShiftAbove">
                     <property name="text">
-                     <string notr="true">…</string>
+                     <string notr="true"/>
                     </property>
                     <property name="icon">
                      <iconset resource="musescore.qrc">
@@ -12019,7 +12016,7 @@ By default, they will be placed such as that their right end are at the same lev
                   <item row="4" column="2">
                    <widget class="QToolButton" name="resetMaxChordShiftBelow">
                     <property name="text">
-                     <string notr="true">…</string>
+                     <string notr="true"/>
                     </property>
                     <property name="icon">
                      <iconset resource="musescore.qrc">
@@ -12231,7 +12228,7 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="8" column="2">
             <widget class="QToolButton" name="resetMaxFretShiftAbove">
              <property name="text">
-              <string notr="true">…</string>
+              <string notr="true"/>
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
@@ -12410,7 +12407,7 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="9" column="2">
             <widget class="QToolButton" name="resetMaxFretShiftBelow">
              <property name="text">
-              <string notr="true">…</string>
+              <string notr="true"/>
              </property>
              <property name="icon">
               <iconset resource="musescore.qrc">
