@@ -12343,22 +12343,22 @@ oregelbundna notvärden skulle korsa takt</translation>
         <translation>Scoop</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1203"/>
+        <location filename="../../mscore/menus.cpp" line="1200"/>
         <source>Slide out down</source>
         <translation>Glid ut nedåt</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1208"/>
+        <location filename="../../mscore/menus.cpp" line="1205"/>
         <source>Slide out up</source>
         <translation>Glid ut uppåt</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1213"/>
+        <location filename="../../mscore/menus.cpp" line="1210"/>
         <source>Slide in above</source>
         <translation>Glid in ovanför</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1218"/>
+        <location filename="../../mscore/menus.cpp" line="1215"/>
         <source>Slide in below</source>
         <translation>Glid in nedanför</translation>
     </message>
@@ -17729,45 +17729,45 @@ välj ett annat namn:</translation>
 <context>
     <name>Palette</name>
     <message>
-        <location filename="../../mscore/menus.cpp" line="447"/>
+        <location filename="../../mscore/menus.cpp" line="443"/>
         <location filename="../../mscore/noteGroups.cpp" line="85"/>
         <source>Beam Properties</source>
         <translation>Balkegenskaper</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="510"/>
+        <location filename="../../mscore/menus.cpp" line="506"/>
         <source>Dynamics</source>
         <translation>Dynamik</translation>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="227"/>
-        <location filename="../../mscore/menus.cpp" line="553"/>
+        <location filename="../../mscore/menus.cpp" line="549"/>
         <location filename="../../mscore/musescore.cpp" line="6305"/>
         <source>Key Signatures</source>
         <translation>Tonarter</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="591"/>
+        <location filename="../../mscore/menus.cpp" line="587"/>
         <source>Accidentals</source>
         <translation>Förtecken</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="647"/>
+        <location filename="../../mscore/menus.cpp" line="643"/>
         <source>Barlines</source>
         <translation>Taktstreck</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="800"/>
+        <location filename="../../mscore/menus.cpp" line="796"/>
         <source>Fingering</source>
         <translation>Fingersättning</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1146"/>
+        <location filename="../../mscore/menus.cpp" line="1143"/>
         <source>Breaths &amp; Pauses</source>
         <translation>Cesurer &amp; pauser</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1167"/>
+        <location filename="../../mscore/menus.cpp" line="1164"/>
         <source>Arpeggios &amp; Glissandi</source>
         <translation>Arpeggion &amp; glissandon</translation>
     </message>
@@ -17802,538 +17802,538 @@ välj ett annat namn:</translation>
         <translation>Arpeggio nedåt rakt</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1601"/>
+        <location filename="../../mscore/menus.cpp" line="1598"/>
         <source>Staff Text</source>
         <translation>Notsystemtext</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1602"/>
+        <location filename="../../mscore/menus.cpp" line="1599"/>
         <source>Staff text</source>
         <translation>Notsystemtext - Text i valt notsystem</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1605"/>
+        <location filename="../../mscore/menus.cpp" line="1602"/>
         <source>Expression</source>
         <translation>Uttryck</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1608"/>
+        <location filename="../../mscore/menus.cpp" line="1605"/>
         <source>Expression text</source>
         <translation>Uttryckstext</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1611"/>
+        <location filename="../../mscore/menus.cpp" line="1608"/>
         <source>Change Instr.</source>
         <translation>Byt instr.</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1612"/>
+        <location filename="../../mscore/menus.cpp" line="1609"/>
         <source>Instrument change</source>
         <translation>Instrumentbyte</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1615"/>
+        <location filename="../../mscore/menus.cpp" line="1612"/>
         <source>Staff type change</source>
         <translation>Ändra notsystemtyp</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1619"/>
+        <location filename="../../mscore/menus.cpp" line="1616"/>
         <source>Rehearsal mark</source>
         <translation>Orienteringstecken</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1622"/>
-        <location filename="../../mscore/menus.cpp" line="1624"/>
+        <location filename="../../mscore/menus.cpp" line="1619"/>
+        <location filename="../../mscore/menus.cpp" line="1621"/>
         <source>Swing</source>
         <translation>Swing</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1628"/>
-        <location filename="../../mscore/menus.cpp" line="1634"/>
+        <location filename="../../mscore/menus.cpp" line="1625"/>
+        <location filename="../../mscore/menus.cpp" line="1631"/>
         <source>Straight</source>
         <extracomment>System text to switch from swing rhythm back to straight rhythm</extracomment>
         <translation>Rakt</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1637"/>
+        <location filename="../../mscore/menus.cpp" line="1634"/>
         <source>System Text</source>
         <translation>Partiturtext</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1638"/>
+        <location filename="../../mscore/menus.cpp" line="1635"/>
         <source>System text</source>
         <translation>Partiturtext - Gemensam text för alla stämmor</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1651"/>
+        <location filename="../../mscore/menus.cpp" line="1648"/>
         <source>pizz.</source>
         <translation>pizz.</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1656"/>
+        <location filename="../../mscore/menus.cpp" line="1653"/>
         <source>Pizzicato</source>
         <translation>Pizzicato</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1659"/>
+        <location filename="../../mscore/menus.cpp" line="1656"/>
         <source>arco</source>
         <translation>arco</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1664"/>
+        <location filename="../../mscore/menus.cpp" line="1661"/>
         <source>Arco</source>
         <translation>Arco</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1667"/>
+        <location filename="../../mscore/menus.cpp" line="1664"/>
         <source>tremolo</source>
         <translation>tremolo</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1672"/>
+        <location filename="../../mscore/menus.cpp" line="1669"/>
         <source>Tremolo</source>
         <translation>Tremolo</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="881"/>
+        <location filename="../../mscore/menus.cpp" line="877"/>
         <source>Noteheads</source>
         <translation>Nothuvuden</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="474"/>
+        <location filename="../../mscore/menus.cpp" line="470"/>
         <source>Frames &amp; Measures</source>
         <translation>Ramar &amp; takter</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="688"/>
+        <location filename="../../mscore/menus.cpp" line="684"/>
         <source>Repeats &amp; Jumps</source>
         <translation>Repriser och hopp</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="742"/>
+        <location filename="../../mscore/menus.cpp" line="738"/>
         <source>Breaks &amp; Spacers</source>
         <translation>Brytningar &amp; utfyllning</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="752"/>
+        <location filename="../../mscore/menus.cpp" line="748"/>
         <source>System break</source>
         <translation>Radbrytning för notsystem</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="757"/>
+        <location filename="../../mscore/menus.cpp" line="753"/>
         <source>Page break</source>
         <translation>Sidbrytning</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="762"/>
+        <location filename="../../mscore/menus.cpp" line="758"/>
         <source>Section break</source>
         <translation>Sektionsbrytning</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="768"/>
+        <location filename="../../mscore/menus.cpp" line="764"/>
         <source>Don&apos;t break</source>
         <translation>Bryt inte</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="775"/>
+        <location filename="../../mscore/menus.cpp" line="771"/>
         <source>Staff spacer down</source>
         <translation>Systemavstånd nedåt</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="781"/>
+        <location filename="../../mscore/menus.cpp" line="777"/>
         <source>Staff spacer up</source>
         <translation>Systemavstånd uppåt</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="787"/>
+        <location filename="../../mscore/menus.cpp" line="783"/>
         <source>Staff spacer fixed down</source>
         <translation>Systemavstånd fixerat nedåt</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="809"/>
+        <location filename="../../mscore/menus.cpp" line="805"/>
         <source>Fingering %1</source>
         <translation>Fingersättning %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="815"/>
+        <location filename="../../mscore/menus.cpp" line="811"/>
         <source>RH Guitar Fingering %1</source>
         <translation>HH gitarrfingersättning %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="821"/>
+        <location filename="../../mscore/menus.cpp" line="817"/>
         <source>LH Guitar Fingering %1</source>
         <translation>VH gitarrfingersättning %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="827"/>
+        <location filename="../../mscore/menus.cpp" line="823"/>
         <source>String number %1</source>
         <translation>Sträng nummer %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="850"/>
+        <location filename="../../mscore/menus.cpp" line="846"/>
         <source>Tremolos</source>
         <translation>Tremolon</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="912"/>
+        <location filename="../../mscore/menus.cpp" line="908"/>
         <source>Articulations</source>
         <translation>Artikulationer</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="979"/>
+        <location filename="../../mscore/menus.cpp" line="976"/>
         <source>Bend</source>
         <translation>Bänd</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="985"/>
+        <location filename="../../mscore/menus.cpp" line="982"/>
         <source>Tremolo bar</source>
         <translation>Svajarm</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="997"/>
+        <location filename="../../mscore/menus.cpp" line="994"/>
         <source>Ornaments</source>
         <translation>Ornament</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1037"/>
+        <location filename="../../mscore/menus.cpp" line="1034"/>
         <source>Accordion</source>
         <translation>Dragspel</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1119"/>
+        <location filename="../../mscore/menus.cpp" line="1116"/>
         <source>Brackets</source>
         <translation>Klamrar</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1125"/>
+        <location filename="../../mscore/menus.cpp" line="1122"/>
         <source>Bracket</source>
         <translation>Balkklammer</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1126"/>
+        <location filename="../../mscore/menus.cpp" line="1123"/>
         <source>Brace</source>
         <translation>Svängd klammer</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1127"/>
+        <location filename="../../mscore/menus.cpp" line="1124"/>
         <source>Square</source>
         <translation>Hakklammer</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1441"/>
+        <location filename="../../mscore/menus.cpp" line="1438"/>
         <source>Pedal (with ped and line)</source>
         <translation>Pedal (med ped och linje)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1449"/>
+        <location filename="../../mscore/menus.cpp" line="1446"/>
         <source>Pedal (with ped and asterisk)</source>
         <translation>Pedal (med ped och asterisk)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1455"/>
+        <location filename="../../mscore/menus.cpp" line="1452"/>
         <source>Pedal (straight hooks)</source>
         <translation>Pedal (raka krokar)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1461"/>
+        <location filename="../../mscore/menus.cpp" line="1458"/>
         <source>Pedal (angled end hook)</source>
         <translation>Pedal (krok med vinklad ände)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1467"/>
+        <location filename="../../mscore/menus.cpp" line="1464"/>
         <source>Pedal (both hooks angled)</source>
         <translation>Pedal (båda krokar vinklade)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1473"/>
+        <location filename="../../mscore/menus.cpp" line="1470"/>
         <source>Pedal (angled start hook)</source>
         <translation>Pedal (vinklad startkrok)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1486"/>
+        <location filename="../../mscore/menus.cpp" line="1483"/>
         <source>Staff Text line</source>
         <translation>Textlinje i valt notsystem</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1492"/>
+        <location filename="../../mscore/menus.cpp" line="1489"/>
         <source>System Text line</source>
         <translation>Gemensam textlinje för alla stämmor</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1536"/>
+        <location filename="../../mscore/menus.cpp" line="1533"/>
         <source>Half note = 80 BPM</source>
         <translation>Halvnot = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1537"/>
+        <location filename="../../mscore/menus.cpp" line="1534"/>
         <source>Quarter note = 80 BPM</source>
         <translation>Fjärdedelsnot = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1538"/>
+        <location filename="../../mscore/menus.cpp" line="1535"/>
         <source>Eighth note = 80 BPM</source>
         <translation>Åttondelsnot = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1539"/>
+        <location filename="../../mscore/menus.cpp" line="1536"/>
         <source>Dotted half note = 80 BPM</source>
         <translation>Punkterad halvnot = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1540"/>
+        <location filename="../../mscore/menus.cpp" line="1537"/>
         <source>Dotted quarter note = 80 BPM</source>
         <translation>Punkterad fjärdedelsnot = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1541"/>
+        <location filename="../../mscore/menus.cpp" line="1538"/>
         <source>Dotted eighth note = 80 BPM</source>
         <translation>Punkterad åttondelsnot = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1558"/>
+        <location filename="../../mscore/menus.cpp" line="1555"/>
         <source>Quarter note = dotted quarter note metric modulation</source>
         <translation>Fjärdedelsnot = punkterad fjärdedelsnot taktartsmodulering</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1559"/>
+        <location filename="../../mscore/menus.cpp" line="1556"/>
         <source>Dotted quarter note = quarter note metric modulation</source>
         <translation>Punkterad fjärdedelsnot = fjärdedelsnot taktartsmodulering</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1560"/>
+        <location filename="../../mscore/menus.cpp" line="1557"/>
         <source>Half note = quarter note metric modulation</source>
         <translation>Halvnot = fjärdedelsnot taktartsmodulering</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1561"/>
+        <location filename="../../mscore/menus.cpp" line="1558"/>
         <source>Quarter note = half note metric modulation</source>
         <translation>Fjärdedelsnot = halvnot taktartsmodulering</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1562"/>
+        <location filename="../../mscore/menus.cpp" line="1559"/>
         <source>Eighth note = eighth note metric modulation</source>
         <translation>Åttondelsnot = åttondelsnot taktartsmodulering</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1563"/>
+        <location filename="../../mscore/menus.cpp" line="1560"/>
         <source>Quarter note = quarter note metric modulation</source>
         <translation>Fjärdedelsnot = fjärdedelsnot taktartsmodulering</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1564"/>
+        <location filename="../../mscore/menus.cpp" line="1561"/>
         <source>Dotted eighth note = quarter note metric modulation</source>
         <translation>Punkterad åttondelsnot = fjärdedelsnot taktartsmodulering</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1646"/>
-        <location filename="../../mscore/menus.cpp" line="1647"/>
+        <location filename="../../mscore/menus.cpp" line="1643"/>
+        <location filename="../../mscore/menus.cpp" line="1644"/>
         <source>Measure Number</source>
         <translation>Taktnummer</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1676"/>
+        <location filename="../../mscore/menus.cpp" line="1673"/>
         <source>mute</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation>sordin</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1682"/>
+        <location filename="../../mscore/menus.cpp" line="1679"/>
         <source>Mute</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation>Sordin</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1686"/>
+        <location filename="../../mscore/menus.cpp" line="1683"/>
         <source>open</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation>öppet</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1692"/>
+        <location filename="../../mscore/menus.cpp" line="1689"/>
         <source>Open</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation>Öppet</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1695"/>
+        <location filename="../../mscore/menus.cpp" line="1692"/>
         <source>S/A</source>
         <translation>S/A</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1701"/>
+        <location filename="../../mscore/menus.cpp" line="1698"/>
         <source>Soprano/Alto</source>
         <translation>Sopran/Alt</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1704"/>
+        <location filename="../../mscore/menus.cpp" line="1701"/>
         <source>T/B</source>
         <translation>T/B</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1710"/>
+        <location filename="../../mscore/menus.cpp" line="1707"/>
         <source>Tenor/Bass</source>
         <translation>Tenor/Bas</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1713"/>
+        <location filename="../../mscore/menus.cpp" line="1710"/>
         <source>T/L</source>
         <translation>T/L</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1719"/>
+        <location filename="../../mscore/menus.cpp" line="1716"/>
         <source>Tenor/Lead</source>
         <translation>Tenor/Led</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1722"/>
+        <location filename="../../mscore/menus.cpp" line="1719"/>
         <source>B/B</source>
         <translation>B/B</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1728"/>
+        <location filename="../../mscore/menus.cpp" line="1725"/>
         <source>Bari/Bass</source>
         <translation>Bari/Bas</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1230"/>
+        <location filename="../../mscore/menus.cpp" line="1227"/>
         <source>Clefs</source>
         <translation>Klaver</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1276"/>
+        <location filename="../../mscore/menus.cpp" line="1273"/>
         <source>Grace Notes</source>
         <translation>Prydnadsnoter</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1301"/>
+        <location filename="../../mscore/menus.cpp" line="1298"/>
         <source>Bagpipe Embellishments</source>
         <translation>Säckpipsornament</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1321"/>
+        <location filename="../../mscore/menus.cpp" line="1318"/>
         <source>Lines</source>
         <translation>Linjer</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1329"/>
+        <location filename="../../mscore/menus.cpp" line="1326"/>
         <source>Slur</source>
         <translation>Legatobåge</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1334"/>
+        <location filename="../../mscore/menus.cpp" line="1331"/>
         <source>Crescendo hairpin</source>
         <translation>Crescendopil</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1339"/>
+        <location filename="../../mscore/menus.cpp" line="1336"/>
         <source>Diminuendo hairpin</source>
         <translation>Diminuendopil</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1344"/>
+        <location filename="../../mscore/menus.cpp" line="1341"/>
         <source>Crescendo line</source>
         <translation>Crescendo linje</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1349"/>
+        <location filename="../../mscore/menus.cpp" line="1346"/>
         <source>Diminuendo line</source>
         <translation>Diminuendo linje</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1358"/>
+        <location filename="../../mscore/menus.cpp" line="1355"/>
         <source>Dynamic + hairpin</source>
         <translation>Dynamik + crescendopil</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1367"/>
+        <location filename="../../mscore/menus.cpp" line="1364"/>
         <source>Prima volta</source>
         <translation>Prima volta</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1376"/>
+        <location filename="../../mscore/menus.cpp" line="1373"/>
         <source>Seconda volta</source>
         <translation>Seconda volta</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1385"/>
+        <location filename="../../mscore/menus.cpp" line="1382"/>
         <source>Terza volta</source>
         <translation>Terza volta</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1394"/>
+        <location filename="../../mscore/menus.cpp" line="1391"/>
         <source>Seconda volta, open</source>
         <translation>Seconda volta, öppen</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1400"/>
+        <location filename="../../mscore/menus.cpp" line="1397"/>
         <source>8va alta</source>
         <translation>8va alta</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1407"/>
+        <location filename="../../mscore/menus.cpp" line="1404"/>
         <source>8va bassa</source>
         <translation>8va bassa</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1413"/>
+        <location filename="../../mscore/menus.cpp" line="1410"/>
         <source>15ma alta</source>
         <translation>15ma alta</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1420"/>
+        <location filename="../../mscore/menus.cpp" line="1417"/>
         <source>15ma bassa</source>
         <translation>15ma bassa</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1426"/>
+        <location filename="../../mscore/menus.cpp" line="1423"/>
         <source>22ma alta</source>
         <translation>22ma alta</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1433"/>
+        <location filename="../../mscore/menus.cpp" line="1430"/>
         <source>22ma bassa</source>
         <translation>22ma bassa</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1128"/>
-        <location filename="../../mscore/menus.cpp" line="1497"/>
+        <location filename="../../mscore/menus.cpp" line="1125"/>
+        <location filename="../../mscore/menus.cpp" line="1494"/>
         <source>Line</source>
         <translation>Linje</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1500"/>
+        <location filename="../../mscore/menus.cpp" line="1497"/>
         <source>Ambitus</source>
         <translation>Ambitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1504"/>
+        <location filename="../../mscore/menus.cpp" line="1501"/>
         <source>Let Ring</source>
         <translation>Låt klinga</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1515"/>
+        <location filename="../../mscore/menus.cpp" line="1512"/>
         <source>Palm Mute</source>
         <translation>Handdämpning</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1527"/>
+        <location filename="../../mscore/menus.cpp" line="1524"/>
         <source>Tempo</source>
         <translation>Tempo</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1595"/>
+        <location filename="../../mscore/menus.cpp" line="1592"/>
         <source>Text</source>
         <translation>Text</translation>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="228"/>
-        <location filename="../../mscore/menus.cpp" line="1769"/>
+        <location filename="../../mscore/menus.cpp" line="1766"/>
         <location filename="../../mscore/musescore.cpp" line="6307"/>
         <source>Time Signatures</source>
         <translation>Taktarter</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1789"/>
+        <location filename="../../mscore/menus.cpp" line="1786"/>
         <source>Fretboard Diagrams</source>
         <translation>Greppbrädediagram</translation>
     </message>
@@ -34440,6 +34440,11 @@ This score already has part scores. Changing local time signatures while part sc
         <translation>Omvänt dubbelslag med snedstreck</translation>
     </message>
     <message>
+        <location filename="../../libmscore/sym.cpp" line="5458"/>
+        <source>Half-open 2 (Weinberg)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libmscore/sym.cpp" line="5565"/>
         <source>Snap pizzicato above</source>
         <translation>Knäpp-pizzicato ovanför</translation>
@@ -34612,28 +34617,28 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="5804"/>
         <location filename="../../libmscore/timesig.cpp" line="564"/>
-        <location filename="../../mscore/menus.cpp" line="1759"/>
+        <location filename="../../mscore/menus.cpp" line="1756"/>
         <source>Common time</source>
         <translation>C (4/4)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5807"/>
         <location filename="../../libmscore/timesig.cpp" line="570"/>
-        <location filename="../../mscore/menus.cpp" line="1764"/>
+        <location filename="../../mscore/menus.cpp" line="1761"/>
         <source>Cut time (Bach)</source>
         <translation>Halvtakt (Bach)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5808"/>
         <location filename="../../libmscore/timesig.cpp" line="573"/>
-        <location filename="../../mscore/menus.cpp" line="1765"/>
+        <location filename="../../mscore/menus.cpp" line="1762"/>
         <source>Cut triple time (9/8)</source>
         <translation>Halv tretakt (9/8)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5809"/>
         <location filename="../../libmscore/timesig.cpp" line="567"/>
-        <location filename="../../mscore/menus.cpp" line="1760"/>
+        <location filename="../../mscore/menus.cpp" line="1757"/>
         <source>Cut time</source>
         <translation>Alla breve</translation>
     </message>
@@ -34738,12 +34743,12 @@ This score already has part scores. Changing local time signatures while part sc
         <translation>Linje-prall</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="667"/>
+        <location filename="../../mscore/menus.cpp" line="663"/>
         <source>Tick barline 2</source>
         <translation>Tjockt taktstreck 2</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="669"/>
+        <location filename="../../mscore/menus.cpp" line="665"/>
         <source>Short barline 2</source>
         <translation>Kort taktstreck 2</translation>
     </message>

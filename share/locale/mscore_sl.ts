@@ -12343,22 +12343,22 @@ nepravilna poddelitev bi segla v naslednji takt</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1203"/>
+        <location filename="../../mscore/menus.cpp" line="1200"/>
         <source>Slide out down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1208"/>
+        <location filename="../../mscore/menus.cpp" line="1205"/>
         <source>Slide out up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1213"/>
+        <location filename="../../mscore/menus.cpp" line="1210"/>
         <source>Slide in above</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1218"/>
+        <location filename="../../mscore/menus.cpp" line="1215"/>
         <source>Slide in below</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17724,45 +17724,45 @@ izberite drugo ime:</translation>
 <context>
     <name>Palette</name>
     <message>
-        <location filename="../../mscore/menus.cpp" line="447"/>
+        <location filename="../../mscore/menus.cpp" line="443"/>
         <location filename="../../mscore/noteGroups.cpp" line="85"/>
         <source>Beam Properties</source>
         <translation>Zastavice in prečke</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="510"/>
+        <location filename="../../mscore/menus.cpp" line="506"/>
         <source>Dynamics</source>
         <translation>Dinamika</translation>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="227"/>
-        <location filename="../../mscore/menus.cpp" line="553"/>
+        <location filename="../../mscore/menus.cpp" line="549"/>
         <location filename="../../mscore/musescore.cpp" line="6305"/>
         <source>Key Signatures</source>
         <translation>Tonalitete</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="591"/>
+        <location filename="../../mscore/menus.cpp" line="587"/>
         <source>Accidentals</source>
         <translation>Predznaki</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="647"/>
+        <location filename="../../mscore/menus.cpp" line="643"/>
         <source>Barlines</source>
         <translation>Taktnice</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="800"/>
+        <location filename="../../mscore/menus.cpp" line="796"/>
         <source>Fingering</source>
         <translation>Prstni red</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1146"/>
+        <location filename="../../mscore/menus.cpp" line="1143"/>
         <source>Breaths &amp; Pauses</source>
         <translation>Dihi in premori</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1167"/>
+        <location filename="../../mscore/menus.cpp" line="1164"/>
         <source>Arpeggios &amp; Glissandi</source>
         <translation>Razložitve in Zadrsi</translation>
     </message>
@@ -17797,538 +17797,538 @@ izberite drugo ime:</translation>
         <translation>Ravna razložitev (arpeggio) navzdol</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1601"/>
+        <location filename="../../mscore/menus.cpp" line="1598"/>
         <source>Staff Text</source>
         <translation>Napis črtovja</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1602"/>
+        <location filename="../../mscore/menus.cpp" line="1599"/>
         <source>Staff text</source>
         <translation>Napis črtovja</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1605"/>
+        <location filename="../../mscore/menus.cpp" line="1602"/>
         <source>Expression</source>
         <translation>Izraznost</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1608"/>
+        <location filename="../../mscore/menus.cpp" line="1605"/>
         <source>Expression text</source>
         <translation>Izraznostni napis</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1611"/>
+        <location filename="../../mscore/menus.cpp" line="1608"/>
         <source>Change Instr.</source>
         <translation>Spremeni glasbilo</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1612"/>
+        <location filename="../../mscore/menus.cpp" line="1609"/>
         <source>Instrument change</source>
         <translation>Sprememba glasbila</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1615"/>
+        <location filename="../../mscore/menus.cpp" line="1612"/>
         <source>Staff type change</source>
         <translation>Spreminanje vrste črtovja</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1619"/>
+        <location filename="../../mscore/menus.cpp" line="1616"/>
         <source>Rehearsal mark</source>
         <translation>Vadbena oznaka</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1622"/>
-        <location filename="../../mscore/menus.cpp" line="1624"/>
+        <location filename="../../mscore/menus.cpp" line="1619"/>
+        <location filename="../../mscore/menus.cpp" line="1621"/>
         <source>Swing</source>
         <translation>Pozibavanje</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1628"/>
-        <location filename="../../mscore/menus.cpp" line="1634"/>
+        <location filename="../../mscore/menus.cpp" line="1625"/>
+        <location filename="../../mscore/menus.cpp" line="1631"/>
         <source>Straight</source>
         <extracomment>System text to switch from swing rhythm back to straight rhythm</extracomment>
         <translation>Ravno</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1637"/>
+        <location filename="../../mscore/menus.cpp" line="1634"/>
         <source>System Text</source>
         <translation>Napis vrste</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1638"/>
+        <location filename="../../mscore/menus.cpp" line="1635"/>
         <source>System text</source>
         <translation>Napis vrste</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1651"/>
+        <location filename="../../mscore/menus.cpp" line="1648"/>
         <source>pizz.</source>
         <translation>pizz.</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1656"/>
+        <location filename="../../mscore/menus.cpp" line="1653"/>
         <source>Pizzicato</source>
         <translation>Brenkanje (pizzicato)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1659"/>
+        <location filename="../../mscore/menus.cpp" line="1656"/>
         <source>arco</source>
         <translation>arco</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1664"/>
+        <location filename="../../mscore/menus.cpp" line="1661"/>
         <source>Arco</source>
         <translation>Godenje (arco)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1667"/>
+        <location filename="../../mscore/menus.cpp" line="1664"/>
         <source>tremolo</source>
         <translation>tremolo</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1672"/>
+        <location filename="../../mscore/menus.cpp" line="1669"/>
         <source>Tremolo</source>
         <translation>Tremolo – hitro ponavljanje tonov</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="881"/>
+        <location filename="../../mscore/menus.cpp" line="877"/>
         <source>Noteheads</source>
         <translation>Notne glavice</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="474"/>
+        <location filename="../../mscore/menus.cpp" line="470"/>
         <source>Frames &amp; Measures</source>
         <translation>Okvirji in Takti</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="688"/>
+        <location filename="../../mscore/menus.cpp" line="684"/>
         <source>Repeats &amp; Jumps</source>
         <translation>Ponavljanja</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="742"/>
+        <location filename="../../mscore/menus.cpp" line="738"/>
         <source>Breaks &amp; Spacers</source>
         <translation>Prelomi in razmiki</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="752"/>
+        <location filename="../../mscore/menus.cpp" line="748"/>
         <source>System break</source>
         <translation>Prelom vrste</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="757"/>
+        <location filename="../../mscore/menus.cpp" line="753"/>
         <source>Page break</source>
         <translation>Prelom strani</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="762"/>
+        <location filename="../../mscore/menus.cpp" line="758"/>
         <source>Section break</source>
         <translation>Razdelilni prelom</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="768"/>
+        <location filename="../../mscore/menus.cpp" line="764"/>
         <source>Don&apos;t break</source>
         <translation>Brez preloma</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="775"/>
+        <location filename="../../mscore/menus.cpp" line="771"/>
         <source>Staff spacer down</source>
         <translation>Spodnji odmičnik črtovja</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="781"/>
+        <location filename="../../mscore/menus.cpp" line="777"/>
         <source>Staff spacer up</source>
         <translation>Zgornji odmičnik črtovja</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="787"/>
+        <location filename="../../mscore/menus.cpp" line="783"/>
         <source>Staff spacer fixed down</source>
         <translation>Izrecni odmik spodnjega črtovja</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="809"/>
+        <location filename="../../mscore/menus.cpp" line="805"/>
         <source>Fingering %1</source>
         <translation>Prstni red %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="815"/>
+        <location filename="../../mscore/menus.cpp" line="811"/>
         <source>RH Guitar Fingering %1</source>
         <translation>Desnoročni kitarski prstni red %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="821"/>
+        <location filename="../../mscore/menus.cpp" line="817"/>
         <source>LH Guitar Fingering %1</source>
         <translation>Levoročni kitarski prstni red %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="827"/>
+        <location filename="../../mscore/menus.cpp" line="823"/>
         <source>String number %1</source>
         <translation>Struna %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="850"/>
+        <location filename="../../mscore/menus.cpp" line="846"/>
         <source>Tremolos</source>
         <translation>Tremoli</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="912"/>
+        <location filename="../../mscore/menus.cpp" line="908"/>
         <source>Articulations</source>
         <translation>Artikulacije</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="979"/>
+        <location filename="../../mscore/menus.cpp" line="976"/>
         <source>Bend</source>
         <translation>Zategni</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="985"/>
+        <location filename="../../mscore/menus.cpp" line="982"/>
         <source>Tremolo bar</source>
         <translation>Tremolo prečka</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="997"/>
+        <location filename="../../mscore/menus.cpp" line="994"/>
         <source>Ornaments</source>
         <translation>Okraski</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1037"/>
+        <location filename="../../mscore/menus.cpp" line="1034"/>
         <source>Accordion</source>
         <translation>Harmonika</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1119"/>
+        <location filename="../../mscore/menus.cpp" line="1116"/>
         <source>Brackets</source>
         <translation>Sistemski oklepaji</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1125"/>
+        <location filename="../../mscore/menus.cpp" line="1122"/>
         <source>Bracket</source>
         <translation>Vrstni oklepaj</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1126"/>
+        <location filename="../../mscore/menus.cpp" line="1123"/>
         <source>Brace</source>
         <translation>Zaviti uklepaj</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1127"/>
+        <location filename="../../mscore/menus.cpp" line="1124"/>
         <source>Square</source>
         <translation>Oglata alokada</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1441"/>
+        <location filename="../../mscore/menus.cpp" line="1438"/>
         <source>Pedal (with ped and line)</source>
         <translation>Pedal (&quot;ped&quot; in črta)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1449"/>
+        <location filename="../../mscore/menus.cpp" line="1446"/>
         <source>Pedal (with ped and asterisk)</source>
         <translation>Pedal (&quot;ped&quot; in zvezdica)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1455"/>
+        <location filename="../../mscore/menus.cpp" line="1452"/>
         <source>Pedal (straight hooks)</source>
         <translation>Pedal (pravokotne kljuke)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1461"/>
+        <location filename="../../mscore/menus.cpp" line="1458"/>
         <source>Pedal (angled end hook)</source>
         <translation>Pedal (poševna zaključna kljuka)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1467"/>
+        <location filename="../../mscore/menus.cpp" line="1464"/>
         <source>Pedal (both hooks angled)</source>
         <translation>Pedal (obe poševni kljuki)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1473"/>
+        <location filename="../../mscore/menus.cpp" line="1470"/>
         <source>Pedal (angled start hook)</source>
         <translation>Pedal (poševna začetna kljuka)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1486"/>
+        <location filename="../../mscore/menus.cpp" line="1483"/>
         <source>Staff Text line</source>
         <translation>Napisna črta črtovja</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1492"/>
+        <location filename="../../mscore/menus.cpp" line="1489"/>
         <source>System Text line</source>
         <translation>Napisna črta vrste</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1536"/>
+        <location filename="../../mscore/menus.cpp" line="1533"/>
         <source>Half note = 80 BPM</source>
         <translation>Polovinka = 80 UNM</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1537"/>
+        <location filename="../../mscore/menus.cpp" line="1534"/>
         <source>Quarter note = 80 BPM</source>
         <translation>Četrtinka = 80 UNM</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1538"/>
+        <location filename="../../mscore/menus.cpp" line="1535"/>
         <source>Eighth note = 80 BPM</source>
         <translation>Osminka = 80 UNM</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1539"/>
+        <location filename="../../mscore/menus.cpp" line="1536"/>
         <source>Dotted half note = 80 BPM</source>
         <translation>Polovinka s piko = 80 UNM</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1540"/>
+        <location filename="../../mscore/menus.cpp" line="1537"/>
         <source>Dotted quarter note = 80 BPM</source>
         <translation>Četrtinka s piko = 80 UNM</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1541"/>
+        <location filename="../../mscore/menus.cpp" line="1538"/>
         <source>Dotted eighth note = 80 BPM</source>
         <translation>Osminka s piko = 80 UNM</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1558"/>
+        <location filename="../../mscore/menus.cpp" line="1555"/>
         <source>Quarter note = dotted quarter note metric modulation</source>
         <translation>Premena taktovskega načina: četrtinka = četrtinka s piko </translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1559"/>
+        <location filename="../../mscore/menus.cpp" line="1556"/>
         <source>Dotted quarter note = quarter note metric modulation</source>
         <translation>Premena taktovskega načina: četrtinka s piko = četrtinka </translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1560"/>
+        <location filename="../../mscore/menus.cpp" line="1557"/>
         <source>Half note = quarter note metric modulation</source>
         <translation>Premena taktovskega načina: polovinka = četrtinka </translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1561"/>
+        <location filename="../../mscore/menus.cpp" line="1558"/>
         <source>Quarter note = half note metric modulation</source>
         <translation>Premena taktovskega načina: četrtinka = polovinka</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1562"/>
+        <location filename="../../mscore/menus.cpp" line="1559"/>
         <source>Eighth note = eighth note metric modulation</source>
         <translation>Premena taktovskega načina: osminka = osminka</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1563"/>
+        <location filename="../../mscore/menus.cpp" line="1560"/>
         <source>Quarter note = quarter note metric modulation</source>
         <translation>Premena taktovskega načina: četrtinka = četrtinka</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1564"/>
+        <location filename="../../mscore/menus.cpp" line="1561"/>
         <source>Dotted eighth note = quarter note metric modulation</source>
         <translation>Premena taktovskega načina: osminka s piko = četrtinka</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1646"/>
-        <location filename="../../mscore/menus.cpp" line="1647"/>
+        <location filename="../../mscore/menus.cpp" line="1643"/>
+        <location filename="../../mscore/menus.cpp" line="1644"/>
         <source>Measure Number</source>
         <translation>Številka takta</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1676"/>
+        <location filename="../../mscore/menus.cpp" line="1673"/>
         <source>mute</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation>dušenje</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1682"/>
+        <location filename="../../mscore/menus.cpp" line="1679"/>
         <source>Mute</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation>Dušilec</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1686"/>
+        <location filename="../../mscore/menus.cpp" line="1683"/>
         <source>open</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation>odprto</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1692"/>
+        <location filename="../../mscore/menus.cpp" line="1689"/>
         <source>Open</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation>Odprto</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1695"/>
+        <location filename="../../mscore/menus.cpp" line="1692"/>
         <source>S/A</source>
         <translation>S/A</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1701"/>
+        <location filename="../../mscore/menus.cpp" line="1698"/>
         <source>Soprano/Alto</source>
         <translation>Sopran/Alt</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1704"/>
+        <location filename="../../mscore/menus.cpp" line="1701"/>
         <source>T/B</source>
         <translation>T/B</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1710"/>
+        <location filename="../../mscore/menus.cpp" line="1707"/>
         <source>Tenor/Bass</source>
         <translation>Tenor/Bas</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1713"/>
+        <location filename="../../mscore/menus.cpp" line="1710"/>
         <source>T/L</source>
         <translation>T/V</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1719"/>
+        <location filename="../../mscore/menus.cpp" line="1716"/>
         <source>Tenor/Lead</source>
         <translation>Tenor/Vodilni</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1722"/>
+        <location filename="../../mscore/menus.cpp" line="1719"/>
         <source>B/B</source>
         <translation>B/B</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1728"/>
+        <location filename="../../mscore/menus.cpp" line="1725"/>
         <source>Bari/Bass</source>
         <translation>Bariton/Bas</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1230"/>
+        <location filename="../../mscore/menus.cpp" line="1227"/>
         <source>Clefs</source>
         <translation>Ključi</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1276"/>
+        <location filename="../../mscore/menus.cpp" line="1273"/>
         <source>Grace Notes</source>
         <translation>Glasbeni okraski</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1301"/>
+        <location filename="../../mscore/menus.cpp" line="1298"/>
         <source>Bagpipe Embellishments</source>
         <translation>Glasbeni okraski za dude</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1321"/>
+        <location filename="../../mscore/menus.cpp" line="1318"/>
         <source>Lines</source>
         <translation>Črte</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1329"/>
+        <location filename="../../mscore/menus.cpp" line="1326"/>
         <source>Slur</source>
         <translation>Lok</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1334"/>
+        <location filename="../../mscore/menus.cpp" line="1331"/>
         <source>Crescendo hairpin</source>
         <translation>Vilice naraščanja</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1339"/>
+        <location filename="../../mscore/menus.cpp" line="1336"/>
         <source>Diminuendo hairpin</source>
         <translation>Vilice pojemanja</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1344"/>
+        <location filename="../../mscore/menus.cpp" line="1341"/>
         <source>Crescendo line</source>
         <translation>Črta naraščanja (crescendo)</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1349"/>
+        <location filename="../../mscore/menus.cpp" line="1346"/>
         <source>Diminuendo line</source>
         <translation>Diminuendo črtice</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1358"/>
+        <location filename="../../mscore/menus.cpp" line="1355"/>
         <source>Dynamic + hairpin</source>
         <translation>Dinamika in vilice</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1367"/>
+        <location filename="../../mscore/menus.cpp" line="1364"/>
         <source>Prima volta</source>
         <translation>Prvikrat</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1376"/>
+        <location filename="../../mscore/menus.cpp" line="1373"/>
         <source>Seconda volta</source>
         <translation>Drugikrat</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1385"/>
+        <location filename="../../mscore/menus.cpp" line="1382"/>
         <source>Terza volta</source>
         <translation>Tretjikrat</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1394"/>
+        <location filename="../../mscore/menus.cpp" line="1391"/>
         <source>Seconda volta, open</source>
         <translation>Drugikrat, odprto</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1400"/>
+        <location filename="../../mscore/menus.cpp" line="1397"/>
         <source>8va alta</source>
         <translation>8va alta</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1407"/>
+        <location filename="../../mscore/menus.cpp" line="1404"/>
         <source>8va bassa</source>
         <translation>8va bassa</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1413"/>
+        <location filename="../../mscore/menus.cpp" line="1410"/>
         <source>15ma alta</source>
         <translation>15ma alta</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1420"/>
+        <location filename="../../mscore/menus.cpp" line="1417"/>
         <source>15ma bassa</source>
         <translation>15ma bassa</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1426"/>
+        <location filename="../../mscore/menus.cpp" line="1423"/>
         <source>22ma alta</source>
         <translation>22ma alta</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1433"/>
+        <location filename="../../mscore/menus.cpp" line="1430"/>
         <source>22ma bassa</source>
         <translation>22ma bassa</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1128"/>
-        <location filename="../../mscore/menus.cpp" line="1497"/>
+        <location filename="../../mscore/menus.cpp" line="1125"/>
+        <location filename="../../mscore/menus.cpp" line="1494"/>
         <source>Line</source>
         <translation>Črta</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1500"/>
+        <location filename="../../mscore/menus.cpp" line="1497"/>
         <source>Ambitus</source>
         <translation>Ambitus</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1504"/>
+        <location filename="../../mscore/menus.cpp" line="1501"/>
         <source>Let Ring</source>
         <translation>Pusti zveneti</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1515"/>
+        <location filename="../../mscore/menus.cpp" line="1512"/>
         <source>Palm Mute</source>
         <translation>Dušenje z dlanjo</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1527"/>
+        <location filename="../../mscore/menus.cpp" line="1524"/>
         <source>Tempo</source>
         <translation>Tempo</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1595"/>
+        <location filename="../../mscore/menus.cpp" line="1592"/>
         <source>Text</source>
         <translation>Besedilo</translation>
     </message>
     <message>
         <location filename="../../mscore/masterpalette.cpp" line="228"/>
-        <location filename="../../mscore/menus.cpp" line="1769"/>
+        <location filename="../../mscore/menus.cpp" line="1766"/>
         <location filename="../../mscore/musescore.cpp" line="6307"/>
         <source>Time Signatures</source>
         <translation>Taktovski načini</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="1789"/>
+        <location filename="../../mscore/menus.cpp" line="1786"/>
         <source>Fretboard Diagrams</source>
         <translation>Diagrami akordov</translation>
     </message>
@@ -34429,6 +34429,11 @@ This score already has part scores. Changing local time signatures while part sc
         <translation>Obrnjeni dvoložek - prečrtan</translation>
     </message>
     <message>
+        <location filename="../../libmscore/sym.cpp" line="5458"/>
+        <source>Half-open 2 (Weinberg)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libmscore/sym.cpp" line="5565"/>
         <source>Snap pizzicato above</source>
         <translation>Tleskajoče brenkanje (pizzicato) zgoraj</translation>
@@ -34601,28 +34606,28 @@ This score already has part scores. Changing local time signatures while part sc
     <message>
         <location filename="../../libmscore/sym.cpp" line="5804"/>
         <location filename="../../libmscore/timesig.cpp" line="564"/>
-        <location filename="../../mscore/menus.cpp" line="1759"/>
+        <location filename="../../mscore/menus.cpp" line="1756"/>
         <source>Common time</source>
         <translation>Štiri četrtinski taktovski način</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5807"/>
         <location filename="../../libmscore/timesig.cpp" line="570"/>
-        <location filename="../../mscore/menus.cpp" line="1764"/>
+        <location filename="../../mscore/menus.cpp" line="1761"/>
         <source>Cut time (Bach)</source>
         <translation>Polovinski takt (Bach)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5808"/>
         <location filename="../../libmscore/timesig.cpp" line="573"/>
-        <location filename="../../mscore/menus.cpp" line="1765"/>
+        <location filename="../../mscore/menus.cpp" line="1762"/>
         <source>Cut triple time (9/8)</source>
         <translation>Triolski takt (9/8)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5809"/>
         <location filename="../../libmscore/timesig.cpp" line="567"/>
-        <location filename="../../mscore/menus.cpp" line="1760"/>
+        <location filename="../../mscore/menus.cpp" line="1757"/>
         <source>Cut time</source>
         <translation>Polovinski takt</translation>
     </message>
@@ -34727,12 +34732,12 @@ This score already has part scores. Changing local time signatures while part sc
         <translation>Črta trilček</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="667"/>
+        <location filename="../../mscore/menus.cpp" line="663"/>
         <source>Tick barline 2</source>
         <translation>Črtica 2</translation>
     </message>
     <message>
-        <location filename="../../mscore/menus.cpp" line="669"/>
+        <location filename="../../mscore/menus.cpp" line="665"/>
         <source>Short barline 2</source>
         <translation>Skrajšana taktnica 2</translation>
     </message>

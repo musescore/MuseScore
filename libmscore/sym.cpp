@@ -5455,7 +5455,7 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
       "Soft gum beater, right",
       "Soft gum beater, up",
       "Half-open",
-      "Half-open 2 (Weinberg)",
+      QT_TRANSLATE_NOOP("symUserNames", "Half-open 2 (Weinberg)"),
       "Handbell",
       "Hi-hat",
       "Hi-hat cymbals on stand",
