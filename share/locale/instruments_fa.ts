@@ -4711,6 +4711,35 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="1534"/>
+        <location filename="../instruments/instrumentsxml.h" line="1539"/>
+        <source>Bass Viol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1535"/>
+        <location filename="../instruments/instrumentsxml.h" line="1540"/>
+        <source>B. Vl.</source>
+        <comment>Bass Viol</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1541"/>
+        <source>Bass Viol (Tablature)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1547"/>
+        <source>G Violone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1548"/>
+        <source>G Vne.</source>
+        <comment>G Violone</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Be.</source>
         <comment>Bells</comment>
         <translation type="vanished">زنگ</translation>
@@ -5943,16 +5972,14 @@
         <translation>ویول تنور</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1535"/>
         <source>Vla. d. g.</source>
         <comment>Viola da gamba</comment>
-        <translation>ویولا دا گامبا</translation>
+        <translation type="vanished">ویولا دا گامبا</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1548"/>
         <source>Vne.</source>
         <comment>Violone</comment>
-        <translation>ویولون</translation>
+        <translation type="vanished">ویولون</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1553"/>
@@ -6245,9 +6272,8 @@
         <translation>گیتار بیس ۵-سیم</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1541"/>
         <source>Viola da gamba (Tablature)</source>
-        <translation>ویولا دا گامبا (تبلچر)</translation>
+        <translation type="vanished">ویولا دا گامبا (تبلچر)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1364"/>
@@ -6873,20 +6899,17 @@
         <translation>ویول تنور</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1534"/>
         <source>Viola da gamba</source>
-        <translation>ویولا دا گامبا</translation>
+        <translation type="vanished">ویولا دا گامبا</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1539"/>
         <source>Viola da gamba (Tab)</source>
-        <translation>ویولا دا گامبا (تبلچر)</translation>
+        <translation type="vanished">ویولا دا گامبا (تبلچر)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1540"/>
         <source>Vla. d. g.</source>
         <comment>Viola da gamba (Tab)</comment>
-        <translation>ویولا دا گامبا</translation>
+        <translation type="vanished">ویولا دا گامبا</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1542"/>
@@ -6900,9 +6923,8 @@
         <translation>باریتون</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1547"/>
         <source>Violone</source>
-        <translation>ویولون</translation>
+        <translation type="vanished">ویولون</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1552"/>

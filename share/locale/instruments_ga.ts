@@ -4608,6 +4608,35 @@
         <translation>Dorddhruma Chomhaontaithe</translation>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="1534"/>
+        <location filename="../instruments/instrumentsxml.h" line="1539"/>
+        <source>Bass Viol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1535"/>
+        <location filename="../instruments/instrumentsxml.h" line="1540"/>
+        <source>B. Vl.</source>
+        <comment>Bass Viol</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1541"/>
+        <source>Bass Viol (Tablature)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1547"/>
+        <source>G Violone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1548"/>
+        <source>G Vne.</source>
+        <comment>G Violone</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Con. BD </source>
         <comment>Concert Bass Drum</comment>
         <translation type="vanished">Dd Chomh.</translation>
@@ -5948,16 +5977,14 @@
         <translation>Vl. T.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1535"/>
         <source>Vla. d. g.</source>
         <comment>Viola da gamba</comment>
-        <translation>Bíol gl.</translation>
+        <translation type="vanished">Bíol gl.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1548"/>
         <source>Vne.</source>
         <comment>Violone</comment>
-        <translation>Vlón.</translation>
+        <translation type="vanished">Vlón.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1553"/>
@@ -6250,9 +6277,8 @@
         <translation>Dordghiotár Leictreach 5-sreinge</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1541"/>
         <source>Viola da gamba (Tablature)</source>
-        <translation>Bíol [Nodaireacht Tháibléadach]</translation>
+        <translation type="vanished">Bíol [Nodaireacht Tháibléadach]</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1364"/>
@@ -6878,20 +6904,17 @@
         <translation>Víol Teanóir</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1534"/>
         <source>Viola da gamba</source>
-        <translation>Bíol Glúine</translation>
+        <translation type="vanished">Bíol Glúine</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1539"/>
         <source>Viola da gamba (Tab)</source>
-        <translation>Bíol Glúine (Nodaireacht Tháibléadach)</translation>
+        <translation type="vanished">Bíol Glúine (Nodaireacht Tháibléadach)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1540"/>
         <source>Vla. d. g.</source>
         <comment>Viola da gamba (Tab)</comment>
-        <translation>Bíol gl.</translation>
+        <translation type="vanished">Bíol gl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1542"/>
@@ -6905,9 +6928,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1547"/>
         <source>Violone</source>
-        <translation>Víolón</translation>
+        <translation type="vanished">Víolón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1552"/>

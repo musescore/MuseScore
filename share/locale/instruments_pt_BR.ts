@@ -4608,6 +4608,35 @@
         <translation>Bumbo de Concerto</translation>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="1534"/>
+        <location filename="../instruments/instrumentsxml.h" line="1539"/>
+        <source>Bass Viol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1535"/>
+        <location filename="../instruments/instrumentsxml.h" line="1540"/>
+        <source>B. Vl.</source>
+        <comment>Bass Viol</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1541"/>
+        <source>Bass Viol (Tablature)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1547"/>
+        <source>G Violone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1548"/>
+        <source>G Vne.</source>
+        <comment>G Violone</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Con. BD </source>
         <comment>Concert Bass Drum</comment>
         <translation type="vanished">Bumb. Conc.</translation>
@@ -5948,16 +5977,14 @@
         <translation>Vio. Gam. Ten.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1535"/>
         <source>Vla. d. g.</source>
         <comment>Viola da gamba</comment>
-        <translation>Vio. Gam.</translation>
+        <translation type="vanished">Vio. Gam.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1548"/>
         <source>Vne.</source>
         <comment>Violone</comment>
-        <translation>Vne.</translation>
+        <translation type="vanished">Vne.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1553"/>
@@ -6250,9 +6277,8 @@
         <translation>Baixo Elétrico de 5 cordas</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1541"/>
         <source>Viola da gamba (Tablature)</source>
-        <translation>Viola da gamba (Tablatura)</translation>
+        <translation type="vanished">Viola da gamba (Tablatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1364"/>
@@ -6878,20 +6904,17 @@
         <translation>Viola da gamba tenor</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1534"/>
         <source>Viola da gamba</source>
-        <translation>Viola da gamba</translation>
+        <translation type="vanished">Viola da gamba</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1539"/>
         <source>Viola da gamba (Tab)</source>
-        <translation>Viola da gamba (Tab)</translation>
+        <translation type="vanished">Viola da gamba (Tab)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1540"/>
         <source>Vla. d. g.</source>
         <comment>Viola da gamba (Tab)</comment>
-        <translation>Vio. Gam.</translation>
+        <translation type="vanished">Vio. Gam.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1542"/>
@@ -6905,9 +6928,8 @@
         <translation>Bar.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1547"/>
         <source>Violone</source>
-        <translation>Violone</translation>
+        <translation type="vanished">Violone</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1552"/>

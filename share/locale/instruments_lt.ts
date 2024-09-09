@@ -5938,15 +5938,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../instruments/instrumentsxml.h" line="1534"/>
+        <location filename="../instruments/instrumentsxml.h" line="1539"/>
+        <source>Bass Viol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../instruments/instrumentsxml.h" line="1535"/>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba</comment>
+        <location filename="../instruments/instrumentsxml.h" line="1540"/>
+        <source>B. Vl.</source>
+        <comment>Bass Viol</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1541"/>
+        <source>Bass Viol (Tablature)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1547"/>
+        <source>G Violone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1548"/>
-        <source>Vne.</source>
-        <comment>Violone</comment>
+        <source>G Vne.</source>
+        <comment>G Violone</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6240,9 +6257,8 @@
         <translation>5-stygė bosinė el. gitara</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1541"/>
         <source>Viola da gamba (Tablature)</source>
-        <translation>Viola da gamba (tabulatūra)</translation>
+        <translation type="vanished">Viola da gamba (tabulatūra)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1364"/>
@@ -6868,22 +6884,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1534"/>
-        <source>Viola da gamba</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1539"/>
-        <source>Viola da gamba (Tab)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1540"/>
-        <source>Vla. d. g.</source>
-        <comment>Viola da gamba (Tab)</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="1542"/>
         <source>Baryton</source>
         <translation type="unfinished"></translation>
@@ -6895,9 +6895,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1547"/>
         <source>Violone</source>
-        <translation>Violonas</translation>
+        <translation type="vanished">Violonas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1552"/>
