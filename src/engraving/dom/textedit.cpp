@@ -905,7 +905,7 @@ void TextBase::paste(EditData& ed, const String& txt)
     bool symState = false;
     CharFormat format = *static_cast<TextEditData*>(ed.getData(this).get())->cursor()->format();
 
-    score()->startCmd();
+    score()->startCmd(TranslatableString("undoableAction", "Paste text"));
     for (size_t i = 0; i < txt.size(); i++) {
         Char c = txt.at(i);
         if (state == 0) {

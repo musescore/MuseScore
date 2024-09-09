@@ -76,6 +76,29 @@ bool AppMenuModel::isGlobalMenuAvailable()
     return uiConfiguration()->isGlobalMenuAvailable();
 }
 
+mu::notation::INotationUndoStackPtr AppMenuModel::undoStack() const
+{
+    mu::notation::INotationPtr notation = context()->currentNotation();
+    return notation ? notation->undoStack() : nullptr;
+}
+
+void AppMenuModel::updateUndoRedoItems()
+{
+    auto stack = undoStack();
+
+    MenuItem& undoItem = findItem(ActionCode("undo"));
+    const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
+    undoItem.setTitle(undoActionName.isEmpty()
+                            ? TranslatableString("action", "Undo")
+                            : TranslatableString("action", "Undo '%1'").arg(undoActionName));
+
+    MenuItem& redoItem = findItem(ActionCode("redo"));
+    const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
+    redoItem.setTitle(redoActionName.isEmpty()
+                            ? TranslatableString("action", "Redo")
+                            : TranslatableString("action", "Redo '%1'").arg(redoActionName));
+}
+
 void AppMenuModel::setupConnections()
 {
     recentFilesController()->recentFilesListChanged().onNotify(this, [this]() {
@@ -113,6 +136,17 @@ void AppMenuModel::setupConnections()
     extensionsProvider()->manifestChanged().onReceive(this, [this](const Manifest&) {
         MenuItem& pluginsItem = findMenu("menu-plugins");
         pluginsItem.setSubitems(makePluginsMenuSubitems());
+    });
+
+    context()->currentNotationChanged().onNotify(this, [this]() {
+        auto stack = undoStack();
+        if (stack) {
+            stack->stackChanged().onNotify(this, [this]() {
+                updateUndoRedoItems();
+            });
+        } else {
+            updateUndoRedoItems();
+        }
     });
 }
 

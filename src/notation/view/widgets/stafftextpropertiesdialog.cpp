@@ -141,7 +141,7 @@ void StaffTextPropertiesDialog::saveValues()
     StaffTextBase* nt = toStaffTextBase(m_staffText->clone());
     nt->setScore(score);
 
-    stack->prepareChanges();
+    stack->prepareChanges(muse::TranslatableString("undoableAction", "Save text properties"));
     score->undoChangeElement(m_originStaffText, nt);
     score->masterScore()->updateChannel();
     score->updateSwing();

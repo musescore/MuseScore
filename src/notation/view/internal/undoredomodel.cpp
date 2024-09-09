@@ -25,53 +25,75 @@
 #include "uicomponents/view/menuitem.h"
 
 using namespace mu::notation;
+using namespace muse;
 using namespace muse::uicomponents;
 
 UndoRedoModel::UndoRedoModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : QObject(parent), Injectable(iocCtxForQmlObject(this))
 {
-}
-
-QVariant UndoRedoModel::makeUndoItem()
-{
-    MenuItem* item = new MenuItem(actionsRegister()->action("undo"), this);
-
-    muse::ui::UiActionState state;
-    state.enabled = undoStack() ? undoStack()->canUndo() : false;
-    item->setState(state);
-
-    return QVariant::fromValue(item);
-}
-
-QVariant UndoRedoModel::makeRedoItem()
-{
-    MenuItem* item = new MenuItem(actionsRegister()->action("redo"), this);
-
-    muse::ui::UiActionState state;
-    state.enabled = undoStack() ? undoStack()->canRedo() : false;
-    item->setState(state);
-
-    return QVariant::fromValue(item);
 }
 
 void UndoRedoModel::load()
 {
     context()->currentNotationChanged().onNotify(this, [this]() {
-        if (!undoStack()) {
-            emit stackChanged();
-            return;
+        auto stack = undoStack();
+        if (stack) {
+            stack->stackChanged().onNotify(this, [this]() {
+                updateItems();
+            });
+        } else {
+            updateItems();
         }
+    });
 
-        undoStack()->stackChanged().onNotify(this, [this]() {
-            emit stackChanged();
+    auto stack = undoStack();
+    if (stack) {
+        stack->stackChanged().onNotify(this, [this]() {
+            updateItems();
         });
-    });
+    }
 
-    context()->currentProjectChanged().onNotify(this, [this]() {
-        emit stackChanged();
-    });
+    m_undoItem = new MenuItem(actionsRegister()->action("undo"), this);
+    m_redoItem = new MenuItem(actionsRegister()->action("redo"), this);
+    updateItems();
 
-    emit stackChanged();
+    emit itemsChanged();
+}
+
+MenuItem* UndoRedoModel::undoItem() const
+{
+    return m_undoItem;
+}
+
+MenuItem* UndoRedoModel::redoItem() const
+{
+    return m_redoItem;
+}
+
+void UndoRedoModel::updateItems()
+{
+    auto stack = undoStack();
+
+
+    if (m_undoItem) {
+        const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
+        ui::UiActionState state;
+        state.enabled = stack ? stack->canUndo() : false;
+        m_undoItem->setState(state);
+        m_undoItem->setTitle(undoActionName.isEmpty()
+            ? TranslatableString("action", "Undo")
+            : TranslatableString("action", "Undo '%1'").arg(undoActionName));
+    }
+
+    if (m_redoItem) {
+        const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
+        ui::UiActionState state;
+        state.enabled = stack ? stack->canRedo() : false;
+        m_redoItem->setState(state);
+        m_redoItem->setTitle(redoActionName.isEmpty()
+             ? TranslatableString("action", "Redo")
+             : TranslatableString("action", "Redo '%1'").arg(redoActionName));
+    }
 }
 
 void UndoRedoModel::redo()

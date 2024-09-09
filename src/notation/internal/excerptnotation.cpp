@@ -141,7 +141,7 @@ void ExcerptNotation::undoSetName(const QString& name)
         return;
     }
 
-    undoStack()->prepareChanges();
+    undoStack()->prepareChanges(TranslatableString("undoableAction", "Undo set excerpt name"));
 
     score()->undo(new engraving::ChangeExcerptTitle(m_excerpt, name));
 

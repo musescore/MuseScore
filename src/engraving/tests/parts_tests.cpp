@@ -135,7 +135,7 @@ void Engraving_PartsTests::createParts(MasterScore* masterScore)
 
 void Engraving_PartsTests::createLinkedStaff(MasterScore* masterScore)
 {
-    masterScore->startCmd();
+    masterScore->startCmd(TranslatableString("undoableAction", "Engraving parts tests"));
     Staff* sourceStaff = masterScore->staff(0);
     EXPECT_TRUE(sourceStaff);
     Staff* linkedStaff = Factory::createStaff(sourceStaff->part());
@@ -253,7 +253,7 @@ TEST_F(Engraving_PartsTests, appendMeasure)
 
     createParts(score);
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving parts tests"));
     score->insertMeasure(0);
     score->endCmd();
 
@@ -276,7 +276,7 @@ TEST_F(Engraving_PartsTests, insertMeasure)
 
     createParts(score);
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving parts tests"));
     Measure* m = score->firstMeasure();
     score->insertMeasure(m);
     score->endCmd();
@@ -404,7 +404,7 @@ MasterScore* Engraving_PartsTests::doAddBreath()
     b->setSymId(SymId::breathMarkComma);
     dd.dropElement = b;
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving parts tests"));
     note->drop(dd);
     score->endCmd();          // does layout
 
@@ -465,7 +465,7 @@ MasterScore* Engraving_PartsTests::doRemoveBreath()
     Breath* b    = toBreath(s->element(0));
 
     score->select(b);
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving parts tests"));
     score->cmdDeleteSelection();
     score->setLayoutAll();
     score->endCmd();
@@ -536,7 +536,7 @@ MasterScore* Engraving_PartsTests::doAddFingering()
     b->setXmlText("3");
     dd.dropElement = b;
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving parts tests"));
     note->drop(dd);
     score->endCmd();          // does layout
     return score;
@@ -600,7 +600,7 @@ MasterScore* Engraving_PartsTests::doRemoveFingering()
     }
     score->select(fingering);
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving parts tests"));
     score->cmdDeleteSelection();
     score->setLayoutAll();
     score->endCmd();
@@ -670,7 +670,7 @@ MasterScore* Engraving_PartsTests::doAddSymbol()
     b->setSym(SymId::gClef);
     dd.dropElement = b;
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving parts tests"));
     note->drop(dd);
     score->endCmd();          // does layout
     return score;
@@ -734,7 +734,7 @@ MasterScore* Engraving_PartsTests::doRemoveSymbol()
     }
     score->select(se);
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving parts tests"));
     score->cmdDeleteSelection();
     score->setLayoutAll();
     score->endCmd();
@@ -804,7 +804,7 @@ MasterScore* Engraving_PartsTests::doAddChordline()
     b->setChordLineType(ChordLineType::FALL);
     dd.dropElement = b;
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving parts tests"));
     note->drop(dd);
     score->endCmd();          // does layout
     return score;
@@ -868,7 +868,7 @@ MasterScore* Engraving_PartsTests::doRemoveChordline()
     }
     score->select(se);
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving parts tests"));
     score->cmdDeleteSelection();
     score->setLayoutAll();
     score->endCmd();
@@ -931,7 +931,7 @@ MasterScore* Engraving_PartsTests::doAddMeasureRepeat()
 
     Measure* m = score->firstMeasure()->nextMeasure();
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving parts tests"));
     score->cmdAddMeasureRepeat(m, 4, 0); // test with 4-measure repeat in first staff
     score->setLayoutAll();
     score->endCmd();
@@ -992,7 +992,7 @@ MasterScore* Engraving_PartsTests::doRemoveMeasureRepeat()
     MeasureRepeat* mr = m->measureRepeatElement(0);
     score->select(mr);
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving parts tests"));
     score->cmdDeleteSelection();
     score->setLayoutAll();
     score->endCmd();
@@ -1063,7 +1063,7 @@ MasterScore* Engraving_PartsTests::doAddImage()
     b->load(PARTS_DATA_DIR + u"schnee.png");
     dd.dropElement = b;
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving parts tests"));
     note->drop(dd);
     score->endCmd();          // does layout
     return score;
@@ -1127,7 +1127,7 @@ MasterScore* Engraving_PartsTests::doRemoveImage()
     }
     score->select(fingering);
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving parts tests"));
     score->cmdDeleteSelection();
     score->setLayoutAll();
     score->endCmd();
@@ -1315,7 +1315,7 @@ TEST_F(Engraving_PartsTests, partVisibleTracks) {
     Note* n = c->downNote();
     EXPECT_TRUE(n);
 
-    part->startCmd();
+    part->startCmd(TranslatableString("undoableAction", "Engraving parts tests"));
     part->select(n);
     part->changeSelectedElementsVoice(1);
     part->endCmd();

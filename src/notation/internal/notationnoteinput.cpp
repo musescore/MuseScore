@@ -337,7 +337,7 @@ void NotationNoteInput::addNote(NoteName noteName, NoteAddingMode addingMode)
 
     mu::engraving::EditData editData(m_scoreCallbacks);
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Add note"));
     int inote = static_cast<int>(noteName);
     bool addToUpOnCurrentChord = addingMode == NoteAddingMode::CurrentChord;
     bool insertNewChord = addingMode == NoteAddingMode::InsertChord;
@@ -356,7 +356,7 @@ void NotationNoteInput::padNote(const Pad& pad)
 
     mu::engraving::EditData editData(m_scoreCallbacks);
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Pad note"));
     score()->padToggle(pad, editData);
     apply();
 
@@ -369,7 +369,7 @@ Ret NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
 {
     TRACEFUNC;
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Put note"));
     Ret ret = score()->putNote(pos, replace, insert);
     apply();
 
@@ -388,7 +388,7 @@ void NotationNoteInput::removeNote(const PointF& pos)
     mu::engraving::InputState& inputState = score()->inputState();
     bool restMode = inputState.rest();
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Remove note"));
     inputState.setRest(!restMode);
     score()->putNote(pos, false, false);
     inputState.setRest(restMode);
@@ -472,7 +472,7 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
 
     const mu::engraving::InputState& inputState = score()->inputState();
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Add tuplet"));
     score()->expandVoice();
     mu::engraving::ChordRest* chordRest = inputState.cr();
     if (chordRest) {
@@ -588,7 +588,7 @@ void NotationNoteInput::addTie()
 {
     TRACEFUNC;
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Add tie"));
     score()->cmdAddTie();
     apply();
 
@@ -617,9 +617,9 @@ mu::engraving::Score* NotationNoteInput::score() const
     return m_getScore->score();
 }
 
-void NotationNoteInput::startEdit()
+void NotationNoteInput::startEdit(const muse::TranslatableString& actionName)
 {
-    m_undoStack->prepareChanges();
+    m_undoStack->prepareChanges(actionName);
 }
 
 void NotationNoteInput::apply()
@@ -672,7 +672,7 @@ void NotationNoteInput::doubleNoteInputDuration()
 
     mu::engraving::EditData editData(m_scoreCallbacks);
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Double note input duration"));
     score()->cmdPadNoteIncreaseTAB(editData);
     apply();
 
@@ -687,7 +687,7 @@ void NotationNoteInput::halveNoteInputDuration()
 
     mu::engraving::EditData editData(m_scoreCallbacks);
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Halve note input duration"));
     score()->cmdPadNoteDecreaseTAB(editData);
     apply();
 

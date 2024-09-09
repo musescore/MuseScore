@@ -138,7 +138,7 @@ void GeneralSettingsModel::onCurrentNotationChanged()
 
 void GeneralSettingsModel::onVisibleChanged(bool visible)
 {
-    beginCommand();
+    beginCommand(muse::TranslatableString("undoableAction", "Toggle item(s) visible"));
 
     Score* score = currentNotation()->elements()->msScore();
 

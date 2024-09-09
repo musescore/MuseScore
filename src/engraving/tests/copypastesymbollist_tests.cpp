@@ -71,7 +71,7 @@ void Engraving_CopyPasteSymbolListTests::copypastecommon(MasterScore* score, con
     }
     score->select(m->first()->element(0));
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Copy/paste symbol tests"));
     const QMimeData* ms = QApplication::clipboard()->mimeData();
     if (!ms->hasFormat(mimeSymbolListFormat)) {
         LOGD("wrong type mime data");

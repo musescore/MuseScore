@@ -47,7 +47,7 @@ public:
     void redo(mu::engraving::EditData*) override;
     muse::async::Notification redoNotification() const override;
 
-    void prepareChanges() override;
+    void prepareChanges(const muse::TranslatableString& actionName) override;
     void rollbackChanges() override;
     void commitChanges() override;
 
@@ -56,6 +56,9 @@ public:
     void lock() override;
     void unlock() override;
     bool isLocked() const override;
+
+    muse::TranslatableString topMostUndoActionName() const override;
+    muse::TranslatableString topMostRedoActionName() const override;
 
     muse::async::Notification stackChanged() const override;
     muse::async::Channel<ChangesRange> changesChannel() const override;

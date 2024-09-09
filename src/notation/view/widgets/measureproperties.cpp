@@ -321,7 +321,7 @@ void MeasurePropertiesDialog::apply()
 
     mu::engraving::Score* score = m_measure->score();
 
-    m_notation->undoStack()->prepareChanges();
+    m_notation->undoStack()->prepareChanges(TranslatableString("undoableAction", "Set measure properties"));
     bool propertiesChanged = false;
     for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         bool v = visible(static_cast<int>(staffIdx));

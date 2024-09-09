@@ -319,7 +319,7 @@ void CmdState::setUpdateMode(UpdateMode m)
 ///   and starting a user-visible undo.
 //---------------------------------------------------------
 
-void Score::startCmd()
+void Score::startCmd(const TranslatableString& actionName)
 {
     if (undoStack()->locked()) {
         return;
@@ -339,7 +339,7 @@ void Score::startCmd()
         LOGD("Score::startCmd(): cmd already active");
         return;
     }
-    undoStack()->beginMacro(this);
+    undoStack()->beginMacro(this, actionName);
 }
 
 //---------------------------------------------------------
@@ -2790,7 +2790,7 @@ void Score::cmdResetNoteAndRestGroupings()
     staff_idx_t sStaff = selection().staffStart();
     staff_idx_t eStaff = selection().staffEnd();
 
-    startCmd();
+    startCmd(TranslatableString("undoableAction", "Reset note/rest groupings"));
     for (staff_idx_t staff = sStaff; staff < eStaff; staff++) {
         track_idx_t sTrack = staff * VOICES;
         track_idx_t eTrack = sTrack + VOICES;
@@ -2822,7 +2822,7 @@ void Score::cmdResetAllPositions(bool undoable)
     TRACEFUNC;
 
     if (undoable) {
-        startCmd();
+        startCmd(TranslatableString("undoableAction", "Reset all positions"));
     }
     resetAutoplace();
     if (undoable) {

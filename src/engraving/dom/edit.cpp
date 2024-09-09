@@ -1876,7 +1876,7 @@ void Score::cmdAddTie(bool addToChord)
         return;
     }
 
-    startCmd();
+    startCmd(TranslatableString("undoableAction", "Add tie"));
     Chord* lastAddedChord = 0;
     for (Note* note : noteList) {
         if (note->tieFor()) {
@@ -2010,7 +2010,7 @@ void Score::cmdToggleTie()
         }
     }
 
-    startCmd();
+    startCmd(TranslatableString("undoableAction", "Toggle tie"));
 
     if (canAddTies) {
         for (size_t i = 0; i < notes; ++i) {
@@ -3998,7 +3998,7 @@ void Score::cmdEnterRest(const TDuration& d)
         LOGD("cmdEnterRest: track invalid");
         return;
     }
-    startCmd();
+    startCmd(TranslatableString("undoableAction", "Add rest"));
     enterRest(d);
     endCmd();
 }

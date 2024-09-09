@@ -521,7 +521,7 @@ void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
         return;
     }
 
-    undoStack()->prepareChanges();
+    undoStack()->prepareChanges(TranslatableString("undoableAction", "Set excerpts"));
 
     // Delete old excerpts (that are not included in the new list)
     for (IExcerptNotationPtr excerptNotation : m_excerpts) {
@@ -564,7 +564,7 @@ void MasterNotation::resetExcerpt(IExcerptNotationPtr excerptNotation)
 
     TRACEFUNC;
 
-    undoStack()->prepareChanges();
+    undoStack()->prepareChanges(TranslatableString("undoableAction", "Reset excerpt"));
 
     mu::engraving::Excerpt* oldExcerpt = get_impl(excerptNotation)->excerpt();
     masterScore()->deleteExcerpt(oldExcerpt);

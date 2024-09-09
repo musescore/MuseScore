@@ -327,7 +327,7 @@ void UndoStack::setLocked(bool val)
 //   beginMacro
 //---------------------------------------------------------
 
-void UndoStack::beginMacro(Score* score)
+void UndoStack::beginMacro(Score* score, const TranslatableString& undoString)
 {
     if (isLocked) {
         return;
@@ -337,7 +337,7 @@ void UndoStack::beginMacro(Score* score)
         LOGW("already active");
         return;
     }
-    curCmd = new UndoMacro(score);
+    curCmd = new UndoMacro(score, undoString);
 }
 
 //---------------------------------------------------------
@@ -574,8 +574,8 @@ void UndoMacro::applySelectionInfo(const SelectionInfo& info, Selection& sel)
     }
 }
 
-UndoMacro::UndoMacro(Score* s)
-    : m_undoInputState(s->inputState()), m_score(s)
+UndoMacro::UndoMacro(Score* s, const TranslatableString& actionName)
+    : m_undoInputState(s->inputState()), m_actionName(actionName), m_score(s)
 {
     fillSelectionInfo(m_undoSelectionInfo, s->selection());
 }
@@ -680,6 +680,11 @@ UndoMacro::ChangesInfo UndoMacro::changesInfo() const
     }
 
     return result;
+}
+
+const TranslatableString& UndoMacro::actionName() const
+{
+    return m_actionName;
 }
 
 //---------------------------------------------------------

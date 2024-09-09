@@ -1967,7 +1967,7 @@ void NotationActionController::toggleConcertPitch()
         return;
     }
 
-    currentNotationUndoStack()->prepareChanges();
+    currentNotationUndoStack()->prepareChanges(TranslatableString("undoableAction", "Toggle concert pitch"));
     bool enabled = style->styleValue(StyleId::concertPitch).toBool();
     style->setStyleValue(StyleId::concertPitch, !enabled);
     currentNotationUndoStack()->commitChanges();

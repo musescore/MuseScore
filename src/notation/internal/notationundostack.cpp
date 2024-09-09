@@ -89,7 +89,7 @@ Notification NotationUndoStack::redoNotification() const
     return m_redoNotification;
 }
 
-void NotationUndoStack::prepareChanges()
+void NotationUndoStack::prepareChanges(const muse::TranslatableString& actionName)
 {
     IF_ASSERT_FAILED(score()) {
         return;
@@ -99,7 +99,7 @@ void NotationUndoStack::prepareChanges()
         return;
     }
 
-    score()->startCmd();
+    score()->startCmd(actionName);
 }
 
 void NotationUndoStack::rollbackChanges()
@@ -160,6 +160,30 @@ void NotationUndoStack::unlock()
 bool NotationUndoStack::isLocked() const
 {
     return undoStack()->locked();
+}
+
+muse::TranslatableString NotationUndoStack::topMostUndoActionName() const
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        return {};
+    }
+
+    if (auto current = undoStack()->last())
+        return current->actionName();
+
+    return {};
+}
+
+muse::TranslatableString NotationUndoStack::topMostRedoActionName() const
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        return {};
+    }
+
+    if (auto current = undoStack()->next())
+        return current->actionName();
+
+    return {};
 }
 
 muse::async::Notification NotationUndoStack::stackChanged() const

@@ -289,6 +289,7 @@ public:
     virtual void transposeDiatonicAlterations(mu::engraving::TransposeDirection) = 0;
     virtual void toggleAutoplace(bool all) = 0;
     virtual void getLocation() = 0;
+    //virtual void execute(void (mu::engraving::Score::*)(), const muse::TranslatableString& actionName = {}) = 0;
     virtual void execute(void (mu::engraving::Score::*)()) = 0;
 
     struct ShowItemRequest {

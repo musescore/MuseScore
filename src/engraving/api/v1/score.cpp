@@ -237,13 +237,17 @@ QQmlListProperty<Staff> Score::staves()
 //   Score::startCmd
 //---------------------------------------------------------
 
-void Score::startCmd()
+void Score::startCmd(const QString& qActionName)
 {
     IF_ASSERT_FAILED(undoStack()) {
         return;
     }
 
-    undoStack()->prepareChanges();
+    muse::TranslatableString actionName = qActionName.isEmpty()
+        ? TranslatableString("undoableAction", "Plugin edit")
+        : TranslatableString::untranslatable(qActionName);
+
+    undoStack()->prepareChanges(actionName);
 }
 
 void Score::endCmd(bool rollback)

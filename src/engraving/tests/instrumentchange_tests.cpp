@@ -74,7 +74,7 @@ TEST_F(Engraving_InstrumentChangeTests, testAdd)
     ic->setParent(s);
     ic->setTrack(0);
     ic->setXmlText("Instrument");
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Instrument change tests"));
     score->undoAddElement(ic);
     score->endCmd();
     test_post(score, u"add");
@@ -99,7 +99,7 @@ TEST_F(Engraving_InstrumentChangeTests, testChange)
     InstrumentChange* ic = toInstrumentChange(s->annotations()[0]);
     Instrument* ni       = score->staff(1)->part()->instrument();
     ic->setInstrument(new Instrument(*ni));
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Instrument change tests"));
     ic->setXmlText("Instrument Oboe");
     score->undo(new ChangeInstrument(ic, ic->instrument()));
     score->endCmd();
@@ -121,7 +121,7 @@ TEST_F(Engraving_InstrumentChangeTests, testMixer)
     mp->name = "Viola";
     mp->prog = 41;
     mp->synti = "Fluid";
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Instrument change tests"));
     ic->setXmlText("Mixer Viola");
     score->undo(new ChangePatch(score, c, mp));
     score->endCmd();

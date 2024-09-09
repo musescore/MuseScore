@@ -47,7 +47,7 @@ public:
     virtual void redo(mu::engraving::EditData*) = 0;
     virtual muse::async::Notification redoNotification() const = 0;
 
-    virtual void prepareChanges() = 0;
+    virtual void prepareChanges(const muse::TranslatableString& actionName) = 0;
     virtual void rollbackChanges() = 0;
     virtual void commitChanges() = 0;
 
@@ -56,6 +56,9 @@ public:
     virtual void lock() = 0;
     virtual void unlock() = 0;
     virtual bool isLocked() const = 0;
+
+    virtual muse::TranslatableString topMostUndoActionName() const = 0;
+    virtual muse::TranslatableString topMostRedoActionName() const = 0;
 
     virtual muse::async::Notification stackChanged() const = 0;
     virtual muse::async::Channel<ChangesRange> changesChannel() const = 0;
