@@ -20321,7 +20321,7 @@ Dostosowanie opóźnienia może pomóc zsynchronizować Twoje urządzenie MIDI z
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3465"/>
         <source>Character Set Used When Importing Binary Files</source>
-        <translation>Zestaw znaków używany przy importowaniu plików binarnych</translation>
+        <translation>Zestaw znaków używany podczas importowania plików binarnych</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.ui" line="3488"/>
