@@ -22,11 +22,14 @@
 
 #include "editstyle.h"
 
+#include <QAnyStringView>
 #include <QButtonGroup>
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QQuickView>
 #include <QSignalMapper>
+#include <QStringBuilder>
+#include <QStringLiteral>
 
 #include "translation.h"
 #include "types/translatablestring.h"
@@ -998,7 +1001,7 @@ EditStyle::EditStyle(QWidget* parent)
     // Miscellaneous
     // ====================================================
 
-    setHeaderFooterToolTip();
+    setHeaderFooterMacroInfoText();
 
     connect(buttonBox,             &QDialogButtonBox::clicked,  this, &EditStyle::buttonClicked);
     connect(enableVerticalSpread,  &QGroupBox::clicked,         this, &EditStyle::enableVerticalSpreadClicked);
@@ -1349,7 +1352,7 @@ void EditStyle::retranslate()
     // voicingSelectWidget->durationBox->setItemText(1, muse::qtrc("notation/editstyle", "Until end of measure"));
     // voicingSelectWidget->durationBox->setItemText(2, muse::qtrc("notation/editstyle", "Chord/rest duration"));
 
-    setHeaderFooterToolTip();
+    setHeaderFooterMacroInfoText();
 
     Score* score = globalContext()->currentNotation()->elements()->msScore();
 
@@ -1365,86 +1368,78 @@ void EditStyle::retranslate()
 }
 
 //---------------------------------------------------------
-//   setHeaderFooterToolTip
+//   setHeaderFooterMacroInfoText
 //---------------------------------------------------------
 
-void EditStyle::setHeaderFooterToolTip()
+void EditStyle::setHeaderFooterMacroInfoText()
 {
+    using namespace Qt::Literals::StringLiterals;
+
     // keep in sync with implementation in Page::replaceTextMacros (page.cpp)
     // jumping thru hoops here to make the job of translators easier, yet have a nice display
     QString toolTipHeaderFooter
-        = QString("<html><head></head><body><p><b>")
-          + muse::qtrc("notation/editstyle", "Special symbols in header/footer")
-          + QString("</b></p>")
-          + QString("<table><tr><td>$p</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "Page number, except on first page")
-          + QString("</i></td></tr><tr><td>$N</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "Page number, if there is more than one page")
-          + QString("</i></td></tr><tr><td>$P</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "Page number, on all pages")
-          + QString("</i></td></tr><tr><td>$n</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "Number of pages")
-          + QString("</i></td></tr><tr><td>$f</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "File name")
-          + QString("</i></td></tr><tr><td>$F</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "File path+name")
-          + QString("</i></td></tr><tr><td>$i</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "Part name, except on first page")
-          + QString("</i></td></tr><tr><td>$I</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "Part name, on all pages")
-          + QString("</i></td></tr><tr><td>$d</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "Current date")
-          + QString("</i></td></tr><tr><td>$D</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "Creation date")
-          + QString("</i></td></tr><tr><td>$m</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "Last modification time")
-          + QString("</i></td></tr><tr><td>$M</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "Last modification date")
-          + QString("</i></td></tr><tr><td>$C</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "Copyright, on first page only")
-          + QString("</i></td></tr><tr><td>$c</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "Copyright, on all pages")
-          + QString("</i></td></tr><tr><td>$v</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "MuseScore Studio version this score was last saved with")
-          + QString("</i></td></tr><tr><td>$r</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "MuseScore Studio revision this score was last saved with")
-          + QString("</i></td></tr><tr><td>$$</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "The $ sign itself")
-          + QString("</i></td></tr><tr><td>$:tag:</td><td>-</td><td><i>")
-          + muse::qtrc("notation/editstyle", "Metadata tag, see below")
-          + QString("</i></td></tr></table><p>")
-          + muse::qtrc("notation/editstyle", "Available metadata tags and their current values")
-          + QString("<br />")
-          + muse::qtrc("notation/editstyle", "(in File > Project properties…):")
-          + QString("</p><table>");
+        = "<html><head></head><body><p><b>"_L1
+          % muse::qtrc("notation/editstyle", "Using variables in the header/footer")
+          % "</b><br/>"_L1
+          % muse::qtrc("notation/editstyle",
+                       "Type these special character combinations in the fields above to reference document data in the header/footer.")
+          % "<br/></p><table><tr><td>$p</td><td width=\"12\"/><td><i>"_L1
+          % muse::qtrc("notation/editstyle", "Page number, except on first page")
+          % "</i></td></tr><tr><td>$N</td><td width=\"12\"/><td><i>"_L1
+          % muse::qtrc("notation/editstyle", "Page number, if there is more than one page")
+          % "</i></td></tr><tr><td>$P</td><td width=\"12\"/><td><i>"_L1
+          % muse::qtrc("notation/editstyle", "Page number, on all pages")
+          % "</i></td></tr><tr><td>$n</td><td width=\"12\"/><td><i>"_L1
+          % muse::qtrc("notation/editstyle", "Number of pages")
+          % "</i></td></tr><tr><td>$f</td><td width=\"12\"/><td><i>"_L1
+          % muse::qtrc("notation/editstyle", "File name")
+          % "</i></td></tr><tr><td>$F</td><td width=\"12\"/><td><i>"_L1
+          % muse::qtrc("notation/editstyle", "File path+name")
+          % "</i></td></tr><tr><td>$i</td><td width=\"12\"/><td><i>"_L1
+          % muse::qtrc("notation/editstyle", "Part name, except on first page")
+          % "</i></td></tr><tr><td>$I</td><td width=\"12\"/><td><i>"_L1
+          % muse::qtrc("notation/editstyle", "Part name, on all pages")
+          % "</i></td></tr><tr><td>$d</td><td width=\"12\"/><td><i>"_L1
+          % muse::qtrc("notation/editstyle", "Current date")
+          % "</i></td></tr><tr><td>$D</td><td width=\"12\"/><td><i>"_L1
+          % muse::qtrc("notation/editstyle", "Creation date")
+          % "</i></td></tr><tr><td>$m</td><td width=\"12\"/><td><i>"_L1
+          % muse::qtrc("notation/editstyle", "Last modification time")
+          % "</i></td></tr><tr><td>$M</td><td width=\"12\"/><td><i>"_L1
+          % muse::qtrc("notation/editstyle", "Last modification date")
+          % "</i></td></tr><tr><td>$C</td><td width=\"12\"/><td><i>"_L1
+          % muse::qtrc("notation/editstyle", "Copyright, on first page only")
+          % "</i></td></tr><tr><td>$c</td><td width=\"12\"/><td><i>"_L1
+          % muse::qtrc("notation/editstyle", "Copyright, on all pages")
+          % "</i></td></tr><tr><td>$v</td><td width=\"12\"/><td><i>"_L1
+          % muse::qtrc("notation/editstyle", "MuseScore Studio version this score was last saved with")
+          % "</i></td></tr><tr><td>$r</td><td width=\"12\"/><td><i>"_L1
+          % muse::qtrc("notation/editstyle", "MuseScore Studio revision this score was last saved with")
+          % "</i></td></tr><tr><td>$$</td><td width=\"12\"/><td><i>"_L1
+          % muse::qtrc("notation/editstyle", "The $ sign itself")
+          % "</i></td></tr></table><p>"_L1
+          % muse::qtrc("notation/editstyle", "<b>Metadata tags and current values</b> (configured in <b>File > Project properties…</b>)")
+          % "<br>"_L1
+          % muse::qtrc("notation/editstyle",
+                       "Type $:tag: into a field above, replacing the word ‘tag’ with one of the labels below. Its associated metadata will be shown on your score.")
+          % "<br/></p><table>"_L1;
 
     // show all tags for current score/part
     Score* score = globalContext()->currentNotation()->elements()->msScore();
     if (!score->isMaster()) {
         for (const auto& tag : score->masterScore()->metaTags()) {
-            toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>")
-                                   .arg(tag.first.toQString(), tag.second.toQString());
+            toolTipHeaderFooter += "<tr><td>%1</td><td width=\"12\"/><td><i>%2</i></td></tr>"_L1
+                                   .arg(tag.first, tag.second.empty() ? QAnyStringView { "-" } : QAnyStringView { tag.second });
         }
     }
-    for (const auto& tag : score->masterScore()->metaTags()) {
-        toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>")
-                               .arg(tag.first.toQString(), tag.second.toQString());
+    for (const auto& tag : score->metaTags()) {
+        toolTipHeaderFooter += "<tr><td>%1</td><td width=\"12\"/><td><i>%2</i></td></tr>"_L1
+                               .arg(tag.first, tag.second.empty() ? QAnyStringView { "-" } : QAnyStringView { tag.second });
     }
 
-    QList<QMap<QString, QString> > tags; // FIXME
-    for (const QMap<QString, QString>& tag: tags) {
-        QMapIterator<QString, QString> i(tag);
-        while (i.hasNext()) {
-            i.next();
-            toolTipHeaderFooter += QString("<tr><td>%1</td><td>-</td><td>%2</td></tr>").arg(i.key(), i.value());
-        }
-    }
+    toolTipHeaderFooter += "</table></body></html>"_L1;
 
-    toolTipHeaderFooter += QString("</table></body></html>");
-    showHeader->setToolTip(toolTipHeaderFooter);
-    showHeader->setToolTipDuration(5000);   // leaving the default value of -1 calculates the duration automatically and it takes too long
-    showFooter->setToolTip(toolTipHeaderFooter);
-    showFooter->setToolTipDuration(5000);
+    headerFooterMacroInfo->setText(toolTipHeaderFooter);
 }
 
 //---------------------------------------------------------
