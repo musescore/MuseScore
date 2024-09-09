@@ -3604,7 +3604,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="531"/>
         <source>Reset &apos;Minimum number of empty measures&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Minimalna liczba pustych taktów&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="548"/>
@@ -4097,7 +4097,7 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3451"/>
         <source>Reset &apos;Bracket distance&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Odległość klamry&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3465"/>
@@ -4108,12 +4108,12 @@ space unit</extracomment>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3569"/>
         <source>Reset &apos;Brace thickness&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Grubość akolady&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3586"/>
         <source>Reset &apos;Brace distance&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Odległość akolady&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3887"/>
@@ -4170,57 +4170,57 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/editstyle.ui" line="5593"/>
         <source>Reset &apos;Accidental to note distance&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Odległość znaku chromatycznego od nuty&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5610"/>
         <source>Reset &apos;Accidental distance&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Odległość znaku chromatycznego od znaku chromatycznego&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5627"/>
         <source>Reset &apos;Dot size&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Rozmiar kropki&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5661"/>
         <source>Reset &apos;Dot to dot distance&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Odległość kropki od kropki&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5692"/>
         <source>Reset &apos;Ledger line thickness&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Grubość linii dodanych&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5709"/>
         <source>Reset &apos;Ledger line length&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Długość linii dodanych&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5778"/>
         <source>Reset &apos;Progression&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Progresja&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5927"/>
         <source>Reset &apos;Beam distance&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Odległość belek&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5944"/>
         <source>Reset &apos;Beam thickness&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Grubość belki&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5961"/>
         <source>Reset &apos;Broken beam minimum length&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Minimalna długość złamanej belki&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5978"/>
         <source>Reset &apos;Flatten all beams&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Spłaszcz wszystkie belki&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="6414"/>
@@ -4242,12 +4242,12 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/editstyle.ui" line="6896"/>
         <source>Reset &apos;Distance to note&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Odległość od nuty&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="6936"/>
         <source>Reset &apos;Hook length&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Długość haka&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="6979"/>
@@ -4262,12 +4262,12 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/editstyle.ui" line="11380"/>
         <source>Reset &apos;Vertical position&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Pozycja pionowa&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="11397"/>
         <source>Reset &apos;Size&apos; value</source>
-        <translation type="unfinished">Resetuj wartość &quot;Rozmiar&quot;</translation>
+        <translation>Resetuj wartość &quot;Rozmiar&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="11918"/>
@@ -4282,12 +4282,12 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/editstyle.ui" line="5644"/>
         <source>Reset &apos;Note to dot distance&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Odległość nuty od kropki&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="5675"/>
         <source>Reset &apos;Stem thickness&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Grubość laseczki&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="11888"/>
@@ -4309,57 +4309,57 @@ W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej 
     <message>
         <location filename="../../mscore/editstyle.ui" line="12097"/>
         <source>Reset &apos;Distance to fretboard diagram&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Odległość od diagramu akordu&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="12114"/>
         <source>Reset &apos;Minimum chord spacing&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Minimalna odległość akordu&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="12131"/>
         <source>Reset &apos;Maximum barline distance&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Maksymalna odległość kreski taktowej&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="12174"/>
         <source>Reset &apos;Capo fret position&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Pozycja progu kapodastra&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="12521"/>
         <source>Reset &apos; Fret number position&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Pozycja numeru progu&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="12540"/>
         <source>Reset &apos;Fret spacing&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Odległość progu&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="12557"/>
         <source>Reset &apos;String spacing&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Odległość struny&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="12574"/>
         <source>Reset &apos;Relative dot size&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Względny rozmiar kropki&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="12591"/>
         <source>Reset &apos;Barre line thickness&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Grubość poprzeczki barré&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="12608"/>
         <source>Reset &apos;Fret number font size&apos; value</source>
-        <translation type="unfinished"></translation>
+        <translation>Resetuj wartość &quot;Rozmiar czcionki numeru progu&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="12625"/>
         <source>Reset &apos;Scale&apos; value</source>
-        <translation type="unfinished">Resetuj wartość &quot;Skala&quot;</translation>
+        <translation>Resetuj wartość &quot;Skala&quot;</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="12715"/>
@@ -28049,7 +28049,7 @@ zakończone niepowodzeniem.</translation>
         <location filename="../../mscore/shortcut.cpp" line="1941"/>
         <location filename="../../mscore/shortcut.cpp" line="1942"/>
         <source>Cycle through voices in range-selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Przechodź przez głosy w zakresie zaznaczenia</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1948"/>

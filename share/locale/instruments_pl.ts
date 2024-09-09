@@ -4611,30 +4611,30 @@
         <location filename="../instruments/instrumentsxml.h" line="1534"/>
         <location filename="../instruments/instrumentsxml.h" line="1539"/>
         <source>Bass Viol</source>
-        <translation type="unfinished"></translation>
+        <translation>Viola da gamba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1535"/>
         <location filename="../instruments/instrumentsxml.h" line="1540"/>
         <source>B. Vl.</source>
         <comment>Bass Viol</comment>
-        <translation type="unfinished"></translation>
+        <translation>V-la da g.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1541"/>
         <source>Bass Viol (Tablature)</source>
-        <translation type="unfinished"></translation>
+        <translation>Viola da gamba (tabulatura)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1547"/>
         <source>G Violone</source>
-        <translation type="unfinished"></translation>
+        <translation>Violone in G</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1548"/>
         <source>G Vne.</source>
         <comment>G Violone</comment>
-        <translation type="unfinished"></translation>
+        <translation>V-ne in G</translation>
     </message>
     <message>
         <source>Con. BD </source>
