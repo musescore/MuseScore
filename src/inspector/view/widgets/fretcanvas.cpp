@@ -208,6 +208,8 @@ void FretCanvas::draw(QPainter* painter)
             double xOff = -0.5 * width;
             double fingerX = (m_diagram->strings() - i - 1) * stringDist + xOff;
             double fingerY = (m_diagram->frets() * fretDist) + fontHeight + padding;
+            painter->setPen(pen);
+            painter->setFont(font);
             painter->drawText(QPointF(fingerX, fingerY), fingerS);
         }
     }
