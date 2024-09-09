@@ -12,47 +12,46 @@
 
 #include "importgtp.h"
 
-#include <libmscore/score.h>
-#include <libmscore/measurebase.h>
-#include <libmscore/text.h>
+#include <libmscore/arpeggio.h>
+#include <libmscore/articulation.h>
+#include <libmscore/barline.h>
+#include <libmscore/bend.h>
 #include <libmscore/box.h>
-#include <libmscore/staff.h>
-#include <libmscore/part.h>
+#include <libmscore/bracket.h>
+#include <libmscore/chord.h>
+#include <libmscore/chordline.h>
+#include <libmscore/clef.h>
+#include <libmscore/dynamic.h>
+#include <libmscore/excerpt.h>
+#include <libmscore/fingering.h>
+#include <libmscore/glissando.h>
+#include <libmscore/harmony.h>
+#include <libmscore/instrtemplate.h>
+#include <libmscore/keysig.h>
+#include <libmscore/lyrics.h>
 #include <libmscore/measure.h>
+#include <libmscore/measurebase.h>
+#include <libmscore/note.h>
+#include <libmscore/notedot.h>
+#include <libmscore/part.h>
+#include <libmscore/rehearsalmark.h>
+#include <libmscore/rest.h>
+#include <libmscore/score.h>
+#include <libmscore/slur.h>
+#include <libmscore/staff.h>
+#include <libmscore/stafftext.h>
+#include <libmscore/stafftype.h>
+#include <libmscore/segment.h>
+#include <libmscore/stringdata.h>
+#include <libmscore/sym.h>
+#include <libmscore/tempotext.h>
+#include <libmscore/text.h>
+#include <libmscore/tie.h>
 #include <libmscore/timesig.h>
 #include <libmscore/tremolo.h>
-#include <libmscore/rest.h>
-#include <libmscore/chord.h>
-#include <libmscore/note.h>
-#include <libmscore/stringdata.h>
-#include <libmscore/clef.h>
-#include <libmscore/lyrics.h>
-#include <libmscore/tempotext.h>
-#include <libmscore/glissando.h>
-#include <libmscore/slur.h>
-#include <libmscore/tie.h>
-#include <libmscore/tuplet.h>
-#include <libmscore/barline.h>
-#include <libmscore/excerpt.h>
-#include <libmscore/stafftype.h>
-#include <libmscore/bracket.h>
-#include <libmscore/articulation.h>
-#include <libmscore/keysig.h>
-#include <libmscore/harmony.h>
-#include <libmscore/bend.h>
 #include <libmscore/tremolobar.h>
-#include <libmscore/segment.h>
-#include <libmscore/rehearsalmark.h>
-#include <libmscore/dynamic.h>
-#include <libmscore/arpeggio.h>
+#include <libmscore/tuplet.h>
 #include <libmscore/volta.h>
-#include <libmscore/instrtemplate.h>
-#include <libmscore/fingering.h>
-#include <libmscore/notedot.h>
-#include <libmscore/stafftext.h>
-#include <libmscore/sym.h>
-#include <libmscore/chordline.h>
-
 
 namespace Ms {
 
@@ -115,9 +114,13 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
             // representation is different in guitar pro 5 - the up/down order below is correct
             if (strokeup > 0) {
                   a->setArpeggioType(ArpeggioType::UP_STRAIGHT);
+                  if (strokeup < 7)
+                        a->setStretch(1.0 / std::pow(2, 6 - strokeup));
                   }
             else if (strokedown > 0) {
                   a->setArpeggioType(ArpeggioType::DOWN_STRAIGHT);
+                  if (strokedown < 7)
+                        a->setStretch(1.0 / std::pow(2, 6 - strokedown));
                   }
             else {
                   delete a;
@@ -684,7 +687,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
                   }
             }
       else {
-            int counter = 0;
+//            int counter = 0;
 //            int index = 0;
 //TODO-ws ???		gpLyrics.lyricTrack -= 1;
 		auto mes = score->firstMeasure();
@@ -693,7 +696,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
 		do {
 		      if (beg->isChordRestType() && beg->cr(gpLyrics.lyricTrack)) {
                         ChordRest* cr = beg->cr(gpLyrics.lyricTrack);
-				++counter;
+//				++counter;
 				if (!cr->isChord())
                               continue;
                         bool is_tied = false;

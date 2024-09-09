@@ -103,6 +103,7 @@
             <Arpeggio>
               <linkedMain/>
               <subtype>5</subtype>
+              <timeStretch>0.5</timeStretch>
               </Arpeggio>
             </Chord>
           </voice>
@@ -136,6 +137,7 @@
             <Arpeggio>
               <linkedMain/>
               <subtype>4</subtype>
+              <timeStretch>0.5</timeStretch>
               </Arpeggio>
             </Chord>
           </voice>
@@ -273,6 +275,7 @@
                 <linked>
                   </linked>
                 <subtype>5</subtype>
+                <timeStretch>0.5</timeStretch>
                 </Arpeggio>
               </Chord>
             </voice>
@@ -311,6 +314,7 @@
                 <linked>
                   </linked>
                 <subtype>4</subtype>
+                <timeStretch>0.5</timeStretch>
                 </Arpeggio>
               </Chord>
             </voice>
@@ -362,6 +366,7 @@
                   <indexDiff>4</indexDiff>
                   </linked>
                 <subtype>5</subtype>
+                <timeStretch>0.5</timeStretch>
                 </Arpeggio>
               </Chord>
             </voice>
@@ -400,6 +405,7 @@
                 <linked>
                   </linked>
                 <subtype>4</subtype>
+                <timeStretch>0.5</timeStretch>
                 </Arpeggio>
               </Chord>
             </voice>
