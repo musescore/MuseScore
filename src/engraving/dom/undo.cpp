@@ -504,8 +504,8 @@ void UndoStack::undo(EditData* ed)
 {
     LOG_UNDO() << "called";
     // Are we currently editing text?
-    if (ed && ed->element && ed->element->isTextBase()) {
-        TextEditData* ted = static_cast<TextEditData*>(ed->getData(ed->element).get());
+    if (ed && ed->editTextualProperties && ed->element && ed->element->isTextBase()) {
+        TextEditData* ted = dynamic_cast<TextEditData*>(ed->getData(ed->element).get());
         if (ted && ted->startUndoIdx == curIdx) {
             // No edits to undo, so do nothing
             return;
