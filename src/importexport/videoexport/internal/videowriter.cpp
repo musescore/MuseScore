@@ -190,7 +190,7 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
 
     // Setup duration
     INotationPlaybackPtr playback = masterNotation->playback();
-    float totalPlayTimeSec = playback->totalPlayTime() / 1000.0;
+    float totalPlayTimeSec = playback->totalPlayTime();
 
     LOGI() << "totalPlayTime: " << totalPlayTimeSec << " sec";
 
