@@ -27,6 +27,8 @@
 
 #include "modularity/imoduleinterface.h"
 
+#include "graphicsapiprovider.h"
+
 class QQmlEngine;
 class QQmlApplicationEngine;
 
@@ -43,6 +45,9 @@ public:
     virtual QQmlEngine* qmlEngine() const = 0;
     virtual void quit() = 0;
     virtual void clearComponentCache() = 0;
+
+    virtual GraphicsApiProvider::Api graphicsApi() const = 0;
+    virtual QString graphicsApiName() const = 0;
 
     virtual void addSourceImportPath(const QString& path) = 0;
 };

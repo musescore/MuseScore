@@ -29,6 +29,7 @@
 #include <QQmlContext>
 
 #include "draw/types/color.h"
+#include "graphicsapiprovider.h"
 
 #include "log.h"
 
@@ -146,6 +147,14 @@ void UiEngine::setRootItem(QQuickItem* rootItem)
     emit rootItemChanged(m_rootItem);
 }
 
+bool UiEngine::isEffectsAllowed() const
+{
+    if (m_isEffectsAllowed == -1) {
+        m_isEffectsAllowed = GraphicsApiProvider::graphicsApi() != GraphicsApiProvider::Software;
+    }
+    return m_isEffectsAllowed;
+}
+
 void UiEngine::addSourceImportPath(const QString& path)
 {
 #ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
@@ -233,4 +242,14 @@ QQmlEngine* UiEngine::qmlEngine() const
 void UiEngine::clearComponentCache()
 {
     m_engine->clearComponentCache();
+}
+
+GraphicsApiProvider::Api UiEngine::graphicsApi() const
+{
+    return GraphicsApiProvider::graphicsApi();
+}
+
+QString UiEngine::graphicsApiName() const
+{
+    return GraphicsApiProvider::graphicsApiName();
 }
