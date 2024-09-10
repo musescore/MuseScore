@@ -144,9 +144,9 @@ void AppMenuModel::setupConnections()
             stack->stackChanged().onNotify(this, [this]() {
                 updateUndoRedoItems();
             });
-        } else {
-            updateUndoRedoItems();
         }
+
+        updateUndoRedoItems();
     });
 }
 
