@@ -46,6 +46,8 @@ class UiEngine : public QObject, public IUiEngine, public Injectable
 
     Q_PROPERTY(QQuickItem * rootItem READ rootItem WRITE setRootItem NOTIFY rootItemChanged)
 
+    Q_PROPERTY(bool isEffectsAllowed READ isEffectsAllowed CONSTANT)
+
     // for internal use
     Q_PROPERTY(InteractiveProvider * _interactiveProvider READ interactiveProvider_property CONSTANT)
 
@@ -76,10 +78,14 @@ public:
     QQmlEngine* qmlEngine() const override;
     void quit() override;
     void clearComponentCache() override;
+    GraphicsApiProvider::Api graphicsApi() const override;
+    QString graphicsApiName() const override;
     void addSourceImportPath(const QString& path) override;
     // ---
 
     QQuickItem* rootItem() const;
+
+    bool isEffectsAllowed() const;
 
 public slots:
     void setRootItem(QQuickItem* rootItem);
@@ -99,6 +105,7 @@ private:
     QmlApi* m_api = nullptr;
     QmlToolTip* m_tooltip = nullptr;
     QQuickItem* m_rootItem = nullptr;
+    mutable int m_isEffectsAllowed = -1;
 };
 }
 

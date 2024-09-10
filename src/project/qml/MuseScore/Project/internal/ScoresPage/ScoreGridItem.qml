@@ -108,7 +108,7 @@ FocusScope {
                         return scoreItemComp
                     }
 
-                    layer.enabled: true
+                    layer.enabled: ui.isEffectsAllowed
                     layer.effect: EffectOpacityMask {
                         maskSource: Rectangle {
                             width: thumbnail.width

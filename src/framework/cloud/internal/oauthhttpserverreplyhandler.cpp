@@ -100,7 +100,7 @@ private:
 };
 
 OAuthHttpServerReplyHandler::Impl::Impl(OAuthHttpServerReplyHandler* p, const modularity::ContextPtr& iocCtx)
-    : m_public(p), Injectable(iocCtx)
+    : Injectable(iocCtx), m_public(p)
 {
     QObject::connect(&m_httpServer, &QTcpServer::newConnection, [this]() { onClientConnected(); });
 }
