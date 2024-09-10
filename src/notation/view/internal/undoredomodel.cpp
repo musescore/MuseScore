@@ -36,13 +36,13 @@ UndoRedoModel::UndoRedoModel(QObject* parent)
 void UndoRedoModel::load()
 {
     context()->currentNotationChanged().onNotify(this, [this]() {
+        updateItems();
+
         auto stack = undoStack();
         if (stack) {
             stack->stackChanged().onNotify(this, [this]() {
                 updateItems();
             });
-        } else {
-            updateItems();
         }
     });
 
