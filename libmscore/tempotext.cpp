@@ -294,6 +294,7 @@ void TempoText::updateTempo()
       s.replace("≈", "=");
       s.replace("~", "=");
       s.replace("ca.", "");
+      s.replace("c.", "");
       s.replace("approx.", "");
       for (const TempoPattern& pa : tp) {
             QRegExp re;
