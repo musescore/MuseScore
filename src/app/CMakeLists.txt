@@ -382,7 +382,9 @@ if (OS_IS_WIN)
             DESTINATION bin/platforms)
 
     install(FILES
+            ${QT_INSTALL_PLUGINS}/tls/qcertonlybackend.dll
             ${QT_INSTALL_PLUGINS}/tls/qopensslbackend.dll
+            ${QT_INSTALL_PLUGINS}/tls/qschannelbackend.dll
             DESTINATION bin/tls)
 
     install(DIRECTORY
