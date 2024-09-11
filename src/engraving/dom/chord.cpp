@@ -275,7 +275,7 @@ Chord::Chord(Segment* parent)
     m_spaceRw          = 0.;
     m_crossMeasure     = CrossMeasure::UNKNOWN;
     m_graceIndex       = 0;
-    m_combineVoice       = true;
+    m_combineVoice     = AutoOnOff::AUTO;
 }
 
 Chord::Chord(const Chord& c, bool link)
@@ -1175,6 +1175,16 @@ void Chord::setTrack(track_idx_t val)
 {
     ChordRest::setTrack(val);
     processSiblings([val](EngravingItem* e) { e->setTrack(val); }, true);
+}
+
+bool Chord::shouldCombineVoice() const
+{
+    return combineVoice() == AutoOnOff::ON || (combineVoice() == AutoOnOff::AUTO && style().styleB(Sid::combineVoice));
+}
+
+bool Chord::combineVoice(const Chord* chord1, const Chord* chord2)
+{
+    return chord1->shouldCombineVoice() && chord2->shouldCombineVoice();
 }
 
 //---------------------------------------------------------
@@ -2139,7 +2149,7 @@ PropertyValue Chord::getProperty(Pid propertyId) const
     case Pid::SMALL:           return isSmall();
     case Pid::STEM_DIRECTION:  return PropertyValue::fromValue<DirectionV>(stemDirection());
     case Pid::PLAY: return isChordPlayable();
-    case Pid::COMBINE_VOICE: return combineVoice();
+    case Pid::COMBINE_VOICE: return PropertyValue::fromValue<AutoOnOff>(combineVoice());
     default:
         return ChordRest::getProperty(propertyId);
     }
@@ -2157,7 +2167,7 @@ PropertyValue Chord::propertyDefault(Pid propertyId) const
     case Pid::SMALL:           return false;
     case Pid::STEM_DIRECTION:  return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
     case Pid::PLAY: return true;
-    case Pid::COMBINE_VOICE: return true;
+    case Pid::COMBINE_VOICE: return AutoOnOff::AUTO;
     default:
         return ChordRest::propertyDefault(propertyId);
     }
@@ -2186,7 +2196,7 @@ bool Chord::setProperty(Pid propertyId, const PropertyValue& v)
         setIsChordPlayable(v.toBool());
         break;
     case Pid::COMBINE_VOICE:
-        setCombineVoice(v.toBool());
+        setCombineVoice(v.value<AutoOnOff>());
         break;
     default:
         return ChordRest::setProperty(propertyId, v);

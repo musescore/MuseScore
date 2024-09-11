@@ -2717,7 +2717,13 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         TRead::read(cl, e, ctx);
         ch->add(cl);
     } else if (tag == "combineVoice") {
-        ch->setCombineVoice(e.readBool());
+        // Handle mistake in 4.4 & convert from bool
+        if (ch->score()->mscoreVersion() == u"4.4.0") {
+            bool val = e.readBool();
+            ch->setCombineVoice(val ? AutoOnOff::ON : AutoOnOff::OFF);
+        } else {
+            readProperty(ch, tag, e, ctx, Pid::COMBINE_VOICE);
+        }
     } else {
         return false;
     }
