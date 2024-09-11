@@ -34,26 +34,13 @@ using namespace mu;
 namespace mu::engraving {
 static std::pair<Hairpin*, Hairpin*> findAdjacentHairpins(Dynamic* d)
 {
-    Score* score = d->score();
-    const Segment* dSeg = d->segment();
-    Hairpin* leftHairpin = nullptr;
-    Hairpin* rightHairpin = nullptr;
+    EngravingItem* itemSnappedBefore = d->ldata()->itemSnappedBefore();
+    EngravingItem* itemSnappedAfter = d->ldata()->itemSnappedAfter();
 
-    const Fraction tick = dSeg->tick();
-    const int intTick = tick.ticks();
-
-    const auto& nearSpanners = score->spannerMap().findOverlapping(intTick - 1, intTick + 1);
-    for (auto i : nearSpanners) {
-        Spanner* s = i.value;
-        if (s->track() == d->track() && s->isHairpin()) {
-            Hairpin* h = toHairpin(s);
-            if (h->tick() == tick) {
-                rightHairpin = h;
-            } else if (h->tick2() == tick) {
-                leftHairpin = h;
-            }
-        }
-    }
+    Hairpin* leftHairpin = itemSnappedBefore && itemSnappedBefore->isHairpinSegment()
+                           ? toHairpinSegment(itemSnappedBefore)->hairpin() : nullptr;
+    Hairpin* rightHairpin = itemSnappedAfter && itemSnappedAfter->isHairpinSegment()
+                            ? toHairpinSegment(itemSnappedAfter)->hairpin() : nullptr;
 
     return { leftHairpin, rightHairpin };
 }
@@ -65,14 +52,11 @@ std::unique_ptr<ElementGroup> HairpinWithDynamicsDragGroup::detectFor(HairpinSeg
         return nullptr;
     }
 
-    Hairpin* hairpin = hs->hairpin();
+    EngravingItem* itemSnappedBefore = hs->ldata()->itemSnappedBefore();
+    EngravingItem* itemSnappedAfter = hs->ldata()->itemSnappedAfter();
 
-    Segment* startSegment = hairpin->startSegment();
-    Segment* endSegment = hairpin->endSegment();
-    const track_idx_t track = hs->track();
-
-    Dynamic* startDynamic = toDynamic(startSegment->findAnnotation(ElementType::DYNAMIC, track, track));
-    Dynamic* endDynamic = toDynamic(endSegment->findAnnotation(ElementType::DYNAMIC, track, track));
+    Dynamic* startDynamic = itemSnappedBefore && itemSnappedBefore->isDynamic() ? toDynamic(itemSnappedBefore) : nullptr;
+    Dynamic* endDynamic = itemSnappedAfter && itemSnappedAfter->isDynamic() ? toDynamic(itemSnappedAfter) : nullptr;
 
     // Include only dragged dynamics to this group
     if (!isDragged(startDynamic)) {
