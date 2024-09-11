@@ -1574,7 +1574,7 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
     });
 
     m_notation->interaction()->textEditingEnded().onReceive(this, [this](engraving::TextBase* text) {
-        if (text->isHarmony()) {
+        if (text && text->isHarmony()) {
             playElements({ text });
         }
     });

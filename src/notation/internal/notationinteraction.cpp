@@ -1735,7 +1735,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             spanner->styleChanged();
             if (spanner->isHairpin()) {
                 score->addHairpin(toHairpin(spanner), cr1, cr2);
-                if (!spanner->segmentsEmpty()) {
+                if (!spanner->segmentsEmpty() && !score->noteEntryMode()) {
                     SpannerSegment* frontSegment = spanner->frontSegment();
                     score->select(frontSegment);
                     startEditElement(frontSegment);
@@ -3299,20 +3299,18 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
 
 void NotationInteraction::endEditText()
 {
-    EngravingItem** element = &m_editData.element;
-    IF_ASSERT_FAILED(*element) {
-        return;
-    }
-
     if (!isTextEditingStarted()) {
         return;
     }
 
-    doEndEditElement();
+    doEndEditElement(false /*clearEditData*/);
 
-    if (*element) {
-        notifyAboutTextEditingEnded(toTextBase(*element));
+    if (m_editData.element) {
+        notifyAboutTextEditingEnded(toTextBase(m_editData.element));
     }
+
+    m_editData.clear();
+
     notifyAboutTextEditingChanged();
     notifyAboutSelectionChangedIfNeed();
 }
@@ -3666,12 +3664,15 @@ const EngravingItem* NotationInteraction::editedItem() const
     return m_editData.element;
 }
 
-void NotationInteraction::doEndEditElement()
+void NotationInteraction::doEndEditElement(bool clearEditData)
 {
     if (m_editData.element) {
         m_editData.element->endEdit(m_editData);
     }
-    m_editData.clear();
+
+    if (clearEditData) {
+        m_editData.clear();
+    }
 }
 
 void NotationInteraction::onElementDestroyed(EngravingItem* element)

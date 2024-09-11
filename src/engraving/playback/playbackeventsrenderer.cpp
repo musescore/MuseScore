@@ -307,9 +307,17 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::t
                          profile,
                          dummyCtx);
 
-    NoteArticulationsParser::buildNoteArticulationMap(note, ctx, ctx.commonArticulations);
-    NominalNoteCtx noteCtx(note, ctx);
+    NoteArticulationsParser::parsePersistentMeta(ctx, ctx.commonArticulations);
+    NoteArticulationsParser::parseGhostNote(note, ctx, ctx.commonArticulations);
+    NoteArticulationsParser::parseNoteHead(note, ctx, ctx.commonArticulations);
 
+    if (ctx.commonArticulations.empty()) {
+        ctx.commonArticulations = makeStandardArticulationMap(profile, actualTimestamp, actualDuration);
+    } else {
+        ctx.commonArticulations.preCalculateAverageData();
+    }
+
+    NominalNoteCtx noteCtx(note, ctx);
     result.emplace_back(buildNoteEvent(std::move(noteCtx)));
 }
 
