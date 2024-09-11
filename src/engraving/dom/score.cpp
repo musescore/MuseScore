@@ -436,12 +436,7 @@ void Score::setUpTempoMap()
         if (m->mmRest()) {
             m->mmRest()->moveTicks(diff);
         }
-        // TODO: Better to use Measure::isAnacrusis() here
-        // but since it requires irregular() return true it's not working as expected
-        // if user didn't checked "Exclude from measure count" in measure properties,
-        // but reduces the real measure length.
-        // So we use the following workaround:
-        if (m->ticks() < m->timesig()) {
+        if (m->isAnacrusis()) {
             anacrusisMeasures.push_back(m);
         }
 
