@@ -376,6 +376,8 @@ private:
 
     static Shape textLineBaseSegmentShape(const TextLineBaseSegment* item);
     static void layoutDynamicToEndOfPrevious(const Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf);
+
+    static void manageHairpinSnapping(HairpinSegment* item, LayoutContext& ctx);
 };
 }
 
