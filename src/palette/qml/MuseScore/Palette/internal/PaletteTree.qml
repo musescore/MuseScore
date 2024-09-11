@@ -403,7 +403,7 @@ StyledListView {
                 paletteTree.implicitWidth = Math.max(paletteTree.implicitWidth, w);
             }
 
-            property bool expanded: filter.length || model.expanded
+            property bool expanded: searchOpened || model.expanded
 
             function toggleExpand() {
                 model.expanded = !expanded
