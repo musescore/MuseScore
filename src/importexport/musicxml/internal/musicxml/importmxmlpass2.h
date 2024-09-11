@@ -254,7 +254,7 @@ public:
                             MusicXMLParserPass2& pass2);
     void parse();
     void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs, Glissando* glissandi[MAX_NUMBER_LEVEL][2],
-                    MusicXmlSpannerMap& spanners, TrillStack& trills, std::map<int, Tie*>& ties, ArpeggioMap& arpMap,
+                    MusicXmlSpannerMap& spanners, TrillStack& trills, std::map<TieLocation, Tie*>& ties, ArpeggioMap& arpMap,
                     DelayedArpMap& delayedArps);
     String errors() const { return m_errors; }
     MusicXmlTupletDesc tupletDesc() const { return m_tupletDesc; }
@@ -418,7 +418,7 @@ private:
 
     Glissando* m_glissandi[MAX_NUMBER_LEVEL][2];     // Current slides ([0]) / glissandi ([1])
 
-    std::map<int, Tie*> m_ties;
+    std::map<TieLocation, Tie*> m_ties;
     Volta* m_lastVolta = nullptr;
     bool m_hasDrumset;                             // drumset defined TODO: move to pass 1
 
