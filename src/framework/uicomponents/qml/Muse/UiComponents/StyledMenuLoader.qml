@@ -40,6 +40,8 @@ Loader {
 
     property alias isMenuOpened: loader.active
 
+    property string accessibleName: ""
+
     QtObject {
         id: prv
 
@@ -59,6 +61,8 @@ Loader {
         id: itemMenu
 
         openPolicies: PopupView.NoActivateFocus
+
+        accessibleName: loader.accessibleName
 
         onHandleMenuItem: function(itemId) {
             itemMenu.close()
