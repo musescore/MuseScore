@@ -375,6 +375,7 @@ void DockBase::init()
     setInited(true);
 
     applySizeConstraints();
+    updateFloatingStatus();
 }
 
 void DockBase::deinit()
