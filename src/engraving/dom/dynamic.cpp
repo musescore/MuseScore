@@ -333,7 +333,7 @@ bool Dynamic::isEditAllowed(EditData& ed) const
 
 void Dynamic::manageBarlineCollisions()
 {
-    if (!_avoidBarLines || score()->nstaves() <= 1 || anchorToEndOfPrevious()) {
+    if (!_avoidBarLines || score()->nstaves() <= 1 || anchorToEndOfPrevious() || !isStyled(Pid::OFFSET)) {
         return;
     }
 
@@ -402,12 +402,6 @@ void Dynamic::manageBarlineCollisions()
             rightBarLineSegment = segment;
             break;
         }
-    }
-
-    bool isOnTimeTickSegAtBarline = rightBarLineSegment && thisSegment->isTimeTickType()
-                                    && thisSegment->tick() == rightBarLineSegment->tick();
-    if (isOnTimeTickSegAtBarline) {
-        return;
     }
 
     if (rightBarLineSegment) {
