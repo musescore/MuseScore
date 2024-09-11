@@ -2288,7 +2288,9 @@ bool SlurTieLayout::isDirectionMixture(const Chord* c1, const Chord* c2, LayoutC
         }
         Chord* c = toChord(e);
         const Measure* m = c->measure();
-        if (!c->staff()->isDrumStaff(c->tick()) && c1->measure()->system() != m->system()) {
+        const System* c1Sys = c1->measure()->system();
+        const System* cSys = m->system();
+        if (!c->staff()->isDrumStaff(c->tick()) && c1Sys && cSys && c1Sys != cSys) {
             // This chord is on a different system and may not have been laid out yet
             for (Note* note : c->notes()) {
                 note->updateLine();     // because chord direction is based on note lines
