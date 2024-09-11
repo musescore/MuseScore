@@ -74,7 +74,9 @@ Loader {
         }
 
         onClosed: function(force) {
-            Qt.callLater(prv.unloadMenu, force)
+            // Not using Qt.callLater here because the delayed call causes
+            // a crash if objects are destroyed in the meantime.
+            prv.unloadMenu(force)
         }
 
         onOpened: {
