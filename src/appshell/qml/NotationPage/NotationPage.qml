@@ -460,6 +460,21 @@ DockPage {
             dropDestinations: root.horizontalPanelDropDestinations
 
             navigationSection: root.navigationPanelSec(percussionPanel.location)
+
+            PercussionPanel {
+                navigationSection: percussionPanel.navigationSection
+                contentNavigationPanelOrderStart: percussionPanel.contentNavigationPanelOrderStart
+
+                Component.onCompleted: {
+                    // percussionPanel.contextMenuModel = contextMenuModel
+                    percussionPanel.toolbarComponent = toolbarComponent
+                }
+
+                Component.onDestruction: {
+                    // percussionPanel.contextMenuModel = null
+                    percussionPanel.toolbarComponent = null
+                }
+            }
         }
     ]
 
