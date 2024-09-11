@@ -305,6 +305,9 @@ StyledListView {
                     customPaletteRootIndex = paletteTree.paletteProvider.customElementsPaletteIndex(control.modelIndex) // TODO: make a property binding? (but that works incorrectly)
                     customPaletteController = paletteTree.paletteProvider.customElementsPaletteController
                 }
+                if (!isOpened) {
+                    paletteTree.expandedPopupIndex = null
+                }
             }
 
             property bool needScrollToBottom: false
