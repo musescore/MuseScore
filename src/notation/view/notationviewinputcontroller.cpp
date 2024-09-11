@@ -173,20 +173,11 @@ void NotationViewInputController::initZoom()
 
 void NotationViewInputController::initCanvasPos()
 {
-    if (currentNotation()->viewState()->zoomType().val != ZoomType::Percentage) {
-        return;
-    }
+    RectF notationContentRect = m_view->notationContentRect();
+    double totalScoreWidth = notationContentRect.width();
+    double totalScoreHeight = notationContentRect.height();
 
-    const std::vector<Page*>& pages = currentNotation()->elements()->msScore()->pages();
-    IF_ASSERT_FAILED(!pages.empty()) {
-        return;
-    }
-
-    const Page* lastPage = pages.back();
     double curScaling = m_view->currentScaling();
-
-    double totalScoreWidth = lastPage->x() + lastPage->width();
-    double totalScoreHeight = lastPage->y() + lastPage->height();
     double viewWidth = m_view->width() / curScaling;
     double viewHeight = m_view->height() / curScaling;
 
@@ -310,8 +301,9 @@ void NotationViewInputController::doZoomToPageWidth()
     }
 
     qreal pageWidth = notationStyle()->styleValue(mu::engraving::Sid::pageWidth).toDouble() * mu::engraving::DPI;
+    double viewWidth = m_view->width() - 2 * MScore::horizontalPageGapOdd;
 
-    qreal scale = m_view->width() / pageWidth;
+    qreal scale = viewWidth / pageWidth;
     setScaling(scale, PointF(), false);
 }
 
@@ -334,8 +326,11 @@ void NotationViewInputController::doZoomToWholePage()
     qreal pageWidth = notationStyle()->styleValue(mu::engraving::Sid::pageWidth).toDouble() * mu::engraving::DPI;
     qreal pageHeight = notationStyle()->styleValue(mu::engraving::Sid::pageHeight).toDouble() * mu::engraving::DPI;
 
-    qreal pageWidthScale = m_view->width() / pageWidth;
-    qreal pageHeightScale = m_view->height() / pageHeight;
+    double viewWidth = m_view->width() - 2 * MScore::horizontalPageGapOdd;
+    double viewHeight = m_view->height() - 2 * MScore::horizontalPageGapOdd;
+
+    qreal pageWidthScale = viewWidth / pageWidth;
+    qreal pageHeightScale = viewHeight / pageHeight;
 
     qreal scale = std::min(pageWidthScale, pageHeightScale);
     setScaling(scale, PointF(), false);
@@ -357,8 +352,8 @@ void NotationViewInputController::doZoomToTwoPages()
         return;
     }
 
-    qreal viewWidth = m_view->width();
-    qreal viewHeight = m_view->height();
+    qreal viewWidth = m_view->width() - 2 * MScore::horizontalPageGapOdd;
+    qreal viewHeight = m_view->height() - 2 * MScore::horizontalPageGapOdd;
     qreal pageWidth = notationStyle()->styleValue(mu::engraving::Sid::pageWidth).toDouble() * mu::engraving::DPI;
     qreal pageHeight = notationStyle()->styleValue(mu::engraving::Sid::pageHeight).toDouble() * mu::engraving::DPI;
 
