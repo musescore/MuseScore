@@ -125,7 +125,7 @@ static std::shared_ptr<mu::engraving::IEngravingFontsProvider> engravingFonts()
 //   function declarations
 //---------------------------------------------------------
 
-static void addTie(const Notation& notation, Score* score, Note* note, const track_idx_t track, std::map<int, Tie*>& tie,
+static void addTie(const Notation& notation, Score* score, Note* note, const track_idx_t track, std::map<TieLocation, Tie*>& tie,
                    MxmlLogger* logger, const XmlStreamReader* const xmlreader, const bool fixForCrossStaff);
 
 //---------------------------------------------------------
@@ -6843,7 +6843,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
         notations.addToScore(cr, note, noteStartTime.ticks(), m_slurs, m_glissandi, m_spanners, m_trills, m_ties, arpMap, delayedArps);
 
         // if no tie added yet, convert the "tie" into "tied" and add it.
-        if (note && !note->tieFor() && !tieType.empty()) {
+        if (note && !note->tieFor() && !note->tieBack() && !tieType.empty()) {
             Notation notation = Notation(u"tied");
             const String type2 = u"type";
             notation.addAttribute(type2, tieType);
@@ -8313,7 +8313,8 @@ static void addArpeggio(ChordRest* cr, String& arpeggioType, int arpeggioNo, Arp
 //---------------------------------------------------------
 
 static void addTie(const Notation& notation, Score* score, Note* note, const track_idx_t track,
-                   std::map<int, Tie*>& ties, MxmlLogger* logger, const XmlStreamReader* const xmlreader, const bool fixForCrossStaff)
+                   std::map<TieLocation, Tie*>& ties, MxmlLogger* logger, const XmlStreamReader* const xmlreader,
+                   const bool fixForCrossStaff)
 {
     IF_ASSERT_FAILED(note) {
         return;
@@ -8324,16 +8325,18 @@ static void addTie(const Notation& notation, Score* score, Note* note, const tra
     const String placement = notation.attribute(u"placement");
     const String lineType = notation.attribute(u"line-type");
 
+    TieLocation loc = TieLocation(note->pitch(), note->track());
+
     if (type.empty()) {
         // ignore, nothing to do
     } else if (type == u"start") {
-        if (ties[note->pitch()]) {
+        if (ties[loc]) {
             logger->logError(String(u"Tie already active"), xmlreader);
-            cleanupUnterminatedTie(ties[note->pitch()], score, fixForCrossStaff);
-            ties[note->pitch()] = nullptr;
+            cleanupUnterminatedTie(ties[loc], score, fixForCrossStaff);
+            ties[loc] = nullptr;
         }
-        ties[note->pitch()] = Factory::createTie(note);
-        Tie* currTie = ties[note->pitch()];
+        ties[loc] = Factory::createTie(note);
+        Tie* currTie = ties[loc];
         note->setTieFor(currTie);
         currTie->setStartNote(note);
         currTie->setTrack(track);
@@ -8364,8 +8367,8 @@ static void addTie(const Notation& notation, Score* score, Note* note, const tra
         }
         currTie = nullptr;
     } else if (type == "stop") {
-        if (ties[note->pitch()]) {
-            Tie* currTie = ties[note->pitch()];
+        if (ties[loc]) {
+            Tie* currTie = ties[loc];
             const Note* startNote = currTie->startNote();
             const Chord* startChord = startNote ? startNote->chord() : nullptr;
             const Chord* endChord = note->chord();
@@ -8375,9 +8378,10 @@ static void addTie(const Notation& notation, Score* score, Note* note, const tra
                 currTie->setEndNote(note);
                 note->setTieBack(currTie);
             } else {
-                cleanupUnterminatedTie(ties[note->pitch()], score, fixForCrossStaff);
+                logger->logError(String(u"Intervening note in voice"), xmlreader);
+                cleanupUnterminatedTie(ties[loc], score, fixForCrossStaff);
             }
-            ties[note->pitch()] = nullptr;
+            ties[loc] = nullptr;
         } else {
             logger->logError(String(u"Non-started tie terminated. No-op."), xmlreader);
         }
@@ -8675,7 +8679,8 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
 
 void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs,
                                          Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners,
-                                         TrillStack& trills, std::map<int, Tie*>& ties, ArpeggioMap& arpMap, DelayedArpMap& delayedArps)
+                                         TrillStack& trills, std::map<TieLocation, Tie*>& ties, ArpeggioMap& arpMap,
+                                         DelayedArpMap& delayedArps)
 {
     addArpeggio(cr, m_arpeggioType, m_arpeggioNo, arpMap, delayedArps);
     addBreath(cr, cr->tick(), m_breath);
