@@ -128,6 +128,7 @@ private:
 
     void reloadCurrentPage();
     bool restoreLayout(const QByteArray& layout, bool restoreRelativeToMainWindow = false);
+    bool checkLayoutIsCorrupted() const;
 
     void initDocks(DockPageView* page);
 
