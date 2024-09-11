@@ -702,7 +702,7 @@ StyledListView {
                             return mainPaletteBottom >= paletteTree.contentY && mainPaletteBottom < (paletteTree.contentY + paletteTree.height)
                         }
 
-                        showMoreButton: !filter.length
+                        showMoreButton: !paletteTree.searchOpened
                         onMoreButtonClicked: function(btn) { control.togglePopup(btn) }
 
                         onVisibleChanged: {
