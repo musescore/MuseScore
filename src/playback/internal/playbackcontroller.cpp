@@ -1334,6 +1334,9 @@ void PlaybackController::updateSoloMuteStates()
     bool hasSolo = false;
 
     for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
+        if (instrumentTrackId == notationPlayback()->metronomeTrackId()) {
+            continue;
+        }
         if (m_notation->soloMuteState()->trackSoloMuteState(instrumentTrackId).solo) {
             hasSolo = true;
             break;
