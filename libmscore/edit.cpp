@@ -2252,12 +2252,15 @@ void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie, bool preserveTies)
                         if (!s)
                               s = mAfterSel->undoGetSegment(SegmentType::TimeSig, mAfterSel->tick());
 
-                        TimeSig* nts = new TimeSig(this);
-                        nts->setTrack(staffIdx * VOICES);
-                        nts->setParent(s);
-                        nts->setFrom(lastDeletedForThisStaff);
-                        nts->setStretch(nts->sig() / mAfterSel->timesig());
-                        score->undoAddElement(nts);
+                        size_t track = staffIdx * VOICES;
+                        if (track < s->elist().size()) {
+                              TimeSig* nts = new TimeSig(score);
+                              nts->setTrack(track);
+                              nts->setParent(s);
+                              nts->setSig(lastDeletedForThisStaff->sig());
+                              nts->setStretch(nts->sig() / mAfterSel->timesig());
+                              score->undoAddElement(nts);
+                              }
                         }
                   }
 
