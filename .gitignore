@@ -56,3 +56,4 @@ SF_VERSION
 
 # Created/used during (master) build
 src/
+SetupConfigure.local.cmake
