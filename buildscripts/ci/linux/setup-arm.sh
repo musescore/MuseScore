@@ -123,6 +123,7 @@ apt_packages_runtime=(
   libxcb-xinerama0
   libxcb-xkb-dev
   libxkbcommon-dev
+  libopengl-dev
   libvulkan-dev
   )
 
@@ -167,6 +168,7 @@ apt_packages_qt6=(
   libqt6core5compat6-dev
   qt6-scxml-dev
   qt6-wayland
+  qt6-websockets
   )
 
 apt-get install -y \
