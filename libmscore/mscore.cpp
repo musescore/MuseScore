@@ -386,6 +386,7 @@ void MScore::init()
             ":/fonts/finalebroadway/FinaleBroadwayText.otf",
             };
 
+      // Include the above internal text fonts into QFontDatabase
       for (unsigned i = 0; i < sizeof(fonts)/sizeof(*fonts); ++i) {
             QString str(fonts[i]);
             if (-1 == QFontDatabase::addApplicationFont(str)) {
