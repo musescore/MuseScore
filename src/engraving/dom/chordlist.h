@@ -305,7 +305,7 @@ private:
 
     friend class compat::ReadChordListHook;
 
-    void read(XmlReader&);
+    void read(XmlReader& xml, int mscVersion);
     void write(XmlWriter& xml) const;
 
     std::map<String, ChordSymbol> m_symbols;
