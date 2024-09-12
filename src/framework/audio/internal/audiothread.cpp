@@ -22,6 +22,7 @@
 #include "audiothread.h"
 
 #include "global/runtime.h"
+#include "global/threadutils.h"
 #include "global/async/processevents.h"
 
 #include "internal/audiosanitizer.h"
@@ -64,6 +65,10 @@ void AudioThread::run(const Runnable& onStart, const Runnable& loopBody, const m
     m_thread = std::make_unique<std::thread>([this]() {
         main();
     });
+
+    if (!muse::setThreadPriority(*m_thread, ThreadPriority::High)) {
+        LOGE() << "Unable to change audio thread priority";
+    }
 #else
     emscripten_set_timeout_loop([](double, void* userData) -> EM_BOOL {
         reinterpret_cast<AudioThread*>(userData)->loopBody();

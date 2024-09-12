@@ -42,6 +42,7 @@ static const Settings::Key AUDIO_OUTPUT_DEVICE_ID_KEY("audio", "io/outputDevice"
 static const Settings::Key AUDIO_BUFFER_SIZE_KEY("audio", "io/bufferSize");
 static const Settings::Key AUDIO_SAMPLE_RATE_KEY("audio", "io/sampleRate");
 static const Settings::Key AUDIO_MEASURE_INPUT_LAG("audio", "io/measureInputLag");
+static const Settings::Key AUDIO_DESIRED_THREAD_NUMBER_KEY("audio", "io/audioThreads");
 
 static const Settings::Key USER_SOUNDFONTS_PATHS("midi", "application/paths/mySoundfonts");
 
@@ -58,8 +59,6 @@ void AudioConfiguration::init()
     int defaultBufferSize = 0;
 #if defined(Q_OS_WASM)
     defaultBufferSize = 8192;
-#elif defined(Q_OS_MAC)
-    defaultBufferSize = 512;
 #else
     defaultBufferSize = 1024;
 #endif
@@ -91,6 +90,8 @@ void AudioConfiguration::init()
     }
 
     settings()->setDefaultValue(AUDIO_MEASURE_INPUT_LAG, Val(false));
+
+    settings()->setDefaultValue(AUDIO_DESIRED_THREAD_NUMBER_KEY, Val(0));
 
     updateSamplesToPreallocate();
 }
@@ -157,6 +158,9 @@ msecs_t AudioConfiguration::audioWorkerInterval(const samples_t samples, const s
     msecs_t interval = float(samples) / 4.f / float(sampleRate) * 1000.f;
     interval = std::max(interval, msecs_t(1));
 
+    // Found experementaly on a slow laptop (2 core) running on battery power
+    interval = std::min(interval, msecs_t(10));
+
     return interval;
 }
 
@@ -194,6 +198,11 @@ void AudioConfiguration::setSampleRate(unsigned int sampleRate)
 async::Notification AudioConfiguration::sampleRateChanged() const
 {
     return m_driverSampleRateChanged;
+}
+
+size_t AudioConfiguration::desiredAudioThreadNumber() const
+{
+    return settings()->value(AUDIO_DESIRED_THREAD_NUMBER_KEY).toInt();
 }
 
 size_t AudioConfiguration::minTrackCountForMultithreading() const

@@ -130,6 +130,14 @@ FocusScope {
                         drawOutsideParent: false
                     }
 
+                    Rectangle {
+                        id: playbackCursor
+
+                        Component.onCompleted: {
+                            notationView.setPlaybackCursorItem(playbackCursor)
+                        }
+                    }
+
                     onActiveFocusRequested: {
                         fakeNavCtrl.requestActive()
                     }
