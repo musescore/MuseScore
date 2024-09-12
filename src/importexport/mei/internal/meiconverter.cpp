@@ -3386,7 +3386,7 @@ void Convert::layerIdentToMEI(const engraving::EngravingItem* item, libmei::Elem
     if (item->hasVoiceAssignmentProperties()
         && (item->getProperty(engraving::Pid::VOICE_ASSIGNMENT).value<engraving::VoiceAssignment>()
             == engraving::VoiceAssignment::CURRENT_VOICE_ONLY)) {
-        layerAtt->SetLayer(item->voice() + 1);
+        layerAtt->SetLayer(static_cast<int>(item->voice()) + 1);
     }
 }
 
@@ -3399,7 +3399,7 @@ void Convert::staffIdentToMEI(const engraving::EngravingItem* item, libmei::Elem
     }
 
     libmei::xsdPositiveInteger_List staffList;
-    staffList.push_back(item->staff()->idx() + 1);
+    staffList.push_back(static_cast<int>(item->staff()->idx()) + 1);
     // TODO: add staff number if centered between staves
     staffAtt->SetStaff(staffList);
 }
