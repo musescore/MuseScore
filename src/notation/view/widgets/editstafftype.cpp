@@ -442,30 +442,30 @@ void EditStaffType::setFromDlg()
         staffType.setShowLedgerLines(showLedgerLinesPercussion->isChecked());
         staffType.setStemless(stemlessPercussion->isChecked());
     }
-    staffType.setDurationFontName(durFontName->currentText());
-    staffType.setDurationFontSize(durFontSize->value());
-    staffType.setDurationFontUserY(durY->value());
-    staffType.setFretFontName(fretFontName->currentText());
-    staffType.setFretFontSize(fretFontSize->value());
-    staffType.setFretFontUserY(fretY->value());
-    staffType.setLinesThrough(linesThroughRadio->isChecked());
-    staffType.setMinimStyle(minimNoneRadio->isChecked() ? mu::engraving::TablatureMinimStyle::NONE
-                            : (minimShortRadio->isChecked() ? mu::engraving::TablatureMinimStyle::SHORTER : mu::engraving::
-                               TablatureMinimStyle::
-                               SLASHED));
-    staffType.setSymbolRepeat(valuesRepeatNever->isChecked() ? mu::engraving::TablatureSymbolRepeat::NEVER
-                              : (valuesRepeatSystem->isChecked() ? mu::engraving::TablatureSymbolRepeat::SYSTEM
-                                 : valuesRepeatMeasure->isChecked() ? mu::engraving::TablatureSymbolRepeat::MEASURE
-                                 : mu::engraving::TablatureSymbolRepeat::ALWAYS));
-    staffType.setOnLines(onLinesRadio->isChecked());
-    staffType.setShowRests(showRests->isChecked());
-    staffType.setUpsideDown(upsideDown->isChecked());
-    staffType.setShowTabFingering(showTabFingering->isChecked());
-    staffType.setUseNumbers(numbersRadio->isChecked());
-    //note values
-    staffType.setStemsDown(stemBelowRadio->isChecked());
-    staffType.setStemsThrough(stemThroughRadio->isChecked());
     if (staffType.group() == mu::engraving::StaffGroup::TAB) {
+        staffType.setDurationFontName(durFontName->currentText());
+        staffType.setDurationFontSize(durFontSize->value());
+        staffType.setDurationFontUserY(durY->value());
+        staffType.setFretFontName(fretFontName->currentText());
+        staffType.setFretFontSize(fretFontSize->value());
+        staffType.setFretFontUserY(fretY->value());
+        staffType.setLinesThrough(linesThroughRadio->isChecked());
+        staffType.setMinimStyle(minimNoneRadio->isChecked() ? mu::engraving::TablatureMinimStyle::NONE
+                                : (minimShortRadio->isChecked() ? mu::engraving::TablatureMinimStyle::SHORTER : mu::engraving::
+                                   TablatureMinimStyle::
+                                   SLASHED));
+        staffType.setSymbolRepeat(valuesRepeatNever->isChecked() ? mu::engraving::TablatureSymbolRepeat::NEVER
+                                  : (valuesRepeatSystem->isChecked() ? mu::engraving::TablatureSymbolRepeat::SYSTEM
+                                     : valuesRepeatMeasure->isChecked() ? mu::engraving::TablatureSymbolRepeat::MEASURE
+                                     : mu::engraving::TablatureSymbolRepeat::ALWAYS));
+        staffType.setOnLines(onLinesRadio->isChecked());
+        staffType.setShowRests(showRests->isChecked());
+        staffType.setUpsideDown(upsideDown->isChecked());
+        staffType.setShowTabFingering(showTabFingering->isChecked());
+        staffType.setUseNumbers(numbersRadio->isChecked());
+        //note values
+        staffType.setStemsDown(stemBelowRadio->isChecked());
+        staffType.setStemsThrough(stemThroughRadio->isChecked());
         staffType.setGenKeysig(false);
         staffType.setStemless(true);                       // assume no note values
         staffType.setGenDurations(false);                  //    "     "
