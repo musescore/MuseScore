@@ -168,7 +168,7 @@ apt_packages_qt6=(
   libqt6core5compat6-dev
   qt6-scxml-dev
   qt6-wayland
-  qt6-websockets
+  libqt6websockets6-dev
   )
 
 apt-get install -y \
