@@ -20,25 +20,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __IMPORTGTP_H__
-#define __IMPORTGTP_H__
+#pragma once
 
-#include <vector>
 #include <map>
+#include <vector>
 
-#include "io/file.h"
-#include "engraving/dom/measurebase.h"
-
-#include "gtp/gp67dombuilder.h"
-#include "continiouselementsbuilder.h"
-#include "guitarbendimport/guitarbendimporter.h"
-#include "engraving/types/types.h"
-#include "engraving/engravingerrors.h"
-
+#include "io/iodevice.h"
 #include "modularity/ioc.h"
-#include "iengravingconfiguration.h"
+#include "types/bytearray.h"
+#include "types/string.h"
 
-#include "guitarprodrumset.h"
+#include "engraving/dom/measurebase.h"
+#include "engraving/engravingerrors.h"
+#include "engraving/iengravingconfiguration.h"
+#include "engraving/types/types.h"
+
+#include "continiouselementsbuilder.h"
+#include "gtp/igpdombuilder.h"
+#include "guitarbendimport/guitarbendimporter.h"
 
 namespace mu::engraving {
 class Chord;
@@ -496,5 +495,4 @@ public:
     bool read(muse::io::IODevice*) override;
     GPProperties readProperties(muse::ByteArray* data);
 };
-} // namespace mu::iex::guitarpro
-#endif
+}

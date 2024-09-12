@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_MEIREADER_H
-#define MU_IMPORTEXPORT_MEIREADER_H
+#pragma once
 
 #include "project/inotationreader.h"
 
@@ -28,7 +27,7 @@
 #include "iinteractive.h"
 #include "io/ifilesystem.h"
 
-#include "engravingerrors.h"
+#include "engraving/engravingerrors.h"
 
 namespace mu::iex::mei {
 class MeiReader : public project::INotationReader
@@ -43,6 +42,4 @@ public:
 private:
     bool askToLoadDespiteWarnings(const muse::String& text, const muse::String& detailedText);
 };
-} // namespace
-
-#endif // MU_IMPORTEXPORT_MEIREADER_H
+}

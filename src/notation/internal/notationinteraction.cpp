@@ -42,6 +42,8 @@
 #include "draw/painter.h"
 #include "draw/types/painterpath.h"
 #include "draw/types/pen.h"
+
+// TODO: Don't include from engraving/internal
 #include "engraving/internal/qmimedataadapter.h"
 
 #include "engraving/dom/accidental.h"
