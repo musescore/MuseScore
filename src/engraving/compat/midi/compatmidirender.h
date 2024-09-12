@@ -19,56 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_COMPATMIDIRENDER_H
-#define MU_ENGRAVING_COMPATMIDIRENDER_H
+#pragma once
 
 #include <set>
-#include <cmath>
-#include <tuple>
+#include <vector>
 
-#include "compat/midi/event.h"
-#include "style/style.h"
-#include "types/constants.h"
+#include "engraving/types/types.h"
 
+#include "event.h"
 #include "compatmidirenderinternal.h"
-
-#include "dom/arpeggio.h"
-#include "dom/articulation.h"
-#include "dom/chord.h"
-#include "dom/durationtype.h"
-#include "dom/dynamic.h"
-#include "dom/easeInOut.h"
-#include "dom/glissando.h"
-#include "dom/hairpin.h"
-#include "dom/instrument.h"
-#include "dom/masterscore.h"
-#include "dom/measure.h"
-#include "dom/measurerepeat.h"
-#include "dom/note.h"
-#include "dom/noteevent.h"
-#include "dom/palmmute.h"
-#include "dom/part.h"
-#include "dom/repeatlist.h"
-#include "dom/score.h"
-#include "dom/segment.h"
-#include "dom/sig.h"
-#include "dom/slur.h"
-#include "dom/staff.h"
-#include "dom/stafftextbase.h"
-#include "dom/swing.h"
-#include "dom/synthesizerstate.h"
-#include "dom/tempo.h"
-#include "dom/tie.h"
-#include "dom/trill.h"
-#include "dom/undo.h"
-#include "dom/utils.h"
-#include "dom/volta.h"
-#include "dom/capo.h"
 
 #include "log.h"
 
 namespace mu::engraving {
+class Chord;
+class Drumset;
+class Glissando;
+class Instrument;
+class Measure;
+class Note;
+class NoteEventList;
+class Score;
+class Segment;
+class Trill;
+
 class CompatMidiRender
 {
 public:
@@ -100,6 +74,7 @@ private:
     static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, TrillType trillType, OrnamentStyle ornamentStyle);
     static void createSlideInNotePlayEvents(Note* note, Chord* prevChord, NoteEventList* el);
     static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int onTime, bool hasTremolo);
+
     // Helpers
     static Chord* getChordFromSegment(Segment* segment, track_idx_t track);
     static Trill* findFirstTrill(Chord* chord);
@@ -113,5 +88,3 @@ private:
     static int totalTiedNoteTicks(Note* note);
 };
 }
-
-#endif //MU_ENGRAVING_COMPATMIDIRENDER_H

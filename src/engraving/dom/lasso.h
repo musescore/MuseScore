@@ -19,20 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_LASSO_H
-#define MU_ENGRAVING_LASSO_H
+#pragma once
 
 #include "engravingitem.h"
 
-#include "modularity/ioc.h"
-#include "iengravingconfiguration.h"
-
 namespace mu::engraving {
-//---------------------------------------------------------
-//   Lasso
-//---------------------------------------------------------
-
 class Lasso : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Lasso)
@@ -53,5 +44,4 @@ public:
     Grip defaultGrip() const override { return Grip(7); }
     std::vector<PointF> gripsPositions(const EditData&) const override;
 };
-} // namespace mu::engraving
-#endif
+}

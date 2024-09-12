@@ -19,16 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_XMLWRITER_H
-#define MU_ENGRAVING_XMLWRITER_H
-
-#include <map>
-#include <unordered_map>
+#pragma once
 
 #include "io/iodevice.h"
 #include "serialization/xmlstreamwriter.h"
 
-#include "dom/property.h"
+#include "../dom/property.h"
 
 namespace mu::engraving {
 class EngravingObject;
@@ -72,5 +68,3 @@ private:
     bool _recordElements = false;
 };
 }
-
-#endif // MU_ENGRAVING_XMLWRITER_H

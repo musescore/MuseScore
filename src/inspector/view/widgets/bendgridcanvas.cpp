@@ -26,7 +26,7 @@
 
 #include <QPainterPath>
 
-#include "dom/utils.h"
+#include "engraving/dom/utils.h"
 
 #include "translation.h"
 #include "log.h"

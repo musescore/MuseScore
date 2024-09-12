@@ -47,6 +47,7 @@
 #include "noteline.h"
 #include "ornament.h"
 #include "part.h"
+#include "rest.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"

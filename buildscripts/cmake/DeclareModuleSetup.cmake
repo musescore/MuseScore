@@ -164,9 +164,14 @@ macro(setup_module)
     )
 
     target_include_directories(${MODULE} PUBLIC
+        ${MODULE_INCLUDE}
+    )
+
+    target_include_directories(${MODULE} PRIVATE
         ${PROJECT_BINARY_DIR}
         ${CMAKE_CURRENT_BINARY_DIR}
         ${MODULE_ROOT}
+
         ${PROJECT_SOURCE_DIR}/src
 
         ${MUSE_FRAMEWORK_PATH}
@@ -181,10 +186,7 @@ macro(setup_module)
         ${MUSE_FRAMEWORK_PATH}/src/framework/testing/thirdparty/googletest/googletest/include
         # end compat
 
-        ${MODULE_INCLUDE}
-    )
 
-    target_include_directories(${MODULE} PRIVATE
         ${MODULE_INCLUDE_PRIVATE}
     )
 
