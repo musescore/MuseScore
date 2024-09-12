@@ -1014,7 +1014,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="73"/>
         <source>Do not hide if system is empty</source>
-        <translation>Ne rejtse el, ha a vonalrendszer üres</translation>
+        <translation>Ne rejtse el, ha a sorcsoport üres</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="82"/>
@@ -2200,7 +2200,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="551"/>
         <source>Hide empty staves within systems</source>
-        <translation>Üres sorok elrejtése a sorcsoportok között</translation>
+        <translation>Üres sorok elrejtése a sorcsoportokon belül</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="570"/>
@@ -2718,17 +2718,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3839"/>
         <source>Show all clefs on every system</source>
-        <translation>Az összes kulcs megjelenítése az összes rendszernél</translation>
+        <translation>Az összes kulcs megjelenítése az összes sorcsoportban</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3846"/>
         <source>Hide all clefs after the first system where they appear</source>
-        <translation>Az összes kulcs elrejtése az első rendszer után, amelyben szerepel</translation>
+        <translation>Az összes kulcs elrejtése az első sorcsoport után, amelyben szerepel</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3853"/>
         <source>Hide TAB clefs after the first system where they appear</source>
-        <translation>A TAB kulcsok elrejtése az első rendszer után, amelyben szerepelnek</translation>
+        <translation>A TAB kulcsok elrejtése az első sorcsoport után, amelyben szerepelnek</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3860"/>
@@ -2753,12 +2753,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3906"/>
         <source>Show on every system</source>
-        <translation>Megjelenítés az összes rendszernél</translation>
+        <translation>Megjelenítés az összes sorcsoportban</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3913"/>
         <source>Hide after the first system where they appear</source>
-        <translation>Elrejtés az első rendszer után, amelyben szerepel</translation>
+        <translation>Elrejtés az első sorcsoport után, amelyben szerepel</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3920"/>
@@ -3166,7 +3166,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7572"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7774"/>
         <source>Ties</source>
-        <translation>Kötőívek</translation>
+        <translation>Átkötőívek</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7893"/>
@@ -3241,7 +3241,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11677"/>
         <source>Max. dash gap:</source>
-        <translation>Max. kötőjel hézeg</translation>
+        <translation>Max. kötőjel hézag</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11713"/>
@@ -3705,7 +3705,7 @@ sorcsoport első szótagja előtt</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="144"/>
         <source>Slurs &amp; ties</source>
-        <translation>Kötőjel, ív, ív aláírások</translation>
+        <translation>Legato- &amp; átkötőívek</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="154"/>
@@ -3881,7 +3881,7 @@ sorcsoport első szótagja előtt</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7364"/>
         <source>Slurs &amp;&amp; ties</source>
-        <translation>Kötőjel és ívvel összekötött hangok</translation>
+        <translation>Legato- &amp; átkötőívek</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7466"/>
@@ -3915,7 +3915,7 @@ sorcsoport első szótagja előtt</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7788"/>
         <source>Minimum tie length:</source>
-        <translation>Átkötés minimális hossza:</translation>
+        <translation>Átkötőív minimális hossza:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7546"/>
@@ -3948,7 +3948,7 @@ sorcsoport első szótagja előtt</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7826"/>
         <source>Reset &apos;Minimum tie length&apos; value</source>
-        <translation>„Átkötés minimális hossza” alaphelyzetbe</translation>
+        <translation>„Átkötőív minimális hossza” alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8277"/>
@@ -4420,22 +4420,22 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12002"/>
         <source>Reset &apos;Min. line length&apos; value</source>
-        <translation>&apos;Vonal min. hossza&apos; alaphelyzetbe</translation>
+        <translation>„Min. vonalhossz” alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12031"/>
         <source>Min. line length:</source>
-        <translation>Vonal min. hossza</translation>
+        <translation>Min. vonalhossz:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12048"/>
         <source>Line gap:</source>
-        <translation>Vonal hézag:</translation>
+        <translation>Vonalhézag:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12080"/>
         <source>Reset &apos;Line gap&apos; value</source>
-        <translation>&apos;Vonal hézag&apos; alaphelyzetbe</translation>
+        <translation>„Vonalhézag” alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12097"/>
@@ -4694,7 +4694,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3355"/>
         <source>System brackets</source>
-        <translation>Klammerek</translation>
+        <translation>Sorcsoport klammerek</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3576"/>
@@ -4827,7 +4827,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13887"/>
         <source>Parentheses indicating ties</source>
-        <translation>Kötőívet jelző zárójelek</translation>
+        <translation>Ákötőívet jelző zárójelek</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13900"/>
@@ -4862,7 +4862,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14487"/>
         <source>Reset &apos;Musical symbols scale&apos; value</source>
-        <translation>&apos;Zenei szimbólumok skálázása&apos; alaphelyzetbe</translation>
+        <translation>„Zenei szimbólumok skálázása” alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14556"/>
@@ -4882,12 +4882,12 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13863"/>
         <source>Show ties and repeat fret marks</source>
-        <translation>Mutassa a kötőíveket és az ismétléseket az érintőjeleknél</translation>
+        <translation>Mutassa az átkötőíveket és az ismétléseket az érintőjeleknél</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13870"/>
         <source>Show ties only</source>
-        <translation>Csak a kötőíveket mutassa</translation>
+        <translation>Csak az átkötőíveket mutassa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13877"/>
@@ -4897,7 +4897,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13893"/>
         <source>Only show at the start of a system</source>
-        <translation>Megjelenítés csak a rendszer kezdeténél</translation>
+        <translation>Megjelenítés csak a sorcsoport kezdeténél</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13907"/>
@@ -6608,12 +6608,12 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="113"/>
         <source>Next chord / Shift text right</source>
-        <translation>Következő akkor / szöveg mozgatása jobbra</translation>
+        <translation>Következő akkord / szöveg mozgatása jobbra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="119"/>
         <source>Previous chord / Shift text left</source>
-        <translation>Előző akkor / szöveg mozgatása balra</translation>
+        <translation>Előző akkord / szöveg mozgatása balra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="125"/>
@@ -7330,7 +7330,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="204"/>
         <source>Go to previous frame</source>
-        <translation>Ugrás az előző keretre</translation>
+        <translation>Ugrás az előző kerethez</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="210"/>
@@ -7841,7 +7841,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1258"/>
         <source>Add frame text</source>
-        <translation>Keretszöveg hozzáadása</translation>
+        <translation>Dobozkeret hozzáadása</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1264"/>
@@ -8482,12 +8482,12 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2321"/>
         <source>Add tied note</source>
-        <translation>Kötőíves hang hozzáadása</translation>
+        <translation>Átkötött hang hozzáadása</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2327"/>
         <source>Slur</source>
-        <translation>Kötőív</translation>
+        <translation>Legato-ív</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2418"/>
@@ -8653,7 +8653,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2320"/>
         <source>Tie</source>
-        <translation>Átkötés</translation>
+        <translation>Átkötőív</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="731"/>
@@ -9418,7 +9418,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="692"/>
         <source>Insert &amp;horizontal frame</source>
-        <translation>Vízszintes keret beszúrása</translation>
+        <translation>Vízszintes doboz beszúrása</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="699"/>
@@ -9428,22 +9428,22 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="706"/>
         <source>Insert &amp;text frame</source>
-        <translation>Szövegkeret beszúrása</translation>
+        <translation>&amp;Szövegkeret beszúrása</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="713"/>
         <source>Append h&amp;orizontal frame</source>
-        <translation>Vízszintes keret hozzáadása</translation>
+        <translation>&amp;Vízszintes keret hozzáadása</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="719"/>
         <source>Append v&amp;ertical frame</source>
-        <translation>Függőleges keret hozzáadása</translation>
+        <translation>&amp;Függőleges keret hozzáadása</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="725"/>
         <source>Append te&amp;xt frame</source>
-        <translation>Szövegkeret hozzáadása</translation>
+        <translation>Szövegkeret &amp;hozzáadása</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="870"/>
@@ -10046,7 +10046,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2328"/>
         <source>Add slur</source>
-        <translation>Kötőív hozzáadása</translation>
+        <translation>Legato-ív hozzáadása</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2402"/>
@@ -10071,12 +10071,12 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2488"/>
         <source>Show sound flags</source>
-        <translation>Hangjelzők megjelenítése</translation>
+        <translation>Hangszínjelölők megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2489"/>
         <source>Show/hide sound flags</source>
-        <translation>Hangjelzők megjelenítése/elrejtése</translation>
+        <translation>Hangszínjelölők megjelenítése/elrejtése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2495"/>
@@ -10621,7 +10621,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="220"/>
         <source>&amp;Intervals</source>
-        <translation>&amp;Hangközök</translation>
+        <translation>Hang&amp;közök</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="221"/>
@@ -11307,7 +11307,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="169"/>
         <source>Audio &amp; MIDI</source>
-        <translation>Audio &amp; MIDI</translation>
+        <translation>Hang és MIDI</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="172"/>
@@ -12251,7 +12251,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="177"/>
         <source>Tie segment</source>
-        <translation>Kötőív szegmens</translation>
+        <translation>Átkötőív szegmens</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="178"/>
@@ -12342,12 +12342,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="197"/>
         <source>Tie</source>
-        <translation>Átkötés</translation>
+        <translation>Átkötőív</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/articulation.cpp" line="159"/>
         <source>Articulation text</source>
-        <translation>Artikuláció szöveg</translation>
+        <translation>Artikuláció szövege</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/articulation.cpp" line="162"/>
@@ -12453,7 +12453,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="216"/>
         <source>Sound flag</source>
-        <translation>Hangjelző</translation>
+        <translation>Hangszínjelölő</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="217"/>
@@ -12782,7 +12782,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="283"/>
         <source>Slur</source>
-        <translation>Kötőív</translation>
+        <translation>Legato-ív</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="286"/>
@@ -12887,7 +12887,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="1407"/>
         <source>♮</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>Feloldójel</translation>
+        <translation>♮</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1475"/>
@@ -13063,12 +13063,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1164"/>
         <source>Fretboard diagram fingering</source>
-        <translation>Akkordábra ujjrend</translation>
+        <translation>Akkordábra ujjrendje</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1166"/>
         <source>Fretboard diagram fret number</source>
-        <translation>Akkordábra bund szám</translation>
+        <translation>Akkordábra bundszáma</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1179"/>
@@ -18238,7 +18238,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/extensions/extensionsmodule.cpp" line="93"/>
         <source>Manually</source>
-        <translation>Manuálisan</translation>
+        <translation>Kézileg</translation>
     </message>
 </context>
 <context>
@@ -19629,12 +19629,12 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="57"/>
         <source>Parentheses</source>
-        <translation>Zárójelek</translation>
+        <translation>Gömbölyű klammerek</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="58"/>
         <source>Brackets</source>
-        <translation>Klammerek</translation>
+        <translation>Gerendaklammerek</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="66"/>
@@ -20105,7 +20105,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="117"/>
         <source>Triangle</source>
-        <translation>Triangulum</translation>
+        <translation>Háromszög</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="57"/>
@@ -20126,7 +20126,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="111"/>
         <source>Scale to frame size</source>
-        <translation>Átméretezés a kerethez</translation>
+        <translation>Átméretezés a keret méretéhez</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="121"/>
@@ -20465,7 +20465,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="188"/>
         <source>Move cross-staff beam</source>
-        <translation>Soron átnyúló gerenda mozgatása</translation>
+        <translation>Soron átnyúló gerenda áthelyezése</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="227"/>
@@ -20590,7 +20590,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="64"/>
         <source>Show stem slash</source>
-        <translation>Kottaszár áthúzás mutatása</translation>
+        <translation>Kottaszár áthúzásának megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="77"/>
@@ -20862,7 +20862,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="50"/>
         <source>Empty staves</source>
-        <translation>Üres sorcsoportok</translation>
+        <translation>Üres kottasorok</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="77"/>
@@ -20903,7 +20903,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="106"/>
         <source>Sound flags</source>
-        <translation>Hangjelzők</translation>
+        <translation>Hangszínjelölők</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="82"/>
@@ -21325,12 +21325,12 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="43"/>
         <source>Slur</source>
-        <translation>Kötőív</translation>
+        <translation>Legato-ív</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="48"/>
         <source>Tie</source>
-        <translation>Átkötés</translation>
+        <translation>Átkötőív</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="79"/>
@@ -21660,7 +21660,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="79"/>
         <source>Tie placement</source>
-        <translation>Kötőív helyzete</translation>
+        <translation>Átkötőív helyzete</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="86"/>
@@ -21769,12 +21769,12 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/expressions/ExpressionsSettings.qml" line="82"/>
         <source>Align with preceding dynamic</source>
-        <translation>Illessztés a megelőző dinamikai jelhez</translation>
+        <translation>Illesztés a megelőző dinamikai jelhez</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangePositionSettingsTab.qml" line="63"/>
         <source>Alignment with adjacent tempo text</source>
-        <translation>Illessztés a mellette lévő tempószöveghez</translation>
+        <translation>Illesztés a mellette lévő tempószöveghez</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangePositionSettingsTab.qml" line="68"/>
@@ -22001,12 +22001,12 @@ felismerése</translation>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentspanelcontextmenumodel.cpp" line="192"/>
         <source>Expand all instruments</source>
-        <translation>Bontsa ki az összes hangszert</translation>
+        <translation>Az összes hangszer kibontása</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentspanelcontextmenumodel.cpp" line="193"/>
         <source>Collapse all instruments</source>
-        <translation>Csukja be az összes hangszert</translation>
+        <translation>Az összes hangszer összecsukása</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/staffcontroltreeitem.cpp" line="33"/>
@@ -22336,7 +22336,7 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="148"/>
         <source>Draw inner stems to nearest beam (“French” style)</source>
-        <translation>A belső kottaszárakat a legközelebbi gerendához rajzolja (&quot;Francia&quot; stílus)</translation>
+        <translation>A belső kottaszárakat a legközelebbi gerendához rajzolja („francia” stílus)</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml" line="42"/>
@@ -23686,7 +23686,7 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="45"/>
         <source>Keep accidentals close to offset notes</source>
-        <translation>Tartsa az módosítójeleket közel az eltolt hangokhoz</translation>
+        <translation>Tartsa a módosítójeleket közel az eltolt hangokhoz</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="53"/>
@@ -23696,7 +23696,7 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="61"/>
         <source>Align accidentals an octave apart across subchords</source>
-        <translation>Igazítsa az oktáv távolságra levő módosítójeleket szubakkordon esetén</translation>
+        <translation>Igazítsa az oktáv távolságra levő módosítójeleket szubakkordok esetén</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="69"/>
@@ -23783,13 +23783,13 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="772"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1266"/>
         <source>Brackets</source>
-        <translation>Klammerek</translation>
+        <translation>Gerendaklammerek</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="773"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1267"/>
         <source>Parentheses</source>
-        <translation>Zárójelek</translation>
+        <translation>Gömbölyű klammerek</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="776"/>
@@ -24436,7 +24436,7 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="145"/>
         <source>Draw staff</source>
-        <translation>Vonalrendszer megjelenítése</translation>
+        <translation>Kottasor megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="31"/>
@@ -24608,7 +24608,7 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <location filename="../../src/palette/internal/palettecreator.cpp" line="695"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1137"/>
         <source>Slur</source>
-        <translation>Kötőív</translation>
+        <translation>Legato-ív</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="773"/>
@@ -27205,7 +27205,7 @@ palettafájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="679"/>
         <source>Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation>A hangszer hangjelzői alaphelyzetbe állíthatók, de a kottaszöveg megmarad. Ez a művelet nem vonható vissza.</translation>
+        <translation>A hangszer hangszínjelölői alaphelyzetbe állíthatók, de a kottaszöveg megmarad. Ez a művelet nem vonható vissza.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/TempoSlider.qml" line="45"/>
@@ -27265,7 +27265,7 @@ palettafájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="98"/>
         <source>Sound flag options are not available for this sound.</source>
-        <translation>Nem érhetők el hangjelző-beállítások ehhez a hanghoz.</translation>
+        <translation>Nem érhetők el hangszínjelölő-beállítások ehhez a hanghoz.</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="74"/>
@@ -27295,12 +27295,12 @@ palettafájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="90"/>
         <source>Sound flag settings</source>
-        <translation>Hangjelző-beállítások</translation>
+        <translation>Hangszínjelölő-beállítások</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="137"/>
         <source>Sound flag menu</source>
-        <translation>Hangjelzőmenü</translation>
+        <translation>Hangszínjelölő menü</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="154"/>
@@ -28319,7 +28319,7 @@ palettafájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="75"/>
         <source>Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.</source>
-        <translation>Felhívjuk a figyelmet, hogy a kotta megjelenése meg fog változni, mivel több funkció is tovább lett fejlesztve a gerendák, kötőívek, legato-ívek, rendszerelemek és vízszintes elrendezés tekintetében.</translation>
+        <translation>Felhívjuk a figyelmet, hogy a kotta megjelenése meg fog változni, mivel több funkció is tovább lett fejlesztve a gerendák, kötőívek, legato-ívek, sorcsoportelemek és vízszintes elrendezés tekintetében.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>

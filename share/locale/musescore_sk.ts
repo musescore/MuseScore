@@ -58,7 +58,7 @@
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="69"/>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="72"/>
         <source>Add system break at end of each system</source>
-        <translation>Pridať ukončenie riadka na konci každého riadka</translation>
+        <translation>Pridať zalomenie riadku na konci každého riadku</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="79"/>
@@ -72,7 +72,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="14"/>
         <source>Edit Drumset</source>
-        <translation>Upraviť biciu sadu</translation>
+        <translation>Upraviť biciu súpravu</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="50"/>
@@ -211,7 +211,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="20"/>
         <source>Select note:</source>
-        <translation>Označiť notu:</translation>
+        <translation>Vybrať notu:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="57"/>
@@ -1786,7 +1786,7 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="139"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7234"/>
         <source>Arpeggios</source>
-        <translation>Arpeggiá</translation>
+        <translation>Arpeggia</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8174"/>
@@ -1829,7 +1829,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="427"/>
         <source>Staff line thickness:</source>
-        <translation>Hrúbka čiar notovej osnovy:</translation>
+        <translation>Hrúbka čiary notovej osnovy:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="443"/>
@@ -2175,7 +2175,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="456"/>
         <source>Reset &apos;Staff line thickness&apos; value</source>
-        <translation>Obnoviť hodnotu hrúbky čiar notovej osnovy</translation>
+        <translation>Obnoviť hodnotu hrúbky čiary notovej osnovy</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="468"/>
@@ -2200,7 +2200,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="551"/>
         <source>Hide empty staves within systems</source>
-        <translation>Skryť prázdne osnovy v riadkoch</translation>
+        <translation>Skryť prázdne notové osnovy v rámci riadkov</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="570"/>
@@ -2220,7 +2220,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="733"/>
         <source>Off</source>
-        <translation>Vypnúť</translation>
+        <translation>Vypnuté</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="774"/>
@@ -2323,7 +2323,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1609"/>
         <source>Max. staff distance:</source>
-        <translation type="unfinished"/>
+        <translation>Max. vzdialenosť notovej osnovy:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1068"/>
@@ -2370,13 +2370,13 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1151"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1771"/>
         <source>Max. system distance:</source>
-        <translation>Maximálna vzdialenosť medzi systémami:</translation>
+        <translation>Max. vzdialenosť riadkov:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1167"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1837"/>
         <source>Min. system distance:</source>
-        <translation>Minimálna vzdialenosť medzi systémami:</translation>
+        <translation>Min. vzdialenosť riadkov:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1850"/>
@@ -2753,7 +2753,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3906"/>
         <source>Show on every system</source>
-        <translation type="unfinished"/>
+        <translation>Zobraziť na každom riadku</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3913"/>
@@ -2804,7 +2804,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="602"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="622"/>
         <source>Long name</source>
-        <translation type="unfinished"/>
+        <translation>Dlhý názov</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="612"/>
@@ -3114,7 +3114,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5814"/>
         <source>Rests (multiple voices)</source>
-        <translation type="unfinished"/>
+        <translation>Pomlčky (viaceré hlasy)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5820"/>
@@ -3693,7 +3693,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="79"/>
         <source>Header &amp; footer</source>
-        <translation type="unfinished"/>
+        <translation>Hlavička a päta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="104"/>
@@ -3710,7 +3710,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="154"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8457"/>
         <source>Voltas</source>
-        <translation type="unfinished"/>
+        <translation>Volty</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="159"/>
@@ -4632,7 +4632,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="124"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6251"/>
         <source>Measure repeats</source>
-        <translation type="unfinished"/>
+        <translation>Opakovania taktov</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="204"/>
@@ -5017,7 +5017,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14400"/>
         <source>li</source>
-        <translation type="unfinished"/>
+        <translation>li</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="840"/>
@@ -5478,7 +5478,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="389"/>
         <source>Even page margins</source>
-        <translation>Okraje pánych strán</translation>
+        <translation>Okraje párnych strán</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="300"/>
@@ -5520,7 +5520,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.ui" line="17"/>
         <source>Convert chord symbols into notes</source>
-        <translation>Prepíš akordické značky do nôt</translation>
+        <translation>Prepísať akordové značky do nôt</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.ui" line="41"/>
@@ -5574,17 +5574,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="99"/>
         <source>Same beat</source>
-        <translation type="unfinished"/>
+        <translation>Rovnaká doba</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="106"/>
         <source>Same measure</source>
-        <translation type="unfinished"/>
+        <translation>Rovnaký takt</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="113"/>
         <source>Same system</source>
-        <translation>Rovnaký systém</translation>
+        <translation>Rovnaký riadok</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="120"/>
@@ -5637,7 +5637,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="138"/>
         <source>Same system</source>
-        <translation>Rovnaký systém</translation>
+        <translation>Rovnaký riadok</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="54"/>
@@ -5647,7 +5647,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="152"/>
         <source>Same note type:</source>
-        <translation type="unfinished"/>
+        <translation>Rovnaký typ noty:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="103"/>
@@ -5687,12 +5687,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="166"/>
         <source>Same beat</source>
-        <translation type="unfinished"/>
+        <translation>Rovnaká doba</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="173"/>
         <source>Same measure</source>
-        <translation type="unfinished"/>
+        <translation>Rovnaký takt</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="183"/>
@@ -6455,7 +6455,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="69"/>
         <source>Save a cop&amp;y…</source>
-        <translation>Uložiť kópiu…</translation>
+        <translation>Uložiť &amp;kópiu…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="70"/>
@@ -6465,7 +6465,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="75"/>
         <source>Save se&amp;lection…</source>
-        <translation>U&amp;ložiť výber…</translation>
+        <translation>Uložiť &amp;výber…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="76"/>
@@ -6475,7 +6475,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="81"/>
         <source>Save to clo&amp;ud…</source>
-        <translation>Uložiť do clo&amp;udu…</translation>
+        <translation>Uložiť do &amp;cloudu…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="82"/>
@@ -6485,23 +6485,23 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="88"/>
         <source>Pu&amp;blish to MuseScore.com…</source>
-        <translation>Pu&amp;blikovať na MuseScore.com…</translation>
+        <translation>Zverejniť &amp;na MuseScore.com…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="89"/>
         <source>Publish to MuseScore.com…</source>
-        <translation>Zverejniť na MuseScore.com</translation>
+        <translation>Zverejniť na MuseScore.com...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="95"/>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="96"/>
         <source>Share on Audio.com…</source>
-        <translation type="unfinished"/>
+        <translation>Zdieľať na Audio.com...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="102"/>
         <source>&amp;Export…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Exportovať...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="103"/>
@@ -6511,17 +6511,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="109"/>
         <source>Import P&amp;DF…</source>
-        <translation>Importovať P&amp;DF…</translation>
+        <translation>&amp;Importovať PDF…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="110"/>
         <source>Import PDF…</source>
-        <translation>Import PDF…</translation>
+        <translation>Importovať PDF…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="116"/>
         <source>Project propert&amp;ies…</source>
-        <translation>Vlastnost&amp;i projektu…</translation>
+        <translation>&amp;Vlastnosti projektu…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
@@ -6531,17 +6531,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="122"/>
         <source>&amp;Print…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Tlačiť...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="129"/>
         <source>&amp;Clear recent files</source>
-        <translation>Vy&amp;čistiť zoznam nedávnych súborov</translation>
+        <translation>Vyčistiť &amp;zoznam nedávnych súborov</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="130"/>
         <source>Clear recent files</source>
-        <translation type="unfinished"/>
+        <translation>Vyčistiť zoznam nedávnych súborov</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="123"/>
@@ -6772,7 +6772,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="376"/>
         <source>Similar on this staff</source>
-        <translation>Podobné v tejto osnove</translation>
+        <translation>Podobné v tejto notovej osnove</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="382"/>
@@ -11793,7 +11793,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/fret.cpp" line="902"/>
         <source>%n dot(s) on fret(s) %1</source>
         <extracomment>Omit the &quot;%n &quot; for the singular translation (and the &quot;(s)&quot; too)</extracomment>
-        <translation><numerusform>jedna bodka na pražci %1</numerusform><numerusform>%n bodky na pražci %1</numerusform><numerusform>%n bodiek na pražci %1</numerusform><numerusform>%n bodka(y) na pražci(och) %1</numerusform></translation>
+        <translation><numerusform>Jedna bodka na pražci %1</numerusform><numerusform>%n bodky na pražci/-och %1</numerusform><numerusform>%n bodiek na pražci/-och %1</numerusform><numerusform>%n bodiek na pražci/-och %1</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="914"/>
@@ -12486,7 +12486,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="223"/>
         <source>Staff type change</source>
-        <translation>Zmeny typu osnovy</translation>
+        <translation>Zmena typu notovej osnovy</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="224"/>
@@ -12762,7 +12762,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="280"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1143"/>
         <source>System</source>
-        <translation>Systém</translation>
+        <translation>Riadok</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="281"/>
@@ -13682,7 +13682,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/stringtunings.cpp" line="180"/>
         <source>String %1</source>
-        <translation type="unfinished"/>
+        <translation>Struna %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stringtunings.cpp" line="181"/>
@@ -18720,7 +18720,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="56"/>
         <source>s</source>
         <extracomment>Abbreviation of &quot;seconds&quot;</extracomment>
-        <translation>Automaticky</translation>
+        <translation>s</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="100"/>
@@ -18760,12 +18760,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="107"/>
         <source>Abort</source>
-        <translation type="unfinished"/>
+        <translation>Prerušiť</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="108"/>
         <source>Retry</source>
-        <translation>Oprakovať</translation>
+        <translation>Skúsiť znova</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="109"/>
@@ -18795,12 +18795,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="116"/>
         <source>Continue</source>
-        <translation>Priebežne</translation>
+        <translation>Pokračovať</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/Utils.js" line="34"/>
         <source>percent</source>
-        <translation type="unfinished"/>
+        <translation>percent</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="108"/>
@@ -18832,7 +18832,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="132"/>
         <source>li</source>
         <extracomment>Stands for &quot;Lines&quot;. Used for text line spacing controls, for example.</extracomment>
-        <translation type="unfinished"/>
+        <translation>li</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="58"/>
@@ -18847,7 +18847,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="120"/>
         <source>On</source>
         <extracomment>as opposed to Off</extracomment>
-        <translation type="unfinished"/>
+        <translation>Zapnúť</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
@@ -18883,12 +18883,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="126"/>
         <source>Don’t ask again</source>
-        <translation type="unfinished"/>
+        <translation>Už sa nepýtať</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="83"/>
         <source>°</source>
-        <translation type="unfinished"/>
+        <translation>°</translation>
     </message>
 </context>
 <context>
@@ -18901,7 +18901,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/capella/internal/capella.cpp" line="2844"/>
         <source>Import failed: %1</source>
-        <translation>Zlyhanie importu: %1</translation>
+        <translation>Import zlyhal: %1</translation>
     </message>
 </context>
 <context>
@@ -18928,7 +18928,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/mei/internal/meireader.cpp" line="80"/>
         <source>Do you want to try to load this MEI file anyway?</source>
-        <translation type="unfinished"/>
+        <translation>Chcete aj tak skúsiť tento súbor MEI načítať?</translation>
     </message>
 </context>
 <context>
@@ -18936,12 +18936,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi.cpp" line="1276"/>
         <source>Import MIDI</source>
-        <translation>Importovať MIDID</translation>
+        <translation>Importovať MIDI</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi.cpp" line="1277"/>
         <source>Import failed: %1</source>
-        <translation>Zlyhanie importu: %1</translation>
+        <translation>Import zlyhal: %1</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="89"/>
@@ -18956,7 +18956,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="143"/>
         <source>Staff name</source>
-        <translation>Názov osnovy</translation>
+        <translation>Názov notovej osnovy</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="174"/>
@@ -18986,7 +18986,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="316"/>
         <source>16th</source>
-        <translation>16-inová </translation>
+        <translation>16-tinová</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="317"/>
@@ -18996,12 +18996,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="318"/>
         <source>64th</source>
-        <translation>64-inová</translation>
+        <translation>64-tinová</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="319"/>
         <source>128th</source>
-        <translation>128-inová </translation>
+        <translation>128-minová</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="324"/>
@@ -19016,32 +19016,32 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="380"/>
         <source>2-plets</source>
-        <translation>Duoly 2</translation>
+        <translation>Duoly</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="381"/>
         <source>3-plets</source>
-        <translation>Trioly 3</translation>
+        <translation>Trioly</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="382"/>
         <source>4-plets</source>
-        <translation>Kvartoly 4</translation>
+        <translation>Kvartoly</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="383"/>
         <source>5-plets</source>
-        <translation>Kvintoly 5</translation>
+        <translation>Kvintoly</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="384"/>
         <source>7-plets</source>
-        <translation>Septoly 7</translation>
+        <translation>Septoly</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="385"/>
         <source>9-plets</source>
-        <translation>Nontola 9</translation>
+        <translation>Nontoly</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="391"/>
@@ -19069,13 +19069,13 @@ predvedenie</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="667"/>
         <source>Split staff</source>
-        <translation>Rozdeliť osnovu</translation>
+        <translation>Rozdeliť notovú osnovu</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="691"/>
         <source>Clef
 changes</source>
-        <translation>Zmena
+        <translation>Zmeny
 kľúča</translation>
     </message>
     <message>
@@ -19138,7 +19138,7 @@ predtaktie</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="889"/>
         <source>Detect swing</source>
-        <translation>Detekuj swing</translation>
+        <translation>Detekovať swing</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="1220"/>
@@ -19152,7 +19152,7 @@ predtaktie</translation>
         <location filename="../../src/importexport/musicxml/internal/musicxml/importmxml.cpp" line="59"/>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="170"/>
         <source>Do you want to try to load this file anyway?</source>
-        <translation>Chcete súbor opäť načítať?</translation>
+        <translation>Chcete aj tak skúsiť tento súbor načítať?</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/importexport/musicxml/internal/musicxml/importmxml.cpp" line="108"/>
@@ -19167,22 +19167,22 @@ predtaktie</translation>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="98"/>
         <source>Warning:</source>
-        <translation type="unfinished"/>
+        <translation>Varovanie:</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="100"/>
         <source>Critical error:</source>
-        <translation type="unfinished"/>
+        <translation>Kritická chyba:</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="102"/>
         <source>Fatal error:</source>
-        <translation type="unfinished"/>
+        <translation>Závažná chyba:</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="104"/>
         <source>Unknown error:</source>
-        <translation type="unfinished"/>
+        <translation>Neznáma chyba:</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="228"/>
@@ -19208,7 +19208,7 @@ predtaktie</translation>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="57"/>
         <source>Export invisible elements to MusicXML</source>
-        <translation type="unfinished"/>
+        <translation>Exportovať neviditeľné prvky do MusicXML</translation>
     </message>
 </context>
 <context>
@@ -19276,7 +19276,7 @@ predtaktie</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="128"/>
         <source>Reset property to default value</source>
-        <translation type="unfinished"/>
+        <translation>Obnoviť vlastnosť na predvolenú hodnotu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="153"/>
@@ -19292,7 +19292,7 @@ predtaktie</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="127"/>
         <source>Reset “%1” to default value</source>
-        <translation type="unfinished"/>
+        <translation>Obnoviť “%1” na predvolenú hodnotu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="156"/>
@@ -19404,7 +19404,7 @@ predtaktie</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/HorizontalSpacingSection.qml" line="74"/>
         <source>Measure width</source>
-        <translation type="unfinished"/>
+        <translation>Šírka taktu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/VerticalSpacingSection.qml" line="40"/>
@@ -19425,12 +19425,12 @@ predtaktie</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="87"/>
         <source>Auto-place</source>
-        <translation>Automatické umiestňenie</translation>
+        <translation>Automatické umiestnenie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="100"/>
         <source>Play</source>
-        <translation>Hrať</translation>
+        <translation>Prehrať</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="123"/>
@@ -21751,7 +21751,7 @@ predtaktie</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="196"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>Zapnúť</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="197"/>
@@ -23417,12 +23417,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/notationerrors.h" line="64"/>
         <source>No measure selected</source>
-        <translation>Žiaden takt nebol vybraný</translation>
+        <translation>Nie je vybraný žiaden takt</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="65"/>
         <source>Please select a measure and retry</source>
-        <translation>Vyberte takt a skúste znova</translation>
+        <translation>Prosím, vyberte takt a skúste to znova</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="68"/>
@@ -23511,7 +23511,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/noteinputbarcustomisemodel.cpp" line="234"/>
         <source>Separator line</source>
-        <translation type="unfinished"/>
+        <translation>Oddeľovacia čiara</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/colorlabel.cpp" line="109"/>
@@ -23589,7 +23589,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="203"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="181"/>
         <source>String %1</source>
-        <translation type="unfinished"/>
+        <translation>Struna %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="217"/>
@@ -23659,7 +23659,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message numerus="yes">
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="265"/>
         <source>%n string(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n struna</numerusform><numerusform>%n struny</numerusform><numerusform>%n strún</numerusform><numerusform>%n strún</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="41"/>
@@ -28084,7 +28084,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
         <source>A file already exists with the filename %1. Do you want to replace it?</source>
-        <translation type="unfinished"/>
+        <translation>Súbor s názvom %1 už existuje. Chcete ho nahradiť?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="366"/>
@@ -28419,7 +28419,7 @@ failed.</source>
     <message numerus="yes">
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="57"/>
         <source>%n measure(s),</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Jeden takt,</numerusform><numerusform>%n takty,</numerusform><numerusform>%n taktov,</numerusform><numerusform>%n taktov,</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="100"/>
@@ -29290,7 +29290,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="54"/>
         <source>The file does not exist</source>
-        <translation type="unfinished"/>
+        <translation>Súbor neexistuje</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="55"/>
@@ -29300,37 +29300,37 @@ failed.</source>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="56"/>
         <source>The file could not be removed</source>
-        <translation type="unfinished"/>
+        <translation>Súbor nemohol byť odstránený</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="57"/>
         <source>The directory is not empty</source>
-        <translation type="unfinished"/>
+        <translation>Adresár nie je prázdny</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="58"/>
         <source>The directory could not be cleared</source>
-        <translation type="unfinished"/>
+        <translation>Adresár nemohol byť vymazaný</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="59"/>
         <source>An error occurred when reading from the file</source>
-        <translation type="unfinished"/>
+        <translation>Pri čítaní zo súboru sa vyskytla chyba</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="60"/>
         <source>An error occurred when writing to the file</source>
-        <translation type="unfinished"/>
+        <translation>Pri zapisovaní do súboru sa vyskytla chyba</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="61"/>
         <source>An error occurred when making a path</source>
-        <translation type="unfinished"/>
+        <translation>Pri vytváraní cesty sa vyskytla chyba</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="62"/>
         <source>An error occurred when copying the file</source>
-        <translation type="unfinished"/>
+        <translation>Pri kopírovaní súboru sa vyskytla chyba</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="63"/>
@@ -29423,18 +29423,18 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="48"/>
         <source>Current path:</source>
-        <translation type="unfinished"/>
+        <translation>Aktuálna cesta:</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="97"/>
         <source>Choose file</source>
-        <translation type="unfinished"/>
+        <translation>Vybrať súbor</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="98"/>
         <location filename="../../src/framework/uicomponents/view/selectmultipledirectoriesmodel.cpp" line="127"/>
         <source>Choose directory</source>
-        <translation type="unfinished"/>
+        <translation>Vybrať adresár</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/DirectoriesTopPanel.qml" line="44"/>
@@ -29445,12 +29445,12 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/DirectoriesTopPanel.qml" line="57"/>
         <source>Directories</source>
-        <translation type="unfinished"/>
+        <translation>Adresáre</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/DirectoriesTopPanel.qml" line="62"/>
         <source>Add directory</source>
-        <translation type="unfinished"/>
+        <translation>Pridať adresár</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/DirectoriesView.qml" line="77"/>
@@ -29460,22 +29460,22 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/DirectoriesView.qml" line="103"/>
         <source>Directories list</source>
-        <translation type="unfinished"/>
+        <translation>Zoznam adresárov</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/ValueListHeaderItem.qml" line="52"/>
         <source>sorted ascending</source>
-        <translation type="unfinished"/>
+        <translation>usporiadané vzostupne</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/ValueListHeaderItem.qml" line="52"/>
         <source>sorted descending</source>
-        <translation type="unfinished"/>
+        <translation>usporiadané zostupne</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/ValueListHeaderItem.qml" line="54"/>
         <source>not sorted</source>
-        <translation type="unfinished"/>
+        <translation>neusporiadané</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/SearchField.qml" line="38"/>
@@ -29582,7 +29582,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="144"/>
         <source>Abort</source>
-        <translation type="unfinished"/>
+        <translation>Prerušiť</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="145"/>
@@ -29690,7 +29690,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="140"/>
         <source>You already have the latest version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; for news on what’s coming next.</source>
-        <translation type="unfinished"/>
+        <translation>Máte najnovšiu verziu programu MuseScore Studio. Na stránke &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; nájdete správy o tom, čo bude nasledovať.</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="147"/>
@@ -29700,7 +29700,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="176"/>
         <source>Cannot connect to server</source>
-        <translation>Nepodarilo sa pripojiť na server</translation>
+        <translation>Nedá sa pripojiť k serveru</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="177"/>
@@ -29720,12 +29720,12 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/ReleaseNotesView.qml" line="80"/>
         <source>Read the %1 release notes</source>
-        <translation type="unfinished"/>
+        <translation>Prečítajte si poznámky k vydaniu %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="51"/>
         <source>No thanks</source>
-        <translation>Nie ďakujem</translation>
+        <translation>Nie, ďakujem</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="68"/>
@@ -29741,7 +29741,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/view/updatemodel.cpp" line="36"/>
         <source>Updating MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Aktualizuje sa MuseScore Studio</translation>
     </message>
 </context>
 <context>

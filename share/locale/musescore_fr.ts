@@ -23061,7 +23061,7 @@ De plus, Maîtriser MuseScore propose une communauté de musiciens solidaires, a
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="188"/>
         <source>Edit fret number text style</source>
-        <translation>Éditer le style de texte</translation>
+        <translation>Éditer le style de texte des numéros de frettes</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="200"/>
@@ -23101,7 +23101,7 @@ De plus, Maîtriser MuseScore propose une communauté de musiciens solidaires, a
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="270"/>
         <source>Edit fingering text style</source>
-        <translation>Éditer le style de texte</translation>
+        <translation>Éditer le style de texte des doigtés</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="284"/>
@@ -28353,7 +28353,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="157"/>
         <source>Please note: score layouts will be affected by improvements to MuseScore Studio</source>
-        <translation>Remarque : Les mises en page des partitions seront affectées par les améliorations apportées à MuseScore Studio</translation>
+        <translation>Note : Les mises en page sont affectées par les améliorations apportées à MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="162"/>

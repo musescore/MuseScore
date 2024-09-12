@@ -1060,7 +1060,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="166"/>
         <source>Cutaway</source>
-        <translation>Iškarpyti (tuščius taktus)</translation>
+        <translation>Iškarpyta partitūra</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="186"/>
@@ -1359,7 +1359,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="968"/>
         <source>Don’t reflect transposition in linked tablature staves</source>
-        <translation>Neatspindėti transponavimo susietose tablatūrinėse eilutėse</translation>
+        <translation>Neatspindėti transponavimo susietose tabulatūrinėse eilutėse</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1005"/>
@@ -1610,7 +1610,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1110"/>
         <source>Below</source>
-        <translation>Po</translation>
+        <translation>Apačioje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1160"/>
@@ -1669,22 +1669,22 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="14"/>
         <source>Default strings tuning:</source>
-        <translation type="unfinished"/>
+        <translation>Numatytasis stygų derinimas:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="51"/>
         <source>New string…</source>
-        <translation type="unfinished"/>
+        <translation>Nauja styga...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="58"/>
         <source>Edit string…</source>
-        <translation type="unfinished"/>
+        <translation>Tvarkyti stygą...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="65"/>
         <source>Delete string</source>
-        <translation type="unfinished"/>
+        <translation>Pašalinti stygą</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="81"/>
@@ -1709,12 +1709,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14072"/>
         <source>Padding:</source>
-        <translation type="unfinished"/>
+        <translation>Atskirtis:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14118"/>
         <source>Reset &apos;Padding&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Atskirtis&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="64"/>
@@ -1960,7 +1960,7 @@
         <extracomment>spatium unit
 ----------
 space unit</extracomment>
-        <translation>tarp.</translation>
+        <translation>sp</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="453"/>
@@ -2175,7 +2175,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="456"/>
         <source>Reset &apos;Staff line thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;penklinės linijų storio&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="468"/>
@@ -2195,17 +2195,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="525"/>
         <source>Reset &apos;First system indentation&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Pirmosios sistemos atitraukimo&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="551"/>
         <source>Hide empty staves within systems</source>
-        <translation type="unfinished"/>
+        <translation>Slėpti tuščias penklines sistemose</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="570"/>
         <source>Show brackets when spanning a single staff</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti akolades kai apimama tik viena penklinė</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="580"/>
@@ -2263,7 +2263,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1507"/>
         <source>Reset &apos;Music top margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Muzikos viršutinė paraštė&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1523"/>
@@ -2278,32 +2278,32 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1381"/>
         <source>Reset &apos;Vertical frame bottom margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Vertikalaus rėmelio apatinė paraštė&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1291"/>
         <source>Reset &apos;Vertical frame top margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Vertikalaus rėmelio viršutinė paraštė&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1368"/>
         <source>Vertical frame top margin:</source>
-        <translation type="unfinished"/>
+        <translation>Vertikalaus rėmelio viršutinė paraštė:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1404"/>
         <source>Reset &apos;Last system fill threshold&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Paskutinės sistemos užpildo riba&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1278"/>
         <source>Reset &apos;Music bottom margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Muzikos apatinė paraštė&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1391"/>
         <source>Vertical frame bottom margin:</source>
-        <translation type="unfinished"/>
+        <translation>Vertikalaus rėmelio apatinė paraštė:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1265"/>
@@ -2313,7 +2313,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1546"/>
         <source>Enable vertical justification of staves</source>
-        <translation type="unfinished"/>
+        <translation>Įjungti vertikalų penklinių derinimą</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1571"/>
@@ -2329,7 +2329,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1068"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1619"/>
         <source>Reset &apos;Min. system distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Min. sistemos atstumas&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1660"/>
@@ -2339,12 +2339,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1705"/>
         <source>Reset &apos;Min. staff distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Min. penklinės atstumas&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1715"/>
         <source>Max. page fill distance:</source>
-        <translation type="unfinished"/>
+        <translation>Maks. puslapio užpildo atstumas:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1728"/>
@@ -2354,12 +2354,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1741"/>
         <source>Reset &apos;Max. staff distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Maks. penklinės atstumas&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1751"/>
         <source>Reset &apos;Max. grand staff distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Maks. dvig. penklinės atstumas&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1761"/>
@@ -2376,7 +2376,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1167"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1837"/>
         <source>Min. system distance:</source>
-        <translation type="unfinished"/>
+        <translation>Min. sistemos atstumas:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1850"/>
@@ -2392,12 +2392,12 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1081"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1924"/>
         <source>Reset &apos;Max. system distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Maks. sistemų atstumas&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1934"/>
         <source>Reset &apos;Max. page fill distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Maks. lapo užpildo atstumas&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1975"/>
@@ -2412,22 +2412,22 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="996"/>
         <source>Disable vertical justification of staves</source>
-        <translation type="unfinished"/>
+        <translation>Išjungti vertikalų penklinių derinimą</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="94"/>
         <source>Clefs, key &amp; time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Raktai, tonacijų ir metro ženklai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="357"/>
         <source>MuseScore Studio will change the style to suit the font better</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio pakeis stiliaus parinktis, kad geriau prisitaikytų prie šrifto</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1039"/>
         <source>Reset &apos;Grand staff distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Dvigubos penklinės atstumas&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1055"/>
@@ -2437,7 +2437,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1107"/>
         <source>Reset &apos;Staff distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Penklių atstumas&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1211"/>
@@ -2452,17 +2452,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2103"/>
         <source>Reset &apos;Small staff size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Sumažintos penklinės dydis&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2132"/>
         <source>Small note size:</source>
-        <translation type="unfinished"/>
+        <translation>Sumažintų natų dydis:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2170"/>
         <source>Reset &apos;Small note size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Sumažintos natos dydis&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2186"/>
@@ -2472,7 +2472,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2224"/>
         <source>Reset &apos;Grace note size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Melizmo dydis&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2240"/>
@@ -2689,7 +2689,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3537"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>System bracket</comment>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Akoladės storis&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3635"/>
@@ -2718,22 +2718,22 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3839"/>
         <source>Show all clefs on every system</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti visus raktus kiekvienoje sistemoje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3846"/>
         <source>Hide all clefs after the first system where they appear</source>
-        <translation type="unfinished"/>
+        <translation>Slėpti visus raktus po pirmos sistemos, kurioje jie pasirodo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3853"/>
         <source>Hide TAB clefs after the first system where they appear</source>
-        <translation type="unfinished"/>
+        <translation>Slėpti TAB raktus po pirmos sistemos, kurioje jie pasirodo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3860"/>
         <source>Show courtesy clefs</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti primenamuosius raktus</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3873"/>
@@ -2743,37 +2743,37 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3880"/>
         <source>Serif TAB clef</source>
-        <translation type="unfinished"/>
+        <translation>Serifinis TAB raktas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3893"/>
         <source>Key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Tonacijos</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3906"/>
         <source>Show on every system</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti kiekvienoje sistemoje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3913"/>
         <source>Hide after the first system where they appear</source>
-        <translation type="unfinished"/>
+        <translation>Slėpti po pirmos sistemos, kurioje jie pasirodo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3920"/>
         <source>Show courtesy key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti primenamuosius tonacijos ženklus</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3930"/>
         <source>Time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Metrai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3936"/>
         <source>Show courtesy time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti primenamąjį metrą</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4006"/>
@@ -2788,7 +2788,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="149"/>
         <source>Dynamics &amp; hairpins</source>
-        <translation type="unfinished"/>
+        <translation>Dinamika ir din. linijos</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="587"/>
@@ -2798,13 +2798,13 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="593"/>
         <source>Hide if there is only 1 instrument</source>
-        <translation type="unfinished"/>
+        <translation>Slėpti jei yra tik 1 instrumentas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="602"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="622"/>
         <source>Long name</source>
-        <translation type="unfinished"/>
+        <translation>Pilnas pavadinimas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="612"/>
@@ -2820,17 +2820,17 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="642"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="677"/>
         <source>Hide</source>
-        <translation type="unfinished"/>
+        <translation>Slėpti</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="649"/>
         <source>On subsequent systems:</source>
-        <translation type="unfinished"/>
+        <translation>Sekančiose sistemose:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="656"/>
         <source>On first system of sections:</source>
-        <translation type="unfinished"/>
+        <translation>Sekcijų pirmose sistemose:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="663"/>
@@ -2851,7 +2851,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4040"/>
         <source>Padding inside parentheses:</source>
-        <translation type="unfinished"/>
+        <translation>Atskirtis skliaustelių viduje:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4066"/>
@@ -2886,27 +2886,27 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4117"/>
         <source>After key signature if changing to fewer ♯ or ♭. Before if changing between ♯ and ♭</source>
-        <translation type="unfinished"/>
+        <translation>Po tonacijos ženklų, jeigu sumažėja ♯ ar ♭. Prieš juos, jeigu apsikeičiama tarp ♯ ir ♭</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4127"/>
         <source>Multiple accidentals in chords</source>
-        <translation type="unfinished"/>
+        <translation>Keli alteracijos ženklai akorduose</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4337"/>
         <source>Padding</source>
-        <translation type="unfinished"/>
+        <translation>Atskirtis</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4343"/>
         <source>Barline to time signature:</source>
-        <translation type="unfinished"/>
+        <translation>Nuo takto brūkšnio iki metro:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4366"/>
         <source>Key signature to time signature:</source>
-        <translation type="unfinished"/>
+        <translation>Nuo tonacijos ženklų iki metro:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4386"/>
@@ -2927,12 +2927,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4462"/>
         <source>Barline to clef:</source>
-        <translation type="unfinished"/>
+        <translation>Nuo takto brūkšnio iki rakto:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4472"/>
         <source>Time signature to barline:</source>
-        <translation type="unfinished"/>
+        <translation>Nuo metro iki takto brūkšnio:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4485"/>
@@ -2952,17 +2952,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4547"/>
         <source>Barline to key signature:</source>
-        <translation type="unfinished"/>
+        <translation>Nuo takto brūkšnio iki tonacijos ženklų:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4570"/>
         <source>Barline to grace note:</source>
-        <translation type="unfinished"/>
+        <translation>Nuo takto brūkšnio iki melizmo:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4580"/>
         <source>Clef to barline:</source>
-        <translation type="unfinished"/>
+        <translation>Nuo rakto iki takto brūkšnio:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4593"/>
@@ -2972,7 +2972,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4616"/>
         <source>Note to barline:</source>
-        <translation type="unfinished"/>
+        <translation>Nuo natos iki takto brūkšnio:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4629"/>
@@ -2982,7 +2982,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4639"/>
         <source>Barline to note:</source>
-        <translation type="unfinished"/>
+        <translation>Nuo takto brūkšnio iki natos:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4652"/>
@@ -2992,27 +2992,27 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4678"/>
         <source>Reset &apos;Clef/Key right margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Rakto/Tonacijos dešinioji paraštė&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4704"/>
         <source>Reset &apos;Key to barline distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Atstumas nuo ton. ženklų iki takto brūkšnio&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4747"/>
         <source>Clef to note:</source>
-        <translation type="unfinished"/>
+        <translation>Nuo rakto iki natos:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4760"/>
         <source>Clef to key signature:</source>
-        <translation type="unfinished"/>
+        <translation>Nuo rakto iki tonacijos ženklų:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4770"/>
         <source>Key signature to barline:</source>
-        <translation type="unfinished"/>
+        <translation>Nuo tonacijos ženklų iki takto brūkšnio:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4796"/>
@@ -3022,7 +3022,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4806"/>
         <source>Barline to accidental:</source>
-        <translation type="unfinished"/>
+        <translation>Nuo takto brūkšnio iki alteracijos ženklo:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4819"/>
@@ -3037,12 +3037,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4881"/>
         <source>Clef to time signature:</source>
-        <translation type="unfinished"/>
+        <translation>Nuo rakto iki metro:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4327"/>
         <source>Reset &apos;Spacing&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Tarpai&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4285"/>
@@ -3052,12 +3052,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4262"/>
         <source>Reset &apos;Minimum note distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Min. natų atstumas&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4249"/>
         <source>Reset &apos;Minimum measure width&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Min. takto plotis&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4907"/>
@@ -3067,7 +3067,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5384"/>
         <source>Use double barlines before key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti dvigubus takto brūkšnius prieš tonacijos ženklus</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5390"/>
@@ -3084,32 +3084,32 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5404"/>
         <source>Only before courtesy key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Tik prieš primenamuosius ton. ženklus</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5414"/>
         <source>Use double barlines before time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti dvigubus takto brūkšnius prieš metrus</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5434"/>
         <source>Only before courtesy time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Tik prieš primenamuosius metrus</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5688"/>
         <source>Accidental to accidental distance:</source>
-        <translation type="unfinished"/>
+        <translation>Atstumas nuo alteracijos iki alteracijos:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5768"/>
         <source>Alignment in chords</source>
-        <translation type="unfinished"/>
+        <translation>Lygiuotė akorduose</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5774"/>
         <source>Combine voices that share the same stem direction</source>
-        <translation type="unfinished"/>
+        <translation>Apjungti balsus, turinčius tą pačią kotelio kryptį</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5814"/>
@@ -3155,38 +3155,38 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6951"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>Tuplet bracket</comment>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Akoladės storis&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7324"/>
         <source>Do not show arpeggios in standard notation when displayed in tablature</source>
-        <translation type="unfinished"/>
+        <translation>Nerodyti arpeggio standartinėje notacijoje kai rodoma tabulatūroje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7572"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7774"/>
         <source>Ties</source>
-        <translation type="unfinished"/>
+        <translation>Jungimai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7893"/>
         <source>Default positions of dynamics and hairpins</source>
-        <translation type="unfinished"/>
+        <translation>Numatytosios dinamikos ir din. linijų pozicijos</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7921"/>
         <source>Voices 1 &amp; 3 above staff, voices 2 &amp; 4 below staff</source>
-        <translation type="unfinished"/>
+        <translation>Balsai 1 ir 3 virš penklinės, balsai 2 ir 4 po penkline</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7956"/>
         <source>Place above the staff on vocal instruments</source>
-        <translation type="unfinished"/>
+        <translation>Dėti virš penklinės vokaliniuose instrumentuose</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7963"/>
         <source>Center on grand staff instruments automatically</source>
-        <translation type="unfinished"/>
+        <translation>Centruoti dvig. penklinės instrumentuose automatiškai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9802"/>
@@ -3196,27 +3196,27 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9907"/>
         <source>Arrow height:</source>
-        <translation type="unfinished"/>
+        <translation>Rodyklės aukštis:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10032"/>
         <source>Tablature fret numbers</source>
-        <translation type="unfinished"/>
+        <translation>Tabulatūros ladų numeriai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10038"/>
         <source>Use cue sized numbers for grace note bends</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti sumažintus numerius melizmų patempimams</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11209"/>
         <source>Edit lyrics text style</source>
-        <translation type="unfinished"/>
+        <translation>Redaguoti žodžių teksto stilių</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11244"/>
         <source>Min. gap between lyrics:</source>
-        <translation type="unfinished"/>
+        <translation>Min. tarpas tarp žodžių:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11311"/>
@@ -3226,12 +3226,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11403"/>
         <source>Min. margin to other staves:</source>
-        <translation type="unfinished"/>
+        <translation>Min. paraštės iki kitų penklinių:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11550"/>
         <source>Line height (% of text size):</source>
-        <translation type="unfinished"/>
+        <translation>Linijos aukštis (teksto dydžio %):</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11628"/>
@@ -3241,17 +3241,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11677"/>
         <source>Max. dash gap:</source>
-        <translation type="unfinished"/>
+        <translation>Maks. brūkšnio tarpas:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11713"/>
         <source>Min. dash gap:</source>
-        <translation type="unfinished"/>
+        <translation>Min. brūkšnio tarpas:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11893"/>
         <source>Omit dash when space is limited</source>
-        <translation type="unfinished"/>
+        <translation>Praleisti brūkšnį kai trūksta vietos</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11913"/>
@@ -3262,7 +3262,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11921"/>
         <source>Dash placement at the start of the system:</source>
-        <translation type="unfinished"/>
+        <translation>Brūkšnių padėtis sistemos pradžioje:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8129"/>
@@ -3272,7 +3272,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8096"/>
         <source>Avoid barlines</source>
-        <translation type="unfinished"/>
+        <translation>Vengti takto brūkšnių</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12164"/>
@@ -3317,12 +3317,12 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4949"/>
         <source>Time signature to first note:</source>
-        <translation type="unfinished"/>
+        <translation>Nuo metro iki pirmos natos:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4972"/>
         <source>Clef/key signature to first note:</source>
-        <translation type="unfinished"/>
+        <translation>Nuo rakto/tonacijos ženklų iki pirmos natos:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4985"/>
@@ -3337,12 +3337,12 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5069"/>
         <source>Double barline thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Dvigubo takto brūkšnio storis:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5095"/>
         <source>Reset &apos;Thin barline thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;plonų takto brūkšnių storio&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5118"/>
@@ -3372,27 +3372,27 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5249"/>
         <source>Thick barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Storo takto brūkšnio atstumas:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5259"/>
         <source>Scale barlines to staff size</source>
-        <translation type="unfinished"/>
+        <translation>Didinti takto brūkšnius pagal penklinės dydį</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5269"/>
         <source>Reset &apos;Double barline distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;dvigubo takto brūkšnio atstumo&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5282"/>
         <source>Reset &apos;Barline at start of single staff&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;takto brūkšnys viengubos penklinės pradžioje&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5295"/>
         <source>Reset &apos;Scale barlines to staff size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Didinti takto brūkšnius pagal penklinės dydį&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5321"/>
@@ -3402,7 +3402,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5331"/>
         <source>Thick barline thickness:</source>
-        <translation type="unfinished"/>
+        <translation>Storo takto brūkšnio storis:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5341"/>
@@ -3412,7 +3412,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5351"/>
         <source>Double barline distance:</source>
-        <translation type="unfinished"/>
+        <translation>Dvigubo takto brūkšnio atstumas:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5364"/>
@@ -3447,7 +3447,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5658"/>
         <source>Note to dot distance:</source>
-        <translation type="unfinished"/>
+        <translation>Atstumas tarp natos ir taškelio:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5668"/>
@@ -3457,22 +3457,22 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5678"/>
         <source>Dot to dot distance:</source>
-        <translation type="unfinished"/>
+        <translation>Atstumas tarp dviejų taškelių:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5720"/>
         <source>Shorten stems</source>
-        <translation type="unfinished"/>
+        <translation>Trumpinti kotelius</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5729"/>
         <source>Shortest stem:</source>
-        <translation type="unfinished"/>
+        <translation>Trumpiausias kotelis:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5755"/>
         <source>Accidental to note distance:</source>
-        <translation type="unfinished"/>
+        <translation>Atstumas nuo alteracijos iki natos:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5848"/>
@@ -3482,7 +3482,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5877"/>
         <source>Minimum width:</source>
-        <translation type="unfinished"/>
+        <translation>Minimalus plotis:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5906"/>
@@ -3492,7 +3492,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5922"/>
         <source>Vertical position of number:</source>
-        <translation type="unfinished"/>
+        <translation>Vertikali numerio pozicija:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5951"/>
@@ -3557,7 +3557,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6363"/>
         <source>Number position:</source>
-        <translation type="unfinished"/>
+        <translation>Numerio pozicija:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6523"/>
@@ -3572,7 +3572,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6562"/>
         <source>Vertical distance from stem:</source>
-        <translation type="unfinished"/>
+        <translation>Vertikalus atstumas nuo kotelio:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6581"/>
@@ -3677,7 +3677,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6891"/>
         <source>Bracket hook height:</source>
         <comment>Tuplet bracket</comment>
-        <translation type="unfinished"/>
+        <translation>Akoladės užlenkimo aukštis:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6910"/>
@@ -3693,7 +3693,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="79"/>
         <source>Header &amp; footer</source>
-        <translation type="unfinished"/>
+        <translation>Antraštė ir poraštė</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="104"/>
@@ -3704,66 +3704,66 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="144"/>
         <source>Slurs &amp; ties</source>
-        <translation type="unfinished"/>
+        <translation>Lygos ir jungimai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="154"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8457"/>
         <source>Voltas</source>
-        <translation type="unfinished"/>
+        <translation>Voltos</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="159"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8771"/>
         <source>Ottavas</source>
-        <translation type="unfinished"/>
+        <translation>Oktaviniai ženklai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="164"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9206"/>
         <source>Pedal lines</source>
-        <translation type="unfinished"/>
+        <translation>Pedalų linijos</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="169"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9530"/>
         <source>Trill lines</source>
-        <translation type="unfinished"/>
+        <translation>Trelio linijos</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="174"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9666"/>
         <source>Vibrato lines</source>
-        <translation type="unfinished"/>
+        <translation>Vibrato linijos</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="179"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9810"/>
         <source>Bends</source>
-        <translation type="unfinished"/>
+        <translation>Patempimai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="184"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10052"/>
         <source>Text lines</source>
-        <translation type="unfinished"/>
+        <translation>Teksto linijos</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="189"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10200"/>
         <source>System text lines</source>
-        <translation type="unfinished"/>
+        <translation>Sistemos teksto linijos</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="194"/>
         <source>Articulations &amp; ornaments</source>
-        <translation type="unfinished"/>
+        <translation>Artikuliacijos ir melizmai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="219"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12158"/>
         <source>Expression text</source>
-        <translation type="unfinished"/>
+        <translation>Išraiškos tekstas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="563"/>
@@ -3784,7 +3784,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3117"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3256"/>
         <source>Reset &apos;Vertical placement&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Vertikalios padėties&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3178"/>
@@ -3801,7 +3801,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3867"/>
         <source>Default TAB clef</source>
-        <translation type="unfinished"/>
+        <translation>Numatytasis TAB raktas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6811"/>
@@ -3880,7 +3880,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7364"/>
         <source>Slurs &amp;&amp; ties</source>
-        <translation type="unfinished"/>
+        <translation>Lygos ir jungimai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7466"/>
@@ -3962,7 +3962,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8410"/>
         <source>Reset &apos;Height&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Aukštis&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8267"/>
@@ -4002,7 +4002,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11416"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12260"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Padėtis&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8368"/>
@@ -4011,13 +4011,13 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9367"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11989"/>
         <source>Reset &apos;Line thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Linijos storis&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7944"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8472"/>
         <source>Reset &apos;Position&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Pozicija&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8498"/>
@@ -4030,14 +4030,14 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9481"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9500"/>
         <source>Reset &apos;Line style&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Linijos stilius&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8524"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8875"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8953"/>
         <source>Reset &apos;Hook height&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Kabliuko aukštis&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8534"/>
@@ -4063,7 +4063,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8638"/>
         <source>Hook height:</source>
-        <translation type="unfinished"/>
+        <translation>Kabliuko aukštis:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8672"/>
@@ -4084,14 +4084,14 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8896"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9336"/>
         <source>Dotted</source>
-        <translation type="unfinished"/>
+        <translation>Punktyrinė</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8687"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8901"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9341"/>
         <source>Dash-dotted</source>
-        <translation type="unfinished"/>
+        <translation>Brūkšninė-punktyrinė</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8692"/>
@@ -4110,7 +4110,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8914"/>
         <source>Hook height above:</source>
-        <translation type="unfinished"/>
+        <translation>Kabliuko aukštis virš:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8924"/>
@@ -4120,47 +4120,47 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8963"/>
         <source>Hook height below:</source>
-        <translation type="unfinished"/>
+        <translation>Kabliuko aukštis po:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9014"/>
         <source>Reset &apos;Numbers only&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Tik numeriai&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9816"/>
         <source>Standard staff</source>
-        <translation type="unfinished"/>
+        <translation>Standartinė penklinė</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9835"/>
         <source>Line thickness on standard staves:</source>
-        <translation type="unfinished"/>
+        <translation>Linijų storis standartinėse penklinėse:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9858"/>
         <source>Reset &apos;Line thickness on standard staves&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Linijų storis standartinėse penklinėse&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9890"/>
         <source>Reset &apos;Arrow width&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Rodyklės plotis&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9877"/>
         <source>Arrow width:</source>
-        <translation type="unfinished"/>
+        <translation>Rodyklės plotis:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9942"/>
         <source>Reset &apos;Arrow height&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Rodyklės aukštis&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9965"/>
         <source>Line thickness on tablature staves:</source>
-        <translation type="unfinished"/>
+        <translation>Linijų storis tabulatūros penklinėse:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10003"/>
@@ -4170,7 +4170,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10348"/>
         <source>Articulations &amp;&amp; ornaments</source>
-        <translation type="unfinished"/>
+        <translation>Artikuliacijos ir melizmai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10354"/>
@@ -4188,12 +4188,12 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10374"/>
         <source>Distance from stem:</source>
-        <translation type="unfinished"/>
+        <translation>Atstumas nuo kotelio:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10384"/>
         <source>Articulation size:</source>
-        <translation type="unfinished"/>
+        <translation>Artikuliacijos dydis:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10439"/>
@@ -4213,7 +4213,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10476"/>
         <source>Distance from notehead:</source>
-        <translation type="unfinished"/>
+        <translation>Atstumas nuo natos galvutės:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10486"/>
@@ -4233,12 +4233,12 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10545"/>
         <source>Align with stem</source>
-        <translation type="unfinished"/>
+        <translation>Lygiuoti su koteliu</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10552"/>
         <source>Align with notehead</source>
-        <translation type="unfinished"/>
+        <translation>Lygiuoti su natos galvute</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10559"/>
@@ -4248,12 +4248,12 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10585"/>
         <source>Combined articulation</source>
-        <translation type="unfinished"/>
+        <translation>Apjungta artikuliacija</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10591"/>
         <source>Always keep together</source>
-        <translation type="unfinished"/>
+        <translation>Visada laikyti šalia</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10598"/>
@@ -4298,17 +4298,17 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11800"/>
         <source>Min. dash length:</source>
-        <translation type="unfinished"/>
+        <translation>Min. brūkšnio ilgis:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11438"/>
         <source>Align verse number</source>
-        <translation type="unfinished"/>
+        <translation>Sulygiuoti posmo numerį</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11569"/>
         <source>Reset &apos;Align verse number&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Sulygiuoti posmo numerį&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11595"/>
@@ -4318,7 +4318,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12490"/>
         <source>Line height:</source>
-        <translation type="unfinished"/>
+        <translation>Linijos aukštis:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11608"/>
@@ -4343,7 +4343,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8025"/>
         <source>Reset &apos;Avoid barlines&apos; setting</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Vengti takto brūkšnių&quot; nustatymą</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8012"/>
@@ -4375,7 +4375,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12461"/>
         <source>of font height</source>
-        <translation type="unfinished"/>
+        <translation>šrifto aukščio</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8138"/>
@@ -4727,49 +4727,49 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6508"/>
         <source>Vertical distance from notes</source>
-        <translation type="unfinished"/>
+        <translation>Vertikalus atstumas nuo natų</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6990"/>
         <source>Horizontal distance from notes</source>
-        <translation type="unfinished"/>
+        <translation>Horizontalus atstumas nuo natų</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11197"/>
         <source>Lyrics text</source>
-        <translation type="unfinished"/>
+        <translation>Žodžių tekstas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12835"/>
         <source>Automatic capitalization</source>
-        <translation type="unfinished"/>
+        <translation>Automatinės didžiosios raidės</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="244"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9871"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13372"/>
         <source>Tablature</source>
-        <translation>Tablatūra</translation>
+        <translation>Tabulatūra</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13805"/>
         <source>Staccato</source>
-        <translation>stakato</translation>
+        <translation>Staccato</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13500"/>
         <source>Accent and marcato marks</source>
-        <translation type="unfinished"/>
+        <translation>Akcentai ir marcato žymės</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13637"/>
         <source>Harmonic marks</source>
-        <translation type="unfinished"/>
+        <translation>Flažoletų žymės</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13609"/>
         <source>Turns</source>
-        <translation type="unfinished"/>
+        <translation>Vertimai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13592"/>
@@ -4820,17 +4820,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13507"/>
         <source>Rasgueado</source>
-        <translation type="unfinished"/>
+        <translation>Rasgueado</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13887"/>
         <source>Parentheses indicating ties</source>
-        <translation type="unfinished"/>
+        <translation>Skliausteliai, nurodantys jungimus</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13900"/>
         <source>Always show at the start of a measure</source>
-        <translation type="unfinished"/>
+        <translation>Visada rodyti takto pradžioje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13914"/>
@@ -4840,12 +4840,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14413"/>
         <source>Line spacing:</source>
-        <translation type="unfinished"/>
+        <translation>Linijų tarpai:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14436"/>
         <source>Use musical symbols font for tuplet numbers</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti muzikinių simbolių šriftą tupletų numeriams</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14446"/>
@@ -4855,7 +4855,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14458"/>
         <source>Musical symbols scale:</source>
-        <translation type="unfinished"/>
+        <translation>Muzikinių simbolių mastelis:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14487"/>
@@ -4895,12 +4895,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13893"/>
         <source>Only show at the start of a system</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti tik sistemos pradžioje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13907"/>
         <source>Never show</source>
-        <translation type="unfinished"/>
+        <translation>Niekada nerodyti</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13987"/>
@@ -4992,7 +4992,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14311"/>
         <source>Follow staff size</source>
-        <translation type="unfinished"/>
+        <translation>Sekti penklinės dydį</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14321"/>
@@ -5017,7 +5017,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14400"/>
         <source>li</source>
-        <translation type="unfinished"/>
+        <translation>li</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="840"/>
@@ -5061,12 +5061,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/DockWidgetBase.cpp" line="608"/>
         <source>Dock</source>
-        <translation type="unfinished"/>
+        <translation>Prišvartuoti</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/DockWidgetBase.cpp" line="612"/>
         <source>Detach</source>
-        <translation type="unfinished"/>
+        <translation>Atkabinti</translation>
     </message>
 </context>
 <context>
@@ -5097,7 +5097,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="265"/>
         <source>Auto-hide</source>
-        <translation type="unfinished"/>
+        <translation>Auto-slėpti</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="268"/>
@@ -5282,12 +5282,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="389"/>
         <source>Add to measure number:</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti prie takto numerio:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="415"/>
         <source>Measure number mode:</source>
-        <translation type="unfinished"/>
+        <translation>Taktų numeracijos režimas:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="426"/>
@@ -5330,7 +5330,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/palette/view/widgets/note_groups.ui" line="37"/>
         <source>Beam selector</source>
-        <translation type="unfinished"/>
+        <translation>Sijų parinkėjas</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/note_groups.ui" line="69"/>
@@ -5448,7 +5448,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="199"/>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="202"/>
         <source>Distance between two lines on a standard 5-line staff</source>
-        <translation type="unfinished"/>
+        <translation>Atstumas tarp dviejų linijų standartinėje 5 linijų penklinėje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="205"/>
@@ -5507,7 +5507,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="492"/>
         <source>First page number:</source>
-        <translation type="unfinished"/>
+        <translation>Pirmo puslapio numeris:</translation>
     </message>
 </context>
 <context>
@@ -6317,12 +6317,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="45"/>
         <source>Interpretation:</source>
-        <translation type="unfinished"/>
+        <translation>Interpretacija:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="55"/>
         <source>Voicing:</source>
-        <translation type="unfinished"/>
+        <translation>Balsovada:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="69"/>
@@ -6334,7 +6334,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="74"/>
         <source>Literal</source>
         <extracomment>Literally following the chord symbols text</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tiesiogiai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="83"/>
@@ -6397,7 +6397,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/accessibility/internal/accessibleiteminterface.cpp" line="259"/>
         <source>Panel</source>
-        <translation type="unfinished"/>
+        <translation>Skydelis</translation>
     </message>
 </context>
 <context>
@@ -6405,7 +6405,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="36"/>
         <source>&amp;Open…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Atverti...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="37"/>
@@ -6415,7 +6415,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="43"/>
         <source>&amp;New…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Naujas...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="44"/>
@@ -6425,7 +6425,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="50"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Užverti</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="51"/>
@@ -6435,7 +6435,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="56"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Išsaugoti</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="57"/>
@@ -6445,7 +6445,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="63"/>
         <source>Save &amp;as…</source>
-        <translation type="unfinished"/>
+        <translation>Išsau&amp;goti kaip...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="64"/>
@@ -6455,48 +6455,48 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="69"/>
         <source>Save a cop&amp;y…</source>
-        <translation type="unfinished"/>
+        <translation>Išsaugoti &amp;kopiją...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="70"/>
         <source>Save a copy…</source>
-        <translation type="unfinished"/>
+        <translation>Išsaugoti kopiją...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="75"/>
         <source>Save se&amp;lection…</source>
-        <translation type="unfinished"/>
+        <translation>Išsaugoti pasi&amp;rinkimą...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="76"/>
         <source>Save selection…</source>
-        <translation type="unfinished"/>
+        <translation>Išsaugoti pasirinkimą...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="81"/>
         <source>Save to clo&amp;ud…</source>
-        <translation type="unfinished"/>
+        <translation>Įrašyti į de&amp;besų saugyklą...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="82"/>
         <source>Save to cloud…</source>
-        <translation type="unfinished"/>
+        <translation>Įrašyti į debesų saugyklą...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="88"/>
         <source>Pu&amp;blish to MuseScore.com…</source>
-        <translation type="unfinished"/>
+        <translation>Pub&amp;likuoti MuseScore.com...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="89"/>
         <source>Publish to MuseScore.com…</source>
-        <translation type="unfinished"/>
+        <translation>Publikuoti MuseScore.com...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="95"/>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="96"/>
         <source>Share on Audio.com…</source>
-        <translation type="unfinished"/>
+        <translation>Dalintis per Audio.com...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="102"/>
@@ -6512,7 +6512,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="109"/>
         <source>Import P&amp;DF…</source>
-        <translation type="unfinished"/>
+        <translation>Importuoti P&amp;DF...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="110"/>
@@ -6522,27 +6522,27 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="116"/>
         <source>Project propert&amp;ies…</source>
-        <translation type="unfinished"/>
+        <translation>Projekto &amp;ypatybės...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
         <source>Project properties…</source>
-        <translation type="unfinished"/>
+        <translation>Projekto ypatybės...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="122"/>
         <source>&amp;Print…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Spausdinti...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="129"/>
         <source>&amp;Clear recent files</source>
-        <translation type="unfinished"/>
+        <translation>Išvalyti pas&amp;kiausius failus</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="130"/>
         <source>Clear recent files</source>
-        <translation type="unfinished"/>
+        <translation>Išvalyti paskiausius failus</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="123"/>
@@ -6564,7 +6564,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2007"/>
         <source>Note input</source>
-        <translation type="unfinished"/>
+        <translation>Natų įvestis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="62"/>
@@ -6587,32 +6587,32 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="91"/>
         <source>Put note</source>
-        <translation type="unfinished"/>
+        <translation>Padėti natą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="96"/>
         <source>Remove note</source>
-        <translation type="unfinished"/>
+        <translation>Pašalinti natą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="101"/>
         <source>Next element</source>
-        <translation type="unfinished"/>
+        <translation>Kitas elementas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="107"/>
         <source>Previous element</source>
-        <translation type="unfinished"/>
+        <translation>Praeitas elementas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="113"/>
         <source>Next chord / Shift text right</source>
-        <translation type="unfinished"/>
+        <translation>Kitas akordas / pastumti tekstą dešinėn</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="119"/>
         <source>Previous chord / Shift text left</source>
-        <translation type="unfinished"/>
+        <translation>Ankstesnis akordas / pastumti tekstą kairėn</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="125"/>
@@ -6627,72 +6627,72 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="137"/>
         <source>Up note in chord</source>
-        <translation type="unfinished"/>
+        <translation>Nata į viršų akorde</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="143"/>
         <source>Down note in chord</source>
-        <translation type="unfinished"/>
+        <translation>Nata žemyn akorde</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="149"/>
         <source>Top note in chord</source>
-        <translation type="unfinished"/>
+        <translation>Viršutinė akordo nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="155"/>
         <source>Bottom note in chord</source>
-        <translation type="unfinished"/>
+        <translation>Apatinė akordo nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="161"/>
         <source>First element</source>
-        <translation type="unfinished"/>
+        <translation>Pirmas elementas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="162"/>
         <source>Go to first element in score</source>
-        <translation type="unfinished"/>
+        <translation>Eiti į pirmą elementą partitūroje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="167"/>
         <source>Last element</source>
-        <translation type="unfinished"/>
+        <translation>Paskutinis elementas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="168"/>
         <source>Go to last element in score</source>
-        <translation type="unfinished"/>
+        <translation>Eiti į paskutinį elementą partitūroje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="173"/>
         <source>Move to staff above</source>
-        <translation type="unfinished"/>
+        <translation>Perkelti penkline aukščiau</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="179"/>
         <source>Move to staff below</source>
-        <translation type="unfinished"/>
+        <translation>Perkelti penkline žemiau</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="197"/>
         <source>Next frame</source>
-        <translation type="unfinished"/>
+        <translation>Kitas rėmelis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="203"/>
         <source>Previous frame</source>
-        <translation type="unfinished"/>
+        <translation>Ankstesnis rėmelis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="209"/>
         <source>Next system</source>
-        <translation type="unfinished"/>
+        <translation>Kita sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="215"/>
         <source>Previous system</source>
-        <translation type="unfinished"/>
+        <translation>Ankstesnė sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="271"/>
@@ -6702,12 +6702,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="277"/>
         <source>Up octave</source>
-        <translation type="unfinished"/>
+        <translation>Oktava aukštyn</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="289"/>
         <source>Halve duration</source>
-        <translation type="unfinished"/>
+        <translation>Trumpinti trukmę pusiau</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="295"/>
@@ -6722,63 +6722,63 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="307"/>
         <source>Cu&amp;t</source>
-        <translation type="unfinished"/>
+        <translation>Iš&amp;kirpti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="314"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Kopijuoti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="321"/>
         <source>Past&amp;e</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Įklijuoti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="328"/>
         <source>Paste &amp;half duration</source>
-        <translation type="unfinished"/>
+        <translation>Įklijuoti pusė trukmės</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="334"/>
         <source>Paste &amp;double duration</source>
-        <translation type="unfinished"/>
+        <translation>Įklijuoti &amp;dvigubos trukmės</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="346"/>
         <source>&amp;Swap with clipboard</source>
-        <translation type="unfinished"/>
+        <translation>Apkeisti su segtuvu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="352"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="353"/>
         <source>Toggle visibility of elements</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti elementų matomumą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="358"/>
         <source>Select &amp;all</source>
-        <translation type="unfinished"/>
+        <translation>P&amp;asirinkti viską</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="364"/>
         <source>Select sectio&amp;n</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkti pasiri&amp;nkimą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="370"/>
         <source>Similar</source>
-        <translation type="unfinished"/>
+        <translation>Panašius</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="376"/>
         <source>Similar on this staff</source>
-        <translation type="unfinished"/>
+        <translation>Panašius šioje penklinėje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="382"/>
         <source>Similar in this range</source>
-        <translation type="unfinished"/>
+        <translation>Panašius šiame diapazone</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="388"/>
@@ -6799,76 +6799,76 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="511"/>
         <source>Page view</source>
-        <translation type="unfinished"/>
+        <translation>Puslapių rodinys</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="525"/>
         <source>Continuous view (horizontal)</source>
-        <translation type="unfinished"/>
+        <translation>Nuoseklus rodinys (horizontaliai)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="532"/>
         <source>Continuous view (vertical)</source>
-        <translation type="unfinished"/>
+        <translation>Nuoseklus rodinys (vertikaliai)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="551"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="552"/>
         <source>Staff text properties…</source>
-        <translation type="unfinished"/>
+        <translation>Penklinės teksto savybės...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="557"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="558"/>
         <source>System text properties…</source>
-        <translation type="unfinished"/>
+        <translation>Sistemos teksto savybės...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="563"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="564"/>
         <source>Measure properties…</source>
-        <translation type="unfinished"/>
+        <translation>Takto savybės...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="655"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="656"/>
         <source>Insert one measure before selection</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti vieną taktą prieš pasirinkimą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="662"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="663"/>
         <source>Insert measures before selection…</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti taktus prieš pasirinkimą...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="668"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="669"/>
         <source>Insert measures after selection…</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti taktus po pasirinkimo...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="674"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="675"/>
         <source>Insert measures at start of score…</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti taktus partitūros pradžioje...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="680"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="681"/>
         <source>Insert one measure at end of score</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti vieną taktą partitūros gale</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="686"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="687"/>
         <source>Insert measures at end of score…</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti taktus partitūros gale...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="766"/>
         <source>Grace: 8th after</source>
-        <translation type="unfinished"/>
+        <translation>Melizmas: 8-inė po</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="801"/>
@@ -6936,7 +6936,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2362"/>
         <source>Cross-staff beaming</source>
-        <translation type="unfinished"/>
+        <translation>Tarppenklinės sijos</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2368"/>
@@ -6959,17 +6959,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2355"/>
         <source>Staccato</source>
-        <translation>Stakato</translation>
+        <translation>Staccato</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2348"/>
         <source>Tenuto</source>
-        <translation type="unfinished"/>
+        <translation>Tenuto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="66"/>
         <source>Enter note %1</source>
-        <translation type="unfinished"/>
+        <translation>Įvesti natą %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="67"/>
@@ -6989,65 +6989,65 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1414"/>
         <source>Reset all text style overrides to default</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti visų teksto stilių nepaisymus į numatytuosius</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1559"/>
         <source>Page: Top of first</source>
-        <translation type="unfinished"/>
+        <translation>Lapas: pirmojo viršus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1565"/>
         <source>Page: Bottom of last</source>
-        <translation type="unfinished"/>
+        <translation>Lapas: paskutiniojo apačia</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1571"/>
         <source>Context sensitive help</source>
-        <translation type="unfinished"/>
+        <translation>Kontekstuali pagalba</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1582"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1583"/>
         <source>Toggle score lock</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti partitūros užrakinimą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1609"/>
         <source>Concert pitch</source>
-        <translation type="unfinished"/>
+        <translation>Koncertinis aukštis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1623"/>
         <source>Next text element</source>
-        <translation type="unfinished"/>
+        <translation>Kitas teksto elementas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1629"/>
         <source>Previous text element</source>
-        <translation type="unfinished"/>
+        <translation>Ankstesnis teksto elementas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1701"/>
         <source>Next lyric verse</source>
-        <translation type="unfinished"/>
+        <translation>Kitas žodžių posmas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1707"/>
         <source>Previous lyric verse</source>
-        <translation type="unfinished"/>
+        <translation>Ankstesnis žodžių posmas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1725"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1726"/>
         <source>Add lyric verse</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti žodžių posmą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1785"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1786"/>
         <source>Go to top staff</source>
-        <translation type="unfinished"/>
+        <translation>Eiti į viršutinę penklinę</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1791"/>
@@ -7073,12 +7073,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2028"/>
         <source>Rhythm only (not pitch)</source>
-        <translation type="unfinished"/>
+        <translation>Tik ritmas (be intonacijos)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2035"/>
         <source>Re-pitch existing notes</source>
-        <translation type="unfinished"/>
+        <translation>Perintonuoti egzistuojančias natas iš naujo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2042"/>
@@ -7094,39 +7094,39 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2140"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2217"/>
         <source>256th note</source>
-        <translation type="unfinished"/>
+        <translation>256-inė nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2147"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2224"/>
         <source>512th note</source>
-        <translation type="unfinished"/>
+        <translation>512-inė nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2154"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2231"/>
         <source>1024th note</source>
-        <translation type="unfinished"/>
+        <translation>1024-inė nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1821"/>
         <source>Toggle trill</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti trelį</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2334"/>
         <source>Marcato</source>
-        <translation>Akcentas markato</translation>
+        <translation>Akcentas marcato</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1869"/>
         <source>Toggle up bow</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti stryką aukštyn</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1875"/>
         <source>Toggle down bow</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti stryką žemyn</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1602"/>
@@ -7142,7 +7142,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1773"/>
         <source>Diatonic pitch up</source>
-        <translation type="unfinished"/>
+        <translation>Diatoniškai aukštis į viršų</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="265"/>
@@ -7152,27 +7152,27 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1779"/>
         <source>Diatonic pitch down</source>
-        <translation type="unfinished"/>
+        <translation>Diatoniškai aukštis į apačią</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2273"/>
         <source>Accessibility: Next segment element</source>
-        <translation type="unfinished"/>
+        <translation>Prieinamumas: Kitas segmento elementas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2279"/>
         <source>Accessibility: Previous segment element</source>
-        <translation type="unfinished"/>
+        <translation>Prieinamumas: Ankstesnis segmento elementas</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="40"/>
         <source>&amp;Master palette</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Pagrindinė paletė</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="41"/>
         <source>Open master palette…</source>
-        <translation type="unfinished"/>
+        <translation>Atidaryti pagrindinę paletę...</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="47"/>
@@ -7182,7 +7182,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="48"/>
         <source>Search palettes</source>
-        <translation type="unfinished"/>
+        <translation>Ieškoti palečių</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="53"/>
@@ -7194,7 +7194,7 @@ text x-height):</source>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="59"/>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="60"/>
         <source>Edit drumset…</source>
-        <translation type="unfinished"/>
+        <translation>Redaguoti mušamųjų rinkinį...</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="65"/>
@@ -7210,12 +7210,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="191"/>
         <source>Previous staff or voice</source>
-        <translation type="unfinished"/>
+        <translation>Ankstesnė penklinė ar balsas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="185"/>
         <source>Next staff or voice</source>
-        <translation type="unfinished"/>
+        <translation>Kita penklinė ar balsas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="227"/>
@@ -7237,13 +7237,13 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="239"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="240"/>
         <source>Move chord/rest right</source>
-        <translation type="unfinished"/>
+        <translation>Perkelti akordą/pauzę dešinėn</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="233"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="234"/>
         <source>Move chord/rest left</source>
-        <translation type="unfinished"/>
+        <translation>Perkelti akordą/pauzę kairėn</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="71"/>
@@ -7334,12 +7334,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="210"/>
         <source>Go to next system</source>
-        <translation type="unfinished"/>
+        <translation>Eiti į sekančią sistemą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="216"/>
         <source>Go to previous system</source>
-        <translation type="unfinished"/>
+        <translation>Eiti į ankstesnę sistemą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="222"/>
@@ -7354,7 +7354,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="245"/>
         <source>Snap to &amp;previous</source>
-        <translation type="unfinished"/>
+        <translation>Prikabinti &amp;prie ankstesniojo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="246"/>
@@ -7364,7 +7364,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="252"/>
         <source>Snap to &amp;next</source>
-        <translation type="unfinished"/>
+        <translation>Prikabinti pre &amp;kito</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="253"/>
@@ -7424,22 +7424,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="322"/>
         <source>Paste</source>
-        <translation>Įdėti</translation>
+        <translation>Įklijuoti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="329"/>
         <source>Paste half duration</source>
-        <translation type="unfinished"/>
+        <translation>Įklijuoti pusė trukmės</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="335"/>
         <source>Paste double duration</source>
-        <translation type="unfinished"/>
+        <translation>Įklijuoti dvigubos trukmės</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="347"/>
         <source>Copy/paste: swap with clipboard</source>
-        <translation type="unfinished"/>
+        <translation>Kopijuoti/įklijuoti: apkeisti su segtuvu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="359"/>
@@ -7479,7 +7479,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="402"/>
         <source>Format style…</source>
-        <translation type="unfinished"/>
+        <translation>Formato stilius...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="408"/>
@@ -7489,12 +7489,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="414"/>
         <source>Load style…</source>
-        <translation type="unfinished"/>
+        <translation>Krauti stilių...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="420"/>
         <source>Save style…</source>
-        <translation type="unfinished"/>
+        <translation>Saugoti stilių...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="426"/>
@@ -7570,7 +7570,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="539"/>
         <source>&amp;Find / Go to</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Rasti / Eiti į</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="540"/>
@@ -7586,13 +7586,13 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="570"/>
         <source>Add/remove system breaks…</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti/pašalinti sistemos lūžius...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="625"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="626"/>
         <source>Add/remove system break</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti/pašalinti sistemos lūžį</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="631"/>
@@ -7704,7 +7704,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="864"/>
         <source>&amp;Unison</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Unisonas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="865"/>
@@ -7809,27 +7809,27 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1228"/>
         <source>Add text: title</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tekstą: antraštė</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1234"/>
         <source>Add text: subtitle</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tekstą: paantraštė</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1240"/>
         <source>Add text: composer</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tekstą: kompozitorius</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1246"/>
         <source>Add text: lyricist</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tekstą: žodžių autorius</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1252"/>
         <source>Add text: part name</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tekstą: partijos pavadinimas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1257"/>
@@ -7844,32 +7844,32 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1264"/>
         <source>Add text: system text</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tekstą: sistemos tekstas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1270"/>
         <source>Add text: staff text</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tekstą: penklinės tekstas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1276"/>
         <source>Add text: expression text</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tekstą: išraiškos tekstas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1282"/>
         <source>Add text: rehearsal mark</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tekstą: skaitlinė</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1288"/>
         <source>Add text: instrument change</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tekstą: instrumento pasikeitimas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1294"/>
         <source>Add text: fingering</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tekstą: pirštuotė</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1300"/>
@@ -7879,7 +7879,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1306"/>
         <source>Add text: chord symbol</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tekstą: akordo simbolis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1312"/>
@@ -7889,22 +7889,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1318"/>
         <source>Add text: Nashville number</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tekstą: Nashville skaičius</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1324"/>
         <source>Add text: lyrics</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tekstą: žodžiai</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1330"/>
         <source>Add text: figured bass</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tekstą: skaitmeninis bosas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1336"/>
         <source>Add text: tempo marking</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tekstą: tempo nuoroda</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1342"/>
@@ -7944,7 +7944,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1383"/>
         <source>&amp;Nonuplet</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Nonolė</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1384"/>
@@ -7979,7 +7979,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1425"/>
         <source>Reset s&amp;hapes and positions</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti formas ir pozicijas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1426"/>
@@ -7989,7 +7989,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1431"/>
         <source>Reset entire score to &amp;default layout</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti visą partitūrą į &amp;numatytąjį išdėstymą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1432"/>
@@ -8067,17 +8067,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1530"/>
         <source>Add to selection: staff below</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti prie pasirinkimo: penklinė žemiau</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1547"/>
         <source>Page: Previous</source>
-        <translation type="unfinished"/>
+        <translation>Puslapis: Praeitas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1553"/>
         <source>Page: Next</source>
-        <translation type="unfinished"/>
+        <translation>Puslapis: Kitas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1560"/>
@@ -8222,17 +8222,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1732"/>
         <source>Format text: bold</source>
-        <translation type="unfinished"/>
+        <translation>Formatuoti tekstą: pajuodintas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1739"/>
         <source>Format text: italic</source>
-        <translation type="unfinished"/>
+        <translation>Formatuoti tekstą: pasvirasis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1746"/>
         <source>Format text: underline</source>
-        <translation type="unfinished"/>
+        <translation>Formatuoti tekstą: pabraukimas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1752"/>
@@ -8242,7 +8242,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1753"/>
         <source>Format text: strikethrough</source>
-        <translation type="unfinished"/>
+        <translation>Formatuoti tekstą: išbraukimas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1759"/>
@@ -8257,57 +8257,57 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1766"/>
         <source>Superscript</source>
-        <translation type="unfinished"/>
+        <translation>Indeksas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1767"/>
         <source>Format text: superscript</source>
-        <translation type="unfinished"/>
+        <translation>Formatuoti tekstą: indeksas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1774"/>
         <source>Move pitch up diatonically</source>
-        <translation type="unfinished"/>
+        <translation>Pakelti natos aukštį diatoniškai</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1780"/>
         <source>Move pitch down diatonically</source>
-        <translation type="unfinished"/>
+        <translation>Nuleisti natos aukštį diatoniškai</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1888"/>
         <source>Add clef: treble</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti raktą: smuiko</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1894"/>
         <source>Add clef: bass</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti raktą: boso</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1906"/>
         <source>Add accidental: sharp</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti alteraciją: diezas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1942"/>
         <source>Move pitch up diatonically (keep degree alterations)</source>
-        <translation type="unfinished"/>
+        <translation>Pakelti natos aukštį diatoniškai (išlaikyti laipsnines alteracijas)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1948"/>
         <source>Move pitch down diatonically (keep degree alterations)</source>
-        <translation type="unfinished"/>
+        <translation>Nuleisti natos aukštį diatoniškai (išlaikyti laipsnines alteracijas)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1954"/>
         <source>Insert full measure rest</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti pilną takto pauzę</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1966"/>
         <source>Show/hide empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti/slėpti tuščias penklines</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1972"/>
@@ -8328,50 +8328,50 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1995"/>
         <source>String above (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Styga aukščiau (TAB)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1996"/>
         <source>Go to string above (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Eiti į stygą aukščiau (TAB)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2001"/>
         <source>String below (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Styga žemiau (TAB)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2002"/>
         <source>Go to string below (TAB)</source>
-        <translation type="unfinished"/>
+        <translation>Eiti į stygą žemiau (TAB)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2071"/>
         <source>Set duration: longa</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti trukmę: longa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2078"/>
         <source>Set duration: double whole note</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti trukmę: dvig. sveikoji nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2085"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2162"/>
         <source>Set duration: whole note</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti trukmę: sveikoji nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2092"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2169"/>
         <source>Set duration: half note</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti trukmę: pusinė nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2099"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2176"/>
         <source>Set duration: quarter note</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti trukmę: ketvirtinė nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2105"/>
@@ -8383,74 +8383,74 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2106"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2183"/>
         <source>Set duration: eighth note</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti trukmę: aštuntinė nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2113"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2190"/>
         <source>Set duration: 16th note</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti trukmę: 16-inė nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2120"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2197"/>
         <source>Set duration: 32nd note</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti trukmę: 32-inė nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2127"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2204"/>
         <source>Set duration: 64th note</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti trukmę: 64-inė nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2134"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2211"/>
         <source>Set duration: 128th note</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti trukmę: 128-inė nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2141"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2218"/>
         <source>Set duration: 256th note</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti trukmę: 256-inė nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2148"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2225"/>
         <source>Set duration: 512th note</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti trukmę: 512-inė nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2155"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2232"/>
         <source>Set duration: 1024th note</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti trukmę: 1024-inė nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2239"/>
         <source>Toggle duration dot</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti trukmės taškelį</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2246"/>
         <source>Toggle duration dot: double</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti trukmės taškelį: dvigubai</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2253"/>
         <source>Toggle duration dot: triple</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti trukmės taškelį: trigubai</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2260"/>
         <source>Toggle duration dot: quadruple</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti trukmės taškelį: keturgubai</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2267"/>
         <source>Toggle rest</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti pauzę</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2274"/>
@@ -8480,7 +8480,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2321"/>
         <source>Add tied note</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti sujungtą natą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2327"/>
@@ -8490,18 +8490,18 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2418"/>
         <source>Staff type change</source>
-        <translation type="unfinished"/>
+        <translation>Penklinės tipo pakeitimas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2419"/>
         <source>Insert staff type change</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti penklinės tipo pakeitimą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2429"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2430"/>
         <source>Standard bend</source>
-        <translation type="unfinished"/>
+        <translation>Standartinis patempimas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2436"/>
@@ -8524,22 +8524,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2461"/>
         <source>Show/hide invisible elements</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti/slėpti nematomus elementus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2475"/>
         <source>Show/hide frames</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti/slėpti rėmelius</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2482"/>
         <source>Show/hide page margins</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti/slėpti lapo paraštes</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2505"/>
         <source>Show element bounding rectangles</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti elementą ribojančius stačiakampius</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2511"/>
@@ -8564,17 +8564,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2535"/>
         <source>Show system bounding rectangles</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti sistemą ribojančius stačiakampius</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2541"/>
         <source>Show corrupted measures</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti sugadintus taktus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1953"/>
         <source>Full measure rest</source>
-        <translation type="unfinished"/>
+        <translation>Pilna takto pauzė</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2070"/>
@@ -8608,50 +8608,50 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2112"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2189"/>
         <source>16th note</source>
-        <translation type="unfinished"/>
+        <translation>16-inė nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2119"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2196"/>
         <source>32nd note</source>
-        <translation type="unfinished"/>
+        <translation>32-inė nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2126"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2203"/>
         <source>64th note</source>
-        <translation type="unfinished"/>
+        <translation>64-inė nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2133"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2210"/>
         <source>128th note</source>
-        <translation type="unfinished"/>
+        <translation>128-inė nata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2238"/>
         <source>Augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Prailginimo taškelis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2245"/>
         <source>Double augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Dvigubo prailginimo taškelis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2252"/>
         <source>Triple augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Trigubas prailginimo taškelis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2259"/>
         <source>Quadruple augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Keturgubas prailginimo taškelis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2320"/>
         <source>Tie</source>
-        <translation>Uodegėlė</translation>
+        <translation>Jungimas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="731"/>
@@ -8666,47 +8666,47 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="745"/>
         <source>Grace: quarter</source>
-        <translation type="unfinished"/>
+        <translation>Melizmas: ketvirtinė</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="752"/>
         <source>Grace: 16th</source>
-        <translation type="unfinished"/>
+        <translation>Melizmas: 16-inė</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="759"/>
         <source>Grace: 32nd</source>
-        <translation type="unfinished"/>
+        <translation>Melizmas: 32-inė</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="773"/>
         <source>Grace: 16th after</source>
-        <translation type="unfinished"/>
+        <translation>Melizmas: 16-inė po</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="780"/>
         <source>Grace: 32nd after</source>
-        <translation type="unfinished"/>
+        <translation>Melizmas: 32-inė po</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2335"/>
         <source>Add articulation: marcato</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti artikuliaciją: marcato</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2342"/>
         <source>Add articulation: accent</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti artikuliaciją: akcentas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2349"/>
         <source>Add articulation: tenuto</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti artikuliaciją: tenuto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2356"/>
         <source>Add articulation: staccato</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti artikuliaciją: staccato</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2374"/>
@@ -8716,7 +8716,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2375"/>
         <source>Use voice 1</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti 1-ą balsą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2381"/>
@@ -8726,7 +8726,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2382"/>
         <source>Use voice 2</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti 2-ą balsą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2388"/>
@@ -8736,7 +8736,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2389"/>
         <source>Use voice 3</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti 3-ą balsą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2395"/>
@@ -8746,80 +8746,80 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2496"/>
         <source>Mark irregular measures</source>
-        <translation type="unfinished"/>
+        <translation>Pažymėti neįprastus taktus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1588"/>
         <source>Change enharmonic spelling (both modes)</source>
-        <translation type="unfinished"/>
+        <translation>Keisti enharmoninį užrašymą (abu režimai)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1595"/>
         <source>Change enharmonic spelling (current mode)</source>
-        <translation type="unfinished"/>
+        <translation>Keisti enharmoninį užrašymą (dabartinis režimas)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="193"/>
         <source>Score comparison tool</source>
-        <translation type="unfinished"/>
+        <translation>Partitūrų palyginimo įrankis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="843"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="844"/>
         <source>Add brackets to accidental</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti skliaustus prie alteracijos ženklo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="857"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="858"/>
         <source>Add parentheses to element</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti skliaustelius prie elemento</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="340"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="341"/>
         <source>Paste special</source>
-        <translation type="unfinished"/>
+        <translation>Įklijuoti specialų</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2056"/>
         <source>Insert</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1217"/>
         <source>Add tied note to chord</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti sujungtą natą į akordą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2341"/>
         <source>Accent</source>
-        <translation type="unfinished"/>
+        <translation>Akcentas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1881"/>
         <source>Reset style</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti stilių</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1882"/>
         <source>Reset all style values to default</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti visas stiliaus reikšmes į numatytąsias</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1475"/>
         <source>Accessibility: Get location</source>
-        <translation type="unfinished"/>
+        <translation>Prieinamumas: Gauti lokaciją</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1535"/>
         <source>Screen: Previous</source>
-        <translation type="unfinished"/>
+        <translation>Ekranas: Praeitas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1541"/>
         <source>Screen: Next</source>
-        <translation type="unfinished"/>
+        <translation>Ekranas: Kitas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="794"/>
@@ -8836,17 +8836,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="53"/>
         <source>Restart</source>
-        <translation type="unfinished"/>
+        <translation>Perkrauti</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="58"/>
         <source>&amp;Full screen</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Pilnas ekranas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="65"/>
         <source>&amp;About MuseScore Studio…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Apie MuseScore Studio...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="70"/>
@@ -8861,82 +8861,82 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="80"/>
         <source>Online &amp;handbook</source>
-        <translation type="unfinished"/>
+        <translation>Internetinis &amp;žinynas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="86"/>
         <source>As&amp;k for help</source>
-        <translation type="unfinished"/>
+        <translation>Pra&amp;šyti pagalbos</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="91"/>
         <source>Revert to &amp;factory settings</source>
-        <translation type="unfinished"/>
+        <translation>Atkurti &amp;numatytuosius nustatymus</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="107"/>
         <source>&amp;Playback controls</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Grojimo valdymas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="108"/>
         <source>Show/hide playback controls</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti/slėpti grojimo valdymą</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="115"/>
         <source>Show/hide note input toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti/slėpti natų įvesties įrankių juostą</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="123"/>
         <source>&amp;Palettes</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Paletės</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="124"/>
         <source>Show/hide palettes</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti/slėpti paletes</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="130"/>
         <source>Instr&amp;uments</source>
-        <translation type="unfinished"/>
+        <translation>Instr&amp;umentai</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="131"/>
         <source>Open instruments dialog…</source>
-        <translation type="unfinished"/>
+        <translation>Atidaryti instrumentų langą...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="137"/>
         <source>Propert&amp;ies</source>
-        <translation type="unfinished"/>
+        <translation>Parink&amp;tys</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="138"/>
         <source>Show/hide properties</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti/slėpti parinktis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="144"/>
         <source>Se&amp;lection filter</source>
-        <translation type="unfinished"/>
+        <translation>Pa&amp;sirinkimo filtras</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="145"/>
         <source>Show/hide selection filter</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti/slėpti pasirinkimo filtrą</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="153"/>
         <source>&amp;Navigator</source>
-        <translation type="unfinished"/>
+        <translation>Na&amp;vigatorius</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="154"/>
         <source>Show/hide navigator</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti/slėpti navigatorių</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="162"/>
@@ -8951,42 +8951,42 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="171"/>
         <source>Tim&amp;eline</source>
-        <translation type="unfinished"/>
+        <translation>Lai&amp;kjuostė</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="172"/>
         <source>Show/hide timeline</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti/slėpti laikjuostę</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="179"/>
         <source>Show/hide mixer</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti/slėpti mikšerį</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="187"/>
         <source>Show/hide piano keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti/slėpti pianino klaviatūrą</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="201"/>
         <source>&amp;Status bar</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Būsenos juosta</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="202"/>
         <source>Show/hide status bar</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti/slėpti būsenos juostą</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="210"/>
         <source>Preferences…</source>
-        <translation type="unfinished"/>
+        <translation>Nuostatos...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="92"/>
         <source>Revert to factory settings</source>
-        <translation type="unfinished"/>
+        <translation>Atkurti numatytuosius nustatymus</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="59"/>
@@ -8996,37 +8996,37 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="81"/>
         <source>Open online handbook</source>
-        <translation type="unfinished"/>
+        <translation>Atidaryti internetinį žinyną</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="99"/>
         <source>Restore the &amp;default layout</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti nu&amp;matytąjį išdėstymą</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="100"/>
         <source>Restore the default layout</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti numatytąjį išdėstymą</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="114"/>
         <source>&amp;Note input</source>
-        <translation type="unfinished"/>
+        <translation>Na&amp;tų įvestis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="186"/>
         <source>Piano &amp;keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Pianino k&amp;laviatūra</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="209"/>
         <source>&amp;Preferences</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Nuostatos</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updateuiactions.cpp" line="36"/>
         <source>Check for &amp;update</source>
-        <translation type="unfinished"/>
+        <translation>Patikrinti &amp;atnaujinimus</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="178"/>
@@ -9048,12 +9048,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="45"/>
         <source>Stop</source>
-        <translation type="unfinished"/>
+        <translation>Stabdyti</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="46"/>
         <source>Stop playback</source>
-        <translation type="unfinished"/>
+        <translation>Stabdyti grojimą</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="59"/>
@@ -9063,33 +9063,33 @@ text x-height):</source>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="76"/>
         <source>Open playback setup dialog</source>
-        <translation type="unfinished"/>
+        <translation>Atverti grojimo sąsajos langą</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="101"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="102"/>
         <source>Play chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>Groti akordų simbolius</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="109"/>
         <source>Pan score automatically</source>
-        <translation type="unfinished"/>
+        <translation>Slinkti partitūrą automatiškai</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="86"/>
         <source>Toggle MIDI input</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti MIDI įvestį</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="110"/>
         <source>Pan score automatically during playback</source>
-        <translation type="unfinished"/>
+        <translation>Atliekant kūrinį sekti partitūrą automatiškai</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="60"/>
         <source>Toggle ‘Loop playback’</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti &quot;Ciklinį grojimą&quot;</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="68"/>
@@ -9099,19 +9099,19 @@ text x-height):</source>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="75"/>
         <source>Playback setup</source>
-        <translation type="unfinished"/>
+        <translation>Grojimo sąsaja</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="128"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="129"/>
         <source>Set loop marker left</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti ciklo žymeklį kairėje</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="135"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="136"/>
         <source>Set loop marker right</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti ciklo žymeklį dešinėje</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="52"/>
@@ -9186,32 +9186,32 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2396"/>
         <source>Use voice 4</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti 4-ą balsą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2460"/>
         <source>Show &amp;invisible</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti &amp;nematomus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2467"/>
         <source>Show f&amp;ormatting</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti f&amp;ormatavimą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2468"/>
         <source>Show/hide formatting</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti/slėpti formatavimą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2474"/>
         <source>Show &amp;frames</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti &amp;rėmelius</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2481"/>
         <source>Show page &amp;margins</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti lapo &amp;paraštes</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="71"/>
@@ -9234,18 +9234,18 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1451"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1452"/>
         <source>Zoom to 100%</source>
-        <translation type="unfinished"/>
+        <translation>Priartinti iki 100%</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1797"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1798"/>
         <source>Mirror notehead</source>
-        <translation type="unfinished"/>
+        <translation>Apskuti natos galvutę</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="283"/>
         <source>Double duration</source>
-        <translation type="unfinished"/>
+        <translation>Dviguba trukmė</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1576"/>
@@ -9271,7 +9271,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1713"/>
         <source>Next syllable</source>
-        <translation type="unfinished"/>
+        <translation>Kitas skiemuo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1971"/>
@@ -9286,57 +9286,57 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="394"/>
         <source>De&amp;lete</source>
-        <translation type="unfinished"/>
+        <translation>I&amp;štrinti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="108"/>
         <source>Select previous element in score</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkti praeitą elementą partitūroje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="132"/>
         <source>Go to previous measure / move text left quickly</source>
-        <translation type="unfinished"/>
+        <translation>Eiti į praeitą taktą / pastumti tekstą kairėn greitai</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="401"/>
         <source>&amp;Style…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Stilius...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="407"/>
         <source>&amp;Page settings…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Lapo nustatymai...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="413"/>
         <source>&amp;Load style…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Krauti stilių...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="419"/>
         <source>S&amp;ave style…</source>
-        <translation type="unfinished"/>
+        <translation>S&amp;augoti stilių...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="431"/>
         <source>&amp;Explode</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Ištempti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="437"/>
         <source>&amp;Implode</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Sutraukti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="443"/>
         <source>Realize &amp;chord symbols</source>
-        <translation type="unfinished"/>
+        <translation>Realizuoti &amp;akordų simbolius</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="449"/>
         <source>Remove selected ran&amp;ge</source>
-        <translation type="unfinished"/>
+        <translation>Pašalinti pasirinktą pasir&amp;inkimą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="462"/>
@@ -9356,17 +9356,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="474"/>
         <source>Regroup &amp;rhythms</source>
-        <translation type="unfinished"/>
+        <translation>Pergrupuoti &amp;ritmus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="480"/>
         <source>Resequence re&amp;hearsal marks</source>
-        <translation type="unfinished"/>
+        <translation>Perrikiuoti skaitlin&amp;es</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="492"/>
         <source>Copy &amp;lyrics to clipboard</source>
-        <translation type="unfinished"/>
+        <translation>Kopijuoti žodžius į segtuvą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="498"/>
@@ -9541,17 +9541,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1194"/>
         <source>Add ottava 8va bassa</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti oktavos žemyn liniją</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1199"/>
         <source>&amp;Crescendo</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Crescendo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1205"/>
         <source>&amp;Decrescendo</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Diminuendo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1211"/>
@@ -9566,37 +9566,37 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1227"/>
         <source>&amp;Title</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Antraštė</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1233"/>
         <source>&amp;Subtitle</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Paantraštė</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1239"/>
         <source>&amp;Composer</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Kompozitorius</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1245"/>
         <source>&amp;Lyricist</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Žodžių autorius</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1251"/>
         <source>&amp;Part name</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Partijos pavadinimas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1263"/>
         <source>Syst&amp;em text</source>
-        <translation type="unfinished"/>
+        <translation>Sist&amp;emos tekstas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1269"/>
         <source>St&amp;aff text</source>
-        <translation type="unfinished"/>
+        <translation>Pe&amp;nklinės tekstas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1275"/>
@@ -9731,32 +9731,32 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1548"/>
         <source>Jump to previous page</source>
-        <translation type="unfinished"/>
+        <translation>Šokti į ankstesnį puslapį</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1554"/>
         <source>Jump to next page</source>
-        <translation type="unfinished"/>
+        <translation>Šokti į kitą puslapį</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1617"/>
         <source>Next word</source>
-        <translation type="unfinished"/>
+        <translation>Kitas žodis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1618"/>
         <source>Go to next word</source>
-        <translation type="unfinished"/>
+        <translation>Eiti į kitą žodį</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1624"/>
         <source>Go to next text element</source>
-        <translation type="unfinished"/>
+        <translation>Eiti į kitą teksto elementą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1630"/>
         <source>Go to previous text element</source>
-        <translation type="unfinished"/>
+        <translation>Eiti į ankstesnį teksto elementą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1642"/>
@@ -9766,27 +9766,27 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1714"/>
         <source>Lyrics: enter hyphen</source>
-        <translation type="unfinished"/>
+        <translation>Žodžiai: įvesti brūkšnelį</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1803"/>
         <source>Toggle turn</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti grupetą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1804"/>
         <source>Add ornament: turn</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti melizmą: grupetas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1809"/>
         <source>Toggle inverted turn</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti atvirkštinį grupetą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1810"/>
         <source>Add ornament: inverted turn</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti melizmą: atvirkštinis grupetas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1815"/>
@@ -9806,22 +9806,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1827"/>
         <source>Toggle short trill</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti trumpą trelį</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1828"/>
         <source>Add ornament: short trill</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti melizmą: trumpas trelis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1833"/>
         <source>Toggle mordent</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti mordentą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1834"/>
         <source>Add ornament: mordent</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti melizmą: mordentas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1839"/>
@@ -9876,99 +9876,99 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1870"/>
         <source>Add bowing: up bow</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti griežimą: strykas į viršų</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1876"/>
         <source>Add bowing: down bow</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti griežimą: strykas į apačią</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1899"/>
         <source>Add double-sharp</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti dvigubą diezą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1900"/>
         <source>Add accidental: double-sharp</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti alteraciją: dvigubas diezas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1905"/>
         <source>Add sharp</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti diezą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1911"/>
         <source>Add natural</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti bekarą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1912"/>
         <source>Add accidental: natural</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti alteraciją: bekaras</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1917"/>
         <source>Add flat</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti bemolį</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1918"/>
         <source>Add accidental: flat</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti alteraciją: bekaras</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1923"/>
         <source>Add double-flat</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti dvigubą bemolį</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1924"/>
         <source>Add accidental: double-flat</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti alteraciją: dvig. bemolis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1930"/>
         <source>Transpose up a semitone</source>
-        <translation type="unfinished"/>
+        <translation>Transponuoti į viršų per pustonį</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1936"/>
         <source>Transpose down a semitone</source>
-        <translation type="unfinished"/>
+        <translation>Transponuoti žemyn per pustonį</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1959"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1960"/>
         <source>Toggle multimeasure rests</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti daugiataktę pauzę</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1965"/>
         <source>Toggle empty staves</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti tuščias penklines</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1989"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1990"/>
         <source>Toggle automatic placement for entire score</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti automatinį išdėstymą visoje partitūroje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2008"/>
         <source>Toggle note input mode</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti natų įvesties režimą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2015"/>
         <source>Insert/overwrite</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti/perrašyti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2016"/>
         <source>Toggle note input mode: insert/overwrite</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti natų įvesties režimą: įterpti/perrašyti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2022"/>
@@ -9998,7 +9998,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2057"/>
         <source>Toggle note input mode: insert (increases measure duration)</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti natų įvesties režimą: įterpti (padidina takto trukmę)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2063"/>
@@ -10009,37 +10009,37 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2285"/>
         <source>Toggle flat</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti bemolį</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2292"/>
         <source>Toggle double-flat</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti dvigubą bemolį</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2293"/>
         <source>Toggle accidental: double-flat</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti alteraciją: dvigubas bemolis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2299"/>
         <source>Toggle natural</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti bekarą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2306"/>
         <source>Toggle sharp</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti diezą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2313"/>
         <source>Toggle double-sharp</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti dvigubą diezą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2314"/>
         <source>Toggle accidental: double-sharp</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti alteraciją: dvigubas diezas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2328"/>
@@ -10049,37 +10049,37 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2402"/>
         <source>All voices on instrument</source>
-        <translation type="unfinished"/>
+        <translation>Visi balsai instrumente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2403"/>
         <source>Use all voices on instrument</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti visus balsus instrumente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2408"/>
         <source>All voices on staff</source>
-        <translation type="unfinished"/>
+        <translation>Visi balsai penklinėje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2409"/>
         <source>Use all voices on staff</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti visus balsus penklinėje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2488"/>
         <source>Show sound flags</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti garso žymes</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2489"/>
         <source>Show/hide sound flags</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti/slėpti garso žymes</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2495"/>
         <source>Mark i&amp;rregular measures</source>
-        <translation type="unfinished"/>
+        <translation>Pažymėti ne&amp;įprastus taktus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1641"/>
@@ -10094,7 +10094,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1731"/>
         <source>Bold face</source>
-        <translation type="unfinished"/>
+        <translation>Pajuodintas šriftas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1738"/>
@@ -10110,7 +10110,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="456"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="457"/>
         <source>Fill with slashes</source>
-        <translation type="unfinished"/>
+        <translation>Užpildyti pasv. brūkšniais</translation>
     </message>
     <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="37"/>
@@ -10132,37 +10132,37 @@ text x-height):</source>
         <location filename="../../src/instrumentsscene/internal/instrumentsuiactions.cpp" line="44"/>
         <location filename="../../src/instrumentsscene/internal/instrumentsuiactions.cpp" line="45"/>
         <source>Select instrument…</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkti instrumentą...</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/playbacktoolbarmodel.cpp" line="123"/>
         <source>Playback settings</source>
-        <translation type="unfinished"/>
+        <translation>Grojimo nustatymai</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="37"/>
         <source>Select workspace</source>
-        <translation>Pasirinkite darbo sritį</translation>
+        <translation>Pasirinkite darbo stilių</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="42"/>
         <source>Configure workspace</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti darbo stilių</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="43"/>
         <source>Configure workspace…</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti darbo stilių...</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="37"/>
         <source>Save diagnostic files</source>
-        <translation type="unfinished"/>
+        <translation>Išsaugoti diagnostinius failus</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="42"/>
         <source>Show p&amp;aths…</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti &amp;failų vietas...</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="47"/>
@@ -10172,12 +10172,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="52"/>
         <source>Show &amp;navigation tree…</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti &amp;navigacijos medį...</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="57"/>
         <source>Show &amp;accessibility tree…</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti priein&amp;amumo medį...</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="62"/>
@@ -10187,7 +10187,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="67"/>
         <source>Show engraving &amp;elements</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti užrašymo &amp;elementus</translation>
     </message>
     <message>
         <location filename="../../src/framework/multiinstances/internal/multiinstancesuiactions.cpp" line="37"/>
@@ -10197,22 +10197,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="39"/>
         <source>&amp;Manage plugins…</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Valdyti papildinius...</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="40"/>
         <source>Manage plugins…</source>
-        <translation type="unfinished"/>
+        <translation>Valdyti papildinius...</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="37"/>
         <source>Check Muse Sampler</source>
-        <translation type="unfinished"/>
+        <translation>Patikrinti Muse Sampler</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="42"/>
         <source>Reload Muse Sampler</source>
-        <translation type="unfinished"/>
+        <translation>Perkrauti Muse Sampler</translation>
     </message>
 </context>
 <context>
@@ -10220,7 +10220,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="53"/>
         <source>Home menu</source>
-        <translation type="unfinished"/>
+        <translation>Titulinis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="88"/>
@@ -10232,50 +10232,50 @@ text x-height):</source>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="73"/>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="97"/>
         <source>Plugins</source>
-        <translation type="unfinished"/>
+        <translation>Papildiniai</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="92"/>
         <source>Learn</source>
-        <translation type="unfinished"/>
+        <translation>Mokytis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="110"/>
         <source>Plugins search</source>
-        <translation type="unfinished"/>
+        <translation>Papildinių paieška</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="129"/>
         <source>Category:</source>
-        <translation type="unfinished"/>
+        <translation>Kategorija:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="137"/>
         <source>All</source>
         <extracomment>The title of an option to display the plugins from all categories.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Visi</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="116"/>
         <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="55"/>
         <source>Notation toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Notacijos įrankių juosta</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="136"/>
         <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="75"/>
         <source>Playback controls</source>
-        <translation type="unfinished"/>
+        <translation>Grojimo valdymas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="158"/>
         <source>Undo/redo</source>
-        <translation type="unfinished"/>
+        <translation>Anuliuoti/perdaryti</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="180"/>
         <source>Note input</source>
-        <translation type="unfinished"/>
+        <translation>Natų įvestis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="209"/>
@@ -10285,7 +10285,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="234"/>
         <source>Instruments</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentai</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="259"/>
@@ -10310,70 +10310,72 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="373"/>
         <source>Timeline</source>
-        <translation type="unfinished"/>
+        <translation>Laikjuostė</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="399"/>
         <source>Drumset tools</source>
-        <translation type="unfinished"/>
+        <translation>Mušamųjų įrankiai</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="93"/>
         <source>Undo/redo toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Anuliavimo/perdarymo įrankių juostas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MainToolBar.qml" line="64"/>
         <location filename="../../src/appshell/qml/WindowContent.qml" line="63"/>
         <source>Main toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Pagrindinė įrankių juosta</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="321"/>
         <source>Are you sure you want to revert to factory settings?</source>
-        <translation type="unfinished"/>
+        <translation>Ar tikrai norite atstatyti gamyklinius nustatymus?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="322"/>
         <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
 
 This action will not delete any of your scores.</source>
-        <translation type="unfinished"/>
+        <translation>Šis veiksmas atstatys visas jūsų programos parinktis ir ištrins visus tinkintus sparčiuosius klavišus bei tinkintas paletes. Taip pat bus išvalytas paskiausių partitūrų sąrašas.
+
+Šis veiksmas neištrins jokių jūsų partitūrų.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="329"/>
         <source>Revert</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="340"/>
         <source>Would you like to restart MuseScore Studio now?</source>
-        <translation type="unfinished"/>
+        <translation>Ar norėtumėte perkrauti MuseScore Studio dabar?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="341"/>
         <source>MuseScore Studio needs to be restarted for these changes to take effect.</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio reikia perkrauti, kad šie pokyčiai įsigalėtų.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="346"/>
         <source>Restart</source>
-        <translation type="unfinished"/>
+        <translation>Perkrauti</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="190"/>
         <source>The previous session quit unexpectedly.</source>
-        <translation type="unfinished"/>
+        <translation>Ankstesnė darbo sesija netikėtai nutrūko.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="191"/>
         <source>Do you want to restore the session?</source>
-        <translation type="unfinished"/>
+        <translation>Ar norite atstatyti sesiją?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="90"/>
         <source>Home</source>
-        <translation type="unfinished"/>
+        <translation>Titulinis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="91"/>
@@ -10383,59 +10385,59 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="92"/>
         <source>Publish</source>
-        <translation type="unfinished"/>
+        <translation>Publikuoti</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="95"/>
         <source>DevTools</source>
-        <translation type="unfinished"/>
+        <translation>Kūrėjų įrankiai</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiDevicesSection.qml" line="79"/>
         <source>Produce MIDI 2.0 output if supported by the receiver</source>
-        <translation type="unfinished"/>
+        <translation>Generuoti MIDI 2.0 išvestį jeigu palaikoma gavėjo</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/platform/AppMenuBar.qml" line="71"/>
         <source>Application menu</source>
-        <translation type="unfinished"/>
+        <translation>Aplikacijos meniu</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/loadingscreenview.cpp" line="54"/>
         <source>Loading…‎</source>
-        <translation type="unfinished"/>
+        <translation>Kraunasi...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/loadingscreenview.cpp" line="99"/>
         <source>Version %1</source>
-        <translation type="unfinished"/>
+        <translation>Versija %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/AccountPage.qml" line="75"/>
         <source>Accounts</source>
-        <translation type="unfinished"/>
+        <translation>Paskyros</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/newinstanceloadingscreenview.cpp" line="40"/>
         <source>Loading new score…‎</source>
-        <translation type="unfinished"/>
+        <translation>Kraunama nauja partitūra...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/newinstanceloadingscreenview.cpp" line="44"/>
         <source>Loading “%1”…‎</source>
-        <translation type="unfinished"/>
+        <translation>Kraunama &quot;%1&quot;...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/newinstanceloadingscreenview.cpp" line="50"/>
         <source>Loading score…‎</source>
-        <translation type="unfinished"/>
+        <translation>Kraunama partitūra...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Main.wasm.qml" line="36"/>
         <location filename="../../src/appshell/qml/platform/win/AppTitleBar.qml" line="93"/>
         <location filename="../../src/appshell/view/mainwindowtitleprovider.cpp" line="104"/>
         <source>MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio</translation>
     </message>
 </context>
 <context>
@@ -10443,7 +10445,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="33"/>
         <source>About MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Apie MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="85"/>
@@ -10459,23 +10461,23 @@ This action will not delete any of your scores.</source>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="115"/>
         <source>Visit %1 for new versions and more information.</source>
         <extracomment>%1 will be a link to the MuseScore website</extracomment>
-        <translation type="unfinished"/>
+        <translation>Apsilankykite &amp;1 norėdami gauti naujas versijas ir detalesnę informaciją.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="118"/>
         <source>Get &lt;a href=&quot;%1&quot;&gt;help&lt;/a&gt; with the program or &lt;a href=&quot;%2&quot;&gt;contribute&lt;/a&gt; to its development.</source>
-        <translation type="unfinished"/>
+        <translation>Gaukite &lt;a href=&quot;%1&quot;&gt;pagalbos&lt;/a&gt; su programa arba &lt;a href=&quot;%2&quot;&gt;prisidėkite&lt;/a&gt; prie jos kūrimo.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="131"/>
         <source>For privacy information, see our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Dėl privatumo informacijos žiūrėkite &lt;a href=&quot;%1&quot;&gt;privatumo politiką&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="140"/>
         <source>Copyright © 1999-2024 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Autorinės teisės © 1999-2024 MuseScore Limited. Publikuota naudojantis &lt;a href=&quot;%1&quot;&gt;GNU General Public License versija 3&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="32"/>
@@ -10485,7 +10487,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="59"/>
         <source>MusicXML is an open file format for exchanging digital sheet music, supported by many applications.</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML yra atviras failo formatas, skirtas dalintis skaitmeninėmis natomis, ir yra palaikomas daugybės aplikacijų.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="71"/>
@@ -10495,7 +10497,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="95"/>
         <source>A human-readable summary is available:</source>
-        <translation type="unfinished"/>
+        <translation>Žmogui įskaitomas apibendrinimas yra prieinamas:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/aboutmodel.cpp" line="41"/>
@@ -10513,12 +10515,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/dockwindow/view/dockpanelview.cpp" line="117"/>
         <source>Dock</source>
-        <translation type="unfinished"/>
+        <translation>Prišvartuoti</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/view/dockpanelview.cpp" line="117"/>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>Atšvartuoti</translation>
     </message>
 </context>
 <context>
@@ -10526,42 +10528,42 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/FirstLaunchSetupDialog.qml" line="32"/>
         <source>Getting started</source>
-        <translation type="unfinished"/>
+        <translation>Pradėti</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/FirstLaunchSetupDialog.qml" line="191"/>
         <source>Finish</source>
-        <translation type="unfinished"/>
+        <translation>Pabaigti</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="31"/>
         <source>Playback</source>
-        <translation>Atkūrimas</translation>
+        <translation>Grojimas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="32"/>
         <source>Enjoy realistic playback for free by downloading our new Muse Sounds library</source>
-        <translation type="unfinished"/>
+        <translation>Mėgaukitės tikrovišku grojimu nemokamai parsisiuntę mūsų naują Muse Sounds biblioteką</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="36"/>
         <source>Watch video</source>
-        <translation type="unfinished"/>
+        <translation>Žiūrėti video</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="34"/>
         <source>Welcome to MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Sveiki atvykę į MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="35"/>
         <source>Let’s get started by choosing a theme.</source>
-        <translation type="unfinished"/>
+        <translation>Pradėkime pasirinkdami temą.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="56"/>
         <source>Follow system theme</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti sistemos temą</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="117"/>
@@ -10571,38 +10573,39 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="123"/>
         <source>Enable high contrast</source>
-        <translation type="unfinished"/>
+        <translation>Įjungti aukštą kontrastą</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="32"/>
         <source>Video tutorials</source>
-        <translation type="unfinished"/>
+        <translation>Video pamokos</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="33"/>
         <source>Behind this dialog is the ‘Learn’ section, where you’ll find tutorials to get you started
 (Video tutorials require an internet connection)</source>
-        <translation type="unfinished"/>
+        <translation>Už šio langelio yra &quot;Mokytis&quot; sekcija, kur rasite pamokas, padėsiančias pradėti
+(Video pamokoms reikalingas interneto ryšys)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="81"/>
         <source>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; for more info.</source>
-        <translation type="unfinished"/>
+        <translation>Siekiant apsaugoti jūsų privatumą, MuseScore Studio nerenka jokių asmens duomenų. Apsilankykite mūsų &lt;/a&gt;privatumo politikoje&lt;/a&gt; dėl išsamesnės informacijos.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="102"/>
         <source>Keep going</source>
-        <translation type="unfinished"/>
+        <translation>Tęskite</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="106"/>
         <source>Are you sure you want to cancel?</source>
-        <translation type="unfinished"/>
+        <translation>Ar tikrai norite atšaukti?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="107"/>
         <source>If you choose to cancel, then be sure to check out our free Muse Sounds playback library on musescore.org.</source>
-        <translation type="unfinished"/>
+        <translation>Jei pasirinksite atšaukti, būtinai pasidomėkite mūsų nemokama Muse Sounds grojimo garsų biblioteka musescore.org</translation>
     </message>
 </context>
 <context>
@@ -10640,7 +10643,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="226"/>
         <source>&amp;Lines</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Linijos</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="229"/>
@@ -10653,12 +10656,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="357"/>
         <source>&amp;System</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Sistema</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="369"/>
         <source>&amp;Muse Sampler</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Muse Sampler</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="395"/>
@@ -10668,7 +10671,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="396"/>
         <source>&amp;Engraving</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Užrašymas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="397"/>
@@ -10678,7 +10681,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="401"/>
         <source>&amp;Diagnostic</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Diagnostika</translation>
     </message>
 </context>
 <context>
@@ -10686,7 +10689,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="183"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Taisa</translation>
+        <translation>&amp;Redaguoti</translation>
     </message>
 </context>
 <context>
@@ -10694,7 +10697,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="138"/>
         <source>Open &amp;recent</source>
-        <translation type="unfinished"/>
+        <translation>Atidaryti &amp;paskiausią</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="159"/>
@@ -10707,12 +10710,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="245"/>
         <source>Str&amp;etch</source>
-        <translation type="unfinished"/>
+        <translation>Iš&amp;tempti</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="256"/>
         <source>F&amp;ormat</source>
-        <translation type="unfinished"/>
+        <translation>F&amp;ormatas</translation>
     </message>
 </context>
 <context>
@@ -10754,12 +10757,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="205"/>
         <source>&amp;Toolbars</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Įrankių juostos</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="206"/>
         <source>W&amp;orkspaces</source>
-        <translation>&amp;Darbo sritys</translation>
+        <translation>&amp;Darbo stiliai</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="208"/>
@@ -10777,7 +10780,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/AdvancedPreferencesPage.qml" line="67"/>
         <source>Preference</source>
-        <translation type="unfinished"/>
+        <translation>Nuostata</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/AdvancedPreferencesPage.qml" line="69"/>
@@ -10792,7 +10795,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/AppearancePreferencesPage.qml" line="145"/>
         <source>Choose background wallpaper</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkitę foną</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/AppearancePreferencesPage.qml" line="184"/>
@@ -10802,13 +10805,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/AppearancePreferencesPage.qml" line="185"/>
         <source>Choose notepaper</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkite natų popierių</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AccentColorsSection.qml" line="63"/>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="47"/>
         <source>Accent color:</source>
-        <translation type="unfinished"/>
+        <translation>Akcento spalva:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AdvancedTopSection.qml" line="44"/>
@@ -10820,47 +10823,47 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/appshell/qml/Preferences/internal/AdvancedTopSection.qml" line="67"/>
         <source>Search advanced</source>
         <extracomment>Search advanced preferences</extracomment>
-        <translation type="unfinished"/>
+        <translation>Ieškoti išsamiau</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioApiSection.qml" line="29"/>
         <source>Audio</source>
-        <translation type="unfinished"/>
+        <translation>Audio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioEngineSection.qml" line="31"/>
         <source>Audio engine</source>
-        <translation type="unfinished"/>
+        <translation>Audio variklis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioEngineSection.qml" line="34"/>
         <source>Restart audio and MIDI devices</source>
-        <translation type="unfinished"/>
+        <translation>Perkrauti audio ir MIDI įrenginius</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="30"/>
         <source>Automatic update check</source>
-        <translation type="unfinished"/>
+        <translation>Automatinė atnaujinimų patikra</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="42"/>
         <source>Check to see if a new version of MuseScore Studio is available</source>
-        <translation type="unfinished"/>
+        <translation>Patikrinti, ar yra nauja MuseScore Studio versija</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
         <source>Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
-        <translation type="unfinished"/>
+        <translation>Atnaujinimų patikrai reikalingas interneto ryšys. Siekiant apsaugoti jūsų privatumą, MuseScore Studio neišsaugo jokių asmens duomenų. Apsilankykite mūsų &lt;a href=&quot;%1&quot;&gt;privatumo politikoje&lt;/a&gt; dėl išsamesnės informacijos.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="30"/>
         <source>Auto save</source>
-        <translation type="unfinished"/>
+        <translation>Automatinis įrašymas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="49"/>
         <source>Auto save every:</source>
-        <translation type="unfinished"/>
+        <translation>Automatiškai įrašyti kas:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CharsetsSection.qml" line="29"/>
@@ -10880,17 +10883,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ColorAndWallpaperSection.qml" line="95"/>
         <source>Wallpaper:</source>
-        <translation type="unfinished"/>
+        <translation>Fono paveikslėlis:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CommonAudioApiConfiguration.qml" line="53"/>
         <source>Audio device:</source>
-        <translation type="unfinished"/>
+        <translation>Audio įrenginys:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CommonAudioApiConfiguration.qml" line="71"/>
         <source>Buffer size:</source>
-        <translation type="unfinished"/>
+        <translation>Buferio dydis:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CommonAudioApiConfiguration.qml" line="89"/>
@@ -10900,7 +10903,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/DefaultFilesSection.qml" line="31"/>
         <source>Default files</source>
-        <translation type="unfinished"/>
+        <translation>Numatytieji failai</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/FoldersSection.qml" line="31"/>
@@ -10911,17 +10914,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/FoldersSection.qml" line="63"/>
         <source>Choose %1 folder</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkite %1 aplanką</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ImportStyleSection.qml" line="30"/>
         <source>Style used for import</source>
-        <translation type="unfinished"/>
+        <translation>Stilius naudojamas importui</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ImportStyleSection.qml" line="51"/>
         <source>Built-in style</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti įdiegtą stilių</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ImportStyleSection.qml" line="75"/>
@@ -10931,7 +10934,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/KeyboardLayoutsSection.qml" line="31"/>
         <source>Keyboard layout</source>
-        <translation type="unfinished"/>
+        <translation>Klaviatūros išdėstymas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="31"/>
@@ -10941,12 +10944,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="79"/>
         <source>Check for language updates</source>
-        <translation type="unfinished"/>
+        <translation>Patikrinti, ar yra kalbos atnaujinimų</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="92"/>
         <source>Restart required</source>
-        <translation type="unfinished"/>
+        <translation>Reikalingas perkrovimas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiDevicesSection.qml" line="42"/>
@@ -10957,12 +10960,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiDevicesSection.qml" line="47"/>
         <source>MIDI input:</source>
-        <translation type="unfinished"/>
+        <translation>MIDI įvestis:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiDevicesSection.qml" line="63"/>
         <source>MIDI output:</source>
-        <translation type="unfinished"/>
+        <translation>MIDI išvestis:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiSection.qml" line="39"/>
@@ -10982,7 +10985,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="29"/>
         <source>MusicXML</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="45"/>
@@ -10992,12 +10995,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="60"/>
         <source>Import system and page breaks</source>
-        <translation type="unfinished"/>
+        <translation>Importuoti sistemos ir puslapių lūžius</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="75"/>
         <source>Apply default typeface (Edwin) to imported scores</source>
-        <translation type="unfinished"/>
+        <translation>Taikyti numatytąjį šriftą (Edwin) importuotoms partitūroms</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="90"/>
@@ -11017,23 +11020,23 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="82"/>
         <source>Play chord when editing</source>
-        <translation type="unfinished"/>
+        <translation>Groti redaguojamą akordą</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="99"/>
         <source>Play chord symbol when editing</source>
-        <translation type="unfinished"/>
+        <translation>Groti redaguojamą akordo simbolį</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="31"/>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="163"/>
         <source>Note input</source>
-        <translation type="unfinished"/>
+        <translation>Natų įvestis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="47"/>
         <source>Advance to next note on key release (MIDI)</source>
-        <translation type="unfinished"/>
+        <translation>Pereiti prie kitos natos atleidus klavišą (MIDI)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="62"/>
@@ -11053,12 +11056,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PreferencesButtonsPanel.qml" line="50"/>
         <source>Reset preferences</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti nuostatas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ProgramStartSection.qml" line="79"/>
         <source>Choose starting score</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkti pradinę partitūrą</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/RemoteControlSection.qml" line="31"/>
@@ -11073,7 +11076,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ScrollPagesSection.qml" line="30"/>
         <source>Scroll pages</source>
-        <translation type="unfinished"/>
+        <translation>Versti puslapius</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ScrollPagesSection.qml" line="48"/>
@@ -11083,7 +11086,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ScrollPagesSection.qml" line="49"/>
         <source>Vertical</source>
-        <translation type="unfinished"/>
+        <translation>Vertikalus</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ScrollPagesSection.qml" line="80"/>
@@ -11093,47 +11096,47 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemeAdditionalOptionsSection.qml" line="38"/>
         <source>Invert score</source>
-        <translation type="unfinished"/>
+        <translation>Apversti partitūros spalvas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemesSection.qml" line="32"/>
         <source>Themes</source>
-        <translation type="unfinished"/>
+        <translation>Temos</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemesSection.qml" line="32"/>
         <source>High contrast themes</source>
-        <translation type="unfinished"/>
+        <translation>Didelio kontrasto temos</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemesSection.qml" line="78"/>
         <source>Follow system theme</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti sistemos temą</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemesSection.qml" line="93"/>
         <source>Enable high-contrast</source>
-        <translation type="unfinished"/>
+        <translation>Įjungti aukštą kontrastą</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="32"/>
         <source>UI colors</source>
-        <translation type="unfinished"/>
+        <translation>UI spalvos</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="48"/>
         <source>Text and icons:</source>
-        <translation type="unfinished"/>
+        <translation>Tekstas ir ikonos:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="49"/>
         <source>Disabled text:</source>
-        <translation type="unfinished"/>
+        <translation>Išjungtas tekstas:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="50"/>
         <source>Border color:</source>
-        <translation type="unfinished"/>
+        <translation>Kraštų spalva:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiFontSection.qml" line="29"/>
@@ -11144,12 +11147,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiFontSection.qml" line="42"/>
         <source>Font face:</source>
-        <translation type="unfinished"/>
+        <translation>Šriftas:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiFontSection.qml" line="57"/>
         <source>Body text size:</source>
-        <translation type="unfinished"/>
+        <translation>Papr. teksto dydis:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ZoomSection.qml" line="30"/>
@@ -11164,12 +11167,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ZoomSection.qml" line="94"/>
         <source>Mouse zoom precision:</source>
-        <translation type="unfinished"/>
+        <translation>Pelės priartinimo tikslumas:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/PreferencesDialog.qml" line="34"/>
         <source>Preferences</source>
-        <translation type="unfinished"/>
+        <translation>Nuostatos</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/appearancepreferencesmodel.cpp" line="166"/>
@@ -11180,7 +11183,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/appshell/view/preferences/appearancepreferencesmodel.cpp" line="167"/>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="220"/>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>Visi</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="91"/>
@@ -11195,32 +11198,32 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="99"/>
         <source>Templates</source>
-        <translation type="unfinished"/>
+        <translation>Šablonai</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="103"/>
         <source>Plugins</source>
-        <translation type="unfinished"/>
+        <translation>Papildiniai</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="107"/>
         <source>SoundFonts</source>
-        <translation type="unfinished"/>
+        <translation>Garsų rinkiniai</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="113"/>
         <source>VST3</source>
-        <translation type="unfinished"/>
+        <translation>VST3</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="62"/>
         <source>Your version of %1 is up to date.</source>
-        <translation type="unfinished"/>
+        <translation>Jūsų %1 versija yra atnaujinta.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="95"/>
         <source>System default</source>
-        <translation type="unfinished"/>
+        <translation>Sistemos numatytasis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="59"/>
@@ -11230,7 +11233,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="60"/>
         <source>Eighth</source>
-        <translation type="unfinished"/>
+        <translation>Aštuntinė</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="61"/>
@@ -11245,43 +11248,43 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="63"/>
         <source>64th</source>
-        <translation type="unfinished"/>
+        <translation>64-inė</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="64"/>
         <source>128th</source>
-        <translation type="unfinished"/>
+        <translation>128-inė</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="65"/>
         <source>256th</source>
-        <translation type="unfinished"/>
+        <translation>256-inė</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="66"/>
         <source>512th</source>
-        <translation type="unfinished"/>
+        <translation>512-inė</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="67"/>
         <source>1024th</source>
-        <translation type="unfinished"/>
+        <translation>1024-inė</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="75"/>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="186"/>
         <source>MuseScore style file</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore stiliaus failas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="80"/>
         <source>Choose default style for imports</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkite numatytąjį stilių importavimui</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ProgramStartSection.qml" line="30"/>
         <source>Program start</source>
-        <translation type="unfinished"/>
+        <translation>Programos paleidimas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="151"/>
@@ -11296,17 +11299,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="160"/>
         <source>Save &amp; publish</source>
-        <translation type="unfinished"/>
+        <translation>Išsaugoti ir publikuoti</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="169"/>
         <source>Audio &amp; MIDI</source>
-        <translation type="unfinished"/>
+        <translation>Audio ir MIDI</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="172"/>
         <source>MIDI mappings</source>
-        <translation type="unfinished"/>
+        <translation>MIDI priskyrimai</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="166"/>
@@ -11361,17 +11364,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="219"/>
         <source>MuseScore file</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore failas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="92"/>
         <source>Score order list 1</source>
-        <translation type="unfinished"/>
+        <translation>Partitūros eiliškumo sąrašas 1</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="94"/>
         <source>Score order list 2</source>
-        <translation type="unfinished"/>
+        <translation>Partitūros eiliškumo sąrašas 2</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="96"/>
@@ -11386,57 +11389,57 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="181"/>
         <source>Score order list</source>
-        <translation type="unfinished"/>
+        <translation>Partitūros eiliškumo sąrašas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="191"/>
         <source>Choose score order list</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkite partitūros eiliškumo sąrašą</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="196"/>
         <source>Choose default style</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkite numatytąjį stilių</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="201"/>
         <source>Choose default style for parts</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkine partijoms numatytąjį stilių</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/SaveToCloudSection.qml" line="31"/>
         <source>Save to cloud</source>
-        <translation type="unfinished"/>
+        <translation>Įrašyti į debesų saugyklą</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/SaveToCloudSection.qml" line="41"/>
         <source>Generate MP3 audio for private cloud scores</source>
-        <translation type="unfinished"/>
+        <translation>Generuoti MP3 audio privačioms partitūroms debesų saugykloje</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleSection.qml" line="31"/>
         <source>Enable/disable</source>
-        <translation type="unfinished"/>
+        <translation>Įjungti/išjungti</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleSection.qml" line="40"/>
         <source>Show braille panel</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti brailio panelę</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleAdvancedSection.qml" line="29"/>
         <source>Advanced options</source>
-        <translation type="unfinished"/>
+        <translation>Išsamios parinktys</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleAdvancedSection.qml" line="41"/>
         <source>Braille table for lyrics:</source>
-        <translation type="unfinished"/>
+        <translation>Brailio lentelė žodžiams:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleAdvancedSection.qml" line="57"/>
         <source>Interval direction:</source>
-        <translation type="unfinished"/>
+        <translation>Intervalo kryptis:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MeiSection.qml" line="30"/>
@@ -11452,12 +11455,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PublishMuseScoreComSection.qml" line="30"/>
         <source>Publish to MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Publikuoti į MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PublishMuseScoreComSection.qml" line="41"/>
         <source>Always prompt to share on Audio.com after publishing to MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Visada raginti dalintis Audio.com po publikacijos MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/braillepreferencesmodel.cpp" line="60"/>
@@ -11490,12 +11493,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="102"/>
         <source>Voice assignment</source>
-        <translation type="unfinished"/>
+        <translation>Balsų paskyrimas</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="106"/>
         <source>When entered, dynamics and hairpins should affect:</source>
-        <translation type="unfinished"/>
+        <translation>Įvedus, dinamikos ir din. linijos turėtų paveikti:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="113"/>
@@ -11513,12 +11516,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="105"/>
         <source>Do you want to add the SoundFont: %1?</source>
-        <translation type="unfinished"/>
+        <translation>Ar norite pridėti garso rinkinį: %1?</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="123"/>
         <source>File already exists. Do you want to overwrite it?</source>
-        <translation type="unfinished"/>
+        <translation>Failas jau egzistuoja. Ar norite jį perrašyti?</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="125"/>
@@ -11528,12 +11531,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="144"/>
         <source>SoundFont installed</source>
-        <translation type="unfinished"/>
+        <translation>Garsų rinkinys įrašytas</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="145"/>
         <source>You can assign soundfonts to instruments using the mixer panel.</source>
-        <translation type="unfinished"/>
+        <translation>Galite priskirti garsų bibliotekas instrumentams naudodamiesi mikšerio skydeliu.</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/internal/platform/jack/jackaudiodriver.cpp" line="240"/>
@@ -11542,13 +11545,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/framework/audio/internal/platform/win/wasapiaudiodriver.cpp" line="218"/>
         <location filename="../../src/framework/audio/internal/platform/win/wincoreaudiodriver.cpp" line="457"/>
         <source>System default</source>
-        <translation type="unfinished"/>
+        <translation>Sistemos numatytasis</translation>
     </message>
     <message>
         <location filename="../../src/framework/audioplugins/internal/registeraudiopluginsscenario.cpp" line="80"/>
         <location filename="../../src/framework/audioplugins/tests/registeraudiopluginsscenariotest.cpp" line="157"/>
         <source>Scanning audio plugins</source>
-        <translation type="unfinished"/>
+        <translation>Skanuojama audio papildinių</translation>
     </message>
 </context>
 <context>
@@ -11557,55 +11560,55 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudItem.qml" line="75"/>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudItem.qml" line="131"/>
         <source>Not signed in</source>
-        <translation type="unfinished"/>
+        <translation>Neprisijungta</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudItem.qml" line="161"/>
         <source>My profile</source>
-        <translation type="unfinished"/>
+        <translation>Mano profilis</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudItem.qml" line="189"/>
         <source>Sign out</source>
-        <translation type="unfinished"/>
+        <translation>Atsijungti</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="195"/>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudItem.qml" line="161"/>
         <source>Sign in</source>
-        <translation type="unfinished"/>
+        <translation>Prisijungti</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="68"/>
         <source>You are not signed in</source>
-        <translation type="unfinished"/>
+        <translation>Jūs nesate prisijungęs</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="77"/>
         <source>Log in</source>
-        <translation type="unfinished"/>
+        <translation>Prisijungti</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="185"/>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudItem.qml" line="189"/>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="74"/>
         <source>Create account</source>
-        <translation type="unfinished"/>
+        <translation>Susikurti paskyrą</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/AccountInfoButton.qml" line="42"/>
         <source>My accounts</source>
-        <translation type="unfinished"/>
+        <translation>Mano paskyros</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="178"/>
         <source>Sign in buttons</source>
-        <translation type="unfinished"/>
+        <translation>Prisijungimo mygtukai</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/internal/oauthhttpserverreplyhandler.cpp" line="184"/>
         <source>Sign in successful! You’re good to go back to MuseScore Studio.</source>
-        <translation type="unfinished"/>
+        <translation>Prisijungimas sėkmingas! Galite grįžti į MuseScore Studio.</translation>
     </message>
 </context>
 <context>
@@ -11613,17 +11616,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="37"/>
         <source>Save diagnostic files?</source>
-        <translation type="unfinished"/>
+        <translation>Išsaugoti diagnostinius failus?</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="38"/>
         <source>This will create a .zip file with information about your MuseScore Studio setup to help developers diagnose any problems you are having. You can inspect the contents of this file before sending it to anyone.</source>
-        <translation type="unfinished"/>
+        <translation>Tai sukurs .zip failą su informacija apie jūsų MuseScore Studio konfigūraciją tam, kad galėtų padėti kūrėjams diagnozuoti jūsų patiriamas problemas. Galite apžvelgti šio failo turinį prieš siunčiant.</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="52"/>
         <source>Save diagnostic files</source>
-        <translation type="unfinished"/>
+        <translation>Išsaugoti diagnostinius failus</translation>
     </message>
 </context>
 <context>
@@ -11643,7 +11646,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="211"/>
         <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="214"/>
         <source>Staff %1 (%2)</source>
-        <translation type="unfinished"/>
+        <translation>Penklinė %1 (%2)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="220"/>
@@ -11728,17 +11731,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/cmd.cpp" line="3541"/>
         <source>Current contents of measures will be replaced</source>
-        <translation type="unfinished"/>
+        <translation>Dabartinis takto turinys bus pakeistas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/cmd.cpp" line="3542"/>
         <source>Continue with inserting measure repeat?</source>
-        <translation type="unfinished"/>
+        <translation>Tęsti takto pakartojimo įterpimą?</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/engravingitem.cpp" line="2518"/>
         <source>Measure: %1</source>
-        <translation type="unfinished"/>
+        <translation>Taktas: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/engravingitem.cpp" line="2521"/>
@@ -11754,24 +11757,24 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/fingering.cpp" line="118"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1161"/>
         <source>String number</source>
-        <translation type="unfinished"/>
+        <translation>Stygos numeris</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="838"/>
         <location filename="../../src/engraving/dom/fret.cpp" line="939"/>
         <source>with chord symbol %1</source>
-        <translation type="unfinished"/>
+        <translation>su akordo simboilu %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="840"/>
         <location filename="../../src/engraving/dom/fret.cpp" line="940"/>
         <source>without chord symbol</source>
-        <translation type="unfinished"/>
+        <translation>be akordo simbolio</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="853"/>
         <source>string %1</source>
-        <translation type="unfinished"/>
+        <translation>styga %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="859"/>
@@ -11786,7 +11789,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="894"/>
         <source>%1 and %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 ir %2</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/dom/fret.cpp" line="902"/>
@@ -11797,7 +11800,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="914"/>
         <source>fret %1</source>
-        <translation type="unfinished"/>
+        <translation>lada %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="918"/>
@@ -11822,7 +11825,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="935"/>
         <source>no content</source>
-        <translation type="unfinished"/>
+        <translation>jokio turinio</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/dom/fret.cpp" line="944"/>
@@ -11840,29 +11843,29 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/harmony.cpp" line="1736"/>
         <source>Roman numeral</source>
-        <translation type="unfinished"/>
+        <translation>Romėniškas skaitmuo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/harmony.cpp" line="1738"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1154"/>
         <source>Nashville number</source>
-        <translation type="unfinished"/>
+        <translation>Nashville skaičius</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/harmony.cpp" line="1776"/>
         <source>lower case</source>
-        <translation type="unfinished"/>
+        <translation>mažosiomis raidėmis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/instrchange.cpp" line="150"/>
         <source>To %1</source>
         <extracomment>The text of an &quot;instrument change&quot; marking. It is an instruction to the player to switch to another instrument.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Į %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/lyrics.cpp" line="82"/>
         <source>Verse %1</source>
-        <translation type="unfinished"/>
+        <translation>Posmas %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="859"/>
@@ -11882,12 +11885,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="2212"/>
         <source>Grace note after</source>
-        <translation type="unfinished"/>
+        <translation>Nachšlagas po</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="2216"/>
         <source>Grace note before</source>
-        <translation type="unfinished"/>
+        <translation>Foršlagas prieš</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="2218"/>
@@ -11913,13 +11916,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/note.cpp" line="3147"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
         <source>Beat slash</source>
-        <translation type="unfinished"/>
+        <translation>Takto dalies pasvirasis brūkšnys</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3147"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
         <source>Rhythm slash</source>
-        <translation type="unfinished"/>
+        <translation>Ritmo pasv. brūkšnys</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3151"/>
@@ -11953,68 +11956,68 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3194"/>
         <source>too low</source>
-        <translation type="unfinished"/>
+        <translation>per žemai</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3196"/>
         <source>too high</source>
-        <translation type="unfinished"/>
+        <translation>per aukštai</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3198"/>
         <source>too low for amateurs</source>
-        <translation type="unfinished"/>
+        <translation>per žemai mėgėjams</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3200"/>
         <source>too high for amateurs</source>
-        <translation type="unfinished"/>
+        <translation>per aukštai mėgėjams</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/noteentry.cpp" line="411"/>
         <source>Note input will remove measure repeat</source>
-        <translation type="unfinished"/>
+        <translation>Natų įvestis panaikins taktų pakartojimą</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/noteentry.cpp" line="412"/>
         <source>This measure contains a measure repeat. If you enter notes here, it will be deleted. Do you want to continue?</source>
-        <translation type="unfinished"/>
+        <translation>Šiame takte yra takto pakartojimas. Jeigu bandysite čia įvesti natas, pakartojimas bus ištrintas. Ar norite tęsti?</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1422"/>
         <source>triple ♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation type="unfinished"/>
+        <translation>trigubas ♭</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1417"/>
         <source>double ♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation type="unfinished"/>
+        <translation>dvigubas ♭</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1412"/>
         <source>♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>bemolis</translation>
+        <translation>♭</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1402"/>
         <source>♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>diezas</translation>
+        <translation>♯</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1397"/>
         <source>double ♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation type="unfinished"/>
+        <translation>dvigubas ♯</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1392"/>
         <source>triple ♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation type="unfinished"/>
+        <translation>trigubas ♯</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/rest.cpp" line="748"/>
@@ -12024,7 +12027,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/segment.cpp" line="2393"/>
         <source>Annotations:</source>
-        <translation type="unfinished"/>
+        <translation>Anotacijos:</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/barline.cpp" line="1232"/>
@@ -12034,7 +12037,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/note.cpp" line="3238"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2419"/>
         <source>Start of %1</source>
-        <translation type="unfinished"/>
+        <translation>%1 Pradžia</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/barline.cpp" line="1235"/>
@@ -12044,7 +12047,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/note.cpp" line="3246"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2434"/>
         <source>End of %1</source>
-        <translation type="unfinished"/>
+        <translation>%1 Pabaiga</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1205"/>
@@ -12054,102 +12057,102 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1206"/>
         <source>Perc. 1 line</source>
-        <translation type="unfinished"/>
+        <translation>Perk. 1 linija</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1207"/>
         <source>Perc. 2 lines</source>
-        <translation type="unfinished"/>
+        <translation>Perk. 2 linijos</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1208"/>
         <source>Perc. 3 lines</source>
-        <translation type="unfinished"/>
+        <translation>Perk. 3 linijos</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1209"/>
         <source>Perc. 5 lines</source>
-        <translation type="unfinished"/>
+        <translation>Perk. 5 linijos</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1212"/>
         <source>Tab. 6-str. simple</source>
-        <translation type="unfinished"/>
+        <translation>Tab. 6-styg. supaprastinta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1213"/>
         <source>Tab. 6-str. common</source>
-        <translation type="unfinished"/>
+        <translation>Tab. 6-styg. įprasta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1214"/>
         <source>Tab. 6-str. full</source>
-        <translation type="unfinished"/>
+        <translation>Tab. 6-styg. pilna</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1215"/>
         <source>Tab. 4-str. simple</source>
-        <translation type="unfinished"/>
+        <translation>Tab. 4-styg. supaprastinta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1216"/>
         <source>Tab. 4-str. common</source>
-        <translation type="unfinished"/>
+        <translation>Tab. 4-styg. įprasta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1217"/>
         <source>Tab. 4-str. full</source>
-        <translation type="unfinished"/>
+        <translation>Tab. 4-styg. pilna</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1218"/>
         <source>Tab. 5-str. simple</source>
-        <translation type="unfinished"/>
+        <translation>Tab. 5-styg. supaprastinta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1219"/>
         <source>Tab. 5-str. common</source>
-        <translation type="unfinished"/>
+        <translation>Tab. 5-styg. įprasta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1220"/>
         <source>Tab. 5-str. full</source>
-        <translation type="unfinished"/>
+        <translation>Tab. 5-styg. pilna</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1221"/>
         <source>Tab. ukulele</source>
-        <translation type="unfinished"/>
+        <translation>Tab. ukulelė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1222"/>
         <source>Tab. balalaika</source>
-        <translation type="unfinished"/>
+        <translation>Tab. balalaika</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1223"/>
         <source>Tab. dulcimer</source>
-        <translation type="unfinished"/>
+        <translation>Tab. cimbolai</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1224"/>
         <source>Tab. 6-str. Italian</source>
-        <translation type="unfinished"/>
+        <translation>Tab. 6-styg. itališka</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1225"/>
         <source>Tab. 6-str. French</source>
-        <translation type="unfinished"/>
+        <translation>Tab. 6-styg. prancūziška</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1226"/>
         <source>Tab. 7-str. common</source>
-        <translation type="unfinished"/>
+        <translation>Tab. 7-styg. įprasta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1227"/>
         <source>Tab. 8-str. common</source>
-        <translation type="unfinished"/>
+        <translation>Tab. 8-styg. įprasta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1228"/>
@@ -12185,7 +12188,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/rw/read400/measurerw.cpp" line="99"/>
         <location filename="../../src/engraving/rw/read410/measureread.cpp" line="97"/>
         <source>MSCX error at line %1: invalid measure length: %2</source>
-        <translation type="unfinished"/>
+        <translation>MSCX klaida %1 eilutėje: netinkama takto trukmė: %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="166"/>
@@ -12224,23 +12227,23 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="173"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1134"/>
         <source>Measure number</source>
-        <translation type="unfinished"/>
+        <translation>Takto numeris</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="174"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1135"/>
         <source>Multimeasure rest range</source>
-        <translation type="unfinished"/>
+        <translation>Daugiataktės pauzės diapazonas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="175"/>
         <source>Instrument name</source>
-        <translation type="unfinished"/>
+        <translation>Instrumento pavadinimas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="176"/>
         <source>Slur segment</source>
-        <translation type="unfinished"/>
+        <translation>Lygos segmentas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="177"/>
@@ -12255,12 +12258,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="179"/>
         <source>Staff lines</source>
-        <translation type="unfinished"/>
+        <translation>Penklinės linijos</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="180"/>
         <source>System divider</source>
-        <translation type="unfinished"/>
+        <translation>Akoladės skirtukas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="181"/>
@@ -12301,7 +12304,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="190"/>
         <source>Ambitus</source>
-        <translation type="unfinished"/>
+        <translation>Ambitus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="191"/>
@@ -12341,7 +12344,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/articulation.cpp" line="159"/>
         <source>Articulation text</source>
-        <translation type="unfinished"/>
+        <translation>Artikuliacijos tekstas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/articulation.cpp" line="162"/>
@@ -12352,7 +12355,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/ornament.cpp" line="95"/>
         <source>Ornament text</source>
-        <translation type="unfinished"/>
+        <translation>Ornamento tekstas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/ornament.cpp" line="98"/>
@@ -12363,12 +12366,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="200"/>
         <source>Fermata</source>
-        <translation type="unfinished"/>
+        <translation>Fermata</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="201"/>
         <source>Chord line</source>
-        <translation type="unfinished"/>
+        <translation>Akordo linija</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="202"/>
@@ -12442,50 +12445,50 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="215"/>
         <source>System text</source>
-        <translation type="unfinished"/>
+        <translation>Sistemos tekstas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="216"/>
         <source>Sound flag</source>
-        <translation type="unfinished"/>
+        <translation>Garso žymė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="217"/>
         <source>Playing technique annotation</source>
-        <translation type="unfinished"/>
+        <translation>Grojimo technikos anotacija</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="218"/>
         <source>Capo</source>
-        <translation type="unfinished"/>
+        <translation>Kapodasteris</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="219"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1162"/>
         <source>String tunings</source>
-        <translation type="unfinished"/>
+        <translation>Stygų derinimai</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="220"/>
         <source>Triplet feel</source>
-        <translation type="unfinished"/>
+        <translation>Trijolės pojūtis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="221"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1142"/>
         <source>Rehearsal mark</source>
-        <translation type="unfinished"/>
+        <translation>Skaitlinė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="222"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1128"/>
         <source>Instrument change</source>
-        <translation type="unfinished"/>
+        <translation>Instrumento pakeitimas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="223"/>
         <source>Staff type change</source>
-        <translation type="unfinished"/>
+        <translation>Penklinės tipo pokytis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="224"/>
@@ -12502,7 +12505,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="226"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1167"/>
         <source>Harp pedal diagram</source>
-        <translation type="unfinished"/>
+        <translation>Arfos pedalų diagrama</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="227"/>
@@ -12545,7 +12548,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="236"/>
         <source>Gradual tempo change segment</source>
-        <translation type="unfinished"/>
+        <translation>Laipsninio tempo pokyčio segmentas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="237"/>
@@ -12595,12 +12598,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="247"/>
         <source>Glissando segment</source>
-        <translation type="unfinished"/>
+        <translation>Glissando segmentas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="248"/>
         <source>Layout break</source>
-        <translation type="unfinished"/>
+        <translation>Išdėstymo lūžis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="249"/>
@@ -12610,17 +12613,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="250"/>
         <source>Staff state</source>
-        <translation type="unfinished"/>
+        <translation>Penklinės būsena</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="251"/>
         <source>Notehead</source>
-        <translation type="unfinished"/>
+        <translation>Natos galvutė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="252"/>
         <source>Note dot</source>
-        <translation type="unfinished"/>
+        <translation>Natos taškelis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="304"/>
@@ -12662,7 +12665,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="259"/>
         <source>Font symbol</source>
-        <translation type="unfinished"/>
+        <translation>Šrifto simbolis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="260"/>
@@ -12702,7 +12705,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="266"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1138"/>
         <source>Gradual tempo change</source>
-        <translation type="unfinished"/>
+        <translation>Laipsninis tempo pokytis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="267"/>
@@ -12723,7 +12726,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="270"/>
         <source>Rasgueado</source>
-        <translation type="unfinished"/>
+        <translation>Rasgueado</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="272"/>
@@ -12744,13 +12747,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="275"/>
         <source>Note line</source>
-        <translation type="unfinished"/>
+        <translation>Natos linija</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="277"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1173"/>
         <source>Glissando</source>
-        <translation>Glisando</translation>
+        <translation>Glissando</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="279"/>
@@ -12781,27 +12784,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="286"/>
         <source>Staff list</source>
-        <translation type="unfinished"/>
+        <translation>Penklinių sąrašas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="287"/>
         <source>Measure list</source>
-        <translation type="unfinished"/>
+        <translation>Taktų sąrašas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="288"/>
         <source>Horizontal frame</source>
-        <translation type="unfinished"/>
+        <translation>Horizontalus rėmelis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="289"/>
         <source>Vertical frame</source>
-        <translation type="unfinished"/>
+        <translation>Vertikalus rėmelis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="290"/>
         <source>Text frame</source>
-        <translation type="unfinished"/>
+        <translation>Teksto rėmelis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="291"/>
@@ -12811,12 +12814,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="293"/>
         <source>Ossia</source>
-        <translation type="unfinished"/>
+        <translation>Ossia</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="294"/>
         <source>Bagpipe embellishment</source>
-        <translation type="unfinished"/>
+        <translation>Dūdmaišio pagražinimas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="295"/>
@@ -12827,12 +12830,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="298"/>
         <source>Guitar bend</source>
-        <translation type="unfinished"/>
+        <translation>Gitaros patempimas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="299"/>
         <source>Guitar bend segment</source>
-        <translation type="unfinished"/>
+        <translation>Gitaros patempimo segmentas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="300"/>
@@ -12852,7 +12855,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="487"/>
         <source>Vertical</source>
-        <translation type="unfinished"/>
+        <translation>Vertikalus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="488"/>
@@ -12901,7 +12904,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1477"/>
         <source>Breve</source>
-        <translation type="unfinished"/>
+        <translation>Breve</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="284"/>
@@ -12916,7 +12919,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="285"/>
         <source>Element list</source>
-        <translation type="unfinished"/>
+        <translation>Elementų sąrašas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1118"/>
@@ -12977,7 +12980,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1125"/>
         <source>Instrument name (Part)</source>
-        <translation type="unfinished"/>
+        <translation>Instrumento pavadinimas (Partija)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="246"/>
@@ -12997,12 +13000,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1126"/>
         <source>Instrument name (Long)</source>
-        <translation type="unfinished"/>
+        <translation>Instrumento pavadinimas (Pilnas)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1127"/>
         <source>Instrument name (Short)</source>
-        <translation type="unfinished"/>
+        <translation>Instrumento pavadinimas (Trumpas)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1131"/>
@@ -13012,7 +13015,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1132"/>
         <source>Page number</source>
-        <translation type="unfinished"/>
+        <translation>Puslapio numeris</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1140"/>
@@ -13067,32 +13070,32 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1179"/>
         <source>User-1</source>
-        <translation type="unfinished"/>
+        <translation>Naudotojas-1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1180"/>
         <source>User-2</source>
-        <translation type="unfinished"/>
+        <translation>Naudotojas-2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1181"/>
         <source>User-3</source>
-        <translation type="unfinished"/>
+        <translation>Naudotojas-3</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1182"/>
         <source>User-4</source>
-        <translation type="unfinished"/>
+        <translation>Naudotojas-4</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1183"/>
         <source>User-5</source>
-        <translation type="unfinished"/>
+        <translation>Naudotojas-5</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1184"/>
         <source>User-6</source>
-        <translation type="unfinished"/>
+        <translation>Naudotojas-6</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1185"/>
@@ -13112,89 +13115,89 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1188"/>
         <source>User-10</source>
-        <translation type="unfinished"/>
+        <translation>Naudotojas-10</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1189"/>
         <source>User-11</source>
-        <translation type="unfinished"/>
+        <translation>Naudotojas-11</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1190"/>
         <source>User-12</source>
-        <translation type="unfinished"/>
+        <translation>Naudotojas-12</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1394"/>
         <source>triple sharp</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
-        <translation type="unfinished"/>
+        <translation>trigubas diezas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1399"/>
         <source>double sharp</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
-        <translation type="unfinished"/>
+        <translation>dvigubas diezas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1404"/>
         <source>sharp</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
-        <translation type="unfinished"/>
+        <translation>diezas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1409"/>
         <source>natural</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
-        <translation type="unfinished"/>
+        <translation>bekaras</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1414"/>
         <source>flat</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
-        <translation type="unfinished"/>
+        <translation>bemolis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1419"/>
         <source>double flat</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
-        <translation type="unfinished"/>
+        <translation>dvigubas bemolis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1424"/>
         <source>triple flat</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
-        <translation type="unfinished"/>
+        <translation>trigubas bemolis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1466"/>
         <source>Eighth</source>
-        <translation type="unfinished"/>
+        <translation>Aštuntinė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1467"/>
         <source>1024th</source>
-        <translation type="unfinished"/>
+        <translation>1024-inė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1468"/>
         <source>512th</source>
-        <translation type="unfinished"/>
+        <translation>512-inė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1469"/>
         <source>256th</source>
-        <translation type="unfinished"/>
+        <translation>256-inė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1470"/>
         <source>128th</source>
-        <translation type="unfinished"/>
+        <translation>128-inė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1471"/>
         <source>64th</source>
-        <translation type="unfinished"/>
+        <translation>64-inė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1472"/>
@@ -13214,7 +13217,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1479"/>
         <source>Zero</source>
-        <translation type="unfinished"/>
+        <translation>Nulis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1651"/>
@@ -13324,12 +13327,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2426"/>
         <source>Straight glissando</source>
-        <translation type="unfinished"/>
+        <translation>Tiesus glissando</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2427"/>
         <source>Wavy glissando</source>
-        <translation type="unfinished"/>
+        <translation>Banguotas glissando</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2446"/>
@@ -13349,12 +13352,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2449"/>
         <source>D.S. al Coda</source>
-        <translation type="unfinished"/>
+        <translation>D.S. al Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2450"/>
         <source>D.S. al Fine</source>
-        <translation type="unfinished"/>
+        <translation>D.S. al Fine</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2451"/>
@@ -13364,17 +13367,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2482"/>
         <source>Da Coda</source>
-        <translation type="unfinished"/>
+        <translation>Da Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2474"/>
         <source>Segno</source>
-        <translation type="unfinished"/>
+        <translation>Segno</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2475"/>
         <source>Segno variation</source>
-        <translation type="unfinished"/>
+        <translation>Segno variacija</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2476"/>
@@ -13384,7 +13387,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2477"/>
         <source>Varied coda</source>
-        <translation type="unfinished"/>
+        <translation>Varijuota coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2479"/>
@@ -13399,7 +13402,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2481"/>
         <source>To coda (symbol)</source>
-        <translation type="unfinished"/>
+        <translation>Į codą (simbolis)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2722"/>
@@ -13409,7 +13412,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2714"/>
         <source>C♭ major, A♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>C♭ mažoras, A♭ minoras</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2723"/>
@@ -13419,57 +13422,57 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2715"/>
         <source>G♭ major, E♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>G♭ mažoras, E♭ minoras</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2724"/>
         <source>A major, F♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>A mažoras, F♯ minoras</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2716"/>
         <source>D♭ major, B♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>D♭ mažoras, B♭ minoras</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2725"/>
         <source>E major, C♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>E mažoras, C♯ minoras</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2717"/>
         <source>A♭ major, F minor</source>
-        <translation type="unfinished"/>
+        <translation>A♭ mažoras, F minoras</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2726"/>
         <source>B major, G♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>B mažoras, G♯ minoras</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2718"/>
         <source>E♭ major, C minor</source>
-        <translation type="unfinished"/>
+        <translation>E♭ mažoras, C minoras</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2727"/>
         <source>F♯ major, D♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>F♯ mažoras, D♯ minoras</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2719"/>
         <source>B♭ major, G minor</source>
-        <translation type="unfinished"/>
+        <translation>B♭ mažoras, G minoras</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2728"/>
         <source>C♯ major, A♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>C♯ mažoras, A♯ minoras</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2720"/>
         <source>F major, D minor</source>
-        <translation type="unfinished"/>
+        <translation>F mažoras, D minoras</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2453"/>
@@ -13519,7 +13522,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2729"/>
         <source>Open/Atonal</source>
-        <translation type="unfinished"/>
+        <translation>Atvira/atonali</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/dom/measurerepeat.cpp" line="193"/>
@@ -13554,22 +13557,22 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="73"/>
         <source>Unknown filetype</source>
-        <translation type="unfinished"/>
+        <translation>Nežinomas failo tipas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="76"/>
         <source>This file was last saved in a version older than 2.0.0. You can convert this score by opening and then saving in MuseScore version 2.x. Visit the &lt;a href=&quot;%1&quot;&gt;MuseScore download page&lt;/a&gt; to obtain such a 2.x version.</source>
-        <translation type="unfinished"/>
+        <translation>Šis failas paskutinį kartą buvo išsaugotas versijoje, senesnėje negu 2.0.0. Galite konvertuoti šią partitūrą atidarydami ir išsaugodami MuseScore 2.x versijoje. Apsilankykite &lt;a href=&quot;%1&quot;&gt;MuseScore atsisiuntimų puslapyje&lt;/a&gt;, jog atsiimtumėte tokią 2.x versiją.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="83"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Šis failas buvo išsaugotas naudojant naujesnę MuseScore Studio versiją. Apsilankykite &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; kad gautumėte naujausią versiją.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="87"/>
         <source>This file was last saved in a development version of 3.0.</source>
-        <translation type="unfinished"/>
+        <translation>ŠIs failas buvo paskutinį kartą išsaugotas nebaigtoje 3.0 versijoje.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="90"/>
@@ -13589,12 +13592,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/accessibility/accessibleitem.cpp" line="206"/>
         <source>invisible</source>
-        <translation type="unfinished"/>
+        <translation>nematomas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/accessibility/accessibleitem.cpp" line="208"/>
         <source>selected</source>
-        <translation type="unfinished"/>
+        <translation>pasirinktas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="459"/>
@@ -13616,7 +13619,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="146"/>
         <source>Full score</source>
-        <translation type="unfinished"/>
+        <translation>Pilna partitūra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="150"/>
@@ -13644,22 +13647,22 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="82"/>
         <source>Voice %1 color</source>
-        <translation type="unfinished"/>
+        <translation>%1 balso spalva</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="96"/>
         <source>All voices color</source>
-        <translation type="unfinished"/>
+        <translation>Visų balsų spalva</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="109"/>
         <source>Formatting color</source>
-        <translation type="unfinished"/>
+        <translation>Formatavimo spalva</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="116"/>
         <source>Desynchronized color</source>
-        <translation type="unfinished"/>
+        <translation>Desinchronizacijos spalva</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="141"/>
@@ -14695,7 +14698,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="704"/>
         <source>Tenor clef (French, 18th century)</source>
-        <translation type="unfinished"/>
+        <translation>Tenoro raktas (Prancūzija, 18-as amžius)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="705"/>
@@ -14710,7 +14713,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="707"/>
         <source>Tenor clef (French, 20th century)</source>
-        <translation type="unfinished"/>
+        <translation>Tenoro raktas (Prancūzija, 20-as amžius)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="708"/>
@@ -14770,27 +14773,27 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="721"/>
         <source>Tablature</source>
-        <translation>Tablatūra</translation>
+        <translation>Tabulatūra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="722"/>
         <source>Tablature 4 lines</source>
-        <translation type="unfinished"/>
+        <translation>4 linijų tabulatūra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="723"/>
         <source>Tablature Serif</source>
-        <translation type="unfinished"/>
+        <translation>Serifinė tabulatūra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="724"/>
         <source>Tablature Serif 4 lines</source>
-        <translation type="unfinished"/>
+        <translation>4 linijų serifinė tabulatūra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="726"/>
         <source>Tenor clef 8va bassa</source>
-        <translation type="unfinished"/>
+        <translation>Tenoro raktas 8va bassa</translation>
     </message>
 </context>
 <context>
@@ -15251,12 +15254,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="828"/>
         <source>rfz (Rinforzando)</source>
-        <translation type="unfinished"/>
+        <translation>rfz (Rinforzando)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="830"/>
         <source>rf (Rinforzando)</source>
-        <translation type="unfinished"/>
+        <translation>rf (Rinforzando)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="832"/>
@@ -15271,7 +15274,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="836"/>
         <source>r (Rinforzando)</source>
-        <translation type="unfinished"/>
+        <translation>r (Rinforzando)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="838"/>
@@ -15294,57 +15297,57 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1535"/>
         <source>accel.</source>
-        <translation type="unfinished"/>
+        <translation>accel.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1536"/>
         <source>allarg.</source>
-        <translation type="unfinished"/>
+        <translation>allarg.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1537"/>
         <source>calando</source>
-        <translation type="unfinished"/>
+        <translation>calando</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1538"/>
         <source>lentando</source>
-        <translation type="unfinished"/>
+        <translation>lentando</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1539"/>
         <source>morendo</source>
-        <translation type="unfinished"/>
+        <translation>morendo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1540"/>
         <source>precipitando</source>
-        <translation type="unfinished"/>
+        <translation>precipitando</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1541"/>
         <source>rall.</source>
-        <translation type="unfinished"/>
+        <translation>rall.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1542"/>
         <source>rit.</source>
-        <translation type="unfinished"/>
+        <translation>rit,</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1543"/>
         <source>smorz.</source>
-        <translation type="unfinished"/>
+        <translation>smorz.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1544"/>
         <source>sost.</source>
-        <translation type="unfinished"/>
+        <translation>sost.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1545"/>
         <source>string.</source>
-        <translation type="unfinished"/>
+        <translation>string.</translation>
     </message>
 </context>
 <context>
@@ -15352,7 +15355,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/hairpin.cpp" line="763"/>
         <source>Crescendo hairpin</source>
-        <translation type="unfinished"/>
+        <translation>Crescendo din. linija</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/hairpin.cpp" line="765"/>
@@ -15362,7 +15365,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/hairpin.cpp" line="767"/>
         <source>Crescendo line</source>
-        <translation type="unfinished"/>
+        <translation>Crescendo linija</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/hairpin.cpp" line="769"/>
@@ -15400,7 +15403,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1722"/>
         <source>System break</source>
-        <translation type="unfinished"/>
+        <translation>Sistemos lūžis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1723"/>
@@ -15859,7 +15862,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="511"/>
         <source>Breve</source>
-        <translation type="unfinished"/>
+        <translation>Breve</translation>
     </message>
 </context>
 <context>
@@ -15867,32 +15870,32 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/ottava.h" line="68"/>
         <source>8va alta</source>
-        <translation type="unfinished"/>
+        <translation>8va alta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/ottava.h" line="69"/>
         <source>8va bassa</source>
-        <translation type="unfinished"/>
+        <translation>8va bassa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/ottava.h" line="70"/>
         <source>15ma alta</source>
-        <translation type="unfinished"/>
+        <translation>15ma alta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/ottava.h" line="71"/>
         <source>15ma bassa</source>
-        <translation type="unfinished"/>
+        <translation>15ma bassa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/ottava.h" line="72"/>
         <source>22ma alta</source>
-        <translation type="unfinished"/>
+        <translation>22ma alta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/ottava.h" line="73"/>
         <source>22ma bassa</source>
-        <translation type="unfinished"/>
+        <translation>22ma bassa</translation>
     </message>
 </context>
 <context>
@@ -15905,7 +15908,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1501"/>
         <source>Pizzicato</source>
-        <translation type="unfinished"/>
+        <translation>Pizzicato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1502"/>
@@ -15955,17 +15958,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1511"/>
         <source>Legato</source>
-        <translation type="unfinished"/>
+        <translation>Legato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1512"/>
         <source>Distortion</source>
-        <translation type="unfinished"/>
+        <translation>Distortion</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1513"/>
         <source>Overdrive</source>
-        <translation type="unfinished"/>
+        <translation>Overdrive</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1514"/>
@@ -16001,7 +16004,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="421"/>
         <source>Dotted</source>
-        <translation type="unfinished"/>
+        <translation>Punktyrinė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="423"/>
@@ -16052,7 +16055,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2524"/>
         <source>Tablature</source>
-        <translation>Tablatūra</translation>
+        <translation>Tabulatūra</translation>
     </message>
 </context>
 <context>
@@ -16060,7 +16063,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3089"/>
         <source>No symbol</source>
-        <translation type="unfinished"/>
+        <translation>Jokio simbolio</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3099"/>
@@ -16280,12 +16283,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3356"/>
         <source>Pull</source>
-        <translation type="unfinished"/>
+        <translation>Traukti</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3357"/>
         <source>Push</source>
-        <translation type="unfinished"/>
+        <translation>Stumti</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3358"/>
@@ -16535,7 +16538,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3413"/>
         <source>Büyük mücenneb (sharp)</source>
-        <translation type="unfinished"/>
+        <translation>Büyük mücenneb (diezas)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3415"/>
@@ -16867,7 +16870,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3561"/>
         <source>Sharp</source>
-        <translation>diezas</translation>
+        <translation>Diezas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3563"/>
@@ -17069,92 +17072,92 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3698"/>
         <source>Accent-staccato above</source>
-        <translation type="unfinished"/>
+        <translation>Akcentas-staccato virš</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3699"/>
         <source>Accent-staccato below</source>
-        <translation type="unfinished"/>
+        <translation>Akcentas-staccato apačioje</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3700"/>
         <source>Laissez vibrer (l.v.) above</source>
-        <translation type="unfinished"/>
+        <translation>Laissez vibrer (l.v.) virš</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3701"/>
         <source>Laissez vibrer (l.v.) below</source>
-        <translation type="unfinished"/>
+        <translation>Laissez vibrer (l.v.) žemyn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3702"/>
         <source>Marcato above</source>
-        <translation type="unfinished"/>
+        <translation>Marcato virš</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3703"/>
         <source>Marcato below</source>
-        <translation type="unfinished"/>
+        <translation>Marcato apačioje</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3704"/>
         <source>Marcato-staccato above</source>
-        <translation type="unfinished"/>
+        <translation>Marcato-staccato virš</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3705"/>
         <source>Marcato-staccato below</source>
-        <translation type="unfinished"/>
+        <translation>Marcato-staccato apačioje</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3706"/>
         <source>Marcato-tenuto above</source>
-        <translation type="unfinished"/>
+        <translation>Marcato-tenuto virš</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3707"/>
         <source>Marcato-tenuto below</source>
-        <translation type="unfinished"/>
+        <translation>Marcato-tenuto apačioje</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3708"/>
         <source>Soft accent above</source>
-        <translation type="unfinished"/>
+        <translation>Švelnus akcentas virš</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3709"/>
         <source>Soft accent below</source>
-        <translation type="unfinished"/>
+        <translation>Švelnus akcentas žemyn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3710"/>
         <source>Soft accent-staccato above</source>
-        <translation type="unfinished"/>
+        <translation>Švelnus akcentas-staccato virš</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3711"/>
         <source>Soft accent-staccato below</source>
-        <translation type="unfinished"/>
+        <translation>Švelnus akcentas-staccato apačioje</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3712"/>
         <source>Soft accent-tenuto above</source>
-        <translation type="unfinished"/>
+        <translation>Švelnus akcentas-tenuto virš</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3713"/>
         <source>Soft accent-tenuto below</source>
-        <translation type="unfinished"/>
+        <translation>Švelnus akcentas-tenuto žemyn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3714"/>
         <source>Soft accent-tenuto-staccato above</source>
-        <translation type="unfinished"/>
+        <translation>Švelnus akcentas-tenuto-staccato virš</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3715"/>
         <source>Soft accent-tenuto-staccato below</source>
-        <translation type="unfinished"/>
+        <translation>Švelnus akcentas-tenuto-staccato apačioje</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3716"/>
@@ -17169,22 +17172,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3718"/>
         <source>Staccatissimo stroke above</source>
-        <translation type="unfinished"/>
+        <translation>Staccatissimo brūkšniukas virš</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3719"/>
         <source>Staccatissimo stroke below</source>
-        <translation type="unfinished"/>
+        <translation>Staccatissimo brūkšniukas žemyn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3720"/>
         <source>Staccatissimo wedge above</source>
-        <translation type="unfinished"/>
+        <translation>Staccatissimo trikampėlis virš</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3721"/>
         <source>Staccatissimo wedge below</source>
-        <translation type="unfinished"/>
+        <translation>Staccatissimo trikampėlis žemyn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3722"/>
@@ -17199,12 +17202,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3724"/>
         <source>Stress above</source>
-        <translation type="unfinished"/>
+        <translation>Pabrėžimas virš</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3725"/>
         <source>Stress below</source>
-        <translation type="unfinished"/>
+        <translation>Pabrėžimas žemyn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3726"/>
@@ -17229,12 +17232,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3730"/>
         <source>Louré (tenuto-staccato) above</source>
-        <translation type="unfinished"/>
+        <translation>Louré (tenuto-staccato) virš</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3731"/>
         <source>Louré (tenuto-staccato) below</source>
-        <translation type="unfinished"/>
+        <translation>Louré (tenuto-staccato) žemyn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3732"/>
@@ -17324,7 +17327,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3800"/>
         <source>Breath mark (upbow-like)</source>
-        <translation type="unfinished"/>
+        <translation>Kvėpavimo brūkšnys (kaip stryko varnelė)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3803"/>
@@ -17540,7 +17543,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4763"/>
         <source>Augmentation dot</source>
-        <translation type="unfinished"/>
+        <translation>Prailginimo taškelis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4765"/>
@@ -17715,37 +17718,37 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5634"/>
         <source>16th (semiquaver) rest</source>
-        <translation type="unfinished"/>
+        <translation>Šešioliktinė pauzė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5635"/>
         <source>256th rest</source>
-        <translation type="unfinished"/>
+        <translation>256-inė pauzė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5636"/>
         <source>32nd (demisemiquaver) rest</source>
-        <translation type="unfinished"/>
+        <translation>Trisdešimtantrinė pauzė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5637"/>
         <source>512th rest</source>
-        <translation type="unfinished"/>
+        <translation>512-inė pauzė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5638"/>
         <source>64th (hemidemisemiquaver) rest</source>
-        <translation type="unfinished"/>
+        <translation>64-inė pauzė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5639"/>
         <source>Eighth (quaver) rest</source>
-        <translation type="unfinished"/>
+        <translation>Aštuntinė pauzė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5640"/>
         <source>Double whole (breve) rest</source>
-        <translation type="unfinished"/>
+        <translation>Dviguba sveikoji pauzė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5641"/>
@@ -17755,7 +17758,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5646"/>
         <source>Half (minim) rest</source>
-        <translation type="unfinished"/>
+        <translation>Pusinė pauzė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5647"/>
@@ -17765,22 +17768,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5648"/>
         <source>Longa rest</source>
-        <translation type="unfinished"/>
+        <translation>Longa pauzė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5649"/>
         <source>Maxima rest</source>
-        <translation type="unfinished"/>
+        <translation>Maxima pauzė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5650"/>
         <source>Quarter (crotchet) rest</source>
-        <translation type="unfinished"/>
+        <translation>Ketvirtinė pauzė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5653"/>
         <source>Whole (semibreve) rest</source>
-        <translation type="unfinished"/>
+        <translation>Sveikoji pauzė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5654"/>
@@ -17790,7 +17793,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5672"/>
         <source>Segno</source>
-        <translation type="unfinished"/>
+        <translation>Segno</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5673"/>
@@ -17800,7 +17803,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5751"/>
         <source>Down bow</source>
-        <translation type="unfinished"/>
+        <translation>Smičius žemyn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5758"/>
@@ -17810,27 +17813,27 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5772"/>
         <source>Thumb position</source>
-        <translation type="unfinished"/>
+        <translation>Nykščio pozicija</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5776"/>
         <source>Up bow</source>
-        <translation type="unfinished"/>
+        <translation>Smičius aukštyn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5786"/>
         <source>System divider</source>
-        <translation type="unfinished"/>
+        <translation>Akoladės skirtumas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5787"/>
         <source>Extra long system divider</source>
-        <translation type="unfinished"/>
+        <translation>Ypač ilgas akoladės skirtukas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5788"/>
         <source>Long system divider</source>
-        <translation type="unfinished"/>
+        <translation>Ilgas akoladės skirtukas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5853"/>
@@ -18118,7 +18121,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2588"/>
         <source>Vibrato sawtooth</source>
-        <translation type="unfinished"/>
+        <translation>Vibrato dantuotas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2590"/>
@@ -18131,7 +18134,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="162"/>
         <source>Reload plugins</source>
-        <translation type="unfinished"/>
+        <translation>Perkrauti papildinius</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="116"/>
@@ -18142,7 +18145,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="145"/>
         <location filename="../../src/framework/extensions/extensionsmodule.cpp" line="92"/>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>Išjungti</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="192"/>
@@ -18159,7 +18162,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="80"/>
         <source>Edit shortcut</source>
         <extracomment>Edit the keyboard shortcut assigned to a plug-in</extracomment>
-        <translation type="unfinished"/>
+        <translation>Redaguoti greitąjį klavišą</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="103"/>
@@ -18189,12 +18192,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="72"/>
         <source>The plugin “%1” is currently disabled. Do you want to enable it now?</source>
-        <translation type="unfinished"/>
+        <translation>Papildinys &quot;%1&quot; šiuo metu yra išjungtas. Ar norite jį įjungti dabar?</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="73"/>
         <source>Alternatively, you can enable it at any time from Home &gt; Plugins.</source>
-        <translation type="unfinished"/>
+        <translation>Kita vertus, jūs galite tai įjungti bet kada iš Titulinis &gt; Papildiniai.</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsprovider.cpp" line="42"/>
@@ -18204,12 +18207,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsprovider.cpp" line="43"/>
         <source>Color notes</source>
-        <translation type="unfinished"/>
+        <translation>Spalvotos natos</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsprovider.cpp" line="44"/>
         <source>Playback</source>
-        <translation>Atkūrimas</translation>
+        <translation>Grojimas</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsprovider.cpp" line="45"/>
@@ -18225,7 +18228,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/framework/extensions/view/extensionslistmodel.cpp" line="108"/>
         <source>Not defined</source>
         <extracomment>No keyboard shortcut is assigned to this plugin.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Nenustatyta</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/extensionsmodule.cpp" line="93"/>
@@ -18255,7 +18258,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/FirstLaunchSetupDialog.qml" line="192"/>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="166"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>Kitas</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="71"/>
@@ -18286,23 +18289,23 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml" line="83"/>
         <source>Clear all</source>
-        <translation type="unfinished"/>
+        <translation>Išvalyti viską</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/StandardDialogPanel.qml" line="92"/>
         <source>Question</source>
-        <translation type="unfinished"/>
+        <translation>Klausimas</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/StandardDialogPanel.qml" line="93"/>
         <location filename="../../src/framework/ui/qml/Muse/Ui/StandardDialogPanel.qml" line="98"/>
         <source>Information</source>
-        <translation type="unfinished"/>
+        <translation>Informacija</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/StandardDialogPanel.qml" line="94"/>
         <source>Warning</source>
-        <translation type="unfinished"/>
+        <translation>Įspėjimas</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/StandardDialogPanel.qml" line="95"/>
@@ -18333,13 +18336,13 @@ Fret %1 on strings %2</source>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml" line="66"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PartsDialog.qml" line="112"/>
         <source>Open all</source>
-        <translation type="unfinished"/>
+        <translation>Atverti viską</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml" line="78"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PartsDialog.qml" line="123"/>
         <source>Open selected</source>
-        <translation type="unfinished"/>
+        <translation>Atverti pasirinktas</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="204"/>
@@ -18350,22 +18353,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="44"/>
         <source>Today</source>
-        <translation type="unfinished"/>
+        <translation>Šiandien</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="48"/>
         <source>Yesterday</source>
-        <translation type="unfinished"/>
+        <translation>Vakar</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="52"/>
         <source>%n day(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>prieš %n dieną</numerusform><numerusform>prieš %n dienas</numerusform><numerusform>prieš %n dienas</numerusform><numerusform>prieš %n dienas</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="58"/>
         <source>Last week</source>
-        <translation type="unfinished"/>
+        <translation>Praeitą savaitę</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="62"/>
@@ -18375,7 +18378,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="70"/>
         <source>Last month</source>
-        <translation type="unfinished"/>
+        <translation>Praeitą mėnesį</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="74"/>
@@ -18616,7 +18619,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.cpp" line="91"/>
         <source>Show less…</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti mažiau...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.cpp" line="91"/>
@@ -18627,7 +18630,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="73"/>
         <source>min</source>
         <comment>abbreviation of minutes</comment>
-        <translation type="unfinished"/>
+        <translation>min.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="67"/>
@@ -18651,14 +18654,14 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="128"/>
         <source>Don’t show again</source>
-        <translation type="unfinished"/>
+        <translation>Daugiau nerodyti</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PdfSettingsPage.qml" line="51"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="50"/>
         <source>dpi</source>
         <extracomment>Dots per inch</extracomment>
-        <translation type="unfinished"/>
+        <translation>dpi</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="178"/>
@@ -18724,12 +18727,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="100"/>
         <source>Save all</source>
-        <translation type="unfinished"/>
+        <translation>Išsaugoti viską</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="101"/>
         <source>Don’t save</source>
-        <translation type="unfinished"/>
+        <translation>Neišsaugoti</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="102"/>
@@ -18831,7 +18834,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="132"/>
         <source>li</source>
         <extracomment>Stands for &quot;Lines&quot;. Used for text line spacing controls, for example.</extracomment>
-        <translation type="unfinished"/>
+        <translation>li</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="58"/>
@@ -18877,12 +18880,12 @@ Fret %1 on strings %2</source>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="213"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="164"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Nežinoma</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="126"/>
         <source>Don’t ask again</source>
-        <translation type="unfinished"/>
+        <translation>Daugiau neklausti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="83"/>
@@ -18900,7 +18903,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/capella/internal/capella.cpp" line="2844"/>
         <source>Import failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Importavimas nepavyko: %1</translation>
     </message>
 </context>
 <context>
@@ -18909,17 +18912,17 @@ Fret %1 on strings %2</source>
         <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="482"/>
         <source>Free time</source>
         <comment>time signature</comment>
-        <translation type="unfinished"/>
+        <translation>Laisvas laikas</translation>
     </message>
     <message>
         <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1057"/>
         <source>Music by %1</source>
-        <translation type="unfinished"/>
+        <translation>Muzika %1</translation>
     </message>
     <message>
         <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1063"/>
         <source>Words by %1</source>
-        <translation type="unfinished"/>
+        <translation>Žodžiai %1</translation>
     </message>
 </context>
 <context>
@@ -18935,12 +18938,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi.cpp" line="1276"/>
         <source>Import MIDI</source>
-        <translation type="unfinished"/>
+        <translation>Importuoti MIDI</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi.cpp" line="1277"/>
         <source>Import failed: %1</source>
-        <translation type="unfinished"/>
+        <translation>Importavimas nepavyko: %1</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="89"/>
@@ -18960,7 +18963,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="174"/>
         <source>Sound</source>
-        <translation type="unfinished"/>
+        <translation>Garsas</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="206"/>
@@ -18980,7 +18983,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="315"/>
         <source>Eighth</source>
-        <translation type="unfinished"/>
+        <translation>Aštuntinė</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="316"/>
@@ -18995,12 +18998,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="318"/>
         <source>64th</source>
-        <translation type="unfinished"/>
+        <translation>64-inė</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="319"/>
         <source>128th</source>
-        <translation type="unfinished"/>
+        <translation>128-inė</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="324"/>
@@ -19067,25 +19070,28 @@ performance</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="667"/>
         <source>Split staff</source>
-        <translation type="unfinished"/>
+        <translation>Skaidyti penklinę</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="691"/>
         <source>Clef
 changes</source>
-        <translation type="unfinished"/>
+        <translation>Rakto
+pokyčiai</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="735"/>
         <source>Simplify
 durations</source>
-        <translation type="unfinished"/>
+        <translation>Supaprastinti
+trukmes</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="759"/>
         <source>Show
 staccato</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti
+staccato</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="783"/>
@@ -19097,7 +19103,8 @@ notes</source>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="808"/>
         <source>Show
 tempo text</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti
+tempo tekstą</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="835"/>
@@ -19110,7 +19117,8 @@ akordų simbolius</translation>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="861"/>
         <source>Recognize
 pickup measure</source>
-        <translation type="unfinished"/>
+        <translation>Atpažinti
+prieštaktį</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="882"/>
@@ -19130,12 +19138,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="889"/>
         <source>Detect swing</source>
-        <translation type="unfinished"/>
+        <translation>Aptikti svingą</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="1220"/>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>Visi</translation>
     </message>
 </context>
 <context>
@@ -19144,7 +19152,7 @@ pickup measure</source>
         <location filename="../../src/importexport/musicxml/internal/musicxml/importmxml.cpp" line="59"/>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="170"/>
         <source>Do you want to try to load this file anyway?</source>
-        <translation type="unfinished"/>
+        <translation>Ar norite vis tiek bandyti užkrauti šį failą?</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/importexport/musicxml/internal/musicxml/importmxml.cpp" line="108"/>
@@ -19154,17 +19162,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="96"/>
         <source>Debug message:</source>
-        <translation type="unfinished"/>
+        <translation>Debug žinutė:</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="98"/>
         <source>Warning:</source>
-        <translation type="unfinished"/>
+        <translation>Įspėjimas:</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="100"/>
         <source>Critical error:</source>
-        <translation type="unfinished"/>
+        <translation>Kritinė klaida:</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="102"/>
@@ -19174,7 +19182,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="104"/>
         <source>Unknown error:</source>
-        <translation type="unfinished"/>
+        <translation>Nežinoma klaida:</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="228"/>
@@ -19195,7 +19203,7 @@ pickup measure</source>
         <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="52"/>
         <source>Limit MusicXML export for compatibility with MuseScore 3</source>
         <extracomment>Means that less information will be included in exported MusicXML files, to prevent errors when importing them into MuseScore 3</extracomment>
-        <translation type="unfinished"/>
+        <translation>Limituoti MusicXML eksportavimą dėl suderinamumo su MuseScore 3</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxmlconfiguration.cpp" line="57"/>
@@ -19279,7 +19287,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="148"/>
         <source>Menu</source>
-        <translation type="unfinished"/>
+        <translation>Meniu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="127"/>
@@ -19289,12 +19297,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="156"/>
         <source>Save as default style for this score</source>
-        <translation type="unfinished"/>
+        <translation>Išsaugoti kaip numatytąjį stilių šiai partitūrai</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="158"/>
         <source>This is set as the default style for this score</source>
-        <translation type="unfinished"/>
+        <translation>Tai yra nustatytas numatytasis šios partitūros stilius</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/OffsetSection.qml" line="35"/>
@@ -19317,7 +19325,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="156"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="125"/>
         <source>Vertical</source>
-        <translation type="unfinished"/>
+        <translation>Vertikalus</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/PlacementSection.qml" line="31"/>
@@ -19351,17 +19359,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/AppearanceOffsetSection.qml" line="65"/>
         <source>Snap to grid</source>
-        <translation type="unfinished"/>
+        <translation>Prikabinti prie tinklelio</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/AppearanceOffsetSection.qml" line="82"/>
         <source>Configure grid</source>
-        <translation type="unfinished"/>
+        <translation>Konfigūruoti tinklelį</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="64"/>
         <source>Arrange</source>
-        <translation type="unfinished"/>
+        <translation>Dėlioti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="72"/>
@@ -19371,12 +19379,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="141"/>
         <source>Backwards</source>
-        <translation type="unfinished"/>
+        <translation>Atbulai</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="98"/>
         <source>Forwards</source>
-        <translation type="unfinished"/>
+        <translation>Į priekį</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="160"/>
@@ -19396,7 +19404,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/HorizontalSpacingSection.qml" line="74"/>
         <source>Measure width</source>
-        <translation type="unfinished"/>
+        <translation>Takto plotis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/VerticalSpacingSection.qml" line="40"/>
@@ -19412,12 +19420,12 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="74"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="48"/>
         <source>Cue size</source>
-        <translation type="unfinished"/>
+        <translation>Sumažintas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="87"/>
         <source>Auto-place</source>
-        <translation type="unfinished"/>
+        <translation>Auto-padėtis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="100"/>
@@ -19427,7 +19435,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="123"/>
         <source>Playback</source>
-        <translation>Atkūrimas</translation>
+        <translation>Grojimas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="153"/>
@@ -19438,7 +19446,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/ArpeggioExpandableBlank.qml" line="42"/>
         <source>Spread delay</source>
-        <translation type="unfinished"/>
+        <translation>Praskleidimo vėlinimas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/staffs/staffsettingsmodel.cpp" line="32"/>
@@ -19449,18 +19457,18 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="66"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/NoteExpandableBlank.qml" line="64"/>
         <source>Velocity</source>
-        <translation type="unfinished"/>
+        <translation>Garsumas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="85"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="57"/>
         <source>Velocity change</source>
-        <translation type="unfinished"/>
+        <translation>Garsumo pokytis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="97"/>
         <source>Change speed</source>
-        <translation type="unfinished"/>
+        <translation>Pakeisti greitį</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="105"/>
@@ -19483,7 +19491,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/FermataExpandableBlank.qml" line="51"/>
         <source>Time stretch</source>
-        <translation type="unfinished"/>
+        <translation>Laiko išplėtimas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="51"/>
@@ -19505,42 +19513,42 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="57"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="60"/>
         <source>Chromatic</source>
-        <translation type="unfinished"/>
+        <translation>Chromatinis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="61"/>
         <source>White keys</source>
-        <translation type="unfinished"/>
+        <translation>Balti klavišai</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="62"/>
         <source>Black keys</source>
-        <translation type="unfinished"/>
+        <translation>Juodi klavišai</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="63"/>
         <source>Diatonic</source>
-        <translation type="unfinished"/>
+        <translation>Diatoninis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="64"/>
         <source>Portamento</source>
-        <translation type="unfinished"/>
+        <translation>Portamento</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GradualTempoChangeBlank.qml" line="50"/>
         <source>Amount</source>
-        <translation type="unfinished"/>
+        <translation>Kiekis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GradualTempoChangeBlank.qml" line="65"/>
         <source>Easing method</source>
-        <translation type="unfinished"/>
+        <translation>Įvažiavimo metodas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="73"/>
         <source>Changes in dynamics range</source>
-        <translation type="unfinished"/>
+        <translation>Pokyčiai dinamikos diapazone</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="77"/>
@@ -19560,12 +19568,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/NoteExpandableBlank.qml" line="83"/>
         <source>Tuning (cents)</source>
-        <translation type="unfinished"/>
+        <translation>Derinimas (centais)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/PausesExpandableBlank.qml" line="51"/>
         <source>Pause time</source>
-        <translation type="unfinished"/>
+        <translation>Pauzės laikas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretDiagramTabPanel.qml" line="52"/>
@@ -19581,7 +19589,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="80"/>
         <source>Where to insert measures:</source>
-        <translation type="unfinished"/>
+        <translation>Kur įterpti taktus:</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="108"/>
@@ -19598,7 +19606,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="49"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tuplets/TupletSettings.qml" line="69"/>
         <source>Bracket type</source>
-        <translation type="unfinished"/>
+        <translation>Akoladės tipas:</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="57"/>
@@ -19613,7 +19621,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="57"/>
         <source>Parentheses</source>
-        <translation type="unfinished"/>
+        <translation>Skliausteliai</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="58"/>
@@ -19633,17 +19641,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="95"/>
         <source>Top note</source>
-        <translation type="unfinished"/>
+        <translation>Viršutinė nata</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="135"/>
         <source>Bottom note</source>
-        <translation type="unfinished"/>
+        <translation>Apatinė nata</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="171"/>
         <source>Update to match the notes on the staff</source>
-        <translation type="unfinished"/>
+        <translation>Atnaujinti sutapatinant su natomis penklinėje</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="188"/>
@@ -19653,7 +19661,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="149"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="329"/>
         <source>Show less</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti mažiau</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="188"/>
@@ -19663,20 +19671,20 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="149"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="329"/>
         <source>Show more</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti daugiau</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="237"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="116"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tuplets/TupletSettings.qml" line="82"/>
         <source>Line thickness</source>
-        <translation type="unfinished"/>
+        <translation>Linijos storis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/articulations/ArticulationSettings.qml" line="50"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="207"/>
         <source>Placement</source>
-        <translation type="unfinished"/>
+        <translation>Išdėstymas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="60"/>
@@ -19721,22 +19729,22 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="73"/>
         <source>Repeat style</source>
-        <translation type="unfinished"/>
+        <translation>Pakartoti stilių</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="95"/>
         <source>Span to next staff</source>
-        <translation type="unfinished"/>
+        <translation>Apimti iki kitos penklinės</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="111"/>
         <source>Span from</source>
-        <translation type="unfinished"/>
+        <translation>Apimti nuo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="130"/>
         <source>Span to</source>
-        <translation type="unfinished"/>
+        <translation>Apimti iki</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="148"/>
@@ -19746,7 +19754,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="171"/>
         <source>Span presets</source>
-        <translation type="unfinished"/>
+        <translation>Apimties ruošiniai</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="180"/>
@@ -19758,12 +19766,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="192"/>
         <source>Tick 1</source>
-        <translation type="unfinished"/>
+        <translation>Varnelė 1</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="204"/>
         <source>Tick 2</source>
-        <translation type="unfinished"/>
+        <translation>Varnelė 2</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="221"/>
@@ -19804,7 +19812,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="75"/>
         <source>Hide</source>
-        <translation type="unfinished"/>
+        <translation>Slėpti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="81"/>
@@ -19814,37 +19822,37 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="104"/>
         <source>Press Enter to start editing</source>
-        <translation type="unfinished"/>
+        <translation>Spauskite Enter norėdami redaguoti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="78"/>
         <source>Click to add or remove points</source>
-        <translation type="unfinished"/>
+        <translation>Spustelėkite norėdami pridėti ar pašalinti taškus</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/brackets/BracketSettings.qml" line="58"/>
         <source>Column</source>
-        <translation type="unfinished"/>
+        <translation>Stulpelis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/brackets/BracketSettings.qml" line="76"/>
         <source>Span</source>
-        <translation type="unfinished"/>
+        <translation>Apimtis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/brackets/BracketSettings.qml" line="93"/>
         <source>You have multiple brackets selected. Select a single bracket to edit its settings.</source>
-        <translation type="unfinished"/>
+        <translation>Jūs esate pasirinkę kelias akolades. Pasirinkite vieną akoladę norėdami redaguoti jos nustatymus.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="49"/>
         <source>Interpretation</source>
-        <translation type="unfinished"/>
+        <translation>Interpretacija</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="56"/>
         <source>Literal</source>
-        <translation type="unfinished"/>
+        <translation>Tiesiogiai</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="57"/>
@@ -19854,7 +19862,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="63"/>
         <source>Voicing</source>
-        <translation type="unfinished"/>
+        <translation>Balsovada</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="71"/>
@@ -19889,12 +19897,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="81"/>
         <source>Duration</source>
-        <translation type="unfinished"/>
+        <translation>Trukmė</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="88"/>
         <source>Until the next chord symbol</source>
-        <translation type="unfinished"/>
+        <translation>Iki kito akordo simbolio</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="89"/>
@@ -19904,12 +19912,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="90"/>
         <source>Until the end of the attached duration</source>
-        <translation type="unfinished"/>
+        <translation>Iki prikabintos trukmės pabaigos</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="53"/>
         <source>Show courtesy clef on previous system</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti primenamąjį raktą praeitoje sistemoje</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="61"/>
@@ -19932,7 +19940,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/VerticalFrameSettings.qml" line="55"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="61"/>
         <source>Scale with staff size</source>
-        <translation type="unfinished"/>
+        <translation>Didinti pagal penklinės dydį</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="65"/>
@@ -19957,12 +19965,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="53"/>
         <source>Gap above</source>
-        <translation type="unfinished"/>
+        <translation>Tarpas virš</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="68"/>
         <source>Gap below</source>
-        <translation type="unfinished"/>
+        <translation>Tarpas žemiau</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/VerticalFrameSettings.qml" line="65"/>
@@ -19974,7 +19982,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="89"/>
         <source>Show fingerings</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti pirštuotes</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="162"/>
@@ -19999,7 +20007,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="74"/>
         <source>Avoid barlines</source>
-        <translation type="unfinished"/>
+        <translation>Vengti takto brūkšnių</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="107"/>
@@ -20044,7 +20052,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretDiagramTabPanel.qml" line="60"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Nustatymai</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="65"/>
@@ -20059,7 +20067,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="101"/>
         <source>Marker type</source>
-        <translation type="unfinished"/>
+        <translation>Žymės tipas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="114"/>
@@ -20094,34 +20102,34 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="57"/>
         <source>Image height</source>
-        <translation type="unfinished"/>
+        <translation>Paveikslėlio aukštis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="82"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="303"/>
         <source>Lock</source>
-        <translation type="unfinished"/>
+        <translation>Užrakinti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="96"/>
         <source>Image width</source>
-        <translation type="unfinished"/>
+        <translation>Paveikslėlio plotis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="111"/>
         <source>Scale to frame size</source>
-        <translation type="unfinished"/>
+        <translation>Didinti pagal rėmelio dydį</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="121"/>
         <source>Use staff space units</source>
-        <translation type="unfinished"/>
+        <translation>Naudoti penklinės tarpo vienetus</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/instrumentname/InstrumentNameSettings.qml" line="53"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="123"/>
         <source>Style settings</source>
-        <translation type="unfinished"/>
+        <translation>Stiliaus nustatymai</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/instrumentname/InstrumentNameSettings.qml" line="66"/>
@@ -20131,17 +20139,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/jumps/JumpSettings.qml" line="49"/>
         <source>Jump to</source>
-        <translation type="unfinished"/>
+        <translation>Šokti į</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/jumps/JumpSettings.qml" line="58"/>
         <source>Play until</source>
-        <translation type="unfinished"/>
+        <translation>Groti iki</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/jumps/JumpSettings.qml" line="67"/>
         <source>Continue at</source>
-        <translation type="unfinished"/>
+        <translation>Tęsti nuo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/jumps/JumpSettings.qml" line="75"/>
@@ -20151,18 +20159,18 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="48"/>
         <source>Show courtesy key signature on previous system</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti primenamuosius ton. ženklus praeitoje sistemoje</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="58"/>
         <source>Mode</source>
         <extracomment>Musical mode (major, minor, dorian, phrygian, lydian, etc.)</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dermė</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="66"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Nežinoma</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="69"/>
@@ -20181,22 +20189,22 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="72"/>
         <source>Dorian</source>
-        <translation type="unfinished"/>
+        <translation>Dorinė</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="73"/>
         <source>Phrygian</source>
-        <translation type="unfinished"/>
+        <translation>Fryginė</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="74"/>
         <source>Lydian</source>
-        <translation type="unfinished"/>
+        <translation>Lydinė</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="75"/>
         <source>Mixolydian</source>
-        <translation type="unfinished"/>
+        <translation>Miksolydinė</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="76"/>
@@ -20206,17 +20214,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="77"/>
         <source>Ionian</source>
-        <translation type="unfinished"/>
+        <translation>Joninė</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="78"/>
         <source>Locrian</source>
-        <translation type="unfinished"/>
+        <translation>Lokrinė</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="49"/>
         <source>Glissando line</source>
-        <translation type="unfinished"/>
+        <translation>Glissando linija</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="59"/>
@@ -20236,7 +20244,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml" line="58"/>
         <source>Niente circle</source>
-        <translation type="unfinished"/>
+        <translation>Niente apskritimas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/CrescDimLineStyleSettings.qml" line="58"/>
@@ -20244,7 +20252,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml" line="71"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineWithHooksCommonStyleSettings.qml" line="58"/>
         <source>Allow diagonal</source>
-        <translation type="unfinished"/>
+        <translation>Leisti skersai</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="119"/>
@@ -20252,17 +20260,17 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="60"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="172"/>
         <source>Thickness</source>
-        <translation type="unfinished"/>
+        <translation>Storis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml" line="142"/>
         <source>Height (new system)</source>
-        <translation type="unfinished"/>
+        <translation>Aukštis (nauja sistema)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="47"/>
         <source>Line style</source>
-        <translation type="unfinished"/>
+        <translation>Linijos stilius</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="83"/>
@@ -20274,7 +20282,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="84"/>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="81"/>
         <source>Dotted</source>
-        <translation type="unfinished"/>
+        <translation>Punktyrinė</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="101"/>
@@ -20362,12 +20370,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="60"/>
         <source>Segno</source>
-        <translation type="unfinished"/>
+        <translation>Segno</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="61"/>
         <source>Segno variation</source>
-        <translation type="unfinished"/>
+        <translation>Segno variacija</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="62"/>
@@ -20377,7 +20385,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="63"/>
         <source>Varied coda</source>
-        <translation type="unfinished"/>
+        <translation>Varijuota coda</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="64"/>
@@ -20397,24 +20405,24 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="74"/>
         <source>Label</source>
-        <translation type="unfinished"/>
+        <translation>Etiketė</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettings.qml" line="48"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="58"/>
         <source>Number position</source>
-        <translation type="unfinished"/>
+        <translation>Numerio pozicija</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="48"/>
         <source>Show number</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti numerį</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="52"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/rests/RestBeamSettings.qml" line="46"/>
         <source>Beam type</source>
-        <translation type="unfinished"/>
+        <translation>Sijos tipas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="82"/>
@@ -20424,12 +20432,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="97"/>
         <source>Decelerate</source>
-        <translation type="unfinished"/>
+        <translation>Lėtinti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="98"/>
         <source>Accelerate</source>
-        <translation type="unfinished"/>
+        <translation>Greitinti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="131"/>
@@ -20464,32 +20472,32 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="52"/>
         <source>Notehead parentheses</source>
-        <translation type="unfinished"/>
+        <translation>Natų skliausteliai</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="59"/>
         <source>Normal notehead</source>
-        <translation type="unfinished"/>
+        <translation>Normali natos galvutė</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="60"/>
         <source>Notehead with parentheses</source>
-        <translation type="unfinished"/>
+        <translation>Natos galvutė su skliausteliais</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="77"/>
         <source>Hide notehead</source>
-        <translation type="unfinished"/>
+        <translation>Slėpti natos galvutę</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="88"/>
         <source>Small notehead</source>
-        <translation type="unfinished"/>
+        <translation>Sumažinta natos galvutė</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="100"/>
         <source>Duration dot position</source>
-        <translation type="unfinished"/>
+        <translation>Trukmės taškelio pozicija</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="148"/>
@@ -20509,7 +20517,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="181"/>
         <source>Alignment in chords</source>
-        <translation type="unfinished"/>
+        <translation>Lygiuotė akorduose</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="196"/>
@@ -20622,22 +20630,22 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="65"/>
         <source>Start new section with long instrument names</source>
-        <translation type="unfinished"/>
+        <translation>Pradėti naują sekciją su pilnais instrumentų pavadinimais</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="75"/>
         <source>Reset measure numbers for new section</source>
-        <translation type="unfinished"/>
+        <translation>Naujoje sekcijoje taktus skaičiuoti iš naujo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="85"/>
         <source>Indent first system of new section</source>
-        <translation type="unfinished"/>
+        <translation>Atitraukti pirmąją sistemą naujoje sekcijoje</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="111"/>
         <source>Number of lines</source>
-        <translation type="unfinished"/>
+        <translation>Linijų skaičius</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="129"/>
@@ -20657,13 +20665,13 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="172"/>
         <source>Staff line color</source>
-        <translation type="unfinished"/>
+        <translation>Penklinės linijų spalva</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="136"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="183"/>
         <source>Notehead scheme</source>
-        <translation type="unfinished"/>
+        <translation>Natų galvučių išvaizda:</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="192"/>
@@ -20680,12 +20688,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="194"/>
         <source>Solfege movable Do</source>
-        <translation type="unfinished"/>
+        <translation>Solfedžio judinama Do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="195"/>
         <source>Solfege fixed Do</source>
-        <translation type="unfinished"/>
+        <translation>Solfedžio fiksuota Do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="196"/>
@@ -20766,7 +20774,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="135"/>
         <source>Show courtesy time signature on previous system</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti primenamąjį metrą praeitoje sistemoje</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="146"/>
@@ -20841,7 +20849,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/HideEmptyStavesSettings.qml" line="68"/>
         <source>Show brackets when spanning a single staff</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti akolades kai apimama tik viena penklinė</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="50"/>
@@ -20872,7 +20880,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="67"/>
         <source>Formatting</source>
-        <translation type="unfinished"/>
+        <translation>Formatavimas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="80"/>
@@ -20882,12 +20890,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="93"/>
         <source>Page margins</source>
-        <translation type="unfinished"/>
+        <translation>Lapo paraštės</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="106"/>
         <source>Sound flags</source>
-        <translation type="unfinished"/>
+        <translation>Garso žymės</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="82"/>
@@ -21013,7 +21021,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="76"/>
         <source>Superscript</source>
-        <translation type="unfinished"/>
+        <translation>Indeksas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="49"/>
@@ -21043,7 +21051,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="140"/>
         <source>Padding</source>
-        <translation type="unfinished"/>
+        <translation>Atskirtis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="162"/>
@@ -21100,7 +21108,7 @@ pickup measure</source>
         <location filename="../../src/inspector/models/general/playback/internal_models/glissandoplaybackmodel.cpp" line="33"/>
         <location filename="../../src/inspector/models/notation/lines/glissandosettingsmodel.cpp" line="32"/>
         <source>Glissando</source>
-        <translation>Glisando</translation>
+        <translation>Glissando</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp" line="33"/>
@@ -21112,13 +21120,13 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="79"/>
         <location filename="../../src/inspector/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp" line="53"/>
         <source>Ease in</source>
-        <translation type="unfinished"/>
+        <translation>Įsivažiuoti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="80"/>
         <location filename="../../src/inspector/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp" line="54"/>
         <source>Ease out</source>
-        <translation type="unfinished"/>
+        <translation>Išvažiuoti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/noteplaybackmodel.cpp" line="32"/>
@@ -21138,7 +21146,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/ambituses/ambitussettingsmodel.cpp" line="34"/>
         <source>Ambitus</source>
-        <translation type="unfinished"/>
+        <translation>Ambitus</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/articulations/articulationsettingsmodel.cpp" line="35"/>
@@ -21165,22 +21173,22 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/fermatas/fermatasettingsmodel.cpp" line="32"/>
         <source>Fermata</source>
-        <translation type="unfinished"/>
+        <translation>Fermata</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/frames/horizontalframesettingsmodel.cpp" line="34"/>
         <source>Horizontal frame</source>
-        <translation type="unfinished"/>
+        <translation>Horizontalus rėmelis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/frames/textframesettingsmodel.cpp" line="33"/>
         <source>Text frame</source>
-        <translation type="unfinished"/>
+        <translation>Teksto rėmelis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/frames/verticalframesettingsmodel.cpp" line="35"/>
         <source>Vertical frame</source>
-        <translation type="unfinished"/>
+        <translation>Vertikalus rėmelis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/fretdiagrams/fretdiagramsettingsmodel.cpp" line="35"/>
@@ -21215,7 +21223,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/glissandosettingsmodel.cpp" line="57"/>
         <source>Wavy</source>
-        <translation type="unfinished"/>
+        <translation>Banguota(-s)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/hairpinlinesettingsmodel.cpp" line="40"/>
@@ -21257,32 +21265,32 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="66"/>
         <source>8va alta</source>
-        <translation type="unfinished"/>
+        <translation>8va alta</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="67"/>
         <source>8va bassa</source>
-        <translation type="unfinished"/>
+        <translation>8va bassa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="68"/>
         <source>15ma alta</source>
-        <translation type="unfinished"/>
+        <translation>15ma alta</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="69"/>
         <source>15ma bassa</source>
-        <translation type="unfinished"/>
+        <translation>15ma bassa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="70"/>
         <source>22ma alta</source>
-        <translation type="unfinished"/>
+        <translation>22ma alta</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="71"/>
         <source>22ma bassa</source>
-        <translation type="unfinished"/>
+        <translation>22ma bassa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/palmmutesettingsmodel.cpp" line="30"/>
@@ -21335,17 +21343,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/vibratosettingsmodel.cpp" line="54"/>
         <source>Vibrato wide</source>
-        <translation type="unfinished"/>
+        <translation>Vibrato platus</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/vibratosettingsmodel.cpp" line="55"/>
         <source>Vibrato sawtooth</source>
-        <translation type="unfinished"/>
+        <translation>Vibrato dantuotas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/vibratosettingsmodel.cpp" line="56"/>
         <source>Vibrato sawtooth wide</source>
-        <translation type="unfinished"/>
+        <translation>Vibrato dantuotas platus</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/voltasettingsmodel.cpp" line="37"/>
@@ -21391,12 +21399,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="195"/>
         <source>Solfège movable do</source>
-        <translation type="unfinished"/>
+        <translation>Solfedžio judinama do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="196"/>
         <source>Solfège fixed do</source>
-        <translation type="unfinished"/>
+        <translation>Solfedžio fiksuota do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/notesettingsproxymodel.cpp" line="45"/>
@@ -21426,7 +21434,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/stafftype/stafftypesettingsmodel.cpp" line="34"/>
         <source>Staff type changes</source>
-        <translation type="unfinished"/>
+        <translation>Penklinės tipo pokyčiai</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/timesignatures/timesignaturesettingsmodel.cpp" line="34"/>
@@ -21518,7 +21526,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="69"/>
         <source>Interval below</source>
-        <translation type="unfinished"/>
+        <translation>Intervalas žemyn</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="87"/>
@@ -21668,7 +21676,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="79"/>
         <source>Style/appearance</source>
-        <translation type="unfinished"/>
+        <translation>Stilius/išvaizda</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="110"/>
@@ -21718,17 +21726,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="46"/>
         <source>Voice assignment</source>
-        <translation type="unfinished"/>
+        <translation>Balsų paskyrimas</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="71"/>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>Visi</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="106"/>
         <source>All voices on instrument</source>
-        <translation type="unfinished"/>
+        <translation>Visi balsai instrumente</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="112"/>
@@ -21806,12 +21814,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/FamilyView.qml" line="70"/>
         <source>Family</source>
-        <translation type="unfinished"/>
+        <translation>Šeima</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="66"/>
         <source>Add instruments</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti instrumentus</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="69"/>
@@ -21837,59 +21845,59 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="174"/>
         <source>Add selected instruments to score</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti pasirinktus instrumentus į partitūrą</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="236"/>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="85"/>
         <source>Move selected instruments up</source>
-        <translation type="unfinished"/>
+        <translation>Perkelti pasirinktus instrumentus aukštyn</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="251"/>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="103"/>
         <source>Move selected instruments down</source>
-        <translation type="unfinished"/>
+        <translation>Perkelti pasirinktus instrumentus žemyn</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="121"/>
         <source>Remove selected instruments</source>
-        <translation type="unfinished"/>
+        <translation>Pašalinti pasirinktus instrumentus</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="64"/>
         <source>Name on main score</source>
-        <translation type="unfinished"/>
+        <translation>Pavadinimas pagr. partitūroje</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="65"/>
         <source>Name on part score</source>
-        <translation type="unfinished"/>
+        <translation>Pavadinimas partijoje</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="86"/>
         <source>Abbreviated name</source>
-        <translation type="unfinished"/>
+        <translation>Sutrumpintas pavadinimas</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="111"/>
         <source>Replace instrument</source>
-        <translation type="unfinished"/>
+        <translation>Pakeisti instrumentą</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="128"/>
         <source>Reset all formatting</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti visą formatavimą</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="78"/>
         <source>Your score</source>
-        <translation type="unfinished"/>
+        <translation>Jūsų partitūra</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="119"/>
         <source>Remove selected instruments from score</source>
-        <translation type="unfinished"/>
+        <translation>Pašalinti pasirinktus instrumentus iš partitūros</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="103"/>
@@ -21904,28 +21912,28 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="176"/>
         <source>Undo soloist</source>
-        <translation type="unfinished"/>
+        <translation>Atšaukti solistą</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="176"/>
         <source>Make soloist</source>
-        <translation type="unfinished"/>
+        <translation>Paversti solistu</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="212"/>
         <source>Choose your instruments by adding them to this list</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkite instrumentus pridėdami juos į šį sąrašą</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="289"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Nustatymai</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsView.qml" line="55"/>
         <location filename="../../src/stubs/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsDialog.qml" line="37"/>
         <source>Instruments</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentai</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsView.qml" line="136"/>
@@ -21935,12 +21943,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="67"/>
         <source>Staff type</source>
-        <translation type="unfinished"/>
+        <translation>Penklinės tipas</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="94"/>
         <source>Voices visible in the score</source>
-        <translation type="unfinished"/>
+        <translation>Balsai matomi partitūroje</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="143"/>
@@ -21950,7 +21958,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="159"/>
         <source>Hide all measures that do not contain notation (cutaway)</source>
-        <translation type="unfinished"/>
+        <translation>Slėpti visus taktus, kuriuose nėra jokios notacijos (iškirptinė)</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="176"/>
@@ -21970,7 +21978,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentsettingsmodel.cpp" line="90"/>
         <source>Are you sure you want to reset all formatting?</source>
-        <translation type="unfinished"/>
+        <translation>Ar tikrai norite atstatyti visą formatavimą?</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentsettingsmodel.cpp" line="91"/>
@@ -21980,7 +21988,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentspanelcontextmenumodel.cpp" line="182"/>
         <source>Instrument ordering</source>
-        <translation type="unfinished"/>
+        <translation>Instrumentų tvarka</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentspanelcontextmenumodel.cpp" line="192"/>
@@ -21995,7 +22003,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/view/staffcontroltreeitem.cpp" line="33"/>
         <source>Add staff</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti penklinę</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/stafftreeitem.cpp" line="63"/>
@@ -22007,7 +22015,7 @@ pickup measure</source>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml" line="129"/>
         <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;, or use the keyboard shortcut %1.</source>
         <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Instruments panel (InstrumentsControlPanel.qml)</extracomment>
-        <translation type="unfinished"/>
+        <translation>Jūsų partitūroje nėra instrumentų. Pasirinkite kelis paspausdami &lt;b&gt;Pridėti&lt;/b&gt;, arba naudokite greitąjį klavišą %1.</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml" line="132"/>
@@ -22038,7 +22046,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="362"/>
         <source>Checking for updates…</source>
-        <translation type="unfinished"/>
+        <translation>Tikrinami atnaujinimai...</translation>
     </message>
     <message>
         <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="416"/>
@@ -22063,7 +22071,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/framework/languages/languageserrors.h" line="53"/>
         <source>Error while downloading language</source>
-        <translation type="unfinished"/>
+        <translation>Klaida parsisiunčiant kalbą</translation>
     </message>
     <message>
         <location filename="../../src/framework/languages/languageserrors.h" line="54"/>
@@ -22096,18 +22104,18 @@ pickup measure</source>
     <message>
         <location filename="../../src/framework/learn/qml/Muse/Learn/internal/Playlist.qml" line="137"/>
         <source>Sorry, we are unable to load these videos right now</source>
-        <translation type="unfinished"/>
+        <translation>Atleiskite, šiuo metu negalime užkrauti šių vaizdo įrašų</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/qml/Muse/Learn/internal/Playlist.qml" line="142"/>
         <source>Please check your internet connection or try again later.</source>
-        <translation type="unfinished"/>
+        <translation>Patikrinkite savo interneto ryšį arba bandykite dar kartą vėliau.</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/qml/Muse/Learn/LearnPage.qml" line="96"/>
         <location filename="../../src/framework/learn/qml/Muse/Learn/LearnPage.qml" line="103"/>
         <source>Learn</source>
-        <translation type="unfinished"/>
+        <translation>Mokytis</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/qml/Muse/Learn/LearnPage.qml" line="156"/>
@@ -22118,28 +22126,28 @@ pickup measure</source>
         <location filename="../../src/framework/learn/qml/Muse/Learn/LearnPage.qml" line="167"/>
         <location filename="../../src/framework/learn/qml/Muse/Learn/LearnPage.qml" line="213"/>
         <source>Get started</source>
-        <translation type="unfinished"/>
+        <translation>Pradėk</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/qml/Muse/Learn/LearnPage.qml" line="186"/>
         <location filename="../../src/framework/learn/qml/Muse/Learn/LearnPage.qml" line="257"/>
         <source>Classes</source>
-        <translation type="unfinished"/>
+        <translation>Klasės</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="78"/>
         <source>Marc Sabatella</source>
-        <translation type="unfinished"/>
+        <translation>Marc Sabatella</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="79"/>
         <source>Instructor</source>
-        <translation type="unfinished"/>
+        <translation>Instruktorius</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="82"/>
         <source>Creator, Mastering MuseScore</source>
-        <translation type="unfinished"/>
+        <translation>Kūrėjas, MuseScore Meistriškumas</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="83"/>
@@ -22148,7 +22156,13 @@ pickup measure</source>
 Whether you are just getting started with music notation software, or are a power user eager to explore advanced engraving and playback techniques, my flagship online course Mastering MuseScore covers everything you need to know to get the most out of MuseScore. 
 
 In addition, Mastering MuseScore features a supportive community of musicians, with discussion spaces, live streams, and other related courses and services to help you create your best music. Take advantage of this opportunity to learn MuseScore from one of its most recognized experts!</source>
-        <translation type="unfinished"/>
+        <translation>Sveiki atvykę į MuseScore Meistriškumą – išsamiausią priemonę mokantis populiariausios pasaulyje notacinės programos! Mano vardas Marc Sabatella, ir aš padedu kurti, palaikyti ir viešinau MuseScore nuo pat pirmojo išleidimo prieš daugiau nei dešimtmetį.
+
+Nepaisant to, ar tik pradedi su notacijos programomis, ar esi pažengęs naudotojas, norintis pažinti išsamesnias muzikos užrašymo ir grojimo technikas, mano pagrindinis online kursas MuseScore Meistriškumas apima viską, kas reikalinga pasisemti iš MuseScore kuo įmanoma daugiau.
+
+Šalia to, MuseScore Meistriškumas pasižymi palaikančia muzikantų bendruomene kartu su diskusijos erdvėmis, gyvomis transliacijomis, ir kitais susijusiais kursais bei paslaugomis, siekiant padėti tau kurti savo geriausius darbus. Pasinaudok šia galimybe mokytis MuseScore iš vieno jo žymiausių ekspertų!
+
+(prieinama tik anglų k.)</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="96"/>
@@ -22171,7 +22185,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/framework/midi/internal/platform/win/winmidiinport.cpp" line="97"/>
         <location filename="../../src/framework/midi/internal/platform/win/winmidioutport.cpp" line="92"/>
         <source>No device</source>
-        <translation type="unfinished"/>
+        <translation>Joks įrenginys</translation>
     </message>
 </context>
 <context>
@@ -22207,12 +22221,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/framework/network/networkerrors.h" line="52"/>
         <source>The I/O device was not opened for reading</source>
-        <translation type="unfinished"/>
+        <translation>I/O įrenginys nebuvo atidarytas nuskaitymui</translation>
     </message>
     <message>
         <location filename="../../src/framework/network/networkerrors.h" line="53"/>
         <source>The I/O device was not opened for writing</source>
-        <translation type="unfinished"/>
+        <translation>I/O įrenginys nebuvo atidarytas įrašymui</translation>
     </message>
 </context>
 <context>
@@ -22220,27 +22234,27 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="83"/>
         <source>After selection</source>
-        <translation type="unfinished"/>
+        <translation>Po pasirinkimo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="84"/>
         <source>Before selection</source>
-        <translation type="unfinished"/>
+        <translation>Prieš pasirinkimą</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="85"/>
         <source>At start of score</source>
-        <translation type="unfinished"/>
+        <translation>Partitūros pradžioje</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="86"/>
         <source>At end of score</source>
-        <translation type="unfinished"/>
+        <translation>Partitūros pabaigoje</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/EditGridSizeDialog.qml" line="54"/>
         <source>Edit grid</source>
-        <translation type="unfinished"/>
+        <translation>Tvarkyti tinklelį</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/EditGridSizeDialog.qml" line="66"/>
@@ -22261,7 +22275,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="61"/>
         <source>Add separator line</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti atskiriamąją liniją</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="99"/>
@@ -22281,17 +22295,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="45"/>
         <source>Regular</source>
-        <translation type="unfinished"/>
+        <translation>Reguliarus</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="46"/>
         <source>Wide</source>
-        <translation type="unfinished"/>
+        <translation>Platus</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="80"/>
         <source>Beam thickness</source>
-        <translation type="unfinished"/>
+        <translation>Sijos storis</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="100"/>
@@ -22306,7 +22320,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="132"/>
         <source>Beam style</source>
-        <translation type="unfinished"/>
+        <translation>Sijų stilius</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="147"/>
@@ -22331,27 +22345,27 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="100"/>
         <source>Not saved</source>
-        <translation type="unfinished"/>
+        <translation>Neišsaugota</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="142"/>
         <source>Scroll left</source>
-        <translation type="unfinished"/>
+        <translation>Slinkti kairėn</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="159"/>
         <source>Scroll right</source>
-        <translation type="unfinished"/>
+        <translation>Slinkti dešinėn</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="166"/>
         <source>Duplicate</source>
-        <translation type="unfinished"/>
+        <translation>Duplikuoti</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="167"/>
         <source>Rename</source>
-        <translation type="unfinished"/>
+        <translation>Pervadinti</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="168"/>
@@ -22379,7 +22393,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="60"/>
         <source>Create new part</source>
-        <translation type="unfinished"/>
+        <translation>Kurti naują partiją</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsView.qml" line="55"/>
@@ -22389,7 +22403,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsView.qml" line="81"/>
         <source>Parts view</source>
-        <translation type="unfinished"/>
+        <translation>Partijų rodinys</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="91"/>
@@ -22399,12 +22413,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="102"/>
         <source>Find / Go to:</source>
-        <translation type="unfinished"/>
+        <translation>Rasti / Eiti į:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
         <source>Voices visible on this staff</source>
-        <translation type="unfinished"/>
+        <translation>Šioje penklinėje matomi balsai</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="55"/>
@@ -22418,7 +22432,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NotationToolBar.qml" line="31"/>
         <source>Notation toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Notacijos įrankių juosta</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="46"/>
@@ -22428,7 +22442,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="209"/>
         <source>Show/hide toolbar buttons</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti/slėpti įrankių juostos mygtukus</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml" line="60"/>
@@ -22448,7 +22462,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="126"/>
         <source>Zoom menu</source>
-        <translation type="unfinished"/>
+        <translation>Padidinimo meniu</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="129"/>
@@ -22485,12 +22499,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="867"/>
         <source>Cannot create tuplet</source>
-        <translation type="unfinished"/>
+        <translation>Negalima kurti tupleto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="867"/>
         <source>Note value is too short</source>
-        <translation type="unfinished"/>
+        <translation>Natos vertė per trumpa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1297"/>
@@ -22500,7 +22514,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1298"/>
         <source>Scalable Vector Graphics</source>
-        <translation type="unfinished"/>
+        <translation>Vektorinė grafika</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1299"/>
@@ -22510,7 +22524,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1300"/>
         <source>PNG Bitmap Graphic</source>
-        <translation type="unfinished"/>
+        <translation>PNG</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1301"/>
@@ -22530,12 +22544,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1655"/>
         <source>MuseScore style files</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore stiliaus failai</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1656"/>
         <source>MuseScore style file</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore stiliaus failas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1659"/>
@@ -22551,22 +22565,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1670"/>
         <source>The style file could not be loaded.</source>
-        <translation type="unfinished"/>
+        <translation>Šis stiliaus failas negali būti užkrautas.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1675"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
-        <translation type="unfinished"/>
+        <translation>Kadangi šis stiliaus failas yra iš kitos MuseScore Studio versijos, jūsų partitūra nebūtinai bus atvaizduojama teisingai.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1677"/>
         <source>Click OK to load anyway.</source>
-        <translation type="unfinished"/>
+        <translation>Spustelėkite OK norėdami vis tiek užkrauti.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1691"/>
         <source>The style file could not be saved.</source>
-        <translation type="unfinished"/>
+        <translation>Šis stiliaus failas negali būti išsaugotas.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1692"/>
@@ -22581,17 +22595,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/searchcommandsparser.cpp" line="41"/>
         <source>Pages</source>
-        <translation type="unfinished"/>
+        <translation>Puslapiai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="114"/>
         <source>Clear measures</source>
-        <translation type="unfinished"/>
+        <translation>Išvalyti taktus</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="116"/>
         <source>Delete measures</source>
-        <translation type="unfinished"/>
+        <translation>Ištrinti taktus</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="128"/>
@@ -22606,37 +22620,37 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="239"/>
         <source>After selection…</source>
-        <translation type="unfinished"/>
+        <translation>Po pasirinkimo...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="240"/>
         <source>Before selection…</source>
-        <translation type="unfinished"/>
+        <translation>Prieš pasirinkimą...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="242"/>
         <source>At start of score…</source>
-        <translation type="unfinished"/>
+        <translation>Partitūros pradžioje...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="243"/>
         <source>At end of score…</source>
-        <translation type="unfinished"/>
+        <translation>Partitūros pabaigoje...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationswitchlistmodel.cpp" line="294"/>
         <source>Close tab</source>
-        <translation type="unfinished"/>
+        <translation>Uždaryti skirtuką</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationswitchlistmodel.cpp" line="299"/>
         <source>Close other tabs</source>
-        <translation type="unfinished"/>
+        <translation>Uždaryti kitus skirtukus</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationswitchlistmodel.cpp" line="304"/>
         <source>Close all tabs</source>
-        <translation type="unfinished"/>
+        <translation>Uždaryti visus skirtukus</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="271"/>
@@ -22653,7 +22667,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="644"/>
         <source>Intervals</source>
-        <translation type="unfinished"/>
+        <translation>Intervalai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="645"/>
@@ -22836,12 +22850,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="155"/>
         <source>Are you sure you want to reset this part?</source>
-        <translation type="unfinished"/>
+        <translation>Ar tikrai norite atstatyti šią partiją?</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="187"/>
         <source>Are you sure you want to delete this part?</source>
-        <translation type="unfinished"/>
+        <translation>Ar tikrai norite ištrinti šią partiją?</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="243"/>
@@ -22856,7 +22870,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="79"/>
         <source>Large</source>
-        <translation type="unfinished"/>
+        <translation>Didelė</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="80"/>
@@ -22902,7 +22916,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1303"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="161"/>
         <source>All</source>
-        <translation type="unfinished"/>
+        <translation>Visi</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="171"/>
@@ -22917,7 +22931,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="175"/>
         <source>Fingerings</source>
-        <translation type="unfinished"/>
+        <translation>Pirštuotės</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="177"/>
@@ -22942,17 +22956,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="193"/>
         <source>Pedal lines</source>
-        <translation type="unfinished"/>
+        <translation>Pedalų linijos</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="195"/>
         <source>Other lines</source>
-        <translation type="unfinished"/>
+        <translation>Kitos linijos</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="199"/>
         <source>Glissandos</source>
-        <translation type="unfinished"/>
+        <translation>Glissandai</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="41"/>
@@ -22978,7 +22992,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="75"/>
         <source>Vertical</source>
-        <translation type="unfinished"/>
+        <translation>Vertikalus</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="76"/>
@@ -23023,12 +23037,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="145"/>
         <source>Format:</source>
-        <translation type="unfinished"/>
+        <translation>Formatas:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="156"/>
         <source>Number only</source>
-        <translation type="unfinished"/>
+        <translation>Tik numeris</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="167"/>
@@ -23078,7 +23092,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="263"/>
         <source>Show fingerings</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti pirštuotes</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="270"/>
@@ -23123,12 +23137,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="203"/>
         <source>Breath marks</source>
-        <translation type="unfinished"/>
+        <translation>Kvėpavimo brūkšniai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="207"/>
         <source>Grace notes</source>
-        <translation type="unfinished"/>
+        <translation>Melizmai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="183"/>
@@ -23138,7 +23152,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="185"/>
         <source>Ornaments</source>
-        <translation type="unfinished"/>
+        <translation>Melizmai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="187"/>
@@ -23148,7 +23162,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="191"/>
         <source>Ottavas</source>
-        <translation type="unfinished"/>
+        <translation>Oktaviniai ženklai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="197"/>
@@ -23165,7 +23179,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="208"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="216"/>
         <source>Customize toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Redaguoti įrankių juostą</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="519"/>
@@ -23338,12 +23352,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="120"/>
         <source>Cannot paste into tuplet</source>
-        <translation>Negalima įdėti į ritminę grupę</translation>
+        <translation>Negalima įklijuoti į ritminę grupę</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="123"/>
         <source>Tuplet cannot cross barlines</source>
-        <translation type="unfinished"/>
+        <translation>Tupletai negali peržengti takto brūkšnių</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="126"/>
@@ -23358,7 +23372,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="132"/>
         <source>Nothing to paste</source>
-        <translation type="unfinished"/>
+        <translation>Nėra ką įklijuoti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="135"/>
@@ -23379,7 +23393,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="143"/>
         <source>This score already has part scores. Changing local time signatures while part scores are present is not yet supported.</source>
-        <translation type="unfinished"/>
+        <translation>Ši partitūra jau turi partijas. Keisti vietinius metrus kai egzistuoja partijos šiuo metu nėra įmanoma.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="147"/>
@@ -23399,12 +23413,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="154"/>
         <source>These measures cannot be joined</source>
-        <translation type="unfinished"/>
+        <translation>Šie taktai negali būti sujungti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="155"/>
         <source>Please remove the staff type change and retry.</source>
-        <translation type="unfinished"/>
+        <translation>Pašalinkite penklinės tipo pokytį ir bandykite dar kartą.</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="64"/>
@@ -23429,22 +23443,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/notationtypes.h" line="273"/>
         <source>Percentage</source>
-        <translation type="unfinished"/>
+        <translation>Procentai</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationtypes.h" line="274"/>
         <source>Page width</source>
-        <translation type="unfinished"/>
+        <translation>Lapo plotis</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationtypes.h" line="275"/>
         <source>Whole page</source>
-        <translation type="unfinished"/>
+        <translation>Visas lapas</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationtypes.h" line="276"/>
         <source>Two pages</source>
-        <translation type="unfinished"/>
+        <translation>Du lapai</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationtypes.h" line="314"/>
@@ -23503,7 +23517,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/noteinputbarcustomisemodel.cpp" line="234"/>
         <source>Separator line</source>
-        <translation type="unfinished"/>
+        <translation>Atskiriamoji linija</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/colorlabel.cpp" line="109"/>
@@ -23545,7 +23559,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2342"/>
         <source>MuseScore chord symbol style files</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore akordų simbolių stiliaus failai</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml" line="39"/>
@@ -23565,7 +23579,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="82"/>
         <source>Capo</source>
-        <translation type="unfinished"/>
+        <translation>Kapodasteris</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="114"/>
@@ -23698,7 +23712,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.cpp" line="209"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Nežinoma</translation>
     </message>
 </context>
 <context>
@@ -23769,7 +23783,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="773"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1267"/>
         <source>Parentheses</source>
-        <translation type="unfinished"/>
+        <translation>Skliausteliai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="776"/>
@@ -23814,7 +23828,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1277"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1284"/>
         <source>Automatic</source>
-        <translation type="unfinished"/>
+        <translation>Automatiškai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="787"/>
@@ -23839,7 +23853,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="910"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1282"/>
         <source>Literal</source>
-        <translation type="unfinished"/>
+        <translation>Tiesiogiai</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="915"/>
@@ -23863,7 +23877,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="195"/>
         <source>Dotted</source>
         <extracomment>line style</extracomment>
-        <translation type="unfinished"/>
+        <translation>Punktyrinė</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="209"/>
@@ -23981,12 +23995,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1330"/>
         <source>Number of pages</source>
-        <translation type="unfinished"/>
+        <translation>Puslapių skaičius</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1332"/>
         <source>File name</source>
-        <translation type="unfinished"/>
+        <translation>Failo pavadinimas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1334"/>
@@ -24006,52 +24020,52 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1340"/>
         <source>Current date</source>
-        <translation type="unfinished"/>
+        <translation>Dabartinė data</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1342"/>
         <source>Creation date</source>
-        <translation type="unfinished"/>
+        <translation>Sukūrimo data</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1344"/>
         <source>Last modification time</source>
-        <translation type="unfinished"/>
+        <translation>Paskutinis pakeitimo laikas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1346"/>
         <source>Last modification date</source>
-        <translation type="unfinished"/>
+        <translation>Paskutinė pakeitimo data</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1348"/>
         <source>Copyright, on first page only</source>
-        <translation type="unfinished"/>
+        <translation>Autorinės teisės, tik pirmame puslapyje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1350"/>
         <source>Copyright, on all pages</source>
-        <translation type="unfinished"/>
+        <translation>Autorinės teisės, visuose puslapiuose</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1352"/>
         <source>MuseScore Studio version this score was last saved with</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio versija, kuria buvo paskutinį kartą išsaugota ši partitūra</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1354"/>
         <source>MuseScore Studio revision this score was last saved with</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio revizija, kurioje buvo paskutinį kartą išsaugota ši partitūra</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1356"/>
         <source>The $ sign itself</source>
-        <translation type="unfinished"/>
+        <translation>Pats $ ženklas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1358"/>
         <source>Metadata tag, see below</source>
-        <translation type="unfinished"/>
+        <translation>Metaduomenų žymė, žr. žemiau</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1360"/>
@@ -24100,7 +24114,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="56"/>
         <source>System text properties</source>
-        <translation type="unfinished"/>
+        <translation>Sistemos teksto savybės</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="58"/>
@@ -24138,12 +24152,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="603"/>
         <source>Hide instrument in score</source>
-        <translation type="unfinished"/>
+        <translation>Slėpti instrumentą partitūroje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="606"/>
         <source>Show instrument in score</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti instrumentą partitūroje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="768"/>
@@ -24164,7 +24178,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1244"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="2537"/>
         <source>Rehearsal mark</source>
-        <translation type="unfinished"/>
+        <translation>Skaitlinė</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="771"/>
@@ -24191,7 +24205,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3053"/>
         <source>Edit instruments</source>
-        <translation type="unfinished"/>
+        <translation>Tvarkyti instrumentus</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="772"/>
@@ -24219,19 +24233,19 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3051"/>
         <source>Context menu</source>
-        <translation type="unfinished"/>
+        <translation>Kontekstinis meniu</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3070"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3093"/>
         <source>Hide all</source>
-        <translation type="unfinished"/>
+        <translation>Slėpti viską</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3073"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3102"/>
         <source>Show all</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti viską</translation>
     </message>
 </context>
 <context>
@@ -24239,7 +24253,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/DrumsetPanel.qml" line="64"/>
         <source>Edit drumset</source>
-        <translation type="unfinished"/>
+        <translation>Redaguoti mušamųjų rinkinį...</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="63"/>
@@ -24249,12 +24263,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="70"/>
         <source>Create custom palette</source>
-        <translation type="unfinished"/>
+        <translation>Sukurti nuosavą paletę</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="85"/>
         <source>All palettes were added</source>
-        <translation type="unfinished"/>
+        <translation>Visos paletės buvo pridėtos</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="134"/>
@@ -24274,7 +24288,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="56"/>
         <source>Name your custom palette</source>
-        <translation type="unfinished"/>
+        <translation>Užvadinkite savo nuosavą paletę</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="99"/>
@@ -24304,7 +24318,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="139"/>
         <source>No elements</source>
-        <translation type="unfinished"/>
+        <translation>Jokių elementų</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="194"/>
@@ -24339,12 +24353,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="549"/>
         <location filename="../../src/palette/view/palettemodel.cpp" line="836"/>
         <source>Untitled palette</source>
-        <translation type="unfinished"/>
+        <translation>Bevardė paletė</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="158"/>
         <source>Hide palette</source>
-        <translation type="unfinished"/>
+        <translation>Slėpti paletę</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="158"/>
@@ -24354,38 +24368,38 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="159"/>
         <source>Insert new palette</source>
-        <translation type="unfinished"/>
+        <translation>Įterpti naują paletę</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="161"/>
         <source>Enable editing</source>
-        <translation type="unfinished"/>
+        <translation>Įgalinti redagavimą</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="163"/>
         <source>Reset palette</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti paletę</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="164"/>
         <source>Save palette…</source>
-        <translation type="unfinished"/>
+        <translation>Išsaugoti paletę...</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="165"/>
         <source>Load palette…</source>
-        <translation type="unfinished"/>
+        <translation>Užkrauti paletę...</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="167"/>
         <source>Palette properties…</source>
-        <translation type="unfinished"/>
+        <translation>Paletės savybės...</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="31"/>
         <location filename="../../src/stubs/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="31"/>
         <source>Palette cell properties</source>
-        <translation type="unfinished"/>
+        <translation>Paletės langelio savybės</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="53"/>
@@ -24401,33 +24415,33 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="84"/>
         <source>X</source>
-        <translation type="unfinished"/>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="93"/>
         <source>Y</source>
-        <translation type="unfinished"/>
+        <translation>Y</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="101"/>
         <source>Content scale</source>
-        <translation type="unfinished"/>
+        <translation>Turinio dydis</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="145"/>
         <source>Draw staff</source>
-        <translation type="unfinished"/>
+        <translation>Piešti penklinę</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="31"/>
         <location filename="../../src/stubs/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="31"/>
         <source>Palette properties</source>
-        <translation type="unfinished"/>
+        <translation>Paletės savybės</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="68"/>
         <source>Cell size</source>
-        <translation type="unfinished"/>
+        <translation>Langelio dydis</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="84"/>
@@ -24442,7 +24456,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="98"/>
         <source>Element offset</source>
-        <translation type="unfinished"/>
+        <translation>Elemento poslinkis</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="106"/>
@@ -24457,12 +24471,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="111"/>
         <source>Start typing to search all palettes</source>
-        <translation type="unfinished"/>
+        <translation>Pradėkite rašyti norėdami ieškoti visų palečių</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="214"/>
         <source>Beam properties</source>
-        <translation type="unfinished"/>
+        <translation>Sijos savybės</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="235"/>
@@ -24472,34 +24486,34 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="260"/>
         <source>Crescendo line</source>
-        <translation type="unfinished"/>
+        <translation>Crescendo linija</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="261"/>
         <source>Diminuendo line</source>
-        <translation type="unfinished"/>
+        <translation>Diminuendo linija</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="262"/>
         <source>Crescendo hairpin</source>
-        <translation type="unfinished"/>
+        <translation>Crescendo din. linija</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="263"/>
         <source>Diminuendo hairpin</source>
-        <translation type="unfinished"/>
+        <translation>Diminuendo din. linija</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1160"/>
         <source>Dynamic + hairpin</source>
-        <translation type="unfinished"/>
+        <translation>Dinamika + din. linija</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="283"/>
         <location filename="../../src/palette/view/widgets/keyedit.cpp" line="309"/>
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="168"/>
         <source>Key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Tonacijos</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="318"/>
@@ -24514,7 +24528,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="385"/>
         <source>Repeats &amp; jumps</source>
-        <translation type="unfinished"/>
+        <translation>Pakartojimai ir šuoliai</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="481"/>
@@ -24526,7 +24540,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="490"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1198"/>
         <source>Seconda volta, open</source>
-        <translation type="unfinished"/>
+        <translation>Antra volta, atvira</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="499"/>
@@ -24577,7 +24591,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="665"/>
         <source>Noteheads</source>
-        <translation type="unfinished"/>
+        <translation>Natų galvutės</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="690"/>
@@ -24599,7 +24613,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="782"/>
         <source>Ornaments</source>
-        <translation type="unfinished"/>
+        <translation>Melizmai</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="846"/>
@@ -24636,7 +24650,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="956"/>
         <source>Breaths &amp; pauses</source>
-        <translation>Įkvėpimai ir pauzės</translation>
+        <translation>Atsikvėpimai ir pauzės</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1055"/>
@@ -24646,12 +24660,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1088"/>
         <source>Grace notes</source>
-        <translation type="unfinished"/>
+        <translation>Melizmai</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1108"/>
         <source>Bagpipe embellishments</source>
-        <translation type="unfinished"/>
+        <translation>Dūdmaišio pagražinimai</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1128"/>
@@ -24662,31 +24676,31 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1227"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1909"/>
         <source>Pedal (with ped and line)</source>
-        <translation type="unfinished"/>
+        <translation>Pedalas (su ped. ir linija)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1235"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1901"/>
         <source>Pedal (with ped and asterisk)</source>
-        <translation type="unfinished"/>
+        <translation>Pedalas (su ped. ir žvaigždute)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1244"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1918"/>
         <source>Pedal (straight hooks)</source>
-        <translation type="unfinished"/>
+        <translation>Pedalas (tiesūs kabliukai)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1254"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1927"/>
         <source>Pedal (angled end hook)</source>
-        <translation type="unfinished"/>
+        <translation>Pedalas (pasviręs galinis kabliukas)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1263"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1936"/>
         <source>Pedal (both hooks angled)</source>
-        <translation type="unfinished"/>
+        <translation>Pedalas (abu kabliukai pasvirę)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1272"/>
@@ -24710,18 +24724,18 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1815"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1816"/>
         <source>Capo</source>
-        <translation type="unfinished"/>
+        <translation>Kapodasteris</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="156"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1821"/>
         <source>String tunings</source>
-        <translation type="unfinished"/>
+        <translation>Stygų derinimai</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1997"/>
         <source>Harp pedal diagram</source>
-        <translation type="unfinished"/>
+        <translation>Arfos pedalų diagrama</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="2002"/>
@@ -24737,24 +24751,24 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="574"/>
         <source>Fingerings</source>
-        <translation type="unfinished"/>
+        <translation>Pirštuotės</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1003"/>
         <source>Arpeggios &amp; glissandos</source>
-        <translation type="unfinished"/>
+        <translation>Arpeggio ir glissandai</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1300"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1534"/>
         <source>System text line</source>
-        <translation type="unfinished"/>
+        <translation>Sistemos teksto linija</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1316"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1984"/>
         <source>Ambitus</source>
-        <translation type="unfinished"/>
+        <translation>Ambitus</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1320"/>
@@ -24776,17 +24790,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1369"/>
         <source>Half note = 80 BPM</source>
-        <translation type="unfinished"/>
+        <translation>Pusinė = 80 BPM</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1372"/>
         <source>Quarter note = 80 BPM</source>
-        <translation type="unfinished"/>
+        <translation>Ketvirtinė = 80 BPM</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1375"/>
         <source>Eighth note = 80 BPM</source>
-        <translation type="unfinished"/>
+        <translation>Aštuntinė = 80 BPM</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1378"/>
@@ -24842,60 +24856,60 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1441"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1448"/>
         <source>accel.</source>
-        <translation type="unfinished"/>
+        <translation>accel.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1442"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1449"/>
         <source>allarg.</source>
-        <translation type="unfinished"/>
+        <translation>allarg.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1443"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1454"/>
         <source>rall.</source>
-        <translation type="unfinished"/>
+        <translation>rall.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1444"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1455"/>
         <source>rit.</source>
-        <translation type="unfinished"/>
+        <translation>rit.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1450"/>
         <source>calando</source>
-        <translation type="unfinished"/>
+        <translation>calando</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1451"/>
         <source>lentando</source>
-        <translation type="unfinished"/>
+        <translation>lentando</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1452"/>
         <source>morendo</source>
-        <translation type="unfinished"/>
+        <translation>morendo</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1453"/>
         <source>precipitando</source>
-        <translation type="unfinished"/>
+        <translation>precipitando</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1456"/>
         <source>smorz.</source>
-        <translation type="unfinished"/>
+        <translation>smorz.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1457"/>
         <source>sost.</source>
-        <translation type="unfinished"/>
+        <translation>sost.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1458"/>
         <source>string.</source>
-        <translation type="unfinished"/>
+        <translation>string.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1470"/>
@@ -24911,7 +24925,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1486"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1488"/>
         <source>Swing</source>
-        <translation type="unfinished"/>
+        <translation>Svingas</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1495"/>
@@ -24935,47 +24949,47 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1527"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1528"/>
         <source>System text</source>
-        <translation type="unfinished"/>
+        <translation>Sistemos tekstas</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1540"/>
         <source>Expression text</source>
-        <translation type="unfinished"/>
+        <translation>Išraiškos tekstas</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1543"/>
         <source>Change instr.</source>
-        <translation type="unfinished"/>
+        <translation>Pakeisti instr.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1544"/>
         <source>Instrument change</source>
-        <translation type="unfinished"/>
+        <translation>Instrumento pakeitimas</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1548"/>
         <source>Rehearsal mark</source>
-        <translation type="unfinished"/>
+        <translation>Skaitlinė</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1551"/>
         <source>legato</source>
-        <translation type="unfinished"/>
+        <translation>legato</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1553"/>
         <source>Legato</source>
-        <translation type="unfinished"/>
+        <translation>Legato</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1556"/>
         <source>pizz.</source>
-        <translation type="unfinished"/>
+        <translation>pizz.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1558"/>
         <source>Pizzicato</source>
-        <translation type="unfinished"/>
+        <translation>Pizzicato</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1561"/>
@@ -24985,7 +24999,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1563"/>
         <source>Arco</source>
-        <translation type="unfinished"/>
+        <translation>Arco</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1567"/>
@@ -25025,23 +25039,23 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1586"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1869"/>
         <source>distort</source>
-        <translation type="unfinished"/>
+        <translation>distort</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1588"/>
         <source>Distortion</source>
-        <translation type="unfinished"/>
+        <translation>Distortion</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1591"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1870"/>
         <source>overdrive</source>
-        <translation type="unfinished"/>
+        <translation>overdrive</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1593"/>
         <source>Overdrive</source>
-        <translation type="unfinished"/>
+        <translation>Overdrive</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1596"/>
@@ -25080,7 +25094,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1617"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1618"/>
         <source>Measure number</source>
-        <translation type="unfinished"/>
+        <translation>Takto numeris</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1621"/>
@@ -25225,7 +25239,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1631"/>
         <source>col legno</source>
-        <translation type="unfinished"/>
+        <translation>col legno</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1538"/>
@@ -25240,17 +25254,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1636"/>
         <source>sul pont.</source>
-        <translation type="unfinished"/>
+        <translation>sul pont.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1641"/>
         <source>sul tasto</source>
-        <translation type="unfinished"/>
+        <translation>sul tasto</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1646"/>
         <source>vibrato</source>
-        <translation type="unfinished"/>
+        <translation>vibrato</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1648"/>
@@ -25262,7 +25276,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="169"/>
         <location filename="../../src/palette/view/widgets/timedialog.cpp" line="44"/>
         <source>Time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Metrai</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1722"/>
@@ -25277,7 +25291,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1889"/>
         <source>Keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Klaviatūra</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1954"/>
@@ -25298,17 +25312,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="99"/>
         <source>The palette was hidden or changed</source>
-        <translation type="unfinished"/>
+        <translation>Ši paletė buvo paslėpta arba pakeista</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="337"/>
         <source>Hide</source>
-        <translation type="unfinished"/>
+        <translation>Slėpti</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="338"/>
         <source>Delete permanently</source>
-        <translation type="unfinished"/>
+        <translation>Ištrinti visam laikui</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="375"/>
@@ -25359,7 +25373,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="902"/>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="905"/>
         <source>MuseScore Studio palette</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio paletė</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="904"/>
@@ -25375,27 +25389,27 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="637"/>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="686"/>
         <source>MuseScore drumset file</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore mušamųjų failas</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="639"/>
         <source>Load drumset</source>
-        <translation type="unfinished"/>
+        <translation>Užkrauti mušamuosius</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="656"/>
         <source>Drumset file too old</source>
-        <translation type="unfinished"/>
+        <translation>Mušamųjų failas per senas</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="657"/>
         <source>MuseScore Studio may not be able to load this drumset file.</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio gali nepavykti užkrauti šio būgnų failo.</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="688"/>
         <source>Save drumset</source>
-        <translation type="unfinished"/>
+        <translation>Išsaugoti mušamųjų rinkinį</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="696"/>
@@ -25407,7 +25421,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="697"/>
         <source>Open file</source>
-        <translation type="unfinished"/>
+        <translation>Atverti failą</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="707"/>
@@ -25428,7 +25442,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/palette/view/widgets/noteGroups.cpp" line="85"/>
         <source>Beam selector</source>
-        <translation type="unfinished"/>
+        <translation>Sijų parinkėjas</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1132"/>
@@ -25443,22 +25457,22 @@ failed: %2</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="436"/>
         <source>Common symbols</source>
-        <translation type="unfinished"/>
+        <translation>Dažni simboliai</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="456"/>
         <source>Musical symbols</source>
-        <translation type="unfinished"/>
+        <translation>Muzikiniai simboliai</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="479"/>
         <source>Unicode symbols</source>
-        <translation type="unfinished"/>
+        <translation>Unicode simboliai</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteconfiguration.cpp" line="43"/>
         <source>Palette scale</source>
-        <translation type="unfinished"/>
+        <translation>Paletės dydis</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="98"/>
@@ -25469,7 +25483,7 @@ failed: %2</source>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="65"/>
         <source>Single-click to open a palette</source>
-        <translation type="unfinished"/>
+        <translation>Spustelėkite vieną kartą norėdami atverti paletę</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PalettesPanelHeader.qml" line="120"/>
@@ -25479,12 +25493,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PalettesPanelHeader.qml" line="160"/>
         <source>Search palettes</source>
-        <translation type="unfinished"/>
+        <translation>Ieškoti palečių</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palette.cpp" line="545"/>
         <source>Writing palette file</source>
-        <translation type="unfinished"/>
+        <translation>Įrašomas paletės failas</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palette.cpp" line="546"/>
@@ -25501,7 +25515,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="131"/>
         <source>Collapse all palettes</source>
-        <translation type="unfinished"/>
+        <translation>Suglausti visas paletes</translation>
     </message>
 </context>
 <context>
@@ -25510,27 +25524,27 @@ failed.</source>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="101"/>
         <source>Basic Latin</source>
         <extracomment>For strings in the &quot;palette/unicodeRanges&quot; context, it may help to refer to https://en.wikipedia.org/wiki/Unicode_block or translated versions of this resource.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Paprastoji Lotynų</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="102"/>
         <source>Latin-1 Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Lotynų-1 Papildas</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="103"/>
         <source>Latin Extended-A</source>
-        <translation type="unfinished"/>
+        <translation>Lotynų Išplėstoji-A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="104"/>
         <source>Latin Extended-B</source>
-        <translation type="unfinished"/>
+        <translation>Lotynų Išplėstoji-B</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="105"/>
         <source>IPA Extensions</source>
-        <translation type="unfinished"/>
+        <translation>IPA Papildiniai</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="106"/>
@@ -25555,7 +25569,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="110"/>
         <source>Cyrillic Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Kirilicos papildas</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="111"/>
@@ -25580,7 +25594,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="115"/>
         <source>Arabic Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Arabiškų papildas</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="116"/>
@@ -25595,7 +25609,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="118"/>
         <source>Samaritan</source>
-        <translation type="unfinished"/>
+        <translation>Samariečių</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="119"/>
@@ -25675,17 +25689,17 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="134"/>
         <source>Tibetan</source>
-        <translation type="unfinished"/>
+        <translation>Tibetiečių</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="135"/>
         <source>Myanmar</source>
-        <translation type="unfinished"/>
+        <translation>Mianmariečių</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="136"/>
         <source>Georgian</source>
-        <translation type="unfinished"/>
+        <translation>Sakartveliečių</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="137"/>
@@ -25695,17 +25709,17 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="138"/>
         <source>Ethiopic</source>
-        <translation type="unfinished"/>
+        <translation>Etiopiečių</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="139"/>
         <source>Ethiopic Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Etiopiečių papildas</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="140"/>
         <source>Cherokee</source>
-        <translation type="unfinished"/>
+        <translation>Čerokių</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="141"/>
@@ -25795,7 +25809,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="158"/>
         <source>Balinese</source>
-        <translation type="unfinished"/>
+        <translation>Baliečių</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="159"/>
@@ -25855,17 +25869,17 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="170"/>
         <source>Latin Extended Additional</source>
-        <translation type="unfinished"/>
+        <translation>Lotynų Išplėstoji Pridėtinė</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="171"/>
         <source>Greek Extended</source>
-        <translation type="unfinished"/>
+        <translation>Graikų Išplėstoji</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="172"/>
         <source>General Punctuation</source>
-        <translation type="unfinished"/>
+        <translation>Bendroji Skyryba</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="173"/>
@@ -25875,7 +25889,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="174"/>
         <source>Currency Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Valiutos simboliai</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="175"/>
@@ -25895,12 +25909,12 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="178"/>
         <source>Arrows</source>
-        <translation type="unfinished"/>
+        <translation>Rodyklės</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="179"/>
         <source>Mathematical Operators</source>
-        <translation type="unfinished"/>
+        <translation>Matematiniai operatoriai</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="180"/>
@@ -25925,7 +25939,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="184"/>
         <source>Box Drawing</source>
-        <translation type="unfinished"/>
+        <translation>Dėžės piešinys</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="185"/>
@@ -25935,12 +25949,12 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="186"/>
         <source>Geometric Shapes</source>
-        <translation type="unfinished"/>
+        <translation>Geometrinės figūros</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="187"/>
         <source>Miscellaneous Symbols</source>
-        <translation type="unfinished"/>
+        <translation>Įvairūs simboliai</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="188"/>
@@ -26460,7 +26474,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="291"/>
         <source>Lydian</source>
-        <translation type="unfinished"/>
+        <translation>Lydinė</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="292"/>
@@ -27029,12 +27043,12 @@ failed.</source>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioResourceControl.qml" line="99"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AuxSendControl.qml" line="91"/>
         <source>Bypass</source>
-        <translation type="unfinished"/>
+        <translation>Praleisti</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioResourceControl.qml" line="263"/>
         <source>Menu</source>
-        <translation type="unfinished"/>
+        <translation>Meniu</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerBalanceSection.qml" line="31"/>
@@ -27047,7 +27061,7 @@ failed.</source>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="46"/>
         <source>Audio FX</source>
         <extracomment>FX is an abbreviation of &quot;effects&quot;.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Audio FX</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerMuteAndSoloSection.qml" line="60"/>
@@ -27063,7 +27077,7 @@ failed.</source>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerSoundSection.qml" line="31"/>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="45"/>
         <source>Sound</source>
-        <translation type="unfinished"/>
+        <translation>Garsas</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerTitleSection.qml" line="32"/>
@@ -27080,7 +27094,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/PlaybackToolBar.qml" line="44"/>
         <source>Playback toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Grojimo įrankių juosta</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="79"/>
@@ -27106,27 +27120,27 @@ failed.</source>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1216"/>
         <source>Loading audio samples</source>
-        <translation type="unfinished"/>
+        <translation>Kraunami garsai</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/outputresourceitem.cpp" line="15"/>
         <source>No effect</source>
-        <translation type="unfinished"/>
+        <translation>Jokio efekto</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="44"/>
         <source>Labels</source>
-        <translation type="unfinished"/>
+        <translation>Etiketės</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="49"/>
         <source>Fader</source>
-        <translation type="unfinished"/>
+        <translation>Slankiklis</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="50"/>
         <source>Mute and solo</source>
-        <translation type="unfinished"/>
+        <translation>Tildyti ir solo</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="170"/>
@@ -27136,12 +27150,12 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/mixerpanelmodel.cpp" line="552"/>
         <source>Master</source>
-        <translation type="unfinished"/>
+        <translation>Masteris</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="46"/>
         <source>SoundFonts</source>
-        <translation type="unfinished"/>
+        <translation>Garsų rinkiniai</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="349"/>
@@ -27177,12 +27191,12 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="678"/>
         <source>Are you sure you want to change this sound?</source>
-        <translation type="unfinished"/>
+        <translation>Ar tikrai norite pakeisti šį garsą?</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="679"/>
         <source>Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation type="unfinished"/>
+        <translation>Garso žymės šiame instrumente gali būti atstatytos, tačiau penklinės tekstas išliks. Šis veiksmas yra galutinis.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/TempoSlider.qml" line="45"/>
@@ -27192,7 +27206,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="33"/>
         <source>Playback setup</source>
-        <translation type="unfinished"/>
+        <translation>Grojimo nustatymas</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="80"/>
@@ -27207,17 +27221,17 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="101"/>
         <source>Inactive</source>
-        <translation type="unfinished"/>
+        <translation>Neaktyvus</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="193"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Nustatymai</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="201"/>
         <source>Set as default for new scores</source>
-        <translation type="unfinished"/>
+        <translation>Nustatyti kaip numatytąjį naujoms partitūroms</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="237"/>
@@ -27242,17 +27256,17 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="98"/>
         <source>Sound flag options are not available for this sound.</source>
-        <translation type="unfinished"/>
+        <translation>Garso žymių parinktys nėra prieinamos šiam garsui.</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="74"/>
         <source>Ord. (default)</source>
-        <translation type="unfinished"/>
+        <translation>Ord. (numatytasis)</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="284"/>
         <source>Reset to default sound</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti į numatytąjį garsą</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="296"/>
@@ -27272,12 +27286,12 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="90"/>
         <source>Sound flag settings</source>
-        <translation type="unfinished"/>
+        <translation>Garso žymių nustatymai</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="137"/>
         <source>Sound flag menu</source>
-        <translation type="unfinished"/>
+        <translation>Garso žymių meniu</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="154"/>
@@ -27292,7 +27306,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="158"/>
         <source>Sound flags may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation type="unfinished"/>
+        <translation>Garso žymės gali būti atstatytos, tačiau penklinių tekstas išliks. Šis veiksmas yra galutinis.</translation>
     </message>
 </context>
 <context>
@@ -27306,7 +27320,7 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="70"/>
         <location filename="../../src/project/internal/notationproject.cpp" line="84"/>
         <source>Untitled score</source>
-        <translation type="unfinished"/>
+        <translation>Bevardė partitūra</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="82"/>
@@ -27317,7 +27331,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="84"/>
         <source>Composer / arranger</source>
-        <translation type="unfinished"/>
+        <translation>Kompozitorius / aranžuotojas</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="108"/>
@@ -27342,7 +27356,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="154"/>
         <source>New &amp; recent</source>
-        <translation type="unfinished"/>
+        <translation>Naujos ir paskiausios</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="88"/>
@@ -27353,7 +27367,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="108"/>
         <source>Search recent scores</source>
-        <translation type="unfinished"/>
+        <translation>Ieškoti paskiausių partitūrų</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="143"/>
@@ -27363,7 +27377,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="162"/>
         <source>My online scores</source>
-        <translation type="unfinished"/>
+        <translation>Mano partitūros internete</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="177"/>
@@ -27389,12 +27403,12 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="322"/>
         <source>Scores actions</source>
         <extracomment>accessibility name for the panel at the bottom of the &quot;Scores&quot; page</extracomment>
-        <translation type="unfinished"/>
+        <translation>Partitūros veiksmai</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="335"/>
         <source>Score manager (online)</source>
-        <translation type="unfinished"/>
+        <translation>Partitūrų valdymas (internetu)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="354"/>
@@ -27404,17 +27418,17 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="366"/>
         <source>Open other…</source>
-        <translation type="unfinished"/>
+        <translation>Atidaryti kitą...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="720"/>
         <source>Do you want to save changes to the score “%1” before closing?</source>
-        <translation type="unfinished"/>
+        <translation>Ar norite išsaugoti pokyčius partitūroje &quot;%1&quot; prieš uždarant?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="723"/>
         <source>Your changes will be lost if you don’t save them.</source>
-        <translation type="unfinished"/>
+        <translation>Jūsų pakeitimai bus prarasti jeigu jų neišsaugosite.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1664"/>
@@ -27425,7 +27439,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1677"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Šis failas buvo išsaugotas naudojant naujesnę MuseScore Studio versiją. Apsilankykite &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; kad gautumėte naujausią versiją.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1683"/>
@@ -27457,7 +27471,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1470"/>
         <source>This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on musescore.org.</source>
-        <translation type="unfinished"/>
+        <translation>Ši partitūra buvo pažeista ir turi klaidų. Jūs galite pataisyti klaidas rankiniu būdu, antraip išsaugokite šią partitūrą savo kompiuteryje ir ieškokite pagalbos musescore.org.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1477"/>
@@ -27468,7 +27482,7 @@ failed.</source>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1482"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1518"/>
         <source>Revert to last saved</source>
-        <translation type="unfinished"/>
+        <translation>Atkurti į paskutinį išsaugojimą</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1503"/>
@@ -27478,22 +27492,22 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1504"/>
         <source>You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on musescore.org.</source>
-        <translation type="unfinished"/>
+        <translation>Jūs galite tęsti išsaugodami vietoje, tačiau failas gali tapti nepanaudojamu. Galite bandyti pataisyti netikslumus ranka, taip pat galite gauti pagalbos musescore.org.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1506"/>
         <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on musescore.org.</source>
-        <translation type="unfinished"/>
+        <translation>Jūs galite tęsti išsaugodami vietoje, tačiau failas gali tapti nepanaudojamu. Norėdami išlaikyti savo partitūrą grąžinkite partitūrą į paskutinę išsaugotą versiją, arba sutvarkykite netikslumus ranka. Taip pat galite gauti pagalbos musescore.org.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1513"/>
         <source>Save anyway</source>
-        <translation type="unfinished"/>
+        <translation>Vis tiek išsaugoti</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1550"/>
         <source>Your score cannot be saved</source>
-        <translation type="unfinished"/>
+        <translation>Jūsų partitūra negali būti išsaugota</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1552"/>
@@ -27503,12 +27517,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1585"/>
         <source>Revert to last saved?</source>
-        <translation type="unfinished"/>
+        <translation>Atkurti paskutinį išsaugojimą?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1586"/>
         <source>Your changes will be lost. This action cannot be undone.</source>
-        <translation type="unfinished"/>
+        <translation>Jūsų pakeitimai bus prarasti. Šis veiksmas yra galutinis.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="476"/>
@@ -27534,12 +27548,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1684"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction.</source>
-        <translation type="unfinished"/>
+        <translation>Šis failas turi klaidų, kurios gali pakenkti MuseScore Studio.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1723"/>
         <source>This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</source>
-        <translation type="unfinished"/>
+        <translation>Šio failo neišeina atidaryti. Įsitikinkite, kad MuseScore Studio turi prieigą nuskaityti šį failą.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1730"/>
@@ -27549,77 +27563,77 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1783"/>
         <source>All supported files</source>
-        <translation type="unfinished"/>
+        <translation>Visi palaikomi failai</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1784"/>
         <source>MuseScore files</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore failai</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1785"/>
         <source>MusicXML files</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML failai</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1786"/>
         <source>MIDI files</source>
-        <translation type="unfinished"/>
+        <translation>MIDI failai</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1787"/>
         <source>MuseData files</source>
-        <translation type="unfinished"/>
+        <translation>MuseData failai</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1788"/>
         <source>Capella files</source>
-        <translation type="unfinished"/>
+        <translation>Capella failai</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1789"/>
         <source>BB files (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>BB failai (eksperimentalu)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1790"/>
         <source>Overture / Score Writer files (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>Overture / Score Writer failai (eksperimentalu)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1791"/>
         <source>Bagpipe Music Writer files (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>Bagpipe Music Writer failai (eksperimentalu)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1792"/>
         <source>Guitar Pro files</source>
-        <translation type="unfinished"/>
+        <translation>Guitar Pro failai</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1793"/>
         <source>Power Tab Editor files (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>Power Tab Editor failai (eksperimentalu)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1794"/>
         <source>MEI files</source>
-        <translation type="unfinished"/>
+        <translation>MEI failai</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1795"/>
         <source>Uncompressed MuseScore folders (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>Nesuspausti MuseScore aplankai (eksperimentalu)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1796"/>
         <source>MuseScore developer files</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore kūrėjo failai</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1797"/>
         <source>MuseScore backup files</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore atsargos failai</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1809"/>
@@ -27634,17 +27648,17 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="48"/>
         <source>Work title</source>
-        <translation type="unfinished"/>
+        <translation>Kūrinio pavadinimas</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="51"/>
         <source>Arranger</source>
-        <translation type="unfinished"/>
+        <translation>Aranžuotojas</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="58"/>
         <source>Creation date</source>
-        <translation type="unfinished"/>
+        <translation>Sukūrimo data</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="53"/>
@@ -27654,44 +27668,44 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="55"/>
         <source>Work number</source>
-        <translation type="unfinished"/>
+        <translation>Kūrinio numeris</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="56"/>
         <source>Movement title</source>
-        <translation type="unfinished"/>
+        <translation>Dalies pavadinimas</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="57"/>
         <source>Movement number</source>
-        <translation type="unfinished"/>
+        <translation>Dalies numeris</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="59"/>
         <source>Platform</source>
-        <translation type="unfinished"/>
+        <translation>Platforma</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="60"/>
         <source>Source</source>
-        <translation type="unfinished"/>
+        <translation>Šaltinis</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="61"/>
         <source>Audio.com URL</source>
-        <translation type="unfinished"/>
+        <translation>Audio.com nuoroda</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="79"/>
         <source>Scores list</source>
-        <translation type="unfinished"/>
+        <translation>Partitūrų sąrašas</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="34"/>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="105"/>
         <location filename="../../src/project/view/recentscoresmodel.cpp" line="68"/>
         <source>New score</source>
-        <translation type="unfinished"/>
+        <translation>Nauja partitūra</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="150"/>
@@ -27701,22 +27715,22 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="106"/>
         <source>MuseScore file</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore failas</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="107"/>
         <source>Uncompressed MuseScore folder (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>Nesuspaustas MuseScore aplankas (experimentalu)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/templatesrepository.cpp" line="62"/>
         <source>My templates</source>
-        <translation type="unfinished"/>
+        <translation>Mano šablonai</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="120"/>
         <source>All saved changes will now update to the cloud</source>
-        <translation type="unfinished"/>
+        <translation>Visi išsaugoti pakeitimai dabar atsinaujins debesų saugykloje</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="162"/>
@@ -27741,7 +27755,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="223"/>
         <source>Watch video</source>
-        <translation type="unfinished"/>
+        <translation>Žiūrėti video</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="251"/>
@@ -27771,17 +27785,17 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="131"/>
         <source>Scores will appear here when you save a file to the cloud, or publish a score on &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Partitūros atsiras čia kai jūs išsaugote failą debesų saugykloje arba publikuojate partitūrą &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="155"/>
         <source>You are not signed in</source>
-        <translation type="unfinished"/>
+        <translation>Jūs nesate prisijungęs</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="156"/>
         <source>Log in or create a new account on &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt; to view online scores.</source>
-        <translation type="unfinished"/>
+        <translation>Prisijunkite arba susikurkite paskyrą &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt;, kad galėtumėte peržiūrėti internetines partitūras. </translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="219"/>
@@ -27791,7 +27805,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="220"/>
         <source>Please check your internet connection or try again later.</source>
-        <translation type="unfinished"/>
+        <translation>Patikrinkite savo interneto ryšį arba bandykite dar kartą vėliau.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="57"/>
@@ -27835,7 +27849,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectPropertiesDialog.qml" line="112"/>
         <source>New property</source>
-        <translation type="unfinished"/>
+        <translation>Nauja savybė</translation>
     </message>
 </context>
 <context>
@@ -27851,7 +27865,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="97"/>
         <source>Private</source>
-        <translation type="unfinished"/>
+        <translation>Privatu</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="99"/>
@@ -27861,7 +27875,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="101"/>
         <source>Public</source>
-        <translation type="unfinished"/>
+        <translation>Vieša</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="428"/>
@@ -27888,7 +27902,7 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="468"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="598"/>
         <source>Please try again later, or get help for this problem on musescore.org.</source>
-        <translation type="unfinished"/>
+        <translation>Bandykite dar kartą vėliau, arba gaukite pagalbos musescore.org</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="484"/>
@@ -27899,12 +27913,12 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="487"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="553"/>
         <source>Your musescore.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
-        <translation type="unfinished"/>
+        <translation>Jūsų musescore.com paskyra pirmiausiai turi būti patvirtinta. Prašome aktyvuoti savo paskyrą naudojantis nuoroda, esančia aktyvacijos laiške.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="491"/>
         <source>This score does not belong to this account. To access this score, make sure you are logged in to the desktop app with the account to which this score belongs.</source>
-        <translation type="unfinished"/>
+        <translation>Ši partitūra nepriklauso šiai paskyrai. Kad gautumėte prieigą, įsitikinkite, kad esate prisijungę į darbalaukio aplikaciją su paskyra, kuriai ši partitūra priklauso.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="495"/>
@@ -27915,7 +27929,7 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="508"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="594"/>
         <source>Could not connect to &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt;. Please check your internet connection or try again later.</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko prisijungti prie &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt;. Patikrinkite interneto ryšį arba bandykite dar kartą vėliau.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="512"/>
@@ -27925,7 +27939,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="117"/>
         <source>Would you also like to share your music on Audio.com?</source>
-        <translation type="unfinished"/>
+        <translation>Ar norėtumėte pasidalinti savo muzika Audio.com?</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="126"/>
@@ -27935,7 +27949,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
         <source>You can change this setting in Preferences at any time.</source>
-        <translation type="unfinished"/>
+        <translation>Galite bet kada pakeisti šį nustatymą Nuostatose.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="165"/>
@@ -27954,7 +27968,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="67"/>
         <source>Select parts to export</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkite partijas eksportavimui</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="95"/>
@@ -27964,12 +27978,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="109"/>
         <source>Clear selection</source>
-        <translation type="unfinished"/>
+        <translation>Išvalyti pasirinkimą</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="128"/>
         <source>Export settings</source>
-        <translation type="unfinished"/>
+        <translation>Eksportavimo nustatymai</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="154"/>
@@ -27989,37 +28003,37 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="49"/>
         <source>%1 Hz</source>
-        <translation type="unfinished"/>
+        <translation>%1 Hz</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="63"/>
         <source>Bitrate:</source>
-        <translation type="unfinished"/>
+        <translation>Bitrate (sparta):</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="74"/>
         <source>%1 kBit/s</source>
-        <translation type="unfinished"/>
+        <translation>%1 kBit/s</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="87"/>
         <source>Each selected part will be exported as a separate audio file.</source>
-        <translation type="unfinished"/>
+        <translation>Kiekviena pasirinkta partija bus eksportuojama kaip atskiras audio failas.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="52"/>
         <source>Format:</source>
-        <translation type="unfinished"/>
+        <translation>Formatas:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="95"/>
         <source>File type:</source>
-        <translation type="unfinished"/>
+        <translation>Failo tipas:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="184"/>
         <source>Open destination folder on export</source>
-        <translation type="unfinished"/>
+        <translation>Atidaryti destinacijos aplanką po eksportavimo</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MidiSettingsPage.qml" line="31"/>
@@ -28034,13 +28048,13 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MidiSettingsPage.qml" line="59"/>
         <source>Each selected part will be exported as a separate MIDI file.</source>
-        <translation type="unfinished"/>
+        <translation>Kiekviena pasirinkta partija bus eksportuojama kaip atskiras MIDI failas.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PdfSettingsPage.qml" line="33"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="33"/>
         <source>Resolution:</source>
-        <translation type="unfinished"/>
+        <translation>Raiška:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="60"/>
@@ -28052,7 +28066,7 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="74"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/SvgSettingsPage.qml" line="45"/>
         <source>Each page of the selected parts will be exported as a separate %1 file.</source>
-        <translation type="unfinished"/>
+        <translation>Kiekvienas pasirinktų partijų puslapis bus eksportuotas kaip atskiras %1 failas.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="71"/>
@@ -28069,22 +28083,22 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="363"/>
         <source>File already exists</source>
-        <translation type="unfinished"/>
+        <translation>Failas jau egzistuoja</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
         <source>A file already exists with the filename %1. Do you want to replace it?</source>
-        <translation type="unfinished"/>
+        <translation>Failas su pavadinimu %1 jau egzistuoja. Ar norite jį perrašyti?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="366"/>
         <source>Replace</source>
-        <translation type="unfinished"/>
+        <translation>Perrašyti</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="367"/>
         <source>Replace all</source>
-        <translation type="unfinished"/>
+        <translation>Perrašyti viską</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="368"/>
@@ -28094,7 +28108,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="369"/>
         <source>Skip all</source>
-        <translation type="unfinished"/>
+        <translation>Praleisti viską</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="392"/>
@@ -28104,7 +28118,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="393"/>
         <source>An error occurred while writing the file %1. Do you want to retry?</source>
-        <translation type="unfinished"/>
+        <translation>Įvyko klaida įrašant failą %1. Ar norite bandyti dar kartą?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="445"/>
@@ -28114,105 +28128,105 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="49"/>
         <source>Compressed</source>
-        <translation type="unfinished"/>
+        <translation>Suspaustas</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="53"/>
         <source>Uncompressed</source>
-        <translation type="unfinished"/>
+        <translation>Nesuspaustas</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="57"/>
         <source>Uncompressed (outdated)</source>
-        <translation type="unfinished"/>
+        <translation>Nesuspaustas (pasenęs)</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="50"/>
         <source>Compressed MusicXML files</source>
-        <translation type="unfinished"/>
+        <translation>Suspaustas MusicXML failas</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="54"/>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="58"/>
         <source>Uncompressed MusicXML files</source>
-        <translation type="unfinished"/>
+        <translation>Nesuspaustas MusicXML failas</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="64"/>
         <source>PDF file</source>
-        <translation type="unfinished"/>
+        <translation>PDF failas</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="65"/>
         <source>PDF files</source>
-        <translation type="unfinished"/>
+        <translation>PDF failai</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="68"/>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="69"/>
         <source>PNG images</source>
-        <translation type="unfinished"/>
+        <translation>PNG paveikslėliai</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="72"/>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="73"/>
         <source>SVG images</source>
-        <translation type="unfinished"/>
+        <translation>SVG paveikslėliai</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="76"/>
         <source>MP3 audio</source>
-        <translation type="unfinished"/>
+        <translation>MP3 audio</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="77"/>
         <source>MP3 audio files</source>
-        <translation type="unfinished"/>
+        <translation>MP3 audio failai</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="80"/>
         <source>WAV audio</source>
-        <translation type="unfinished"/>
+        <translation>WAV audio</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="81"/>
         <source>WAV audio files</source>
-        <translation type="unfinished"/>
+        <translation>WAV audio failai</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="84"/>
         <source>OGG audio</source>
-        <translation type="unfinished"/>
+        <translation>OGG audio</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="85"/>
         <source>OGG audio files</source>
-        <translation type="unfinished"/>
+        <translation>OGG audio failai</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="88"/>
         <source>FLAC audio</source>
-        <translation type="unfinished"/>
+        <translation>FLAC audio</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="89"/>
         <source>FLAC audio files</source>
-        <translation type="unfinished"/>
+        <translation>FLAC audio failai</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="92"/>
         <source>MIDI file</source>
-        <translation type="unfinished"/>
+        <translation>MIDI failas</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="93"/>
         <source>MIDI files</source>
-        <translation type="unfinished"/>
+        <translation>MIDI failai</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="96"/>
         <source>MusicXML</source>
-        <translation type="unfinished"/>
+        <translation>MusicXML</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="101"/>
@@ -28233,34 +28247,34 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="105"/>
         <source>MEI files</source>
-        <translation type="unfinished"/>
+        <translation>MEI failai</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="304"/>
         <source>Each page to a separate file</source>
-        <translation type="unfinished"/>
+        <translation>Kiekvieną puslapį į atskirą failą</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="305"/>
         <source>Each part to a separate file</source>
-        <translation type="unfinished"/>
+        <translation>Kiekvieną partiją į atskirą failą</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="306"/>
         <source>All parts combined in one file</source>
-        <translation type="unfinished"/>
+        <translation>Visos partijos sujungtos į vieną failą</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="546"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Visą išdėstymą</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="548"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sistemų ir puslapių lūžiai</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="550"/>
@@ -28272,7 +28286,7 @@ failed.</source>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="552"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Jokių sistemos ar puslapių lūžių</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportScoresListView.qml" line="72"/>
@@ -28291,52 +28305,52 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="69"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="78"/>
         <source>This file was last saved in MuseScore %1</source>
-        <translation type="unfinished"/>
+        <translation>Šis failas paskutinį kartą buvo išsaugotas MuseScore %1</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="75"/>
         <source>Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.</source>
-        <translation type="unfinished"/>
+        <translation>Prašome atkreipti dėmesį, kad jūsų partitūros išvaizda pasikeis dėl patobulinimų, kuriuos atlikome sijų, ligatūros, sistemos objektų ir horizontalaus išdėstymo numatytiesiems nustatymams.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>
         <source>Use our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Naudokite mūsų naują notaciją bei garsų pritaikymą &lt;a href=&quot;%1&quot;&gt;MDL perkusijai&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="100"/>
         <source>Watch video about changes</source>
-        <translation type="unfinished"/>
+        <translation>Žiūrėti vaizdo įrašą apie pasikeitimus</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="83"/>
         <source>Select the engraving improvements you would like to apply to your score</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkite užrašymo patobulinimus, kuriuos norite pritaikyti savo partitūroje</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="112"/>
         <source>Our new notation font, Leland</source>
-        <translation type="unfinished"/>
+        <translation>Mūsų naujas notacijos šriftas, Leland</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="125"/>
         <source>Our new text font, Edwin</source>
-        <translation type="unfinished"/>
+        <translation>Mūsų naujas teksto šriftas, Edwin</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="138"/>
         <source>Our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Mūsų nauja notacija ir garsų paskirstymas, skirtas &lt;a href=&quot;%1&quot;&gt;MDL perkusijai&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="157"/>
         <source>Please note: score layouts will be affected by improvements to MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Atkreipkite dėmesį: partitūros išdėstymai bus paveikti MuseScore Studio patobulinimų</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="162"/>
         <source>Watch video</source>
-        <translation type="unfinished"/>
+        <translation>Žiūrėti video</translation>
     </message>
 </context>
 <context>
@@ -28344,7 +28358,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="71"/>
         <source>Score options</source>
-        <translation type="unfinished"/>
+        <translation>Partitūros ypatybės</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="91"/>
@@ -28369,22 +28383,22 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ChooseInstrumentsAndTemplatesPage.qml" line="112"/>
         <source>Choose instruments</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkite instrumentus</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ChooseInstrumentsAndTemplatesPage.qml" line="122"/>
         <source>Create from template</source>
-        <translation type="unfinished"/>
+        <translation>Kurti pagal šabloną</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="69"/>
         <source>Category</source>
-        <translation type="unfinished"/>
+        <translation>Kategorija</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="96"/>
         <source>Template</source>
-        <translation type="unfinished"/>
+        <translation>Šablonas</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="148"/>
@@ -28399,32 +28413,32 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="49"/>
         <source>pickup:</source>
-        <translation type="unfinished"/>
+        <translation>prieštaktis:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="53"/>
         <source>no pickup</source>
-        <translation type="unfinished"/>
+        <translation>jokio prieštakčio</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="57"/>
         <source>%n measure(s),</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>&amp;n taktas,</numerusform><numerusform>&amp;n taktai,</numerusform><numerusform>&amp;n taktai,</numerusform><numerusform>&amp;n taktai,</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="100"/>
         <source>Create pickup measure</source>
-        <translation type="unfinished"/>
+        <translation>Sukurti prieštaktį</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="146"/>
         <source>Initial number of measures</source>
-        <translation type="unfinished"/>
+        <translation>Pradinis taktų skaičius</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="187"/>
         <source>Hint: You can also add &amp; delete measures after you have created your score</source>
-        <translation type="unfinished"/>
+        <translation>Užuomina: Jūs taip pat galite pridėti ar ištrinti taktus po partitūros sukūrimo</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TemplatePreview.qml" line="49"/>
@@ -28434,17 +28448,17 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TempoSettings.qml" line="95"/>
         <source>Show tempo marking on my score</source>
-        <translation type="unfinished"/>
+        <translation>Rodyti tempo nuorodą mano partitūroje</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="48"/>
         <source>General score info</source>
-        <translation type="unfinished"/>
+        <translation>Bendra partitūros informacija</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ScoreInfoPage.qml" line="71"/>
         <source>Additional score information</source>
-        <translation type="unfinished"/>
+        <translation>Papildoma partitūros informacija</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="97"/>
@@ -28486,7 +28500,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="124"/>
         <source>F♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>F♯ minoras</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="126"/>
@@ -28496,7 +28510,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="126"/>
         <source>C♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>C♯ minoras</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="128"/>
@@ -28506,7 +28520,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="128"/>
         <source>G♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>G♯ minoras</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="130"/>
@@ -28516,7 +28530,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="130"/>
         <source>D♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>D♯ minoras</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="132"/>
@@ -28526,12 +28540,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="132"/>
         <source>A♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>A♯ minoras</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="134"/>
         <source>Open/Atonal</source>
-        <translation type="unfinished"/>
+        <translation>Atvira/atonali</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="136"/>
@@ -28541,7 +28555,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="136"/>
         <source>D minor</source>
-        <translation type="unfinished"/>
+        <translation>D minoras</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="138"/>
@@ -28551,7 +28565,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="138"/>
         <source>G minor</source>
-        <translation type="unfinished"/>
+        <translation>G minoras</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="140"/>
@@ -28561,7 +28575,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="140"/>
         <source>C minor</source>
-        <translation type="unfinished"/>
+        <translation>C minoras</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="142"/>
@@ -28571,7 +28585,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="142"/>
         <source>F minor</source>
-        <translation type="unfinished"/>
+        <translation>F minoras</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="144"/>
@@ -28581,7 +28595,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="144"/>
         <source>B♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>B♭ minoras</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="146"/>
@@ -28591,7 +28605,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="146"/>
         <source>E♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>E♭ minoras</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="148"/>
@@ -28601,7 +28615,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="148"/>
         <source>A♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>A♭ minoras</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="330"/>
@@ -28611,7 +28625,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="330"/>
         <source>16th note</source>
-        <translation type="unfinished"/>
+        <translation>16-inė nata</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="332"/>
@@ -28678,12 +28692,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="51"/>
         <source>File path:</source>
-        <translation type="unfinished"/>
+        <translation>Failo vieta:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="81"/>
         <source>MuseScore Studio version:</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio versija:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="90"/>
@@ -28693,12 +28707,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="104"/>
         <source>API-Level:</source>
-        <translation type="unfinished"/>
+        <translation>API-Lygis:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/PropertyItem.qml" line="73"/>
         <source>Property</source>
-        <translation type="unfinished"/>
+        <translation>Savybė</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/PropertyItem.qml" line="103"/>
@@ -28709,7 +28723,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectPropertiesDialog.qml" line="34"/>
         <source>Project properties</source>
-        <translation type="unfinished"/>
+        <translation>Projekto ypatybės</translation>
     </message>
 </context>
 <context>
@@ -28717,37 +28731,37 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="60"/>
         <source>How would you like to save?</source>
-        <translation type="unfinished"/>
+        <translation>Kaip norėtumėte išsaugoti?</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
         <source>To the Cloud (free)</source>
-        <translation type="unfinished"/>
+        <translation>Į debesų saugyklą (nemokamai)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="79"/>
         <source>Files are saved privately on your own personal account. You can share drafts with others and publish your finished scores publicly too.</source>
-        <translation type="unfinished"/>
+        <translation>Failai yra išsaugomi privačiai jūsų asmeninėje paskyroje. Galite dalintis juodraščiais su kitais bei viešai publikuoti savo užbaigtas partitūras.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="81"/>
         <source>Save to the cloud</source>
-        <translation type="unfinished"/>
+        <translation>Įrašyti į debesų saugyklą</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="87"/>
         <source>Save to the cloud (free)</source>
-        <translation type="unfinished"/>
+        <translation>Įrašyti į debesų saugyklą (nemokamai)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="96"/>
         <source>On your computer</source>
-        <translation type="unfinished"/>
+        <translation>Savo kompiuteryje</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
         <source>If you prefer to save your files on your computer, you can do that here.</source>
-        <translation type="unfinished"/>
+        <translation>Jeigu labiau mėgstate išsaugoti failus savo kompiuteryje, galite tai padaryti čia.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="74"/>
@@ -28756,17 +28770,17 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="398"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="542"/>
         <source>Save to computer</source>
-        <translation type="unfinished"/>
+        <translation>Išsaugoti kompiuteryje</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="104"/>
         <source>Save on your computer</source>
-        <translation type="unfinished"/>
+        <translation>Išsaugoti savo kompiuteryje</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="132"/>
         <source>Save to cloud</source>
-        <translation type="unfinished"/>
+        <translation>Įrašyti į debesų saugyklą</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="150"/>
@@ -28787,12 +28801,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="215"/>
         <source>Create new</source>
-        <translation type="unfinished"/>
+        <translation>Kurti naują</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="162"/>
         <source>Public</source>
-        <translation type="unfinished"/>
+        <translation>Vieša</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="167"/>
@@ -28802,12 +28816,12 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="173"/>
         <source>Private</source>
-        <translation type="unfinished"/>
+        <translation>Privatu</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="185"/>
         <source>Publish to MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Publikuoti į MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="188"/>
@@ -28818,7 +28832,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="191"/>
         <source>Publish as new online score</source>
-        <translation type="unfinished"/>
+        <translation>Publikuoti kaip naują partitūrą internete</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="199"/>
@@ -28829,7 +28843,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="202"/>
         <source>Upload as new audio file</source>
-        <translation type="unfinished"/>
+        <translation>Įkelti kaip naują audio failą</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="203"/>
@@ -28846,25 +28860,25 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="341"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="376"/>
         <source>Publish</source>
-        <translation type="unfinished"/>
+        <translation>Publikuoti</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="92"/>
         <source>Save score</source>
-        <translation type="unfinished"/>
+        <translation>Išsaugoti partitūrą</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="97"/>
         <source>copy</source>
         <comment>a copy of a file</comment>
         <extracomment>used to form a filename suggestion, like &quot;originalFile - copy&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>kopija</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="100"/>
         <source>selection</source>
         <extracomment>used to form a filename suggestion, like &quot;originalFile - selection&quot;</extracomment>
-        <translation type="unfinished"/>
+        <translation>pasirinkimas</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="347"/>
@@ -28875,17 +28889,17 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="348"/>
         <source>We will need to generate a new MP3 for web playback.</source>
-        <translation type="unfinished"/>
+        <translation>Mums reikės sugeneruoti naują MP3 grojimui tinklapyje.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="351"/>
         <source>All saved changes will be publicly visible on MuseScore.com. If you want to make frequent changes, we recommend saving this score privately until you’re ready to share it to the world.</source>
-        <translation type="unfinished"/>
+        <translation>Visi išsaugoti pakeitimai bus viešai matomi MuseScore.com. Jeigu norite atlikti dažnus pakeitimus, rekomenduojame išsaugoti šią partitūrą privačiai iki kol būsite pasiruošę ja dalintis.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="350"/>
         <source>Publish this score online?</source>
-        <translation type="unfinished"/>
+        <translation>Publikuoti šią partitūrą internete?</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="59"/>
@@ -28901,24 +28915,24 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="134"/>
         <source>Every: %1 saves</source>
         <extracomment>`%1` will be replaced with a number input field. Text before it will appear before that number field, text after will appear after the field.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kas: %1 išsaugojimus</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="165"/>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="185"/>
         <source>Every N saves</source>
         <extracomment>Accessibility name for &quot;Every N saves&quot; radio button in MP3 generation settings dialog</extracomment>
-        <translation type="unfinished"/>
+        <translation>Kas N išsaugojimų</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="77"/>
         <source>Generate MP3 audio for web playback?</source>
-        <translation type="unfinished"/>
+        <translation>Generuoti MP3 audio internetiniam grojimui?</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="87"/>
         <source>This could take a few minutes each time you save, depending on the size of your score. These settings can always be changed in Preferences.</source>
-        <translation type="unfinished"/>
+        <translation>Tai gali užtrukti kelias minutes kiekvieno išsaugojimo metu, priklausomai nuo partitūros dydžio. Šie nustatymai visada gali būti pakeisti Nuostatose.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="424"/>
@@ -28934,7 +28948,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1345"/>
         <source>All saved changes will now update to the cloud. You can manage this file in the score manager on musescore.com.</source>
-        <translation type="unfinished"/>
+        <translation>Visi išsaugoti pakeitimai dabar atsinaujins debesų saugykloje. Galite valdyti šį failą partitūrų tvarkyklėje musescore.com</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1570"/>
@@ -28944,23 +28958,23 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="182"/>
         <source>Log in or create a new account on Audio.com to share your music.</source>
-        <translation type="unfinished"/>
+        <translation>Prisijunkite arba susikurkite paskyrą Audio.com, kad galėtumėte dalintis savo muzika.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="234"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="964"/>
         <source>Log in to musescore.com to save this score to the cloud.</source>
-        <translation type="unfinished"/>
+        <translation>Prisijunkite prie musescore.com norėdami išsaugoti šią partitūrą debesų saugykloje.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="235"/>
         <source>Log in to musescore.com to publish this score.</source>
-        <translation type="unfinished"/>
+        <translation>Prisijunkite prie musescore.com, kad galėtumėte publikuoti šią partitūrą.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="381"/>
         <source>Your saved changes will be publicly visible. We will also need to generate a new MP3 for public playback.</source>
-        <translation type="unfinished"/>
+        <translation>Jūsų išsaugoti pakeitimai bus matomi viešai. Mums taip pat reikės sugeneruoti naują MP3 viešam grojimui.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="415"/>
@@ -28975,7 +28989,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="526"/>
         <source>Your score could not be saved to the cloud</source>
-        <translation type="unfinished"/>
+        <translation>Jūsų partitūros negalime išsaugoti debesų saugykloje</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="529"/>
@@ -28985,7 +28999,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="530"/>
         <source>Your score cannot be saved to the cloud</source>
-        <translation type="unfinished"/>
+        <translation>Jūsų partitūros negalime išsaugoti debesų saugykloje</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="543"/>
@@ -29000,23 +29014,23 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="560"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or publish this as a new score to avoid losing changes in the current online version.</source>
-        <translation type="unfinished"/>
+        <translation>Galite pakeisti esančią &lt;a href=&quot;%1&quot;&gt;partitūrą internete&lt;/a&gt;, arba publikuoti kaip naują partitūrą, kad neprarastumėte dabartinės internetinės versijos pokyčių.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="566"/>
         <source>Publish as new score</source>
-        <translation type="unfinished"/>
+        <translation>Publikuoti kaip naują partitūrą</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="567"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="578"/>
         <source>Replace</source>
-        <translation type="unfinished"/>
+        <translation>Perrašyti</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="571"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or save this as a new file to avoid losing changes in the current online version.</source>
-        <translation type="unfinished"/>
+        <translation>Galite pakeisti esančią &lt;a href=&quot;%1&quot;&gt;partitūrą internete&lt;/a&gt;, arba išsaugoti kaip naują failą, kad neprarastumėte dabartinės internetinės versijos pokyčių.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="577"/>
@@ -29032,7 +29046,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1420"/>
         <source>Your changes will be saved to a local file until the connection resumes.</source>
-        <translation type="unfinished"/>
+        <translation>Jūsų pokyčiai bus išsaugoti vietiniame faile, kol atsiras ryšys.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="391"/>
@@ -29044,17 +29058,17 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="402"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="416"/>
         <source>Please check your internet connection or try again later.</source>
-        <translation type="unfinished"/>
+        <translation>Patikrinkite savo interneto ryšį arba bandykite dar kartą vėliau.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1578"/>
         <source>Your score could not be saved</source>
-        <translation type="unfinished"/>
+        <translation>Jūsų partitūra negalėjo būti išsaugota</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1433"/>
         <source>Please add at least one instrument to enable saving.</source>
-        <translation type="unfinished"/>
+        <translation>Pridėkite bent vieną instrumentą, kad galėtumėte išsaugoti.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="196"/>
@@ -29072,7 +29086,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="630"/>
         <source>Your audio.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
-        <translation type="unfinished"/>
+        <translation>Jūsų audio.com paskyra pirmiausiai turi būti patvirtinta. Prašome aktyvuoti savo paskyrą naudojantis nuoroda, esančia aktyvacijos laiške.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="637"/>
@@ -29089,7 +29103,7 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="642"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="649"/>
         <source>Please try again later, or get help for this problem on audio.com.</source>
-        <translation type="unfinished"/>
+        <translation>Bandykite dar kartą vėliau, arba gaukite pagalbos audio.com</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="645"/>
@@ -29116,12 +29130,12 @@ failed.</source>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditMidiMappingDialog.qml" line="83"/>
         <source>Press a key or adjust a control on your MIDI device to assign it to this action.</source>
-        <translation type="unfinished"/>
+        <translation>Spustelėkite klavišą arba pareguliuokite valdymo mygtuką savo MIDI įrenginyje, jog priskirtumėte jį šiam veiksmui.</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditMidiMappingDialog.qml" line="92"/>
         <source>MIDI mapping:</source>
-        <translation type="unfinished"/>
+        <translation>MIDI priskyrimai:</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialog.qml" line="32"/>
@@ -29182,7 +29196,7 @@ failed.</source>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsList.qml" line="31"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/MidiDeviceMappingPage.qml" line="93"/>
         <source>action</source>
-        <translation type="unfinished"/>
+        <translation>veiksmas</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsList.qml" line="33"/>
@@ -29207,14 +29221,14 @@ failed.</source>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/MidiDeviceMappingPage.qml" line="95"/>
         <source>status</source>
-        <translation type="unfinished"/>
+        <translation>būsena</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditMidiMappingDialog.qml" line="107"/>
         <location filename="../../src/framework/shortcuts/view/editmidimappingmodel.cpp" line="61"/>
         <source>Waiting…</source>
         <extracomment>The app is waiting for the user to trigger a valid MIDI remote event</extracomment>
-        <translation type="unfinished"/>
+        <translation>Laukiama...</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/shortcutstypes.h" line="107"/>
@@ -29237,12 +29251,12 @@ failed.</source>
     <message>
         <location filename="../../src/framework/shortcuts/view/mididevicemappingmodel.cpp" line="101"/>
         <source>Inactive</source>
-        <translation type="unfinished"/>
+        <translation>Neaktyvus</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="37"/>
         <source>MuseScore Studio shortcuts file</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio greitųjų klavišų failas</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="186"/>
@@ -29262,7 +29276,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="171"/>
         <source>Are you sure you want to assign it to &lt;b&gt;%1&lt;/b&gt; instead?</source>
-        <translation type="unfinished"/>
+        <translation>Ar tikrai norite verčiau priskirti tai prie &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="176"/>
@@ -29346,28 +29360,28 @@ failed.</source>
         <location filename="../../src/framework/ui/internal/themeconverter.cpp" line="82"/>
         <source>White</source>
         <extracomment>The name of the high contrast light ui theme</extracomment>
-        <translation type="unfinished"/>
+        <translation>Balta</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/internal/themeconverter.cpp" line="85"/>
         <source>Black</source>
         <extracomment>The name of the high contrast dark ui theme</extracomment>
-        <translation type="unfinished"/>
+        <translation>Juoda</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="135"/>
         <source>direction is horizontal</source>
-        <translation type="unfinished"/>
+        <translation>horizontali kryptis</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="136"/>
         <source>direction is vertical</source>
-        <translation type="unfinished"/>
+        <translation>vertikali kryptis</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="137"/>
         <source>direction is both</source>
-        <translation type="unfinished"/>
+        <translation>abi kryptys</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="75"/>
@@ -29377,7 +29391,7 @@ failed.</source>
         <source>checked</source>
         <comment>checkstate</comment>
         <extracomment>Describes the 'on' state of a toggle-able ui item.</extracomment>
-        <translation type="unfinished"/>
+        <translation>įjungta</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="77"/>
@@ -29387,28 +29401,28 @@ failed.</source>
         <source>unchecked</source>
         <comment>checkstate</comment>
         <extracomment>Describes the 'off' state of a toggle-able ui item.</extracomment>
-        <translation type="unfinished"/>
+        <translation>išjungta</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="81"/>
         <source>selected</source>
         <comment>selectedState</comment>
         <extracomment>Describes the state of a ui item that is the chosen option in a list of options</extracomment>
-        <translation type="unfinished"/>
+        <translation>pasirinktas</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="83"/>
         <source>not selected</source>
         <comment>selectedState</comment>
         <extracomment>Describes the state of a ui item that is not the chosen option in a list of options</extracomment>
-        <translation type="unfinished"/>
+        <translation>nepasirinkta</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="92"/>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/MenuButton.qml" line="50"/>
         <source>Menu</source>
         <extracomment>a type of ui item</extracomment>
-        <translation type="unfinished"/>
+        <translation>Meniu</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="48"/>
@@ -29537,12 +29551,12 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="137"/>
         <source>Save all</source>
-        <translation type="unfinished"/>
+        <translation>Išsaugoti viską</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="138"/>
         <source>Don’t save</source>
-        <translation type="unfinished"/>
+        <translation>Neišsaugoti</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="139"/>
@@ -29617,7 +29631,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="153"/>
         <source>Restore defaults</source>
-        <translation type="unfinished"/>
+        <translation>Atkurti numatytuosius</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="154"/>
@@ -29627,7 +29641,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="155"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>Kitas</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="156"/>
@@ -29670,7 +29684,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/AppReleaseInfoDialog.qml" line="82"/>
         <source>A new version of MuseScore Studio is available!</source>
-        <translation type="unfinished"/>
+        <translation>Nauja MuseScore Studio versija yra prieinama!</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/AppReleaseInfoDialog.qml" line="89"/>
@@ -29680,7 +29694,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="140"/>
         <source>You already have the latest version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; for news on what’s coming next.</source>
-        <translation type="unfinished"/>
+        <translation>Jūs jau turite naujausią MuseScore Studio versiją. Apsilankykite &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; ir sužinokite, kokios naujienos laukia ateityje!</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="147"/>
@@ -29700,7 +29714,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="193"/>
         <source>MuseScore Studio needs to close to complete the installation. If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio reikia uždaryti kad būtų užbaigtas įdiegimas. Jeigu turite kokių neišsaugotų pakeitimų, MuseScore Studio paragins jus išsaugoti prieš uždarant programą.</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="198"/>
@@ -29726,12 +29740,12 @@ failed.</source>
         <location filename="../../src/framework/update/internal/appupdateservice.cpp" line="208"/>
         <source>Downloading MuseScore Studio %1</source>
         <extracomment>Means that the download is currently in progress. %1 will be replaced by the version number of the version that is being downloaded.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Siunčiamas MuseScore Studio %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/view/updatemodel.cpp" line="36"/>
         <source>Updating MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>Atnaujinama MuseScore Studio</translation>
     </message>
 </context>
 <context>
@@ -29739,13 +29753,13 @@ failed.</source>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/internal/WorkspacesTopPanel.qml" line="68"/>
         <source>Workspaces</source>
-        <translation type="unfinished"/>
+        <translation>Darbo stiliai</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/internal/WorkspacesTopPanel.qml" line="79"/>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="66"/>
         <source>Create new workspace</source>
-        <translation type="unfinished"/>
+        <translation>Sukurti naują darbo stilių</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/internal/WorkspacesTopPanel.qml" line="100"/>
@@ -29755,27 +29769,27 @@ failed.</source>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/internal/WorkspacesTopPanel.qml" line="111"/>
         <source>Use workspaces to save different arrangements of the MuseScore Studio interface</source>
-        <translation type="unfinished"/>
+        <translation>Naudokite darbo stilius norėdami išsaugoti skirtingus MusicScore Studio langų išdėstymus</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="74"/>
         <source>Workspace name:</source>
-        <translation>Darbo srities pavadinimas:</translation>
+        <translation>Darbo stiliaus pavadinimas:</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="114"/>
         <source>Select the options you want remembered in your new workspace</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkite parinktis, kurias norite užfiksuoti naujame darbo stiliuje</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="133"/>
         <source>UI preferences (colors, canvas style, etc.)</source>
-        <translation type="unfinished"/>
+        <translation>UI parinktys (spalvos, stilius, etc.)</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="150"/>
         <source>UI arrangement</source>
-        <translation type="unfinished"/>
+        <translation>UI išdėstymas</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="166"/>
@@ -29790,22 +29804,22 @@ failed.</source>
     <message>
         <location filename="../../src/workspacescene/view/newworkspacemodel.cpp" line="44"/>
         <source>My new workspace</source>
-        <translation type="unfinished"/>
+        <translation>Mano naujas darbo stilius</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/view/newworkspacemodel.cpp" line="102"/>
         <source>A workspace with the name “%1” already exists. Please choose a different name.</source>
-        <translation type="unfinished"/>
+        <translation>Darbo stilius pavadinimu &quot;%1&quot; jau egzistuoja. Pasirinkite kitą pavadinimą.</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/view/newworkspacemodel.cpp" line="109"/>
         <source>“%1” cannot be used as a workspace name. Please choose a different name.</source>
-        <translation type="unfinished"/>
+        <translation>&quot;%1&quot; negali būti naudojamas kaip darbo stiliaus pavadinimas. Pasirinkite kitą pavadinimą.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="95"/>
         <source>Workspace:</source>
-        <translation type="unfinished"/>
+        <translation>Darbo stilius:</translation>
     </message>
 </context>
 </TS>

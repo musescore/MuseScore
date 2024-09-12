@@ -16393,7 +16393,7 @@
         <source>Bass</source>
         <comment>acoustic-bass shortName</comment>
         <extracomment>shortName for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>贝斯</translation>
+        <translation>Bass</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5396"/>

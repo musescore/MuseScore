@@ -3171,12 +3171,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7893"/>
         <source>Default positions of dynamics and hairpins</source>
-        <translation>Standardpositioner för dynamik och cresc./dim.-pilar</translation>
+        <translation>Standardpositioner för dynamikbeteckningar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7921"/>
         <source>Voices 1 &amp; 3 above staff, voices 2 &amp; 4 below staff</source>
-        <translation>Stämmor 1 &amp;3 ovanför notrad, stämmor 2 &amp; 4 nedanför notrad</translation>
+        <translation>Stämmor 1 &amp; 3 ovanför notrad, stämmor 2 &amp; 4 nedanför notrad</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7956"/>
@@ -3236,7 +3236,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11628"/>
         <source>Dash</source>
-        <translation>Streckad</translation>
+        <translation>Streck</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11677"/>
@@ -3251,7 +3251,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11893"/>
         <source>Omit dash when space is limited</source>
-        <translation>Uteslut streck vid litet utrymme</translation>
+        <translation>Uteslut streck vid begränsat utrymme</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11913"/>
@@ -4440,12 +4440,12 @@ textens x-höjd):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12097"/>
         <source>Omit extension line when space is limited</source>
-        <translation>Uteslut förlängningslinje vid litet utrymme</translation>
+        <translation>Uteslut förlängningslinje vid begränsat utrymme</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12107"/>
         <source>Reset &apos;Omit extension line when space is limited&apos; value</source>
-        <translation>Återställ &apos;Uteslut förlängningslinje vid litet utrymme&apos;</translation>
+        <translation>Återställ &apos;Uteslut förlängningslinje vid begränsat utrymme&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12545"/>
@@ -4694,7 +4694,7 @@ textens x-höjd):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3355"/>
         <source>System brackets</source>
-        <translation>Klamrar</translation>
+        <translation>Systemklamrar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3576"/>
@@ -17325,7 +17325,7 @@ Band %1 på strängar %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3799"/>
         <source>Breath mark (tick-like)</source>
-        <translation>Andningstecken (tickliknande)</translation>
+        <translation>Andningstecken (kommaliknande)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3800"/>
@@ -21102,7 +21102,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/breathplaybackmodel.cpp" line="33"/>
         <source>Breaths &amp; pauses</source>
-        <translation>Andning &amp; pauser</translation>
+        <translation>Andning &amp; fermater</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/fermataplaybackmodel.cpp" line="33"/>
@@ -24759,7 +24759,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1003"/>
         <source>Arpeggios &amp; glissandos</source>
-        <translation>Arpeggion &amp; glissandi</translation>
+        <translation>Arpeggi &amp; glissandi</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1300"/>

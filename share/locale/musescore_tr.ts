@@ -5056,7 +5056,7 @@ yüzdesel yüksekliği):</translation>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/DebugWindow.cpp" line="123"/>
         <source>DockWidget unique name</source>
-        <translation>DockWidget unique name</translation>
+        <translation>DockWidget&apos;ın benzersiz ismi</translation>
     </message>
 </context>
 <context>
@@ -7876,7 +7876,7 @@ yüzdesel yüksekliği):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1300"/>
         <source>Add text: sticking</source>
-        <translation>Metin ekle: yapışkan</translation>
+        <translation>Metin ekle: darbe düzeni (Sticking, L-R)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1306"/>
@@ -9623,7 +9623,7 @@ yüzdesel yüksekliği):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1299"/>
         <source>Stic&amp;king</source>
-        <translation>&amp;Yapışkan</translation>
+        <translation>Darbe d&amp;üzeni (Sticking, L-R)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1305"/>
@@ -12829,7 +12829,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="295"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1157"/>
         <source>Sticking</source>
-        <translation>Yapışkan</translation>
+        <translation>Darbe düzeni (Sticking, L-R)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="298"/>
@@ -12999,7 +12999,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="306"/>
         <source>Time tick anchor</source>
-        <translation>Zaman işareti tutucusu</translation>
+        <translation>Zaman işaretleyici</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1126"/>
@@ -16678,17 +16678,17 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3458"/>
         <source>Enharmonically reinterpret accidental almost equal to</source>
-        <translation>Şuna neredeyse eşit olan değiştirici işareti sesteşiyle yeniden yorumla</translation>
+        <translation>Yaklaşık eşittir ses değiştirici işaretini sesteş yorumla</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3459"/>
         <source>Enharmonically reinterpret accidental equals</source>
-        <translation>Değiştirici işaret denklerini sesteşiyle yeniden yorumla</translation>
+        <translation>Eşittir ses değiştirici işaretini sesteş yorumla</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3460"/>
         <source>Enharmonically reinterpret accidental tilde</source>
-        <translation>Değiştirici işareti tildeyi sesteşiyle yorumla</translation>
+        <translation>Tilde (yaklaşık işareti) ses değiştirici işaretini sesteş yorumla</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3466"/>
@@ -27115,7 +27115,7 @@ yazılamadı.</translation>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="85"/>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="617"/>
         <source>Aux %1</source>
-        <translation>Aux %1</translation>
+        <translation>Yard. %1</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="884"/>
@@ -27251,7 +27251,7 @@ yazılamadı.</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerAuxSendsSection.qml" line="31"/>
         <source>Aux sends</source>
-        <translation>Aux sends</translation>
+        <translation>Yard. çıkış</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="55"/>
