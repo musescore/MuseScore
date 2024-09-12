@@ -26,6 +26,7 @@
 # set(MODULE_ALIAS somename)                  - set module (target) alias name
 # set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})  - set module root
 # set(MODULE_INCLUDE ...)                     - set include (by default see below include_directories)
+# set(MODULE_INCLUDE_PRIVATE ...)             - set private include
 # set(MODULE_DEF ...)                         - set definitions
 # set(MODULE_SRC ...)                         - set sources and headers files
 # set(MODULE_LINK ...)                        - set libraries for link
@@ -177,6 +178,10 @@ macro(setup_module)
         # end compat
 
         ${MODULE_INCLUDE}
+    )
+
+    target_include_directories(${MODULE} PRIVATE
+        ${MODULE_INCLUDE_PRIVATE}
     )
 
     target_compile_definitions(${MODULE} PUBLIC
