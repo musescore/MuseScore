@@ -1065,7 +1065,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="186"/>
         <source>Merge matching rests</source>
-        <translation>Scal pasujące pauzy</translation>
+        <translation>Połącz pasujące pauzy</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="193"/>
@@ -10876,7 +10876,7 @@ Opublikowano na licencji &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CharsetsSection.qml" line="37"/>
         <source>Overture import character set:</source>
-        <translation>Zestaw znaków przy importowaniu pliku Overture’a:</translation>
+        <translation>Zestaw znaków przy imporcie pliku Overture’a:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ColorAndWallpaperSection.qml" line="62"/>
@@ -10922,7 +10922,7 @@ Opublikowano na licencji &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ImportStyleSection.qml" line="30"/>
         <source>Style used for import</source>
-        <translation>Styl używany dla importowania</translation>
+        <translation>Styl używany dla importu</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ImportStyleSection.qml" line="51"/>
@@ -16041,7 +16041,7 @@ Próg %1 na strunach %2</translation>
     <message>
         <location filename="../../src/engraving/dom/spacer.cpp" line="238"/>
         <source>Staff spacer fixed down</source>
-        <translation>Dolny odstęp pięciolinii</translation>
+        <translation>Dolny stały odstęp pięciolinii</translation>
     </message>
 </context>
 <context>
@@ -18907,7 +18907,7 @@ Próg %1 na strunach %2</translation>
     <message>
         <location filename="../../src/importexport/capella/internal/capella.cpp" line="2844"/>
         <source>Import failed: %1</source>
-        <translation>Importowanie zakończone niepowodzeniem: %1.</translation>
+        <translation>Import zakończony niepowodzeniem: %1.</translation>
     </message>
 </context>
 <context>
@@ -18947,7 +18947,7 @@ Próg %1 na strunach %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi.cpp" line="1277"/>
         <source>Import failed: %1</source>
-        <translation>Importowanie zakończone niepowodzeniem: %1.</translation>
+        <translation>Import zakończony niepowodzeniem: %1.</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="89"/>
@@ -20632,7 +20632,7 @@ przedtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="48"/>
         <source>Pause before new section starts</source>
-        <translation>Zatrzymaj przed rozpoczęciem nowej sekcji</translation>
+        <translation>Wstrzymaj przed rozpoczęciem nowej sekcji</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="65"/>
@@ -27129,7 +27129,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1216"/>
         <source>Loading audio samples</source>
-        <translation>Ładowanie sampli dźwiękowych</translation>
+        <translation>Ładowanie próbek dźwiękowych</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/outputresourceitem.cpp" line="15"/>

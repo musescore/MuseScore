@@ -3747,7 +3747,7 @@ viivaston ensimmäisessä nuotissa</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="184"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10052"/>
         <source>Text lines</source>
-        <translation>Tekstiviivat</translation>
+        <translation>Tekstirivit</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="189"/>

@@ -9044,7 +9044,7 @@ text x-height):</source>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="38"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="39"/>
         <source>Play</source>
-        <translation>Abspielen</translation>
+        <translation>Wiedergabe</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="45"/>
@@ -9059,7 +9059,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="59"/>
         <source>Loop playback</source>
-        <translation>Schleifenwiedergabe umschalten</translation>
+        <translation>Schleifenwiedergabe</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="76"/>
@@ -23577,7 +23577,7 @@ Darüber hinaus bietet Mastering MuseScore eine unterstützende Community von Mu
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml" line="40"/>
         <source>2 spaces</source>
-        <translation>2 Spatium</translation>
+        <translation>2 Spatien</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="76"/>
