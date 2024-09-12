@@ -119,7 +119,6 @@ class HBox final : public Box {
       bool readProperties(XmlReader&) override;
 
       QRectF drag(EditData&) override;
-      void endEditDrag(EditData&) override;
       void layout2();
       bool isMovable() const override;
       void computeMinWidth() override;
