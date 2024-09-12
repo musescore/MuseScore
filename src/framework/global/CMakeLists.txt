@@ -241,7 +241,7 @@ else ()
     set(Z_LIB z)
 endif ()
 
-list(APPEND MODULE_INCLUDE
+list(APPEND MODULE_INCLUDE_PRIVATE
     ${Z_INCLUDE}
     )
 

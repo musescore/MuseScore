@@ -92,7 +92,7 @@
 #include "../../dom/sticking.h"
 #include "../../dom/systemdivider.h"
 #include "../../dom/systemtext.h"
-#include "./../dom/soundflag.h"
+#include "../../dom/soundflag.h"
 
 #include "../../dom/textbase.h"
 #include "../../dom/tempotext.h"
