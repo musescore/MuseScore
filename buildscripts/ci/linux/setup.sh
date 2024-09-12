@@ -106,6 +106,7 @@ apt_packages_runtime=(
   libxcb-xinerama0
   libxcb-xkb-dev
   libxkbcommon-dev
+  libopengl-dev
   libvulkan-dev
   )
 
