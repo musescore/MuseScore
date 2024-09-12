@@ -33,12 +33,18 @@ using namespace muse;
 using namespace muse::audio;
 using namespace muse::async;
 
-static constexpr size_t DEFAULT_AUX_BUFFER_SIZE = 1024;
-
 Mixer::Mixer(const modularity::ContextPtr& iocCtx)
     : muse::Injectable(iocCtx)
 {
     ONLY_AUDIO_WORKER_THREAD;
+
+    m_taskScheduler = std::make_unique<TaskScheduler>(configuration()->desiredAudioThreadNumber());
+
+    if (!m_taskScheduler->setThreadsPriority(ThreadPriority::High)) {
+        LOGE() << "Unable to change audio threads priority";
+    }
+
+    AudioSanitizer::setMixerThreads(m_taskScheduler->threadIdSet());
 
     m_minTrackCountForMultithreading = configuration()->minTrackCountForMultithreading();
 }
@@ -271,7 +277,7 @@ void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel,
                 continue;
             }
 
-            std::future<std::vector<float> > future = TaskScheduler::instance()->submit(processChannel, pair.second);
+            std::future<std::vector<float> > future = m_taskScheduler->submit(processChannel, pair.second);
             futures.emplace(pair.first, std::move(future));
         }
 
