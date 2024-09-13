@@ -28,7 +28,8 @@
 #include "importmxmlpass1.h"
 #include "importxmlfirstpass.h"
 #include "internal/musicxml/musicxmlsupport.h"
-#include "musicxml.h" // a.o. for Slur
+#include "musicxml.h"
+#include "musicxmltypes.h"
 
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/types.h"

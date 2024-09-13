@@ -25,7 +25,7 @@
 
 #include "engraving/types/fraction.h"
 #include "engraving/dom/interval.h"
-#include "musicxmlsupport.h"
+#include "musicxmltypes.h"
 
 namespace mu::engraving {
 typedef std::map<int, VoiceDesc> VoiceList;

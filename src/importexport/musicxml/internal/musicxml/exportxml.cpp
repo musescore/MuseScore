@@ -127,6 +127,7 @@
 #include "musicxml.h"
 #include "musicxmlfonthandler.h"
 #include "musicxmlsupport.h"
+#include "musicxmltypes.h"
 
 #include "modularity/ioc.h"
 #include "../../imusicxmlconfiguration.h"

@@ -29,8 +29,8 @@
 #include "draw/types/geometry.h"
 
 #include "importxmlfirstpass.h"
-#include "musicxml.h" // for the creditwords and MusicXmlPartGroupList definitions
 #include "musicxmlsupport.h"
+#include "musicxmltypes.h"
 
 #include "engraving/engravingerrors.h"
 
@@ -52,9 +52,6 @@ struct PageFormat {
     double oddBottomMargin = 0.2;
     bool twosided = false;
 };
-
-typedef std::map<String, Part*> PartMap;
-typedef std::map<int, MusicXmlPartGroup*> MusicXmlPartGroupMap;
 
 //---------------------------------------------------------
 //   MxmlOctaveShiftDesc

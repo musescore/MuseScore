@@ -26,6 +26,7 @@
 #include "engraving/dom/durationtype.h"
 #include "engraving/types/fraction.h"
 #include "importmxmlpass1.h"
+#include "musicxmltypes.h"
 
 namespace mu::engraving {
 class MxmlLogger;
