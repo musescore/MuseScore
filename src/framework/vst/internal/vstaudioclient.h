@@ -47,7 +47,9 @@ public:
     void flush();
     void allNotesOff();
 
-    void setMaxSamplesPerBlock(unsigned int samples);
+    audio::samples_t maxSamplesPerBlock() const;
+    void setMaxSamplesPerBlock(audio::samples_t samples);
+
     void setSampleRate(unsigned int sampleRate);
 
     ParamsMapping paramsMapping(const std::set<Steinberg::Vst::CtrlNumber>& controllers) const;
@@ -55,7 +57,7 @@ public:
 private:
     struct SamplesInfo {
         unsigned int sampleRate = 0;
-        unsigned int maxSamplesPerBlock = 0;
+        audio::samples_t maxSamplesPerBlock = 0;
 
         bool isValid()
         {
