@@ -245,7 +245,7 @@ additional_libraries=(
 # Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
 fallback_libraries=(
   libjack.so.0 # https://github.com/LMMS/lmms/pull/3958
-  libopengl.so.0 # https://bugreports.qt.io/browse/QTBUG-89754
+  libOpenGL.so.0 # https://bugreports.qt.io/browse/QTBUG-89754
 
   # https://github.com/musescore/MuseScore/issues/24068#issuecomment-2297823192
   libwayland-client.so.0
