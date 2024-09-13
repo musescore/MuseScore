@@ -82,18 +82,22 @@ Rectangle {
 
         anchors.top: parent.top
 
+        property alias titleBar: frameModel.titleBar
+
         titleBarCpp: root.titleBarCpp
 
         contextMenuModel: frameModel.currentDockContextMenuModel
         visible: frameModel.titleBarVisible
         isHorizontalPanel: frameModel.isHorizontalPanel
 
-        navigation.panel: navPanel
-        navigation.order: 1
+        navigationPanel: navPanel
+        navigationOrder: 1
 
         onHandleContextMenuItemRequested: function(itemId) {
             frameModel.handleMenuItem(itemId)
         }
+
+        titleBarItem: frameModel.titleBar
     }
 
     MouseArea {

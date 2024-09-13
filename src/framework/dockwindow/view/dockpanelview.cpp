@@ -164,6 +164,7 @@ DockPanelView::~DockPanelView()
 
     dockWidget->setProperty(DOCK_PANEL_PROPERTY, QVariant::fromValue(nullptr));
     dockWidget->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(nullptr));
+    dockWidget->setProperty(TITLEBAR_PROPERTY, QVariant::fromValue(nullptr));
 }
 
 QString DockPanelView::groupName() const
@@ -194,6 +195,7 @@ void DockPanelView::componentComplete()
 
     dockWidget->setProperty(DOCK_PANEL_PROPERTY, QVariant::fromValue(this));
     dockWidget->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(m_menuModel));
+    dockWidget->setProperty(TITLEBAR_PROPERTY, QVariant::fromValue(m_titleBar));
 
     connect(m_menuModel, &AbstractMenuModel::itemsChanged, [dockWidget, this]() {
         if (dockWidget) {
@@ -222,6 +224,11 @@ AbstractMenuModel* DockPanelView::contextMenuModel() const
     return m_menuModel->customMenuModel();
 }
 
+QQmlComponent* DockPanelView::titleBar() const
+{
+    return m_titleBar;
+}
+
 void DockPanelView::setContextMenuModel(AbstractMenuModel* model)
 {
     if (m_menuModel->customMenuModel() == model) {
@@ -231,6 +238,16 @@ void DockPanelView::setContextMenuModel(AbstractMenuModel* model)
     m_menuModel->setCustomMenuModel(model);
     m_menuModel->load();
     emit contextMenuModelChanged();
+}
+
+void DockPanelView::setTitleBar(QQmlComponent* titleBar)
+{
+    if (m_titleBar == titleBar) {
+        return;
+    }
+
+    m_titleBar = titleBar;
+    emit titleBarChanged();
 }
 
 bool DockPanelView::isTabAllowed(const DockPanelView* tab) const
