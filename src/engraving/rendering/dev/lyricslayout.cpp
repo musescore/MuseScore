@@ -452,10 +452,17 @@ void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
         if (endSegment->tick() == endTick && endSegmentElement && endSegmentElement->type() == ElementType::CHORD) {
             // everything is OK if we have reached a chord at right tick on right track
             // advance to next CR after duration of note, or last segment if no next CR
-            const Score* score = item->score();
+            const Segment* endChordSeg = endSegment;
             const Chord* endChord = toChord(endSegmentElement);
 
-            endSegment = score ? score->tick2segment(endSegment->tick() + endChord->ticks(), true, SegmentType::ChordRest) : nullptr;
+            endSegment = endChordSeg->nextCR(track, false);
+
+            if (!endSegment) {
+                endSegment = endChordSeg;
+                while (endSegment && endSegment->tick() < endChord->tick() + endChord->ticks()) {
+                    endSegment = endSegment->nextCR(muse::nidx, true);
+                }
+            }
         } else {
             // FIXUP - lyrics tick count not valid
             // this happens if edits to score have removed the original end segment
