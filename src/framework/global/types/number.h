@@ -24,7 +24,7 @@ inline constexpr double _pow_minus10(int prec)
 inline constexpr double _compare_real_epsilon = _pow_minus10(COMPARE_REAL_PREC);
 
 template<typename T>
-inline bool is_zero(T v)
+inline constexpr bool is_zero(T v)
 {
     if constexpr (std::numeric_limits<T>::is_integer) {
         return v == 0;
@@ -34,7 +34,7 @@ inline bool is_zero(T v)
 }
 
 template<typename T>
-inline bool is_equal(T v1, T v2)
+inline constexpr bool is_equal(T v1, T v2)
 {
     if constexpr (std::numeric_limits<T>::is_integer) {
         return v1 == v2;
@@ -63,9 +63,15 @@ class number_t
 {
 public:
 
-    number_t() = default;
+    constexpr number_t() = default;
     number_t(T v)
         : m_val(muse::check_valid(v)) {}
+
+    //! NOTE At the moment, not all compilers have std::is_nan is constexpr,
+    //! so we can't make check_valid is constexpr,
+    //! so we can't make a copy constructor is constexpr.
+    //! This function is a helper for creating constexpr variables.
+    static constexpr number_t<T> make(T v) { number_t<T> n; n.m_val = v; return n; }
 
     number_t<T>& operator=(T v) { m_val = muse::check_valid(v); return *this; }
 
@@ -76,7 +82,7 @@ public:
     template<typename V>
     static T cast(V v) { return static_cast<T>(v); }
 
-    inline T raw() const { return m_val; }
+    inline constexpr T raw() const { return m_val; }
     inline double to_double() const { return static_cast<double>(m_val); }
     inline number_t<T> operator-() const { return number_t<T>(-m_val); }
 
@@ -119,7 +125,7 @@ public:
     inline number_t<T>& operator/=(T n) { m_val /= muse::check_valid(n, T(1)); return *this; }
     inline number_t<T>& operator*=(T n) { m_val *= muse::check_valid(n); return *this; }
 
-private:
+protected:
 
     T m_val = T();
 };

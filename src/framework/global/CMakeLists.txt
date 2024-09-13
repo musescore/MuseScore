@@ -103,6 +103,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/version.h
     ${CMAKE_CURRENT_LIST_DIR}/types/number.h
     ${CMAKE_CURRENT_LIST_DIR}/types/config.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/ratio.h
 
     ${CMAKE_CURRENT_LIST_DIR}/io/ioenums.h
     ${CMAKE_CURRENT_LIST_DIR}/io/path.cpp

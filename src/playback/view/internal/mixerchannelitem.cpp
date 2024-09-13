@@ -30,8 +30,8 @@ using namespace mu::playback;
 using namespace muse;
 using namespace muse::audio;
 
-static constexpr volume_dbfs_t MAX_DISPLAYED_DBFS = 0.f; // 100%
-static constexpr volume_dbfs_t MIN_DISPLAYED_DBFS = -60.f; // 0%
+static constexpr volume_dbfs_t MAX_DISPLAYED_DBFS = volume_dbfs_t::make(0.f);   // 100%
+static constexpr volume_dbfs_t MIN_DISPLAYED_DBFS = volume_dbfs_t::make(-60.f); // 0%
 
 static constexpr float BALANCE_SCALING_FACTOR = 100.f;
 
