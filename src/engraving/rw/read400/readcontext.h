@@ -28,7 +28,7 @@
 #include "global/modularity/ioc.h"
 #include "iengravingfontsprovider.h"
 
-#include "../types/types.h"
+#include "types/types.h"
 
 #include "dom/connector.h"
 #include "dom/interval.h"

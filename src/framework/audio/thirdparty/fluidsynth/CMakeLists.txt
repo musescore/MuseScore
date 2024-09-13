@@ -9,6 +9,9 @@ set(MODULE_SRC
 
 set (MODULE_INCLUDE
     ${FLUIDSYNTH_INC}
+    )
+
+set (MODULE_INCLUDE_PRIVATE
     ${SNDFILE_INCDIR}
     )
 

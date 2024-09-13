@@ -20,7 +20,7 @@
 
 declare_module(iex_mei)
 
-set(MODULE_INCLUDE
+set(MODULE_INCLUDE_PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/internal/
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/

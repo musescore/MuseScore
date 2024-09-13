@@ -322,7 +322,7 @@ set_source_files_properties( # For these files, Unity Build does not work
     PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
     )
 
-set(MODULE_INCLUDE
+set(MODULE_INCLUDE_PRIVATE
     ${PROJECT_SOURCE_DIR}/thirdparty/dtl
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure
     )

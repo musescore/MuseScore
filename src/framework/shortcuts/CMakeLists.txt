@@ -74,7 +74,7 @@ if (OS_IS_MAC)
         SKIP_PRECOMPILE_HEADERS ON
     )
 
-    set(MODULE_INCLUDE
+    set(MODULE_INCLUDE_PRIVATE
         ${CARBON_LIBRARY}
     )
 endif(OS_IS_MAC)
