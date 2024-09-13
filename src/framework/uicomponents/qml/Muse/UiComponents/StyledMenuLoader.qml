@@ -74,9 +74,7 @@ Loader {
         }
 
         onClosed: function(force) {
-            // Not using Qt.callLater here because the delayed call may cause a crash
-            // if objects are destroyed in the meantime and one of them is the parent of the menu.
-            prv.unloadMenu(force)
+            Qt.callLater(prv.unloadMenu, force)
         }
 
         onOpened: {
