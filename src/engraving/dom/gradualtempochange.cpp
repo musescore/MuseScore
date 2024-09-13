@@ -359,6 +359,7 @@ TempoText* GradualTempoChangeSegment::findElementToSnapAfter() const
     // It is the next tempoChange which looks for a tempoChange before.
     Fraction refTick = tempoChange()->tick2();
     Measure* measure = score()->tick2measure(refTick);
+    measure = style().styleB(Sid::createMultiMeasureRests) && measure->hasMMRest() ? measure->mmRest() : measure;
     if (!measure) {
         return nullptr;
     }
