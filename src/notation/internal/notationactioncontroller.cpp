@@ -25,6 +25,7 @@
 
 #include "notationtypes.h"
 
+#include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/sig.h"
