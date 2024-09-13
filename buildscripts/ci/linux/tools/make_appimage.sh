@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+trap 'echo Making AppImage failed; exit 1' ERR
+
 INSTALL_DIR="$1" # MuseScore was installed here
 APPIMAGE_NAME="$2" # name for AppImage file (created outside $INSTALL_DIR)
 PACKARCH="$3" # architecture (x86_64, aarch64, armv7l)
@@ -243,7 +245,7 @@ additional_libraries=(
 # Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
 fallback_libraries=(
   libjack.so.0 # https://github.com/LMMS/lmms/pull/3958
-  libopengl.so.0 # https://bugreports.qt.io/browse/QTBUG-89754
+  libOpenGL.so.0 # https://bugreports.qt.io/browse/QTBUG-89754
 )
 
 # PREVIOUSLY EXTRACTED APPIMAGES
@@ -359,15 +361,5 @@ fi
 
 # create AppImage
 appimagetool "${appimagetool_args[@]}" "${appdir}" "${appimage}"
-
-# We are running as root in the Docker image so all created files belong to
-# root. Allow non-root users outside the Docker image to access these files.
-chmod a+rwx "${created_files[@]}"
-parent_dir="${PWD}"
-while [[ "$(dirname "${parent_dir}")" != "${parent_dir}" ]]; do
-  [[ "$parent_dir" == "/" ]] && break
-  chmod a+rwx "$parent_dir"
-  parent_dir="$(dirname "$parent_dir")"
-done
 
 echo "Making AppImage finished"
