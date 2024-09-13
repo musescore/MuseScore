@@ -650,10 +650,13 @@ void LyricsLayout::checkCollisionsWithStaffElements(System* system, staff_idx_t 
     SkylineLine& staffSkylineNorth = systemStaff->skyline().north();
     SkylineLine& staffSkylineSouth = systemStaff->skyline().south();
 
-    int maxVerseAbove = int(lyricsVersesAbove.size());
-    int maxVerseBelow = int(lyricsVersesBelow.size());
+    int maxVerseAbove = !lyricsVersesAbove.empty() ? lyricsVersesAbove.crbegin()->first : 0;
+    int maxVerseBelow = !lyricsVersesBelow.empty() ? lyricsVersesBelow.crbegin()->first : 0;
 
-    for (int verse = maxVerseAbove - 1; verse >= 0; --verse) {
+    for (int verse = maxVerseAbove; verse >= 0; --verse) {
+        if (lyricsVersesAbove.count(verse) == 0) {
+            continue;
+        }
         SkylineLine verseSkyline = createSkylineForVerse(verse, false, lyricsVersesAbove, system);
         double minDistance = -verseSkyline.minDistance(staffSkylineNorth);
         if (minDistance < lyricsMinDist) {
@@ -663,6 +666,9 @@ void LyricsLayout::checkCollisionsWithStaffElements(System* system, staff_idx_t 
     }
 
     for (int verse = 0; verse < maxVerseBelow; ++verse) {
+        if (lyricsVersesBelow.count(verse) == 0) {
+            continue;
+        }
         SkylineLine verseSkyline = createSkylineForVerse(verse, true, lyricsVersesBelow, system);
         double minDistance = -staffSkylineSouth.minDistance(verseSkyline);
         if (minDistance < lyricsMinDist) {
