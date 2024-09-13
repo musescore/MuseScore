@@ -25,12 +25,12 @@
 
 #include "global/serialization/xmlstreamreader.h"
 #include "global/containers.h"
-#include "global/types/flags.h"
 #include "draw/types/geometry.h"
 
 #include "importxmlfirstpass.h"
 #include "musicxmlsupport.h"
 #include "musicxmltypes.h"
+#include "musicxmltupletstate.h"
 
 #include "engraving/engravingerrors.h"
 
@@ -71,22 +71,6 @@ struct MxmlOctaveShiftDesc {
         : tp(_tp), size(_size), time(_tm), num(-1) {}
 };
 
-//---------------------------------------------------------
-//   MxmlStartStop (also used in pass 2)
-//---------------------------------------------------------
-
-enum class MxmlStartStop : char {
-    NONE, START, STOP
-};
-
-enum class MxmlTupletFlag : char {
-    NONE = 0,
-    STOP_PREVIOUS = 1,
-    START_NEW = 2,
-    ADD_CHORD = 4,
-    STOP_CURRENT = 8
-};
-
 enum class MusicXMLExporterSoftware : char {
     SIBELIUS,
     DOLET6,
@@ -96,29 +80,10 @@ enum class MusicXMLExporterSoftware : char {
     OTHER
 };
 
-typedef muse::Flags<MxmlTupletFlag> MxmlTupletFlags;
-
-struct MxmlTupletState {
-    void addDurationToTuplet(const Fraction duration, const Fraction timeMod);
-    MxmlTupletFlags determineTupletAction(const Fraction noteDuration, const Fraction timeMod, const MxmlStartStop tupletStartStop,
-                                          const TDuration normalType, Fraction& missingPreviousDuration, Fraction& missingCurrentDuration);
-    bool inTuplet = false;
-    bool implicit = false;
-    int actualNotes = 1;
-    int normalNotes = 1;
-    Fraction duration { 0, 1 };
-    int tupletType = 0;   // smallest note type in the tuplet // TODO_NOW rename ?
-    int tupletCount = 0;   // number of smallest notes in the tuplet // TODO_NOW rename ?
-};
-
-using MxmlTupletStates = std::map<String, MxmlTupletState>;
-
 //---------------------------------------------------------
 //   declarations
 //---------------------------------------------------------
 
-void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& fraction, Fraction& fullDuration);
-Fraction missingTupletDuration(const Fraction duration);
 bool isLikelyCreditText(const String& text, const bool caseInsensitive);
 bool isLikelySubtitleText(const String& text, const bool caseInsensitive);
 

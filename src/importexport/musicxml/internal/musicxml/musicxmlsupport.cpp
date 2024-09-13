@@ -670,4 +670,79 @@ const Articulation* findLaissezVibrer(const Chord* chord)
     }
     return nullptr;
 }
+
+//---------------------------------------------------------
+//   determineTupletFractionAndFullDuration
+//---------------------------------------------------------
+
+/**
+ Split duration into two factors where fullDuration is note sized
+ (i.e. the denominator is a power of 2), 1/2 < fraction <= 1/1
+ and fraction * fullDuration equals duration.
+ */
+
+void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& fraction, Fraction& fullDuration)
+{
+    fraction = duration;
+    fullDuration = Fraction(1, 1);
+    // move denominator's powers of 2 from fraction to fullDuration
+    while (fraction.denominator() % 2 == 0) {
+        fraction *= 2;
+        fraction.reduce();
+        fullDuration *= Fraction(1, 2);
+    }
+    // move numerator's powers of 2 from fraction to fullDuration
+    while (fraction.numerator() % 2 == 0) {
+        fraction *= Fraction(1, 2);
+        fraction.reduce();
+        fullDuration *= 2;
+        fullDuration.reduce();
+    }
+    // make sure 1/2 < fraction <= 1/1
+    while (fraction <= Fraction(1, 2)) {
+        fullDuration *= Fraction(1, 2);
+        fraction *= 2;
+    }
+    fullDuration.reduce();
+    fraction.reduce();
+
+    /*
+    Examples (note result when denominator is not a power of two):
+    3:2 tuplet of 1/4 results in fraction 1/1 and fullDuration 1/2
+    2:3 tuplet of 1/4 results in fraction 3/1 and fullDuration 1/4
+    4:3 tuplet of 1/4 results in fraction 3/1 and fullDuration 1/4
+    3:4 tuplet of 1/4 results in fraction 1/1 and fullDuration 1/1
+
+     Bring back fraction in 1/2 .. 1/1 range.
+     */
+
+    if (fraction > Fraction(1, 1) && fraction.denominator() == 1) {
+        fullDuration *= fraction;
+        fullDuration.reduce();
+        fraction = Fraction(1, 1);
+    }
+
+    /*
+    LOGD("duration %s fraction %s fullDuration %s",
+           muPrintable(duration.toString()),
+           muPrintable(fraction.toString()),
+           muPrintable(fullDuration.toString())
+           );
+    */
+}
+
+//---------------------------------------------------------
+//   missingTupletDuration
+//---------------------------------------------------------
+
+Fraction missingTupletDuration(const Fraction duration)
+{
+    Fraction tupletFraction;
+    Fraction tupletFullDuration;
+
+    determineTupletFractionAndFullDuration(duration, tupletFraction, tupletFullDuration);
+    Fraction missing = (Fraction(1, 1) - tupletFraction) * tupletFullDuration;
+
+    return missing;
+}
 }

@@ -30,6 +30,7 @@
 #include "internal/musicxml/musicxmlsupport.h"
 #include "musicxml.h"
 #include "musicxmltypes.h"
+#include "musicxmltupletstate.h"
 
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/types.h"
@@ -46,15 +47,6 @@ using GraceChordList = std::vector<Chord*>;
 using FiguredBassList = std::vector<FiguredBass*>;
 using Tuplets = std::map<String, Tuplet*>;
 using Beams = std::map<String, Beam*>;
-
-//---------------------------------------------------------
-//   MxmlStartStop
-//---------------------------------------------------------
-/*
-enum class MxmlStartStop : char {
-      START, STOP, NONE
-      };
- */
 
 //---------------------------------------------------------
 //   MusicXmlSlash
