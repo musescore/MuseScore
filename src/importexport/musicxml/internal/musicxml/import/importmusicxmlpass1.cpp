@@ -1286,6 +1286,9 @@ Err MusicXmlParserPass1::parse()
 
     if (!found) {
         m_logger->logError(u"this is not a MusicXML score-partwise file, node <score-partwise> not found", &m_e);
+        if (!m_e.errorString().isEmpty()) {
+            m_errors += errorStringWithLocation(m_e.lineNumber(), m_e.columnNumber(), m_e.errorString()) + '\n';
+        }
         return Err::FileBadFormat;
     }
 
