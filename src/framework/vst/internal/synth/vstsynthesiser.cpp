@@ -199,6 +199,10 @@ samples_t VstSynthesiser::process(float* buffer, samples_t samplesPerChannel)
         return 0;
     }
 
+    if (samplesPerChannel > m_vstAudioClient->maxSamplesPerBlock()) {
+        m_vstAudioClient->setMaxSamplesPerBlock(samplesPerChannel);
+    }
+
     const msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
     const VstSequencer::EventSequenceMap sequences = m_sequencer.movePlaybackForward(nextMsecs);
     samples_t sampleOffset = 0;

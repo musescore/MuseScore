@@ -210,13 +210,18 @@ void VstAudioClient::allNotesOff()
     m_playingParams.clear();
 }
 
-void VstAudioClient::setMaxSamplesPerBlock(unsigned int samples)
+samples_t VstAudioClient::maxSamplesPerBlock() const
+{
+    return m_samplesInfo.maxSamplesPerBlock;
+}
+
+void VstAudioClient::setMaxSamplesPerBlock(samples_t samples)
 {
     if (m_samplesInfo.maxSamplesPerBlock == samples) {
         return;
     }
 
-    m_processData.numSamples = samples;
+    m_processData.numSamples = static_cast<Steinberg::int32>(samples);
     m_samplesInfo.maxSamplesPerBlock = samples;
     m_needUnprepareProcessData = true;
 
