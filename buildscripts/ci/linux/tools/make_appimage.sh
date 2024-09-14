@@ -161,11 +161,6 @@ export QML_SOURCES_PATHS=./
 linuxdeploy --appdir "${appdir}" # adds all shared library dependencies
 linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
 
-# At an unknown point in time, the libqgtk3 plugin stopped being deployed
-if [ ! -f ${appdir}/plugins/platformthemes/libqgtk3.so ]; then
-  cp ${QT_PATH}/plugins/platformthemes/libqgtk3.so ${appdir}/plugins/platformthemes/libqgtk3.so 
-fi
-
 # The system must be used
 if [ -f ${appdir}/lib/libglib-2.0.so.0 ]; then
   rm -f ${appdir}/lib/libglib-2.0.so.0 
@@ -221,6 +216,9 @@ unwanted_files=(
 additional_qt_components=(
   plugins/printsupport/libcupsprintersupport.so
 
+  # At an unknown point in time, the libqgtk3 plugin stopped being deployed
+  plugins/platformthemes/libqgtk3.so
+
   # Wayland support (run with QT_QPA_PLATFORM=wayland to use)
   plugins/wayland-decoration-client
   plugins/wayland-graphics-integration-client
@@ -270,11 +268,19 @@ for file in "${unwanted_files[@]}"; do
 done
 
 for file in "${additional_qt_components[@]}"; do
+  if [ -f "${appdir}/${file}" ]; then
+    echo "Warning: ${file} was already deployed. Skipping."
+    continue
+  fi
   mkdir -p "${appdir}/$(dirname "${file}")"
   cp -Lr "${QT_PATH}/${file}" "${appdir}/${file}"
 done
 
 for lib in "${additional_libraries[@]}"; do
+  if [ -f "${appdir}/lib/${lib}" ]; then
+    echo "Warning: ${file} was already deployed. Skipping."
+    continue
+  fi
   full_path="$(find_library "${lib}")"
   cp -L "${full_path}" "${appdir}/lib/${lib}"
 done
