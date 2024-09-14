@@ -44,7 +44,7 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 #define M_PROPERTY(a, b, c)                                      \
-    a _##b;                                                \
+    a _##b { };                                                \
 public:                                                     \
     const a& b() const { return _##b; }                  \
     void c(const a& val) { _##b = val; }                  \
