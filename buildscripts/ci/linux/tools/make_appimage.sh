@@ -146,8 +146,8 @@ mv "${appdir}/bin/findlib" "${appdir}/../findlib"
 qt_sql_drivers_path="${QT_PATH}/plugins/sqldrivers"
 qt_sql_drivers_tmp="/tmp/qtsqldrivers"
 mkdir -p "$qt_sql_drivers_tmp"
-mv "${qt_sql_drivers_path}/libqsqlmysql.so" "${qt_sql_drivers_tmp}/libqsqlmysql.so"
-mv "${qt_sql_drivers_path}/libqsqlpsql.so" "${qt_sql_drivers_tmp}/libqsqlpsql.so"
+[ -f "${qt_sql_drivers_path}/libqsqlmysql.so" ] && mv "${qt_sql_drivers_path}/libqsqlmysql.so" "${qt_sql_drivers_tmp}/libqsqlmysql.so"
+[ -f "${qt_sql_drivers_path}/libqsqlpsql.so" ] && mv "${qt_sql_drivers_path}/libqsqlpsql.so" "${qt_sql_drivers_tmp}/libqsqlpsql.so"
 
 # Semicolon-separated list of platforms to deploy in addition to `libqxcb.so`.
 # Used by linuxdeploy-plugin-qt.
@@ -173,9 +173,9 @@ fi
 
 unset QML_SOURCES_PATHS EXTRA_PLATFORM_PLUGINS
 
-# In case this container is reused multiple times, return the moved libraries back
-mv "${qt_sql_drivers_tmp}/libqsqlmysql.so" "${qt_sql_drivers_path}/libqsqlmysql.so"
-mv "${qt_sql_drivers_tmp}/libqsqlpsql.so" "${qt_sql_drivers_path}/libqsqlpsql.so"
+# Return the moved libraries back
+[ -f "${qt_sql_drivers_tmp}/libqsqlmysql.so" ] && mv "${qt_sql_drivers_tmp}/libqsqlmysql.so" "${qt_sql_drivers_path}/libqsqlmysql.so"
+[ -f "${qt_sql_drivers_tmp}/libqsqlpsql.so" ] && mv "${qt_sql_drivers_tmp}/libqsqlpsql.so" "${qt_sql_drivers_path}/libqsqlpsql.so"
 
 # Put the non-RUNPATH binaries back
 mv "${appdir}/../findlib" "${appdir}/bin/findlib"
