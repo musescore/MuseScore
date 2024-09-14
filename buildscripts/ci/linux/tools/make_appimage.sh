@@ -163,6 +163,7 @@ linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
 
 # At an unknown point in time, the libqgtk3 plugin stopped being deployed
 if [ ! -f ${appdir}/plugins/platformthemes/libqgtk3.so ]; then
+  mkdir -p ${appdir}/plugins/platformthemes
   cp ${QT_PATH}/plugins/platformthemes/libqgtk3.so ${appdir}/plugins/platformthemes/libqgtk3.so 
 fi
 
