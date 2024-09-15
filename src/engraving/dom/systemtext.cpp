@@ -45,6 +45,22 @@ SystemText::SystemText(Segment* parent, TextStyleType tid, ElementType type)
 }
 
 //---------------------------------------------------------
+//   isEditAllowed
+//---------------------------------------------------------
+
+bool SystemText::isEditAllowed(EditData& ed) const
+{
+    bool ctrlPressed  = ed.modifiers & ControlModifier;
+    bool shiftPressed = ed.modifiers & ShiftModifier;
+    bool altPressed = ed.modifiers & AltModifier;
+    if (altPressed && !ctrlPressed && !shiftPressed) {
+        return false;
+    }
+
+    return TextBase::isEditAllowed(ed);
+}
+
+//---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
