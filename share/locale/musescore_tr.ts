@@ -5056,7 +5056,7 @@ yüzdesel yüksekliği):</translation>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/DebugWindow.cpp" line="123"/>
         <source>DockWidget unique name</source>
-        <translation>DockWidget unique name</translation>
+        <translation>DockWidget&apos;ın benzersiz ismi</translation>
     </message>
 </context>
 <context>
@@ -12999,7 +12999,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="306"/>
         <source>Time tick anchor</source>
-        <translation>Zaman işareti tutucusu</translation>
+        <translation>Zaman işaretleyici</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1126"/>
@@ -16678,17 +16678,17 @@ Perde %1 teller %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3458"/>
         <source>Enharmonically reinterpret accidental almost equal to</source>
-        <translation>Neredeyse eşdeğer olan değiştirici işareti enharmonik olarak yeniden yorumla</translation>
+        <translation>Yaklaşık eşittir ses değiştirici işaretini sesteş yorumla</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3459"/>
         <source>Enharmonically reinterpret accidental equals</source>
-        <translation>Değiştirici işaret denklerini sesteşiyle yeniden yorumla</translation>
+        <translation>Eşittir ses değiştirici işaretini sesteş yorumla</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3460"/>
         <source>Enharmonically reinterpret accidental tilde</source>
-        <translation>Değiştirici işareti tildeyi sesteşiyle yorumla</translation>
+        <translation>Tilde (yaklaşık işareti) ses değiştirici işaretini sesteş yorumla</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3466"/>

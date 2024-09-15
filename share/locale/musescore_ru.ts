@@ -22942,7 +22942,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="175"/>
         <source>Fingerings</source>
-        <translation>Аппликатуры</translation>
+        <translation>Аппликатура</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="177"/>
@@ -23103,7 +23103,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="263"/>
         <source>Show fingerings</source>
-        <translation>Показать аппликатуры</translation>
+        <translation>Показать аппликатуру</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="270"/>
@@ -24762,7 +24762,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="574"/>
         <source>Fingerings</source>
-        <translation>Аппликатуры</translation>
+        <translation>Аппликатура</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1003"/>

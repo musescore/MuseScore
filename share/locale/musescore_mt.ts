@@ -1334,7 +1334,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="874"/>
         <source>Prefer sharps or flats for transposed key signatures:</source>
-        <translation type="unfinished"/>
+        <translation>Ippreferi sharps jew flats għas-sinjali tal-kjavi ittrasportata:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="885"/>
@@ -1434,7 +1434,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="268"/>
         <source>Notehead scheme:</source>
-        <translation type="unfinished"/>
+        <translation>Skema tan-noteheads:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="292"/>
@@ -1534,7 +1534,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="709"/>
         <source>Note values</source>
-        <translation type="unfinished"/>
+        <translation>Valuri tan-noti</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="826"/>
@@ -1664,7 +1664,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="6"/>
         <source>String data</source>
-        <translation>Dejta tas-string</translation>
+        <translation>Dejta tal-istring</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="14"/>
@@ -1674,7 +1674,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="51"/>
         <source>New string…</source>
-        <translation>Korda ġdida…</translation>
+        <translation>String ġdida…</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="58"/>
@@ -1684,7 +1684,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="65"/>
         <source>Delete string</source>
-        <translation type="unfinished"/>
+        <translation>Ħassar l-istring</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="81"/>
@@ -5682,7 +5682,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="145"/>
         <source>Same string:</source>
-        <translation type="unfinished"/>
+        <translation>L-istess string:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="166"/>
@@ -10735,7 +10735,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="281"/>
         <source>&amp;Voices</source>
-        <translation>&amp;Ilħna</translation>
+        <translation>&amp;Vuċijiet</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="282"/>
@@ -16524,12 +16524,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3408"/>
         <source>Bakiye (flat)</source>
-        <translation type="unfinished"/>
+        <translation>Bakiye (flat)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3412"/>
         <source>Büyük mücenneb (flat)</source>
-        <translation type="unfinished"/>
+        <translation>Büyük mücenneb (flat)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3413"/>
@@ -16589,7 +16589,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3438"/>
         <source>Double flat</source>
-        <translation type="unfinished"/>
+        <translation>Double flat</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3440"/>
@@ -16948,7 +16948,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3609"/>
         <source>5/6 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>5/6 ton flat (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3610"/>
@@ -16958,7 +16958,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3611"/>
         <source>11/12 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>11/12 ton flat (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3612"/>
@@ -16968,7 +16968,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3613"/>
         <source>1/12 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>1/12 ton flat (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3614"/>
@@ -16978,7 +16978,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3615"/>
         <source>1/6 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>1/6 ton flat (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3616"/>
@@ -16988,7 +16988,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3617"/>
         <source>1/4 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>1/4 ton flat (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3618"/>
@@ -16998,7 +16998,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3619"/>
         <source>1/3 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>1/3 ton flat (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3620"/>
@@ -17008,7 +17008,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3621"/>
         <source>5/12 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>5/12 ton flat (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3622"/>
@@ -17018,7 +17018,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3623"/>
         <source>1/2 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>1/2 ton flat (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3624"/>
@@ -17028,7 +17028,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3625"/>
         <source>7/12 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>7/12 ton flat (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3626"/>
@@ -17038,7 +17038,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3627"/>
         <source>2/3 tone flat (Wyschnegradsky)</source>
-        <translation type="unfinished"/>
+        <translation>2/3 ton flat (Wyschnegradsky)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3628"/>
@@ -21941,7 +21941,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="94"/>
         <source>Voices visible in the score</source>
-        <translation>Vuċijiet viżibli fis-partitura</translation>
+        <translation>Vuċijiet viżibli fil-partitura</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="143"/>
@@ -22411,7 +22411,7 @@ X&apos;aktarx, Mastering MuseScore għandu komunità sapportiva ta&apos; mużċi
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
         <source>Voices visible on this staff</source>
-        <translation type="unfinished"/>
+        <translation>Vuċijiet viżibli fl-istaff</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="55"/>
@@ -23875,7 +23875,7 @@ X&apos;aktarx, Mastering MuseScore għandu komunità sapportiva ta&apos; mużċi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="209"/>
         <source>Based on voice</source>
-        <translation type="unfinished"/>
+        <translation>Ibbażat fuq vuċi</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="232"/>
