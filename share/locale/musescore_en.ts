@@ -10180,21 +10180,26 @@ text x-height):</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="52"/>
+        <source>Show g&amp;raphics info…</source>
+        <translation type="unfinished">Show g&amp;raphics info…</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="57"/>
         <source>Show &amp;navigation tree…</source>
         <translation type="unfinished">Show &amp;navigation tree…</translation>
     </message>
     <message>
-        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="57"/>
+        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="62"/>
         <source>Show &amp;accessibility tree…</source>
         <translation type="unfinished">Show &amp;accessibility tree…</translation>
     </message>
     <message>
-        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="62"/>
+        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="67"/>
         <source>&amp;Dump accessibility tree to console</source>
         <translation type="unfinished">&amp;Dump accessibility tree to console</translation>
     </message>
     <message>
-        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="67"/>
+        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="72"/>
         <source>Show engraving &amp;elements</source>
         <translation type="unfinished">Show engraving &amp;elements</translation>
     </message>
@@ -10674,37 +10679,37 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/diagnostic</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="358"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="359"/>
         <source>&amp;System</source>
         <translation type="unfinished">&amp;System</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="370"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="371"/>
         <source>&amp;Muse Sampler</source>
         <translation type="unfinished">&amp;Muse Sampler</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="400"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="401"/>
         <source>&amp;Accessibility</source>
         <translation type="unfinished">&amp;Accessibility</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="401"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="402"/>
         <source>&amp;Engraving</source>
         <translation type="unfinished">&amp;Engraving</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="402"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="403"/>
         <source>E&amp;xtensions</source>
         <translation type="unfinished">E&amp;xtensions</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="403"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="404"/>
         <source>Auto&amp;bot</source>
         <translation type="unfinished">Auto&amp;bot</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="407"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="408"/>
         <source>&amp;Diagnostic</source>
         <translation type="unfinished">&amp;Diagnostic</translation>
     </message>
@@ -11726,25 +11731,25 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="527"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="415"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="416"/>
         <source>Dotted %1</source>
         <translation type="unfinished">Dotted %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="530"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="417"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="418"/>
         <source>Double dotted %1</source>
         <translation type="unfinished">Double dotted %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="533"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="419"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="420"/>
         <source>Triple dotted %1</source>
         <translation type="unfinished">Triple dotted %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="536"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="421"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="422"/>
         <source>Quadruple dotted %1</source>
         <translation type="unfinished">Quadruple dotted %1</translation>
     </message>
@@ -13622,7 +13627,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">File “%1” is critically corrupted and cannot be processed.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/ambitus.cpp" line="553"/>
+        <location filename="../../src/engraving/dom/ambitus.cpp" line="558"/>
         <source>Top pitch: %1; Bottom pitch: %2</source>
         <translation type="unfinished">Top pitch: %1; Bottom pitch: %2</translation>
     </message>
@@ -13637,13 +13642,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">selected</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="459"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="460"/>
         <source>%1 note = %2 note</source>
         <extracomment>%1 and %2 are note durations. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate &quot;%1 note&quot; with &quot;%1&quot; and &quot;%2 note&quot; with &quot;%2&quot;, so that just the duration will be shown.</extracomment>
         <translation type="unfinished">%1 note = %2 note</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="465"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="466"/>
         <source>%1 note = %2</source>
         <extracomment>%1 is a note duration. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate &quot;%1 note&quot; with &quot;%1&quot;, so that just the duration will be shown.</extracomment>
         <translation type="unfinished">%1 note = %2</translation>
@@ -19298,6 +19303,7 @@ pickup measure</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="70"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="85"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="108"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="200"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/NoteheadTypeSelector.qml" line="39"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="214"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="190"/>
@@ -20574,12 +20580,7 @@ pickup measure</translation>
         <translation type="unfinished">Notehead offset</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="181"/>
-        <source>Alignment in chords</source>
-        <translation type="unfinished">Alignment in chords</translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="196"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="188"/>
         <source>Combine with voices that share the same stem direction</source>
         <translation type="unfinished">Combine with voices that share the same stem direction</translation>
     </message>
@@ -21809,11 +21810,13 @@ pickup measure</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="196"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="201"/>
         <source>On</source>
         <translation type="unfinished">On</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="197"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="202"/>
         <source>Off</source>
         <translation type="unfinished">Off</translation>
     </message>
@@ -22549,104 +22552,104 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="863"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="695"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="696"/>
         <source>Note input mode</source>
         <translation type="unfinished">Note input mode</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="868"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="695"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="696"/>
         <source>Normal mode</source>
         <translation type="unfinished">Normal mode</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="869"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="870"/>
         <source>Cannot create tuplet</source>
         <translation type="unfinished">Cannot create tuplet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="869"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="870"/>
         <source>Note value is too short</source>
         <translation type="unfinished">Note value is too short</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1299"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1300"/>
         <source>All Supported Files</source>
         <translation type="unfinished">All Supported Files</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1300"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1301"/>
         <source>Scalable Vector Graphics</source>
         <translation type="unfinished">Scalable Vector Graphics</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1301"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1302"/>
         <source>JPEG</source>
         <translation type="unfinished">JPEG</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1302"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1303"/>
         <source>PNG Bitmap Graphic</source>
         <translation type="unfinished">PNG Bitmap Graphic</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1303"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1304"/>
         <source>Bitmap</source>
         <translation type="unfinished">Bitmap</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1304"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1305"/>
         <source>TIFF</source>
         <translation type="unfinished">TIFF</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1307"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1308"/>
         <source>Insert Image</source>
         <translation type="unfinished">Insert Image</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1657"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1658"/>
         <source>MuseScore style files</source>
         <translation type="unfinished">MuseScore style files</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1658"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1659"/>
         <source>MuseScore style file</source>
         <translation type="unfinished">MuseScore style file</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1661"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1662"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2344"/>
         <source>Load style</source>
         <translation type="unfinished">Load style</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1662"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1663"/>
         <source>Save style</source>
         <translation type="unfinished">Save style</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1672"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1673"/>
         <source>The style file could not be loaded.</source>
         <translation type="unfinished">The style file could not be loaded.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1677"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1678"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
         <translation type="unfinished">Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1679"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1680"/>
         <source>Click OK to load anyway.</source>
         <translation type="unfinished">Click OK to load anyway.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1693"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1694"/>
         <source>The style file could not be saved.</source>
         <translation type="unfinished">The style file could not be saved.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1694"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1695"/>
         <source>An error occurred.</source>
         <translation type="unfinished">An error occurred.</translation>
     </message>
@@ -22976,7 +22979,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">View</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1305"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1306"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="161"/>
         <source>All</source>
         <translation type="unfinished">All</translation>
@@ -23245,22 +23248,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Customize toolbar</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="525"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="526"/>
         <source>Insert &amp;after selection…</source>
         <translation type="unfinished">Insert &amp;after selection…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="526"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="527"/>
         <source>Insert &amp;before selection…</source>
         <translation type="unfinished">Insert &amp;before selection…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="528"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="529"/>
         <source>Insert at &amp;start of score…</source>
         <translation type="unfinished">Insert at &amp;start of score…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="529"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="530"/>
         <source>Insert at &amp;end of score…</source>
         <translation type="unfinished">Insert at &amp;end of score…</translation>
     </message>
@@ -24393,19 +24396,19 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">More</translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="618"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="473"/>
         <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1114"/>
         <source>Delete</source>
         <translation type="unfinished">Delete</translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="619"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="474"/>
         <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1115"/>
         <source>Properties…</source>
         <translation type="unfinished">Properties…</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="412"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="510"/>
         <source>%1, contains %n matching element(s)</source>
         <translation type="unfinished">
             <numerusform>%1, contains %n matching element(s)</numerusform>
@@ -24413,13 +24416,13 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         </translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="413"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="511"/>
         <source>%1 expanded</source>
         <comment>tree item not collapsed</comment>
         <translation type="unfinished">%1 expanded</translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="550"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="648"/>
         <location filename="../../src/palette/view/palettemodel.cpp" line="836"/>
         <source>Untitled palette</source>
         <translation type="unfinished">Untitled palette</translation>
@@ -25404,28 +25407,28 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Do you want to hide these custom palettes or permanently delete them?</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="833"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="832"/>
         <source>Do you want to permanently delete this custom palette?</source>
         <translation type="unfinished">Do you want to permanently delete this custom palette?</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="854"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="853"/>
         <source>Do you want to restore this palette to its default state? All changes to this palette will be lost.</source>
         <translation type="unfinished">Do you want to restore this palette to its default state? All changes to this palette will be lost.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="916"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="915"/>
         <source>Load palette</source>
         <translation type="unfinished">Load palette</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="917"/>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="920"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="916"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="919"/>
         <source>MuseScore Studio palette</source>
         <translation type="unfinished">MuseScore Studio palette</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="919"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="918"/>
         <source>Save palette</source>
         <translation type="unfinished">Save palette</translation>
     </message>
@@ -28772,7 +28775,7 @@ failed.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/PropertyItem.qml" line="103"/>
-        <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/PropertyItem.qml" line="126"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/PropertyItem.qml" line="128"/>
         <source>Value</source>
         <translation type="unfinished">Value</translation>
     </message>
