@@ -13082,7 +13082,7 @@
         <source>Boy soprano voice.</source>
         <comment>boy-soprano description</comment>
         <extracomment>description for Boy Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Vuċi sopran ta&apos; tifel.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4417"/>
@@ -13446,7 +13446,7 @@
         <source>Voice (unspecified type).</source>
         <comment>voice description</comment>
         <extracomment>description for Voice; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Vuċi (tip mhux speċifikata)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4534"/>
@@ -14930,21 +14930,21 @@
         <source>String synthesizer.</source>
         <comment>string-synthesizer description</comment>
         <extracomment>description for String Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Synthesizer tal-kordi.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5011"/>
         <source>String Synthesizer</source>
         <comment>string-synthesizer trackName</comment>
         <extracomment>trackName for String Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Synthesizer tal-Kordi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5013"/>
         <source>String Synthesizer</source>
         <comment>string-synthesizer longName</comment>
         <extracomment>longName for String Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Synthesizer tal-Kordi</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5015"/>
@@ -14958,14 +14958,14 @@
         <source>synth-string-1</source>
         <comment>string-synthesizer channel</comment>
         <extracomment>channel for String Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>synth-kord-1</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5019"/>
         <source>synth-string-2</source>
         <comment>string-synthesizer channel</comment>
         <extracomment>channel for String Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>synth-kord-2</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5022"/>
@@ -19507,7 +19507,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="194"/>
         <source>Orchestral Strings</source>
-        <translation>Kordi Orkestrali</translation>
+        <translation>Strumenti tal-Kordi Orkestrali</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="195"/>
@@ -19628,7 +19628,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4412"/>
         <source>Vocals</source>
-        <translation type="unfinished"/>
+        <translation>Vuċijiet</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4585"/>
@@ -19914,7 +19914,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="72"/>
         <source>String Orchestra</source>
-        <translation type="unfinished"/>
+        <translation>Orkestra tal-istrumenti tal-kordi</translation>
     </message>
 </context>
 <context>

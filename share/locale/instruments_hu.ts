@@ -55,7 +55,7 @@
         <source>Picc.</source>
         <comment>eb-piccolo shortName</comment>
         <extracomment>shortName for Piccolo; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Picc.</translation>
+        <translation>Pik.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="223"/>
@@ -69,7 +69,7 @@
         <source>Piccolo in D♭, sounding a semitone above the standard piccolo.</source>
         <comment>db-piccolo description</comment>
         <extracomment>description for Piccolo; transposition: D♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Desz-pikoló, egy kisszekunddal a normál pikoló fölött.</translation>
+        <translation>Desz-pikoló, egy kisszekunddal a normál pikkoló fölött.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="228"/>
@@ -125,7 +125,7 @@
         <source>Picc.</source>
         <comment>piccolo shortName</comment>
         <extracomment>shortName for Piccolo; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Picc.</translation>
+        <translation>Pik.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="245"/>
@@ -1903,14 +1903,14 @@
         <source>Piccolo Heckelphone</source>
         <comment>piccolo-heckelphone trackName</comment>
         <extracomment>trackName for Piccolo Heckelphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pikkoló heckelphon</translation>
+        <translation>Pikoló heckelphon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="820"/>
         <source>Piccolo Heckelphone</source>
         <comment>piccolo-heckelphone longName</comment>
         <extracomment>longName for Piccolo Heckelphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pikkoló heckelphon</translation>
+        <translation>Pikoló heckelphon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="822"/>
@@ -10541,7 +10541,7 @@
         <source>Marimba (grand staff)</source>
         <comment>marimba trackName</comment>
         <extracomment>trackName for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Marimba (összekapcsolt kottasor)</translation>
+        <translation>Marimba (két sorban)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3561"/>
@@ -10562,14 +10562,14 @@
         <source>Marimba notated on a single staff.</source>
         <comment>marimba-single description</comment>
         <extracomment>description for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Egyszeres kottasoron kottázott marimba.</translation>
+        <translation>Egy sorban kottázott marimba.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3568"/>
         <source>Marimba (single staff)</source>
         <comment>marimba-single trackName</comment>
         <extracomment>trackName for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Marimba (egyszeres kottasor).</translation>
+        <translation>Marimba (egy sorban)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3570"/>
@@ -10618,21 +10618,21 @@
         <source>Contrabass marimba.</source>
         <comment>contrabass-marimba description</comment>
         <extracomment>description for Contrabass Marimba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kontrabasszusmarimba</translation>
+        <translation>Kontrabasszus-marimba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3586"/>
         <source>Contrabass Marimba</source>
         <comment>contrabass-marimba trackName</comment>
         <extracomment>trackName for Contrabass Marimba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kontrabasszus marimba</translation>
+        <translation>Kontrabasszus-marimba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3588"/>
         <source>Contrabass Marimba</source>
         <comment>contrabass-marimba longName</comment>
         <extracomment>longName for Contrabass Marimba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Kontrabasszus marimba</translation>
+        <translation>Kontrabasszus-marimba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3590"/>
@@ -13201,7 +13201,7 @@
         <source>Mezzo-soprano (C clef)</source>
         <comment>mezzo-soprano-c-clef trackName</comment>
         <extracomment>trackName for Mezzo-soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mezzoszoprán (C-kulcs).</translation>
+        <translation>Mezzoszoprán (C-kulcs)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4455"/>
@@ -13285,7 +13285,7 @@
         <source>Alto (C clef)</source>
         <comment>alto-c-clef trackName</comment>
         <extracomment>trackName for Alto (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Alt (c-kulcs)</translation>
+        <translation>Alt (C-kulcs)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4482"/>
@@ -13509,14 +13509,14 @@
         <source>Women</source>
         <comment>women trackName</comment>
         <extracomment>trackName for Women; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Női kar</translation>
+        <translation>Nőikar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4554"/>
         <source>Women</source>
         <comment>women longName</comment>
         <extracomment>longName for Women; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Női kar</translation>
+        <translation>Nőikar</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4556"/>
@@ -15364,84 +15364,84 @@
         <source>Treble viola da gamba. Second highest member of the viol family.</source>
         <comment>treble-viol description</comment>
         <extracomment>description for Treble Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Szoprán viola da gamba. A viol család második legmagasabb tagja.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6085"/>
         <source>Alto viola da gamba. Third highest member of the viol family.</source>
         <comment>alto-viol description</comment>
         <extracomment>description for Alto Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Alt viola da gamba. A viol család harmadik legmagasabb tagja.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6115"/>
         <source>Tenor viola da gamba. Middle member of the viol family.</source>
         <comment>tenor-viol description</comment>
         <extracomment>description for Tenor Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tenor viola da gamba. A viol család harmadik középső tagja.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6145"/>
         <source>Bass viola da gamba (staff notation). Third lowest member of the viol family.</source>
         <comment>viola-da-gamba description</comment>
         <extracomment>description for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Basszus viola da gamba. A viol család harmadik legmélyebb tagja.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6147"/>
         <source>Bass Viol</source>
         <comment>viola-da-gamba trackName</comment>
         <extracomment>trackName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Basszus viol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6149"/>
         <source>Bass Viol</source>
         <comment>viola-da-gamba longName</comment>
         <extracomment>longName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Basszus viol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6151"/>
         <source>B. Vl.</source>
         <comment>viola-da-gamba shortName</comment>
         <extracomment>shortName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>B. Vl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6160"/>
         <source>Bass viola da gamba (tablature). Third lowest member of the viol family.</source>
         <comment>viola-da-gamba-tablature description</comment>
         <extracomment>description for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Basszus viola da gamba (tabulatúra). A viol család harmadik legmélyebb tagja.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6162"/>
         <source>Bass Viol (tablature)</source>
         <comment>viola-da-gamba-tablature trackName</comment>
         <extracomment>trackName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Basszus viol (tabulatúra)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6164"/>
         <source>Bass Viol</source>
         <comment>viola-da-gamba-tablature longName</comment>
         <extracomment>longName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Basszus viol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6166"/>
         <source>B. Vl.</source>
         <comment>viola-da-gamba-tablature shortName</comment>
         <extracomment>shortName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>B. Vl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6169"/>
         <source>Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol. Second lowest member of the viol family.</source>
         <comment>violone description</comment>
         <extracomment>description for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Nagy viol, ahol a legalsó húr G-re van hangolva. Néha G violone-nek vagy nagy basszus violnak is hívják. A viol család második legmélyebb tagja.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6171"/>
@@ -15455,7 +15455,7 @@
         <source>Large viol with the lowest string tuned to D. Sometimes called the D violone or contrabass viol. Lowest-pitched member of the viol family.</source>
         <comment>d-violone description</comment>
         <extracomment>description for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Nagy viol, ahol a legalsó húr D-re van hangolva. Néha D violone-nek vagy kontrabasszus violnak is hívják. A viol család legmélyebb tagja.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6188"/>
@@ -15742,7 +15742,7 @@
         <source>Electric Guitar (tablature)</source>
         <comment>electric-guitar-tablature trackName</comment>
         <extracomment>trackName for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Elektromos gitár (tabulatúra).</translation>
+        <translation>Elektromos gitár (tabulatúra)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5191"/>
@@ -15763,7 +15763,7 @@
         <source>Classical Guitar (tablature)</source>
         <comment>guitar-nylon-tablature trackName</comment>
         <extracomment>trackName for Classical Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Klasszikus gitár (tabulatúra).</translation>
+        <translation>Klasszikus gitár (tabulatúra)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5198"/>
@@ -16106,7 +16106,7 @@
         <source>5-str. Electric Bass (high C/tenor)</source>
         <comment>5-string-electric-bass-high-c trackName</comment>
         <extracomment>trackName for 5-str. Electric Bass (high C/tenor); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Öthúros elektromos basszusgitár (C&apos;&apos;/tenor).</translation>
+        <translation>Öthúros elektromos basszusgitár (C&apos;&apos;/tenor)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5306"/>
@@ -16379,14 +16379,14 @@
         <source>Acoustic Bass</source>
         <comment>acoustic-bass trackName</comment>
         <extracomment>trackName for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Akusztikus basszus</translation>
+        <translation>Akusztikus basszusgitár</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5392"/>
         <source>Acoustic Bass</source>
         <comment>acoustic-bass longName</comment>
         <extracomment>longName for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Akusztikus basszus</translation>
+        <translation>Akusztikus basszusgitár</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5394"/>

@@ -6422,7 +6422,7 @@ textens x-höjd):</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="44"/>
         <source>New…</source>
-        <translation>Nya …</translation>
+        <translation>Nytt …</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="50"/>
@@ -6754,7 +6754,7 @@ textens x-höjd):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="352"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="353"/>
         <source>Toggle visibility of elements</source>
-        <translation>Synlighet för element av/på</translation>
+        <translation>Synlighet för element på/av</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="358"/>
@@ -6908,7 +6908,7 @@ textens x-höjd):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="850"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="851"/>
         <source>Add braces to element</source>
-        <translation>Sätt klamrar på element</translation>
+        <translation>Sätt svängda klamrar kring element</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="54"/>
@@ -7011,7 +7011,7 @@ textens x-höjd):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1582"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1583"/>
         <source>Toggle score lock</source>
-        <translation>Dokumentlås av/på</translation>
+        <translation>Dokumentlås på/av</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1609"/>
@@ -8768,7 +8768,7 @@ textens x-höjd):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="843"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="844"/>
         <source>Add brackets to accidental</source>
-        <translation>Sätt klamrar kring förtecken</translation>
+        <translation>Sätt hakklamrar kring förtecken</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="857"/>
@@ -9032,7 +9032,7 @@ textens x-höjd):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="178"/>
         <source>Mixer</source>
-        <translation>Mi&amp;xer</translation>
+        <translation>Mixer</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="47"/>
@@ -9106,13 +9106,13 @@ textens x-höjd):</translation>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="128"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="129"/>
         <source>Set loop marker left</source>
-        <translation>Börja slinga</translation>
+        <translation>Ange början på slinga</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="135"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="136"/>
         <source>Set loop marker right</source>
-        <translation>Sluta slinga</translation>
+        <translation>Ange slut på slinga</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="52"/>
@@ -10301,7 +10301,7 @@ textens x-höjd):</translation>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="309"/>
         <source>Mixer</source>
-        <translation>Mi&amp;xer</translation>
+        <translation>Mixer</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="343"/>
@@ -11485,12 +11485,12 @@ Utgiven under &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MixerSection.qml" line="30"/>
         <source>Mixer</source>
-        <translation>Mi&amp;xer</translation>
+        <translation>Mixer</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MixerSection.qml" line="41"/>
         <source>Toggle track mute by showing/hiding instruments in the Instruments panel</source>
-        <translation>Spårtystning av/på genom att visa eller gömma instrument i instrumentpanelen</translation>
+        <translation>Spårtystning genom att gömma instrument i instrumentpanelen</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="102"/>
