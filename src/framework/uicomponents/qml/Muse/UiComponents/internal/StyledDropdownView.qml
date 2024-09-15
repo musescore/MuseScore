@@ -55,6 +55,11 @@ DropdownView {
     property int contentWidth: root.itemWidth
     property int contentHeight: content.contentBodyHeight
 
+    property string typeAheadStr: ""
+    property string lastTypedChar: ""
+    property bool typeAheadSameChar: true
+    property int currentNavIndex: root.currentIndex
+
     //! NOTE: Due to the fact that the dropdown window opens without activating focus,
     //!       for all items in the dropdown, the accessible window must be the window
     //!       of the element from which the dropdown was opened
@@ -68,7 +73,15 @@ DropdownView {
 
     showArrow: false
 
-    openPolicies: PopupView.NoActivateFocus
+    property Timer typeAheadTimer: Timer {
+        interval: 1000
+        repeat: false
+        onTriggered: {
+            typeAheadStr = ""
+            lastTypedChar = ""
+            typeAheadSameChar = true
+        }
+    }
 
     signal handleItem(int index, var value)
 
@@ -80,6 +93,7 @@ DropdownView {
 
     onClosed: {
         content.focus = false
+        root.requestHighlight(false)
     }
 
     onModelChanged: {
@@ -163,20 +177,74 @@ DropdownView {
             QtObject {
                 id: prv
 
-                function itemIndexByFirstChar(text) {
-                    if (text === "") {
-                        return;
+                function typeAheadFind(typedChar) {
+                    if (typeAheadSameChar && typeAheadStr.length > 0 && typedChar !== lastTypedChar) {
+                        typeAheadSameChar = false
                     }
 
-                    text = text.toLowerCase()
-                    for (var i = 0; i < root.model.length; ++i) {
-                        var itemText =  Utils.getItemValue(root.model, i, root.textRole, "")
-                        if (itemText.toLowerCase().startsWith(text)) {
+                    typeAheadStr += typedChar
+                    lastTypedChar = typedChar
+
+                    focusNextMatchingItem(
+                        typeAheadSameChar ? typedChar : typeAheadStr,
+                        currentNavIndex + (typeAheadSameChar ? 1 : 0)
+                    )
+                }
+
+                function focusNextMatchingItem(str, startIndex) {
+                    root.typeAheadTimer.restart()
+                    let nextMatchIndex = findNextMatchingIndex(str, startIndex)
+
+                    if (nextMatchIndex !== -1) {
+                        highlightItem(nextMatchIndex)
+                        currentNavIndex = nextMatchIndex
+                        return true
+                    }
+                    return false
+                }
+
+                function findNextMatchingIndex(str, startIndex) {
+                    let modelLength = root.model.length;
+                    if (startIndex < 0 || startIndex >= modelLength) {
+                        startIndex = 0
+                    }
+
+                    str = normalizeForSearch(str);
+                    for (let i = startIndex; i < modelLength; i++) {
+                        if (matchItemText(i, str)) {
                             return i
+                        }
+                    }
+                    for (let j = 0; j < startIndex; j++) {
+                        if (matchItemText(j, str)) {
+                            return j
                         }
                     }
 
                     return -1
+                }
+
+                function matchItemText(i, str) {
+                    let itemText = normalizeForSearch(Utils.getItemValue(root.model, i, root.textRole).replace(/^\s+/, ""))
+                    return itemText.startsWith(str)
+                }
+
+                function highlightItem(index) {
+                    scrollToItem(index)
+                    setItemFocus(index)
+                    root.requestHighlight(true)
+                }
+
+                function scrollToItem(index) {
+                    let itemHeight = root.itemHeight
+                    let totalItems = root.model.length
+                    let itemTop = index * itemHeight
+
+                    let middleOffset = (view.height / 2);
+                    let scrollPosition = itemTop - middleOffset;
+
+                    let maxContentHeight = totalItems * itemHeight
+                    view.contentY = Math.max(0, Math.min(scrollPosition, maxContentHeight - view.height))
                 }
 
                 function positionViewAtIndex(itemIndex) {
@@ -186,9 +254,9 @@ DropdownView {
                 }
 
                 function correctPosition(itemIndex) {
-                    var item = view.itemAtIndex(itemIndex)
+                    let item = view.itemAtIndex(itemIndex)
                     if (Boolean(item)) {
-                        var diff = item.mapToGlobal(0, 0).y - root.parent.mapToGlobal(0, 0).y
+                        let diff = item.mapToGlobal(0, 0).y - root.parent.mapToGlobal(0, 0).y
 
                         if (view.contentY + diff + view.height > view.contentHeight) {
                             view.positionViewAtEnd()
@@ -198,15 +266,18 @@ DropdownView {
                             view.contentY += diff
                         }
                     }
-
-                    Qt.callLater(navigateToItem, itemIndex)
+                    setItemFocus(itemIndex)
                 }
 
-                function navigateToItem(itemIndex, byUser) {
-                    var item = view.itemAtIndex(itemIndex)
+                function setItemFocus(index) {
+                    let item = view.itemAtIndex(index)
                     if (Boolean(item)) {
-                        item.navigation.requestActive(byUser)
+                        item.navigation.requestActive()
                     }
+                }
+
+                function normalizeForSearch(str) {
+                    return str.toLowerCase().normalize("NFKD")
                 }
             }
 
@@ -235,26 +306,21 @@ DropdownView {
                 }
 
                 Keys.onShortcutOverride: function(event) {
-                    if (event.text === "") {
-                        event.accepted = false
-                        return
+
+                    let typedChar = event.text
+                    event.accepted = false
+
+                    if (typedChar === "" || typedChar.match(/[\x00-\x1F\x7F]/)) {
+                        return // ignore shortcuts and text containing ASCII control characters
                     }
 
-                    if (prv.itemIndexByFirstChar(event.text) > -1) {
-                        event.accepted = true
-                    }
-                }
-
-                Keys.onPressed: function(event) {
-                    if (event.text === "") {
-                        return
+                    if (typedChar === " " && typeAheadStr.length === 0) {
+                        return // ignore space if it's the first character typed
                     }
 
-                    var index = prv.itemIndexByFirstChar(event.text)
-                    if (index > -1) {
-                        view.positionViewAtIndex(index, ListView.Contain)
-                        Qt.callLater(navigateToItem, index, true)
-                    }
+                    // User typed a printable character.
+                    prv.typeAheadFind(typedChar)
+                    event.accepted = true
                 }
 
                 StyledTextLabel {

@@ -41,6 +41,8 @@ public:
     int focusItemY() const;
     void setFocusItemY(int newFocusItemY);
 
+    Q_INVOKABLE void requestHighlight(bool isHighlight);
+
 signals:
     void focusItemYChanged();
 

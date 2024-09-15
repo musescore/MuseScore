@@ -86,6 +86,11 @@ int DropdownView::focusItemY() const
     return m_focusItemY;
 }
 
+void DropdownView::requestHighlight(bool isHighlight)
+{
+    navigationController()->setIsHighlight(isHighlight);
+}
+
 void DropdownView::setFocusItemY(int newFocusItemY)
 {
     if (m_focusItemY == newFocusItemY) {
