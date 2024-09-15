@@ -76,8 +76,8 @@ jobs:
         ref: ${{ env.CURRENT_RELEASE_BRANCH }}
     - name: setup QEMU
       run: |
-        sudo apt update
-        sudo apt install qemu-user-static -y
+        sudo apt-get update
+        sudo apt-get install qemu-user-static -y
     - name: "Configure workflow"
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
@@ -223,8 +223,8 @@ jobs:
         ref: ${{ env.CURRENT_RELEASE_BRANCH }}
     - name: setup QEMU
       run: |
-        sudo apt update
-        sudo apt install qemu-user-static -y
+        sudo apt-get update
+        sudo apt-get install qemu-user-static -y
     - name: "Configure workflow"
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
