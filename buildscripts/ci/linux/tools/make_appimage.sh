@@ -230,10 +230,14 @@ additional_qt_components=(
 # ADDITIONAL LIBRARIES
 # linuxdeploy may have missed some libraries that we need
 # Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
-additional_libraries=(
-  libssl.so.1.1       # OpenSSL (for Save Online)
-  libcrypto.so.1.1    # OpenSSL (for Save Online)
-)
+if [[ "$PACKARCH" == "x86_64" ]]; then
+  additional_libraries=(
+    libssl.so.1.1    # OpenSSL (for Save Online)
+    libcrypto.so.1.1 # OpenSSL (for Save Online)
+  )
+else
+  additional_libraries=()
+fi
 
 # FALLBACK LIBRARIES
 # These get bundled in the AppImage, but are only loaded if the user does not
