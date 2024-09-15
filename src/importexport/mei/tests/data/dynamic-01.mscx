@@ -104,6 +104,7 @@
           <Dynamic>
             <subtype>sfz</subtype>
             <velocity>112</velocity>
+            <voiceAssignment>currentVoiceOnly</voiceAssignment>
             </Dynamic>
           <Chord>
             <durationType>eighth</durationType>
