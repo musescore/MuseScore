@@ -5759,6 +5759,7 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
         if (text) {
             startEditText(text);
             text->selectAll(text->cursor());
+            showItem(text);
         }
     } else {
         // add new text if no existing element to edit
