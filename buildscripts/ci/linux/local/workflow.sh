@@ -50,7 +50,7 @@ fi
     # - name: Generate placeholder.ts files
     #   if: env.DO_PLACEHOLDER_TRANSLATIONS == 'true'
     #   run: |
-    #     sudo python3 ./tools/translations/placeholder_translations.py
+    #     python3 ./tools/translations/placeholder_translations.py
 #exit 0
 #    - name: Build
 #      run: |
@@ -58,7 +58,7 @@ fi
         bash ./buildscripts/ci/linux/build.sh -n ${github_run_id}
     # - name: Generate dump symbols
     #   run: |
-    #     sudo bash ./buildscripts/ci/linux/dumpsyms.sh  
+    #     bash ./buildscripts/ci/linux/dumpsyms.sh  
  #   - name: Package 
 #      run: |
         bash ./buildscripts/ci/linux/package.sh

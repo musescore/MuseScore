@@ -69,10 +69,10 @@ jobs:
         SENTRY_SERVER_SANDBOX_KEY: ${{ secrets.SENTRY_SERVER_SANDBOX_KEY }}
         SENTRY_PROJECT: ${{ inputs.sentry_project }}
       run: |
-        sudo bash ./buildscripts/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
+        bash ./buildscripts/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
 
-        sudo bash ./buildscripts/ci/tools/make_build_number.sh
+        bash ./buildscripts/ci/tools/make_build_number.sh
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_UPDATE_TS='false'
@@ -148,50 +148,50 @@ jobs:
     - name: Setup ccache
       run: |
         sudo apt-get update && sudo apt-get install -y ccache
-        sudo bash ./buildscripts/ci/tools/setup_ccache_config.sh
+        bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
     - name: Setup environment
       run: |
-        sudo bash ./buildscripts/ci/linux/setup.sh
+        bash ./buildscripts/ci/linux/setup.sh
     - name: Generate _en.ts files
       env:
         LUPDATE_ARGS: ""
         POSTPROCESS_ARGS: ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}
       run: |
-        sudo bash ./buildscripts/ci/translation/run_lupdate.sh
+        bash ./buildscripts/ci/translation/run_lupdate.sh
     - name: Update .ts files
       if: env.DO_UPDATE_TS == 'true'
       run: |
-        sudo bash ./buildscripts/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
-        sudo bash ./buildscripts/ci/translation/tx_pull.sh
+        bash ./buildscripts/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
+        bash ./buildscripts/ci/translation/tx_pull.sh
     - name: Build
       run: |
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
-        sudo bash ./buildscripts/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL
+        bash ./buildscripts/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL
         echo "============== ccache ==============="
-        sudo ccache -s
+        ccache -s
     - name: Package
       run: |
-        sudo bash ./buildscripts/ci/linux/package.sh
+        bash ./buildscripts/ci/linux/package.sh
     - name: Checksum
       run: |
-        sudo bash ./buildscripts/ci/tools/checksum.sh
+        bash ./buildscripts/ci/tools/checksum.sh
     - name: Generate and upload dump symbols
       if: env.DO_UPLOAD_SYMBOLS == 'true'
       run: |
         APP_BIN=$(find "$(pwd)/build.release/src/app/" -type f -name "mscore4portable*" -print -quit)
         ARCH=x86-64
-        sudo cmake -DAPP_BIN=${APP_BIN} \
-                   -DARCH=${ARCH} \
-                   -DSENTRY_URL=https://sentry.musescore.org \
-                   -DSENTRY_ORG=musescore \
-                   -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
-                   -DSENTRY_PROJECT=${SENTRY_PROJECT} \
-                   -P buildscripts/ci/crashdumps/ci_generate_and_upload.cmake
+        cmake -DAPP_BIN=${APP_BIN} \
+              -DARCH=${ARCH} \
+              -DSENTRY_URL=https://sentry.musescore.org \
+              -DSENTRY_ORG=musescore \
+              -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
+              -DSENTRY_PROJECT=${SENTRY_PROJECT} \
+              -P buildscripts/ci/crashdumps/ci_generate_and_upload.cmake
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
       run: |
-        sudo bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux -v 4
+        bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux -v 4
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v4
       with:
