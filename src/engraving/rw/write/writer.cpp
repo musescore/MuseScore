@@ -89,7 +89,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
 
     // if we have multi measure rests and some parts are hidden,
     // then some layout information is missing:
-    // relayout with all parts set visible
+    // relayout with all parts set visible (but rollback at end)
 
     std::list<Part*> hiddenParts;
     bool unhide = false;
@@ -97,7 +97,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
         for (Part* part : score->m_parts) {
             if (!part->show()) {
                 if (!unhide) {
-                    score->startCmd();
+                    score->startCmd(TranslatableString("undoableAction", "Unhide instruments for save"));
                     unhide = true;
                 }
                 part->undoChangeProperty(Pid::VISIBLE, true);

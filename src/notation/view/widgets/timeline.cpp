@@ -3031,7 +3031,7 @@ void Timeline::toggleShow(int staff)
 
     QList<Part*> parts = getParts();
     if (parts.size() > staff && staff >= 0) {
-        m_notation->undoStack()->prepareChanges();
+        m_notation->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Toggle show timeline"));
         parts.at(staff)->setShow(!parts.at(staff)->show());
         parts.at(staff)->undoChangeProperty(Pid::VISIBLE, parts.at(staff)->show());
         m_notation->undoStack()->commitChanges();

@@ -55,6 +55,10 @@ public:
     Q_INVOKABLE void undo();
     Q_INVOKABLE void redo();
 
+    Q_INVOKABLE size_t undoRedoActionCount() const;
+    Q_INVOKABLE size_t undoRedoActionCurrentIdx() const;
+    Q_INVOKABLE const QString undoRedoActionNameAtIdx(size_t idx) const;
+
 signals:
     void itemsChanged();
 

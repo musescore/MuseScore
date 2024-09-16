@@ -49,7 +49,7 @@ void Engraving_RhythmicGroupingTests::group(const char* p1, const char* p2, size
         score->cmdResetNoteAndRestGroupings();
     } else {
         assert(staves < score->nstaves());
-        score->startCmd();
+        score->startCmd(TranslatableString("undoableAction", "Rhythmic grouping tests"));
         for (size_t track = 0; track < staves * VOICES; track++) {
             score->regroupNotesAndRests(score->firstSegment(SegmentType::All)->tick(),
                                         score->lastSegment()->tick(), static_cast<int>(track));

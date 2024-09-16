@@ -78,15 +78,23 @@ void UndoRedoModel::updateItems()
     auto stack = undoStack();
 
     if (m_undoItem) {
+        const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
         ui::UiActionState state;
         state.enabled = stack ? stack->canUndo() : false;
         m_undoItem->setState(state);
+        m_undoItem->setTitle(undoActionName.isEmpty()
+                             ? TranslatableString("action", "Undo")
+                             : TranslatableString("action", "Undo ‘%1’").arg(undoActionName));
     }
 
     if (m_redoItem) {
+        const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
         ui::UiActionState state;
         state.enabled = stack ? stack->canRedo() : false;
         m_redoItem->setState(state);
+        m_redoItem->setTitle(redoActionName.isEmpty()
+                             ? TranslatableString("action", "Redo")
+                             : TranslatableString("action", "Redo ‘%1’").arg(redoActionName));
     }
 }
 
@@ -102,6 +110,33 @@ void UndoRedoModel::undo()
     if (undoStack()) {
         undoStack()->undo(nullptr);
     }
+}
+
+size_t UndoRedoModel::undoRedoActionCount() const
+{
+    if (auto stack = undoStack()) {
+        return stack->undoRedoActionCount();
+    }
+
+    return 0;
+}
+
+size_t UndoRedoModel::undoRedoActionCurrentIdx() const
+{
+    if (auto stack = undoStack()) {
+        return stack->undoRedoActionCurrentIdx();
+    }
+
+    return muse::nidx;
+}
+
+const QString UndoRedoModel::undoRedoActionNameAtIdx(size_t idx) const
+{
+    if (auto stack = undoStack()) {
+        return stack->undoRedoActionNameAtIdx(idx).qTranslated();
+    }
+
+    return {};
 }
 
 INotationUndoStackPtr UndoRedoModel::undoStack() const

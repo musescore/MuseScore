@@ -192,7 +192,7 @@ void Lyrics::paste(EditData& ed, const String& txt)
     }
 
     StringList hyph = sl.at(0).split(u'-');
-    score()->startCmd();
+    score()->startCmd(TranslatableString("undoableAction", "Paste lyrics"));
 
     deleteSelectedText(ed);
 

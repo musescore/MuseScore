@@ -269,7 +269,7 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
         return;
     }
 
-    globalContext()->currentNotation()->undoStack()->prepareChanges();
+    globalContext()->currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Edit fretboard"));
 
     // Click above the fret diagram, so change the open/closed string marker
     if (fret == 0) {
@@ -378,7 +378,7 @@ void FretCanvas::setFretDiagram(QVariant fd)
 
 void FretCanvas::clear()
 {
-    globalContext()->currentNotation()->undoStack()->prepareChanges();
+    globalContext()->currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Clear fretboard"));
     m_diagram->undoFretClear();
     globalContext()->currentNotation()->undoStack()->commitChanges();
     update();

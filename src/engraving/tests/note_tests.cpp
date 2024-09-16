@@ -312,7 +312,7 @@ TEST_F(Engraving_NoteTests, grace)
 //      delete n;
 
     // tremolo
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving note tests"));
     TremoloSingleChord* tr = Factory::createTremoloSingleChord(gc);
     tr->setTremoloType(TremoloType::R16);
     tr->setParent(gc);
@@ -324,7 +324,7 @@ TEST_F(Engraving_NoteTests, grace)
 //      delete c;
 
     // articulation
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving note tests"));
     Articulation* ar = Factory::createArticulation(gc);
     ar->setSymId(SymId::articAccentAbove);
     ar->setParent(gc);
@@ -375,19 +375,19 @@ TEST_F(Engraving_NoteTests, tpcTranspose)
 {
     MasterScore* score = ScoreRW::readScore(NOTE_DATA_DIR + u"tpc-transpose.mscx");
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving note tests"));
     Measure* m = score->firstMeasure();
     score->select(m, SelectType::SINGLE, 0);
     score->changeAccidental(AccidentalType::FLAT);
     score->endCmd();
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving note tests"));
     m = m->nextMeasure();
     score->select(m, SelectType::SINGLE, 0);
     score->upDown(false, UpDownMode::CHROMATIC);
     score->endCmd();
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving note tests"));
     score->cmdConcertPitchChanged(true);
     score->endCmd();
 
@@ -410,7 +410,7 @@ TEST_F(Engraving_NoteTests, tpcTranspose2)
     int octave = 5 * 7;
     score->cmdAddPitch(octave + 3, false, false);
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving note tests"));
     score->cmdConcertPitchChanged(true);
     score->endCmd();
 
@@ -447,7 +447,7 @@ TEST_F(Engraving_NoteTests, noteLimits)
     score->cmdAddPitch(42, false, false);
     for (int i = 0; i < 20; i++) {
         std::vector<Note*> nl = score->selection().noteList();
-        score->startCmd();
+        score->startCmd(TranslatableString("undoableAction", "Engraving note tests"));
         score->addInterval(-8, nl);
         score->endCmd();
     }
@@ -456,7 +456,7 @@ TEST_F(Engraving_NoteTests, noteLimits)
     score->cmdAddPitch(42, false, false);
     for (int i = 0; i < 20; i++) {
         std::vector<Note*> nl = score->selection().noteList();
-        score->startCmd();
+        score->startCmd(TranslatableString("undoableAction", "Engraving note tests"));
         score->addInterval(8, nl);
         score->endCmd();
     }
