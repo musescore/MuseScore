@@ -2168,6 +2168,7 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Note Input"),
          QT_TRANSLATE_NOOP("action","Toggle 'Note Input' toolbar")
          },
+#if 0
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,
@@ -2175,6 +2176,7 @@ Shortcut Shortcut::_sc[] = {
          QT_TRANSLATE_NOOP("action","Feedback"),
          QT_TRANSLATE_NOOP("action","Toggle 'Feedback' toolbar"),
          },
+#endif
       {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY | STATE_EDIT ,

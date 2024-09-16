@@ -265,7 +265,7 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       connect(resetPreference, &QPushButton::clicked, this, &PreferenceDialog::resetAdvancedPreferenceToDefault);
       connect(this, &PreferenceDialog::preferencesChanged, mscore->timeline(),  &Timeline::updateTimelineTheme); // this should probably be moved to updateUiStyleAndTheme
       MuseScore::restoreGeometry(this);
-#if !defined(Q_OS_MAC) && (!defined(Q_OS_WIN) || defined(FOR_WINSTORE))
+#if !defined(Q_OS_MAC) && (!defined(Q_OS_WIN) || defined(FOR_WINSTORE)) || !0
       General->removeTab(General->indexOf(tabUpdate)); // updateTab not needed on Linux and not wanted in Windows Store
 #endif
       }

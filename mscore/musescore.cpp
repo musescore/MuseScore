@@ -1310,6 +1310,7 @@ MuseScore::MuseScore()
       fotoTools->setObjectName("foto-tools");
       fotoTools->addWidget(new AccessibleToolButton(fotoTools, getAction("fotomode")));
 
+#if 0
       //-------------------------------
       //    Feedback Tool Bar
       //-------------------------------
@@ -1329,6 +1330,7 @@ MuseScore::MuseScore()
       feedbackButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
       feedbackTools->addWidget(feedbackButton);
       }
+#endif
 
       addToolBarBreak();
 
@@ -1556,11 +1558,13 @@ MuseScore::MuseScore()
       connect(entryTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
       menuToolbars->addAction(a);
 
+#if 0
       a = getAction("toggle-feedback");
       a->setCheckable(true);
       a->setChecked(feedbackTools->isVisible());
       connect(feedbackTools, SIGNAL(visibilityChanged(bool)), a, SLOT(setChecked(bool)));
       menuToolbars->addAction(a);
+#endif
 
       a = getAction("toggle-workspaces-toolbar");
       a->setCheckable(true);
@@ -1900,7 +1904,7 @@ MuseScore::MuseScore()
       Workspace::addActionAndString(aboutMusicXMLAction, "about-musicxml");
 
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
-#if (!defined(FOR_WINSTORE)) && (!defined(WIN_PORTABLE))
+#if (!defined(FOR_WINSTORE)) && (!defined(WIN_PORTABLE) && 0)
       checkForUpdateAction = new QAction("", 0);
       connect(checkForUpdateAction, SIGNAL(triggered()), this, SLOT(checkForUpdatesUI()));
       checkForUpdateAction->setMenuRole(QAction::NoRole);
@@ -1922,11 +1926,13 @@ MuseScore::MuseScore()
       menuHelp->addAction(reportBugAction);
       Workspace::addActionAndString(reportBugAction, "report-bug");
 
+#if 0
       leaveFeedbackAction = new QAction("", 0);
       connect(leaveFeedbackAction, &QAction::triggered, this, [this]{ leaveFeedback("menu"); });
       leaveFeedbackAction->setMenuRole(QAction::NoRole);
       menuHelp->addAction(leaveFeedbackAction);
       Workspace::addActionAndString(leaveFeedbackAction, "leave-feedback");
+#endif
 
       menuHelp->addSeparator();
       menuHelp->addAction(getAction("resource-manager"));
@@ -2122,7 +2128,9 @@ void MuseScore::retranslate()
             checkForUpdateAction->setText(tr("Check for &Update"));
       askForHelpAction->setText(tr("Ask for Help"));
       reportBugAction->setText(tr("Report a Bug"));
+#if 0
       leaveFeedbackAction->setText(tr("Feedback"));
+#endif
       revertToFactoryAction->setText(tr("Revert to Factory Settings"));
 
       fileTools->setWindowTitle(tr("File Operations"));
@@ -2130,7 +2138,9 @@ void MuseScore::retranslate()
       cpitchTools->setWindowTitle(tr("Concert Pitch"));
       fotoTools->setWindowTitle(tr("Image Capture"));
       entryTools->setWindowTitle(tr("Note Input"));
+#if 0
       feedbackTools->setWindowTitle(tr("Feedback"));
+#endif
       workspacesTools->setWindowTitle(tr("Workspaces"));
 
       // keep translatable (con)texts in sync with those from zoombox.cpp
@@ -6379,8 +6389,10 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             fotoTools->setVisible(!fotoTools->isVisible());
       else if (cmd == "toggle-noteinput")
             entryTools->setVisible(!entryTools->isVisible());
+#if 0
       else if (cmd == "toggle-feedback")
             feedbackTools->setVisible(!feedbackTools->isVisible());
+#endif
       else if (cmd == "toggle-workspaces-toolbar")
             workspacesTools->setVisible(!workspacesTools->isVisible());
       else if (cmd == "create-new-workspace") {

@@ -159,7 +159,7 @@ AboutBoxDialog::AboutBoxDialog()
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       QString visitAndDonateString;
-#if !defined(FOR_WINSTORE)
+#if !defined(FOR_WINSTORE) && 0
       visitAndDonateString = tr("Visit %1 for new versions and more information.\nGet %2help%3 with the program or %4contribute%5 to its development.")
                   .arg("<a href=\"https://www.musescore.org/\">www.musescore.org</a>",
                        "<a href=\"https://www.musescore.org/forum\">", "</a>",

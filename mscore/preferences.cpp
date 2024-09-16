@@ -82,7 +82,7 @@ void Preferences::init(bool storeInMemoryOnly)
 
       _storeInMemoryOnly = storeInMemoryOnly;
 
-#if defined(Q_OS_MAC) || (defined(Q_OS_WIN) && !defined(FOR_WINSTORE))
+#if defined(Q_OS_MAC) || (defined(Q_OS_WIN) && !defined(FOR_WINSTORE) && 0)
       bool checkUpdateStartup = true;
       bool checkExtensionsUpdateStartup = true;
 #else
