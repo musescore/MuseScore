@@ -1134,6 +1134,9 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         if (!sp->systemFlag() && sp->staff() && !sp->staff()->show()) {
             continue;
         }
+        if (sp->systemFlag() && sp->staffIdxOrNextVisible() == muse::nidx) {
+            continue;
+        }
 
         if (sp->tick2() == stick && sp->isPedal() && toPedal(sp)->connect45HookToNext()) {
             pedal.push_back(sp);
