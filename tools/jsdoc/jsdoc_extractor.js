@@ -177,6 +177,7 @@ async function main()
 
     // parse args
     var args = process.argv.slice(2);
+    console.log("args: ", args)
     {
         var i = -1;
         while (true) {
