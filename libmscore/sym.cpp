@@ -6429,6 +6429,11 @@ void ScoreFont::draw(SymId id, QPainter* painter, const QSizeF& mag, const QPoin
 
       if (MScore::pdfPrinting) {
             if (font == 0) {
+                  QString s(_fontPath+_filename);
+                  if (-1 == QFontDatabase::addApplicationFont(s)) {
+                        qDebug("Mscore: fatal error: cannot load internal font <%s>", qPrintable(s));
+                        return;
+                        }
                   font = new QFont;
                   font->setWeight(QFont::Normal);
                   font->setItalic(false);
@@ -6557,7 +6562,7 @@ const char* Sym::id2name(SymId id)
 //    load default score font
 //---------------------------------------------------------
 
-void Ms::ScoreFont::initScoreFonts()
+void ScoreFont::initScoreFonts()
       {
       QJsonObject glyphNamesJson(ScoreFont::initGlyphNamesJson());
       if (glyphNamesJson.empty())
@@ -6670,17 +6675,6 @@ void ScoreFont::scanUserFonts(const QString& path, bool system)
 
       _allScoreFonts = _builtinScoreFonts;
       _allScoreFonts << _userScoreFonts << _systemScoreFonts;
-
-      // Include external fonts into QFontDatabase
-      for (auto& usrFont : _userScoreFonts) {
-            QString s(usrFont._fontPath + usrFont._filename);
-            if (-1 == QFontDatabase::addApplicationFont(s)) {
-                  if (!MScore::testMode)
-                        qDebug("Mscore: fatal error: cannot load external font <%s>", qPrintable(s));
-                  if (!MScore::debugMode && !MScore::testMode)
-                        exit(-1);
-                  }
-            }
       }
 
 //---------------------------------------------------------
