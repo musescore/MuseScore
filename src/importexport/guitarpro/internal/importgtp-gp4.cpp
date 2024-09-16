@@ -1046,6 +1046,7 @@ bool GuitarPro4::read(IODevice* io)
                         slur->setTrack2(track);
                         slur->setTick(cr->tick());
                         slur->setTick2(cr->tick());
+                        slur->setStartElement(cr);
                         slurs[staffIdx] = slur;
                         score->addElement(slur);
                     } else if (slurs[staffIdx] && !hasSlur) {
@@ -1054,6 +1055,7 @@ bool GuitarPro4::read(IODevice* io)
                         slurs[staffIdx] = 0;
                         s->setTick2(cr->tick());
                         s->setTrack2(cr->track());
+                        s->setEndElement(cr);
                         if (cr->isChord()) {
                             lastSlurAdd = true;
                             slurSwap = false;

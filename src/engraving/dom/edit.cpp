@@ -4412,7 +4412,16 @@ void Score::cmdTimeDelete()
     }
 
     if (!isMaster() && masterScore()) {
-        masterScore()->doTimeDelete(startSegment, endSegment);
+        Measure* masterStartMeas = masterScore()->tick2measure(startSegment->tick());
+        Measure* masterEndMeas = masterScore()->tick2measure(endSegment->tick());
+        if (endSegment->isEndBarLineType()) {
+            Measure* prevEndMeasure = masterEndMeas->prevMeasure();
+            masterEndMeas = prevEndMeasure ? prevEndMeasure : masterEndMeas;
+        }
+        Segment* masterStartSeg
+            = masterStartMeas ? masterStartMeas->findSegment(startSegment->segmentType(), startSegment->tick()) : startSegment;
+        Segment* masterEndSeg = masterEndMeas ? masterEndMeas->findSegment(endSegment->segmentType(), endSegment->tick()) : endSegment;
+        masterScore()->doTimeDelete(masterStartSeg, masterEndSeg);
     } else {
         doTimeDelete(startSegment, endSegment);
     }
@@ -5065,8 +5074,6 @@ void Score::undoChangeElement(EngravingItem* oldElement, EngravingItem* newEleme
 {
     if (!oldElement) {
         undoAddElement(newElement);
-    } else if (oldElement->isSpanner()) {
-        undo(new ChangeElement(oldElement, newElement));
     } else {
         const std::list<EngravingObject*> links = oldElement->linkList();
         for (EngravingObject* obj : links) {
@@ -5075,7 +5082,8 @@ void Score::undoChangeElement(EngravingItem* oldElement, EngravingItem* newEleme
                 undo(new ChangeElement(oldElement, newElement));
             } else {
                 if (item->score()) {
-                    item->score()->undo(new ChangeElement(item, newElement->linkedClone()));
+                    EngravingItem* newClone = newElement->clone();
+                    item->score()->undo(new ChangeElement(item, newClone));
                 }
             }
         }

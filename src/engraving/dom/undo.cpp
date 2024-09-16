@@ -1504,6 +1504,11 @@ void ChangeElement::flip(EditData*)
         oldElement->unlink();
     }
 
+    newElement->setTrack(oldElement->track());
+    if (newElement->isSpanner()) {
+        toSpanner(newElement)->setTrack2(toSpanner(oldElement)->track2());
+    }
+
     Score* score = oldElement->score();
     if (!score->selection().isRange()) {
         if (oldElement->selected()) {
@@ -1515,6 +1520,7 @@ void ChangeElement::flip(EditData*)
     }
 
     if (oldElement->explicitParent() == 0) {
+        newElement->setScore(score);
         score->removeElement(oldElement);
         score->addElement(newElement);
     } else {

@@ -780,6 +780,8 @@ void Spanner::doComputeStartElement()
         break;
 
     case Anchor::CHORD:
+        m_startElement = startCR();
+        break;
     case Anchor::NOTE:
         break;
     }
@@ -837,7 +839,9 @@ void Spanner::doComputeEndElement()
         break;
 
     case Anchor::NOTE:
+        break;
     case Anchor::CHORD:
+        m_endElement = endCR();
         break;
     }
 }
