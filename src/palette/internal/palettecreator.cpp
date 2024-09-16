@@ -753,6 +753,7 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
         SymId::stringsUpBow,
         SymId::stringsDownBow,
         SymId::pluckedSnapPizzicatoAbove,
+        SymId::pictHalfOpen2,
         // SymId::stringsThumbPosition,
         // SymId::luteFingeringRHThumb,
         // SymId::luteFingeringRHFirst,
