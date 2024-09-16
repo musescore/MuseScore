@@ -3751,6 +3751,8 @@ bool  MStyle::readProperties450(XmlReader& e, int mscVersion)
 
       if (tag == "defaultsVersion")                                 // 4mm -> 4nn, let's skip, i.e. reset to Mu3's 302
             e.skipCurrentElement();
+      if (tag == "lyricsDashFirstAndLastGapAreHalf")                // Mu4.5+ only
+            e.skipCurrentElement();
       else if (tag == "spatium")                                    // pre-4.5(?) typo
             set(Sid::spatium, e.readDouble() * DPMM);
       else // still no match
