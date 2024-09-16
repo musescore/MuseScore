@@ -239,6 +239,23 @@ void MusicXMLParserPass1::addError(const String& error)
     }
 }
 
+void MusicXMLParserPass1::setExporterSoftware(String& exporter)
+{
+    if (exporter.contains(u"sibelius")) {
+        if (exporter.contains(u"dolet 6")) {
+            m_exporterSoftware = MusicXMLExporterSoftware::DOLET6;
+        } else if (exporter.contains(u"dolet 8")) {
+            m_exporterSoftware = MusicXMLExporterSoftware::DOLET8;
+        } else {
+            m_exporterSoftware = MusicXMLExporterSoftware::SIBELIUS;
+        }
+    } else if (exporter.contains(u"finale")) {
+        m_exporterSoftware = MusicXMLExporterSoftware::FINALE;
+    } else if (exporter.contains(u"noteflight")) {
+        m_exporterSoftware = MusicXMLExporterSoftware::NOTEFLIGHT;
+    }
+}
+
 //---------------------------------------------------------
 //   initPartState
 //---------------------------------------------------------
@@ -951,7 +968,7 @@ void MusicXMLParserPass1::createMeasuresAndVboxes(Score* score,
             ++pageNr;
 
             if (pageNr == 1) {
-                vbox = addCreditWords(score, crWords, pageSize, true, m_exporterString.contains(u"sibelius"));
+                vbox = addCreditWords(score, crWords, pageSize, true, sibOrDolet());
                 if (i == 0 && vbox) {
                     vbox->setExcludeFromOtherParts(false);
                 }
@@ -978,9 +995,19 @@ void MusicXMLParserPass1::createMeasuresAndVboxes(Score* score,
 
         // add a footer vbox if the next measure is on a new page or end of score has been reached
         if ((pageStartMeasureNrs.count(int(i + 1)) || i == (ml.size() - 1)) && pageNr == 1) {
-            addCreditWords(score, crWords, pageSize, false, m_exporterString.contains(u"sibelius"));
+            addCreditWords(score, crWords, pageSize, false, sibOrDolet());
         }
     }
+}
+
+bool MusicXMLParserPass1::sibOrDolet() const
+{
+    return m_exporterSoftware == MusicXMLExporterSoftware::SIBELIUS || dolet();
+}
+
+bool MusicXMLParserPass1::dolet() const
+{
+    return m_exporterSoftware == MusicXMLExporterSoftware::DOLET6 || m_exporterSoftware == MusicXMLExporterSoftware::DOLET8;
 }
 
 //---------------------------------------------------------
@@ -1272,7 +1299,8 @@ void MusicXMLParserPass1::identification()
             // TODO
             while (m_e.readNextStartElement()) {
                 if (m_e.name() == "software") {
-                    m_exporterString += m_e.readText().toLower();
+                    String exporterString = m_e.readText().toLower();
+                    setExporterSoftware(exporterString);
                 } else if (m_e.name() == "supports" && m_e.asciiAttribute("element") == "beam" && m_e.asciiAttribute("type") == "yes") {
                     m_hasBeamingInfo = true;
                     m_e.skipCurrentElement();
@@ -2248,7 +2276,7 @@ void MusicXMLParserPass1::scoreInstrument(const String& partId, const String& cu
              */
 
             // Finale exports all instrument names as 'Grand Piano' - use part name
-            if (m_exporterString.contains(u"finale")) {
+            if (exporterSoftware() == MusicXMLExporterSoftware::FINALE) {
                 instrName = m_parts[partId].getName();
                 if (instrName.size() <= 1) {
                     instrName = curPartGroupName;

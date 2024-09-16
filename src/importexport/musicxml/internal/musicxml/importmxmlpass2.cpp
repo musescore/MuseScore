@@ -2257,7 +2257,7 @@ void MusicXMLParserPass2::part()
         }
 
         if (!unendedTie->endNote()) {
-            cleanupUnterminatedTie(unendedTie, m_score, m_pass1.exporterString().contains(u"dolet 6"));
+            cleanupUnterminatedTie(unendedTie, m_score, m_pass1.exporterSoftware() == MusicXMLExporterSoftware::DOLET6);
         }
     }
 
@@ -3276,7 +3276,7 @@ void MusicXMLParserDirection::direction(const String& partId,
     bool isVocalStaff = m_pass1.isVocalStaff(partId);
     bool isPercussionStaff = m_pass1.isPercussionStaff(partId);
     bool isExpressionText = false;
-    bool delayOttava = m_pass1.exporterString().contains(u"sibelius");
+    bool delayOttava = m_pass1.dolet() || m_pass1.exporterSoftware() == MusicXMLExporterSoftware::FINALE;
     m_systemDirection = m_e.attribute("system") == "only-top";
     //LOGD("direction track %d", track);
     std::vector<MusicXmlSpannerDesc> starts;
@@ -3939,7 +3939,7 @@ void MusicXMLParserDirection::otherDirection()
         // TODO: Multiple sets of maps for exporters other than Dolet 6/Sibelius
         // TODO: Add more symbols from Sibelius
         std::map<String, String> otherDirectionStrings;
-        if (m_pass1.exporterString().contains(u"dolet")) {
+        if (m_pass1.dolet()) {
             otherDirectionStrings = {
                 { String(u"To Coda"), String(u"To Coda") },
                 { String(u"Segno"), String(u"<sym>segno</sym>") },
@@ -4177,7 +4177,7 @@ void MusicXMLParserDirection::textToDynamic(String& text)
     }
     String simplifiedText = MScoreTextToMXML::toPlainText(text).simplified();
     // Correct finale's incorrect dynamic export
-    if (m_pass1.exporterString().contains(u"finale")) {
+    if (m_pass1.exporterSoftware() == MusicXMLExporterSoftware::FINALE) {
         static const std::map<String,
                               String> finaleDynamicSubs
             = { { u"π", u"pp" }, { u"P", u"mp" }, { u"F", u"mf" }, { u"ƒ", u"ff" }, { u"Ï", u"fff" }, { u"S", u"sf" }, { u"ß", u"sfz" },
@@ -4578,7 +4578,7 @@ void MusicXMLParserDirection::handleTempo(String& wordsString)
     };
 
     MetronomeTextMap textMap;
-    if (m_pass1.exporterString().contains(u"sibelius")) {
+    if (m_pass1.sibOrDolet()) {
         textMap = sibeliusSyms;
     } else if (m_fontFamily == u"MetTimes Plain") {
         textMap = metTimesSyms;
@@ -6613,7 +6613,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
             String noteheadValue = m_e.readText();
             if (noteheadValue == "none") {
                 hasHead = false;
-            } else if (noteheadValue == "named" && m_pass1.exporterString().contains(u"noteflight")) {
+            } else if (noteheadValue == "named" && m_pass1.exporterSoftware() == MusicXMLExporterSoftware::NOTEFLIGHT) {
                 headScheme = NoteHeadScheme::HEAD_PITCHNAME;
             } else {
                 headGroup = convertNotehead(noteheadValue);
@@ -7514,7 +7514,7 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
 
     const HarmonyDesc newHarmonyDesc(track, ha, fd);
     bool insert = true;
-    if (m_pass1.exporterString().contains(u"dolet")) {
+    if (m_pass1.sibOrDolet()) {
         const int ticks = (sTime + offset).ticks();
         for (auto itr = harmonyMap.begin(); itr != harmonyMap.end(); itr++) {
             if (itr->first != ticks) {

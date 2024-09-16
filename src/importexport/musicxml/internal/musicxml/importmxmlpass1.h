@@ -90,6 +90,15 @@ enum class MxmlTupletFlag : char {
     STOP_CURRENT = 8
 };
 
+enum class MusicXMLExporterSoftware : char {
+    SIBELIUS,
+    DOLET6,
+    DOLET8,
+    FINALE,
+    NOTEFLIGHT,
+    OTHER
+};
+
 typedef muse::Flags<MxmlTupletFlag> MxmlTupletFlags;
 
 struct MxmlTupletState {
@@ -195,21 +204,24 @@ public:
     void insertAdjustedDuration(Fraction key, Fraction value) { m_adjustedDurations.insert({ key, value }); }
     std::map<Fraction, Fraction>& adjustedDurations() { return m_adjustedDurations; }
     void insertSeenDenominator(int val) { m_seenDenominators.emplace(val); }
-    String exporterString() const { return m_exporterString; }
+    MusicXMLExporterSoftware exporterSoftware() const { return m_exporterSoftware; }
+    bool sibOrDolet() const;
+    bool dolet() const;
 
 private:
     // functions
     void addError(const String& error);        // Add an error to be shown in the GUI
+    void setExporterSoftware(String& exporter);
 
     // generic pass 1 data
     muse::XmlStreamReader m_e;
-    String m_exporterString;                    // Name of the software which exported the file
+    MusicXMLExporterSoftware m_exporterSoftware = MusicXMLExporterSoftware::OTHER;   // Software which exported the file
     int m_divs = 0;                              // Current MusicXML divisions value
-    std::map<String, MusicXmlPart> m_parts;     // Parts data, mapped on part id
+    std::map<String, MusicXmlPart> m_parts;      // Parts data, mapped on part id
     std::set<int> m_systemStartMeasureNrs;       // Measure numbers of measures starting a page
     std::set<int> m_pageStartMeasureNrs;         // Measure numbers of measures starting a page
-    std::vector<Fraction> m_measureLength;           // Length of each measure
-    std::vector<Fraction> m_measureStart;            // Start time of each measure
+    std::vector<Fraction> m_measureLength;       // Length of each measure
+    std::vector<Fraction> m_measureStart;        // Start time of each measure
     CreditWordsList m_credits;                   // All credits collected
     PartMap m_partMap;                           // TODO merge into MusicXmlPart ??
     std::map<String, MusicXMLInstruments> m_instruments;   // instruments for each part, mapped on part id
