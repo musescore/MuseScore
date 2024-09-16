@@ -675,7 +675,7 @@ void LyricsLayout::checkCollisionsWithStaffElements(System* system, staff_idx_t 
         }
     }
 
-    for (int verse = 0; verse < maxVerseBelow; ++verse) {
+    for (int verse = 0; verse <= maxVerseBelow; ++verse) {
         if (lyricsVersesBelow.count(verse) == 0) {
             continue;
         }
