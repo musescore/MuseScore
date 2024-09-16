@@ -88,7 +88,7 @@ std::vector<PointF> LineSegment::gripsPositions(const EditData&) const
 PointF LineSegment::leftAnchorPosition(const double& systemPositionY) const
 {
     if (isMiddleType() || isEndType()) {
-        return PointF(system()->firstMeasure()->abbox().left(), systemPositionY);
+        return PointF(system()->firstMeasure()->pageBoundingRect().left(), systemPositionY);
     }
 
     PointF result;

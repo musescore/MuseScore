@@ -83,11 +83,11 @@ std::vector<LineF> SlurTieSegment::gripAnchorLines(Grip grip) const
         break;
 
     case SpannerSegmentType::BEGIN:
-        anchorPosition = (grip == Grip::START ? p1 : system()->abbox().topRight());
+        anchorPosition = (grip == Grip::START ? p1 : system()->pageBoundingRect().topRight());
         break;
 
     case SpannerSegmentType::MIDDLE:
-        anchorPosition = (grip == Grip::START ? sp : system()->abbox().topRight());
+        anchorPosition = (grip == Grip::START ? sp : system()->pageBoundingRect().topRight());
         break;
 
     case SpannerSegmentType::END:

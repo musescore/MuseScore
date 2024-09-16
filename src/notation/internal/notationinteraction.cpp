@@ -1787,7 +1787,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                     || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::BRACKETS))) {
             Measure* last = sel.endSegment() ? sel.endSegment()->measure() : nullptr;
             for (Measure* m = sel.startSegment()->measure(); m; m = m->nextMeasureMM()) {
-                RectF r = m->staffabbox(sel.staffStart());
+                RectF r = m->staffPageBoundingRect(sel.staffStart());
                 PointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                 pt += m->system()->page()->pos();
                 applyDropPaletteElement(score, m, element, modifiers, pt);
@@ -1883,7 +1883,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                         if (e2) {
                             applyDropPaletteElement(score, e2, oelement, modifiers);
                         } else {
-                            RectF r = m2->staffabbox(i);
+                            RectF r = m2->staffPageBoundingRect(i);
                             PointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                             pt += m2->system()->page()->pos();
                             applyDropPaletteElement(score, m2, oelement, modifiers, pt);
@@ -1895,7 +1895,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 if (e1) {
                     applyDropPaletteElement(score, e1, element, modifiers);
                 } else {
-                    RectF r = m1->staffabbox(i);
+                    RectF r = m1->staffPageBoundingRect(i);
                     PointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
                     pt += m1->system()->page()->pos();
                     applyDropPaletteElement(score, m1, element, modifiers, pt);
@@ -2340,7 +2340,7 @@ bool NotationInteraction::dragStandardElement(const PointF& pos, Qt::KeyboardMod
         if (targetMeasure && dropElem->type() != targetElem->type()) {
             setDropTarget(targetMeasure, true);
 
-            RectF measureRect = targetMeasure->staffabbox(targetElem->staffIdx());
+            RectF measureRect = targetMeasure->staffPageBoundingRect(targetElem->staffIdx());
             measureRect.adjust(page->x(), page->y(), page->x(), page->y());
             m_dropData.ed.pos = measureRect.center();
             setAnchorLines({ LineF(pos, measureRect.topLeft()) });
@@ -2402,7 +2402,7 @@ bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
         mu::engraving::Measure* targetMeasure = mu::engraving::toMeasure(mb);
         setDropTarget(targetMeasure, true);
 
-        RectF measureRect = targetMeasure->staffabbox(staffIdx);
+        RectF measureRect = targetMeasure->staffPageBoundingRect(staffIdx);
         measureRect.adjust(page->x(), page->y(), page->x(), page->y());
         m_dropData.ed.pos = measureRect.center();
         setAnchorLines({ LineF(pos, measureRect.topLeft()) });

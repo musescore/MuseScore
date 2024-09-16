@@ -88,7 +88,7 @@ Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
 
     const int TRIM_MARGIN_SIZE = configuration()->trimMarginPixelSize();
 
-    RectF pageRect = page->abbox();
+    RectF pageRect = page->pageBoundingRect();
     if (TRIM_MARGIN_SIZE >= 0) {
         pageRect = page->tbbox().adjusted(-TRIM_MARGIN_SIZE, -TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE);
     }

@@ -129,13 +129,13 @@ void Box::endEdit(EditData&)
 
 std::vector<PointF> HBox::gripsPositions(const EditData&) const
 {
-    RectF r(abbox());
+    RectF r(pageBoundingRect());
     return { PointF(r.right(), r.top() + r.height() * .5) };
 }
 
 std::vector<PointF> VBox::gripsPositions(const EditData&) const
 {
-    RectF r(abbox());
+    RectF r(pageBoundingRect());
     return { PointF(r.x() + r.width() * .5, r.bottom()) };
 }
 

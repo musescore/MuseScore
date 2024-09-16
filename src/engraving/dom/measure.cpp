@@ -1283,20 +1283,18 @@ void Measure::insertStaff(Staff* staff, staff_idx_t staffIdx)
 }
 
 //---------------------------------------------------------
-//   staffabbox
+//   staffPageBoundingRect
 //---------------------------------------------------------
 
-RectF Measure::staffabbox(staff_idx_t staffIdx) const
+RectF Measure::staffPageBoundingRect(staff_idx_t staffIdx) const
 {
     System* s = system();
     IF_ASSERT_FAILED(s) {
         return RectF();
     }
-    RectF sb(s->staff(staffIdx)->bbox());
-    RectF rrr(sb.translated(s->pagePos()));
-    RectF rr(abbox());
-    RectF r(rr.x(), rrr.y(), rr.width(), rrr.height());
-    return r;
+    RectF sysStaffPageBbox = s->staff(staffIdx)->bbox().translated(s->pagePos());
+    RectF measurePageBbox = pageBoundingRect();
+    return RectF(measurePageBbox.x(), sysStaffPageBbox.y(), measurePageBbox.width(), sysStaffPageBbox.height());
 }
 
 //---------------------------------------------------------

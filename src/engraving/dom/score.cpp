@@ -3419,7 +3419,7 @@ static void onFocusedItemChanged(EngravingItem* item)
 
 void Score::deselect(EngravingItem* el)
 {
-    addRefresh(el->abbox());
+    addRefresh(el->pageBoundingRect());
     m_selection.remove(el);
     setSelectionChanged(true);
     m_selection.update();
@@ -3486,7 +3486,7 @@ void Score::selectSingle(EngravingItem* e, staff_idx_t staffIdx)
             doSelect(e, SelectType::RANGE, staffIdx);
             return;
         }
-        addRefresh(e->abbox());
+        addRefresh(e->pageBoundingRect());
         m_selection.add(e);
         m_is.setTrack(e->track());
         selState = SelState::LIST;
@@ -3542,7 +3542,7 @@ void Score::selectAdd(EngravingItem* e)
             m_selection.updateSelectedElements();
         }
     } else if (!muse::contains(m_selection.elements(), e)) {
-        addRefresh(e->abbox());
+        addRefresh(e->pageBoundingRect());
         selState = SelState::LIST;
         m_selection.add(e);
     }
@@ -4082,7 +4082,7 @@ void Score::lassoSelect(const RectF& bbox)
         std::vector<EngravingItem*> itemsToSelect;
 
         for (EngravingItem* item : items) {
-            if (frr.contains(item->abbox())) {
+            if (frr.contains(item->pageBoundingRect())) {
                 if (item->type() != ElementType::MEASURE && item->selectable()) {
                     itemsToSelect.push_back(item);
                 }
