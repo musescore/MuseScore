@@ -175,7 +175,7 @@ apt-get install -y \
   "${apt_packages_qt6[@]}"
 
 case $PACKARCH in
-  arm64)
+  aarch64)
     qt_dir="/usr/lib/aarch64-linux-gnu/qt6"
     ;;
   armv7l)
