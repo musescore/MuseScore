@@ -4885,19 +4885,20 @@ void MusicXMLParserDirection::octaveShift(const String& type, const int number,
         } else {
             Ottava* o = spdesc.isStopped ? toOttava(spdesc.sp) : Factory::createOttava(m_score->dummy());
 
-            // if (placement.empty()) placement = "above";  // TODO ? set default
-
-            if (type == u"down" && ottavasize == 8) {
-                o->setOttavaType(OttavaType::OTTAVA_8VA);
-            }
-            if (type == u"down" && ottavasize == 15) {
-                o->setOttavaType(OttavaType::OTTAVA_15MA);
-            }
-            if (type == u"up" && ottavasize == 8) {
-                o->setOttavaType(OttavaType::OTTAVA_8VB);
-            }
-            if (type == u"up" && ottavasize == 15) {
-                o->setOttavaType(OttavaType::OTTAVA_15MB);
+            if (type == u"down") {
+                m_placement = m_placement.empty() ? u"above" : m_placement;
+                if (ottavasize == 8) {
+                    o->setOttavaType(OttavaType::OTTAVA_8VA);
+                } else if (ottavasize == 15) {
+                    o->setOttavaType(OttavaType::OTTAVA_15MA);
+                }
+            } else if (type == u"up") {
+                m_placement = m_placement.empty() ? u"below" : m_placement;
+                if (ottavasize == 8) {
+                    o->setOttavaType(OttavaType::OTTAVA_8VB);
+                } else if (ottavasize == 15) {
+                    o->setOttavaType(OttavaType::OTTAVA_15MB);
+                }
             }
 
             const Color color = Color::fromString(m_e.asciiAttribute("color").ascii());
