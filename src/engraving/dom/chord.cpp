@@ -437,61 +437,6 @@ AccessibleItemPtr Chord::createAccessible()
 
 #endif
 
-bool Chord::containsEqualArticulations(const Chord* other) const
-{
-    if (!other) {
-        return false;
-    }
-
-    if (m_articulations.size() != other->m_articulations.size()) {
-        return false;
-    }
-
-    for (size_t i = 0; i < m_articulations.size(); ++i) {
-        const Articulation* first = m_articulations.at(i);
-        const Articulation* second = other->m_articulations.at(i);
-
-        if (!first || !second) {
-            return false;
-        }
-
-        if (first->symId() != second->symId()) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool Chord::containsEqualArpeggio(const Chord* other) const
-{
-    if (m_arpeggio && other->m_arpeggio) {
-        if (m_arpeggio->arpeggioType() != other->m_arpeggio->arpeggioType()) {
-            return false;
-        }
-    }
-
-    return !m_arpeggio && !other->m_arpeggio;
-}
-
-bool Chord::containsEqualTremolo(const Chord* other) const
-{
-    if (tremoloSingleChord() && other->tremoloSingleChord()) {
-        if (tremoloSingleChord()->tremoloType() != other->tremoloSingleChord()->tremoloType()) {
-            return false;
-        }
-    }
-
-    if (tremoloTwoChord() && other->tremoloTwoChord()) {
-        if (tremoloTwoChord()->tremoloType() != other->tremoloTwoChord()->tremoloType()) {
-            return false;
-        }
-    }
-
-    return !tremoloSingleChord() && !other->tremoloSingleChord()
-           && !tremoloTwoChord() && !other->tremoloTwoChord();
-}
-
 //---------------------------------------------------------
 //   noteHeadWidth
 //---------------------------------------------------------
