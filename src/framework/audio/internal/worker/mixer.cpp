@@ -553,7 +553,7 @@ void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
         }
 
         float rms = dsp::samplesRootMeanSquare(singleChannelSquaredSum, samplesPerChannel);
-        m_audioSignalNotifier.updateSignalValues(audioChNum, rms, muse::linear_to_db(rms));
+        m_audioSignalNotifier.updateSignalValues(audioChNum, rms);
     }
 
     m_audioSignalNotifier.notifyAboutChanges();
@@ -569,7 +569,7 @@ void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
 void Mixer::notifyNoAudioSignal()
 {
     for (audioch_t audioChNum = 0; audioChNum < m_audioChannelsCount; ++audioChNum) {
-        m_audioSignalNotifier.updateSignalValues(audioChNum, 0.f, MINIMUM_OPERABLE_DBFS_LEVEL);
+        m_audioSignalNotifier.updateSignalValues(audioChNum, 0.f);
     }
 
     m_audioSignalNotifier.notifyAboutChanges();
