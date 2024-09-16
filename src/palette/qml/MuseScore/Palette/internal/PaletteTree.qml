@@ -403,7 +403,13 @@ StyledListView {
                 paletteTree.implicitWidth = Math.max(paletteTree.implicitWidth, w);
             }
 
-            readonly property bool expanded: paletteTree.searchOpened || model.expanded
+            Component.onDestruction: {
+                if (palettePopup.active && palettePopup.model === model) {
+                    palettePopup.close()
+                }
+            }
+
+            readonly property bool expanded: paletteTree.searchOpened || Boolean(model.expanded)
 
             function toggleExpand() {
                 model.expanded = !expanded
