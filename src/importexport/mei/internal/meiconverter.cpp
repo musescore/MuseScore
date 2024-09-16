@@ -3359,18 +3359,19 @@ std::list<std::string> Convert::getTypeValuesWithPrefix(const std::string& typeS
 
 void Convert::layerIdentFromMEI(engraving::EngravingItem* item, const libmei::Element& meiElement)
 {
+    if (!item->hasVoiceAssignmentProperties()) {
+        return;
+    }
+
     const libmei::AttLayerIdent* layerAtt = dynamic_cast<const libmei::AttLayerIdent*>(&meiElement);
 
     IF_ASSERT_FAILED(layerAtt) {
         return;
     }
 
-    // @color
     if (layerAtt->HasLayer()) {
         // without further check we assume the layer to match
-        if (item->hasVoiceAssignmentProperties()) {
-            item->setProperty(engraving::Pid::VOICE_ASSIGNMENT, engraving::VoiceAssignment::CURRENT_VOICE_ONLY);
-        }
+        item->setProperty(engraving::Pid::VOICE_ASSIGNMENT, engraving::VoiceAssignment::CURRENT_VOICE_ONLY);
     }
 }
 
