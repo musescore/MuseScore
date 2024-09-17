@@ -3276,7 +3276,7 @@ void MusicXMLParserDirection::direction(const String& partId,
     bool isVocalStaff = m_pass1.isVocalStaff(partId);
     bool isPercussionStaff = m_pass1.isPercussionStaff(partId);
     bool isExpressionText = false;
-    bool delayOttava = m_pass1.dolet() || m_pass1.exporterSoftware() == MusicXMLExporterSoftware::FINALE;
+    bool delayOttava = m_pass1.exporterSoftware() == MusicXMLExporterSoftware::SIBELIUS;
     m_systemDirection = m_e.attribute("system") == "only-top";
     //LOGD("direction track %d", track);
     std::vector<MusicXmlSpannerDesc> starts;
@@ -3583,19 +3583,23 @@ void MusicXMLParserDirection::direction(const String& partId,
             delete desc.sp;
         } else {
             if (spdesc.isStarted) {
+                // Adjustments to ottavas by the offset value are unwanted
+                const Fraction spTick = spdesc.sp && spdesc.sp->isOttava() ? tick : tick + m_offset;
                 if (spdesc.sp && spdesc.sp->isOttava() && delayOttava) {
                     // Sibelius writes ottava ends 1 note too early
                     m_pass2.setDelayedOttava(spdesc.sp);
                     m_pass2.delayedOttava()->setTrack2(m_track);
-                    m_pass2.delayedOttava()->setTick2(tick + m_offset);
+                    m_pass2.delayedOttava()->setTick2(spTick);
+                    // need to set tick again later
                     m_pass2.clearSpanner(desc);
                 } else {
-                    handleSpannerStop(spdesc.sp, m_track, tick + m_offset, spanners);
+                    handleSpannerStop(spdesc.sp, m_track, spTick, spanners);
                     m_pass2.clearSpanner(desc);
                 }
             } else {
                 spdesc.sp = desc.sp;
-                spdesc.tick2 = tick + m_offset;
+                const Fraction spTick = spdesc.sp && spdesc.sp->isOttava() ? tick : tick + m_offset;
+                spdesc.tick2 = spTick;
                 spdesc.track2 = m_track;
                 spdesc.isStopped = true;
             }
