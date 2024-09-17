@@ -86,7 +86,7 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makePitchMenu()
         items << makeToggleNotatedPitchItem(title, notationState);
     }
 
-    configuration()->pianoKeyboardUseNotatedPitch().ch.onReceive(this, [this](bool) {
+    engravingConfiguration()->pianoKeyboardUseNotatedPitch().ch.onReceive(this, [this](bool) {
         emit pianoKeyboardUseNotatedPitchChanged();
     });
 
@@ -95,7 +95,7 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makePitchMenu()
             return;
         }
 
-        configuration()->setPianoKeyboardUseNotatedPitch(args.arg<bool>(0));
+        engravingConfiguration()->setPianoKeyboardUseNotatedPitch(args.arg<bool>(0));
         emit pianoKeyboardUseNotatedPitchChanged();
     });
 
@@ -208,7 +208,7 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makeToggleNotatedPitchItem(const m
     MenuItem* item = new MenuItem(action, this);
     item->setId(QString::fromStdString(SET_NOTATED_PITCH_CODE) + (isNotatedPitch ? "-notated" : "-playback"));
 
-    ValCh<bool> currentState = configuration()->pianoKeyboardUseNotatedPitch();
+    ValCh<bool> currentState = engravingConfiguration()->pianoKeyboardUseNotatedPitch();
 
     bool checked = !(isNotatedPitch ^ currentState.val);
     item->setState(UiActionState::make_enabled(checked));

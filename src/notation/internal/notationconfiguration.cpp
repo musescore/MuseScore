@@ -89,7 +89,6 @@ static const Settings::Key NEED_TO_SHOW_ADD_FIGURED_BASS_ERROR_MESSAGE_KEY(modul
 static const Settings::Key NEED_TO_SHOW_ADD_GUITAR_BEND_ERROR_MESSAGE_KEY(module_name,  "ui/dialogs/needToShowAddGuitarBendErrorMessage");
 
 static const Settings::Key PIANO_KEYBOARD_NUMBER_OF_KEYS(module_name,  "pianoKeyboard/numberOfKeys");
-static const Settings::Key PIANO_KEYBOARD_PITCH_STATE(module_name,  "pianoKeyboard/useNotatedPitch");
 
 static const Settings::Key USE_NEW_PERCUSSION_PANEL_KEY(module_name,  "ui/useNewPercussionPanel");
 static const Settings::Key AUTO_SHOW_PERCUSSION_PANEL_KEY(module_name,  "ui/autoShowPercussionPanel");
@@ -219,12 +218,6 @@ void NotationConfiguration::init()
     m_pianoKeyboardNumberOfKeys.val = settings()->value(PIANO_KEYBOARD_NUMBER_OF_KEYS).toInt();
     settings()->valueChanged(PIANO_KEYBOARD_NUMBER_OF_KEYS).onReceive(this, [this](const Val& val) {
         m_pianoKeyboardNumberOfKeys.set(val.toInt());
-    });
-
-    settings()->setDefaultValue(PIANO_KEYBOARD_PITCH_STATE, Val(true));
-    m_pianoKeyboardUseNotatedPitch.val = settings()->value(PIANO_KEYBOARD_PITCH_STATE).toBool();
-    settings()->valueChanged(PIANO_KEYBOARD_PITCH_STATE).onReceive(this, [this](const Val& val) {
-        m_pianoKeyboardUseNotatedPitch.set(val.toBool());
     });
 
     settings()->setDefaultValue(USE_NEW_PERCUSSION_PANEL_KEY, Val(false));
@@ -924,16 +917,6 @@ void NotationConfiguration::setAutoShowPercussionPanel(bool autoShow)
 void NotationConfiguration::setPianoKeyboardNumberOfKeys(int number)
 {
     settings()->setSharedValue(PIANO_KEYBOARD_NUMBER_OF_KEYS, Val(number));
-}
-
-ValCh<bool> NotationConfiguration::pianoKeyboardUseNotatedPitch() const
-{
-    return m_pianoKeyboardUseNotatedPitch;
-}
-
-void NotationConfiguration::setPianoKeyboardUseNotatedPitch(bool useNotatedPitch)
-{
-    settings()->setSharedValue(PIANO_KEYBOARD_PITCH_STATE, Val(useNotatedPitch));
 }
 
 muse::io::path_t NotationConfiguration::firstScoreOrderListPath() const
