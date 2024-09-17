@@ -98,6 +98,7 @@ public:
     void init();
 
     void initZoom();
+    void initCanvasPos();
     void updateZoomAfterSizeChange();
     void zoomIn();
     void zoomOut();

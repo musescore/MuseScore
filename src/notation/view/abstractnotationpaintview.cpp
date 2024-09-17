@@ -230,6 +230,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
 {
     if (viewport().isValid() && !m_notation->viewState()->isMatrixInited()) {
         m_inputController->initZoom();
+        m_inputController->initCanvasPos();
     }
 
     if (publishMode()) {
@@ -380,6 +381,7 @@ void AbstractNotationPaintView::onViewSizeChanged()
     if (viewport().isValid()) {
         if (!notation()->viewState()->isMatrixInited()) {
             m_inputController->initZoom();
+            m_inputController->initCanvasPos();
         } else {
             m_inputController->updateZoomAfterSizeChange();
         }
