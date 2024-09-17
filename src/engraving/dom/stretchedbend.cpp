@@ -462,6 +462,10 @@ void StretchedBend::fillStretchedSegments(bool untilNextSegment)
         }
     }
 
+    if (!untilNextSegment) {
+        return;
+    }
+
     /// adjust coordinate to bend of tied back note
     StretchedBend* backTiedBend = backTiedStretchedBend();
     if (backTiedBend) {
@@ -474,6 +478,11 @@ void StretchedBend::fillStretchedSegments(bool untilNextSegment)
             for (EngravingItem* item : tiedBackChord->el()) {
                 if (item->isStretchedBend()) {
                     StretchedBend* bendToAdjust = toStretchedBend(item);
+                    IF_ASSERT_FAILED(!bendToAdjust->m_bendSegmentsStretched.empty()) {
+                        LOGE() << "wrong bend data while adjusting coordinates";
+                        return;
+                    }
+
                     PointF& tiedBendEndPoint = bendToAdjust->m_bendSegmentsStretched.back().dest;
                     tiedBendEndPoint.setX(newX);
                 }
