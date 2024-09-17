@@ -249,6 +249,10 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
 void SlurSegment::editDrag(EditData& ed)
 {
     Grip g     = ed.curGrip;
+    if (g == Grip::NO_GRIP) {
+        return;
+    }
+
     ups(g).off += ed.delta;
 
     PointF delta;
