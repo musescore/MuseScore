@@ -34,6 +34,7 @@
 #include "compat/backendapi.h"
 
 #include "log.h"
+#include <iostream>
 
 using namespace mu::converter;
 using namespace mu::project;
@@ -105,7 +106,13 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
         return make_ret(Err::UnknownError);
     }
 
+    // Check if this is a part conversion job
+    if (out.toString().contains('*')) {
+        return convertScoreParts(in, out, stylePath, forceMode);
+    }
+
     std::string suffix = io::suffix(out);
+
     auto writer = writers()->writer(suffix);
     if (!writer) {
         return make_ret(Err::ConvertTypeUnknown);
@@ -218,10 +225,33 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
 
         Job job;
         job.in = correctUserInputPath(obj["in"].toString());
-        job.out = correctUserInputPath(obj["out"].toString());
-
-        if (!job.in.empty() && !job.out.empty()) {
+        
+        QJsonValue outValue = obj["out"];
+        if (outValue.isString()) {
+            job.out = correctUserInputPath(outValue.toString());
             rv.val.push_back(std::move(job));
+        } else if (outValue.isArray()) {
+            QJsonArray outArray = outValue.toArray();
+<<<<<<< HEAD
+            for (const QJsonValue& value : outArray) {
+                Job tempJob = job; // Copy the 'job' with 'in' value
+                tempJob.out = correctUserInputPath(value.toString());
+                if (!tempJob.in.empty() && !tempJob.out.empty()) {
+                    rv.val.push_back(std::move(tempJob));
+=======
+            for (const QJsonValue& outItem : outArray) {
+                Job partJob = job; // Copy the input path
+                if (outItem.isString()) {
+                    partJob.out = correctUserInputPath(outItem.toString());
+                } else if (outItem.isArray() && outItem.toArray().size() == 2) {
+                    QJsonArray partOutArray = outItem.toArray();
+                    QString prefix = correctUserInputPath(partOutArray[0].toString());
+                    QString suffix = partOutArray[1].toString();
+                    partJob.out = prefix + "*" + suffix; // Use "*" as a placeholder for part names
+>>>>>>> 2be56fc5fe (Fixes multi-part conversion)
+                }
+                rv.val.push_back(std::move(partJob));
+            }
         }
     }
 
@@ -334,9 +364,33 @@ Ret ConverterController::convertScorePartsToPdf(INotationWriterPtr writer, IMast
         return make_ret(Err::OutFileFailedOpen);
     }
 
+    for (size_t i = 0; i < notations.size(); ++i) {
+        QString partName = (i == 0) ? "full" : QString("part%1").arg(i);
+        muse::io::path_t partOut = io::dirpath(out) + "/" + io::completeBasename(out) + "_" + partName.toStdString() + ".pdf";
+
+        File file(partOut);
+        if (!file.open(File::WriteOnly)) {
+            return make_ret(Err::OutFileFailedOpen);
+        }
+
+        INotationWriter::Options options {
+            { INotationWriter::OptionKey::UNIT_TYPE, Val(INotationWriter::UnitType::PER_PART) },
+        };
+
+        Ret ret = writer->write(notations[i], file, options);
+        if (!ret) {
+            LOGE() << "failed write, err: " << ret.toString() << ", path: " << partOut;
+            return make_ret(Err::OutFileFailedWrite);
+        }
+
+        file.close();
+    }
+
+
     INotationWriter::Options options {
         { INotationWriter::OptionKey::UNIT_TYPE, Val(INotationWriter::UnitType::MULTI_PART) },
     };
+
 
     Ret ret = writer->writeList(notations, file, options);
     if (!ret) {
