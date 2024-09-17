@@ -100,6 +100,8 @@ void AudioEngine::setSampleRate(const sample_rate_t sampleRate)
         return;
     }
 
+    LOGI() << "Sample rate: " << sampleRate;
+
     m_sampleRate = sampleRate;
     m_mixer->mixedSource()->setSampleRate(sampleRate);
 
@@ -116,6 +118,8 @@ void AudioEngine::setReadBufferSize(const uint16_t readBufferSize)
         return;
     }
 
+    LOGI() << "Read buffer size: " << readBufferSize;
+
     m_readBufferSize = readBufferSize;
     updateBufferConstraints();
 
@@ -131,6 +135,8 @@ void AudioEngine::setAudioChannelsCount(const audioch_t count)
     IF_ASSERT_FAILED(m_mixer) {
         return;
     }
+
+    LOGI() << "Audio channels: " << count;
 
     m_mixer->setAudioChannelsCount(count);
 }
