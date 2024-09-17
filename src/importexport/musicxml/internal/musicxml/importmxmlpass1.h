@@ -53,6 +53,56 @@ struct PageFormat {
     bool twosided = false;
 };
 
+typedef std::pair<int, int> StartStop;
+typedef std::vector<StartStop> StartStopList;
+
+//---------------------------------------------------------
+//   NoteList
+//---------------------------------------------------------
+
+/**
+ List of note start/stop times in a voice in all staves.
+*/
+
+class NoteList
+{
+public:
+    NoteList();
+    void addNote(const int startTick, const int endTick, const size_t staff);
+    void dump(const int& voice) const;
+    bool stavesOverlap(const int staff1, const int staff2) const;
+    bool anyStaffOverlaps() const;
+private:
+    std::vector<StartStopList> _staffNoteLists;   // The note start/stop times in all staves
+    bool notesOverlap(const StartStop& n1, const StartStop& n2) const;
+};
+
+//---------------------------------------------------------
+//   VoiceOverlapDetector
+//---------------------------------------------------------
+
+/**
+ Detect overlap in a voice, which is when a voice has two or more notes
+ active at the same time. In theory this should not happen, as voices
+ only move forward in time, but Sibelius 7 reuses voice numbers in multi-
+ staff parts, which leads to overlap.
+
+ Current implementation does not detect voice overlap within a staff,
+ but only between staves.
+*/
+
+class VoiceOverlapDetector
+{
+public:
+    VoiceOverlapDetector();
+    void addNote(const int startTick, const int endTick, const int& voice, const int staff);
+    void dump() const;
+    void newMeasure();
+    bool stavesOverlap(const int& voice) const;
+private:
+    std::map<int, NoteList> _noteLists;   // The notelists for all the voices
+};
+
 //---------------------------------------------------------
 //   MxmlOctaveShiftDesc
 //---------------------------------------------------------
@@ -79,6 +129,51 @@ enum class MusicXMLExporterSoftware : char {
     NOTEFLIGHT,
     OTHER
 };
+
+//---------------------------------------------------------
+//   MusicXmlPartGroup
+//---------------------------------------------------------
+
+struct MusicXmlPartGroup {
+    int span = 0;
+    int start = 0;
+    BracketType type = BracketType::NO_BRACKET;
+    bool barlineSpan = false;
+    int column = 0;
+};
+typedef std::vector<MusicXmlPartGroup*> MusicXmlPartGroupList;
+typedef std::map<String, Part*> PartMap;
+typedef std::map<int, MusicXmlPartGroup*> MusicXmlPartGroupMap;
+
+//---------------------------------------------------------
+//   CreditWords
+//    a single parsed MusicXML credit-words element
+//---------------------------------------------------------
+
+struct CreditWords {
+    int page = 0;
+    String type;
+    double defaultX = 0.0;
+    double defaultY = 0.0;
+    double fontSize = 0.0;
+    String justify;
+    String hAlign;
+    String vAlign;
+    String words;
+    CreditWords(int p, String tp, double dx, double dy, double fs, String j, String ha, String va, String w)
+    {
+        page = p;
+        type = tp;
+        defaultX = dx;
+        defaultY = dy;
+        fontSize = fs;
+        justify  = j;
+        hAlign   = ha;
+        vAlign   = va;
+        words    = w;
+    }
+};
+typedef  std::vector<CreditWords*> CreditWordsList;
 
 //---------------------------------------------------------
 //   declarations

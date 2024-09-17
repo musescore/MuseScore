@@ -74,6 +74,33 @@ struct MusicXmlTupletDesc {
 };
 
 //---------------------------------------------------------
+//   SlurDesc
+//---------------------------------------------------------
+
+/**
+ The description of Slurs being handled
+ */
+
+class SlurDesc
+{
+public:
+    enum class State : char {
+        NONE, START, STOP
+    };
+    SlurDesc()
+        : m_slur(0), m_state(State::NONE) {}
+    Slur* slur() const { return m_slur; }
+    void start(Slur* slur) { m_slur = slur; m_state = State::START; }
+    void stop(Slur* slur) { m_slur = slur; m_state = State::STOP; }
+    bool isStart() const { return m_state == State::START; }
+    bool isStop() const { return m_state == State::STOP; }
+private:
+    Slur* m_slur = nullptr;
+    State m_state;
+};
+typedef std::map<SLine*, std::pair<int, int> > MusicXmlSpannerMap;
+
+//---------------------------------------------------------
 //   MusicXmlSpannerDesc
 //---------------------------------------------------------
 
@@ -103,6 +130,30 @@ struct MusicXmlExtendedSpannerDesc {
 };
 
 //---------------------------------------------------------
+//   HarmonyDesc
+//---------------------------------------------------------
+
+/**
+ The description of a chord symbol with or without a fret diagram
+ */
+
+struct HarmonyDesc
+{
+    track_idx_t m_track;
+    bool fretDiagramVisible() const { return m_fretDiagram ? m_fretDiagram->visible() : false; }
+    Harmony* m_harmony;
+    FretDiagram* m_fretDiagram;
+
+    HarmonyDesc(track_idx_t m_track, Harmony* m_harmony, FretDiagram* m_fretDiagram)
+        : m_track(m_track), m_harmony(m_harmony),
+        m_fretDiagram(m_fretDiagram) {}
+
+    HarmonyDesc()
+        : m_track(0), m_harmony(nullptr), m_fretDiagram(nullptr) {}
+};
+using HarmonyMap = std::multimap<int, HarmonyDesc>;
+
+//---------------------------------------------------------
 //   MusicXmlLyricsExtend
 //---------------------------------------------------------
 
@@ -126,6 +177,22 @@ struct GraceNoteLyrics {
     GraceNoteLyrics(Lyrics* lyric, bool extend, int no)
         : lyric(lyric), extend(extend), no(no) {}
 };
+
+struct InferredPercInstr {
+    int pitch;
+    track_idx_t track;
+    String name;
+    Fraction tick;
+
+    InferredPercInstr(int pitch, track_idx_t track, String name, Fraction tick)
+        : pitch(pitch), track(track), name(name), tick(tick) {}
+
+    InferredPercInstr()
+        : pitch(-1), track(muse::nidx), name(u""), tick(Fraction(0, -1)) {}
+};
+typedef std::vector<InferredPercInstr> InferredPercList;
+
+typedef std::map<String, std::pair<String, DurationType> > MetronomeTextMap;
 
 //---------------------------------------------------------
 //   MusicXMLParserLyric

@@ -22,121 +22,16 @@
 
 #ifndef MUSICXMLTYPES_H
 #define MUSICXMLTYPES_H
-#include "engraving/dom/line.h"
-#include "engraving/dom/mscore.h"
-#include "engraving/dom/fret.h"
+#include "dom/mscore.h"
+#include "dom/arpeggio.h"
 
 namespace mu::engraving {
-//---------------------------------------------------------
-//   MusicXmlPartGroup
-//---------------------------------------------------------
-
-struct MusicXmlPartGroup {
-    int span = 0;
-    int start = 0;
-    BracketType type = BracketType::NO_BRACKET;
-    bool barlineSpan = false;
-    int column = 0;
-};
-typedef std::vector<MusicXmlPartGroup*> MusicXmlPartGroupList;
-typedef std::map<String, Part*> PartMap;
-typedef std::map<int, MusicXmlPartGroup*> MusicXmlPartGroupMap;
-
-//---------------------------------------------------------
-//   CreditWords
-//    a single parsed MusicXML credit-words element
-//---------------------------------------------------------
-
-struct CreditWords {
-    int page = 0;
-    String type;
-    double defaultX = 0.0;
-    double defaultY = 0.0;
-    double fontSize = 0.0;
-    String justify;
-    String hAlign;
-    String vAlign;
-    String words;
-    CreditWords(int p, String tp, double dx, double dy, double fs, String j, String ha, String va, String w)
-    {
-        page = p;
-        type = tp;
-        defaultX = dx;
-        defaultY = dy;
-        fontSize = fs;
-        justify  = j;
-        hAlign   = ha;
-        vAlign   = va;
-        words    = w;
-    }
-};
-typedef  std::vector<CreditWords*> CreditWordsList;
-
-//---------------------------------------------------------
-//   SlurDesc
-//---------------------------------------------------------
-
-/**
- The description of Slurs being handled
- */
-
-class SlurDesc
-{
-public:
-    enum class State : char {
-        NONE, START, STOP
-    };
-    SlurDesc()
-        : m_slur(0), m_state(State::NONE) {}
-    Slur* slur() const { return m_slur; }
-    void start(Slur* slur) { m_slur = slur; m_state = State::START; }
-    void stop(Slur* slur) { m_slur = slur; m_state = State::STOP; }
-    bool isStart() const { return m_state == State::START; }
-    bool isStop() const { return m_state == State::STOP; }
-private:
-    Slur* m_slur = nullptr;
-    State m_state;
-};
-typedef std::map<SLine*, std::pair<int, int> > MusicXmlSpannerMap;
-
-//---------------------------------------------------------
-//   NoteList
-//---------------------------------------------------------
-
-/**
- List of note start/stop times in a voice in a single staff.
-*/
-
 //---------------------------------------------------------
 //   MxmlStartStop
 //---------------------------------------------------------
 
 enum class MxmlStartStop : char {
     NONE, START, STOP
-};
-
-typedef std::pair<int, int> StartStop;
-typedef std::vector<StartStop> StartStopList;
-
-//---------------------------------------------------------
-//   NoteList
-//---------------------------------------------------------
-
-/**
- List of note start/stop times in a voice in all staves.
-*/
-
-class NoteList
-{
-public:
-    NoteList();
-    void addNote(const int startTick, const int endTick, const size_t staff);
-    void dump(const int& voice) const;
-    bool stavesOverlap(const int staff1, const int staff2) const;
-    bool anyStaffOverlaps() const;
-private:
-    std::vector<StartStopList> _staffNoteLists;   // The note start/stop times in all staves
-    bool notesOverlap(const StartStop& n1, const StartStop& n2) const;
 };
 
 struct MusicXmlArpeggioDesc {
@@ -147,26 +42,6 @@ struct MusicXmlArpeggioDesc {
         : arp(arp), no(no) {}
 };
 typedef std::multimap<int, MusicXmlArpeggioDesc> ArpeggioMap;
-
-/**
- The description of a chord symbol with or without a fret diagram
- */
-
-struct HarmonyDesc
-{
-    track_idx_t m_track;
-    bool fretDiagramVisible() const { return m_fretDiagram ? m_fretDiagram->visible() : false; }
-    Harmony* m_harmony;
-    FretDiagram* m_fretDiagram;
-
-    HarmonyDesc(track_idx_t m_track, Harmony* m_harmony, FretDiagram* m_fretDiagram)
-        : m_track(m_track), m_harmony(m_harmony),
-        m_fretDiagram(m_fretDiagram) {}
-
-    HarmonyDesc()
-        : m_track(0), m_harmony(nullptr), m_fretDiagram(nullptr) {}
-};
-using HarmonyMap = std::multimap<int, HarmonyDesc>;
 
 //---------------------------------------------------------
 //   VoiceDesc
@@ -229,32 +104,6 @@ private:
 };
 
 //---------------------------------------------------------
-//   VoiceOverlapDetector
-//---------------------------------------------------------
-
-/**
- Detect overlap in a voice, which is when a voice has two or more notes
- active at the same time. In theory this should not happen, as voices
- only move forward in time, but Sibelius 7 reuses voice numbers in multi-
- staff parts, which leads to overlap.
-
- Current implementation does not detect voice overlap within a staff,
- but only between staves.
-*/
-
-class VoiceOverlapDetector
-{
-public:
-    VoiceOverlapDetector();
-    void addNote(const int startTick, const int endTick, const int& voice, const int staff);
-    void dump() const;
-    void newMeasure();
-    bool stavesOverlap(const int& voice) const;
-private:
-    std::map<int, NoteList> _noteLists;   // The notelists for all the voices
-};
-
-//---------------------------------------------------------
 //   MusicXMLInstrument
 //---------------------------------------------------------
 
@@ -293,25 +142,6 @@ struct MusicXMLInstrument {
      */
 };
 typedef std::map<String, MusicXMLInstrument> MusicXMLInstruments;
-
-struct InferredPercInstr {
-    int pitch;
-    track_idx_t track;
-    String name;
-    Fraction tick;
-
-    InferredPercInstr(int pitch, track_idx_t track, String name, Fraction tick)
-        : pitch(pitch), track(track), name(name), tick(tick) {}
-
-    InferredPercInstr()
-        : pitch(-1), track(muse::nidx), name(u""), tick(Fraction(0, -1)) {}
-};
-typedef std::vector<InferredPercInstr> InferredPercList;
-
-typedef std::map<String, std::pair<String, DurationType> > MetronomeTextMap;
-
-// Ties are identified by the pitch and track of their first note
-typedef std::pair<int, track_idx_t> TieLocation;
 }
 
 #endif // MUSICXMLTYPES_H
