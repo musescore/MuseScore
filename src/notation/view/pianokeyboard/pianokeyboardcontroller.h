@@ -32,6 +32,7 @@
 namespace mu::notation {
 class PianoKeyboardController : public muse::Injectable, public muse::async::Asyncable
 {
+    muse::Inject<INotationConfiguration> configuration = { this };
     muse::Inject<context::IGlobalContext> context = { this };
 
 public:
@@ -44,6 +45,8 @@ public:
     muse::async::Notification keyStatesChanged() const;
 
     bool isFromMidi() const;
+
+    bool useNotatedPitch() const;
 
 private:
     INotationPtr currentNotation() const;

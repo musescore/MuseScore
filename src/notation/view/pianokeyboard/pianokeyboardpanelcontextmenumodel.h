@@ -58,12 +58,16 @@ signals:
     void keyWidthScalingChanged();
     void setKeyWidthScalingRequested(qreal scaling);
     void numberOfKeysChanged();
+    void pianoKeyboardUseNotatedPitchChanged();
 
 private:
     muse::uicomponents::MenuItem* makeViewMenu();
+    muse::uicomponents::MenuItem* makePitchMenu();
 
     muse::uicomponents::MenuItem* makeKeyWidthScalingItem(const muse::TranslatableString& title, qreal scaling);
     muse::uicomponents::MenuItem* makeNumberOfKeysItem(const muse::TranslatableString& title, int numberOfKeys);
+
+    muse::uicomponents::MenuItem* makeToggleNotatedPitchItem(const muse::TranslatableString& title, bool isNotatedPitch);
 
     void updateKeyWidthScalingItems();
 
