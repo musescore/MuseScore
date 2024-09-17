@@ -644,8 +644,6 @@ void BeamLayout::beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after)
 
 void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
 {
-    bool crossMeasure = ctx.conf().styleB(Sid::crossMeasureValues);
-
     for (track_idx_t track = 0; track < ctx.dom().ntracks(); ++track) {
         const Staff* stf = ctx.dom().staff(track2staff(track));
 
@@ -738,17 +736,12 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                 cr->removeDeleteBeam(false);
             }
 
-            // handle grace notes and cross-measure beaming
+            // handle grace notes
             // (tied chords?)
             if (cr->isChord()) {
                 Chord* chord = toChord(cr);
                 beamGraceNotes(ctx, chord, false);         // grace before
                 beamGraceNotes(ctx, chord, true);          // grace after
-                // set up for cross-measure values as soon as possible
-                // to have all computations (stems, hooks, ...) consistent with it
-                if (!chord->isGrace()) {
-                    ChordLayout::crossMeasureSetup(chord, crossMeasure, ctx);
-                }
             }
 
             if (cr->isRest() && cr->beamMode() == BeamMode::AUTO) {
