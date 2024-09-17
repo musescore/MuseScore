@@ -322,7 +322,6 @@ void EngravingConfiguration::setPianoKeyboardUseNotatedPitch(bool useNotatedPitc
     settings()->setSharedValue(PIANO_KEYBOARD_PITCH_STATE, Val(useNotatedPitch));
 }
 
-
 muse::async::Notification EngravingConfiguration::scoreInversionChanged() const
 {
     return m_scoreInversionChanged;
