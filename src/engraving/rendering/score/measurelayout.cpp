@@ -869,6 +869,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
     checkStaffMoveValidity(measure, ctx);
 
     // ---- Modify DOM ----
+    ModifyDom::setCrossMeasure(measure, ctx);
     ModifyDom::connectTremolo(measure);
     ModifyDom::cmdUpdateNotes(measure, ctx.dom());
     ModifyDom::createStems(measure,  ctx);

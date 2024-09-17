@@ -32,8 +32,43 @@
 #include "dom/keysig.h"
 #include "dom/hook.h"
 #include "dom/part.h"
+#include "rendering/score/chordlayout.h"
 
 using namespace mu::engraving::rendering::score;
+
+void ModifyDom::setCrossMeasure(const Measure* measure, LayoutContext& ctx)
+{
+    bool crossMeasure = ctx.conf().styleB(Sid::crossMeasureValues);
+    const DomAccessor& dom = ctx.dom();
+    for (staff_idx_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
+        const Staff* staff = dom.staff(staffIdx);
+        if (!staff->show()) {
+            continue;
+        }
+
+        track_idx_t startTrack = staffIdx * VOICES;
+        track_idx_t endTrack  = startTrack + VOICES;
+
+        for (const Segment& segment : measure->segments()) {
+            if (!segment.isJustType(SegmentType::ChordRest)) {
+                continue;
+            }
+
+            for (track_idx_t t = startTrack; t < endTrack; ++t) {
+                ChordRest* cr = segment.cr(t);
+                if (!cr) {
+                    continue;
+                }
+                if (cr->isChord()) {
+                    Chord* chord = toChord(cr);
+                    if (!chord->isGrace()) {
+                        ChordLayout::crossMeasureSetup(chord, crossMeasure, ctx);
+                    }
+                }
+            }
+        }
+    }
+}
 
 void ModifyDom::connectTremolo(Measure* m)
 {
