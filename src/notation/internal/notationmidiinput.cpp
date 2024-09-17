@@ -306,7 +306,7 @@ void NotationMidiInput::doRealtimeAdvance()
 
     QTimer::singleShot(100, Qt::PreciseTimer, [this]() {
         m_undoStack->prepareChanges();
-        m_getScore->score()->realtimeAdvance();
+        m_getScore->score()->realtimeAdvance(configuration()->pianoKeyboardUseNotatedPitch().val);
         m_undoStack->commitChanges();
     });
 
