@@ -174,8 +174,23 @@ apt_packages_qt6=(
 apt-get install -y \
   "${apt_packages_qt6[@]}"
 
-qt_version="624"
-qt_dir="/usr/lib/aarch64-linux-gnu/qt6"
+case $PACKARCH in
+  aarch64)
+    qt_dir="/usr/lib/aarch64-linux-gnu/qt6"
+    ;;
+  armv7l)
+    qt_dir="/usr/lib/arm-linux-gnueabihf/qt6"
+    ;;
+  *)
+    echo "Unknown architecture: $PACKARCH"
+    exit 1
+    ;;
+esac
+
+if [[ ! -d "${qt_dir}" ]]; then
+  echo "Qt directory not found: ${qt_dir}"
+  exit 1
+fi
 
 ##########################################################################
 # GET TOOLS

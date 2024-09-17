@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+trap 'echo Making AppImage failed; exit 1' ERR
+
 INSTALL_DIR="$1" # MuseScore was installed here
 APPIMAGE_NAME="$2" # name for AppImage file (created outside $INSTALL_DIR)
 PACKARCH="$3" # architecture (x86_64, aarch64, armv7l)
@@ -144,8 +146,8 @@ mv "${appdir}/bin/findlib" "${appdir}/../findlib"
 qt_sql_drivers_path="${QT_PATH}/plugins/sqldrivers"
 qt_sql_drivers_tmp="/tmp/qtsqldrivers"
 mkdir -p "$qt_sql_drivers_tmp"
-mv "${qt_sql_drivers_path}/libqsqlmysql.so" "${qt_sql_drivers_tmp}/libqsqlmysql.so"
-mv "${qt_sql_drivers_path}/libqsqlpsql.so" "${qt_sql_drivers_tmp}/libqsqlpsql.so"
+[ -f "${qt_sql_drivers_path}/libqsqlmysql.so" ] && mv "${qt_sql_drivers_path}/libqsqlmysql.so" "${qt_sql_drivers_tmp}/libqsqlmysql.so"
+[ -f "${qt_sql_drivers_path}/libqsqlpsql.so" ] && mv "${qt_sql_drivers_path}/libqsqlpsql.so" "${qt_sql_drivers_tmp}/libqsqlpsql.so"
 
 # Semicolon-separated list of platforms to deploy in addition to `libqxcb.so`.
 # Used by linuxdeploy-plugin-qt.
@@ -159,11 +161,6 @@ export QML_SOURCES_PATHS=./
 linuxdeploy --appdir "${appdir}" # adds all shared library dependencies
 linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
 
-# At an unknown point in time, the libqgtk3 plugin stopped being deployed
-if [ ! -f ${appdir}/plugins/platformthemes/libqgtk3.so ]; then
-  cp ${QT_PATH}/plugins/platformthemes/libqgtk3.so ${appdir}/plugins/platformthemes/libqgtk3.so 
-fi
-
 # The system must be used
 if [ -f ${appdir}/lib/libglib-2.0.so.0 ]; then
   rm -f ${appdir}/lib/libglib-2.0.so.0 
@@ -171,9 +168,9 @@ fi
 
 unset QML_SOURCES_PATHS EXTRA_PLATFORM_PLUGINS
 
-# In case this container is reused multiple times, return the moved libraries back
-mv "${qt_sql_drivers_tmp}/libqsqlmysql.so" "${qt_sql_drivers_path}/libqsqlmysql.so"
-mv "${qt_sql_drivers_tmp}/libqsqlpsql.so" "${qt_sql_drivers_path}/libqsqlpsql.so"
+# Return the moved libraries back
+[ -f "${qt_sql_drivers_tmp}/libqsqlmysql.so" ] && mv "${qt_sql_drivers_tmp}/libqsqlmysql.so" "${qt_sql_drivers_path}/libqsqlmysql.so"
+[ -f "${qt_sql_drivers_tmp}/libqsqlpsql.so" ] && mv "${qt_sql_drivers_tmp}/libqsqlpsql.so" "${qt_sql_drivers_path}/libqsqlpsql.so"
 
 # Put the non-RUNPATH binaries back
 mv "${appdir}/../findlib" "${appdir}/bin/findlib"
@@ -219,6 +216,9 @@ unwanted_files=(
 additional_qt_components=(
   plugins/printsupport/libcupsprintersupport.so
 
+  # At an unknown point in time, the libqgtk3 plugin stopped being deployed
+  plugins/platformthemes/libqgtk3.so
+
   # Wayland support (run with QT_QPA_PLATFORM=wayland to use)
   plugins/wayland-decoration-client
   plugins/wayland-graphics-integration-client
@@ -228,10 +228,14 @@ additional_qt_components=(
 # ADDITIONAL LIBRARIES
 # linuxdeploy may have missed some libraries that we need
 # Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
-additional_libraries=(
-  libssl.so.1.1       # OpenSSL (for Save Online)
-  libcrypto.so.1.1    # OpenSSL (for Save Online)
-)
+if [[ "$PACKARCH" == "x86_64" ]]; then
+  additional_libraries=(
+    libssl.so.1.1    # OpenSSL (for Save Online)
+    libcrypto.so.1.1 # OpenSSL (for Save Online)
+  )
+else
+  additional_libraries=()
+fi
 
 # FALLBACK LIBRARIES
 # These get bundled in the AppImage, but are only loaded if the user does not
@@ -243,7 +247,7 @@ additional_libraries=(
 # Report new additions at https://github.com/linuxdeploy/linuxdeploy/issues
 fallback_libraries=(
   libjack.so.0 # https://github.com/LMMS/lmms/pull/3958
-  libopengl.so.0 # https://bugreports.qt.io/browse/QTBUG-89754
+  libOpenGL.so.0 # https://bugreports.qt.io/browse/QTBUG-89754
 
   # https://github.com/musescore/MuseScore/issues/24068#issuecomment-2297823192
   libwayland-client.so.0
@@ -267,11 +271,19 @@ for file in "${unwanted_files[@]}"; do
 done
 
 for file in "${additional_qt_components[@]}"; do
+  if [ -f "${appdir}/${file}" ]; then
+    echo "Warning: ${file} was already deployed. Skipping."
+    continue
+  fi
   mkdir -p "${appdir}/$(dirname "${file}")"
   cp -Lr "${QT_PATH}/${file}" "${appdir}/${file}"
 done
 
 for lib in "${additional_libraries[@]}"; do
+  if [ -f "${appdir}/lib/${lib}" ]; then
+    echo "Warning: ${file} was already deployed. Skipping."
+    continue
+  fi
   full_path="$(find_library "${lib}")"
   cp -L "${full_path}" "${appdir}/lib/${lib}"
 done
@@ -362,15 +374,5 @@ fi
 
 # create AppImage
 appimagetool "${appimagetool_args[@]}" "${appdir}" "${appimage}"
-
-# We are running as root in the Docker image so all created files belong to
-# root. Allow non-root users outside the Docker image to access these files.
-chmod a+rwx "${created_files[@]}"
-parent_dir="${PWD}"
-while [[ "$(dirname "${parent_dir}")" != "${parent_dir}" ]]; do
-  [[ "$parent_dir" == "/" ]] && break
-  chmod a+rwx "$parent_dir"
-  parent_dir="$(dirname "$parent_dir")"
-done
 
 echo "Making AppImage finished"
