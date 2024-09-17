@@ -25,46 +25,86 @@
 
 using namespace muse::api;
 
+/** APIDOC namespace: log
+ * Write messages to log and console
+ * @namespace
+ */
 LogApi::LogApi(api::IApiEngine* e)
     : ApiObject(e)
 {
 }
 
+/** APIDOC method
+ * Write error message with default tag
+ * @param {String} message Message
+ */
 void LogApi::error(const QString& message)
 {
     error("Api", message);
 }
 
+/** APIDOC method
+ * Write warning message with default tag
+ * @param {String} message Message
+ */
 void LogApi::warn(const QString& message)
 {
     warn("Api", message);
 }
 
+/** APIDOC method
+ * Write info message with default tag
+ * @param {String} message Message
+ */
 void LogApi::info(const QString& message)
 {
     info("Api", message);
 }
 
+/** APIDOC method
+ * Write debug message with default tag
+ * @param {String} message Message
+ */
 void LogApi::debug(const QString& message)
 {
     debug("Api", message);
 }
 
+/** APIDOC method
+ * Write error message with tag
+ * @param {String} tag Tag
+ * @param {String} message Message
+ */
 void LogApi::error(const QString& tag, const QString& message)
 {
     LOGE_T(tag.toStdString())() << message;
 }
 
+/** APIDOC method
+ * Write warning message with tag
+ * @param {String} tag Tag
+ * @param {String} message Message
+ */
 void LogApi::warn(const QString& tag, const QString& message)
 {
     LOGW_T(tag.toStdString())() << message;
 }
 
+/** APIDOC method
+ * Write info message with tag
+ * @param {String} tag Tag
+ * @param {String} message Message
+ */
 void LogApi::info(const QString& tag, const QString& message)
 {
     LOGI_T(tag.toStdString())() << message;
 }
 
+/** APIDOC method
+ * Write debug message with tag
+ * @param {String} tag Tag
+ * @param {String} message Message
+ */
 void LogApi::debug(const QString& tag, const QString& message)
 {
     LOGD_T(tag.toStdString())() << message;
