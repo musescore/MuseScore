@@ -27,10 +27,10 @@
 #include "global/containers.h"
 #include "draw/types/geometry.h"
 
-#include "importxmlfirstpass.h"
 #include "musicxmlsupport.h"
 #include "musicxmltypes.h"
 #include "musicxmltupletstate.h"
+#include "musicxmlpart.h"
 
 #include "engraving/engravingerrors.h"
 

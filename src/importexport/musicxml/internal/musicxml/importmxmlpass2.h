@@ -26,7 +26,6 @@
 #include <array>
 
 #include "importmxmlpass1.h"
-#include "importxmlfirstpass.h"
 #include "internal/musicxml/musicxmlsupport.h"
 #include "musicxml.h"
 #include "musicxmltypes.h"

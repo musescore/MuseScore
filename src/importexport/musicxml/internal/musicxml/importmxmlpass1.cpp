@@ -43,6 +43,7 @@
 #include "importmxmllogger.h"
 #include "importmxmlnoteduration.h"
 #include "importmxmlpass1.h"
+#include "musicxml.h"
 #include "musicxmltypes.h"
 
 #include "modularity/ioc.h"

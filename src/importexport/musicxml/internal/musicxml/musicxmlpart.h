@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,33 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MUSICXMLPART_H
+#define MUSICXMLPART_H
 
-#ifndef __IMPORTXMLFIRSTPASS_H__
-#define __IMPORTXMLFIRSTPASS_H__
-
-#include "engraving/types/fraction.h"
-#include "engraving/dom/interval.h"
+#include "types/fraction.h"
+#include "dom/interval.h"
 #include "musicxmltypes.h"
 
 namespace mu::engraving {
-typedef std::map<int, VoiceDesc> VoiceList;
-//using Intervals = std::map<Fraction, Interval>;
-
-class MusicXmlIntervalList : public std::map<Fraction, Interval>
-{
-public:
-    MusicXmlIntervalList() {}
-    Interval interval(const Fraction f) const;
-};
-
-class MusicXmlInstrList : public std::map<Fraction, String>
-{
-public:
-    MusicXmlInstrList() {}
-    const String instrument(const Fraction f) const;
-    void setInstrument(const String instr, const Fraction f);
-};
-
 class MusicXmlOctaveShiftList : public std::map<Fraction, int>
 {
 public:
@@ -53,18 +34,6 @@ public:
     int octaveShift(const Fraction f) const;
     void addOctaveShift(const int shift, const Fraction f);
     void calcOctaveShiftShifts();
-};
-
-class LyricNumberHandler
-{
-public:
-    LyricNumberHandler() {}
-    void addNumber(const String& number);
-    String toString() const;
-    int getLyricNo(const String& number) const;
-    void determineLyricNos();
-private:
-    std::map<String, int> m_numberToNo;
 };
 
 class MusicXmlPart
@@ -114,7 +83,7 @@ private:
     int m_maxStaff = -1;                      // maximum staff value found (0 based), -1 = none
     bool m_hasLyrics = false;
     std::map<int, int> m_staffNumberToIndex;       // Mapping from staff number to index in staff list.
-                                                   // Only for when staves are discarded in MusicXMLParserPass1::attributes.
+    // Only for when staves are discarded in MusicXMLParserPass1::attributes.
 };
-} // namespace Ms
-#endif
+}
+#endif // MUSICXMLPART_H

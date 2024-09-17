@@ -24,6 +24,7 @@
 #define MUSICXMLTYPES_H
 #include "dom/mscore.h"
 #include "dom/arpeggio.h"
+#include "dom/interval.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -102,6 +103,7 @@ private:
     int m_staffAlloc[MAX_STAVES];        // For overlapping voices: voice is allocated on these staves (note: -2=unalloc -1=undef 1=alloc)
     int m_voices[MAX_STAVES];            // For every voice allocated on the staff, the voice number
 };
+typedef std::map<int, VoiceDesc> VoiceList;
 
 //---------------------------------------------------------
 //   MusicXMLInstrument
@@ -142,6 +144,33 @@ struct MusicXMLInstrument {
      */
 };
 typedef std::map<String, MusicXMLInstrument> MusicXMLInstruments;
+
+class MusicXmlIntervalList : public std::map<Fraction, Interval>
+{
+public:
+    MusicXmlIntervalList() {}
+    Interval interval(const Fraction f) const;
+};
+
+class MusicXmlInstrList : public std::map<Fraction, String>
+{
+public:
+    MusicXmlInstrList() {}
+    const String instrument(const Fraction f) const;
+    void setInstrument(const String instr, const Fraction f);
+};
+
+class LyricNumberHandler
+{
+public:
+    LyricNumberHandler() {}
+    void addNumber(const String& number);
+    String toString() const;
+    int getLyricNo(const String& number) const;
+    void determineLyricNos();
+private:
+    std::map<String, int> m_numberToNo;
+};
 }
 
 #endif // MUSICXMLTYPES_H
