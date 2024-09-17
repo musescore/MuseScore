@@ -99,6 +99,9 @@ public:
 
     bool isAccessibleEnabled() const override;
 
+    muse::ValCh<bool> pianoKeyboardUseNotatedPitch() const override;
+    void setPianoKeyboardUseNotatedPitch(bool useNotatedPitch) override;
+
     bool guitarProImportExperimental() const override;
     bool useStretchedBends() const override;
     bool shouldAddParenthesisOnStandardStaff() const override;
@@ -119,6 +122,7 @@ private:
     muse::ValNt<DebuggingOptions> m_debuggingOptions;
 
     bool m_multiVoice = false;
+    muse::ValCh<bool> m_pianoKeyboardUseNotatedPitch;
 };
 }
 

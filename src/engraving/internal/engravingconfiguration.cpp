@@ -51,6 +51,8 @@ static const Settings::Key UNLINKED_COLOR("engraving", "engraving/colors/unlinke
 
 static const Settings::Key DYNAMICS_APPLY_TO_ALL_VOICES("engraving", "score/dynamicsApplyToAllVoices");
 
+static const Settings::Key PIANO_KEYBOARD_PITCH_STATE("engraving",  "pianoKeyboard/useNotatedPitch");
+
 struct VoiceColor {
     Settings::Key key;
     Color color;
@@ -104,6 +106,12 @@ void EngravingConfiguration::init()
     VOICE_COLORS[ALL_VOICES_IDX] = VoiceColor { std::move(ALL_VOICES_COLOR), currentColor };
 
     settings()->setDefaultValue(DYNAMICS_APPLY_TO_ALL_VOICES, Val(true));
+
+    settings()->setDefaultValue(PIANO_KEYBOARD_PITCH_STATE, Val(true));
+    m_pianoKeyboardUseNotatedPitch.val = settings()->value(PIANO_KEYBOARD_PITCH_STATE).toBool();
+    settings()->valueChanged(PIANO_KEYBOARD_PITCH_STATE).onReceive(this, [this](const Val& val) {
+        m_pianoKeyboardUseNotatedPitch.set(val.toBool());
+    });
 
     settings()->setDefaultValue(FORMATTING_COLOR, Val(Color("#A0A0A4").toQColor()));
     settings()->setDescription(FORMATTING_COLOR, muse::trc("engraving", "Formatting color"));
@@ -303,6 +311,17 @@ void EngravingConfiguration::setDynamicsApplyToAllVoices(bool v)
 {
     settings()->setSharedValue(DYNAMICS_APPLY_TO_ALL_VOICES, Val(v));
 }
+
+muse::ValCh<bool> EngravingConfiguration::pianoKeyboardUseNotatedPitch() const
+{
+    return m_pianoKeyboardUseNotatedPitch;
+}
+
+void EngravingConfiguration::setPianoKeyboardUseNotatedPitch(bool useNotatedPitch)
+{
+    settings()->setSharedValue(PIANO_KEYBOARD_PITCH_STATE, Val(useNotatedPitch));
+}
+
 
 muse::async::Notification EngravingConfiguration::scoreInversionChanged() const
 {
