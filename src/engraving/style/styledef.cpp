@@ -85,6 +85,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(lyricsDashMaxLength,                        Spatium(0.6)),
     styleDef(lyricsDashMaxDistance,                      Spatium(16.0)),
     styleDef(lyricsDashForce,                            true),
+    styleDef(lyricsDashFirstAndLastGapAreHalf,           true),
     styleDef(lyricsAlignVerseNumber,                     true),
     styleDef(lyricsLineThickness,                        Spatium(0.1)),
     styleDef(lyricsMelismaAlign,                         Align(AlignH::LEFT, AlignV::BASELINE)),

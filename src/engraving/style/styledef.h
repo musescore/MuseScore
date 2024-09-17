@@ -102,6 +102,7 @@ enum class Sid {
     lyricsDashMaxLength,
     lyricsDashMaxDistance,
     lyricsDashForce,
+    lyricsDashFirstAndLastGapAreHalf,
     lyricsAlignVerseNumber,
     lyricsLineThickness,
     lyricsMelismaAlign,
