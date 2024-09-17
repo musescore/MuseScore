@@ -3384,7 +3384,7 @@ void Score::cmdMoveLyrics(Lyrics* lyrics, DirectionV dir)
 //   realtimeAdvance
 //---------------------------------------------------------
 
-void Score::realtimeAdvance()
+void Score::realtimeAdvance(bool allowTransposition)
 {
     InputState& is = inputState();
     if (!is.noteEntryMode()) {
@@ -3410,7 +3410,7 @@ void Score::realtimeAdvance()
         Chord* prevChord = prevCR->isChord() ? toChord(prevCR) : 0;
         bool partOfChord = false;
         for (const MidiInputEvent& ev : midiPitches) {
-            addTiedMidiPitch(ev.pitch, partOfChord, prevChord);
+            addTiedMidiPitch(ev.pitch, partOfChord, prevChord, allowTransposition);
             partOfChord = true;
         }
     }

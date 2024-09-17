@@ -1564,9 +1564,9 @@ void Score::cmdRemoveTimeSig(TimeSig* timeSignature)
 //  addTiedMidiPitch
 //---------------------------------------------------------
 
-Note* Score::addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord)
+Note* Score::addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool allowTransposition)
 {
-    Note* n = addMidiPitch(pitch, addFlag, true);
+    Note* n = addMidiPitch(pitch, addFlag, allowTransposition);
     if (prevChord) {
         Note* nn = prevChord->findNote(n->pitch());
         if (nn) {
