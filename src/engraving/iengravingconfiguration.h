@@ -28,7 +28,6 @@
 #include "async/channel.h"
 #include "async/notification.h"
 #include "engraving/types/types.h"
-#include "framework/global/types/retval.h"
 
 namespace muse::draw {
 class Color;
@@ -116,9 +115,6 @@ public:
     virtual muse::async::Notification debuggingOptionsChanged() const = 0;
 
     virtual bool isAccessibleEnabled() const = 0;
-
-    virtual muse::ValCh<bool> pianoKeyboardUseNotatedPitch() const = 0;
-    virtual void setPianoKeyboardUseNotatedPitch(bool useNotatedPitch) = 0;
 
     /// these configurations will be removed after solving https://github.com/musescore/MuseScore/issues/14294
     virtual bool guitarProImportExperimental() const = 0;
