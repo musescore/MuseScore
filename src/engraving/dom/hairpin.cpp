@@ -114,6 +114,18 @@ EngravingItem* HairpinSegment::drop(EditData& data)
     return d;
 }
 
+void HairpinSegment::setPropertyFlags(Pid id, PropertyFlags f)
+{
+    int i = getPropertyFlagsIdx(id);
+    if (i == -1) {
+        // Can happen (for example when edit-dragging the aperture) that we're editing
+        // the HairpinSegment but the relevant property belongs to the Hairpin.
+        hairpin()->setPropertyFlags(id, f);
+        return;
+    }
+    m_propertyFlagsList[i] = f;
+}
+
 //---------------------------------------------------------
 //   gripsPositions
 //---------------------------------------------------------
