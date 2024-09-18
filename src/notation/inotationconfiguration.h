@@ -193,8 +193,8 @@ public:
     virtual muse::ValCh<int> pianoKeyboardNumberOfKeys() const = 0;
     virtual void setPianoKeyboardNumberOfKeys(int number) = 0;
 
-    virtual muse::ValCh<bool> pianoKeyboardUseNotatedPitch() const = 0;
-    virtual void setPianoKeyboardUseNotatedPitch(bool useNotatedPitch) = 0;
+    virtual muse::ValCh<bool> midiUseWrittenPitch() const = 0;
+    virtual void setMidiUseWrittenPitch(bool useWrittenPitch) = 0;
 
     // TODO: Delete when the new percussion panel is finished
     virtual bool useNewPercussionPanel() const = 0;

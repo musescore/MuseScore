@@ -47,7 +47,7 @@ public:
 
     bool isFromMidi() const;
 
-    bool useNotatedPitch() const;
+    bool useWrittenPitch() const;
 
 private:
     INotationPtr currentNotation() const;

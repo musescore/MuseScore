@@ -36,6 +36,7 @@ using namespace muse::uicomponents;
 using namespace muse::audio;
 
 static const ActionCode PLAY_ACTION_CODE("play");
+static const ActionCode TOGGLE_INPUT_PITCH_CODE("toggle-written-sounding-pitch");
 
 static MusicalSymbolCodes::Code tempoDurationToNoteIcon(DurationType durationType)
 {
@@ -95,6 +96,13 @@ void PlaybackToolBarModel::updateActions()
     MenuItemList result;
     MenuItemList settingsItems;
 
+    for (const UiAction& action : PlaybackUiActions::midiInputActions()) {
+        settingsItems << makeMenuItem(action.code);
+    }
+
+    settingsItems << makePitchMenu();
+    settingsItems << makeSeparator();
+
     for (const UiAction& action : PlaybackUiActions::settingsActions()) {
         settingsItems << makeMenuItem(action.code);
     }
@@ -129,6 +137,22 @@ void PlaybackToolBarModel::updateActions()
     result << settingsItem;
 
     setItems(result);
+}
+
+MenuItem* PlaybackToolBarModel::makePitchMenu()
+{
+    MenuItemList items;
+
+    for (const UiAction& action : PlaybackUiActions::midiInputPitchActions()) {
+        items << makeMenuItem(action.code);
+    }
+
+    MenuItem* menu = makeMenu(muse::TranslatableString("notation", "Input pitch"), items);
+    UiAction action = menu->action();
+    action.iconCode = IconCode::Code::MUSIC_NOTES;
+    menu->setAction(action);
+
+    return menu;
 }
 
 void PlaybackToolBarModel::onActionsStateChanges(const ActionCodeList& codes)
