@@ -28,4 +28,6 @@ set (MUSICXML_SRC
     ${CMAKE_CURRENT_LIST_DIR}/musicxmltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/musicxmlvalidation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/musicxmlvalidation.h
+    ${CMAKE_CURRENT_LIST_DIR}/musicxmlvoicedesc.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/musicxmlvoicedesc.h
     )
