@@ -42,6 +42,7 @@ public:
     async::Channel<midi::channel_t, midi::Program> channelAdded() const;
 
     const ChannelMap& channels() const;
+    int lastStaff() const;
 
 private:
     void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) override;
@@ -69,6 +70,7 @@ private:
 
     mutable ChannelMap m_channels;
     bool m_useDynamicEvents = false;
+    int m_lastStaff = -1;
 };
 }
 

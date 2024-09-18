@@ -289,18 +289,6 @@ bool CoreMidiOutPort::supportsMIDI20Output() const
     return false;
 }
 
-static ByteCount packetListSize(const std::vector<Event>& events)
-{
-    if (events.empty()) {
-        return 0;
-    }
-
-    // TODO: should be dynamic per type of event
-    constexpr size_t eventSize = sizeof(Event().to_MIDI10Package());
-
-    return offsetof(MIDIPacketList, packet) + events.size() * (offsetof(MIDIPacket, data) + eventSize);
-}
-
 Ret CoreMidiOutPort::sendEvent(const Event& e)
 {
     if (!isConnected()) {
@@ -309,35 +297,60 @@ Ret CoreMidiOutPort::sendEvent(const Event& e)
 
     OSStatus result;
     MIDITimeStamp timeStamp = AudioGetCurrentHostTime();
+    static bool doLog = false; // kors::logger::Logger::instance()->isLevel(kors::logger::Level::Debug);
 
     if (__builtin_available(macOS 11.0, *)) {
-        MIDIProtocolID protocolId = configuration()->useMIDI20Output() ? m_core->destinationProtocolId : kMIDIProtocol_1_0;
+        MIDIProtocolID protocolId = kMIDIProtocol_2_0; // configuration()->useMIDI20Output() ? m_core->destinationProtocolId : kMIDIProtocol_1_0;
+
+        ByteCount wordCount = e.midi20WordCount();
+        if (wordCount == 0) {
+            LOGW() << "Failed to send message for event: " << e.to_string();
+            return make_ret(Err::MidiSendError, "failed send message. unknown word count");
+        }
+        if (doLog) {
+            LOGW() << "Sending MIDIEventList event: " << e.to_string();
+        }
 
         MIDIEventList eventList;
         MIDIEventPacket* packet = MIDIEventListInit(&eventList, protocolId);
-        // TODO: Replace '4' with something specific for the type of element?
-        MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, 4, e.rawData());
+
+        if (doLog) {
+            bool isChannelVoiceMessage20 = e.messageType() == Event::MessageType::ChannelVoice20;
+            bool isNoteOnMessage = isChannelVoiceMessage20 && e.opcode() == muse::midi::Event::Opcode::NoteOn;
+            if (isNoteOnMessage && e.velocity() < 128) {
+                LOGW() << "Detected low MIDI 2.0 ChannelVoiceMessage velocity.";
+            }
+        }
+
+        MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, wordCount, e.rawData());
 
         result = MIDISendEventList(m_core->outputPort, m_core->destinationId, &eventList);
     } else {
         const std::vector<Event> events = e.toMIDI10();
 
-        ByteCount packetListSize = ::packetListSize(events);
-        if (packetListSize == 0) {
+        if (events.empty()) {
             return make_ret(Err::MidiSendError, "midi 1.0 messages list was empty");
         }
 
         MIDIPacketList packetList;
+        // packetList has one packet of 256 bytes by default, which is more than enough for one midi 2.0 event.
         MIDIPacket* packet = MIDIPacketListInit(&packetList);
+        ByteCount packetListSize = sizeof(packetList);
+        Byte bytesPackage[4];
 
         for (const Event& event : events) {
-            uint32_t msg = event.to_MIDI10Package();
-
-            if (!msg) {
-                return make_ret(Err::MidiSendError, "message wasn't converted");
+            int length = event.to_MIDI10BytesPackage(bytesPackage);
+            assert(length <= 3);
+            if (doLog) {
+                if (length == 0) {
+                    LOGW() << "Failed Sending MIDIPacketList event: " << event.to_string();
+                } else {
+                    LOGW() << "Sending MIDIPacketList event: " << event.to_string();
+                }
             }
-
-            packet = MIDIPacketListAdd(&packetList, packetListSize, packet, timeStamp, sizeof(msg), reinterpret_cast<Byte*>(&msg));
+            if (length > 0) {
+                packet = MIDIPacketListAdd(&packetList, packetListSize, packet, timeStamp, length, bytesPackage);
+            }
         }
 
         result = MIDISend(m_core->outputPort, m_core->destinationId, &packetList);
