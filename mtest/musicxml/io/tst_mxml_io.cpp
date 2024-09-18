@@ -114,6 +114,7 @@ private slots:
       void divisionsDefinedTooLate1() { mxmlIoTestRef("testDivsDefinedTooLate1"); }
       void divisionsDefinedTooLate2() { mxmlIoTestRef("testDivsDefinedTooLate2"); }
       void divisionsDuration() { mxmlIoTest("testDivisionsDuration"); }
+      void doletOttavas() { mxmlImportTestRef("testDoletOttavas"); }
       void doubleClefError() { mxmlIoTestRef("testDoubleClefError"); }
       void drumset1() { mxmlIoTest("testDrumset1"); }
       void drumset2() { mxmlIoTest("testDrumset2"); }
@@ -314,7 +315,7 @@ private slots:
       void tieTied() { mxmlIoTestRef("testTieTied"); }
       void timesig1() { mxmlIoTest("testTimesig1"); }
       void timesig3() { mxmlIoTest("testTimesig3"); }
-      void titleSwapMu() { mxmlImportTestRef("testTitleSwapMu"); }
+      void titleSwapMu() {mxmlImportTestRef("testTitleSwapMu"); }
       void titleSwapSib() { mxmlImportTestRef("testTitleSwapSib"); }
       void trackHandling() { mxmlIoTest("testTrackHandling"); }
       void tremolo() { mxmlIoTest("testTremolo"); }
@@ -348,6 +349,7 @@ private slots:
       void wedge2() { mxmlIoTest("testWedge2"); }
       void wedge3() { mxmlIoTest("testWedge3"); }
       //void wedge4() { mxmlIoTestRef("testWedge4"); }
+      // void wedge5() { mxmlIoTestRef("testWedge5"); } // TODO
       void wedgeOffset() { mxmlImportTestRef("testWedgeOffset"); }
       void words1() { mxmlIoTest("testWords1"); }
       // void words2() { mxmlIoTest("testWords2"); } // TODO

@@ -2299,7 +2299,7 @@ void MusicXMLParserPass2::part()
       // Clean up unterminated ties
       for (auto tie : _ties) {
             if (tie.second) {
-                  cleanupUnterminatedTie(tie.second, _score, _pass1.exporterString().contains("dolet 6"));
+                  cleanupUnterminatedTie(tie.second, _score, _pass1.exporterSoftware() == MusicXMLExporterSoftware::DOLET6);
                   _ties[tie.first] = nullptr;
                   }
             }
@@ -3189,7 +3189,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
       int track = _pass1.trackForPart(partId);
       bool isVocalStaff = _pass1.isVocalStaff(partId);
       bool isExpressionText = false;
-      bool delayOttava = _pass1.exporterString().contains("sibelius");
+      bool delayOttava = _pass1.exporterSoftware() == MusicXMLExporterSoftware::SIBELIUS;
       _systemDirection = _e.attributes().value("system").toString() == "only-top";
       //qDebug("direction track %d", track);
       QList<MusicXmlSpannerDesc> starts;
@@ -3464,21 +3464,25 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   }
             else {
                   if (spdesc._isStarted) {
+                        // Adjustments to ottavas by the offset value are unwanted
+                        const Fraction spTick = spdesc._sp && spdesc._sp->isOttava() ? tick : tick + _offset;
                         if (spdesc._sp && spdesc._sp->isOttava() && delayOttava) {
                               // Sibelius writes ottava ends 1 note too early
                               _pass2.setDelayedOttava(spdesc._sp);
                               _pass2.delayedOttava()->setTrack2(track);
-                              _pass2.delayedOttava()->setTick2(tick + _offset);
+                              _pass2.delayedOttava()->setTick2(spTick);
+                              // need to set tick again later
                               _pass2.clearSpanner(desc);
                               }
                         else {
-                              handleSpannerStop(spdesc._sp, track, tick + _offset, spanners);
+                              handleSpannerStop(spdesc._sp, track, spTick, spanners);
                               _pass2.clearSpanner(desc);
                               }
                         }
                   else {
                         spdesc._sp = desc._sp;
-                        spdesc._tick2 = tick + _offset;
+                        const Fraction spTick = spdesc._sp && spdesc._sp->isOttava() ? tick : tick + _offset;
+                        spdesc._tick2 = spTick;
                         spdesc._track2 = track;
                         spdesc._isStopped = true;
                         }
@@ -3668,7 +3672,7 @@ void MusicXMLParserDirection::otherDirection()
             // TODO: Multiple sets of maps for exporters other than Dolet 6/Sibelius
             // TODO: Add more symbols from Sibelius
             QMap<QString, QString> otherDirectionStrings;
-            if (_pass1.exporterString().contains("dolet")) {
+            if (_pass1.dolet()) {
                   otherDirectionStrings = {
                         { QString("To Coda"), QString("To Coda") },
                         { QString("Segno"), QString("<sym>segno</sym>") },
@@ -4480,12 +4484,20 @@ void MusicXMLParserDirection::octaveShift(const QString& type, const int number,
             else {
                   Ottava* o = spdesc._isStopped ? toOttava(spdesc._sp) : new Ottava(_score);
 
-                  // if (placement.isEmpty()) placement = "above";  // TODO ? set default
-
-                  if (type == "down" && ottavasize ==  8) o->setOttavaType(OttavaType::OTTAVA_8VA);
-                  if (type == "down" && ottavasize == 15) o->setOttavaType(OttavaType::OTTAVA_15MA);
-                  if (type ==   "up" && ottavasize ==  8) o->setOttavaType(OttavaType::OTTAVA_8VB);
-                  if (type ==   "up" && ottavasize == 15) o->setOttavaType(OttavaType::OTTAVA_15MB);
+                  if (type == "down") {
+                        _placement = _placement.isEmpty() ? "above" : _placement;
+                        if (ottavasize ==  8)
+                              o->setOttavaType(OttavaType::OTTAVA_8VA);
+                        else if (ottavasize == 15)
+                              o->setOttavaType(OttavaType::OTTAVA_15MA);
+                        }
+                  else /*if (type == "up")*/ {
+                        _placement = _placement.isEmpty() ? "below" : _placement;
+                        if (ottavasize ==  8)
+                              o->setOttavaType(OttavaType::OTTAVA_8VB);
+                        else if (ottavasize == 15)
+                              o->setOttavaType(OttavaType::OTTAVA_15MB);
+                        }
 
                   const QColor color { _e.attributes().value("color").toString() };
                   if (color.isValid())
@@ -6096,7 +6108,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   QString noteheadValue = _e.readElementText();
                   if (noteheadValue == "none")
                         hasHead = false;
-                  else if (noteheadValue == "named" && _pass1.exporterString().contains("noteflight"))
+                  else if (noteheadValue == "named" && _pass1.exporterSoftware() == MusicXMLExporterSoftware::NOTEFLIGHT)
                         headScheme = NoteHead::Scheme::HEAD_PITCHNAME;
                   else
                         headGroup = convertNotehead(noteheadValue);
@@ -6391,7 +6403,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   Notation notation { "tied" };
                   const QString ctype { "type" };
                   notation.addAttribute(&ctype, &tieType);
-                  addTie(notation, _score, note, cr->track(), _ties, _logger, &_e, _pass1.exporterString().contains("dolet 6"));
+                  addTie(notation, _score, note, cr->track(), _ties, _logger, &_e,
+                         _pass1.exporterSoftware() == MusicXMLExporterSoftware::DOLET6);
                   }
             }
 
@@ -7003,7 +7016,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
 
       const HarmonyDesc newHarmonyDesc(track, ha, fd);
       bool insert = true;
-      if (_pass1.exporterString().contains("dolet")) {
+      if (_pass1.sibOrDolet()) {
             const int ticks = (sTime + offset).ticks();
             for (auto itr = harmonyMap.begin(); itr != harmonyMap.end(); itr++) {
                   if (itr->first != ticks)
@@ -8173,7 +8186,8 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
                   addGlissandoSlide(notation, note, glissandi, spanners, _logger, &_e);
                   }
             else if (note && notation.name() == "tied") {
-                  addTie(notation, _score, note, cr->track(), ties, _logger, &_e, _pass1.exporterString().contains("dolet 6"));
+                  addTie(notation, _score, note, cr->track(), ties, _logger, &_e,
+                         _pass1.exporterSoftware() == MusicXMLExporterSoftware::DOLET6);
                   }
             else if (note && notation.parent() == "technical") {
                   addTechnical(notation, note);

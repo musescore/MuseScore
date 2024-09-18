@@ -77,6 +77,15 @@ enum class MxmlTupletFlag : char {
       STOP_CURRENT = 8
       };
 
+enum class MusicXMLExporterSoftware : char {
+      SIBELIUS,
+      DOLET6,
+      DOLET8,
+      FINALE,
+      NOTEFLIGHT,
+      OTHER
+      };
+
 typedef QFlags<MxmlTupletFlag> MxmlTupletFlags;
 
 struct MxmlTupletState {
@@ -191,15 +200,18 @@ public:
       void addInferredTranspose(const QString& partId);
       void setHasInferredHeaderText(bool b) { _hasInferredHeaderText = b; }
       bool hasInferredHeaderText() const { return _hasInferredHeaderText; }
-      QString exporterString() const { return _exporterString; }
+      MusicXMLExporterSoftware exporterSoftware() const { return _exporterSoftware; }
+      bool sibOrDolet() const;
+      bool dolet() const;
 
 private:
       // functions
       void addError(const QString& error);      ///< Add an error to be shown in the GUI
+      void setExporterSoftware(QString& exporter);
 
       // generic pass 1 data
       QXmlStreamReader _e;
-      QString _exporterString;                  ///< Name of the software which exported the file
+      MusicXMLExporterSoftware _exporterSoftware = MusicXMLExporterSoftware::OTHER;   // Software which exported the file
       int _divs;                                ///< Current MusicXML divisions value
       QMap<QString, MusicXmlPart> _parts;       ///< Parts data, mapped on part id
       std::set<int> _systemStartMeasureNrs;     ///< Measure numbers of measures starting a page
