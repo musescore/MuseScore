@@ -167,7 +167,8 @@ bool FluidSynth::handleEvent(const midi::Event& event)
     int ret = FLUID_OK;
     switch (event.opcode()) {
     case Event::Opcode::NoteOn: {
-        ret = fluid_synth_noteon(m_fluid->synth, event.channel(), event.note(), event.velocity());
+        // fluid_synth_noteon expects 0...127
+        ret = fluid_synth_noteon(m_fluid->synth, event.channel(), event.note(), event.velocity7());
         m_tuning.add(event.note(), event.pitchTuningCents());
     } break;
     case Event::Opcode::NoteOff: {
@@ -176,16 +177,16 @@ bool FluidSynth::handleEvent(const midi::Event& event)
     } break;
     case Event::Opcode::ControlChange: {
         if (event.index() == muse::midi::EXPRESSION_CONTROLLER) {
-            ret = setExpressionLevel(event.data());
+            ret = setExpressionLevel(event.data7());
         } else {
-            ret = setControllerValue(event.channel(), event.index(), event.data());
+            ret = setControllerValue(event.channel(), event.index(), event.data7());
         }
     } break;
     case Event::Opcode::ProgramChange: {
         fluid_synth_program_change(m_fluid->synth, event.channel(), event.program());
     } break;
     case Event::Opcode::PitchBend: {
-        ret = setPitchBend(event.channel(), event.data());
+        ret = setPitchBend(event.channel(), event.pitchBend14());
     } break;
     default: {
         LOGD() << "not supported event type: " << event.opcodeString();

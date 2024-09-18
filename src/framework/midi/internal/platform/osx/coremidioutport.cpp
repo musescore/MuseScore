@@ -311,12 +311,30 @@ Ret CoreMidiOutPort::sendEvent(const Event& e)
     MIDITimeStamp timeStamp = AudioGetCurrentHostTime();
 
     if (__builtin_available(macOS 11.0, *)) {
-        MIDIProtocolID protocolId = configuration()->useMIDI20Output() ? m_core->destinationProtocolId : kMIDIProtocol_1_0;
+        MIDIProtocolID protocolId = kMIDIProtocol_2_0; // configuration()->useMIDI20Output() ? m_core->destinationProtocolId : kMIDIProtocol_1_0;
+
+        ByteCount wordCount = e.midi20WordCount();
+        if (wordCount == 0) {
+            LOGE() << "CoreMidiOutPort: failed to send message for event: " << e.to_string();
+            return make_ret(Err::MidiSendError, "failed send message. unknown word count");
+        }
+        LOGD() << "CoreMidiOutPort: sending event: " << e.to_string();
 
         MIDIEventList eventList;
         MIDIEventPacket* packet = MIDIEventListInit(&eventList, protocolId);
-        // TODO: Replace '4' with something specific for the type of element?
-        MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, 4, e.rawData());
+
+        bool isChannelVoiceMessage20 = e.messageType() == Event::MessageType::ChannelVoice20;
+        bool isNoteOnMessage = isChannelVoiceMessage20 && e.opcode() == muse::midi::Event::Opcode::NoteOn;
+
+        if (isNoteOnMessage && e.velocity() < 128) {
+            LOGW() << "CoreMidiOutPort: unexpected low ChannelVoiceMessage velocity. scaling...";
+            Event e2 = e;
+            uint16_t vel = e.velocity();
+            e2.setVelocity(vel*256*2);
+            MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, wordCount, e2.rawData());
+        } else {
+            MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, wordCount, e.rawData());
+        }
 
         result = MIDISendEventList(m_core->outputPort, m_core->destinationId, &eventList);
     } else {
@@ -337,6 +355,7 @@ Ret CoreMidiOutPort::sendEvent(const Event& e)
                 return make_ret(Err::MidiSendError, "message wasn't converted");
             }
 
+            // bug: sizeof(msg) is not the byte count
             packet = MIDIPacketListAdd(&packetList, packetListSize, packet, timeStamp, sizeof(msg), reinterpret_cast<Byte*>(&msg));
         }
 

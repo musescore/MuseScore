@@ -978,6 +978,60 @@ struct Event {
         return str;
     }
 
+    uint8_t velocity7() const
+    {
+        uint16_t val = velocity();
+        if (isChannelVoice20()) {
+            return static_cast<uint8_t>(scaleDown(val >> 16, 16, 7));
+        }
+        return static_cast<uint8_t>(val);
+    }
+
+    void setVelocity7(uint8_t value) {
+        if (isChannelVoice20()) {
+            uint16_t scaled = scaleUp(value, 7, 16);
+            setVelocity(scaled);
+            return;
+        }
+        setVelocity(value);
+    }
+
+    uint8_t data7() const
+    {
+        uint32_t val = data();
+        if (messageType() == MessageType::ChannelVoice20) {
+            return scaleDown(val,32,7);
+        }
+        return val;
+    }
+
+    uint32_t pitchBend14() const
+    {
+        uint32_t val = data();
+        switch (messageType()) {
+        case MessageType::ChannelVoice10: {
+            return val;
+        }
+        case MessageType::ChannelVoice20: {
+            return scaleDown(val,32,14);
+        }
+        default: assert(false);
+        }
+        return 0;
+    }
+
+    int midi20WordCount() const
+    {
+        switch (messageType()) {
+        case MessageType::Utility: return 1;
+        case MessageType::SystemRealTime: return 1;
+        case MessageType::ChannelVoice10: return 1;
+        case MessageType::SystemExclusiveData: return 2;
+        case MessageType::ChannelVoice20: return 2;
+        case MessageType::Data: return 4;
+        }
+    }
+
 private:
     //!Note Temporarily disabled until the end of the investigation, looks like we're not supporting some 'custom' messages from MU3
     //! v.pereverzev@wsmgroup.ru
