@@ -139,7 +139,7 @@ static qreal nudgeDistance(const mu::engraving::EditData& editData, qreal raster
 
 static PointF bindCursorPosToText(const PointF& cursorPos, const EngravingItem* text)
 {
-    if (!text || !text->isTextBase()) {
+    if (cursorPos.isNull() || !text || !text->isTextBase()) {
         return PointF();
     }
 
@@ -5019,7 +5019,11 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         nextLyrics->setTrack(track);
         cr = toChordRest(nextSegment->element(track));
         nextLyrics->setParent(cr);
+
         nextLyrics->setNo(verse);
+        const mu::engraving::TextStyleType styleType(nextLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
+        nextLyrics->setTextStyleType(styleType);
+
         nextLyrics->setPlacement(placement);
         nextLyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, pFlags);
         nextLyrics->setSyllabic(mu::engraving::LyricsSyllabic::SINGLE);
@@ -5176,7 +5180,11 @@ void NotationInteraction::navigateToNextSyllable()
         toLyrics = Factory::createLyrics(cr);
         toLyrics->setTrack(track);
         toLyrics->setParent(cr);
+
         toLyrics->setNo(verse);
+        const mu::engraving::TextStyleType styleType(toLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
+        toLyrics->setTextStyleType(styleType);
+
         toLyrics->setPlacement(placement);
         toLyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, pFlags);
         toLyrics->setSyllabic(mu::engraving::LyricsSyllabic::END);
@@ -5258,7 +5266,11 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
         lyrics = Factory::createLyrics(cr);
         lyrics->setTrack(track);
         lyrics->setParent(cr);
+
         lyrics->setNo(verse);
+        const mu::engraving::TextStyleType styleType(lyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
+        lyrics->setTextStyleType(styleType);
+
         lyrics->setPlacement(placement);
         lyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, pFlags);
         lyrics->setFontStyle(fStyle);
@@ -5823,7 +5835,11 @@ void NotationInteraction::addMelisma()
         toLyrics = Factory::createLyrics(cr);
         toLyrics->setTrack(track);
         toLyrics->setParent(cr);
+
         toLyrics->setNo(verse);
+        const mu::engraving::TextStyleType styleType(toLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
+        toLyrics->setTextStyleType(styleType);
+
         toLyrics->setPlacement(placement);
         toLyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, pFlags);
         toLyrics->setSyllabic(mu::engraving::LyricsSyllabic::SINGLE);
@@ -5884,7 +5900,11 @@ void NotationInteraction::addLyricsVerse()
     lyrics->setParent(oldLyrics->chordRest());
     lyrics->setPlacement(oldLyrics->placement());
     lyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, oldLyrics->propertyFlags(mu::engraving::Pid::PLACEMENT));
+
     lyrics->setNo(newVerse);
+    const mu::engraving::TextStyleType styleType(lyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
+    lyrics->setTextStyleType(styleType);
+
     lyrics->setFontStyle(fStyle);
     lyrics->setPropertyFlags(mu::engraving::Pid::FONT_STYLE, fFlags);
 
