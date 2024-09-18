@@ -22,11 +22,24 @@
 
 #include "runtime.h"
 
+#ifdef Q_OS_LINUX
+#include <pthread.h>
+#endif
+
 static thread_local std::string s_threadName;
 
 void muse::runtime::setThreadName(const std::string& name)
 {
     s_threadName = name;
+#ifdef Q_OS_LINUX
+    // Set thread name through pthreads to aid debuggers that display such names.
+    // Thread names are limited to 16 bytes on Linux, including the
+    // terminating null.
+    std::string truncated_name = name.length() > 15 ? name.substr(0, 15) : name;
+    if (pthread_setname_np(pthread_self(), truncated_name.c_str()) > 0) {
+        qWarning() << Q_FUNC_INFO << "Couldn't set thread name through pthreads";
+    }
+#endif
 }
 
 const std::string& muse::runtime::threadName()
