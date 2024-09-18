@@ -118,7 +118,9 @@ void TextBase::startEdit(EditData& ed)
     if (!ldata || ldata->layoutInvalid) {
         renderer()->layoutItem(this);
     }
-    if (!ted->cursor()->set(ed.startMove)) {
+
+    //! NOTE: startMove will be null if we didn't use the mouse (e.g. we added a lyric with the spacebar)
+    if (!ed.startMove.isNull() && !ted->cursor()->set(ed.startMove)) {
         resetFormatting();
     }
     double _spatium = spatium();
