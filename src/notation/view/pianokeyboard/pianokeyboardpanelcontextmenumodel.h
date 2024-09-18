@@ -42,7 +42,6 @@ class PianoKeyboardPanelContextMenuModel : public muse::uicomponents::AbstractMe
     Q_PROPERTY(qreal keyWidthScaling READ keyWidthScaling WRITE setKeyWidthScaling NOTIFY keyWidthScalingChanged)
 
     muse::Inject<INotationConfiguration> configuration = { this };
-    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
 public:

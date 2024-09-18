@@ -171,6 +171,9 @@ public:
     ValCh<int> pianoKeyboardNumberOfKeys() const override;
     void setPianoKeyboardNumberOfKeys(int number)  override;
 
+    ValCh<bool> pianoKeyboardUseNotatedPitch() const override;
+    void setPianoKeyboardUseNotatedPitch(bool value)  override;
+
     bool useNewPercussionPanel() const override;
     void setUseNewPercussionPanel(bool use) override;
 

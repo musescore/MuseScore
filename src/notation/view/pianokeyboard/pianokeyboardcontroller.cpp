@@ -178,5 +178,5 @@ INotationPtr PianoKeyboardController::currentNotation() const
 
 bool PianoKeyboardController::useNotatedPitch() const
 {
-    return configuration()->pianoKeyboardUseNotatedPitch().val;
+    return notationConfiguration()->pianoKeyboardUseNotatedPitch().val;
 }

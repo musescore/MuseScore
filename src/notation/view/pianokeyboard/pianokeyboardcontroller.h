@@ -26,13 +26,14 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
+#include "inotationconfiguration.h"
 
 #include "pianokeyboardtypes.h"
 
 namespace mu::notation {
 class PianoKeyboardController : public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<engraving::IEngravingConfiguration> configuration = { this };
+    muse::Inject<INotationConfiguration> notationConfiguration = { this };
     muse::Inject<context::IGlobalContext> context = { this };
 
 public:
