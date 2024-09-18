@@ -27,6 +27,9 @@
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(Q_OS_MACOS)
 #include <pthread.h>
 #endif
+#if defined(Q_OS_FREEBSD)
+#include <pthread_np.h> // Needed for pthread_setname_np on FreeBSD
+#endif
 
 static thread_local std::string s_threadName;
 
