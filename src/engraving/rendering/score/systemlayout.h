@@ -36,6 +36,7 @@ class System;
 class Measure;
 class Bracket;
 class BracketItem;
+class SkylineLine;
 }
 
 namespace mu::engraving::rendering::score {
@@ -86,6 +87,7 @@ private:
     static double minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2, LayoutContext& ctx);
 
     static bool elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system);
+    static bool elementHasAnotherStackedOutside(const EngravingItem* element, const Shape& elementShape, const SkylineLine& skylineLine);
     static void centerElementBetweenStaves(EngravingItem* element, const System* system);
 };
 }
