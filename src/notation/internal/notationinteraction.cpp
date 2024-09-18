@@ -1763,6 +1763,15 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             }
         } else if (isLineNoteToNote) {
             applyLineNoteToNote(score, toNote(sel.elements()[0]), toNote(sel.elements()[1]), element);
+        } else if ((element->isClef() || element->isTimeSig() || element->isKeySig()) && score->noteEntryMode()) {
+            // in note input mode place clef / time sig / key sig before cursor
+            EngravingItem* e = score->inputState().cr();
+            if (!e) {
+                e = sel.elements().front();
+            } else if (e->isChord()) {
+                e = toChord(e)->notes().front();
+            }
+            applyDropPaletteElement(score, e, element, modifiers);
         } else {
             for (EngravingItem* e : sel.elements()) {
                 applyDropPaletteElement(score, e, element, modifiers);
