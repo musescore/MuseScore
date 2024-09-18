@@ -406,7 +406,13 @@ StyledListView {
                 paletteTree.implicitWidth = Math.max(paletteTree.implicitWidth, w);
             }
 
-            property bool expanded: filter.length || model.expanded
+            Component.onDestruction: {
+                if (palettePopup.active && palettePopup.model === model) {
+                    palettePopup.close()
+                }
+            }
+
+            readonly property bool expanded: paletteTree.searchOpened || Boolean(model.expanded)
 
             function toggleExpand() {
                 model.expanded = !expanded
@@ -705,7 +711,7 @@ StyledListView {
                             return mainPaletteBottom >= paletteTree.contentY && mainPaletteBottom < (paletteTree.contentY + paletteTree.height)
                         }
 
-                        showMoreButton: !filter.length
+                        showMoreButton: !paletteTree.searchOpened
                         onMoreButtonClicked: function(btn) { control.togglePopup(btn) }
 
                         onVisibleChanged: {

@@ -463,44 +463,40 @@ StyledGridView {
         visible: false
     }
 
-    StyledMenuLoader {
-        id: contextMenu
-
-        property var modelIndex: null
-        property bool canEdit: true
-
-        property var items: [
-            { id: "delete", title: qsTrc("palette", "Delete"), icon: IconCode.DELETE_TANK, enabled: contextMenu.canEdit },
-            { id: "properties", title: qsTrc("palette", "Properties…"), enabled: contextMenu.canEdit }
-        ]
-
-        onHandleMenuItem: function(itemId) {
-            switch(itemId) {
-            case "delete":
-                paletteView.paletteController.remove(contextMenu.modelIndex)
-                break
-            case "properties":
-                Qt.callLater(paletteView.paletteController.editCellProperties, contextMenu.modelIndex)
-                break
-            }
-        }
-
-        onClosed: function(force) {
-            contextMenu.parent = paletteView
-        }
-    }
-
     MouseArea {
         id: rightClickArea
         anchors.fill: parent
         acceptedButtons: Qt.RightButton
+
         onClicked: function(mouseEvent) {
             var paletteCell = paletteView.itemAt(mouseEvent.x, mouseEvent.y)
             if (Boolean(paletteCell)) {
-                contextMenu.modelIndex = paletteCell.modelIndex
-                contextMenu.canEdit = paletteView.paletteController.canEdit(paletteView.paletteRootIndex)
-                contextMenu.parent = paletteCell
-                contextMenu.toggleOpened(contextMenu.items, mouseEvent.x, mouseEvent.y)
+                contextMenuLoader.modelIndex = paletteCell.modelIndex
+                contextMenuLoader.canEdit = paletteView.paletteController.canEdit(paletteView.paletteRootIndex)
+                contextMenuLoader.show(Qt.point(mouseEvent.x, mouseEvent.y))
+            }
+        }
+
+        ContextMenuLoader {
+            id: contextMenuLoader
+
+            property var modelIndex: null
+            property bool canEdit: true
+
+            items: [
+                { id: "delete", title: qsTrc("palette", "Delete"), icon: IconCode.DELETE_TANK, enabled: contextMenuLoader.canEdit },
+                { id: "properties", title: qsTrc("palette", "Properties…"), enabled: contextMenuLoader.canEdit }
+            ]
+
+            onHandleMenuItem: function(itemId) {
+                switch(itemId) {
+                case "delete":
+                    paletteView.paletteController.remove(contextMenuLoader.modelIndex)
+                    break
+                case "properties":
+                    Qt.callLater(paletteView.paletteController.editCellProperties, contextMenuLoader.modelIndex)
+                    break
+                }
             }
         }
     }
@@ -600,7 +596,7 @@ StyledGridView {
             property var dropData: null
 
             Drag.onDragStarted: {
-                contextMenu.close()
+                contextMenuLoader.close()
 
                 paletteView.state = "drag";
                 DelegateModel.inPersistedItems = true;
