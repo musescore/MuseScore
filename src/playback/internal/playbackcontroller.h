@@ -163,6 +163,7 @@ private:
     void toggleAutomaticallyPan();
     void toggleMetronome();
     void toggleMidiInput();
+    void toggleMidiInputPitch();
     void toggleCountIn();
     void toggleLoopPlayback();
 

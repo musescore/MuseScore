@@ -133,9 +133,9 @@ void PianoKeyboardController::updateNotesKeys(const std::vector<const Note*>& re
     };
 
     for (const mu::engraving::Note* note : receivedNotes) {
-        newKeys.insert(static_cast<piano_key_t>(useNotatedPitch() ? note->epitch() : note->ppitch()));
+        newKeys.insert(static_cast<piano_key_t>(useWrittenPitch() ? note->epitch() : note->ppitch()));
         for (const mu::engraving::Note* otherNote : note->chord()->notes()) {
-            newOtherNotesInChord.insert(static_cast<piano_key_t>(useNotatedPitch() ? otherNote->epitch() : otherNote->ppitch()));
+            newOtherNotesInChord.insert(static_cast<piano_key_t>(useWrittenPitch() ? otherNote->epitch() : otherNote->ppitch()));
         }
     }
 }
@@ -176,7 +176,7 @@ INotationPtr PianoKeyboardController::currentNotation() const
     return context()->currentNotation();
 }
 
-bool PianoKeyboardController::useNotatedPitch() const
+bool PianoKeyboardController::useWrittenPitch() const
 {
-    return notationConfiguration()->pianoKeyboardUseNotatedPitch().val;
+    return notationConfiguration()->midiUseWrittenPitch().val;
 }
