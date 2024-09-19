@@ -100,7 +100,7 @@ void PlaybackToolBarModel::updateActions()
         settingsItems << makeMenuItem(action.code);
     }
 
-    settingsItems << makePitchMenu();
+    settingsItems << makeInputPitchMenu();
     settingsItems << makeSeparator();
 
     for (const UiAction& action : PlaybackUiActions::settingsActions()) {
@@ -139,7 +139,7 @@ void PlaybackToolBarModel::updateActions()
     setItems(result);
 }
 
-MenuItem* PlaybackToolBarModel::makePitchMenu()
+MenuItem* PlaybackToolBarModel::makeInputPitchMenu()
 {
     MenuItemList items;
 
