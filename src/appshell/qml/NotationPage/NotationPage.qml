@@ -25,6 +25,7 @@ import QtQuick.Controls 2.15
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import Muse.Dock 1.0
+import Muse.Extensions 1.0
 import MuseScore.AppShell 1.0
 
 import MuseScore.NotationScene 1.0
@@ -154,6 +155,58 @@ DockPage {
         },
 
         DockToolBar {
+            id: extDockToolBar
+
+            objectName: "extensionsToolBar"
+            title: qsTrc("appshell", "Extensions toolbar")
+
+            separatorsVisible: false
+            orientation: Qt.Horizontal
+            alignment: DockToolBarAlignment.Right
+
+            contentBottomPadding: floating ? 8 : 2
+            contentTopPadding: floating ? 8 : 0
+
+            dropDestinations: [
+                { "dock": notationToolBar, "dropLocation": Location.Right },
+                { "dock": playbackToolBar, "dropLocation": Location.Right }
+            ]
+
+            ExtensionsToolBar {
+                id: extToolBar
+
+
+                function updateVisible() {
+                    if (!extDockToolBar.inited) {
+                        return;
+                    }
+
+                    if (!root.visible) {
+                        return;
+                    }
+
+                    if (extToolBar.isEmpty) {
+                        extDockToolBar.close()
+                    } else {
+                        extDockToolBar.open()
+                    }
+                }
+
+                onIsEmptyChanged: extToolBar.updateVisible()
+
+                Connections {
+                    target: extDockToolBar
+                    function onInitedChanged() { extToolBar.updateVisible() }
+                }
+
+                Connections {
+                    target: root
+                    function onVisibleChanged() { extToolBar.updateVisible() }
+                }
+            }
+        },
+
+        DockToolBar {
             objectName: pageModel.undoRedoToolBarName()
             title: qsTrc("appshell", "Undo/redo")
 
@@ -173,6 +226,7 @@ DockPage {
     ]
 
     toolBars: [
+
         DockToolBar {
             id: noteInputBar
 

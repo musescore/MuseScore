@@ -3,5 +3,11 @@
     "type": "macros",
     "title": "Example 2 (default)",
 
-    "main": "main.js"
+    "main": "main.js",
+
+    "toolbar": {
+        "controls": [
+            {"icon": "SAVE", "action": "main" }
+        ]
+    }
 }

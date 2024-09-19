@@ -66,6 +66,8 @@ void ExtensionsProvider::reloadExtensions()
     }
 
     m_manifestListChanged.notify();
+
+    updateToolBarConfig();
 }
 
 ManifestList ExtensionsProvider::manifestList(Filter filter) const
@@ -86,6 +88,22 @@ ManifestList ExtensionsProvider::manifestList(Filter filter) const
 muse::async::Notification ExtensionsProvider::manifestListChanged() const
 {
     return m_manifestListChanged;
+}
+
+void ExtensionsProvider::updateToolBarConfig()
+{
+    //! NOTE Now there is one toolbar for extensions, so one toolbar config.
+    //! But perhaps in the future it will be possible to add controls to other toolbars.
+
+    m_toolBarConfig.controls.clear();
+
+    for (const Manifest& m : m_manifests) {
+        if (m.enabled()) {
+            muse::join(m_toolBarConfig.controls, m.toolBarConfig.controls);
+        }
+    }
+
+    m_toolBarConfigChanged.notify();
 }
 
 bool ExtensionsProvider::exists(const Uri& uri) const
@@ -206,6 +224,8 @@ muse::Ret ExtensionsProvider::setExecPoint(const Uri& uri, const ExecPointName& 
         allconfigs[m.uri] = m.config;
     }
 
+    updateToolBarConfig();
+
     Ret ret;
     if (ok) {
         ret = configuration()->setManifestConfigs(allconfigs);
@@ -246,4 +266,14 @@ void ExtensionsProvider::performPointAsync(const ExecPointName& name)
     async::Async::call(this, [this, name]() {
         performPoint(name);
     });
+}
+
+ToolBarConfig ExtensionsProvider::toolBarConfig() const
+{
+    return m_toolBarConfig;
+}
+
+muse::async::Notification ExtensionsProvider::toolBarConfigChanged() const
+{
+    return m_toolBarConfigChanged;
 }
