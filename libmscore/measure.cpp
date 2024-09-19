@@ -508,8 +508,7 @@ bool Measure::showsMeasureNumberInAutoMode()
 
       // Measure numbers should not show on first measure unless specified with Sid::showMeasureNumberOne
       // except, when showing numbers on each measure, and first measure is after anacrusis - then show always
-      if (!prevMeasure || prevMeasure->sectionBreak()
-          || (prevMeasure->irregular() && prevMeasure->isFirstInSection() && interval != 1))
+      if (isFirstInSection() || (prevMeasure->irregular() && prevMeasure->isFirstInSection() && interval != 1))
             return score()->styleB(Sid::showMeasureNumberOne);
 
       if (score()->styleB(Sid::measureNumberSystem))
@@ -2618,8 +2617,13 @@ bool Measure::isFirstInSystem() const
 
 bool Measure::isFirstInSection() const
       {
-      Measure* prevMeasure = this->prevMeasure();
-      return !prevMeasure || prevMeasure->sectionBreak();
+      for (MeasureBase* m = prev(); m; m = m->prev()) {
+            if (m->sectionBreak())
+                  return true;
+            else if (m->isMeasure())
+                  return false;
+            }
+      return true;
       }
 
 //---------------------------------------------------------
