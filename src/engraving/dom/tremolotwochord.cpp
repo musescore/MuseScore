@@ -351,8 +351,8 @@ std::vector<PointF> TremoloTwoChord::gripsPositions(const EditData&) const
     }
 
     int y = pagePos().y();
-    double beamStartX = m_startAnchor.x() + m_chord1->pageX();
-    double beamEndX = m_endAnchor.x() + m_chord1->pageX(); // intentional--chord1 is start x
+    double beamStartX = startAnchor().x() + m_chord1->pageX();
+    double beamEndX = endAnchor().x() + m_chord1->pageX(); // intentional--chord1 is start x
     double middleX = (beamStartX + beamEndX) / 2;
     double middleY = (m_beamFragment.py1[idx] + y + m_beamFragment.py2[idx] + y) / 2;
 

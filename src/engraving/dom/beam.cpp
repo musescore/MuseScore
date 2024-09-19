@@ -404,8 +404,8 @@ std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
     }
 
     int y = pagePos().y();
-    double beamStartX = m_startAnchor.x() + (system() ? system()->x() : 0);
-    double beamEndX = m_endAnchor.x() + (system() ? system()->x() : 0);
+    double beamStartX = startAnchor().x() + (system() ? system()->x() : 0);
+    double beamEndX = endAnchor().x() + (system() ? system()->x() : 0);
     double middleX = (beamStartX + beamEndX) / 2;
     double middleY = (f->py1[idx] + y + f->py2[idx] + y) / 2;
 

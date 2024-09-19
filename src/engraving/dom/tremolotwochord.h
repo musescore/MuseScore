@@ -64,8 +64,6 @@ public:
     double chordMag() const;
     RectF drag(EditData&) override;
 
-    void layout2();
-
     Chord* chord1() const { return m_chord1; }
     void setChord1(Chord* ch) { m_chord1 = ch; }
     Chord* chord2() const { return m_chord2; }
@@ -121,13 +119,6 @@ public:
     void endEdit(EditData&) override;
     void editDrag(EditData&) override;
 
-    const PointF& startAnchor() const { return m_startAnchor; }
-    PointF& startAnchor() { return m_startAnchor; }
-    void setStartAnchor(const PointF& p) { m_startAnchor = p; }
-    const PointF& endAnchor() const { return m_endAnchor; }
-    PointF& endAnchor() { return m_endAnchor; }
-    void setEndAnchor(const PointF& p) { m_endAnchor = p; }
-
     void clearBeamSegments() override;
 
     int maxCRMove() const override;
@@ -153,9 +144,6 @@ private:
     Chord* m_chord2 = nullptr;
     TDuration m_durationType;
     bool m_playTremolo = true;
-
-    PointF m_startAnchor;
-    PointF m_endAnchor;
 
     int m_lines = 0;         // derived from _subtype
     TremoloStyle m_style = TremoloStyle::DEFAULT;

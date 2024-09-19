@@ -104,6 +104,13 @@ public:
     std::vector<BeamSegment*>& beamSegments() { return m_beamSegments; }
     virtual void clearBeamSegments();
 
+    const PointF& startAnchor() const { return m_startAnchor; }
+    PointF& startAnchor() { return m_startAnchor; }
+    void setStartAnchor(const PointF& p) { m_startAnchor = p; }
+    const PointF& endAnchor() const { return m_endAnchor; }
+    PointF& endAnchor() { return m_endAnchor; }
+    void setEndAnchor(const PointF& p) { m_endAnchor = p; }
+
     void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE) override;
 
     struct NotePosition {
@@ -188,6 +195,8 @@ private:
     bool m_userModified[2]{ false };    // 0: auto/down  1: up
     DirectionV m_direction = DirectionV::AUTO;
     std::vector<BeamSegment*> m_beamSegments;
+    PointF m_startAnchor;
+    PointF m_endAnchor;
 };
 }
 

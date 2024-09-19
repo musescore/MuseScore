@@ -124,13 +124,6 @@ public:
     void computeAndSetSlope();
     void setSlope(double val) { m_slope = val; }
 
-    const PointF& startAnchor() const { return m_startAnchor; }
-    PointF& startAnchor() { return m_startAnchor; }
-    void setStartAnchor(const PointF& p) { m_startAnchor = p; }
-    const PointF& endAnchor() const { return m_endAnchor; }
-    PointF& endAnchor() { return m_endAnchor; }
-    void setEndAnchor(const PointF& p) { m_endAnchor = p; }
-
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
@@ -213,8 +206,6 @@ private:
     double m_beamDist = 0.0;
     int m_beamSpacing = 3;              // how far apart beams are spaced in quarter spaces
     double m_beamWidth = 0.0;           // how wide each beam is
-    PointF m_startAnchor;
-    PointF m_endAnchor;
 
     // for tabs
     bool m_isBesideTabStaff = false;
