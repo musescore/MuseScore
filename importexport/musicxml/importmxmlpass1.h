@@ -128,10 +128,10 @@ public:
       void defaults();
       void pageLayout(MxmlPageFormat& pf, const qreal conversion);
       void partList(MusicXmlPartGroupList& partGroupList);
-      void partGroup(const int scoreParts, MusicXmlPartGroupList& partGroupList, MusicXmlPartGroupMap& partGroups);
-      void scorePart();
+      void partGroup(const int scoreParts, MusicXmlPartGroupList& partGroupList, MusicXmlPartGroupMap& partGroups, QString& curPartGroupName);
+      void scorePart(const QString& curPartGroupName);
       void setStyle(const QString& type, const double val);
-      void scoreInstrument(const QString& partId);
+      void scoreInstrument(const QString& partId, const QString& curPartGroupName);
       void midiInstrument(const QString& partId);
       void part();
       void measure(const QString& partId, const Fraction cTime, Fraction& mdur, VoiceOverlapDetector& vod, const int measureNr);
