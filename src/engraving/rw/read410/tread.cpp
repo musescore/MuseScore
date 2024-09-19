@@ -1758,7 +1758,7 @@ void TRead::read(Beam* b, XmlReader& e, ReadContext& ctx)
             b->setGrowRight(e.readDouble());
         } else if (tag == "Fragment") {
             BeamFragment* f = new BeamFragment;
-            int idx = (b->beamDirection() == DirectionV::AUTO || b->beamDirection() == DirectionV::DOWN) ? 0 : 1;
+            int idx = b->directionIdx();
             b->setUserModified(true);
             double _spatium = b->spatium();
             while (e.readNextStartElement()) {
@@ -4563,8 +4563,8 @@ void TRead::read(compat::TremoloCompat* tc, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Fragment") {
             if (tc->two) {
                 BeamFragment f = BeamFragment();
-                int idx = (tc->two->direction() == DirectionV::AUTO || tc->two->direction() == DirectionV::DOWN) ? 0 : 1;
-                tc->two->setUserModified(tc->two->direction(), true);
+                int idx = tc->two->directionIdx();
+                tc->two->setUserModified(true);
                 double _spatium = tc->two->spatium();
                 while (e.readNextStartElement()) {
                     const AsciiStringView tag1(e.name());

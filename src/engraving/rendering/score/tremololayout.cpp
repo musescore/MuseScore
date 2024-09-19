@@ -233,7 +233,7 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, const LayoutCon
     // deal with manual adjustments here and return
     PropertyValue val = item->getProperty(Pid::PLACEMENT);
     if (item->userModified()) {
-        int idx = (item->direction() == DirectionV::AUTO || item->direction() == DirectionV::DOWN) ? 0 : 1;
+        int idx = item->directionIdx();
         double startY = item->beamFragment().py1[idx];
         double endY = item->beamFragment().py2[idx];
         if (ctx.conf().styleB(Sid::snapCustomBeamsToGrid)) {
@@ -280,7 +280,7 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, const LayoutCon
     item->setStartAnchor(item->ldata()->startAnchor);
     item->setEndAnchor(item->ldata()->endAnchor);
 
-    int idx = (item->direction() == DirectionV::AUTO || item->direction() == DirectionV::DOWN) ? 0 : 1;
+    int idx = item->directionIdx();
     item->beamFragment().py1[idx] = item->startAnchor().y() - item->pagePos().y();
     item->beamFragment().py2[idx] = item->endAnchor().y() - item->pagePos().y();
     createBeamSegments(item, ctx);

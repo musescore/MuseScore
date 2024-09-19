@@ -120,7 +120,7 @@ PointF TremoloTwoChord::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorT
 
 RectF TremoloTwoChord::drag(EditData& ed)
 {
-    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = directionIdx();
     double dy = ed.pos.y() - ed.lastPos.y();
 
     double y1 = m_beamFragment.py1[idx];
@@ -244,21 +244,6 @@ bool TremoloTwoChord::crossStaffBeamBetween() const
            || ((m_chord1->staffMove() < m_chord2->staffMove()) && !m_chord1->up() && m_chord2->up());
 }
 
-void TremoloTwoChord::setUserModified(DirectionV d, bool val)
-{
-    switch (d) {
-    case DirectionV::AUTO:
-        m_userModified[0] = val;
-        break;
-    case DirectionV::DOWN:
-        m_userModified[0] = val;
-        break;
-    case DirectionV::UP:
-        m_userModified[1] = val;
-        break;
-    }
-}
-
 TDuration TremoloTwoChord::durationType() const
 {
     return m_durationType;
@@ -300,7 +285,7 @@ Fraction TremoloTwoChord::tremoloLen() const
 
 void TremoloTwoChord::setBeamPos(const PairF& bp)
 {
-    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = directionIdx();
     m_userModified[idx] = true;
     setGenerated(false);
 
@@ -315,7 +300,7 @@ void TremoloTwoChord::setBeamPos(const PairF& bp)
 
 PairF TremoloTwoChord::beamPos() const
 {
-    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = directionIdx();
     double _spatium = spatium();
     return PairF(m_beamFragment.py1[idx] / _spatium, m_beamFragment.py2[idx] / _spatium);
 }
@@ -326,7 +311,7 @@ PairF TremoloTwoChord::beamPos() const
 
 bool TremoloTwoChord::userModified() const
 {
-    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = directionIdx();
     return m_userModified[idx];
 }
 
@@ -336,7 +321,7 @@ bool TremoloTwoChord::userModified() const
 
 void TremoloTwoChord::setUserModified(bool val)
 {
-    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = directionIdx();
     m_userModified[idx] = val;
 }
 
@@ -380,7 +365,7 @@ Grip TremoloTwoChord::defaultGrip() const
 
 std::vector<PointF> TremoloTwoChord::gripsPositions(const EditData&) const
 {
-    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = directionIdx();
 
     if (!twoNotes()) {
         return std::vector<PointF>();
@@ -414,7 +399,7 @@ void TremoloTwoChord::endEdit(EditData& ed)
 
 void TremoloTwoChord::editDrag(EditData& ed)
 {
-    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = directionIdx();
     double dy = ed.delta.y();
     double y1 = m_beamFragment.py1[idx];
     double y2 = m_beamFragment.py2[idx];
@@ -480,6 +465,8 @@ PropertyValue TremoloTwoChord::getProperty(Pid propertyId) const
         return int(m_style);
     case Pid::PLAY:
         return m_playTremolo;
+    case Pid::USER_MODIFIED:
+        return userModified();
     default:
         break;
     }
@@ -533,6 +520,8 @@ PropertyValue TremoloTwoChord::propertyDefault(Pid propertyId) const
         return style().styleI(Sid::tremoloStyle);
     case Pid::PLAY:
         return true;
+    case Pid::USER_MODIFIED:
+        return false;
     default:
         return EngravingItem::propertyDefault(propertyId);
     }

@@ -61,8 +61,6 @@ public:
     DirectionV direction() const { return m_direction; }
     void setDirection(DirectionV val) { m_direction = val; }
 
-    void setUserModified(DirectionV d, bool val);
-
     double minHeight() const;
     void reset() override;
 
@@ -144,6 +142,8 @@ public:
 
     int maxCRMove() const override;
     int minCRMove() const override;
+
+    inline int directionIdx() const { return (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1; }
 
     //! NOTE for palettes
     muse::draw::PainterPath basePath(double stretch = 0) const;

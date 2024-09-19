@@ -1489,7 +1489,6 @@ void BeamLayout::setTremAnchors(Beam* item, const LayoutContext& ctx)
             // there is an inset tremolo here!
             // figure out up / down
             bool tremUp = t->up();
-            //int fragmentIndex = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
             if (item->userModified()) {
                 tremUp = c->up();
             } else if (item->cross() && t->chord1()->staffMove() == t->chord2()->staffMove()) {

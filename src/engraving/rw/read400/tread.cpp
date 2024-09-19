@@ -4153,8 +4153,8 @@ void TRead::read(TremoloCompat& t, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Fragment") {
             if (t.two) {
                 BeamFragment f = BeamFragment();
-                int idx = (t.two->direction() == DirectionV::AUTO || t.two->direction() == DirectionV::DOWN) ? 0 : 1;
-                t.two->setUserModified(t.two->direction(), true);
+                int idx = t.two->directionIdx();
+                t.two->setUserModified(true);
                 double _spatium = t.two->spatium();
                 while (e.readNextStartElement()) {
                     const AsciiStringView tag1(e.name());
