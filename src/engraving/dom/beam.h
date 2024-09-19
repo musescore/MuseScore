@@ -23,8 +23,6 @@
 #ifndef MU_ENGRAVING_BEAM_H
 #define MU_ENGRAVING_BEAM_H
 
-#include <memory>
-
 #include "beambase.h"
 #include "engravingitem.h"
 #include "property.h"
@@ -39,26 +37,10 @@ class Beam;
 enum class ActionIconType;
 enum class SpannerSegmentType;
 
-//---------------------------------------------------------
-//   BeamFragment
-//    position of primary beam
-//    idx 0 - DirectionV::AUTO or DirectionV::DOWN
-//        1 - DirectionV::UP
-//---------------------------------------------------------
-
-struct BeamFragment {
-    double py1[2];
-    double py2[2];
-};
-
 struct TremAnchor {
     ChordRest* chord1 = nullptr;
     double y1 = 0.;
     double y2 = 0.;
-};
-
-enum class ChordBeamAnchorType {
-    Start, End, Middle
 };
 
 //---------------------------------------------------------

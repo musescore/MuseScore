@@ -30,7 +30,6 @@
 
 #include "rendering/score/beamtremololayout.h"
 
-#include "beam.h"
 #include "chord.h"
 #include "stem.h"
 #include "system.h"

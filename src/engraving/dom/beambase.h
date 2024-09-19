@@ -34,6 +34,22 @@ enum class BeamType {
     TREMOLO
 };
 
+//---------------------------------------------------------
+//   BeamFragment
+//    position of primary beam
+//    idx 0 - DirectionV::AUTO or DirectionV::DOWN
+//        1 - DirectionV::UP
+//---------------------------------------------------------
+
+struct BeamFragment {
+    double py1[2];
+    double py2[2];
+};
+
+enum class ChordBeamAnchorType {
+    Start, End, Middle
+};
+
 class BeamSegment
 {
     OBJECT_ALLOCATOR(engraving, BeamSegment)

@@ -23,13 +23,10 @@
 #include "beam.h"
 
 #include <cmath>
-#include <set>
 #include <algorithm>
 
 #include "containers.h"
 #include "realfn.h"
-
-#include "draw/types/brush.h"
 
 #include "actionicon.h"
 #include "chord.h"
