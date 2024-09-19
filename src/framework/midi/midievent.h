@@ -1032,6 +1032,34 @@ struct Event {
         }
     }
 
+    int midi10ByteCount() const
+    {
+        assert(messageType() == MessageType::ChannelVoice10);
+        switch (opcode()) {
+        case Opcode::RegisteredPerNoteController:
+        case Opcode::AssignablePerNoteController:
+        case Opcode::RelativeRegisteredController:
+        case Opcode::RelativeAssignableController:
+        case Opcode::PerNotePitchBend:
+        case Opcode::PerNoteManagement:
+            //D2.8 cannot be translated to Midi 1.0
+            assert(false);
+        case Opcode::RegisteredController:
+        case Opcode::AssignableController:
+            // Already translated to a sequence of CCs.
+            assert(false);
+        case Opcode::NoteOff:
+        case Opcode::NoteOn:
+        case Opcode::PolyPressure:
+        case Opcode::ControlChange:
+        case Opcode::PitchBend:
+            return 3;
+        case Opcode::ProgramChange:
+        case Opcode::ChannelPressure:
+            return 2;
+        }
+    }
+
 private:
     //!Note Temporarily disabled until the end of the investigation, looks like we're not supporting some 'custom' messages from MU3
     //! v.pereverzev@wsmgroup.ru
