@@ -516,13 +516,7 @@ void BarLine::calcY()
     double y2;
 
     if (staffIdx2 != staffIdx1) {
-        BarLine* barline2 = toBarLine(segment()->element(staffIdx2 * VOICES));
-        double from2 = barline2 ? barline2->m_spanFrom : m_spanFrom;
-        const Staff* staff2 = score()->staff(staffIdx2);
-        const StaffType* staffType2 = staff2 ? staff2->staffType(tick) : staff1->staffType(tick);
-        double spatium2 = staffType2->spatium(style());
-        double lineDistance2 = staffType2->lineDistance().val() * spatium2;
-        y2 = measure->staffLines(staffIdx2)->y1() - startStaffY + from2 * lineDistance2 * .5;
+        y2 = measure->staffLines(staffIdx2)->y1() - startStaffY - to * lineDistance * 0.5;
     } else {
         y2 = offset + (staffType1->lines() * 2 - 2 + to) * lineDistance * .5 + lineWidth;
     }
