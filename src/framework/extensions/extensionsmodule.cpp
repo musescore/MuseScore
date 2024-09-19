@@ -36,6 +36,7 @@
 #include "view/extensionbuilder.h"
 #include "view/extensionsuiengine.h"
 #include "view/extensionslistmodel.h"
+#include "view/extensionstoolbarmodel.h"
 
 #include "api/v1/extapiv1.h"
 
@@ -87,6 +88,7 @@ void ExtensionsModule::registerUiTypes()
     qmlRegisterType<ExtensionBuilder>("Muse.Extensions", 1, 0, "ExtensionBuilder");
     qmlRegisterType<DevExtensionsListModel>("Muse.Extensions", 1, 0, "DevExtensionsListModel");
     qmlRegisterType<ApiDumpModel>("Muse.Extensions", 1, 0, "ApiDumpModel");
+    qmlRegisterType<ExtensionsToolBarModel>("Muse.Extensions", 1, 0, "ExtensionsToolBarModel");
 }
 
 void ExtensionsModule::resolveImports()

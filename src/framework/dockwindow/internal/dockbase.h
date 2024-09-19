@@ -99,10 +99,6 @@ public:
 
     void deinit();
 
-    bool isOpen() const;
-    void open();
-    void close();
-
     void showHighlighting(const QRect& highlightingRect);
     void hideHighlighting();
 
@@ -111,6 +107,9 @@ public:
     bool isInSameFrame(const DockBase* other) const;
     void setFramePanelOrder(int order);
 
+    Q_INVOKABLE bool isOpen() const;
+    Q_INVOKABLE void open();
+    Q_INVOKABLE void close();
     Q_INVOKABLE void resize(int width, int height);
 
     ui::NavigationPanel* contentNavigationPanel() const;

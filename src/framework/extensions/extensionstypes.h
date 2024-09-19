@@ -29,6 +29,7 @@
 #include "global/io/path.h"
 #include "global/types/translatablestring.h"
 #include "ui/uiaction.h"
+#include "ui/view/iconcodes.h"
 #include "shortcuts/shortcutcontext.h"
 
 #include "log.h"
@@ -159,6 +160,26 @@ inline UriQuery makeUriQuery(const Uri& uri, const std::string& actionCode)
     return q;
 }
 
+inline actions::ActionCode makeActionCode(const Uri& uri, const std::string& extActionCode)
+{
+    return makeUriQuery(uri, extActionCode).toString();
+}
+
+enum class UiControlType {
+    Undefined = 0,
+    ToolButton
+};
+
+struct UiControl {
+    UiControlType type = UiControlType::Undefined;
+    ui::IconCode::Code icon = ui::IconCode::Code::NONE;
+    actions::ActionCode actionCode;
+};
+
+struct ToolBarConfig {
+    std::vector<UiControl> controls;
+};
+
 /*
 manifest.json
 {
@@ -176,18 +197,6 @@ manifest.json
 }*/
 
 struct Manifest {
-    Uri uri;
-    Type type = Type::Undefined;
-    String title;
-    String description;
-    String category;
-    io::path_t thumbnail;
-    String version;
-    int apiversion = DEFAULT_API_VERSION;
-    bool legacyPlugin = false;
-
-    std::vector<Action> actions;
-
     struct Config {
         std::map<std::string /*action*/, Action::Config> actions;
 
@@ -203,7 +212,22 @@ struct Manifest {
             static Action::Config _dummy;
             return _dummy;
         }
-    } config;
+    };
+
+    Uri uri;
+    Type type = Type::Undefined;
+    String title;
+    String description;
+    String category;
+    io::path_t thumbnail;
+    String version;
+    int apiversion = DEFAULT_API_VERSION;
+    bool legacyPlugin = false;
+
+    std::vector<Action> actions;
+
+    Config config;
+    ToolBarConfig toolBarConfig;
 
     bool isValid() const { return type != Type::Undefined && uri.isValid(); }
 

@@ -24,6 +24,7 @@
 #define MUSE_UI_ICONCODE_H
 
 #include <QObject>
+#include <QMetaEnum>
 
 #ifdef WARNING
 #undef WARNING
@@ -451,6 +452,15 @@ public:
     };
 
     Q_ENUM(Code)
+
+    static Code fromString(const char* key)
+    {
+        int enumIndex = staticMetaObject.indexOfEnumerator("Code");
+        QMetaEnum me = staticMetaObject.enumerator(enumIndex);
+        bool ok = false;
+        int val = me.keyToValue(key, &ok);
+        return ok ? static_cast<Code>(val) : Code::NONE;
+    }
 };
 
 static inline QChar iconCodeToChar(IconCode::Code code)

@@ -153,6 +153,26 @@ Manifest ExtensionsLoader::parseManifest(const ByteArray& data) const
         m.actions.push_back(std::move(a));
     }
 
+    if (obj.contains("toolbar")) {
+        JsonObject toolbar = obj.value("toolbar").toObject();
+        JsonArray controls = toolbar.value("controls").toArray();
+        for (size_t i = 0; i < controls.size(); ++i) {
+            JsonObject co = controls.at(i).toObject();
+
+            UiControl c;
+            //! NOTE At the moment only buttons
+            c.type = UiControlType::ToolButton;
+
+            std::string icon = co.value("icon").toStdString();
+            c.icon = ui::IconCode::fromString(icon.c_str());
+
+            std::string extActionCode = co.value("action").toStdString();
+            c.actionCode = makeActionCode(m.uri, extActionCode);
+
+            m.toolBarConfig.controls.push_back(std::move(c));
+        }
+    }
+
     return m;
 }
 
