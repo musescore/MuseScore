@@ -90,7 +90,7 @@ signals:
 
 private:
     void setupConnections();
-    muse::uicomponents::MenuItem* makePitchMenu();
+    muse::uicomponents::MenuItem* makeInputPitchMenu();
 
     void updateActions();
     void onActionsStateChanges(const muse::actions::ActionCodeList& codes) override;
