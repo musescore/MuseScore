@@ -128,9 +128,7 @@ public:
     PointF& endAnchor() { return m_endAnchor; }
     void setEndAnchor(const PointF& p) { m_endAnchor = p; }
 
-    const std::vector<BeamSegment*>& beamSegments() const { return m_beamSegments; }
-    std::vector<BeamSegment*>& beamSegments() { return m_beamSegments; }
-    void clearBeamSegments();
+    void clearBeamSegments() override;
 
     int maxCRMove() const override;
     int minCRMove() const override;
@@ -154,7 +152,6 @@ private:
     Chord* m_chord1 = nullptr;
     Chord* m_chord2 = nullptr;
     TDuration m_durationType;
-    std::vector<BeamSegment*> m_beamSegments;
     bool m_playTremolo = true;
 
     PointF m_startAnchor;

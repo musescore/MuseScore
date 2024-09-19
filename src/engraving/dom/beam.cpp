@@ -74,9 +74,6 @@ Beam::Beam(const Beam& b)
 {
     m_elements     = b.m_elements;
     m_id           = b.m_id;
-    for (const BeamSegment* bs : b.m_beamSegments) {
-        m_beamSegments.push_back(new BeamSegment(*bs));
-    }
     m_growLeft           = b.m_growLeft;
     m_growRight           = b.m_growRight;
     m_beamDist        = b.m_beamDist;
@@ -218,18 +215,19 @@ const Chord* Beam::findChordWithCustomStemDirection() const
 
 const BeamSegment* Beam::topLevelSegmentForElement(const ChordRest* element) const
 {
-    size_t segmentsSize = m_beamSegments.size();
+    const std::vector<BeamSegment*>& segments = beamSegments();
+    size_t segmentsSize = segments.size();
 
     IF_ASSERT_FAILED(segmentsSize > 0) {
         return nullptr;
     }
 
-    const BeamSegment* curSegment = m_beamSegments[0];
+    const BeamSegment* curSegment = segments[0];
     if (segmentsSize == 1) {
         return curSegment;
     }
 
-    for (const BeamSegment* segment : m_beamSegments) {
+    for (const BeamSegment* segment : segments) {
         if (segment->level <= curSegment->level) {
             continue;
         }
@@ -249,7 +247,7 @@ const BeamSegment* Beam::topLevelSegmentForElement(const ChordRest* element) con
 void Beam::move(const PointF& offset)
 {
     EngravingItem::move(offset);
-    for (BeamSegment* bs : m_beamSegments) {
+    for (BeamSegment* bs : beamSegments()) {
         bs->line.translate(offset);
     }
 }
@@ -699,12 +697,12 @@ PropertyValue Beam::propertyDefault(Pid id) const
 
 void Beam::addSkyline(Skyline& sk)
 {
-    if (m_beamSegments.empty() || !addToSkyline()) {
+    if (beamSegments().empty() || !addToSkyline()) {
         return;
     }
 
     // Only add the outer segment, no need to add the inner one
-    sk.add(m_beamSegments.front()->shape());
+    sk.add(beamSegments().front()->shape());
 }
 
 //---------------------------------------------------------
@@ -853,8 +851,7 @@ void Beam::clearBeamSegments()
         chordRest->setBeamlet(nullptr);
     }
 
-    muse::DeleteAll(m_beamSegments);
-    m_beamSegments.clear();
+    BeamBase::clearBeamSegments();
 }
 
 //-------------------------------------------------------

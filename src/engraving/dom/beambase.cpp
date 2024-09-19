@@ -31,6 +31,9 @@ BeamBase::BeamBase(const ElementType& type, EngravingItem* parent, ElementFlags 
 BeamBase::BeamBase(const BeamBase& b)
     : EngravingItem(b)
 {
+    for (const BeamSegment* bs : b.m_beamSegments) {
+        m_beamSegments.push_back(new BeamSegment(*bs));
+    }
     _crossStaffMove = b._crossStaffMove;
     m_direction       = b.m_direction;
     m_up              = b.m_up;
@@ -129,4 +132,10 @@ void BeamBase::setUserModified(bool val)
 {
     int idx = directionIdx();
     m_userModified[idx] = val;
+}
+
+void BeamBase::clearBeamSegments()
+{
+    muse::DeleteAll(m_beamSegments);
+    m_beamSegments.clear();
 }

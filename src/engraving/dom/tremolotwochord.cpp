@@ -515,7 +515,7 @@ void TremoloTwoChord::clearBeamSegments()
     BeamSegment* chord2Segment = m_chord2 ? m_chord2->beamlet() : nullptr;
 
     if (chord1Segment || chord2Segment) {
-        for (BeamSegment* segment : m_beamSegments) {
+        for (BeamSegment* segment : beamSegments()) {
             if (chord1Segment && chord1Segment == segment) {
                 m_chord1->setBeamlet(nullptr);
             } else if (chord2Segment && chord2Segment == segment) {
@@ -524,8 +524,7 @@ void TremoloTwoChord::clearBeamSegments()
         }
     }
 
-    muse::DeleteAll(m_beamSegments);
-    m_beamSegments.clear();
+    BeamBase::clearBeamSegments();
 }
 
 int TremoloTwoChord::maxCRMove() const

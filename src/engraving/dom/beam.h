@@ -51,24 +51,6 @@ struct BeamFragment {
     double py2[2];
 };
 
-class BeamSegment
-{
-    OBJECT_ALLOCATOR(engraving, BeamSegment)
-public:
-    LineF line;
-    int level = 0;
-    bool above = false; // above level 0 or below? (meaningless for level 0)
-    Fraction startTick;
-    Fraction endTick;
-    bool isBeamlet = false;
-    bool isBefore = false;
-
-    Shape shape() const;
-    EngravingItem* parentElement = nullptr;
-
-    BeamSegment(EngravingItem* b);
-};
-
 struct TremAnchor {
     ChordRest* chord1 = nullptr;
     double y1 = 0.;
@@ -210,9 +192,7 @@ public:
     std::vector<BeamFragment*>& beamFragments() { return m_fragments; }
     void addBeamFragment(BeamFragment* f) { m_fragments.push_back(f); }
 
-    const std::vector<BeamSegment*>& beamSegments() const { return m_beamSegments; }
-    std::vector<BeamSegment*>& beamSegments() { return m_beamSegments; }
-    void clearBeamSegments();
+    void clearBeamSegments() override;
 
     const StaffType* tab() const { return m_tab; }
     void setTab(const StaffType* t) { m_tab = t; }
@@ -241,7 +221,6 @@ private:
     void removeChordRest(ChordRest* a);
 
     std::vector<ChordRest*> m_elements;          // must be sorted by tick
-    std::vector<BeamSegment*> m_beamSegments;
 
     bool m_isGrace = false;
     bool m_cross = false;
