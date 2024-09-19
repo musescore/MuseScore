@@ -57,6 +57,15 @@ public:
     bool up() const { return m_up; }
     void setUp(bool v) { m_up = v; }
 
+    bool userModified() const;
+    void setUserModified(bool val);
+
+    DirectionV direction() const { return m_direction; }
+    void setDirection(DirectionV val) { m_direction = val; }
+    virtual void setBeamDirection(DirectionV v) = 0;
+
+    inline int directionIdx() const { return (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1; }
+
     void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE) override;
 
     struct NotePosition {
@@ -136,7 +145,10 @@ protected:
     BeamBase(const ElementType& type, EngravingItem* parent, ElementFlags flags = ElementFlag::NOTHING);
     BeamBase(const BeamBase&);
 
+private:
     bool m_up = true;
+    bool m_userModified[2]{ false };    // 0: auto/down  1: up
+    DirectionV m_direction = DirectionV::AUTO;
 };
 }
 

@@ -208,14 +208,14 @@ PointF TremoloTwoChord::pagePos() const
 
 void TremoloTwoChord::setBeamDirection(DirectionV d)
 {
-    if (m_direction == d) {
+    if (direction() == d) {
         return;
     }
 
-    m_direction = d;
+    setDirection(d);
 
     if (d != DirectionV::AUTO) {
-        m_up = d == DirectionV::UP;
+        setUp(d == DirectionV::UP);
     }
     if (twoNotes()) {
         if (m_chord1) {
@@ -286,7 +286,7 @@ Fraction TremoloTwoChord::tremoloLen() const
 void TremoloTwoChord::setBeamPos(const PairF& bp)
 {
     int idx = directionIdx();
-    m_userModified[idx] = true;
+    setUserModified(true);
     setGenerated(false);
 
     double _spatium = spatium();
@@ -303,26 +303,6 @@ PairF TremoloTwoChord::beamPos() const
     int idx = directionIdx();
     double _spatium = spatium();
     return PairF(m_beamFragment.py1[idx] / _spatium, m_beamFragment.py2[idx] / _spatium);
-}
-
-//---------------------------------------------------------
-//   userModified
-//---------------------------------------------------------
-
-bool TremoloTwoChord::userModified() const
-{
-    int idx = directionIdx();
-    return m_userModified[idx];
-}
-
-//---------------------------------------------------------
-//   setUserModified
-//---------------------------------------------------------
-
-void TremoloTwoChord::setUserModified(bool val)
-{
-    int idx = directionIdx();
-    m_userModified[idx] = val;
 }
 
 //---------------------------------------------------------
@@ -465,12 +445,10 @@ PropertyValue TremoloTwoChord::getProperty(Pid propertyId) const
         return int(m_style);
     case Pid::PLAY:
         return m_playTremolo;
-    case Pid::USER_MODIFIED:
-        return userModified();
     default:
         break;
     }
-    return EngravingItem::getProperty(propertyId);
+    return BeamBase::getProperty(propertyId);
 }
 
 //---------------------------------------------------------
@@ -488,12 +466,6 @@ bool TremoloTwoChord::setProperty(Pid propertyId, const PropertyValue& val)
             setTremoloStyle(TremoloStyle(val.toInt()));
         }
         break;
-    case Pid::STEM_DIRECTION:
-        setBeamDirection(val.value<DirectionV>());
-        break;
-    case Pid::USER_MODIFIED:
-        setUserModified(val.toBool());
-        break;
     case Pid::BEAM_POS:
         if (userModified()) {
             setBeamPos(val.value<PairF>());
@@ -503,7 +475,7 @@ bool TremoloTwoChord::setProperty(Pid propertyId, const PropertyValue& val)
         setPlayTremolo(val.toBool());
         break;
     default:
-        return EngravingItem::setProperty(propertyId, val);
+        return BeamBase::setProperty(propertyId, val);
     }
     triggerLayout();
     return true;
@@ -520,10 +492,8 @@ PropertyValue TremoloTwoChord::propertyDefault(Pid propertyId) const
         return style().styleI(Sid::tremoloStyle);
     case Pid::PLAY:
         return true;
-    case Pid::USER_MODIFIED:
-        return false;
     default:
-        return EngravingItem::propertyDefault(propertyId);
+        return BeamBase::propertyDefault(propertyId);
     }
 }
 

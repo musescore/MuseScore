@@ -130,8 +130,7 @@ public:
     void setId(int i) const { m_id = i; }
     int id() const { return m_id; }
 
-    void setBeamDirection(DirectionV d);
-    DirectionV beamDirection() const { return m_direction; }
+    void setBeamDirection(DirectionV d) override;
 
     void calcBeamBreaks(const ChordRest* chord, const ChordRest* prevChord, int level, bool& isBroken32, bool& isBroken64) const;
 
@@ -144,9 +143,6 @@ public:
     double growRight() const { return m_growRight; }
     void setGrowLeft(double val) { m_growLeft = val; }
     void setGrowRight(double val) { m_growRight = val; }
-
-    bool userModified() const;
-    void setUserModified(bool val);
 
     PairF beamPos() const;
     void setBeamPos(const PairF& bp);
@@ -230,8 +226,6 @@ public:
 
     const BeamSegment* topLevelSegmentForElement(const ChordRest* element) const;
 
-    inline int directionIdx() const { return (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1; }
-
 private:
 
     friend class Factory;
@@ -248,9 +242,7 @@ private:
 
     std::vector<ChordRest*> m_elements;          // must be sorted by tick
     std::vector<BeamSegment*> m_beamSegments;
-    DirectionV m_direction = DirectionV::AUTO;
 
-    bool m_userModified[2]{ false };    // 0: auto/down  1: up
     bool m_isGrace = false;
     bool m_cross = false;
     bool m_fullCross = false;

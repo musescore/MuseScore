@@ -23,8 +23,6 @@
 #ifndef MU_ENGRAVING_TREMOLOTWOCHORD_H
 #define MU_ENGRAVING_TREMOLOTWOCHORD_H
 
-#include <memory>
-
 #include "beambase.h"
 #include "engravingitem.h"
 
@@ -58,9 +56,6 @@ public:
     void setTremoloType(TremoloType t);
     TremoloType tremoloType() const { return m_tremoloType; }
 
-    DirectionV direction() const { return m_direction; }
-    void setDirection(DirectionV val) { m_direction = val; }
-
     double minHeight() const;
     void reset() override;
 
@@ -86,9 +81,6 @@ public:
     TDuration durationType() const;
     void setDurationType(TDuration d);
 
-    bool userModified() const;
-    void setUserModified(bool val);
-
     Fraction tremoloLen() const;
     bool isBuzzRoll() const { return m_tremoloType == TremoloType::BUZZ_ROLL; }
     bool twoNotes() const { return m_tremoloType >= TremoloType::C8; }    // is it a two note tremolo?
@@ -104,7 +96,7 @@ public:
 
     TremoloStyle tremoloStyle() const { return m_style; }
     void setTremoloStyle(TremoloStyle v) { m_style = v; }
-    void setBeamDirection(DirectionV v);
+    void setBeamDirection(DirectionV v) override;
     void setBeamFragment(const BeamFragment& bf) { m_beamFragment = bf; }
     const BeamFragment& beamFragment() const { return m_beamFragment; }
     BeamFragment& beamFragment() { return m_beamFragment; }
@@ -143,8 +135,6 @@ public:
     int maxCRMove() const override;
     int minCRMove() const override;
 
-    inline int directionIdx() const { return (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1; }
-
     //! NOTE for palettes
     muse::draw::PainterPath basePath(double stretch = 0) const;
     const muse::draw::PainterPath& path() const { return m_path; }
@@ -164,8 +154,6 @@ private:
     Chord* m_chord1 = nullptr;
     Chord* m_chord2 = nullptr;
     TDuration m_durationType;
-    bool m_userModified[2]{ false };                // 0: auto/down  1: up
-    DirectionV m_direction = DirectionV::AUTO;
     std::vector<BeamSegment*> m_beamSegments;
     bool m_playTremolo = true;
 

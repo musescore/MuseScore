@@ -1567,7 +1567,7 @@ void TRead::read(Beam* b, XmlReader& e, ReadContext& ctx)
             b->setGrowRight(e.readDouble());
         } else if (tag == "Fragment") {
             BeamFragment* f = new BeamFragment;
-            int idx = (b->beamDirection() == DirectionV::AUTO || b->beamDirection() == DirectionV::DOWN) ? 0 : 1;
+            int idx = (b->direction() == DirectionV::AUTO || b->direction() == DirectionV::DOWN) ? 0 : 1;
             b->setUserModified(true);
             double _spatium = b->spatium();
             while (e.readNextStartElement()) {
