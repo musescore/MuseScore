@@ -24,6 +24,7 @@
 #include "chordlayout.h"
 #include "accidentalslayout.h"
 #include "horizontalspacing.h"
+#include "beamtremololayout.h"
 
 #include "containers.h"
 
@@ -1297,6 +1298,18 @@ bool ChordLayout::isChordPosBelowBeam(Chord* item, Beam* beam)
     return noteY > desiredY;
 }
 
+bool ChordLayout::isChordPosBelowTrem(const Chord* item, TremoloTwoChord* trem)
+{
+    if (!item || !trem || !trem->ldata()->isValid()) {
+        return true;
+    }
+    Note* baseNote = item->up() ? item->downNote() : item->upNote();
+    double noteY = baseNote->pagePos().y();
+    double tremY = trem->chordBeamAnchor(item, ChordBeamAnchorType::Middle).y();
+
+    return noteY > tremY;
+}
+
 static bool computeUp_TremoloTwoNotesCase(const Chord* item, TremoloTwoChord* tremolo, const LayoutContext& ctx)
 {
     const Chord* c1 = tremolo->chord1();
@@ -1324,10 +1337,7 @@ static bool computeUp_TremoloTwoNotesCase(const Chord* item, TremoloTwoChord* tr
     }
 
     if (tremolo->userModified()) {
-        Note* baseNote = item->up() ? item->downNote() : item->upNote();
-        double tremY = tremolo->chordBeamAnchor(item, ChordBeamAnchorType::Middle).y();
-        double noteY = baseNote->pagePos().y();
-        return noteY > tremY;
+        return ChordLayout::isChordPosBelowTrem(item, tremolo);
     } else if (cross) {
         // unmodified cross-staff trem, should be one note per staff
         if (item->staffMove() != 0) {
