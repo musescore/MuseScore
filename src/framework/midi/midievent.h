@@ -666,17 +666,18 @@ struct Event {
             basic10Event.setGroup(group());
             switch (opcode()) {
             //D2.1
+            case Opcode::PolyPressure:
+            case Opcode::ControlChange:
             case Opcode::NoteOn:
             case Opcode::NoteOff: {
                 auto e = basic10Event;
-                auto v = scaleDown(velocity(), 16, 7);
-                e.setNote(note());
-                if (v != 0) {
-                    e.setVelocity(static_cast<uint16_t>(v));
-                } else {
+                auto v1 = (m_data[0] & 0x7F00);
+                auto v2 = m_data[1] >> 25;
+                if (opcode() == Opcode::NoteOn && v2 == 0) {
                     //4.2.2 velocity comment
-                    e.setVelocity(1);
+                    v2 = 1;
                 }
+                e.m_data[0] |= v1 | v2;
                 events.push_back(e);
                 break;
             }
@@ -695,8 +696,8 @@ struct Event {
                 std::vector<std::pair<uint8_t, uint8_t> > controlChanges = {
                     { (opcode() == Opcode::RegisteredController ? 101 : 99), bank() },
                     { (opcode() == Opcode::RegisteredController ? 100 : 98), index() },
-                    { 6,  (data() & 0x7FFFFFFF) >> 24 },
-                    { 38, (data() & 0x1FC0000) >> 18 }
+                    { 6,  data() >> 25 }, // first 7 bits
+                    { 38, (data() & 0x1FC0000) >> 18 } // second 7 bits
                 };
                 for (auto& c : controlChanges) {
                     auto e = basic10Event;
@@ -708,16 +709,16 @@ struct Event {
                 break;
             }
 
-            //D.4
+            //D2.4
             case Opcode::ProgramChange: {
                 if (isBankValid()) {
                     auto e = basic10Event;
                     e.setOpcode(Opcode::ControlChange);
                     e.setIndex(0);
-                    e.setData((bank() & 0x7F00) >> 8);
+                    e.setData((m_data[1] & 0x7F00) >> 8);
                     events.push_back(e);
                     e.setIndex(0);
-                    e.setData(bank() & 0x7F);
+                    e.setData(m_data[1] & 0x7F);
                     events.push_back(e);
                 }
                 auto e = basic10Event;
@@ -728,7 +729,7 @@ struct Event {
             //D2.5
             case Opcode::PitchBend: {
                 auto e = basic10Event;
-                e.setData(data());
+                e.setData(pitchBend14());
                 events.push_back(e);
                 break;
             }
@@ -1005,19 +1006,19 @@ struct Event {
         return val;
     }
 
-    uint32_t pitchBend14() const
+    uint32_t data14() const
     {
         uint32_t val = data();
-        switch (messageType()) {
-        case MessageType::ChannelVoice10: {
-            return val;
-        }
-        case MessageType::ChannelVoice20: {
+        if (messageType() == MessageType::ChannelVoice20) {
             return scaleDown(val,32,14);
         }
-        default: assert(false);
-        }
-        return 0;
+        return val;
+    }
+
+    uint32_t pitchBend14() const
+    {
+        assert(messageType().isChannelVoice() && opcode() == Opcode::PitchBend);
+        return data14();
     }
 
     int midi20WordCount() const
