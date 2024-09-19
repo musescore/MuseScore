@@ -452,8 +452,15 @@ staff_idx_t EngravingItem::staffIdxOrNextVisible() const
         m = s ? s->measure() : nullptr;
     } else if (parent() && parent()->isMeasure()) {
         m = parent() ? toMeasure(parent()) : nullptr;
-    } else if (isSpanner() || isSpannerSegment()) {
+    } else if (isSpanner()) {
         m = score()->tick2measure(tick());
+    } else if (isSpannerSegment()) {
+        const SpannerSegment* spannerSeg = toSpannerSegment(this);
+        if (spannerSeg->isSingleBeginType()) {
+            m = score()->tick2measure(tick());
+        } else if (spannerSeg->isMiddleType() || spannerSeg->isEndType()) {
+            m = spannerSeg->system() ? spannerSeg->system()->firstMeasure() : nullptr;
+        }
     }
     if (!m || !m->system() || !m->system()->staff(si)) {
         return si;
