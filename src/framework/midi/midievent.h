@@ -140,6 +140,35 @@ struct Event {
         return 0;
     }
 
+    static Event fromMIDI10BytePackage(const unsigned char *pointer, int length)
+    {
+        Event e;
+        uint32_t val = 0;
+        assert(length <= 3);
+        for (int i=0; i<length; i++) {
+            uint32_t byteVal = static_cast<uint32_t>(pointer[i]);
+            val |= byteVal << ((2-i)*8);
+        }
+        e.m_data[0]=val;
+        e.setMessageType(MessageType::ChannelVoice10);
+        return e;
+    }
+
+    int to_MIDI10BytesPackage(unsigned char *pointer) const
+    {
+        if (messageType() == MessageType::ChannelVoice10) {
+            auto val = m_data[0];
+            int c = Event::midi10ByteCountForOpcode(opcode());
+            assert(c<=3);
+            for (int i=0; i<c; i++) {
+                auto byteVal = (val>>((2-i)*8)) & 0xff;
+                pointer[i]=static_cast<unsigned char>(byteVal);
+            }
+            return c;
+        }
+        return 0;
+    }
+
     static Event fromRawData(const uint32_t* data, size_t count)
     {
         Event e;
@@ -1023,7 +1052,12 @@ struct Event {
 
     int midi20WordCount() const
     {
-        switch (messageType()) {
+        return Event::wordCountForMessageType(messageType());
+    }
+
+    static int wordCountForMessageType(MessageType messageType)
+    {
+        switch (messageType) {
         case MessageType::Utility: return 1;
         case MessageType::SystemRealTime: return 1;
         case MessageType::ChannelVoice10: return 1;
@@ -1031,12 +1065,12 @@ struct Event {
         case MessageType::ChannelVoice20: return 2;
         case MessageType::Data: return 4;
         }
+        return 0; // reserved
     }
 
-    int midi10ByteCount() const
+    static int midi10ByteCountForOpcode(Opcode opcode)
     {
-        assert(messageType() == MessageType::ChannelVoice10);
-        switch (opcode()) {
+        switch (opcode) {
         case Opcode::RegisteredPerNoteController:
         case Opcode::AssignablePerNoteController:
         case Opcode::RelativeRegisteredController:
@@ -1059,6 +1093,8 @@ struct Event {
         case Opcode::ChannelPressure:
             return 2;
         }
+        assert(false);
+        return 0;
     }
 
 private:

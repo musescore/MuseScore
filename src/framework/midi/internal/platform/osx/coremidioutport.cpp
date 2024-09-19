@@ -340,23 +340,35 @@ Ret CoreMidiOutPort::sendEvent(const Event& e)
     } else {
         const std::vector<Event> events = e.toMIDI10();
 
-        ByteCount packetListSize = ::packetListSize(events);
-        if (packetListSize == 0) {
+        if (events.empty()) {
             return make_ret(Err::MidiSendError, "midi 1.0 messages list was empty");
         }
 
         MIDIPacketList packetList;
+        // packetList has one packet of 256 bytes by default, which is more than enough for one midi 2.0 event.
         MIDIPacket* packet = MIDIPacketListInit(&packetList);
+        ByteCount packetListSize = sizeof(packetList);
+        Byte bytesPackage[4];
 
         for (const Event& event : events) {
-            uint32_t msg = event.to_MIDI10Package();
+            // Note: to_MIDI10Package contains voodoo, which works on little-endian machines (Arm and Intel), but not the old PowerPC.
+            // Play safe here.
+            LOGW() << "CoreMidiOutPort: sending event: " << event.to_string();
+            static bool useVoodoo = false;
+            if (useVoodoo) {
+                uint32_t msg = event.to_MIDI10Package();
 
-            if (!msg) {
-                return make_ret(Err::MidiSendError, "message wasn't converted");
+                if (!msg) {
+                    return make_ret(Err::MidiSendError, "message wasn't converted");
+                }
+
+                // bug: sizeof(msg) is not the byte count
+                packet = MIDIPacketListAdd(&packetList, packetListSize, packet, timeStamp, sizeof(msg), reinterpret_cast<Byte*>(&msg));
+            } else {
+                int length = event.to_MIDI10BytesPackage(bytesPackage);
+                assert(length <= 3);
+                packet = MIDIPacketListAdd(&packetList, packetListSize, packet, timeStamp, length, bytesPackage);
             }
-
-            // bug: sizeof(msg) is not the byte count
-            packet = MIDIPacketListAdd(&packetList, packetListSize, packet, timeStamp, sizeof(msg), reinterpret_cast<Byte*>(&msg));
         }
 
         result = MIDISend(m_core->outputPort, m_core->destinationId, &packetList);
