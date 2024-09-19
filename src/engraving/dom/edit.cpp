@@ -24,7 +24,6 @@
 #include <set>
 
 #include "infrastructure/messagebox.h"
-#include "notation/internal/notationconfiguration.h"
 
 #include "accidental.h"
 #include "articulation.h"

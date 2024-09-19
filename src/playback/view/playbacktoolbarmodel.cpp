@@ -36,7 +36,6 @@ using namespace muse::uicomponents;
 using namespace muse::audio;
 
 static const ActionCode PLAY_ACTION_CODE("play");
-static const ActionCode TOGGLE_INPUT_PITCH_CODE("toggle-written-sounding-pitch");
 
 static MusicalSymbolCodes::Code tempoDurationToNoteIcon(DurationType durationType)
 {
