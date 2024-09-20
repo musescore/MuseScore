@@ -78,6 +78,7 @@ ManifestList ExtensionsLoader::manifestList(const io::path_t& rootPath) const
     ManifestList manifests;
     io::paths_t paths = manifestPaths(rootPath);
     for (const io::path_t& path : paths) {
+        LOGD() << path;
         Manifest manifest = parseManifest(path);
         resolvePaths(manifest, io::FileInfo(path).dirPath());
         manifests.push_back(manifest);
@@ -132,12 +133,13 @@ Manifest ExtensionsLoader::parseManifest(const ByteArray& data) const
             JsonObject ao = arr.at(i).toObject();
             Action a;
             a.code = ao.value("code").toStdString();
-            a.type = typeFromString(ao.value("type").toStdString());
+            a.type = ao.contains("type") ? typeFromString(ao.value("type").toStdString()) : m.type;
             a.modal = ao.value("modal", DEFAULT_MODAL).toBool();
             a.title = ao.value("title").toString();
             a.uiCtx = ao.value("ui_context", uiCtx).toString();
             a.hidden = ao.value("hidden", a.title.isEmpty()).toBool();
-            a.main = ao.value("main").toStdString();
+            a.path = ao.value("path").toStdString();
+            a.func = ao.value("func", "main").toString();
             a.apiversion = m.apiversion;
             m.actions.push_back(std::move(a));
         }
@@ -148,7 +150,8 @@ Manifest ExtensionsLoader::parseManifest(const ByteArray& data) const
         a.modal = obj.value("modal", DEFAULT_MODAL).toBool();
         a.title = m.title;
         a.uiCtx = uiCtx;
-        a.main = obj.value("main").toStdString();
+        a.path = obj.value("path").toStdString();
+        a.func = u"main";
         a.apiversion = m.apiversion;
         m.actions.push_back(std::move(a));
     }
@@ -183,6 +186,6 @@ void ExtensionsLoader::resolvePaths(Manifest& m, const io::path_t& rootDirPath) 
     }
 
     for (Action& a : m.actions) {
-        a.main = rootDirPath + "/" + a.main;
+        a.path = rootDirPath + "/" + a.path;
     }
 }

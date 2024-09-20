@@ -3,11 +3,15 @@
     "type": "macros",
     "title": "Example 2 (default)",
 
-    "main": "main.js",
+    "actions": [
+        {"code": "save", "title": "Save", "path": "main.js", "func": "save"},
+        {"code": "open", "title": "Open", "path": "main.js", "func": "open"}
+    ],
 
     "toolbar": {
         "controls": [
-            {"icon": "SAVE", "action": "main" }
+            {"icon": "SAVE", "action": "save" },
+            {"icon": "OPEN_FILE", "action": "open" }
         ]
     }
 }
