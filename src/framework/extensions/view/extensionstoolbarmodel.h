@@ -63,7 +63,8 @@ private:
 
     enum Roles {
         IconRole = Qt::UserRole + 1,
-        EnabledRole
+        EnabledRole,
+        ToolTipTitleRole
     };
 
     struct Item {
