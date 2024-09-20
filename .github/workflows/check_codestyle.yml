@@ -2,8 +2,6 @@ name: 'Check: Codestyle'
 
 on:
   pull_request:
-    branches:
-    - master
 
 jobs:
   codestyle:

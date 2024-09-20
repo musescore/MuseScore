@@ -2,8 +2,6 @@ name: 'Check: Unit Tests (utest)'
 
 on:
   pull_request:
-    branches:
-    - master
   workflow_dispatch:
 
 jobs:
