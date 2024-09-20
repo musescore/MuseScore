@@ -157,7 +157,7 @@ static std::pair<XMLNode*, XmlStreamReader::TokenType> resolveNode(XMLNode* curr
         }
 
         XMLNode* sibling = currentNode->NextSibling();
-        if (!sibling || sibling->ToElement() || sibling->ToText()) {
+        if (!sibling || sibling->ToElement() || sibling->ToText() || sibling->ToComment()) {
             return { currentNode, XmlStreamReader::TokenType::EndElement };
         }
     }
