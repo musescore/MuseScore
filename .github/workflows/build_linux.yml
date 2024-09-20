@@ -55,7 +55,7 @@ jobs:
     - name: Exit if current release branch configuration is incorrect
       if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' && env.CURRENT_RELEASE_BRANCH == '' }}
       run: |
-        echo "::error::CURRENT_RELEASE_BRANCH is not set"
+        echo "::error::CURRENT_RELEASE_BRANCH is empty"
         exit 1
     - name: Clone repository (default)
       uses: actions/checkout@v4
@@ -91,7 +91,7 @@ jobs:
         if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then
           DO_UPDATE_TS='true'
           if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then
-            echo "warning: not set TRANSIFEX_API_TOKEN, update .ts disabled"
+            echo "::warning::TRANSIFEX_API_TOKEN is empty; updating .ts files disabled"
             DO_UPDATE_TS='false'
           fi
         fi
@@ -124,6 +124,15 @@ jobs:
           SENTRY_URL=https://sentry.musescore.org/api/3/minidump/?sentry_key=$SENTRY_SERVER_SANDBOX_KEY
         fi
 
+        DO_PUBLISH='false'
+        if [[ "${{ inputs.publish }}" == "on" || ("${{ github.event_name }}" == "schedule" && $BUILD_MODE == 'nightly') ]]; then
+          DO_PUBLISH='true'
+          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
+            echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is empty; not publishing to OSUOSL"
+            DO_PUBLISH='false'
+          fi
+        fi
+
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${{ env.CURRENT_RELEASE_BRANCH }}"; fi
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
@@ -137,6 +146,7 @@ jobs:
         echo "DO_UPLOAD_SYMBOLS=$DO_UPLOAD_SYMBOLS" | tee -a $GITHUB_ENV
         echo "SENTRY_PROJECT=$SENTRY_PROJECT" | tee -a $GITHUB_ENV
         echo "SENTRY_URL=$SENTRY_URL" | tee -a $GITHUB_ENV
+        echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
     - name: Setup environment
@@ -177,13 +187,9 @@ jobs:
                    -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
                    -DSENTRY_PROJECT=${SENTRY_PROJECT} \
                    -P buildscripts/ci/crashdumps/ci_generate_and_upload.cmake
-    - name: Publish package
-      if: inputs.publish == 'on' || (github.event_name == 'schedule' && env.BUILD_MODE == 'nightly')
+    - name: Publish to OSUOSL
+      if: env.DO_PUBLISH == 'true'
       run: |
-        if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
-          echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is not set; not publishing to OSUOSL"
-          exit
-        fi
         sudo bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux -v 4
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v4

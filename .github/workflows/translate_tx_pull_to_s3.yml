@@ -28,15 +28,15 @@ jobs:
       - name: Check preconditions
         run: |
           if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then
-            echo "::error::TRANSIFEX_API_TOKEN is not set"
+            echo "::error::TRANSIFEX_API_TOKEN is empty"
             exit 1
           fi
           if [ -z "${{ secrets.S3_KEY }}" ]; then
-            echo "::error::S3_KEY is not set"
+            echo "::error::S3_KEY is empty"
             exit 1
           fi
           if [ -z "${{ secrets.S3_SECRET }}" ]; then
-            echo "::error::S3_SECRET is not set"
+            echo "::error::S3_SECRET is empty"
             exit 1
           fi
 
