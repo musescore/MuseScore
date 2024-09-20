@@ -102,7 +102,7 @@ void ShortcutsModel::load()
     beginResetModel();
     m_shortcuts.clear();
 
-    for (const UiAction& action : uiactionsRegister()->getActions()) {
+    for (const UiAction& action : uiactionsRegister()->actionList()) {
         Shortcut shortcut = shortcutsRegister()->shortcut(action.code);
         if (!shortcut.isValid()) {
             shortcut.action = action.code;

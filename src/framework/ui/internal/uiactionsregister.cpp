@@ -62,6 +62,10 @@ void UiActionsRegister::reg(const IUiActionsModulePtr& module)
     updateChecked(newActionCodeList);
     updateShortcuts(newActionCodeList);
 
+    module->actionsChanged().onReceive(this, [this](const UiActionList& actions) {
+        updateActions(actions);
+    });
+
     module->actionEnabledChanged().onReceive(this, [this](const ActionCodeList& codes) {
         updateEnabled(codes);
         m_actionStateChanged.send(codes);
@@ -95,12 +99,7 @@ const UiActionsRegister::Info& UiActionsRegister::info(const ActionCode& code) c
     return null;
 }
 
-const UiAction& UiActionsRegister::action(const ActionCode& code) const
-{
-    return info(code).action;
-}
-
-const std::vector<UiAction> UiActionsRegister::getActions() const
+std::vector<UiAction> UiActionsRegister::actionList() const
 {
     std::vector<UiAction> allActions;
 
@@ -109,6 +108,16 @@ const std::vector<UiAction> UiActionsRegister::getActions() const
     }
 
     return allActions;
+}
+
+const UiAction& UiActionsRegister::action(const ActionCode& code) const
+{
+    return info(code).action;
+}
+
+async::Channel<UiActionList> UiActionsRegister::actionsChanged() const
+{
+    return m_actionsChanged;
 }
 
 UiActionState UiActionsRegister::actionState(const ActionCode& code) const
@@ -144,6 +153,26 @@ void UiActionsRegister::updateShortcutsAll()
         Info& inf = it->second;
         inf.action.shortcuts = screg->shortcut(inf.action.code).sequences;
     }
+}
+
+void UiActionsRegister::updateActions(const UiActionList& actions)
+{
+    ActionCodeList codes;
+    for (const UiAction& act : actions) {
+        Info& inf = info(act.code);
+        IF_ASSERT_FAILED(inf.isValid()) {
+            continue;
+        }
+
+        inf.action = act;
+
+        codes.push_back(act.code);
+    }
+
+    m_actionsChanged.send(actions);
+
+    updateEnabled(codes);
+    updateChecked(codes);
 }
 
 void UiActionsRegister::doUpdateEnabled(Info& inf,
