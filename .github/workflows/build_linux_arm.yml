@@ -94,15 +94,6 @@ jobs:
         sudo bash ./buildscripts/ci/tools/make_build_number.sh
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
-        DO_PUBLISH='false'
-        if [[ "${{ inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then
-          DO_PUBLISH='true'
-          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
-            echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
-            DO_PUBLISH='false'
-          fi  
-        fi
-
         DO_UPDATE_TS='false'
         if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then 
           DO_UPDATE_TS='true'
@@ -154,8 +145,6 @@ jobs:
         echo "DO_UPDATE_TS: $DO_UPDATE_TS"
         echo "DO_PLACEHOLDER_TRANSLATIONS=$DO_PLACEHOLDER_TRANSLATIONS" >> $GITHUB_ENV
         echo "DO_PLACEHOLDER_TRANSLATIONS: $DO_PLACEHOLDER_TRANSLATIONS"
-        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
-        echo "DO_PUBLISH: $DO_PUBLISH"
         echo "DO_UPLOAD_SYMBOLS=$DO_UPLOAD_SYMBOLS" >> $GITHUB_ENV
         echo "DO_UPLOAD_SYMBOLS: $DO_UPLOAD_SYMBOLS"
         echo "SENTRY_PROJECT=$SENTRY_PROJECT" >> $GITHUB_ENV
@@ -201,8 +190,12 @@ jobs:
                    -DSENTRY_PROJECT=${SENTRY_PROJECT} \
                    -P buildscripts/ci/crashdumps/ci_generate_and_upload.cmake
     - name: Publish package
-      if: env.DO_PUBLISH == 'true'
+      if: inputs.publish == 'on' || (github.event_name == 'schedule' && env.BUILD_MODE == 'nightly')
       run: |
+        if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
+          echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is not set; not publishing to OSUOSL"
+          exit
+        fi
         sudo bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux --arch armv7l -v 4
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v4
@@ -247,15 +240,6 @@ jobs:
         sudo bash ./buildscripts/ci/tools/make_build_number.sh
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
-        DO_PUBLISH='false'
-        if [[ "${{ inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then
-          DO_PUBLISH='true'
-          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
-            echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
-            DO_PUBLISH='false'
-          fi  
-        fi
-
         DO_UPDATE_TS='false'
         if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then 
           DO_UPDATE_TS='true'
@@ -297,8 +281,6 @@ jobs:
         echo "DO_UPDATE_TS: $DO_UPDATE_TS"
         echo "DO_PLACEHOLDER_TRANSLATIONS=$DO_PLACEHOLDER_TRANSLATIONS" >> $GITHUB_ENV
         echo "DO_PLACEHOLDER_TRANSLATIONS: $DO_PLACEHOLDER_TRANSLATIONS"
-        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
-        echo "DO_PUBLISH: $DO_PUBLISH"
         echo "DO_UPLOAD_SYMBOLS=$DO_UPLOAD_SYMBOLS" >> $GITHUB_ENV
         echo "DO_UPLOAD_SYMBOLS: $DO_UPLOAD_SYMBOLS"
         echo "SENTRY_PROJECT=$SENTRY_PROJECT" >> $GITHUB_ENV
@@ -345,8 +327,12 @@ jobs:
                    -DSENTRY_PROJECT=${SENTRY_PROJECT} \
                    -P buildscripts/ci/crashdumps/ci_generate_and_upload.cmake
     - name: Publish package
-      if: env.DO_PUBLISH == 'true'
+      if: inputs.publish == 'on' || (github.event_name == 'schedule' && env.BUILD_MODE == 'nightly')
       run: |
+        if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
+          echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is not set; not publishing to OSUOSL"
+          exit
+        fi
         sudo bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux --arch aarch64 -v 4
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v4
