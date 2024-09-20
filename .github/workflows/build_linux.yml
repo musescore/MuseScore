@@ -70,10 +70,10 @@ jobs:
       with:
         path: ~/.ccache
         key: ${{github.workflow}}-ccache-$(date -u +"%F-%T")
-        restore-keys: ${{github.workflow}}-ccache-  # restore ccache from either previous build on this branch or on master  
+        restore-keys: ${{github.workflow}}-ccache-  # restore ccache from either previous build on this branch or on master
     - name: Setup ccache
       run: |
-        sudo bash ./buildscripts/ci/tools/setup_ccache.sh     
+        sudo bash ./buildscripts/ci/tools/setup_ccache.sh
     - name: "Configure workflow"
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
@@ -88,12 +88,12 @@ jobs:
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_UPDATE_TS='false'
-        if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then 
+        if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then
           DO_UPDATE_TS='true'
-          if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then 
-            echo "warning: not set TRANSIFEX_API_TOKEN, update .ts disabled" 
+          if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then
+            echo "warning: not set TRANSIFEX_API_TOKEN, update .ts disabled"
             DO_UPDATE_TS='false'
-          fi 
+          fi
         fi
 
         DO_PLACEHOLDER_TRANSLATIONS='false'
@@ -104,12 +104,12 @@ jobs:
         DO_UPLOAD_SYMBOLS='false'
         SENTRY_URL=""
 
-        if [ "$SENTRY_SERVER_MU4_KEY" != "" ]; then 
-          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable" ]; then 
+        if [ "$SENTRY_SERVER_MU4_KEY" != "" ]; then
+          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable" ]; then
             SENTRY_PROJECT="mu4"
           fi
 
-          if [ "$SENTRY_PROJECT" == "mu4" ]; then 
+          if [ "$SENTRY_PROJECT" == "mu4" ]; then
             DO_UPLOAD_SYMBOLS='true'
             SENTRY_URL=https://sentry.musescore.org/api/4/minidump/?sentry_key=$SENTRY_SERVER_MU4_KEY
           fi
@@ -119,7 +119,7 @@ jobs:
           SENTRY_PROJECT="sandbox"
         fi
 
-        if [ "$SENTRY_PROJECT" == "sandbox" ] && [ "$SENTRY_SERVER_SANDBOX_KEY" != "" ]; then 
+        if [ "$SENTRY_PROJECT" == "sandbox" ] && [ "$SENTRY_SERVER_SANDBOX_KEY" != "" ]; then
           DO_UPLOAD_SYMBOLS='true'
           SENTRY_URL=https://sentry.musescore.org/api/3/minidump/?sentry_key=$SENTRY_SERVER_SANDBOX_KEY
         fi
@@ -167,12 +167,12 @@ jobs:
         sudo bash ./buildscripts/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL
         echo "============== ccache ==============="
         ccache -s
-    - name: Package 
+    - name: Package
       run: |
         sudo bash ./buildscripts/ci/linux/package.sh
-    - name: Checksum 
+    - name: Checksum
       run: |
-        sudo bash ./buildscripts/ci/tools/checksum.sh 
+        sudo bash ./buildscripts/ci/tools/checksum.sh
     - name: Generate and upload dump symbols
       if: env.DO_UPLOAD_SYMBOLS == 'true'
       run: |
@@ -197,4 +197,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
-        path: ./build.artifacts/      
+        path: ./build.artifacts/

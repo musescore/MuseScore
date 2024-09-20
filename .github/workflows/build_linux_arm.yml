@@ -95,12 +95,12 @@ jobs:
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_UPDATE_TS='false'
-        if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then 
+        if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then
           DO_UPDATE_TS='true'
-          if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then 
-            echo "warning: not set TRANSIFEX_API_TOKEN, update .ts disabled" 
+          if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then
+            echo "warning: not set TRANSIFEX_API_TOKEN, update .ts disabled"
             DO_UPDATE_TS='false'
-          fi 
+          fi
         fi
 
         DO_PLACEHOLDER_TRANSLATIONS='false'
@@ -111,12 +111,12 @@ jobs:
         DO_UPLOAD_SYMBOLS='false'
         SENTRY_URL=""
 
-        if [ "$SENTRY_SERVER_MU4_KEY" != "" ]; then 
-          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable" ]; then 
+        if [ "$SENTRY_SERVER_MU4_KEY" != "" ]; then
+          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable" ]; then
             SENTRY_PROJECT="mu4"
           fi
 
-          if [ "$SENTRY_PROJECT" == "mu4" ]; then 
+          if [ "$SENTRY_PROJECT" == "mu4" ]; then
             DO_UPLOAD_SYMBOLS='true'
             SENTRY_URL=https://sentry.musescore.org/api/4/minidump/?sentry_key=$SENTRY_SERVER_MU4_KEY
           fi
@@ -126,7 +126,7 @@ jobs:
           SENTRY_PROJECT="sandbox"
         fi
 
-        if [ "$SENTRY_PROJECT" == "sandbox" ] && [ "$SENTRY_SERVER_SANDBOX_KEY" != "" ]; then 
+        if [ "$SENTRY_PROJECT" == "sandbox" ] && [ "$SENTRY_SERVER_SANDBOX_KEY" != "" ]; then
           DO_UPLOAD_SYMBOLS='true'
           SENTRY_URL=https://sentry.musescore.org/api/3/minidump/?sentry_key=$SENTRY_SERVER_SANDBOX_KEY
         fi
@@ -241,12 +241,12 @@ jobs:
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_UPDATE_TS='false'
-        if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then 
+        if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then
           DO_UPDATE_TS='true'
-          if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then 
-            echo "warning: not set TRANSIFEX_API_TOKEN, update .ts disabled" 
+          if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then
+            echo "warning: not set TRANSIFEX_API_TOKEN, update .ts disabled"
             DO_UPDATE_TS='false'
-          fi 
+          fi
         fi
 
         DO_PLACEHOLDER_TRANSLATIONS='false'
@@ -257,12 +257,12 @@ jobs:
         DO_UPLOAD_SYMBOLS='false'
         SENTRY_PROJECT=${{ inputs.sentry_project }}
         SENTRY_URL=""
-        if [ "$SENTRY_PROJECT" == "editor" ] && [ ${{ secrets.SENTRY_SERVER_MU3_KEY }} != 0 ]; then 
+        if [ "$SENTRY_PROJECT" == "editor" ] && [ ${{ secrets.SENTRY_SERVER_MU3_KEY }} != 0 ]; then
           DO_UPLOAD_SYMBOLS='true'
           SENTRY_URL=https://sentry.musescore.org/api/2/minidump/?sentry_key=${{ secrets.SENTRY_SERVER_MU3_KEY }}
         fi
 
-        if [ "$SENTRY_PROJECT" == "sandbox" ] && [ ${{ secrets.SENTRY_SERVER_SANDBOX_KEY }} != 0 ]; then 
+        if [ "$SENTRY_PROJECT" == "sandbox" ] && [ ${{ secrets.SENTRY_SERVER_SANDBOX_KEY }} != 0 ]; then
           DO_UPLOAD_SYMBOLS='true'
           SENTRY_URL=https://sentry.musescore.org/api/3/minidump/?sentry_key=${{ secrets.SENTRY_SERVER_SANDBOX_KEY }}
         fi

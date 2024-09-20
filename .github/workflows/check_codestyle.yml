@@ -6,11 +6,11 @@ on:
     - master
 
 jobs:
-  codestyle:    
+  codestyle:
     runs-on: ubuntu-20.04
     steps:
     - name: Clone repository
-      uses: actions/checkout@v4    
+      uses: actions/checkout@v4
     - name: Test coding style
       run: |
         bash ./buildscripts/ci/linux/checkcodestyle.sh

@@ -27,7 +27,7 @@ jobs:
 
         echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
         echo "BUILD_NUMBER: $BUILD_NUMBER"
-        
+
     - name: Get reference commit for PR
       if: github.event_name == 'pull_request'
       env:
@@ -137,10 +137,10 @@ jobs:
       with:
         name: reference_build
         path: ./musescore_reference
-    - name: Generate PNGs   
+    - name: Generate PNGs
       run: |
         xvfb-run ./buildscripts/ci/vtests/generate_pngs.sh
-      env: 
+      env:
         ASAN_OPTIONS: "detect_leaks=0"
     - name: Compare PNGs
       run: |
@@ -184,4 +184,4 @@ jobs:
           [here][1]
 
           [1]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        token: ${{ secrets.GITHUB_TOKEN }}    
+        token: ${{ secrets.GITHUB_TOKEN }}

@@ -72,12 +72,12 @@ jobs:
     - name: Build
       run: |
         sudo bash ./buildscripts/ci/backend/build.sh -n ${{ env.BUILD_NUMBER }} --build_videoexport
-    
+
     - name: Package
       run: |
         sudo bash ./buildscripts/ci/backend/package.sh
 
-    - name: Publish to S3 
+    - name: Publish to S3
       if: env.DO_PUBLISH == 'true'
       run: |
         sudo bash ./buildscripts/ci/backend/publish_to_s3.sh --s3_key ${{ secrets.S3_KEY_CONVERTER }} --s3_secret ${{ secrets.S3_SECRET_CONVERTER }}
@@ -87,10 +87,10 @@ jobs:
       run: |
         sudo bash ./buildscripts/ci/backend/build_docker.sh
 
-    - name: Publish to Registry 
+    - name: Publish to Registry
       if: env.DO_PUBLISH == 'true'
       run: |
-        sudo bash ./buildscripts/ci/backend/publish_to_registry.sh --token ${{ secrets.PACKAGES_PAT }} 
+        sudo bash ./buildscripts/ci/backend/publish_to_registry.sh --token ${{ secrets.PACKAGES_PAT }}
 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
