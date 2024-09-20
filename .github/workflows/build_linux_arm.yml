@@ -55,7 +55,9 @@ on:
 jobs:
 
   linux_arm32:
-    if: ${{ github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'linux_arm32') }}
+    if: |
+      (github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'linux_arm32')) &&
+      (github.event_name != 'schedule' || github.repository == 'musescore/MuseScore')
     runs-on: ubuntu-22.04
     steps:
     - name: Cancel Previous Runs
@@ -101,18 +103,9 @@ jobs:
           fi  
         fi
 
-        DO_BUILD='true'
-        if [ "$BUILD_MODE" == "nightly" ]; then 
-          if [ "${{ github.repository }}" != "musescore/MuseScore" ]; then 
-            DO_BUILD='false'
-          fi
-        fi
-
         DO_PLACEHOLDER_TRANSLATIONS='false'
-        if [[ "$DO_BUILD" == "true" ]]; then
-          if [[ "$BUILD_MODE" == "nightly" || "$BUILD_MODE" == "devel" ]]; then
-            DO_PLACEHOLDER_TRANSLATIONS='true'
-          fi
+        if [[ "$BUILD_MODE" == "nightly" || "$BUILD_MODE" == "devel" ]]; then
+          DO_PLACEHOLDER_TRANSLATIONS='true'
         fi
 
         DO_UPLOAD_SYMBOLS='false'
@@ -138,11 +131,6 @@ jobs:
           SENTRY_URL=https://sentry.musescore.org/api/3/minidump/?sentry_key=$SENTRY_SERVER_SANDBOX_KEY
         fi
 
-        if [ $DO_BUILD == 'false' ]; then
-          DO_UPLOAD_SYMBOLS='false'
-          DO_PUBLISH='false'
-        fi
-
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
@@ -153,8 +141,6 @@ jobs:
         echo "BUILD_MODE: $BUILD_MODE"
         echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
         echo "BUILD_NUMBER: $BUILD_NUMBER"
-        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
-        echo "DO_BUILD: $DO_BUILD"
         echo "DO_PLACEHOLDER_TRANSLATIONS=$DO_PLACEHOLDER_TRANSLATIONS" >> $GITHUB_ENV
         echo "DO_PLACEHOLDER_TRANSLATIONS: $DO_PLACEHOLDER_TRANSLATIONS"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
@@ -169,7 +155,6 @@ jobs:
         echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
     - name: Setup, Generate, Update, Build the AppImage
-      if: env.DO_BUILD == 'true'
       run: |
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
 
@@ -195,14 +180,15 @@ jobs:
       run: |
         sudo bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux --arch armv7l -v 4
     - name: Upload artifacts on GitHub
-      if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: ./build.artifacts/
 
   linux_arm64:
-    if: ${{ github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'linux_arm64') }}
+    if: |
+      (github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'linux_arm64')) &&
+      (github.event_name != 'schedule' || github.repository == 'musescore/MuseScore')
     runs-on: ubuntu-22.04
     steps:
     - name: Cancel Previous Runs
@@ -240,18 +226,9 @@ jobs:
           fi  
         fi
 
-        DO_BUILD='true'
-        if [ "$BUILD_MODE" == "nightly" ]; then 
-          if [ "${{ github.repository }}" != "musescore/MuseScore" ]; then 
-            DO_BUILD='false'
-          fi
-        fi
-
         DO_PLACEHOLDER_TRANSLATIONS='false'
-        if [[ "$DO_BUILD" == "true" ]]; then
-          if [[ "$BUILD_MODE" == "nightly" || "$BUILD_MODE" == "devel" ]]; then
-            DO_PLACEHOLDER_TRANSLATIONS='true'
-          fi
+        if [[ "$BUILD_MODE" == "nightly" || "$BUILD_MODE" == "devel" ]]; then
+          DO_PLACEHOLDER_TRANSLATIONS='true'
         fi
 
         DO_UPLOAD_SYMBOLS='false'
@@ -267,11 +244,6 @@ jobs:
           SENTRY_URL=https://sentry.musescore.org/api/3/minidump/?sentry_key=${{ secrets.SENTRY_SERVER_SANDBOX_KEY }}
         fi
 
-        if [ $DO_BUILD == 'false' ]; then
-          DO_UPLOAD_SYMBOLS='false'
-          DO_PUBLISH='false'
-        fi
-
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
@@ -282,8 +254,6 @@ jobs:
         echo "BUILD_MODE: $BUILD_MODE"
         echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
         echo "BUILD_NUMBER: $BUILD_NUMBER"
-        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
-        echo "DO_BUILD: $DO_BUILD"
         echo "DO_PLACEHOLDER_TRANSLATIONS=$DO_PLACEHOLDER_TRANSLATIONS" >> $GITHUB_ENV
         echo "DO_PLACEHOLDER_TRANSLATIONS: $DO_PLACEHOLDER_TRANSLATIONS"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
@@ -298,7 +268,6 @@ jobs:
         echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
     - name: Setup, Generate, Update, Build the AppImage
-      if: env.DO_BUILD == 'true'
       run: |
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
 
@@ -325,7 +294,6 @@ jobs:
       run: |
         sudo bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux --arch aarch64 -v 4
     - name: Upload artifacts on GitHub
-      if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}

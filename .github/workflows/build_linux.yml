@@ -46,6 +46,7 @@ env:
 jobs:
   linux_x64:
     runs-on: ubuntu-20.04
+    if: github.event_name != 'schedule' || github.repository == 'musescore/MuseScore'
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.12.1
@@ -95,13 +96,6 @@ jobs:
           fi  
         fi
 
-        DO_BUILD='true'
-        if [ "$BUILD_MODE" == "nightly" ]; then 
-          if [ "${{ github.repository }}" != "musescore/MuseScore" ]; then 
-            DO_BUILD='false'
-          fi
-        fi
-
         DO_UPDATE_TS='false'
         if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then 
             DO_UPDATE_TS='true'
@@ -112,10 +106,8 @@ jobs:
         fi
 
         DO_PLACEHOLDER_TRANSLATIONS='false'
-        if [[ "$DO_BUILD" == "true" ]]; then
-          if [[ "$BUILD_MODE" == "nightly" || "$BUILD_MODE" == "devel" ]]; then
-            DO_PLACEHOLDER_TRANSLATIONS='true'
-          fi
+        if [[ "$BUILD_MODE" == "nightly" || "$BUILD_MODE" == "devel" ]]; then
+          DO_PLACEHOLDER_TRANSLATIONS='true'
         fi
 
         DO_UPLOAD_SYMBOLS='false'
@@ -141,11 +133,6 @@ jobs:
           SENTRY_URL=https://sentry.musescore.org/api/3/minidump/?sentry_key=$SENTRY_SERVER_SANDBOX_KEY
         fi
 
-        if [ $DO_BUILD == 'false' ]; then
-          DO_UPLOAD_SYMBOLS='false'
-          DO_PUBLISH='false'
-        fi
-
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${{ env.CURRENT_RELEASE_BRANCH }}"; fi
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
@@ -156,8 +143,6 @@ jobs:
         echo "BUILD_MODE: $BUILD_MODE"
         echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
         echo "BUILD_NUMBER: $BUILD_NUMBER"
-        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
-        echo "DO_BUILD: $DO_BUILD"
         echo "DO_UPDATE_TS=$DO_UPDATE_TS" >> $GITHUB_ENV
         echo "DO_UPDATE_TS: $DO_UPDATE_TS"
         echo "DO_PLACEHOLDER_TRANSLATIONS=$DO_PLACEHOLDER_TRANSLATIONS" >> $GITHUB_ENV
@@ -174,11 +159,9 @@ jobs:
         echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
     - name: Setup environment
-      if: env.DO_BUILD == 'true'
       run: |
         sudo bash ./buildscripts/ci/linux/setup.sh
     - name: Generate _en.ts files
-      if: env.DO_BUILD == 'true'
       env:
         LUPDATE_ARGS: ""
         POSTPROCESS_ARGS: ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}
@@ -190,18 +173,15 @@ jobs:
         sudo bash ./buildscripts/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
         sudo bash ./buildscripts/ci/translation/tx_pull.sh
     - name: Build
-      if: env.DO_BUILD == 'true'
       run: |
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
         sudo bash ./buildscripts/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL
         echo "============== ccache ==============="
         ccache -s
     - name: Package 
-      if: env.DO_BUILD == 'true'
       run: |
         sudo bash ./buildscripts/ci/linux/package.sh
     - name: Checksum 
-      if: env.DO_BUILD == 'true'
       run: |
         sudo bash ./buildscripts/ci/tools/checksum.sh 
     - name: Generate and upload dump symbols
@@ -221,7 +201,6 @@ jobs:
       run: |
         sudo bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux -v 4
     - name: Upload artifacts on GitHub
-      if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
