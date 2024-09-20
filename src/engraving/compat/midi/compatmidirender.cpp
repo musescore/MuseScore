@@ -327,11 +327,11 @@ void CompatMidiRender::renderTremolo(Chord* chord, std::vector<NoteEventList>& e
     }
 
     // render tremolo with multiple events
+    int t = Constants::DIVISION / 1 << (tremolo.lines() + chord->durationType().hooks());
+    if (t == 0) {
+        t = 1;
+    }
     if (chord->tremoloChordType() == TremoloChordType::TremoloFirstChord) {
-        int t = Constants::DIVISION / (1 << (tremolo.lines() + chord->durationType().hooks()));
-        if (t == 0) {       // avoid crash on very short tremolo
-            t = 1;
-        }
         SegmentType st = SegmentType::ChordRest;
         Segment* seg2 = seg->next(st);
         track_idx_t track = chord->track();
@@ -404,15 +404,13 @@ void CompatMidiRender::renderTremolo(Chord* chord, std::vector<NoteEventList>& e
             events->clear();
         }
     } else if (chord->tremoloChordType() == TremoloChordType::TremoloSingle) {
-        int t = Constants::DIVISION / (1 << (tremolo.lines() + chord->durationType().hooks()));
-        if (t == 0) {       // avoid crash on very short tremolo
-            t = 1;
-        }
+        double tpoch = muse::RealIsNull(tremoloPartOfChord) ? 1.0 : tremoloPartOfChord;
 
-        int tremoloEventsSize = chord->ticks().ticks() / t * tremoloPartOfChord;
+        int tremoloEventsSize = static_cast<int>(static_cast<double>(chord->ticks().ticks())
+                                                 / (static_cast<double>(t) * tpoch));
 
-        constexpr int fullEventTime = 1000;
-        int tremoloTime = fullEventTime * tremoloPartOfChord;
+        constexpr double fullEventTime = 1000.0;
+        int tremoloTime = static_cast<int>(fullEventTime * tremoloPartOfChord);
         int tremoloEventStep = tremoloTime / tremoloEventsSize;
         ontime += tremoloTime;
 
