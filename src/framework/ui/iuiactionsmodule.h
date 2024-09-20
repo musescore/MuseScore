@@ -35,6 +35,14 @@ public:
     virtual ~IUiActionsModule() = default;
 
     virtual const UiActionList& actionsList() const = 0;
+    virtual async::Channel<UiActionList> actionsChanged() const
+    {
+        //! NOTE Usually actions don't change,
+        //! so let's add a default implementation here.
+        static async::Channel<UiActionList> ch;
+        return ch;
+    }
+
     virtual bool actionEnabled(const UiAction& act) const = 0;
     virtual async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const = 0;
 
