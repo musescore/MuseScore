@@ -1046,7 +1046,7 @@ struct Event {
 
     uint32_t pitchBend14() const
     {
-        assert(messageType().isChannelVoice() && opcode() == Opcode::PitchBend);
+        assert(isChannelVoice() && opcode() == Opcode::PitchBend);
         return data14();
     }
 
