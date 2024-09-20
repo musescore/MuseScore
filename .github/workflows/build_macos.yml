@@ -63,15 +63,6 @@ jobs:
       if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' }}
       with:
         ref: ${{ env.CURRENT_RELEASE_BRANCH }}
-    - name: Ccache cache files
-      uses: actions/cache@v4
-      with:
-        path: ~/.ccache
-        key: ${{github.workflow}}-ccache-$(date -u +"%F-%T")
-        restore-keys: ${{github.workflow}}-ccache-  # restore ccache from either previous build on this branch or on master
-    - name: Setup ccache
-      run: |
-        bash ./buildscripts/ci/tools/setup_ccache.sh
     - name: "Configure workflow"
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
@@ -160,6 +151,20 @@ jobs:
         echo "SENTRY_URL=$SENTRY_URL" | tee -a $GITHUB_ENV
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
+
+        echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_ENV
+
+    - name: Restore ccache files
+      uses: actions/cache@v4
+      with:
+        path: ${{ github.workspace }}/.ccache
+        key: ${{github.workflow}}-ccache-${{ env.CCACHE_TIMESTAMP }}
+        restore-keys: ${{github.workflow}}-ccache-
+    - name: Setup ccache
+      run: |
+        brew install ccache
+        bash ./buildscripts/ci/tools/setup_ccache_config.sh
+
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/macos/setup.sh

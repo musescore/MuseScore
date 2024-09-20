@@ -21,15 +21,19 @@ jobs:
 
         echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
 
-    - name: Ccache cache files
+        echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_ENV
+
+    - name: Restore ccache files
       uses: actions/cache@v4
       with:
-        path: ~/.ccache
-        key: ${{github.workflow}}-ccache-$(date -u +"%F-%T")
-        restore-keys: ${{github.workflow}}-ccache- # restore ccache from either previous build on this branch or on master
+        path: ${{ github.workspace }}/.ccache
+        key: ${{github.workflow}}-ccache-${{ env.CCACHE_TIMESTAMP }}
+        restore-keys: ${{github.workflow}}-ccache-
     - name: Setup ccache
       run: |
-        sudo bash ./buildscripts/ci/tools/setup_ccache.sh
+        sudo apt-get update && sudo apt-get install -y ccache
+        sudo bash ./buildscripts/ci/tools/setup_ccache_config.sh
+
     - name: Setup environment
       run: |
         sudo bash ./buildscripts/ci/linux/setup.sh
@@ -37,6 +41,8 @@ jobs:
       run: |
         mkdir -p build.artifacts/env
         sudo bash ./buildscripts/ci/linux/build_utest.sh -n ${{ env.BUILD_NUMBER }}
+        echo "============== ccache ==============="
+        sudo ccache -s
     - name: Free up disk space
       # After building, too little disk space is left. Remove unnecessary tools to free up disk space.
       run: |

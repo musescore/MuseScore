@@ -18,25 +18,19 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-BASE_DIR=$1
 
-echo "Install ccache"
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    sudo apt install ccache
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-    brew install ccache
-else
-    echo "Unsupported OS: $OSTYPE"; exit 1;
-fi
+echo "Setup ccache config"
 
-echo "Setup config"
+export CCACHE_DIR=$GITHUB_WORKSPACE/.ccache
+mkdir -p $CCACHE_DIR
 
-mkdir -p ~/.ccache
-echo "base_dir = ${BASE_DIR}" > ~/.ccache/ccache.conf
-echo "compression = true" >> ~/.ccache/ccache.conf
-echo "compression_level = 6" >> ~/.ccache/ccache.conf
-echo "max_size = 2G" >> ~/.ccache/ccache.conf
-echo "sloppiness=pch_defines,time_macros" >> ~/.ccache/ccache.conf
-cat ~/.ccache/ccache.conf
+echo "CCACHE_DIR=$CCACHE_DIR" | tee -a $GITHUB_ENV
+echo "base_dir = $GITHUB_WORKSPACE" >$CCACHE_DIR/ccache.conf
+echo "compression = true" >>$CCACHE_DIR/ccache.conf
+echo "compression_level = 5" >>$CCACHE_DIR/ccache.conf
+echo "max_size = 2G" >>$CCACHE_DIR/ccache.conf
+echo "sloppiness=pch_defines,time_macros" >>$CCACHE_DIR/ccache.conf
+cat $CCACHE_DIR/ccache.conf
+
 ccache -s
-ccache -z      
+ccache -z
