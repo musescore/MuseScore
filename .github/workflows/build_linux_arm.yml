@@ -220,6 +220,11 @@ jobs:
       uses: styfle/cancel-workflow-action@0.12.1
       with:
         access_token: ${{ github.token }}
+    - name: Exit if current release branch configuration is incorrect
+      if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' && env.CURRENT_RELEASE_BRANCH == '' }}
+      run: |
+        echo "::error::CURRENT_RELEASE_BRANCH is not set"
+        exit 1
     - name: Clone repository (default)
       uses: actions/checkout@v4
       if: ${{ github.event_name != 'schedule' || github.event.schedule == '0 3 */1 */1 *' }}
