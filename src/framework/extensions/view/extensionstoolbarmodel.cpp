@@ -116,6 +116,7 @@ QVariant ExtensionsToolBarModel::data(const QModelIndex& index, int role) const
     switch (role) {
     case IconRole: return QVariant::fromValue(item.control.icon);
     case EnabledRole: return item.state.enabled;
+    case ToolTipTitleRole: return item.action.title.qTranslatedWithoutMnemonic();
     }
     return QVariant();
 }
@@ -129,7 +130,8 @@ QHash<int, QByteArray> ExtensionsToolBarModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
         { IconRole, "iconRole" },
-        { EnabledRole, "enabledRole" }
+        { EnabledRole, "enabledRole" },
+        { ToolTipTitleRole, "toolTipTitleRole" }
     };
     return roles;
 }

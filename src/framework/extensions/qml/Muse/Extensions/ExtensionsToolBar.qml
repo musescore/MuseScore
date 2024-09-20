@@ -53,11 +53,13 @@ Item {
                 height: width
                 anchors.verticalCenter: parent.verticalCenter
 
+                enabled: enabledRole
+
                 icon: iconRole
                 iconFont: ui.theme.toolbarIconsFont
                 transparent: true
 
-                enabled: enabledRole
+                toolTipTitle: toolTipTitleRole
 
                 onClicked: extModel.onClicked(model.index)
             }
