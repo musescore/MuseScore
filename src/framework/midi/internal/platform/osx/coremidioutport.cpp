@@ -309,32 +309,32 @@ Ret CoreMidiOutPort::sendEvent(const Event& e)
 
     OSStatus result;
     MIDITimeStamp timeStamp = AudioGetCurrentHostTime();
+    static bool doLog = false; // kors::logger::Logger::instance()->isLevel(kors::logger::Level::Debug);
 
     if (__builtin_available(macOS 11.0, *)) {
         MIDIProtocolID protocolId = kMIDIProtocol_2_0; // configuration()->useMIDI20Output() ? m_core->destinationProtocolId : kMIDIProtocol_1_0;
 
         ByteCount wordCount = e.midi20WordCount();
         if (wordCount == 0) {
-            LOGE() << "CoreMidiOutPort: failed to send message for event: " << e.to_string();
+            LOGW() << "Failed to send message for event: " << e.to_string();
             return make_ret(Err::MidiSendError, "failed send message. unknown word count");
         }
-        LOGD() << "CoreMidiOutPort: sending event: " << e.to_string();
+        if (doLog) {
+            LOGW() << "Sending MIDIEventList event: " << e.to_string();
+        }
 
         MIDIEventList eventList;
         MIDIEventPacket* packet = MIDIEventListInit(&eventList, protocolId);
 
-        bool isChannelVoiceMessage20 = e.messageType() == Event::MessageType::ChannelVoice20;
-        bool isNoteOnMessage = isChannelVoiceMessage20 && e.opcode() == muse::midi::Event::Opcode::NoteOn;
-
-        if (isNoteOnMessage && e.velocity() < 128) {
-            LOGW() << "CoreMidiOutPort: unexpected low ChannelVoiceMessage velocity. scaling...";
-            Event e2 = e;
-            uint16_t vel = e.velocity();
-            e2.setVelocity(vel*256*2);
-            MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, wordCount, e2.rawData());
-        } else {
-            MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, wordCount, e.rawData());
+        if (doLog) {
+            bool isChannelVoiceMessage20 = e.messageType() == Event::MessageType::ChannelVoice20;
+            bool isNoteOnMessage = isChannelVoiceMessage20 && e.opcode() == muse::midi::Event::Opcode::NoteOn;
+            if (isNoteOnMessage && e.velocity() < 128) {
+                LOGW() << "Detected low MIDI 2.0 ChannelVoiceMessage velocity.";
+            }
         }
+
+        MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, wordCount, e.rawData());
 
         result = MIDISendEventList(m_core->outputPort, m_core->destinationId, &eventList);
     } else {
@@ -351,22 +351,16 @@ Ret CoreMidiOutPort::sendEvent(const Event& e)
         Byte bytesPackage[4];
 
         for (const Event& event : events) {
-            // Note: to_MIDI10Package contains voodoo, which works on little-endian machines (Arm and Intel), but not the old PowerPC.
-            // Play safe here.
-            LOGW() << "CoreMidiOutPort: sending event: " << event.to_string();
-            static bool useVoodoo = false;
-            if (useVoodoo) {
-                uint32_t msg = event.to_MIDI10Package();
-
-                if (!msg) {
-                    return make_ret(Err::MidiSendError, "message wasn't converted");
+            int length = event.to_MIDI10BytesPackage(bytesPackage);
+            assert(length <= 3);
+            if (doLog) {
+                if (length == 0) {
+                    LOGW() << "Failed Sending MIDIPacketList event: " << event.to_string();
+                } else {
+                    LOGW() << "Sending MIDIPacketList event: " << event.to_string();
                 }
-
-                // bug: sizeof(msg) is not the byte count
-                packet = MIDIPacketListAdd(&packetList, packetListSize, packet, timeStamp, sizeof(msg), reinterpret_cast<Byte*>(&msg));
-            } else {
-                int length = event.to_MIDI10BytesPackage(bytesPackage);
-                assert(length <= 3);
+            }
+            if (length > 0) {
                 packet = MIDIPacketListAdd(&packetList, packetListSize, packet, timeStamp, length, bytesPackage);
             }
         }

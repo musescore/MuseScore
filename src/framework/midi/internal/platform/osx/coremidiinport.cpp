@@ -187,6 +187,7 @@ void CoreMidiInPort::initCore()
     }
 
     QString portName = "MuseScore MIDI input port";
+    static bool doLog = false; // kors::logger::Logger::instance()->isLevel(kors::logger::Level::Debug);
     if (__builtin_available(macOS 11.0, *)) {
         MIDIReceiveBlock receiveBlock = ^ (const MIDIEventList* eventList, void* /*srcConnRefCon*/) {
             // For reference have a look at Table 4 on page 22f in
@@ -220,7 +221,9 @@ void CoreMidiInPort::initCore()
 
             const MIDIEventPacket* packet = eventList->packet;
             for (UInt32 index = 0; index < eventList->numPackets; index++) {
-                LOGD() << "midi packet size " << packet->wordCount << " bytes";
+                if (doLog) {
+                    LOGW() << "Receiving MIDIEventPacket with " << packet->wordCount << " words";
+                }
                 // Handle packet
                 uint32_t pos = 0;
                 while (pos < packet->wordCount) {
@@ -228,11 +231,14 @@ void CoreMidiInPort::initCore()
                     assert(most_significant_4_bit < 6);
 
                     uint32_t message_size = message_type_to_size_in_words[most_significant_4_bit];
-
-                    LOGW() << "midi message size " << message_size << " words";
+                    if (doLog) {
+                        LOGW() << "Receiving midi message with " << message_size << " words";
+                    }
                     Event e = Event::fromRawData(&packet->words[pos], message_size);
                     if (e) {
-                        LOGW() << "Received midi message:" << e.to_string();
+                        if (doLog) {
+                            LOGW() << "Received midi message:" << e.to_string();
+                        }
                         m_eventReceived.send((tick_t)packet->timeStamp, e);
                     }
                     pos += message_size;
@@ -254,20 +260,28 @@ void CoreMidiInPort::initCore()
                 while (pos < len) {
                     Byte status = pointer[pos] >> 4;
                     if (status < 8 || status >= 15) {
-                        LOGW() << "unhandled status byte:" << status;
+                        if (doLog) {
+                            LOGW() << "Unhandled status byte:" << status;
+                        }
                         return;
                     }
                     Event::Opcode opcode = static_cast<Event::Opcode>(status);
                     int msgLen = Event::midi10ByteCountForOpcode(opcode);
                     if (msgLen == 0) {
-                        LOGW() << "unhandled opcode:" << status;
+                        if (doLog) {
+                            LOGW() << "Unhandled opcode:" << status;
+                        }
                         return;
                     }
                     Event e = Event::fromMIDI10BytePackage(pointer + pos, msgLen);
-                    LOGW() << "Received midi 1.0 message:" << e.to_string();
+                    if (doLog) {
+                        LOGW() << "Received midi 1.0 message:" << e.to_string();
+                    }
                     e = e.toMIDI20();
                     if (e) {
-                        LOGW() << "Converted to midi 2.0 midi message:" << e.to_string();
+                        if (doLog) {
+                            LOGW() << "Converted to midi 2.0 midi message:" << e.to_string();
+                        }
                         m_eventReceived.send((tick_t)packet->timeStamp, e);
                     }
                     pos += msgLen;
