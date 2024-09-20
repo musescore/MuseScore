@@ -26,8 +26,7 @@ jobs:
             LUPDATE_ARGS='-no-obsolete'
           fi
 
-          echo "LUPDATE_ARGS=$LUPDATE_ARGS" >> $GITHUB_ENV
-          echo "LUPDATE_ARGS: $LUPDATE_ARGS"
+          echo "LUPDATE_ARGS=$LUPDATE_ARGS" | tee -a $GITHUB_ENV
 
       - name: Setup environment
         run: |
