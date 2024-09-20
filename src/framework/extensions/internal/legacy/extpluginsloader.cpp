@@ -264,7 +264,7 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& rootPath, const io::p
     a.uiCtx = uiCtx;
     a.apiversion = m.apiversion;
     a.legacyPlugin = m.legacyPlugin;
-    a.main = fi.fileName();
+    a.path = fi.fileName();
     m.actions.push_back(std::move(a));
 
     return m;
@@ -277,6 +277,6 @@ void ExtPluginsLoader::resolvePaths(Manifest& m, const io::path_t& rootDirPath) 
     }
 
     for (Action& a : m.actions) {
-        a.main = rootDirPath + "/" + a.main;
+        a.path = rootDirPath + "/" + a.path;
     }
 }

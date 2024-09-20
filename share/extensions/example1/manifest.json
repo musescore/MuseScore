@@ -5,5 +5,5 @@
     "title": "Example 1 (default)",
     "ui_context": "Any",
 
-    "main": "Main.qml"
+    "path": "Main.qml"
 }
