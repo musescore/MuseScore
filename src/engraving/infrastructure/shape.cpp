@@ -291,8 +291,8 @@ double Shape::left() const
 {
     double dist = DBL_MAX;
     for (const ShapeElement& r : m_elements) {
-        if (!RealIsNull(r.height()) && !(r.item() && r.item()->isTextBase()) && r.left() < dist) {
-            // if (r.left() < dist)
+        // TURBO-HACK: the only purpose of this is to ignore fingering for spacing the first CR segment after the header.
+        if (!RealIsNull(r.height()) && !(r.item() && r.item()->isFingering()) && r.left() < dist) {
             dist = r.left();
         }
     }

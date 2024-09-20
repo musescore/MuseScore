@@ -1575,6 +1575,7 @@ void TWrite::writeProperties(const TextLineBase* item, XmlWriter& xml, WriteCont
             writeProperty(item, xml, pid);
         }
     }
+
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
 }
 
@@ -1605,6 +1606,9 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
 
     writeProperty(item, xml, Pid::SNAP_BEFORE);
     writeProperty(item, xml, Pid::SNAP_AFTER);
+
+    writeProperty(item, xml, Pid::HAIRPIN_HEIGHT);
+    writeProperty(item, xml, Pid::HAIRPIN_CONT_HEIGHT);
 
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();

@@ -2885,6 +2885,31 @@ bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* ite
     return centerProperty == AutoOnOff::ON || item->appliesToAllVoicesInInstrument();
 }
 
+bool SystemLayout::elementHasAnotherStackedOutside(const EngravingItem* element, const Shape& elementShape, const SkylineLine& skylineLine)
+{
+    double elemShapeLeft = -elementShape.left();
+    double elemShapeRight = elementShape.right();
+    double elemShapeTop = elementShape.top();
+    double elemShapeBottom = elementShape.bottom();
+
+    for (const ShapeElement& skylineElement : skylineLine.elements()) {
+        if (!skylineElement.item() || skylineElement.item() == element || skylineElement.item()->parent() == element) {
+            continue;
+        }
+        bool intersectHorizontally = elemShapeRight > skylineElement.left() && elemShapeLeft < skylineElement.right();
+        if (!intersectHorizontally) {
+            continue;
+        }
+        bool skylineElementIsStackedOnIt = skylineLine.isNorth() ? skylineElement.top() < elemShapeBottom : skylineElement.bottom()
+                                           > elemShapeTop;
+        if (skylineElementIsStackedOnIt) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const System* system)
 {
     bool isAbove = element->placeAbove();
@@ -2915,6 +2940,10 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
     elementShape.remove_if([](ShapeElement& shEl) { return shEl.ignoreForLayout(); });
 
     const SkylineLine& skylineOfThisStaff = isAbove ? thisStaff->skyline().north() : thisStaff->skyline().south();
+
+    if (elementHasAnotherStackedOutside(element, elementShape, skylineOfThisStaff)) {
+        return;
+    }
 
     SkylineLine thisSkyline = skylineOfThisStaff.getFilteredCopy([element](const ShapeElement& shEl) {
         const EngravingItem* shapeItem = shEl.item();

@@ -358,9 +358,13 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
     bool isDashOnFirstSyllable = lyricsLine->tick2() == system->firstMeasure()->tick();
     double curLength = endX - startX;
     double dashMinLength = style.styleMM(Sid::lyricsDashMinLength);
-    int dashCount = std::floor(curLength / style.styleMM(Sid::lyricsDashMaxDistance));
+    bool firstAndLastGapAreHalf = style.styleB(Sid::lyricsDashFirstAndLastGapAreHalf);
     bool forceDash = style.styleB(Sid::lyricsDashForce)
                      || (style.styleB(Sid::lyricsShowDashIfSyllableOnFirstNote) && isDashOnFirstSyllable);
+    double maxDashDistance = style.styleMM(Sid::lyricsDashMaxDistance);
+    int dashCount = firstAndLastGapAreHalf && curLength > maxDashDistance ? std::ceil(curLength / maxDashDistance)
+                    : std::floor(curLength / maxDashDistance);
+
     if (curLength > dashMinLength || forceDash) {
         dashCount = std::max(dashCount, 1);
     }
@@ -381,7 +385,7 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
     double dashWidth = std::min(curLength, style.styleMM(Sid::lyricsDashMaxLength).val());
 
     bool dashesLeftAligned = lyricsDashSystemStart != LyricsDashSystemStart::STANDARD && !item->isSingleBeginType();
-    double dashDist = curLength / (dashesLeftAligned ? dashCount : dashCount + 1);
+    double dashDist = curLength / (dashesLeftAligned || firstAndLastGapAreHalf ? dashCount : dashCount + 1);
     double xDash = 0.0;
     if (dashesLeftAligned) {
         for (int i = 0; i < dashCount; ++i) {
@@ -390,7 +394,11 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
         }
     } else {
         for (int i = 0; i < dashCount; ++i) {
-            xDash += dashDist;
+            if (firstAndLastGapAreHalf && i == 0) {
+                xDash += 0.5 * dashDist;
+            } else {
+                xDash += dashDist;
+            }
             item->mutldata()->addDash(LineF(PointF(xDash - 0.5 * dashWidth, 0.0), PointF(xDash + 0.5 * dashWidth, 0.0)));
         }
     }
