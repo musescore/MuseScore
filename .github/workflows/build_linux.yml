@@ -98,11 +98,11 @@ jobs:
 
         DO_UPDATE_TS='false'
         if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then 
-            DO_UPDATE_TS='true'
-            if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then 
-              echo "warning: not set TRANSIFEX_API_TOKEN, update .ts disabled" 
-              DO_UPDATE_TS='false'
-            fi 
+          DO_UPDATE_TS='true'
+          if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then 
+            echo "warning: not set TRANSIFEX_API_TOKEN, update .ts disabled" 
+            DO_UPDATE_TS='false'
+          fi 
         fi
 
         DO_PLACEHOLDER_TRANSLATIONS='false'
