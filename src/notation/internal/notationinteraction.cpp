@@ -2734,7 +2734,8 @@ bool NotationInteraction::moveSelectionAvailable(MoveSelectionType type) const
     const std::set<ElementType> allowedTextEditTypes = {
         ElementType::STAFF_TEXT,
         ElementType::SYSTEM_TEXT,
-        ElementType::EXPRESSION
+        ElementType::EXPRESSION,
+        ElementType::REHEARSAL_MARK
     };
     if (isTextEditingStarted() && el && allowedTextEditTypes.find(el->type()) != allowedTextEditTypes.end()) {
         return true;
