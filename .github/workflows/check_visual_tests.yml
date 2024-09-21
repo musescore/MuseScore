@@ -18,6 +18,8 @@ jobs:
         access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - name: "Configure workflow"
       run: |
         bash ./buildscripts/ci/tools/make_build_number.sh
@@ -30,7 +32,7 @@ jobs:
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
       run: |
-        REFERENCE_SHA=${{ github.event.pull_request.base.sha }}
+        REFERENCE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} HEAD)
         if [ -z "$REFERENCE_SHA" ]; then DO_RUN='false'; else DO_RUN='true'; fi
         echo "REFERENCE_SHA=$REFERENCE_SHA" >> $GITHUB_ENV
         echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV
