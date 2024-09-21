@@ -40,8 +40,12 @@ jobs:
     - name: Get reference commit for push commit
       if: github.event_name == 'push'
       run: |
-        REFERENCE_SHA=$( git show -s --pretty=%P ${{ github.sha }} | head -c 10 )
-        if [ -z "$REFERENCE_SHA" ]; then DO_RUN='false'; else DO_RUN='true'; fi
+        REFERENCE_SHA=${{ github.event.before }}
+        if [[ -z "$REFERENCE_SHA" || "$REFERENCE_SHA" == 0000000000000000000000000000000000000000 ]]; then 
+          DO_RUN='false' 
+        else 
+          DO_RUN='true'
+        fi
         echo "REFERENCE_SHA=$REFERENCE_SHA" >> $GITHUB_ENV
         echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV
         echo "PR_INFO=" >> $GITHUB_ENV
