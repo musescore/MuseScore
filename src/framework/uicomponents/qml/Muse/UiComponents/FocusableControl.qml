@@ -25,8 +25,6 @@ import Muse.Ui 1.0
 FocusScope {
     id: root
 
-    default property alias content: contentItemContainer.data
-    property alias contentItem: contentItemContainer
     property alias background: focusRectItem
     property alias focusBorder: focusBorderItem
 
@@ -91,11 +89,5 @@ FocusScope {
         onClicked: {
             root.ensureActiveFocus()
         }
-    }
-
-    Item {
-        id: contentItemContainer
-        objectName: "FocusableControlContent"
-        anchors.fill: focusRectItem
     }
 }
