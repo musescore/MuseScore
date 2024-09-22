@@ -95,6 +95,22 @@ ListItemBlank {
         return text
     }
 
+    // https://github.com/musescore/MuseScore/pull/24644#issuecomment-2356235871
+    // Since https://github.com/qt/qtdeclarative/commit/499828b855d125ac236917f6ed01d8f1e7d88505
+    // (cherry-picked to Qt 6.2.5 as https://github.com/qt/qtdeclarative/commit/caf81fefbe3f5b8e2fb7892b40b4748db3230046)
+    // hover events are not propagated anymore between siblings, only to ancestors.
+    // For us, that means that they are not propagated anymore from the StyledTextLabel
+    // with `textFormat: Text.RichText` (which accepts hover events) to the MouseArea,
+    // which is not an ancestor of the StyledTextLabel.
+    // The fact that the StyledTextLabel accepts hover events cannot be changed from
+    // QML (there is no way to call `QQuickItem::setAcceptHoverEvents(false)`).
+    // Making the MouseArea an ancestor of the StyledTextLabel is not possible either,
+    // because the MouseArea is defined far away in FocusableControl (from which
+    // ListItemBlank inherits).
+    // As a workaround, we ensure that the MouseArea is on top of the StyledTextLabel,
+    // so that it takes precedence.
+    mouseArea.z: 1000
+
     QtObject {
         id: itemPrv
 
@@ -198,11 +214,6 @@ ListItemBlank {
             text: itemPrv.titleWithMnemonicUnderline
 
             textFormat: Text.RichText
-            //! If the rich text format is set, then the component intercepts the hover state
-            //  The hover state is required to open a submenu(see onHovered)
-            //  So, let's turn off the mouse hovering over the component
-            enabled: false
-            opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
         }
 
         StyledTextLabel {
