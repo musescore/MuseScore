@@ -11308,7 +11308,7 @@ Givið út við &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="169"/>
         <source>Audio &amp; MIDI</source>
-        <translation type="unfinished"/>
+        <translation>Ljóð &amp; MIDI</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="172"/>
@@ -11497,7 +11497,7 @@ Givið út við &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 
     <message>
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="102"/>
         <source>Voice assignment</source>
-        <translation type="unfinished"/>
+        <translation>Raddartilluting</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="106"/>
@@ -11507,12 +11507,12 @@ Givið út við &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 
     <message>
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="113"/>
         <source>All voices on the instrument</source>
-        <translation type="unfinished"/>
+        <translation>Allar røddir í ljóðførinum</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="124"/>
         <source>Only the voice they are applied to</source>
-        <translation type="unfinished"/>
+        <translation>Bert røddin sum tey eru tillutaði</translation>
     </message>
 </context>
 <context>
@@ -11612,7 +11612,7 @@ Givið út við &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 
     <message>
         <location filename="../../src/framework/cloud/internal/oauthhttpserverreplyhandler.cpp" line="184"/>
         <source>Sign in successful! You’re good to go back to MuseScore Studio.</source>
-        <translation type="unfinished"/>
+        <translation>Væleydna innskriving! Tú kanst fara aftur til MuseScore Studio.</translation>
     </message>
 </context>
 <context>
@@ -11750,7 +11750,7 @@ Givið út við &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 
     <message>
         <location filename="../../src/engraving/dom/engravingitem.cpp" line="2521"/>
         <source>Displayed measure: %1</source>
-        <translation type="unfinished"/>
+        <translation>Víst takt: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/engravingitem.cpp" line="2525"/>
@@ -12348,7 +12348,7 @@ Givið út við &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 
     <message>
         <location filename="../../src/engraving/dom/articulation.cpp" line="159"/>
         <source>Articulation text</source>
-        <translation type="unfinished"/>
+        <translation>Framburðar tekstur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/articulation.cpp" line="162"/>
@@ -12359,7 +12359,7 @@ Givið út við &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 
     <message>
         <location filename="../../src/engraving/dom/ornament.cpp" line="95"/>
         <source>Ornament text</source>
-        <translation type="unfinished"/>
+        <translation>Príðistekstur</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/ornament.cpp" line="98"/>
@@ -12454,7 +12454,7 @@ Givið út við &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="216"/>
         <source>Sound flag</source>
-        <translation type="unfinished"/>
+        <translation>Ljóð merki</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="217"/>
@@ -12999,7 +12999,7 @@ Givið út við &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="306"/>
         <source>Time tick anchor</source>
-        <translation type="unfinished"/>
+        <translation>Tíðar klikk festi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1126"/>
@@ -13019,7 +13019,7 @@ Givið út við &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1132"/>
         <source>Page number</source>
-        <translation type="unfinished"/>
+        <translation>Síðutal</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1140"/>
@@ -13311,22 +13311,22 @@ Givið út við &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2306"/>
         <source>Slide out down (rough)</source>
-        <translation type="unfinished"/>
+        <translation>Glíðing út niður (leysliga)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2307"/>
         <source>Slide out up (rough)</source>
-        <translation type="unfinished"/>
+        <translation>Glíðing út upp (leysliga)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2308"/>
         <source>Slide in above (rough)</source>
-        <translation type="unfinished"/>
+        <translation>Glíðing inn omanfyri (leysliga)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2309"/>
         <source>Slide in below (rough)</source>
-        <translation type="unfinished"/>
+        <translation>Glíðing inn niðanfyri (leysliga)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2426"/>
@@ -13536,7 +13536,7 @@ Givið út við &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 
     <message numerus="yes">
         <location filename="../../src/engraving/dom/measurerepeat.cpp" line="202"/>
         <source>%n measure(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n takt(ir)</numerusform><numerusform>%n takt(ir)</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="61"/>
@@ -13571,7 +13571,7 @@ Givið út við &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="83"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Fílan varð goymd við nýggjari útgávu av MuseScore. Vinarliga vitja &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; og útvega tær nýggjastu útgávuna.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="87"/>
@@ -13656,12 +13656,12 @@ Givið út við &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="96"/>
         <source>All voices color</source>
-        <translation type="unfinished"/>
+        <translation>Litur allar røddir</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="109"/>
         <source>Formatting color</source>
-        <translation type="unfinished"/>
+        <translation>Litur forsniðing</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="116"/>
@@ -21734,7 +21734,7 @@ byrjunar takt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="46"/>
         <source>Voice assignment</source>
-        <translation type="unfinished"/>
+        <translation>Raddartilluting</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="71"/>
@@ -27449,7 +27449,7 @@ misseydnaðist</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1677"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation type="unfinished"/>
+        <translation>Fílan varð goymd við nýggjari útgávu av MuseScore. Vinarliga vitja &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; og útvega tær nýggjastu útgávuna.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1683"/>
