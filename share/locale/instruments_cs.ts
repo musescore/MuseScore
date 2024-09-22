@@ -19382,7 +19382,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="169"/>
         <source>Body Percussion</source>
-        <translation>Bicí nástroje – lidské tělo</translation>
+        <translation>Lidské tělo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="170"/>
@@ -19608,22 +19608,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3410"/>
         <source>Percussion - Pitched</source>
-        <translation>Bicí nástroje – laděné</translation>
+        <translation>Bicí nástroje laděné</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3800"/>
         <source>Percussion - Unpitched</source>
-        <translation>Bicí nástroje – neladěné</translation>
+        <translation>Bicí nástroje neladěné</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4334"/>
         <source>Percussion - Marching</source>
-        <translation>Bicí nástroje – pochodové</translation>
+        <translation>Bicí nástroje pochodové</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4373"/>
         <source>Percussion - Body</source>
-        <translation>Bicí nástroje – lidské tělo</translation>
+        <translation>Lidské tělo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4412"/>

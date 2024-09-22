@@ -15602,7 +15602,7 @@
         <source>Marching Cymbals</source>
         <comment>marching-cymbals trackName</comment>
         <extracomment>trackName for Marching Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Marş Zillerii.</translation>
+        <translation>Marş Zilleri.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5141"/>

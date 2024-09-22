@@ -2417,7 +2417,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="94"/>
         <source>Clefs, key &amp; time signatures</source>
-        <translation>Klíče, předznamenání a taktová označení</translation>
+        <translation>Klíče, předznamenání a taktové označení</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="357"/>
@@ -2758,7 +2758,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3913"/>
         <source>Hide after the first system where they appear</source>
-        <translation>Skrýt za prvním systémem, kde jsou zobrazeny</translation>
+        <translation>Skrýt za prvním systémem, kde jsou zobrazena</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3920"/>
@@ -19738,7 +19738,7 @@ předtaktí</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="73"/>
         <source>Repeat style</source>
-        <translation>Opakovat styl</translation>
+        <translation>Styl repetiční čáry</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="95"/>
@@ -19748,12 +19748,12 @@ předtaktí</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="111"/>
         <source>Span from</source>
-        <translation>Protažení nahoře</translation>
+        <translation>Protáhnout nahoře</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="130"/>
         <source>Span to</source>
-        <translation>Protažení dole</translation>
+        <translation>Protáhnout dole</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="148"/>

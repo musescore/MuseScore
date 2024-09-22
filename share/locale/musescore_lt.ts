@@ -3027,12 +3027,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4819"/>
         <source>Reset &apos;Key to time signature distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Atstumas nuo ton. ženklų iki metro&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4845"/>
         <source>Reset &apos;Barline to grace note distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Atstumas nuo takto brūkšnio iki melizmo&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4881"/>
@@ -3124,17 +3124,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5961"/>
         <source>Break H-bar if it collides with number</source>
-        <translation type="unfinished"/>
+        <translation>Laužti H-taktą jei jis kertasi su numeriu</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5971"/>
         <source>Reset &apos;Break H-bar if it collides with number&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Laužti H-taktą jei jis kertasi su numeriu&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6010"/>
         <source>Reset &apos;H-bar horizontal stroke thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;H-takto horizontalaus pabraukimo storis&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6052"/>
@@ -3191,7 +3191,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9802"/>
         <source>Label for full bends</source>
-        <translation type="unfinished"/>
+        <translation>Užrašas pilniems patempimams</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9907"/>
@@ -3287,7 +3287,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13411"/>
         <source>Select the elements you would like displayed in common and simple tablature staves</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkite elementus, kuriuos norėtumėte matyti įprastinių ir paprastų tabulatūrų penklinėse</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4223"/>
@@ -3407,7 +3407,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5341"/>
         <source>Repeat barline to dots distance:</source>
-        <translation type="unfinished"/>
+        <translation>Atstumas nuo pakartojimo brūkšnio iki jo taškelių:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5351"/>
@@ -3897,7 +3897,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10971"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12223"/>
         <source>Autoplace min. distance:</source>
-        <translation type="unfinished"/>
+        <translation>Autopadėties min. atstumas:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7382"/>
@@ -3957,7 +3957,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8391"/>
         <source>Continue height:</source>
-        <translation type="unfinished"/>
+        <translation>Tęsti aukštį:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8410"/>
@@ -3967,17 +3967,17 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8267"/>
         <source>Reset &apos;Continue height&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Tęsti aukštį&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8229"/>
         <source>Autoplace, distance to dynamics:</source>
-        <translation type="unfinished"/>
+        <translation>Autopadėtis, atstumas iki dinamikų:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8189"/>
         <source>Reset &apos;Autoplace, distance to dynamics&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti &quot;Autopadėtis, atstumas iki dinamikų&quot; reikšmę</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9354"/>
@@ -7884,7 +7884,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1312"/>
         <source>Add text: Roman numeral analysis</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti tekstą: Romėniškų skaitmenų analizė</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1318"/>
@@ -7974,7 +7974,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1420"/>
         <source>Reset beams to default grouping</source>
-        <translation type="unfinished"/>
+        <translation>Atstatyti sijas į numatytąjį grupavimą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1425"/>
@@ -8000,24 +8000,24 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1457"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1458"/>
         <source>Zoom to page width</source>
-        <translation type="unfinished"/>
+        <translation>Padidinti iki lapo pločio</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1463"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1464"/>
         <source>Zoom to whole page</source>
-        <translation type="unfinished"/>
+        <translation>Padidinti iki viso lapo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1469"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1470"/>
         <source>Zoom to two pages</source>
-        <translation type="unfinished"/>
+        <translation>Padidinti iki dviejų lapų</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1476"/>
         <source>Accessibility: get location</source>
-        <translation type="unfinished"/>
+        <translation>Prieinamumas: gauti lokaciją</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1493"/>
@@ -8057,7 +8057,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1524"/>
         <source>Add to selection: staff above</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti prie pasirinkimo: penklinė virš</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1529"/>
@@ -8082,12 +8082,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1560"/>
         <source>Jump to top of first page</source>
-        <translation type="unfinished"/>
+        <translation>Šokti į pirmo lapo viršų</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1566"/>
         <source>Jump to bottom of last page</source>
-        <translation type="unfinished"/>
+        <translation>Šokti į paskutinio lapo apačią</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1589"/>
@@ -8102,7 +8102,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1610"/>
         <source>Toggle concert pitch</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti koncertinį derinimą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1636"/>
@@ -8312,18 +8312,18 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1972"/>
         <source>Make selected element(s) visible</source>
-        <translation type="unfinished"/>
+        <translation>Padaryti pasirinktą elementą(-us) matomą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1978"/>
         <source>Make selected element(s) invisible</source>
-        <translation type="unfinished"/>
+        <translation>Padaryti pasirinktą elementą(-us) nematomą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1983"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1984"/>
         <source>Toggle automatic placement for selected elements</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti automatinį išdėstymą pasirinktiems elementams</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1995"/>
@@ -8455,27 +8455,27 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2274"/>
         <source>Select next in-staff element</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkti sekantį elementą penklinėje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2280"/>
         <source>Select previous in-staff element</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkti ankstesnį elementą penklinėje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2286"/>
         <source>Toggle accidental: flat</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti alteraciją: bemolis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2300"/>
         <source>Toggle accidental: natural</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti alteraciją: bekaras</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2307"/>
         <source>Toggle accidental: sharp</source>
-        <translation type="unfinished"/>
+        <translation>Perjungti alteraciją: diezas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2321"/>
@@ -8941,7 +8941,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="162"/>
         <source>&amp;Braille</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Brailis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="163"/>
@@ -9386,32 +9386,32 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="589"/>
         <source>Exchange voice &amp;1-2</source>
-        <translation type="unfinished"/>
+        <translation>Apkeisti balsus &amp;1-2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="601"/>
         <source>Exchange voice 1-&amp;4</source>
-        <translation type="unfinished"/>
+        <translation>Apkeisti balsus 1-&amp;4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="607"/>
         <source>Exchange voice &amp;2-3</source>
-        <translation type="unfinished"/>
+        <translation>Apkeisti balsus &amp;2-3</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="619"/>
         <source>Exchange voice &amp;3-4</source>
-        <translation type="unfinished"/>
+        <translation>Apkeisti balsus &amp;3-4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="643"/>
         <source>&amp;Split measure before selected note/rest</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Skelti taktą prieš pasirinktą natą/pauzę</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="649"/>
         <source>&amp;Join selected measures</source>
-        <translation type="unfinished"/>
+        <translation>Su&amp;jungti pasirinktus taktus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="692"/>
@@ -9696,17 +9696,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1395"/>
         <source>&amp;Decrease layout stretch</source>
-        <translation type="unfinished"/>
+        <translation>%Sumažinti išdėstymo tempimą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1401"/>
         <source>&amp;Increase layout stretch</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Padidinti išdėstymo tempimą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1407"/>
         <source>&amp;Reset layout stretch</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Atstatyti išdėstymo tempimą</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1413"/>
@@ -13287,42 +13287,42 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2301"/>
         <source>Slide out down</source>
-        <translation type="unfinished"/>
+        <translation>Nuslydimas žemyn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2302"/>
         <source>Slide out up</source>
-        <translation type="unfinished"/>
+        <translation>Nuslydimas viršun</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2303"/>
         <source>Slide in above</source>
-        <translation type="unfinished"/>
+        <translation>Įvažiavimas iš viršaus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2304"/>
         <source>Slide in below</source>
-        <translation type="unfinished"/>
+        <translation>Įvažiavimas iš apačios</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2306"/>
         <source>Slide out down (rough)</source>
-        <translation type="unfinished"/>
+        <translation>Nuslydimas žemyn (grubus)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2307"/>
         <source>Slide out up (rough)</source>
-        <translation type="unfinished"/>
+        <translation>Nuslydimas viršun (grubus)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2308"/>
         <source>Slide in above (rough)</source>
-        <translation type="unfinished"/>
+        <translation>Įvažiavimas iš viršaus (grubus)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2309"/>
         <source>Slide in below (rough)</source>
-        <translation type="unfinished"/>
+        <translation>Įvažiavimas iš apačios (grubus)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2426"/>
@@ -13477,42 +13477,42 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2453"/>
         <source>Da Capo al Doppia Coda</source>
-        <translation type="unfinished"/>
+        <translation>Da Capo al Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2454"/>
         <source>Dal Segno al Doppia Coda</source>
-        <translation type="unfinished"/>
+        <translation>Dal Segno al Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2455"/>
         <source>Dal Doppio Segno</source>
-        <translation type="unfinished"/>
+        <translation>Dal Doppio Segno</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2456"/>
         <source>Dal Doppio Segno al Coda</source>
-        <translation type="unfinished"/>
+        <translation>Dal Doppio Segno al Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2457"/>
         <source>Dal Doppio Segno al Doppia Coda</source>
-        <translation type="unfinished"/>
+        <translation>Dal Doppio Segno al Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2458"/>
         <source>Dal Doppio Segno al Fine</source>
-        <translation type="unfinished"/>
+        <translation>Dal Doppio Segno al Fine</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2478"/>
         <source>Doppia Coda</source>
-        <translation type="unfinished"/>
+        <translation>Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2483"/>
         <source>Da Doppia Coda</source>
-        <translation type="unfinished"/>
+        <translation>Da Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2721"/>
@@ -13547,12 +13547,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="67"/>
         <source>File open error</source>
-        <translation type="unfinished"/>
+        <translation>Failo atidarymo klaida</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="70"/>
         <source>Bad format</source>
-        <translation type="unfinished"/>
+        <translation>Blogas formatas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="73"/>
@@ -13603,13 +13603,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/tempotext.cpp" line="459"/>
         <source>%1 note = %2 note</source>
         <extracomment>%1 and %2 are note durations. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate &quot;%1 note&quot; with &quot;%1&quot; and &quot;%2 note&quot; with &quot;%2&quot;, so that just the duration will be shown.</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1 nata = %2 nata</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="465"/>
         <source>%1 note = %2</source>
         <extracomment>%1 is a note duration. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate &quot;%1 note&quot; with &quot;%1&quot;, so that just the duration will be shown.</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1 nata = %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="258"/>
@@ -13625,24 +13625,24 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/check.cpp" line="150"/>
         <source>Part score: %1</source>
         <extracomment>%1 is the name of a part score.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Partijos natos: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="191"/>
         <source>&lt;b&gt;Corrupted measure&lt;/b&gt;: %1, measure %2, staff %3.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Pažeistas taktas&lt;/b&gt;: %1, %2 taktas, %3 penklinė.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="200"/>
         <source>&lt;b&gt;Incomplete measure&lt;/b&gt;: %1, measure %2, staff %3. Found: %4. Expected: %5.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Neužbaigtas taktas&lt;/b&gt;: %1, %2 taktas, %3 penklinė. Rasta: %4. Tikėtasi: %5.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="215"/>
         <source>&lt;b&gt;Voice too long&lt;/b&gt;: %1, measure %2, staff %3, voice %4. Found: %5. Expected: %6.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Balsas per ilgas&lt;/b&gt;: %1, %2 taktas, %3 penklinė, %4 balsas. Rasta: %5. Tikėtasi: %6.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="82"/>
@@ -13673,7 +13673,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="145"/>
         <source>Capo %1</source>
-        <translation type="unfinished"/>
+        <translation>Kapodasteris %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="162"/>
@@ -14643,12 +14643,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="693"/>
         <source>Double treble clef 8va bassa on 2nd line</source>
-        <translation type="unfinished"/>
+        <translation>Dvig. smuiko raktas 8va bassa ant 2-os linijos</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="694"/>
         <source>Treble clef optional 8va bassa</source>
-        <translation type="unfinished"/>
+        <translation>Smuiko raktas (pasirinktai) 8va bassa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="695"/>
@@ -14683,7 +14683,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="701"/>
         <source>C clef, H shape (19th century)</source>
-        <translation type="unfinished"/>
+        <translation>C raktas, H formos (19-as amžius)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="702"/>
@@ -14821,7 +14821,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2339"/>
         <source>Sticks</source>
-        <translation type="unfinished"/>
+        <translation>Lazdelės</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2340"/>
@@ -14846,7 +14846,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2344"/>
         <source>Bass Drum 1</source>
-        <translation type="unfinished"/>
+        <translation>Bosinis būgnas 1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2345"/>
@@ -14856,7 +14856,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2346"/>
         <source>Acoustic Snare</source>
-        <translation type="unfinished"/>
+        <translation>Akustinis solinis būgnas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2347"/>
@@ -14866,57 +14866,57 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2349"/>
         <source>Electric Snare</source>
-        <translation type="unfinished"/>
+        <translation>Elektrinis solinis būgnas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2350"/>
         <source>Low Floor Tom</source>
-        <translation type="unfinished"/>
+        <translation>Žemas apatinis tomas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2351"/>
         <source>Closed Hi-Hat</source>
-        <translation type="unfinished"/>
+        <translation>Uždaras hi-hetas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2352"/>
         <source>High Floor Tom</source>
-        <translation type="unfinished"/>
+        <translation>Aukštas apatinis tomas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2353"/>
         <source>Pedal Hi-Hat</source>
-        <translation type="unfinished"/>
+        <translation>Hi-heto pedalas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2354"/>
         <source>Low Tom</source>
-        <translation type="unfinished"/>
+        <translation>Žemas tomas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2355"/>
         <source>Open Hi-Hat</source>
-        <translation type="unfinished"/>
+        <translation>Atviras hi-hetas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2356"/>
         <source>Low-Mid Tom</source>
-        <translation type="unfinished"/>
+        <translation>Žemas-vidutinis tomas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2357"/>
         <source>Hi-Mid Tom</source>
-        <translation type="unfinished"/>
+        <translation>Aukštas-vidutinis tomas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2358"/>
         <source>Crash Cymbal 1</source>
-        <translation type="unfinished"/>
+        <translation>Lėkštė 1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2360"/>
         <source>High Tom</source>
-        <translation type="unfinished"/>
+        <translation>Aukštas tomas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2361"/>
@@ -14956,7 +14956,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2368"/>
         <source>Vibraslap</source>
-        <translation type="unfinished"/>
+        <translation>Vibraslap</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2369"/>
@@ -14966,27 +14966,27 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2371"/>
         <source>Hi Bongo</source>
-        <translation type="unfinished"/>
+        <translation>Aukštas bongas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2372"/>
         <source>Low Bongo</source>
-        <translation type="unfinished"/>
+        <translation>Žemas bongas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2373"/>
         <source>Mute Hi Conga</source>
-        <translation type="unfinished"/>
+        <translation>Prislopinta aukšta konga</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2374"/>
         <source>Open Hi Conga</source>
-        <translation type="unfinished"/>
+        <translation>Atvira aukšta konga</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2375"/>
         <source>Low Conga</source>
-        <translation type="unfinished"/>
+        <translation>Žema konga</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2376"/>
@@ -15066,17 +15066,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2393"/>
         <source>Mute Triangle</source>
-        <translation type="unfinished"/>
+        <translation>Prislopintas Trikampis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2394"/>
         <source>Open Triangle</source>
-        <translation type="unfinished"/>
+        <translation>Atviras Trikampis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2395"/>
         <source>Shaker</source>
-        <translation type="unfinished"/>
+        <translation>Barškalas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2396"/>
@@ -15086,7 +15086,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2397"/>
         <source>Mark Tree</source>
-        <translation type="unfinished"/>
+        <translation>Mark Tree</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2398"/>
@@ -15174,47 +15174,47 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="793"/>
         <source>f (Forte)</source>
-        <translation type="unfinished"/>
+        <translation>f (Forte)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="795"/>
         <source>ff (Fortissimo)</source>
-        <translation type="unfinished"/>
+        <translation>ff (Fortissimo)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="797"/>
         <source>fff (Fortississimo)</source>
-        <translation type="unfinished"/>
+        <translation>fff (Fortississimo)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="799"/>
         <source>ffff (Fortissississimo)</source>
-        <translation type="unfinished"/>
+        <translation>ffff (Fortissississimo)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="801"/>
         <source>fffff (Fortississississimo)</source>
-        <translation type="unfinished"/>
+        <translation>fffff (Fortississississimo)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="803"/>
         <source>ffffff (Fortissississississimo)</source>
-        <translation type="unfinished"/>
+        <translation>ffffff (Fortissississississimo)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="806"/>
         <source>fp (Fortepiano)</source>
-        <translation type="unfinished"/>
+        <translation>fp (Fortepiano)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="808"/>
         <source>pf (Pianoforte)</source>
-        <translation type="unfinished"/>
+        <translation>pf (Pianoforte)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="811"/>
         <source>sf (Sforzando)</source>
-        <translation type="unfinished"/>
+        <translation>sf (Sforzando)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="813"/>
@@ -15224,32 +15224,32 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="815"/>
         <source>sff (Sforzando)</source>
-        <translation type="unfinished"/>
+        <translation>sff (Sforzando)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="817"/>
         <source>sffz (Sforzato)</source>
-        <translation type="unfinished"/>
+        <translation>sffz (Sforzato)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="819"/>
         <source>sfff (Sforzando)</source>
-        <translation type="unfinished"/>
+        <translation>sfff (Sforzando)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="821"/>
         <source>sfffz (Sforzato)</source>
-        <translation type="unfinished"/>
+        <translation>sfffz (Sforzato)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="823"/>
         <source>sfp (Sforzando-piano)</source>
-        <translation type="unfinished"/>
+        <translation>sfp (Sforzando-piano)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="825"/>
         <source>sfpp (Sforzando-pianissimo)</source>
-        <translation type="unfinished"/>
+        <translation>sfpp (Sforzando-pianissimo)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="828"/>
@@ -15264,7 +15264,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="832"/>
         <source>fz (Forzando)</source>
-        <translation type="unfinished"/>
+        <translation>fz (Forzando)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="834"/>
@@ -15279,17 +15279,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="838"/>
         <source>s (Sforzando)</source>
-        <translation type="unfinished"/>
+        <translation>s (Sforzando)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="840"/>
         <source>z (Forzando)</source>
-        <translation type="unfinished"/>
+        <translation>z (Forzando)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="842"/>
         <source>n (Niente)</source>
-        <translation type="unfinished"/>
+        <translation>n (Niente)</translation>
     </message>
 </context>
 <context>
@@ -15360,7 +15360,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/hairpin.cpp" line="765"/>
         <source>Decrescendo hairpin</source>
-        <translation type="unfinished"/>
+        <translation>Decrescendo din. linija</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/hairpin.cpp" line="767"/>
@@ -15370,7 +15370,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/hairpin.cpp" line="769"/>
         <source>Decrescendo line</source>
-        <translation type="unfinished"/>
+        <translation>Decrescendo linija</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/hairpin.cpp" line="771"/>
@@ -15390,12 +15390,12 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/dom/instrument.cpp" line="40"/>
         <source>harmony</source>
         <extracomment>Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters</extracomment>
-        <translation type="unfinished"/>
+        <translation>harmonija</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/instrument.cpp" line="41"/>
         <source>palmmute</source>
-        <translation type="unfinished"/>
+        <translation>riešinis prislopinimas</translation>
     </message>
 </context>
 <context>
@@ -15418,7 +15418,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1725"/>
         <source>Keep measures on the same system</source>
-        <translation type="unfinished"/>
+        <translation>Laikyti taktus toje pačioje sistemoje</translation>
     </message>
 </context>
 <context>
@@ -15436,7 +15436,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="562"/>
         <source>Plus</source>
-        <translation type="unfinished"/>
+        <translation>Plius</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="563"/>
@@ -15446,27 +15446,27 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="564"/>
         <source>With X</source>
-        <translation type="unfinished"/>
+        <translation>Su X</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="565"/>
         <source>Triangle up</source>
-        <translation type="unfinished"/>
+        <translation>Trikampis į viršų</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="566"/>
         <source>Triangle down</source>
-        <translation type="unfinished"/>
+        <translation>Trikampis žemyn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="567"/>
         <source>Slashed (forwards)</source>
-        <translation type="unfinished"/>
+        <translation>Pasvirasis brūkšnys (priekin)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="568"/>
         <source>Slashed (backwards)</source>
-        <translation type="unfinished"/>
+        <translation>Pasvirasis brūkšnys (atgal)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="569"/>
@@ -15476,27 +15476,27 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="570"/>
         <source>Diamond (old)</source>
-        <translation type="unfinished"/>
+        <translation>Rombas (senas)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="571"/>
         <source>Circled</source>
-        <translation type="unfinished"/>
+        <translation>Apskritas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="572"/>
         <source>Circled large</source>
-        <translation type="unfinished"/>
+        <translation>Apskritas didelis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="573"/>
         <source>Large arrow</source>
-        <translation type="unfinished"/>
+        <translation>Didelė rodyklė</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="574"/>
         <source>Alt. brevis</source>
-        <translation type="unfinished"/>
+        <translation>Alt. brevis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="576"/>
@@ -15506,7 +15506,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="577"/>
         <source>Large diamond</source>
-        <translation type="unfinished"/>
+        <translation>Didelis rombas</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="579"/>
@@ -15521,7 +15521,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="583"/>
         <source>Sol</source>
-        <translation type="unfinished"/>
+        <translation>Sol</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="584"/>
@@ -15556,37 +15556,37 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="592"/>
         <source>Do (Walker)</source>
-        <translation type="unfinished"/>
+        <translation>Do (Walker)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="593"/>
         <source>Re (Walker)</source>
-        <translation type="unfinished"/>
+        <translation>Re (Walker)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="594"/>
         <source>Ti (Walker)</source>
-        <translation type="unfinished"/>
+        <translation>Si (Walker)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="595"/>
         <source>Do (Funk)</source>
-        <translation type="unfinished"/>
+        <translation>Do (Funk)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="596"/>
         <source>Re (Funk)</source>
-        <translation type="unfinished"/>
+        <translation>Re (Funk)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="597"/>
         <source>Ti (Funk)</source>
-        <translation type="unfinished"/>
+        <translation>Si (Funk)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="600"/>
         <source>Do (Name)</source>
-        <translation type="unfinished"/>
+        <translation>Do (Vardas)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="601"/>
@@ -15814,12 +15814,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="535"/>
         <source>Solfège movable Do</source>
-        <translation type="unfinished"/>
+        <translation>Solfedžio kintanti Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="536"/>
         <source>Solfège fixed Do</source>
-        <translation type="unfinished"/>
+        <translation>Solfedžio fiksuota Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="537"/>
@@ -15928,27 +15928,27 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1505"/>
         <source>Détaché</source>
-        <translation type="unfinished"/>
+        <translation>Détaché</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1506"/>
         <source>Martelé</source>
-        <translation type="unfinished"/>
+        <translation>Martelé</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1507"/>
         <source>Col legno</source>
-        <translation type="unfinished"/>
+        <translation>Col legno</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1508"/>
         <source>Sul ponticello</source>
-        <translation type="unfinished"/>
+        <translation>Sul ponticello</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1509"/>
         <source>Sul tasto</source>
-        <translation type="unfinished"/>
+        <translation>Sul tasto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1510"/>
@@ -15973,12 +15973,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1514"/>
         <source>Harmonics</source>
-        <translation type="unfinished"/>
+        <translation>Flažoletai</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1515"/>
         <source>Jazz tone</source>
-        <translation type="unfinished"/>
+        <translation>Džiazo tonas</translation>
     </message>
 </context>
 <context>
@@ -16027,17 +16027,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/spacer.cpp" line="234"/>
         <source>Staff spacer up</source>
-        <translation type="unfinished"/>
+        <translation>Tarpas tarp penklinių viršun</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/spacer.cpp" line="236"/>
         <source>Staff spacer down</source>
-        <translation type="unfinished"/>
+        <translation>Tarpas tarp penklinių žemyn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/spacer.cpp" line="238"/>
         <source>Staff spacer fixed down</source>
-        <translation type="unfinished"/>
+        <translation>Fiksuotas tarpas tarp penklinių žemyn</translation>
     </message>
 </context>
 <context>
@@ -16128,7 +16128,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3165"/>
         <source>5:7 kleisma down</source>
-        <translation type="unfinished"/>
+        <translation>5:7 kleisma žemyn</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3166"/>
@@ -18742,22 +18742,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="103"/>
         <source>Yes</source>
-        <translation type="unfinished"/>
+        <translation>Taip</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="104"/>
         <source>Yes to all</source>
-        <translation type="unfinished"/>
+        <translation>Taip viskam</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="105"/>
         <source>No</source>
-        <translation type="unfinished"/>
+        <translation>Ne</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="106"/>
         <source>No to all</source>
-        <translation type="unfinished"/>
+        <translation>Ne viskam</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="107"/>
@@ -18772,12 +18772,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="109"/>
         <source>Ignore</source>
-        <translation type="unfinished"/>
+        <translation>Ignoruoti</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="112"/>
         <source>Discard</source>
-        <translation type="unfinished"/>
+        <translation>Atmesti</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="113"/>
@@ -20177,14 +20177,14 @@ prieštaktį</translation>
         <source>Major</source>
         <comment>key signature mode</comment>
         <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mažoras</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="71"/>
         <source>Minor</source>
         <comment>key signature mode</comment>
         <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation type="unfinished"/>
+        <translation>Minoras</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="72"/>
@@ -20688,7 +20688,7 @@ prieštaktį</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="194"/>
         <source>Solfege movable Do</source>
-        <translation>Solfedžio judinama Do</translation>
+        <translation>Solfedžio kintanti Do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="195"/>
@@ -21399,7 +21399,7 @@ prieštaktį</translation>
     <message>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="195"/>
         <source>Solfège movable do</source>
-        <translation>Solfedžio judinama do</translation>
+        <translation>Solfedžio kintanti do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="196"/>
@@ -21555,14 +21555,14 @@ prieštaktį</translation>
         <source>Major</source>
         <comment>interval quality</comment>
         <extracomment>Interval, not the mode of a key signature</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mažoras</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="132"/>
         <source>Minor</source>
         <comment>interval quality</comment>
         <extracomment>Interval, not the mode of a key signature</extracomment>
-        <translation type="unfinished"/>
+        <translation>Minoras</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="158"/>
@@ -24820,37 +24820,37 @@ Nepaisant to, ar tik pradedi su notacijos programomis, ar esi pažengęs naudoto
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1402"/>
         <source>Metric modulation: quarter note = dotted quarter note</source>
-        <translation type="unfinished"/>
+        <translation>Metrinė moduliacija: ketvirtinė = ketvirtinė su tašku</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1405"/>
         <source>Metric modulation: dotted quarter note = quarter note</source>
-        <translation type="unfinished"/>
+        <translation>Metrinė moduliacija: ketvirtinė su tašku = ketvirtinė</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1408"/>
         <source>Metric modulation: half note = quarter note</source>
-        <translation type="unfinished"/>
+        <translation>Metrinė moduliacija: pusinė = ketvirtinė</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1411"/>
         <source>Metric modulation: quarter note = half note</source>
-        <translation type="unfinished"/>
+        <translation>Metrinė moduliacija: ketvirtinė = pusinė</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1414"/>
         <source>Metric modulation: eighth note = eighth note</source>
-        <translation type="unfinished"/>
+        <translation>Metrinė moduliacija: aštuntinė = aštuntinė</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1417"/>
         <source>Metric modulation: quarter note = quarter note</source>
-        <translation type="unfinished"/>
+        <translation>Metrinė moduliacija: ketvirtinė = ketvirtinė</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1420"/>
         <source>Metric modulation: dotted eighth note = quarter note</source>
-        <translation type="unfinished"/>
+        <translation>Metrinė moduliacija: aštuntinė su tašku = ketvirtinė</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1441"/>
@@ -24914,12 +24914,12 @@ Nepaisant to, ar tik pradedi su notacijos programomis, ar esi pažengęs naudoto
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1470"/>
         <source>a tempo</source>
-        <translation type="unfinished"/>
+        <translation>a tempo</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1477"/>
         <source>tempo primo</source>
-        <translation type="unfinished"/>
+        <translation>tempo primo</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1486"/>
@@ -25061,23 +25061,23 @@ Nepaisant to, ar tik pradedi su notacijos programomis, ar esi pažengęs naudoto
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1596"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1871"/>
         <source>harmonics</source>
-        <translation type="unfinished"/>
+        <translation>flažoletai</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1598"/>
         <source>Harmonics</source>
-        <translation type="unfinished"/>
+        <translation>Flažoletai</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1601"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1872"/>
         <source>jazz tone</source>
-        <translation type="unfinished"/>
+        <translation>džiazo tonas</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1603"/>
         <source>Jazz tone</source>
-        <translation type="unfinished"/>
+        <translation>Džiazo tonas</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1606"/>
@@ -25099,12 +25099,12 @@ Nepaisant to, ar tik pradedi su notacijos programomis, ar esi pažengęs naudoto
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1621"/>
         <source>détaché</source>
-        <translation type="unfinished"/>
+        <translation>détaché</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1623"/>
         <source>Détaché</source>
-        <translation type="unfinished"/>
+        <translation>Détaché</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1626"/>
@@ -25114,17 +25114,17 @@ Nepaisant to, ar tik pradedi su notacijos programomis, ar esi pažengęs naudoto
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1628"/>
         <source>Martelé</source>
-        <translation type="unfinished"/>
+        <translation>Martelé</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1638"/>
         <source>Sul ponticello</source>
-        <translation type="unfinished"/>
+        <translation>Sul ponticello</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1643"/>
         <source>Sul tasto</source>
-        <translation type="unfinished"/>
+        <translation>Sul tasto</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1734"/>
@@ -25134,12 +25134,12 @@ Nepaisant to, ar tik pradedi su notacijos programomis, ar esi pažengęs naudoto
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1735"/>
         <source>Cm</source>
-        <translation type="unfinished"/>
+        <translation>Cm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1736"/>
         <source>C7</source>
-        <translation type="unfinished"/>
+        <translation>C7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1738"/>
@@ -25149,12 +25149,12 @@ Nepaisant to, ar tik pradedi su notacijos programomis, ar esi pažengęs naudoto
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1739"/>
         <source>Dm</source>
-        <translation type="unfinished"/>
+        <translation>Dm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1740"/>
         <source>D7</source>
-        <translation type="unfinished"/>
+        <translation>D7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1742"/>
@@ -25164,12 +25164,12 @@ Nepaisant to, ar tik pradedi su notacijos programomis, ar esi pažengęs naudoto
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1743"/>
         <source>Em</source>
-        <translation type="unfinished"/>
+        <translation>Em</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1744"/>
         <source>E7</source>
-        <translation type="unfinished"/>
+        <translation>E7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1746"/>
@@ -25179,12 +25179,12 @@ Nepaisant to, ar tik pradedi su notacijos programomis, ar esi pažengęs naudoto
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1747"/>
         <source>Fm</source>
-        <translation type="unfinished"/>
+        <translation>Fm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1748"/>
         <source>F7</source>
-        <translation type="unfinished"/>
+        <translation>F7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1750"/>
@@ -25194,12 +25194,12 @@ Nepaisant to, ar tik pradedi su notacijos programomis, ar esi pažengęs naudoto
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1751"/>
         <source>Gm</source>
-        <translation type="unfinished"/>
+        <translation>Gm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1752"/>
         <source>G7</source>
-        <translation type="unfinished"/>
+        <translation>G7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1754"/>
@@ -25209,12 +25209,12 @@ Nepaisant to, ar tik pradedi su notacijos programomis, ar esi pažengęs naudoto
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1755"/>
         <source>Am</source>
-        <translation type="unfinished"/>
+        <translation>Am</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1756"/>
         <source>A7</source>
-        <translation type="unfinished"/>
+        <translation>A7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1758"/>
@@ -25224,12 +25224,12 @@ Nepaisant to, ar tik pradedi su notacijos programomis, ar esi pažengęs naudoto
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1759"/>
         <source>Bm</source>
-        <translation type="unfinished"/>
+        <translation>Bm</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1760"/>
         <source>B7</source>
-        <translation type="unfinished"/>
+        <translation>B7</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1991"/>
@@ -25244,12 +25244,12 @@ Nepaisant to, ar tik pradedi su notacijos programomis, ar esi pažengęs naudoto
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1538"/>
         <source>expression</source>
-        <translation type="unfinished"/>
+        <translation>išraiška</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1633"/>
         <source>Col legno</source>
-        <translation type="unfinished"/>
+        <translation>Col legno</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1636"/>
@@ -26334,7 +26334,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="263"/>
         <source>Specials</source>
-        <translation type="unfinished"/>
+        <translation>Specialūs</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="264"/>
@@ -27105,7 +27105,7 @@ failed.</source>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="85"/>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="617"/>
         <source>Aux %1</source>
-        <translation type="unfinished"/>
+        <translation>Aux %1</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="884"/>
@@ -27115,7 +27115,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="894"/>
         <source>Chords</source>
-        <translation type="unfinished"/>
+        <translation>Akordai</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1216"/>
@@ -27160,23 +27160,23 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="349"/>
         <source>Bank %1, preset %2</source>
-        <translation type="unfinished"/>
+        <translation>Bankas %1, paruoštinis %2</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="403"/>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="462"/>
         <source>Choose automatically</source>
-        <translation type="unfinished"/>
+        <translation>Parinkti automatiškai</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="445"/>
         <source>Preset %1</source>
-        <translation type="unfinished"/>
+        <translation>Paruoštinis %1</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="454"/>
         <source>Bank %1</source>
-        <translation type="unfinished"/>
+        <translation>Bankas %1</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="62"/>
@@ -27186,7 +27186,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="675"/>
         <source>Change sound</source>
-        <translation type="unfinished"/>
+        <translation>Pakeisti garsą</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="678"/>
@@ -27211,12 +27211,12 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="80"/>
         <source>Profiles</source>
-        <translation type="unfinished"/>
+        <translation>Profiliai</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="100"/>
         <source>Active</source>
-        <translation type="unfinished"/>
+        <translation>Aktyvus</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="101"/>
@@ -27236,22 +27236,22 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="237"/>
         <source>Activate this profile</source>
-        <translation type="unfinished"/>
+        <translation>Aktivuoti šį profilį</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerAuxSendsSection.qml" line="31"/>
         <source>Aux sends</source>
-        <translation type="unfinished"/>
+        <translation>Aux sends</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="55"/>
         <source>Modify sound</source>
-        <translation type="unfinished"/>
+        <translation>Modifikuoti garsą</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="78"/>
         <source>Playing techniques</source>
-        <translation type="unfinished"/>
+        <translation>Grojimo technikos</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="98"/>
@@ -27271,17 +27271,17 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="296"/>
         <source>Allow multiple selection</source>
-        <translation type="unfinished"/>
+        <translation>Leisti keletą pasirinkimų</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="309"/>
         <source>Apply selection to all staves</source>
-        <translation type="unfinished"/>
+        <translation>Pritaikyti pasirinkimą visoms penklinėms</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="393"/>
         <source>ordinary</source>
-        <translation type="unfinished"/>
+        <translation>ord.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="90"/>
@@ -27296,12 +27296,12 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="154"/>
         <source>Change sounds</source>
-        <translation type="unfinished"/>
+        <translation>Pakeisti garsus</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="157"/>
         <source>Are you sure you want to change sounds?</source>
-        <translation type="unfinished"/>
+        <translation>Ar tikrai norite pakeisti garsus?</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="158"/>
@@ -27382,22 +27382,22 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="177"/>
         <source>View buttons</source>
-        <translation type="unfinished"/>
+        <translation>Rodinys mygtukai</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="189"/>
         <source>Refresh</source>
-        <translation type="unfinished"/>
+        <translation>Atnaujinti</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="201"/>
         <source>Grid view</source>
-        <translation type="unfinished"/>
+        <translation>Tinklelio rodinys</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="202"/>
         <source>List view</source>
-        <translation type="unfinished"/>
+        <translation>Sąrašo rodinys</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="322"/>
@@ -27434,7 +27434,7 @@ failed.</source>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1664"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1686"/>
         <source>Open anyway</source>
-        <translation type="unfinished"/>
+        <translation>Atverti nepaisant</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1677"/>
@@ -27444,29 +27444,29 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1683"/>
         <source>File “%1” is corrupted</source>
-        <translation type="unfinished"/>
+        <translation>Failas &quot;%1&quot; yra pažeistas</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1698"/>
         <source>File “%1” is corrupted and cannot be opened</source>
-        <translation type="unfinished"/>
+        <translation>Failas &quot;%1&quot; yra pažeistas ir negali būti atvertas</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1699"/>
         <source>Get help for this issue on musescore.org.</source>
-        <translation type="unfinished"/>
+        <translation>Gaukite pagalbos šiuo klausimu musescore.org.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1554"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1701"/>
         <source>Get help</source>
-        <translation type="unfinished"/>
+        <translation>Gauti pagalbos</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1469"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1551"/>
         <source>Your score cannot be uploaded to the cloud</source>
-        <translation type="unfinished"/>
+        <translation>Jūsų partitūra negali būti įkelta į debesų saugyklą</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1470"/>
@@ -27487,7 +27487,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1503"/>
         <source>This score has become corrupted and contains errors</source>
-        <translation type="unfinished"/>
+        <translation>Ši partitūra buvo pažeista ir turi klaidų</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1504"/>
@@ -27512,7 +27512,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1552"/>
         <source>This score is corrupted. You can get help for this issue on musescore.org.</source>
-        <translation type="unfinished"/>
+        <translation>Ši partitūra yra pažeista. Gaukite pagalbos šiuo klausimu musescore.org.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1585"/>
@@ -27527,23 +27527,23 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="476"/>
         <source>Your score could not be opened</source>
-        <translation type="unfinished"/>
+        <translation>Jūsų partitūra negalėjo būti atverta</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="481"/>
         <source>This score is invalid.</source>
-        <translation type="unfinished"/>
+        <translation>Ši partitūra yra netinkama.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1676"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1715"/>
         <source>Cannot read file %1</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko nuskaityti failo %1</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1720"/>
         <source>This file does not exist or cannot be accessed at the moment.</source>
-        <translation type="unfinished"/>
+        <translation>Šis failas neegzistuoja arba negali būti pasiekiamas šiuo momentu.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1684"/>
@@ -27558,7 +27558,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1730"/>
         <source>An error occurred while reading this file.</source>
-        <translation type="unfinished"/>
+        <translation>Įvyko klaida nuskaitant šį failą.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1783"/>
@@ -27735,22 +27735,22 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="162"/>
         <source>Publish your finished scores on MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Publikuokite savo užbaigtas partitūras MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="187"/>
         <source>Create a portfolio to showcase your music</source>
-        <translation type="unfinished"/>
+        <translation>Susikurkite portfolio savo muzikai parodyti</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="188"/>
         <source>Gain followers and receive score comments and ratings</source>
-        <translation type="unfinished"/>
+        <translation>Gaukite sekėjų ir komentarų apie partitūrą bei reitingus</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="189"/>
         <source>Share your projects and collaborate with other musicians</source>
-        <translation type="unfinished"/>
+        <translation>Dalinkitės savo projektais ir bendradarbiaukite su kitais muzikantais</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="223"/>
@@ -27760,27 +27760,27 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="251"/>
         <source>View score online</source>
-        <translation type="unfinished"/>
+        <translation>Peržiūrėti partitūrą internetu</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/UploadProgressDialog.qml" line="48"/>
         <source>Saving online…</source>
-        <translation type="unfinished"/>
+        <translation>Įrašoma internete...</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoreIndicatorButton.qml" line="43"/>
         <source>Stop download</source>
-        <translation type="unfinished"/>
+        <translation>Stabdyti atsisiuntimą</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoreIndicatorButton.qml" line="43"/>
         <source>Download score</source>
-        <translation type="unfinished"/>
+        <translation>Atsisiųsti partitūrą</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="130"/>
         <source>You don’t have any online scores yet</source>
-        <translation type="unfinished"/>
+        <translation>Kol kas neturite jokių internetinių partitūrų</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="131"/>
@@ -27800,7 +27800,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="219"/>
         <source>Unable to load online scores</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko užkrauti internetinių partitūrų</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="220"/>
@@ -27810,41 +27810,41 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="57"/>
         <source>Recent scores grid</source>
-        <translation type="unfinished"/>
+        <translation>Paskiausios partitūros tinklelyje</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="88"/>
         <source>Recent scores list</source>
-        <translation type="unfinished"/>
+        <translation>Paskiausios partitūros sąraše</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresGridView.qml" line="32"/>
         <source>Online scores grid</source>
-        <translation type="unfinished"/>
+        <translation>Internetinės partitūros tinkelyje</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="35"/>
         <source>Online scores list</source>
-        <translation type="unfinished"/>
+        <translation>Internetinės partitūros sąraše</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="153"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="104"/>
         <source>Modified</source>
         <extracomment>Stands for &quot;Last time that this score was modified&quot;. Used as the header of this column in the scores list.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Modifikuota</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="234"/>
         <source>Views</source>
         <comment>number of views</comment>
         <extracomment>Stands for &quot;The number of times this score was viewed on MuseScore.com&quot;. Used as the header of this column in the scores list.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Peržiūros</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresGridView.qml" line="83"/>
         <source>Scores grid</source>
-        <translation type="unfinished"/>
+        <translation>Partitūrų tinklelis</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectPropertiesDialog.qml" line="112"/>
@@ -27870,7 +27870,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="99"/>
         <source>Unlisted</source>
-        <translation type="unfinished"/>
+        <translation>Neįtraukta į sąrašą</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="101"/>
@@ -27885,18 +27885,18 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="452"/>
         <source>MuseScore.com returned an error code: %1.</source>
         <extracomment>%1 will be replaced with the error code that MuseScore.com returned; this might contain english text that is deliberately not translated</extracomment>
-        <translation type="unfinished"/>
+        <translation>MuseScore.com grąžino klaidos kodą: %1.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="459"/>
         <source>MuseScore.com returned an unknown error code: %1.</source>
         <extracomment>%1 will be replaced with the error code that MuseScore.com returned, which is a number.</extracomment>
-        <translation type="unfinished"/>
+        <translation>MuseScore.com grąžino nežinomos klaidos kodą: %1.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="462"/>
         <source>MuseScore.com returned an unknown error code.</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore.com grąžino nežinomos klaidos kodą.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="468"/>
@@ -27907,7 +27907,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="484"/>
         <source>The file could not be downloaded to your disk.</source>
-        <translation type="unfinished"/>
+        <translation>Šio failo nepavyko atsisiųsti į kietąjį diską.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="487"/>
@@ -27923,7 +27923,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="495"/>
         <source>The score could not be found, or cannot be accessed by your account.</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko rasti partitūros, arba nėra prieigos su Jūsų paskyra.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="508"/>
@@ -27934,7 +27934,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="512"/>
         <source>Please try again later.</source>
-        <translation type="unfinished"/>
+        <translation>Bandykite dar kartą vėliau.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="117"/>
@@ -27944,7 +27944,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="126"/>
         <source>Share your score’s audio with millions of listeners on this free streaming platform</source>
-        <translation type="unfinished"/>
+        <translation>Dalinkitės savo partitūros garso įrašu su milijonais klausytojų šioje nemokamoje klausymosi platformoje</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
@@ -27954,7 +27954,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="165"/>
         <source>Remember my choice</source>
-        <translation type="unfinished"/>
+        <translation>Atsiminti mano pasirinkimą</translation>
     </message>
 </context>
 <context>
@@ -28123,7 +28123,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="445"/>
         <source>Exporting audio…</source>
-        <translation type="unfinished"/>
+        <translation>Eksportuojamas audio...</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="49"/>
@@ -28280,7 +28280,7 @@ failed.</source>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="550"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tik ranka pridėti sistemų ir lapų lūžiai</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="552"/>
@@ -28291,12 +28291,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportScoresListView.qml" line="72"/>
         <source>Main score</source>
-        <translation type="unfinished"/>
+        <translation>Pagrindinė partitūra</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MeiSettingsPage.qml" line="31"/>
         <source>Include page and system breaks</source>
-        <translation type="unfinished"/>
+        <translation>Įtraukti lapo ir sistemos lūžius</translation>
     </message>
 </context>
 <context>
@@ -28505,7 +28505,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="126"/>
         <source>E major</source>
-        <translation type="unfinished"/>
+        <translation>E-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="126"/>
@@ -28515,7 +28515,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="128"/>
         <source>B major</source>
-        <translation type="unfinished"/>
+        <translation>H-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="128"/>
@@ -28525,7 +28525,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="130"/>
         <source>F♯ major</source>
-        <translation type="unfinished"/>
+        <translation>Fis-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="130"/>
@@ -28535,7 +28535,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="132"/>
         <source>C♯ major</source>
-        <translation type="unfinished"/>
+        <translation>Cis-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="132"/>
@@ -28550,7 +28550,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="136"/>
         <source>F major</source>
-        <translation type="unfinished"/>
+        <translation>F-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="136"/>
@@ -28560,7 +28560,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="138"/>
         <source>B♭ major</source>
-        <translation type="unfinished"/>
+        <translation>B-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="138"/>
@@ -28570,7 +28570,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="140"/>
         <source>E♭ major</source>
-        <translation type="unfinished"/>
+        <translation>Es-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="140"/>
@@ -28580,7 +28580,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="142"/>
         <source>A♭ major</source>
-        <translation type="unfinished"/>
+        <translation>As-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="142"/>
@@ -28590,7 +28590,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="144"/>
         <source>D♭ major</source>
-        <translation type="unfinished"/>
+        <translation>Des-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="144"/>
@@ -28600,7 +28600,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="146"/>
         <source>G♭ major</source>
-        <translation type="unfinished"/>
+        <translation>Ges-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="146"/>
@@ -28610,7 +28610,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="148"/>
         <source>C♭ major</source>
-        <translation type="unfinished"/>
+        <translation>Ces-dur</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="148"/>
@@ -28620,7 +28620,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="330"/>
         <source>Dotted 16th note</source>
-        <translation type="unfinished"/>
+        <translation>16-inė su tašku</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="330"/>
@@ -28630,7 +28630,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="332"/>
         <source>Dotted eighth note</source>
-        <translation type="unfinished"/>
+        <translation>Aštuntinė su tašku</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="332"/>
@@ -28640,7 +28640,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="334"/>
         <source>Dotted quarter note</source>
-        <translation type="unfinished"/>
+        <translation>Ketvirtinė su tašku</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="334"/>
@@ -28650,7 +28650,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="336"/>
         <source>Dotted half note</source>
-        <translation type="unfinished"/>
+        <translation>Pusinė su tašku</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="336"/>
@@ -28660,7 +28660,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="338"/>
         <source>Dotted whole note</source>
-        <translation type="unfinished"/>
+        <translation>Sveikoji su tašku</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="338"/>
@@ -28672,19 +28672,19 @@ failed.</source>
         <source>Major</source>
         <comment>key signature mode</comment>
         <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mažoras</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/KeySignatureSettings.qml" line="110"/>
         <source>Minor</source>
         <comment>key signature mode</comment>
         <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation type="unfinished"/>
+        <translation>Minoras</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/KeySignatureListView.qml" line="83"/>
         <source>Not selected</source>
-        <translation type="unfinished"/>
+        <translation>Nepasirinkta</translation>
     </message>
 </context>
 <context>
@@ -28796,7 +28796,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="213"/>
         <source>Replace existing</source>
-        <translation type="unfinished"/>
+        <translation>Pakeisti esamą</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="215"/>
@@ -28811,7 +28811,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="167"/>
         <source>Unlisted</source>
-        <translation type="unfinished"/>
+        <translation>Neįtraukta į sąrašą</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="173"/>
@@ -28827,7 +28827,7 @@ failed.</source>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="188"/>
         <source>Replace the existing &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;</source>
         <extracomment>The text between `&lt;a href=&quot;%1&quot;&gt;` and `&lt;/a&gt;` will be a clickable link to the online score in question</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pakeisti esamą &lt;a href=&quot;%1&quot;&gt;internetinę partitūrą&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="191"/>
@@ -28838,7 +28838,7 @@ failed.</source>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="199"/>
         <source>Replace the &lt;a href=&quot;%1&quot;&gt;existing audio&lt;/a&gt;</source>
         <extracomment>The text between `&lt;a href=&quot;%1&quot;&gt;` and `&lt;/a&gt;` will be a clickable link to the online audio in question</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pakeisti &lt;a href=&quot;%1&quot;&gt;esamą audio&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="202"/>
@@ -28848,7 +28848,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="203"/>
         <source>Share</source>
-        <translation type="unfinished"/>
+        <translation>Dalintis</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="256"/>
@@ -28884,7 +28884,7 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="347"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="380"/>
         <source>Publish changes online?</source>
-        <translation type="unfinished"/>
+        <translation>Publikuoti pasikeitimus internete?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="348"/>
@@ -28938,12 +28938,12 @@ failed.</source>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="424"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="521"/>
         <source>Log in or create a free account on musescore.com to open this score.</source>
-        <translation type="unfinished"/>
+        <translation>Prisijunkite arba susikurkite paskyrą musescore.com, kad galėtumėte atverti šią partitūrą.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1342"/>
         <source>View online</source>
-        <translation type="unfinished"/>
+        <translation>Peržiūrėti internetu</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1345"/>
@@ -28953,7 +28953,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1570"/>
         <source>An unknown error occurred while saving this file.</source>
-        <translation type="unfinished"/>
+        <translation>Įvyko nežinoma klaida išsaugant šį failą.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="182"/>
@@ -28979,12 +28979,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="415"/>
         <source>Unable to connect to Audio.com</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko prisijungti prie Audio.com</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="525"/>
         <source>Your score could not be published</source>
-        <translation type="unfinished"/>
+        <translation>Jūsų partitūros nepavyko publikuoti</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="526"/>
@@ -28994,7 +28994,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="529"/>
         <source>Your score cannot be published</source>
-        <translation type="unfinished"/>
+        <translation>Jūsų partitūros nepavyksta publikuoti</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="530"/>
@@ -29004,12 +29004,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="543"/>
         <source>Get help</source>
-        <translation type="unfinished"/>
+        <translation>Gauti pagalbos</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="558"/>
         <source>There are conflicting changes in the online score</source>
-        <translation type="unfinished"/>
+        <translation>Yra besikertantys pasikeitimai internetinėje partitūroje</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="560"/>
@@ -29041,7 +29041,7 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="401"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1419"/>
         <source>Unable to connect to the cloud</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko prisijungti prie debesų saugyklos</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1420"/>
@@ -29051,7 +29051,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="391"/>
         <source>Unable to connect to MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko prisijungti prie MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="392"/>
@@ -29073,7 +29073,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="196"/>
         <source>Share on Audio.com</source>
-        <translation type="unfinished"/>
+        <translation>Dalintis Audio.com</translation>
     </message>
 </context>
 <context>
@@ -29081,7 +29081,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="622"/>
         <source>Your audio could not be shared</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko pasidalinti jūsų audio įrašu</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="630"/>
@@ -29092,12 +29092,12 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="637"/>
         <source>Audio.com returned an unknown error code: %1.</source>
         <extracomment>%1 will be replaced with the error code that audio.com returned, which is a number.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Audio.com grąžino nežinomos klaidos kodą: %1.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="640"/>
         <source>Audio.com returned an unknown error code.</source>
-        <translation type="unfinished"/>
+        <translation>Audio.com grąžino nežinomos klaidos kodą.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="642"/>
@@ -29108,7 +29108,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="645"/>
         <source>Could not connect to audio.com. Please check your internet connection or try again later.</source>
-        <translation type="unfinished"/>
+        <translation>Nepavyko prisijungti prie audio.com. Patikrinkite savo interneto ryšį arba bandykite dar kartą vėliau.</translation>
     </message>
 </context>
 <context>
@@ -29234,13 +29234,13 @@ failed.</source>
         <location filename="../../src/framework/shortcuts/shortcutstypes.h" line="107"/>
         <source>Note %1</source>
         <extracomment>A MIDI remote event, namely a note event</extracomment>
-        <translation type="unfinished"/>
+        <translation>Nata %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/shortcutstypes.h" line="111"/>
         <source>CC %1</source>
         <extracomment>A MIDI remote event, namely a MIDI controller event</extracomment>
-        <translation type="unfinished"/>
+        <translation>CC %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/shortcutstypes.h" line="115"/>
@@ -29261,12 +29261,12 @@ failed.</source>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="186"/>
         <source>Import shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Importuoti greit. klavišus</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="198"/>
         <source>Export shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Eksportuoti greit. klavišus</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="151"/>
@@ -29294,52 +29294,52 @@ failed.</source>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="54"/>
         <source>The file does not exist</source>
-        <translation type="unfinished"/>
+        <translation>Failas neegzistuoja</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="55"/>
         <source>The file already exists</source>
-        <translation type="unfinished"/>
+        <translation>Failas jau egzistuoja</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="56"/>
         <source>The file could not be removed</source>
-        <translation type="unfinished"/>
+        <translation>Failas negali būti pašalintas</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="57"/>
         <source>The directory is not empty</source>
-        <translation type="unfinished"/>
+        <translation>Failo aplankas nėra tuščias</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="58"/>
         <source>The directory could not be cleared</source>
-        <translation type="unfinished"/>
+        <translation>Failo aplankas nėgalėjo būti išvalytas</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="59"/>
         <source>An error occurred when reading from the file</source>
-        <translation type="unfinished"/>
+        <translation>Įvyko klaida skaitant failą</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="60"/>
         <source>An error occurred when writing to the file</source>
-        <translation type="unfinished"/>
+        <translation>Įvyko klaida rašant į failą</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="61"/>
         <source>An error occurred when making a path</source>
-        <translation type="unfinished"/>
+        <translation>Įvyko klaida kuriant kelią</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="62"/>
         <source>An error occurred when copying the file</source>
-        <translation type="unfinished"/>
+        <translation>Įvyko klaida kopijuojant failą</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/io/ioretcodes.h" line="63"/>
         <source>An error occurred when moving the file</source>
-        <translation type="unfinished"/>
+        <translation>Įvyko klaida perkeliant failą</translation>
     </message>
 </context>
 <context>
@@ -29427,59 +29427,59 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="48"/>
         <source>Current path:</source>
-        <translation type="unfinished"/>
+        <translation>Dabartinis kelias:</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="97"/>
         <source>Choose file</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkti failą</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="98"/>
         <location filename="../../src/framework/uicomponents/view/selectmultipledirectoriesmodel.cpp" line="127"/>
         <source>Choose directory</source>
-        <translation type="unfinished"/>
+        <translation>Pasirinkti aplanką</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/DirectoriesTopPanel.qml" line="44"/>
         <source>Directories actions</source>
         <extracomment>Accessibility description of the button group at the top of the &quot;Choose Directories&quot; dialog</extracomment>
-        <translation type="unfinished"/>
+        <translation>Aplankų veiksmai</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/DirectoriesTopPanel.qml" line="57"/>
         <source>Directories</source>
-        <translation type="unfinished"/>
+        <translation>Aplankai</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/DirectoriesTopPanel.qml" line="62"/>
         <source>Add directory</source>
-        <translation type="unfinished"/>
+        <translation>Pridėti aplanką</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/DirectoriesView.qml" line="77"/>
         <source>Path</source>
-        <translation type="unfinished"/>
+        <translation>Kelias</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/DirectoriesView.qml" line="103"/>
         <source>Directories list</source>
-        <translation type="unfinished"/>
+        <translation>Aplankų sąrašas</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/ValueListHeaderItem.qml" line="52"/>
         <source>sorted ascending</source>
-        <translation type="unfinished"/>
+        <translation>išrikiuota didėjant</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/ValueListHeaderItem.qml" line="52"/>
         <source>sorted descending</source>
-        <translation type="unfinished"/>
+        <translation>išrikiuota mažėjant</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/ValueListHeaderItem.qml" line="54"/>
         <source>not sorted</source>
-        <translation type="unfinished"/>
+        <translation>neišrikiuota</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/SearchField.qml" line="38"/>
@@ -29489,17 +29489,17 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/Utils.js" line="40"/>
         <source>Red</source>
-        <translation type="unfinished"/>
+        <translation>Raudona</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/Utils.js" line="41"/>
         <source>Green</source>
-        <translation type="unfinished"/>
+        <translation>Žalia</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/Utils.js" line="42"/>
         <source>Blue</source>
-        <translation type="unfinished"/>
+        <translation>Mėlyna</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/ValueList.qml" line="41"/>
@@ -29533,7 +29533,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/VisibilityBox.qml" line="67"/>
         <source>Hidden</source>
-        <translation type="unfinished"/>
+        <translation>Paslėpta</translation>
     </message>
 </context>
 <context>
@@ -29566,22 +29566,22 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="140"/>
         <source>Yes</source>
-        <translation type="unfinished"/>
+        <translation>Taip</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="141"/>
         <source>Yes to all</source>
-        <translation type="unfinished"/>
+        <translation>Taip viskam</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="142"/>
         <source>No</source>
-        <translation type="unfinished"/>
+        <translation>Ne</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="143"/>
         <source>No to all</source>
-        <translation type="unfinished"/>
+        <translation>Ne viskam</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="144"/>
@@ -29596,7 +29596,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="146"/>
         <source>Ignore</source>
-        <translation type="unfinished"/>
+        <translation>Ignoruoti</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="147"/>
@@ -29611,7 +29611,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="149"/>
         <source>Discard</source>
-        <translation type="unfinished"/>
+        <translation>Atmesti</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="150"/>
@@ -29669,17 +29669,17 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/AppReleaseInfoBottomPanel.qml" line="51"/>
         <source>Skip this version</source>
-        <translation type="unfinished"/>
+        <translation>Praleisti šią versiją</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/AppReleaseInfoBottomPanel.qml" line="70"/>
         <source>Remind me later</source>
-        <translation type="unfinished"/>
+        <translation>Priminti vėliau</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/AppReleaseInfoBottomPanel.qml" line="86"/>
         <source>Install update</source>
-        <translation type="unfinished"/>
+        <translation>Įdiegti atnaujinimą</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/AppReleaseInfoDialog.qml" line="82"/>
@@ -29689,7 +29689,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/AppReleaseInfoDialog.qml" line="89"/>
         <source>Release notes</source>
-        <translation type="unfinished"/>
+        <translation>Išleidimo pastabos</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="140"/>
@@ -29699,17 +29699,17 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="147"/>
         <source>You’re up to date!</source>
-        <translation type="unfinished"/>
+        <translation>Jūs pilnai atsinaujinote!</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="176"/>
         <source>Cannot connect to server</source>
-        <translation type="unfinished"/>
+        <translation>Negalima prisijungti prie serverio</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="177"/>
         <source>Sorry - please try again later</source>
-        <translation type="unfinished"/>
+        <translation>Atleiskite - bandykite dar kartą vėliau</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="193"/>
@@ -29724,17 +29724,17 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/ReleaseNotesView.qml" line="80"/>
         <source>Read the %1 release notes</source>
-        <translation type="unfinished"/>
+        <translation>Perskaitykite %1 išleidimo pastabas</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="51"/>
         <source>No thanks</source>
-        <translation type="unfinished"/>
+        <translation>Ne, ačiū</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="68"/>
         <source>Take me to Muse Hub</source>
-        <translation type="unfinished"/>
+        <translation>Eiti į Muse Hub</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/appupdateservice.cpp" line="208"/>

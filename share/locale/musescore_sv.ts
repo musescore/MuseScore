@@ -24653,7 +24653,7 @@ Dessutom har Mastering MuseScore en hjälpsam gemenskap bestående av musiker, m
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="956"/>
         <source>Breaths &amp; pauses</source>
-        <translation>Andning &amp; pauser</translation>
+        <translation>Andning &amp; fermater</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1055"/>
