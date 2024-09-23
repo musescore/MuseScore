@@ -283,6 +283,9 @@ void CompatMidiRender::renderArpeggio(Chord* chord, std::vector<NoteEventList>& 
 
 void CompatMidiRender::renderTremolo(Chord* chord, std::vector<NoteEventList>& ell, int& ontime, double tremoloPartOfChord /* = 1.0 */)
 {
+    if (mu::RealIsNull(tremoloPartOfChord)) {
+        return;
+    }
     struct TremoloAdapter {
         TremoloSingleChord* singleChord = nullptr;
         TremoloTwoChord* twoChord = nullptr;
