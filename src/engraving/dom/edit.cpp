@@ -1317,11 +1317,11 @@ void Score::cmdAddTimeSig(Measure* firstMeasure, staff_idx_t staffIdx, TimeSig* 
         firstMeasure = firstMeasure->mmRestFirst();
     }
 
-    Fraction newSigFraction   = timeSig->sig();
+    Fraction newTimeSigFraction   = timeSig->sig();
     Fraction tick = firstMeasure->tick();
     TimeSig* localTimeSig  = staff(staffIdx)->timeSig(tick);
     if (local) {
-        Fraction stretch = (newSigFraction / firstMeasure->timesig()).reduced();
+        Fraction stretch = (newTimeSigFraction / firstMeasure->timesig()).reduced();
         timeSig->setStretch(stretch);
     }
 
@@ -1367,7 +1367,7 @@ void Score::cmdAddTimeSig(Measure* firstMeasure, staff_idx_t staffIdx, TimeSig* 
         return std::make_pair(startStaffIdx, endStaffIdx);
     };
 
-    if (originalTimeSig && originalTimeSig->sig() == newSigFraction && originalTimeSig->stretch() == timeSig->stretch()) {
+    if (originalTimeSig && originalTimeSig->sig() == newTimeSigFraction && originalTimeSig->stretch() == timeSig->stretch()) {
         //
         // the measure duration does not change,
         // so its ok to just update the time signatures
@@ -1379,26 +1379,26 @@ void Score::cmdAddTimeSig(Measure* firstMeasure, staff_idx_t staffIdx, TimeSig* 
             Measure* lastMeasure = (lastMeasureTick != Fraction(-1, 1)) ? score->tick2measure(lastMeasureTick) : nullptr;
             for (Measure* currentMeasure = mf; currentMeasure != lastMeasure; currentMeasure = currentMeasure->nextMeasure()) {
                 bool changeActual = currentMeasure->ticks() == currentMeasure->timesig();
-                currentMeasure->undoChangeProperty(Pid::TIMESIG_NOMINAL, newSigFraction);
+                currentMeasure->undoChangeProperty(Pid::TIMESIG_NOMINAL, newTimeSigFraction);
                 if (changeActual) {
-                    currentMeasure->undoChangeProperty(Pid::TIMESIG_ACTUAL, newSigFraction);
+                    currentMeasure->undoChangeProperty(Pid::TIMESIG_ACTUAL, newTimeSigFraction);
                 }
             }
             std::pair<staff_idx_t, staff_idx_t> staffIdxRange = getStaffIdxRange(score);
             for (staff_idx_t si = staffIdxRange.first; si < staffIdxRange.second; ++si) {
-                TimeSig* newSig = toTimeSig(seg->element(si * VOICES));
-                if (!newSig) {
+                TimeSig* newTimeSig = toTimeSig(seg->element(si * VOICES));
+                if (!newTimeSig) {
                     continue;
                 }
-                newSig->undoChangeProperty(Pid::SHOW_COURTESY, timeSig->showCourtesySig());
-                newSig->undoChangeProperty(Pid::TIMESIG, timeSig->sig());
-                newSig->undoChangeProperty(Pid::TIMESIG_TYPE, int(timeSig->timeSigType()));
-                newSig->undoChangeProperty(Pid::NUMERATOR_STRING, timeSig->numeratorString());
-                newSig->undoChangeProperty(Pid::DENOMINATOR_STRING, timeSig->denominatorString());
-                newSig->undoChangeProperty(Pid::TIMESIG_STRETCH, timeSig->stretch());
-                newSig->undoChangeProperty(Pid::GROUP_NODES, timeSig->groups().nodes());
-                newSig->setSelected(false);
-                newSig->setDropTarget(false);
+                newTimeSig->undoChangeProperty(Pid::SHOW_COURTESY, timeSig->showCourtesySig());
+                newTimeSig->undoChangeProperty(Pid::TIMESIG, timeSig->sig());
+                newTimeSig->undoChangeProperty(Pid::TIMESIG_TYPE, int(timeSig->timeSigType()));
+                newTimeSig->undoChangeProperty(Pid::NUMERATOR_STRING, timeSig->numeratorString());
+                newTimeSig->undoChangeProperty(Pid::DENOMINATOR_STRING, timeSig->denominatorString());
+                newTimeSig->undoChangeProperty(Pid::TIMESIG_STRETCH, timeSig->stretch());
+                newTimeSig->undoChangeProperty(Pid::GROUP_NODES, timeSig->groups().nodes());
+                newTimeSig->setSelected(false);
+                newTimeSig->setDropTarget(false);
             }
         }
     } else {
@@ -1410,7 +1410,7 @@ void Score::cmdAddTimeSig(Measure* firstMeasure, staff_idx_t staffIdx, TimeSig* 
         //
         if (mf == mScore->firstMeasure() && mf->nextMeasure() && (mf->ticks() != mf->timesig())) {
             // handle upbeat
-            mf->undoChangeProperty(Pid::TIMESIG_NOMINAL, newSigFraction);
+            mf->undoChangeProperty(Pid::TIMESIG_NOMINAL, newTimeSigFraction);
             Measure* currentMeasure = mf->nextMeasure();
             Segment* segment = currentMeasure->findSegment(SegmentType::TimeSig, currentMeasure->tick());
             mf = segment ? 0 : mf->nextMeasure();
@@ -1420,7 +1420,7 @@ void Score::cmdAddTimeSig(Measure* firstMeasure, staff_idx_t staffIdx, TimeSig* 
                 // but we need to rewrite any staves with local time signatures
                 for (size_t i = 0; i < nstaves(); ++i) {
                     if (staff(i)->timeSig(tick) && staff(i)->timeSig(tick)->isLocal()) {
-                        if (!mScore->rewriteMeasures(mf, newSigFraction, i)) {
+                        if (!mScore->rewriteMeasures(mf, newTimeSigFraction, i)) {
                             undoStack()->current()->unwind();
                             return;
                         }
@@ -1449,37 +1449,37 @@ void Score::cmdAddTimeSig(Measure* firstMeasure, staff_idx_t staffIdx, TimeSig* 
                 if (fm->isMeasureRepeatGroup(si)) {
                     deleteItem(fm->measureRepeatElement(si));
                 }
-                TimeSig* newSig = toTimeSig(seg->element(si * VOICES));
-                if (newSig == 0) {
-                    newSig = Factory::copyTimeSig(*timeSig);
-                    newSig->setScore(score);
-                    newSig->setTrack(si * VOICES);
-                    newSig->setParent(seg);
-                    undoAddElement(newSig);
+                TimeSig* newTimeSig = toTimeSig(seg->element(si * VOICES));
+                if (newTimeSig == 0) {
+                    newTimeSig = Factory::copyTimeSig(*timeSig);
+                    newTimeSig->setScore(score);
+                    newTimeSig->setTrack(si * VOICES);
+                    newTimeSig->setParent(seg);
+                    undoAddElement(newTimeSig);
                     if (score->excerpt()) {
-                        const track_idx_t masterTrack = muse::key(score->excerpt()->tracksMapping(), newSig->track());
+                        const track_idx_t masterTrack = muse::key(score->excerpt()->tracksMapping(), newTimeSig->track());
                         TimeSig* masterTimeSig = masterTimeSigs[masterTrack];
                         if (masterTimeSig) {
-                            undo(new Link(masterTimeSig, newSig));
+                            undo(new Link(masterTimeSig, newTimeSig));
                         }
                     }
                 } else {
-                    newSig->undoChangeProperty(Pid::SHOW_COURTESY, timeSig->showCourtesySig());
-                    newSig->undoChangeProperty(Pid::TIMESIG_TYPE, int(timeSig->timeSigType()));
-                    newSig->undoChangeProperty(Pid::TIMESIG, timeSig->sig());
-                    newSig->undoChangeProperty(Pid::NUMERATOR_STRING, timeSig->numeratorString());
-                    newSig->undoChangeProperty(Pid::DENOMINATOR_STRING, timeSig->denominatorString());
+                    newTimeSig->undoChangeProperty(Pid::SHOW_COURTESY, timeSig->showCourtesySig());
+                    newTimeSig->undoChangeProperty(Pid::TIMESIG_TYPE, int(timeSig->timeSigType()));
+                    newTimeSig->undoChangeProperty(Pid::TIMESIG, timeSig->sig());
+                    newTimeSig->undoChangeProperty(Pid::NUMERATOR_STRING, timeSig->numeratorString());
+                    newTimeSig->undoChangeProperty(Pid::DENOMINATOR_STRING, timeSig->denominatorString());
 
                     // HACK do it twice to accommodate undo
-                    newSig->undoChangeProperty(Pid::TIMESIG_TYPE, int(timeSig->timeSigType()));
-                    newSig->undoChangeProperty(Pid::TIMESIG_STRETCH, timeSig->stretch());
-                    newSig->undoChangeProperty(Pid::GROUP_NODES, timeSig->groups().nodes());
-                    newSig->setSelected(false);
-                    newSig->setDropTarget(false);                 // DEBUG
+                    newTimeSig->undoChangeProperty(Pid::TIMESIG_TYPE, int(timeSig->timeSigType()));
+                    newTimeSig->undoChangeProperty(Pid::TIMESIG_STRETCH, timeSig->stretch());
+                    newTimeSig->undoChangeProperty(Pid::GROUP_NODES, timeSig->groups().nodes());
+                    newTimeSig->setSelected(false);
+                    newTimeSig->setDropTarget(false);                 // DEBUG
                 }
 
                 if (score->isMaster()) {
-                    masterTimeSigs[newSig->track()] = newSig;
+                    masterTimeSigs[newTimeSig->track()] = newTimeSig;
                 }
             }
         }
