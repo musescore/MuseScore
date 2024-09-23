@@ -256,7 +256,7 @@ void CoreMidiInPort::initCore()
             for (UInt32 index = 0; index < packetList->numPackets; index++) {
                 auto len = packet->length;
                 int pos = 0;
-                const Byte * pointer = static_cast<const Byte*>(&(packet->data[0]));
+                const Byte* pointer = static_cast<const Byte*>(&(packet->data[0]));
                 while (pos < len) {
                     Byte status = pointer[pos] >> 4;
                     if (status < 8 || status >= 15) {

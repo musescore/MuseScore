@@ -140,28 +140,28 @@ struct Event {
         return 0;
     }
 
-    static Event fromMIDI10BytePackage(const unsigned char *pointer, int length)
+    static Event fromMIDI10BytePackage(const unsigned char* pointer, int length)
     {
         Event e;
         uint32_t val = 0;
         assert(length <= 3);
-        for (int i=0; i<length; i++) {
+        for (int i=0; i < length; i++) {
             uint32_t byteVal = static_cast<uint32_t>(pointer[i]);
-            val |= byteVal << ((2-i)*8);
+            val |= byteVal << ((2 - i) * 8);
         }
         e.m_data[0]=val;
         e.setMessageType(MessageType::ChannelVoice10);
         return e;
     }
 
-    int to_MIDI10BytesPackage(unsigned char *pointer) const
+    int to_MIDI10BytesPackage(unsigned char* pointer) const
     {
         if (messageType() == MessageType::ChannelVoice10) {
             auto val = m_data[0];
             int c = Event::midi10ByteCountForOpcode(opcode());
-            assert(c<=3);
-            for (int i=0; i<c; i++) {
-                auto byteVal = (val>>((2-i)*8)) & 0xff;
+            assert(c <= 3);
+            for (int i=0; i < c; i++) {
+                auto byteVal = (val >> ((2 - i) * 8)) & 0xff;
                 pointer[i]=static_cast<unsigned char>(byteVal);
             }
             return c;
@@ -1017,7 +1017,8 @@ struct Event {
         return static_cast<uint8_t>(val);
     }
 
-    void setVelocity7(uint8_t value) {
+    void setVelocity7(uint8_t value)
+    {
         if (isChannelVoice20()) {
             uint16_t scaled = scaleUp(value, 7, 16);
             setVelocity(scaled);
@@ -1030,7 +1031,7 @@ struct Event {
     {
         uint32_t val = data();
         if (messageType() == MessageType::ChannelVoice20) {
-            return scaleDown(val,32,7);
+            return scaleDown(val, 32, 7);
         }
         return val;
     }
@@ -1039,7 +1040,7 @@ struct Event {
     {
         uint32_t val = data();
         if (messageType() == MessageType::ChannelVoice20) {
-            return scaleDown(val,32,14);
+            return scaleDown(val, 32, 14);
         }
         return val;
     }

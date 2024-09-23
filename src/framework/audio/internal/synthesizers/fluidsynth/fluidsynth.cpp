@@ -169,20 +169,20 @@ void FluidSynth::allNotesOff()
         // - We could send all events at once.
         // Does i directly relate to midi channels? -> lastChannelIndex, otherwise use 16.
         int upperBound = min(lastChannelIdx, 16);
-        for (int i = 0; i<upperBound; i++) {
+        for (int i = 0; i < upperBound; i++) {
             muse::midi::Event e(muse::midi::Event::Opcode::ControlChange, muse::midi::Event::MessageType::ChannelVoice20);
             e.setChannel(i);
             e.setIndex(123); // CC#123 = All notes off
             port->sendEvent(e);
         }
-        for (int i = 0; i<upperBound; i++) {
+        for (int i = 0; i < upperBound; i++) {
             muse::midi::Event e(muse::midi::Event::Opcode::ControlChange, muse::midi::Event::MessageType::ChannelVoice20);
             e.setChannel(i);
             e.setIndex(midi::SUSTAIN_PEDAL_CONTROLLER);
             e.setData(0);
             port->sendEvent(e);
         }
-        for (int i = 0; i<upperBound; i++) {
+        for (int i = 0; i < upperBound; i++) {
             muse::midi::Event e(muse::midi::Event::Opcode::PitchBend, muse::midi::Event::MessageType::ChannelVoice20);
             e.setChannel(i);
             e.setData(0x80000000);
