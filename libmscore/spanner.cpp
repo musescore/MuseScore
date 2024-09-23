@@ -348,7 +348,7 @@ Spanner::Spanner(const Spanner& s)
       _ticks        = s._ticks;
       _track2       = s._track2;
       if (!s.startElement() && !spannerSegments().size()) {
-            for (auto* segment : s.spannerSegments()) {
+            for (auto segment : s.spannerSegments()) {
                   add(segment->clone());
                   }
             }
@@ -873,6 +873,22 @@ Measure* Spanner::startMeasure() const
 Measure* Spanner::endMeasure() const
       {
       return toMeasure(_endElement);
+      }
+
+Measure* Spanner::findStartMeasure() const
+      {
+      if (!_startElement)
+            return nullptr;
+
+      return toMeasure(_startElement->findAncestor(ElementType::MEASURE));
+      }
+
+Measure* Spanner::findEndMeasure() const
+      {
+      if (!_endElement)
+            return nullptr;
+
+      return toMeasure(_endElement->findAncestor(ElementType::MEASURE));
       }
 
 //---------------------------------------------------------

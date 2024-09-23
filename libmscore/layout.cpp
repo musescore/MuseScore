@@ -78,7 +78,7 @@ namespace Ms {
 
 void Score::rebuildBspTree()
       {
-      for (Page* page : pages())
+      for (Page* page : qAsConst(pages()))
             page->rebuildBspTree();
       }
 
@@ -179,7 +179,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   if (chord->beam() && chord->beam()->cross())
                         crossBeamFound = true;
                   bool hasGraceBefore = false;
-                  for (Chord* c : chord->graceNotes()) {
+                  for (Chord* c : qAsConst(chord->graceNotes())) {
                         if (c->isGraceBefore())
                               hasGraceBefore = true;
                         layoutChords2(c->notes(), c->up());       // layout grace note noteheads
@@ -1597,7 +1597,7 @@ void Score::connectTies(bool silent)
                               }
                         }
 #endif
-                  for (Chord* gc : c->graceNotes()) {
+                  for (Chord* gc : qAsConst(c->graceNotes())) {
                         for (Note* n : gc->notes()) {
                               // spanner with no end element apparently happens when reading some 206 files
                               // (and possibly in other situations too)
@@ -1687,7 +1687,7 @@ void Score::fixupLaissezVibrer()
                   if (e == 0 || !e->isChord())
                         continue;
                   Chord* c = toChord(e);
-                  for (auto a : c->articulations()) {
+                  for (auto& a : c->articulations()) {
                         if (a->symId() != SymId::articLaissezVibrerAbove && a->symId() != SymId::articLaissezVibrerBelow)
                               continue;
 
@@ -1772,7 +1772,7 @@ void LayoutContext::distributeStaves(Page* page, qreal footerPadding)
       Spacer* nextSpacer  { nullptr    };
       bool transferNormalBracket { false };
       bool transferCurlyBracket  { false };
-      for (System* system : page->systems()) {
+      for (System* system : qAsConst(page->systems())) {
             if (system->vbox()) {
                   VerticalGapData* vgd = new VerticalGapData(!ngaps++, system, nullptr, nullptr, nullptr, prevYBottom);
                   vgd->addSpaceAroundVBox(true);
@@ -1790,11 +1790,11 @@ void LayoutContext::distributeStaves(Page* page, qreal footerPadding)
                   int endNormalBracket { -1   };
                   int endCurlyBracket  { -1   };
                   int staffNr { -1 };
-                  for (SysStaff* sysStaff : *system->staves()) {
+                  for (SysStaff* sysStaff : qAsConst(*system->staves())) {
                         Staff* staff { score->staff(++staffNr)};
                         addSpaceAroundNormalBracket |= endNormalBracket == staffNr;
                         addSpaceAroundCurlyBracket  |= endCurlyBracket == staffNr;
-                        for (const BracketItem* bi : staff->brackets()) {
+                        for (const BracketItem* bi : qAsConst(staff->brackets())) {
                               if  (bi->bracketType() == BracketType::NORMAL) {
                                     addSpaceAroundNormalBracket |= staff->idx() > (endNormalBracket - 1);
                                     endNormalBracket = qMax(endNormalBracket, staff->idx() + bi->bracketSpan());
@@ -1995,7 +1995,7 @@ void LayoutContext::layoutPage(Page* page, qreal restHeight, qreal footerPadding
 
       if (sList.empty() || MScore::noVerticalStretch || score->enableVerticalSpread() || score->layoutMode() == LayoutMode::SYSTEM) {
             if (score->layoutMode() == LayoutMode::FLOAT) {
-                  for (System* system : page->systems())
+                  for (System* system : qAsConst(page->systems()))
                         system->move(QPointF(0.0, 0.0));
                   }
             else if ((score->layoutMode() != LayoutMode::SYSTEM) && score->enableVerticalSpread())
@@ -2522,7 +2522,7 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
             // clone elements from underlying measure to mmr
             for (Element* e : cs->annotations()) {
                   // look at elements in underlying measure
-                  if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isInstrumentChange()))
+                  if (!(e->isTempoText() || e->isRehearsalMark() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isInstrumentChange() || e->isSymbol() || e->isFretDiagram()) || !e->visible())
                         continue;
                   // try to find a match in mmr
                   bool found = false;
@@ -2542,9 +2542,10 @@ void Score::createMMRest(Measure* m, Measure* lm, const Fraction& len)
 
             // remove stray elements (possibly leftover from a previous layout of this mmr)
             // this should not happen since the elements are linked?
-            for (Element* e : s->annotations()) {
+            const auto annotations = s->annotations(); // make a copy since we alter the list
+            for (Element* e : annotations) {
                   // look at elements in mmr
-                  if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isInstrumentChange()))
+                  if (!(e->isTempoText() || e->isRehearsalMark() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isInstrumentChange() || e->isSymbol() || e->isFretDiagram()))
                         continue;
                   // try to find a match in underlying measure
                   bool found = false;
@@ -2578,6 +2579,8 @@ static bool validMMRestMeasure(Measure* m)
       int n = 0;
       for (Segment* s = m->first(); s; s = s->next()) {
             for (Element* e : s->annotations()) {
+                  if (!e->staff()->show() || !e->visible())
+                      continue;
                   if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isInstrumentChange()))
                         return false;
                   }
@@ -2630,6 +2633,8 @@ static bool breakMultiMeasureRest(Measure* m)
       auto sl = m->score()->spannerMap().findOverlapping(m->tick().ticks(), m->endTick().ticks());
       for (auto i : sl) {
             Spanner* s = i.value;
+            if (!s->visible())
+                continue;
             // break for first measure of volta or textline and first measure *after* volta
             if ((s->isVolta() || s->isTextLine()) && (s->tick() == m->tick() || s->tick2() == m->tick()))
                   return true;
@@ -3197,7 +3202,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                               if (cr->isChord()) {
                                     Chord* chord = toChord(cr);
                                     chord->cmdUpdateNotes(&as, staffIdx);
-                                    for (Chord* c : chord->graceNotes()) {
+                                    for (Chord* c : qAsConst(chord->graceNotes())) {
                                           c->setMag(m * score()->styleD(Sid::graceNoteMag));
                                           c->computeUp();
                                           if (c->stemDirection() != Direction::AUTO)
@@ -3863,7 +3868,7 @@ void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool 
                               qreal shift = be->rypos();
                               be->rypos() = reference - be->ryoffset();
                               shift -= be->rypos();
-                              for (Element* e : elements[s]) {
+                              for (Element* e : qAsConst(elements[s])) {
                                     if ((above && e->placeBelow()) || (!above && e->placeAbove()))
                                           continue;
                                     modified.append(e);
@@ -3910,7 +3915,7 @@ void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool 
                   }
             }
 
-      for (int idx: staves.keys()) {
+      for (int idx : staves.keys()) {
             // Align the objects.
             // Algorithm:
             //    - Find highest placed harmony/fretdiagram.
@@ -4435,7 +4440,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                                     if (e->isChord()) {
                                           Chord* c = toChord(e);
                                           std::list<Note*> notes;
-                                          for (auto gc : c->graceNotes()) {
+                                          for (auto& gc : c->graceNotes()) {
                                                 for (auto n : gc->notes())
                                                       notes.push_back(n);
                                                 }
@@ -4495,7 +4500,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                   if (e->isChord()) {
                         Chord* c = toChord(e);
                         std::list<Note*> notes;
-                        for (auto gc : c->graceNotes()) {
+                        for (auto& gc : c->graceNotes()) {
                               for (auto n : gc->notes())
                                     notes.push_back(n);
                               }
@@ -4626,7 +4631,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         continue;
                   if (e->isChord()) {
                         Chord* c = toChord(e);
-                        for (Chord* ch : c->graceNotes())
+                        for (Chord* ch : qAsConst(c->graceNotes()))
                               layoutTies(ch, system, stick);
                         layoutTies(c, system, stick);
                         }
@@ -4674,6 +4679,12 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
             Spanner* sp = interval.value;
             if (sp->staff() && !sp->staff()->show())
                 continue;
+
+            const Measure* startMeas = sp->findStartMeasure();
+            const Measure* endMeas = sp->findEndMeasure();
+            if (!sp->visible() && ((startMeas && startMeas->isMMRest()) || (endMeas && endMeas->isMMRest()))
+                && score()->styleB(Sid::createMultiMeasureRests))
+                  continue;
             if (sp->tick() < etick && sp->tick2() > stick) {
                   if (sp->isOttava()) {
                         if (sp->staff()->staffType(sp->tick())->isTabStaff())
@@ -4797,7 +4808,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
       //
       for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
             std::vector<SpannerSegment*> voltaSegments;
-            for (SpannerSegment* ss : system->spannerSegments()) {
+            for (SpannerSegment* ss : qAsConst(system->spannerSegments())) {
                   if (ss->isVoltaSegment() && ss->staffIdx() == staffIdx)
                         voltaSegments.push_back(ss);
                   }
@@ -5065,7 +5076,7 @@ void LayoutContext::collectPage()
             }
 
       Fraction stick = Fraction(-1,1);
-      for (System* s : page->systems()) {
+      for (System* s : qAsConst(page->systems())) {
             Score* currentScore = s->score();
             for (MeasureBase* mb : s->measures()) {
                   if (!mb->isMeasure())
@@ -5097,7 +5108,7 @@ void LayoutContext::collectPage()
 
                                     if (cr->isChord()) {
                                           Chord* c = toChord(cr);
-                                          for (Chord* cc : c->graceNotes()) {
+                                          for (Chord* cc : qAsConst(c->graceNotes())) {
                                                 if (cc->beam() && cc->beam()->elements().front() == cc)
                                                       cc->beam()->layout();
                                                 cc->layoutSpanners();
@@ -5560,7 +5571,7 @@ qreal VerticalGapData::addFillSpacing(qreal step, qreal maxFill)
 
 void VerticalGapDataList::deleteAll()
       {
-      for (auto vsd : *this)
+      for (auto& vsd : *this)
             delete vsd;
       }
 
