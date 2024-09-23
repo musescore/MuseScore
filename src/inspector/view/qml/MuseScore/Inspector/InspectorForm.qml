@@ -35,7 +35,7 @@ Rectangle {
     property alias notationView: popupController.notationView
 
     property NavigationSection navigationSection: null
-    property NavigationPanel navigationPanel: sectionList.count > 0 ? sectionList.itemAt(0).navigationPanel : null // first panel
+    property NavigationPanel navigationPanel: sectionList.count > 0 ? sectionList.itemAtIndex(0).navigationPanel : null // first panel
     property int navigationOrderStart: 0
 
     color: ui.theme.backgroundPrimaryColor
@@ -71,7 +71,12 @@ Rectangle {
     StyledListView {
         id: sectionList
         anchors.fill: parent
-        anchors.margins: 12
+
+        topMargin: 12
+        leftMargin: 12
+        rightMargin: 12
+        bottomMargin: 12
+
         spacing: 12
 
         function ensureContentVisible(invisibleContentHeight) {
@@ -95,7 +100,7 @@ Rectangle {
         }
 
         delegate: Column {
-            width: sectionList.width
+            width: parent.width
 
             spacing: 12
 
