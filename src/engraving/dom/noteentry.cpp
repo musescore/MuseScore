@@ -199,6 +199,10 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
     track_idx_t track = is.track();
     if (is.drumset()) {
         const Drumset* ds = is.drumset();
+        if (!ds->isValid(nval.pitch)) {
+            return nullptr;
+        }
+
         nval.headGroup    = ds->noteHead(nval.pitch);
         stemDirection     = ds->stemDirection(nval.pitch);
         track             = ds->voice(nval.pitch) + (is.track() / VOICES) * VOICES;
