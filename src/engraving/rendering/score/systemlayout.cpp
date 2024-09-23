@@ -1138,6 +1138,12 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             continue;
         }
 
+        const Measure* startMeas = sp->findStartMeasure();
+        const Measure* endMeas = sp->findEndMeasure();
+        if (!sp->visible() && ((startMeas && startMeas->isMMRest()) || (endMeas && endMeas->isMMRest()))
+            && ctx.conf().styleB(Sid::createMultiMeasureRests)) {
+            continue;
+        }
         if (sp->tick2() == stick && sp->isPedal() && toPedal(sp)->connect45HookToNext()) {
             pedal.push_back(sp);
         }
