@@ -112,11 +112,11 @@ UiContext UiContextResolver::currentUiContext() const
         INavigationPanel* activePanel = navigationController()->activePanel();
         if (activePanel) {
             if (activePanel->name() == NOTATION_NAVIGATION_PANEL) {
-                return context::UiCtxNotationFocused;
+                return context::UiCtxProjectFocused;
             }
         }
 
-        return context::UiCtxNotationOpened;
+        return context::UiCtxProjectOpened;
     }
 
     return context::UiCtxUnknown;
@@ -128,8 +128,7 @@ bool UiContextResolver::match(const muse::ui::UiContext& currentCtx, const muse:
         return true;
     }
 
-    //! NOTE If the current context is `UiCtxNotationFocused`, then we allow `UiCtxNotationOpened` too
-    if (currentCtx == context::UiCtxNotationFocused && actCtx == context::UiCtxNotationOpened) {
+    if (actCtx == context::UiCtxProjectOpened && globalContext()->currentNotation()) {
         return true;
     }
 
@@ -164,13 +163,13 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
     //!         NotationStaffTab
 
     if (CTX_NOTATION_OPENED == scContext) {
-        return matchWithCurrent(context::UiCtxNotationOpened);
+        return matchWithCurrent(context::UiCtxProjectOpened);
     } else if (CTX_NOTATION_FOCUSED == scContext) {
-        return matchWithCurrent(context::UiCtxNotationFocused);
+        return matchWithCurrent(context::UiCtxProjectFocused);
     } else if (CTX_NOT_NOTATION_FOCUSED == scContext) {
-        return !matchWithCurrent(context::UiCtxNotationFocused);
+        return !matchWithCurrent(context::UiCtxProjectFocused);
     } else if (CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB == scContext) {
-        if (!matchWithCurrent(context::UiCtxNotationFocused)) {
+        if (!matchWithCurrent(context::UiCtxProjectFocused)) {
             return false;
         }
         auto notation = globalContext()->currentNotation();
@@ -180,7 +179,7 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
         auto noteInput = notation->interaction()->noteInput();
         return !noteInput->isNoteInputMode() || noteInput->state().staffGroup != mu::engraving::StaffGroup::TAB;
     } else if (CTX_NOTATION_NOTE_INPUT_STAFF_TAB == scContext) {
-        if (!matchWithCurrent(context::UiCtxNotationFocused)) {
+        if (!matchWithCurrent(context::UiCtxProjectFocused)) {
             return false;
         }
         auto notation = globalContext()->currentNotation();
@@ -190,7 +189,7 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
         auto noteInput = notation->interaction()->noteInput();
         return noteInput->isNoteInputMode() && noteInput->state().staffGroup == mu::engraving::StaffGroup::TAB;
     } else if (CTX_NOTATION_TEXT_EDITING == scContext) {
-        if (!matchWithCurrent(context::UiCtxNotationFocused)) {
+        if (!matchWithCurrent(context::UiCtxProjectFocused)) {
             return false;
         }
         auto notation = globalContext()->currentNotation();
