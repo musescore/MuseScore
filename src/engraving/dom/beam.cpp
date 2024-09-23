@@ -244,7 +244,7 @@ const BeamSegment* Beam::topLevelSegmentForElement(const ChordRest* element) con
 void Beam::move(const PointF& offset)
 {
     EngravingItem::move(offset);
-    for (BeamSegment* bs : beamSegments()) {
+    for (BeamSegment* bs : m_beamSegments) {
         bs->line.translate(offset);
     }
 }
@@ -404,8 +404,8 @@ std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
     }
 
     int y = pagePos().y();
-    double beamStartX = startAnchor().x() + (system() ? system()->x() : 0);
-    double beamEndX = endAnchor().x() + (system() ? system()->x() : 0);
+    double beamStartX = m_startAnchor.x() + (system() ? system()->x() : 0);
+    double beamEndX = m_endAnchor.x() + (system() ? system()->x() : 0);
     double middleX = (beamStartX + beamEndX) / 2;
     double middleY = (f->py1[idx] + y + f->py2[idx] + y) / 2;
 
@@ -420,13 +420,13 @@ std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
 //   setBeamDirection
 //---------------------------------------------------------
 
-void Beam::setBeamDirection(DirectionV d)
+void Beam::setDirection(DirectionV d)
 {
     if (direction() == d || m_cross) {
         return;
     }
 
-    setDirection(d);
+    doSetDirection(d);
 
     if (d != DirectionV::AUTO) {
         setUp(d == DirectionV::UP);
@@ -594,8 +594,8 @@ void Beam::setNoSlope(bool b)
 
 void Beam::computeAndSetSlope()
 {
-    double xDiff = endAnchor().x() - startAnchor().x();
-    double yDiff = endAnchor().y() - startAnchor().y();
+    double xDiff = m_endAnchor.x() - m_startAnchor.x();
+    double yDiff = m_endAnchor.y() - m_startAnchor.y();
     if (std::abs(xDiff) < 0.5 * spatium()) {
         // Temporary safeguard: a beam this short is invalid, and exists only as a temporary state,
         // so don't try to compute the slope as it will be wrong. Needs a better solution in future.
@@ -694,12 +694,12 @@ PropertyValue Beam::propertyDefault(Pid id) const
 
 void Beam::addSkyline(Skyline& sk)
 {
-    if (beamSegments().empty() || !addToSkyline()) {
+    if (m_beamSegments.empty() || !addToSkyline()) {
         return;
     }
 
     // Only add the outer segment, no need to add the inner one
-    sk.add(beamSegments().front()->shape());
+    sk.add(m_beamSegments.front()->shape());
 }
 
 //---------------------------------------------------------

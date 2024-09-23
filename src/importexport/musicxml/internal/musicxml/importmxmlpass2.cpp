@@ -2279,7 +2279,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const Directi
         // create a new beam
         beam = Factory::createBeam(cr->score()->dummy()->system());
         beam->setTrack(cr->track());
-        beam->setBeamDirection(sd);
+        beam->setDirection(sd);
     }
     // add ChordRest to beam
     if (beam) {

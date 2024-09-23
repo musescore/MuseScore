@@ -74,7 +74,7 @@ bool BeamBase::setProperty(Pid propertyId, const PropertyValue& v)
         setCrossStaffMove(v.toInt());
         break;
     case Pid::STEM_DIRECTION:
-        setBeamDirection(v.value<DirectionV>());
+        setDirection(v.value<DirectionV>());
         break;
     case Pid::USER_MODIFIED:
         setUserModified(v.toBool());

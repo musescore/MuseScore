@@ -187,7 +187,7 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, const LayoutCon
     if (item->chord1()->beam() && item->chord1()->beam() == item->chord2()->beam()) {
         Beam* beam = item->chord1()->beam();
         item->setUp(beam->up());
-        item->setDirection(beam->direction());
+        item->doSetDirection(beam->direction());
         // stem stuff is already taken care of by the beams
     } else if (!item->userModified()) {
         // user modified trems will be dealt with later

@@ -205,13 +205,13 @@ PointF TremoloTwoChord::pagePos() const
 //   setBeamDirection
 //---------------------------------------------------------
 
-void TremoloTwoChord::setBeamDirection(DirectionV d)
+void TremoloTwoChord::setDirection(DirectionV d)
 {
     if (direction() == d) {
         return;
     }
 
-    setDirection(d);
+    doSetDirection(d);
 
     if (d != DirectionV::AUTO) {
         setUp(d == DirectionV::UP);
@@ -351,8 +351,8 @@ std::vector<PointF> TremoloTwoChord::gripsPositions(const EditData&) const
     }
 
     int y = pagePos().y();
-    double beamStartX = startAnchor().x() + m_chord1->pageX();
-    double beamEndX = endAnchor().x() + m_chord1->pageX(); // intentional--chord1 is start x
+    double beamStartX = m_startAnchor.x() + m_chord1->pageX();
+    double beamEndX = m_endAnchor.x() + m_chord1->pageX(); // intentional--chord1 is start x
     double middleX = (beamStartX + beamEndX) / 2;
     double middleY = (m_beamFragment.py1[idx] + y + m_beamFragment.py2[idx] + y) / 2;
 
@@ -514,7 +514,7 @@ void TremoloTwoChord::clearBeamSegments()
     BeamSegment* chord2Segment = m_chord2 ? m_chord2->beamlet() : nullptr;
 
     if (chord1Segment || chord2Segment) {
-        for (BeamSegment* segment : beamSegments()) {
+        for (BeamSegment* segment : m_beamSegments) {
             if (chord1Segment && chord1Segment == segment) {
                 m_chord1->setBeamlet(nullptr);
             } else if (chord2Segment && chord2Segment == segment) {

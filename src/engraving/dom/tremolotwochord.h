@@ -94,7 +94,7 @@ public:
 
     TremoloStyle tremoloStyle() const { return m_style; }
     void setTremoloStyle(TremoloStyle v) { m_style = v; }
-    void setBeamDirection(DirectionV v) override;
+    void setDirection(DirectionV v) override;
     void setBeamFragment(const BeamFragment& bf) { m_beamFragment = bf; }
     const BeamFragment& beamFragment() const { return m_beamFragment; }
     BeamFragment& beamFragment() { return m_beamFragment; }

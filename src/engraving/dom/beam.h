@@ -94,7 +94,7 @@ public:
     void setId(int i) const { m_id = i; }
     int id() const { return m_id; }
 
-    void setBeamDirection(DirectionV d) override;
+    void setDirection(DirectionV d) override;
 
     void calcBeamBreaks(const ChordRest* chord, const ChordRest* prevChord, int level, bool& isBroken32, bool& isBroken64) const;
 
