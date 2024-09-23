@@ -1530,7 +1530,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
 //! NOTE: Helper method for NotationInteraction::drop. Handles drop logic for majority of elements (returns "accepted")
 bool NotationInteraction::doDropStandard()
 {
-    EngravingItem* el = dropTarget(m_dropData.ed);
+    EngravingItem* el = m_dropData.dropTarget ? m_dropData.dropTarget : dropTarget(m_dropData.ed);
     if (!el) {
         if (!dropCanvas(m_dropData.ed.dropElement)) {
             LOGD("cannot drop %s(%p) to canvas", m_dropData.ed.dropElement->typeName(), m_dropData.ed.dropElement);
