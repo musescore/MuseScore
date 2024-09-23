@@ -146,6 +146,9 @@ RectF TremoloTwoChord::drag(EditData& ed)
 
 void TremoloTwoChord::setTremoloType(TremoloType t)
 {
+    IF_ASSERT_FAILED(t >= TremoloType::C8) {
+        return;
+    }
     m_tremoloType = t;
     switch (tremoloType()) {
     case TremoloType::R16:
@@ -216,15 +219,11 @@ void TremoloTwoChord::setDirection(DirectionV d)
     if (d != DirectionV::AUTO) {
         setUp(d == DirectionV::UP);
     }
-    if (twoNotes()) {
-        if (m_chord1) {
-            m_chord1->setStemDirection(d);
-        }
-        if (m_chord2) {
-            m_chord2->setStemDirection(d);
-        }
-    } else {
-        chord()->setStemDirection(d);
+    if (m_chord1) {
+        m_chord1->setStemDirection(d);
+    }
+    if (m_chord2) {
+        m_chord2->setStemDirection(d);
     }
 }
 
@@ -235,10 +234,6 @@ void TremoloTwoChord::setDirection(DirectionV d)
 
 bool TremoloTwoChord::crossStaffBeamBetween() const
 {
-    if (!twoNotes()) {
-        return false;
-    }
-
     return ((m_chord1->staffMove() > m_chord2->staffMove()) && m_chord1->up() && !m_chord2->up())
            || ((m_chord1->staffMove() < m_chord2->staffMove()) && !m_chord1->up() && m_chord2->up());
 }
@@ -310,7 +305,7 @@ PairF TremoloTwoChord::beamPos() const
 
 void TremoloTwoChord::triggerLayout() const
 {
-    if (twoNotes() && m_chord1 && m_chord2) {
+    if (m_chord1 && m_chord2) {
         toChordRest(m_chord1)->triggerLayout();
         toChordRest(m_chord2)->triggerLayout();
     } else {
@@ -320,22 +315,22 @@ void TremoloTwoChord::triggerLayout() const
 
 bool TremoloTwoChord::needStartEditingAfterSelecting() const
 {
-    return twoNotes();
+    return true;
 }
 
 int TremoloTwoChord::gripsCount() const
 {
-    return twoNotes() ? 3 : 0;
+    return 3;
 }
 
 Grip TremoloTwoChord::initialEditModeGrip() const
 {
-    return twoNotes() ? Grip::END : Grip::NO_GRIP;
+    return Grip::END;
 }
 
 Grip TremoloTwoChord::defaultGrip() const
 {
-    return twoNotes() ? Grip::MIDDLE : Grip::NO_GRIP;
+    return Grip::MIDDLE;
 }
 
 //---------------------------------------------------------
@@ -345,10 +340,6 @@ Grip TremoloTwoChord::defaultGrip() const
 std::vector<PointF> TremoloTwoChord::gripsPositions(const EditData&) const
 {
     int idx = directionIdx();
-
-    if (!twoNotes()) {
-        return std::vector<PointF>();
-    }
 
     int y = pagePos().y();
     double beamStartX = m_startAnchor.x() + m_chord1->pageX();
@@ -426,8 +417,7 @@ String TremoloTwoChord::accessibleInfo() const
 
 bool TremoloTwoChord::customStyleApplicable() const
 {
-    return twoNotes()
-           && (durationType().type() == DurationType::V_HALF)
+    return (durationType().type() == DurationType::V_HALF)
            && (staffType()->group() != StaffGroup::TAB);
 }
 
@@ -539,10 +529,7 @@ int TremoloTwoChord::minCRMove() const
 // used for palettes
 PainterPath TremoloTwoChord::basePath(double stretch) const
 {
-    if (isBuzzRoll()) {
-        return PainterPath();
-    }
-    bool tradAlternate = twoNotes() && m_style == TremoloStyle::TRADITIONAL_ALTERNATE;
+    bool tradAlternate = m_style == TremoloStyle::TRADITIONAL_ALTERNATE;
     if (tradAlternate && muse::RealIsEqual(stretch, 0.)) {
         // this shape will have to be constructed after the stretch
         // is known
@@ -555,7 +542,7 @@ PainterPath TremoloTwoChord::basePath(double stretch) const
     const double sp = spatium() * chordMag();
 
     // overall width of two-note tremolos should not be changed if chordMag() isn't 1.0
-    double w2  = sp * style().styleS(Sid::tremoloWidth).val() * .5 / (twoNotes() ? chordMag() : 1.0);
+    double w2  = sp * style().styleS(Sid::tremoloWidth).val() * .5 / chordMag();
     double lw  = sp * style().styleS(Sid::tremoloLineWidth).val();
     double td  = sp * style().styleS(Sid::tremoloDistance).val();
 
@@ -580,7 +567,7 @@ PainterPath TremoloTwoChord::basePath(double stretch) const
         ty += td;
     }
 
-    if (!explicitParent() || !twoNotes()) {
+    if (!explicitParent()) {
         // for the palette or for one-note tremolos
         Transform shearTransform;
         shearTransform.shear(0.0, -(lw / 2.0) / w2);
@@ -592,11 +579,7 @@ PainterPath TremoloTwoChord::basePath(double stretch) const
 
 void TremoloTwoChord::computeShape()
 {
-    if (isBuzzRoll()) {
-        setbbox(symBbox(SymId::buzzRoll));
-    } else {
-        m_path = basePath();
-        setbbox(m_path.boundingRect());
-    }
+    m_path = basePath();
+    setbbox(m_path.boundingRect());
 }
 }

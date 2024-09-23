@@ -80,11 +80,7 @@ public:
     void setDurationType(TDuration d);
 
     Fraction tremoloLen() const;
-    bool isBuzzRoll() const { return m_tremoloType == TremoloType::BUZZ_ROLL; }
-    bool twoNotes() const { return m_tremoloType >= TremoloType::C8; }    // is it a two note tremolo?
     int lines() const { return m_lines; }
-
-    bool placeMidStem() const;
 
     bool crossStaffBeamBetween() const;
 
@@ -108,7 +104,6 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
 
-    // only need grips for two-note trems
     bool needStartEditingAfterSelecting() const override;
     int gripsCount() const override;
     Grip initialEditModeGrip() const override;
@@ -139,7 +134,7 @@ private:
 
     void setBeamPos(const PairF& bp);
 
-    TremoloType m_tremoloType = TremoloType::R8;
+    TremoloType m_tremoloType = TremoloType::INVALID_TREMOLO;
     Chord* m_chord1 = nullptr;
     Chord* m_chord2 = nullptr;
     TDuration m_durationType;

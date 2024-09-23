@@ -55,18 +55,6 @@ void TremoloLayout::layout(TremoloTwoChord* item, const LayoutContext& ctx)
     } else {
         // center tremolo above note
         x = anchor1->x() + anchor1->headWidth() * 0.5;
-        if (!item->twoNotes()) {
-            bool hasMirroredNote = false;
-            for (Note* n : item->chord1()->notes()) {
-                if (n->ldata()->mirror.value()) {
-                    hasMirroredNote = true;
-                    break;
-                }
-            }
-            if (hasMirroredNote) {
-                x = item->chord1()->stemPosX();
-            }
-        }
         y = anchor1->y();
         h = (ctx.conf().styleMM(Sid::tremoloNoteSidePadding).val() + item->ldata()->bbox().height()) * item->chord1()->intrinsicMag();
     }
@@ -326,10 +314,6 @@ void TremoloLayout::createBeamSegments(TremoloTwoChord* item, const LayoutContex
     const bool defaultStyle = (!item->customStyleApplicable()) || (item->tremoloStyle() == TremoloStyle::DEFAULT);
 
     item->clearBeamSegments();
-
-    if (!item->twoNotes()) {
-        return;
-    }
 
     bool _isGrace = item->chord1()->isGrace();
     const PointF pagePos = item->pagePos();
