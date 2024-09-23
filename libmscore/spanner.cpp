@@ -1050,8 +1050,8 @@ Element* Spanner::nextSegmentElement()
       {
       Segment* s = startSegment();
       if (s)
-      return score()->lastElement();
             return s->firstElementForNavigation(staffIdx());
+      return score()->lastElement();
       }
 
 //---------------------------------------------------------
@@ -1062,8 +1062,8 @@ Element* Spanner::prevSegmentElement()
       {
       Segment* s = endSegment();
       if (s)
-      return score()->firstElement();
             return s->lastElementForNavigation(staffIdx());
+      return score()->firstElement();
       }
 
 //---------------------------------------------------------
