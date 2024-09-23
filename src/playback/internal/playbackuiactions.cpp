@@ -33,28 +33,28 @@ using namespace muse::actions;
 
 const UiActionList PlaybackUiActions::m_mainActions = {
     UiAction("play",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Play"),
              TranslatableString("action", "Play"),
              IconCode::Code::PLAY
              ),
     UiAction("stop",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Stop"),
              TranslatableString("action", "Stop playback"),
              IconCode::Code::STOP
              ),
     UiAction("rewind",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Rewind"),
              TranslatableString("action", "Rewind"),
              IconCode::Code::REWIND
              ),
     UiAction("loop",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Loop playback"),
              TranslatableString("action", "Toggle ‘Loop playback’"),
@@ -62,7 +62,7 @@ const UiActionList PlaybackUiActions::m_mainActions = {
              Checkable::Yes
              ),
     UiAction("metronome",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Metronome"),
              TranslatableString("action", "Toggle metronome playback"),
@@ -70,7 +70,7 @@ const UiActionList PlaybackUiActions::m_mainActions = {
              Checkable::Yes
              ),
     UiAction("playback-setup",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Playback setup"),
              TranslatableString("action", "Open playback setup dialog"),
