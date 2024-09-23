@@ -31,11 +31,11 @@ import "."
 Rectangle {
     id: root
 
-    property alias model: flickableArea.model
+    property alias model: sectionList.model
     property alias notationView: popupController.notationView
 
     property NavigationSection navigationSection: null
-    property NavigationPanel navigationPanel: flickableArea.count > 0 ? flickableArea.itemAt(0).navigationPanel : null // first panel
+    property NavigationPanel navigationPanel: sectionList.count > 0 ? sectionList.itemAt(0).navigationPanel : null // first panel
     property int navigationOrderStart: 0
 
     color: ui.theme.backgroundPrimaryColor
@@ -45,7 +45,7 @@ Rectangle {
     }
 
     function focusFirstItem() {
-        var item = flickableArea.itemAt(0)
+        var item = sectionList.itemAt(0)
         if (item) {
             item.navigation.requestActive()
         }
@@ -69,15 +69,16 @@ Rectangle {
     }
 
     StyledListView {
-        id: flickableArea
+        id: sectionList
         anchors.fill: parent
         anchors.margins: 12
+        spacing: 12
 
         function ensureContentVisible(invisibleContentHeight) {
-            if (flickableArea.contentY + invisibleContentHeight > 0) {
-                flickableArea.contentY += invisibleContentHeight
+            if (sectionList.contentY + invisibleContentHeight > 0) {
+                sectionList.contentY += invisibleContentHeight
             } else {
-                flickableArea.contentY = 0
+                sectionList.contentY = 0
             }
         }
 
@@ -94,7 +95,7 @@ Rectangle {
         }
 
         delegate: Column {
-            width: flickableArea.width
+            width: sectionList.width
 
             spacing: 12
 
@@ -120,11 +121,11 @@ Rectangle {
                 }
 
                 onReturnToBoundsRequested: {
-                    flickableArea.returnToBounds()
+                    sectionList.returnToBounds()
                 }
 
                 onEnsureContentVisibleRequested: function(invisibleContentHeight) {
-                    flickableArea.ensureContentVisible(invisibleContentHeight)
+                    sectionList.ensureContentVisible(invisibleContentHeight)
                 }
 
                 onPopupOpened: function(openedPopup, visualControl) {

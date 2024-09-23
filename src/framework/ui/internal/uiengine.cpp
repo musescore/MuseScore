@@ -27,7 +27,6 @@
 #include <QStringList>
 #include <QDir>
 #include <QQmlContext>
-#include <qquickwindow.h>
 
 #include "draw/types/color.h"
 #include "graphicsapiprovider.h"
@@ -143,8 +142,6 @@ void UiEngine::setRootItem(QQuickItem* rootItem)
     if (m_rootItem == rootItem) {
         return;
     }
-
-    m_engine->setIncubationController(rootItem->window()->incubationController());
 
     m_rootItem = rootItem;
     emit rootItemChanged(m_rootItem);
