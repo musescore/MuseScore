@@ -26,6 +26,8 @@
 
 #include "chordarticulationsrenderer.h"
 
+#include "noterenderer.h"
+
 #include "playback/metaparsers/notearticulationsparser.h"
 
 using namespace mu::engraving;
@@ -161,7 +163,7 @@ void GraceChordsRenderer::renderPrincipalNote(const Note* note, const RenderingC
 {
     RenderingContext principalCtx = buildPrincipalNoteCtx(note->score(), ctx, graceCtx);
 
-    ChordArticulationsRenderer::renderNote(note->chord(), note, principalCtx, result);
+    NoteRenderer::render(note, principalCtx, result);
 }
 
 GraceChordsRenderer::GraceNotesContext GraceChordsRenderer::buildGraceNotesContext(const std::vector<Chord*>& graceChords,

@@ -22,7 +22,7 @@
 
 #include "bendsrenderer.h"
 
-#include "chordarticulationsrenderer.h"
+#include "noterenderer.h"
 #include "gracechordsrenderer.h"
 
 #include "playback/metaparsers/internal/gracenotesmetaparser.h"
@@ -127,7 +127,7 @@ void BendsRenderer::renderMultibend(const Score* score, const Note* startNote, c
             currBend = principalNote->bendFor();
             appendBendTimeFactors(score, currBend, bendTimeFactorMap);
         } else {
-            ChordArticulationsRenderer::renderNote(currNote->chord(), currNote, currNoteCtx, bendEvents);
+            NoteRenderer::render(currNote, currNoteCtx, bendEvents);
         }
 
         if (currBend) {
