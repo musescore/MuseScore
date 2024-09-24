@@ -45,7 +45,7 @@ Rectangle {
     }
 
     function focusFirstItem() {
-        var item = sectionList.itemAt(0)
+        var item = sectionList.itemAtIndex(0)
         if (item) {
             item.navigation.requestActive()
         }
@@ -102,7 +102,7 @@ Rectangle {
         delegate: Column {
             width: parent.width
 
-            spacing: 12
+            spacing: sectionList.spacing
 
             property var navigationPanel: _item.navigationPanel
 
