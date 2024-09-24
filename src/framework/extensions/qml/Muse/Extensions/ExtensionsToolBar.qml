@@ -25,44 +25,20 @@ import QtQuick 2.15
 import Muse.UiComponents 1.0
 import Muse.Extensions 1.0
 
-Item {
+StyledToolBarView {
 
     id: root
 
     property alias isEmpty: extModel.isEmpty
 
-    width: Math.max(32, row.childrenRect.width)
-    height: 30
+    navigationPanel.name: "ExtensionsToolBar"
+    navigationPanel.accessible.name: qsTrc("notation", "Extensions toolbar")
 
-    Component.onCompleted: {
-        extModel.init()
-    }
+    spacing: 2
 
     ExtensionsToolBarModel {
         id: extModel
     }
 
-    Row {
-        id: row
-        anchors.fill: parent
-
-        Repeater {
-            model: extModel
-            delegate: FlatButton {
-                width: 30
-                height: width
-                anchors.verticalCenter: parent.verticalCenter
-
-                enabled: enabledRole
-
-                icon: iconRole
-                iconFont: ui.theme.toolbarIconsFont
-                transparent: true
-
-                toolTipTitle: toolTipTitleRole
-
-                onClicked: extModel.onClicked(model.index)
-            }
-        }
-    }
+    model: extModel
 }

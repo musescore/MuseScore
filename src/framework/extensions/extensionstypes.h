@@ -139,6 +139,7 @@ struct Action {
     Type type = Type::Undefined;
     bool modal = DEFAULT_MODAL;
     String title;
+    ui::IconCode::Code icon = ui::IconCode::Code::NONE;
     String uiCtx = DEFAULT_UI_CONTEXT;
     bool hidden = false; // hidden from menu, can be called programmatically
     io::path_t path;

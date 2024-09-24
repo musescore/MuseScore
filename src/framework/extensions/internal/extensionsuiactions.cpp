@@ -60,6 +60,7 @@ const muse::ui::UiActionList& ExtensionsUiActions::actionsList() const
             action.scCtx = toScContext(a.uiCtx);
             action.description = TranslatableString("extensions", "Run plugin %1 (%2)").arg(m.title, a.title);
             action.title = action.description;
+            action.iconCode = a.icon;
 
             result.push_back(std::move(action));
         }

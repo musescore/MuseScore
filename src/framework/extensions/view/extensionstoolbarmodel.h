@@ -26,12 +26,11 @@
 #include "modularity/ioc.h"
 #include "../iextensionsprovider.h"
 #include "ui/iuiactionsregister.h"
+#include "uicomponents/view/abstracttoolbarmodel.h"
 #include "actions/iactionsdispatcher.h"
 
-#include "async/asyncable.h"
-
 namespace muse::extensions {
-class ExtensionsToolBarModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class ExtensionsToolBarModel : public uicomponents::AbstractToolBarModel
 {
     Q_OBJECT
 
@@ -42,14 +41,8 @@ class ExtensionsToolBarModel : public QAbstractListModel, public Injectable, pub
     Inject<actions::IActionsDispatcher> dispatcher = { this };
 
 public:
-    ExtensionsToolBarModel();
 
-    QVariant data(const QModelIndex& index, int role) const override;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    QHash<int, QByteArray> roleNames() const override;
-
-    Q_INVOKABLE void init();
-    Q_INVOKABLE void onClicked(int idx);
+    Q_INVOKABLE void load() override;
 
     bool isEmpty() const;
 
@@ -57,23 +50,6 @@ signals:
     void isEmptyChanged();
 
 private:
-
-    void load();
-    int indexByAction(const actions::ActionCode& code) const;
-
-    enum Roles {
-        IconRole = Qt::UserRole + 1,
-        EnabledRole,
-        ToolTipTitleRole
-    };
-
-    struct Item {
-        UiControl control;
-        ui::UiAction action;
-        ui::UiActionState state;
-    };
-
-    QList<Item> m_items;
 
     bool m_isEmpty = true;
 };
