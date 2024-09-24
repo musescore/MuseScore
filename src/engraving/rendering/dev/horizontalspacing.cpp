@@ -166,12 +166,13 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
     }
 
     // Allocate space to ensure minimum length of "dangling" ties or gliss at start of system
-    if (systemHeaderGap && ns && ns->isChordRestType()) {
+    if ((systemHeaderGap || f->isStartRepeatBarLineType()) && ns && ns->isChordRestType()) {
         for (EngravingItem* e : ns->elist()) {
             if (!e || !e->isChord()) {
                 continue;
             }
-            double headerTieMargin = f->style().styleMM(Sid::headerToLineStartDistance);
+            double headerTieMargin = systemHeaderGap ? f->style().styleMM(Sid::headerToLineStartDistance)
+                                     : f->style().styleMM(Sid::repeatBarlineDotSeparation);
             for (Note* note : toChord(e)->notes()) {
                 bool tieOrGlissBack = note->spannerBack().size() || (note->tieBack() && !note->tieBack()->segmentsEmpty());
                 if (!tieOrGlissBack || note->lineAttachPoints().empty()) {
