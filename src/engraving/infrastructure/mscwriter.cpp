@@ -39,6 +39,24 @@ using namespace muse;
 using namespace muse::io;
 using namespace mu::engraving;
 
+// FileCorruptor
+FileCorruptor::FileCorruptor(const path_t& filePath)
+    : File(filePath)
+{
+}
+
+size_t FileCorruptor::writeData(const uint8_t* data, size_t len)
+{
+    // Ignore the actual data and write only zeros
+    Q_UNUSED(data)
+    uint8_t* zerosData = new uint8_t[len];
+    for (size_t i = 0; i < len; i++) {
+        zerosData[i] = 0;
+    }
+    return File::writeData(zerosData, len);
+}
+
+// MscWriter
 MscWriter::MscWriter(const Params& params)
     : m_params(params)
 {
@@ -266,7 +284,11 @@ Ret MscWriter::ZipFileWriter::open(io::IODevice* device, const path_t& filePath)
 {
     m_device = device;
     if (!m_device) {
-        m_device = new File(filePath);
+        // Create a corrupted file if the filename contains " - CORRUPTED.mscz".
+        // This is only for DEV/QA testing and will not be included in a release.
+        m_device = filePath.toQString().contains(" - CORRUPTED.mscz")
+                   ? new FileCorruptor(filePath)
+                   : new File(filePath);
         m_selfDeviceOwner = true;
     }
 

@@ -34,6 +34,7 @@ enum class Err {
     NoPartsError,
     CorruptionError,
     CorruptionUponOpenningError,
+    CorruptionUponSavingError, // do we need this or can we use CorruptionError instead?
 
     FileOpenError,
     InvalidCloudScoreId,

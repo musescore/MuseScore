@@ -641,8 +641,24 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
                 LOGW() << ret.toString();
             }
         } else {
-            Ret ret = fileSystem()->move(savePath, targetContainerPath, true);
+            Ret ret = checkSavedFileForCorruption(ioMode, savePath, targetMainFileName.toQString());
             if (!ret) {
+                if (ret.code() == (int)Err::CorruptionUponSavingError) {
+                    ret.setData("corruptedAfterMove", false);
+                }
+                return ret;
+            }
+
+            ret = fileSystem()->move(savePath, targetContainerPath, true);
+            if (!ret) {
+                return ret;
+            }
+
+            ret = checkSavedFileForCorruption(ioMode, targetContainerPath, targetMainFileName.toQString());
+            if (!ret) {
+                if (ret.code() == (int)Err::CorruptionUponSavingError) {
+                    ret.setData("corruptedAfterMove", true);
+                }
                 return ret;
             }
         }
@@ -777,6 +793,43 @@ Ret NotationProject::saveSelectionOnScore(const muse::io::path_t& path)
     }
     LOGI() << "success save file: " << path;
     return ret;
+}
+
+Ret NotationProject::checkSavedFileForCorruption(engraving::MscIoMode ioMode, QString path, QString scoreFileName)
+{
+    if (ioMode != MscIoMode::Zip) {
+        return muse::make_ok();
+    }
+
+    // TODO: Execute this on Windows only?
+
+    MscReader::Params params;
+    params.filePath = path;
+    params.mainFileName = scoreFileName;
+    params.mode = MscIoMode::Zip;
+
+    MscReader msczReader(params);
+    Ret ret = msczReader.open();
+    if (!ret) {
+        return Ret(static_cast<int>(Err::CorruptionUponSavingError),
+                  muse::mtrc("project/save", "File “%1” could not be opened. %2")
+                  .arg(path)
+                  .arg(String(ret.toString().c_str()))
+                  .toStdString());
+    }
+
+    // Try to extract the main score file.
+    ByteArray scoreFile = msczReader.readScoreFile();
+    msczReader.close();
+
+    if (scoreFile.empty()) {
+        return Ret(static_cast<int>(Err::CorruptionUponSavingError),
+                  muse::mtrc("project/save", "File “%1” is corrupted or damaged: the score file could not be read.")
+                  .arg(path)
+                  .toStdString());
+    }
+
+    return muse::make_ok();
 }
 
 Ret NotationProject::exportProject(const muse::io::path_t& path, const std::string& suffix)

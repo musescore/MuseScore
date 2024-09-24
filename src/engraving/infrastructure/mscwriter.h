@@ -26,6 +26,7 @@
 #include "types/ret.h"
 #include "io/path.h"
 #include "io/iodevice.h"
+#include "io/file.h"
 #include "mscio.h"
 
 namespace muse {
@@ -34,6 +35,17 @@ class TextStream;
 }
 
 namespace mu::engraving {
+// FileCorruptor: a class that writes only zeros to a file no matter what it is passed
+class FileCorruptor : public muse::io::File
+{
+public:
+    FileCorruptor(const muse::io::path_t& filePath);
+
+protected:
+    size_t writeData(const uint8_t* data, size_t len) override;
+};
+
+// MscWriter
 class MscWriter
 {
 public:

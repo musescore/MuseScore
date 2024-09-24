@@ -930,7 +930,11 @@ bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& filePa
 
     if (!ret) {
         LOGE() << ret.toString();
-        warnScoreCouldnotBeSaved(ret);
+        if (ret.code() == (int)Err::CorruptionUponSavingError) {
+            warnScoreCorruptAfterSave(ret);
+        } else {
+            warnScoreCouldnotBeSaved(ret);
+        }
         return false;
     }
 
@@ -1575,6 +1579,29 @@ void ProjectActionsController::warnScoreCouldnotBeSaved(const Ret& ret)
 void ProjectActionsController::warnScoreCouldnotBeSaved(const std::string& errorText)
 {
     interactive()->warning(muse::trc("project/save", "Your score could not be saved"), errorText);
+}
+
+void ProjectActionsController::warnScoreCorruptAfterSave(const Ret& ret)
+{
+    std::string errMessage = ret.toString();
+
+    std::any corruptedAfterMove = ret.data("corruptedAfterMove");
+    std::string originalFileCorruptedMessage = corruptedAfterMove.has_value() && std::any_cast<bool>(corruptedAfterMove)
+                                               ? "Unfortunately your original file has become corrupt.\n\n"
+                                               : "";
+
+    std::string message = muse::qtrc("project/save",
+                                      "An error occurred while saving your file. "
+                                      "This may be a one-off error. Please retry saving the file in order not to lose your latest changes.\n\n"
+                                      "If it keeps happening, try saving the file to a different location or to MuseScore.com. "
+                                      " You could also try saving the file as an uncompressed folder or XML.\n\n"
+                                      "%1"
+                                      "For help please use the \"Support and bug reports\" forum at https://musescore.org/en/forum\n\n"
+                                      "Error: %2")
+                          .arg(originalFileCorruptedMessage.c_str())
+                          .arg(errMessage.c_str())
+                          .toStdString();
+    interactive()->warning(muse::trc("project/save", "Your score could not be saved"), message);
 }
 
 void ProjectActionsController::revertCorruptedScoreToLastSaved()
