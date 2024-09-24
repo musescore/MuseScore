@@ -136,6 +136,8 @@ Manifest ExtensionsLoader::parseManifest(const ByteArray& data) const
             a.type = ao.contains("type") ? typeFromString(ao.value("type").toStdString()) : m.type;
             a.modal = ao.value("modal", DEFAULT_MODAL).toBool();
             a.title = ao.value("title").toString();
+            std::string icon = ao.value("icon").toStdString();
+            a.icon = ui::IconCode::fromString(icon.c_str());
             a.uiCtx = ao.value("ui_context", uiCtx).toString();
             a.hidden = ao.value("hidden", a.title.isEmpty()).toBool();
             a.path = ao.value("path").toStdString();
@@ -171,6 +173,19 @@ Manifest ExtensionsLoader::parseManifest(const ByteArray& data) const
 
             std::string extActionCode = co.value("action").toStdString();
             c.actionCode = makeActionCode(m.uri, extActionCode);
+
+            auto it = std::find_if(m.actions.begin(), m.actions.end(), [extActionCode](const Action& a) {
+                return a.code == extActionCode;
+            });
+
+            if (it == m.actions.end()) {
+                LOGE() << "not found action: " << extActionCode;
+                continue;
+            }
+
+            if (c.icon != ui::IconCode::Code::NONE) {
+                it->icon = c.icon;
+            }
 
             m.toolBarConfig.controls.push_back(std::move(c));
         }
