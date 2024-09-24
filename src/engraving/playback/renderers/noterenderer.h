@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,23 +20,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_CHORDARTICULATIONSRENDERER_H
-#define MU_ENGRAVING_CHORDARTICULATIONSRENDERER_H
+#pragma once
 
-#include "renderbase.h"
+#include "playback/renderingcontext.h"
 
 namespace mu::engraving {
-class ChordArticulationsRenderer : public RenderBase<ChordArticulationsRenderer>
+class Note;
+class NoteRenderer
 {
 public:
-    static const muse::mpe::ArticulationTypeSet& supportedTypes();
-
-    static void doRender(const EngravingItem* item, const muse::mpe::ArticulationType type, const RenderingContext& ctx,
-                         muse::mpe::PlaybackEventList& result);
+    static void render(const Note* note, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
 
 private:
-    static bool renderChordArticulations(const Chord* chord, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
+    static void doRenderNote(const Note* note, NominalNoteCtx&& noteCtx, muse::mpe::PlaybackEventList& result);
+
+    static NominalNoteCtx buildNominalNoteCtx(const Note* note, const RenderingContext& ctx);
 };
 }
-
-#endif // MU_ENGRAVING_CHORDARTICULATIONSRENDERER_H
