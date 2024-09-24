@@ -2263,6 +2263,9 @@ void Note::setTrack(track_idx_t val)
             seg->setTrack(val);
         }
     }
+    if (m_tieBack) {
+        m_tieBack->setTrack2(val);
+    }
     for (Spanner* s : m_spannerFor) {
         s->setTrack(val);
     }
