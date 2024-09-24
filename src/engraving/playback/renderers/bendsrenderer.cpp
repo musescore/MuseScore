@@ -29,7 +29,6 @@
 
 #include "dom/note.h"
 #include "dom/guitarbend.h"
-#include "dom/tempo.h"
 
 using namespace mu::engraving;
 using namespace muse;
@@ -108,7 +107,7 @@ void BendsRenderer::renderMultibend(const Score* score, const Note* startNote, c
     BendTimeFactorMap bendTimeFactorMap;
 
     while (currNote) {
-        RenderingContext currNoteCtx = buildRenderingContext(score, currNote, startNoteCtx);
+        RenderingContext currNoteCtx = buildRenderingContext(currNote, startNoteCtx);
         appendBendTimeFactors(score, currBend, bendTimeFactorMap);
 
         if (currNote->isGrace()) {
@@ -188,7 +187,7 @@ void BendsRenderer::appendBendTimeFactors(const Score* score, const GuitarBend* 
     timeFactorMap.insert_or_assign(endNoteTime, BendTimeFactors { startFactor, endFactor });
 }
 
-RenderingContext BendsRenderer::buildRenderingContext(const Score* score, const Note* note, const RenderingContext& initialCtx)
+RenderingContext BendsRenderer::buildRenderingContext(const Note* note, const RenderingContext& initialCtx)
 {
     const Chord* chord = note->chord();
 
@@ -200,25 +199,8 @@ RenderingContext BendsRenderer::buildRenderingContext(const Score* score, const 
         }
     }
 
-    int chordPosTicks = chord->tick().ticks();
-    int chordDurationTicks = chord->actualTicks().ticks();
-
-    auto tnd = timestampAndDurationFromStartAndDurationTicks(score, chordPosTicks, chordDurationTicks, initialCtx.positionTickOffset);
-
-    BeatsPerSecond bps = score->tempomap()->tempo(chordPosTicks);
-
-    RenderingContext ctx(tnd.timestamp,
-                         tnd.duration,
-                         initialCtx.nominalDynamicLevel,
-                         chordPosTicks,
-                         initialCtx.positionTickOffset,
-                         chordDurationTicks,
-                         bps,
-                         initialCtx.timeSignatureFraction,
-                         initialCtx.persistentArticulation,
-                         initialCtx.commonArticulations,
-                         initialCtx.profile,
-                         initialCtx.playbackCtx);
+    RenderingContext ctx = engraving::buildRenderingCtx(chord, initialCtx.positionTickOffset,
+                                                        initialCtx.profile, initialCtx.playbackCtx);
 
     if (note->isGrace()) {
         GraceNotesMetaParser::parse(note->chord(), ctx, ctx.commonArticulations);

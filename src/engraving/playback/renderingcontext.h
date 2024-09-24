@@ -92,6 +92,36 @@ struct RenderingContext {
     }
 };
 
+inline RenderingContext buildRenderingCtx(const Chord* chord, const int tickPositionOffset,
+                                          const muse::mpe::ArticulationsProfilePtr profile, const PlaybackContextPtr playbackCtx)
+{
+    int chordPosTick = chord->tick().ticks();
+    int chordDurationTicks = chord->actualTicks().ticks();
+    int chordPosTickWithOffset = chordPosTick + tickPositionOffset;
+
+    const Score* score = chord->score();
+
+    auto chordTnD = timestampAndDurationFromStartAndDurationTicks(score, chordPosTick, chordDurationTicks, tickPositionOffset);
+
+    BeatsPerSecond bps = score->tempomap()->tempo(chordPosTick);
+    TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(chordPosTick).timesig();
+
+    RenderingContext ctx(chordTnD.timestamp,
+                         chordTnD.duration,
+                         playbackCtx->appliableDynamicLevel(chord->track(), chordPosTickWithOffset),
+                         chordPosTick,
+                         tickPositionOffset,
+                         chordDurationTicks,
+                         bps,
+                         timeSignatureFraction,
+                         playbackCtx->persistentArticulationType(chordPosTickWithOffset),
+                         {},
+                         profile,
+                         playbackCtx);
+
+    return ctx;
+}
+
 inline muse::mpe::duration_t noteNominalDuration(const Note* note, const RenderingContext& ctx)
 {
     if (!note->score()) {
