@@ -204,7 +204,6 @@ FocusScope {
                 var isAcceptKey = event.key === Qt.Key_Enter || event.key === Qt.Key_Return
                 var isEscapeKey = event.key === Qt.Key_Escape
                 if (isAcceptKey || isEscapeKey) {
-                    root.focus = false
                     root.textEditingFinished(valueInput.text)
                 }
 
@@ -214,6 +213,10 @@ FocusScope {
 
                 if (isEscapeKey) {
                     root.escaped()
+                }
+
+                if (isAcceptKey || isEscapeKey) {
+                    root.focus = false
                 }
             }
 
