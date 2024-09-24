@@ -19,34 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_PROJECTERRORS_H
-#define MU_PROJECT_PROJECTERRORS_H
+#pragma once
 
-#include "types/ret.h"
+#include "io/file.h"
 
-namespace mu::project {
-enum class Err {
-    Undefined       = int(muse::Ret::Code::Undefined),
-    NoError         = int(muse::Ret::Code::Ok),
-    UnknownError    = int(muse::Ret::Code::ProjectFirst),
-
-    NoProjectError,
-    NoPartsError,
-    CorruptionError,
-    CorruptionUponOpenningError,
-    CorruptionUponSavingError,
-
-    FileOpenError,
-    InvalidCloudScoreId,
-
-    UnsupportedUrl,
-    MalformedOpenScoreUrl,
-};
-
-inline muse::Ret make_ret(Err e)
+namespace muse::io {
+class AllZerosFileCorruptor : public File
 {
-    return muse::Ret(static_cast<int>(e));
-}
-}
+public:
+    AllZerosFileCorruptor(const path_t& filePath);
 
-#endif // MU_PROJECT_PROJECTERRORS_H
+private:
+    size_t writeData(const uint8_t* data, size_t len) override;
+};
+}

@@ -28,6 +28,7 @@
 #include "global/io/buffer.h"
 #include "global/io/file.h"
 #include "global/io/ioretcodes.h"
+#include "global/io/devtools/allzerosfilecorruptor.h"
 
 #include "engraving/dom/undo.h"
 
@@ -504,7 +505,7 @@ Ret NotationProject::save(const muse::io::path_t& path, SaveMode saveMode)
             suffix = engraving::MSCX;
         }
 
-        return saveScore(path, suffix, false /*generateBackup*/, false /*createThumbnail*/);
+        return saveScore(path, suffix, false /*generateBackup*/, false /*createThumbnail*/, true /*isAutosave*/);
     }
 
     return make_ret(notation::Err::UnknownError);
@@ -550,7 +551,8 @@ Ret NotationProject::writeToDevice(QIODevice* device)
     return ret;
 }
 
-Ret NotationProject::saveScore(const muse::io::path_t& path, const std::string& fileSuffix, bool generateBackup, bool createThumbnail)
+Ret NotationProject::saveScore(const muse::io::path_t& path, const std::string& fileSuffix,
+                               bool generateBackup, bool createThumbnail, bool isAutosave)
 {
     if (!isMuseScoreFile(fileSuffix) && !fileSuffix.empty()) {
         return exportProject(path, fileSuffix);
@@ -558,10 +560,11 @@ Ret NotationProject::saveScore(const muse::io::path_t& path, const std::string& 
 
     MscIoMode ioMode = mscIoModeBySuffix(fileSuffix);
 
-    return doSave(path, ioMode, generateBackup, createThumbnail);
+    return doSave(path, ioMode, generateBackup, createThumbnail, isAutosave);
 }
 
-Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode ioMode, bool generateBackup, bool createThumbnail)
+Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode ioMode,
+                            bool generateBackup, bool createThumbnail, bool isAutosave)
 {
     TRACEFUNC;
 
@@ -596,10 +599,21 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
         IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
             return make_ret(Ret::Code::InternalError);
         }
+        if (ioMode == MscIoMode::Zip
+            && !isAutosave
+            && globalConfiguration()->devModeEnabled()
+            && savePath.contains(" - ALL_ZEROS_CORRUPTED.mscz")) {
+            // Create a corrupted file so devs/qa can simulate a saved corrupted file.
+            params.device = new AllZerosFileCorruptor(savePath);
+        }
 
         MscWriter msczWriter(params);
         Ret ret = writeProject(msczWriter, false /*onlySelection*/, createThumbnail);
         msczWriter.close();
+        if (params.device) {
+            delete params.device;
+            params.device = nullptr;
+        }
 
         if (!ret) {
             LOGE() << "failed write project to buffer: " << ret.toString();
@@ -645,10 +659,29 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
                 LOGW() << ret.toString();
             }
         } else {
-            Ret ret = fileSystem()->move(savePath, targetContainerPath, true);
+            Ret ret = muse::make_ok();
+
+            ret = fileSystem()->copy(savePath, targetContainerPath, true);
             if (!ret) {
                 return ret;
             }
+
+            if (!isAutosave) {
+                ret = checkSavedFileForCorruption(ioMode, targetContainerPath, targetMainFileName.toQString());
+                if (!ret) {
+                    if (ret.code() == (int)Err::CorruptionUponSavingError) {
+                        // Validate the temporary "saving" file too.
+                        Ret ret2 = checkSavedFileForCorruption(ioMode, savePath, targetMainFileName.toQString());
+                        if (!ret2) {
+                            return ret2;
+                        }
+                    }
+                    return ret;
+                }
+            }
+
+            // Remove the temp save file (not problematic if fails)
+            fileSystem()->remove(savePath);
         }
     }
 
@@ -781,6 +814,43 @@ Ret NotationProject::saveSelectionOnScore(const muse::io::path_t& path)
     }
     LOGI() << "success save file: " << path;
     return ret;
+}
+
+Ret NotationProject::checkSavedFileForCorruption(MscIoMode ioMode, const muse::io::path_t& path,
+                                                 const muse::io::path_t& scoreFileName)
+{
+    TRACEFUNC;
+
+    if (ioMode != MscIoMode::Zip) {
+        return muse::make_ok();
+    }
+
+    MscReader::Params params;
+    params.filePath = path;
+    params.mainFileName = scoreFileName.toString();
+    params.mode = MscIoMode::Zip;
+
+    MscReader msczReader(params);
+    Ret ret = msczReader.open();
+    if (!ret) {
+        return Ret(static_cast<int>(Err::CorruptionUponSavingError),
+                   muse::mtrc("project/save", "File “%1” could not be opened for validation. %2")
+                   .arg(path.toString(), String(ret.toString().c_str()))
+                   .toStdString());
+    }
+
+    // Try to extract the main score file.
+    ByteArray scoreFile = msczReader.readScoreFile();
+    msczReader.close();
+
+    if (scoreFile.empty()) {
+        return Ret(static_cast<int>(Err::CorruptionUponSavingError),
+                   muse::mtrc("project/save", "“%1” is corrupted or damaged.")
+                   .arg(path.toString())
+                   .toStdString());
+    }
+
+    return muse::make_ok();
 }
 
 Ret NotationProject::exportProject(const muse::io::path_t& path, const std::string& suffix)
