@@ -2231,11 +2231,10 @@ void InsertRemoveMeasures::insertMeasures()
     score->setLayoutAll();
 
     // move subsequent StaffTypeChanges
-    if (moveStc) {
+    Fraction tickStart = fm->tick();
+    Fraction tickEnd = lm->endTick();
+    if (moveStc && tickEnd > tickStart) {
         for (Staff* staff : score->staves()) {
-            Fraction tickStart = fm->tick();
-            Fraction tickEnd = lm->endTick();
-
             // loop backwards until the insert point
             auto stRange = staff->staffTypeRange(score->lastMeasure()->tick());
             int moveTick = stRange.first;
