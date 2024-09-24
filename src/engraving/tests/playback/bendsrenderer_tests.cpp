@@ -28,6 +28,7 @@
 
 #include "dom/guitarbend.h"
 #include "dom/tempo.h"
+#include "dom/part.h"
 
 #include "playback/renderers/bendsrenderer.h"
 
@@ -50,6 +51,9 @@ protected:
         ASSERT_TRUE(m_score);
         ASSERT_EQ(m_score->parts().size(), 1);
         ASSERT_EQ(m_score->nstaves(), 2);
+
+        m_playbackCtx = std::make_shared<PlaybackContext>();
+        m_playbackCtx->update(m_score->parts().front()->id(), m_score);
 
         MScore::useRead302InTestMode = useRead302;
     }
@@ -88,37 +92,8 @@ protected:
         return pattern;
     }
 
-    RenderingContext buildCtx(const Chord* chord, ArticulationsProfilePtr profile,
-                              ArticulationType persistentArticulationType = ArticulationType::Standard)
-    {
-        int chordPosTick = chord->tick().ticks();
-        int chordDurationTicks = chord->actualTicks().ticks();
-
-        auto tnd = timestampAndDurationFromStartAndDurationTicks(m_score, chordPosTick, chordDurationTicks, 0);
-
-        BeatsPerSecond bps = m_score->tempomap()->tempo(chordPosTick);
-        TimeSigFrac timeSignatureFraction = m_score->sigmap()->timesig(chordPosTick).timesig();
-
-        PlaybackContextPtr dummyCtx = std::make_shared<PlaybackContext>();
-
-        RenderingContext ctx(tnd.timestamp,
-                             tnd.duration,
-                             5000,
-                             chordPosTick,
-                             0,
-                             chordDurationTicks,
-                             bps,
-                             timeSignatureFraction,
-                             persistentArticulationType,
-                             ArticulationMap(),
-                             profile,
-                             dummyCtx);
-
-        return ctx;
-    }
-
-private:
     Score* m_score = nullptr;
+    PlaybackContextPtr m_playbackCtx = nullptr;
 };
 
 /*!
@@ -138,7 +113,7 @@ TEST_F(Engraving_BendsRendererTests, Multibend)
     profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::PreAppoggiatura, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::Distortion, buildTestArticulationPattern());
-    RenderingContext startChordCtx = buildCtx(startChord, profile, ArticulationType::Distortion);
+    RenderingContext startChordCtx = buildRenderingCtx(startChord, 0, profile, m_playbackCtx);
 
     // [THEN] BendsRenderer can render the multibend articulation
     EXPECT_TRUE(BendsRenderer::isAbleToRender(ArticulationType::Multibend));
@@ -178,7 +153,7 @@ TEST_F(Engraving_BendsRendererTests, Multibend)
         ASSERT_TRUE(note);
 
         const Chord* chord = note->chord();
-        RenderingContext ctx = buildCtx(chord, profile);
+        RenderingContext ctx = buildRenderingCtx(chord, 0, profile, m_playbackCtx);
 
         events.clear();
         BendsRenderer::render(chord, ArticulationType::Multibend, ctx, events);
@@ -205,7 +180,7 @@ TEST_F(Engraving_BendsRendererTests, MultipleBendsOnOneChord)
     ArticulationsProfilePtr profile = std::make_shared<ArticulationsProfile>();
     profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
-    RenderingContext ctx = buildCtx(startChord, profile);
+    RenderingContext ctx = buildRenderingCtx(startChord, 0, profile, m_playbackCtx);
 
     // [WHEN] Render the chord
     PlaybackEventList events;
@@ -249,7 +224,7 @@ TEST_F(Engraving_BendsRendererTests, PreBend)
     ArticulationsProfilePtr profile = std::make_shared<ArticulationsProfile>();
     profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
-    RenderingContext ctx = buildCtx(chord, profile);
+    RenderingContext ctx = buildRenderingCtx(chord, 0, profile, m_playbackCtx);
 
     // [WHEN] Render the chord
     PlaybackEventList events;
@@ -282,7 +257,7 @@ TEST_F(Engraving_BendsRendererTests, SlightBend)
     ArticulationsProfilePtr profile = std::make_shared<ArticulationsProfile>();
     profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
-    RenderingContext ctx = buildCtx(chord, profile);
+    RenderingContext ctx = buildRenderingCtx(chord, 0, profile, m_playbackCtx);
 
     // [WHEN] Render the chord
     PlaybackEventList events;
@@ -318,7 +293,7 @@ TEST_F(Engraving_BendsRendererTests, Multibend_CustomTimeOffsets)
     profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::PreAppoggiatura, buildTestArticulationPattern());
-    RenderingContext ctx = buildCtx(startChord, profile);
+    RenderingContext ctx = buildRenderingCtx(startChord, 0, profile, m_playbackCtx);
 
     // [WHEN] Render the chord
     PlaybackEventList events;

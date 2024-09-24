@@ -52,7 +52,7 @@ private:
 
     static void appendBendTimeFactors(const Score* score, const GuitarBend* bend, BendTimeFactorMap& timeFactorMap);
 
-    static RenderingContext buildRenderingContext(const Score* score, const Note* note, const RenderingContext& initialCtx);
+    static RenderingContext buildRenderingContext(const Note* note, const RenderingContext& initialCtx);
     static muse::mpe::NoteEvent buildSlightNoteEvent(const Note* note, const RenderingContext& ctx);
     static muse::mpe::NoteEvent buildBendEvent(const Note* startNote, const RenderingContext& startNoteCtx,
                                                const muse::mpe::PlaybackEventList& bendNoteEvents, const BendTimeFactorMap& timeFactorMap);
