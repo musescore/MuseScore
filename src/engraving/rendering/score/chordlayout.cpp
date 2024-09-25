@@ -1274,16 +1274,11 @@ bool ChordLayout::isChordPosBelowBeam(Chord* item, Beam* beam)
 
     Note* baseNote = item->up() ? item->downNote() : item->upNote();
     double noteY = baseNote->pagePos().y();
-    double noteX = item->stemPosX() + item->pagePos().x();
 
-    PointF base = beam->pagePos();
-    const BeamFragment* fragment = beam->beamFragments().front();
-    double startY = fragment->py1[beam->directionIdx()] + base.y();
-    double endY = fragment->py2[beam->directionIdx()] + base.y();
-    double startX = beam->startAnchor().x();
-    double endX = beam->endAnchor().x();
-    PointF startAnchor(startX, startY);
-    PointF endAnchor(endX, endY);
+    ChordRest* startCR = beam->elements().front();
+    ChordRest* endCR = beam->elements().back();
+    PointF startAnchor = BeamLayout::chordBeamAnchor(beam, startCR, ChordBeamAnchorType::Start);
+    PointF endAnchor = BeamLayout::chordBeamAnchor(beam, endCR, ChordBeamAnchorType::End);
 
     if (item == beam->elements().front()) {
         return noteY > startAnchor.y();
@@ -1293,7 +1288,11 @@ bool ChordLayout::isChordPosBelowBeam(Chord* item, Beam* beam)
         return noteY > endAnchor.y();
     }
 
-    double proportionAlongX = muse::RealIsEqual(startX, endX) ? 0.0 : (noteX - startAnchor.x()) / (endAnchor.x() - startAnchor.x());
+    PointF noteAnchor = BeamLayout::chordBeamAnchor(beam, item, ChordBeamAnchorType::Middle);
+    double noteX = noteAnchor.x();
+
+    double proportionAlongX
+        = muse::RealIsEqual(startAnchor.x(), endAnchor.x()) ? 0.0 : (noteX - startAnchor.x()) / (endAnchor.x() - startAnchor.x());
     double desiredY = proportionAlongX * (endAnchor.y() - startAnchor.y()) + startAnchor.y();
     return noteY > desiredY;
 }
