@@ -259,7 +259,7 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
 
     if (m_configuration->shouldMeasureInputLag()) {
         requiredSpec.callback = [this](void* /*userdata*/, uint8_t* stream, int byteCount) {
-            auto samplesPerChannel = byteCount / (2 * sizeof(float));
+            auto samplesPerChannel = byteCount / (2 * sizeof(float));  // 2 == m_configuration->audioChannelsCount()
             float* dest = reinterpret_cast<float*>(stream);
             m_audioBuffer->pop(dest, samplesPerChannel);
             measureInputLag(dest, samplesPerChannel * m_audioBuffer->audioChannelCount());
@@ -298,7 +298,7 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
 
         // Setup audio engine
         m_audioEngine->init(m_audioBuffer, consts);
-        m_audioEngine->setAudioChannelsCount(activeSpec.channels);
+        m_audioEngine->setAudioChannelsCount(m_configuration->audioChannelsCount());
         m_audioEngine->setSampleRate(activeSpec.sampleRate);
         m_audioEngine->setReadBufferSize(activeSpec.samples);
 

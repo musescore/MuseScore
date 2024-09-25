@@ -100,7 +100,7 @@ void AudioOutputDeviceController::onOutputDeviceChanged()
     IAudioDriver::Spec activeSpec = audioDriver()->activeSpec();
 
     async::Async::call(this, [this, activeSpec]() {
-        audioEngine()->setAudioChannelsCount(activeSpec.channels);
+        // TODO: audioEngine()->setAudioChannelsCount(activeSpec.channels);
         audioEngine()->setSampleRate(activeSpec.sampleRate);
         audioEngine()->setReadBufferSize(activeSpec.samples);
     }, AudioThread::ID);
