@@ -25,6 +25,7 @@
 
 #include "mpe/tests/utils/articulationutils.h"
 
+#include "dom/note.h"
 #include "dom/factory.h"
 #include "dom/measure.h"
 #include "dom/part.h"
@@ -2290,6 +2291,83 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo)
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
         }
     }
+}
+
+/**
+ * @brief PlaybackEventsRendererTests_Single_Note_Tremolo_OnTiedNote
+ * @details In this case we're gonna render a simple piece of score with 3 measures,
+ *          which starts with an A4 half note tied to another A4 half note marked by the 32nd Tremolo articulation
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo_OnTiedNote)
+{
+    // [GIVEN] Simple piece of score (violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "single_note_tremolo_on_tied_note/single_note_tremolo_on_tied_note.mscx");
+    ASSERT_TRUE(score);
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
+    m_defaultProfile->setPattern(ArticulationType::Tremolo32nd, m_dummyPattern);
+
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+
+    // [GIVEN] Chord of the 1st tied note (without tremolo)
+    const Chord* chord = findChord(score, 1920);
+    ASSERT_TRUE(chord);
+    ASSERT_EQ(chord->notes().size(), 1);
+
+    const Note* firstTiedNote = chord->notes().front();
+    ASSERT_TRUE(firstTiedNote->tieFor() && !firstTiedNote->tieBack());
+
+    // [WHEN] Request to render the 1st chord
+    PlaybackEventsMap result;
+    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
+
+    // [THEN] Note event has normal duration and standard articulation (no tremolo)
+    ASSERT_EQ(result.size(), 1);
+    ASSERT_EQ(result.begin()->second.size(), 1);
+    mpe::NoteEvent noteEvent = std::get<mpe::NoteEvent>(result.begin()->second.at(0));
+    EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+    EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
+    EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::A, 4));
+    EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, HALF_NOTE_DURATION);
+
+    // [GIVEN] Chord of the 2nd tied note (with tremolo)
+    chord = findChord(score, 2880);
+    ASSERT_TRUE(chord);
+    ASSERT_EQ(chord->notes().size(), 1);
+
+    const Note* lastTiedNote = chord->notes().front();
+    ASSERT_TRUE(lastTiedNote->tieBack() && !lastTiedNote->tieFor());
+
+    // [WHEN] Request to render the 2nd chord
+    result.clear();
+    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
+
+    constexpr int expectedSubNotesCount = 16;
+    constexpr mpe::duration_t expectedDuration = HALF_NOTE_DURATION / expectedSubNotesCount;
+
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
+
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
+
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Tremolo32nd));
+
+            // [THEN] We expect that each sub-note has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
+
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::A, 4));
+        }
+    }
+
+    delete score;
 }
 
 /**

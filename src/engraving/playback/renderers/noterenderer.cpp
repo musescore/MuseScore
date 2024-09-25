@@ -28,6 +28,7 @@
 
 #include "glissandosrenderer.h"
 
+#include "playback/metaparsers/chordarticulationsparser.h"
 #include "playback/metaparsers/notearticulationsparser.h"
 
 using namespace mu::engraving;
@@ -36,51 +37,23 @@ using namespace muse::mpe;
 
 void NoteRenderer::render(const Note* note, const RenderingContext& ctx, mpe::PlaybackEventList& result)
 {
+    IF_ASSERT_FAILED(note) {
+        return;
+    }
+
     NominalNoteCtx noteCtx = buildNominalNoteCtx(note, ctx);
 
-    if (isNotePlayable(note, noteCtx.chordCtx.commonArticulations)) {
-        doRenderNote(note, std::move(noteCtx), result);
-    }
-}
-
-void NoteRenderer::doRenderNote(const Note* note, NominalNoteCtx&& noteCtx, mpe::PlaybackEventList& result)
-{
-    const Chord* chord = note->chord();
-    IF_ASSERT_FAILED(chord) {
+    if (!isNotePlayable(note, noteCtx.chordCtx.commonArticulations)) {
         return;
     }
 
-    Swing::ChordDurationAdjustment swingDurationAdjustment;
-
-    if (!chord->tuplet()) {
-        SwingParameters swing = chord->staff()->swing(chord->tick());
-
-        if (swing.isOn()) {
-            swingDurationAdjustment = Swing::applySwing(chord, swing);
+    if (const Tie* tieFor = note->tieFor()) {
+        if (tieFor->playSpanner() && !tieFor->isLaissezVib()) {
+            renderTiedNotes(note, noteCtx);
         }
     }
 
-    const RenderingContext& ctx = noteCtx.chordCtx;
-
-    auto applySwingToNoteCtx = [&swingDurationAdjustment, &ctx](NominalNoteCtx& noteCtx) {
-        if (swingDurationAdjustment.isNull()) {
-            return;
-        }
-
-        //! NOTE: Swing must be applied to the "raw" note duration, but not to the additional duration (e.g, from a tied note)
-        duration_t additionalDuration = noteCtx.duration - ctx.nominalDuration;
-        noteCtx.timestamp = noteCtx.timestamp + ctx.nominalDuration * swingDurationAdjustment.remainingDurationMultiplier;
-        noteCtx.duration = ctx.nominalDuration * swingDurationAdjustment.durationMultiplier + additionalDuration;
-    };
-
-    if (note->tieFor()) {
-        noteCtx.duration = tiedNotesTotalDuration(note->score(), note, noteCtx.duration, ctx.positionTickOffset);
-        applySwingToNoteCtx(noteCtx);
-        result.emplace_back(buildNoteEvent(std::move(noteCtx)));
-        return;
-    }
-
-    applySwingToNoteCtx(noteCtx);
+    applySwingIfNeed(note, noteCtx);
 
     if (noteCtx.chordCtx.commonArticulations.contains(ArticulationType::DiscreteGlissando)) {
         GlissandosRenderer::render(note, ArticulationType::DiscreteGlissando, noteCtx.chordCtx, result);
@@ -93,6 +66,92 @@ void NoteRenderer::doRenderNote(const Note* note, NominalNoteCtx&& noteCtx, mpe:
     }
 
     result.emplace_back(buildNoteEvent(std::move(noteCtx)));
+}
+
+void NoteRenderer::renderTiedNotes(const Note* firstNote, NominalNoteCtx& firstNoteCtx)
+{
+    std::unordered_set<const Note*> renderedNotes { firstNote };
+
+    const RenderingContext& firstChordCtx = firstNoteCtx.chordCtx;
+    const Tie* currTie = firstNote->tieFor();
+
+    while (currTie && currTie->playSpanner()) {
+        const Note* currNote = currTie->endNote();
+        if (!currNote || !currNote->play()) {
+            break;
+        }
+
+        if (muse::contains(renderedNotes, currNote)) {
+            break; // prevents infinite loop
+        }
+
+        const Chord* chord = currNote->chord();
+        if (!chord) {
+            break;
+        }
+
+        RenderingContext currChordCtx = buildRenderingCtx(chord, firstChordCtx.positionTickOffset,
+                                                          firstChordCtx.profile, firstChordCtx.playbackCtx);
+        ChordArticulationsParser::buildChordArticulationMap(chord, currChordCtx, currChordCtx.commonArticulations);
+
+        NominalNoteCtx currNoteCtx = buildNominalNoteCtx(currNote, currChordCtx);
+
+        if (isNotePlayable(currNote, currNoteCtx.chordCtx.commonArticulations)) {
+            break;
+        }
+
+        firstNoteCtx.duration += currNoteCtx.duration;
+        firstNoteCtx.chordCtx.commonArticulations.insert(currNoteCtx.chordCtx.commonArticulations.begin(),
+                                                         currNoteCtx.chordCtx.commonArticulations.end());
+
+        currTie = currNote->tieFor();
+        renderedNotes.insert(currNote);
+    }
+
+    if (firstNoteCtx.chordCtx.commonArticulations.size() > 1) {
+        firstNoteCtx.chordCtx.commonArticulations.erase(mpe::ArticulationType::Standard);
+    }
+
+    updateArticulationBoundaries(firstNoteCtx.timestamp, firstNoteCtx.duration, firstNoteCtx.chordCtx.commonArticulations);
+}
+
+void NoteRenderer::updateArticulationBoundaries(const timestamp_t noteTimestamp, const duration_t noteDuration,
+                                                ArticulationMap& articulations)
+{
+    const timestamp_t noteTimestampTo = noteTimestamp + noteDuration;
+    IF_ASSERT_FAILED(noteTimestampTo > 0) {
+        return;
+    }
+
+    for (const auto& pair : articulations) {
+        const ArticulationAppliedData& articulation = pair.second;
+
+        const duration_percentage_t occupiedFrom = mpe::occupiedPercentage(articulation.meta.timestamp,
+                                                                           noteTimestampTo);
+        const duration_percentage_t occupiedTo = mpe::occupiedPercentage(articulation.meta.timestamp + articulation.meta.overallDuration,
+                                                                         noteTimestampTo);
+
+        articulations.updateOccupiedRange(pair.first, occupiedFrom, occupiedTo);
+    }
+}
+
+void NoteRenderer::applySwingIfNeed(const Note* note, NominalNoteCtx& noteCtx)
+{
+    const Chord* chord = note->chord();
+    if (!chord || chord->tuplet()) {
+        return;
+    }
+
+    const SwingParameters swing = chord->staff()->swing(chord->tick());
+    if (!swing.isOn()) {
+        return;
+    }
+
+    //! NOTE: Swing must be applied to the "raw" note duration, but not to the additional duration (e.g, from a tied note)
+    const Swing::ChordDurationAdjustment swingDurationAdjustment = Swing::applySwing(chord, swing);
+    const duration_t additionalDuration = noteCtx.duration - noteCtx.chordCtx.nominalDuration;
+    noteCtx.timestamp = noteCtx.timestamp + noteCtx.chordCtx.nominalDuration * swingDurationAdjustment.remainingDurationMultiplier;
+    noteCtx.duration = noteCtx.chordCtx.nominalDuration * swingDurationAdjustment.durationMultiplier + additionalDuration;
 }
 
 NominalNoteCtx NoteRenderer::buildNominalNoteCtx(const Note* note, const RenderingContext& ctx)
