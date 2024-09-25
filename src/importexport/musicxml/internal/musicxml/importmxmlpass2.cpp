@@ -2831,7 +2831,7 @@ void MusicXMLParserPass2::measureLayout(Measure* measure)
 {
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "measure-distance") {
-            const Spatium val(m_e.readText().toDouble() / 10.0);
+            const Spatium val(m_e.readDouble() / 10.0);
             if (!measure->prev()->isHBox()) {
                 MeasureBase* gap = m_score->insertBox(ElementType::HBOX, measure);
                 toHBox(gap)->setBoxWidth(val);
@@ -2955,7 +2955,7 @@ void MusicXMLParserPass2::staffDetails(const String& partId, Measure* measure)
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "staff-lines") {
             // save staff lines for later
-            staffLines = m_e.readText().toInt();
+            staffLines = m_e.readInt();
             // for a TAB staff also resize the string table and init with zeroes
             if (t) {
                 if (0 < staffLines) {
@@ -2967,7 +2967,7 @@ void MusicXMLParserPass2::staffDetails(const String& partId, Measure* measure)
         } else if (m_e.name() == "staff-tuning") {
             staffTuning(t);
         } else if (m_e.name() == "staff-size") {
-            const double val = m_e.readText().toDouble() / 100;
+            const double val = m_e.readDouble() / 100;
             m_score->staff(staffIdx)->setProperty(Pid::MAG, val);
         } else {
             skipLogCurrElem();
@@ -3020,9 +3020,9 @@ void MusicXMLParserPass2::staffTuning(StringData* t)
     int octave = 0;
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "tuning-alter") {
-            alter = m_e.readText().toInt();
+            alter = m_e.readInt();
         } else if (m_e.name() == "tuning-octave") {
-            octave = m_e.readText().toInt();
+            octave = m_e.readInt();
         } else if (m_e.name() == "tuning-step") {
             String strStep = m_e.readText();
             int pos = static_cast<int>(String(u"CDEFGAB").indexOf(strStep));
@@ -3078,7 +3078,7 @@ void MusicXMLParserPass2::measureStyle(Measure* measure)
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "multiple-rest") {
-            int multipleRest = m_e.readText().toInt();
+            int multipleRest = m_e.readInt();
             if (multipleRest > 1) {
                 m_multiMeasureRestCount = multipleRest;
                 m_score->style().set(Sid::createMultiMeasureRests, true);
@@ -3090,7 +3090,7 @@ void MusicXMLParserPass2::measureStyle(Measure* measure)
             String startStop = m_e.attribute("type");
             // note: possible "slashes" attribute is either redundant with numMeasures or not supported by MuseScore, so ignored either way
             if (startStop == u"start") {
-                int numMeasures = m_e.readText().toInt();
+                int numMeasures = m_e.readInt();
                 for (int i = startStaff; i <= endStaff; i++) {
                     m_measureRepeatNumMeasures[i] = numMeasures;
                     m_measureRepeatCount[i] = numMeasures;   // measure repeat(s) haven't actually started yet in current measure, so this is a lie,
@@ -3234,7 +3234,7 @@ void MusicXMLParserDirection::direction(const String& partId,
         if (m_e.name() == "direction-type") {
             directionType(starts, stops);
         } else if (m_e.name() == "offset") {
-            m_offset = m_pass1.calcTicks(m_e.readText().toInt(), m_pass2.divs(), &m_e);
+            m_offset = m_pass1.calcTicks(m_e.readInt(), m_pass2.divs(), &m_e);
             preventNegativeTick(tick, m_offset, m_logger);
         } else if (m_e.name() == "sound") {
             sound();
@@ -5596,7 +5596,7 @@ void MusicXMLParserPass2::key(const String& partId, Measure* measure, const Frac
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "fifths") {
-            Key tKey = Key(m_e.readText().toInt());
+            Key tKey = Key(m_e.readInt());
             Key cKey = tKey;
             Interval v = m_pass1.getPart(partId)->instrument()->transpose();
             if (!v.isZero() && !m_score->style().styleB(Sid::concertPitch)) {
@@ -5689,9 +5689,9 @@ void MusicXMLParserPass2::clef(const String& partId, Measure* measure, const Fra
         if (m_e.name() == "sign") {
             c = m_e.readText();
         } else if (m_e.name() == "line") {
-            line = m_e.readText().toInt();
+            line = m_e.readInt();
         } else if (m_e.name() == "clef-octave-change") {
-            i = m_e.readText().toInt();
+            i = m_e.readInt();
             if (i && !(c == "F" || c == "G" || c == "C")) {
                 LOGD("clef-octave-change only implemented for F and G key");          // TODO
             }
@@ -5925,7 +5925,7 @@ void MusicXMLParserPass2::time(const String& partId, Measure* measure, const Fra
 
 void MusicXMLParserPass2::divisions()
 {
-    m_divs = m_e.readText().toInt();
+    m_divs = m_e.readInt();
     if (!(m_divs > 0)) {
         m_logger->logError(u"illegal divisions", &m_e);
     }
@@ -7196,14 +7196,14 @@ FretDiagram* MusicXMLParserPass2::frame()
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "first-fret") {
             bool ok {};
-            int val = m_e.readText().toInt(&ok);
+            int val = m_e.readInt(&ok);
             if (ok && val > 0) {
                 fd->setFretOffset(val - 1);
             } else {
                 m_logger->logError(String(u"FretDiagram::readMusicXML: illegal first-fret %1").arg(val), &m_e);
             }
         } else if (m_e.name() == "frame-frets") {
-            int val = m_e.readText().toInt();
+            int val = m_e.readInt();
             if (val > 0) {
                 fd->setProperty(Pid::FRET_FRETS, val);
                 fd->setPropertyFlags(Pid::FRET_FRETS, PropertyFlags::UNSTYLED);
@@ -7216,9 +7216,9 @@ FretDiagram* MusicXMLParserPass2::frame()
             int actualString = -1;
             while (m_e.readNextStartElement()) {
                 if (m_e.name() == "fret") {
-                    fret = m_e.readText().toInt();
+                    fret = m_e.readInt();
                 } else if (m_e.name() == "string") {
-                    string = m_e.readText().toInt();
+                    string = m_e.readInt();
                     actualString = fd->strings() - string;
                 } else if (m_e.name() == "barre") {
                     // Keep barres to be added later
@@ -7250,7 +7250,7 @@ FretDiagram* MusicXMLParserPass2::frame()
                 m_logger->logError(String(u"FretDiagram::readMusicXML: illegal frame-note string %1").arg(string), &m_e);
             }
         } else if (m_e.name() == "frame-strings") {
-            int val = m_e.readText().toInt();
+            int val = m_e.readInt();
             if (val > 0) {
                 fd->setStrings(val);
                 for (int i = 0; i < val; ++i) {
@@ -7326,7 +7326,7 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
                 } else if (m_e.name() == "root-alter") {
                     // attributes: print-object, print-style
                     //             location (left-right)
-                    alter = m_e.readText().toInt();
+                    alter = m_e.readInt();
                 } else {
                     skipLogCurrElem();
                 }
@@ -7368,7 +7368,7 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
                 } else if (m_e.name() == "bass-alter") {
                     // attributes: print-object, print-style
                     //             location (left-right)
-                    alter = m_e.readText().toInt();
+                    alter = m_e.readInt();
                 } else {
                     skipLogCurrElem();
                 }
@@ -7380,9 +7380,9 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
             String degreeType;
             while (m_e.readNextStartElement()) {
                 if (m_e.name() == "degree-value") {
-                    degreeValue = m_e.readText().toInt();
+                    degreeValue = m_e.readInt();
                 } else if (m_e.name() == "degree-alter") {
-                    degreeAlter = m_e.readText().toInt();
+                    degreeAlter = m_e.readInt();
                 } else if (m_e.name() == "degree-type") {
                     degreeType = m_e.readText();
                 } else {
@@ -7408,7 +7408,7 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
         } else if (m_e.name() == "level") {
             skipLogCurrElem();
         } else if (m_e.name() == "offset") {
-            offset = m_pass1.calcTicks(m_e.readText().toInt(), m_divs, &m_e);
+            offset = m_pass1.calcTicks(m_e.readInt(), m_divs, &m_e);
             preventNegativeTick(sTime, offset, m_logger);
         } else if (m_e.name() == "staff") {
             size_t nstaves = m_pass1.getPart(partId)->nstaves();
@@ -7983,7 +7983,7 @@ void MusicXMLParserNotations::ornaments()
         } else if (m_e.name() == "tremolo") {
             m_hasTremolo = true;
             m_tremoloType = m_e.attribute("type");
-            m_tremoloNr = m_e.readText().toInt();
+            m_tremoloNr = m_e.readInt();
             m_tremoloSmufl = m_e.attribute("smufl");
         } else if (m_e.name() == "inverted-mordent"
                    || m_e.name() == "mordent") {
