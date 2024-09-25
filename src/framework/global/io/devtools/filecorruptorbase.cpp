@@ -19,34 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_PROJECTERRORS_H
-#define MU_PROJECT_PROJECTERRORS_H
+#include "filecorruptorbase.h"
 
-#include "types/ret.h"
+using namespace muse::io;
 
-namespace mu::project {
-enum class Err {
-    Undefined       = int(muse::Ret::Code::Undefined),
-    NoError         = int(muse::Ret::Code::Ok),
-    UnknownError    = int(muse::Ret::Code::ProjectFirst),
-
-    NoProjectError,
-    NoPartsError,
-    CorruptionError,
-    CorruptionUponOpenningError,
-    CorruptionUponSavingError,
-
-    FileOpenError,
-    InvalidCloudScoreId,
-
-    UnsupportedUrl,
-    MalformedOpenScoreUrl,
-};
-
-inline muse::Ret make_ret(Err e)
+FileCorruptorBase::FileCorruptorBase(const path_t& filePath)
+    : File(filePath)
 {
-    return muse::Ret(static_cast<int>(e));
-}
 }
 
-#endif // MU_PROJECT_PROJECTERRORS_H
+size_t FileCorruptorBase::writeData(const uint8_t* data, size_t len)
+{
+    // Ignore the actual data and write something else so as to corrupt the file
+    Q_UNUSED(data);
+    uint8_t* corruptData = new uint8_t[len];
+    fillCorruptData(corruptData, len);
+    return File::writeData(corruptData, len);
+}
+

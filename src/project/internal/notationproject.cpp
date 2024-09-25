@@ -28,6 +28,7 @@
 #include "global/io/buffer.h"
 #include "global/io/file.h"
 #include "global/io/ioretcodes.h"
+#include "global/io/devtools/allzerosfilecorruptor.h"
 
 #include "engraving/dom/undo.h"
 
@@ -592,10 +593,21 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
         IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
             return make_ret(Ret::Code::InternalError);
         }
+        if (ioMode == MscIoMode::Zip
+            && globalConfiguration()->devModeEnabled()
+            && savePath.contains(" - CORRUPTED.mscz")
+            && !savePath.contains("autosave")) {
+            // Create a corrupted file so devs/qa can simulate a saved corrupted file.
+            params.device = new AllZerosFileCorruptor(savePath);
+        }
 
         MscWriter msczWriter(params);
         Ret ret = writeProject(msczWriter, false /*onlySelection*/, createThumbnail);
         msczWriter.close();
+        if (params.device) {
+            delete params.device;
+            params.device = nullptr;
+        }
 
         if (!ret) {
             LOGE() << "failed write project to buffer: " << ret.toString();
@@ -797,11 +809,11 @@ Ret NotationProject::saveSelectionOnScore(const muse::io::path_t& path)
 
 Ret NotationProject::checkSavedFileForCorruption(engraving::MscIoMode ioMode, QString path, QString scoreFileName)
 {
+    TRACEFUNC;
+
     if (ioMode != MscIoMode::Zip) {
         return muse::make_ok();
     }
-
-    // TODO: Execute this on Windows only?
 
     MscReader::Params params;
     params.filePath = path;
@@ -812,10 +824,10 @@ Ret NotationProject::checkSavedFileForCorruption(engraving::MscIoMode ioMode, QS
     Ret ret = msczReader.open();
     if (!ret) {
         return Ret(static_cast<int>(Err::CorruptionUponSavingError),
-                  muse::mtrc("project/save", "File “%1” could not be opened. %2")
-                  .arg(path)
-                  .arg(String(ret.toString().c_str()))
-                  .toStdString());
+                   muse::mtrc("project/save", "File “%1” could not be opened for validation. %2")
+                   .arg(path)
+                   .arg(String(ret.toString().c_str()))
+                   .toStdString());
     }
 
     // Try to extract the main score file.
@@ -824,9 +836,9 @@ Ret NotationProject::checkSavedFileForCorruption(engraving::MscIoMode ioMode, QS
 
     if (scoreFile.empty()) {
         return Ret(static_cast<int>(Err::CorruptionUponSavingError),
-                  muse::mtrc("project/save", "File “%1” is corrupted or damaged: the score file could not be read.")
-                  .arg(path)
-                  .toStdString());
+                   muse::mtrc("project/save", "File “%1” is corrupt or damaged: the score file could not be read.")
+                   .arg(path)
+                   .toStdString());
     }
 
     return muse::make_ok();

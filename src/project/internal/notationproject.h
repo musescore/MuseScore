@@ -39,6 +39,8 @@
 #include "projectaudiosettings.h"
 #include "iprojectmigrator.h"
 
+#include "global/iglobalconfiguration.h"
+
 namespace mu::engraving {
 class MscReader;
 class MscWriter;
@@ -54,6 +56,7 @@ class NotationProject : public INotationProject, public muse::Injectable, public
     muse::Inject<INotationReadersRegister> readers = { this };
     muse::Inject<INotationWritersRegister> writers = { this };
     muse::Inject<IProjectMigrator> migrator = { this };
+    muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
 
 public:
     NotationProject(const muse::modularity::ContextPtr& iocCtx)
