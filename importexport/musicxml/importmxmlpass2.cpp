@@ -6873,7 +6873,8 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                         else if (_e.name() == "root-alter") {
                               // attributes: print-object
                               //             location (left-right)
-                              alter = _e.readElementText().toInt();
+                              // Cubase exports this value with a trailing newline
+                              alter = _e.readElementText().simplified().toInt();
                               }
                         else
                               skipLogCurrElem();
