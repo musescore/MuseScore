@@ -81,6 +81,7 @@ static const std::set<OrnamentStyle> any;             // empty set has the speci
 static constexpr int _16th = Constants::DIVISION / 4;
 static constexpr int _32nd = _16th / 2;
 constexpr int SLIDE_DURATION = _32nd;
+constexpr int GRACE_BEND_DURATION = _16th;
 static const std::vector<OrnamentExcursion> excursions = {
     //  articulation type            set of  duration       body         repeatp      suffix
     //                               styles          prefix                    sustainp
