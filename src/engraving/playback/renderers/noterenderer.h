@@ -32,7 +32,10 @@ public:
     static void render(const Note* note, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
 
 private:
-    static void doRenderNote(const Note* note, NominalNoteCtx&& noteCtx, muse::mpe::PlaybackEventList& result);
+    static void renderTiedNotes(const Note* firstNote, NominalNoteCtx& firstNoteCtx);
+    static void updateArticulationBoundaries(const muse::mpe::timestamp_t noteTimestamp, const muse::mpe::duration_t noteDuration,
+                                             muse::mpe::ArticulationMap& articulations);
+    static void applySwingIfNeed(const Note* note, NominalNoteCtx& noteCtx);
 
     static NominalNoteCtx buildNominalNoteCtx(const Note* note, const RenderingContext& ctx);
 };
