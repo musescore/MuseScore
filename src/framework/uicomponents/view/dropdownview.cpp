@@ -100,3 +100,4 @@ void DropdownView::setFocusItemY(int newFocusItemY)
     m_focusItemY = newFocusItemY;
     emit focusItemYChanged();
 }
+
