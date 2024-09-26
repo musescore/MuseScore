@@ -4651,7 +4651,7 @@ void NotationInteraction::addTimeSignature(Measure* measure, staff_idx_t staffIn
     startEdit();
     score()->cmdAddTimeSig(measure, staffIndex, timeSignature, true);
     apply();
-    doSelect( { measure }, SelectType::SINGLE, staffIndex);
+    doSelect({ measure }, SelectType::SINGLE, staffIndex);
 }
 
 void NotationInteraction::explodeSelectedStaff()
