@@ -1012,7 +1012,7 @@ struct Event {
     {
         uint16_t val = velocity();
         if (isChannelVoice20()) {
-            return static_cast<uint8_t>(scaleDown(val >> 16, 16, 7));
+            return static_cast<uint8_t>(scaleDown(val, 16, 7));
         }
         return static_cast<uint8_t>(val);
     }

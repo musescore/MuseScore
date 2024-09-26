@@ -300,7 +300,7 @@ velocity_t FluidSequencer::noteVelocity(const mpe::NoteEvent& noteEvent) const
     }
 
     dynamic_level_t dynamicLevel = expressionCtx.expressionCurve.maxAmplitudeLevel();
-    return expressionLevel(dynamicLevel);
+    return expressionLevel(dynamicLevel) << 9; // midi::Event::scaleUp(7,16)
 }
 
 int FluidSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) const
