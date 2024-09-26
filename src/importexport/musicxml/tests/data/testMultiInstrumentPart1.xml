@@ -84,8 +84,12 @@
       </measure>
     <measure number="3">
       <print>
-        <part-name>Piano</part-name>
-        <part-abbreviation>Pno.</part-abbreviation>
+        <part-name-display>
+          <display-text>Piano</display-text>
+          </part-name-display>
+        <part-abbreviation-display>
+          <display-text>Pno.</display-text>
+          </part-abbreviation-display>
         </print>
       <sound>
         <instrument-change>

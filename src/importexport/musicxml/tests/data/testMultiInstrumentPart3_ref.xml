@@ -169,13 +169,11 @@
           </key>
         </attributes>
       <print>
-        <part-name>Bb Clarinet</part-name>
         <part-name-display>
           <display-text>B</display-text>
           <accidental-text>flat</accidental-text>
           <display-text> Clarinet</display-text>
           </part-name-display>
-        <part-abbreviation>Bb Cl.</part-abbreviation>
         <part-abbreviation-display>
           <display-text>B</display-text>
           <accidental-text>flat</accidental-text>

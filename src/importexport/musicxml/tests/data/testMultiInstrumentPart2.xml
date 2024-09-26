@@ -108,8 +108,12 @@
       </measure>
     <measure number="3">
       <print>
-        <part-name>Piano</part-name>
-        <part-abbreviation>Pno.</part-abbreviation>
+        <part-name-display>
+          <display-text>Piano</display-text>
+          </part-name-display>
+        <part-abbreviation-display>
+          <display-text>Pno.</display-text>
+          </part-abbreviation-display>
         </print>
       <sound>
         <instrument-change>
@@ -258,8 +262,12 @@
       </measure>
     <measure number="7">
       <print>
-        <part-name>Voice</part-name>
-        <part-abbreviation>Vo.</part-abbreviation>
+        <part-name-display>
+          <display-text>Voice</display-text>
+          </part-name-display>
+        <part-abbreviation-display>
+          <display-text>Vo.</display-text>
+          </part-abbreviation-display>
         </print>
       <sound>
         <instrument-change>

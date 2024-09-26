@@ -7777,26 +7777,23 @@ void ExportMusicXml::writeInstrumentChange(const InstrumentChange* instrChange)
     const Part* part = instrChange->part();
     const size_t partNr = muse::indexOf(m_score->parts(), part);
     const int instNr = muse::value(m_instrMap, instr, -1);
-    static const std::wregex acc(L"[♭♯]");
+    const String longName = instr->nameAsPlainText();
+    const String shortName = instr->abbreviatureAsPlainText();
 
     m_xml.startElement("print");
-    m_xml.tag("part-name", instr->nameAsPlainText().replace(u"♭", u"b").replace(u"♯", u"#"));
-    if (instr->nameAsPlainText().contains(acc)) {
+    if (!longName.isEmpty()) {
         m_xml.startElement("part-name-display");
-        writeDisplayName(m_xml, instr->nameAsPlainText());
+        writeDisplayName(m_xml, longName);
         m_xml.endElement();
     }
-    if (!instr->abbreviatureAsPlainText().isEmpty()) {
-        m_xml.tag("part-abbreviation", instr->abbreviatureAsPlainText().replace(u"♭", u"b").replace(u"♯", u"#"));
-        if (instr->abbreviatureAsPlainText().contains(acc)) {
-            m_xml.startElement("part-abbreviation-display");
-            writeDisplayName(m_xml, instr->abbreviatureAsPlainText());
-            m_xml.endElement();
-        }
+    if (!shortName.isEmpty()) {
+        m_xml.startElement("part-abbreviation-display");
+        writeDisplayName(m_xml, shortName);
+        m_xml.endElement();
     }
     m_xml.endElement();
 
-    writeInstrumentDetails(instrChange->instrument(), m_score->style().styleB(Sid::concertPitch));
+    writeInstrumentDetails(instr, m_score->style().styleB(Sid::concertPitch));
 
     m_xml.startElement("sound");
     m_xml.startElement("instrument-change");

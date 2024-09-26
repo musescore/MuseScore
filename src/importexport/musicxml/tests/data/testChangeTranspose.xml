@@ -101,8 +101,12 @@
           </key>
         </attributes>
       <print>
-        <part-name>A Clarinet</part-name>
-        <part-abbreviation>A Cl.</part-abbreviation>
+        <part-name-display>
+          <display-text>A Clarinet</display-text>
+          </part-name-display>
+        <part-abbreviation-display>
+          <display-text>A Cl.</display-text>
+          </part-abbreviation-display>
         </print>
       <attributes>
         <transpose>
