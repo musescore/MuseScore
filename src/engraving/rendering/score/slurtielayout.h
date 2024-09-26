@@ -58,6 +58,7 @@ public:
     static void computeBezier(TieSegment* tieSeg, PointF shoulderOffset = PointF());
     static void computeBezier(SlurSegment* slurSeg, PointF shoulderOffset = PointF());
     static double noteOpticalCenterForTie(const Note* note, bool up);
+    static void createSlurSegments(Slur* item, LayoutContext& ctx);
 
 private:
 
