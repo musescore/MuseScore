@@ -289,18 +289,6 @@ bool CoreMidiOutPort::supportsMIDI20Output() const
     return false;
 }
 
-static ByteCount packetListSize(const std::vector<Event>& events)
-{
-    if (events.empty()) {
-        return 0;
-    }
-
-    // TODO: should be dynamic per type of event
-    constexpr size_t eventSize = sizeof(Event().to_MIDI10Package());
-
-    return offsetof(MIDIPacketList, packet) + events.size() * (offsetof(MIDIPacket, data) + eventSize);
-}
-
 Ret CoreMidiOutPort::sendEvent(const Event& e)
 {
     if (!isConnected()) {
