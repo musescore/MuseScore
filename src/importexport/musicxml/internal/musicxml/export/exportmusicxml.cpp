@@ -7800,7 +7800,7 @@ void ExportMusicXml::writeInstrumentChange(const InstrumentChange* instrChange)
 
     m_xml.startElement("sound");
     m_xml.startElement("instrument-change");
-    scoreInstrument(m_xml, static_cast<int>(partNr) + 1, instNr + 1, instr->trackName(), instrChange->instrument());
+    scoreInstrument(m_xml, static_cast<int>(partNr) + 1, instNr + 1, instr->trackName(), instr);
     m_xml.endElement();
     m_xml.endElement();
 }
