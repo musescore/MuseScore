@@ -1415,7 +1415,7 @@ void Score::cmdAddTimeSig(Measure* firstMeasure, staff_idx_t staffIdx, TimeSig* 
             Segment* segment = currentMeasure->findSegment(SegmentType::TimeSig, currentMeasure->tick());
             mf = segment ? 0 : mf->nextMeasure();
         } else {
-            if (sigmap()->timesig(seg->tick().ticks()).nominal().identical(ns)) {
+            if (sigmap()->timesig(seg->tick().ticks()).nominal().identical(newTimeSigFraction)) {
                 // no change to global time signature,
                 // but we need to rewrite any staves with local time signatures
                 for (size_t i = 0; i < nstaves(); ++i) {
@@ -1434,7 +1434,7 @@ void Score::cmdAddTimeSig(Measure* firstMeasure, staff_idx_t staffIdx, TimeSig* 
         // we will only add time signatures if this succeeds
         // this means, however, that the rewrite cannot depend on the time signatures being in place
         if (mf) {
-            if (!mScore->rewriteMeasures(mf, ns, local ? staffIdx : muse::nidx)) {
+            if (!mScore->rewriteMeasures(mf, newTimeSigFraction, local ? staffIdx : muse::nidx)) {
                 undoStack()->current()->unwind();
                 return;
             }
@@ -1446,8 +1446,8 @@ void Score::cmdAddTimeSig(Measure* firstMeasure, staff_idx_t staffIdx, TimeSig* 
             seg = nfm->undoGetSegment(SegmentType::TimeSig, nfm->tick());
             std::pair<staff_idx_t, staff_idx_t> staffIdxRange = getStaffIdxRange(score);
             for (staff_idx_t si = staffIdxRange.first; si < staffIdxRange.second; ++si) {
-                if (fm->isMeasureRepeatGroup(si)) {
-                    deleteItem(fm->measureRepeatElement(si));
+                if (firstMeasure->isMeasureRepeatGroup(si)) {
+                    deleteItem(firstMeasure->measureRepeatElement(si));
                 }
                 TimeSig* newTimeSig = toTimeSig(seg->element(si * VOICES));
                 if (newTimeSig == 0) {
