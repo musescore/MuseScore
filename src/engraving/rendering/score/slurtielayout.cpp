@@ -1157,7 +1157,7 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
 
     // Remove items that the slur shouldn't try to avoid
     segShape.remove_if([&](ShapeElement& shapeEl) {
-        if (!shapeEl.item() || !shapeEl.item()->parentItem()) {
+        if (!shapeEl.item() || !shapeEl.item()->parentItem() || !shapeEl.item()->visible()) {
             return true;
         }
         const EngravingItem* item = shapeEl.item();
