@@ -107,6 +107,17 @@
         </note>
       </measure>
     <measure number="3">
+      <print>
+        <part-name>Piano</part-name>
+        <part-abbreviation>Pno.</part-abbreviation>
+        </print>
+      <sound>
+        <instrument-change>
+          <score-instrument id="P1-I2">
+            <instrument-name>Flute</instrument-name>
+            </score-instrument>
+          </instrument-change>
+        </sound>
       <direction placement="above">
         <direction-type>
           <words font-weight="bold" font-size="12">Flute</words>
@@ -246,6 +257,17 @@
         </note>
       </measure>
     <measure number="7">
+      <print>
+        <part-name>Voice</part-name>
+        <part-abbreviation>Vo.</part-abbreviation>
+        </print>
+      <sound>
+        <instrument-change>
+          <score-instrument id="P2-I2">
+            <instrument-name>C Trumpet</instrument-name>
+            </score-instrument>
+          </instrument-change>
+        </sound>
       <direction placement="above">
         <direction-type>
           <words font-weight="bold" font-size="12">Trumpet</words>
