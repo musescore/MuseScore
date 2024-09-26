@@ -5039,8 +5039,7 @@ void TLayout::layoutLine(SLine* item, LayoutContext& ctx)
 
 void TLayout::layoutSlur(Slur* item, LayoutContext& ctx)
 {
-    UNUSED(item)
-    UNUSED(ctx)
+    SlurTieLayout::createSlurSegments(item, ctx);
 }
 
 void TLayout::layoutSpacer(Spacer* item, LayoutContext&)
