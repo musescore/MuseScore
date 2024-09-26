@@ -227,6 +227,7 @@ private slots:
       void midiPortExport() { mxmlMscxExportTestRef("testMidiPortExport"); }
       void multiInstrumentPart1() { mxmlIoTest("testMultiInstrumentPart1"); }
       void multiInstrumentPart2() { mxmlIoTest("testMultiInstrumentPart2"); }
+      void multiInstrumentPart3() { mxmlMscxExportTestRef("testMultiInstrumentPart3"); }
       void multiMeasureRest1() { mxmlIoTestRef("testMultiMeasureRest1"); }
       void multiMeasureRest2() { mxmlIoTestRef("testMultiMeasureRest2"); }
       void multiMeasureRest3() { mxmlIoTestRef("testMultiMeasureRest3"); }

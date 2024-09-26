@@ -394,6 +394,7 @@ public:
       double getTenthsFromInches(double) const;
       double getTenthsFromDots(double) const;
       Fraction tick() const { return _tick; }
+      void writeInstrumentChange(const InstrumentChange* instrChange);
       void writeInstrumentDetails(const Instrument* instrument, const bool concertPitch);
       static bool canWrite(const Element* e);
       };
@@ -1482,9 +1483,9 @@ static void textAsCreditWords(const ExportMusicXml* const expMxml, XmlWriter& xm
 void ExportMusicXml::credits(XmlWriter& xml)
       {
       // find the vboxes in every page and write their elements as credit-words
-      for (Page* const page : _score->pages()) {
+      for (Page* const page : qAsConst(_score->pages())) {
             const int pageIdx = _score->pageIdx(page);
-            for (const System* system : page->systems()) {
+            for (const System* system : qAsConst(page->systems())) {
                   for (const MeasureBase* mb : system->measures()) {
                         if (mb->isVBox()) {
                               for (const Element* element : mb->el()) {
@@ -1690,7 +1691,7 @@ static void ending(XmlWriter& xml, Volta* v, bool left)
       {
       QString number;
       QString type;
-      for (int i : v->endings()) {
+      for (int& i : v->endings()) {
             if (!number.isEmpty())
                   number += ", ";
             number += QString("%1").arg(i);
@@ -3971,7 +3972,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
             _xml.tag("voice", voice);
 
             writeType(_xml, note);
-            for (NoteDot* dot : note->dots()) {
+            for (const NoteDot* dot : qAsConst(note->dots())) {
                   QString dotTag = "dot";
                   if (note->userDotPosition() != Direction::AUTO) {
                         if (note->dotIsUp())
@@ -5844,7 +5845,7 @@ static bool commonAnnotations(ExportMusicXml* exp, const Element* e, int sstaff)
       // optionally writing the associated staff text is done below
       if (e->isInstrumentChange()) {
             const InstrumentChange* instrChange = toInstrumentChange(e);
-            exp->writeInstrumentDetails(instrChange->instrument(), false);
+            exp->writeInstrumentChange(instrChange);
             instrChangeHandled = true;
             }
 
@@ -7039,6 +7040,45 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
                   xml.etag();
                   }
             }
+      }
+
+//---------------------------------------------------------
+//  writeInstrumentChange
+//---------------------------------------------------------
+
+/**
+ Write the instrument change.
+ */
+
+void ExportMusicXml::writeInstrumentChange(const InstrumentChange* instrChange)
+      {
+      const Instrument* instr = instrChange->instrument();
+      Part* const part = instrChange->part();
+      const int partNr = _score->parts().indexOf(part);
+      const int instNr = instrMap.value(instr, -1);
+      const QString longName = instr->longNames()[0].name();
+      const QString shortName = instr->shortNames()[0].name();
+
+      _xml.stag("print");
+      if (!longName.isEmpty()) {
+            _xml.stag("part-name-display");
+            writeDisplayName(_xml, longName);
+            _xml.etag();
+            }
+      if (!shortName.isEmpty()) {
+            _xml.stag("part-abbreviation-display");
+            writeDisplayName(_xml, shortName);
+            _xml.etag();
+            }
+      _xml.etag();
+
+      writeInstrumentDetails(instr, _score->styleB(Sid::concertPitch));
+
+      _xml.stag("sound");
+      _xml.stag("instrument-change");
+      scoreInstrument(_xml, partNr + 1, instNr + 1, instr->trackName(), instr);
+      _xml.etag();
+      _xml.etag();
       }
 
 //---------------------------------------------------------
