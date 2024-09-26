@@ -1157,6 +1157,21 @@ TEST_F(Musicxml_Tests, textQuirkInference) {
 TEST_F(Musicxml_Tests, tieTied) {
     mxmlIoTestRef("testTieTied");
 }
+TEST_F(Musicxml_Tests, importTie1) {
+    mxmlImportTestRef("importTie1");
+}
+TEST_F(Musicxml_Tests, importTie2) {
+    // Finale ties to different voices
+    mxmlImportTestRef("importTie2");
+}
+TEST_F(Musicxml_Tests, importTie3) {
+    // Dolet6 ties to different voices & staves
+    mxmlImportTestRef("importTie3");
+}
+TEST_F(Musicxml_Tests, importTie4) {
+    // Dolet8 ties to different voices & staves
+    mxmlImportTestRef("importTie4");
+}
 TEST_F(Musicxml_Tests, timesig1) {
     mxmlIoTest("testTimesig1");
 }

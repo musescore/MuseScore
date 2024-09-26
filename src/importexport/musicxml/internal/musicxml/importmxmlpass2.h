@@ -242,6 +242,7 @@ using SpannerSet = std::set<Spanner*>;
 using DelayedArpMap = std::map<int, DelayedArpeggio>;
 using SegnoStack = std::map<int, Marker*>;
 using SystemElements = std::multimap<int, EngravingItem*>;
+using MusicXMLTieMap = std::map<TieLocation, Tie*>;
 
 //---------------------------------------------------------
 //   MusicXMLParserNotations
@@ -254,8 +255,8 @@ public:
                             MusicXMLParserPass2& pass2);
     void parse();
     void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs, Glissando* glissandi[MAX_NUMBER_LEVEL][2],
-                    MusicXmlSpannerMap& spanners, TrillStack& trills, std::map<int, Tie*>& ties, ArpeggioMap& arpMap,
-                    DelayedArpMap& delayedArps);
+                    MusicXmlSpannerMap& spanners, TrillStack& trills, MusicXMLTieMap& ties, std::vector<Note*>& unstartedTieNotes,
+                    std::vector<Note*>& unendedTieNotes, ArpeggioMap& arpMap, DelayedArpMap& delayedArps);
     String errors() const { return m_errors; }
     MusicXmlTupletDesc tupletDesc() const { return m_tupletDesc; }
     bool hasTremolo() const { return m_hasTremolo; }
@@ -418,7 +419,9 @@ private:
 
     Glissando* m_glissandi[MAX_NUMBER_LEVEL][2];     // Current slides ([0]) / glissandi ([1])
 
-    std::map<int, Tie*> m_ties;
+    MusicXMLTieMap m_ties;
+    std::vector<Note*> m_unstartedTieNotes;
+    std::vector<Note*> m_unendedTieNotes;
     Volta* m_lastVolta = nullptr;
     bool m_hasDrumset;                             // drumset defined TODO: move to pass 1
 
