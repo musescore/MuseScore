@@ -141,7 +141,8 @@ struct Action {
     String title;
     ui::IconCode::Code icon = ui::IconCode::Code::NONE;
     String uiCtx = DEFAULT_UI_CONTEXT;
-    bool hidden = false; // hidden from menu, can be called programmatically
+    bool showOnToolbar = false;
+    bool showOnAppmenu = true;
     io::path_t path;
     String func = u"main";
     int apiversion = DEFAULT_API_VERSION;
@@ -166,21 +167,6 @@ inline actions::ActionCode makeActionCode(const Uri& uri, const std::string& ext
 {
     return makeUriQuery(uri, extActionCode).toString();
 }
-
-enum class UiControlType {
-    Undefined = 0,
-    ToolButton
-};
-
-struct UiControl {
-    UiControlType type = UiControlType::Undefined;
-    ui::IconCode::Code icon = ui::IconCode::Code::NONE;
-    actions::ActionCode actionCode;
-};
-
-struct ToolBarConfig {
-    std::vector<UiControl> controls;
-};
 
 /*
 manifest.json
@@ -229,7 +215,6 @@ struct Manifest {
     std::vector<Action> actions;
 
     Config config;
-    ToolBarConfig toolBarConfig;
 
     bool isValid() const { return type != Type::Undefined && uri.isValid(); }
 

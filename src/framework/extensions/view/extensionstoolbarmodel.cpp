@@ -32,17 +32,24 @@ using namespace muse::uicomponents;
 
 void ExtensionsToolBarModel::load()
 {
-    extensionsProvider()->toolBarConfigChanged().onNotify(this, [this]() {
+    extensionsProvider()->manifestListChanged().onNotify(this, [this]() {
         load();
     });
 
-    ToolBarConfig toolBarConfig = extensionsProvider()->toolBarConfig();
+    extensionsProvider()->manifestChanged().onReceive(this, [this](const Manifest&) {
+        load();
+    });
 
     ToolBarItemList items;
-    for (const UiControl& c : toolBarConfig.controls) {
-        ToolBarItem* item = makeItem(c.actionCode);
+    ManifestList enabledExtensions = extensionsProvider()->manifestList(Filter::Enabled);
+    for (const Manifest& m : enabledExtensions) {
+        for (const muse::extensions::Action& a : m.actions) {
+            if (!a.showOnToolbar) {
+                continue;
+            }
 
-        items << item;
+            items << makeItem(makeActionCode(m.uri, a.code));
+        }
     }
 
     setItems(items);

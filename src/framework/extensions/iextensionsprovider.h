@@ -56,8 +56,5 @@ public:
     virtual std::vector<ExecPoint> execPoints(const Uri& uri) const = 0;
     virtual Ret performPoint(const ExecPointName& name) = 0;
     virtual void performPointAsync(const ExecPointName& name) = 0;
-
-    virtual ToolBarConfig toolBarConfig() const = 0;
-    virtual async::Notification toolBarConfigChanged() const = 0;
 };
 }

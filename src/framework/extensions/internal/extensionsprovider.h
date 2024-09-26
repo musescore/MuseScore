@@ -61,21 +61,13 @@ public:
     Ret performPoint(const ExecPointName& name) override;
     void performPointAsync(const ExecPointName& name) override;
 
-    ToolBarConfig toolBarConfig() const override;
-    async::Notification toolBarConfigChanged() const override;
-
 private:
 
     Ret run(const Action& a);
 
-    void updateToolBarConfig();
-
     mutable ManifestList m_manifests;
     async::Notification m_manifestListChanged;
     async::Channel<Manifest> m_manifestChanged;
-
-    ToolBarConfig m_toolBarConfig;
-    async::Notification m_toolBarConfigChanged;
 };
 }
 

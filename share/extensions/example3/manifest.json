@@ -4,16 +4,29 @@
     "title": "Example 3 (default)",
 
     "actions": [
-        {"code": "configure", "type": "form", "title": "Configure", "path": "configure.qml"},
-        {"code": "add", "type": "macros", "title": "Add", "path": "add.js"},
-        {"code": "remove", "type": "macros", "title": "Remove", "path": "remove.js"}
-    ],
-
-    "toolbar": {
-        "controls": [
-            {"icon": "CONFIGURE", "action": "configure" },
-            {"icon": "PLUS", "action": "add" },
-            {"icon": "MINUS", "action": "remove" }
-        ]
-    }
+        {
+            "code": "configure",
+            "type": "form",
+            "title": "Configure",
+            "icon": "CONFIGURE",
+            "show_on_toolbar": true,
+            "path": "configure.qml"
+        },
+        {
+            "code": "add",
+            "type": "macros",
+            "title": "Add",
+            "icon": "PLUS",
+            "show_on_toolbar": true,
+            "path": "add.js"
+        },
+        {
+            "code": "remove",
+            "type": "macros",
+            "title": "Remove",
+            "icon": "MINUS",
+            "show_on_toolbar": true,
+            "path": "remove.js"
+        }
+    ]
 }

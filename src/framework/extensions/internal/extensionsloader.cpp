@@ -78,7 +78,7 @@ ManifestList ExtensionsLoader::manifestList(const io::path_t& rootPath) const
     ManifestList manifests;
     io::paths_t paths = manifestPaths(rootPath);
     for (const io::path_t& path : paths) {
-        LOGD() << path;
+        LOGD() << "parsing manifest: " << path;
         Manifest manifest = parseManifest(path);
         resolvePaths(manifest, io::FileInfo(path).dirPath());
         manifests.push_back(manifest);
@@ -139,7 +139,8 @@ Manifest ExtensionsLoader::parseManifest(const ByteArray& data) const
             std::string icon = ao.value("icon").toStdString();
             a.icon = ui::IconCode::fromString(icon.c_str());
             a.uiCtx = ao.value("ui_context", uiCtx).toString();
-            a.hidden = ao.value("hidden", a.title.isEmpty()).toBool();
+            a.showOnAppmenu = ao.value("show_on_appmenu", true).toBool();
+            a.showOnToolbar = ao.value("show_on_toolbar", false).toBool();
             a.path = ao.value("path").toStdString();
             a.func = ao.value("func", "main").toString();
             a.apiversion = m.apiversion;
@@ -156,39 +157,6 @@ Manifest ExtensionsLoader::parseManifest(const ByteArray& data) const
         a.func = u"main";
         a.apiversion = m.apiversion;
         m.actions.push_back(std::move(a));
-    }
-
-    if (obj.contains("toolbar")) {
-        JsonObject toolbar = obj.value("toolbar").toObject();
-        JsonArray controls = toolbar.value("controls").toArray();
-        for (size_t i = 0; i < controls.size(); ++i) {
-            JsonObject co = controls.at(i).toObject();
-
-            UiControl c;
-            //! NOTE At the moment only buttons
-            c.type = UiControlType::ToolButton;
-
-            std::string icon = co.value("icon").toStdString();
-            c.icon = ui::IconCode::fromString(icon.c_str());
-
-            std::string extActionCode = co.value("action").toStdString();
-            c.actionCode = makeActionCode(m.uri, extActionCode);
-
-            auto it = std::find_if(m.actions.begin(), m.actions.end(), [extActionCode](const Action& a) {
-                return a.code == extActionCode;
-            });
-
-            if (it == m.actions.end()) {
-                LOGE() << "not found action: " << extActionCode;
-                continue;
-            }
-
-            if (c.icon != ui::IconCode::Code::NONE) {
-                it->icon = c.icon;
-            }
-
-            m.toolBarConfig.controls.push_back(std::move(c));
-        }
     }
 
     return m;
