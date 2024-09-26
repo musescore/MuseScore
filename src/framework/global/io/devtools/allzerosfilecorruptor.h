@@ -19,21 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_IO_ALLZEROSFILECORRUPTOR_H
-#define MUSE_IO_ALLZEROSFILECORRUPTOR_H
+#pragma once
 
-#include "filecorruptorbase.h"
+#include "io/file.h"
 
 namespace muse::io {
-class AllZerosFileCorruptor : public FileCorruptorBase
+class AllZerosFileCorruptor : public File
 {
 public:
     AllZerosFileCorruptor(const path_t& filePath);
 
 protected:
-    void fillCorruptData(uint8_t* data, size_t len) override;
+    size_t writeData(const uint8_t* data, size_t len) override;
 };
 }
-
-#endif // MUSE_IO_ALLZEROSFILECORRUPTOR_H
-

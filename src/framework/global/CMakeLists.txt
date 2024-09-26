@@ -121,8 +121,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/io/dir.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/dir.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/io/devtools/filecorruptorbase.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/io/devtools/filecorruptorbase.h
     ${CMAKE_CURRENT_LIST_DIR}/io/devtools/allzerosfilecorruptor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/devtools/allzerosfilecorruptor.h
 
