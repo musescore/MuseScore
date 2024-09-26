@@ -4,14 +4,22 @@
     "title": "Example 2 (default)",
 
     "actions": [
-        {"code": "save", "title": "Save", "path": "main.js", "func": "save"},
-        {"code": "open", "title": "Open", "path": "main.js", "func": "open"}
-    ],
-
-    "toolbar": {
-        "controls": [
-            {"icon": "SAVE", "action": "save" },
-            {"icon": "OPEN_FILE", "action": "open" }
-        ]
-    }
+        {
+            "code": "save",
+            "title": "Save",
+            "icon": "SAVE",
+            "show_on_toolbar": true,
+            "show_on_appmenu": false,
+            "path": "main.js",
+            "func": "save"
+        },
+        {
+            "code": "open",
+            "title": "Open",
+            "icon": "OPEN_FILE",
+            "show_on_toolbar": true,
+            "show_on_appmenu": false,
+            "path": "main.js",
+            "func": "open"}
+    ]
 }
