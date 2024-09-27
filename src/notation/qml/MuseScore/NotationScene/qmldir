@@ -11,3 +11,4 @@ UndoRedoToolBar 1.0 UndoRedoToolBar.qml
 Timeline 1.0 Timeline.qml
 SelectionFilterPanel 1.0 SelectionFilterPanel.qml
 PianoKeyboardPanel 1.0 PianoKeyboardPanel.qml
+PercussionPanel 1.0 PercussionPanel.qml
