@@ -10,13 +10,13 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "sym.h"
-#include "staff.h"
 #include "clef.h"
 #include "keysig.h"
 #include "measure.h"
-#include "segment.h"
 #include "score.h"
+#include "segment.h"
+#include "staff.h"
+#include "sym.h"
 #include "system.h"
 #include "undo.h"
 #include "xml.h"
@@ -112,7 +112,7 @@ void KeySig::layout()
             Clef* c = nullptr;
             if (segment()) {
                   for (Segment* seg = segment()->prev1(); !c && seg && seg->tick() == tick(); seg = seg->prev1())
-                        if (seg->isClefType() || seg->isHeaderClefType())
+                        if (seg->enabled() && (seg->isClefType() || seg->isHeaderClefType()))
                               c = toClef(seg->element(track()));
                   }
             if (c)
