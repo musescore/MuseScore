@@ -56,12 +56,12 @@ void NoteRenderer::render(const Note* note, const RenderingContext& ctx, mpe::Pl
     applySwingIfNeed(note, noteCtx);
 
     if (noteCtx.articulations.contains(ArticulationType::DiscreteGlissando)) {
-        GlissandosRenderer::render(note, ArticulationType::DiscreteGlissando, noteCtx.chordCtx, result);
+        GlissandosRenderer::renderDiscreteGlissando(note, noteCtx, result);
         return;
     }
 
     if (noteCtx.articulations.contains(ArticulationType::ContinuousGlissando)) {
-        GlissandosRenderer::render(note, ArticulationType::ContinuousGlissando, noteCtx.chordCtx, result);
+        GlissandosRenderer::renderContinuousGlissando(note, noteCtx, result);
         return;
     }
 

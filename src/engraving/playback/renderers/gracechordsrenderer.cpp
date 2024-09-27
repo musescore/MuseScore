@@ -29,6 +29,7 @@
 #include "noterenderer.h"
 
 #include "playback/metaparsers/notearticulationsparser.h"
+#include "playback/utils/expressionutils.h"
 
 using namespace mu::engraving;
 using namespace muse;
