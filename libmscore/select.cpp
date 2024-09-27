@@ -633,14 +633,14 @@ void Selection::updateSelectedElements()
             // ignore voltas
             if (sp->isVolta())
                   continue;
-            if (sp->isSlur() || sp->isHairpin()) {
+            if (sp->isSlur() || sp->isHairpin() || sp->isOttava() || sp->isPedal() || sp-> isTrill() || sp->isTextLine()|| sp->isLetRing() || sp->isPalmMute()) {
                   // ignore if start & end elements not calculated yet
                   if (!sp->startElement() || !sp->endElement())
                         continue;
-                  if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick)) {
+                  if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() <= etick)) {
                         if (canSelect(sp->startCR()) && canSelect(sp->endCR())) {
                               for (auto seg : sp->spannerSegments())
-                                    appendFiltered(seg);  // slur with start or end in range selection
+                                    appendFiltered(seg);  // spanner with start or end in range selection
                               }
                         }
                   }
