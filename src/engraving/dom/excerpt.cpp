@@ -929,7 +929,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                             BarLine* bl = toBarLine(oe);
                             int oSpan1 = static_cast<int>(bl->staff()->idx());
                             int oSpan2 = static_cast<int>(oSpan1 + bl->spanStaff());
-                            if (oSpan1 <= oIdx && oIdx < oSpan2) {
+                            if (oSpan1 <= oIdx && oIdx <= oSpan2) {
                                 // this staff is within span
                                 // calculate adjusted span for excerpt
                                 int oSpan = oSpan2 - oIdx;
