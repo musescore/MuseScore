@@ -159,8 +159,8 @@ void TremoloRenderer::buildAndAppendEvents(const Chord* chord, const Articulatio
         int utick = timestampToTick(score, noteCtx.timestamp);
         noteCtx.dynamicLevel = context.playbackCtx->appliableDynamicLevel(note->track(), utick);
 
-        NoteArticulationsParser::buildNoteArticulationMap(note, context, noteCtx.chordCtx.commonArticulations);
-        updateArticulationBoundaries(type, noteCtx.timestamp, noteCtx.duration, noteCtx.chordCtx.commonArticulations);
+        NoteArticulationsParser::buildNoteArticulationMap(note, context, noteCtx.articulations);
+        updateArticulationBoundaries(type, noteCtx.timestamp, noteCtx.duration, noteCtx.articulations);
 
         result.emplace_back(buildNoteEvent(std::move(noteCtx)));
     }
