@@ -143,6 +143,7 @@ struct NominalNoteCtx {
     muse::mpe::pitch_level_t pitchLevel = 0;
 
     RenderingContext chordCtx;
+    muse::mpe::ArticulationMap articulations;
 
     explicit NominalNoteCtx(const Note* note, const RenderingContext& ctx)
         : voiceIdx(note->voice()),
@@ -155,7 +156,8 @@ struct NominalNoteCtx {
         pitchLevel(notePitchLevel(note->playingTpc(),
                                   note->playingOctave(),
                                   note->playingTuning())),
-        chordCtx(ctx)
+        chordCtx(ctx),
+        articulations(ctx.commonArticulations)
     {
     }
 };
@@ -207,7 +209,7 @@ inline muse::mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx)
                                 static_cast<muse::mpe::staff_layer_idx_t>(ctx.staffIdx),
                                 ctx.pitchLevel,
                                 ctx.dynamicLevel,
-                                ctx.chordCtx.commonArticulations,
+                                ctx.articulations,
                                 ctx.tempo.val,
                                 ctx.userVelocityFraction);
 }
@@ -220,7 +222,7 @@ inline muse::mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const muse::mpe
                                 static_cast<muse::mpe::staff_layer_idx_t>(ctx.staffIdx),
                                 ctx.pitchLevel,
                                 ctx.dynamicLevel,
-                                ctx.chordCtx.commonArticulations,
+                                ctx.articulations,
                                 ctx.tempo.val,
                                 ctx.userVelocityFraction,
                                 pitchCurve);
@@ -249,7 +251,7 @@ inline muse::mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const muse::mpe
                                 static_cast<muse::mpe::staff_layer_idx_t>(ctx.staffIdx),
                                 ctx.pitchLevel + pitchLevelOffset,
                                 ctx.dynamicLevel,
-                                ctx.chordCtx.commonArticulations,
+                                ctx.articulations,
                                 ctx.tempo.val,
                                 ctx.userVelocityFraction);
 }

@@ -328,7 +328,7 @@ void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationTy
         }
 
         NominalNoteCtx noteCtx(note, context);
-        NoteArticulationsParser::buildNoteArticulationMap(note, noteCtx.chordCtx, noteCtx.chordCtx.commonArticulations);
+        NoteArticulationsParser::buildNoteArticulationMap(note, noteCtx.chordCtx, noteCtx.articulations);
 
         convert(score, preferredType, nominalPattern.buildActualPattern(note, intervalsInfo, context.beatsPerSecond.val),
                 std::move(noteCtx), result);
@@ -407,7 +407,7 @@ void OrnamentsRenderer::createEvents(const Score* score, const ArticulationType 
             subNoteCtx.dynamicLevel = noteCtx.chordCtx.playbackCtx->appliableDynamicLevel(trackIdx, utick);
 
             updateArticulationBoundaries(type, subNoteCtx.timestamp,
-                                         subNoteCtx.duration, subNoteCtx.chordCtx.commonArticulations);
+                                         subNoteCtx.duration, subNoteCtx.articulations);
 
             result.emplace_back(buildNoteEvent(std::move(subNoteCtx)));
 

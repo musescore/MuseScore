@@ -221,14 +221,14 @@ void TremoloRenderer::buildAndAppendEvents(const Chord* chord, const Articulatio
         int utick = timestampToTick(score, noteCtx.timestamp);
         noteCtx.dynamicLevel = context.playbackCtx->appliableDynamicLevel(note->track(), utick);
 
-        NoteArticulationsParser::buildNoteArticulationMap(note, context, noteCtx.chordCtx.commonArticulations);
+        NoteArticulationsParser::buildNoteArticulationMap(note, context, noteCtx.articulations);
 
         const TimestampAndDuration& tremoloTnD = tremoloTimeAndDuration(note, context, tremoloCache);
-        muse::mpe::ArticulationAppliedData& articulationData = noteCtx.chordCtx.commonArticulations.at(type);
+        muse::mpe::ArticulationAppliedData& articulationData = noteCtx.articulations.at(type);
         articulationData.meta.timestamp = tremoloTnD.timestamp;
         articulationData.meta.overallDuration = tremoloTnD.duration;
 
-        updateArticulationBoundaries(type, noteCtx.timestamp, noteCtx.duration, noteCtx.chordCtx.commonArticulations);
+        updateArticulationBoundaries(type, noteCtx.timestamp, noteCtx.duration, noteCtx.articulations);
 
         result.emplace_back(buildNoteEvent(std::move(noteCtx)));
     }
