@@ -127,8 +127,8 @@ void GraceChordsRenderer::renderGraceNoteEvents(const std::vector<Chord*>& grace
             noteCtx.duration = duration;
             noteCtx.timestamp = timestamp;
 
-            NoteArticulationsParser::buildNoteArticulationMap(graceNote, ctx, noteCtx.chordCtx.commonArticulations);
-            updateArticulationBoundaries(graceCtx.type, noteCtx.timestamp, noteCtx.duration, noteCtx.chordCtx.commonArticulations);
+            NoteArticulationsParser::buildNoteArticulationMap(graceNote, ctx, noteCtx.articulations);
+            updateArticulationBoundaries(graceCtx.type, noteCtx.timestamp, noteCtx.duration, noteCtx.articulations);
 
             mpe::NoteEvent event = buildNoteEvent(std::move(noteCtx));
 

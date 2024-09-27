@@ -62,8 +62,8 @@ void ArpeggioRenderer::doRender(const EngravingItem* item, const mpe::Articulati
     double stretch = arpeggio->Stretch();
 
     auto buildEvent = [&](NominalNoteCtx& noteCtx, const int stepNumber) {
-        noteCtx.chordCtx.commonArticulations.updateOccupiedRange(preferredType, stepNumber * percentageStep,
-                                                                 (stepNumber + 1) * percentageStep);
+        noteCtx.articulations.updateOccupiedRange(preferredType, stepNumber * percentageStep,
+                                                  (stepNumber + 1) * percentageStep);
         timestamp_t offset = offsetStep * stepNumber * stretch;
         noteCtx.timestamp += offset;
         noteCtx.duration -= offset;
@@ -123,7 +123,7 @@ std::map<pitch_level_t, NominalNoteCtx> ArpeggioRenderer::arpeggioNotes(const Ch
             noteCtx.duration = tiedNotesTotalDuration(score, note, noteCtx.duration, ctx.positionTickOffset);
         }
 
-        NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.chordCtx.commonArticulations);
+        NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.articulations);
 
         result.emplace(noteCtx.pitchLevel, std::move(noteCtx));
     }

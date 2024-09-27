@@ -43,7 +43,7 @@ void NoteRenderer::render(const Note* note, const RenderingContext& ctx, mpe::Pl
 
     NominalNoteCtx noteCtx = buildNominalNoteCtx(note, ctx);
 
-    if (!isNotePlayable(note, noteCtx.chordCtx.commonArticulations)) {
+    if (!isNotePlayable(note, noteCtx.articulations)) {
         return;
     }
 
@@ -55,12 +55,12 @@ void NoteRenderer::render(const Note* note, const RenderingContext& ctx, mpe::Pl
 
     applySwingIfNeed(note, noteCtx);
 
-    if (noteCtx.chordCtx.commonArticulations.contains(ArticulationType::DiscreteGlissando)) {
+    if (noteCtx.articulations.contains(ArticulationType::DiscreteGlissando)) {
         GlissandosRenderer::render(note, ArticulationType::DiscreteGlissando, noteCtx.chordCtx, result);
         return;
     }
 
-    if (noteCtx.chordCtx.commonArticulations.contains(ArticulationType::ContinuousGlissando)) {
+    if (noteCtx.articulations.contains(ArticulationType::ContinuousGlissando)) {
         GlissandosRenderer::render(note, ArticulationType::ContinuousGlissando, noteCtx.chordCtx, result);
         return;
     }
@@ -96,23 +96,22 @@ void NoteRenderer::renderTiedNotes(const Note* firstNote, NominalNoteCtx& firstN
 
         NominalNoteCtx currNoteCtx = buildNominalNoteCtx(currNote, currChordCtx);
 
-        if (isNotePlayable(currNote, currNoteCtx.chordCtx.commonArticulations)) {
+        if (isNotePlayable(currNote, currNoteCtx.articulations)) {
             break;
         }
 
         firstNoteCtx.duration += currNoteCtx.duration;
-        firstNoteCtx.chordCtx.commonArticulations.insert(currNoteCtx.chordCtx.commonArticulations.begin(),
-                                                         currNoteCtx.chordCtx.commonArticulations.end());
+        firstNoteCtx.articulations.insert(currNoteCtx.articulations.begin(), currNoteCtx.articulations.end());
 
         currTie = currNote->tieFor();
         renderedNotes.insert(currNote);
     }
 
-    if (firstNoteCtx.chordCtx.commonArticulations.size() > 1) {
-        firstNoteCtx.chordCtx.commonArticulations.erase(mpe::ArticulationType::Standard);
+    if (firstNoteCtx.articulations.size() > 1) {
+        firstNoteCtx.articulations.erase(mpe::ArticulationType::Standard);
     }
 
-    updateArticulationBoundaries(firstNoteCtx.timestamp, firstNoteCtx.duration, firstNoteCtx.chordCtx.commonArticulations);
+    updateArticulationBoundaries(firstNoteCtx.timestamp, firstNoteCtx.duration, firstNoteCtx.articulations);
 }
 
 void NoteRenderer::updateArticulationBoundaries(const timestamp_t noteTimestamp, const duration_t noteDuration,
@@ -157,7 +156,7 @@ void NoteRenderer::applySwingIfNeed(const Note* note, NominalNoteCtx& noteCtx)
 NominalNoteCtx NoteRenderer::buildNominalNoteCtx(const Note* note, const RenderingContext& ctx)
 {
     NominalNoteCtx noteCtx(note, ctx);
-    NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.chordCtx.commonArticulations);
+    NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.articulations);
 
     return noteCtx;
 }
