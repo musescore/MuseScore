@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSICXMLTYPES_H
-#define MUSICXMLTYPES_H
+#pragma once
 #include "dom/arpeggio.h"
 #include "dom/interval.h"
 
@@ -112,5 +111,3 @@ private:
     std::map<String, int> m_numberToNo;
 };
 }
-
-#endif // MUSICXMLTYPES_H

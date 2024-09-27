@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSICXMLPART_H
-#define MUSICXMLPART_H
+#pragma once
 
 #include "types/fraction.h"
 #include "dom/interval.h"
@@ -87,4 +86,3 @@ private:
     // Only for when staves are discarded in MusicXMLParserPass1::attributes.
 };
 }
-#endif // MUSICXMLPART_H

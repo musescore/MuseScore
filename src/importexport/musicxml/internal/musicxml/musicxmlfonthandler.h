@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MUSICXMLFONTHANDLER_H__
-#define __MUSICXMLFONTHANDLER_H__
+#pragma once
 
 #include "engraving/dom/text.h"
 
@@ -50,5 +49,3 @@ private:
     String musicalTextFont;
 };
 } // namespace Ms
-
-#endif

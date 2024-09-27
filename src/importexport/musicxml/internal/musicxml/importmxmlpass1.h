@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __IMPORTMXMLPASS1_H__
-#define __IMPORTMXMLPASS1_H__
+#pragma once
 
 #include "global/serialization/xmlstreamreader.h"
 #include "global/containers.h"
@@ -252,4 +251,3 @@ private:
     std::set<int> m_seenDenominators;          // Denominators seen. Used for rounding errors.
 };
 } // namespace Ms
-#endif

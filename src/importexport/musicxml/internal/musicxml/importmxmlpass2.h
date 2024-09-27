@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __IMPORTMXMLPASS2_H__
-#define __IMPORTMXMLPASS2_H__
+#pragma once
 
 #include <array>
 
@@ -674,4 +673,3 @@ private:
     void addToNotes(std::vector<Note*>& notes) const;
 };
 } // namespace Ms
-#endif

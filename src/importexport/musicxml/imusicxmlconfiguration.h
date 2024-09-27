@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_IMUSICXMLCONFIGURATION_H
-#define MU_IMPORTEXPORT_IMUSICXMLCONFIGURATION_H
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 #include "io/path.h"
@@ -67,5 +66,3 @@ public:
     virtual void setInferTextTypeOverride(std::optional<bool> value) = 0;
 };
 }
-
-#endif // MU_IMPORTEXPORT_IMUSICXMLCONFIGURATION_H

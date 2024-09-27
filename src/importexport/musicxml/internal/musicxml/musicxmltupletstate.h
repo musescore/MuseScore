@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSICXMLTUPLETSTATE_H
-#define MUSICXMLTUPLETSTATE_H
+#pragma once
 
 #include "musicxmltypes.h"
 #include "dom/durationtype.h"
@@ -59,5 +58,3 @@ using MxmlTupletStates = std::map<String, MxmlTupletState>;
 void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& fraction, Fraction& fullDuration);
 Fraction missingTupletDuration(const Fraction duration);
 }
-
-#endif // MUSICXMLTUPLETSTATE_H

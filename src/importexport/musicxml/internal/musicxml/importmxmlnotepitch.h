@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __IMPORTMXMLNOTEPITCH_H__
-#define __IMPORTMXMLNOTEPITCH_H__
+#pragma once
 
 #include "global/serialization/xmlstreamreader.h"
 #include "engraving/dom/accidental.h"
@@ -69,5 +68,3 @@ private:
     MxmlLogger* m_logger = nullptr;                          // Error logger
 };
 } // namespace Ms
-
-#endif

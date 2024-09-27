@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MUSICXMLSUPPORT_H__
-#define __MUSICXMLSUPPORT_H__
+#pragma once
 
 #include "engraving/types/fraction.h"
 #include "engraving/dom/note.h"
@@ -57,4 +56,3 @@ extern const Articulation* findLaissezVibrer(const Chord* chord);
 extern String errorStringWithLocation(int line, int col, const String& error);
 extern String checkAtEndElement(const muse::XmlStreamReader& e, const String& expName);
 } // namespace Ms
-#endif
