@@ -76,6 +76,8 @@
 #include "view/internal/caposettingsmodel.h"
 #include "view/internal/stringtuningssettingsmodel.h"
 
+#include "view/percussionpanel/percussionpanelmodel.h"
+
 #include "view/styledialog/styleitem.h"
 #include "view/styledialog/notespagemodel.h"
 #include "view/styledialog/restspagemodel.h"
@@ -182,6 +184,9 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<HarpPedalPopupModel>("MuseScore.NotationScene", 1, 0, "HarpPedalPopupModel");
     qmlRegisterType<CapoSettingsModel>("MuseScore.NotationScene", 1, 0, "CapoSettingsModel");
     qmlRegisterType<StringTuningsSettingsModel>("MuseScore.NotationScene", 1, 0, "StringTuningsSettingsModel");
+
+    qmlRegisterType<PercussionPanelModel>("MuseScore.NotationScene", 1, 0, "PercussionPanelModel");
+    qmlRegisterUncreatableType<PanelMode>("MuseScore.NotationScene", 1, 0, "PanelMode", "Cannot create");
 
     qmlRegisterUncreatableType<StyleItem>("MuseScore.NotationScene", 1, 0, "StyleItem", "Cannot create StyleItem from QML");
     qmlRegisterType<NotesPageModel>("MuseScore.NotationScene", 1, 0, "NotesPageModel");
