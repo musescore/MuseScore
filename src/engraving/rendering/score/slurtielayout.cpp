@@ -1515,6 +1515,53 @@ double SlurTieLayout::noteOpticalCenterForTie(const Note* note, bool up)
     return 0.5 * (cutOutLeft.x() + cutOutRight.x());
 }
 
+void SlurTieLayout::createSlurSegments(Slur* item, LayoutContext& ctx)
+{
+    const ChordRest* startCR = item->startCR();
+    const ChordRest* endCR = item->endCR();
+    const System* startSys = startCR->measure()->system();
+    const System* endSys = endCR->measure()->system();
+
+    const std::vector<System*>& systems = ctx.dom().systems();
+    system_idx_t startSysIdx = muse::indexOf(systems, startSys);
+    system_idx_t endSysIdx = muse::indexOf(systems, endSys);
+    if (startSysIdx == muse::nidx || endSysIdx == muse::nidx) {
+        return;
+    }
+
+    int segmentsNeeded = 0;
+    for (system_idx_t i = startSysIdx; i <= endSysIdx; ++i) {
+        if (systems.at(i)->vbox()) {
+            continue;
+        }
+        ++segmentsNeeded;
+    }
+    int currentSegments = int(item->spannerSegments().size());
+
+    if (currentSegments != segmentsNeeded) {
+        item->fixupSegments(segmentsNeeded);
+    }
+
+    int segIdx = 0;
+    for (system_idx_t i = startSysIdx; i <= endSysIdx; ++i) {
+        System* system = systems.at(i);
+        if (system->vbox()) {
+            continue;
+        }
+        SlurSegment* lineSegm = item->segmentAt(segIdx++);
+        lineSegm->setSystem(system);
+        if (startSysIdx == endSysIdx) {
+            lineSegm->setSpannerSegmentType(SpannerSegmentType::SINGLE);
+        } else if (i == startSysIdx) {
+            lineSegm->setSpannerSegmentType(SpannerSegmentType::BEGIN);
+        } else if (i > 0 && i != endSysIdx) {
+            lineSegm->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
+        } else if (i == endSysIdx) {
+            lineSegm->setSpannerSegmentType(SpannerSegmentType::END);
+        }
+    }
+}
+
 void SlurTieLayout::correctForCrossStaff(Tie* tie, SlurTiePos& sPos, SpannerSegmentType type)
 {
     Chord* startChord = tie->startNote() ? tie->startNote()->chord() : nullptr;
