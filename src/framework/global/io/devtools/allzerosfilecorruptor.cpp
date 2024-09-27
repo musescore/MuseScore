@@ -28,10 +28,9 @@ AllZerosFileCorruptor::AllZerosFileCorruptor(const path_t& filePath)
 {
 }
 
-size_t AllZerosFileCorruptor::writeData(const uint8_t* data, size_t len)
+size_t AllZerosFileCorruptor::writeData(const uint8_t*, size_t len)
 {
     // Ignore the actual data and write all zeros so as to corrupt the file.
-    Q_UNUSED(data);
     uint8_t* corruptData = new uint8_t[len];
     memset(corruptData, 0, len);
     return File::writeData(corruptData, len);

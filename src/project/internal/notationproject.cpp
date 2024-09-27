@@ -657,17 +657,7 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
         } else {
             Ret ret = muse::make_ok();
 
-            if (!isAutosave) {
-                ret = checkSavedFileForCorruption(ioMode, savePath, targetMainFileName.toQString());
-                if (!ret) {
-                    if (ret.code() == (int)Err::CorruptionUponSavingError) {
-                        ret.setData("corruptedAfterMove", false);
-                    }
-                    return ret;
-                }
-            }
-
-            ret = fileSystem()->move(savePath, targetContainerPath, true);
+            ret = fileSystem()->copy(savePath, targetContainerPath, true);
             if (!ret) {
                 return ret;
             }
@@ -676,11 +666,19 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
                 ret = checkSavedFileForCorruption(ioMode, targetContainerPath, targetMainFileName.toQString());
                 if (!ret) {
                     if (ret.code() == (int)Err::CorruptionUponSavingError) {
-                        ret.setData("corruptedAfterMove", true);
+                        // Validate the temporary "saving" file too.
+                        Ret ret2 = checkSavedFileForCorruption(ioMode, savePath, targetMainFileName.toQString());
+                        if (ret2.code() == (int)Err::CorruptionUponSavingError) {
+                            ret2.setData("savingFileIsCorrupt", true);
+                            return ret2;
+                        }
                     }
                     return ret;
                 }
             }
+
+            // Remove the temp save file (not problematic if fails)
+            fileSystem()->remove(savePath);
         }
     }
 
@@ -815,7 +813,8 @@ Ret NotationProject::saveSelectionOnScore(const muse::io::path_t& path)
     return ret;
 }
 
-Ret NotationProject::checkSavedFileForCorruption(MscIoMode ioMode, const muse::io::path_t path, const muse::io::path_t scoreFileName)
+Ret NotationProject::checkSavedFileForCorruption(MscIoMode ioMode, const muse::io::path_t& path,
+                                                 const muse::io::path_t& scoreFileName)
 {
     TRACEFUNC;
 

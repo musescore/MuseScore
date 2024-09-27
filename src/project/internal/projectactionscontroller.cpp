@@ -1585,19 +1585,19 @@ void ProjectActionsController::warnScoreCorruptAfterSave(const Ret& ret)
 {
     std::string errMessage = ret.toString();
 
-    std::any corruptedAfterMove = ret.data("corruptedAfterMove");
-    std::string originalFileCorruptedMessage = corruptedAfterMove.has_value() && std::any_cast<bool>(corruptedAfterMove)
-                                               ? muse::trc("project/save", "Sadly, your file has become corrupt.\n\n")
-                                               : "";
+    std::any savingFileIsCorrupt = ret.data("savingFileIsCorrupt");
+    std::string savingFileIsCorruptMessage = savingFileIsCorrupt.has_value() && std::any_cast<bool>(savingFileIsCorrupt)
+                                             ? ""
+                                             : " " + muse::trc("project/save", "or from the _saving file"); // The Linux build doesn't like trailing and leading whitespace in translations
 
     std::string message = muse::qtrc("project/save",
-                                     "An error occurred while saving your file. This may be a one-off error. "
-                                     "Please retry saving the file in order not to lose your latest changes.\n\n"
+                                     "An error occurred while saving your file and sadly it has become corrupt. "
+                                     "This may be a one-off error. Please retry saving the file in order not to lose your latest changes.\n\n"
                                      "If it keeps happening, try saving the file to a different location or to MuseScore.com. "
-                                     "Go to the “Support and bug reports” forum at https://musescore.org/en/forum for help.\n\n"
-                                     "%1"
+                                     "If all else fails, restore the file from the most recent backup created by MuseScore Studio%1.\n\n"
+                                     "If you need help, go to the “Support and bug reports” forum at https://musescore.org/en/forum\n\n"
                                      "Error: %2")
-                          .arg(originalFileCorruptedMessage.c_str(), errMessage.c_str())
+                          .arg(savingFileIsCorruptMessage.c_str(), errMessage.c_str())
                           .toStdString();
 
     interactive()->warning(muse::trc("project/save", "Your score could not be saved"), message);

@@ -115,11 +115,11 @@ private:
                         bool createThumbnail = true, bool isAutosave = false);
     muse::Ret saveSelectionOnScore(const muse::io::path_t& path = muse::io::path_t());
     muse::Ret exportProject(const muse::io::path_t& path, const std::string& suffix);
-    muse::Ret doSave(const muse::io::path_t& path, engraving::MscIoMode ioMode, bool generateBackup = true,
-                     bool createThumbnail = true, bool isAutosave = false);
+    muse::Ret doSave(const muse::io::path_t& path, engraving::MscIoMode ioMode, bool generateBackup = true, bool createThumbnail = true,
+                     bool isAutosave = false);
     muse::Ret makeCurrentFileAsBackup();
     muse::Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection, bool createThumbnail = true);
-    muse::Ret checkSavedFileForCorruption(engraving::MscIoMode ioMode, const muse::io::path_t path, const muse::io::path_t scoreFileName);
+    muse::Ret checkSavedFileForCorruption(engraving::MscIoMode ioMode, const muse::io::path_t& path, const muse::io::path_t& scoreFileName);
 
     void listenIfNeedSaveChanges();
     void markAsSaved(const muse::io::path_t& path);
