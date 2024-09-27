@@ -21873,7 +21873,7 @@ l&apos;anacrouse</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="64"/>
         <source>Name on main score</source>
-        <translation>Nom sur le partition principale</translation>
+        <translation>Nom sur la partition principale</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="65"/>

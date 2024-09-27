@@ -6561,7 +6561,7 @@ yüzdesel yüksekliği):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="582"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="583"/>
         <source>Redo</source>
-        <translation>İleri al</translation>
+        <translation>Yenile</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2007"/>

@@ -6492,13 +6492,13 @@ textens x-höjd):</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="89"/>
         <source>Publish to MuseScore.com…</source>
-        <translation>&amp;Publicera på MuseScore.com …</translation>
+        <translation>Publicera på MuseScore.com …</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="95"/>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="96"/>
         <source>Share on Audio.com…</source>
-        <translation>&amp;Ge ut på Audio.com …</translation>
+        <translation>Ge ut på Audio.com …</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="102"/>
@@ -6508,7 +6508,7 @@ textens x-höjd):</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="103"/>
         <source>Export…</source>
-        <translation>&amp;Exportera …</translation>
+        <translation>Exportera …</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="109"/>
@@ -6528,7 +6528,7 @@ textens x-höjd):</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
         <source>Project properties…</source>
-        <translation>&amp;Dokumentspecifikationer …</translation>
+        <translation>Dokumentspecifikationer …</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="122"/>
@@ -6543,7 +6543,7 @@ textens x-höjd):</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="130"/>
         <source>Clear recent files</source>
-        <translation>&amp;Rensa senaste filer</translation>
+        <translation>Rensa senaste filer</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="123"/>
@@ -6554,13 +6554,13 @@ textens x-höjd):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="575"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="576"/>
         <source>Undo</source>
-        <translation>&amp;Ångra</translation>
+        <translation>Ångra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="582"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="583"/>
         <source>Redo</source>
-        <translation>&amp;Gör om</translation>
+        <translation>Gör om</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2007"/>
@@ -9038,7 +9038,7 @@ textens x-höjd):</translation>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="47"/>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="48"/>
         <source>Quit</source>
-        <translation>&amp;Avsluta</translation>
+        <translation>Avsluta</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="38"/>
@@ -9106,13 +9106,13 @@ textens x-höjd):</translation>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="128"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="129"/>
         <source>Set loop marker left</source>
-        <translation>Ange början på slinga</translation>
+        <translation>Ange slingas början</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="135"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="136"/>
         <source>Set loop marker right</source>
-        <translation>Ange slut på slinga</translation>
+        <translation>Ange slingas slut</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="52"/>
@@ -10111,7 +10111,7 @@ textens x-höjd):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="456"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="457"/>
         <source>Fill with slashes</source>
-        <translation>&amp;Fyll med upprepningsstreck</translation>
+        <translation>Fyll med upprepningsstreck</translation>
     </message>
     <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="37"/>
@@ -10158,7 +10158,7 @@ textens x-höjd):</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="37"/>
         <source>Save diagnostic files</source>
-        <translation>&amp;Spara diagnostikfiler</translation>
+        <translation>Spara diagnostikfiler</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="42"/>
@@ -10296,7 +10296,7 @@ textens x-höjd):</translation>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="281"/>
         <source>Selection filter</source>
-        <translation>&amp;Markeringsfilter</translation>
+        <translation>Markeringsfilter</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="309"/>
@@ -10311,7 +10311,7 @@ textens x-höjd):</translation>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="373"/>
         <source>Timeline</source>
-        <translation>&amp;Tidslinje</translation>
+        <translation>Tidslinje</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="399"/>
@@ -29152,7 +29152,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialog.qml" line="84"/>
         <source>Define keyboard shortcut</source>
-        <translation>Definiera kortkommando</translation>
+        <translation>Ange kortkommando</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialog.qml" line="114"/>
@@ -29218,7 +29218,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="63"/>
         <source>Define…</source>
-        <translation>Definiera …</translation>
+        <translation>Ange kommando …</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="97"/>

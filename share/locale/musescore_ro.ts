@@ -173,7 +173,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="370"/>
         <source>Stem direction:</source>
-        <translation>Direcţia cozii:</translation>
+        <translation>Direcția codiței:</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="390"/>
@@ -2872,7 +2872,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4086"/>
         <source>Cents offset</source>
-        <translation>Deplasament Cents</translation>
+        <translation>Deplasament centisunete</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4103"/>
@@ -19578,7 +19578,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/NoteExpandableBlank.qml" line="83"/>
         <source>Tuning (cents)</source>
-        <translation>Acordare (cenți)</translation>
+        <translation>Acordare (centisunete)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/PausesExpandableBlank.qml" line="51"/>
@@ -20598,7 +20598,7 @@ anacruzele</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="77"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolos/TremoloSettings.qml" line="65"/>
         <source>Stem direction</source>
-        <translation>Direcţia cozii</translation>
+        <translation>Direcția codiței</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="92"/>

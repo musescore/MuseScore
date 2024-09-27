@@ -15378,14 +15378,14 @@
         <source>Tenor viola da gamba. Middle member of the viol family.</source>
         <comment>tenor-viol description</comment>
         <extracomment>description for Tenor Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>中音古提琴。 古提琴家族的中间成员。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6145"/>
         <source>Bass viola da gamba (staff notation). Third lowest member of the viol family.</source>
         <comment>viola-da-gamba description</comment>
         <extracomment>description for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>低音古提琴（五线谱）。 古提琴家族第三低的成员。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6147"/>
@@ -15413,7 +15413,7 @@
         <source>Bass viola da gamba (tablature). Third lowest member of the viol family.</source>
         <comment>viola-da-gamba-tablature description</comment>
         <extracomment>description for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>低音古提琴（指法谱）。 古提琴家族第三低的成员。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6162"/>
