@@ -56,7 +56,5 @@ extern bool isLaissezVibrer(const SymId id);
 extern const Articulation* findLaissezVibrer(const Chord* chord);
 extern String errorStringWithLocation(int line, int col, const String& error);
 extern String checkAtEndElement(const muse::XmlStreamReader& e, const String& expName);
-extern void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& fraction, Fraction& fullDuration);
-extern Fraction missingTupletDuration(const Fraction duration);
 } // namespace Ms
 #endif

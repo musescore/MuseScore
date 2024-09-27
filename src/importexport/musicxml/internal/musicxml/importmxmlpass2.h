@@ -27,7 +27,6 @@
 
 #include "importmxmlpass1.h"
 #include "internal/musicxml/musicxmlsupport.h"
-#include "musicxml.h"
 #include "musicxmltypes.h"
 #include "musicxmltupletstate.h"
 
@@ -301,6 +300,9 @@ using SpannerSet = std::set<Spanner*>;
 using DelayedArpMap = std::map<int, DelayedArpeggio>;
 using SegnoStack = std::map<int, Marker*>;
 using SystemElements = std::multimap<int, EngravingItem*>;
+
+// Ties are identified by the pitch and track of their first note
+typedef std::pair<int, track_idx_t> TieLocation;
 using MusicXMLTieMap = std::map<TieLocation, Tie*>;
 
 //---------------------------------------------------------

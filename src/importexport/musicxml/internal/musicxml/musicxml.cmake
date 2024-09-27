@@ -15,7 +15,6 @@ set (MUSICXML_SRC
     ${CMAKE_CURRENT_LIST_DIR}/importmxmlpass2.cpp
     ${CMAKE_CURRENT_LIST_DIR}/importmxmlpass2.h
     ${CMAKE_CURRENT_LIST_DIR}/importxml.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/musicxml.h
     ${CMAKE_CURRENT_LIST_DIR}/musicxmlfonthandler.cpp
     ${CMAKE_CURRENT_LIST_DIR}/musicxmlfonthandler.h
     ${CMAKE_CURRENT_LIST_DIR}/musicxmlpart.cpp

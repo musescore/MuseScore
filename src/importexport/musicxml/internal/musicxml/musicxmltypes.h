@@ -26,6 +26,8 @@
 #include "dom/interval.h"
 
 namespace mu::engraving {
+const int MAX_NUMBER_LEVEL = 16; // maximum number of overlapping MusicXML objects
+
 //---------------------------------------------------------
 //   MxmlStartStop
 //---------------------------------------------------------

@@ -122,6 +122,8 @@ static std::shared_ptr<mu::engraving::IEngravingFontsProvider> engravingFonts()
 
 //#define DEBUG_VOICE_MAPPER true
 
+constexpr int MAX_LYRICS       = 16;
+
 //---------------------------------------------------------
 //   function declarations
 //---------------------------------------------------------

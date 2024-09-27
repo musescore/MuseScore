@@ -28,7 +28,6 @@
 
 namespace mu::engraving {
 class Score;
-
 bool saveMxl(Score*, muse::io::IODevice*);
 bool saveXml(Score*, muse::io::IODevice*);
 bool saveXml(Score*, const muse::String&);

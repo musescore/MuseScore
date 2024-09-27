@@ -55,6 +55,9 @@ private:
     int smallestNoteCount = 0;   // number of smallest notes in the tuplet
 };
 using MxmlTupletStates = std::map<String, MxmlTupletState>;
+
+void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& fraction, Fraction& fullDuration);
+Fraction missingTupletDuration(const Fraction duration);
 }
 
 #endif // MUSICXMLTUPLETSTATE_H
