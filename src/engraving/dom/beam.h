@@ -23,8 +23,6 @@
 #ifndef MU_ENGRAVING_BEAM_H
 #define MU_ENGRAVING_BEAM_H
 
-#include <memory>
-
 #include "beambase.h"
 #include "engravingitem.h"
 #include "property.h"
@@ -39,44 +37,10 @@ class Beam;
 enum class ActionIconType;
 enum class SpannerSegmentType;
 
-//---------------------------------------------------------
-//   BeamFragment
-//    position of primary beam
-//    idx 0 - DirectionV::AUTO or DirectionV::DOWN
-//        1 - DirectionV::UP
-//---------------------------------------------------------
-
-struct BeamFragment {
-    double py1[2];
-    double py2[2];
-};
-
-class BeamSegment
-{
-    OBJECT_ALLOCATOR(engraving, BeamSegment)
-public:
-    LineF line;
-    int level = 0;
-    bool above = false; // above level 0 or below? (meaningless for level 0)
-    Fraction startTick;
-    Fraction endTick;
-    bool isBeamlet = false;
-    bool isBefore = false;
-
-    Shape shape() const;
-    EngravingItem* parentElement = nullptr;
-
-    BeamSegment(EngravingItem* b);
-};
-
 struct TremAnchor {
     ChordRest* chord1 = nullptr;
     double y1 = 0.;
     double y2 = 0.;
-};
-
-enum class ChordBeamAnchorType {
-    Start, End, Middle
 };
 
 //---------------------------------------------------------
@@ -130,8 +94,7 @@ public:
     void setId(int i) const { m_id = i; }
     int id() const { return m_id; }
 
-    void setBeamDirection(DirectionV d);
-    DirectionV beamDirection() const { return m_direction; }
+    void setDirection(DirectionV d) override;
 
     void calcBeamBreaks(const ChordRest* chord, const ChordRest* prevChord, int level, bool& isBroken32, bool& isBroken64) const;
 
@@ -144,9 +107,6 @@ public:
     double growRight() const { return m_growRight; }
     void setGrowLeft(double val) { m_growLeft = val; }
     void setGrowRight(double val) { m_growRight = val; }
-
-    bool userModified() const;
-    void setUserModified(bool val);
 
     PairF beamPos() const;
     void setBeamPos(const PairF& bp);
@@ -163,13 +123,6 @@ public:
     double slope() const { return m_slope; }
     void computeAndSetSlope();
     void setSlope(double val) { m_slope = val; }
-
-    const PointF& startAnchor() const { return m_startAnchor; }
-    PointF& startAnchor() { return m_startAnchor; }
-    void setStartAnchor(const PointF& p) { m_startAnchor = p; }
-    const PointF& endAnchor() const { return m_endAnchor; }
-    PointF& endAnchor() { return m_endAnchor; }
-    void setEndAnchor(const PointF& p) { m_endAnchor = p; }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -214,9 +167,7 @@ public:
     std::vector<BeamFragment*>& beamFragments() { return m_fragments; }
     void addBeamFragment(BeamFragment* f) { m_fragments.push_back(f); }
 
-    const std::vector<BeamSegment*>& beamSegments() const { return m_beamSegments; }
-    std::vector<BeamSegment*>& beamSegments() { return m_beamSegments; }
-    void clearBeamSegments();
+    void clearBeamSegments() override;
 
     const StaffType* tab() const { return m_tab; }
     void setTab(const StaffType* t) { m_tab = t; }
@@ -229,8 +180,6 @@ public:
     const Chord* findChordWithCustomStemDirection() const;
 
     const BeamSegment* topLevelSegmentForElement(const ChordRest* element) const;
-
-    inline int directionIdx() const { return (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1; }
 
 private:
 
@@ -247,10 +196,7 @@ private:
     void removeChordRest(ChordRest* a);
 
     std::vector<ChordRest*> m_elements;          // must be sorted by tick
-    std::vector<BeamSegment*> m_beamSegments;
-    DirectionV m_direction = DirectionV::AUTO;
 
-    bool m_userModified[2]{ false };    // 0: auto/down  1: up
     bool m_isGrace = false;
     bool m_cross = false;
     bool m_fullCross = false;
@@ -260,8 +206,6 @@ private:
     double m_beamDist = 0.0;
     int m_beamSpacing = 3;              // how far apart beams are spaced in quarter spaces
     double m_beamWidth = 0.0;           // how wide each beam is
-    PointF m_startAnchor;
-    PointF m_endAnchor;
 
     // for tabs
     bool m_isBesideTabStaff = false;

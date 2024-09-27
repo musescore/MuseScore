@@ -55,18 +55,6 @@ void TremoloLayout::layout(TremoloTwoChord* item, const LayoutContext& ctx)
     } else {
         // center tremolo above note
         x = anchor1->x() + anchor1->headWidth() * 0.5;
-        if (!item->twoNotes()) {
-            bool hasMirroredNote = false;
-            for (Note* n : item->chord1()->notes()) {
-                if (n->ldata()->mirror.value()) {
-                    hasMirroredNote = true;
-                    break;
-                }
-            }
-            if (hasMirroredNote) {
-                x = item->chord1()->stemPosX();
-            }
-        }
         y = anchor1->y();
         h = (ctx.conf().styleMM(Sid::tremoloNoteSidePadding).val() + item->ldata()->bbox().height()) * item->chord1()->intrinsicMag();
     }
@@ -187,7 +175,7 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, const LayoutCon
     if (item->chord1()->beam() && item->chord1()->beam() == item->chord2()->beam()) {
         Beam* beam = item->chord1()->beam();
         item->setUp(beam->up());
-        item->setDirection(beam->beamDirection());
+        item->doSetDirection(beam->direction());
         // stem stuff is already taken care of by the beams
     } else if (!item->userModified()) {
         // user modified trems will be dealt with later
@@ -233,7 +221,7 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, const LayoutCon
     // deal with manual adjustments here and return
     PropertyValue val = item->getProperty(Pid::PLACEMENT);
     if (item->userModified()) {
-        int idx = (item->direction() == DirectionV::AUTO || item->direction() == DirectionV::DOWN) ? 0 : 1;
+        int idx = item->directionIdx();
         double startY = item->beamFragment().py1[idx];
         double endY = item->beamFragment().py2[idx];
         if (ctx.conf().styleB(Sid::snapCustomBeamsToGrid)) {
@@ -280,7 +268,7 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, const LayoutCon
     item->setStartAnchor(item->ldata()->startAnchor);
     item->setEndAnchor(item->ldata()->endAnchor);
 
-    int idx = (item->direction() == DirectionV::AUTO || item->direction() == DirectionV::DOWN) ? 0 : 1;
+    int idx = item->directionIdx();
     item->beamFragment().py1[idx] = item->startAnchor().y() - item->pagePos().y();
     item->beamFragment().py2[idx] = item->endAnchor().y() - item->pagePos().y();
     createBeamSegments(item, ctx);
@@ -326,10 +314,6 @@ void TremoloLayout::createBeamSegments(TremoloTwoChord* item, const LayoutContex
     const bool defaultStyle = (!item->customStyleApplicable()) || (item->tremoloStyle() == TremoloStyle::DEFAULT);
 
     item->clearBeamSegments();
-
-    if (!item->twoNotes()) {
-        return;
-    }
 
     bool _isGrace = item->chord1()->isGrace();
     const PointF pagePos = item->pagePos();

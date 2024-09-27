@@ -155,8 +155,8 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     }
 
     if (item->staff()->isDrumStaff(Fraction(0, 1))) {
-        if (item->beamDirection() != DirectionV::AUTO) {
-            item->setUp(item->beamDirection() == DirectionV::UP);
+        if (item->direction() != DirectionV::AUTO) {
+            item->setUp(item->direction() == DirectionV::UP);
         } else if (item->isGrace()) {
             item->setUp(true);
         } else {
@@ -224,8 +224,8 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     Measure* measure = firstNote->measure();
     bool hasMultipleVoices = measure->hasVoices(firstNote->staffIdx(), item->tick(), item->ticks());
     if (computeUpForMovedCross(item)) {
-    } else if (item->beamDirection() != DirectionV::AUTO) {
-        item->setUp(item->beamDirection() == DirectionV::UP);
+    } else if (item->direction() != DirectionV::AUTO) {
+        item->setUp(item->direction() == DirectionV::UP);
     } else if (item->maxCRMove() > 0) {
         item->setUp(false);
     } else if (item->minCRMove() < 0) {
@@ -265,7 +265,7 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     if (item->minCRMove() == item->maxCRMove() && item->minCRMove() != 0) {
         isEntirelyMoved = true;
         item->setStaffIdx(staffIdx);
-        if (item->beamDirection() == DirectionV::AUTO) {
+        if (item->direction() == DirectionV::AUTO) {
             item->setUp(item->maxCRMove() > 0);
         }
     } else if (item->elements().size()) {
@@ -1482,7 +1482,6 @@ void BeamLayout::setTremAnchors(Beam* item, const LayoutContext& ctx)
             // there is an inset tremolo here!
             // figure out up / down
             bool tremUp = t->up();
-            //int fragmentIndex = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
             if (item->userModified()) {
                 tremUp = c->up();
             } else if (item->cross() && t->chord1()->staffMove() == t->chord2()->staffMove()) {

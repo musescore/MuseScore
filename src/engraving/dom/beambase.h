@@ -34,6 +34,40 @@ enum class BeamType {
     TREMOLO
 };
 
+//---------------------------------------------------------
+//   BeamFragment
+//    position of primary beam
+//    idx 0 - DirectionV::AUTO or DirectionV::DOWN
+//        1 - DirectionV::UP
+//---------------------------------------------------------
+
+struct BeamFragment {
+    double py1[2];
+    double py2[2];
+};
+
+enum class ChordBeamAnchorType {
+    Start, End, Middle
+};
+
+class BeamSegment
+{
+    OBJECT_ALLOCATOR(engraving, BeamSegment)
+public:
+    LineF line;
+    int level = 0;
+    bool above = false; // above level 0 or below? (meaningless for level 0)
+    Fraction startTick;
+    Fraction endTick;
+    bool isBeamlet = false;
+    bool isBefore = false;
+
+    Shape shape() const;
+    EngravingItem* parentElement = nullptr;
+
+    BeamSegment(EngravingItem* b);
+};
+
 class BeamBase : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, BeamBase)
@@ -56,6 +90,26 @@ public:
 
     bool up() const { return m_up; }
     void setUp(bool v) { m_up = v; }
+
+    bool userModified() const;
+    void setUserModified(bool val);
+
+    DirectionV direction() const { return m_direction; }
+    void doSetDirection(DirectionV val) { m_direction = val; }
+    virtual void setDirection(DirectionV v) = 0;
+
+    inline int directionIdx() const { return (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1; }
+
+    const std::vector<BeamSegment*>& beamSegments() const { return m_beamSegments; }
+    std::vector<BeamSegment*>& beamSegments() { return m_beamSegments; }
+    virtual void clearBeamSegments();
+
+    const PointF& startAnchor() const { return m_startAnchor; }
+    PointF& startAnchor() { return m_startAnchor; }
+    void setStartAnchor(const PointF& p) { m_startAnchor = p; }
+    const PointF& endAnchor() const { return m_endAnchor; }
+    PointF& endAnchor() { return m_endAnchor; }
+    void setEndAnchor(const PointF& p) { m_endAnchor = p; }
 
     void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE) override;
 
@@ -135,8 +189,14 @@ public:
 protected:
     BeamBase(const ElementType& type, EngravingItem* parent, ElementFlags flags = ElementFlag::NOTHING);
     BeamBase(const BeamBase&);
+    std::vector<BeamSegment*> m_beamSegments;
+    PointF m_startAnchor;
+    PointF m_endAnchor;
 
+private:
     bool m_up = true;
+    bool m_userModified[2]{ false };    // 0: auto/down  1: up
+    DirectionV m_direction = DirectionV::AUTO;
 };
 }
 

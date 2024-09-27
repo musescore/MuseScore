@@ -3024,7 +3024,7 @@ void TWrite::write(const TremoloTwoChord* item, XmlWriter& xml, WriteContext& ct
     writeItemProperties(item, xml, ctx);
 
     // write manual adjustments to file
-    int idx = (item->direction() == DirectionV::AUTO || item->direction() == DirectionV::DOWN) ? 0 : 1;
+    int idx = item->directionIdx();
     if (item->userModified()) {
         double _spatium = item->spatium();
 
