@@ -183,12 +183,12 @@
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="395"/>
         <source>Up</source>
-        <translation>Nahoře</translation>
+        <translation>Nahoru</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="400"/>
         <source>Down</source>
-        <translation>Dole</translation>
+        <translation>Dolů</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="418"/>
@@ -1014,7 +1014,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="73"/>
         <source>Do not hide if system is empty</source>
-        <translation>Neskrývat, když je systém prázdný</translation>
+        <translation>Neskrývat v prázdných systémech</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="82"/>
@@ -1055,12 +1055,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="159"/>
         <source>Hide system barline</source>
-        <translation>Skrýt taktovou čáru systému</translation>
+        <translation>Skrýt spojovací čáru systému</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="166"/>
         <source>Cutaway</source>
-        <translation>Vystříhat prázdné takty</translation>
+        <translation>Vystřihnout prázdné takty</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="186"/>
@@ -2417,7 +2417,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="94"/>
         <source>Clefs, key &amp; time signatures</source>
-        <translation>Klíče, předznamenání a taktová označení</translation>
+        <translation>Klíče, předznamenání a taktové označení</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="357"/>
@@ -2758,7 +2758,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3913"/>
         <source>Hide after the first system where they appear</source>
-        <translation>Skrýt za prvním systémem, kde jsou zobrazeny</translation>
+        <translation>Skrýt za prvním systémem, kde jsou zobrazena</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3920"/>
@@ -8747,7 +8747,7 @@ pro čísla u nepravidelných rytm. skupin</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2496"/>
         <source>Mark irregular measures</source>
-        <translation>Označit nepravidelné takty</translation>
+        <translation>Označit neregulérní takty</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1588"/>
@@ -10080,7 +10080,7 @@ pro čísla u nepravidelných rytm. skupin</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2495"/>
         <source>Mark i&amp;rregular measures</source>
-        <translation>Označit nepravidelné &amp;takty</translation>
+        <translation>Označit neregulérní &amp;takty</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1641"/>
@@ -10382,7 +10382,7 @@ Tento krok neodstraní žádný vašich notových zápisů.
     <message>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="91"/>
         <source>Score</source>
-        <translation>Notové zápisy</translation>
+        <translation>Notový zápis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="92"/>
@@ -11319,7 +11319,7 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="166"/>
         <source>Score</source>
-        <translation>Notové zápisy</translation>
+        <translation>Notový zápis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="175"/>
@@ -11640,7 +11640,7 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
         <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="105"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="170"/>
         <source>Score</source>
-        <translation>Notové zápisy</translation>
+        <translation>Notový zápis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="141"/>
@@ -19738,7 +19738,7 @@ předtaktí</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="73"/>
         <source>Repeat style</source>
-        <translation>Opakovat styl</translation>
+        <translation>Styl repetiční čáry</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="95"/>
@@ -19748,12 +19748,12 @@ předtaktí</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="111"/>
         <source>Span from</source>
-        <translation>Protažení nahoře</translation>
+        <translation>Protáhnout nahoře</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="130"/>
         <source>Span to</source>
-        <translation>Protažení po</translation>
+        <translation>Protáhnout dole</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="148"/>
@@ -20664,7 +20664,7 @@ předtaktí</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="148"/>
         <source>Step offset</source>
-        <translation>Posun kroku</translation>
+        <translation>Posun not</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="162"/>
@@ -21967,7 +21967,7 @@ předtaktí</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="159"/>
         <source>Hide all measures that do not contain notation (cutaway)</source>
-        <translation>Skrýt všechny takty, které neobsahují noty (vystřihnutí)</translation>
+        <translation>Skrýt všechny takty, které neobsahují noty (vystřihnout)</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="176"/>

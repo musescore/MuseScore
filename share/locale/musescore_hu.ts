@@ -3672,7 +3672,7 @@ sorcsoport első szótagja előtt</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6859"/>
         <source>Bracket thickness:</source>
         <comment>Tuplet bracket</comment>
-        <translation>Klammer vastagsága</translation>
+        <translation>Klammer vastagsága:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6891"/>
@@ -12988,12 +12988,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="246"/>
         <source>Extension line segment</source>
-        <translation>Pótvonal szegmens</translation>
+        <translation>Hosszabbító vonal szegmens</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="276"/>
         <source>Extension line</source>
-        <translation>Pótvonal</translation>
+        <translation>Hosszabbító vonal</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="306"/>
@@ -25250,7 +25250,7 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1538"/>
         <source>expression</source>
-        <translation>kifejezés</translation>
+        <translation>előadási jel</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1633"/>
