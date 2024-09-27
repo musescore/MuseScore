@@ -1133,14 +1133,14 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
     // ###################################################
     // 2nd case: Continuous glissando on a tied note
     // ###################################################
-    chord = findChord(score, 5280, 0); // tied A4 with continuous glissando
+    chord = findChord(score, 4800, 0); // tied A4 with continuous glissando
     ASSERT_TRUE(chord);
     ASSERT_FALSE(chord->notes().empty());
-    ASSERT_TRUE(chord->notes().front()->tieBack());
+    ASSERT_TRUE(chord->notes().front()->tieFor());
 
     // [GIVEN] Expected glissando disclosure
     expectedSubNotesCount = 1;
-    expectedDuration = QUARTER_NOTE_DURATION;
+    expectedDuration = QUARTER_NOTE_DURATION * 2;
     expectedTimestamp = timestampFromTicks(score, chord->tick().ticks());
     nominalPitchLevel = pitchLevel(PitchClass::A, 4);
 
