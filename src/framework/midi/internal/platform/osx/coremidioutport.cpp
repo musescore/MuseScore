@@ -35,6 +35,15 @@
 using namespace muse;
 using namespace muse::midi;
 
+//#define DEBUG_COREMIDIOUTPORT
+#ifdef DEBUG_COREMIDIOUTPORT
+#define LOG_MIDI_D LOGD
+#define LOG_MIDI_W LOGW
+#else
+#define LOG_MIDI_D LOGN
+#define LOG_MIDI_W LOGN
+#endif
+
 struct muse::midi::CoreMidiOutPort::Core {
     MIDIClientRef client = 0;
     MIDIPortRef outputPort = 0;
@@ -297,29 +306,23 @@ Ret CoreMidiOutPort::sendEvent(const Event& e)
 
     OSStatus result;
     MIDITimeStamp timeStamp = AudioGetCurrentHostTime();
-    static bool doLog = false; // kors::logger::Logger::instance()->isLevel(kors::logger::Level::Debug);
 
     if (__builtin_available(macOS 11.0, *)) {
         MIDIProtocolID protocolId = kMIDIProtocol_2_0; // configuration()->useMIDI20Output() ? m_core->destinationProtocolId : kMIDIProtocol_1_0;
 
         ByteCount wordCount = e.midi20WordCount();
         if (wordCount == 0) {
-            LOGW() << "Failed to send message for event: " << e.to_string();
+            LOG_MIDI_W() << "Failed to send message for event: " << e.to_string();
             return make_ret(Err::MidiSendError, "failed send message. unknown word count");
         }
-        if (doLog) {
-            LOGW() << "Sending MIDIEventList event: " << e.to_string();
-        }
+        LOG_MIDI_D() << "Sending MIDIEventList event: " << e.to_string();
 
         MIDIEventList eventList;
         MIDIEventPacket* packet = MIDIEventListInit(&eventList, protocolId);
 
-        if (doLog) {
-            bool isChannelVoiceMessage20 = e.messageType() == Event::MessageType::ChannelVoice20;
-            bool isNoteOnMessage = isChannelVoiceMessage20 && e.opcode() == muse::midi::Event::Opcode::NoteOn;
-            if (isNoteOnMessage && e.velocity() < 128) {
-                LOGW() << "Detected low MIDI 2.0 ChannelVoiceMessage velocity.";
-            }
+        if (e.messageType() == Event::MessageType::ChannelVoice20 && e.opcode() == muse::midi::Event::Opcode::NoteOn
+            && e.velocity() < 128) {
+            LOG_MIDI_W() << "Detected low MIDI 2.0 ChannelVoiceMessage velocity.";
         }
 
         MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, wordCount, e.rawData());
@@ -341,14 +344,10 @@ Ret CoreMidiOutPort::sendEvent(const Event& e)
         for (const Event& event : events) {
             int length = event.to_MIDI10BytesPackage(bytesPackage);
             assert(length <= 3);
-            if (doLog) {
-                if (length == 0) {
-                    LOGW() << "Failed Sending MIDIPacketList event: " << event.to_string();
-                } else {
-                    LOGW() << "Sending MIDIPacketList event: " << event.to_string();
-                }
-            }
-            if (length > 0) {
+            if (length == 0) {
+                LOG_MIDI_W() << "Failed Sending MIDIPacketList event: " << event.to_string();
+            } else {
+                LOG_MIDI_D() << "Sending MIDIPacketList event: " << event.to_string();
                 packet = MIDIPacketListAdd(&packetList, packetListSize, packet, timeStamp, length, bytesPackage);
             }
         }
