@@ -3033,7 +3033,7 @@ void MusicXMLParserPass2::staffTuning(StringData* t)
       int octave = 0;
       while (_e.readNextStartElement()) {
             if (_e.name() == "tuning-alter")
-                  alter = _e.readElementText().toInt();
+                  alter = _e.readElementText().trimmed().toInt();
             else if (_e.name() == "tuning-octave")
                   octave = _e.readElementText().toInt();
             else if (_e.name() == "tuning-step") {
@@ -5286,7 +5286,7 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
                   keyStep = _e.readElementText();
                   }
             else if (_e.name() == "key-alter")
-                  keyAlter = _e.readElementText();
+                  keyAlter = _e.readElementText().trimmed();
             else if (_e.name() == "key-accidental") {
                   smufl = _e.attributes().value("smufl").toString();
                   keyAccidental = _e.readElementText();
@@ -6887,8 +6887,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                         else if (_e.name() == "root-alter") {
                               // attributes: print-object
                               //             location (left-right)
-                              // Cubase exports this value with a trailing newline
-                              alter = _e.readElementText().simplified().toInt();
+                              alter = _e.readElementText().trimmed().toInt();
                               }
                         else
                               skipLogCurrElem();
@@ -6932,7 +6931,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                         else if (_e.name() == "bass-alter") {
                               // attributes: print-object
                               //             location (left-right)
-                              alter = _e.readElementText().toInt();
+                              alter = _e.readElementText().trimmed().toInt();
                               }
                         else
                               skipLogCurrElem();
@@ -6948,7 +6947,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                               degreeValue = _e.readElementText().toInt();
                               }
                         else if (_e.name() == "degree-alter") {
-                              degreeAlter = _e.readElementText().toInt();
+                              degreeAlter = _e.readElementText().trimmed().toInt();
                               }
                         else if (_e.name() == "degree-type") {
                               degreeType = _e.readElementText();
