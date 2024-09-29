@@ -48,7 +48,6 @@ struct muse::midi::CoreMidiOutPort::Core {
     MIDIClientRef client = 0;
     MIDIPortRef outputPort = 0;
     MIDIEndpointRef destinationId = 0;
-    MIDIProtocolID destinationProtocolId = kMIDIProtocol_1_0;
     int deviceID = -1;
 };
 
@@ -78,15 +77,6 @@ void CoreMidiOutPort::deinit()
 
     if (m_core->client) {
         MIDIClientDispose(m_core->client);
-    }
-}
-
-void CoreMidiOutPort::getDestinationProtocolId()
-{
-    if (__builtin_available(macOS 11.0, *)) {
-        SInt32 protocol = 0;
-        OSStatus err = MIDIObjectGetIntegerProperty(m_core->destinationId, kMIDIPropertyProtocolID, &protocol);
-        m_core->destinationProtocolId = err == noErr ? (MIDIProtocolID)protocol : kMIDIProtocol_1_0;
     }
 }
 
@@ -141,11 +131,6 @@ void CoreMidiOutPort::initCore()
             if (CFStringCompare(propertyChangeNotification->propertyName, kMIDIPropertyDisplayName, 0) == kCFCompareEqualTo
                 || CFStringCompare(propertyChangeNotification->propertyName, kMIDIPropertyName, 0) == kCFCompareEqualTo) {
                 self->availableDevicesChanged().notify();
-            } else if (__builtin_available(macOS 11.0, *)) {
-                if (CFStringCompare(propertyChangeNotification->propertyName, kMIDIPropertyProtocolID, 0) == kCFCompareEqualTo
-                    && self->isConnected() && propertyChangeNotification->object == self->m_core->destinationId) {
-                    self->getDestinationProtocolId();
-                }
             }
         } break;
 
@@ -247,8 +232,6 @@ Ret CoreMidiOutPort::connect(const MidiDeviceID& deviceID)
 
         m_core->deviceID = std::stoi(deviceID);
         m_core->destinationId = (MIDIEndpointRef)obj;
-
-        getDestinationProtocolId();
     }
 
     m_deviceID = deviceID;
