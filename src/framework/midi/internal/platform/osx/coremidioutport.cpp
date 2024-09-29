@@ -307,27 +307,32 @@ Ret CoreMidiOutPort::sendEvent(const Event& e)
     OSStatus result;
     MIDITimeStamp timeStamp = AudioGetCurrentHostTime();
 
-    if (__builtin_available(macOS 11.0, *)) {
-        MIDIProtocolID protocolId = kMIDIProtocol_2_0; // configuration()->useMIDI20Output() ? m_core->destinationProtocolId : kMIDIProtocol_1_0;
+    // Note: there could be three cases: MIDI2+MIDIEventList, MIDI1+MIDIEventList, MIDI1+MIDIPacketList.
+    //       But we only maintain 2 code paths and may drop configuration()->useMIDI20Output() and MIDIPacketList later.
 
-        ByteCount wordCount = e.midi20WordCount();
-        if (wordCount == 0) {
-            LOG_MIDI_W() << "Failed to send message for event: " << e.to_string();
-            return make_ret(Err::MidiSendError, "failed send message. unknown word count");
+    if (supportsMIDI20Output() && configuration()->useMIDI20Output()) {
+        if (__builtin_available(macOS 11.0, *)) {
+            MIDIProtocolID protocolId = kMIDIProtocol_2_0;
+
+            ByteCount wordCount = e.midi20WordCount();
+            if (wordCount == 0) {
+                LOG_MIDI_W() << "Failed to send message for event: " << e.to_string();
+                return make_ret(Err::MidiSendError, "failed send message. unknown word count");
+            }
+            LOG_MIDI_D() << "Sending MIDIEventList event: " << e.to_string();
+
+            MIDIEventList eventList;
+            MIDIEventPacket* packet = MIDIEventListInit(&eventList, protocolId);
+
+            if (e.messageType() == Event::MessageType::ChannelVoice20 && e.opcode() == muse::midi::Event::Opcode::NoteOn
+                && e.velocity() < 128) {
+                LOG_MIDI_W() << "Detected low MIDI 2.0 ChannelVoiceMessage velocity.";
+            }
+
+            MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, wordCount, e.rawData());
+
+            result = MIDISendEventList(m_core->outputPort, m_core->destinationId, &eventList);
         }
-        LOG_MIDI_D() << "Sending MIDIEventList event: " << e.to_string();
-
-        MIDIEventList eventList;
-        MIDIEventPacket* packet = MIDIEventListInit(&eventList, protocolId);
-
-        if (e.messageType() == Event::MessageType::ChannelVoice20 && e.opcode() == muse::midi::Event::Opcode::NoteOn
-            && e.velocity() < 128) {
-            LOG_MIDI_W() << "Detected low MIDI 2.0 ChannelVoiceMessage velocity.";
-        }
-
-        MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, wordCount, e.rawData());
-
-        result = MIDISendEventList(m_core->outputPort, m_core->destinationId, &eventList);
     } else {
         const std::vector<Event> events = e.toMIDI10();
 
