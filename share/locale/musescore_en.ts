@@ -11935,87 +11935,87 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Note</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3132"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3170"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3135"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3173"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="747"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="759"/>
         <source>Voice: %1</source>
         <translation type="unfinished">Voice: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3140"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3143"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation type="unfinished">(on %1‰ off %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3146"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3175"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3149"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3178"/>
         <source>Beat slash</source>
         <translation type="unfinished">Beat slash</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3146"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3175"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3149"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3178"/>
         <source>Rhythm slash</source>
         <translation type="unfinished">Rhythm slash</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3150"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3179"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3153"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3182"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation type="unfinished">%1; String: %2; Fret: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3156"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3159"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation type="unfinished">%1; Pitch: %2; Duration: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3185"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3188"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation type="unfinished">%1 head %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3187"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3190"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="762"/>
         <source>Cross-staff above</source>
         <translation type="unfinished">Cross-staff above</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3189"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3192"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="764"/>
         <source>Cross-staff below</source>
         <translation type="unfinished">Cross-staff below</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3193"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3196"/>
         <source>too low</source>
         <translation type="unfinished">too low</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3195"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3198"/>
         <source>too high</source>
         <translation type="unfinished">too high</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3197"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3200"/>
         <source>too low for amateurs</source>
         <translation type="unfinished">too low for amateurs</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3199"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3202"/>
         <source>too high for amateurs</source>
         <translation type="unfinished">too high for amateurs</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/noteentry.cpp" line="411"/>
+        <location filename="../../src/engraving/dom/noteentry.cpp" line="415"/>
         <source>Note input will remove measure repeat</source>
         <translation type="unfinished">Note input will remove measure repeat</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/noteentry.cpp" line="412"/>
+        <location filename="../../src/engraving/dom/noteentry.cpp" line="416"/>
         <source>This measure contains a measure repeat. If you enter notes here, it will be deleted. Do you want to continue?</source>
         <translation type="unfinished">This measure contains a measure repeat. If you enter notes here, it will be deleted. Do you want to continue?</translation>
     </message>
@@ -12069,8 +12069,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1226"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1103"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1114"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3225"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3237"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3228"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3240"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2420"/>
         <source>Start of %1</source>
         <translation type="unfinished">Start of %1</translation>
@@ -12079,8 +12079,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1229"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1106"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1116"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3229"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3245"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3232"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3248"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2435"/>
         <source>End of %1</source>
         <translation type="unfinished">End of %1</translation>
@@ -23770,6 +23770,36 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="69"/>
         <source>Align accidentals on offset octaves</source>
         <translation type="unfinished">Align accidentals on offset octaves</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="62"/>
+        <source>Write</source>
+        <translation type="unfinished">Write</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="76"/>
+        <source>Preview</source>
+        <translation type="unfinished">Preview</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="96"/>
+        <source>Finish editing</source>
+        <translation type="unfinished">Finish editing</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="119"/>
+        <source>Layout</source>
+        <translation type="unfinished">Layout</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="140"/>
+        <source>Customize kit</source>
+        <translation type="unfinished">Customize kit</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="183"/>
+        <source>Add row</source>
+        <translation type="unfinished">Add row</translation>
     </message>
 </context>
 <context>
