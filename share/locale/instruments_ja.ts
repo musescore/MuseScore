@@ -6,7 +6,7 @@
         <source>Wind section notated on a grand staff.</source>
         <comment>winds description</comment>
         <extracomment>description for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>大譜表に記譜される木管楽器セクション。</translation>
+        <translation>大譜表に記譜される木管楽器セクション</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="208"/>
@@ -167,7 +167,7 @@
         <source>Notched, end-blown vertical bamboo flute used in Korean folk music.</source>
         <comment>danso description</comment>
         <extracomment>description for Danso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>韓国の民族音楽で用いられる、切り込みのあるシャクハチ類の竹製の縦笛。</translation>
+        <translation>韓国の民族音楽で用いられる、切り込みのあるシャクハチ類の竹製の縦笛</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="259"/>
@@ -216,7 +216,7 @@
         <source>6-hole simple-system wooden transverse flute.</source>
         <comment>irish-flute description</comment>
         <extracomment>description for Irish Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>6つの穴の空いたシンプルな仕組みの木製横笛。</translation>
+        <translation>6つの穴の空いたシンプルな仕組みの木製横笛</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="277"/>
