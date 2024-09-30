@@ -2712,16 +2712,16 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
     }
 }
 
-static void _layoutGlissando(Glissando* item, LayoutContext& ctx, Glissando::LayoutData* ldata)
+void TLayout::layoutGlissando(Glissando* item, LayoutContext& ctx)
 {
-    double _spatium = item->spatium();
-
+    LAYOUT_CALL_ITEM(item);
     TLayout::layoutLine(const_cast<Glissando*>(item), ctx);
 
     if (item->spannerSegments().empty()) {
         LOGD("no segments");
         return;
     }
+    Glissando::LayoutData* ldata = item->mutldata();
     ldata->setPos(0.0, 0.0);
 
     String instrId = item->staff()->part()->instrumentId(item->tick());
@@ -2750,167 +2750,9 @@ static void _layoutGlissando(Glissando* item, LayoutContext& ctx, Glissando::Lay
         }
     }
 
-    Note* startAnchor = toNote(item->startElement());
-    Note* endAnchor = toNote(item->endElement());
-    Chord* startChord = startAnchor->chord();
-    Chord* endChord = endAnchor->chord();
-    GlissandoSegment* startSeg = toGlissandoSegment(const_cast<Glissando*>(item)->frontSegment());
-    GlissandoSegment* endSeg = toGlissandoSegment(const_cast<Glissando*>(item)->backSegment());
-
-    // Note: line segments are defined by
-    // initial point: ipos() (relative to system origin)
-    // ending point:  pos2() (relative to initial point)
-
-    // LINE ENDING POINTS TO NOTEHEAD CENTRES
-
-    // assume gliss. line goes from centre of initial note centre to centre of ending note:
-    // move first segment origin and last segment ending point from notehead origin to notehead centre
-    // For TAB: begin at the right-edge of initial note rather than centre
-    PointF startOffset = (startChord->staff()->isTabStaff(startChord->tick()))
-                         ? PointF(startAnchor->ldata()->bbox().right(), 0.0)
-                         : PointF(startAnchor->headWidth() * 0.5, 0.0);
-
-    PointF endOffset = PointF(endAnchor->headWidth() * 0.5, 0.0);
-
-    // AVOID HORIZONTAL LINES
-
-    // for microtonality read tuning, or check note accidental
-    double startTune = startAnchor->tuning();
-    double endTune = endAnchor->tuning();
-    AccidentalType startAcc = startAnchor->accidentalType();
-    AccidentalType endAcc = endAnchor->accidentalType();
-    if (muse::RealIsNull(startTune) && Accidental::isMicrotonal(startAcc)) {
-        startTune = Accidental::subtype2centOffset(startAcc);
-    }
-    if (muse::RealIsNull(endTune) && Accidental::isMicrotonal(endAcc)) {
-        endTune = Accidental::subtype2centOffset(endAcc);
-    }
-
-    int upDown = (0 < (endAnchor->ppitch() - startAnchor->ppitch())) - ((endAnchor->ppitch() - startAnchor->ppitch()) < 0);
-    // same note, so compare tunings
-    if (upDown == 0) {
-        upDown = (0 < (endTune - startTune)) - ((endTune - startTune) < 0);
-    }
-
-    // on TAB's, glissando are by necessity on the same string, this gives an horizontal glissando line;
-    // make bottom end point lower and top ending point higher
-    if (startChord->staff()->isTabStaff(startChord->tick())) {
-        double yOff = startChord->staff()->lineDistance(startChord->tick()) * 0.4 * _spatium;
-        startOffset.ry() += yOff * upDown;
-        endOffset.ry() -= yOff * upDown;
-    }
-    // if not TAB, angle glissando between notes on the same line
-    else {
-        if (startAnchor->line() == endAnchor->line()) {
-            startOffset.ry() += _spatium * 0.25 * upDown;
-            endOffset.ry() -= _spatium * 0.25 * upDown;
-        }
-    }
-
-    // move initial point of first segment and adjust its length accordingly
-    startSeg->setPos(startSeg->ldata()->pos() + startOffset);
-    startSeg->setPos2(startSeg->ipos2() - startOffset);
-    // adjust ending point of last segment
-    endSeg->setPos2(endSeg->ipos2() + endOffset);
-
-    // INTERPOLATION OF INTERMEDIATE POINTS
-    // This probably belongs to SLine class itself; currently it does not seem
-    // to be needed for anything else than Glissando, though
-
-    // get total x-width and total y-height of all segments
-    double xTot = 0.0;
-    for (SpannerSegment* segm : item->spannerSegments()) {
-        xTot += segm->ipos2().x();
-    }
-    double startY   = startSeg->ldata()->pos().y();
-    double yTot = endSeg->ldata()->pos().y() + endSeg->ipos2().y() - startY;
-    yTot -= yStaffDifference(endSeg->system(), track2staff(item->track2()), startSeg->system(), track2staff(item->track()));
-    double ratio = muse::divide(yTot, xTot, 1.0);
-    // interpolate y-coord of intermediate points across total width and height
-    double xCurr = 0.0;
-    double yCurr;
-    for (unsigned i = 0; i + 1 < item->spannerSegments().size(); i++) {
-        SpannerSegment* segm = const_cast<Glissando*>(item)->segmentAt(i);
-        xCurr += segm->ipos2().x();
-        yCurr = startY + ratio * xCurr;
-        segm->rypos2() = yCurr - segm->ldata()->pos().y();           // position segm. end point at yCurr
-        // next segment shall start where this segment stopped, corrected for the staff y-difference
-        SpannerSegment* nextSeg = const_cast<Glissando*>(item)->segmentAt(i + 1);
-        yCurr += yStaffDifference(nextSeg->system(), track2staff(item->track2()), segm->system(), track2staff(item->track()));
-        segm = nextSeg;
-        segm->rypos2() += segm->ldata()->pos().y() - yCurr;          // adjust next segm. vertical length
-        segm->mutldata()->setPosY(yCurr);                                // position next segm. start point at yCurr
-    }
-
-    // KEEP CLEAR OF ALL ELEMENTS OF THE CHORD
-    // Remove offset already applied
-    startOffset  *= -1.0;
-    endOffset *= -1.0;
-    // Look at chord shapes (but don't consider lyrics)
-    Shape startCRShape = startChord->shape();
-    startCRShape.remove_if([](ShapeElement& s) {
-        if (!s.item() || s.item()->isLyrics()) {
-            return true;
-        } else {
-            return false;
-        }
-    });
-
-    double startYAbove = startAnchor->ldata()->pos().y() + startAnchor->ldata()->bbox().topRight().y();
-    double startYBelow = startYAbove + startAnchor->ldata()->bbox().height();
-    startOffset.rx() += startCRShape.rightMostEdgeAtHeight(startYAbove, startYBelow) - startAnchor->pos().x();
-    if (!endChord->staff()->isTabStaff(endChord->tick())) {
-        double endYAbove = endAnchor->ldata()->pos().y() + endAnchor->ldata()->bbox().topLeft().y();
-        double endYBelow = endYAbove + endAnchor->ldata()->bbox().height();
-        double noteMiddle = endYAbove + endAnchor->ldata()->bbox().height() / 2;
-        if (upDown != 0) {
-            int llWidth = ctx.conf().styleS(Sid::ledgerLineWidth).val() * _spatium;
-            // Only check top/bottom half of note depending on gliss approach direction
-            // to avoid clearing acidentals the line won't collide with
-            endYAbove = upDown == 1 ? noteMiddle - llWidth : endYAbove;
-            endYBelow = upDown == 1 ? endYBelow : noteMiddle + llWidth;
-        }
-
-        endOffset.rx() -= endAnchor->pos().x() - endChord->shape().leftMostEdgeAtHeight(endYAbove, endYBelow);
-    }
-    // Add note distance
-    const double glissNoteDist = 0.25 * item->spatium(); // TODO: style
-    startOffset.rx() += glissNoteDist;
-    endOffset.rx() -= glissNoteDist;
-
-    // apply offsets: shorten first segment by x1 (and proportionally y) and adjust its length accordingly
-    startOffset.ry() = startSeg->ipos2().y() * muse::divide(startOffset.x(), startSeg->ipos2().x(), 1.0);
-    startSeg->setPos(startSeg->ldata()->pos() + startOffset);
-    startSeg->setPos2(startSeg->ipos2() - startOffset);
-    // adjust last segment length by x2 (and proportionally y)
-    endOffset.ry() = endSeg->ipos2().y() * muse::divide(endOffset.x(), endSeg->ipos2().x(), 1.0);
-    endSeg->setPos2(endSeg->ipos2() + endOffset);
-
-    for (SpannerSegment* segm : item->spannerSegments()) {
-        TLayout::layoutItem(segm, ctx);
-    }
-
-    // compute glissando bbox as the bbox of the last segment, relative to the end anchor note
-    PointF endAnchorPagePos = endAnchor->pagePos();
-    PointF endSystemPagePos;
-    IF_ASSERT_FAILED(endChord->segment()->system()) {
-        endSystemPagePos = endSeg->pos();
-    } else {
-        endSystemPagePos = endChord->segment()->system()->pagePos();
-    }
-
-    PointF endAnchorSystPos = endAnchorPagePos - endSystemPagePos;
-    RectF r = RectF(endAnchorSystPos - endSeg->pos(), endAnchorSystPos - endSeg->pos() - endSeg->pos2()).normalized();
-    double lw = item->absoluteFromSpatium(item->lineWidth()) * .5;
-    ldata->setBbox(r.adjusted(-lw, -lw, lw, lw));
+    layoutNoteAnchoredLine(item, ldata, ctx);
 
     const_cast<Glissando*>(item)->addLineAttachPoints();
-}
-
-void TLayout::layoutGlissando(Glissando* item, LayoutContext& ctx)
-{
-    LAYOUT_CALL_ITEM(item);
-    _layoutGlissando(item, ctx, item->mutldata());
 }
 
 void TLayout::layoutGlissandoSegment(GlissandoSegment* item, LayoutContext&)
@@ -5037,6 +4879,162 @@ void TLayout::layoutLine(SLine* item, LayoutContext& ctx)
     }
 }
 
+void TLayout::layoutNoteAnchoredLine(SLine* item, EngravingItem::LayoutData* ldata, LayoutContext& ctx)
+{
+    double _spatium = item->spatium();
+    Note* startAnchor = toNote(item->startElement());
+    Note* endAnchor = toNote(item->endElement());
+    Chord* startChord = startAnchor->chord();
+    Chord* endChord = endAnchor->chord();
+    LineSegment* startSeg = toLineSegment(item->frontSegment());
+    LineSegment* endSeg = toLineSegment(item->backSegment());
+
+    // Note: line segments are defined by
+    // initial point: ipos() (relative to system origin)
+    // ending point:  pos2() (relative to initial point)
+
+    // LINE ENDING POINTS TO NOTEHEAD CENTRES
+
+    // assume line goes from centre of initial note centre to centre of ending note:
+    // move first segment origin and last segment ending point from notehead origin to notehead centre
+    // For TAB: begin at the right-edge of initial note rather than centre
+    PointF startOffset = (startChord->staff()->isTabStaff(startChord->tick()))
+                         ? PointF(startAnchor->ldata()->bbox().right(), 0.0)
+                         : PointF(startAnchor->headWidth() * 0.5, 0.0);
+
+    PointF endOffset = PointF(endAnchor->headWidth() * 0.5, 0.0);
+
+    // AVOID HORIZONTAL LINES
+
+    // for microtonality read tuning, or check note accidental
+    double startTune = startAnchor->tuning();
+    double endTune = endAnchor->tuning();
+    AccidentalType startAcc = startAnchor->accidentalType();
+    AccidentalType endAcc = endAnchor->accidentalType();
+    if (muse::RealIsNull(startTune) && Accidental::isMicrotonal(startAcc)) {
+        startTune = Accidental::subtype2centOffset(startAcc);
+    }
+    if (muse::RealIsNull(endTune) && Accidental::isMicrotonal(endAcc)) {
+        endTune = Accidental::subtype2centOffset(endAcc);
+    }
+
+    int upDown = (0 < (endAnchor->ppitch() - startAnchor->ppitch())) - ((endAnchor->ppitch() - startAnchor->ppitch()) < 0);
+    // same note, so compare tunings
+    if (upDown == 0) {
+        upDown = (0 < (endTune - startTune)) - ((endTune - startTune) < 0);
+    }
+
+    // on TAB's, glissando are by necessity on the same string, this gives an horizontal glissando line;
+    // make bottom end point lower and top ending point higher
+    if (startChord->staff()->isTabStaff(startChord->tick())) {
+        double yOff = startChord->staff()->lineDistance(startChord->tick()) * 0.4 * _spatium;
+        startOffset.ry() += yOff * upDown;
+        endOffset.ry() -= yOff * upDown;
+    }
+    // if not TAB, angle glissando between notes on the same line
+    else {
+        if (startAnchor->line() == endAnchor->line()) {
+            startOffset.ry() += _spatium * 0.25 * upDown;
+            endOffset.ry() -= _spatium * 0.25 * upDown;
+        }
+    }
+
+    // move initial point of first segment and adjust its length accordingly
+    startSeg->setPos(startSeg->ldata()->pos() + startOffset);
+    startSeg->setPos2(startSeg->ipos2() - startOffset);
+    // adjust ending point of last segment
+    endSeg->setPos2(endSeg->ipos2() + endOffset);
+
+    // INTERPOLATION OF INTERMEDIATE POINTS
+
+    // get total x-width and total y-height of all segments
+    double xTot = 0.0;
+    for (SpannerSegment* segm : item->spannerSegments()) {
+        xTot += segm->ipos2().x();
+    }
+    double startY   = startSeg->ldata()->pos().y();
+    double yTot = endSeg->ldata()->pos().y() + endSeg->ipos2().y() - startY;
+    yTot -= yStaffDifference(endSeg->system(), track2staff(item->track2()), startSeg->system(), track2staff(item->track()));
+    double ratio = muse::divide(yTot, xTot, 1.0);
+    // interpolate y-coord of intermediate points across total width and height
+    double xCurr = 0.0;
+    double yCurr;
+    for (unsigned i = 0; i + 1 < item->spannerSegments().size(); i++) {
+        SpannerSegment* segm = item->segmentAt(i);
+        xCurr += segm->ipos2().x();
+        yCurr = startY + ratio * xCurr;
+        segm->rypos2() = yCurr - segm->ldata()->pos().y();           // position segm. end point at yCurr
+        // next segment shall start where this segment stopped
+        SpannerSegment* nextSeg = item->segmentAt(i + 1);
+        yCurr += yStaffDifference(nextSeg->system(), track2staff(item->track2()), segm->system(), track2staff(item->track()));
+        segm = nextSeg;
+        segm->rypos2() += segm->ldata()->pos().y() - yCurr;          // adjust next segm. vertical length
+        segm->mutldata()->setPosY(yCurr);                                // position next segm. start point at yCurr
+    }
+
+    // KEEP CLEAR OF ALL ELEMENTS OF THE CHORD
+    // Remove offset already applied
+    startOffset  *= -1.0;
+    endOffset *= -1.0;
+    // Look at chord shapes (but don't consider lyrics)
+    Shape startCRShape = startChord->shape();
+    startCRShape.remove_if([](ShapeElement& s) {
+        if (!s.item() || s.item()->isLyrics()) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+
+    double startYAbove = startAnchor->ldata()->pos().y() + startAnchor->ldata()->bbox().topRight().y();
+    double startYBelow = startYAbove + startAnchor->ldata()->bbox().height();
+    startOffset.rx() += startCRShape.rightMostEdgeAtHeight(startYAbove, startYBelow) - startAnchor->pos().x();
+    if (!endChord->staff()->isTabStaff(endChord->tick())) {
+        double endYAbove = endAnchor->ldata()->pos().y() + endAnchor->ldata()->bbox().topLeft().y();
+        double endYBelow = endYAbove + endAnchor->ldata()->bbox().height();
+        double noteMiddle = endYAbove + endAnchor->ldata()->bbox().height() / 2;
+        if (upDown != 0) {
+            int llWidth = ctx.conf().styleS(Sid::ledgerLineWidth).val() * _spatium;
+            // Only check top/bottom half of note depending on line approach direction
+            // to avoid clearing acidentals the line won't collide with
+            endYAbove = upDown == 1 ? noteMiddle - llWidth : endYAbove;
+            endYBelow = upDown == 1 ? endYBelow : noteMiddle + llWidth;
+        }
+
+        endOffset.rx() -= endAnchor->pos().x() - endChord->shape().leftMostEdgeAtHeight(endYAbove, endYBelow);
+    }
+    // Add note distance
+    const double lineNoteDist = 0.25 * item->spatium(); // TODO: style
+    startOffset.rx() += lineNoteDist;
+    endOffset.rx() -= lineNoteDist;
+
+    // apply offsets: shorten first segment by x1 (and proportionally y) and adjust its length accordingly
+    startOffset.ry() = startSeg->ipos2().y() * muse::divide(startOffset.x(), startSeg->ipos2().x(), 1.0);
+    startSeg->setPos(startSeg->ldata()->pos() + startOffset);
+    startSeg->setPos2(startSeg->ipos2() - startOffset);
+    // adjust last segment length by x2 (and proportionally y)
+    endOffset.ry() = endSeg->ipos2().y() * muse::divide(endOffset.x(), endSeg->ipos2().x(), 1.0);
+    endSeg->setPos2(endSeg->ipos2() + endOffset);
+
+    for (SpannerSegment* segm : item->spannerSegments()) {
+        TLayout::layoutItem(segm, ctx);
+    }
+
+    // compute line bbox as the bbox of the last segment, relative to the end anchor note
+    PointF endAnchorPagePos = endAnchor->pagePos();
+    PointF endSystemPagePos;
+    IF_ASSERT_FAILED(endChord->segment()->system()) {
+        endSystemPagePos = endSeg->pos();
+    } else {
+        endSystemPagePos = endChord->segment()->system()->pagePos();
+    }
+
+    PointF endAnchorSystPos = endAnchorPagePos - endSystemPagePos;
+    RectF r = RectF(endAnchorSystPos - endSeg->pos(), endAnchorSystPos - endSeg->pos() - endSeg->pos2()).normalized();
+    double lw = item->absoluteFromSpatium(item->lineWidth()) * .5;
+    ldata->setBbox(r.adjusted(-lw, -lw, lw, lw));
+}
+
 void TLayout::layoutSlur(Slur* item, LayoutContext& ctx)
 {
     SlurTieLayout::createSlurSegments(item, ctx);
@@ -5817,6 +5815,10 @@ void TLayout::layoutTextLine(TextLine* item, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
     layoutLine(item, ctx);
+
+    if (item->anchor() == Spanner::Anchor::NOTE) {
+        layoutNoteAnchoredLine(item, item->mutldata(), ctx);
+    }
 }
 
 void TLayout::layoutTextLineSegment(TextLineSegment* item, LayoutContext& ctx)

@@ -298,6 +298,7 @@ public:
 
     static void layoutShadowNote(ShadowNote* item, LayoutContext& ctx);
     static void layoutLine(SLine* item, LayoutContext& ctx); // base class
+    static void layoutNoteAnchoredLine(SLine* item, SLine::LayoutData* ldata, LayoutContext& ctx);
     static void layoutSlur(Slur* item, LayoutContext& ctx);
     static void layoutSpacer(Spacer* item, LayoutContext& ctx);
     static void layoutSpanner(Spanner* item, LayoutContext& ctx);
