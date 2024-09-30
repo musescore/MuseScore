@@ -44,6 +44,6 @@ Progress MuseSoundsCheckUpdateServiceStub::updateProgress()
     return Progress();
 }
 
-void MuseSoundsCheckUpdateServiceStub::openMuseHub()
+void MuseSoundsCheckUpdateServiceStub::openMuseHub(const std::vector<std::string>&)
 {
 }

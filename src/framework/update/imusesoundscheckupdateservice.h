@@ -23,7 +23,6 @@
 #define MUSE_UPDATE_IMUSESOUNDSCHECKUPDATESERVICE_H
 
 #include "types/retval.h"
-#include "io/path.h"
 #include "progress.h"
 
 #include "updatetypes.h"
@@ -44,8 +43,6 @@ public:
     virtual RetVal<ReleaseInfo> lastCheckResult() = 0;
 
     virtual Progress updateProgress() = 0;
-
-    virtual void openMuseHub() = 0;
 };
 }
 

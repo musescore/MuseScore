@@ -58,8 +58,6 @@ public:
 
     Progress updateProgress() override;
 
-    void openMuseHub() override;
-
 private:
     RetVal<ReleaseInfo> parseRelease(const QByteArray& json) const;
 
