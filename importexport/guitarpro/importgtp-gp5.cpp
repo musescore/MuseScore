@@ -827,8 +827,8 @@ bool GuitarPro5::read(QFile* fp)
             if (barBits & SCORE_REPEAT_START)
                   bar.repeatFlags = bar.repeatFlags | Repeat::START;
             if (barBits & SCORE_REPEAT_END) {                // number of repeats
-                  bar.repeatFlags = bar.repeatFlags |Repeat::END;
-                  bar.repeats = readUChar();
+                  bar.repeatFlags = bar.repeatFlags | Repeat::END;
+                  bar.repeats = readUChar() + 1;
                   }
             if (barBits & SCORE_MARKER) {
                   bar.marker = readDelphiString();     // new section?
@@ -1144,7 +1144,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
             Articulation* a = new Articulation(chord->score());
             a->setSymId(SymId::articStaccatoAbove);
 		bool add = true;
-		for (auto a1 : chord->articulations()) {
+		for (auto& a1 : chord->articulations()) {
 		      if (a1->symId() == SymId::articStaccatoAbove) {
 			      add = false;
 				break;
@@ -1173,8 +1173,10 @@ bool GuitarPro5::readNoteEffects(Note* note)
                   t->setTremoloType(TremoloType::R32);
                   chord->add(t);
                   }
-            else
+            else {
+                  delete t;
                   qDebug("Unknown tremolo value");
+                  }
             }
 //      bool skip = false;
       if (modMask2 & EFFECT_SLIDE) {
@@ -1243,7 +1245,9 @@ bool GuitarPro5::readNoteEffects(Note* note)
 			createSlur(true, note->staffIdx(), note->chord());
 			}
 	      if (slideKind & SHIFT_SLIDE) {
+#if 0
                   slideKind &= ~SHIFT_SLIDE;
+#endif
 			slideList.push_back(note);
 			}
 #if 0
