@@ -52,6 +52,9 @@ if (OS_IS_WIN)
 
 elseif(OS_IS_LIN)
 
+    # add ssl support on local linux machine
+    # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L /usr/local/lib -lcrypto -lssl")
+
     if (MUSE_APP_INSTALL_SUFFIX)
         set(MSCORE_OUTPUT_NAME "${EXECUTABLE_NAME}${MUSE_APP_INSTALL_SUFFIX}")
     endif(MUSE_APP_INSTALL_SUFFIX)
