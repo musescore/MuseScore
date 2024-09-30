@@ -4954,7 +4954,7 @@ void TLayout::layoutNoteAnchoredLine(SLine* item, EngravingItem::LayoutData* lda
     }
     double startY   = startSeg->ldata()->pos().y();
     double yTot = endSeg->ldata()->pos().y() + endSeg->ipos2().y() - startY;
-    yTot -= yStaffDifference(endSeg->system(), track2staff(item->track2()), startSeg->system(), track2staff(item->track()));
+    yTot -= yStaffDifference(endSeg->system(), startSeg->system(), track2staff(item->track2()));
     double ratio = muse::divide(yTot, xTot, 1.0);
     // interpolate y-coord of intermediate points across total width and height
     double xCurr = 0.0;
@@ -4966,7 +4966,7 @@ void TLayout::layoutNoteAnchoredLine(SLine* item, EngravingItem::LayoutData* lda
         segm->rypos2() = yCurr - segm->ldata()->pos().y();           // position segm. end point at yCurr
         // next segment shall start where this segment stopped
         SpannerSegment* nextSeg = item->segmentAt(i + 1);
-        yCurr += yStaffDifference(nextSeg->system(), track2staff(item->track2()), segm->system(), track2staff(item->track()));
+        yCurr += yStaffDifference(nextSeg->system(), segm->system(), track2staff(item->track2()));
         segm = nextSeg;
         segm->rypos2() += segm->ldata()->pos().y() - yCurr;          // adjust next segm. vertical length
         segm->mutldata()->setPosY(yCurr);                                // position next segm. start point at yCurr
