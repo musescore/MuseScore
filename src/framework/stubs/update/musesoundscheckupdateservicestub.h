@@ -35,7 +35,7 @@ public:
 
     Progress updateProgress() override;
 
-    void openMuseHub() override;
+    void openMuseHub(const std::vector<std::string>& actions) override;
 };
 }
 

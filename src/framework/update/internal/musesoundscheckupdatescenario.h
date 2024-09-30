@@ -60,6 +60,7 @@ private:
     void th_checkForUpdate();
 
     void showReleaseInfo(const ReleaseInfo& info);
+    void tryOpenMuseHub(ValList actions) const;
 
     bool m_checkProgress = false;
     ProgressPtr m_checkProgressChannel = nullptr;
