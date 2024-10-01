@@ -445,6 +445,8 @@ public:
 
         PLAYHEAD = 0xF478,
 
+        PLAYHEAD_FILLED = 0xF47A,
+
         NONE = 0xFFFF
     };
 
