@@ -34,8 +34,6 @@ public:
     RetVal<ReleaseInfo> lastCheckResult() override;
 
     Progress updateProgress() override;
-
-    void openMuseHub(const std::vector<std::string>& actions) override;
 };
 }
 

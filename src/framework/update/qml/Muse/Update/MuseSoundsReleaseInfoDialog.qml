@@ -79,8 +79,6 @@ StyledDialogView {
 
             Layout.fillWidth: true
             Layout.preferredHeight: 186
-
-            //source: "qrc:/qml/Muse/Update/resources/muse_sounds_promo.png"
         }
 
         Item {
