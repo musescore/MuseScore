@@ -94,6 +94,7 @@ public:
     void setTrack(track_idx_t n) override;
     void setScore(Score* s) override;
     void computeStartElement() override;
+    PointF linePos(Grip grip, System** system) const override;
 
     void setTrillType(TrillType tt);
     TrillType trillType() const { return m_trillType; }
