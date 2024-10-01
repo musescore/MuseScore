@@ -621,7 +621,7 @@ Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonW
     jsonWriter.addKey("mscz");
 
     std::string fileNumber = std::to_string(QRandomGenerator::global()->generate() % 1000000);
-    std::string fileName = score->name().toStdString() + "_transposed." + fileNumber + ".mscx";
+    std::string fileName = score->name().toStdString() + "_transposed." + fileNumber + ".mscz";
 
     RetVal<QByteArray> scoreJson = scorePartJson(score, fileName);
     if (!scoreJson.ret) {
@@ -724,6 +724,8 @@ RetVal<TransposeOptions> BackendApi::parseTransposeOptions(const std::string& op
         }
     }
 
+    options.interval = transposeInterval;
+    options.key = targetKey;
     options.needTransposeKeys = optionsObj["transposeKeySignatures"].toBool();
     options.needTransposeChordNames = optionsObj["transposeChordNames"].toBool();
     options.needTransposeDoubleSharpsFlats = optionsObj["useDoubleSharpsFlats"].toBool();
@@ -746,6 +748,8 @@ Ret BackendApi::applyTranspose(const INotationPtr notation, const std::string& o
     if (!interaction) {
         return make_ret(Ret::Code::InternalError);
     }
+
+    interaction->selectAll();
 
     bool ok = interaction->transpose(options.val);
     if (!ok) {
