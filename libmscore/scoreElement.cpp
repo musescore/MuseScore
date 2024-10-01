@@ -10,15 +10,13 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "scoreElement.h"
-#include "score.h"
-#include "undo.h"
-#include "xml.h"
-#include "bracket.h"
 #include "bracketItem.h"
 #include "measure.h"
-#include "spanner.h"
 #include "musescoreCore.h"
+#include "score.h"
+#include "scoreElement.h"
+#include "undo.h"
+#include "xml.h"
 
 namespace Ms {
 
@@ -114,7 +112,6 @@ static const ElementName elementNames[] = {
       { ElementType::PALM_MUTE,            "PalmMute",             QT_TRANSLATE_NOOP("elementName", "Palm Mute") },
       { ElementType::TEXTLINE,             "TextLine",             QT_TRANSLATE_NOOP("elementName", "Text Line") },
       { ElementType::TEXTLINE_BASE,        "TextLineBase",         QT_TRANSLATE_NOOP("elementName", "Text Line Base") },  // remove
-      { ElementType::NOTELINE,             "NoteLine",             QT_TRANSLATE_NOOP("elementName", "Note Line") },
       { ElementType::LYRICSLINE,           "LyricsLine",           QT_TRANSLATE_NOOP("elementName", "Melisma Line") },
       { ElementType::GLISSANDO,            "Glissando",            QT_TRANSLATE_NOOP("elementName", "Glissando") },
       { ElementType::BRACKET,              "Bracket",              QT_TRANSLATE_NOOP("elementName", "Bracket") },

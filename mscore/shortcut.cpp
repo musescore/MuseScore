@@ -11,8 +11,8 @@
 //=============================================================================
 
 #include "globals.h"
-#include "shortcut.h"
 #include "icons.h"
+#include "shortcut.h"
 #include "libmscore/xml.h"
 
 
@@ -4443,7 +4443,7 @@ void Shortcut::retranslate()
 
 void Shortcut::refreshIcons()
       {
-      for (Shortcut* s : _shortcuts) {
+      for (Shortcut* s : qAsConst(_shortcuts)) {
             QAction* a = s->action();
             if (a && s->icon() != Icons::Invalid_ICON) {
                   a->setIcon(*icons[int(s->icon())]);
@@ -4651,7 +4651,7 @@ static QList<Shortcut1> loadShortcuts(QString fileLocation)
 void Shortcut::loadFromNewFile(QString fileLocation)
       {
       QList<Shortcut1> list = loadShortcuts(fileLocation);
-      for (const Shortcut1& sc : list) {
+      for (const Shortcut1& sc : qAsConst(list)) {
             Shortcut* s = getShortcut(sc.key);
             if (s) {
                   s->setKeys(sc.keys);
@@ -4697,7 +4697,7 @@ QActionGroup* Shortcut::getActionGroupForWidget(MsWidget w, Qt::ShortcutContext 
 void Shortcut::resetToDefault()
       {
       QList<Shortcut1> sl = loadShortcuts(defaultFileName);
-      for (const Shortcut1& sc : sl) {
+      for (const Shortcut1& sc : qAsConst(sl)) {
             Shortcut* s = getShortcut(sc.key);
             if (s) {
                   s->setKeys(sc.keys);
@@ -4741,7 +4741,7 @@ void Shortcut::reset()
       _standardKey = QKeySequence::UnknownKey;
       _keys.clear();
       QList<Shortcut1> sl = loadShortcuts(defaultFileName);
-      for (const Shortcut1& sc : sl) {
+      for (const Shortcut1& sc : qAsConst(sl)) {
             if (sc.key == _key) {
                   setKeys(sc.keys);
                   setStandardKey(sc.standardKey);
@@ -4791,12 +4791,13 @@ QKeySequence Shortcut::keySeqFromString(const QString& str, QKeySequence::Sequen
       for (i = 0; i < KEYSEQ_SIZE; ++i)
             code[i] = 0;
 
-      QStringList strList = str.split(QRegularExpression("(?<!\\\\),|(?<=\\\\\\\\),"), QString::SkipEmptyParts);
+      static QRegularExpression re("(?<!\\\\),|(?<=\\\\\\\\),");
+      QStringList strList = str.split(re, QString::SkipEmptyParts);
       //split based on commas that are not preceded by a single slash; two is okay
       //original regex: (?<!\\),|(?<=\\\\),
 
       i = 0;
-      for (const QString& s : strList) {
+      for (const QString& s : qAsConst(strList)) {
             QString keyStr = s.trimmed();
             if (keyStr.contains("\\"))
                   keyStr.remove(keyStr.length() - 2, 1); //remove escaped characters which will always be second to last

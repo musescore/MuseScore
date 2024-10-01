@@ -53,7 +53,6 @@
 #include "libmscore/navigate.h"
 #include "libmscore/notedot.h"
 #include "libmscore/note.h"
-#include "libmscore/noteline.h"
 #include "libmscore/page.h"
 #include "libmscore/part.h"
 #include "libmscore/pitchspelling.h"
@@ -244,7 +243,7 @@ void ScoreView::setScore(Score* s)
             _curLoopOut->move(s->pos(POS::RIGHT));
             loopToggled(getAction("loop")->isChecked());
 
-            connect(s, SIGNAL(posChanged(POS,unsigned)), SLOT(posChanged(POS,unsigned)));
+            connect(s, SIGNAL(posChanged(POS,uint)), SLOT(posChanged(POS,uint)));
             connect(this, SIGNAL(viewRectChanged()), this, SLOT(updateContinuousPanel()));
             }
       }
@@ -1071,7 +1070,7 @@ void ScoreView::drawAnchorLines(QPainter& painter)
       const auto dropAnchorColor = preferences.getColor(PREF_UI_SCORE_VOICE4_COLOR);
       QPen pen(QBrush(dropAnchorColor), 2.0 / painter.worldTransform().m11(), Qt::DotLine);
 
-      for (const QLineF& anchor : m_dropAnchorLines) {
+      for (const QLineF& anchor : qAsConst(m_dropAnchorLines)) {
             painter.setPen(pen);
             painter.drawLine(anchor);
 
@@ -1334,7 +1333,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                   }
             }
       else {
-            for (Page* page : _score->pages()) {
+            for (Page* page : qAsConst(_score->pages())) {
                   QRectF pr(page->abbox().translated(page->pos()));
                   if (pr.right() < fr.left())
                         continue;
@@ -1361,7 +1360,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
 #ifndef NDEBUG
                   if (!score()->printing()) {
                         if (MScore::showSystemBoundingRect) {
-                              for (const System* system : page->systems()) {
+                              for (const System* system : qAsConst(page->systems())) {
                                     QPointF pt(system->ipos());
                                     qreal h = system->height() + system->minBottom() + system->minTop();
                                     p.translate(pt);
@@ -1371,7 +1370,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                                     }
                               }
                         if (MScore::showSegmentShapes) {
-                              for (const System* system : page->systems()) {
+                              for (const System* system : qAsConst(page->systems())) {
                                     for (const MeasureBase* mb : system->measures()) {
                                           if (mb->type() == ElementType::MEASURE) {
                                                 const Measure* m = static_cast<const Measure*>(mb);
@@ -1391,7 +1390,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                                     }
                               }
                         if (MScore::showSkylines) {
-                              for (const System* system : page->systems()) {
+                              for (const System* system : qAsConst(page->systems())) {
                                     for (SysStaff* ss : *system->staves()) {
                                           if (!ss->show())
                                                 continue;
@@ -1410,7 +1409,7 @@ void ScoreView::paint(const QRect& r, QPainter& p)
                               pen.setStyle(Qt::SolidLine);
                               p.setPen(pen);
                               p.setBrush(Qt::NoBrush);
-                              for (const System* system : page->systems()) {
+                              for (const System* system : qAsConst(page->systems())) {
                                     for (const MeasureBase* mb : system->measures()) {
                                           if (mb->type() == ElementType::MEASURE) {
                                                 const Measure* m = static_cast<const Measure*>(mb);
@@ -1496,12 +1495,11 @@ void ScoreView::paint(const QRect& r, QPainter& p)
             // drag vertical start line
             p.drawLine(QLineF(x2, y1, x2, y2).translated(system2->page()->pos()));
 
-            System* system1 = system2;
             double x1;
 
             for (Segment* s = ss; s && (s != es); ) {
                   Segment* ns = s->next1MMenabled();
-                  system1  = system2;
+                  System* system1 = system2;
                   system2  = s->measure()->system();
                   if (!system2) {
                         // as before, use mmrest if necessary
@@ -3183,7 +3181,7 @@ void ScoreView::startNoteEntry()
                         if (s)
                               lastSelected = s->nextChordRest(track, true);
                         }
-                  for (Element* e : el) {
+                  for (Element* e : qAsConst(el)) {
                         // loop through visible elements
                         // looking for the CR in voice 1 with earliest tick and highest staff position
                         // but stop if we find the last selected CR
@@ -4817,7 +4815,7 @@ void ScoreView::cmdAddText(Tid tid, Tid customTid, PropertyFlags pf, Placement p
             Measure* m = s->findMeasure();
             if (m && m->hasMMRest() && s->links()) {
                   Measure* mmRest = m->mmRest();
-                  for (ScoreElement* se : *s->links()) {
+                  for (ScoreElement* se : qAsConst(*s->links())) {
                         TextBase* s1 = toTextBase(se);
                         if (s != s1 && s1->findMeasure() == mmRest) {
                               s = s1;
@@ -5216,7 +5214,7 @@ QList<Element*> ScoreView::elementsNear(QPointF p)
       for (int i = 0; i < MAX_FOOTERS; i++)
             if (score()->footerText(i) != nullptr)      // gives the ability to select the footer
                   el.push_back(score()->footerText(i));
-      for (Element* e : el) {
+      for (Element* e : qAsConst(el)) {
             e->itemDiscovered = 0;
             if (!e->selectable() || e->isPage())
                   continue;
@@ -5228,7 +5226,7 @@ QList<Element*> ScoreView::elementsNear(QPointF p)
             //
             // if no relevant element hit, look nearby
             //
-            for (Element* e : el) {
+            for (Element* e : qAsConst(el)) {
                   if (e->isPage() || !e->selectable())
                         continue;
                   if (e->intersects(r))
@@ -5316,7 +5314,7 @@ void ScoreView::cmdMoveCR(bool left)
                   e = e->parent();
             QList<ChordRest*> crl;
             if (e->links()) {
-                  for (ScoreElement* cr : *e->links())
+                  for (ScoreElement* cr : qAsConst(*e->links()))
                         crl.append(static_cast<ChordRest*>(cr));
                   }
             else

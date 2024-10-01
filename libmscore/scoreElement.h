@@ -97,7 +97,6 @@ class PedalSegment;
 class LedgerLine;
 class Icon;
 class VoltaSegment;
-class NoteLine;
 class Trill;
 class TrillSegment;
 class Symbol;
@@ -323,7 +322,6 @@ class ScoreElement {
       CONVERT(LedgerLine,    LEDGER_LINE)
       CONVERT(Icon,          ICON)
       CONVERT(VoltaSegment,  VOLTA_SEGMENT)
-      CONVERT(NoteLine,      NOTELINE)
       CONVERT(Trill,         TRILL)
       CONVERT(TrillSegment,  TRILL_SEGMENT)
       CONVERT(LetRing,       LET_RING)
@@ -391,7 +389,6 @@ class ScoreElement {
       bool isTextLineBase() const {
             return isHairpin()
             || isLetRing()
-            || isNoteLine()
             || isOttava()
             || isPalmMute()
             || isPedal()
@@ -578,7 +575,6 @@ static inline const a* to##a(const ScoreElement* e) { Q_ASSERT(e == 0 || e->is##
       CONVERT(LedgerLine)
       CONVERT(Icon)
       CONVERT(VoltaSegment)
-      CONVERT(NoteLine)
       CONVERT(Trill)
       CONVERT(TrillSegment)
       CONVERT(LetRing)

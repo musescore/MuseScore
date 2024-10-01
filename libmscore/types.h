@@ -119,7 +119,6 @@ enum class ElementType {
       PALM_MUTE,
       TEXTLINE,
       TEXTLINE_BASE,
-      NOTELINE,
       LYRICSLINE,
       GLISSANDO,
       BRACKET,

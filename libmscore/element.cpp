@@ -56,7 +56,6 @@
 #include "mscore.h"
 #include "notedot.h"
 #include "note.h"
-#include "noteline.h"
 #include "ossia.h"
 #include "ottava.h"
 #include "page.h"
@@ -748,7 +747,7 @@ bool Element::readProperties(XmlReader& e)
                   }
 #ifndef NDEBUG
             else {
-                  for (ScoreElement* eee : *_links) {
+                  for (ScoreElement* eee : qAsConst(*_links)) {
                         Element* ee = static_cast<Element*>(eee);
                         if (ee->type() != type()) {
                               qFatal("link %s(%d) type mismatch %s linked to %s",
@@ -1061,7 +1060,6 @@ Element* Element::create(ElementType type, Score* score)
             case ElementType::VOLTA:             return new Volta(score);
             case ElementType::OTTAVA:            return new Ottava(score);
             case ElementType::TEXTLINE:          return new TextLine(score);
-            case ElementType::NOTELINE:          return new NoteLine(score);
             case ElementType::TRILL:             return new Trill(score);
             case ElementType::LET_RING:          return new LetRing(score);
             case ElementType::VIBRATO:           return new Vibrato(score);
