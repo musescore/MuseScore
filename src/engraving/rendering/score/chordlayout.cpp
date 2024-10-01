@@ -2726,7 +2726,8 @@ void ChordLayout::appendGraceNotes(Chord* chord)
     //Attach graceNotesAfter of this chord to the *following* segment
     if (!gna.empty()) {
         Segment* followingSeg = measure->tick2segment(segment->tick() + chord->actualTicks(), SegmentType::All);
-        while (followingSeg && !followingSeg->hasElements(staff2track(staffIdx), staff2track(staffIdx) + 3)) {
+        while (followingSeg
+               && (!followingSeg->hasElements(staff2track(staffIdx), staff2track(staffIdx) + 3) || followingSeg->isTimeTickType())) {
             // If there is nothing on this staff, go to next segment
             followingSeg = followingSeg->next();
         }
