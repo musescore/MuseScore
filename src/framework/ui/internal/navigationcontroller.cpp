@@ -27,6 +27,7 @@
 #include <QApplication>
 #include <QWindow>
 #include <QTextStream>
+#include <QKeyEvent>
 
 #include "global/defer.h"
 
@@ -381,6 +382,14 @@ bool NavigationController::eventFilter(QObject* watched, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonPress) {
         resetIfNeed(watched);
+    } else if (event->type() == QEvent::ShortcutOverride) {
+        auto keyEvent = static_cast<QKeyEvent*>(event);
+        QKeySequence sequence(keyEvent->keyCombination());
+        LOGI() << QString("Keys: '%1'  Native: '%2'  Text: '%3'").arg(
+            sequence.toString(QKeySequence::PortableText), // default
+            sequence.toString(QKeySequence::NativeText),
+            keyEvent->text()
+                ).toStdString();
     }
 
     return QObject::eventFilter(watched, event);
