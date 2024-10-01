@@ -586,15 +586,23 @@ Segment* Segment::nextCR(track_idx_t track, bool sameStaff) const
 //    get the next ChordRest, start at this segment
 //---------------------------------------------------------
 
-ChordRest* Segment::nextChordRest(track_idx_t track, bool backwards) const
+ChordRest* Segment::nextChordRest(track_idx_t track, bool backwards, bool stopAtMeasureBoundary) const
 {
-    for (const Segment* seg = this; seg; seg = backwards ? seg->prev1() : seg->next1()) {
+    const Segment* seg = this;
+    while (seg) {
         EngravingItem* el = seg->element(track);
         if (el && el->isChordRest()) {
             return toChordRest(el);
         }
+
+        if (backwards) {
+            seg = stopAtMeasureBoundary ? seg->prev() : seg->prev1();
+            continue;
+        }
+
+        seg = stopAtMeasureBoundary ? seg->next() : seg->next1();
     }
-    return 0;
+    return nullptr;
 }
 
 EngravingItem* Segment::element(track_idx_t track) const

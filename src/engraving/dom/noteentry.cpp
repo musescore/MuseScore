@@ -446,6 +446,33 @@ Ret Score::putNote(const Position& p, bool replace)
 
     ChordRest* cr = m_is.cr();
 
+    // If there's an overlapping ChordRest at the current input position, shorten it...
+    if (!cr) {
+        MasterScore* ms = masterScore();
+        ChordRest* prevCr = m_is.segment()->nextChordRest(m_is.track(), /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
+        if (prevCr && prevCr->endTick() > m_is.tick()) {
+            const Fraction overlapDuration = prevCr->endTick() - m_is.tick();
+            const Fraction desiredDuration = prevCr->ticks() - overlapDuration;
+
+            const InputState inputStateToRestore = m_is; // because changeCRlen will alter the input state
+            ms->changeCRlen(prevCr, desiredDuration, /*fillWithRest*/ false);
+
+            // Fill the difference with tied notes if necessary...
+            const Fraction difference = desiredDuration - prevCr->ticks();
+            if (prevCr->isChord() && difference.isNotZero()) {
+                Fraction startTick = prevCr->endTick();
+                Chord* prevChord = toChord(prevCr);
+                const std::vector<TDuration> durationList = toDurationList(difference, true);
+                for (const TDuration& dur : durationList) {
+                    prevChord = ms->addChord(startTick, dur, prevChord, /*genTie*/ bool(prevChord), prevChord->tuplet());
+                    startTick += dur.fraction();
+                }
+            }
+
+            m_is = inputStateToRestore;
+        }
+    }
+
     auto checkTied = [&](){
         if (!cr || !cr->isChord()) {
             return false;
