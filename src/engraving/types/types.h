@@ -174,7 +174,6 @@ enum class ElementType {
     PICK_SCRAPE,
     TEXTLINE,
     TEXTLINE_BASE,
-    NOTELINE,
     LYRICSLINE,
     GLISSANDO,
     BRACKET,

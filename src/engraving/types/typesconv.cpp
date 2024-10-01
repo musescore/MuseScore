@@ -272,7 +272,6 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::PICK_SCRAPE,          "PickScrape",           muse::TranslatableString("engraving", "Pick scrape out") },
     { ElementType::TEXTLINE,             "TextLine",             muse::TranslatableString("engraving", "Text line") },
     { ElementType::TEXTLINE_BASE,        "TextLineBase",         muse::TranslatableString("engraving", "Text line base") },    // remove
-    { ElementType::NOTELINE,             "NoteLine",             muse::TranslatableString("engraving", "Note line") },
     { ElementType::LYRICSLINE,           "LyricsLine",           muse::TranslatableString("engraving", "Extension line") },
     { ElementType::GLISSANDO,            "Glissando",            muse::TranslatableString("engraving", "Glissando") },
     { ElementType::BRACKET,              "Bracket",              muse::TranslatableString("engraving", "Bracket") },

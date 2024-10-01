@@ -162,7 +162,7 @@ bool SelectionFilter::canSelect(const EngravingItem* e) const
     if (e->isTextBase()) { // only TEXT, INSTRCHANGE and STAFFTEXT are caught here, rest are system thus not in selection
         return isFiltered(SelectionFilterType::OTHER_TEXT);
     }
-    if (e->isSLine()) { // NoteLine, Volta
+    if (e->isSLine()) { // Volta
         return isFiltered(SelectionFilterType::OTHER_LINE);
     }
     if (e->type() == ElementType::TREMOLO_TWOCHORD) {
@@ -1062,7 +1062,6 @@ muse::ByteArray Selection::symbolListMimeData() const
                           case ElementType::PEDAL:
                           case ElementType::TRILL:
                           case ElementType::TEXTLINE:
-                          case ElementType::NOTELINE:
                           case ElementType::SEGMENT:
                           case ElementType::SYSTEM:
                           case ElementType::COMPOUND:
