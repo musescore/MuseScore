@@ -28,7 +28,7 @@ QuickPaintedView::QuickPaintedView(QQuickItem* parent)
 {
 #ifdef Q_OS_WIN
     setAntialiasing(true);
-    setSmooth(true);
+    setSmooth(false);
 #else
     //! NOTE It is necessary that when UI scaling is displayed without a blur
     setAntialiasing(false);
