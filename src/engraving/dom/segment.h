@@ -138,7 +138,7 @@ public:
 
     Segment* nextCR(track_idx_t track = muse::nidx, bool sameStaff = false) const;
 
-    ChordRest* nextChordRest(track_idx_t track, bool backwards = false) const;
+    ChordRest* nextChordRest(track_idx_t track, bool backwards = false, bool stopAtMeasureBoundary = false) const;
 
     EngravingItem* element(track_idx_t track) const;
 
