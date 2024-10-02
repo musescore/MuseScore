@@ -953,6 +953,9 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
         } else {
             el->setPlacement(placement == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
             el->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+            if (!el->isSticking()) {
+                el->resetProperty(Pid::OFFSET);
+            }
         }
     }
     const Fraction& endTick = measure->score()->endTick();
@@ -1197,6 +1200,7 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
     }
     if (!direction.empty()) {
         na->setPlacement(direction == "inverted" ? PlacementV::BELOW : PlacementV::ABOVE);
+        na->resetProperty(Pid::OFFSET);
     } else {
         na->setPlacement(na->propertyDefault(Pid::PLACEMENT).value<PlacementV>());
     }
@@ -1459,6 +1463,7 @@ static void addTextToNote(int l, int c, String txt, String placement, String fon
             if (!placement.empty()) {
                 t->setPlacement(placement == u"below" ? PlacementV::BELOW : PlacementV::ABOVE);
                 t->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+                t->resetProperty(Pid::OFFSET);
             }
             if (color.isValid()) {
                 t->setColor(color);
@@ -1490,6 +1495,7 @@ static void setSLinePlacement(SLine* sli, const String& placement)
         } else {
             sli->setPlacement(placement == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
             sli->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+            sli->resetProperty(Pid::OFFSET);
         }
     }
 }
@@ -3436,6 +3442,7 @@ void MusicXMLParserDirection::direction(const String& partId,
                 if (!m_hasDefaultY) {
                     t->setPlacement(PlacementV::ABOVE);            // crude way to force placement TODO improve ?
                     t->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+                    t->resetProperty(Pid::OFFSET);
                 }
             }
         }
@@ -4530,6 +4537,7 @@ void MusicXMLParserDirection::handleChordSym(const Fraction& tick, HarmonyMap& h
     ha->setTrack(m_track);
     ha->setPlacement(placement() == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
     ha->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    ha->resetProperty(Pid::OFFSET);
     ha->setVisible(m_visible);
     HarmonyDesc newHarmonyDesc(m_track, ha, nullptr);
 
@@ -5374,7 +5382,8 @@ void MusicXMLParserPass2::barline(const String& partId, Measure* measure, const 
             }
             if (fermataType == u"inverted") {
                 fermata->setPlacement(PlacementV::BELOW);
-            } else if (fermataType == u"") {
+                fermata->resetProperty(Pid::OFFSET);
+            } else if (fermataType.empty()) {
                 fermata->setPlacement(fermata->propertyDefault(Pid::PLACEMENT).value<PlacementV>());
             }
 
@@ -7227,6 +7236,7 @@ FiguredBass* MusicXMLParserPass2::figuredBass()
 
     fb->setPlacement(placement == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
     fb->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    fb->resetProperty(Pid::OFFSET);
 
     if (normalizedText.empty()) {
         delete fb;
@@ -7373,6 +7383,7 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
     if (!placement.isEmpty()) {
         ha->setPlacement(placement == "below" ? PlacementV::BELOW : PlacementV::ABOVE);
         ha->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+        ha->resetProperty(Pid::OFFSET);
     }
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "root") {
@@ -7507,6 +7518,7 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
     ha->setVisible(printObject);
     if (placement == u"below") {
         ha->setPlacement(PlacementV::BELOW);
+        ha->resetProperty(Pid::OFFSET);
     }
     if (color.isValid()) {
         ha->setColor(color);
@@ -7721,6 +7733,7 @@ void MusicXMLParserLyric::parse()
 
     item->setPlacement(placement() == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
     item->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    item->resetProperty(Pid::OFFSET);
 
     if (!RealIsNull(relX)) {
         PointF offset = item->offset();
