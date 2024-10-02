@@ -109,8 +109,8 @@ void PlaybackController::init()
     dispatcher()->reg(this, PAN_CODE, this, &PlaybackController::toggleAutomaticallyPan);
     dispatcher()->reg(this, METRONOME_CODE, this, &PlaybackController::toggleMetronome);
     dispatcher()->reg(this, MIDI_ON_CODE, this, &PlaybackController::toggleMidiInput);
-    dispatcher()->reg(this, INPUT_WRITTEN_PITCH, this, &PlaybackController::toggleMidiInputPitch);
-    dispatcher()->reg(this, INPUT_SOUNDING_PITCH, this, &PlaybackController::toggleMidiInputPitch);
+    dispatcher()->reg(this, INPUT_WRITTEN_PITCH, [this]() { PlaybackController::setMidiInputPitch(true); });
+    dispatcher()->reg(this, INPUT_SOUNDING_PITCH, [this]() { PlaybackController::setMidiInputPitch(false); });
     dispatcher()->reg(this, COUNT_IN_CODE, this, &PlaybackController::toggleCountIn);
     dispatcher()->reg(this, PLAYBACK_SETUP, this, &PlaybackController::openPlaybackSetupDialog);
 
@@ -732,10 +732,9 @@ void PlaybackController::toggleMidiInput()
     notifyActionCheckedChanged(MIDI_ON_CODE);
 }
 
-void PlaybackController::toggleMidiInputPitch()
+void PlaybackController::setMidiInputPitch(bool useWrittenPitch)
 {
-    bool useWrittenPitch = notationConfiguration()->midiUseWrittenPitch().val;
-    notationConfiguration()->setMidiUseWrittenPitch(!useWrittenPitch);
+    notationConfiguration()->setMidiUseWrittenPitch(useWrittenPitch);
     notifyActionCheckedChanged(INPUT_WRITTEN_PITCH);
     notifyActionCheckedChanged(INPUT_SOUNDING_PITCH);
 }
