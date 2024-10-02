@@ -974,6 +974,9 @@ TEST_F(MusicXml_Tests, placementDefaults) {
 TEST_F(MusicXml_Tests, printSpacingNo) {
     musicXmlIoTestRef("testPrintSpacingNo");
 }
+TEST_F(MusicXml_Tests, placementOffsetDefaults) {
+    musicXmlImportTestRef("testPlacementOffsetDefaults");
+}
 TEST_F(MusicXml_Tests, repeatCounts) {
     musicXmlIoTest("testRepeatCounts");
 }
