@@ -37,6 +37,26 @@ void PercussionPanelPadModel::setInstrumentName(const QString& instrumentName)
     emit instrumentNameChanged();
 }
 
+void PercussionPanelPadModel::setKeyboardShortcut(const QString& keyboardShortcut)
+{
+    if (m_keyboardShortcut == keyboardShortcut) {
+        return;
+    }
+
+    m_keyboardShortcut = keyboardShortcut;
+    emit keyboardShortcutChanged();
+}
+
+void PercussionPanelPadModel::setMidiNote(const QString& midiNote)
+{
+    if (m_midiNote == midiNote) {
+        return;
+    }
+
+    m_midiNote = midiNote;
+    emit midiNoteChanged();
+}
+
 void PercussionPanelPadModel::setIsEmptySlot(bool isEmptySlot)
 {
     if (m_isEmptySlot == isEmptySlot) {

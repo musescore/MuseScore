@@ -101,28 +101,33 @@ void PercussionPanelPadListModel::resetLayout()
 
 QList<PercussionPanelPadModel*> PercussionPanelPadListModel::createDefaultItems()
 {
-    QMap<size_t, QString> dummyInstruments;
-    dummyInstruments.insert(2, "Bass Drum (Kit): Mid");
-    dummyInstruments.insert(0, "Bass Drum (Kit): Low");
-    dummyInstruments.insert(8, "Hi-hat (Kit)");
-    dummyInstruments.insert(17, "Splash (Kit)");
-    dummyInstruments.insert(11, "Tom (Kit): High");
-    dummyInstruments.insert(9, "Tom (Kit): Mid");
-    dummyInstruments.insert(12, "Crash (Kit)");
-    dummyInstruments.insert(3, "Snare (Kit)");
-    dummyInstruments.insert(15, "Ride (Kit)");
-    dummyInstruments.insert(5, "Floor Tom (Kit)");
+    QMap<size_t, PadInfo> dummyPads;
+    dummyPads.insert(2, { "Bass Drum (Kit): Mid", "S", "B2" });
+    dummyPads.insert(0, { "This is a pad with a really long text label that truncates.", "A", "F2" });
+    dummyPads.insert(8, { "Hi-hat (Kit)", "J", "G#2" });
+    dummyPads.insert(17, { "Splash (Kit)", "X", "F3" });
+    dummyPads.insert(11, { "Tom (Kit): High", "L", "A#2" });
+    dummyPads.insert(9, { "Tom (Kit): Mid", "K", "F#2" });
+    dummyPads.insert(12, { "Crash (Kit)", ";", "D#3" });
+    dummyPads.insert(3, { "Snare (Kit)", "D", "D3" });
+    dummyPads.insert(15, { "Ride (Kit)", "Z", "E3" });
+    dummyPads.insert(5, { "Floor Tom (Kit)", "F", "D2" });
 
     // Get the largest key and round up to the nearest multiple of 8
-    size_t maxIndex = dummyInstruments.lastKey();
+    size_t maxIndex = dummyPads.lastKey();
     maxIndex = std::ceil(maxIndex / (double)NUM_COLUMNS) * NUM_COLUMNS;
 
     QList<PercussionPanelPadModel*> padModels;
 
     for (size_t i = 0; i < maxIndex; ++i) {
         PercussionPanelPadModel* model = new PercussionPanelPadModel(this);
-        if (!dummyInstruments.value(i).isEmpty()) {
-            model->setInstrumentName(dummyInstruments.value(i));
+        const PadInfo info = dummyPads.value(i);
+        if (info.isValid()) {
+            model->setInstrumentName(info.instrumentName);
+
+            model->setKeyboardShortcut(info.keyboardShortcut);
+            model->setMidiNote(info.midiNote);
+
             model->setIsEmptySlot(false);
         }
         padModels.append(model);

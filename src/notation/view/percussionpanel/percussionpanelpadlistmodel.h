@@ -64,6 +64,21 @@ private:
         PadModelRole = Qt::UserRole + 1,
     };
 
+    //! NOTE: Probably a placeholder struct...
+    struct PadInfo {
+        QString instrumentName;
+
+        QString keyboardShortcut;
+        QString midiNote;
+
+        bool isEmptySlot = true;
+
+        bool isValid() const
+        {
+            return !instrumentName.isEmpty() && !keyboardShortcut.isEmpty() && !midiNote.isEmpty();
+        }
+    };
+
     void movePad(int fromIndex, int toIndex);
 
     QList<PercussionPanelPadModel*> createDefaultItems();
