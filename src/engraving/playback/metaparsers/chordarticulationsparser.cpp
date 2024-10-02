@@ -33,6 +33,7 @@
 
 #include "playback/utils/arrangementutils.h"
 #include "playback/filters/spannerfilter.h"
+
 #include "internal/spannersmetaparser.h"
 #include "internal/symbolsmetaparser.h"
 #include "internal/annotationsmetaparser.h"
@@ -85,10 +86,6 @@ void ChordArticulationsParser::doParse(const EngravingItem* item, const Renderin
     parseGraceNotes(chord, ctx, result);
     parseChordLine(chord, ctx, result);
     parseArticulationSymbols(chord, ctx, result);
-
-    if (ctx.profile->contains(ArticulationType::Multibend)) {
-        parseBends(chord, ctx, result);
-    }
 }
 
 void ChordArticulationsParser::parseSpanners(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
@@ -130,23 +127,6 @@ void ChordArticulationsParser::parseSpanners(const Chord* chord, const Rendering
         spannerContext.nominalPositionEndTick = spannerContext.nominalPositionStartTick + spannerContext.nominalDurationTicks;
 
         SpannersMetaParser::parse(spanner, std::move(spannerContext), result);
-    }
-}
-
-void ChordArticulationsParser::parseBends(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
-{
-    for (const Note* note : chord->notes()) {
-        for (const Spanner* spanner : note->spannerBack()) {
-            if (spanner->isGuitarBend()) {
-                SpannersMetaParser::parse(spanner, ctx, result);
-            }
-        }
-
-        for (const Spanner* spanner : note->spannerFor()) {
-            if (spanner->isGuitarBend()) {
-                SpannersMetaParser::parse(spanner, ctx, result);
-            }
-        }
     }
 }
 
