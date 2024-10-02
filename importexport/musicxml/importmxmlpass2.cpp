@@ -918,6 +918,8 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
       if (!placement.isEmpty()) {
             el->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
             el->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+            if (!el->isSticking())
+                  el->resetProperty(Pid::OFFSET);
             }
 
 
@@ -1102,8 +1104,10 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
       na->setTrack(cr->track());
       if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
             na->setColor(color);
-      if (!direction.isEmpty())
+      if (!direction.isEmpty()) {
             na->setPlacement(direction == "inverted" ? Placement::BELOW : Placement::ABOVE);
+            na->resetProperty(Pid::OFFSET);
+            }
       else
             na->setPlacement(na->propertyDefault(Pid::PLACEMENT).value<Placement>());
       setElementPropertyFlags(na, Pid::PLACEMENT, direction);
@@ -1374,6 +1378,7 @@ static void addTextToNote(int l, int c, QString txt, QString placement, QString 
                   if (!placement.isEmpty()) {
                         t->setPlacement(placement == "below" ? Placement::BELOW : Placement::ABOVE);
                         t->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+                        t->resetProperty(Pid::OFFSET);
                         }
                   if (color.isValid()) {
                         t->setColor(color);
@@ -1428,6 +1433,7 @@ static void setSLinePlacement(SLine* sli, const QString placement)
       if (placement == "above" || placement == "below") {
             sli->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
             sli->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+            sli->resetProperty(Pid::OFFSET);
             }
       }
 
@@ -3383,6 +3389,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   if (!_hasDefaultY) {
                         t->setPlacement(Placement::ABOVE);  // crude way to force placement TODO improve ?
                         t->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+                        t->resetProperty(Pid::OFFSET);
                         }
                   }
 
@@ -4327,7 +4334,8 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const int track, c
                               tb->setSize(symSize);
                         tb->setPropertyFlags(Pid::FONT_SIZE, PropertyFlags::UNSTYLED);
                         }
-                  else tb->setVisible(false);
+                  else
+                        tb->setVisible(false);
 
                   // Sometimes Jumps and Markers are exported on the incorrect side
                   // of the barline (i.e. end of mm. 29 vs. beginning of mm. 30).
@@ -4380,6 +4388,8 @@ void MusicXMLParserDirection::handleChordSym(const int track, const Fraction tic
       ha->setTrack(track);
       ha->setPlacement(placement() == "above" ? Placement::ABOVE : Placement::BELOW);
       ha->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+      ha->resetProperty(Pid::OFFSET);
+      ha->setVisible(_visible);
       HarmonyDesc newHarmonyDesc(track, ha, nullptr);
 
       const int ticks = tick.ticks();
@@ -5017,18 +5027,18 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
                   segment->add(fermata);
                   if (fermataColor.isValid())
                         fermata->setColor(fermataColor);
-                  if (fermataType == "inverted")
+                  if (fermataType == "inverted") {
                         fermata->setPlacement(Placement::BELOW);
-                  else if (fermataType.isEmpty()) {
-                        fermata->setPlacement(fermata->propertyDefault(Pid::PLACEMENT).value<Placement>());
+                        fermata->resetProperty(Pid::OFFSET);
                         }
+                  else if (fermataType.isEmpty())
+                        fermata->setPlacement(fermata->propertyDefault(Pid::PLACEMENT).value<Placement>());
                   }
             else if (_e.name() == "repeat") {
                   repeat       = _e.attributes().value("direction").toString();
                   count        = _e.attributes().value("times").toString();
-                  if (count.isEmpty()) {
-                        count = "2";
-                        }
+                  if (count.isEmpty())
+                        count  = "2";
                   measure->setRepeatCount(count.toInt());
                   _e.skipCurrentElement();
                   }
@@ -6744,6 +6754,7 @@ FiguredBass* MusicXMLParserPass2::figuredBass()
 
       fb->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
       fb->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+      fb->resetProperty(Pid::OFFSET);
 
       if (normalizedText.isEmpty()) {
             delete fb;
@@ -6920,6 +6931,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       if (!placement.isEmpty()) {
             ha->setPlacement(placement == "below" ? Placement::BELOW : Placement::ABOVE);
             ha->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+            ha->resetProperty(Pid::OFFSET);
             }
       else if (hasTotalY) {
             ha->setPlacement(totalY > 0 ? Placement::BELOW : Placement::ABOVE);
@@ -7062,8 +7074,10 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       ha->render();
 
       ha->setVisible(printObject);
-      if (placement == "below")
+      if (placement == "below") {
             ha->setPlacement(Placement::BELOW);
+            ha->resetProperty(Pid::OFFSET);
+            }
       if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/) {
             ha->setColor(color);
             ha->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
@@ -7266,9 +7280,10 @@ void MusicXMLParserLyric::parse()
       if (!placement.isEmpty()) {
             lyric->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
             lyric->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+            lyric->resetProperty(Pid::OFFSET);
             }
 
-      if (relX != 0 || relY != 0) {
+      if (!qFuzzyIsNull(relX) || !qFuzzyIsNull(relY)) {
             QPointF offset = lyric->offset();
             offset.setX(relX != 0 ? relX : lyric->offset().x());
             offset.setY(relY != 0 ? relY : lyric->offset().y());

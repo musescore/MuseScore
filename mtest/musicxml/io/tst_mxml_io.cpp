@@ -259,6 +259,7 @@ private slots:
       void pedalChangesBroken() { mxmlImportTestRef("testPedalChangesBroken"); }
       void pedalStyles() { mxmlIoTest("testPedalStyles"); }
       void placementDefaults() { mxmlImportTestRef("testPlacementDefaults"); }
+      void placementOffsetDefaults() { mxmlImportTestRef("testPlacementOffsetDefaults"); }
       void printSpacingNo() { mxmlIoTestRef("testPrintSpacingNo"); }
       void repeatCounts() { mxmlIoTest("testRepeatCounts"); }
       void repeatSingleMeasure() { mxmlIoTest("testRepeatSingleMeasure"); }
