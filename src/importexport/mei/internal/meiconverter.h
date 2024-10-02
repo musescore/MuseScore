@@ -223,6 +223,9 @@ public:
     static void harmFromMEI(engraving::Harmony* harmony, const muse::StringList& meiLines, const libmei::Harm& meiHarm, bool& warning);
     static libmei::Harm harmToMEI(const engraving::Harmony* harmony, muse::StringList& meiLines);
 
+    static void layerIdentFromMEI(engraving::EngravingItem* item, const libmei::Element& meiElement);
+    static void layerIdentToMEI(const engraving::EngravingItem* item, libmei::Element& meiElement);
+
     static void lvFromMEI(engraving::Articulation* lv, const libmei::Lv& meiLv, bool& warning);
     static libmei::Lv lvToMEI(const engraving::Articulation* lv);
 
@@ -280,6 +283,8 @@ public:
 
     static StaffStruct staffFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
     static libmei::StaffDef staffToMEI(const engraving::Staff* staff);
+
+    static void staffIdentToMEI(const engraving::EngravingItem* item, libmei::Element& meiElement);
 
     static std::pair<engraving::DirectionV, bool> stemFromMEI(const libmei::AttStems& meiStemsAtt, bool& warning);
     static std::pair<libmei::data_STEMDIRECTION, double> stemToMEI(const engraving::DirectionV direction, bool noStem);

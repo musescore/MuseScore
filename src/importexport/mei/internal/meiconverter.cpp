@@ -1258,6 +1258,9 @@ void Convert::dynamFromMEI(engraving::Dynamic* dynamic, const StringList& meiLin
         dynamic->setDynamicType(meiLines.at(0));
     }
 
+    // @layer
+    Convert::layerIdentFromMEI(dynamic, meiDynam);
+
     // text content
     StringList lines;
     // For each line in the dynamic text
@@ -1306,6 +1309,12 @@ libmei::Dynam Convert::dynamToMEI(const engraving::Dynamic* dynamic, StringList&
     if (dynamic->getProperty(engraving::Pid::DIRECTION) != dynamic->propertyDefault(engraving::Pid::DIRECTION)) {
         meiDynam.SetPlace(Convert::directionToMEI(dynamic->direction()));
     }
+
+    // @layer
+    Convert::layerIdentToMEI(dynamic, meiDynam);
+
+    // @staff
+    Convert::staffIdentToMEI(dynamic, meiDynam);
 
     // @label
     if (dynamic->dynamicType() != engraving::DynamicType::OTHER) {
@@ -1605,6 +1614,9 @@ void Convert::hairpinFromMEI(engraving::Hairpin* hairpin, const libmei::Hairpin&
 
     // @color
     Convert::colorlineFromMEI(hairpin, meiHairpin);
+
+    // @layer
+    Convert::layerIdentFromMEI(hairpin, meiHairpin);
 }
 
 libmei::Hairpin Convert::hairpinToMEI(const engraving::Hairpin* hairpin)
@@ -1630,6 +1642,12 @@ libmei::Hairpin Convert::hairpinToMEI(const engraving::Hairpin* hairpin)
 
     // @color
     Convert::colorlineToMEI(hairpin, meiHairpin);
+
+    // @layer
+    Convert::layerIdentToMEI(hairpin, meiHairpin);
+
+    // @staff
+    Convert::staffIdentToMEI(hairpin, meiHairpin);
 
     return meiHairpin;
 }
@@ -2296,6 +2314,9 @@ libmei::Octave Convert::octaveToMEI(const engraving::Ottava* ottava)
     // @color
     Convert::colorlineToMEI(ottava, meiOctave);
 
+    // @staff
+    Convert::staffIdentToMEI(ottava, meiOctave);
+
     return meiOctave;
 }
 
@@ -2946,6 +2967,9 @@ libmei::Tempo Convert::tempoToMEI(const engraving::TempoText* tempoText, StringL
     // text content - only split lines
     meiLines = String(tempoText->plainText()).split(u"\n");
 
+    // @staff
+    Convert::staffIdentToMEI(tempoText, meiTempo);
+
     return meiTempo;
 }
 
@@ -3331,6 +3355,53 @@ std::list<std::string> Convert::getTypeValuesWithPrefix(const std::string& typeS
     }
 
     return values;
+}
+
+void Convert::layerIdentFromMEI(engraving::EngravingItem* item, const libmei::Element& meiElement)
+{
+    if (!item->hasVoiceAssignmentProperties()) {
+        return;
+    }
+
+    const libmei::AttLayerIdent* layerAtt = dynamic_cast<const libmei::AttLayerIdent*>(&meiElement);
+
+    IF_ASSERT_FAILED(layerAtt) {
+        return;
+    }
+
+    if (layerAtt->HasLayer()) {
+        // without further check we assume the layer to match
+        item->setProperty(engraving::Pid::VOICE_ASSIGNMENT, engraving::VoiceAssignment::CURRENT_VOICE_ONLY);
+    }
+}
+
+void Convert::layerIdentToMEI(const engraving::EngravingItem* item, libmei::Element& meiElement)
+{
+    libmei::AttLayerIdent* layerAtt = dynamic_cast<libmei::AttLayerIdent*>(&meiElement);
+
+    IF_ASSERT_FAILED(layerAtt) {
+        return;
+    }
+
+    if (item->hasVoiceAssignmentProperties()
+        && (item->getProperty(engraving::Pid::VOICE_ASSIGNMENT).value<engraving::VoiceAssignment>()
+            == engraving::VoiceAssignment::CURRENT_VOICE_ONLY)) {
+        layerAtt->SetLayer(item->voice() + 1);
+    }
+}
+
+void Convert::staffIdentToMEI(const engraving::EngravingItem* item, libmei::Element& meiElement)
+{
+    libmei::AttStaffIdent* staffAtt = dynamic_cast<libmei::AttStaffIdent*>(&meiElement);
+
+    IF_ASSERT_FAILED(staffAtt) {
+        return;
+    }
+
+    libmei::xsdPositiveInteger_List staffList;
+    staffList.push_back(item->staff()->idx() + 1);
+    // TODO: add staff number if centered between staves
+    staffAtt->SetStaff(staffList);
 }
 
 double Convert::tstampFromFraction(const engraving::Fraction& fraction, const engraving::Fraction& timesig)
