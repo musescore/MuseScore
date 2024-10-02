@@ -1184,6 +1184,12 @@ TEST_F(Musicxml_Tests, timesig3) {
 TEST_F(Musicxml_Tests, timeTick) {
     mxmlImportTestRef("testTimeTick");
 }
+TEST_F(Musicxml_Tests, timeTickExport) {
+    bool use302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+    mxmlMscxExportTestRef("testTimeTickExport");
+    MScore::useRead302InTestMode = use302;
+}
 TEST_F(Musicxml_Tests, titleSwapMu) {
     mxmlImportTestRef("testTitleSwapMu");
 }
