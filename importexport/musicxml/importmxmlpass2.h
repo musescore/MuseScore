@@ -145,6 +145,12 @@ private:
       MxmlLogger* _logger = nullptr;      ///< Error logger
       QMap<int, Lyrics*> _numberedLyrics; // lyrics with valid number
       QSet<Lyrics*> _extendedLyrics;      // lyrics with the extend flag set
+      qreal _defaultY = 0.0;
+      qreal _relativeY = 0.0;
+      QString _placement;
+      QString placement() const;
+      qreal totalY() const { return _defaultY + _relativeY; }
+      bool hasTotalY() const { return !qFuzzyIsNull(_defaultY) || !qFuzzyIsNull(_relativeY); }
       };
 
 //---------------------------------------------------------
