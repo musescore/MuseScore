@@ -22,6 +22,7 @@
 
 #include "chordarticulationsrenderer.h"
 
+#include "bendsrenderer.h"
 #include "noterenderer.h"
 #include "ornamentsrenderer.h"
 #include "tremolorenderer.h"
@@ -60,8 +61,14 @@ void ChordArticulationsRenderer::doRender(const EngravingItem* item, const mpe::
         return;
     }
 
+    const bool supportsMultibend = ctx.profile->contains(ArticulationType::Multibend);
+
     for (const Note* note: chord->notes()) {
-        NoteRenderer::render(note, ctx, result);
+        if (supportsMultibend && BendsRenderer::isMultibendPart(note)) {
+            BendsRenderer::render(note, ctx, result);
+        } else {
+            NoteRenderer::render(note, ctx, result);
+        }
     }
 }
 
