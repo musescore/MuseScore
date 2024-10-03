@@ -37,6 +37,7 @@ public:
       Accidental* acc() const { return _acc; }
       AccidentalType accType() const { return _accType; }
       int alter() const { return _alter; }
+      qreal tuning() const { return _tuning; }
       int displayOctave() const { return _displayOctave; }
       int displayStep() const { return _displayStep; }
       void displayStepOctave(QXmlStreamReader& e);
@@ -48,6 +49,7 @@ private:
       Accidental* _acc = 0;                                 // created based on accidental element
       AccidentalType _accType = AccidentalType::NONE;       // set by pitch() based on alter value (can be microtonal)
       int _alter = 0;
+      qreal _tuning = 0.0;
       int _displayStep = -1;                                // invalid
       int _displayOctave = -1;                              // invalid
       int _octave = -1;

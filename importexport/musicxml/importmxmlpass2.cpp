@@ -234,7 +234,7 @@ static int MusicXMLStepAltOct2Pitch(int step, int alter, int octave)
  Note that n's staff and track have not been set yet
  */
 
-static void xmlSetPitch(Note* n, int step, int alter, int octave, const int octaveShift, const Instrument* const instr, Interval inferredTranspose = Interval(0))
+static void xmlSetPitch(Note* n, int step, int alter, qreal tuning, int octave, const int octaveShift, const Instrument* const instr, Interval inferredTranspose = Interval(0))
       {
       //qDebug("xmlSetPitch(n=%p, step=%d, alter=%d, octave=%d, octaveShift=%d)",
       //       n, step, alter, octave, octaveShift);
@@ -258,6 +258,7 @@ static void xmlSetPitch(Note* n, int step, int alter, int octave, const int octa
       tpc2 = Ms::transposeTpc(tpc2, inferredTranspose, true);
       int tpc1 = Ms::transposeTpc(tpc2, combinedIntval, true);
       n->setPitch(pitch, tpc1, tpc2);
+      n->setTuning(tuning);
       //qDebug("  pitch=%d tpc1=%d tpc2=%d", n->pitch(), n->tpc1(), n->tpc2());
       }
 
@@ -5946,11 +5947,11 @@ static void setPitch(Note* note, MusicXMLParserPass1& pass1, const QString& part
                   }
             else {
                   //qDebug("disp step %d oct %d", displayStep, displayOctave);
-                  xmlSetPitch(note, mnp.displayStep(), 0, mnp.displayOctave(), 0, instrument);
+                  xmlSetPitch(note, mnp.displayStep(), 0, 0.0, mnp.displayOctave(), 0, instrument);
                   }
             }
       else {
-            xmlSetPitch(note, mnp.step(), mnp.alter(), mnp.octave(), octaveShift, instrument, pass1.getMusicXmlPart(partId)._inferredTranspose);
+            xmlSetPitch(note, mnp.step(), mnp.alter(), mnp.tuning(), mnp.octave(), octaveShift, instrument, pass1.getMusicXmlPart(partId)._inferredTranspose);
             }
       }
 

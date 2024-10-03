@@ -109,6 +109,7 @@ void mxmlNotePitch::pitch(QXmlStreamReader& e)
       // defaults
       _step = -1;
       _alter = 0;
+      _tuning = 0.0;
       _octave = -1;
 
       while (e.readNextStartElement()) {
@@ -123,6 +124,10 @@ void mxmlNotePitch::pitch(QXmlStreamReader& e)
                         if (ok2 && (qAbs(altervalue) < 2.0) && (_accType == AccidentalType::NONE)) {
                               // try to see if a microtonal accidental is needed
                               _accType = microtonalGuess(altervalue);
+
+                              // If it's not a microtonal accidental we will use tuning
+                              if (_accType == AccidentalType::NONE)
+                                    _tuning = 100 * altervalue;
                               }
                         _alter = 0;
                         }
