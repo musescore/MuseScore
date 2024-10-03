@@ -27,6 +27,15 @@
 namespace mu::engraving {
 const int MAX_NUMBER_LEVEL = 16; // maximum number of overlapping MusicXML objects
 
+enum class MusicXMLExporterSoftware : char {
+    SIBELIUS,
+    DOLET6,
+    DOLET8,
+    FINALE,
+    NOTEFLIGHT,
+    OTHER
+};
+
 //---------------------------------------------------------
 //   MxmlStartStop
 //---------------------------------------------------------

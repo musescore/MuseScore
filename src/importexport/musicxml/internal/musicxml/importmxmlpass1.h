@@ -74,15 +74,6 @@ struct MxmlOctaveShiftDesc {
         : tp(_tp), size(_size), time(_tm), num(-1) {}
 };
 
-enum class MusicXMLExporterSoftware : char {
-    SIBELIUS,
-    DOLET6,
-    DOLET8,
-    FINALE,
-    NOTEFLIGHT,
-    OTHER
-};
-
 //---------------------------------------------------------
 //   MusicXmlPartGroup
 //---------------------------------------------------------
