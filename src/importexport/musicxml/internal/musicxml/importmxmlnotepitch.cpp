@@ -129,6 +129,7 @@ void MxmlNotePitch::pitch(muse::XmlStreamReader& e)
     // defaults
     m_step = -1;
     m_alter = 0;
+    m_tuning = 0.0;
     m_octave = -1;
 
     while (e.readNextStartElement()) {
@@ -143,6 +144,11 @@ void MxmlNotePitch::pitch(muse::XmlStreamReader& e)
                 if (ok2 && (std::abs(altervalue) < 2.0) && (m_accType == AccidentalType::NONE)) {
                     // try to see if a microtonal accidental is needed
                     m_accType = microtonalGuess(altervalue);
+
+                    // If it's not a microtonal accidental we will use tuning
+                    if (m_accType == AccidentalType::NONE) {
+                        m_tuning = 100 * altervalue;
+                    }
                 }
                 m_alter = 0;
             }

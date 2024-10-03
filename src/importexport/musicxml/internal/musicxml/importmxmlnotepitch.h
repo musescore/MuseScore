@@ -48,6 +48,7 @@ public:
     Accidental* acc() const { return m_acc; }
     AccidentalType accType() const { return m_accType; }
     int alter() const { return m_alter; }
+    double tuning() const { return m_tuning; }
     int displayOctave() const { return m_displayOctave; }
     int displayStep() const { return m_displayStep; }
     void displayStepOctave(muse::XmlStreamReader& e);
@@ -59,6 +60,7 @@ private:
     Accidental* m_acc = nullptr;                             // created based on accidental element
     AccidentalType m_accType = AccidentalType::NONE;         // set by pitch() based on alter value (can be microtonal)
     int m_alter = 0;
+    double m_tuning = 0.0;
     int m_displayStep = -1;                                  // invalid
     int m_displayOctave = -1;                                // invalid
     int m_octave = -1;
