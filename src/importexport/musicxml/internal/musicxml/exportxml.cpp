@@ -374,6 +374,7 @@ public:
     void write(muse::io::IODevice* dev);
     void credits(XmlWriter& xml);
     void moveToTick(const Fraction& t);
+    void moveToTickIfNeed(const Fraction& t);
     void words(TextBase const* const text, staff_idx_t staff);
     void tboxTextAsWords(TextBase const* const text, const staff_idx_t staff, PointF position);
     void rehearsal(RehearsalMark const* const rmk, staff_idx_t staff);
@@ -2165,6 +2166,14 @@ void ExportMusicXml::moveToTick(const Fraction& t)
         m_xml.endElement();
     }
     m_tick = t;
+}
+
+void ExportMusicXml::moveToTickIfNeed(const Fraction& t)
+{
+    if (m_tick != t) {
+        m_attr.doAttr(m_xml, false);
+        moveToTick(t);
+    }
 }
 
 //---------------------------------------------------------
@@ -5314,6 +5323,9 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
             if ((isStart && hp->beginText().isEmpty()) || (!isStart && hp->endText().isEmpty())) {
                 return;
             }
+            // generate backup or forward to the start time of the element
+            const Fraction tickToWrite = isStart ? hp->tick() : hp->tick2();
+            moveToTickIfNeed(tickToWrite);
             directionTag(m_xml, m_attr, hp);
             writeHairpinText(m_xml, hp, isStart);
             directionETag(m_xml, staff);
@@ -5345,6 +5357,10 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
             }
         }
     }
+
+    // generate backup or forward to the start time of the element
+    const Fraction tickToWrite = isStart ? hp->tick() : hp->tick2();
+    moveToTickIfNeed(tickToWrite);
 
     directionTag(m_xml, m_attr, hp);
     if (isStart) {
@@ -5420,6 +5436,7 @@ int ExportMusicXml::findOttava(const Ottava* ot) const
 void ExportMusicXml::ottava(Ottava const* const ot, staff_idx_t staff, const Fraction& tick)
 {
     int n = findOttava(ot);
+    bool isStart = ot->tick() == tick;
     if (n >= 0) {
         m_ottavas[n] = 0;
     } else {
@@ -5471,6 +5488,10 @@ void ExportMusicXml::ottava(Ottava const* const ot, staff_idx_t staff, const Fra
     }
 
     if (!octaveShiftXml.empty()) {
+        // generate backup or forward to the start time of the element
+        const Fraction tickToWrite = isStart ? ot->tick() : ot->tick2();
+        moveToTickIfNeed(tickToWrite);
+
         directionTag(m_xml, m_attr, ot);
         m_xml.startElement("direction-type");
         octaveShiftXml += color2xml(ot);
@@ -5491,6 +5512,11 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
     if (pd->tick() != tick && pd->endHookType() == HookType::HOOK_45) {
         return;
     }
+    bool isStart = pd->tick() == tick;
+
+    // generate backup or forward to the start time of the element
+    const Fraction tickToWrite = isStart ? pd->tick() : pd->tick2();
+    moveToTickIfNeed(tickToWrite);
 
     directionTag(m_xml, m_attr, pd);
     m_xml.startElement("direction-type");
@@ -5659,6 +5685,10 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
 
     rest += color2xml(tl);
     rest += positioningAttributes(tl, tl->tick() == tick);
+
+    // generate backup or forward to the start time of the element
+    const Fraction tickToWrite = isStart ? tl->tick() : tl->tick2();
+    moveToTickIfNeed(tickToWrite);
 
     directionTag(m_xml, m_attr, tl);
 
@@ -6123,7 +6153,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
 
 static track_idx_t findTrackForAnnotations(track_idx_t track, Segment* seg)
 {
-    if (seg->segmentType() != SegmentType::ChordRest) {
+    if (!(seg->isChordRestType() || seg->isTimeTickType())) {
         return muse::nidx;
     }
 
@@ -6688,7 +6718,7 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
 
 static void spannerStart(ExportMusicXml* exp, track_idx_t strack, track_idx_t etrack, track_idx_t track, staff_idx_t sstaff, Segment* seg)
 {
-    if (seg->segmentType() == SegmentType::ChordRest) {
+    if (seg->isChordRestType() || seg->isTimeTickType()) {
         Fraction stick = seg->tick();
         for (auto it = exp->score()->spanner().lower_bound(stick.ticks()); it != exp->score()->spanner().upper_bound(stick.ticks()); ++it) {
             Spanner* e = it->second;
@@ -7985,6 +8015,18 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
     for (track_idx_t track = strack; track < etrack; ++track) {
         for (Segment* seg = m->first(); seg; seg = seg->next()) {
             if (seg->isTimeTickType()) {
+                // Prefer to start/stop spanners on a chordrest segment where one is available
+                const Segment* crSeg = m_score->tick2leftSegment(seg->tick());
+                if (crSeg && crSeg->tick() == seg->tick()) {
+                    continue;
+                }
+                spannerStart(this, strack, etrack, track, partRelStaffNo, seg);
+
+                const staff_idx_t spannerStaff = track2staff(track);
+                const track_idx_t starttrack = staff2track(spannerStaff);
+                const track_idx_t endtrack = staff2track(spannerStaff + 1);
+                spannerStop(this, starttrack, endtrack, seg->tick(), partRelStaffNo, spannersStopped);
+
                 continue;
             }
             EngravingItem* const el = seg->element(track);
@@ -7997,10 +8039,7 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
             }
 
             // generate backup or forward to the start time of the element
-            if (m_tick != seg->tick()) {
-                m_attr.doAttr(m_xml, false);
-                moveToTick(seg->tick());
-            }
+            moveToTickIfNeed(seg->tick());
 
             // handle annotations and spanners (directions attached to this note or rest)
             if (el->isChordRest()) {
