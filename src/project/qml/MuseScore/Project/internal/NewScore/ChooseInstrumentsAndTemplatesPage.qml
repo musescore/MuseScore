@@ -27,9 +27,10 @@ import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import MuseScore.Project 1.0
 import MuseScore.InstrumentsScene 1.0
-
 Item {
     id: root
+
+    required property InstrumentsOnScoreListModel instrumentsOnScoreModel
 
     property string preferredScoreCreationMode: ""
 
@@ -140,6 +141,10 @@ Item {
         }
     }
 
+    InstrumentsOnScoreListModel {
+        id: instrumentsOnScoreModel
+    }
+
     Loader {
         id: pageLoader
 
@@ -168,6 +173,7 @@ Item {
 
         ChooseInstrumentsPage {
             navigationSection: root.navigationSection
+            instrumentsOnScoreModel: instrumentsOnScoreModel
         }
     }
 
