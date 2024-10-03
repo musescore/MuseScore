@@ -4162,13 +4162,19 @@ static void writePitch(XmlWriter& xml, const Note* const note, const bool useDru
         default:                                             break;
         }
     }
-    if (alter && !alter2) {
-        xml.tag("alter", alter);
+    // Override accidental with explicit note tuning
+    double tuning = note->tuning();
+    if (!muse::RealIsNull(tuning)) {
+        alter2 = tuning / 100.0;
     }
-    if (!alter && alter2) {
-        xml.tag("alter", alter2);
+    // `alter` represents the "regular" (Western) pitch which can be
+    // 0 (natural), 1 (sharp), -1 (flat), etc. or some other integer depending on transposing instruments.
+    // `alter2` represents a microtone or manually-adjusted note tuning.
+    // In MusicXML, These two values are merged in the same "alter" tag.
+    // https://usermanuals.musicxml.com/MusicXML/Content/EL-MusicXML-alter.htm
+    if (alter || alter2) {
+        xml.tag("alter", alter + alter2);
     }
-    // TODO what if both alter and alter2 are present? For Example: playing with transposing instruments
     xml.tag(useDrumset ? "display-octave" : "octave", octave);
     xml.endElement();
 }
