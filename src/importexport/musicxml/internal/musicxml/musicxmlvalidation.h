@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MUSICXML_MUSICXMLVALIDATION_H
-#define MU_MUSICXML_MUSICXMLVALIDATION_H
+#pragma once
 
 #include "global/types/bytearray.h"
 #include "global/types/string.h"
@@ -35,5 +34,3 @@ public:
     static engraving::Err validate(const muse::String& name, const muse::ByteArray& data);
 };
 }
-
-#endif // MU_MUSICXML_MUSICXMLVALIDATION_H

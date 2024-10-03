@@ -91,6 +91,7 @@
 #include "importmxmlpass2.h"
 #include "musicxmlfonthandler.h"
 #include "musicxmlsupport.h"
+#include "musicxmltypes.h"
 
 #include "modularity/ioc.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
@@ -120,6 +121,8 @@ static std::shared_ptr<mu::engraving::IEngravingFontsProvider> engravingFonts()
 //---------------------------------------------------------
 
 //#define DEBUG_VOICE_MAPPER true
+
+constexpr int MAX_LYRICS       = 16;
 
 //---------------------------------------------------------
 //   function declarations

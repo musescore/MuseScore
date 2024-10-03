@@ -20,18 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_IMPORTEXPORT_EXPORTXML_H
-#define MU_IMPORTEXPORT_EXPORTXML_H
+#pragma once
 
 #include "io/iodevice.h"
 #include "global/types/string.h"
 
 namespace mu::engraving {
 class Score;
-
 bool saveMxl(Score*, muse::io::IODevice*);
 bool saveXml(Score*, muse::io::IODevice*);
 bool saveXml(Score*, const muse::String&);
 }
-
-#endif // MU_IMPORTEXPORT_EXPORTXML_H

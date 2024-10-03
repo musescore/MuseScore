@@ -20,22 +20,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __IMPORTMXMLPASS1_H__
-#define __IMPORTMXMLPASS1_H__
+#pragma once
 
 #include "global/serialization/xmlstreamreader.h"
 #include "global/containers.h"
-#include "global/types/flags.h"
 #include "draw/types/geometry.h"
 
-#include "importxmlfirstpass.h"
-#include "musicxml.h" // for the creditwords and MusicXmlPartGroupList definitions
 #include "musicxmlsupport.h"
+#include "musicxmltypes.h"
+#include "musicxmltupletstate.h"
+#include "musicxmlpart.h"
 
 #include "engraving/engravingerrors.h"
 
 namespace mu::engraving {
 class Score;
+class VoiceOverlapDetector;
 
 //---------------------------------------------------------
 //   PageFormat
@@ -53,8 +53,8 @@ struct PageFormat {
     bool twosided = false;
 };
 
-typedef std::map<String, Part*> PartMap;
-typedef std::map<int, MusicXmlPartGroup*> MusicXmlPartGroupMap;
+typedef std::pair<int, int> StartStop;
+typedef std::vector<StartStop> StartStopList;
 
 //---------------------------------------------------------
 //   MxmlOctaveShiftDesc
@@ -75,53 +75,54 @@ struct MxmlOctaveShiftDesc {
 };
 
 //---------------------------------------------------------
-//   MxmlStartStop (also used in pass 2)
+//   MusicXmlPartGroup
 //---------------------------------------------------------
 
-enum class MxmlStartStop : char {
-    NONE, START, STOP
+struct MusicXmlPartGroup {
+    int span = 0;
+    int start = 0;
+    BracketType type = BracketType::NO_BRACKET;
+    bool barlineSpan = false;
+    int column = 0;
 };
+typedef std::vector<MusicXmlPartGroup*> MusicXmlPartGroupList;
+typedef std::map<String, Part*> PartMap;
+typedef std::map<int, MusicXmlPartGroup*> MusicXmlPartGroupMap;
 
-enum class MxmlTupletFlag : char {
-    NONE = 0,
-    STOP_PREVIOUS = 1,
-    START_NEW = 2,
-    ADD_CHORD = 4,
-    STOP_CURRENT = 8
+//---------------------------------------------------------
+//   CreditWords
+//    a single parsed MusicXML credit-words element
+//---------------------------------------------------------
+
+struct CreditWords {
+    int page = 0;
+    String type;
+    double defaultX = 0.0;
+    double defaultY = 0.0;
+    double fontSize = 0.0;
+    String justify;
+    String hAlign;
+    String vAlign;
+    String words;
+    CreditWords(int p, String tp, double dx, double dy, double fs, String j, String ha, String va, String w)
+    {
+        page = p;
+        type = tp;
+        defaultX = dx;
+        defaultY = dy;
+        fontSize = fs;
+        justify  = j;
+        hAlign   = ha;
+        vAlign   = va;
+        words    = w;
+    }
 };
-
-enum class MusicXMLExporterSoftware : char {
-    SIBELIUS,
-    DOLET6,
-    DOLET8,
-    FINALE,
-    NOTEFLIGHT,
-    OTHER
-};
-
-typedef muse::Flags<MxmlTupletFlag> MxmlTupletFlags;
-
-struct MxmlTupletState {
-    void addDurationToTuplet(const Fraction duration, const Fraction timeMod);
-    MxmlTupletFlags determineTupletAction(const Fraction noteDuration, const Fraction timeMod, const MxmlStartStop tupletStartStop,
-                                          const TDuration normalType, Fraction& missingPreviousDuration, Fraction& missingCurrentDuration);
-    bool inTuplet = false;
-    bool implicit = false;
-    int actualNotes = 1;
-    int normalNotes = 1;
-    Fraction duration { 0, 1 };
-    int tupletType = 0;   // smallest note type in the tuplet // TODO_NOW rename ?
-    int tupletCount = 0;   // number of smallest notes in the tuplet // TODO_NOW rename ?
-};
-
-using MxmlTupletStates = std::map<String, MxmlTupletState>;
+typedef  std::vector<CreditWords*> CreditWordsList;
 
 //---------------------------------------------------------
 //   declarations
 //---------------------------------------------------------
 
-void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& fraction, Fraction& fullDuration);
-Fraction missingTupletDuration(const Fraction duration);
 bool isLikelyCreditText(const String& text, const bool caseInsensitive);
 bool isLikelySubtitleText(const String& text, const bool caseInsensitive);
 
@@ -241,4 +242,3 @@ private:
     std::set<int> m_seenDenominators;          // Denominators seen. Used for rounding errors.
 };
 } // namespace Ms
-#endif

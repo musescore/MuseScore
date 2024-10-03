@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __IMPORTMXML_H__
-#define __IMPORTMXML_H__
+#pragma once
 
 #include "global/types/string.h"
 #include "engravingerrors.h"
@@ -31,5 +30,3 @@ class Score;
 
 Err importMusicXMLfromBuffer(Score* score, const muse::String&, const muse::ByteArray& data);
 }
-
-#endif

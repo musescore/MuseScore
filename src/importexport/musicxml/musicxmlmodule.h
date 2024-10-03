@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_MUSICXMLMODULE_H
-#define MU_IMPORTEXPORT_MUSICXMLMODULE_H
+#pragma once
 
 #include <memory>
 
@@ -42,5 +41,3 @@ private:
     std::shared_ptr<MusicXmlConfiguration> m_configuration;
 };
 }
-
-#endif // MU_IMPORTEXPORT_MUSICXMLMODULE_H

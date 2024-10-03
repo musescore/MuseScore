@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_MUSICXMLCONFIGURATION_H
-#define MU_IMPORTEXPORT_MUSICXMLCONFIGURATION_H
+#pragma once
 
 #include "../imusicxmlconfiguration.h"
 
@@ -64,5 +63,3 @@ private:
     std::optional<bool> m_inferTextTypeOverride;
 };
 }
-
-#endif // MU_IMPORTEXPORT_MUSICXMLCONFIGURATION_H

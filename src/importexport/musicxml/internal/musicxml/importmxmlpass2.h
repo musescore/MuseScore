@@ -20,15 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __IMPORTMXMLPASS2_H__
-#define __IMPORTMXMLPASS2_H__
+#pragma once
 
 #include <array>
 
 #include "importmxmlpass1.h"
-#include "importxmlfirstpass.h"
 #include "internal/musicxml/musicxmlsupport.h"
-#include "musicxml.h" // a.o. for Slur
+#include "musicxmltypes.h"
+#include "musicxmltupletstate.h"
 
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/types.h"
@@ -45,15 +44,6 @@ using GraceChordList = std::vector<Chord*>;
 using FiguredBassList = std::vector<FiguredBass*>;
 using Tuplets = std::map<String, Tuplet*>;
 using Beams = std::map<String, Beam*>;
-
-//---------------------------------------------------------
-//   MxmlStartStop
-//---------------------------------------------------------
-/*
-enum class MxmlStartStop : char {
-      START, STOP, NONE
-      };
- */
 
 //---------------------------------------------------------
 //   MusicXmlSlash
@@ -79,6 +69,33 @@ struct MusicXmlTupletDesc {
     TupletBracketType bracket;
     TupletNumberType shownumber;
 };
+
+//---------------------------------------------------------
+//   SlurDesc
+//---------------------------------------------------------
+
+/**
+ The description of Slurs being handled
+ */
+
+class SlurDesc
+{
+public:
+    enum class State : char {
+        NONE, START, STOP
+    };
+    SlurDesc()
+        : m_slur(0), m_state(State::NONE) {}
+    Slur* slur() const { return m_slur; }
+    void start(Slur* slur) { m_slur = slur; m_state = State::START; }
+    void stop(Slur* slur) { m_slur = slur; m_state = State::STOP; }
+    bool isStart() const { return m_state == State::START; }
+    bool isStop() const { return m_state == State::STOP; }
+private:
+    Slur* m_slur = nullptr;
+    State m_state;
+};
+typedef std::map<SLine*, std::pair<int, int> > MusicXmlSpannerMap;
 
 //---------------------------------------------------------
 //   MusicXmlSpannerDesc
@@ -110,6 +127,30 @@ struct MusicXmlExtendedSpannerDesc {
 };
 
 //---------------------------------------------------------
+//   HarmonyDesc
+//---------------------------------------------------------
+
+/**
+ The description of a chord symbol with or without a fret diagram
+ */
+
+struct HarmonyDesc
+{
+    track_idx_t m_track;
+    bool fretDiagramVisible() const { return m_fretDiagram ? m_fretDiagram->visible() : false; }
+    Harmony* m_harmony;
+    FretDiagram* m_fretDiagram;
+
+    HarmonyDesc(track_idx_t m_track, Harmony* m_harmony, FretDiagram* m_fretDiagram)
+        : m_track(m_track), m_harmony(m_harmony),
+        m_fretDiagram(m_fretDiagram) {}
+
+    HarmonyDesc()
+        : m_track(0), m_harmony(nullptr), m_fretDiagram(nullptr) {}
+};
+using HarmonyMap = std::multimap<int, HarmonyDesc>;
+
+//---------------------------------------------------------
 //   MusicXmlLyricsExtend
 //---------------------------------------------------------
 
@@ -133,6 +174,22 @@ struct GraceNoteLyrics {
     GraceNoteLyrics(Lyrics* lyric, bool extend, int no)
         : lyric(lyric), extend(extend), no(no) {}
 };
+
+struct InferredPercInstr {
+    int pitch;
+    track_idx_t track;
+    String name;
+    Fraction tick;
+
+    InferredPercInstr(int pitch, track_idx_t track, String name, Fraction tick)
+        : pitch(pitch), track(track), name(name), tick(tick) {}
+
+    InferredPercInstr()
+        : pitch(-1), track(muse::nidx), name(u""), tick(Fraction(0, -1)) {}
+};
+typedef std::vector<InferredPercInstr> InferredPercList;
+
+typedef std::map<String, std::pair<String, DurationType> > MetronomeTextMap;
 
 //---------------------------------------------------------
 //   MusicXMLParserLyric
@@ -242,6 +299,9 @@ using SpannerSet = std::set<Spanner*>;
 using DelayedArpMap = std::map<int, DelayedArpeggio>;
 using SegnoStack = std::map<int, Marker*>;
 using SystemElements = std::multimap<int, EngravingItem*>;
+
+// Ties are identified by the pitch and track of their first note
+typedef std::pair<int, track_idx_t> TieLocation;
 using MusicXMLTieMap = std::map<TieLocation, Tie*>;
 
 //---------------------------------------------------------
@@ -613,4 +673,3 @@ private:
     void addToNotes(std::vector<Note*>& notes) const;
 };
 } // namespace Ms
-#endif

@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __IMPORTMXMLLOGGER_H__
-#define __IMPORTMXMLLOGGER_H__
+#pragma once
 
 #include "global/types/string.h"
 
@@ -45,5 +44,3 @@ private:
     Level m_level = Level::MXML_INFO;
 };
 } // namespace Ms
-
-#endif

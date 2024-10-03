@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __IMPORTMXMLNOTEDURATION_H__
-#define __IMPORTMXMLNOTEDURATION_H__
+#pragma once
 
 #include "engraving/dom/durationtype.h"
 #include "engraving/types/fraction.h"
@@ -66,5 +65,3 @@ private:
     MxmlLogger* m_logger = nullptr;                              ///< Error logger
 };
 } // namespace Ms
-
-#endif

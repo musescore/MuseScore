@@ -124,9 +124,9 @@
 #include "engraving/dom/volta.h"
 #include "engraving/dom/whammybar.h"
 
-#include "musicxml.h"
 #include "musicxmlfonthandler.h"
 #include "musicxmlsupport.h"
+#include "musicxmltypes.h"
 
 #include "modularity/ioc.h"
 #include "../../imusicxmlconfiguration.h"
@@ -156,6 +156,8 @@ namespace mu::engraving {
 #else
 #define clefDebug(...) {}
 #endif
+
+constexpr int MAX_PART_GROUPS  = 8;
 
 //---------------------------------------------------------
 //   typedefs
