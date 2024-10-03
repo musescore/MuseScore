@@ -23,9 +23,10 @@
 #include "bendsrenderer.h"
 
 #include "noterenderer.h"
-#include "gracechordsrenderer.h"
+#include "gracechordcontext.h"
 
 #include "playback/metaparsers/internal/gracenotesmetaparser.h"
+#include "playback/utils/expressionutils.h"
 
 #include "dom/note.h"
 #include "dom/guitarbend.h"
@@ -140,9 +141,32 @@ void BendsRenderer::renderGraceAndPrincipalNotes(const Note* graceNote, const No
     }
 
     for (const auto& pair : ctx.commonArticulations) {
-        if (GraceChordsRenderer::isAbleToRender(pair.first)) {
-            GraceChordsRenderer::renderGraceNote(graceNote, principalNote, pair.first, ctx, result);
-            return;
+        if (!muse::contains(GRACE_NOTE_ARTICULATION_TYPES, pair.first)) {
+            continue;
+        }
+
+        GraceChordCtx graceCtx = GraceChordCtx::buildCtx(principalNote->chord(), pair.first, ctx);
+
+        if (isGraceNotePlacedBeforePrincipalNote(pair.first)) {
+            renderGraceNote(graceNote, graceCtx, result);
+            NoteRenderer::render(principalNote, graceCtx.principalChordCtx, result);
+        } else {
+            NoteRenderer::render(principalNote, graceCtx.principalChordCtx, result);
+            renderGraceNote(graceNote, graceCtx, result);
+        }
+
+        return;
+    }
+}
+
+void BendsRenderer::renderGraceNote(const Note* note, const GraceChordCtx& ctx, muse::mpe::PlaybackEventList& result)
+{
+    for (const auto& pair : ctx.graceChordCtxList) {
+        for (const Note* graceNote : pair.first->notes()) {
+            if (note == graceNote) {
+                NoteRenderer::render(note, pair.second, result);
+                return;
+            }
         }
     }
 }
