@@ -28,6 +28,7 @@ class Note;
 class GuitarBend;
 class Score;
 struct RenderingContext;
+struct GraceChordCtx;
 class BendsRenderer
 {
 public:

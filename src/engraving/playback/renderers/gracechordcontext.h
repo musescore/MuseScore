@@ -22,20 +22,16 @@
 
 #pragma once
 
-#include "renderbase.h"
+#include <vector>
+
+#include "playback/renderingcontext.h"
 
 namespace mu::engraving {
 class Chord;
-struct GraceChordCtx;
-class GraceChordsRenderer : public RenderBase<GraceChordsRenderer>
-{
-public:
-    static const muse::mpe::ArticulationTypeSet& supportedTypes();
+struct GraceChordCtx {
+    RenderingContext principalChordCtx;
+    std::vector<std::pair<const Chord*, RenderingContext> > graceChordCtxList;
 
-    static void doRender(const EngravingItem* item, const muse::mpe::ArticulationType type, const RenderingContext& ctx,
-                         muse::mpe::PlaybackEventList& result);
-
-private:
-    static void renderGraceNoteEvents(const GraceChordCtx& graceChordCtx, muse::mpe::PlaybackEventList& result);
+    static GraceChordCtx buildCtx(const Chord* chord, const muse::mpe::ArticulationType type, const RenderingContext& ctx);
 };
 }
