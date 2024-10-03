@@ -83,7 +83,6 @@ public:
     Glissando(const Glissando&);
 
     static Note* guessInitialNote(Chord* chord);
-    static Note* guessFinalNote(Chord* chord, Note* startNote);
 
     const TranslatableString& glissandoTypeName() const;
 

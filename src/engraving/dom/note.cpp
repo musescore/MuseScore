@@ -1707,7 +1707,8 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::STANDARD_BEND)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::PRE_BEND)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE_NOTE_BEND)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::SLIGHT_BEND);
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::SLIGHT_BEND)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::NOTE_ANCHORED_LINE);
 }
 
 //---------------------------------------------------------
@@ -1838,6 +1839,8 @@ EngravingItem* Note::drop(EditData& data)
         case ActionIconType::SLIGHT_BEND:
             score()->addGuitarBend(GuitarBendType::SLIGHT_BEND, this);
             break;
+        case mu::engraving::ActionIconType::NOTE_ANCHORED_LINE:
+            score()->addNoteLine();
         default:
             break;
         }
@@ -1908,7 +1911,7 @@ EngravingItem* Note::drop(EditData& data)
 
         Glissando* gliss = toGlissando(e);
         EngravingItem* endEl = gliss->endElement();
-        Note* finalNote = endEl && endEl->isNote() ? toNote(endEl) : Glissando::guessFinalNote(chord(), this);
+        Note* finalNote = endEl && endEl->isNote() ? toNote(endEl) : SLine::guessFinalNote(this);
         if (finalNote) {
             // init glissando data
             gliss->setAnchor(Spanner::Anchor::NOTE);

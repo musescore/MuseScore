@@ -2130,13 +2130,17 @@ void Score::addNoteLine()
         }
     }
 
-    if (!firstNote || !lastNote) {
-        LOGD("addNoteLine: no note %p %p", firstNote, lastNote);
+    if (!firstNote) {
+        LOGD("addNoteLine: no first note %p", firstNote);
         return;
     }
 
     if (firstNote == lastNote) {
-        LOGD("addNoteLine: no support for note to same note line %p", firstNote);
+        lastNote = SLine::guessFinalNote(firstNote);
+    }
+
+    if (!lastNote) {
+        LOGD("addNoteLine: no last note note %p", lastNote);
         return;
     }
 

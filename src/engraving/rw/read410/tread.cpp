@@ -1967,6 +1967,8 @@ static void setActionIconTypeFromAction(ActionIcon* i, const std::string& action
         { "pre-bend", ActionIconType::PRE_BEND },
         { "grace-note-bend", ActionIconType::GRACE_NOTE_BEND },
         { "slight-bend", ActionIconType::SLIGHT_BEND },
+
+        { "add-noteline", ActionIconType::NOTE_ANCHORED_LINE }
     };
 
     auto it = map.find(actionCode);
