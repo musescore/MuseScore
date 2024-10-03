@@ -722,7 +722,11 @@ void Selection::updateSelectedElements()
                 continue;
             }
             if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick)) {
-                if (canSelect(sp->startCR()) && canSelect(sp->endCR())) {
+                EngravingItem* startCR = sp->startCR();
+                EngravingItem* endCR = sp->endCR();
+                const bool canSelectStart = (sp->startElement()->isTimeTickAnchor() || canSelect(startCR));
+                const bool canSelectEnd = (sp->endElement()->isTimeTickAnchor() || canSelect(endCR));
+                if (canSelectStart && canSelectEnd) {
                     for (auto seg : sp->spannerSegments()) {
                         appendFiltered(seg);               // slur with start or end in range selection
                     }
