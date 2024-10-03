@@ -141,7 +141,7 @@ void PlaybackController::init()
     m_measureInputLag = configuration()->shouldMeasureInputLag();
 
     m_remoteSeek.onReceive(this, [this](const muse::audio::msecs_t msecs) {
-        seek(msecs);
+        seek(msecs / 1000L); //FIX: dont do scaling here
     });
 
     m_remotePlayOrStop.onReceive(this, [this](const bool playOrStop) {

@@ -200,10 +200,10 @@ void JackDriverState::changedPosition(muse::audio::secs_t secs, muse::midi::tick
     // worker thread is updating muse_frame (which runs every 100ms)
     // thats why we can get out of sync with "ourself"
     if (labs((long int)muse_frame - (long int)frames) > g_frameslimit) {
-        LOGW("musescore tell transport to LOCATE mf=%u, fr=%u diff: %i (lim: %i)",
+        LOGW("musescore tell transport to LOCATE mf=%u, fr=%u diff: %i (lim: %li) g_secs: %f",
              muse_frame, frames,
              muse_frame - frames,
-             g_frameslimit);
+             g_frameslimit, g_secs.to_double());
         jack_transport_locate(client, frames);
         muse_frame = mpos_frame = frames;
         muse_seek_countdown = 10; // KLUDGE: avoid transport seeking musescore for some time
@@ -673,10 +673,11 @@ bool JackDriverState::isPlaying() const
     return m_audiomidiManager->isPlaying();
 }
 
+// FIX: return type double
 float JackDriverState::playbackPositionInSeconds() const
 {
     // this round-trip could be avoided if the caller uses info from changedposition
-    return g_secs;
+    return g_secs.to_double();
 }
 
 void JackDriverState::remotePlayOrStop(bool ps) const
