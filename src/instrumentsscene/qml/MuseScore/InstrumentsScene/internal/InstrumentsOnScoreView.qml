@@ -26,9 +26,11 @@ import QtQuick.Controls 2.12
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import MuseScore.InstrumentsScene 1.0
+import MuseScore.Project 1.0
 
 Item {
     id: root
+    required property InstrumentsOnScoreListModel instrumentsOnScoreModel
 
     readonly property bool hasInstruments: instrumentsOnScoreModel.count > 0
     readonly property alias isMovingUpAvailable: instrumentsOnScoreModel.isMovingUpAvailable
@@ -60,9 +62,7 @@ Item {
         instrumentsView.positionViewAtEnd()
     }
 
-    InstrumentsOnScoreListModel {
-        id: instrumentsOnScoreModel
-    }
+
 
     Component.onCompleted: {
         instrumentsOnScoreModel.load()
