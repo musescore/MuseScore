@@ -158,10 +158,12 @@ Item {
                     height: padGrid.cellHeight
 
                     PercussionPanelPad {
+                        id: pad
+
                         anchors.centerIn: parent
 
-                        width: parent.width - padGrid.spacing
-                        height: parent.height - padGrid.spacing
+                        width: parent.width + pad.totalBorderWidth - padGrid.spacing
+                        height: parent.height + pad.totalBorderWidth - padGrid.spacing
 
                         padModel: model.padModelRole
                         panelMode: percModel.currentPanelMode

@@ -28,8 +28,12 @@ class PercussionPanelPadModel : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString instrumentName READ instrumentName WRITE setInstrumentName NOTIFY instrumentNameChanged)
-    Q_PROPERTY(bool isEmptySlot READ isEmptySlot WRITE setIsEmptySlot NOTIFY isEmptySlotChanged)
+    Q_PROPERTY(QString instrumentName READ instrumentName NOTIFY instrumentNameChanged)
+
+    Q_PROPERTY(QString keyboardShortcut READ keyboardShortcut NOTIFY keyboardShortcutChanged)
+    Q_PROPERTY(QString midiNote READ midiNote NOTIFY midiNoteChanged)
+
+    Q_PROPERTY(bool isEmptySlot READ isEmptySlot NOTIFY isEmptySlotChanged)
 
 public:
     explicit PercussionPanelPadModel(QObject* parent = nullptr);
@@ -37,14 +41,28 @@ public:
     QString instrumentName() const { return m_instrumentName; }
     void setInstrumentName(const QString& instrumentName);
 
+    QString keyboardShortcut() const { return m_keyboardShortcut; }
+    void setKeyboardShortcut(const QString& keyboardShortcut);
+
+    QString midiNote() const { return m_midiNote; }
+    void setMidiNote(const QString& midiNote);
+
     bool isEmptySlot() const { return m_isEmptySlot; }
     void setIsEmptySlot(bool isEmptySlot);
 
 signals:
     void instrumentNameChanged();
+
+    void keyboardShortcutChanged();
+    void midiNoteChanged();
+
     void isEmptySlotChanged();
 
 private:
-    bool m_isEmptySlot = true;
     QString m_instrumentName;
+
+    QString m_keyboardShortcut;
+    QString m_midiNote;
+
+    bool m_isEmptySlot = true;
 };
