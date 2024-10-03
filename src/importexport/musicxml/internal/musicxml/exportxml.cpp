@@ -4168,6 +4168,16 @@ static void writePitch(XmlWriter& xml, const Note* const note, const bool useDru
     if (!alter && alter2) {
         xml.tag("alter", alter2);
     }
+
+    // if alter (from tonal pitch class) and alter2 (from note accidental) are empty we check
+    // if the note has a tuning to add the "alter" tag with tuning value / 100
+    if (!alter && !alter2) {
+        double tuning = note->tuning();
+        if (!muse::RealIsNull(tuning)) {
+            xml.tag("alter", tuning / 100);
+        }
+    }
+
     // TODO what if both alter and alter2 are present? For Example: playing with transposing instruments
     xml.tag(useDrumset ? "display-octave" : "octave", octave);
     xml.endElement();
