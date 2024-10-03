@@ -4148,16 +4148,16 @@ static void writePitch(XmlWriter& xml, const Note* const note, const bool useDru
     xml.tag(useDrumset ? "display-step" : "step", step);
     // Check for microtonal accidentals and overwrite "alter" tag
     const Accidental* acc = note->accidental();
-    double alter2 = 0.0;
+    double microtonalAlter = 0.0;
     if (acc) {
         switch (acc->accidentalType()) {
-        case AccidentalType::MIRRORED_FLAT:  alter2 = -0.5;
+        case AccidentalType::MIRRORED_FLAT:  microtonalAlter = -0.5;
             break;
-        case AccidentalType::SHARP_SLASH:    alter2 = 0.5;
+        case AccidentalType::SHARP_SLASH:    microtonalAlter = 0.5;
             break;
-        case AccidentalType::MIRRORED_FLAT2: alter2 = -1.5;
+        case AccidentalType::MIRRORED_FLAT2: microtonalAlter = -1.5;
             break;
-        case AccidentalType::SHARP_SLASH4:   alter2 = 1.5;
+        case AccidentalType::SHARP_SLASH4:   microtonalAlter = 1.5;
             break;
         default:                                             break;
         }
@@ -4165,15 +4165,10 @@ static void writePitch(XmlWriter& xml, const Note* const note, const bool useDru
     // Override accidental with explicit note tuning
     double tuning = note->tuning();
     if (!muse::RealIsNull(tuning)) {
-        alter2 = tuning / 100.0;
+        microtonalAlter = tuning / 100.0;
     }
-    // `alter` represents the "regular" (Western) pitch which can be
-    // 0 (natural), 1 (sharp), -1 (flat), etc. or some other integer depending on transposing instruments.
-    // `alter2` represents a microtone or manually-adjusted note tuning.
-    // In MusicXML, These two values are merged in the same "alter" tag.
-    // https://usermanuals.musicxml.com/MusicXML/Content/EL-MusicXML-alter.htm
-    if (alter || alter2) {
-        xml.tag("alter", alter + alter2);
+    if (alter || microtonalAlter) {
+        xml.tag("alter", alter + microtonalAlter);
     }
     xml.tag(useDrumset ? "display-octave" : "octave", octave);
     xml.endElement();
