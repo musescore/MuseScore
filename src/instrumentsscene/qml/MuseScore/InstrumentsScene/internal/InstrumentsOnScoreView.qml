@@ -33,30 +33,30 @@ Item {
     required property InstrumentsOnScoreListModel instrumentsOnScoreModel
 
     readonly property bool hasInstruments: instrumentsOnScoreModel.count > 0
-    readonly property alias isMovingUpAvailable: instrumentsOnScoreModel.isMovingUpAvailable
-    readonly property alias isMovingDownAvailable: instrumentsOnScoreModel.isMovingDownAvailable
+    // readonly property alias isMovingUpAvailable: instrumentsOnScoreModel.isMovingUpAvailable
+    // readonly property alias isMovingDownAvailable: instrumentsOnScoreModel.isMovingDownAvailable
 
     property alias navigation: instrumentsView.navigation
 
-    function instruments() {
-        return instrumentsOnScoreModel.instruments()
-    }
+    // function instruments() {
+    //     return instrumentsOnScoreModel.instruments()
+    // }
 
-    function currentOrder() {
-        return instrumentsOnScoreModel.currentOrder()
-    }
+    // function currentOrder() {
+    //     return instrumentsOnScoreModel.currentOrder()
+    // }
 
-    function addInstruments(instruments) {
-        instrumentsOnScoreModel.addInstruments(instruments)
-    }
+    // function addInstruments(instruments) {
+    //     instrumentsOnScoreModel.addInstruments(instruments)
+    // }
 
-    function moveSelectedInstrumentsUp() {
-        instrumentsOnScoreModel.moveSelectionUp()
-    }
+    // function moveSelectedInstrumentsUp() {
+    //     instrumentsOnScoreModel.moveSelectionUp()
+    // }
 
-    function moveSelectedInstrumentsDown() {
-        instrumentsOnScoreModel.moveSelectionDown()
-    }
+    // function moveSelectedInstrumentsDown() {
+    //     instrumentsOnScoreModel.moveSelectionDown()
+    // }
 
     function scrollViewToEnd() {
         instrumentsView.positionViewAtEnd()

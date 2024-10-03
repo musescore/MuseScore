@@ -30,7 +30,7 @@ import MuseScore.Project 1.0
 StyledDialogView {
     id: root
 
-    required property InstrumentsOnScoreListModel instrumentsOnScoreModel
+    // required property InstrumentsOnScoreListModel instrumentsOnScoreModel
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
 
@@ -54,6 +54,10 @@ StyledDialogView {
         root.hide()
     }
 
+    InstrumentsOnScoreListModel {
+        id: theInstrumentsOnScoreModel
+    }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 20
@@ -72,7 +76,8 @@ StyledDialogView {
             onSubmitRequested: {
                 root.submit()
             }
-            instrumentsOnScoreModel: instrumentsOnScoreModel
+
+            instrumentsOnScoreModel: theInstrumentsOnScoreModel
         }
 
         RowLayout {

@@ -49,7 +49,7 @@ Rectangle {
 
     function instruments() {
         if (root.canSelectMultipleInstruments) {
-            return instrumentsOnScoreView.instruments()
+            return root.instrumentsOnScoreModel.instruments()
         }
 
         return [ instrumentsModel.selectedInstrument ]
@@ -57,7 +57,7 @@ Rectangle {
 
     function currentOrder() {
         if (root.canSelectMultipleInstruments) {
-            return instrumentsOnScoreView.currentOrder()
+            return root.instrumentsOnScoreModel.currentOrder()
         }
 
         return undefined
@@ -82,7 +82,7 @@ Rectangle {
         id: prv
 
         function addSelectedInstrumentsToScore() {
-            instrumentsOnScoreView.addInstruments(instrumentsModel.selectedInstrumentIdList())
+            root.instrumentsOnScoreModel.addInstruments(instrumentsModel.selectedInstrumentIdList())
 
             Qt.callLater(instrumentsOnScoreView.scrollViewToEnd)
         }
@@ -229,7 +229,7 @@ Rectangle {
             }
 
             FlatButton {
-                enabled: instrumentsOnScoreView.isMovingUpAvailable
+                enabled: root.instrumentsOnScoreModel.isMovingUpAvailable
                 icon: IconCode.ARROW_UP
 
                 navigation.name: "Up"
@@ -239,12 +239,12 @@ Rectangle {
                 toolTipTitle: qsTrc("instruments", "Move selected instruments up")
 
                 onClicked: {
-                    instrumentsOnScoreView.moveSelectedInstrumentsUp()
+                    root.instrumentsOnScoreModel.moveSelectionUp()
                 }
             }
 
             FlatButton {
-                enabled: instrumentsOnScoreView.isMovingDownAvailable
+                enabled: root.instrumentsOnScoreModel.isMovingDownAvailable
                 icon: IconCode.ARROW_DOWN
 
                 navigation.name: "Down"
@@ -254,7 +254,7 @@ Rectangle {
                 toolTipTitle: qsTrc("instruments", "Move selected instruments down")
 
                 onClicked: {
-                    instrumentsOnScoreView.moveSelectedInstrumentsDown()
+                    root.instrumentsOnScoreModel.moveSelectionDown()
                 }
             }
         }
