@@ -519,7 +519,7 @@ StyledListView {
 
             width: ListView.view.width
 
-            Drag.active: paletteHeaderDragArea.drag.active
+            Drag.active: paletteProvider.isPaletteDragEnabled && paletteHeaderDragArea.drag.active
             Drag.dragType: Drag.Automatic
             Drag.supportedActions: Qt.MoveAction
             Drag.proposedAction: Qt.MoveAction

@@ -35,6 +35,7 @@ using namespace muse::uicomponents;
 
 static const ActionCode TOGGLE_SINGLE_CLICK_CODE("toggle-single-click-to-open-palette");
 static const ActionCode TOGGLE_SINGLE_PALETTE_CODE("toggle-single-palette");
+static const ActionCode TOGGLE_PALETTE_DRAG("toggle-palette-drag");
 static const ActionCode EXPAND_ALL_CODE("expand-all-palettes");
 static const ActionCode COLLAPSE_ALL_CODE("collapse-all-palettes");
 
@@ -48,6 +49,7 @@ void PalettesPanelContextMenuModel::load()
     MenuItemList items {
         createIsSingleClickToOpenPaletteItem(),
         createIsSinglePaletteItem(),
+        createIsDragEnabledItem(),
         makeSeparator(),
         createExpandCollapseAllItem(false),
         createExpandCollapseAllItem(true),
@@ -116,6 +118,38 @@ MenuItem* PalettesPanelContextMenuModel::createIsSinglePaletteItem()
     dispatcher()->reg(this, TOGGLE_SINGLE_PALETTE_CODE, [this, item]() {
         bool newValue = !item->state().checked;
         configuration()->setIsSinglePalette(newValue);
+    });
+
+    return item;
+}
+
+MenuItem* PalettesPanelContextMenuModel::createIsDragEnabledItem()
+{
+    MenuItem* item = new MenuItem(this);
+    item->setId(QString::fromStdString(TOGGLE_PALETTE_DRAG));
+
+    UiAction action;
+    action.title = TranslatableString("palette", "Allow reordering palettes");
+    action.code = TOGGLE_PALETTE_DRAG;
+    action.checkable = Checkable::Yes;
+    item->setAction(action);
+
+    ValCh<bool> checked = configuration()->isPaletteDragEnabled();
+
+    UiActionState state;
+    state.enabled = true;
+    state.checked = checked.val;
+    item->setState(state);
+
+    checked.ch.onReceive(item, [item](bool newValue) {
+        UiActionState state = item->state();
+        state.checked = newValue;
+        item->setState(state);
+    });
+
+    dispatcher()->reg(this, TOGGLE_PALETTE_DRAG, [this, item]() {
+        bool newValue = !item->state().checked;
+        configuration()->setIsPaletteDragEnabled(newValue);
     });
 
     return item;
