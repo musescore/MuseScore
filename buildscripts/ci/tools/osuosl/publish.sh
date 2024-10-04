@@ -81,7 +81,7 @@ chmod 600 $SSH_KEY
 FTP_PATH=${OS}/${MAJOR_VERSION}x/${BUILD_DIR}
 
 if [ "$BUILD_MODE" == "nightly" ]; then
-    file_extension="${ARTIFACT_NAME##*.}"
+    file_extension=$([[ "$ARTIFACT_NAME" == *.paf.exe ]] && echo "paf.exe" || echo "${ARTIFACT_NAME##*.}")
     BUILD_BRANCH=$(cat $ARTIFACTS_DIR/env/build_branch.env)
     LATEST_NAME="MuseScore-Studio-Nightly-latest-${BUILD_BRANCH}-${PACKARCH}.${file_extension}"
 fi
