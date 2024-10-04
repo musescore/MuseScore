@@ -1367,7 +1367,7 @@ void Score::cmdAddTimeSig(Measure* firstMeasure, staff_idx_t staffIdx, TimeSig* 
         return std::make_pair(startStaffIdx, endStaffIdx);
     };
 
-    if (originalTimeSignature && originalTimeSignature->sig() == newTimeSigFraction 
+    if (originalTimeSignature && originalTimeSignature->sig() == newTimeSigFraction
         && originalTimeSignature->stretch() == targetTimeSig->stretch()) {
         //
         // the measure duration does not change,
@@ -1409,7 +1409,7 @@ void Score::cmdAddTimeSig(Measure* firstMeasure, staff_idx_t staffIdx, TimeSig* 
         //
         // rewrite all measures up to the next time signature
         //
-        if (firstMeasure == mastrScore->firstMeasure() 
+        if (firstMeasure == mastrScore->firstMeasure()
             && firstMeasure->nextMeasure() 
             && (firstMeasure->ticks() != firstMeasure->timesig())) {
             // handle upbeat
