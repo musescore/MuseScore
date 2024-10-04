@@ -58,7 +58,7 @@ static Accidental* accidental(muse::XmlStreamReader& e, Score* score)
     const String smufl = e.attribute("smufl");
 
     const String s = e.readText();
-    const AccidentalType type = musicXMLString2accidentalType(s, smufl);
+    const AccidentalType type = musicXmlString2accidentalType(s, smufl);
 
     if (type != AccidentalType::NONE) {
         Accidental* a = Factory::createAccidental(score->dummy());
@@ -89,7 +89,7 @@ static Accidental* accidental(muse::XmlStreamReader& e, Score* score)
  Handle <display-step> and <display-octave> for <rest> and <unpitched>
  */
 
-void MusicXMLNotePitch::displayStepOctave(muse::XmlStreamReader& e)
+void MusicXmlNotePitch::displayStepOctave(muse::XmlStreamReader& e)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "display-step") {
@@ -124,7 +124,7 @@ void MusicXMLNotePitch::displayStepOctave(muse::XmlStreamReader& e)
  Parse the /score-partwise/part/measure/note/pitch node.
  */
 
-void MusicXMLNotePitch::pitch(muse::XmlStreamReader& e)
+void MusicXmlNotePitch::pitch(muse::XmlStreamReader& e)
 {
     // defaults
     m_step = -1;
@@ -136,7 +136,7 @@ void MusicXMLNotePitch::pitch(muse::XmlStreamReader& e)
         if (e.name() == "alter") {
             const String alter = e.readText();
             bool ok;
-            m_alter = MusicXMLSupport::stringToInt(alter, &ok);             // fractions not supported by mscore
+            m_alter = MusicXmlSupport::stringToInt(alter, &ok);             // fractions not supported by mscore
             if (!ok || m_alter < -2 || m_alter > 2) {
                 m_logger->logError(String(u"invalid alter '%1'").arg(alter), &e);
                 bool ok2;
@@ -184,7 +184,7 @@ void MusicXMLNotePitch::pitch(muse::XmlStreamReader& e)
  Return true if handled.
  */
 
-bool MusicXMLNotePitch::readProperties(muse::XmlStreamReader& e, Score* score)
+bool MusicXmlNotePitch::readProperties(muse::XmlStreamReader& e, Score* score)
 {
     const AsciiStringView tag(e.name());
 

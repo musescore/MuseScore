@@ -114,7 +114,7 @@ public:
 
     int startTrack() const { return static_cast<int>(part()->startTrack()); }
     int endTrack()   const { return static_cast<int>(part()->endTrack()); }
-    QString instrumentId() const { return part()->instrument()->musicXMLId(); }
+    QString instrumentId() const { return part()->instrument()->musicXmlId(); }
     int harmonyCount() const { return part()->harmonyCount(); }
     bool hasPitchedStaff() const { return part()->hasPitchedStaff(); }
     bool hasTabStaff() const { return part()->hasTabStaff(); }

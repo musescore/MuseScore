@@ -27,27 +27,27 @@
 #include "musicxmlvoicedesc.h"
 
 namespace mu::engraving {
-class MusicXMLOctaveShiftList : public std::map<Fraction, int>
+class MusicXmlOctaveShiftList : public std::map<Fraction, int>
 {
 public:
-    MusicXMLOctaveShiftList() {}
+    MusicXmlOctaveShiftList() {}
     int octaveShift(const Fraction f) const;
     void addOctaveShift(const int shift, const Fraction f);
     void calcOctaveShiftShifts();
 };
 
-class MusicXMLPart
+class MusicXmlPart
 {
 public:
-    MusicXMLPart(String id = {}, String name = {});
+    MusicXmlPart(String id = {}, String name = {});
     void addMeasureNumberAndDuration(String measureNumber, Fraction measureDuration);
     String getId() const { return m_id; }
     String toString() const;
     VoiceList voicelist;           // the voice map information TODO: make private
     Fraction measureDuration(size_t i) const;
     size_t nMeasures() const { return m_measureDurations.size(); }
-    MusicXMLInstrList _instrList;   // TODO: make private
-    MusicXMLIntervalList _intervals;                       ///< Transpositions
+    MusicXmlInstrList _instrList;   // TODO: make private
+    MusicXmlIntervalList _intervals;                       ///< Transpositions
     Interval interval(const Fraction f) const;
     int octaveShift(const staff_idx_t staff, const Fraction f) const;
     void addOctaveShift(const staff_idx_t staff, const int shift, const Fraction f);
@@ -78,11 +78,11 @@ private:
     bool m_printAbbr = false;
     std::vector<String> m_measureNumbers;               // MusicXML measure number attribute
     std::vector<Fraction> m_measureDurations;         // duration in fraction for every measure
-    std::vector<MusicXMLOctaveShiftList> m_octaveShifts;   // octave shift list for every staff
+    std::vector<MusicXmlOctaveShiftList> m_octaveShifts;   // octave shift list for every staff
     LyricNumberHandler m_lyricNumberHandler;
     int m_maxStaff = -1;                      // maximum staff value found (0 based), -1 = none
     bool m_hasLyrics = false;
     std::map<int, int> m_staffNumberToIndex;       // Mapping from staff number to index in staff list.
-    // Only for when staves are discarded in MusicXMLParserPass1::attributes.
+    // Only for when staves are discarded in MusicXmlParserPass1::attributes.
 };
 }

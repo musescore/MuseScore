@@ -21,7 +21,7 @@
  */
 
 /**
- MusicXML import.
+ MusicXml import.
  */
 
 #include "global/translation.h"
@@ -116,28 +116,28 @@ static Err doValidateAndImport(Score* score, const String& name, const ByteArray
 
     if (!forceMode) {
         // Validate the file
-        res = MusicXMLValidation::validate(name, data);
+        res = MusicXmlValidation::validate(name, data);
         if (res != Err::NoError) {
             return res;
         }
     }
 
     // actually do the import
-    res = importMusicXMLfromBuffer(score, name, data);
+    res = importMusicXmlfromBuffer(score, name, data);
     //LOGD("res %d", static_cast<int>(res));
     return res;
 }
 
 //---------------------------------------------------------
-//   importMusicXML
+//   importMusicXml
 //    return Err::File* errors
 //---------------------------------------------------------
 
-Err importMusicXML(MasterScore* score, const String& name, bool forceMode)
+Err importMusicXml(MasterScore* score, const String& name, bool forceMode)
 {
     ScoreLoad sl;     // suppress warnings for undo push/pop
 
-    //LOGD("importMusicXML(%p, %s)", score, muPrintable(name));
+    //LOGD("importMusicXml(%p, %s)", score, muPrintable(name));
 
     // open the MusicXML file
     io::File xmlFile(name);
@@ -158,17 +158,17 @@ Err importMusicXML(MasterScore* score, const String& name, bool forceMode)
 }
 
 //---------------------------------------------------------
-//   importCompressedMusicXML
+//   importCompressedMusicXml
 //    return false on error
 //---------------------------------------------------------
 
 /**
- Import compressed MusicXML file \a name into the Score.
+ Import compressed MusicXml file \a name into the Score.
  */
 
-Err importCompressedMusicXML(MasterScore* score, const String& name, bool forceMode)
+Err importCompressedMusicXml(MasterScore* score, const String& name, bool forceMode)
 {
-    //LOGD("importCompressedMusicXML(%p, %s)", score, muPrintable(name));
+    //LOGD("importCompressedMusicXml(%p, %s)", score, muPrintable(name));
 
     if (!io::File::exists(name)) {
         return Err::FileNotFound;

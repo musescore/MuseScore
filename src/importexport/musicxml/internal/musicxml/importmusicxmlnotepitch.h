@@ -26,21 +26,21 @@
 #include "engraving/dom/accidental.h"
 
 namespace mu::engraving {
-class MusicXMLLogger;
+class MusicXmlLogger;
 class Score;
 
 //---------------------------------------------------------
-//   musicXMLNotePitch
+//   musicXmlNotePitch
 //---------------------------------------------------------
 
 /**
  Parse the note pitch related part of the /score-partwise/part/measure/note node.
  */
 
-class MusicXMLNotePitch
+class MusicXmlNotePitch
 {
 public:
-    MusicXMLNotePitch(MusicXMLLogger* logger)
+    MusicXmlNotePitch(MusicXmlLogger* logger)
         : m_logger(logger) { /* nothing so far */ }
     void pitch(muse::XmlStreamReader& e);
     bool readProperties(muse::XmlStreamReader& e, Score* score);
@@ -65,6 +65,6 @@ private:
     int m_octave = -1;
     int m_step = 0;
     bool m_unpitched = false;
-    MusicXMLLogger* m_logger = nullptr;                          // Error logger
+    MusicXmlLogger* m_logger = nullptr;                          // Error logger
 };
 } // namespace Ms

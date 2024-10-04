@@ -164,8 +164,8 @@ String Instrument::recognizeMusicXmlId() const
 
     const InstrumentTemplate* tmplByName = mu::engraving::searchTemplateForInstrNameList(nameList, m_useDrumset);
 
-    if (tmplByName && !tmplByName->musicXMLid.isEmpty()) {
-        return tmplByName->musicXMLid;
+    if (tmplByName && !tmplByName->musicXmlId.isEmpty()) {
+        return tmplByName->musicXmlId;
     }
 
     const InstrChannel* channel = this->channel(0);
@@ -177,8 +177,8 @@ String Instrument::recognizeMusicXmlId() const
     const InstrumentTemplate* tmplMidiProgram = mu::engraving::searchTemplateForMidiProgram(channel->bank(), channel->program(),
                                                                                             m_useDrumset);
 
-    if (tmplMidiProgram && !tmplMidiProgram->musicXMLid.isEmpty()) {
-        return tmplMidiProgram->musicXMLid;
+    if (tmplMidiProgram && !tmplMidiProgram->musicXmlId.isEmpty()) {
+        return tmplMidiProgram->musicXmlId;
     }
 
     if (m_useDrumset) {
@@ -227,7 +227,7 @@ String Instrument::recognizeId() const
 
     for (const InstrumentGroup* g : instrumentGroups) {
         for (const InstrumentTemplate* it : g->instrumentTemplates) {
-            if (it->musicXMLid != m_musicXmlId) {
+            if (it->musicXmlId != m_musicXmlId) {
                 continue;
             }
             if (groupHack) {
@@ -1031,7 +1031,7 @@ int Instrument::maxPitchA() const
 //   musicXmlId
 //---------------------------------------------------------
 
-String Instrument::musicXMLId() const
+String Instrument::musicXmlId() const
 {
     return m_musicXmlId;
 }
@@ -1173,7 +1173,7 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* templ)
 
     instrument.setTrackName(templ->trackName);
     instrument.setTranspose(templ->transpose);
-    instrument.setMusicXmlId(templ->musicXMLid);
+    instrument.setMusicXmlId(templ->musicXmlId);
     instrument.m_useDrumset = templ->useDrumset;
 
     if (templ->useDrumset) {

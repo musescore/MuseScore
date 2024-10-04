@@ -47,15 +47,15 @@ static String xmlLocation(const muse::XmlStreamReader* xmlreader)
 //---------------------------------------------------------
 //   logDebugTrace
 //---------------------------------------------------------
-static void to_xml_log(MusicXMLLogger::Level level, const String& text, const XmlStreamReader* xmlreader)
+static void to_xml_log(MusicXmlLogger::Level level, const String& text, const XmlStreamReader* xmlreader)
 {
     String str;
     switch (level) {
-    case MusicXMLLogger::Level::MXML_TRACE: str = u"Trace";
+    case MusicXmlLogger::Level::MXML_TRACE: str = u"Trace";
         break;
-    case MusicXMLLogger::Level::MXML_INFO: str = u"Info";
+    case MusicXmlLogger::Level::MXML_INFO: str = u"Info";
         break;
-    case MusicXMLLogger::Level::MXML_ERROR: str = u"Error";
+    case MusicXmlLogger::Level::MXML_ERROR: str = u"Error";
         break;
     default: str = u"Unknown";
         break;
@@ -76,7 +76,7 @@ static void to_xml_log(MusicXMLLogger::Level level, const String& text, const Xm
  Log debug (function) trace.
  */
 
-void MusicXMLLogger::logDebugTrace(const String& trace, const muse::XmlStreamReader* xmlreader)
+void MusicXmlLogger::logDebugTrace(const String& trace, const muse::XmlStreamReader* xmlreader)
 {
     if (m_level <= Level::MXML_TRACE) {
         to_xml_log(Level::MXML_TRACE, trace, xmlreader);
@@ -91,7 +91,7 @@ void MusicXMLLogger::logDebugTrace(const String& trace, const muse::XmlStreamRea
  Log debug \a info (non-fatal events relevant for debugging).
  */
 
-void MusicXMLLogger::logDebugInfo(const String& info, const XmlStreamReader* xmlreader)
+void MusicXmlLogger::logDebugInfo(const String& info, const XmlStreamReader* xmlreader)
 {
     if (m_level <= Level::MXML_INFO) {
         to_xml_log(Level::MXML_INFO, info, xmlreader);
@@ -106,7 +106,7 @@ void MusicXMLLogger::logDebugInfo(const String& info, const XmlStreamReader* xml
  Log \a error (possibly non-fatal but to be reported to the user anyway).
  */
 
-void MusicXMLLogger::logError(const String& error, const XmlStreamReader* xmlreader)
+void MusicXmlLogger::logError(const String& error, const XmlStreamReader* xmlreader)
 {
     if (m_level <= Level::MXML_ERROR) {
         to_xml_log(Level::MXML_ERROR, error, xmlreader);

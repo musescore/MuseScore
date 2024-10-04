@@ -28,5 +28,5 @@
 namespace mu::engraving {
 class Score;
 
-Err importMusicXMLfromBuffer(Score* score, const muse::String&, const muse::ByteArray& data);
+Err importMusicXmlfromBuffer(Score* score, const muse::String&, const muse::ByteArray& data);
 }

@@ -59,7 +59,7 @@ void MdlMigrator::remapPercussion()
                       ? m_score->endTick()
                       : Fraction::fromTicks(it->first);
 
-            if (!instr || !instr->useDrumset() || !instr->musicXMLId().startsWith(u"mdl.")) {
+            if (!instr || !instr->useDrumset() || !instr->musicXmlId().startsWith(u"mdl.")) {
                 continue;
             }
 
@@ -160,7 +160,7 @@ bool MdlMigrator::needToRemap(const Instrument& instr, RepitchFunc& repitch, pat
     }
 
     const int program = channel->program();
-    const String musicXmlId = instr.musicXMLId();
+    const String musicXmlId = instr.musicXmlId();
 
     if (musicXmlId == u"mdl.drum.snare-drum" && (program == 5 || program == 6)) {
         // MDL Snare Line   (id="mdl-snareline")

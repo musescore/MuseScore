@@ -24,7 +24,7 @@
 #include "musicxmlwriter.h"
 
 namespace mu::iex::musicxml {
-class MxlWriter : public MusicXMLWriter
+class MxlWriter : public MusicXmlWriter
 {
 public:
     muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;

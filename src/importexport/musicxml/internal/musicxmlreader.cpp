@@ -25,14 +25,14 @@
 #include "engraving/engravingerrors.h"
 
 namespace mu::engraving {
-extern Err importMusicXML(MasterScore*, const muse::String&, bool forceMode);
-extern Err importCompressedMusicXML(MasterScore*, const muse::String&, bool forceMode);
+extern Err importMusicXml(MasterScore*, const muse::String&, bool forceMode);
+extern Err importCompressedMusicXml(MasterScore*, const muse::String&, bool forceMode);
 }
 
 using namespace mu::iex::musicxml;
 using namespace mu::engraving;
 
-muse::Ret MusicXMLReader::read(MasterScore* score, const muse::io::path_t& path, const Options& options)
+muse::Ret MusicXmlReader::read(MasterScore* score, const muse::io::path_t& path, const Options& options)
 {
     Err err = Err::FileUnknownType;
     std::string suffix = muse::io::suffix(path);
@@ -42,9 +42,9 @@ muse::Ret MusicXMLReader::read(MasterScore* score, const muse::io::path_t& path,
     }
 
     if (suffix == "xml" || suffix == "musicxml") {
-        err = importMusicXML(score, path.toString(), forceMode);
+        err = importMusicXml(score, path.toString(), forceMode);
     } else if (suffix == "mxl") {
-        err = importCompressedMusicXML(score, path.toString(), forceMode);
+        err = importCompressedMusicXml(score, path.toString(), forceMode);
     }
     return make_ret(err, path);
 }

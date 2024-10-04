@@ -29,13 +29,13 @@ class XmlStreamReader;
 }
 
 namespace mu::engraving {
-class MusicXMLLogger
+class MusicXmlLogger
 {
 public:
     enum class Level : char {
         MXML_TRACE, MXML_INFO, MXML_ERROR
     };
-    MusicXMLLogger() {}
+    MusicXmlLogger() {}
     void logDebugTrace(const muse::String& trace, const muse::XmlStreamReader* xmlreader = 0);
     void logDebugInfo(const muse::String& info, const muse::XmlStreamReader* xmlreader = 0);
     void logError(const muse::String& error, const muse::XmlStreamReader* xmlreader = 0);

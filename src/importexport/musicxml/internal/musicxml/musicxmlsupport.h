@@ -32,10 +32,10 @@ class XmlStreamReader;
 
 namespace mu::engraving {
 //---------------------------------------------------------
-//   MusicXMLSupport -- MusicXML import support functions
+//   MusicXmlSupport -- MusicXML import support functions
 //---------------------------------------------------------
 
-class MusicXMLSupport
+class MusicXmlSupport
 {
 public:
     static int stringToInt(const String& s, bool* ok);
@@ -43,13 +43,13 @@ public:
     static Fraction calculateFraction(const String& type, int dots, int normalNotes, int actualNotes);
 };
 
-extern String accSymId2MusicXMLString(const SymId id);
-extern String accSymId2SmuflMusicXMLString(const SymId id);
-extern String accidentalType2MusicXMLString(const AccidentalType type);
-extern String accidentalType2SmuflMusicXMLString(const AccidentalType type);
-extern AccidentalType musicXMLString2accidentalType(const String mxmlName, const String smufl);
-extern String musicXMLAccidentalTextToChar(const String mxmlName);
-extern SymId musicXMLString2accSymId(const String mxmlName, const String smufl = {});
+extern String accSymId2MusicXmlString(const SymId id);
+extern String accSymId2SmuflMusicXmlString(const SymId id);
+extern String accidentalType2MusicXmlString(const AccidentalType type);
+extern String accidentalType2SmuflMusicXmlString(const AccidentalType type);
+extern AccidentalType musicXmlString2accidentalType(const String mxmlName, const String smufl);
+extern String musicXmlAccidentalTextToChar(const String mxmlName);
+extern SymId musicXmlString2accSymId(const String mxmlName, const String smufl = {});
 extern AccidentalType microtonalGuess(double val);
 extern bool isLaissezVibrer(const SymId id);
 extern const Articulation* findLaissezVibrer(const Chord* chord);

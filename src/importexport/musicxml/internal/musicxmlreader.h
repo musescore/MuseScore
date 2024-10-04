@@ -24,7 +24,7 @@
 #include "project/inotationreader.h"
 
 namespace mu::iex::musicxml {
-class MusicXMLReader : public project::INotationReader
+class MusicXmlReader : public project::INotationReader
 {
 public:
     muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options()) override;

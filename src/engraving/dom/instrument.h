@@ -377,7 +377,7 @@ public:
     int maxPitchP() const;
     int minPitchA() const;
     int maxPitchA() const;
-    String musicXMLId() const;
+    String musicXmlId() const;
 
     const StaffNameList& longNames() const;
     const StaffNameList& shortNames() const;

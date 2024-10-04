@@ -27,7 +27,7 @@
 namespace mu::engraving {
 const int MAX_NUMBER_LEVEL = 16; // maximum number of overlapping MusicXML objects
 
-enum class MusicXMLExporterSoftware : char {
+enum class MusicXmlExporterSoftware : char {
     SIBELIUS,
     DOLET6,
     DOLET8,
@@ -37,32 +37,32 @@ enum class MusicXMLExporterSoftware : char {
 };
 
 //---------------------------------------------------------
-//   MusicXMLStartStop
+//   MusicXmlStartStop
 //---------------------------------------------------------
 
-enum class MusicXMLStartStop : char {
+enum class MusicXmlStartStop : char {
     NONE, START, STOP
 };
 
-struct MusicXMLArpeggioDesc {
+struct MusicXmlArpeggioDesc {
     Arpeggio* arp;
     int no;
 
-    MusicXMLArpeggioDesc(Arpeggio* arp, int no)
+    MusicXmlArpeggioDesc(Arpeggio* arp, int no)
         : arp(arp), no(no) {}
 };
-typedef std::multimap<int, MusicXMLArpeggioDesc> ArpeggioMap;
+typedef std::multimap<int, MusicXmlArpeggioDesc> ArpeggioMap;
 
 //---------------------------------------------------------
-//   MusicXMLInstrument
+//   MusicXmlInstrument
 //---------------------------------------------------------
 
 /**
- A single instrument in a MusicXML part.
+ A single instrument in a MusicXml part.
  Used for both a drum part and a (non-drum) multi-instrument part
  */
 
-struct MusicXMLInstrument {
+struct MusicXmlInstrument {
     int unpitched;                     // midi-unpitched read from MusicXML
     String name;                       // instrument-name read from MusicXML
     String sound;                      // instrument-sound read from MusicXML
@@ -79,31 +79,31 @@ struct MusicXMLInstrument {
 
     String toString() const;
 
-    MusicXMLInstrument()        // required by std::map
+    MusicXmlInstrument()        // required by std::map
         : unpitched(-1), name(), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
         notehead(NoteHeadGroup::HEAD_INVALID), line(0), stemDirection(DirectionV::AUTO) {}
-    MusicXMLInstrument(String s)
+    MusicXmlInstrument(String s)
         : unpitched(-1), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
         notehead(NoteHeadGroup::HEAD_NORMAL), line(0), stemDirection(DirectionV::AUTO) {}
     /*
-    MusicXMLInstrument(int p, String s, NoteHead::Group nh, int l, Direction d)
+    MusicXmlInstrument(int p, String s, NoteHead::Group nh, int l, Direction d)
           : unpitched(p), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
           notehead(nh), line(l), stemDirection(d) {}
      */
 };
-typedef std::map<String, MusicXMLInstrument> MusicXMLInstruments;
+typedef std::map<String, MusicXmlInstrument> MusicXmlInstruments;
 
-class MusicXMLIntervalList : public std::map<Fraction, Interval>
+class MusicXmlIntervalList : public std::map<Fraction, Interval>
 {
 public:
-    MusicXMLIntervalList() {}
+    MusicXmlIntervalList() {}
     Interval interval(const Fraction f) const;
 };
 
-class MusicXMLInstrList : public std::map<Fraction, String>
+class MusicXmlInstrList : public std::map<Fraction, String>
 {
 public:
-    MusicXMLInstrList() {}
+    MusicXmlInstrList() {}
     const String instrument(const Fraction f) const;
     void setInstrument(const String instr, const Fraction f);
 };

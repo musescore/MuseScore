@@ -73,7 +73,7 @@ class ConsoleApp : public muse::BaseApplication, public std::enable_shared_from_
     muse::Inject<iex::audioexport::IAudioExportConfiguration> audioExportConfiguration;
     muse::Inject<iex::videoexport::IVideoExportConfiguration> videoExportConfiguration;
     muse::Inject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration;
-    muse::Inject<iex::musicxml::IMusicXMLConfiguration> musicXmlConfiguration;
+    muse::Inject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration;
 
 public:
     ConsoleApp(const CmdOptions& options, const muse::modularity::ContextPtr& ctx);

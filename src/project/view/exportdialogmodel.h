@@ -53,7 +53,7 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
     INJECT(IProjectConfiguration, configuration)
     INJECT(INotationWritersRegister, writers)
     INJECT(iex::imagesexport::IImagesExportConfiguration, imageExportConfiguration)
-    INJECT(iex::musicxml::IMusicXMLConfiguration, musicXmlConfiguration)
+    INJECT(iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
     INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
     INJECT(iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
     INJECT(iex::mei::IMeiConfiguration, meiConfiguration)
@@ -80,7 +80,7 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
     Q_PROPERTY(bool midiExpandRepeats READ midiExpandRepeats WRITE setMidiExpandRepeats NOTIFY midiExpandRepeatsChanged)
     Q_PROPERTY(bool midiExportRpns READ midiExportRpns WRITE setMidiExportRpns NOTIFY midiExportRpnsChanged)
 
-    Q_PROPERTY(MusicXMLLayoutType musicXMLLayoutType READ musicXMLLayoutType WRITE setMusicXmlLayoutType NOTIFY musicXMLLayoutTypeChanged)
+    Q_PROPERTY(MusicXmlLayoutType musicXmlLayoutType READ musicXmlLayoutType WRITE setMusicXmlLayoutType NOTIFY musicXmlLayoutTypeChanged)
 
     Q_PROPERTY(int meiExportLayout READ meiExportLayout WRITE setMeiExportLayout NOTIFY meiExportLayoutChanged)
 
@@ -143,17 +143,17 @@ public:
     bool meiExportLayout() const;
     void setMeiExportLayout(bool exportLayout);
 
-    enum class MusicXMLLayoutType {
+    enum class MusicXmlLayoutType {
         AllLayout,
         AllBreaks,
         ManualBreaks,
         None
     };
-    Q_ENUM(MusicXMLLayoutType)
+    Q_ENUM(MusicXmlLayoutType)
 
     Q_INVOKABLE QVariantList musicXmlLayoutTypes() const;
-    MusicXMLLayoutType musicXMLLayoutType() const;
-    void setMusicXmlLayoutType(MusicXMLLayoutType layoutType);
+    MusicXmlLayoutType musicXmlLayoutType() const;
+    void setMusicXmlLayoutType(MusicXmlLayoutType layoutType);
 
     bool shouldDestinationFolderBeOpenedOnExport() const;
     void setShouldDestinationFolderBeOpenedOnExport(bool enabled);
@@ -180,7 +180,7 @@ signals:
     void midiExpandRepeatsChanged(bool expandRepeats);
     void midiExportRpnsChanged(bool exportRpns);
 
-    void musicXMLLayoutTypeChanged(MusicXMLLayoutType layoutType);
+    void musicXmlLayoutTypeChanged(MusicXmlLayoutType layoutType);
 
     void meiExportLayoutChanged(bool exportLayout);
 

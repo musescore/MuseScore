@@ -27,7 +27,7 @@ using namespace mu;
 using namespace mu::iex::musicxml;
 using namespace mu::engraving;
 
-Err MusicXMLValidation::validate(const muse::String&, const muse::ByteArray&)
+Err MusicXmlValidation::validate(const muse::String&, const muse::ByteArray&)
 {
     return Err::NoError;
 }
@@ -55,7 +55,7 @@ using namespace mu::engraving;
 //---------------------------------------------------------
 
 /**
- Message handler for the MusicXML schema validator QXmlSchemaValidator.
+ Message handler for the MusicXml schema validator QXmlSchemaValidator.
  */
 
 class ValidatorMessageHandler : public QAbstractMessageHandler
@@ -115,16 +115,16 @@ void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& descr
 }
 
 //---------------------------------------------------------
-//   initMusicXMLSchema
+//   initMusicXmlSchema
 //    return false on error
 //---------------------------------------------------------
 
-static bool initMusicXMLSchema(QXmlSchema& schema)
+static bool initMusicXmlSchema(QXmlSchema& schema)
 {
     // read the MusicXML schema from the application resources
     QFile schemaFile(":/schema/musicxml.xsd");
     if (!schemaFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        LOGE("initMusicXMLSchema() could not open resource musicxml.xsd");
+        LOGE("initMusicXmlSchema() could not open resource musicxml.xsd");
         return false;
     }
 
@@ -145,7 +145,7 @@ static bool initMusicXMLSchema(QXmlSchema& schema)
     // load and validate the schema
     schema.load(schemaBa);
     if (!schema.isValid()) {
-        LOGE("initMusicXMLSchema() internal error: MusicXML schema is invalid");
+        LOGE("initMusicXmlSchema() internal error: MusicXML schema is invalid");
         return false;
     }
 
@@ -153,16 +153,16 @@ static bool initMusicXMLSchema(QXmlSchema& schema)
 }
 
 //---------------------------------------------------------
-//   musicXMLValidationErrorDialog
+//   musicXmlValidationErrorDialog
 //---------------------------------------------------------
 
 /**
- Show a dialog displaying the MusicXML validation error(s)
+ Show a dialog displaying the MusicXml validation error(s)
  and asks the user if he wants to try to load the file anyway.
  Return QMessageBox::Yes (try anyway) or QMessageBox::No (don't)
  */
 
-static int musicXMLValidationErrorDialog(QString text, QString detailedText)
+static int musicXmlValidationErrorDialog(QString text, QString detailedText)
 {
     QMessageBox errorDialog;
     errorDialog.setIcon(QMessageBox::Question);
@@ -174,7 +174,7 @@ static int musicXMLValidationErrorDialog(QString text, QString detailedText)
     return errorDialog.exec();
 }
 
-Err MusicXMLValidation::validate(const String& name, const muse::ByteArray& data)
+Err MusicXmlValidation::validate(const String& name, const muse::ByteArray& data)
 {
     //QElapsedTimer t;
     //t.start();
@@ -183,8 +183,8 @@ Err MusicXMLValidation::validate(const String& name, const muse::ByteArray& data
     ValidatorMessageHandler messageHandler;
     QXmlSchema schema;
     schema.setMessageHandler(&messageHandler);
-    if (!initMusicXMLSchema(schema)) {
-        return Err::FileBadFormat;      // appropriate error message has been printed by initMusicXMLSchema
+    if (!initMusicXmlSchema(schema)) {
+        return Err::FileBadFormat;      // appropriate error message has been printed by initMusicXmlSchema
     }
     // validate the data
     QXmlSchemaValidator validator(schema);
@@ -193,12 +193,12 @@ Err MusicXMLValidation::validate(const String& name, const muse::ByteArray& data
     //LOGD("Validation time elapsed: %d ms", t.elapsed());
 
     if (!valid) {
-        LOGD("importMusicXML() file '%s' is not a valid MusicXML file", muPrintable(name));
+        LOGD("importMusicXml() file '%s' is not a valid MusicXML file", muPrintable(name));
         QString strErr = muse::qtrc("iex_musicxml", "File “%1” is not a valid MusicXML file.").arg(name);
         if (MScore::noGui) {
             return Err::NoError;         // might as well try anyhow in converter mode
         }
-        if (musicXMLValidationErrorDialog(strErr, messageHandler.getErrors()) != QMessageBox::Yes) {
+        if (musicXmlValidationErrorDialog(strErr, messageHandler.getErrors()) != QMessageBox::Yes) {
             return Err::UserAbort;
         }
     }

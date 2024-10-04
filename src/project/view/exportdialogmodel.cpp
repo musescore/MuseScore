@@ -541,20 +541,20 @@ void ExportDialogModel::setMeiExportLayout(bool exportLayout)
 
 QVariantList ExportDialogModel::musicXmlLayoutTypes() const
 {
-    QMap<MusicXMLLayoutType, QString> musicXmlLayoutTypeNames {
+    QMap<MusicXmlLayoutType, QString> musicXmlLayoutTypeNames {
         //: Specifies to which extent layout customizations should be exported to MusicXML.
-        { MusicXMLLayoutType::AllLayout, muse::qtrc("project/export", "All layout") },
+        { MusicXmlLayoutType::AllLayout, muse::qtrc("project/export", "All layout") },
         //: Specifies to which extent layout customizations should be exported to MusicXML.
-        { MusicXMLLayoutType::AllBreaks, muse::qtrc("project/export", "System and page breaks") },
+        { MusicXmlLayoutType::AllBreaks, muse::qtrc("project/export", "System and page breaks") },
         //: Specifies to which extent layout customizations should be exported to MusicXML.
-        { MusicXMLLayoutType::ManualBreaks, muse::qtrc("project/export", "Manually added system and page breaks only") },
+        { MusicXmlLayoutType::ManualBreaks, muse::qtrc("project/export", "Manually added system and page breaks only") },
         //: Specifies to which extent layout customizations should be exported to MusicXML.
-        { MusicXMLLayoutType::None, muse::qtrc("project/export", "No system or page breaks") },
+        { MusicXmlLayoutType::None, muse::qtrc("project/export", "No system or page breaks") },
     };
 
     QVariantList result;
 
-    for (MusicXMLLayoutType type : musicXmlLayoutTypeNames.keys()) {
+    for (MusicXmlLayoutType type : musicXmlLayoutTypeNames.keys()) {
         QVariantMap obj;
         obj["text"] = musicXmlLayoutTypeNames[type];
         obj["value"] = static_cast<int>(type);
@@ -564,46 +564,46 @@ QVariantList ExportDialogModel::musicXmlLayoutTypes() const
     return result;
 }
 
-ExportDialogModel::MusicXMLLayoutType ExportDialogModel::musicXMLLayoutType() const
+ExportDialogModel::MusicXmlLayoutType ExportDialogModel::musicXmlLayoutType() const
 {
-    if (musicXmlConfiguration()->musicXMLExportLayout()) {
-        return MusicXMLLayoutType::AllLayout;
+    if (musicXmlConfiguration()->exportLayout()) {
+        return MusicXmlLayoutType::AllLayout;
     }
-    switch (musicXmlConfiguration()->musicXMLExportBreaksType()) {
-    case IMusicXMLConfiguration::MusicXMLExportBreaksType::All:
-        return MusicXMLLayoutType::AllBreaks;
-    case IMusicXMLConfiguration::MusicXMLExportBreaksType::Manual:
-        return MusicXMLLayoutType::ManualBreaks;
-    case IMusicXMLConfiguration::MusicXMLExportBreaksType::No:
-        return MusicXMLLayoutType::None;
+    switch (musicXmlConfiguration()->exportBreaksType()) {
+    case IMusicXmlConfiguration::MusicXmlExportBreaksType::All:
+        return MusicXmlLayoutType::AllBreaks;
+    case IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual:
+        return MusicXmlLayoutType::ManualBreaks;
+    case IMusicXmlConfiguration::MusicXmlExportBreaksType::No:
+        return MusicXmlLayoutType::None;
     }
 
-    return MusicXMLLayoutType::AllLayout;
+    return MusicXmlLayoutType::AllLayout;
 }
 
-void ExportDialogModel::setMusicXmlLayoutType(MusicXMLLayoutType layoutType)
+void ExportDialogModel::setMusicXmlLayoutType(MusicXmlLayoutType layoutType)
 {
-    if (layoutType == musicXMLLayoutType()) {
+    if (layoutType == musicXmlLayoutType()) {
         return;
     }
     switch (layoutType) {
-    case MusicXMLLayoutType::AllLayout:
-        musicXmlConfiguration()->setMusicXMLExportLayout(true);
+    case MusicXmlLayoutType::AllLayout:
+        musicXmlConfiguration()->setExportLayout(true);
         break;
-    case MusicXMLLayoutType::AllBreaks:
-        musicXmlConfiguration()->setMusicXMLExportLayout(false);
-        musicXmlConfiguration()->setMusicXMLExportBreaksType(IMusicXMLConfiguration::MusicXMLExportBreaksType::All);
+    case MusicXmlLayoutType::AllBreaks:
+        musicXmlConfiguration()->setExportLayout(false);
+        musicXmlConfiguration()->setExportBreaksType(IMusicXmlConfiguration::MusicXmlExportBreaksType::All);
         break;
-    case MusicXMLLayoutType::ManualBreaks:
-        musicXmlConfiguration()->setMusicXMLExportLayout(false);
-        musicXmlConfiguration()->setMusicXMLExportBreaksType(IMusicXMLConfiguration::MusicXMLExportBreaksType::Manual);
+    case MusicXmlLayoutType::ManualBreaks:
+        musicXmlConfiguration()->setExportLayout(false);
+        musicXmlConfiguration()->setExportBreaksType(IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual);
         break;
-    case MusicXMLLayoutType::None:
-        musicXmlConfiguration()->setMusicXMLExportLayout(false);
-        musicXmlConfiguration()->setMusicXMLExportBreaksType(IMusicXMLConfiguration::MusicXMLExportBreaksType::No);
+    case MusicXmlLayoutType::None:
+        musicXmlConfiguration()->setExportLayout(false);
+        musicXmlConfiguration()->setExportBreaksType(IMusicXmlConfiguration::MusicXmlExportBreaksType::No);
         break;
     }
-    emit musicXMLLayoutTypeChanged(layoutType);
+    emit musicXmlLayoutTypeChanged(layoutType);
 }
 
 bool ExportDialogModel::shouldDestinationFolderBeOpenedOnExport() const

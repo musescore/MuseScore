@@ -166,7 +166,7 @@ public:
     const String& extensionName() const;
 
     String xmlKind() const;
-    String musicXMLText() const;
+    String musicXmlText() const;
     String xmlSymbols() const;
     String xmlParens() const;
     StringList xmlDegrees() const;

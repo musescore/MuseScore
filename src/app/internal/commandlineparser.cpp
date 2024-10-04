@@ -360,11 +360,11 @@ void CommandLineParser::parse(int argc, char** argv)
 
     // MusicXML
     if (m_parser.isSet("musicxml-use-default-font")) {
-        m_options.importMusicXML.useDefaultFont = true;
+        m_options.importMusicXml.useDefaultFont = true;
     }
 
     if (m_parser.isSet("musicxml-infer-text-type")) {
-        m_options.importMusicXML.inferTextType = true;
+        m_options.importMusicXml.inferTextType = true;
     }
 
     // Video

@@ -45,43 +45,43 @@ static void musicxml_init_qrc()
 #endif
 }
 
-std::string MusicXMLModule::moduleName() const
+std::string MusicXmlModule::moduleName() const
 {
     return "iex_musicxml";
 }
 
-void MusicXMLModule::registerResources()
+void MusicXmlModule::registerResources()
 {
     musicxml_init_qrc();
 }
 
-void MusicXMLModule::registerExports()
+void MusicXmlModule::registerExports()
 {
 #ifndef MUSICXML_NO_INTERNAL
-    m_configuration = std::make_shared<MusicXMLConfiguration>();
-    ioc()->registerExport<IMusicXMLConfiguration>(moduleName(), m_configuration);
+    m_configuration = std::make_shared<MusicXmlConfiguration>();
+    ioc()->registerExport<IMusicXmlConfiguration>(moduleName(), m_configuration);
 #endif
 }
 
-void MusicXMLModule::resolveImports()
+void MusicXmlModule::resolveImports()
 {
 #ifndef MUSICXML_NO_INTERNAL
     using namespace mu::project;
 
     auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
-        readers->reg({ "xml", "musicxml", "mxl" }, std::make_shared<MusicXMLReader>());
+        readers->reg({ "xml", "musicxml", "mxl" }, std::make_shared<MusicXmlReader>());
     }
 
     auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
-        writers->reg({ "musicxml", "xml" }, std::make_shared<MusicXMLWriter>());
+        writers->reg({ "musicxml", "xml" }, std::make_shared<MusicXmlWriter>());
         writers->reg({ "mxl" }, std::make_shared<MxlWriter>());
     }
 #endif
 }
 
-void MusicXMLModule::onInit(const IApplication::RunMode&)
+void MusicXmlModule::onInit(const IApplication::RunMode&)
 {
 #ifndef MUSICXML_NO_INTERNAL
     m_configuration->init();

@@ -24,7 +24,7 @@
 
 using namespace mu::engraving;
 
-String MusicXMLInstrument::toString() const
+String MusicXmlInstrument::toString() const
 {
     return String(u"chan %1 prog %2 vol %3 pan %4 unpitched %5 name '%6' sound '%7' head %8 line %9 stemDir %10")
            .arg(midiChannel)
@@ -42,7 +42,7 @@ String MusicXMLInstrument::toString() const
 //   interval
 //---------------------------------------------------------
 
-Interval MusicXMLIntervalList::interval(const Fraction f) const
+Interval MusicXmlIntervalList::interval(const Fraction f) const
 {
     if (empty()) {
         return {};
@@ -59,7 +59,7 @@ Interval MusicXMLIntervalList::interval(const Fraction f) const
 //   instrument
 //---------------------------------------------------------
 
-const String MusicXMLInstrList::instrument(const Fraction f) const
+const String MusicXmlInstrList::instrument(const Fraction f) const
 {
     if (empty()) {
         return String();
@@ -76,7 +76,7 @@ const String MusicXMLInstrList::instrument(const Fraction f) const
 //   setInstrument
 //---------------------------------------------------------
 
-void MusicXMLInstrList::setInstrument(const String instr, const Fraction f)
+void MusicXmlInstrList::setInstrument(const String instr, const Fraction f)
 {
     // TODO determine how to handle multiple instrument changes at the same time
     // current implementation keeps the first one
