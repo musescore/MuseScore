@@ -382,7 +382,7 @@ public:
     void cmdMoveRest(Rest*, DirectionV);
     void cmdMoveLyrics(Lyrics*, DirectionV);
 
-    void realtimeAdvance();
+    void realtimeAdvance(bool allowTransposition);
 
     void addRemoveBreaks(int interval, bool lock);
 
@@ -497,9 +497,9 @@ public:
     bool containsElement(const EngravingItem*) const;
 
     Note* addPitch(NoteVal&, bool addFlag, InputState* externalInputState = nullptr);
-    Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord);
-    NoteVal noteVal(int pitch) const;
-    Note* addMidiPitch(int pitch, bool addFlag);
+    Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool allowTransposition);
+    NoteVal noteVal(int pitch, bool allowTransposition) const;
+    Note* addMidiPitch(int pitch, bool addFlag, bool allowTransposition);
     Note* addNote(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {},
                   InputState* externalInputState = nullptr);
     Note* addNoteToTiedChord(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {});

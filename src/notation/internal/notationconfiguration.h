@@ -198,6 +198,9 @@ public:
     muse::ValCh<int> pianoKeyboardNumberOfKeys() const override;
     void setPianoKeyboardNumberOfKeys(int number) override;
 
+    muse::ValCh<bool> midiUseWrittenPitch() const override;
+    void setMidiUseWrittenPitch(bool useWrittenPitch) override;
+
     bool useNewPercussionPanel() const override;
     void setUseNewPercussionPanel(bool use) override;
 
@@ -231,6 +234,7 @@ private:
     muse::async::Notification m_isPlayRepeatsChanged;
     muse::async::Notification m_isPlayChordSymbolsChanged;
     muse::ValCh<int> m_pianoKeyboardNumberOfKeys;
+    muse::ValCh<bool> m_midiInputUseWrittenPitch;
     muse::async::Channel<QColor> m_anchorColorChanged;
 
     int m_styleDialogLastPageIndex = 0;

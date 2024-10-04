@@ -59,6 +59,7 @@ static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrec
 static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
 
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
+static const Settings::Key USE_MIDI_INPUT_WRITTEN_PITCH(module_name, "io/midi/useWrittenPitch");
 static const Settings::Key IS_AUTOMATICALLY_PAN_ENABLED(module_name, "application/playback/panPlayback");
 static const Settings::Key PLAYBACK_SMOOTH_PANNING(module_name, "application/playback/smoothPan");
 static const Settings::Key IS_PLAY_REPEATS_ENABLED(module_name, "application/playback/playRepeats");
@@ -218,6 +219,12 @@ void NotationConfiguration::init()
     m_pianoKeyboardNumberOfKeys.val = settings()->value(PIANO_KEYBOARD_NUMBER_OF_KEYS).toInt();
     settings()->valueChanged(PIANO_KEYBOARD_NUMBER_OF_KEYS).onReceive(this, [this](const Val& val) {
         m_pianoKeyboardNumberOfKeys.set(val.toInt());
+    });
+
+    settings()->setDefaultValue(USE_MIDI_INPUT_WRITTEN_PITCH, Val(true));
+    m_midiInputUseWrittenPitch.val = settings()->value(USE_MIDI_INPUT_WRITTEN_PITCH).toBool();
+    settings()->valueChanged(USE_MIDI_INPUT_WRITTEN_PITCH).onReceive(this, [this](const Val& val) {
+        m_midiInputUseWrittenPitch.set(val.toBool());
     });
 
     settings()->setDefaultValue(USE_NEW_PERCUSSION_PANEL_KEY, Val(false));
@@ -917,6 +924,16 @@ void NotationConfiguration::setAutoShowPercussionPanel(bool autoShow)
 void NotationConfiguration::setPianoKeyboardNumberOfKeys(int number)
 {
     settings()->setSharedValue(PIANO_KEYBOARD_NUMBER_OF_KEYS, Val(number));
+}
+
+ValCh<bool> NotationConfiguration::midiUseWrittenPitch() const
+{
+    return m_midiInputUseWrittenPitch;
+}
+
+void NotationConfiguration::setMidiUseWrittenPitch(bool useWrittenPitch)
+{
+    settings()->setSharedValue(USE_MIDI_INPUT_WRITTEN_PITCH, Val(useWrittenPitch));
 }
 
 muse::io::path_t NotationConfiguration::firstScoreOrderListPath() const

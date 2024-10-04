@@ -212,7 +212,7 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
         }
     }
 
-    mu::engraving::Note* note = sc->addMidiPitch(inputEv.pitch, inputEv.chord);
+    mu::engraving::Note* note = sc->addMidiPitch(inputEv.pitch, inputEv.chord, configuration()->midiUseWrittenPitch().val);
 
     sc->activeMidiPitches().push_back(inputEv);
 
@@ -250,7 +250,7 @@ Note* NotationMidiInput::makeNote(const muse::midi::Event& e)
     note->setParent(chord);
     note->setStaffIdx(engraving::track2staff(inputState.cr()->track()));
 
-    engraving::NoteVal nval = score->noteVal(e.note());
+    engraving::NoteVal nval = score->noteVal(e.note(), configuration()->midiUseWrittenPitch().val);
     note->setNval(nval);
 
     return note;
@@ -306,7 +306,7 @@ void NotationMidiInput::doRealtimeAdvance()
 
     QTimer::singleShot(100, Qt::PreciseTimer, [this]() {
         m_undoStack->prepareChanges();
-        m_getScore->score()->realtimeAdvance();
+        m_getScore->score()->realtimeAdvance(configuration()->midiUseWrittenPitch().val);
         m_undoStack->commitChanges();
     });
 

@@ -1560,9 +1560,9 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
 //  addTiedMidiPitch
 //---------------------------------------------------------
 
-Note* Score::addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord)
+Note* Score::addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool allowTransposition)
 {
-    Note* n = addMidiPitch(pitch, addFlag);
+    Note* n = addMidiPitch(pitch, addFlag, allowTransposition);
     if (prevChord) {
         Note* nn = prevChord->findNote(n->pitch());
         if (nn) {
@@ -1580,14 +1580,14 @@ Note* Score::addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord)
     return n;
 }
 
-NoteVal Score::noteVal(int pitch) const
+NoteVal Score::noteVal(int pitch, bool allowTransposition) const
 {
     NoteVal nval(pitch);
     Staff* st = staff(inputState().track() / VOICES);
 
     // if transposing, interpret MIDI pitch as representing desired written pitch
     // set pitch based on corresponding sounding pitch
-    if (!style().styleB(Sid::concertPitch)) {
+    if (!style().styleB(Sid::concertPitch) && allowTransposition) {
         nval.pitch += st->part()->instrument(inputState().tick())->transpose().chromatic;
     }
     // let addPitch calculate tpc values from pitch
@@ -1601,9 +1601,9 @@ NoteVal Score::noteVal(int pitch) const
 //  addMidiPitch
 //---------------------------------------------------------
 
-Note* Score::addMidiPitch(int pitch, bool addFlag)
+Note* Score::addMidiPitch(int pitch, bool addFlag, bool allowTransposition)
 {
-    NoteVal nval = noteVal(pitch);
+    NoteVal nval = noteVal(pitch, allowTransposition);
     return addPitch(nval, addFlag);
 }
 
