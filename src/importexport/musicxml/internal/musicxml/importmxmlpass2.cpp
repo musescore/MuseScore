@@ -6583,7 +6583,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
     String tieType;
     MusicXMLParserLyric lyric { m_pass1.getMusicXmlPart(partId).lyricNumberHandler(), m_e, m_score, m_logger,
                                 m_pass1.isVocalStaff(partId) };
-    MusicXMLParserNotations notations { m_e, m_score, m_logger, m_pass1, *this };
+    MusicXMLParserNotations notations { m_e, m_score, m_logger, *this };
 
     MxmlNoteDuration mnd { m_divs, m_logger, &m_pass1 };
     MxmlNotePitch mnp { m_logger };
@@ -8624,9 +8624,8 @@ String Notation::print() const
 //   MusicXMLParserNotations
 //---------------------------------------------------------
 
-MusicXMLParserNotations::MusicXMLParserNotations(XmlStreamReader& e, Score* score, MxmlLogger* logger, MusicXMLParserPass1& pass1,
-                                                 mu::engraving::MusicXMLParserPass2& pass2)
-    : m_e(e), m_pass1(pass1), m_pass2(pass2), m_score(score), m_logger(logger)
+MusicXMLParserNotations::MusicXMLParserNotations(XmlStreamReader& e, Score* score, MxmlLogger* logger, MusicXMLParserPass2& pass2)
+    : m_e(e), m_pass2(pass2), m_score(score), m_logger(logger)
 {
     // nothing
 }
