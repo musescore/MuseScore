@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "importmxmllogger.h"
+#include "importmusicxmllogger.h"
 
 #include "global/serialization/xmlstreamreader.h"
 

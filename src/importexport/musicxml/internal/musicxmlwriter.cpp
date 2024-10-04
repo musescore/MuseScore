@@ -23,7 +23,7 @@
 #include "musicxmlwriter.h"
 
 #include "engraving/dom/masterscore.h"
-#include "musicxml/exportxml.h"
+#include "musicxml/exportmusicxml.h"
 
 #include "log.h"
 

@@ -23,8 +23,8 @@
 #include "engraving/types/fraction.h"
 #include "engraving/types/typesconv.h"
 
-#include "importmxmllogger.h"
-#include "importmxmlnoteduration.h"
+#include "importmusicxmllogger.h"
+#include "importmusicxmlnoteduration.h"
 
 using namespace mu::engraving;
 

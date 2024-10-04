@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "importmxmlnotepitch.h"
+#include "importmusicxmlnotepitch.h"
 
 #include "draw/types/color.h"
 
@@ -28,7 +28,7 @@
 #include "engraving/dom/score.h"
 
 #include "musicxmlsupport.h"
-#include "importmxmllogger.h"
+#include "importmusicxmllogger.h"
 
 #include "log.h"
 

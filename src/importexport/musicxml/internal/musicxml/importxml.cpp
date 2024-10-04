@@ -32,7 +32,7 @@
 #include "engraving/types/types.h"
 #include "engraving/dom/masterscore.h"
 
-#include "importmxml.h"
+#include "importmusicxml.h"
 #include "musicxmlsupport.h"
 #include "musicxmlvalidation.h"
 

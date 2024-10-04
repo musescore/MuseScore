@@ -27,10 +27,10 @@
 #include "global/iinteractive.h"
 #endif
 
-#include "importmxml.h"
-#include "importmxmllogger.h"
-#include "importmxmlpass1.h"
-#include "importmxmlpass2.h"
+#include "importmusicxml.h"
+#include "importmusicxmllogger.h"
+#include "importmusicxmlpass1.h"
+#include "importmusicxmlpass2.h"
 
 #include "engraving/dom/part.h"
 #include "engraving/dom/score.h"

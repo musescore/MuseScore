@@ -40,9 +40,9 @@
 
 #include "engraving/types/symnames.h"
 
-#include "importmxmllogger.h"
-#include "importmxmlnoteduration.h"
-#include "importmxmlpass1.h"
+#include "importmusicxmllogger.h"
+#include "importmusicxmlnoteduration.h"
+#include "importmusicxmlpass1.h"
 #include "musicxmltypes.h"
 
 #include "modularity/ioc.h"
