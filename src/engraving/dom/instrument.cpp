@@ -1031,7 +1031,7 @@ int Instrument::maxPitchA() const
 //   musicXmlId
 //---------------------------------------------------------
 
-String Instrument::musicXmlId() const
+String Instrument::musicXMLId() const
 {
     return m_musicXmlId;
 }

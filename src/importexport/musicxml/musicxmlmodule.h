@@ -26,8 +26,8 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::musicxml {
-class MusicXmlConfiguration;
-class MusicXmlModule : public muse::modularity::IModuleSetup
+class MusicXMLConfiguration;
+class MusicXMLModule : public muse::modularity::IModuleSetup
 {
 public:
 
@@ -38,6 +38,6 @@ public:
     void onInit(const muse::IApplication::RunMode&) override;
 
 private:
-    std::shared_ptr<MusicXmlConfiguration> m_configuration;
+    std::shared_ptr<MusicXMLConfiguration> m_configuration;
 };
 }

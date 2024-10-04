@@ -57,7 +57,7 @@ static const std::vector<String> percussionInstrumentNames = {
     u"Stamp"
 };
 
-int MusicXmlOctaveShiftList::octaveShift(const Fraction f) const
+int MusicXMLOctaveShiftList::octaveShift(const Fraction f) const
 {
     if (empty()) {
         return 0;
@@ -70,7 +70,7 @@ int MusicXmlOctaveShiftList::octaveShift(const Fraction f) const
     return i->second;
 }
 
-void MusicXmlOctaveShiftList::addOctaveShift(const int shift, const Fraction f)
+void MusicXMLOctaveShiftList::addOctaveShift(const int shift, const Fraction f)
 {
     IF_ASSERT_FAILED(Fraction(0, 1) <= f) {
         return;
@@ -88,14 +88,14 @@ void MusicXmlOctaveShiftList::addOctaveShift(const int shift, const Fraction f)
     }
 }
 
-void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
+void MusicXMLOctaveShiftList::calcOctaveShiftShifts()
 {
     /*
     for (auto i = cbegin(); i != cend(); ++i)
           LOGD(" [%s : %d]", muPrintable((*i).first.print()), (*i).second);
      */
 
-    // to each MusicXmlOctaveShiftList entry, add the sum of all previous ones
+    // to each MusicXMLOctaveShiftList entry, add the sum of all previous ones
     int currentShift = 0;
     for (auto i = begin(); i != end(); ++i) {
         currentShift += i->second;
@@ -108,26 +108,26 @@ void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
      */
 }
 
-MusicXmlPart::MusicXmlPart(String id, String name)
+MusicXMLPart::MusicXMLPart(String id, String name)
     : m_id(id), m_name(name)
 {
     m_octaveShifts.resize(MAX_STAVES);
 }
 
-void MusicXmlPart::addMeasureNumberAndDuration(String measureNumber, Fraction measureDuration)
+void MusicXMLPart::addMeasureNumberAndDuration(String measureNumber, Fraction measureDuration)
 {
     m_measureNumbers.push_back(measureNumber);
     m_measureDurations.push_back(measureDuration);
 }
 
-void MusicXmlPart::setMaxStaff(const int staff)
+void MusicXMLPart::setMaxStaff(const int staff)
 {
     if (staff > m_maxStaff) {
         m_maxStaff = staff;
     }
 }
 
-Fraction MusicXmlPart::measureDuration(size_t i) const
+Fraction MusicXMLPart::measureDuration(size_t i) const
 {
     if (i < m_measureDurations.size()) {
         return m_measureDurations.at(i);
@@ -135,7 +135,7 @@ Fraction MusicXmlPart::measureDuration(size_t i) const
     return Fraction(0, 0);   // return invalid fraction
 }
 
-String MusicXmlPart::toString() const
+String MusicXMLPart::toString() const
 {
     String res = String(u"part id '%1' name '%2' print %3 abbr '%4' print %5 maxStaff %6\n")
                  .arg(m_id, m_name).arg(m_printName).arg(m_abbr).arg(m_printAbbr, m_maxStaff);
@@ -156,12 +156,12 @@ String MusicXmlPart::toString() const
     return res;
 }
 
-Interval MusicXmlPart::interval(const Fraction f) const
+Interval MusicXMLPart::interval(const Fraction f) const
 {
     return _intervals.interval(f);
 }
 
-int MusicXmlPart::octaveShift(const staff_idx_t staff, const Fraction f) const
+int MusicXMLPart::octaveShift(const staff_idx_t staff, const Fraction f) const
 {
     if (MAX_STAVES <= staff) {
         return 0;
@@ -172,7 +172,7 @@ int MusicXmlPart::octaveShift(const staff_idx_t staff, const Fraction f) const
     return m_octaveShifts[staff].octaveShift(f);
 }
 
-void MusicXmlPart::addOctaveShift(const staff_idx_t staff, const int shift, const Fraction f)
+void MusicXMLPart::addOctaveShift(const staff_idx_t staff, const int shift, const Fraction f)
 {
     if (MAX_STAVES <= staff) {
         return;
@@ -183,7 +183,7 @@ void MusicXmlPart::addOctaveShift(const staff_idx_t staff, const int shift, cons
     m_octaveShifts[staff].addOctaveShift(shift, f);
 }
 
-void MusicXmlPart::calcOctaveShifts()
+void MusicXMLPart::calcOctaveShifts()
 {
     for (staff_idx_t i = 0; i < MAX_STAVES; ++i) {
         m_octaveShifts[i].calcOctaveShiftShifts();
@@ -205,7 +205,7 @@ void MusicXmlPart::calcOctaveShifts()
  for more information.
  */
 
-int MusicXmlPart::staffNumberToIndex(const int staffNumber) const
+int MusicXMLPart::staffNumberToIndex(const int staffNumber) const
 {
     if (m_staffNumberToIndex.size() == 0) {
         return staffNumber - 1;
@@ -216,12 +216,12 @@ int MusicXmlPart::staffNumberToIndex(const int staffNumber) const
     }
 }
 
-bool MusicXmlPart::isVocalStaff() const
+bool MusicXMLPart::isVocalStaff() const
 {
     return std::find(vocalInstrumentNames.begin(), vocalInstrumentNames.end(), m_name) != vocalInstrumentNames.end();
 }
 
-bool MusicXmlPart::isPercussionStaff() const
+bool MusicXMLPart::isPercussionStaff() const
 {
     for (const String& name : percussionInstrumentNames) {
         if (m_name.contains(name)) {

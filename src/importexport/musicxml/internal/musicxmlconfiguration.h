@@ -24,28 +24,28 @@
 #include "../imusicxmlconfiguration.h"
 
 namespace mu::iex::musicxml {
-class MusicXmlConfiguration : public IMusicXmlConfiguration
+class MusicXMLConfiguration : public IMusicXMLConfiguration
 {
 public:
     void init();
 
-    bool musicxmlImportBreaks() const override;
-    void setMusicxmlImportBreaks(bool value) override;
+    bool musicXMLImportBreaks() const override;
+    void setMusicXMLImportBreaks(bool value) override;
 
-    bool musicxmlImportLayout() const override;
-    void setMusicxmlImportLayout(bool value) override;
+    bool musicXMLImportLayout() const override;
+    void setMusicXMLImportLayout(bool value) override;
 
-    bool musicxmlExportLayout() const override;
-    void setMusicxmlExportLayout(bool value) override;
+    bool musicXMLExportLayout() const override;
+    void setMusicXMLExportLayout(bool value) override;
 
-    bool musicxmlExportMu3Compat() const override;
-    void setMusicxmlExportMu3Compat(bool value) override;
+    bool musicXMLExportMu3Compat() const override;
+    void setMusicXMLExportMu3Compat(bool value) override;
 
-    MusicxmlExportBreaksType musicxmlExportBreaksType() const override;
-    void setMusicxmlExportBreaksType(MusicxmlExportBreaksType breaksType) override;
+    MusicXMLExportBreaksType musicXMLExportBreaksType() const override;
+    void setMusicXMLExportBreaksType(MusicXMLExportBreaksType breaksType) override;
 
-    bool musicxmlExportInvisibleElements() const override;
-    void setMusicxmlExportInvisibleElements(bool value) override;
+    bool musicXMLExportInvisibleElements() const override;
+    void setMusicXMLExportInvisibleElements(bool value) override;
 
     bool needUseDefaultFont() const override;
     void setNeedUseDefaultFont(bool value) override;

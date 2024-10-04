@@ -42,7 +42,7 @@ String MusicXMLInstrument::toString() const
 //   interval
 //---------------------------------------------------------
 
-Interval MusicXmlIntervalList::interval(const Fraction f) const
+Interval MusicXMLIntervalList::interval(const Fraction f) const
 {
     if (empty()) {
         return {};
@@ -59,7 +59,7 @@ Interval MusicXmlIntervalList::interval(const Fraction f) const
 //   instrument
 //---------------------------------------------------------
 
-const String MusicXmlInstrList::instrument(const Fraction f) const
+const String MusicXMLInstrList::instrument(const Fraction f) const
 {
     if (empty()) {
         return String();
@@ -76,7 +76,7 @@ const String MusicXmlInstrList::instrument(const Fraction f) const
 //   setInstrument
 //---------------------------------------------------------
 
-void MusicXmlInstrList::setInstrument(const String instr, const Fraction f)
+void MusicXMLInstrList::setInstrument(const String instr, const Fraction f)
 {
     // TODO determine how to handle multiple instrument changes at the same time
     // current implementation keeps the first one

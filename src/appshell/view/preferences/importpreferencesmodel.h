@@ -56,7 +56,7 @@ class ImportPreferencesModel : public QObject, public muse::Injectable, public m
     Q_PROPERTY(
         bool needAskAboutApplyingNewStyle READ needAskAboutApplyingNewStyle WRITE setNeedAskAboutApplyingNewStyle NOTIFY needAskAboutApplyingNewStyleChanged)
 
-    muse::Inject<iex::musicxml::IMusicXmlConfiguration> musicXmlConfiguration = { this };
+    muse::Inject<iex::musicxml::IMusicXMLConfiguration> musicXmlConfiguration = { this };
     muse::Inject<iex::guitarpro::IGuitarProConfiguration> guitarProConfiguration = { this };
     muse::Inject<iex::ove::IOveConfiguration> oveConfiguration = { this };
     muse::Inject<iex::midi::IMidiImportExportConfiguration> midiImportExportConfiguration = { this };

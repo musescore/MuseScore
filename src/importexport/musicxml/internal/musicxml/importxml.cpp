@@ -116,7 +116,7 @@ static Err doValidateAndImport(Score* score, const String& name, const ByteArray
 
     if (!forceMode) {
         // Validate the file
-        res = MusicxmlValidation::validate(name, data);
+        res = MusicXMLValidation::validate(name, data);
         if (res != Err::NoError) {
             return res;
         }
@@ -129,15 +129,15 @@ static Err doValidateAndImport(Score* score, const String& name, const ByteArray
 }
 
 //---------------------------------------------------------
-//   importMusicXml
+//   importMusicXML
 //    return Err::File* errors
 //---------------------------------------------------------
 
-Err importMusicXml(MasterScore* score, const String& name, bool forceMode)
+Err importMusicXML(MasterScore* score, const String& name, bool forceMode)
 {
     ScoreLoad sl;     // suppress warnings for undo push/pop
 
-    //LOGD("importMusicXml(%p, %s)", score, muPrintable(name));
+    //LOGD("importMusicXML(%p, %s)", score, muPrintable(name));
 
     // open the MusicXML file
     io::File xmlFile(name);
@@ -158,7 +158,7 @@ Err importMusicXml(MasterScore* score, const String& name, bool forceMode)
 }
 
 //---------------------------------------------------------
-//   importCompressedMusicXml
+//   importCompressedMusicXML
 //    return false on error
 //---------------------------------------------------------
 
@@ -166,9 +166,9 @@ Err importMusicXml(MasterScore* score, const String& name, bool forceMode)
  Import compressed MusicXML file \a name into the Score.
  */
 
-Err importCompressedMusicXml(MasterScore* score, const String& name, bool forceMode)
+Err importCompressedMusicXML(MasterScore* score, const String& name, bool forceMode)
 {
-    //LOGD("importCompressedMusicXml(%p, %s)", score, muPrintable(name));
+    //LOGD("importCompressedMusicXML(%p, %s)", score, muPrintable(name));
 
     if (!io::File::exists(name)) {
         return Err::FileNotFound;

@@ -110,7 +110,7 @@ static Fraction calculateFraction(const String& type, const int dots, const Frac
  Return empty string if OK, message in case of error.
  */
 
-String MxmlNoteDuration::checkTiming(const String& type, const bool rest, const bool grace)
+String MusicXMLNoteDuration::checkTiming(const String& type, const bool rest, const bool grace)
 {
     //LOGD("type %s rest %d grace %d", muPrintable(type), rest, grace);
     String errorStr;
@@ -192,7 +192,7 @@ String MxmlNoteDuration::checkTiming(const String& type, const bool rest, const 
  Parse the /score-partwise/part/measure/note/duration node.
  */
 
-void MxmlNoteDuration::duration(muse::XmlStreamReader& e)
+void MusicXMLNoteDuration::duration(muse::XmlStreamReader& e)
 {
     m_logger->logDebugTrace(u"MusicXMLParserPass1::duration", &e);
 
@@ -210,7 +210,7 @@ void MxmlNoteDuration::duration(muse::XmlStreamReader& e)
  Return true if handled.
  */
 
-bool MxmlNoteDuration::readProperties(muse::XmlStreamReader& e)
+bool MusicXMLNoteDuration::readProperties(muse::XmlStreamReader& e)
 {
     const AsciiStringView tag(e.name());
     //LOGD("tag %s", muPrintable(tag.toString()));
@@ -236,7 +236,7 @@ bool MxmlNoteDuration::readProperties(muse::XmlStreamReader& e)
  Parse the /score-partwise/part/measure/note/time-modification node.
  */
 
-void MxmlNoteDuration::timeModification(muse::XmlStreamReader& e)
+void MusicXMLNoteDuration::timeModification(muse::XmlStreamReader& e)
 {
     m_logger->logDebugTrace(u"MusicXMLParserPass1::timeModification", &e);
 

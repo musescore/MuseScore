@@ -37,21 +37,21 @@ enum class MusicXMLExporterSoftware : char {
 };
 
 //---------------------------------------------------------
-//   MxmlStartStop
+//   MusicXMLStartStop
 //---------------------------------------------------------
 
-enum class MxmlStartStop : char {
+enum class MusicXMLStartStop : char {
     NONE, START, STOP
 };
 
-struct MusicXmlArpeggioDesc {
+struct MusicXMLArpeggioDesc {
     Arpeggio* arp;
     int no;
 
-    MusicXmlArpeggioDesc(Arpeggio* arp, int no)
+    MusicXMLArpeggioDesc(Arpeggio* arp, int no)
         : arp(arp), no(no) {}
 };
-typedef std::multimap<int, MusicXmlArpeggioDesc> ArpeggioMap;
+typedef std::multimap<int, MusicXMLArpeggioDesc> ArpeggioMap;
 
 //---------------------------------------------------------
 //   MusicXMLInstrument
@@ -93,17 +93,17 @@ struct MusicXMLInstrument {
 };
 typedef std::map<String, MusicXMLInstrument> MusicXMLInstruments;
 
-class MusicXmlIntervalList : public std::map<Fraction, Interval>
+class MusicXMLIntervalList : public std::map<Fraction, Interval>
 {
 public:
-    MusicXmlIntervalList() {}
+    MusicXMLIntervalList() {}
     Interval interval(const Fraction f) const;
 };
 
-class MusicXmlInstrList : public std::map<Fraction, String>
+class MusicXMLInstrList : public std::map<Fraction, String>
 {
 public:
-    MusicXmlInstrList() {}
+    MusicXMLInstrList() {}
     const String instrument(const Fraction f) const;
     void setInstrument(const String instr, const Fraction f);
 };

@@ -24,7 +24,7 @@
 #include "project/inotationwriter.h"
 
 namespace mu::iex::musicxml {
-class MusicXmlWriter : public project::INotationWriter
+class MusicXMLWriter : public project::INotationWriter
 {
 public:
 

@@ -40,7 +40,7 @@ static muse::testing::SuiteEnvironment musicxml_se(
 {
     new muse::draw::DrawModule(),
     new mu::engraving::EngravingModule(),
-    new mu::iex::musicxml::MusicXmlModule() // needs for init resources
+    new mu::iex::musicxml::MusicXMLModule()     // needs for init resources
 },
     nullptr,
     []() {

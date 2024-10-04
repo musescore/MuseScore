@@ -27,7 +27,7 @@
 #include "engraving/engravingerrors.h"
 
 namespace mu::iex::musicxml {
-class MusicxmlValidation
+class MusicXMLValidation
 {
 public:
 

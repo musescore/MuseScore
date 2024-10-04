@@ -264,7 +264,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 #ifdef MUE_BUILD_IMPORTEXPORT_MODULE
     app->addModule(new mu::iex::bb::BBModule());
     app->addModule(new mu::iex::bww::BwwModule());
-    app->addModule(new mu::iex::musicxml::MusicXmlModule());
+    app->addModule(new mu::iex::musicxml::MusicXMLModule());
     app->addModule(new mu::iex::capella::CapellaModule());
     app->addModule(new mu::iex::guitarpro::GuitarProModule());
     app->addModule(new mu::iex::midi::MidiModule());
@@ -367,7 +367,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
 #ifdef MUE_BUILD_IMPORTEXPORT_MODULE
     app->addModule(new mu::iex::bb::BBModule());
     app->addModule(new mu::iex::bww::BwwModule());
-    app->addModule(new mu::iex::musicxml::MusicXmlModule());
+    app->addModule(new mu::iex::musicxml::MusicXMLModule());
     app->addModule(new mu::iex::capella::CapellaModule());
     app->addModule(new mu::iex::guitarpro::GuitarProModule());
     app->addModule(new mu::iex::midi::MidiModule());

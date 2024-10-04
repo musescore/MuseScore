@@ -32,18 +32,18 @@ using namespace mu::project;
 using namespace muse;
 using namespace muse::io;
 
-std::vector<INotationWriter::UnitType> MusicXmlWriter::supportedUnitTypes() const
+std::vector<INotationWriter::UnitType> MusicXMLWriter::supportedUnitTypes() const
 {
     return { UnitType::PER_PART };
 }
 
-bool MusicXmlWriter::supportsUnitType(UnitType unitType) const
+bool MusicXMLWriter::supportsUnitType(UnitType unitType) const
 {
     std::vector<UnitType> unitTypes = supportedUnitTypes();
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-Ret MusicXmlWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
+Ret MusicXMLWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -58,7 +58,7 @@ Ret MusicXmlWriter::write(notation::INotationPtr notation, io::IODevice& destina
     return ret;
 }
 
-Ret MusicXmlWriter::writeList(const notation::INotationPtrList&, io::IODevice&, const Options&)
+Ret MusicXMLWriter::writeList(const notation::INotationPtrList&, io::IODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);

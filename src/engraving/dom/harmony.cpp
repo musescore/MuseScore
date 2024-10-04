@@ -1608,7 +1608,7 @@ String Harmony::xmlKind() const
 //   musicXmlText
 //---------------------------------------------------------
 
-String Harmony::musicXmlText() const
+String Harmony::musicXMLText() const
 {
     const ChordDescription* cd = descr();
     return cd ? cd->xmlText : String();

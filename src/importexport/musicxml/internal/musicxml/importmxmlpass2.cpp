@@ -106,9 +106,9 @@ using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
 namespace mu::engraving {
-static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
+static std::shared_ptr<mu::iex::musicxml::IMusicXMLConfiguration> configuration()
 {
-    return muse::modularity::globalIoc()->resolve<mu::iex::musicxml::IMusicXmlConfiguration>("iex_musicxml");
+    return muse::modularity::globalIoc()->resolve<mu::iex::musicxml::IMusicXMLConfiguration>("iex_musicxml");
 }
 
 static std::shared_ptr<mu::engraving::IEngravingFontsProvider> engravingFonts()
@@ -129,7 +129,7 @@ constexpr int MAX_LYRICS       = 16;
 //---------------------------------------------------------
 
 static void addTie(const Notation& notation, Note* note, const track_idx_t track, MusicXMLTieMap& tie,
-                   std::vector<Note*>& unstartedTieNotes, std::vector<Note*>& unendedTieNotes, MxmlLogger* logger,
+                   std::vector<Note*>& unstartedTieNotes, std::vector<Note*>& unendedTieNotes, MusicXMLLogger* logger,
                    const XmlStreamReader* const xmlreader);
 
 //---------------------------------------------------------
@@ -137,25 +137,25 @@ static void addTie(const Notation& notation, Note* note, const track_idx_t track
 //---------------------------------------------------------
 
 //---------------------------------------------------------
-//   MusicXmlTupletDesc
+//   MusicXMLTupletDesc
 //---------------------------------------------------------
 
-MusicXmlTupletDesc::MusicXmlTupletDesc()
-    : type(MxmlStartStop::NONE), direction(DirectionV::AUTO),
+MusicXMLTupletDesc::MusicXMLTupletDesc()
+    : type(MusicXMLStartStop::NONE), direction(DirectionV::AUTO),
     bracket(TupletBracketType::AUTO_BRACKET), shownumber(TupletNumberType::SHOW_NUMBER)
 {
     // nothing
 }
 
 //---------------------------------------------------------
-//   MusicXmlLyricsExtend
+//   MusicXMLLyricsExtend
 //---------------------------------------------------------
 
 //---------------------------------------------------------
 //   init
 //---------------------------------------------------------
 
-void MusicXmlLyricsExtend::init()
+void MusicXMLLyricsExtend::init()
 {
     m_lyrics.clear();
 }
@@ -167,7 +167,7 @@ void MusicXmlLyricsExtend::init()
 // add a single lyric to be extended later
 // called when lyric with "extend" or "extend type=start" is found
 
-void MusicXmlLyricsExtend::addLyric(Lyrics* const lyric)
+void MusicXMLLyricsExtend::addLyric(Lyrics* const lyric)
 {
     m_lyrics.insert(lyric);
 }
@@ -202,7 +202,7 @@ static Fraction lastChordTicks(const Segment* s, const Fraction& tick, const tra
 // called when lyric (with or without "extend") or note with "extend type=stop" is found
 // // note that no == -1 means all lyrics in this *track*
 
-void MusicXmlLyricsExtend::setExtend(const int no, const track_idx_t track, const Fraction& tick, const Lyrics* prevAddedLyrics = nullptr)
+void MusicXMLLyricsExtend::setExtend(const int no, const track_idx_t track, const Fraction& tick, const Lyrics* prevAddedLyrics = nullptr)
 {
     std::vector<Lyrics*> list;
     for (Lyrics* l : m_lyrics) {
@@ -529,7 +529,7 @@ static Instrument createInstrument(const MusicXMLInstrument& mxmlInstr, const In
     it = combinedTemplateSearch(mxmlInstr.sound, name, transposition, 0, mxmlInstr.midiProgram);
 
     if (it) {
-        // initialize from template with matching MusicXmlId
+        // initialize from template with matching MusicXMLId
         instr = Instrument::fromTemplate(it);
         // reset transpose, as it is determined later from MusicXML data
         instr.setTranspose(Interval());
@@ -627,15 +627,15 @@ static void updatePartWithInstrumentChange(Part* const part, const MusicXMLInstr
 /**
  Set instruments for Part \a part
  Note:
- - MusicXmlInstrList: which instrument plays when
+ - MusicXMLInstrList: which instrument plays when
  - MusicXMLInstruments: instrument details from score-part and part
  */
 
-static void setPartInstruments(MxmlLogger* logger, const XmlStreamReader* xmlreader,
+static void setPartInstruments(MusicXMLLogger* logger, const XmlStreamReader* xmlreader,
                                Part* part, const String& partId,
                                const Score* score,
-                               const MusicXmlInstrList& instrList,
-                               const MusicXmlIntervalList& intervList,
+                               const MusicXMLInstrList& instrList,
+                               const MusicXMLIntervalList& intervList,
                                const MusicXMLInstruments& instruments)
 {
     if (instruments.empty()) {
@@ -879,8 +879,8 @@ static String nextPartOfFormattedString(XmlStreamReader& e)
  Add a single lyric to the score or delete it (if number too high)
  */
 
-static void addLyric(MxmlLogger* logger, const XmlStreamReader* const xmlreader,
-                     ChordRest* cr, Lyrics* l, int lyricNo, MusicXmlLyricsExtend& extendedLyrics)
+static void addLyric(MusicXMLLogger* logger, const XmlStreamReader* const xmlreader,
+                     ChordRest* cr, Lyrics* l, int lyricNo, MusicXMLLyricsExtend& extendedLyrics)
 {
     if (lyricNo > MAX_LYRICS) {
         logger->logError(String(u"too much lyrics (>%1)")
@@ -901,11 +901,11 @@ static void addLyric(MxmlLogger* logger, const XmlStreamReader* const xmlreader,
  Add a notes lyrics to the score
  */
 
-static void addLyrics(MxmlLogger* logger, const XmlStreamReader* const xmlreader,
+static void addLyrics(MusicXMLLogger* logger, const XmlStreamReader* const xmlreader,
                       ChordRest* cr,
                       const std::map<int, Lyrics*>& numbrdLyrics,
                       const std::set<Lyrics*>& extLyrics,
-                      MusicXmlLyricsExtend& extendedLyrics)
+                      MusicXMLLyricsExtend& extendedLyrics)
 {
     for (const int lyricNo : muse::keys(numbrdLyrics)) {
         Lyrics* const lyric = numbrdLyrics.at(lyricNo);
@@ -1071,7 +1071,7 @@ static TDuration determineTupletBaseLen(const Tuplet* const t)
 
 static void handleTupletStart(const ChordRest* const cr, Tuplet*& tuplet,
                               const int actualNotes, const int normalNotes,
-                              const MusicXmlTupletDesc& tupletDesc)
+                              const MusicXMLTupletDesc& tupletDesc)
 {
     tuplet = new Tuplet(cr->measure());
     tuplet->setTrack(cr->track());
@@ -1505,7 +1505,7 @@ static void setSLinePlacement(SLine* sli, const String& placement)
 // note that in case of overlapping spanners, handleSpannerStart is called for every spanner
 // as spanners std::map allows only one value per key, this does not hurt at all
 
-static void handleSpannerStart(SLine* new_sp, track_idx_t track, String& placement, const Fraction& tick, MusicXmlSpannerMap& spanners)
+static void handleSpannerStart(SLine* new_sp, track_idx_t track, String& placement, const Fraction& tick, MusicXMLSpannerMap& spanners)
 {
     new_sp->setTrack(track);
     setSLinePlacement(new_sp, placement);
@@ -1516,7 +1516,7 @@ static void handleSpannerStart(SLine* new_sp, track_idx_t track, String& placeme
 //   handleSpannerStop
 //---------------------------------------------------------
 
-static void handleSpannerStop(SLine* cur_sp, track_idx_t track2, const Fraction& tick, MusicXmlSpannerMap& spanners)
+static void handleSpannerStop(SLine* cur_sp, track_idx_t track2, const Fraction& tick, MusicXMLSpannerMap& spanners)
 {
     //LOGD("handleSpannerStop(sp %p, track2 %d, tick %s (%d))", cur_sp, track2, muPrintable(tick.print()), tick.ticks());
     if (!cur_sp) {
@@ -1535,7 +1535,7 @@ static void handleSpannerStop(SLine* cur_sp, track_idx_t track2, const Fraction&
 //   MusicXMLParserPass2
 //---------------------------------------------------------
 
-MusicXMLParserPass2::MusicXMLParserPass2(Score* score, MusicXMLParserPass1& pass1, MxmlLogger* logger)
+MusicXMLParserPass2::MusicXMLParserPass2(Score* score, MusicXMLParserPass1& pass1, MusicXMLLogger* logger)
     : m_divs(0), m_score(score), m_pass1(pass1), m_logger(logger)
 {
     // nothing
@@ -1672,7 +1672,7 @@ void MusicXMLParserPass2::initPartState(const String& partId)
     m_figBass = 0;
     m_delayedOttava = 0;
     m_multiMeasureRestCount = -1;
-    m_measureStyleSlash = MusicXmlSlash::NONE;
+    m_measureStyleSlash = MusicXMLSlash::NONE;
     m_extendedLyrics.init();
     m_graceNoteLyrics.clear();
     m_inferredHairpins.clear();
@@ -1690,7 +1690,7 @@ void MusicXMLParserPass2::initPartState(const String& partId)
 
 static void findIncompleteSpannersInStack(const String& spannerType, SpannerStack& stack, SpannerSet& res)
 {
-    for (MusicXmlExtendedSpannerDesc& desc : stack) {
+    for (MusicXMLExtendedSpannerDesc& desc : stack) {
         if (desc.sp) {
             LOGD("%s not terminated at end of part", muPrintable(spannerType));
             res.insert(desc.sp);
@@ -2101,7 +2101,7 @@ void MusicXMLParserPass2::part()
     setPartInstruments(m_logger, &m_e, part, id, m_score, m_pass1.getInstrList(id), m_pass1.getIntervals(id), instruments);
 
     // set the part name
-    MusicXmlPart mxmlPart = m_pass1.getMusicXmlPart(id);
+    MusicXMLPart mxmlPart = m_pass1.getMusicXMLPart(id);
     String partName = mxmlPart.getName();
     partName = replacePartNameAccidentals(partName);
     part->setPartName(partName);
@@ -2617,7 +2617,7 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
     Beams beams; // Current beam for each voice in the current part
     String cv = u"1";         // current voice for chords, default is 1
     FiguredBassList fbl;                 // List of figured bass elements under a single note
-    MxmlTupletStates tupletStates;         // Tuplet state for each voice in the current part
+    MusicXMLTupletStates tupletStates;         // Tuplet state for each voice in the current part
     Tuplets tuplets;         // Current tuplet for each voice in the current part
     DelayedDirectionsList delayedDirections; // Directions to be added to score *after* collecting all and sorting
     InferredFingeringsList inferredFingerings; // Directions to be reinterpreted as Fingerings
@@ -2981,7 +2981,7 @@ void MusicXMLParserPass2::staffDetails(const String& partId, Measure* measure)
     String strNumber = m_e.attribute("number");
     int n = 0;  // default
     if (!strNumber.empty()) {
-        n = m_pass1.getMusicXmlPart(partId).staffNumberToIndex(strNumber.toInt());
+        n = m_pass1.getMusicXMLPart(partId).staffNumberToIndex(strNumber.toInt());
         if (n < 0 || n >= int(staves)) {
             m_logger->logError(String(u"invalid staff-details number %1 (may be hidden)").arg(strNumber), &m_e);
             n = 0;
@@ -3172,7 +3172,7 @@ void MusicXMLParserPass2::measureStyle(Measure* measure)
         } else if (m_e.name() == "slash") {
             String type = m_e.attribute("type");
             String stems = m_e.attribute("use-stems");
-            m_measureStyleSlash = type == u"start" ? (stems == u"yes" ? MusicXmlSlash::RHYTHM : MusicXmlSlash::SLASH) : MusicXmlSlash::NONE;
+            m_measureStyleSlash = type == u"start" ? (stems == u"yes" ? MusicXMLSlash::RHYTHM : MusicXMLSlash::SLASH) : MusicXMLSlash::NONE;
             m_e.skipCurrentElement();
         } else {
             skipLogCurrElem();
@@ -3187,7 +3187,7 @@ void MusicXMLParserPass2::measureStyle(Measure* measure)
   Prevent an offset that would result in a negative tick (set offset to -tick instead, resulting in a tick of 0)
  */
 
-static void preventNegativeTick(const Fraction& tick, Fraction& offset, MxmlLogger* logger)
+static void preventNegativeTick(const Fraction& tick, Fraction& offset, MusicXMLLogger* logger)
 {
     if (tick + offset < Fraction(0, 1)) {
         logger->logError(String(u"illegal offset %1 at tick %2").arg(offset.ticks()).arg(tick.ticks()));
@@ -3266,7 +3266,7 @@ static void terminateInferredLine(const std::vector<TextLineBase*> lines, const 
 void MusicXMLParserDirection::direction(const String& partId,
                                         Measure* measure,
                                         const Fraction& tick,
-                                        MusicXmlSpannerMap& spanners,
+                                        MusicXMLSpannerMap& spanners,
                                         DelayedDirectionsList& delayedDirections,
                                         InferredFingeringsList& inferredFingerings,
                                         HarmonyMap& harmonyMap,
@@ -3283,8 +3283,8 @@ void MusicXMLParserDirection::direction(const String& partId,
     bool delayOttava = m_pass1.exporterSoftware() == MusicXMLExporterSoftware::SIBELIUS;
     m_systemDirection = m_e.attribute("system") == "only-top";
     //LOGD("direction track %d", track);
-    std::vector<MusicXmlSpannerDesc> starts;
-    std::vector<MusicXmlSpannerDesc> stops;
+    std::vector<MusicXMLSpannerDesc> starts;
+    std::vector<MusicXMLSpannerDesc> stops;
     bool isDynamicRange = false;
     bool tempoTextAdded = false;
 
@@ -3307,7 +3307,7 @@ void MusicXMLParserDirection::direction(const String& partId,
             sound();
         } else if (m_e.name() == "staff") {
             String strStaff = m_e.readText();
-            int staff = m_pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt());
+            int staff = m_pass1.getMusicXMLPart(partId).staffNumberToIndex(strStaff.toInt());
             if (staff >= 0) {
                 m_track += staff * VOICES;
             }
@@ -3580,8 +3580,8 @@ void MusicXMLParserDirection::direction(const String& partId,
     }
 
     // handle the spanner stops first
-    for (MusicXmlSpannerDesc desc : stops) {
-        MusicXmlExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ desc.tp, desc.nr });
+    for (MusicXMLSpannerDesc desc : stops) {
+        MusicXMLExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ desc.tp, desc.nr });
         if (spdesc.isStopped) {
             m_logger->logError(u"spanner already stopped", &m_e);
             delete desc.sp;
@@ -3612,8 +3612,8 @@ void MusicXMLParserDirection::direction(const String& partId,
 
     // then handle the spanner starts
     // TBD handle offset ?
-    for (MusicXmlSpannerDesc desc : starts) {
-        MusicXmlExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ desc.tp, desc.nr });
+    for (MusicXMLSpannerDesc desc : starts) {
+        MusicXMLExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ desc.tp, desc.nr });
         if (spdesc.isStarted) {
             m_logger->logError(u"spanner already started", &m_e);
             delete desc.sp;
@@ -3816,8 +3816,8 @@ void MusicXMLParserDirection::hideRedundantHeaderText(const Text* inferredText, 
  Parse the /score-partwise/part/measure/direction/direction-type node.
  */
 
-void MusicXMLParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& starts,
-                                            std::vector<MusicXmlSpannerDesc>& stops)
+void MusicXMLParserDirection::directionType(std::vector<MusicXMLSpannerDesc>& starts,
+                                            std::vector<MusicXMLSpannerDesc>& stops)
 {
     while (m_e.readNextStartElement()) {
         m_defaultY = m_e.asciiAttribute("default-y").toDouble(&m_hasDefaultY) * -0.1;
@@ -4748,14 +4748,14 @@ void MusicXMLParserDirection::handleDrumInstrument(bool isPerc, Fraction tick) c
  */
 
 void MusicXMLParserDirection::bracket(const String& type, const int number,
-                                      std::vector<MusicXmlSpannerDesc>& starts,
-                                      std::vector<MusicXmlSpannerDesc>& stops)
+                                      std::vector<MusicXMLSpannerDesc>& starts,
+                                      std::vector<MusicXMLSpannerDesc>& stops)
 {
     AsciiStringView lineEnd = m_e.asciiAttribute("line-end");
     AsciiStringView lineType = m_e.asciiAttribute("line-type");
     const bool isWavy = lineType == "wavy";
     const ElementType elementType = isWavy ? ElementType::TRILL : ElementType::TEXTLINE;
-    const MusicXmlExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ elementType, number });
+    const MusicXMLExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ elementType, number });
     if (type == "start") {
         SLine* sline = spdesc.isStopped ? spdesc.sp : 0;
         if ((sline && sline->isTrill()) || (!sline && isWavy)) {
@@ -4803,7 +4803,7 @@ void MusicXMLParserDirection::bracket(const String& type, const int number,
             }
         }
 
-        starts.push_back(MusicXmlSpannerDesc(sline, elementType, number));
+        starts.push_back(MusicXMLSpannerDesc(sline, elementType, number));
     } else if (type == "stop") {
         SLine* sline = spdesc.isStarted ? spdesc.sp : 0;
         if ((sline && sline->isTrill()) || (!sline && isWavy)) {
@@ -4824,7 +4824,7 @@ void MusicXMLParserDirection::bracket(const String& type, const int number,
             }
         }
 
-        stops.push_back(MusicXmlSpannerDesc(sline, elementType, number));
+        stops.push_back(MusicXMLSpannerDesc(sline, elementType, number));
     }
     m_e.skipCurrentElement();
 }
@@ -4838,10 +4838,10 @@ void MusicXMLParserDirection::bracket(const String& type, const int number,
  */
 
 void MusicXMLParserDirection::dashes(const String& type, const int number,
-                                     std::vector<MusicXmlSpannerDesc>& starts,
-                                     std::vector<MusicXmlSpannerDesc>& stops)
+                                     std::vector<MusicXMLSpannerDesc>& starts,
+                                     std::vector<MusicXMLSpannerDesc>& stops)
 {
-    const MusicXmlExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ ElementType::HAIRPIN, number });
+    const MusicXMLExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ ElementType::HAIRPIN, number });
     if (type == u"start") {
         TextLineBase* b = spdesc.isStopped ? toTextLine(spdesc.sp) : Factory::createTextLine(m_score->dummy());
         // if (placement.empty()) placement = "above";  // TODO ? set default
@@ -4865,10 +4865,10 @@ void MusicXMLParserDirection::dashes(const String& type, const int number,
         // TODO brackets and dashes now share the same storage
         // because they both use ElementType::TEXTLINE
         // use MusicXML specific type instead
-        starts.push_back(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
+        starts.push_back(MusicXMLSpannerDesc(b, ElementType::TEXTLINE, number));
     } else if (type == u"stop") {
         TextLine* b = spdesc.isStarted ? toTextLine(spdesc.sp) : Factory::createTextLine(m_score->dummy());
-        stops.push_back(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
+        stops.push_back(MusicXMLSpannerDesc(b, ElementType::TEXTLINE, number));
     }
     m_e.skipCurrentElement();
 }
@@ -4882,10 +4882,10 @@ void MusicXMLParserDirection::dashes(const String& type, const int number,
  */
 
 void MusicXMLParserDirection::octaveShift(const String& type, const int number,
-                                          std::vector<MusicXmlSpannerDesc>& starts,
-                                          std::vector<MusicXmlSpannerDesc>& stops)
+                                          std::vector<MusicXMLSpannerDesc>& starts,
+                                          std::vector<MusicXMLSpannerDesc>& stops)
 {
-    const MusicXmlExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ ElementType::OTTAVA, number });
+    const MusicXMLExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ ElementType::OTTAVA, number });
     if (type == u"up" || type == u"down") {
         int ottavasize = m_e.intAttribute("size");
         if (!(ottavasize == 8 || ottavasize == 15)) {
@@ -4914,11 +4914,11 @@ void MusicXMLParserDirection::octaveShift(const String& type, const int number,
                 o->setLineColor(color);
             }
 
-            starts.push_back(MusicXmlSpannerDesc(o, ElementType::OTTAVA, number));
+            starts.push_back(MusicXMLSpannerDesc(o, ElementType::OTTAVA, number));
         }
     } else if (type == u"stop") {
         Ottava* o = spdesc.isStarted ? toOttava(spdesc.sp) : Factory::createOttava(m_score->dummy());
-        stops.push_back(MusicXmlSpannerDesc(o, ElementType::OTTAVA, number));
+        stops.push_back(MusicXMLSpannerDesc(o, ElementType::OTTAVA, number));
     }
     m_e.skipCurrentElement();
 }
@@ -4932,8 +4932,8 @@ void MusicXMLParserDirection::octaveShift(const String& type, const int number,
  */
 
 void MusicXMLParserDirection::pedal(const String& type, const int /* number */,
-                                    std::vector<MusicXmlSpannerDesc>& starts,
-                                    std::vector<MusicXmlSpannerDesc>& stops)
+                                    std::vector<MusicXMLSpannerDesc>& starts,
+                                    std::vector<MusicXMLSpannerDesc>& stops)
 {
     const int number { 0 };
     AsciiStringView line = m_e.asciiAttribute("line");
@@ -4950,7 +4950,7 @@ void MusicXMLParserDirection::pedal(const String& type, const int /* number */,
             sign = u"no";                            // MusicXML 2.0 compatibility
         }
     }
-    MusicXmlExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ ElementType::PEDAL, number });
+    MusicXMLExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ ElementType::PEDAL, number });
     if (type == u"start" || type == u"resume" || type == u"sostenuto") {
         if (spdesc.isStarted && !spdesc.isStopped) {
             // Previous pedal unterminated
@@ -4972,7 +4972,7 @@ void MusicXMLParserDirection::pedal(const String& type, const int /* number */,
                 if (color.isValid()) {
                     p->setColor(color);
                 }
-                starts.push_back(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
+                starts.push_back(MusicXMLSpannerDesc(p, ElementType::PEDAL, number));
                 m_e.skipCurrentElement();
 
                 return;
@@ -5004,7 +5004,7 @@ void MusicXMLParserDirection::pedal(const String& type, const int /* number */,
         if (color.isValid()) {
             p->setLineColor(color);
         }
-        starts.push_back(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
+        starts.push_back(MusicXMLSpannerDesc(p, ElementType::PEDAL, number));
     } else if (type == u"stop" || type == u"discontinue") {
         Pedal* p = spdesc.isStarted ? toPedal(spdesc.sp) : Factory::createPedal(m_score->dummy());
         if (line == "yes") {
@@ -5017,7 +5017,7 @@ void MusicXMLParserDirection::pedal(const String& type, const int /* number */,
         } else {
             p->setEndHookType(type == "discontinue" ? HookType::NONE : HookType::HOOK_90);
         }
-        stops.push_back(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
+        stops.push_back(MusicXMLSpannerDesc(p, ElementType::PEDAL, number));
     } else if (type == "change") {
         // pedal change is implemented as two separate pedals
         // first stop the first one
@@ -5029,7 +5029,7 @@ void MusicXMLParserDirection::pedal(const String& type, const int /* number */,
             } else if (line == "no") {
                 p->setLineVisible(false);
             }
-            stops.push_back(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
+            stops.push_back(MusicXMLSpannerDesc(p, ElementType::PEDAL, number));
         } else {
             m_logger->logError(String(u"\"change\" type pedal created without existing pedal"), &m_e);
         }
@@ -5049,7 +5049,7 @@ void MusicXMLParserDirection::pedal(const String& type, const int /* number */,
         if (color.isValid()) {
             p->setColor(color);
         }
-        starts.push_back(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
+        starts.push_back(MusicXMLSpannerDesc(p, ElementType::PEDAL, number));
     } else if (type == "continue") {
         // ignore
     } else {
@@ -5068,11 +5068,11 @@ void MusicXMLParserDirection::pedal(const String& type, const int /* number */,
  */
 
 void MusicXMLParserDirection::wedge(const String& type, const int number,
-                                    std::vector<MusicXmlSpannerDesc>& starts,
-                                    std::vector<MusicXmlSpannerDesc>& stops)
+                                    std::vector<MusicXMLSpannerDesc>& starts,
+                                    std::vector<MusicXMLSpannerDesc>& stops)
 {
     AsciiStringView niente = m_e.asciiAttribute("niente");
-    const MusicXmlExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ ElementType::HAIRPIN, number });
+    const MusicXMLExtendedSpannerDesc& spdesc = m_pass2.getSpanner({ ElementType::HAIRPIN, number });
     if (type == "crescendo" || type == "diminuendo") {
         Hairpin* h = spdesc.isStopped ? toHairpin(spdesc.sp) : Factory::createHairpin(m_score->dummy()->segment());
         h->setHairpinType(type == "crescendo"
@@ -5084,13 +5084,13 @@ void MusicXMLParserDirection::wedge(const String& type, const int number,
         if (color.isValid()) {
             h->setLineColor(color);
         }
-        starts.push_back(MusicXmlSpannerDesc(h, ElementType::HAIRPIN, number));
+        starts.push_back(MusicXMLSpannerDesc(h, ElementType::HAIRPIN, number));
     } else if (type == "stop") {
         Hairpin* h = spdesc.isStarted ? toHairpin(spdesc.sp) : Factory::createHairpin(m_score->dummy()->segment());
         if (niente == "yes") {
             h->setHairpinCircledTip(true);
         }
-        stops.push_back(MusicXmlSpannerDesc(h, ElementType::HAIRPIN, number));
+        stops.push_back(MusicXMLSpannerDesc(h, ElementType::HAIRPIN, number));
     }
     m_e.skipCurrentElement();
 }
@@ -5099,7 +5099,7 @@ void MusicXMLParserDirection::wedge(const String& type, const int number,
 //   toString
 //---------------------------------------------------------
 
-String MusicXmlExtendedSpannerDesc::toString() const
+String MusicXMLExtendedSpannerDesc::toString() const
 {
     String spStr = sp ? String::number(size_t(sp->eid().id())) : u"null";
     return String(u"sp %1 tp %2 tick2 %3 track2 %4 %5 %6")
@@ -5113,9 +5113,9 @@ String MusicXmlExtendedSpannerDesc::toString() const
 //   addSpanner
 //---------------------------------------------------------
 
-void MusicXMLParserPass2::addSpanner(const MusicXmlSpannerDesc& d)
+void MusicXMLParserPass2::addSpanner(const MusicXMLSpannerDesc& d)
 {
-    MusicXmlExtendedSpannerDesc& spdesc = getSpanner(d);
+    MusicXMLExtendedSpannerDesc& spdesc = getSpanner(d);
     spdesc.sp = d.sp;
 }
 
@@ -5123,7 +5123,7 @@ void MusicXMLParserPass2::addSpanner(const MusicXmlSpannerDesc& d)
 //   getSpanner
 //---------------------------------------------------------
 
-MusicXmlExtendedSpannerDesc& MusicXMLParserPass2::getSpanner(const MusicXmlSpannerDesc& d)
+MusicXMLExtendedSpannerDesc& MusicXMLParserPass2::getSpanner(const MusicXMLSpannerDesc& d)
 {
     if (d.tp == ElementType::HAIRPIN && 0 <= d.nr && d.nr < MAX_NUMBER_LEVEL) {
         return m_hairpins[d.nr];
@@ -5135,16 +5135,16 @@ MusicXmlExtendedSpannerDesc& MusicXMLParserPass2::getSpanner(const MusicXmlSpann
         return m_brackets[d.nr];
     }
     m_logger->logError(String(u"invalid number %1").arg(d.nr + 1), &m_e);
-    return m_dummyNewMusicXmlSpannerDesc;
+    return m_dummyNewMusicXMLSpannerDesc;
 }
 
 //---------------------------------------------------------
 //   clearSpanner
 //---------------------------------------------------------
 
-void MusicXMLParserPass2::clearSpanner(const MusicXmlSpannerDesc& d)
+void MusicXMLParserPass2::clearSpanner(const MusicXMLSpannerDesc& d)
 {
-    MusicXmlExtendedSpannerDesc& spdesc = getSpanner(d);
+    MusicXMLExtendedSpannerDesc& spdesc = getSpanner(d);
     spdesc = {};
 }
 
@@ -5544,18 +5544,18 @@ static void addSymToSig(KeySigEvent& sig, const String& step, const String& alte
     //LOGD("addSymToSig(step '%s' alt '%s' acc '%s')",
     //       muPrintable(step), muPrintable(alter), muPrintable(accid));
 
-    SymId id = mxmlString2accSymId(accid, smufl);
+    SymId id = musicXMLString2accSymId(accid, smufl);
 
     if (id == SymId::noSym) {
         bool ok;
         double d;
         d = alter.toDouble(&ok);
         AccidentalType accTpAlter = ok ? microtonalGuess(d) : AccidentalType::NONE;
-        String s = accidentalType2MxmlString(accTpAlter);
+        String s = accidentalType2MusicXMLString(accTpAlter);
         if (s == u"other") {
-            s = accidentalType2SmuflMxmlString(accTpAlter);
+            s = accidentalType2SmuflMusicXMLString(accTpAlter);
         }
-        id = mxmlString2accSymId(s);
+        id = musicXMLString2accSymId(s);
     }
 
     if (step.size() == 1 && id != SymId::noSym) {
@@ -5646,7 +5646,7 @@ void MusicXMLParserPass2::key(const String& partId, Measure* measure, const Frac
     String strKeyno = m_e.attribute("number");
     int keyno = -1;   // assume no number (see below)
     if (!strKeyno.empty()) {
-        keyno = m_pass1.getMusicXmlPart(partId).staffNumberToIndex(strKeyno.toInt());
+        keyno = m_pass1.getMusicXMLPart(partId).staffNumberToIndex(strKeyno.toInt());
         if (keyno < 0) {
             // conversion error (-1), assume staff 0
             m_logger->logError(String(u"invalid key number '%1'").arg(strKeyno), &m_e);
@@ -5848,7 +5848,7 @@ void MusicXMLParserPass2::clef(const String& partId, Measure* measure, const Fra
     // - multi-staff with same clef
     int clefno = 0;   // default
     if (!strClefno.empty()) {
-        clefno = m_pass1.getMusicXmlPart(partId).staffNumberToIndex(strClefno.toInt());
+        clefno = m_pass1.getMusicXMLPart(partId).staffNumberToIndex(strClefno.toInt());
     }
     if (clefno < 0 || clefno >= int(part->nstaves())) {
         // conversion error (0) or other issue, assume staff 1
@@ -6308,7 +6308,7 @@ static void addFiguredBassElements(FiguredBassList& fbl, const Fraction noteStar
 static void addTremolo(ChordRest* cr,
                        const int tremoloNr, const String& tremoloType, const String& tremoloSmufl,
                        Chord*& tremStart,
-                       MxmlLogger* logger, const XmlStreamReader* const xmlreader,
+                       MusicXMLLogger* logger, const XmlStreamReader* const xmlreader,
                        Fraction& timeMod)
 {
     if (!cr->isChord()) {
@@ -6397,7 +6397,7 @@ static void addTremolo(ChordRest* cr,
 
 // TODO: refactor: optimize parameters
 
-static void setPitch(Note* note, const MusicXMLInstruments& instruments, const String& instrumentId, const MxmlNotePitch& mnp,
+static void setPitch(Note* note, const MusicXMLInstruments& instruments, const String& instrumentId, const MusicXMLNotePitch& mnp,
                      const int octaveShift, const Instrument* const instrument)
 {
     if (mnp.unpitched()) {
@@ -6427,7 +6427,7 @@ static void setPitch(Note* note, const MusicXMLInstruments& instruments, const S
 // the MusicXML values for each note are simply copied to the defaults
 
 static void setDrumset(Chord* c, MusicXMLParserPass1& pass1, const String& partId, const String& instrumentId,
-                       const Fraction& noteStartTime, const MxmlNotePitch& mnp, const DirectionV stemDir, const NoteHeadGroup headGroup)
+                       const Fraction& noteStartTime, const MusicXMLNotePitch& mnp, const DirectionV stemDir, const NoteHeadGroup headGroup)
 {
     // determine staff line based on display-step / -octave and clef type
     const ClefType clef = c->staff()->clef(noteStartTime);
@@ -6436,7 +6436,7 @@ static void setDrumset(Chord* c, MusicXMLParserPass1& pass1, const String& partI
     int line = po - absStep(pitch);
 
     // correct for number of staff lines
-    // see ExportMusicXml::unpitch2xml for explanation
+    // see ExportMusicXML::unpitch2xml for explanation
     // TODO handle other # staff lines ?
     int staffLines = c->staff()->lines(Fraction(0, 1));
     if (staffLines == 1) {
@@ -6547,7 +6547,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
                                 Beams& currBeams,
                                 FiguredBassList& fbl,
                                 int& alt,
-                                MxmlTupletStates& tupletStates,
+                                MusicXMLTupletStates& tupletStates,
                                 Tuplets& tuplets, ArpeggioMap& arpMap, DelayedArpMap& delayedArps)
 {
     if (m_e.asciiAttribute("print-spacing") == "no") {
@@ -6581,12 +6581,12 @@ Note* MusicXMLParserPass2::note(const String& partId,
     std::map<int, String> beamTypes;
     String instrumentId;
     String tieType;
-    MusicXMLParserLyric lyric { m_pass1.getMusicXmlPart(partId).lyricNumberHandler(), m_e, m_score, m_logger,
+    MusicXMLParserLyric lyric { m_pass1.getMusicXMLPart(partId).lyricNumberHandler(), m_e, m_score, m_logger,
                                 m_pass1.isVocalStaff(partId) };
     MusicXMLParserNotations notations { m_e, m_score, m_logger, *this };
 
-    MxmlNoteDuration mnd { m_divs, m_logger, &m_pass1 };
-    MxmlNotePitch mnp { m_logger };
+    MusicXMLNoteDuration mnd { m_divs, m_logger, &m_pass1 };
+    MusicXMLNotePitch mnp { m_logger };
 
     while (m_e.readNextStartElement()) {
         if (mnp.readProperties(m_e, m_score)) {
@@ -6633,7 +6633,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
         } else if (m_e.name() == "staff") {
             bool ok = false;
             String strStaff = m_e.readText();
-            staff = m_pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt(&ok));
+            staff = m_pass1.getMusicXMLPart(partId).staffNumberToIndex(strStaff.toInt(&ok));
             if (!ok) {
                 // error already reported in pass 1
                 staff = -1;
@@ -6710,15 +6710,15 @@ Note* MusicXMLParserPass2::note(const String& partId,
     Fraction timeMod = mnd.timeMod();
 
     // determine tuplet state, used twice (before and after note allocation)
-    MxmlTupletFlags tupletAction;
+    MusicXMLTupletFlags tupletAction;
 
     // handle tuplet state for the previous chord or rest
     if (!chord && !grace) {
         Tuplet* tuplet = tuplets[voice];
-        MxmlTupletState& tupletState = tupletStates[voice];
+        MusicXMLTupletState& tupletState = tupletStates[voice];
         tupletAction = tupletState.determineTupletAction(mnd.duration(), timeMod, notations.tupletDesc().type,
                                                          mnd.normalType(), missingPrev, missingCurr);
-        if (tupletAction & MxmlTupletFlag::STOP_PREVIOUS) {
+        if (tupletAction & MusicXMLTupletFlag::STOP_PREVIOUS) {
             // tuplet start while already in tuplet
             if (missingPrev.isValid() && missingPrev > Fraction(0, 1)) {
                 const int track = msTrack + msVoice;
@@ -6944,15 +6944,15 @@ Note* MusicXMLParserPass2::note(const String& partId,
             if (timeMod.isValid() && timeMod != Fraction(1, 1) && timeMod != Fraction(1, 2)) {
                 const int actualNotes = timeMod.denominator();
                 const int normalNotes = timeMod.numerator();
-                if (tupletAction & MxmlTupletFlag::START_NEW) {
+                if (tupletAction & MusicXMLTupletFlag::START_NEW) {
                     // create a new tuplet
                     handleTupletStart(cr, tuplet, actualNotes, normalNotes, notations.tupletDesc());
                 }
-                if (tupletAction & MxmlTupletFlag::ADD_CHORD) {
+                if (tupletAction & MusicXMLTupletFlag::ADD_CHORD) {
                     cr->setTuplet(tuplet);
                     tuplet->add(cr);
                 }
-                if (tupletAction & MxmlTupletFlag::STOP_CURRENT) {
+                if (tupletAction & MusicXMLTupletFlag::STOP_CURRENT) {
                     if (missingCurr.isValid() && missingCurr > Fraction(0, 1)) {
                         LOGD("add missing %s to current tuplet", muPrintable(missingCurr.toString()));
                         const int track = msTrack + msVoice;
@@ -7007,8 +7007,8 @@ Note* MusicXMLParserPass2::note(const String& partId,
 
     // convert to slash or rhythmic notation if needed
     // TODO in the case of slash notation, we assume that given notes do in fact correspond to slash beats
-    if (c && m_measureStyleSlash != MusicXmlSlash::NONE) {
-        c->setSlash(true, m_measureStyleSlash == MusicXmlSlash::SLASH);
+    if (c && m_measureStyleSlash != MusicXMLSlash::NONE) {
+        c->setSlash(true, m_measureStyleSlash == MusicXMLSlash::SLASH);
     }
 
     // don't count chord or grace note duration
@@ -7488,7 +7488,7 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
         } else if (m_e.name() == "staff") {
             size_t nstaves = m_pass1.getPart(partId)->nstaves();
             String strStaff = m_e.readText();
-            int staff = m_pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt());
+            int staff = m_pass1.getMusicXMLPart(partId).staffNumberToIndex(strStaff.toInt());
             if (staff >= 0 && staff < int(nstaves)) {
                 track += staff * VOICES;
             } else {
@@ -7617,7 +7617,7 @@ void MusicXMLParserPass2::backup(Fraction& dura)
 //---------------------------------------------------------
 
 MusicXMLParserLyric::MusicXMLParserLyric(const LyricNumberHandler lyricNumberHandler,
-                                         XmlStreamReader& e, Score* score, MxmlLogger* logger, bool isVoiceStaff)
+                                         XmlStreamReader& e, Score* score, MusicXMLLogger* logger, bool isVoiceStaff)
     : m_lyricNumberHandler(lyricNumberHandler), m_e(e), m_score(score), m_logger(logger), m_isVoiceStaff(isVoiceStaff)
 {
     // nothing
@@ -7806,7 +7806,7 @@ void MusicXMLParserNotations::slur()
 //---------------------------------------------------------
 
 static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, const int tick,
-                    MxmlLogger* logger, const XmlStreamReader* const xmlreader)
+                    MusicXMLLogger* logger, const XmlStreamReader* const xmlreader)
 {
     int slurNo = notation.attribute(u"number").toInt();
     if (slurNo > 0) {
@@ -7853,7 +7853,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
             }
             newSlur->setTick(Fraction::fromTicks(tick));
             newSlur->setStartElement(cr);
-            if (configuration()->musicxmlImportLayout()) {
+            if (configuration()->musicXMLImportLayout()) {
                 const String orientation = notation.attribute(u"orientation");
                 const String placement = notation.attribute(u"placement");
                 if (orientation == u"over" || placement == u"above") {
@@ -8247,8 +8247,8 @@ void MusicXMLParserNotations::glissandoSlide()
 //---------------------------------------------------------
 
 static void addGlissandoSlide(const Notation& notation, Note* note,
-                              Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners,
-                              MxmlLogger* logger, const XmlStreamReader* const xmlreader)
+                              Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXMLSpannerMap& spanners,
+                              MusicXMLLogger* logger, const XmlStreamReader* const xmlreader)
 {
     int glissandoNumber = notation.attribute(u"number").toInt();
     if (glissandoNumber > 0) {
@@ -8346,9 +8346,9 @@ static void addArpeggio(ChordRest* cr, String& arpeggioType, int arpeggioNo, Arp
     // If no current arpeggio with same number add new
     // If not, expand span
     // no support for arpeggio on rest
-    const std::vector<MusicXmlArpeggioDesc> arps = muse::values(arpMap, cr->tick().ticks());
+    const std::vector<MusicXMLArpeggioDesc> arps = muse::values(arpMap, cr->tick().ticks());
     Arpeggio* curArp = nullptr;
-    for (const MusicXmlArpeggioDesc arp : arps) {
+    for (const MusicXMLArpeggioDesc arp : arps) {
         if (arp.no == arpeggioNo) {
             curArp = arp.arp;
         }
@@ -8376,8 +8376,8 @@ static void addArpeggio(ChordRest* cr, String& arpeggioType, int arpeggioNo, Arp
             if (!(static_cast<Chord*>(cr))->arpeggio()) {
                 cr->add(arpeggio);
 
-                MusicXmlArpeggioDesc arpDesc(arpeggio, arpeggioNo);
-                arpMap.insert(std::pair<int, MusicXmlArpeggioDesc>(cr->tick().ticks(), arpDesc));
+                MusicXMLArpeggioDesc arpDesc(arpeggio, arpeggioNo);
+                arpMap.insert(std::pair<int, MusicXMLArpeggioDesc>(cr->tick().ticks(), arpDesc));
             }
         }
     }
@@ -8388,7 +8388,7 @@ static void addArpeggio(ChordRest* cr, String& arpeggioType, int arpeggioNo, Arp
 //---------------------------------------------------------
 
 static void addTie(const Notation& notation, Note* note, const track_idx_t track, MusicXMLTieMap& ties,
-                   std::vector<Note*>& unstartedTieNotes, std::vector<Note*>& unendedTieNotes, MxmlLogger* logger,
+                   std::vector<Note*>& unstartedTieNotes, std::vector<Note*>& unendedTieNotes, MusicXMLLogger* logger,
                    const XmlStreamReader* const xmlreader)
 {
     IF_ASSERT_FAILED(note) {
@@ -8421,7 +8421,7 @@ static void addTie(const Notation& notation, Note* note, const track_idx_t track
             currTie->setColor(color);
         }
 
-        if (configuration()->musicxmlImportLayout()) {
+        if (configuration()->musicXMLImportLayout()) {
             if (orientation == u"over" || placement == u"above") {
                 currTie->setSlurDirection(DirectionV::UP);
             } else if (orientation == u"under" || placement == u"below") {
@@ -8474,8 +8474,8 @@ static void addTie(const Notation& notation, Note* note, const track_idx_t track
 
 static void addWavyLine(ChordRest* cr, const Fraction& tick,
                         const int wavyLineNo, const String& wavyLineType,
-                        MusicXmlSpannerMap& spanners, TrillStack& trills,
-                        MxmlLogger* logger, const XmlStreamReader* const xmlreader)
+                        MusicXMLSpannerMap& spanners, TrillStack& trills,
+                        MusicXMLLogger* logger, const XmlStreamReader* const xmlreader)
 {
     if (!wavyLineType.empty()) {
         const Fraction ticks = cr->ticks();
@@ -8536,7 +8536,7 @@ static void addBreath(ChordRest* cr, const Fraction& tick, SymId breath)
 //---------------------------------------------------------
 
 static void addChordLine(const Notation& notation, Note* note,
-                         MxmlLogger* logger, const XmlStreamReader* const xmlreader)
+                         MusicXMLLogger* logger, const XmlStreamReader* const xmlreader)
 {
     const String chordLineType = notation.subType();
     if (!chordLineType.empty()) {
@@ -8624,7 +8624,7 @@ String Notation::print() const
 //   MusicXMLParserNotations
 //---------------------------------------------------------
 
-MusicXMLParserNotations::MusicXMLParserNotations(XmlStreamReader& e, Score* score, MxmlLogger* logger, MusicXMLParserPass2& pass2)
+MusicXMLParserNotations::MusicXMLParserNotations(XmlStreamReader& e, Score* score, MusicXMLLogger* logger, MusicXMLParserPass2& pass2)
     : m_e(e), m_pass2(pass2), m_score(score), m_logger(logger)
 {
     // nothing
@@ -8752,7 +8752,7 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
  */
 
 void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs,
-                                         Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners,
+                                         Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXMLSpannerMap& spanners,
                                          TrillStack& trills, MusicXMLTieMap& ties, std::vector<Note*>& unstartedTieNotes,
                                          std::vector<Note*>& unendedTieNotes, ArpeggioMap& arpMap,
                                          DelayedArpMap& delayedArps)
@@ -8779,7 +8779,7 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
 
     // more than one dynamic ???
     // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
-    // TODO remove duplicate code (see MusicXml::direction)
+    // TODO remove duplicate code (see MusicXML::direction)
     for (const String& d : std::as_const(m_dynamicsList)) {
         Dynamic* dynamic = Factory::createDynamic(m_score->dummy()->segment());
         dynamic->setDynamicType(d);
@@ -8853,9 +8853,9 @@ void MusicXMLParserNotations::tuplet()
     m_e.skipCurrentElement();
 
     if (tupletType == u"start") {
-        m_tupletDesc.type = MxmlStartStop::START;
+        m_tupletDesc.type = MusicXMLStartStop::START;
     } else if (tupletType == u"stop") {
-        m_tupletDesc.type = MxmlStartStop::STOP;
+        m_tupletDesc.type = MusicXMLStartStop::STOP;
     } else if (!tupletType.empty() && tupletType != u"start" && tupletType != u"stop") {
         m_logger->logError(String(u"unknown tuplet type '%1'").arg(tupletType), &m_e);
     }
@@ -8914,7 +8914,7 @@ MusicXMLParserDirection::MusicXMLParserDirection(XmlStreamReader& e,
                                                  Score* score,
                                                  MusicXMLParserPass1& pass1,
                                                  MusicXMLParserPass2& pass2,
-                                                 MxmlLogger* logger)
+                                                 MusicXMLLogger* logger)
     : m_e(e), m_score(score), m_pass1(pass1), m_pass2(pass2), m_logger(logger),
     m_hasDefaultY(false), m_defaultY(0.0), m_hasRelativeY(false), m_relativeY(0.0),
     m_tpoMetro(0), m_tpoSound(0), m_offset(0, 1)

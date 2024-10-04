@@ -1842,8 +1842,8 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
     if (item->transpose().chromatic) {
         xml.tag("transposeChromatic", item->transpose().chromatic);
     }
-    if (!item->musicXmlId().isEmpty()) {
-        xml.tag("instrumentId", item->musicXmlId());
+    if (!item->musicXMLId().isEmpty()) {
+        xml.tag("instrumentId", item->musicXMLId());
     }
     if (item->useDrumset()) {
         xml.tag("useDrumset", item->useDrumset());

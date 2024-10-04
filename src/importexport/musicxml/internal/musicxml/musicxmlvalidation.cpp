@@ -27,7 +27,7 @@ using namespace mu;
 using namespace mu::iex::musicxml;
 using namespace mu::engraving;
 
-Err MusicxmlValidation::validate(const muse::String&, const muse::ByteArray&)
+Err MusicXMLValidation::validate(const muse::String&, const muse::ByteArray&)
 {
     return Err::NoError;
 }
@@ -115,16 +115,16 @@ void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& descr
 }
 
 //---------------------------------------------------------
-//   initMusicXmlSchema
+//   initMusicXMLSchema
 //    return false on error
 //---------------------------------------------------------
 
-static bool initMusicXmlSchema(QXmlSchema& schema)
+static bool initMusicXMLSchema(QXmlSchema& schema)
 {
     // read the MusicXML schema from the application resources
     QFile schemaFile(":/schema/musicxml.xsd");
     if (!schemaFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        LOGE("initMusicXmlSchema() could not open resource musicxml.xsd");
+        LOGE("initMusicXMLSchema() could not open resource musicxml.xsd");
         return false;
     }
 
@@ -145,7 +145,7 @@ static bool initMusicXmlSchema(QXmlSchema& schema)
     // load and validate the schema
     schema.load(schemaBa);
     if (!schema.isValid()) {
-        LOGE("initMusicXmlSchema() internal error: MusicXML schema is invalid");
+        LOGE("initMusicXMLSchema() internal error: MusicXML schema is invalid");
         return false;
     }
 
@@ -174,7 +174,7 @@ static int musicXMLValidationErrorDialog(QString text, QString detailedText)
     return errorDialog.exec();
 }
 
-Err MusicxmlValidation::validate(const String& name, const muse::ByteArray& data)
+Err MusicXMLValidation::validate(const String& name, const muse::ByteArray& data)
 {
     //QElapsedTimer t;
     //t.start();
@@ -183,8 +183,8 @@ Err MusicxmlValidation::validate(const String& name, const muse::ByteArray& data
     ValidatorMessageHandler messageHandler;
     QXmlSchema schema;
     schema.setMessageHandler(&messageHandler);
-    if (!initMusicXmlSchema(schema)) {
-        return Err::FileBadFormat;      // appropriate error message has been printed by initMusicXmlSchema
+    if (!initMusicXMLSchema(schema)) {
+        return Err::FileBadFormat;      // appropriate error message has been printed by initMusicXMLSchema
     }
     // validate the data
     QXmlSchemaValidator validator(schema);
@@ -193,7 +193,7 @@ Err MusicxmlValidation::validate(const String& name, const muse::ByteArray& data
     //LOGD("Validation time elapsed: %d ms", t.elapsed());
 
     if (!valid) {
-        LOGD("importMusicXml() file '%s' is not a valid MusicXML file", muPrintable(name));
+        LOGD("importMusicXML() file '%s' is not a valid MusicXML file", muPrintable(name));
         QString strErr = muse::qtrc("iex_musicxml", "File “%1” is not a valid MusicXML file.").arg(name);
         if (MScore::noGui) {
             return Err::NoError;         // might as well try anyhow in converter mode

@@ -78,10 +78,10 @@ static IInteractive::Button musicXMLImportErrorDialog(const String& text, const 
 
 Err importMusicXMLfromBuffer(Score* score, const String& /*name*/, const ByteArray& data)
 {
-    MxmlLogger logger;
-    logger.setLoggingLevel(MxmlLogger::Level::MXML_ERROR);   // errors only
-    //logger.setLoggingLevel(MxmlLogger::Level::MXML_INFO);
-    //logger.setLoggingLevel(MxmlLogger::Level::MXML_TRACE); // also include tracing
+    MusicXMLLogger logger;
+    logger.setLoggingLevel(MusicXMLLogger::Level::MXML_ERROR);   // errors only
+    //logger.setLoggingLevel(MusicXMLLogger::Level::MXML_INFO);
+    //logger.setLoggingLevel(MusicXMLLogger::Level::MXML_TRACE); // also include tracing
 
     // pass 1
     MusicXMLParserPass1 pass1(score, &logger);

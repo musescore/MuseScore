@@ -56,9 +56,9 @@ using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
+static std::shared_ptr<mu::iex::musicxml::IMusicXMLConfiguration> configuration()
 {
-    return muse::modularity::globalIoc()->resolve<mu::iex::musicxml::IMusicXmlConfiguration>("iex_musicxml");
+    return muse::modularity::globalIoc()->resolve<mu::iex::musicxml::IMusicXMLConfiguration>("iex_musicxml");
 }
 
 static std::shared_ptr<mu::engraving::IEngravingFontsProvider> engravingFonts()
@@ -66,16 +66,16 @@ static std::shared_ptr<mu::engraving::IEngravingFontsProvider> engravingFonts()
     return muse::modularity::globalIoc()->resolve<mu::engraving::IEngravingFontsProvider>("iex_musicxml");
 }
 
-static bool musicxmlImportBreaks()
+static bool musicXMLImportBreaks()
 {
     auto conf = configuration();
-    return conf ? conf->musicxmlImportBreaks() : true;
+    return conf ? conf->musicXMLImportBreaks() : true;
 }
 
-static bool musicxmlImportLayout()
+static bool musicXMLImportLayout()
 {
     auto conf = configuration();
-    return conf ? conf->musicxmlImportLayout() : true;
+    return conf ? conf->musicXMLImportLayout() : true;
 }
 
 namespace mu::engraving {
@@ -386,7 +386,7 @@ static void copyOverlapData(VoiceOverlapDetector& vod, VoiceList& vcLst)
 //   MusicXMLParserPass1
 //---------------------------------------------------------
 
-MusicXMLParserPass1::MusicXMLParserPass1(Score* score, MxmlLogger* logger)
+MusicXMLParserPass1::MusicXMLParserPass1(Score* score, MusicXMLLogger* logger)
     : m_divs(0), m_score(score), m_logger(logger), m_hasBeamingInfo(false)
 {
     // nothing
@@ -452,7 +452,7 @@ bool MusicXMLParserPass1::determineMeasureLength(std::vector<Fraction>& ml) cons
 
     // determine number of measures: max number of measures in any part
     size_t nMeasures = 0;
-    for (const MusicXmlPart& part : muse::values(m_parts)) {
+    for (const MusicXMLPart& part : muse::values(m_parts)) {
         if (part.nMeasures() > nMeasures) {
             nMeasures = part.nMeasures();
         }
@@ -461,7 +461,7 @@ bool MusicXMLParserPass1::determineMeasureLength(std::vector<Fraction>& ml) cons
     // determine max length of a specific measure in all parts
     for (size_t i = 0; i < nMeasures; ++i) {
         Fraction maxMeasDur;
-        for (const MusicXmlPart& part : muse::values(m_parts)) {
+        for (const MusicXMLPart& part : muse::values(m_parts)) {
             if (i < part.nMeasures()) {
                 Fraction measDurPartJ = part.measureDuration(i);
                 if (measDurPartJ > maxMeasDur) {
@@ -497,16 +497,16 @@ VoiceList MusicXMLParserPass1::getVoiceList(const String& id) const
 //---------------------------------------------------------
 
 /**
- Get the MusicXmlInstrList for part \a id.
- Return an empty MusicXmlInstrList on error.
+ Get the MusicXMLInstrList for part \a id.
+ Return an empty MusicXMLInstrList on error.
  */
 
-MusicXmlInstrList MusicXMLParserPass1::getInstrList(const String& id) const
+MusicXMLInstrList MusicXMLParserPass1::getInstrList(const String& id) const
 {
     if (muse::contains(m_parts, id)) {
         return m_parts.at(id)._instrList;
     }
-    return MusicXmlInstrList();
+    return MusicXMLInstrList();
 }
 
 //---------------------------------------------------------
@@ -514,16 +514,16 @@ MusicXmlInstrList MusicXMLParserPass1::getInstrList(const String& id) const
 //---------------------------------------------------------
 
 /**
- Get the MusicXmlIntervalList for part \a id.
- Return an empty MusicXmlIntervalList on error.
+ Get the MusicXMLIntervalList for part \a id.
+ Return an empty MusicXMLIntervalList on error.
  */
 
-MusicXmlIntervalList MusicXMLParserPass1::getIntervals(const String& id) const
+MusicXMLIntervalList MusicXMLParserPass1::getIntervals(const String& id) const
 {
     if (muse::contains(m_parts, id)) {
         return m_parts.at(id)._intervals;
     }
-    return MusicXmlIntervalList();
+    return MusicXMLIntervalList();
 }
 
 //---------------------------------------------------------
@@ -569,15 +569,15 @@ bool MusicXMLParserPass1::determineStaffMoveVoice(const String& id, const int mx
     msTrack = 0;   // TODO
     msVoice = 0;   // TODO
 
-    // Musicxml voices are counted for all staves of an
+    // MusicXML voices are counted for all staves of an
     // instrument. They are not limited. In mscore voices are associated
     // with a staff. Every staff can have at most VOICES voices.
 
-    // The following lines map musicXml voices to mscore voices.
+    // The following lines map MusicXML voices to mscore voices.
     // If a voice crosses two staves, this is expressed with the
     // "move" parameter in mscore.
 
-    // Musicxml voices are unique within a part, but not across parts.
+    // MusicXML voices are unique within a part, but not across parts.
 
     //LOGD("voice mapper before: voice='%s' staff=%d", muPrintable(mxVoice), mxStaff);
     int s;   // staff mapped by voice mapper
@@ -717,7 +717,7 @@ static void addBreak(Score* const, MeasureBase* const mb, const LayoutBreakType 
 static void addBreakToPreviousMeasureBase(Score* const score, MeasureBase* const mb, const LayoutBreakType type)
 {
     MeasureBase* const pm = mb->prev();
-    if (pm && musicxmlImportBreaks()) {
+    if (pm && musicXMLImportBreaks()) {
         addBreak(score, pm, type);
     }
 }
@@ -1208,7 +1208,7 @@ static void determineMeasureStart(const std::vector<Fraction>& ml, std::vector<F
  Required by TimeSigMap::tickValues(), called (indirectly) by Segment::add().
  */
 
-static void fixupSigmap(MxmlLogger* logger, Score* score, const std::vector<Fraction>& measureLength)
+static void fixupSigmap(MusicXMLLogger* logger, Score* score, const std::vector<Fraction>& measureLength)
 {
     auto it = score->sigmap()->find(0);
 
@@ -1337,7 +1337,7 @@ void MusicXMLParserPass1::scorePartwise()
 {
     m_logger->logDebugTrace(u"MusicXMLParserPass1::scorePartwise", &m_e);
 
-    MusicXmlPartGroupList partGroupList;
+    MusicXMLPartGroupList partGroupList;
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "part") {
@@ -1374,7 +1374,7 @@ void MusicXMLParserPass1::scorePartwise()
     /*
      LOGD("partGroupList");
      for (size_t i = 0; i < partGroupList.size(); i++) {
-     MusicXmlPartGroup* pg = partGroupList[i];
+     MusicXMLPartGroup* pg = partGroupList[i];
      LOGD("part-group span %d start %d type %hhd barlinespan %d",
      pg->span, pg->start, pg->type, pg->barlineSpan);
      }
@@ -1388,7 +1388,7 @@ void MusicXMLParserPass1::scorePartwise()
     // handle the explicit brackets
     const std::vector<Part*>& il = m_score->parts();
     for (size_t i = 0; i < partGroupList.size(); i++) {
-        MusicXmlPartGroup* pg = partGroupList[i];
+        MusicXMLPartGroup* pg = partGroupList[i];
         // determine span in staves
         // and span all barlines except last if applicable
         size_t stavesSpan = 0;
@@ -1889,7 +1889,7 @@ void MusicXMLParserPass1::defaults()
     String wordFontFamily;
     String wordFontSize;
 
-    bool isImportLayout = musicxmlImportLayout();
+    bool isImportLayout = musicXMLImportLayout();
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "scaling") {
@@ -2150,12 +2150,12 @@ void MusicXMLParserPass1::pageLayout(PageFormat& pf, const double conversion)
  Also handle the part-groups.
  */
 
-void MusicXMLParserPass1::partList(MusicXmlPartGroupList& partGroupList)
+void MusicXMLParserPass1::partList(MusicXMLPartGroupList& partGroupList)
 {
     m_logger->logDebugTrace(u"MusicXMLParserPass1::partList", &m_e);
 
     int scoreParts = 0;   // number of score-parts read sofar
-    MusicXmlPartGroupMap partGroups;
+    MusicXMLPartGroupMap partGroups;
     String curPartGroupName;
 
     while (m_e.readNextStartElement()) {
@@ -2193,7 +2193,7 @@ static void createPart(Score* score, const String& id, PartMap& pm)
 //   partGroupStart
 //---------------------------------------------------------
 
-typedef std::map<int, MusicXmlPartGroup*> MusicXmlPartGroupMap;
+typedef std::map<int, MusicXMLPartGroup*> MusicXMLPartGroupMap;
 
 /**
  Store part-group start with number \a n, first part \a p and symbol / \a s in the partGroups
@@ -2201,7 +2201,7 @@ typedef std::map<int, MusicXmlPartGroup*> MusicXmlPartGroupMap;
  to generate the brackets.
  */
 
-static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, const String& s, bool barlineSpan)
+static void partGroupStart(MusicXMLPartGroupMap& pgs, int n, int p, const String& s, bool barlineSpan)
 {
     //LOGD("partGroupStart number=%d part=%d symbol=%s", n, p, muPrintable(s));
 
@@ -2228,7 +2228,7 @@ static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, const String
         return;
     }
 
-    MusicXmlPartGroup* pg = new MusicXmlPartGroup;
+    MusicXMLPartGroup* pg = new MusicXMLPartGroup;
     pg->span = 0;
     pg->start = p;
     pg->barlineSpan = barlineSpan,
@@ -2248,8 +2248,8 @@ static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, const String
  To generate brackets, the span in staves must also be known.
  */
 
-static void partGroupStop(MusicXmlPartGroupMap& pgs, int n, int p,
-                          MusicXmlPartGroupList& pgl)
+static void partGroupStop(MusicXMLPartGroupMap& pgs, int n, int p,
+                          MusicXMLPartGroupList& pgl)
 {
     if (pgs.count(n) == 0) {
         LOGD("part-group number=%d not active", n);
@@ -2272,8 +2272,8 @@ static void partGroupStop(MusicXmlPartGroupMap& pgs, int n, int p,
  */
 
 void MusicXMLParserPass1::partGroup(const int scoreParts,
-                                    MusicXmlPartGroupList& partGroupList,
-                                    MusicXmlPartGroupMap& partGroups, String& curPartGroupName)
+                                    MusicXMLPartGroupList& partGroupList,
+                                    MusicXMLPartGroupMap& partGroups, String& curPartGroupName)
 {
     m_logger->logDebugTrace(u"MusicXMLParserPass1::partGroup", &m_e);
     bool barlineSpan = true;
@@ -2330,7 +2330,7 @@ void MusicXMLParserPass1::scorePart(const String& curPartGroupName)
         skipLogCurrElem();
         return;
     } else {
-        m_parts.insert({ id, MusicXmlPart(id) });
+        m_parts.insert({ id, MusicXMLPart(id) });
         m_instruments.insert({ id, MusicXMLInstruments() });
         createPart(m_score, id, m_partMap);
     }
@@ -2350,7 +2350,7 @@ void MusicXMLParserPass1::scorePart(const String& curPartGroupName)
                 if (m_e.name() == "display-text") {
                     name += m_e.readText();
                 } else if (m_e.name() == "accidental-text") {
-                    name += mxmlAccidentalTextToChar(m_e.readText());
+                    name += musicXMLAccidentalTextToChar(m_e.readText());
                 } else {
                     skipLogCurrElem();
                 }
@@ -2372,7 +2372,7 @@ void MusicXMLParserPass1::scorePart(const String& curPartGroupName)
                 if (m_e.name() == "display-text") {
                     name += m_e.readText();
                 } else if (m_e.name() == "accidental-text") {
-                    name += mxmlAccidentalTextToChar(m_e.readText());
+                    name += musicXMLAccidentalTextToChar(m_e.readText());
                 } else {
                     skipLogCurrElem();
                 }
@@ -2681,7 +2681,7 @@ void MusicXMLParserPass1::measure(const String& partId,
     Fraction mTime;   // current time stamp within measure
     Fraction mDura;   // current total measure duration
     vod.newMeasure();
-    MxmlTupletStates tupletStates;
+    MusicXMLTupletStates tupletStates;
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "attributes") {
@@ -2950,7 +2950,7 @@ void MusicXMLParserPass1::clef(const String& /* partId */)
 
 // TODO: share between pass 1 and pass 2
 
-static bool determineTimeSig(MxmlLogger* logger, const XmlStreamReader* const xmlreader,
+static bool determineTimeSig(MusicXMLLogger* logger, const XmlStreamReader* const xmlreader,
                              const String& beats, const String& beatType, const String& timeSymbol,
                              TimeSigType& st, int& bts, int& btp)
 {
@@ -3087,8 +3087,8 @@ void MusicXMLParserPass1::direction(const String& partId, const Fraction& cTime)
     // note: file order is direction-type first, then staff
     // this means staff is still unknown when direction-type is handled
 
-    std::vector<MxmlOctaveShiftDesc> starts;
-    std::vector<MxmlOctaveShiftDesc> stops;
+    std::vector<MusicXMLOctaveShiftDesc> starts;
+    std::vector<MusicXMLOctaveShiftDesc> stops;
     int staff = 0;
 
     while (m_e.readNextStartElement()) {
@@ -3110,11 +3110,11 @@ void MusicXMLParserPass1::direction(const String& partId, const Fraction& cTime)
     }
 
     // handle the stops first
-    for (const MxmlOctaveShiftDesc& desc : stops) {
+    for (const MusicXMLOctaveShiftDesc& desc : stops) {
         if (muse::contains(m_octaveShifts, static_cast<int>(desc.num))) {
-            MxmlOctaveShiftDesc prevDesc = m_octaveShifts.at(desc.num);
-            if (prevDesc.tp == MxmlOctaveShiftDesc::Type::UP
-                || prevDesc.tp == MxmlOctaveShiftDesc::Type::DOWN) {
+            MusicXMLOctaveShiftDesc prevDesc = m_octaveShifts.at(desc.num);
+            if (prevDesc.tp == MusicXMLOctaveShiftDesc::Type::UP
+                || prevDesc.tp == MusicXMLOctaveShiftDesc::Type::DOWN) {
                 // a complete pair
                 m_parts[partId].addOctaveShift(staff, prevDesc.size, prevDesc.time);
                 m_parts[partId].addOctaveShift(staff, -prevDesc.size, desc.time);
@@ -3128,10 +3128,10 @@ void MusicXMLParserPass1::direction(const String& partId, const Fraction& cTime)
     }
 
     // then handle the starts
-    for (const MxmlOctaveShiftDesc& desc : starts) {
+    for (const MusicXMLOctaveShiftDesc& desc : starts) {
         if (muse::contains(m_octaveShifts, static_cast<int>(desc.num))) {
-            MxmlOctaveShiftDesc prevDesc = m_octaveShifts.at(desc.num);
-            if (prevDesc.tp == MxmlOctaveShiftDesc::Type::STOP) {
+            MusicXMLOctaveShiftDesc prevDesc = m_octaveShifts.at(desc.num);
+            if (prevDesc.tp == MusicXMLOctaveShiftDesc::Type::STOP) {
                 // a complete pair
                 m_parts[partId].addOctaveShift(staff, desc.size, desc.time);
                 m_parts[partId].addOctaveShift(staff, -desc.size, prevDesc.time);
@@ -3154,8 +3154,8 @@ void MusicXMLParserPass1::direction(const String& partId, const Fraction& cTime)
  */
 
 void MusicXMLParserPass1::directionType(const Fraction cTime,
-                                        std::vector<MxmlOctaveShiftDesc>& starts,
-                                        std::vector<MxmlOctaveShiftDesc>& stops)
+                                        std::vector<MusicXMLOctaveShiftDesc>& starts,
+                                        std::vector<MusicXMLOctaveShiftDesc>& stops)
 {
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "octave-shift") {
@@ -3174,13 +3174,13 @@ void MusicXMLParserPass1::directionType(const Fraction cTime,
                 short size = static_cast<short>(m_e.intAttribute("size"));
                 String type = m_e.attribute("type");
                 //LOGD("octave-shift type '%s' size %d number %d", muPrintable(type), size, n);
-                MxmlOctaveShiftDesc osDesc;
+                MusicXMLOctaveShiftDesc osDesc;
                 handleOctaveShift(cTime, type, size, osDesc);
                 osDesc.num = n;
-                if (osDesc.tp == MxmlOctaveShiftDesc::Type::UP
-                    || osDesc.tp == MxmlOctaveShiftDesc::Type::DOWN) {
+                if (osDesc.tp == MusicXMLOctaveShiftDesc::Type::UP
+                    || osDesc.tp == MusicXMLOctaveShiftDesc::Type::DOWN) {
                     starts.push_back(osDesc);
-                } else if (osDesc.tp == MxmlOctaveShiftDesc::Type::STOP) {
+                } else if (osDesc.tp == MusicXMLOctaveShiftDesc::Type::STOP) {
                     stops.push_back(osDesc);
                 }
             } else {
@@ -3199,9 +3199,9 @@ void MusicXMLParserPass1::directionType(const Fraction cTime,
 
 void MusicXMLParserPass1::handleOctaveShift(const Fraction& cTime,
                                             const String& type, short size,
-                                            MxmlOctaveShiftDesc& desc)
+                                            MusicXMLOctaveShiftDesc& desc)
 {
-    MxmlOctaveShiftDesc::Type tp = MxmlOctaveShiftDesc::Type::NONE;
+    MusicXMLOctaveShiftDesc::Type tp = MusicXMLOctaveShiftDesc::Type::NONE;
     short sz = 0;
 
     switch (size) {
@@ -3219,18 +3219,18 @@ void MusicXMLParserPass1::handleOctaveShift(const Fraction& cTime,
     }
 
     if (type == u"up") {
-        tp = MxmlOctaveShiftDesc::Type::UP;
+        tp = MusicXMLOctaveShiftDesc::Type::UP;
     } else if (type == u"down") {
-        tp = MxmlOctaveShiftDesc::Type::DOWN;
+        tp = MusicXMLOctaveShiftDesc::Type::DOWN;
         sz *= -1;
     } else if (type == u"stop") {
-        tp = MxmlOctaveShiftDesc::Type::STOP;
+        tp = MusicXMLOctaveShiftDesc::Type::STOP;
     } else {
         m_logger->logError(String(u"invalid octave-shift type '%1'").arg(type), &m_e);
         return;
     }
 
-    desc = MxmlOctaveShiftDesc(tp, sz, cTime);
+    desc = MusicXMLOctaveShiftDesc(tp, sz, cTime);
 }
 
 //---------------------------------------------------------
@@ -3241,7 +3241,7 @@ void MusicXMLParserPass1::handleOctaveShift(const Fraction& cTime,
  Parse the /score-partwise/part/measure/note/notations node.
  */
 
-void MusicXMLParserPass1::notations(MxmlStartStop& tupletStartStop)
+void MusicXMLParserPass1::notations(MusicXMLStartStop& tupletStartStop)
 {
     //_logger->logDebugTrace("MusicXMLParserPass1::note", &_e);
 
@@ -3253,9 +3253,9 @@ void MusicXMLParserPass1::notations(MxmlStartStop& tupletStartStop)
             m_e.skipCurrentElement();
 
             if (tupletType == u"start") {
-                tupletStartStop = MxmlStartStop::START;
+                tupletStartStop = MusicXMLStartStop::START;
             } else if (tupletType == u"stop") {
-                tupletStartStop = MxmlStartStop::STOP;
+                tupletStartStop = MusicXMLStartStop::STOP;
             } else if (!tupletType.empty() && tupletType != u"start" && tupletType != u"stop") {
                 m_logger->logError(String(u"unknown tuplet type '%1'").arg(tupletType), &m_e);
             }
@@ -3302,7 +3302,7 @@ void MusicXMLParserPass1::note(const String& partId,
                                Fraction& dura,
                                Fraction& missingCurr,
                                VoiceOverlapDetector& vod,
-                               MxmlTupletStates& tupletStates)
+                               MusicXMLTupletStates& tupletStates)
 {
     //_logger->logDebugTrace("MusicXMLParserPass1::note", &_e);
 
@@ -3321,9 +3321,9 @@ void MusicXMLParserPass1::note(const String& partId,
     String type;
     String voice = u"1";
     String instrId;
-    MxmlStartStop tupletStartStop { MxmlStartStop::NONE };
+    MusicXMLStartStop tupletStartStop { MusicXMLStartStop::NONE };
 
-    MxmlNoteDuration mnd(m_divs, m_logger, this);
+    MusicXMLNoteDuration mnd(m_divs, m_logger, this);
 
     while (m_e.readNextStartElement()) {
         if (mnd.readProperties(m_e)) {
@@ -3422,7 +3422,7 @@ void MusicXMLParserPass1::note(const String& partId,
     if (!chord && !grace) {
         // do tuplet
         Fraction timeMod = mnd.timeMod();
-        MxmlTupletState& tupletState = tupletStates[voice];
+        MusicXMLTupletState& tupletState = tupletStates[voice];
         tupletState.determineTupletAction(mnd.duration(), timeMod, tupletStartStop, mnd.normalType(), missingPrev, missingCurr);
     }
 
