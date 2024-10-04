@@ -1410,7 +1410,7 @@ void Score::cmdAddTimeSig(Measure* firstMeasure, staff_idx_t staffIdx, TimeSig* 
         // rewrite all measures up to the next time signature
         //
         if (firstMeasure == mastrScore->firstMeasure()
-            && firstMeasure->nextMeasure() 
+            && firstMeasure->nextMeasure()
             && (firstMeasure->ticks() != firstMeasure->timesig())) {
             // handle upbeat
             firstMeasure->undoChangeProperty(Pid::TIMESIG_NOMINAL, newTimeSigFraction);
