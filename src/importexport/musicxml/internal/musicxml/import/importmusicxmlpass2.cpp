@@ -6021,12 +6021,8 @@ void MusicXmlParserPass2::divisions()
 // the type for all rests.
 // Sibelius calls all whole-measure rests "whole", even if the duration != 4/4
 
-static bool isWholeMeasureRest(const bool rest, const String& type, const Fraction dura, const Fraction mDura)
+static bool isWholeMeasureRest(const String& type, const Fraction dura, const Fraction mDura)
 {
-    if (!rest) {
-        return false;
-    }
-
     if (!dura.isValid()) {
         return false;
     }
@@ -6036,7 +6032,7 @@ static bool isWholeMeasureRest(const bool rest, const String& type, const Fracti
     }
 
     return (type.empty() && dura == mDura)
-           || (type == u"whole" && dura == mDura && dura != Fraction(1, 1));
+           || (type == u"whole" && dura == mDura);
 }
 
 //---------------------------------------------------------
@@ -6048,14 +6044,15 @@ static bool isWholeMeasureRest(const bool rest, const String& type, const Fracti
  * This includes whole measure rest detection.
  */
 
-static TDuration determineDuration(const bool rest, const String& type, const int dots, const Fraction dura, const Fraction mDura)
+static TDuration determineDuration(const bool rest, const bool measureRest, const String& type, const int dots, const Fraction dura,
+                                   const Fraction mDura)
 {
     //LOGD("determineDuration rest %d type '%s' dots %d dura %s mDura %s",
     //       rest, muPrintable(type), dots, muPrintable(dura.print()), muPrintable(mDura.print()));
 
     TDuration res;
     if (rest) {
-        if (isWholeMeasureRest(rest, type, dura, mDura)) {
+        if (measureRest || isWholeMeasureRest(type, dura, mDura)) {
             res.setType(DurationType::V_MEASURE);
         } else if (type.empty()) {
             // If no type, set duration type based on duration.
@@ -6562,6 +6559,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
     bool isSmall = false;
     bool grace = false;
     bool rest = false;
+    bool measureRest = false;
     int staff = 0;
     String type;
     String voice;
@@ -6631,6 +6629,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
             }
         } else if (m_e.name() == "rest") {
             rest = true;
+            measureRest = m_e.asciiAttribute("measure") == "yes";
             mnp.displayStepOctave(m_e);
         } else if (m_e.name() == "staff") {
             bool ok = false;
@@ -6742,7 +6741,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
     ChordRest* cr { nullptr };
     Note* note { nullptr };
 
-    TDuration duration = determineDuration(rest, type, mnd.dots(), dura, measure->ticks());
+    TDuration duration = determineDuration(rest, measureRest, type, mnd.dots(), dura, measure->ticks());
 
     Part* part = m_pass1.getPart(partId);
     Instrument* instrument = part->instrument(noteStartTime);
