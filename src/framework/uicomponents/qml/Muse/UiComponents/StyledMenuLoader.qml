@@ -34,8 +34,8 @@ Loader {
     signal opened()
     signal closed(bool force)
 
-    property alias menu: loader.item
-    property var menuAnchorItem: null
+    property StyledMenu menu: loader.item as StyledMenu
+    property Item menuAnchorItem: null
     property bool hasSiblingMenus: false
 
     property alias isMenuOpened: loader.active
