@@ -34,6 +34,8 @@
 
 using namespace muse;
 
+using namespace Qt::Literals::StringLiterals;
+
 class Global_Types_StringTests : public ::testing::Test
 {
 public:
@@ -88,7 +90,7 @@ TEST_F(Global_Types_StringTests, String_Construct)
 
     {
         //! GIVEN Some QString
-        QString qstr = "123abcПыф";
+        QString qstr = u"123abcПыф"_s;
         //! DO
         String str = qstr;
         //! CHECK
@@ -106,7 +108,7 @@ TEST_F(Global_Types_StringTests, String_Convert)
 {
     {
         //! GIVEN Some QString
-        QString qstr_origin = "123abcПыф";
+        QString qstr_origin = u"123abcПыф"_s;
         //! DO
         String str = String::fromQString(qstr_origin);
         //! CHECK
