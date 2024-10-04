@@ -44,6 +44,18 @@ StyledDialogView {
         propertiesModel.load(properties)
     }
 
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "PalettePropertiesDialog"
+        section: root.navigationSection
+        enabled: root.enabled && root.visible
+        order: 1
+        direction: NavigationPanel.Horizontal
+    }
+
+    onNavigationActivateRequested: {
+        nameField.navigation.requestActive()
+    }
+
     Column {
         id: contentColumn
         anchors.fill: parent
@@ -55,11 +67,15 @@ StyledDialogView {
         }
 
         TextInputField {
+            id: nameField
             currentText: propertiesModel.name
 
             onTextChanged: function(newTextValue) {
                 propertiesModel.name = newTextValue
             }
+
+            navigation.panel: root.navigationPanel
+            navigation.order: 1
         }
 
         SeparatorLine { anchors.margins: -parent.margins }
@@ -156,12 +172,17 @@ StyledDialogView {
             onClicked: {
                 propertiesModel.showGrid = !checked
             }
+
+            navigation.panel: root.navigationPanel
+            navigation.order: 2
         }
 
         ButtonBox {
             width: parent.width
 
             buttons: [ ButtonBoxModel.Cancel, ButtonBoxModel.Ok ]
+
+            navigationPanel.section: root.navigationSection
 
             onStandardButtonClicked: function(buttonId) {
                 if (buttonId === ButtonBoxModel.Cancel) {
