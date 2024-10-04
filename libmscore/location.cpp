@@ -83,6 +83,8 @@ void Location::read(XmlReader& e)
                   _graceIndex = e.readInt();
             else if (tag == "notes")
                   _note = e.readInt();
+            else if (tag == "timeTick")  // 4.4+ compat
+                  e.skipCurrentElement();
             else
                   e.unknown();
             }
