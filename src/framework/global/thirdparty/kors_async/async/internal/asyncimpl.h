@@ -24,9 +24,11 @@ SOFTWARE.
 #ifndef KORS_ASYNC_ASYNCIMPL_H
 #define KORS_ASYNC_ASYNCIMPL_H
 
+#include <cstdint>
 #include <mutex>
 #include <map>
 #include <thread>
+
 #include "../asyncable.h"
 
 namespace kors::async {

@@ -25,6 +25,8 @@ SOFTWARE.
 #define KORS_DEFLOGDEST_H
 
 #include <fstream>
+#include <sstream>
+#include <string>
 
 #include "logger.h"
 

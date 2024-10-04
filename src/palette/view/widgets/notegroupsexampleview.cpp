@@ -159,7 +159,7 @@ void NoteGroupsExampleView::dropEvent(QDropEvent* event)
         return;
     }
 
-    foreach (EngravingItem* e, elementsAt(position)) {
+    for (EngravingItem* e : elementsAt(position)) {
         if (e->type() == ElementType::NOTE) {
             ActionIcon* icon = toActionIcon(m_dragElement);
             Chord* chord = toNote(e)->chord();

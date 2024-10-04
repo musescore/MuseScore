@@ -26,6 +26,7 @@
 
 #ifndef NO_QT_SUPPORT
 #include <QQmlEngine>
+#include <QWidget>
 
 muse::Injectable::GetContext muse::iocCtxForQmlObject(const QObject* o)
 {

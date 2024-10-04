@@ -24,6 +24,7 @@ SOFTWARE.
 #include "abstractinvoker.h"
 
 #include <cassert>
+#include <iostream>
 
 #include "queuedinvoker.h"
 

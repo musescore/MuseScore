@@ -265,7 +265,7 @@ static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions
                     if (!dList.empty()) {
                         mu::engraving::Fraction ltick = tick;
                         int k = 0;
-                        foreach (mu::engraving::TDuration d, dList) {
+                        for (mu::engraving::TDuration d : dList) {
                             mu::engraving::Segment* seg = measure->getSegment(mu::engraving::SegmentType::ChordRest, ltick);
                             if (k < puRests.count()) {
                                 rest = static_cast<mu::engraving::Rest*>(puRests[k]->linkedClone());

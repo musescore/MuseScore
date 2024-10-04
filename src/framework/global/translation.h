@@ -22,11 +22,13 @@
 #ifndef MUSE_GLOBAL_TRANSLATION_H
 #define MUSE_GLOBAL_TRANSLATION_H
 
-#include "types/string.h"
+#include <string>
 
 #ifndef NO_QT_SUPPORT
 #include <QString>
 #endif
+
+#include "types/string.h"
 
 namespace muse {
 std::string trc(const char* context, const char* key, const char* disambiguation = nullptr, int n = -1);

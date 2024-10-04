@@ -25,6 +25,8 @@
 #include <QCoreApplication>
 #endif
 
+#include "types/bytearray.h"
+
 #include "log.h"
 
 using namespace muse;
