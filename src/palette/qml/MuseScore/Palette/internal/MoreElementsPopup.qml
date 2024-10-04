@@ -201,7 +201,12 @@ StyledPopupView {
             border.color: ui.theme.strokeColor
             border.width: 1
 
-            readonly property int availableHeight: root.maxHeight - addToPaletteButton.height - (masterIndexControls ? masterIndexControls.height : 0) - bottomText.height - (elementEditorButton.visible ? elementEditorButton.height : 0) - 40
+            readonly property int availableHeight: root.maxHeight
+                                                   - addToPaletteButton.height
+                                                   - (masterIndexControls ? masterIndexControls.height : 0)
+                                                   - bottomText.height
+                                                   - (elementEditorButton.visible ? elementEditorButton.height : 0)
+                                                   - 40
 
             Column {
                 padding: 1

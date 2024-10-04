@@ -35,8 +35,8 @@ RadioDelegate {
     property int orientation: Qt.Vertical
     readonly property bool isVertical: orientation === Qt.Vertical
 
-    property var normalStateFont: ui.theme.largeBodyFont
-    property var selectedStateFont: ui.theme.largeBodyBoldFont
+    property font normalStateFont: ui.theme.largeBodyFont
+    property font selectedStateFont: ui.theme.largeBodyBoldFont
 
     property alias navigation: navCtrl
 

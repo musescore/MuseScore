@@ -35,9 +35,9 @@ Item {
 
     property Component titleBarItem: null
     property var contextMenuModel: null
-    property var heightWhenVisible: null
-    property var navigationPanel: null
-    property var navigationOrder: null
+    property real heightWhenVisible: titleBarLoader.item?.heightWhenVisible ?? 0
+    property NavigationPanel navigationPanel: null
+    property int navigationOrder: 0
     property bool isHorizontalPanel: false
 
     signal handleContextMenuItemRequested(string itemId)
@@ -56,11 +56,10 @@ Item {
         sourceComponent: root.titleBarItem ?? defaultTitleBarComponent
 
         onLoaded: {
-            if (titleBarLoader.item) {
+            if (item) {
                 item.navigationPanel = Qt.binding(function() { return root.navigationPanel})
                 item.navigationOrder = Qt.binding(function() { return root.navigationOrder})
                 item.contextMenuModel = Qt.binding(function() { return root.contextMenuModel})
-                root.heightWhenVisible = Qt.binding(function() { return item.heightWhenVisible})
             }
         }
     }
@@ -77,8 +76,8 @@ Item {
             heightWhenVisible: titleBarContent.implicitHeight
             color: ui.theme.backgroundPrimaryColor
 
-            property var navigationPanel
-            property var navigationOrder
+            property NavigationPanel navigationPanel
+            property int navigationOrder
             property var contextMenuModel
 
             visible: parent.visible

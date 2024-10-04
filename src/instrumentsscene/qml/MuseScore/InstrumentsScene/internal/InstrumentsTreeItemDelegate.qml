@@ -32,7 +32,7 @@ FocusableControl {
     required property var originalParent
 
     property var item: null
-    property var treeView: undefined
+    property TreeView treeView: undefined
     property var index: styleData.index
     property string filterKey
 

@@ -40,7 +40,7 @@ DockPage {
     objectName: "Notation"
     uri: "musescore://notation"
 
-    property var topToolKeyNavSec
+    required property NavigationSection topToolbarKeyNavSec
 
     property NotationPageModel pageModel: NotationPageModel {}
 
@@ -125,7 +125,7 @@ DockPage {
             contentBottomPadding: 2
 
             NotationToolBar {
-                navigationPanel.section: root.topToolKeyNavSec
+                navigationPanel.section: root.topToolbarKeyNavSec
                 navigationPanel.order: 2
             }
         },
@@ -147,7 +147,7 @@ DockPage {
             ]
 
             PlaybackToolBar {
-                navigationPanelSection: root.topToolKeyNavSec
+                navigationPanelSection: root.topToolbarKeyNavSec
                 navigationPanelOrder: 3
 
                 floating: playbackToolBar.floating
@@ -219,7 +219,7 @@ DockPage {
             contentBottomPadding: 2
 
             UndoRedoToolBar {
-                navigationPanel.section: root.topToolKeyNavSec
+                navigationPanel.section: root.topToolbarKeyNavSec
                 navigationPanel.order: 4
             }
         }

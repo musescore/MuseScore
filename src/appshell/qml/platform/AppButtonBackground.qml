@@ -28,7 +28,8 @@ Rectangle {
     id: root
 
     property bool highlight: false
-    property var mouseArea: null
+
+    required property MouseArea mouseArea
 
     color: "transparent"
 
