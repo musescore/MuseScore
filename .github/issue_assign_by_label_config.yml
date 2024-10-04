@@ -1,5 +1,3 @@
-corruption:
-- cbjeukendrup
 crash:
 - RomanPudashkin
 - DmitryArefiev
@@ -12,10 +10,6 @@ VST:
 - matthewreadbass
 playback:
 - RomanPudashkin
-UI:
-- Eism
-accessibility:
-- Eism
 cloud:
 - shoogle
 - cbjeukendrup
