@@ -83,7 +83,7 @@ FTP_PATH=${OS}/${MAJOR_VERSION}x/${BUILD_DIR}
 if [ "$BUILD_MODE" == "nightly" ]; then
     file_extension="${ARTIFACT_NAME##*.}"
     BUILD_BRANCH=$(cat $ARTIFACTS_DIR/env/build_branch.env)
-    LATEST_NAME="MuseScoreNightly-latest-${BUILD_BRANCH}-${PACKARCH}.${file_extension}"
+    LATEST_NAME="MuseScore-Studio-Nightly-latest-${BUILD_BRANCH}-${PACKARCH}.${file_extension}"
 fi
 
 echo "Copy ${ARTIFACTS_DIR}/${ARTIFACT_NAME} to $FTP_PATH"
@@ -115,14 +115,20 @@ fi
 
 # Delete old files
 if [ "$BUILD_MODE" == "nightly" ]; then
-    echo "Delete old MuseScoreNightly files"
-    number_to_keep=42 # includes the one we just uploaded and the symlink to it
-    if [ "$OS" == "linux" ]; then
-        ((++number_to_keep)) # one extra for the zsync file
-    elif [ "$OS" == "windows" ]; then
-        ((number_to_keep *= 2)) # two nightlies each night, namely portable and normal
-    fi
-    ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/$FTP_PATH; ls MuseScoreNightly* -t | tail -n +${number_to_keep} | xargs rm -f"
+    echo "Delete old MuseScore-Studio-Nightly files"
+    num_days=40         # keep old nightlies for this long  
+    num_today=2         # today's build and latest symlink  
+    num_branches=2      # master and release branch  
+    num_variants=1  
+    if [ "$OS" == "windows" ]; then  
+        num_variants=2      # portable and normal  
+    elif [ "$OS" == "linux" ]; then  
+        num_variants=3      # x86_64, aarch64, armv7l  
+        ((num_today += 1))  # zsync file  
+    fi  
+    num_to_keep=$(((num_days + num_today) * num_branches * num_variants))  
+    start_line_num=$((num_to_keep + 1))  
+    ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/$FTP_PATH && ls -t MuseScore{-Studio-,}Nightly-* MuseScore-4.*-x86_64.{7z,paf.exe} | tail -n +${start_line_num} | xargs rm -f"
 fi
 
 # Sending index.html
