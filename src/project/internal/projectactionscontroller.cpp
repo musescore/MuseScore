@@ -58,8 +58,8 @@ static const muse::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress"
 static const QString MUSESCORE_URL_SCHEME("musescore");
 static const QString OPEN_SCORE_URL_HOSTNAME("open-score");
 
-#define RETRY_SAVE_BTN_ID  static_cast<int>(IInteractive::Button::CustomButton)
-#define SAVE_AS_BTN_ID     (RETRY_SAVE_BTN_ID + 1)
+static constexpr int RETRY_SAVE_BTN_ID = int(IInteractive::Button::CustomButton);
+static constexpr int SAVE_AS_BTN_ID    = RETRY_SAVE_BTN_ID + 1;
 
 void ProjectActionsController::init()
 {
@@ -1624,11 +1624,13 @@ int ProjectActionsController::warnScoreHasBecomeCorruptedAfterSave(const Ret& re
 
     IInteractive::ButtonDatas buttons;
 
-    IInteractive::ButtonData retryBtn(RETRY_SAVE_BTN_ID, muse::trc("project", "Try again"), true /*accent*/);
-    buttons.push_back(retryBtn);
-
     IInteractive::ButtonData saveAsBtn(SAVE_AS_BTN_ID, muse::trc("project/save", "Save as…"));
+    saveAsBtn.role = IInteractive::ButtonRole::ContinueRole;
     buttons.push_back(saveAsBtn);
+
+    IInteractive::ButtonData retryBtn(RETRY_SAVE_BTN_ID, muse::trc("project", "Try again"), true /*accent*/);
+    retryBtn.role = IInteractive::ButtonRole::ContinueRole;
+    buttons.push_back(retryBtn);
 
     IInteractive::ButtonData cancelBtn = interactive()->buttonData(IInteractive::Button::Cancel);
     buttons.push_back(cancelBtn);
