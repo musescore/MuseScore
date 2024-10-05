@@ -36,6 +36,7 @@ Item {
     property bool insideDropdownList: false
     property alias background: backgroundItem
     property alias label: labelItem
+    property alias dropIcon: dropIconItem
     property alias mouseArea: mouseAreaItem
 
     property color hoveredColor: backgroundItem.color
@@ -75,7 +76,17 @@ Item {
         id: labelItem
         anchors.fill: parent
         anchors.leftMargin: 12
+        anchors.rightMargin: 30
         horizontalAlignment: Text.AlignLeft
+    }
+
+    StyledIconLabel {
+        id: dropIconItem
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.right: parent.right
+        anchors.rightMargin: 8
+
+        iconCode: IconCode.SMALL_ARROW_DOWN
     }
 
     MouseArea {

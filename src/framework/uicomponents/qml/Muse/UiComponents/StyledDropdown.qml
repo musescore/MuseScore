@@ -45,7 +45,7 @@ Item {
 
     property int popupItemsCount: 18
 
-    property alias dropIcon: dropIconItem
+    property alias dropIcon: mainItem.dropIcon
     property alias label: mainItem.label
 
     property alias navigation: mainItem.navigation
@@ -136,14 +136,5 @@ Item {
                 root.activated(index, value)
             }
         }
-    }
-
-    StyledIconLabel {
-        id: dropIconItem
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.right: parent.right
-        anchors.rightMargin: 8
-
-        iconCode: IconCode.SMALL_ARROW_DOWN
     }
 }
