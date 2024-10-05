@@ -668,8 +668,7 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
                     if (ret.code() == (int)Err::CorruptionUponSavingError) {
                         // Validate the temporary "saving" file too.
                         Ret ret2 = checkSavedFileForCorruption(ioMode, savePath, targetMainFileName.toQString());
-                        if (ret2.code() == (int)Err::CorruptionUponSavingError) {
-                            ret2.setData("savingFileIsCorrupt", true);
+                        if (!ret2) {
                             return ret2;
                         }
                     }
@@ -842,7 +841,7 @@ Ret NotationProject::checkSavedFileForCorruption(MscIoMode ioMode, const muse::i
 
     if (scoreFile.empty()) {
         return Ret(static_cast<int>(Err::CorruptionUponSavingError),
-                   muse::mtrc("project/save", "File “%1” is corrupt or damaged.")
+                   muse::mtrc("project/save", "“%1” is corrupted or damaged.")
                    .arg(path.toString())
                    .toStdString());
     }

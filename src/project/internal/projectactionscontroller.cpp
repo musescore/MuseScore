@@ -58,6 +58,9 @@ static const muse::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress"
 static const QString MUSESCORE_URL_SCHEME("musescore");
 static const QString OPEN_SCORE_URL_HOSTNAME("open-score");
 
+#define RETRY_SAVE_BTN_ID  static_cast<int>(IInteractive::Button::CustomButton)
+#define SAVE_AS_BTN_ID     (RETRY_SAVE_BTN_ID + 1)
+
 void ProjectActionsController::init()
 {
     dispatcher()->reg(this, "file-new", this, &ProjectActionsController::newProject);
@@ -76,6 +79,7 @@ void ProjectActionsController::init()
     dispatcher()->reg(this, "file-save-a-copy", [this]() { saveProject(SaveMode::SaveCopy); });
     dispatcher()->reg(this, "file-save-selection", [this]() { saveProject(SaveMode::SaveSelection, SaveLocationType::Local); });
     dispatcher()->reg(this, "file-save-to-cloud", [this]() { saveProject(SaveMode::SaveAs, SaveLocationType::Cloud); });
+    dispatcher()->reg(this, "file-retry-save-locally", this, &ProjectActionsController::retrySaveProjectLocally);
 
     dispatcher()->reg(this, "file-publish", this, &ProjectActionsController::publish);
     dispatcher()->reg(this, "file-share-audio", this, &ProjectActionsController::shareAudio);
@@ -930,10 +934,23 @@ bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& filePa
 
     if (!ret) {
         LOGE() << ret.toString();
-        if (ret.code() == (int)Err::CorruptionUponSavingError) {
-            warnScoreCorruptAfterSave(ret);
-        } else {
+        if (ret.code() != (int)Err::CorruptionUponSavingError) {
             warnScoreCouldnotBeSaved(ret);
+        } else {
+            switch (warnScoreHasBecomeCorruptedAfterSave(ret)) {
+            case RETRY_SAVE_BTN_ID:
+                async::Async::call(this, [this, filePath, saveMode]() {
+                    const ActionData actionData = ActionData::make_arg2<muse::io::path_t, SaveMode>(filePath, saveMode);
+                    dispatcher()->dispatch("file-retry-save-locally", actionData);
+                });
+                break;
+
+            case SAVE_AS_BTN_ID:
+                async::Async::call(this, [this]() {
+                    dispatcher()->dispatch("file-save-as");
+                });
+                break;
+            }
         }
         return false;
     }
@@ -944,6 +961,13 @@ bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& filePa
 
     recentFilesController()->prependRecentFile(makeRecentFile(project));
     return true;
+}
+
+void ProjectActionsController::retrySaveProjectLocally(const ActionData& args)
+{
+    const muse::io::path_t filePath = args.arg<muse::io::path_t>(0);
+    SaveMode saveMode = args.arg<SaveMode>(1);
+    saveProjectLocally(filePath, saveMode);
 }
 
 bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode)
@@ -1581,26 +1605,36 @@ void ProjectActionsController::warnScoreCouldnotBeSaved(const std::string& error
     interactive()->warning(muse::trc("project/save", "Your score could not be saved"), errorText);
 }
 
-void ProjectActionsController::warnScoreCorruptAfterSave(const Ret& ret)
+int ProjectActionsController::warnScoreHasBecomeCorruptedAfterSave(const Ret& ret)
 {
-    std::string errMessage = ret.toString();
+    const QString errDetailsMessage = QString::fromStdString(ret.toString()).toHtmlEscaped();
 
-    std::any savingFileIsCorrupt = ret.data("savingFileIsCorrupt");
-    std::string savingFileIsCorruptMessage = savingFileIsCorrupt.has_value() && std::any_cast<bool>(savingFileIsCorrupt)
-                                             ? ""
-                                             : " " + muse::trc("project/save", "or from the _saving file"); // The Linux build doesn't like trailing and leading whitespace in translations
+    const QString supportForumLink = String("<a href=\"%1\" style=\"text-decoration: none\">musescore.org</a>")
+                                     .arg(configuration()->supportForumUrl().toString());
 
-    std::string message = muse::qtrc("project/save",
-                                     "An error occurred while saving your file and sadly it has become corrupt. "
-                                     "This may be a one-off error. Please retry saving the file in order not to lose your latest changes.\n\n"
-                                     "If it keeps happening, try saving the file to a different location or to MuseScore.com. "
-                                     "If all else fails, restore the file from the most recent backup created by MuseScore Studio%1.\n\n"
-                                     "If you need help, go to the “Support and bug reports” forum at https://musescore.org/en/forum\n\n"
-                                     "Error: %2")
-                          .arg(savingFileIsCorruptMessage.c_str(), errMessage.c_str())
-                          .toStdString();
+    const std::string title = muse::trc("project/save", "An error occurred while saving your score");
 
-    interactive()->warning(muse::trc("project/save", "Your score could not be saved"), message);
+    const std::string body = muse::qtrc("project/save",
+                                        "To preserve your score, try saving it again. "
+                                        "If this message still appears, please save your score as new copy. "
+                                        "You can also get help for this issue on %1.<br/><br/>"
+                                        "Error details (please cite when asking for support): %2")
+                             .arg(supportForumLink, errDetailsMessage)
+                             .toStdString();
+
+    IInteractive::ButtonDatas buttons;
+
+    IInteractive::ButtonData retryBtn(RETRY_SAVE_BTN_ID, muse::trc("project", "Try again"), true /*accent*/);
+    buttons.push_back(retryBtn);
+
+    IInteractive::ButtonData saveAsBtn(SAVE_AS_BTN_ID, muse::trc("project/save", "Save as…"));
+    buttons.push_back(saveAsBtn);
+
+    IInteractive::ButtonData cancelBtn = interactive()->buttonData(IInteractive::Button::Cancel);
+    buttons.push_back(cancelBtn);
+
+    return interactive()->error(title, IInteractive::Text(body, IInteractive::TextFormat::RichText),
+                                buttons, retryBtn.btn).button();
 }
 
 void ProjectActionsController::revertCorruptedScoreToLastSaved()

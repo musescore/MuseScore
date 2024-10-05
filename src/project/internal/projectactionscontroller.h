@@ -129,6 +129,7 @@ private:
 
     muse::Ret canSaveProject() const;
     bool saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
+    void retrySaveProjectLocally(const muse::actions::ActionData& args);
 
     struct AudioFile {
         QString format;
@@ -180,7 +181,7 @@ private:
 
     void warnScoreCouldnotBeSaved(const muse::Ret& ret);
     void warnScoreCouldnotBeSaved(const std::string& errorText);
-    void warnScoreCorruptAfterSave(const muse::Ret& ret);
+    int warnScoreHasBecomeCorruptedAfterSave(const muse::Ret& ret);
 
     void revertCorruptedScoreToLastSaved();
 
