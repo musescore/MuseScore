@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file alias="qt/etc/qt.conf">configs/qt_win.conf</file>
-    </qresource>
-</RCC>

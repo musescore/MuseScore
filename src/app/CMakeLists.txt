@@ -187,9 +187,6 @@ endif()
 # Resources
 ###########################################
 qt_add_resources(APP_RCC_SOURCES app.qrc)
-if (OS_IS_WIN)
-    qt_add_resources(APP_RCC_SOURCES app_win.qrc)
-endif()
 
 ###########################################
 # Executable declaration
