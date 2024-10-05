@@ -251,19 +251,20 @@ fi
 fallback_libraries=(
   libjack.so.0 # https://github.com/LMMS/lmms/pull/3958
   libOpenGL.so.0 # https://bugreports.qt.io/browse/QTBUG-89754
+  libEGL.so.1 # not installed on GitHub Actions Ubuntu, so maybe missing elsewhere too
 )
 
 # PREVIOUSLY EXTRACTED APPIMAGES
 # These include their own dependencies. We bundle them uncompressed to avoid
 # creating a double layer of compression (AppImage inside AppImage).
 if [[ "${UPDATE_INFORMATION}" ]]; then
-extracted_appimages=(
-  appimageupdatetool
-)
+  extracted_appimages=(
+    appimageupdatetool
+  )
 else
-extracted_appimages=(
-  # none
-)
+  extracted_appimages=(
+    # none
+  )
 fi
 
 for file in "${unwanted_files[@]}"; do
