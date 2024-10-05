@@ -155,7 +155,7 @@ echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
 if [ "$COMPILER" == "gcc" ]; then
 
   gcc_version="10"
-  sudo apt install -y --no-install-recommends "g++-${gcc_version}"
+  sudo apt-get install -y --no-install-recommends "g++-${gcc_version}"
   sudo update-alternatives \
     --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
     --slave /usr/bin/g++ g++ "/usr/bin/g++-${gcc_version}"
@@ -168,7 +168,7 @@ if [ "$COMPILER" == "gcc" ]; then
 
 elif [ "$COMPILER" == "clang" ]; then
 
-  sudo apt install clang
+  sudo apt-get install clang
   echo export CC="/usr/bin/clang" >> ${ENV_FILE}
   echo export CXX="/usr/bin/clang++" >> ${ENV_FILE}
 

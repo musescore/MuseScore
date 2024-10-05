@@ -2,8 +2,6 @@ name: 'Check: Visual Tests (vtest)'
 
 on:
   pull_request:
-    branches:
-    - master
 
 jobs:
   setup:
@@ -20,20 +18,21 @@ jobs:
         access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - name: "Configure workflow"
       run: |
-        sudo bash ./buildscripts/ci/tools/make_build_number.sh
+        bash ./buildscripts/ci/tools/make_build_number.sh
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
-        echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
-        echo "BUILD_NUMBER: $BUILD_NUMBER"
-        
+        echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
+
     - name: Get reference commit for PR
       if: github.event_name == 'pull_request'
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
       run: |
-        REFERENCE_SHA=${{ github.event.pull_request.base.sha }}
+        REFERENCE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} HEAD)
         if [ -z "$REFERENCE_SHA" ]; then DO_RUN='false'; else DO_RUN='true'; fi
         echo "REFERENCE_SHA=$REFERENCE_SHA" >> $GITHUB_ENV
         echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV
@@ -41,23 +40,22 @@ jobs:
     - name: Get reference commit for push commit
       if: github.event_name == 'push'
       run: |
-        REFERENCE_SHA=$( git show -s --pretty=%P ${{ github.sha }} | head -c 10 )
-        if [ -z "$REFERENCE_SHA" ]; then DO_RUN='false'; else DO_RUN='true'; fi
+        REFERENCE_SHA=${{ github.event.before }}
+        if [[ -z "$REFERENCE_SHA" || "$REFERENCE_SHA" == 0000000000000000000000000000000000000000 ]]; then 
+          DO_RUN='false' 
+        else 
+          DO_RUN='true'
+        fi
         echo "REFERENCE_SHA=$REFERENCE_SHA" >> $GITHUB_ENV
         echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV
         echo "PR_INFO=" >> $GITHUB_ENV
     - id: output_data
       name: Output workflow data
-      env:
-        pr_info: ${{ env.PR_INFO }}
       run: |
-        echo "do_run=${{ env.DO_RUN }}" >> $GITHUB_OUTPUT
-        echo "DO_RUN=${{ env.DO_RUN }}"
-        echo "reference_sha=${{ env.REFERENCE_SHA }}" >> $GITHUB_OUTPUT
-        echo "REFERENCE_SHA=${{ env.REFERENCE_SHA }}"
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"VTests Comparison ${{ env.BUILD_NUMBER }}${pr_info}")"
-        echo "artifact_name=$UPLOAD_ARTIFACT_NAME"  >> $GITHUB_OUTPUT
-        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME"
+        echo "do_run=${DO_RUN}" | tee -a $GITHUB_OUTPUT
+        echo "reference_sha=${REFERENCE_SHA}" | tee -a $GITHUB_OUTPUT
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"VTests Comparison ${BUILD_NUMBER}${PR_INFO}")"
+        echo "artifact_name=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_OUTPUT
 
   build_current:
     name: "Build current"
@@ -67,21 +65,28 @@ jobs:
     steps:
     - name: Clone repository
       uses: actions/checkout@v4
-    - name: Ccache cache files
+
+    - name: Get ccache timestamp
+      run: echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_ENV
+    - name: Restore ccache files
       uses: actions/cache@v4
       with:
-        path: ~/.ccache
-        key: ${{github.workflow}}-ccache-$(date -u +"%F-%T")
-        restore-keys: ${{github.workflow}}-ccache- # restore ccache from either previous build on this branch or on master
+        path: ${{ github.workspace }}/.ccache
+        key: ${{github.workflow}}-ccache-${{ env.CCACHE_TIMESTAMP }}
+        restore-keys: ${{github.workflow}}-ccache-
     - name: Setup ccache
       run: |
-        bash ./buildscripts/ci/tools/setup_ccache.sh
+        sudo apt-get update && sudo apt-get install -y ccache
+        bash ./buildscripts/ci/tools/setup_ccache_config.sh
+
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/linux/setup.sh
     - name: Build and Pack
       run: |
         bash ./buildscripts/ci/vtests/build_and_pack.sh
+        echo "============== ccache ==============="
+        ccache -s
     - name: Upload
       uses: actions/upload-artifact@v4
       with:
@@ -98,21 +103,28 @@ jobs:
       uses: actions/checkout@v4
       with:
         ref: ${{ needs.setup.outputs.reference_sha }}
-    - name: Ccache cache files
+
+    - name: Get ccache timestamp
+      run: echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_ENV
+    - name: Restore ccache files
       uses: actions/cache@v4
       with:
-        path: ~/.ccache
-        key: ${{github.workflow}}-ccache-$(date -u +"%F-%T")
-        restore-keys: ${{github.workflow}}-ccache- # restore ccache from either previous build on this branch or on master
+        path: ${{ github.workspace }}/.ccache
+        key: ${{github.workflow}}-ccache-${{ env.CCACHE_TIMESTAMP }}
+        restore-keys: ${{github.workflow}}-ccache-
     - name: Setup ccache
       run: |
-        bash ./buildscripts/ci/tools/setup_ccache.sh
+        sudo apt-get update && sudo apt-get install -y ccache
+        bash ./buildscripts/ci/tools/setup_ccache_config.sh
+
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/linux/setup.sh
     - name: Build and Pack
       run: |
         bash ./buildscripts/ci/vtests/build_and_pack.sh
+        echo "============== ccache ==============="
+        ccache -s
     - name: Upload
       uses: actions/upload-artifact@v4
       with:
@@ -137,10 +149,10 @@ jobs:
       with:
         name: reference_build
         path: ./musescore_reference
-    - name: Generate PNGs   
+    - name: Generate PNGs
       run: |
         xvfb-run ./buildscripts/ci/vtests/generate_pngs.sh
-      env: 
+      env:
         ASAN_OPTIONS: "detect_leaks=0"
     - name: Compare PNGs
       run: |
@@ -184,4 +196,4 @@ jobs:
           [here][1]
 
           [1]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        token: ${{ secrets.GITHUB_TOKEN }}    
+        token: ${{ secrets.GITHUB_TOKEN }}
