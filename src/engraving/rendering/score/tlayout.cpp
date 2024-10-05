@@ -5419,10 +5419,7 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
     const bool up = item->up();
     const double _up = up ? -1.0 : 1.0;
 
-    //Note* note = up ? item->chord()->downNote() : item->chord()->upNote();
-    //! NOTE A lot of spam
-    // LD_CONDITION(note->ldata()->mirror.has_value());
-
+    double x  = 0.0; // horizontal displacement to match note attach point
     double y1 = 0.0; // vertical displacement to match note attach point
     double y2 = _up * (item->length());
 
@@ -5451,13 +5448,64 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
             // in other TAB types, no correction
         } else { // non-TAB
             // move stem start to note attach point
-            Note* note = up ? item->chord()->downNote() : item->chord()->upNote();
-            if ((up && !note->ldata()->mirror.value(LD_ACCESS::BAD)) || (!up && note->ldata()->mirror.value(LD_ACCESS::BAD))) {
+            const Note* note = up ? item->chord()->downNote() : item->chord()->upNote();
+            //! NOTE A lot of spam
+            // LD_CONDITION(note->ldata()->mirror.has_value());
+            const bool mirror = note->ldata()->mirror.value(LD_ACCESS::BAD);
+            const TDuration durationType = note->chord()->durationType();
+            if ((up && !mirror) || (!up && mirror)) {
+                x  = note->stemUpSE().x();
+                const String musicalFont = conf.styleSt(Sid::musicalSymbolFont);
+                const double lw = item->lineWidthMag() * 0.5;
+                if (musicalFont == "Bravura") { // we can't really change this font
+                    if (durationType == DurationType::V_LONG) {
+                        x -= 1.75 * lw;
+                    } else {
+                        x += 2.25 * lw;
+                    }
+                } else if (musicalFont == "Emmentaler") {
+                    if (durationType == DurationType::V_LONG) {
+                        x += 0.5 * lw; // we should be able to fix this in the metadata
+                    } else if (durationType == DurationType::V_HALF) {
+                        x -= 0.7 * lw; // we should be able to fix this in the metadata
+                    } else {
+                        x -= 5 * lw; // we should be able to fix this in the metadata
+                    }
+                } else if (musicalFont == "Gonville") {
+                    if (durationType == DurationType::V_LONG) {
+                        x -= 3.1 * lw; // we should be able to fix this in the metadata
+                    } else {
+                        x += 1.5 * lw; // we should be able to fix this in the metadata
+                    }
+                } else if (musicalFont == "Leland" && durationType == DurationType::V_LONG) {
+                    x += 2.5 * lw; // we should be able to fix this in the metadata
+                } else if (musicalFont == "MuseJazz") {
+                    if (durationType == DurationType::V_LONG) {
+                        x -= 1.25 * lw; // we should be able to fix this in the metadata
+                    } else if (durationType == DurationType::V_HALF) {
+                        x -= 1.35 * lw; // we should be able to fix this in the metadata
+                    }
+                } else if (musicalFont == "Petaluma") { // we can't really change this font
+                    if (durationType == DurationType::V_LONG) {
+                        x -= 0.5 * lw;
+                    } else if (durationType == DurationType::V_HALF) {
+                        x += 0.4 * lw;
+                    }
+                }
                 y1 = note->stemUpSE().y();
+                if (durationType == DurationType::V_LONG) {
+                    x  += 0.5 * note->headWidth() + 2 * lw;
+                    y1 -= 0.5 * item->spatium();
+                }
             } else {
+                x  = note->stemDownNW().x();
                 y1 = note->stemDownNW().y();
+                if (durationType == DurationType::V_LONG) {
+                    y1 += 0.5 * item->spatium();
+                }
             }
 
+            ldata->setPosX(note->ldata()->pos().x());
             ldata->setPosY(note->ldata()->pos().y());
         }
 
@@ -5473,7 +5521,7 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
     }
 
     double lineWidthCorrection = item->lineWidthMag() * 0.5;
-    double lineX = isTabStaff ? 0.0 : _up * lineWidthCorrection;
+    double lineX = isTabStaff ? 0.0 : x + _up * lineWidthCorrection;
 
     LineF line = LineF(lineX, y1, lineX, y2);
     ldata->line = line;
