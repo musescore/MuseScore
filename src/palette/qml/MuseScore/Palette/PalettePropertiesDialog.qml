@@ -158,6 +158,15 @@ StyledDialogView {
                         onValueEdited: function(newValue) {
                             repeater.setValue(model.index, newValue)
                         }
+                        
+                        navigation.panel: root.navigationPanel
+                        navigation.order: 2 + model.index
+                        navigation.accessible.name: modelData["title"] + " " + currentValue
+                        navigation.onActiveChanged: {
+                            if(navigation.active) {
+                                forceActiveFocus()
+                            }
+                        }
                     }
                 }
             }
@@ -174,7 +183,7 @@ StyledDialogView {
             }
 
             navigation.panel: root.navigationPanel
-            navigation.order: 2
+            navigation.order: 2 + repeater.count
         }
 
         ButtonBox {
