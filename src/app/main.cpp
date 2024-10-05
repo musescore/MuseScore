@@ -66,10 +66,6 @@ static void crashCallback(int signum)
 static void app_init_qrc()
 {
     Q_INIT_RESOURCE(app);
-
-#ifdef Q_OS_WIN
-    Q_INIT_RESOURCE(app_win);
-#endif
 }
 
 int main(int argc, char** argv)
