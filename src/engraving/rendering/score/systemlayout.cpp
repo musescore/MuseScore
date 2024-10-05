@@ -1044,7 +1044,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             }
         }
     }
-    for (auto staffSticking : staffStickings) {
+    for (const auto& staffSticking : staffStickings) {
         AlignmentLayout::alignItemsGroup(staffSticking.second.stickingsAbove, system);
         AlignmentLayout::alignItemsGroup(staffSticking.second.stickingsBelow, system);
     }
