@@ -657,9 +657,25 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
         } else {
             Ret ret = muse::make_ok();
 
-            ret = fileSystem()->copy(savePath, targetContainerPath, true);
-            if (!ret) {
-                return ret;
+            if (!targetContainerPath.contains(" - ALL_ZEROS_CORRUPTED_ORIG_ONLY.mscz")) {
+                ret = fileSystem()->copy(savePath, targetContainerPath, true);
+                if (!ret) {
+                    return ret;
+                }
+            } else {
+                // Corrupt the original file for testing purposes. The temp file will be healthy.
+                size_t tempFileSize = 0;
+                File tempFile(savePath);
+                if (tempFile.open()) {
+                    tempFileSize = tempFile.size();
+                    tempFile.close();
+                }
+
+                ByteArray corruptedData = ByteArray(tempFileSize);
+                ret = AllZerosFileCorruptor::writeFile(targetContainerPath, corruptedData);
+                if (!ret) {
+                    return ret;
+                }
             }
 
             if (!isAutosave) {
