@@ -3191,7 +3191,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9802"/>
         <source>Label for full bends</source>
-        <translation>Estensione completa</translation>
+        <translation>Etichetta per full bend</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9907"/>
@@ -3206,7 +3206,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10038"/>
         <source>Use cue sized numbers for grace note bends</source>
-        <translation>Utilizza numeri di dimensioni minori per le bend delle note di abbellimento</translation>
+        <translation>Utilizza numeri di dimensioni minori per i bend delle note di abbellimento</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11209"/>
@@ -8408,13 +8408,13 @@ altezza x del testo):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2134"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2211"/>
         <source>Set duration: 128th note</source>
-        <translation>Imposta durata: fusa</translation>
+        <translation>Imposta durata: 128esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2141"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2218"/>
         <source>Set duration: 256th note</source>
-        <translation>Imposta durata: semifusa</translation>
+        <translation>Imposta durata: 256esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2148"/>
@@ -8520,12 +8520,12 @@ altezza x del testo):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2450"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2451"/>
         <source>Slight bend</source>
-        <translation>Leggera piegatura</translation>
+        <translation>Leggero bend</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2461"/>
         <source>Show/hide invisible elements</source>
-        <translation>Mostra/nascondi gli elementi invisibili</translation>
+        <translation>Mostra/nascondi elementi invisibili</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2475"/>
@@ -8540,7 +8540,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2505"/>
         <source>Show element bounding rectangles</source>
-        <translation>Mostra i rettangoli di delimitazione degli elementi</translation>
+        <translation>Mostra rettangoli di delimitazione degli elementi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2511"/>
@@ -8609,13 +8609,13 @@ altezza x del testo):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2112"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2189"/>
         <source>16th note</source>
-        <translation>Semicroma </translation>
+        <translation>16esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2119"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2196"/>
         <source>32nd note</source>
-        <translation>Biscroma (trentaduesimo)</translation>
+        <translation>32esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2126"/>
@@ -8627,7 +8627,7 @@ altezza x del testo):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2133"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2210"/>
         <source>128th note</source>
-        <translation>Fusa</translation>
+        <translation>128esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2238"/>
@@ -8785,7 +8785,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2056"/>
         <source>Insert</source>
-        <translation>Inserire </translation>
+        <translation>Inserisci</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1217"/>
@@ -8832,7 +8832,7 @@ altezza x del testo):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="787"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="788"/>
         <source>Auto beam</source>
-        <translation>Gruppo automatico</translation>
+        <translation>Travatura automatica</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="53"/>
@@ -8877,7 +8877,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="107"/>
         <source>&amp;Playback controls</source>
-        <translation>Controlli &amp;riproduzione</translation>
+        <translation>Controlli di &amp;riproduzione</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="108"/>
@@ -9059,12 +9059,12 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="59"/>
         <source>Loop playback</source>
-        <translation>Riproduzione ciclica</translation>
+        <translation>Riproduzione in loop</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="76"/>
         <source>Open playback setup dialog</source>
-        <translation>Apri impostazioni di riproduzione</translation>
+        <translation>Apri dialog setup di riproduzione</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="101"/>
@@ -9090,12 +9090,12 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="60"/>
         <source>Toggle ‘Loop playback’</source>
-        <translation>Attiva/disattiva &apos;Riproduzione ciclica&apos;</translation>
+        <translation>Attiva/disattiva &apos;Riproduzione in loop&apos;</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="68"/>
         <source>Toggle metronome playback</source>
-        <translation>Attiva/disattiva metronomo</translation>
+        <translation>Attiva/disattiva riproduzione metronomo</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="75"/>
@@ -10271,7 +10271,7 @@ altezza x del testo):</translation>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="136"/>
         <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="75"/>
         <source>Playback controls</source>
-        <translation>Controlli riproduzione</translation>
+        <translation>Controlli di riproduzione</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="158"/>
@@ -11053,7 +11053,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="77"/>
         <source>Color guitar bends outside of playable range</source>
-        <translation>Colora le bend della chitarra fuori dall&apos;estensione suonabile</translation>
+        <translation>Colora i bend della chitarra fuori dall&apos;estensione suonabile</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="91"/>
@@ -11225,7 +11225,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="62"/>
         <source>Your version of %1 is up to date.</source>
-        <translation>Questa versione di %1 è aggiornata.</translation>
+        <translation>Versione di %1 aggiornata.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="95"/>
@@ -12388,12 +12388,12 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="204"/>
         <source>Beam</source>
-        <translation>Gruppo note</translation>
+        <translation>Travatura</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="205"/>
         <source>Beam segment</source>
-        <translation>Segmento gruppo</translation>
+        <translation>Segmento travatura</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="186"/>
@@ -12852,12 +12852,12 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="302"/>
         <source>Guitar bend hold segment</source>
-        <translation>Segmento di mantenimento bending chitarra</translation>
+        <translation>Segmento di mantenimento bend chitarra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="303"/>
         <source>Guitar bend text</source>
-        <translation>Testo bending chitarra</translation>
+        <translation>Testo di bend chitarra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="487"/>
@@ -22301,7 +22301,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="37"/>
         <source>Beam distance</source>
-        <translation>Distanza gruppo</translation>
+        <translation>Distanza travatura</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="45"/>
