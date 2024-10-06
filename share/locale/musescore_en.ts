@@ -9075,13 +9075,33 @@ text x-height):</translation>
         <translation type="unfinished">Open playback setup dialog</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="101"/>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="102"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="96"/>
+        <source>Written pitch</source>
+        <translation type="unfinished">Written pitch</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="97"/>
+        <source>Input written pitch</source>
+        <translation type="unfinished">Input written pitch</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="104"/>
+        <source>Sounding pitch</source>
+        <translation type="unfinished">Sounding pitch</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="105"/>
+        <source>Input sounding pitch</source>
+        <translation type="unfinished">Input sounding pitch</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="123"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="124"/>
         <source>Play chord symbols</source>
         <translation type="unfinished">Play chord symbols</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="109"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="131"/>
         <source>Pan score automatically</source>
         <translation type="unfinished">Pan score automatically</translation>
     </message>
@@ -9091,7 +9111,7 @@ text x-height):</translation>
         <translation type="unfinished">Toggle MIDI input</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="110"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="132"/>
         <source>Pan score automatically during playback</source>
         <translation type="unfinished">Pan score automatically during playback</translation>
     </message>
@@ -9111,14 +9131,14 @@ text x-height):</translation>
         <translation type="unfinished">Playback setup</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="128"/>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="129"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="150"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="151"/>
         <source>Set loop marker left</source>
         <translation type="unfinished">Set loop marker left</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="135"/>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="136"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="157"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="158"/>
         <source>Set loop marker right</source>
         <translation type="unfinished">Set loop marker right</translation>
     </message>
@@ -9134,8 +9154,8 @@ text x-height):</translation>
         <translation type="unfinished">Enable MIDI input</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="93"/>
-        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="94"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="115"/>
+        <location filename="../../src/playback/internal/playbackuiactions.cpp" line="116"/>
         <source>Play repeats</source>
         <translation type="unfinished">Play repeats</translation>
     </message>
@@ -10144,7 +10164,7 @@ text x-height):</translation>
         <translation type="unfinished">Select instrument…</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/playbacktoolbarmodel.cpp" line="123"/>
+        <location filename="../../src/playback/view/playbacktoolbarmodel.cpp" line="130"/>
         <source>Playback settings</source>
         <translation type="unfinished">Playback settings</translation>
     </message>
@@ -10937,7 +10957,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/FoldersSection.qml" line="31"/>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="185"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="190"/>
         <source>Folders</source>
         <translation type="unfinished">Folders</translation>
     </message>
@@ -11059,7 +11079,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="31"/>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="164"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="169"/>
         <source>Note input</source>
         <translation type="unfinished">Note input</translation>
     </message>
@@ -11170,7 +11190,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiFontSection.qml" line="29"/>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="155"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="160"/>
         <source>Appearance</source>
         <translation type="unfinished">Appearance</translation>
     </message>
@@ -11317,57 +11337,57 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Program start</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="152"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="157"/>
         <source>General</source>
         <translation type="unfinished">General</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="158"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="163"/>
         <source>Canvas</source>
         <translation type="unfinished">Canvas</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="161"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="166"/>
         <source>Save &amp; publish</source>
         <translation type="unfinished">Save &amp; publish</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="170"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="175"/>
         <source>Audio &amp; MIDI</source>
         <translation type="unfinished">Audio &amp; MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="173"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="178"/>
         <source>MIDI mappings</source>
         <translation type="unfinished">MIDI mappings</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="167"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="172"/>
         <source>Score</source>
         <translation type="unfinished">Score</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="176"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="181"/>
         <source>Import</source>
         <translation type="unfinished">Import</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="179"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="184"/>
         <source>Shortcuts</source>
         <translation type="unfinished">Shortcuts</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="182"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="187"/>
         <source>Update</source>
         <translation type="unfinished">Update</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="188"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="193"/>
         <source>Advanced</source>
         <translation type="unfinished">Advanced</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="191"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="196"/>
         <source>Braille</source>
         <translation type="unfinished">Braille</translation>
     </message>
@@ -12061,7 +12081,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">%1; Duration: %2; %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2394"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2402"/>
         <source>Annotations:</source>
         <translation type="unfinished">Annotations:</translation>
     </message>
@@ -12071,7 +12091,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1114"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3228"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3240"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2420"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2428"/>
         <source>Start of %1</source>
         <translation type="unfinished">Start of %1</translation>
     </message>
@@ -12081,7 +12101,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1116"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3232"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3248"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2435"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2443"/>
         <source>End of %1</source>
         <translation type="unfinished">End of %1</translation>
     </message>
@@ -19254,12 +19274,12 @@ pickup measure</translation>
         <translation type="unfinished">Unknown error:</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="228"/>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="43"/>
         <source>line %1, column %2:</source>
         <translation type="unfinished">line %1, column %2:</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="241"/>
+        <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="56"/>
         <source>expected token type and name ‘EndElement %1’, actual ‘%2 %3’</source>
         <translation type="unfinished">expected token type and name ‘EndElement %1’, actual ‘%2 %3’</translation>
     </message>
@@ -23694,12 +23714,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="177"/>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="178"/>
         <source>Smooth panning</source>
         <translation type="unfinished">Smooth panning</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="227"/>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="234"/>
         <source>Anchor color</source>
         <translation type="unfinished">Anchor color</translation>
     </message>
@@ -23797,9 +23817,14 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Customize kit</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="183"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="185"/>
         <source>Add row</source>
         <translation type="unfinished">Add row</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/playbacktoolbarmodel.cpp" line="149"/>
+        <source>Input pitch</source>
+        <translation type="unfinished">Input pitch</translation>
     </message>
 </context>
 <context>
@@ -25442,28 +25467,28 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Do you want to hide these custom palettes or permanently delete them?</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="826"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="835"/>
         <source>Do you want to permanently delete this custom palette?</source>
         <translation type="unfinished">Do you want to permanently delete this custom palette?</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="847"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="856"/>
         <source>Do you want to restore this palette to its default state? All changes to this palette will be lost.</source>
         <translation type="unfinished">Do you want to restore this palette to its default state? All changes to this palette will be lost.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="909"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="918"/>
         <source>Load palette</source>
         <translation type="unfinished">Load palette</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="910"/>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="913"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="919"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="922"/>
         <source>MuseScore Studio palette</source>
         <translation type="unfinished">MuseScore Studio palette</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteprovider.cpp" line="912"/>
+        <location filename="../../src/palette/internal/paletteprovider.cpp" line="921"/>
         <source>Save palette</source>
         <translation type="unfinished">Save palette</translation>
     </message>
@@ -25559,18 +25584,18 @@ failed: %2</translation>
         <translation type="unfinished">Unicode symbols</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteconfiguration.cpp" line="43"/>
+        <location filename="../../src/palette/internal/paletteconfiguration.cpp" line="44"/>
         <source>Palette scale</source>
         <translation type="unfinished">Palette scale</translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="98"/>
+        <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="100"/>
         <source>Open only one palette at a time</source>
         <extracomment>This is the name of a setting that can be turned on or off. &quot;Open&quot; is a verb here.</extracomment>
         <translation type="unfinished">Open only one palette at a time</translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="65"/>
+        <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="67"/>
         <source>Single-click to open a palette</source>
         <translation type="unfinished">Single-click to open a palette</translation>
     </message>
@@ -25599,12 +25624,17 @@ failed.</source>
 failed.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="130"/>
+        <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="132"/>
+        <source>Allow reordering palettes</source>
+        <translation type="unfinished">Allow reordering palettes</translation>
+    </message>
+    <message>
+        <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="164"/>
         <source>Expand all palettes</source>
         <translation type="unfinished">Expand all palettes</translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="131"/>
+        <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="165"/>
         <source>Collapse all palettes</source>
         <translation type="unfinished">Collapse all palettes</translation>
     </message>
@@ -27188,28 +27218,28 @@ failed.</translation>
         <translation type="unfinished">Playback toolbar</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="79"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="81"/>
         <source>Reverb</source>
         <translation type="unfinished">Reverb</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="85"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="87"/>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="617"/>
         <source>Aux %1</source>
         <translation type="unfinished">Aux %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="888"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="899"/>
         <source>Metronome</source>
         <translation type="unfinished">Metronome</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="898"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="909"/>
         <source>Chords</source>
         <translation type="unfinished">Chords</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1220"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1231"/>
         <source>Loading audio samples</source>
         <translation type="unfinished">Loading audio samples</translation>
     </message>
