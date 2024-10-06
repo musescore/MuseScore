@@ -21,18 +21,11 @@ jobs:
 
         echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
 
-        echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_ENV
-
-    - name: Restore ccache files
-      uses: actions/cache@v4
-      with:
-        path: ${{ github.workspace }}/.ccache
-        key: ${{github.workflow}}-ccache-${{ env.CCACHE_TIMESTAMP }}
-        restore-keys: ${{github.workflow}}-ccache-
-    - name: Setup ccache
+    - name: Install sccache
+      uses: mozilla-actions/sccache-action@v0.0.6
+    - name: Enable sccache
       run: |
-        sudo apt-get update && sudo apt-get install -y ccache
-        bash ./buildscripts/ci/tools/setup_ccache_config.sh
+        echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
 
     - name: Setup environment
       run: |
@@ -41,8 +34,6 @@ jobs:
       run: |
         mkdir -p build.artifacts/env
         bash ./buildscripts/ci/linux/build_utest.sh -n ${{ env.BUILD_NUMBER }}
-        echo "============== ccache ==============="
-        ccache -s
     - name: Free up disk space
       # After building, too little disk space is left. Remove unnecessary tools to free up disk space.
       run: |

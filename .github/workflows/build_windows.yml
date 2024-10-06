@@ -132,6 +132,12 @@ jobs:
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
+    - name: Install sccache
+      uses: mozilla-actions/sccache-action@v0.0.6
+    - name: Enable sccache
+      run: |
+        echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
+
     - name: Setup environment
       run: |
         buildscripts\ci\windows\setup.bat
@@ -252,6 +258,12 @@ jobs:
         echo "DO_PLACEHOLDER_TRANSLATIONS=$DO_PLACEHOLDER_TRANSLATIONS" | tee -a $GITHUB_ENV
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
+
+    - name: Install sccache
+      uses: mozilla-actions/sccache-action@v0.0.6
+    - name: Enable sccache
+      run: |
+        echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
 
     - name: Setup environment
       run: |

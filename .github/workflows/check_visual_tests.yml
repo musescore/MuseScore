@@ -66,18 +66,11 @@ jobs:
     - name: Clone repository
       uses: actions/checkout@v4
 
-    - name: Get ccache timestamp
-      run: echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_ENV
-    - name: Restore ccache files
-      uses: actions/cache@v4
-      with:
-        path: ${{ github.workspace }}/.ccache
-        key: ${{github.workflow}}-ccache-${{ env.CCACHE_TIMESTAMP }}
-        restore-keys: ${{github.workflow}}-ccache-
-    - name: Setup ccache
+    - name: Install sccache
+      uses: mozilla-actions/sccache-action@v0.0.6
+    - name: Enable sccache
       run: |
-        sudo apt-get update && sudo apt-get install -y ccache
-        bash ./buildscripts/ci/tools/setup_ccache_config.sh
+        echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
 
     - name: Setup environment
       run: |
@@ -85,8 +78,6 @@ jobs:
     - name: Build and Pack
       run: |
         bash ./buildscripts/ci/vtests/build_and_pack.sh
-        echo "============== ccache ==============="
-        ccache -s
     - name: Upload
       uses: actions/upload-artifact@v4
       with:
@@ -104,18 +95,11 @@ jobs:
       with:
         ref: ${{ needs.setup.outputs.reference_sha }}
 
-    - name: Get ccache timestamp
-      run: echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_ENV
-    - name: Restore ccache files
-      uses: actions/cache@v4
-      with:
-        path: ${{ github.workspace }}/.ccache
-        key: ${{github.workflow}}-ccache-${{ env.CCACHE_TIMESTAMP }}
-        restore-keys: ${{github.workflow}}-ccache-
-    - name: Setup ccache
+    - name: Install sccache
+      uses: mozilla-actions/sccache-action@v0.0.6
+    - name: Enable sccache
       run: |
-        sudo apt-get update && sudo apt-get install -y ccache
-        bash ./buildscripts/ci/tools/setup_ccache_config.sh
+        echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
 
     - name: Setup environment
       run: |
@@ -123,8 +107,6 @@ jobs:
     - name: Build and Pack
       run: |
         bash ./buildscripts/ci/vtests/build_and_pack.sh
-        echo "============== ccache ==============="
-        ccache -s
     - name: Upload
       uses: actions/upload-artifact@v4
       with:
