@@ -989,7 +989,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="26"/>
         <source>Staff/Part properties</source>
-        <translation>Proprietăți portativ/știmă</translation>
+        <translation>Proprietăți portativ/partidă</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="44"/>
@@ -1116,7 +1116,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="364"/>
         <source>Part properties</source>
-        <translation>Proprietăți știmă</translation>
+        <translation>Proprietăți partidă</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="387"/>
@@ -5412,7 +5412,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="75"/>
         <source>Apply to all parts</source>
-        <translation>Aplică pentru toate știmele</translation>
+        <translation>Aplică tuturor partidelor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="108"/>
@@ -6798,7 +6798,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="504"/>
         <source>Parts</source>
-        <translation>Știme</translation>
+        <translation>Partide</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="511"/>
@@ -7585,7 +7585,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="545"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="546"/>
         <source>Staff/Part properties…</source>
-        <translation>Proprietăți portativ/știmă...</translation>
+        <translation>Proprietăți portativ/partidă...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="570"/>
@@ -7833,7 +7833,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1252"/>
         <source>Add text: part name</source>
-        <translation>Adaugă text: nume știmă</translation>
+        <translation>Adaugă text: nume partidă</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1257"/>
@@ -9265,12 +9265,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1929"/>
         <source>Transpose up</source>
-        <translation>Transpune sus</translation>
+        <translation>Transpune ascendent</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1935"/>
         <source>Transpose down</source>
-        <translation>Transpune jos</translation>
+        <translation>Transpune descendent</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1713"/>
@@ -9380,7 +9380,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="505"/>
         <source>Manage parts</source>
-        <translation>Administrează știme</translation>
+        <translation>Administrează partide</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="569"/>
@@ -9590,7 +9590,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1251"/>
         <source>&amp;Part name</source>
-        <translation>Nume &amp;știmă</translation>
+        <translation>Nume &amp;partidă</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1263"/>
@@ -10176,7 +10176,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="52"/>
         <source>Show g&amp;raphics info…</source>
-        <translation type="unfinished"/>
+        <translation>Arată informații despre g&amp;rafică...</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="57"/>
@@ -11395,7 +11395,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="98"/>
         <source>Style for part</source>
-        <translation>Stil pentru știmă</translation>
+        <translation>Stil pentru partidă</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="181"/>
@@ -11415,7 +11415,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="201"/>
         <source>Choose default style for parts</source>
-        <translation>Alege stilul implicit pentur știme</translation>
+        <translation>Alege stilul implicit pentru partide</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/SaveToCloudSection.qml" line="31"/>
@@ -12216,7 +12216,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="168"/>
         <source>Part</source>
-        <translation>Știmă</translation>
+        <translation>Partidă</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="169"/>
@@ -12991,7 +12991,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1125"/>
         <source>Instrument name (Part)</source>
-        <translation>Nume instrument (Știmă)</translation>
+        <translation>Nume instrument (partidă)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="246"/>
@@ -16500,7 +16500,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3400"/>
         <source>2-comma flat</source>
-        <translation>Bebol de 2 come</translation>
+        <translation>Bemol de 2 come</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3401"/>
@@ -20150,7 +20150,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/instrumentname/InstrumentNameSettings.qml" line="66"/>
         <source>Staff/Part properties</source>
-        <translation>Proprietăți portativ/știmă</translation>
+        <translation>Proprietăți portativ/partidă</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/jumps/JumpSettings.qml" line="49"/>
@@ -21701,7 +21701,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="111"/>
         <source>Exclude from parts</source>
-        <translation>Exclude din știme</translation>
+        <translation>Exclude din partide</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stringtunings/StringTuningsSettings.qml" line="51"/>
@@ -21731,7 +21731,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/models/parts/partssettingsmodel.cpp" line="33"/>
         <source>Score and part synchronization</source>
-        <translation>Sincronizare partitură și știmă</translation>
+        <translation>Sincronizare partitură și partidă</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/symbols/symbolsettingsmodel.cpp" line="34"/>
@@ -21889,7 +21889,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="65"/>
         <source>Name on part score</source>
-        <translation>Nume pe partitura știmei</translation>
+        <translation>Nume pe partidă</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="86"/>
@@ -22050,7 +22050,7 @@ anacruzele</translation>
         <location filename="../../src/instrumentsscene/view/instrumentspaneltreemodel.cpp" line="831"/>
         <source>This will remove the %n instrument(s) from the full score and all part scores.</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation><numerusform>Aceasta va elimina instrumentul din întreaga partitură și din toate știmele.</numerusform><numerusform>Aceasta va elimina %n instrumente din întreaga partitură și din toate știmele.</numerusform><numerusform>Aceasta va elimina %n de instrumente din întreaga partitură și din toate știmele.</numerusform></translation>
+        <translation><numerusform>Aceasta va elimina instrumentul din întreaga partitură și din toate știmele.</numerusform><numerusform>Aceasta va elimina %n instrumente din întreaga partitură și din toate știmele.</numerusform><numerusform>Aceasta va elimina %n de instrumente din întreaga partitură și din toate partidele.</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/instrumentsrepository.cpp" line="42"/>
@@ -22395,18 +22395,18 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="42"/>
         <source>Parts actions</source>
         <extracomment>Accessibility description of the button group at the top of the &quot;Parts&quot; dialog</extracomment>
-        <translation>Acțiuni știme</translation>
+        <translation>Acțiuni partide</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="55"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PartsDialog.qml" line="34"/>
         <source>Parts</source>
-        <translation>Știme</translation>
+        <translation>Partide</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="60"/>
         <source>Create new part</source>
-        <translation>Crează o nouă știmă</translation>
+        <translation>Crează o nouă partidă</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsView.qml" line="55"/>
@@ -22416,7 +22416,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsView.qml" line="81"/>
         <source>Parts view</source>
-        <translation>Vizualizare știme</translation>
+        <translation>Vizualizare partide</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="91"/>
@@ -22480,7 +22480,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="129"/>
         <source>Part</source>
-        <translation>Știmă</translation>
+        <translation>Partidă</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="138"/>
@@ -22863,12 +22863,12 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="155"/>
         <source>Are you sure you want to reset this part?</source>
-        <translation>Ești sigur că vrei să resetezi această știmă?</translation>
+        <translation>Ești sigur că vrei să resetezi această partidă?</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="187"/>
         <source>Are you sure you want to delete this part?</source>
-        <translation>Ești sigur că dorești să ștergi această știmă?</translation>
+        <translation>Ești sigur că dorești să ștergi această partidă?</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="243"/>
@@ -23406,7 +23406,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="143"/>
         <source>This score already has part scores. Changing local time signatures while part scores are present is not yet supported.</source>
-        <translation>Această partitură are deja știme. Schimbarea metrilor măsurilor locale când există știme nu este suportată în prezent.</translation>
+        <translation>Această partitură are deja partide. Schimbarea metrilor măsurilor locale când există partide nu este suportată în prezent.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="147"/>
@@ -23901,7 +23901,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="232"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1244"/>
         <source>Apply to all parts</source>
-        <translation>Aplică pentru toate știmele</translation>
+        <translation>Aplică pentru toate partidele</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="791"/>
@@ -24023,12 +24023,12 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1336"/>
         <source>Part name, except on first page</source>
-        <translation>Nume știmă, exceptând prima pagină</translation>
+        <translation>Nume partidă, exceptând prima pagină</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1338"/>
         <source>Part name, on all pages</source>
-        <translation>Nume știmă, pe toate paginile</translation>
+        <translation>Nume partidă, pe toate paginile</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1340"/>
@@ -27981,7 +27981,7 @@ a eșuat.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="67"/>
         <source>Select parts to export</source>
-        <translation>Alege știmele pentru export</translation>
+        <translation>Alege partidele pentru export</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="95"/>
@@ -28031,7 +28031,7 @@ a eșuat.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="87"/>
         <source>Each selected part will be exported as a separate audio file.</source>
-        <translation>Fiecare știmă aleasă va fi exportată într-un fișier audio separat.</translation>
+        <translation>Fiecare partidă aleasă va fi exportată într-un fișier audio separat.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="52"/>
@@ -28061,7 +28061,7 @@ a eșuat.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MidiSettingsPage.qml" line="59"/>
         <source>Each selected part will be exported as a separate MIDI file.</source>
-        <translation>Fiecare știmă aleasă va fi exportată ca un fișier MIDI separat.</translation>
+        <translation>Fiecare partidă aleasă va fi exportată ca un fișier MIDI separat.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PdfSettingsPage.qml" line="33"/>
@@ -28079,19 +28079,19 @@ a eșuat.</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="74"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/SvgSettingsPage.qml" line="45"/>
         <source>Each page of the selected parts will be exported as a separate %1 file.</source>
-        <translation>Fiecare pagină din știmele alese se va exporta ca un fișier %1 separat.</translation>
+        <translation>Fiecare pagină din partidele alese se va exporta ca un fișier %1 separat.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="71"/>
         <source>Score_and_Parts</source>
         <extracomment>Used in export filename suggestion. Please use only characters that are valid for filenames.</extracomment>
-        <translation>Partitură_și_Știme</translation>
+        <translation>Partitură_și_Partide</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="74"/>
         <source>Parts</source>
         <extracomment>Used in export filename suggestion. Please use only characters that are valid for filenames.</extracomment>
-        <translation>Știme</translation>
+        <translation>Partide</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="363"/>
@@ -28270,12 +28270,12 @@ a eșuat.</translation>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="305"/>
         <source>Each part to a separate file</source>
-        <translation>Fiecare știmă într-un fișier separat</translation>
+        <translation>Fiecare partidă într-un fișier separat</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="306"/>
         <source>All parts combined in one file</source>
-        <translation>Toate știmele combinate într-un fișier</translation>
+        <translation>Toate partidele combinate într-un fișier</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="546"/>

@@ -27912,7 +27912,7 @@ misslyckades.</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="468"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="598"/>
         <source>Please try again later, or get help for this problem on musescore.org.</source>
-        <translation>Försök igen senare eller få hjälp med det här problemet på musescore.org.</translation>
+        <translation>Försök igen senare eller få hjälp med problemet på musescore.org.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="484"/>
@@ -29150,27 +29150,27 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialog.qml" line="32"/>
         <source>Enter shortcut sequence</source>
-        <translation>Ange tangentgenväg</translation>
+        <translation>Ange kortkommando</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialog.qml" line="84"/>
         <source>Define keyboard shortcut</source>
-        <translation>Definiera tangentgenväg</translation>
+        <translation>Definiera kortkommando</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialog.qml" line="114"/>
         <source>Old shortcut:</source>
-        <translation>Gammal genväg:</translation>
+        <translation>Gammalt kortkommando:</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialog.qml" line="127"/>
         <source>New shortcut:</source>
-        <translation>Ny genväg:</translation>
+        <translation>Nytt kortkommando:</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialog.qml" line="140"/>
         <source>Type to set shortcut</source>
-        <translation>Skriv för att ange tangentgenväg</translation>
+        <translation>Skriv för att ange kortkommando</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml" line="43"/>
@@ -29226,7 +29226,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="97"/>
         <source>Search shortcut</source>
-        <translation>Sök genväg</translation>
+        <translation>Sök kortkommando</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/MidiDeviceMappingPage.qml" line="95"/>
@@ -29266,22 +29266,22 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="37"/>
         <source>MuseScore Studio shortcuts file</source>
-        <translation>MuseScore Studio genvägsfil</translation>
+        <translation>MuseScore Studio kortkommandofil</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="186"/>
         <source>Import shortcuts</source>
-        <translation>Importera genvägar</translation>
+        <translation>Importera kortkommandon</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="198"/>
         <source>Export shortcuts</source>
-        <translation>Exportera genvägar</translation>
+        <translation>Exportera kortkommandon</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="151"/>
         <source>This shortcut is already assigned to: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>Den här genvägen är redan tilldelad till: &lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation>Det här kortkommandot är redan tilldelat till: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="171"/>
@@ -29291,7 +29291,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="176"/>
         <source>Reassign shortcut</source>
-        <translation>Ändra genväg</translation>
+        <translation>Ändra kortkommando</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingTopPanel.qml" line="39"/>
