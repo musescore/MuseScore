@@ -33,7 +33,7 @@ class PercussionPanelPadListModel : public QAbstractListModel
     Q_OBJECT
 
     Q_PROPERTY(int numColumns READ numColumns CONSTANT)
-    Q_PROPERTY(int numPads READ numPads NOTIFY numPadsChanged CONSTANT)
+    Q_PROPERTY(int numPads READ numPads NOTIFY numPadsChanged)
 
 public:
     explicit PercussionPanelPadListModel(QObject* parent = nullptr);
