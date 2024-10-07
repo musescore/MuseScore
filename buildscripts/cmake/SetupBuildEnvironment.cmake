@@ -35,12 +35,12 @@ elseif(CC_IS_MSVC)
     set(CMAKE_C_FLAGS_RELEASE           "/MT /O2 /Ob2")
     set(CMAKE_C_FLAGS_RELWITHDEBINFO    "/MT /Zi /O2 /Ob1")
 
-    add_definitions(-DWIN32)
-    add_definitions(-D_WINDOWS)
-    add_definitions(-D_UNICODE)
-    add_definitions(-DUNICODE)
-    add_definitions(-D_USE_MATH_DEFINES)
-    add_definitions(-DNOMINMAX)
+    add_compile_definitions(WIN32)
+    add_compile_definitions(_WINDOWS)
+    add_compile_definitions(_UNICODE)
+    add_compile_definitions(UNICODE)
+    add_compile_definitions(_USE_MATH_DEFINES)
+    add_compile_definitions(NOMINMAX)
 
 elseif(CC_IS_MINGW)
     message(STATUS "Using Compiler MINGW ${CMAKE_CXX_COMPILER_VERSION}")
@@ -58,8 +58,8 @@ elseif(CC_IS_MINGW)
         set(CMAKE_EXE_LINKER_FLAGS "-Wl,--large-address-aware")
     endif()
 
-    add_definitions(-D_UNICODE)
-    add_definitions(-DUNICODE)
+    add_compile_definitions(_UNICODE)
+    add_compile_definitions(UNICODE)
 
 elseif(CC_IS_CLANG)
     message(STATUS "Using Compiler CLANG ${CMAKE_CXX_COMPILER_VERSION}")
@@ -76,7 +76,7 @@ elseif(CC_IS_CLANG)
     # On macOS with clang there are problems with debugging
     # - the value of the std::u16string is not visible.
     if (BUILD_IS_DEBUG AND MUSE_COMPILE_STRING_DEBUG_HACK)
-        add_definitions(-DMUSE_STRING_DEBUG_HACK)
+        add_compile_definitions(MUSE_STRING_DEBUG_HACK)
     endif()
 
 elseif(CC_IS_EMSCRIPTEN)
@@ -112,12 +112,12 @@ include(SetupCompileWarnings)
 string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG") #Debug
 
-    add_definitions(-DQT_QML_DEBUG)
+    add_compile_definitions(QT_QML_DEBUG)
 
 else() #Release
 
-    add_definitions(-DNDEBUG)
-    add_definitions(-DQT_NO_DEBUG)
+    add_compile_definitions(NDEBUG)
+    add_compile_definitions(QT_NO_DEBUG)
 
 endif()
 
