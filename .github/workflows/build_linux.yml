@@ -2,9 +2,6 @@ name: 'Build: Linux'
 
 on:
   pull_request:
-  schedule:
-    - cron: '0 3 */1 */1 *' # At 03:00 on every day-of-month for master
-    - cron: '0 5 */1 */1 *' # At 05:00 on every day-of-month for current release branch
   workflow_dispatch:
     inputs:
       build_mode:
@@ -37,32 +34,17 @@ on:
         type: string
         required: false
 
-env:
-  CURRENT_RELEASE_BRANCH: 4.4.3
-
 jobs:
   linux_x64:
     runs-on: ubuntu-20.04
-    if: github.event_name != 'schedule' || github.repository == 'musescore/MuseScore'
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.12.1
       with:
         access_token: ${{ github.token }}
-    - name: Exit if current release branch configuration is incorrect
-      if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' && env.CURRENT_RELEASE_BRANCH == '' }}
-      run: |
-        echo "::error::CURRENT_RELEASE_BRANCH is empty"
-        exit 1
-    - name: Clone repository (default)
+    - name: Clone repository
       uses: actions/checkout@v4
-      if: ${{ github.event_name != 'schedule' || github.event.schedule == '0 3 */1 */1 *' }}
-    - name: Clone repository (${{ env.CURRENT_RELEASE_BRANCH }})
-      uses: actions/checkout@v4
-      if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' }}
-      with:
-        ref: ${{ env.CURRENT_RELEASE_BRANCH }}
-    - name: "Configure workflow"
+    - name: Configure workflow
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
         SENTRY_SERVER_MU4_KEY: ${{ secrets.SENTRY_SERVER_MU4_KEY }}
@@ -113,7 +95,7 @@ jobs:
         fi
 
         DO_PUBLISH='false'
-        if [[ "${{ inputs.publish }}" == "on" || ("${{ github.event_name }}" == "schedule" && $BUILD_MODE == 'nightly') ]]; then
+        if [ "${{ inputs.publish }}" == "on" ]; then
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
             echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is empty; not publishing to OSUOSL"
@@ -122,8 +104,9 @@ jobs:
         fi
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
-        if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${{ env.CURRENT_RELEASE_BRANCH }}"; fi
-        if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"
+        fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"MU4_${BUILD_NUMBER}_Lin${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
