@@ -29,7 +29,7 @@ class AllZerosFileCorruptor : public File
 public:
     AllZerosFileCorruptor(const path_t& filePath);
 
-protected:
+private:
     size_t writeData(const uint8_t* data, size_t len) override;
 };
 }

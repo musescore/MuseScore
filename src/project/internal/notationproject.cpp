@@ -664,13 +664,7 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
                 }
             } else {
                 // Corrupt the original file for testing purposes. The temp file will be healthy.
-                size_t tempFileSize = 0;
-                File tempFile(savePath);
-                if (tempFile.open()) {
-                    tempFileSize = tempFile.size();
-                    tempFile.close();
-                }
-
+                size_t tempFileSize = QFileInfo(savePath).size();
                 ByteArray corruptedData = ByteArray(tempFileSize);
                 ret = AllZerosFileCorruptor::writeFile(targetContainerPath, corruptedData);
                 if (!ret) {
