@@ -2947,7 +2947,7 @@ void TLayout::layoutGraceNotesGroup(GraceNotesGroup* item, LayoutContext& ctx)
         double offset;
         offset = -std::max(HorizontalSpacing::minHorizontalDistance(graceShape, groupShape, grace->spatium()), 0.0);
         // Adjust spacing for cross-beam situations
-        if (i < item->size() - 1) {
+        if (i < item->size() - 1 && grace->stem()) {
             Chord* prevGrace = item->at(i + 1);
             if (prevGrace->up() != grace->up()) {
                 double crossCorrection = grace->notes().front()->headWidth() - grace->stem()->width();
