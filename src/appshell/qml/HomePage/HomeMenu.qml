@@ -97,7 +97,7 @@ Item {
             delegate: PageTabButton {
                 id: radioButtonDelegate
 
-                width: parent.width
+                width: radioButtonList.width
 
                 navigation.name: title
                 navigation.panel: navPanel

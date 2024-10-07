@@ -311,8 +311,7 @@ using MusicXMLTieMap = std::map<TieLocation, Tie*>;
 class MusicXMLParserNotations
 {
 public:
-    MusicXMLParserNotations(muse::XmlStreamReader& e, Score* score, MxmlLogger* logger, MusicXMLParserPass1& pass1,
-                            MusicXMLParserPass2& pass2);
+    MusicXMLParserNotations(muse::XmlStreamReader& e, Score* score, MxmlLogger* logger, MusicXMLParserPass2& pass2);
     void parse();
     void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs, Glissando* glissandi[MAX_NUMBER_LEVEL][2],
                     MusicXmlSpannerMap& spanners, TrillStack& trills, MusicXMLTieMap& ties, std::vector<Note*>& unstartedTieNotes,
@@ -344,7 +343,6 @@ private:
     void tuplet();
     void otherNotation();
     muse::XmlStreamReader& m_e;
-    MusicXMLParserPass1& m_pass1;
     MusicXMLParserPass2& m_pass2;
     Score* m_score = nullptr;                         // the score
     MxmlLogger* m_logger = nullptr;                              // the error logger

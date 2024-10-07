@@ -28,7 +28,6 @@
 #include "framework/uicomponents/view/qmllistproperty.h"
 
 #include "async/asyncable.h"
-#include "async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "workspace/iworkspacemanager.h"
@@ -55,8 +54,8 @@ class DockWindow : public QQuickItem, public IDockWindow, public muse::Injectabl
 
     Q_PROPERTY(QString currentPageUri READ currentPageUri NOTIFY currentPageUriChanged)
 
-    Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> toolBars READ toolBarsProperty)
-    Q_PROPERTY(QQmlListProperty<muse::dock::DockPageView> pages READ pagesProperty)
+    Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> toolBars READ toolBarsProperty CONSTANT)
+    Q_PROPERTY(QQmlListProperty<muse::dock::DockPageView> pages READ pagesProperty CONSTANT)
 
     Q_PROPERTY(QQuickWindow * window READ windowProperty NOTIFY windowPropertyChanged)
 

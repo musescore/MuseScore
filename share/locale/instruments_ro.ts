@@ -6978,7 +6978,7 @@
         <source>Baritone horn (sometimes just called ‘baritone’). Notated in treble clef, often as a transposing instrument.</source>
         <comment>baritone-horn-treble description</comment>
         <extracomment>description for Baritone Horn (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Corn bariton (uneori numit simplu „bariton”). Notație în cheia sol, folosit des ca instrument transpus.</translation>
+        <translation>Corn bariton (uneori numit simplu „bariton”). Notație în cheia sol, folosit des ca instrument transpozitoriu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2431"/>
@@ -7020,7 +7020,7 @@
         <source>Central European variant of the baritone horn. Notated in treble clef, often as a transposing instrument.</source>
         <comment>baritone-horn-central-europe-treble description</comment>
         <extracomment>description for Baritone Horn (Central European, treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Variantă central europeană a cornului bariton. Notație în cheia sol, folosit des ca instrument transpus.</translation>
+        <translation>Variantă central europeană a cornului bariton. Notație în cheia sol, folosit des ca instrument transpozitoriu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2444"/>
@@ -9141,7 +9141,7 @@
         <source>Trombone (notated in treble clef as a transposing instrument in B♭).</source>
         <comment>trombone-treble description</comment>
         <extracomment>description for Trombone (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombon (notație în cheia sol ca instrument transpus în si♭).</translation>
+        <translation>Trombon (notație în cheia sol ca instrument transpozitoriu în si♭).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3110"/>
@@ -9407,7 +9407,7 @@
         <source>Euphonium (notated in treble clef as a transposing instrument in B♭).</source>
         <comment>euphonium-treble description</comment>
         <extracomment>description for Euphonium (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Eufoniu (notație în cheia sol ca instrument transpozitoriu în si♭).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3194"/>
@@ -9589,7 +9589,7 @@
         <source>Bass tuba in E♭ (notated in treble clef as a transposing instrument).</source>
         <comment>eb-tuba-treble description</comment>
         <extracomment>description for Bass Tuba (treble clef); transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tubă bas în mi♭ (notație în cheia sol ca instrument transpus).</translation>
+        <translation>Tubă bas în mi♭ (notație în cheia sol ca instrument transpozitoriu).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3252"/>
@@ -9694,7 +9694,7 @@
         <source>Contrabass tuba in B♭ (notated in treble clef as a transposing instrument).</source>
         <comment>bb-tuba-treble description</comment>
         <extracomment>description for Contrabass Tuba (treble clef); transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tubă contrabas in si♭ (notație în cheia sol ca instrument transpus).</translation>
+        <translation>Tubă contrabas in si♭ (notație în cheia sol ca instrument transpozitoriu).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3285"/>

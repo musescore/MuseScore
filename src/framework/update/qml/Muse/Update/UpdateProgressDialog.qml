@@ -42,7 +42,7 @@ StyledDialogView {
     UpdateModel {
         id: updateModel
 
-        onFinished: {
+        onFinished: function(errorCode, installerPath) {
             root.ret = { errcode: errorCode, value: installerPath }
             root.hide()
         }
