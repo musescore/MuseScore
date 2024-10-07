@@ -247,7 +247,7 @@ double EngravingItem::spatium() const
 
 bool EngravingItem::isInteractionAvailable() const
 {
-    if (!visible() && (score()->printing() || !score()->isShowInvisible())) {
+    if (!getProperty(Pid::VISIBLE).toBool() && (score()->printing() || !score()->isShowInvisible())) {
         return false;
     }
 
@@ -622,7 +622,7 @@ Color EngravingItem::color() const
 
 Color EngravingItem::curColor() const
 {
-    return curColor(visible());
+    return curColor(getProperty(Pid::VISIBLE).toBool());
 }
 
 //---------------------------------------------------------
