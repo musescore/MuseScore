@@ -365,8 +365,17 @@ Ret ConverterController::convertScorePartsToPdf(INotationWriterPtr writer, IMast
     }
 
     for (size_t i = 0; i < notations.size(); ++i) {
-        QString partName = (i == 0) ? "full" : QString("part%1").arg(i);
-        muse::io::path_t partOut = io::dirpath(out) + "/" + io::completeBasename(out) + "_" + partName.toStdString() + ".pdf";
+        QString partName;
+        if (i == 0){
+            partName = "";
+        }
+        else {
+            partName = notations[i]->name();
+        }
+        QString baseName = QString::fromStdString(io::completeBasename(out).toStdString());
+        baseName.replace('*', partName);
+
+        muse::io::path_t partOut = io::dirpath(out) + "/" + baseName.toStdString() + ".pdf";
 
         File file(partOut);
         if (!file.open(File::WriteOnly)) {
