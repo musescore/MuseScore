@@ -107,7 +107,8 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
     }
 
     // Check if this is a part conversion job
-    if (out.toString().contains('*')) {
+    QString baseName = QString::fromStdString(io::completeBasename(out).toStdString());
+    if (baseName.endsWith('*')) {
         return convertScoreParts(in, out, stylePath, forceMode);
     }
 
@@ -390,20 +391,17 @@ Ret ConverterController::convertScorePartsToPngs(INotationWriterPtr writer, mu::
 {
     TRACEFUNC;
 
-    Ret ret = convertPageByPage(writer, masterNotation->notation(), out);
-    if (!ret) {
-        return ret;
-    }
-
-    INotationPtrList excerpts;
+    INotationPtrList notations;
     for (IExcerptNotationPtr e : masterNotation->excerpts()) {
-        excerpts.push_back(e->notation());
+        notations.push_back(e->notation());
     }
 
-    muse::io::path_t pngFilePath = io::dirpath(out) + "/" + muse::io::path_t(io::completeBasename(out) + "-excerpt.png");
-
-    for (size_t i = 0; i < excerpts.size(); i++) {
-        Ret ret2 = convertPageByPage(writer, excerpts[i], pngFilePath);
+    for (size_t i = 0; i < notations.size(); i++) {
+        QString partName = notations[i]->name();
+        QString baseName = QString::fromStdString(io::completeBasename(out).toStdString());
+        baseName.chop(1);  // Remove the * placeholder
+        muse::io::path_t pngFilePath = io::dirpath(out) + "/" + baseName.toStdString() + partName.toStdString() + ".png";;
+        Ret ret2 = convertPageByPage(writer, notations[i], pngFilePath);
         if (!ret2) {
             return ret2;
         }
