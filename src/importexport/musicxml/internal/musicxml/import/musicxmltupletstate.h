@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "musicxmltypes.h"
+#include "../shared/musicxmltypes.h"
 #include "dom/durationtype.h"
 
 namespace mu::engraving {

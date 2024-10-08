@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "musicxmltupletstate.h"
-#include "internal/musicxml/musicxmlsupport.h"
 
 using namespace mu::engraving;
 

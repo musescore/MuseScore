@@ -89,9 +89,9 @@
 #include "importmusicxmlnotepitch.h"
 #include "importmusicxmlpass1.h"
 #include "importmusicxmlpass2.h"
-#include "musicxmlfonthandler.h"
-#include "musicxmlsupport.h"
-#include "musicxmltypes.h"
+#include "../shared/musicxmlfonthandler.h"
+#include "../shared/musicxmlsupport.h"
+#include "../shared/musicxmltypes.h"
 
 #include "modularity/ioc.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"

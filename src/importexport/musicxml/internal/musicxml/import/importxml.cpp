@@ -33,7 +33,7 @@
 #include "engraving/dom/masterscore.h"
 
 #include "importmusicxml.h"
-#include "musicxmlsupport.h"
+#include "../shared/musicxmlsupport.h"
 #include "musicxmlvalidation.h"
 
 #include "log.h"

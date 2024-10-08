@@ -25,8 +25,8 @@
 #include <array>
 
 #include "importmusicxmlpass1.h"
-#include "internal/musicxml/musicxmlsupport.h"
-#include "musicxmltypes.h"
+#include "../shared/musicxmlsupport.h"
+#include "../shared/musicxmltypes.h"
 #include "musicxmltupletstate.h"
 
 #include "engraving/dom/instrument.h"

@@ -124,12 +124,12 @@
 #include "engraving/dom/volta.h"
 #include "engraving/dom/whammybar.h"
 
-#include "musicxmlfonthandler.h"
-#include "musicxmlsupport.h"
-#include "musicxmltypes.h"
+#include "../shared/musicxmlfonthandler.h"
+#include "../shared/musicxmlsupport.h"
+#include "../shared/musicxmltypes.h"
 
 #include "modularity/ioc.h"
-#include "../../imusicxmlconfiguration.h"
+#include "../../../imusicxmlconfiguration.h"
 #include "global/iapplication.h"
 #include "global/realfn.h"
 #include "engraving/iengravingconfiguration.h"

@@ -27,7 +27,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/score.h"
 
-#include "musicxmlsupport.h"
+#include "../shared/musicxmlsupport.h"
 #include "importmusicxmllogger.h"
 
 #include "log.h"

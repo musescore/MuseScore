@@ -26,8 +26,8 @@
 #include "global/containers.h"
 #include "draw/types/geometry.h"
 
-#include "musicxmlsupport.h"
-#include "musicxmltypes.h"
+#include "../shared/musicxmlsupport.h"
+#include "../shared/musicxmltypes.h"
 #include "musicxmltupletstate.h"
 #include "musicxmlpart.h"
 

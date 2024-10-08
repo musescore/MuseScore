@@ -23,7 +23,7 @@
 
 #include "types/fraction.h"
 #include "dom/interval.h"
-#include "musicxmltypes.h"
+#include "../shared/musicxmltypes.h"
 #include "musicxmlvoicedesc.h"
 
 namespace mu::engraving {
