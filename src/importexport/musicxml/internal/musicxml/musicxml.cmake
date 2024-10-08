@@ -14,7 +14,6 @@ set (MUSICXML_SRC
     ${CMAKE_CURRENT_LIST_DIR}/import/importmusicxmlpass1.h
     ${CMAKE_CURRENT_LIST_DIR}/import/importmusicxmlpass2.cpp
     ${CMAKE_CURRENT_LIST_DIR}/import/importmusicxmlpass2.h
-    ${CMAKE_CURRENT_LIST_DIR}/import/importxml.cpp
     ${CMAKE_CURRENT_LIST_DIR}/import/musicxmlpart.cpp
     ${CMAKE_CURRENT_LIST_DIR}/import/musicxmlpart.h
     ${CMAKE_CURRENT_LIST_DIR}/import/musicxmltupletstate.cpp
