@@ -58,7 +58,7 @@ typedef std::multimap<int, MusicXmlArpeggioDesc> ArpeggioMap;
 //---------------------------------------------------------
 
 /**
- A single instrument in a MusicXml part.
+ A single instrument in a MusicXML part.
  Used for both a drum part and a (non-drum) multi-instrument part
  */
 

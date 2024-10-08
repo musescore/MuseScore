@@ -235,7 +235,7 @@ void MusicXmlLyricsExtend::setExtend(const int no, const track_idx_t track, cons
 //---------------------------------------------------------
 
 /**
- Convert MusicXml \a step (0=C, 1=D, etc.) / \a alter / \a octave to midi pitch.
+ Convert MusicXML \a step (0=C, 1=D, etc.) / \a alter / \a octave to midi pitch.
  Note: same code is in pass 1 and in pass 2.
  TODO: combine
  */
@@ -265,7 +265,7 @@ static int MusicXmlStepAltOct2Pitch(int step, int alter, int octave)
 //---------------------------------------------------------
 
 /**
- Convert MusicXml \a step / \a alter / \a octave to midi pitch,
+ Convert MusicXML \a step / \a alter / \a octave to midi pitch,
  set pitch and tpc.
  Note that n's staff and track have not been set yet
  */
@@ -788,7 +788,7 @@ static String text2syms(const String& t)
 // TODO: probably should be shared between pass 1 and 2
 
 /**
- Read the next part of a MusicXml formatted string and convert to MuseScore internal encoding.
+ Read the next part of a MusicXML formatted string and convert to MuseScore internal encoding.
  */
 
 namespace xmlpass2 {
@@ -1184,8 +1184,8 @@ static void addArticulationToChord(const Notation& notation, ChordRest* cr)
 //---------------------------------------------------------
 
 /**
- Add a MusicXml fermata.
- Note: MusicXml common.mod: "The fermata type is upright if not specified."
+ Add a MusicXML fermata.
+ Note: MusicXML common.mod: "The fermata type is upright if not specified."
  */
 
 static void addFermataToChord(const Notation& notation, ChordRest* cr)
@@ -1307,13 +1307,13 @@ static void addOtherOrnamentToChord(const Notation& notation, ChordRest* cr)
 //---------------------------------------------------------
 
 /**
- Convert a MusicXml articulation to a chord as a "simple" MuseScore articulation.
+ Convert a MusicXML articulation to a chord as a "simple" MuseScore articulation.
  These are the articulations that can be
  - represented by an enum class SymId
  - added to a ChordRest
  Return true (articulation recognized and converted)
  or false (articulation not recognized).
- Note simple implementation: MusicXml syntax is not strictly
+ Note simple implementation: MusicXML syntax is not strictly
  checked, the articulations parent element does not matter.
  */
 
@@ -1359,7 +1359,7 @@ static bool convertArticulationToSymId(const String& mxmlName, SymId& id)
 //---------------------------------------------------------
 
 /**
- Convert a MusicXml fermata name to a MuseScore fermata.
+ Convert a MusicXML fermata name to a MuseScore fermata.
  */
 
 static SymId convertFermataToSymId(const String& mxmlName)
@@ -1389,7 +1389,7 @@ static SymId convertFermataToSymId(const String& mxmlName)
 //---------------------------------------------------------
 
 /**
- Convert a MusicXml notehead name to a MuseScore headgroup.
+ Convert a MusicXML notehead name to a MuseScore headgroup.
  */
 
 static NoteHeadGroup convertNotehead(String mxmlName)
@@ -1643,7 +1643,7 @@ static void resetTuplets(Tuplets& tuplets)
 //---------------------------------------------------------
 
 /**
- Initialize members as required for reading the MusicXml part element.
+ Initialize members as required for reading the MusicXML part element.
  TODO: factor out part reading into a separate class
  TODO: preferably use automatically initialized variables
  */
@@ -1860,7 +1860,7 @@ void MusicXmlParserPass2::skipLogCurrElem()
 //---------------------------------------------------------
 
 /**
- Parse MusicXml in \a device and extract pass 2 data.
+ Parse MusicXML in \a device and extract pass 2 data.
  */
 
 Err MusicXmlParserPass2::parse(const ByteArray& data)
@@ -1888,14 +1888,14 @@ Err MusicXmlParserPass2::parse()
             found = true;
             scorePartwise();
         } else {
-            m_logger->logError(u"this is not a MusicXml score-partwise file", &m_e);
+            m_logger->logError(u"this is not a MusicXML score-partwise file", &m_e);
             m_e.skipCurrentElement();
             return Err::FileBadFormat;
         }
     }
 
     if (!found) {
-        m_logger->logError(u"this is not a MusicXml score-partwise file", &m_e);
+        m_logger->logError(u"this is not a MusicXML score-partwise file", &m_e);
         return Err::FileBadFormat;
     }
 
@@ -1954,7 +1954,7 @@ static void addBarlineToMeasure(Measure* measure, const Fraction tick, std::uniq
 //---------------------------------------------------------
 
 /**
- Parse the MusicXml top-level (XPath /score-partwise) node.
+ Parse the MusicXML top-level (XPath /score-partwise) node.
  */
 
 void MusicXmlParserPass2::scorePartwise()
@@ -2919,7 +2919,7 @@ void MusicXmlParserPass2::measureLayout(Measure* measure)
 
 /* Notes:
  * Number of staves has already been set in pass 1
- * MusicXml order is key, time, clef
+ * MusicXML order is key, time, clef
  * -> check if it is necessary to insert them in order
  */
 
@@ -6085,7 +6085,7 @@ static TDuration determineDuration(const bool rest, const String& type, const in
 
 /**
  * Find (or create if not found) the chord at \a tick and \a track.
- * Note: staff move is a note property in MusicXml, but chord property in MuseScore
+ * Note: staff move is a note property in MusicXML, but chord property in MuseScore
  * This is simply ignored here, effectively using the last chords value.
  */
 
@@ -7253,9 +7253,9 @@ FiguredBass* MusicXmlParserPass2::figuredBass()
  Parse the /score-partwise/part/measure/harmony/frame node.
  Return the result as a FretDiagram.
   Notes:
- - MusicXml's first-fret is a positive integer equivalent to MuseScore's FretDiagram::_fretOffset
- - it is one-based in MusicXml and zero-based in MuseScore
- - in MusicXml fret numbers are absolute, in MuseScore they are relative to the fretOffset,
+ - MusicXML's first-fret is a positive integer equivalent to MuseScore's FretDiagram::_fretOffset
+ - it is one-based in MusicXML and zero-based in MuseScore
+ - in MusicXML fret numbers are absolute, in MuseScore they are relative to the fretOffset,
    which affects both single strings and barres
  */
 
@@ -8821,7 +8821,7 @@ void MusicXmlParserPass2::stem(DirectionV& sd, bool& nost)
 
 /**
  Parse the /score-partwise/part/measure/note/notations/fermata node.
- Note: MusicXml common.mod: "An empty fermata element represents a normal fermata."
+ Note: MusicXML common.mod: "An empty fermata element represents a normal fermata."
  */
 
 void MusicXmlParserNotations::fermata()

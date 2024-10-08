@@ -21,7 +21,7 @@
  */
 
 /**
- MusicXml font handling support.
+ MusicXML font handling support.
  */
 
 #include "musicxmlfonthandler.h"

@@ -199,8 +199,8 @@ void MusicXmlPart::calcOctaveShifts()
  in a Part's Staff list.
  In most cases, this is a simple decrement from the 1-based staff number
  to the 0-based index.
- However, in some parts some MusicXml staves are discarded, and a mapping
- must be stored from MusicXml staff number to index. When this mapping is
+ However, in some parts some MusicXML staves are discarded, and a mapping
+ must be stored from MusicXML staff number to index. When this mapping is
  defined (i.e. size() != 0), it is used. See MusicXmlParserPass1::attributes()
  for more information.
  */

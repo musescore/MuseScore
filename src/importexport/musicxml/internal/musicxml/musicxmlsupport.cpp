@@ -21,7 +21,7 @@
  */
 
 /**
- MusicXml support.
+ MusicXML support.
  */
 
 #include "global/serialization/xmlstreamreader.h"
@@ -273,7 +273,7 @@ String accSymId2SmuflMusicXmlString(const SymId id)
 
 SymId musicXmlString2accSymId(const String mxmlName, const String smufl)
 {
-    // map MusicXml accidental name to MuseScore enum SymId
+    // map MusicXML accidental name to MuseScore enum SymId
     static const std::map<String, SymId> map {
         { u"sharp", SymId::accidentalSharp },
         { u"natural", SymId::accidentalNatural },

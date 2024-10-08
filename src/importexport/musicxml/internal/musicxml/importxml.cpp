@@ -21,7 +21,7 @@
  */
 
 /**
- MusicXml import.
+ MusicXML import.
  */
 
 #include "global/translation.h"
@@ -163,7 +163,7 @@ Err importMusicXml(MasterScore* score, const String& name, bool forceMode)
 //---------------------------------------------------------
 
 /**
- Import compressed MusicXml file \a name into the Score.
+ Import compressed MusicXML file \a name into the Score.
  */
 
 Err importCompressedMusicXml(MasterScore* score, const String& name, bool forceMode)

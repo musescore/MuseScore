@@ -454,7 +454,7 @@ private:
     int m_divs = 0;                        // the current divisions value
     Score* m_score = nullptr;              // the score
     MusicXmlParserPass1& m_pass1;          // the pass1 results
-    MusicXmlLogger* m_logger = nullptr;        // Error logger
+    MusicXmlLogger* m_logger = nullptr;    // Error logger
     String m_errors;                       // Errors to present to the user
 
     // part specific data (TODO: move to part-specific class)
@@ -566,10 +566,10 @@ private:
     bool hasTotalY() const { return m_hasRelativeY || m_hasDefaultY; }
 
     muse::XmlStreamReader& m_e;
-    Score* m_score = nullptr;                              // the score
+    Score* m_score = nullptr;                    // the score
     MusicXmlParserPass1& m_pass1;                // the pass1 results
     MusicXmlParserPass2& m_pass2;                // the pass2 results
-    MusicXmlLogger* m_logger = nullptr;                        // Error logger
+    MusicXmlLogger* m_logger = nullptr;          // Error logger
 
     Color m_color;
     Hairpin* m_inferredHairpinStart = nullptr;

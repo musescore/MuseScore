@@ -6482,19 +6482,19 @@ static void segmentHarmonies(ExportMusicXml* exp, track_idx_t track, Segment* se
 /*
  * Write harmonies and fret diagrams that are attached to chords or rests.
  *
- * There are fondamental differences between the ways Musescore and MusicXml handle harmonies (Chord symbols)
+ * There are fondamental differences between the ways Musescore and MusicXML handle harmonies (Chord symbols)
  * and fretboard diagrams.
  *
  * In MuseScore, the Harmony element is now a child of FretboardDiagram BUT in previous versions,
  * both elements were independant siblings so we have to handle both cases.
- * In MusicXml, fretboard diagram is always contained in a harmony element.
+ * In MusicXML, fretboard diagram is always contained in a harmony element.
  *
  * In MuseScore, Harmony elements are not always linked to notes, and each Harmony will be contained
  * in a `ChordRest` Segment.
- * In MusicXml, those successive Harmony elements must be exported before the note with different offsets.
+ * In MusicXML, those successive Harmony elements must be exported before the note with different offsets.
  *
  * Edge cases that we simply cannot handle:
- *  - as of MusicXml 3.1, there is no way to represent a diagram without an associated chord symbol,
+ *  - as of MusicXML 3.1, there is no way to represent a diagram without an associated chord symbol,
  * so when we encounter such an object in MuseScore, we simply cannot export it.
  *  - If a ChordRest segment contans a FretboardDiagram with no harmonies and several different Harmony siblings,
  * we simply have to pick a random one to export.
@@ -7693,7 +7693,7 @@ void ExportMusicXml::writeElement(EngravingItem* el, const Measure* m, staff_idx
 //---------------------------------------------------------
 
 /**
- Clamps octave to min and max value as per MusicXml Schema
+ Clamps octave to min and max value as per MusicXML Schema
  */
 
 static void clampMusicXmlOctave(int& octave)
@@ -8363,7 +8363,7 @@ static std::vector<const Jump*> findJumpElements(const Score* score)
 //---------------------------------------------------------
 
 /**
- Write the score to \a dev in MusicXml format.
+ Write the score to \a dev in MusicXML format.
  */
 
 void ExportMusicXml::write(muse::io::IODevice* dev)
@@ -8411,7 +8411,7 @@ void ExportMusicXml::write(muse::io::IODevice* dev)
 //---------------------------------------------------------
 
 /**
- Save Score as MusicXml file \a name.
+ Save Score as MusicXML file \a name.
 
  Return false on error.
  */
@@ -8444,7 +8444,7 @@ bool saveXml(Score* score, const String& name)
 //---------------------------------------------------------
 
 /**
- Save Score as compressed MusicXml file \a name.
+ Save Score as compressed MusicXML file \a name.
 
  Return false on error.
  */
@@ -8763,7 +8763,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
 
 /**
  Whether a tag corresponding to the given element \p e
- should be included to the exported MusicXml file.
+ should be included to the exported MusicXML file.
  */
 
 bool ExportMusicXml::canWrite(const EngravingItem* e)

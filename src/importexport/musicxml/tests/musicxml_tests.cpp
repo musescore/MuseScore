@@ -318,7 +318,7 @@ void MusicXml_Tests::musicXmlReadTestCompr(const char* file)
 
 //---------------------------------------------------------
 //   musicXmlReadWriteTestCompr
-//   read a MusicXml file, write to a compressed MusicXML file,
+//   read a MusicXML file, write to a compressed MusicXML file,
 //   read the compressed MusicXML file, write to a new file and verify files are identical
 //---------------------------------------------------------
 

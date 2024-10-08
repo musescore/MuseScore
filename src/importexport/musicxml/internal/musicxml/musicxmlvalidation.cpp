@@ -55,7 +55,7 @@ using namespace mu::engraving;
 //---------------------------------------------------------
 
 /**
- Message handler for the MusicXml schema validator QXmlSchemaValidator.
+ Message handler for the MusicXML schema validator QXmlSchemaValidator.
  */
 
 class ValidatorMessageHandler : public QAbstractMessageHandler
@@ -157,7 +157,7 @@ static bool initMusicXmlSchema(QXmlSchema& schema)
 //---------------------------------------------------------
 
 /**
- Show a dialog displaying the MusicXml validation error(s)
+ Show a dialog displaying the MusicXML validation error(s)
  and asks the user if he wants to try to load the file anyway.
  Return QMessageBox::Yes (try anyway) or QMessageBox::No (don't)
  */
