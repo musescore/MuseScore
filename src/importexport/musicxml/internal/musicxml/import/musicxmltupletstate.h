@@ -24,7 +24,7 @@
 #include "../shared/musicxmltypes.h"
 #include "dom/durationtype.h"
 
-namespace mu::engraving {
+namespace mu::iex::musicxml {
 enum class MusicXmlTupletFlag : char {
     NONE = 0,
     STOP_PREVIOUS = 1,
@@ -40,6 +40,8 @@ public:
     MusicXmlTupletFlags determineTupletAction(const Fraction noteDuration, const Fraction timeMod, const MusicXmlStartStop tupletStartStop,
                                               const TDuration normalType, Fraction& missingPreviousDuration,
                                               Fraction& missingCurrentDuration);
+    static void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& fraction, Fraction& fullDuration);
+    static Fraction missingTupletDuration(const Fraction duration);
 private:
     void addDurationToTuplet(const Fraction duration, const Fraction timeMod);
     void smallestTypeAndCount(const TDuration durType, int& type, int& count);
@@ -55,7 +57,4 @@ private:
     int smallestNoteCount = 0;   // number of smallest notes in the tuplet
 };
 using MusicXmlTupletStates = std::map<String, MusicXmlTupletState>;
-
-void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& fraction, Fraction& fullDuration);
-Fraction missingTupletDuration(const Fraction duration);
 }

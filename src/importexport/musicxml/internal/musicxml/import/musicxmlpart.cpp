@@ -24,6 +24,7 @@
 #include "dom/mscore.h"
 
 using namespace mu::engraving;
+using namespace mu::iex::musicxml;
 
 static const std::vector<String> vocalInstrumentNames = {
     u"Voice",

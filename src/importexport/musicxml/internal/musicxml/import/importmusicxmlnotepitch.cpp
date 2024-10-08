@@ -34,7 +34,7 @@
 
 using namespace mu::engraving;
 
-namespace mu::engraving {
+namespace mu::iex::musicxml {
 //---------------------------------------------------------
 //   accidental
 //---------------------------------------------------------

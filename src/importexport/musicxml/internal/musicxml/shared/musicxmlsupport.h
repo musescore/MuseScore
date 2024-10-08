@@ -30,7 +30,9 @@ namespace muse {
 class XmlStreamReader;
 }
 
-namespace mu::engraving {
+using namespace mu::engraving;
+
+namespace mu::iex::musicxml {
 //---------------------------------------------------------
 //   MusicXmlSupport -- MusicXML import support functions
 //---------------------------------------------------------

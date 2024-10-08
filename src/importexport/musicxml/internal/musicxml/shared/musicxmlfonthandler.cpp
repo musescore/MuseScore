@@ -28,7 +28,7 @@
 
 #include "engraving/rw/xmlwriter.h"
 
-namespace mu::engraving {
+namespace mu::iex::musicxml {
 //---------------------------------------------------------
 //   MScoreTextToMXML
 //---------------------------------------------------------

@@ -26,7 +26,7 @@
 #include "../shared/musicxmltypes.h"
 #include "musicxmlvoicedesc.h"
 
-namespace mu::engraving {
+namespace mu::iex::musicxml {
 class MusicXmlOctaveShiftList : public std::map<Fraction, int>
 {
 public:

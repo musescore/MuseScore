@@ -23,9 +23,10 @@
 #pragma once
 
 #include "engraving/dom/text.h"
+#include "engraving/rw/xmlwriter.h"
 
-namespace mu::engraving {
-class XmlWriter;
+using namespace mu::engraving;
+namespace mu::iex::musicxml {
 //---------------------------------------------------------
 //   MScoreTextToMXML
 //---------------------------------------------------------

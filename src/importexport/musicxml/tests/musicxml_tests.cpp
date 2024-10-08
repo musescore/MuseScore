@@ -27,6 +27,7 @@
 
 #include "settings.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
+#include "importexport/musicxml/internal/musicxml/import/importmusicxml.h"
 #include "importexport/musicxml/internal/musicxml/export/exportmusicxml.h"
 
 #include "engraving/tests/utils/scorerw.h"
@@ -45,12 +46,6 @@ using namespace mu;
 using namespace muse;
 using namespace mu::iex::musicxml;
 using namespace mu::engraving;
-
-namespace mu::engraving {
-extern bool saveMxl(Score*, const String&);
-extern engraving::Err importMusicXml(MasterScore*, const String&, bool forceMode);
-extern engraving::Err importCompressedMusicXml(MasterScore*, const String&, bool forceMode);
-}
 
 static const String XML_IO_DATA_DIR("data/");
 
@@ -102,11 +97,11 @@ MasterScore* MusicXml_Tests::readScore(const String& fileName, bool isAbsolutePa
     String suffix = io::FileInfo::suffix(fileName);
 
     auto importXml = [](MasterScore* score, const muse::io::path_t& path) -> engraving::Err {
-        return mu::engraving::importMusicXml(score, path.toQString(), false);
+        return importMusicXml(score, path.toQString(), false);
     };
 
     auto importMxl = [](MasterScore* score, const muse::io::path_t& path) -> engraving::Err {
-        return mu::engraving::importCompressedMusicXml(score, path.toQString(), false);
+        return importCompressedMusicXml(score, path.toQString(), false);
     };
 
     ScoreRW::ImportFunc importFunc = nullptr;

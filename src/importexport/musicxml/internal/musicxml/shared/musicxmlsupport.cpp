@@ -30,10 +30,9 @@
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/chord.h"
 #include "types/symnames.h"
-#include "musicxmltypes.h"
 #include "musicxmlsupport.h"
 
-namespace mu::engraving {
+namespace mu::iex::musicxml {
 //---------------------------------------------------------
 //   errorStringWithLocation
 //---------------------------------------------------------

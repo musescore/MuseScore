@@ -78,7 +78,7 @@ static bool musicXmlImportLayout()
     return conf ? conf->importLayout() : true;
 }
 
-namespace mu::engraving {
+namespace mu::iex::musicxml {
 //---------------------------------------------------------
 //   NoteList
 //---------------------------------------------------------

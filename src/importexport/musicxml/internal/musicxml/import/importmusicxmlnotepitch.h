@@ -25,9 +25,10 @@
 #include "global/serialization/xmlstreamreader.h"
 #include "engraving/dom/accidental.h"
 
-namespace mu::engraving {
+using namespace mu::engraving;
+
+namespace mu::iex::musicxml {
 class MusicXmlLogger;
-class Score;
 
 //---------------------------------------------------------
 //   musicXmlNotePitch

@@ -26,7 +26,7 @@
 #include "engraving/types/fraction.h"
 #include "importmusicxmlpass1.h"
 
-namespace mu::engraving {
+namespace mu::iex::musicxml {
 class MusicXmlLogger;
 
 //---------------------------------------------------------

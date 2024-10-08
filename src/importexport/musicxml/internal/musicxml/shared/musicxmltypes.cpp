@@ -23,6 +23,7 @@
 #include "musicxmltypes.h"
 
 using namespace mu::engraving;
+using namespace mu::iex::musicxml;
 
 String MusicXmlInstrument::toString() const
 {

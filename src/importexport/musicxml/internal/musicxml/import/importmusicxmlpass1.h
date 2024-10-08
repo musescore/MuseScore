@@ -33,8 +33,9 @@
 
 #include "engraving/engravingerrors.h"
 
-namespace mu::engraving {
-class Score;
+using namespace mu::engraving;
+
+namespace mu::iex::musicxml {
 class VoiceOverlapDetector;
 
 //---------------------------------------------------------

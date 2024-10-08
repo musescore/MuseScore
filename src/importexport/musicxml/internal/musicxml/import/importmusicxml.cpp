@@ -31,6 +31,8 @@
 
 #include "engraving/types/types.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/score.h"
 
 #include "importmusicxml.h"
 #include "importmusicxmllogger.h"
@@ -39,17 +41,14 @@
 #include "musicxmlvalidation.h"
 #include "../shared/musicxmlsupport.h"
 
-#include "engraving/dom/part.h"
-#include "engraving/dom/score.h"
-
 #ifndef MUSICXML_NO_INTERACTIVE
 using namespace mu;
 #endif
 
 using namespace muse;
-using namespace iex::musicxml;
+using namespace mu::engraving;
 
-namespace mu::engraving {
+namespace mu::iex::musicxml {
 //---------------------------------------------------------
 //   musicXmlImportErrorDialog
 //---------------------------------------------------------

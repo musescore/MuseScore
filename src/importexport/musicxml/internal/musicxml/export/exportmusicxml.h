@@ -24,10 +24,13 @@
 
 #include "io/iodevice.h"
 #include "global/types/string.h"
+#include "dom/score.h"
 
-namespace mu::engraving {
-class Score;
+using namespace mu::engraving;
+
+namespace mu::iex::musicxml {
 bool saveMxl(Score*, muse::io::IODevice*);
+bool saveMxl(Score* score, const String& name);
 bool saveXml(Score*, muse::io::IODevice*);
 bool saveXml(Score*, const muse::String&);
 }

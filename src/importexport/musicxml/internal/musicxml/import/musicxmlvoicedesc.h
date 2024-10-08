@@ -23,7 +23,8 @@
 
 #include "dom/mscore.h"
 
-namespace mu::engraving {
+using namespace mu::engraving;
+namespace mu::iex::musicxml {
 //---------------------------------------------------------
 //   VoiceDesc
 //---------------------------------------------------------

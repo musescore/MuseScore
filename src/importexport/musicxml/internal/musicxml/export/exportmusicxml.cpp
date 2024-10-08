@@ -142,7 +142,7 @@ using namespace muse::io;
 using namespace mu::iex::musicxml;
 using namespace mu::engraving;
 
-namespace mu::engraving {
+namespace mu::iex::musicxml {
 //---------------------------------------------------------
 //   local defines for debug output
 //---------------------------------------------------------

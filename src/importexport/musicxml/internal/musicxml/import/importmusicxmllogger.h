@@ -28,7 +28,7 @@ namespace muse {
 class XmlStreamReader;
 }
 
-namespace mu::engraving {
+namespace mu::iex::musicxml {
 class MusicXmlLogger
 {
 public:

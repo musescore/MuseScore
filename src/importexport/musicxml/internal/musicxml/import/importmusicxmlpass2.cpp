@@ -104,8 +104,9 @@ using namespace muse;
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
+using namespace mu::iex::musicxml;
 
-namespace mu::engraving {
+namespace mu::iex::musicxml {
 static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
 {
     return muse::modularity::globalIoc()->resolve<mu::iex::musicxml::IMusicXmlConfiguration>("iex_musicxml");
@@ -1050,7 +1051,7 @@ static TDuration determineTupletBaseLen(const Tuplet* const t)
 {
     Fraction tupletFraction;
     Fraction tupletFullDuration;
-    determineTupletFractionAndFullDuration(calculateTupletDuration(t), tupletFraction, tupletFullDuration);
+    MusicXmlTupletState::determineTupletFractionAndFullDuration(calculateTupletDuration(t), tupletFraction, tupletFullDuration);
 
     Fraction baseLen = tupletFullDuration * Fraction(1, t->ratio().denominator());
     /*
@@ -1615,7 +1616,7 @@ static void resetTuplets(Tuplets& tuplets)
         Tuplet* tuplet = pair.second;
         if (tuplet) {
             const Fraction actualDuration = tuplet->elementsDuration() / tuplet->ratio();
-            const Fraction missingDuration = missingTupletDuration(actualDuration);
+            const Fraction missingDuration = MusicXmlTupletState::missingTupletDuration(actualDuration);
             LOGD("tuplet %p not stopped at end of measure, tick %s duration %s missing %s",
                  tuplet,
                  muPrintable(tuplet->tick().toString()),

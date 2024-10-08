@@ -32,10 +32,7 @@
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/types.h"
 
-namespace mu::engraving {
-class StringData;
-class Tuplet;
-
+namespace mu::iex::musicxml {
 //---------------------------------------------------------
 //   support enums / structs / classes
 //---------------------------------------------------------
@@ -275,11 +272,6 @@ struct DelayedArpeggio
     void clear() { m_arpeggioType = u""; m_arpeggioNo = 0; }
 };
 
-class FretDiagram;
-class FiguredBassItem;
-class Glissando;
-class Pedal;
-class Trill;
 class MusicXmlLogger;
 class MusicXmlDelayedDirectionElement;
 class MusicXmlInferredFingering;
