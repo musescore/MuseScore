@@ -96,6 +96,8 @@ private:
                                      const muse::io::path_t& out) const;
     muse::Ret convertScorePartsToPngs(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
                                       const muse::io::path_t& out) const;
+    muse::Ret convertScorePartsToMp3(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
+                                     const muse::io::path_t& out) const;
 };
 }
 
