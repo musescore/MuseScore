@@ -980,6 +980,9 @@ TEST_F(Musicxml_Tests, pedalStyles) {
 TEST_F(Musicxml_Tests, placementDefaults) {
     mxmlImportTestRef("testPlacementDefaults");
 }
+TEST_F(Musicxml_Tests, placementOffsetDefaults) {
+    mxmlImportTestRef("testPlacementOffsetDefaults");
+}
 TEST_F(Musicxml_Tests, printSpacingNo) {
     mxmlIoTestRef("testPrintSpacingNo");
 }
