@@ -5452,56 +5452,52 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
             //! NOTE A lot of spam
             // LD_CONDITION(note->ldata()->mirror.has_value());
             const bool mirror = note->ldata()->mirror.value(LD_ACCESS::BAD);
-            const TDuration durationType = note->chord()->durationType();
+            const double lw = item->lineWidthMag();
+            SymId symId = note->noteHead();
             if ((up && !mirror) || (!up && mirror)) {
-                x  = note->stemUpSE().x();
-                const String musicalFont = conf.styleSt(Sid::musicalSymbolFont);
-                const double lw = item->lineWidthMag() * 0.5;
-                if (musicalFont == "Bravura") { // we can't really change this font
-                    if (durationType == DurationType::V_LONG) {
-                        x -= 1.75 * lw;
-                    } else {
-                        x += 2.25 * lw;
-                    }
-                } else if (musicalFont == "Emmentaler") {
-                    if (durationType == DurationType::V_LONG) {
-                        x += 0.5 * lw; // we should be able to fix this in the metadata
-                    } else if (durationType == DurationType::V_HALF) {
-                        x -= 0.7 * lw; // we should be able to fix this in the metadata
-                    } else {
-                        x -= 5 * lw; // we should be able to fix this in the metadata
-                    }
-                } else if (musicalFont == "Gonville") {
-                    if (durationType == DurationType::V_LONG) {
-                        x -= 3.1 * lw; // we should be able to fix this in the metadata
-                    } else {
-                        x += 1.5 * lw; // we should be able to fix this in the metadata
-                    }
-                } else if (musicalFont == "Leland" && durationType == DurationType::V_LONG) {
-                    x += 2.5 * lw; // we should be able to fix this in the metadata
-                } else if (musicalFont == "MuseJazz") {
-                    if (durationType == DurationType::V_LONG) {
-                        x -= 1.25 * lw; // we should be able to fix this in the metadata
-                    } else if (durationType == DurationType::V_HALF) {
-                        x -= 1.35 * lw; // we should be able to fix this in the metadata
-                    }
-                } else if (musicalFont == "Petaluma") { // we can't really change this font
-                    if (durationType == DurationType::V_LONG) {
-                        x -= 0.5 * lw;
-                    } else if (durationType == DurationType::V_HALF) {
-                        x += 0.4 * lw;
-                    }
-                }
+                // default offsets for all fonts, half a stem-width, fits for most fonts
+                x  = note->stemUpSE().x() - .5 * lw;
                 y1 = note->stemUpSE().y();
-                if (durationType == DurationType::V_LONG) {
-                    x  += 0.5 * note->headWidth() + 2 * lw;
-                    y1 -= 0.5 * item->spatium();
+                if (symId == SymId::noteheadHalf) {
+                    //x -= .25 * lw;
+                } else if (symId == SymId::noteheadDoubleWhole) {
+                    x  += .5 * note->headWidth() + lw; // move to the qlyph's right edge, seems almost all fonts don't have stemUpSE stem up properly here
+                    y1 -= .5 * item->spatium(); // less overlap with the glyph's vertical bar, which likely has a different width
+                }
+                // some fonts' qlyphs need special treatment, suitable offsets found after lots of trial and error
+                const String musicalFont = conf.styleSt(Sid::musicalSymbolFont);
+                if (musicalFont == "Bravura") { // we can't really change this font, probably need to report to Steinberg
+                    if (symId == SymId::noteheadDoubleWhole) {
+                        x -= .9 * lw; // apparently this glyph`s stemUpSE caters for stem width, but 0.1 too litlle, likely a font issue we'd need to report to Steinberg
+                    } else if (symId == SymId::noteheadHalf) {
+                        x += 1.2 * lw; // apparently this glyph`s stemUpSE caters for stem width, but need an extra 0.2 to prevent a 'hump', likely a font issue we'd need to report to Steinberg
+                    } else if (symId == SymId::noteheadBlack) {
+                        x += 1.2 * lw; // apparently this glyph`s stemUpSE caters for stem width, but need an extra 0.2 to prevent a slight 'hump', likely a font issue we'd need to report to Steinberg
+                    }
+                } else if (musicalFont == "Leland") {
+                    if (symId == SymId::noteheadDoubleWhole) {
+                        x += 1.25 * lw; // we should be able to fix this in the metadata and/or the font
+                    } else if (symId == SymId::noteheadHalf) {
+                        //x += .5 * lw; // we should be able to fix this in the metadata and/or the font
+                    }
+                } else if (musicalFont == "MuseJazz") {
+                    if (symId == SymId::noteheadDoubleWhole) {
+                        x -= .555 * lw; // we should be able to fix this in the metadata and/or the font
+                    } else if (symId == SymId::noteheadHalf) {
+                        x += .35 * lw; // we should be able to fix this in the metadata and/or the font
+                    }
+                } else if (musicalFont == "Petaluma") { // we can't really change this font, probably need to report to Steinberg
+                    if (symId == SymId::noteheadDoubleWhole) {
+                        x -= .25 * lw;
+                    } else if (symId == SymId::noteheadHalf) {
+                        x += .2 * lw;
+                    }
                 }
             } else {
-                x  = note->stemDownNW().x();
+                x  = note->stemDownNW().x() + 0.5 * lw;
                 y1 = note->stemDownNW().y();
-                if (durationType == DurationType::V_LONG) {
-                    y1 += 0.5 * item->spatium();
+                if (symId == SymId::noteheadDoubleWhole) {
+                    y1 += 0.5 * item->spatium(); // less overlap with the glyph's vertical bar, which likely has a different width
                 }
             }
 
@@ -5521,13 +5517,12 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
     }
 
     double lineWidthCorrection = item->lineWidthMag() * 0.5;
-    double lineX = isTabStaff ? 0.0 : x + _up * lineWidthCorrection;
 
-    LineF line = LineF(lineX, y1, lineX, y2);
+    LineF line = LineF(x, y1, x, y2);
     ldata->line = line;
 
     // compute line and bounding rectangle
-    RectF rect(line.p1(), line.p2() + PointF(0.0, ldata->beamCorrection));
+    RectF rect(line.p1(), line.p2());
     ldata->setBbox(rect.normalized().adjusted(-lineWidthCorrection, 0, lineWidthCorrection, 0));
 }
 
