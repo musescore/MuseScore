@@ -87,7 +87,7 @@ public:
     String trackName;
     StaffNameList longNames;     ///< shown on first system
     StaffNameList shortNames;    ///< shown on followup systems
-    String musicXMLid;          ///< used in MusicXML 3.0
+    String musicXmlId;          ///< used in MusicXML 3.0
     String description;         ///< a longer description of the instrument
 
     size_t staffCount = 0;

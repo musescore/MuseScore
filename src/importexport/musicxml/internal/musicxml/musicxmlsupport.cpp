@@ -73,7 +73,7 @@ muse::String checkAtEndElement(const muse::XmlStreamReader& e, const muse::Strin
  Note that non-integer values cannot be handled by mscore.
  */
 
-int MxmlSupport::stringToInt(const String& s, bool* ok)
+int MusicXmlSupport::stringToInt(const String& s, bool* ok)
 {
     int res = 0;
     String str = s;
@@ -92,7 +92,7 @@ int MxmlSupport::stringToInt(const String& s, bool* ok)
  Convert MusicXML note type to fraction.
  */
 
-Fraction MxmlSupport::noteTypeToFraction(const String& type)
+Fraction MusicXmlSupport::noteTypeToFraction(const String& type)
 {
     if (type == u"1024th") {
         return Fraction(1, 1024);
@@ -135,10 +135,10 @@ Fraction MxmlSupport::noteTypeToFraction(const String& type)
  Convert note type, number of dots and actual and normal notes into a duration
  */
 
-Fraction MxmlSupport::calculateFraction(const String& type, int dots, int normalNotes, int actualNotes)
+Fraction MusicXmlSupport::calculateFraction(const String& type, int dots, int normalNotes, int actualNotes)
 {
     // type
-    Fraction f = MxmlSupport::noteTypeToFraction(type);
+    Fraction f = MusicXmlSupport::noteTypeToFraction(type);
     if (f.isValid()) {
         // dot(s)
         Fraction f_no_dots = f;
@@ -157,10 +157,10 @@ Fraction MxmlSupport::calculateFraction(const String& type, int dots, int normal
 }
 
 //---------------------------------------------------------
-//   accSymId2MxmlString
+//   accSymId2MusicXmlString
 //---------------------------------------------------------
 
-String accSymId2MxmlString(const SymId id)
+String accSymId2MusicXmlString(const SymId id)
 {
     String s;
     switch (id) {
@@ -252,26 +252,26 @@ String accSymId2MxmlString(const SymId id)
         break;
     default:
         s = u"other";
-        LOGD("accSymId2MxmlString: unknown accidental %d", static_cast<int>(id));
+        LOGD("accSymId2MusicXmlString: unknown accidental %d", static_cast<int>(id));
     }
     return s;
 }
 
 //---------------------------------------------------------
-//   accSymId2SmuflMxmlString
+//   accSymId2SmuflMusicXmlString
 //---------------------------------------------------------
 
-String accSymId2SmuflMxmlString(const SymId id)
+String accSymId2SmuflMusicXmlString(const SymId id)
 {
     return String::fromAscii(SymNames::nameForSymId(id).ascii());
 }
 
 //---------------------------------------------------------
-//   mxmlString2accSymId
+//   musicXmlString2accSymId
 // see https://github.com/w3c/musicxml/blob/6e3a667b85855b04d7e4548ea508b537bc29fc52/schema/musicxml.xsd#L1392-L1439
 //---------------------------------------------------------
 
-SymId mxmlString2accSymId(const String mxmlName, const String smufl)
+SymId musicXmlString2accSymId(const String mxmlName, const String smufl)
 {
     // map MusicXML accidental name to MuseScore enum SymId
     static const std::map<String, SymId> map {
@@ -331,7 +331,7 @@ SymId mxmlString2accSymId(const String mxmlName, const String smufl)
     } else if (mxmlName == u"other") {
         return SymNames::symIdByName(smufl);
     } else {
-        LOGD("mxmlString2accSymId: unknown accidental '%s'", muPrintable(mxmlName));
+        LOGD("musicXmlString2accSymId: unknown accidental '%s'", muPrintable(mxmlName));
     }
 
     // default
@@ -339,10 +339,10 @@ SymId mxmlString2accSymId(const String mxmlName, const String smufl)
 }
 
 //---------------------------------------------------------
-//   accidentalType2MxmlString
+//   accidentalType2MusicXmlString
 //---------------------------------------------------------
 
-String accidentalType2MxmlString(const AccidentalType type)
+String accidentalType2MusicXmlString(const AccidentalType type)
 {
     String s;
     switch (type) {
@@ -487,16 +487,16 @@ static const std::map<muse::String, AccidentalType> smuflAccidentalTypes {
 };
 
 //---------------------------------------------------------
-//   accidentalType2SmuflMxmlString
+//   accidentalType2SmuflMusicXmlString
 //---------------------------------------------------------
 
-String accidentalType2SmuflMxmlString(const AccidentalType type)
+String accidentalType2SmuflMusicXmlString(const AccidentalType type)
 {
     return muse::key(smuflAccidentalTypes, type);
 }
 
 //---------------------------------------------------------
-//   mxmlString2accidentalType
+//   musicXmlString2accidentalType
 //---------------------------------------------------------
 
 /**
@@ -504,7 +504,7 @@ String accidentalType2SmuflMxmlString(const AccidentalType type)
  see https://github.com/w3c/musicxml/blob/6e3a667b85855b04d7e4548ea508b537bc29fc52/schema/musicxml.xsd#L1392-L1439
  */
 
-AccidentalType mxmlString2accidentalType(const String mxmlName, const String smufl)
+AccidentalType musicXmlString2accidentalType(const String mxmlName, const String smufl)
 {
     // map MusicXML accidental name to MuseScore enum AccidentalType
     static const std::map<String, AccidentalType> map {
@@ -564,20 +564,20 @@ AccidentalType mxmlString2accidentalType(const String mxmlName, const String smu
     } else if (mxmlName == "other" && muse::contains(smuflAccidentalTypes, smufl)) {
         return smuflAccidentalTypes.at(smufl);
     } else {
-        LOGD("mxmlString2accidentalType: unknown accidental '%s'", muPrintable(mxmlName));
+        LOGD("musicXmlString2accidentalType: unknown accidental '%s'", muPrintable(mxmlName));
     }
     return AccidentalType::NONE;
 }
 
 //---------------------------------------------------------
-//   mxmlAccidentalTextToChar
+//   musicXmlAccidentalTextToChar
 //---------------------------------------------------------
 
 /**
  Convert a MusicXML accidental text to a accidental character.
  */
 
-String mxmlAccidentalTextToChar(const String mxmlName)
+String musicXmlAccidentalTextToChar(const String mxmlName)
 {
     // map MusicXML accidental name to MuseScore enum AccidentalType
     static const std::map<String, String> map {
@@ -590,7 +590,7 @@ String mxmlAccidentalTextToChar(const String mxmlName)
     if (it != map.end()) {
         return it->second;
     } else {
-        LOGD("mxmlAccidentalTextToChar: unsupported accidental '%s'", muPrintable(mxmlName));
+        LOGD("musicXmlAccidentalTextToChar: unsupported accidental '%s'", muPrintable(mxmlName));
     }
     return u"";
 }

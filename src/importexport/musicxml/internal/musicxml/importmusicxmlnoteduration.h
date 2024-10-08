@@ -24,23 +24,23 @@
 
 #include "engraving/dom/durationtype.h"
 #include "engraving/types/fraction.h"
-#include "importmxmlpass1.h"
+#include "importmusicxmlpass1.h"
 
 namespace mu::engraving {
-class MxmlLogger;
+class MusicXmlLogger;
 
 //---------------------------------------------------------
-//   mxmlNoteDuration
+//   MusicXmlNoteDuration
 //---------------------------------------------------------
 
 /**
  Parse the note time related part of the /score-partwise/part/measure/note node.
  */
 
-class MxmlNoteDuration
+class MusicXmlNoteDuration
 {
 public:
-    MxmlNoteDuration(int divs, MxmlLogger* logger, MusicXMLParserPass1* pass1)
+    MusicXmlNoteDuration(int divs, MusicXmlLogger* logger, MusicXmlParserPass1* pass1)
         : m_divs(divs), m_pass1(pass1), m_logger(logger) { /* nothing so far */ }
     String checkTiming(const String& type, const bool rest, const bool grace);
     Fraction duration() const { return m_dura; } // duration to use
@@ -61,7 +61,7 @@ private:
     Fraction m_dura;
     TDuration m_normalType;
     Fraction m_timeMod { 1, 1 };                       // default to no time modification
-    MusicXMLParserPass1* m_pass1 = nullptr;
-    MxmlLogger* m_logger = nullptr;                              ///< Error logger
+    MusicXmlParserPass1* m_pass1 = nullptr;
+    MusicXmlLogger* m_logger = nullptr;                              ///< Error logger
 };
 } // namespace Ms

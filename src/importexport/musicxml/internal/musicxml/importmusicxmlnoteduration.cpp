@@ -23,8 +23,8 @@
 #include "engraving/types/fraction.h"
 #include "engraving/types/typesconv.h"
 
-#include "importmxmllogger.h"
-#include "importmxmlnoteduration.h"
+#include "importmusicxmllogger.h"
+#include "importmusicxmlnoteduration.h"
 
 using namespace mu::engraving;
 
@@ -110,7 +110,7 @@ static Fraction calculateFraction(const String& type, const int dots, const Frac
  Return empty string if OK, message in case of error.
  */
 
-String MxmlNoteDuration::checkTiming(const String& type, const bool rest, const bool grace)
+String MusicXmlNoteDuration::checkTiming(const String& type, const bool rest, const bool grace)
 {
     //LOGD("type %s rest %d grace %d", muPrintable(type), rest, grace);
     String errorStr;
@@ -192,9 +192,9 @@ String MxmlNoteDuration::checkTiming(const String& type, const bool rest, const 
  Parse the /score-partwise/part/measure/note/duration node.
  */
 
-void MxmlNoteDuration::duration(muse::XmlStreamReader& e)
+void MusicXmlNoteDuration::duration(muse::XmlStreamReader& e)
 {
-    m_logger->logDebugTrace(u"MusicXMLParserPass1::duration", &e);
+    m_logger->logDebugTrace(u"MusicXmlParserPass1::duration", &e);
 
     m_specDura.set(0, 0);          // invalid unless set correctly
     int intDura = e.readAsciiText().toInt();
@@ -210,7 +210,7 @@ void MxmlNoteDuration::duration(muse::XmlStreamReader& e)
  Return true if handled.
  */
 
-bool MxmlNoteDuration::readProperties(muse::XmlStreamReader& e)
+bool MusicXmlNoteDuration::readProperties(muse::XmlStreamReader& e)
 {
     const AsciiStringView tag(e.name());
     //LOGD("tag %s", muPrintable(tag.toString()));
@@ -236,9 +236,9 @@ bool MxmlNoteDuration::readProperties(muse::XmlStreamReader& e)
  Parse the /score-partwise/part/measure/note/time-modification node.
  */
 
-void MxmlNoteDuration::timeModification(muse::XmlStreamReader& e)
+void MusicXmlNoteDuration::timeModification(muse::XmlStreamReader& e)
 {
-    m_logger->logDebugTrace(u"MusicXMLParserPass1::timeModification", &e);
+    m_logger->logDebugTrace(u"MusicXmlParserPass1::timeModification", &e);
 
     int intActual = 0;
     int intNormal = 0;

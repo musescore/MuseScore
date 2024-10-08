@@ -249,8 +249,8 @@ void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication
     midiImportExportConfiguration()->setMidiImportOperationsFile(options.importMidi.operationsFile);
     guitarProConfiguration()->setLinkedTabStaffCreated(options.guitarPro.linkedTabStaffCreated);
     guitarProConfiguration()->setExperimental(options.guitarPro.experimental);
-    musicXmlConfiguration()->setNeedUseDefaultFontOverride(options.importMusicXML.useDefaultFont);
-    musicXmlConfiguration()->setInferTextTypeOverride(options.importMusicXML.inferTextType);
+    musicXmlConfiguration()->setNeedUseDefaultFontOverride(options.importMusicXml.useDefaultFont);
+    musicXmlConfiguration()->setInferTextTypeOverride(options.importMusicXml.inferTextType);
 #endif
 
     if (options.app.revertToFactorySettings) {

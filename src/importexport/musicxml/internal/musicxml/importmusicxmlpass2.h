@@ -24,7 +24,7 @@
 
 #include <array>
 
-#include "importmxmlpass1.h"
+#include "importmusicxmlpass1.h"
 #include "internal/musicxml/musicxmlsupport.h"
 #include "musicxmltypes.h"
 #include "musicxmltupletstate.h"
@@ -64,7 +64,7 @@ enum class MusicXmlSlash : char {
 
 struct MusicXmlTupletDesc {
     MusicXmlTupletDesc();
-    MxmlStartStop type;
+    MusicXmlStartStop type;
     DirectionV direction;
     TupletBracketType bracket;
     TupletNumberType shownumber;
@@ -113,7 +113,7 @@ struct MusicXmlSpannerDesc {
 };
 
 //---------------------------------------------------------
-//   NewMusicXmlSpannerDesc
+//   MusicXmlExtendedSpannerDesc
 //---------------------------------------------------------
 
 struct MusicXmlExtendedSpannerDesc {
@@ -192,13 +192,13 @@ typedef std::vector<InferredPercInstr> InferredPercList;
 typedef std::map<String, std::pair<String, DurationType> > MetronomeTextMap;
 
 //---------------------------------------------------------
-//   MusicXMLParserLyric
+//   MusicXmlParserLyric
 //---------------------------------------------------------
 
-class MusicXMLParserLyric
+class MusicXmlParserLyric
 {
 public:
-    MusicXMLParserLyric(const LyricNumberHandler lyricNumberHandler, muse::XmlStreamReader& e, Score* score, MxmlLogger* logger,
+    MusicXmlParserLyric(const LyricNumberHandler lyricNumberHandler, muse::XmlStreamReader& e, Score* score, MusicXmlLogger* logger,
                         bool isVoiceStaff);
     std::set<Lyrics*> extendedLyrics() const { return m_extendedLyrics; }
     std::map<int, Lyrics*> numberedLyrics() const { return m_numberedLyrics; }
@@ -210,7 +210,7 @@ private:
     const LyricNumberHandler m_lyricNumberHandler;
     muse::XmlStreamReader& m_e;
     const Score* m_score = nullptr;            // the score
-    MxmlLogger* m_logger = nullptr;            // Error logger
+    MusicXmlLogger* m_logger = nullptr;            // Error logger
     std::map<int, Lyrics*> m_numberedLyrics;   // lyrics with valid number
     std::set<Lyrics*> m_extendedLyrics;        // lyrics with the extend flag set
     std::vector<Sticking*> m_inferredStickings;   // stickings with valid number
@@ -280,13 +280,13 @@ class FiguredBassItem;
 class Glissando;
 class Pedal;
 class Trill;
-class MxmlLogger;
-class MusicXMLDelayedDirectionElement;
-class MusicXMLInferredFingering;
-class MusicXMLParserPass2;
+class MusicXmlLogger;
+class MusicXmlDelayedDirectionElement;
+class MusicXmlInferredFingering;
+class MusicXmlParserPass2;
 
-using DelayedDirectionsList = std::vector<MusicXMLDelayedDirectionElement*>;
-using InferredFingeringsList = std::vector<MusicXMLInferredFingering*>;
+using DelayedDirectionsList = std::vector<MusicXmlDelayedDirectionElement*>;
+using InferredFingeringsList = std::vector<MusicXmlInferredFingering*>;
 using SlurStack = std::array<SlurDesc, MAX_NUMBER_LEVEL>;
 using TrillStack = std::array<Trill*, MAX_NUMBER_LEVEL>;
 using BracketsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
@@ -302,19 +302,19 @@ using SystemElements = std::multimap<int, EngravingItem*>;
 
 // Ties are identified by the pitch and track of their first note
 typedef std::pair<int, track_idx_t> TieLocation;
-using MusicXMLTieMap = std::map<TieLocation, Tie*>;
+using MusicXmlTieMap = std::map<TieLocation, Tie*>;
 
 //---------------------------------------------------------
-//   MusicXMLParserNotations
+//   MusicXmlParserNotations
 //---------------------------------------------------------
 
-class MusicXMLParserNotations
+class MusicXmlParserNotations
 {
 public:
-    MusicXMLParserNotations(muse::XmlStreamReader& e, Score* score, MxmlLogger* logger, MusicXMLParserPass2& pass2);
+    MusicXmlParserNotations(muse::XmlStreamReader& e, Score* score, MusicXmlLogger* logger, MusicXmlParserPass2& pass2);
     void parse();
     void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs, Glissando* glissandi[MAX_NUMBER_LEVEL][2],
-                    MusicXmlSpannerMap& spanners, TrillStack& trills, MusicXMLTieMap& ties, std::vector<Note*>& unstartedTieNotes,
+                    MusicXmlSpannerMap& spanners, TrillStack& trills, MusicXmlTieMap& ties, std::vector<Note*>& unstartedTieNotes,
                     std::vector<Note*>& unendedTieNotes, ArpeggioMap& arpMap, DelayedArpMap& delayedArps);
     String errors() const { return m_errors; }
     MusicXmlTupletDesc tupletDesc() const { return m_tupletDesc; }
@@ -343,9 +343,9 @@ private:
     void tuplet();
     void otherNotation();
     muse::XmlStreamReader& m_e;
-    MusicXMLParserPass2& m_pass2;
+    MusicXmlParserPass2& m_pass2;
     Score* m_score = nullptr;                         // the score
-    MxmlLogger* m_logger = nullptr;                              // the error logger
+    MusicXmlLogger* m_logger = nullptr;                              // the error logger
     String m_errors;                    // errors to present to the user
     MusicXmlTupletDesc m_tupletDesc;
     String m_dynamicsPlacement;
@@ -366,13 +366,13 @@ private:
 };
 
 //---------------------------------------------------------
-//   MusicXMLParserPass2
+//   MusicXmlParserPass2
 //---------------------------------------------------------
 
-class MusicXMLParserPass2
+class MusicXmlParserPass2
 {
 public:
-    MusicXMLParserPass2(Score* score, MusicXMLParserPass1& pass1, MxmlLogger* logger);
+    MusicXmlParserPass2(Score* score, MusicXmlParserPass1& pass1, MusicXmlLogger* logger);
     Err parse(const muse::ByteArray& data);
     String errors() const { return m_errors; }
 
@@ -410,8 +410,6 @@ private:
     void partList();
     void scorePart();
     void part();
-    void measChordNote(/*, const MxmlPhase2Note note, ChordRest& currChord */);
-    void measChordFlush(/*, ChordRest& currChord */);
     void measure(const String& partId, const Fraction time);
     void measureLayout(Measure* measure);
     void setMeasureRepeats(const staff_idx_t scoreRelStaff, Measure* measure);
@@ -424,7 +422,7 @@ private:
     void divisions();
     Note* note(const String& partId, Measure* measure, const Fraction sTime, const Fraction prevTime, Fraction& missingPrev, Fraction& dura,
                Fraction& missingCurr, String& currentVoice, GraceChordList& gcl, size_t& gac, Beams& currBeams, FiguredBassList& fbl,
-               int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets, ArpeggioMap& arpMap, DelayedArpMap& delayedArps);
+               int& alt, MusicXmlTupletStates& tupletStates, Tuplets& tuplets, ArpeggioMap& arpMap, DelayedArpMap& delayedArps);
     void notePrintSpacingNo(Fraction& dura);
     FiguredBassItem* figure(const int idx, const bool paren, FiguredBass* parent);
     FiguredBass* figuredBass();
@@ -455,8 +453,8 @@ private:
     muse::XmlStreamReader m_e;
     int m_divs = 0;                        // the current divisions value
     Score* m_score = nullptr;              // the score
-    MusicXMLParserPass1& m_pass1;          // the pass1 results
-    MxmlLogger* m_logger = nullptr;        // Error logger
+    MusicXmlParserPass1& m_pass1;          // the pass1 results
+    MusicXmlLogger* m_logger = nullptr;    // Error logger
     String m_errors;                       // Errors to present to the user
 
     // part specific data (TODO: move to part-specific class)
@@ -477,7 +475,7 @@ private:
 
     Glissando* m_glissandi[MAX_NUMBER_LEVEL][2];     // Current slides ([0]) / glissandi ([1])
 
-    MusicXMLTieMap m_ties;
+    MusicXmlTieMap m_ties;
     std::vector<Note*> m_unstartedTieNotes;
     std::vector<Note*> m_unendedTieNotes;
     Volta* m_lastVolta = nullptr;
@@ -508,14 +506,14 @@ private:
 };
 
 //---------------------------------------------------------
-//   MusicXMLParserDirection
+//   MusicXmlParserDirection
 //---------------------------------------------------------
 
-class MusicXMLParserDirection
+class MusicXmlParserDirection
 {
 public:
-    MusicXMLParserDirection(muse::XmlStreamReader& e, Score* score, MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2,
-                            MxmlLogger* logger);
+    MusicXmlParserDirection(muse::XmlStreamReader& e, Score* score, MusicXmlParserPass1& pass1, MusicXmlParserPass2& pass2,
+                            MusicXmlLogger* logger);
     void direction(const String& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners,
                    DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings, HarmonyMap& harmonyMap,
                    bool& measureHasCoda, SegnoStack& segnos);
@@ -568,10 +566,10 @@ private:
     bool hasTotalY() const { return m_hasRelativeY || m_hasDefaultY; }
 
     muse::XmlStreamReader& m_e;
-    Score* m_score = nullptr;                              // the score
-    MusicXMLParserPass1& m_pass1;                // the pass1 results
-    MusicXMLParserPass2& m_pass2;                // the pass2 results
-    MxmlLogger* m_logger = nullptr;                        // Error logger
+    Score* m_score = nullptr;                    // the score
+    MusicXmlParserPass1& m_pass1;                // the pass1 results
+    MusicXmlParserPass2& m_pass2;                // the pass2 results
+    MusicXmlLogger* m_logger = nullptr;          // Error logger
 
     Color m_color;
     Hairpin* m_inferredHairpinStart = nullptr;
@@ -608,21 +606,21 @@ private:
 };
 
 //---------------------------------------------------------
-//   MusicXMLDelayedDirectionElement
+//   MusicXmlDelayedDirectionElement
 //---------------------------------------------------------
 /**
  Helper class to allow Direction elements to be sorted by _totalY
  before being added to the score.
  */
 
-class MusicXMLDelayedDirectionElement
+class MusicXmlDelayedDirectionElement
 {
 public:
-    MusicXMLDelayedDirectionElement(double totalY, EngravingItem* element, track_idx_t track,
+    MusicXmlDelayedDirectionElement(double totalY, EngravingItem* element, track_idx_t track,
                                     String placement, Measure* measure, Fraction tick)
         : m_totalY(totalY),  m_element(element), m_track(track), m_placement(placement),
         m_measure(measure), m_tick(tick) {}
-    void addElem(MusicXMLParserPass2& _pass2);
+    void addElem(MusicXmlParserPass2& _pass2);
     double totalY() const { return m_totalY; }
     const EngravingItem* element() const { return m_element; }
     track_idx_t track() const { return m_track; }
@@ -639,23 +637,23 @@ private:
 };
 
 //---------------------------------------------------------
-//   MusicXMLInferredFingering
+//   MusicXmlInferredFingering
 //---------------------------------------------------------
 /**
  Helper class to allow Direction elements to be reinterpreted as fingerings
  */
 
-class MusicXMLInferredFingering
+class MusicXmlInferredFingering
 {
 public:
-    MusicXMLInferredFingering(double totalY, EngravingItem* element, String& text, track_idx_t track, String placement, Measure* measure,
+    MusicXmlInferredFingering(double totalY, EngravingItem* element, String& text, track_idx_t track, String placement, Measure* measure,
                               Fraction tick);
     double totalY() const { return m_totalY; }
     Fraction tick() const { return m_tick; }
     track_idx_t track() const { return m_track; }
     std::vector<String> fingerings() const { return m_fingerings; }
     bool findAndAddToNotes(Measure* measure);
-    MusicXMLDelayedDirectionElement* toDelayedDirection();
+    MusicXmlDelayedDirectionElement* toDelayedDirection();
 
 private:
     double m_totalY;

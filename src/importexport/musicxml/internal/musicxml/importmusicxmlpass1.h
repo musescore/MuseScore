@@ -57,10 +57,10 @@ typedef std::pair<int, int> StartStop;
 typedef std::vector<StartStop> StartStopList;
 
 //---------------------------------------------------------
-//   MxmlOctaveShiftDesc
+//   MusicXmlOctaveShiftDesc
 //---------------------------------------------------------
 
-struct MxmlOctaveShiftDesc {
+struct MusicXmlOctaveShiftDesc {
     enum class Type : char {
         UP, DOWN, STOP, NONE
     };
@@ -68,9 +68,9 @@ struct MxmlOctaveShiftDesc {
     short size;
     Fraction time;
     short num;
-    MxmlOctaveShiftDesc()
+    MusicXmlOctaveShiftDesc()
         : tp(Type::NONE), size(0), num(-1) {}
-    MxmlOctaveShiftDesc(Type _tp, short _size, Fraction _tm)
+    MusicXmlOctaveShiftDesc(Type _tp, short _size, Fraction _tm)
         : tp(_tp), size(_size), time(_tm), num(-1) {}
 };
 
@@ -127,15 +127,15 @@ bool isLikelyCreditText(const String& text, const bool caseInsensitive);
 bool isLikelySubtitleText(const String& text, const bool caseInsensitive);
 
 //---------------------------------------------------------
-//   MusicXMLParserPass1
+//   MusicXmlParserPass1
 //---------------------------------------------------------
 
-class MxmlLogger;
+class MusicXmlLogger;
 
-class MusicXMLParserPass1
+class MusicXmlParserPass1
 {
 public:
-    MusicXMLParserPass1(Score* score, MxmlLogger* logger);
+    MusicXmlParserPass1(Score* score, MusicXmlLogger* logger);
     void initPartState(const String& partId);
     Err parse(const muse::ByteArray& data);
     Err parse();
@@ -160,11 +160,11 @@ public:
     void transpose(const String& partId, const Fraction& tick);
     void divisions();
     void direction(const String& partId, const Fraction& cTime);
-    void directionType(const Fraction cTime, std::vector<MxmlOctaveShiftDesc>& starts, std::vector<MxmlOctaveShiftDesc>& stops);
-    void handleOctaveShift(const Fraction& cTime, const String& type, short size, MxmlOctaveShiftDesc& desc);
-    void notations(MxmlStartStop& tupletStartStop);
+    void directionType(const Fraction cTime, std::vector<MusicXmlOctaveShiftDesc>& starts, std::vector<MusicXmlOctaveShiftDesc>& stops);
+    void handleOctaveShift(const Fraction& cTime, const String& type, short size, MusicXmlOctaveShiftDesc& desc);
+    void notations(MusicXmlStartStop& tupletStartStop);
     void note(const String& partId, const Fraction& cTime, Fraction& missingPrev, Fraction& dura, Fraction& missingCurr,
-              VoiceOverlapDetector& vod, MxmlTupletStates& tupletStates);
+              VoiceOverlapDetector& vod, MusicXmlTupletStates& tupletStates);
     void notePrintSpacingNo(Fraction& dura);
     Fraction calcTicks(const int& intTicks, const int& _divisions, const muse::XmlStreamReader* xmlReader);
     Fraction calcTicks(const int& intTicks) { return calcTicks(intTicks, m_divs, &m_e); }
@@ -184,7 +184,7 @@ public:
     bool hasPart(const String& id) const;
     Part* getPart(const String& id) const { return muse::value(m_partMap, id); }
     MusicXmlPart getMusicXmlPart(const String& id) const { return muse::value(m_parts, id); }
-    MusicXMLInstruments getInstruments(const String& id) const { return muse::value(m_instruments, id); }
+    MusicXmlInstruments getInstruments(const String& id) const { return muse::value(m_instruments, id); }
     void setDrumsetDefault(const String& id, const String& instrId, const NoteHeadGroup hg, const int line, const DirectionV sd);
     MusicXmlInstrList getInstrList(const String& id) const;
     MusicXmlIntervalList getIntervals(const String& id) const;
@@ -205,7 +205,7 @@ public:
     void insertAdjustedDuration(Fraction key, Fraction value) { m_adjustedDurations.insert({ key, value }); }
     std::map<Fraction, Fraction>& adjustedDurations() { return m_adjustedDurations; }
     void insertSeenDenominator(int val) { m_seenDenominators.emplace(val); }
-    MusicXMLExporterSoftware exporterSoftware() const { return m_exporterSoftware; }
+    MusicXmlExporterSoftware exporterSoftware() const { return m_exporterSoftware; }
     bool sibOrDolet() const;
     bool dolet() const;
 
@@ -216,7 +216,7 @@ private:
 
     // generic pass 1 data
     muse::XmlStreamReader m_e;
-    MusicXMLExporterSoftware m_exporterSoftware = MusicXMLExporterSoftware::OTHER;   // Software which exported the file
+    MusicXmlExporterSoftware m_exporterSoftware = MusicXmlExporterSoftware::OTHER;   // Software which exported the file
     int m_divs = 0;                              // Current MusicXML divisions value
     std::map<String, MusicXmlPart> m_parts;      // Parts data, mapped on part id
     std::set<int> m_systemStartMeasureNrs;       // Measure numbers of measures starting a page
@@ -225,16 +225,16 @@ private:
     std::vector<Fraction> m_measureStart;        // Start time of each measure
     CreditWordsList m_credits;                   // All credits collected
     PartMap m_partMap;                           // TODO merge into MusicXmlPart ??
-    std::map<String, MusicXMLInstruments> m_instruments;   // instruments for each part, mapped on part id
+    std::map<String, MusicXmlInstruments> m_instruments;   // instruments for each part, mapped on part id
     Score* m_score = nullptr;                    // MuseScore score
-    MxmlLogger* m_logger = nullptr;              // Error logger
+    MusicXmlLogger* m_logger = nullptr;              // Error logger
     String m_errors;                             // Errors to present to the user
     bool m_hasBeamingInfo = false;               // Whether the score supports or contains beaming info
     bool m_hasInferredHeaderText = false;
 
     // part specific data (TODO: move to part-specific class)
     Fraction m_timeSigDura;                      // Measure duration according to last timesig read
-    std::map<int, MxmlOctaveShiftDesc> m_octaveShifts;   // Pending octave-shifts
+    std::map<int, MusicXmlOctaveShiftDesc> m_octaveShifts;   // Pending octave-shifts
     muse::Size m_pageSize;                             // Page width read from defaults
 
     const int m_maxDiff = 5;                   // Duration rounding tick threshold;

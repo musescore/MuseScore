@@ -27,10 +27,10 @@
 #include "global/iinteractive.h"
 #endif
 
-#include "importmxml.h"
-#include "importmxmllogger.h"
-#include "importmxmlpass1.h"
-#include "importmxmlpass2.h"
+#include "importmusicxml.h"
+#include "importmusicxmllogger.h"
+#include "importmusicxmlpass1.h"
+#include "importmusicxmlpass2.h"
 
 #include "engraving/dom/part.h"
 #include "engraving/dom/score.h"
@@ -43,14 +43,14 @@ using namespace muse;
 
 namespace mu::engraving {
 //---------------------------------------------------------
-//   musicXMLImportErrorDialog
+//   musicXmlImportErrorDialog
 //---------------------------------------------------------
 
 /**
  Show a dialog displaying the MusicXML import error(s).
  */
 #ifndef MUSICXML_NO_INTERACTIVE
-static IInteractive::Button musicXMLImportErrorDialog(const String& text, const String& detailedText)
+static IInteractive::Button musicXmlImportErrorDialog(const String& text, const String& detailedText)
 {
     auto interactive = modularity::fixmeIoc()->resolve<IInteractive>("musicxml");
 
@@ -73,23 +73,23 @@ static IInteractive::Button musicXMLImportErrorDialog(const String& text, const 
 #endif
 
 //---------------------------------------------------------
-//   importMusicXMLfromBuffer
+//   importMusicXmlfromBuffer
 //---------------------------------------------------------
 
-Err importMusicXMLfromBuffer(Score* score, const String& /*name*/, const ByteArray& data)
+Err importMusicXmlfromBuffer(Score* score, const String& /*name*/, const ByteArray& data)
 {
-    MxmlLogger logger;
-    logger.setLoggingLevel(MxmlLogger::Level::MXML_ERROR);   // errors only
-    //logger.setLoggingLevel(MxmlLogger::Level::MXML_INFO);
-    //logger.setLoggingLevel(MxmlLogger::Level::MXML_TRACE); // also include tracing
+    MusicXmlLogger logger;
+    logger.setLoggingLevel(MusicXmlLogger::Level::MXML_ERROR);   // errors only
+    //logger.setLoggingLevel(MusicXmlLogger::Level::MXML_INFO);
+    //logger.setLoggingLevel(MusicXmlLogger::Level::MXML_TRACE); // also include tracing
 
     // pass 1
-    MusicXMLParserPass1 pass1(score, &logger);
+    MusicXmlParserPass1 pass1(score, &logger);
     Err res = pass1.parse(data);
     const String pass1_errors = pass1.errors();
 
     // pass 2
-    MusicXMLParserPass2 pass2(score, pass1, &logger);
+    MusicXmlParserPass2 pass2(score, pass1, &logger);
     if (res == Err::NoError) {
         res = pass2.parse(data);
     }
@@ -107,7 +107,7 @@ Err importMusicXMLfromBuffer(Score* score, const String& /*name*/, const ByteArr
         if (!MScore::noGui) {
             const String text = muse::mtrc("iex_musicxml", "%n error(s) found, import may be incomplete.",
                                            nullptr, int(pass1_errors.size() + pass2_errors.size()));
-            if (musicXMLImportErrorDialog(text, pass1.errors() + pass2.errors()) != IInteractive::Button::Yes) {
+            if (musicXmlImportErrorDialog(text, pass1.errors() + pass2.errors()) != IInteractive::Button::Yes) {
                 res = Err::UserAbort;
             }
         }

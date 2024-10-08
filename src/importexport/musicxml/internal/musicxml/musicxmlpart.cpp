@@ -201,7 +201,7 @@ void MusicXmlPart::calcOctaveShifts()
  to the 0-based index.
  However, in some parts some MusicXML staves are discarded, and a mapping
  must be stored from MusicXML staff number to index. When this mapping is
- defined (i.e. size() != 0), it is used. See MusicXMLParserPass1::attributes()
+ defined (i.e. size() != 0), it is used. See MusicXmlParserPass1::attributes()
  for more information.
  */
 

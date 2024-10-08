@@ -32,7 +32,7 @@
 #include "engraving/types/types.h"
 #include "engraving/dom/masterscore.h"
 
-#include "importmxml.h"
+#include "importmusicxml.h"
 #include "musicxmlsupport.h"
 #include "musicxmlvalidation.h"
 
@@ -116,14 +116,14 @@ static Err doValidateAndImport(Score* score, const String& name, const ByteArray
 
     if (!forceMode) {
         // Validate the file
-        res = MusicxmlValidation::validate(name, data);
+        res = MusicXmlValidation::validate(name, data);
         if (res != Err::NoError) {
             return res;
         }
     }
 
     // actually do the import
-    res = importMusicXMLfromBuffer(score, name, data);
+    res = importMusicXmlfromBuffer(score, name, data);
     //LOGD("res %d", static_cast<int>(res));
     return res;
 }

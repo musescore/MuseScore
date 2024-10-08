@@ -27,7 +27,7 @@ using namespace mu;
 using namespace mu::iex::musicxml;
 using namespace mu::engraving;
 
-Err MusicxmlValidation::validate(const muse::String&, const muse::ByteArray&)
+Err MusicXmlValidation::validate(const muse::String&, const muse::ByteArray&)
 {
     return Err::NoError;
 }
@@ -153,7 +153,7 @@ static bool initMusicXmlSchema(QXmlSchema& schema)
 }
 
 //---------------------------------------------------------
-//   musicXMLValidationErrorDialog
+//   musicXmlValidationErrorDialog
 //---------------------------------------------------------
 
 /**
@@ -162,7 +162,7 @@ static bool initMusicXmlSchema(QXmlSchema& schema)
  Return QMessageBox::Yes (try anyway) or QMessageBox::No (don't)
  */
 
-static int musicXMLValidationErrorDialog(QString text, QString detailedText)
+static int musicXmlValidationErrorDialog(QString text, QString detailedText)
 {
     QMessageBox errorDialog;
     errorDialog.setIcon(QMessageBox::Question);
@@ -174,7 +174,7 @@ static int musicXMLValidationErrorDialog(QString text, QString detailedText)
     return errorDialog.exec();
 }
 
-Err MusicxmlValidation::validate(const String& name, const muse::ByteArray& data)
+Err MusicXmlValidation::validate(const String& name, const muse::ByteArray& data)
 {
     //QElapsedTimer t;
     //t.start();
@@ -198,7 +198,7 @@ Err MusicxmlValidation::validate(const String& name, const muse::ByteArray& data
         if (MScore::noGui) {
             return Err::NoError;         // might as well try anyhow in converter mode
         }
-        if (musicXMLValidationErrorDialog(strErr, messageHandler.getErrors()) != QMessageBox::Yes) {
+        if (musicXmlValidationErrorDialog(strErr, messageHandler.getErrors()) != QMessageBox::Yes) {
             return Err::UserAbort;
         }
     }

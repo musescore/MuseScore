@@ -32,27 +32,27 @@ class IMusicXmlConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMusicXmlConfiguration() = default;
 
-    virtual bool musicxmlImportBreaks() const = 0;
-    virtual void setMusicxmlImportBreaks(bool value) = 0;
+    virtual bool importBreaks() const = 0;
+    virtual void setImportBreaks(bool value) = 0;
 
-    virtual bool musicxmlImportLayout() const = 0;
-    virtual void setMusicxmlImportLayout(bool value) = 0;
+    virtual bool importLayout() const = 0;
+    virtual void setImportLayout(bool value) = 0;
 
-    virtual bool musicxmlExportLayout() const = 0;
-    virtual void setMusicxmlExportLayout(bool value) = 0;
+    virtual bool exportLayout() const = 0;
+    virtual void setExportLayout(bool value) = 0;
 
-    virtual bool musicxmlExportMu3Compat() const = 0;
-    virtual void setMusicxmlExportMu3Compat(bool value) = 0;
+    virtual bool exportMu3Compat() const = 0;
+    virtual void setExportMu3Compat(bool value) = 0;
 
-    enum class MusicxmlExportBreaksType {
+    enum class MusicXmlExportBreaksType {
         All, Manual, No
     };
 
-    virtual MusicxmlExportBreaksType musicxmlExportBreaksType() const = 0;
-    virtual void setMusicxmlExportBreaksType(MusicxmlExportBreaksType breaksType) = 0;
+    virtual MusicXmlExportBreaksType exportBreaksType() const = 0;
+    virtual void setExportBreaksType(MusicXmlExportBreaksType breaksType) = 0;
 
-    virtual bool musicxmlExportInvisibleElements() const = 0;
-    virtual void setMusicxmlExportInvisibleElements(bool value) = 0;
+    virtual bool exportInvisibleElements() const = 0;
+    virtual void setExportInvisibleElements(bool value) = 0;
 
     virtual bool needUseDefaultFont() const = 0;
     virtual void setNeedUseDefaultFont(bool value) = 0;

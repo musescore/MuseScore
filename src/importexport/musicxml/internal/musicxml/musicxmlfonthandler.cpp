@@ -33,7 +33,7 @@ namespace mu::engraving {
 //   MScoreTextToMXML
 //---------------------------------------------------------
 
-MScoreTextToMXML::MScoreTextToMXML(const String& tag, const String& attr, const CharFormat& defFmt, const String& mtf)
+MScoreTextToMusicXml::MScoreTextToMusicXml(const String& tag, const String& attr, const CharFormat& defFmt, const String& mtf)
     : attribs(attr), tagname(tag), oldFormat(defFmt), musicalTextFont(mtf)
 {
     // set MusicXML defaults
@@ -51,7 +51,7 @@ MScoreTextToMXML::MScoreTextToMXML(const String& tag, const String& attr, const 
 //    part name and shortName
 //---------------------------------------------------------
 
-String MScoreTextToMXML::toPlainText(const String& text)
+String MScoreTextToMusicXml::toPlainText(const String& text)
 {
     String res;
     bool inElem = false;
@@ -76,7 +76,7 @@ String MScoreTextToMXML::toPlainText(const String& text)
 //    convert to plain text plus <sym>[name]</sym> encoded symbols
 //---------------------------------------------------------
 
-String MScoreTextToMXML::toPlainTextPlusSymbols(const std::list<TextFragment>& list)
+String MScoreTextToMusicXml::toPlainTextPlusSymbols(const std::list<TextFragment>& list)
 {
     String res;
     for (const TextFragment& f : list) {
@@ -118,8 +118,8 @@ static int plainTextPlusSymbolsListSize(const std::list<TextFragment>& list)
  Return true if OK, false on error.
  */
 
-bool MScoreTextToMXML::split(const std::list<TextFragment>& in, const int pos, const int len,
-                             std::list<TextFragment>& left, std::list<TextFragment>& mid, std::list<TextFragment>& right)
+bool MScoreTextToMusicXml::split(const std::list<TextFragment>& in, const int pos, const int len,
+                                 std::list<TextFragment>& left, std::list<TextFragment>& mid, std::list<TextFragment>& right)
 {
     //LOGD("MScoreTextToMXML::split in size %d pos %d len %d", plainTextPlusSymbolsListSize(in), pos, len);
     //LOGD("-> in");
@@ -193,7 +193,7 @@ bool MScoreTextToMXML::split(const std::list<TextFragment>& in, const int pos, c
 //   writeTextFragments
 //---------------------------------------------------------
 
-void MScoreTextToMXML::writeTextFragments(const std::list<TextFragment>& fr, XmlWriter& xml)
+void MScoreTextToMusicXml::writeTextFragments(const std::list<TextFragment>& fr, XmlWriter& xml)
 {
     //dumpText(fr);
     bool firstTime = true;   // write additional attributes only the first time characters are written
@@ -229,7 +229,7 @@ static String attribute(bool needed, bool value, String trueString, String false
 //    copy newFormat to oldFormat
 //---------------------------------------------------------
 
-String MScoreTextToMXML::updateFormat()
+String MScoreTextToMusicXml::updateFormat()
 {
     if (newFormat.fontFamily() == "ScoreText") {
         newFormat.setFontFamily(musicalTextFont);

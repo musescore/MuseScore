@@ -30,10 +30,10 @@ class XmlWriter;
 //   MScoreTextToMXML
 //---------------------------------------------------------
 
-class MScoreTextToMXML
+class MScoreTextToMusicXml
 {
 public:
-    MScoreTextToMXML(const String& tag, const String& attr, const CharFormat& defFmt, const String& mtf);
+    MScoreTextToMusicXml(const String& tag, const String& attr, const CharFormat& defFmt, const String& mtf);
     static String toPlainText(const String& text);
     static String toPlainTextPlusSymbols(const std::list<TextFragment>& list);
     static bool split(const std::list<TextFragment>& in, const int pos, const int len, std::list<TextFragment>& left,
