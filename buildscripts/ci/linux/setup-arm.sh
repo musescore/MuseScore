@@ -192,6 +192,9 @@ if [[ ! -d "${qt_dir}" ]]; then
   exit 1
 fi
 
+# https://askubuntu.com/questions/1460242/ubuntu-22-04-with-qt6-qmake-could-not-find-a-qt-installation-of
+qtchooser -install qt6 $(which qmake6)
+
 ##########################################################################
 # GET TOOLS
 ##########################################################################
