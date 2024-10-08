@@ -388,8 +388,11 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
             if (sp->isTie()) {
                 item->setTieBack(toTie(sp));
             } else {
-                if ((sp->isGlissando() || sp->isGuitarBend()) && item->explicitParent() && item->explicitParent()->isChord()) {
-                    toChord(item->explicitParent())->setEndsGlissandoOrGuitarBend(true);
+                bool offsetEnds = true;
+                bool isNoteAnchoredTextLine = sp->isTextLine() && sp->anchor() == Spanner::Anchor::NOTE && offsetEnds;
+                if ((sp->isGlissando() || sp->isGuitarBend() || isNoteAnchoredTextLine) && item->explicitParent()
+                    && item->explicitParent()->isChord()) {
+                    toChord(item->explicitParent())->setEndsNoteAnchoredLine(true);
                 }
                 item->addSpannerBack(sp);
             }

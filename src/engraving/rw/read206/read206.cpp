@@ -1069,8 +1069,10 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
             if (sp->isTie()) {
                 note->setTieBack(toTie(sp));
             } else {
-                if (sp->isGlissando() && note->explicitParent() && note->explicitParent()->isChord()) {
-                    toChord(note->explicitParent())->setEndsGlissandoOrGuitarBend(true);
+                bool offsetEnds = true;
+                bool isNoteAnchoredTextLine = sp->isTextLine() && sp->anchor() == Spanner::Anchor::NOTE && true;
+                if ((sp->isGlissando() || isNoteAnchoredTextLine) && note->explicitParent() && note->explicitParent()->isChord()) {
+                    toChord(note->explicitParent())->setEndsNoteAnchoredLine(true);
                 }
                 note->addSpannerBack(sp);
             }

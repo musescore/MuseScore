@@ -5818,6 +5818,7 @@ void TLayout::layoutTextLine(TextLine* item, LayoutContext& ctx)
 
     if (item->anchor() == Spanner::Anchor::NOTE) {
         layoutNoteAnchoredLine(item, item->mutldata(), ctx);
+        item->addLineAttachPoints();
     }
 }
 

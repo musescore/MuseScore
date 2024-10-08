@@ -303,6 +303,33 @@ bool TextLine::setProperty(Pid id, const engraving::PropertyValue& v)
     return true;
 }
 
+void TextLine::addLineAttachPoints()
+{
+    if (anchor() != Spanner::Anchor::NOTE) {
+        return;
+    }
+
+    TextLineSegment* frontSeg = toTextLineSegment(frontSegment());
+    TextLineSegment* backSeg = toTextLineSegment(backSegment());
+    Note* startNote = nullptr;
+    Note* endNote = nullptr;
+    if (startElement() && startElement()->isNote()) {
+        startNote = toNote(startElement());
+    }
+    if (endElement() && endElement()->isNote()) {
+        endNote = toNote(endElement());
+    }
+    if (!frontSeg || !backSeg || !startNote || !endNote) {
+        return;
+    }
+    double startX = frontSeg->ldata()->pos().x();
+    double endX = backSeg->pos2().x() + backSeg->ldata()->pos().x(); // because pos2 is relative to ipos
+    // Here we don't pass y() because its value is unreliable during the first stages of layout.
+    // The y() is irrelevant anyway for horizontal spacing.
+    startNote->addLineAttachPoint(PointF(startX, 0.0), this);
+    endNote->addLineAttachPoint(PointF(endX, 0.0), this);
+}
+
 //---------------------------------------------------------
 //   undoChangeProperty
 //---------------------------------------------------------

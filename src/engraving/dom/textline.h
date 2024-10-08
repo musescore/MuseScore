@@ -80,6 +80,8 @@ public:
 
     PropertyValue propertyDefault(Pid) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
+
+    void addLineAttachPoints();
 };
 } // namespace mu::engraving
 #endif

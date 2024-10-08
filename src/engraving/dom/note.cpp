@@ -61,6 +61,7 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "stringdata.h"
+#include "textline.h"
 #include "tie.h"
 
 #include "undo.h"
@@ -1204,8 +1205,10 @@ void Note::addSpanner(Spanner* l)
     if (e && e->isNote()) {
         Note* note = toNote(e);
         note->addSpannerBack(l);
-        if (l->isGlissando() || l->isGuitarBend()) {
-            note->chord()->setEndsGlissandoOrGuitarBend(true);
+        bool offsetEnds = true;
+        bool isNoteAnchoredTextLine = l->isTextLine() && l->anchor() == Spanner::Anchor::NOTE && offsetEnds;
+        if (l->isGlissando() || l->isGuitarBend() || isNoteAnchoredTextLine) {
+            note->chord()->setEndsNoteAnchoredLine(true);
         }
     }
     addSpannerFor(l);
@@ -1224,7 +1227,7 @@ void Note::removeSpanner(Spanner* l)
             // abort();
         }
         if (l->isGlissando()) {
-            e->chord()->updateEndsGlissandoOrGuitarBend();
+            e->chord()->updateEndsNoteAnchoredLine();
         }
     }
     if (!removeSpannerFor(l)) {
