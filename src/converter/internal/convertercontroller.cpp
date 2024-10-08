@@ -353,29 +353,16 @@ Ret ConverterController::convertScorePartsToPdf(INotationWriterPtr writer, IMast
     TRACEFUNC;
 
     INotationPtrList notations;
-    notations.push_back(masterNotation->notation());
-
     for (IExcerptNotationPtr e : masterNotation->excerpts()) {
         notations.push_back(e->notation());
     }
 
-    File file(out);
-    if (!file.open(File::WriteOnly)) {
-        return make_ret(Err::OutFileFailedOpen);
-    }
-
     for (size_t i = 0; i < notations.size(); ++i) {
-        QString partName;
-        if (i == 0){
-            partName = "";
-        }
-        else {
-            partName = notations[i]->name();
-        }
+        QString partName = notations[i]->name();
         QString baseName = QString::fromStdString(io::completeBasename(out).toStdString());
-        baseName.replace('*', partName);
+        baseName.chop(1);  // Remove the * placeholder
 
-        muse::io::path_t partOut = io::dirpath(out) + "/" + baseName.toStdString() + ".pdf";
+        muse::io::path_t partOut = io::dirpath(out) + "/" + baseName.toStdString() + partName.toStdString() + ".pdf";
 
         File file(partOut);
         if (!file.open(File::WriteOnly)) {
@@ -394,20 +381,6 @@ Ret ConverterController::convertScorePartsToPdf(INotationWriterPtr writer, IMast
 
         file.close();
     }
-
-
-    INotationWriter::Options options {
-        { INotationWriter::OptionKey::UNIT_TYPE, Val(INotationWriter::UnitType::MULTI_PART) },
-    };
-
-
-    Ret ret = writer->writeList(notations, file, options);
-    if (!ret) {
-        LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
-        return make_ret(Err::OutFileFailedWrite);
-    }
-
-    file.close();
 
     return make_ret(Ret::Code::Ok);
 }
