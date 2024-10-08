@@ -3753,6 +3753,8 @@ bool  MStyle::readProperties450(XmlReader& e, int mscVersion)
             e.skipCurrentElement();
       if (tag == "lyricsDashFirstAndLastGapAreHalf")                // Mu4.5+ only
             e.skipCurrentElement();
+      if (tag == "offsetNoteLineEndPoints")                         // Mu4.5+ only
+            e.skipCurrentElement();
       else if (tag == "spatium")                                    // pre-4.5(?) typo
             set(Sid::spatium, e.readDouble() * DPMM);
       else // still no match
