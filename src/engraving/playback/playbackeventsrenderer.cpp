@@ -280,6 +280,7 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::t
                          TimeSigMap::DEFAULT_TIME_SIGNATURE,
                          persistentArticulationApplied,
                          articulations,
+                         note->score(),
                          profile,
                          dummyCtx);
 

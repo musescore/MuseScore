@@ -49,8 +49,9 @@ struct RenderingContext {
 
     muse::mpe::ArticulationType persistentArticulation = muse::mpe::ArticulationType::Undefined;
     muse::mpe::ArticulationMap commonArticulations;
-    muse::mpe::ArticulationsProfilePtr profile;
 
+    const Score* score = nullptr;
+    const muse::mpe::ArticulationsProfilePtr profile;
     const PlaybackContextPtr playbackCtx;
 
     RenderingContext() = default;
@@ -65,6 +66,7 @@ struct RenderingContext {
                               const TimeSigFrac& timeSig,
                               const muse::mpe::ArticulationType persistentArticulationType,
                               const muse::mpe::ArticulationMap& articulations,
+                              const Score* scorePtr,
                               const muse::mpe::ArticulationsProfilePtr profilePtr,
                               const PlaybackContextPtr playbackCtxPtr)
         : nominalTimestamp(timestamp),
@@ -78,6 +80,7 @@ struct RenderingContext {
         timeSignatureFraction(timeSig),
         persistentArticulation(persistentArticulationType),
         commonArticulations(articulations),
+        score(scorePtr),
         profile(profilePtr),
         playbackCtx(playbackCtxPtr)
     {}
@@ -116,6 +119,7 @@ inline RenderingContext buildRenderingCtx(const Chord* chord, const int tickPosi
                          timeSignatureFraction,
                          playbackCtx->persistentArticulationType(chordPosTickWithOffset),
                          {},
+                         score,
                          profile,
                          playbackCtx);
 

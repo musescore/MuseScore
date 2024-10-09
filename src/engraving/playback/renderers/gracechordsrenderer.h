@@ -67,7 +67,7 @@ private:
     static GraceNotesContext buildGraceNotesContext(const std::vector<Chord*>& graceChords, const RenderingContext& ctx,
                                                     const muse::mpe::ArticulationType type);
 
-    static RenderingContext buildPrincipalNoteCtx(const Score* score, const RenderingContext& ctx, const GraceNotesContext& graceCtx);
+    static RenderingContext buildPrincipalNoteCtx(const RenderingContext& ctx, const GraceNotesContext& graceCtx);
 
     static muse::mpe::duration_t graceNotesTotalDuration(const std::vector<Chord*>& graceChords, const RenderingContext& context);
 
