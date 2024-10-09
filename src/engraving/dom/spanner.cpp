@@ -1153,6 +1153,24 @@ Measure* Spanner::endMeasure() const
     return toMeasure(m_endElement);
 }
 
+Measure* Spanner::findStartMeasure() const
+{
+    if (!m_startElement) {
+        return nullptr;
+    }
+
+    return toMeasure(m_startElement->findAncestor(ElementType::MEASURE));
+}
+
+Measure* Spanner::findEndMeasure() const
+{
+    if (!m_endElement) {
+        return nullptr;
+    }
+
+    return toMeasure(m_endElement->findAncestor(ElementType::MEASURE));
+}
+
 //---------------------------------------------------------
 //   setSelected
 //---------------------------------------------------------
