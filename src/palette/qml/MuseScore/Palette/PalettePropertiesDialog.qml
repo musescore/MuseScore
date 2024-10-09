@@ -19,11 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+import QtQuick
 
-import Muse.Ui 1.0
-import Muse.UiComponents 1.0
-import MuseScore.Palette 1.0
+import Muse.Ui
+import Muse.UiComponents
+import MuseScore.Palette
+
+import "internal"
 
 StyledDialogView {
     id: root
@@ -93,78 +95,65 @@ StyledDialogView {
             columns: 2
             spacing: 12
 
-            Repeater {
-                id: repeater
+            PalettePropertyItem {
+                title: qsTrc("palette", "Width")
+                value: propertiesModel.cellWidth
+                incrementStep: 1
+                minValue: 1
+                maxValue: 500
 
-                model: [
-                    {
-                        title: qsTrc("palette", "Width"),
-                        value: propertiesModel.cellWidth,
-                        incrementStep: 1,
-                        minValue: 1,
-                        maxValue: 500
-                    },
-                    {
-                        title: qsTrc("palette", "Height"),
-                        value: propertiesModel.cellHeight,
-                        incrementStep: 1,
-                        minValue: 1,
-                        maxValue: 500
-                    },
-                    {
-                        title: qsTrc("palette", "Element offset"),
-                        value: propertiesModel.elementOffset,
-                        measureUnit: qsTrc("global", "sp"),
-                        incrementStep: 0.1,
-                        minValue: -10,
-                        maxValue: 10
-                    },
-                    {
-                        title: qsTrc("palette", "Scale"),
-                        value: propertiesModel.scaleFactor,
-                        incrementStep: 0.1,
-                        minValue: 0.1,
-                        maxValue: 15
-                    }
-                ]
-
-                function setValue(index, value) {
-                    if (index === 0) {
-                        propertiesModel.cellWidth = value
-                    } else if (index === 1) {
-                        propertiesModel.cellHeight = value
-                    } else if (index === 2) {
-                        propertiesModel.elementOffset = value
-                    } else if (index === 3) {
-                        propertiesModel.scaleFactor = value
-                    }
+                onValueEdited: function(newValue) {
+                    propertiesModel.cellWidth = newValue
                 }
 
-                Column {
-                    width: (grid.width - grid.spacing * (grid.columns - 1)) / grid.columns
+                navigation.panel: navPanel
+                navigation.order: 2
+            }
 
-                    spacing: 8
+            PalettePropertyItem {
+                title: qsTrc("palette", "Height")
+                value: propertiesModel.cellHeight
+                incrementStep: 1
+                minValue: 1
+                maxValue: 500
 
-                    StyledTextLabel {
-                        text: modelData["title"]
-                    }
-
-                    IncrementalPropertyControl {
-                        currentValue: modelData["value"]
-                        measureUnitsSymbol: Boolean(modelData["measureUnit"]) ? modelData["measureUnit"] : ""
-                        step: modelData["incrementStep"]
-                        minValue: modelData["minValue"]
-                        maxValue: modelData["maxValue"]
-
-                        onValueEdited: function(newValue) {
-                            repeater.setValue(model.index, newValue)
-                        }
-                        
-                        navigation.panel: navPanel
-                        navigation.order: 2 + model.index
-                        navigation.accessible.name: modelData["title"] + " " + currentValue
-                    }
+                onValueEdited: function(newValue) {
+                    propertiesModel.cellHeight = newValue
                 }
+
+                navigation.panel: navPanel
+                navigation.order: 3
+            }
+
+            PalettePropertyItem {
+                title: qsTrc("palette", "Element offset")
+                value: propertiesModel.elementOffset
+                measureUnit: qsTrc("global", "sp")
+                incrementStep: 0.1
+                minValue: -10
+                maxValue: 10
+
+                onValueEdited: function (newValue) {
+                    propertiesModel.elementOffset = newValue
+                }
+
+                navigation.panel: navPanel
+                navigation.order: 4
+            }
+
+            PalettePropertyItem {
+                title: qsTrc("palette", "Scale")
+                value: propertiesModel.scaleFactor
+                incrementStep: 0.1
+                minValue: 0.1
+                maxValue: 15
+
+                onValueEdited: function (newValue) {
+                    propertiesModel.scaleFactor = newValue
+                }
+
+                navigation.panel: navPanel
+                navigation.order: 5
             }
         }
 
@@ -179,7 +168,7 @@ StyledDialogView {
             }
 
             navigation.panel: navPanel
-            navigation.order: 2 + repeater.count
+            navigation.order: 6
         }
 
         ButtonBox {
