@@ -14,7 +14,7 @@
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
       <lastSystemFillLimit>0</lastSystemFillLimit>
       <defaultsVersion>206</defaultsVersion>
-      <Spatium>1.76389</Spatium>
+      <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -1822,7 +1822,7 @@
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <defaultsVersion>206</defaultsVersion>
-        <Spatium>1.76389</Spatium>
+        <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>

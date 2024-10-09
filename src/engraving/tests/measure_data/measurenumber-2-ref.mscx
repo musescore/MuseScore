@@ -7,7 +7,7 @@
       <measureNumberHPlacement>1</measureNumberHPlacement>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
-      <Spatium>1.76389</Spatium>
+      <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

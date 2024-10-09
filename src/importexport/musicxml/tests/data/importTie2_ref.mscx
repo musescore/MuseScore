@@ -124,7 +124,7 @@
       <user11FontSize>10.25</user11FontSize>
       <user12FontFace>Times New Roman</user12FontFace>
       <user12FontSize>10.25</user12FontSize>
-      <Spatium>1.80798</Spatium>
+      <spatium>1.80798</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

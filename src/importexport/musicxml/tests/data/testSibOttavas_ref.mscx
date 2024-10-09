@@ -134,7 +134,7 @@
       <user11FontSize>11.9365</user11FontSize>
       <user12FontFace>Quicksand</user12FontFace>
       <user12FontSize>11.9365</user12FontSize>
-      <Spatium>1.75101</Spatium>
+      <spatium>1.75101</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

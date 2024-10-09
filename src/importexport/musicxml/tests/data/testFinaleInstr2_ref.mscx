@@ -125,7 +125,7 @@
       <user11FontSize>8.8</user11FontSize>
       <user12FontFace>Times</user12FontFace>
       <user12FontSize>8.8</user12FontSize>
-      <Spatium>1.69333</Spatium>
+      <spatium>1.69333</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

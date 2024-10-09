@@ -11,7 +11,7 @@
       <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
-      <Spatium>1.364</Spatium>
+      <spatium>1.364</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -316,7 +316,7 @@
         <titleFontFace>Arial</titleFontFace>
         <titleFontSize>48</titleFontSize>
         <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
-        <Spatium>1.76389</Spatium>
+        <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -511,7 +511,7 @@
         <titleFontFace>Arial</titleFontFace>
         <titleFontSize>48</titleFontSize>
         <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
-        <Spatium>1.76389</Spatium>
+        <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
