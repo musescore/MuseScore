@@ -31,6 +31,7 @@ Rectangle {
     property alias model: repeater.model
 
     property alias spacing: content.spacing
+    property int padding: 4
     property int rowHeight: 32
 
     property NavigationPanel navigationPanel: NavigationPanel {
@@ -43,16 +44,10 @@ Rectangle {
 
     property var sourceComponentCallback
 
-    width: content.width + prv.padding * 2
-    height: content.height + prv.padding * 2
+    width: content.width + padding * 2
+    height: content.height + padding * 2
 
     color: ui.theme.backgroundPrimaryColor
-
-    QtObject {
-        id: prv
-
-        property int padding: 4
-    }
 
     Component.onCompleted: {
         root.model.load()
@@ -62,6 +57,8 @@ Rectangle {
         id: content
 
         anchors.verticalCenter: parent.verticalCenter
+        anchors.left: root.left
+        anchors.leftMargin: root.padding
 
         width: {
             var result = 0

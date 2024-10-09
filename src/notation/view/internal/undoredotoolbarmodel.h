@@ -21,48 +21,28 @@
  */
 #pragma once
 
-#include <QObject>
+#include "uicomponents/view/abstracttoolbarmodel.h"
 
-#include "async/asyncable.h"
-#include "context/iglobalcontext.h"
 #include "modularity/ioc.h"
-#include "ui/iuiactionsregister.h"
-
-namespace muse::uicomponents {
-class MenuItem;
-}
+#include "context/iglobalcontext.h"
 
 namespace mu::notation {
-class UndoRedoToolbarModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class UndoRedoToolbarModel : public muse::uicomponents::AbstractToolBarModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(muse::uicomponents::MenuItem * undoItem READ undoItem NOTIFY itemsChanged)
-    Q_PROPERTY(muse::uicomponents::MenuItem * redoItem READ redoItem NOTIFY itemsChanged)
-
     muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
 
 public:
     explicit UndoRedoToolbarModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void load();
-
-    muse::uicomponents::MenuItem* undoItem() const;
-    muse::uicomponents::MenuItem* redoItem() const;
-
-    Q_INVOKABLE void undo();
-    Q_INVOKABLE void redo();
-
-signals:
-    void itemsChanged();
+    Q_INVOKABLE void load() override;
 
 private:
+    void onActionsStateChanges(const muse::actions::ActionCodeList& codes) override;
+
     INotationUndoStackPtr undoStack() const;
-
     void updateItems();
-
-    muse::uicomponents::MenuItem* m_undoItem = nullptr;
-    muse::uicomponents::MenuItem* m_redoItem = nullptr;
+    void subsribeOnUndoStackChanges();
 };
 }
