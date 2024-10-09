@@ -44,7 +44,8 @@ StyledDialogView {
         propertiesModel.load(properties)
     }
 
-    property NavigationPanel navigationPanel: NavigationPanel {
+    NavigationPanel {
+        id: navPanel
         name: "PalettePropertiesDialog"
         section: root.navigationSection
         enabled: root.enabled && root.visible
@@ -74,7 +75,7 @@ StyledDialogView {
                 propertiesModel.name = newTextValue
             }
 
-            navigation.panel: root.navigationPanel
+            navigation.panel: navPanel
             navigation.order: 1
         }
 
@@ -159,14 +160,9 @@ StyledDialogView {
                             repeater.setValue(model.index, newValue)
                         }
                         
-                        navigation.panel: root.navigationPanel
+                        navigation.panel: navPanel
                         navigation.order: 2 + model.index
                         navigation.accessible.name: modelData["title"] + " " + currentValue
-                        navigation.onActiveChanged: {
-                            if(navigation.active) {
-                                forceActiveFocus()
-                            }
-                        }
                     }
                 }
             }
@@ -182,7 +178,7 @@ StyledDialogView {
                 propertiesModel.showGrid = !checked
             }
 
-            navigation.panel: root.navigationPanel
+            navigation.panel: navPanel
             navigation.order: 2 + repeater.count
         }
 
@@ -192,6 +188,7 @@ StyledDialogView {
             buttons: [ ButtonBoxModel.Cancel, ButtonBoxModel.Ok ]
 
             navigationPanel.section: root.navigationSection
+            navigationPanel.order: 2
 
             onStandardButtonClicked: function(buttonId) {
                 if (buttonId === ButtonBoxModel.Cancel) {
