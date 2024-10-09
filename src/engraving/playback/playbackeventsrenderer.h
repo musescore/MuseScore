@@ -67,8 +67,6 @@ private:
                               const muse::mpe::ArticulationsProfilePtr profile, muse::mpe::PlaybackEventList& result) const;
 
     void renderRestEvents(const Rest* rest, const int tickPositionOffset, muse::mpe::PlaybackEventsMap& result) const;
-
-    void renderArticulations(const Chord* chord, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result) const;
 };
 }
 
