@@ -72,18 +72,13 @@ void BendsRenderer::doRender(const EngravingItem* item, const mpe::ArticulationT
     }
 
     const Chord* chord = toChord(item);
-    const Score* score = chord->score();
-
-    IF_ASSERT_FAILED(score) {
-        return;
-    }
 
     for (const Note* note : chord->notes()) {
         if (skipNote(note, ctx.commonArticulations)) {
             continue;
         }
 
-        renderMultibend(score, note, ctx, result);
+        renderMultibend(note, ctx, result);
     }
 
     for (const Chord* graceChord : chord->graceNotes()) {
@@ -92,12 +87,12 @@ void BendsRenderer::doRender(const EngravingItem* item, const mpe::ArticulationT
                 continue;
             }
 
-            renderMultibend(score, note, ctx, result);
+            renderMultibend(note, ctx, result);
         }
     }
 }
 
-void BendsRenderer::renderMultibend(const Score* score, const Note* startNote, const RenderingContext& startNoteCtx,
+void BendsRenderer::renderMultibend(const Note* startNote, const RenderingContext& startNoteCtx,
                                     mpe::PlaybackEventList& result)
 {
     const Note* currNote = startNote;
@@ -108,7 +103,7 @@ void BendsRenderer::renderMultibend(const Score* score, const Note* startNote, c
 
     while (currNote) {
         RenderingContext currNoteCtx = buildRenderingContext(currNote, startNoteCtx);
-        appendBendTimeFactors(score, currBend, bendTimeFactorMap);
+        appendBendTimeFactors(currNoteCtx.score, currBend, bendTimeFactorMap);
 
         if (currNote->isGrace()) {
             IF_ASSERT_FAILED(currBend) {
@@ -125,7 +120,7 @@ void BendsRenderer::renderMultibend(const Score* score, const Note* startNote, c
             // Skip the principal note, it's already been rendered
             currNote = principalNote;
             currBend = principalNote->bendFor();
-            appendBendTimeFactors(score, currBend, bendTimeFactorMap);
+            appendBendTimeFactors(currNoteCtx.score, currBend, bendTimeFactorMap);
         } else {
             NoteRenderer::render(currNote, currNoteCtx, bendEvents);
         }
@@ -139,7 +134,7 @@ void BendsRenderer::renderMultibend(const Score* score, const Note* startNote, c
 
         if (currNote->tieFor()) {
             currBend = currNote->lastTiedNote(false)->bendFor();
-            appendBendTimeFactors(score, currBend, bendTimeFactorMap);
+            appendBendTimeFactors(currNoteCtx.score, currBend, bendTimeFactorMap);
         }
 
         currNote = currBend ? currBend->endNote() : nullptr;

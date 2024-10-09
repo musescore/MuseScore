@@ -95,10 +95,7 @@ void ChordArticulationsParser::doParse(const EngravingItem* item, const Renderin
 
 void ChordArticulationsParser::parseSpanners(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    const Score* score = chord->score();
-
-    const SpannerMap& spannerMap = score->spannerMap();
-
+    const SpannerMap& spannerMap = ctx.score->spannerMap();
     if (spannerMap.empty()) {
         return;
     }
@@ -129,7 +126,7 @@ void ChordArticulationsParser::parseSpanners(const Chord* chord, const Rendering
         }
 
         RenderingContext spannerContext = ctx;
-        spannerContext.nominalTimestamp = timestampFromTicks(score, interval.start + ctx.positionTickOffset);
+        spannerContext.nominalTimestamp = timestampFromTicks(ctx.score, interval.start + ctx.positionTickOffset);
         spannerContext.nominalPositionStartTick = interval.start;
         spannerContext.nominalDurationTicks = SpannerFilter::spannerActualDurationTicks(spanner, interval.stop - interval.start);
         spannerContext.nominalPositionEndTick = spannerContext.nominalPositionStartTick + spannerContext.nominalDurationTicks;
