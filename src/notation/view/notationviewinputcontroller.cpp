@@ -752,14 +752,15 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
 
     INotationSelectionPtr selection = viewInteraction()->selection();
 
-    bool hitElementIsAlreadyBeingEdited = viewInteraction()->isElementEditStarted() && viewInteraction()->editedItem() == ctx.hitElement;
-    if (!selection->isRange() && ctx.hitElement && ctx.hitElement->needStartEditingAfterSelecting() && !hitElementIsAlreadyBeingEdited) {
-        if (ctx.hitElement->hasGrips() && !ctx.hitElement->isImage() && selection->elements().size() == 1) {
-            viewInteraction()->startEditGrip(ctx.hitElement, ctx.hitElement->gripsCount() > 4 ? Grip::DRAG : Grip::MIDDLE);
-        } else {
-            viewInteraction()->startEditElement(ctx.hitElement, false);
+    if (!selection->isRange()) {
+        if (ctx.hitElement && ctx.hitElement->needStartEditingAfterSelecting() && !ctx.hitElement->isTextBase()) {
+            if (ctx.hitElement->hasGrips() && !ctx.hitElement->isImage() && selection->elements().size() == 1) {
+                viewInteraction()->startEditGrip(ctx.hitElement, ctx.hitElement->gripsCount() > 4 ? Grip::DRAG : Grip::MIDDLE);
+            } else {
+                viewInteraction()->startEditElement(ctx.hitElement, false);
+            }
+            return;
         }
-        return;
     }
 
     if (!ctx.hitElement) {
