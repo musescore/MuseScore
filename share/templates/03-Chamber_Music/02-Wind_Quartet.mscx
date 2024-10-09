@@ -6,7 +6,6 @@
     <Division>480</Division>
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>
-      <concertPitch>1</concertPitch>
       <Spatium>1.75</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -638,6 +637,9 @@
         <voice>
           <BarLine>
             </BarLine>
+          <KeySig>
+            <accidental>2</accidental>
+            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
