@@ -857,7 +857,7 @@ static void addLyrics(MxmlLogger* logger, const QXmlStreamReader* const xmlreade
                       const QSet<Lyrics*>& extLyrics,
                       MusicXmlLyricsExtend& extendedLyrics)
       {
-      for (const auto lyricNo : numbrdLyrics.keys()) {
+      for (const auto& lyricNo : numbrdLyrics.keys()) {
             Lyrics* const lyric = numbrdLyrics.value(lyricNo);
             addLyric(logger, xmlreader, cr, lyric, lyricNo, extendedLyrics);
             if (extLyrics.contains(lyric))
@@ -868,7 +868,7 @@ static void addLyrics(MxmlLogger* logger, const QXmlStreamReader* const xmlreade
 static void addGraceNoteLyrics(const QMap<int, Lyrics*>& numberedLyrics, QSet<Lyrics*> extendedLyrics,
                                std::vector<GraceNoteLyrics>& gnLyrics)
       {
-      for (const auto lyricNo : numberedLyrics.keys()) {
+      for (const auto& lyricNo : numberedLyrics.keys()) {
             Lyrics* const lyric = numberedLyrics[lyricNo];
             if (lyric) {
                   bool extend = extendedLyrics.contains(lyric);
@@ -1834,7 +1834,7 @@ static bool cleanUpLayoutBreaks(Score* score, MxmlLogger* logger)
       bool copyrightVBoxAutoSizeEnabledInitial = true;
       Spatium copyrightVBoxBoxHeightInitial = Spatium(10);
 
-      for (auto& system : score->systems()) {
+      for (const auto& system : qAsConst(score->systems())) {
             if (!system->lastMeasure())
                   continue;
             else if (system->lastMeasure()->lineBreak() && !hasExplicitLineBreaks)
@@ -1918,7 +1918,7 @@ static bool cleanUpLayoutBreaks(Score* score, MxmlLogger* logger)
           || hasPageOverflow != initialHasPageOverflow)
             return true;
       else {
-            for (auto& initialStyle : initialStyles)
+            for (const auto& initialStyle : initialStyles)
                   score->style().set(initialStyle.first, initialStyle.second);
             if (copyrightVBox) {
                   copyrightVBox->setAutoSizeEnabled(copyrightVBoxAutoSizeEnabledInitial);
@@ -2380,7 +2380,7 @@ void MusicXMLParserPass2::part()
             }
 
       bool showPart = false;
-            for (Staff* staff : qAsConst(*msPart->staves())) {
+            for (const Staff* staff : qAsConst(*msPart->staves())) {
             if (!staff->invisible(Fraction(0,1))) {
                   showPart = true;
                   break;
@@ -2853,7 +2853,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
       fillGapsInFirstVoices(measure, part);
 
       // Prevent any beams from extending into the next measure
-      for (Beam* beam : beams.values())
+      for (Beam*& beam : beams)
             if (beam)
                   removeBeam(beam);
 
@@ -2864,7 +2864,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
                   return std::abs(a->totalY()) < std::abs(b->totalY());
                   }
             );
-      for (MusicXMLInferredFingering* inferredFingering : qAsConst(inferredFingerings)) {
+      for (MusicXMLInferredFingering*& inferredFingering : inferredFingerings) {
             if (!inferredFingering->findAndAddToNotes(measure))
                   // Could not find notes to add to; print as direction
                   delayedDirections.push_back(inferredFingering->toDelayedDirection());
@@ -4209,7 +4209,7 @@ double MusicXMLParserDirection::convertTextToNotes()
                                               {"x", QString("<sym>metNote16thUp</sym>")},      // note16_Sym
                                               {"w", QString("<sym>metNoteWhole</sym>")},
                                               {"W", QString("<sym>metNoteDoubleWhole</sym>")}};
-      for (auto& noteSym : noteSyms) {
+      for (const auto& noteSym : noteSyms) {
             if (notesSubstring.contains(noteSym.first)) {
                   notesSubstring.replace(noteSym.first, noteSym.second);
                   break;
@@ -4244,7 +4244,7 @@ bool MusicXMLParserDirection::attemptTempoTextCoercion(const Fraction& tick)
             }
       else if (placement() == "above" && _isBold) {
             if (tick == Fraction(0, 1)) return true;
-            for (auto& tempoWord : tempoWords)
+            for (const auto& tempoWord : tempoWords)
                   if (_wordsText.contains(tempoWord, Qt::CaseInsensitive))
                         return true;
             }
@@ -5651,16 +5651,13 @@ void MusicXMLParserPass2::divisions()
 // the type for all rests.
 // Sibelius calls all whole-measure rests "whole", even if the duration != 4/4
 
-static bool isWholeMeasureRest(const QString& type, const Fraction dura, const Fraction mDura)
+static bool isWholeMeasureRest(const QString& type, const Fraction restDuration, const Fraction measureDuration)
       {
-      if (!dura.isValid())
+      if (!restDuration.isValid() || !measureDuration.isValid())
             return false;
 
-      if (!mDura.isValid())
-            return false;
-
-      return (type.isEmpty() && dura == mDura)
-              || (type == "whole" && dura == mDura);
+      return ((type.isEmpty() && restDuration == measureDuration)
+              || (type == "whole" && restDuration == measureDuration));
       }
 
 //---------------------------------------------------------
@@ -5672,34 +5669,28 @@ static bool isWholeMeasureRest(const QString& type, const Fraction dura, const F
  * This includes whole measure rest detection.
  */
 
-static TDuration determineDuration(const bool rest, const bool measureRest, const QString& type, const int dots, const Fraction dura, const Fraction mDura)
+static TDuration determineDuration(const bool isRest, const bool measureRest, const QString& type, const int dots, const Fraction chordRestDuration, const Fraction measureDuration)
       {
-      //qDebug("determineDuration rest %d type '%s' dots %d dura %s mDura %s",
-      //       rest, qPrintable(type), dots, qPrintable(dura.print()), qPrintable(mDura.print()));
+      //qDebug("determineDuration %s, type <%s>, dots %d, duration %s, measure duration %s",
+      //       isRest ? "rest" : "chord", qPrintable(type), dots, qPrintable(chordRestDuration.print()), qPrintable(measureDuration.print()));
 
       TDuration res;
-      if (rest) {
-            if (measureRest  || isWholeMeasureRest(type, dura, mDura))
-                  res.setType(TDuration::DurationType::V_MEASURE);
-            else if (type.isEmpty()) {
-                  // If no type, set duration type based on duration.
-                  // Note that sometimes unusual duration (e.g. 261/256) are found.
-                  res.setVal(dura.ticks());
-                  }
-            else {
-                  res.setType(type);
-                  res.setDots(dots);
-                  }
+      if (isRest && (measureRest || isWholeMeasureRest(type, chordRestDuration, measureDuration)))
+            res.setType(TDuration::DurationType::V_MEASURE);
+      else if (type.isEmpty()) {
+            // If no type, set duration type based on duration.
+            // Note that sometimes unusual duration (e.g. 261/256) are found.
+            res.setVal(chordRestDuration.ticks());
             }
       else {
             res.setType(type);
             res.setDots(dots);
             if (res.type() == TDuration::DurationType::V_INVALID)
-                  res.setType(TDuration::DurationType::V_QUARTER);  // default, TODO: use dura ?
+                  res.setType(TDuration::DurationType::V_QUARTER);  // default, TODO: use measureDuration ?
             }
 
-      //qDebug("-> dur %hhd (%s) dots %d ticks %s",
-      //       res.type(), qPrintable(res.name()), res.dots(), qPrintable(dura.print()));
+      //qDebug("-> duration %hhd (%s) dots %d ticks %s",
+      //       (signed char)res.type(), qPrintable(res.name()), res.dots(), qPrintable(chordRestDuration.print()));
 
       return res;
       }
@@ -8392,7 +8383,6 @@ void MusicXMLParserNotations::tuplet()
 
 void MusicXMLParserNotations::otherNotation()
       {
-      //const QString type = { _e.attributes().value("type").toString() };
       const QString smufl = { _e.attributes().value("smufl").toString() };
       if (!smufl.isEmpty()) {
             SymId id { SymId::noSym };
