@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="2.07">
-  <programVersion>2.1.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="3.01">
+  <programVersion>3.0.0</programVersion>
+  <programRevision>c07ed54</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -9,20 +9,27 @@
       </Synthesizer>
     <Division>480</Division>
     <Style>
+      <pageWidth>3.93701</pageWidth>
+      <pageHeight>1.1811</pageHeight>
+      <pagePrintableWidth>3.77953</pagePrintableWidth>
+      <pageEvenLeftMargin>0.0787403</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.0787403</pageOddLeftMargin>
+      <pageEvenTopMargin>0</pageEvenTopMargin>
+      <pageEvenBottomMargin>0</pageEvenBottomMargin>
+      <pageOddTopMargin>0</pageOddTopMargin>
+      <pageOddBottomMargin>0</pageOddBottomMargin>
+      <pageTwosided>0</pageTwosided>
+      <lyricsMinBottomDistance>4</lyricsMinBottomDistance>
+      <clefLeftMargin>0.64</clefLeftMargin>
+      <clefKeyRightMargin>1.75</clefKeyRightMargin>
+      <barNoteDistance>1.2</barNoteDistance>
+      <pedalPosBelow>0</pedalPosBelow>
+      <trillPosAbove>0</trillPosAbove>
       <showMeasureNumber>0</showMeasureNumber>
       <musicalSymbolFont>Bravura</musicalSymbolFont>
       <musicalTextFont>Bravura Text</musicalTextFont>
       <showFooter>0</showFooter>
-      <page-layout>
-        <page-height>340.157</page-height>
-        <page-width>680.315</page-width>
-        <page-margins type="both">
-          <left-margin>11.3386</left-margin>
-          <right-margin>11.3386</right-margin>
-          <top-margin>0</top-margin>
-          <bottom-margin>0</bottom-margin>
-          </page-margins>
-        </page-layout>
+      <dynamicsFontItalic>0</dynamicsFontItalic>
       <Spatium>1.764</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -41,20 +48,11 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <PageList>
-      <Page>
-        <System>
-          </System>
-        <System>
-          </System>
-        </Page>
-      </PageList>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="-1" span="0"/>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>
@@ -87,289 +85,74 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <Measure number="1">
+      <Measure>
         <stretch>0.8</stretch>
-        <Clef>
-          <concertClefType>G</concertClefType>
-          <transposingClefType>G</transposingClefType>
-          </Clef>
-        <StaffText>
-          <text>Bravura-Text: Dynamics</text>
-          </StaffText>
-        <Dynamic>
-          <subtype>ppp</subtype>
-          <velocity>16</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>pp</subtype>
-          <velocity>33</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>p</subtype>
-          <velocity>49</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>mp</subtype>
-          <velocity>64</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+        <voice>
+          <StaffText>
+            <text>Bravura-Text: Repeats</text>
+            </StaffText>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="2">
+      <Measure>
         <stretch>0.8</stretch>
-        <Dynamic>
-          <subtype>mf</subtype>
-          <velocity>80</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>f</subtype>
-          <velocity>96</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>ff</subtype>
-          <velocity>112</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>fff</subtype>
-          <velocity>126</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>segno</sym></text>
+          <label>segno</label>
+          </Marker>
+        <voice>
+          <RepeatMeasure>
+            <duration>4/4</duration>
+            </RepeatMeasure>
+          </voice>
         </Measure>
-      <Measure number="3">
+      <Measure>
         <stretch>0.8</stretch>
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
-        <Dynamic>
-          <subtype>fp</subtype>
-          <velocity>0</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>sf</subtype>
-          <velocity>0</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>sfz</subtype>
-          <velocity>0</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>sff</subtype>
-          <velocity>0</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>segnoSerpent1</sym></text>
+          <label>varsegno</label>
+          </Marker>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="4">
-        <Dynamic>
-          <subtype>sffz</subtype>
-          <velocity>0</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>sfp</subtype>
-          <velocity>0</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>sfpp</subtype>
-          <velocity>0</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>rfz</subtype>
-          <velocity>0</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        </Measure>
-      <Measure number="5">
+      <Measure>
         <stretch>0.8</stretch>
-        <Dynamic>
-          <subtype>rf</subtype>
-          <velocity>0</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>fz</subtype>
-          <velocity>0</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>m</subtype>
-          <velocity>0</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>r</subtype>
-          <velocity>0</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>coda</sym></text>
+          <label>codab</label>
+          </Marker>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
         </Measure>
-      <Measure number="6">
+      <Measure>
         <stretch>0.8</stretch>
-        <Dynamic>
-          <subtype>s</subtype>
-          <velocity>0</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>z</subtype>
-          <velocity>0</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>quarter</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <Dynamic>
-          <subtype>n</subtype>
-          <velocity>0</velocity>
-          </Dynamic>
-        <Chord>
-          <durationType>half</durationType>
-          <Note>
-            <pitch>67</pitch>
-            <tpc>15</tpc>
-            </Note>
-          </Chord>
-        <BarLine>
-          <subtype>end</subtype>
-          <span>1</span>
-          </BarLine>
+        <Marker>
+          <style>Repeat Text Left</style>
+          <text><sym>codaSquare</sym></text>
+          <label>varcoda</label>
+          </Marker>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            </BarLine>
+          </voice>
         </Measure>
       </Staff>
     </Score>

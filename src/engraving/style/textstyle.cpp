@@ -672,7 +672,7 @@ const TextStyle repeatLeftTextStyle { {
     { TextStylePropertyType::FrameRound,           Sid::repeatLeftFrameRound,                   Pid::FRAME_ROUND },
     { TextStylePropertyType::FrameBorderColor,     Sid::repeatLeftFrameFgColor,                 Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::repeatLeftFrameBgColor,                 Pid::FRAME_BG_COLOR },
-    { TextStylePropertyType::MusicalSymbolsScale,  Sid::repeatsMusicalSymbolsScale,             Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
 } };
 
 const TextStyle repeatRightTextStyle { {
@@ -690,7 +690,7 @@ const TextStyle repeatRightTextStyle { {
     { TextStylePropertyType::FrameRound,           Sid::repeatRightFrameRound,                  Pid::FRAME_ROUND },
     { TextStylePropertyType::FrameBorderColor,     Sid::repeatRightFrameFgColor,                Pid::FRAME_FG_COLOR },
     { TextStylePropertyType::FrameFillColor,       Sid::repeatRightFrameBgColor,                Pid::FRAME_BG_COLOR },
-    { TextStylePropertyType::MusicalSymbolsScale,  Sid::repeatsMusicalSymbolsScale,             Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
 } };
 
 const TextStyle frameTextStyle { {
