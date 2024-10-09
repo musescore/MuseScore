@@ -1341,8 +1341,10 @@ bool MeiExporter::writeRest(const Rest* rest, const Staff* staff)
         if (rest->dots()) {
             meiRest.SetDots(rest->dots());
         }
-        Convert::colorToMEI(rest, meiRest);
-        this->writeBeamTypeAtt(rest, meiRest);
+        if (rest->visible()) {
+            Convert::colorToMEI(rest, meiRest);
+            this->writeBeamTypeAtt(rest, meiRest);
+        }
         this->writeStaffIdentAtt(rest, staff, meiRest);
         // this->writeVerses(rest);
         const char prefix = (rest->visible()) ? 'r' : 's';
