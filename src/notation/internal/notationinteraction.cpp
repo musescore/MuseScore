@@ -3659,11 +3659,6 @@ void NotationInteraction::endEditElement()
     notifyAboutNotationChanged();
 }
 
-const EngravingItem* NotationInteraction::editedItem() const
-{
-    return m_editData.element;
-}
-
 void NotationInteraction::doEndEditElement(bool clearEditData)
 {
     if (m_editData.element) {
