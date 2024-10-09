@@ -3865,7 +3865,7 @@ bool TRead::readProperties(Stem* s, XmlReader& e, ReadContext& ctx)
     if (tag == "userLen" && s->score()->mscVersion() < 400) {
         // Ignore stem length pre-4.0
         e.skipCurrentElement();
-        s->setUserLength(Millimetre(0.0));
+        s->setUserLength(Spatium(0));
     } else if (TRead::readProperty(s, tag, e, ctx, Pid::USER_LEN)) {
     } else if (TRead::readStyledProperty(s, tag, e, ctx)) {
     } else if (readItemProperties(s, e, ctx)) {
