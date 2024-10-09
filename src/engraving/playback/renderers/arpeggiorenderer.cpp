@@ -111,8 +111,6 @@ std::map<pitch_level_t, NominalNoteCtx> ArpeggioRenderer::arpeggioNotes(const Ch
 {
     std::map<pitch_level_t, NominalNoteCtx> result;
 
-    const Score* score = chord->score();
-
     for (const Note* note : chord->notes()) {
         if (!isNotePlayable(note, ctx.commonArticulations)) {
             continue;
@@ -120,7 +118,7 @@ std::map<pitch_level_t, NominalNoteCtx> ArpeggioRenderer::arpeggioNotes(const Ch
 
         NominalNoteCtx noteCtx(note, ctx);
         if (note->tieFor()) {
-            noteCtx.duration = tiedNotesTotalDuration(score, note, noteCtx.duration, ctx.positionTickOffset);
+            noteCtx.duration = tiedNotesTotalDuration(ctx.score, note, noteCtx.duration, ctx.positionTickOffset);
         }
 
         NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.articulations);

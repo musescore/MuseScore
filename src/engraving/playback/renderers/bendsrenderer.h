@@ -45,8 +45,7 @@ private:
     using PitchOffsets = std::vector<std::pair<muse::mpe::timestamp_t, muse::mpe::pitch_level_t> >;
     using BendTimeFactorMap = std::map<muse::mpe::timestamp_t, BendTimeFactors>;
 
-    static void renderMultibend(const Score* score, const Note* startNote, const RenderingContext& startNoteCtx,
-                                muse::mpe::PlaybackEventList& result);
+    static void renderMultibend(const Note* startNote, const RenderingContext& startNoteCtx, muse::mpe::PlaybackEventList& result);
     static void renderGraceAndPrincipalNotes(const Note* graceNote, const Note* principalNote, const RenderingContext& ctx,
                                              muse::mpe::PlaybackEventList& result);
 

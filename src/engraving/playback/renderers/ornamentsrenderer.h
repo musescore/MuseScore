@@ -36,14 +36,14 @@ public:
                          muse::mpe::PlaybackEventList& result);
 
 private:
-    static void convert(const Score* score, const muse::mpe::ArticulationType type, const DisclosurePattern& pattern,
-                        NominalNoteCtx&& noteCtx, muse::mpe::PlaybackEventList& result);
+    static void convert(const muse::mpe::ArticulationType type, const DisclosurePattern& pattern, NominalNoteCtx&& noteCtx,
+                        muse::mpe::PlaybackEventList& result);
 
     static int alterationsNumberByTempo(const double beatsPerSeconds, const int principalNoteDurationTicks,
                                         const DisclosurePattern& pattern);
 
-    static void createEvents(const Score* score, const muse::mpe::ArticulationType type, NominalNoteCtx& noteCtx,
-                             const int alterationsCount, const int availableDurationTicks, const int overallDurationTicks,
+    static void createEvents(const muse::mpe::ArticulationType type, NominalNoteCtx& noteCtx, const int alterationsCount,
+                             const int availableDurationTicks, const int overallDurationTicks,
                              const std::vector<muse::mpe::pitch_level_t>& pitchOffsets, muse::mpe::PlaybackEventList& result);
 };
 }

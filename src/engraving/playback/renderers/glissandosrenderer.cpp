@@ -33,11 +33,6 @@ using namespace muse::mpe;
 
 void GlissandosRenderer::renderDiscreteGlissando(const Note* note, const NominalNoteCtx& ctx, mpe::PlaybackEventList& result)
 {
-    const Score* score = note->score();
-    IF_ASSERT_FAILED(score) {
-        return;
-    }
-
     const Glissando* glissando = nullptr;
     for (const Spanner* spanner : note->spannerFor()) {
         if (spanner->type() == ElementType::GLISSANDO) {
@@ -68,7 +63,7 @@ void GlissandosRenderer::renderDiscreteGlissando(const Note* note, const Nominal
         noteCtx.timestamp += i * durationStep;
         noteCtx.pitchLevel += pitchSteps.at(i) * mpe::PITCH_LEVEL_STEP;
 
-        int utick = timestampToTick(score, noteCtx.timestamp);
+        int utick = timestampToTick(noteCtx.chordCtx.score, noteCtx.timestamp);
         noteCtx.dynamicLevel = ctx.chordCtx.playbackCtx->appliableDynamicLevel(note->track(), utick);
 
         updateArticulationBoundaries(ArticulationType::DiscreteGlissando,
