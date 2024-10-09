@@ -879,7 +879,7 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
 
     if (item->noStem()) {
         xml.tag("noStem", item->noStem());
-    } else if (item->stem() && (item->stem()->isUserModified() || !RealIsNull(item->stem()->userLength()))) {
+    } else if (item->stem() && (item->stem()->isUserModified() || !item->stem()->userLength().isZero())) {
         write(item->stem(), xml, ctx);
     }
     if (item->hook() && item->hook()->isUserModified()) {
