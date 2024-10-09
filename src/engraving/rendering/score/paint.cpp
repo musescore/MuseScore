@@ -116,9 +116,7 @@ void Paint::paintScore(Painter* painter, Score* score, const IScoreRenderer::Pai
 
             painter->beginObject("page_" + std::to_string(pi));
 
-            if (opt.isPrinting && painter->hasClipping() && (drawRect.top() < pageAbsRect.top() || drawRect.bottom() > pageAbsRect.bottom()
-                                                             || drawRect.left() < pageAbsRect.left()
-                                                             || drawRect.right() > pageAbsRect.right())) {
+            if (opt.isPrinting && painter->hasClipping()) {
                 // prevent elements from being drawn off the edge of the page (e.g. too many staves),
                 // for now only in "Publish" mode (opt.isPrinting == true)
                 painter->setClipRect(pageAbsRect.intersected(drawRect));
