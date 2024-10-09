@@ -22,11 +22,7 @@
 
 #pragma once
 
-#include "global/types/string.h"
-
-namespace muse {
-class XmlStreamReader;
-}
+#include "serialization/xmlstreamreader.h"
 
 namespace mu::iex::musicxml {
 class MusicXmlLogger

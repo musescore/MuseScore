@@ -83,6 +83,7 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 #include "engraving/dom/volta.h"
+#include "engraving/engravingerrors.h"
 
 #include "importmusicxmllogger.h"
 #include "importmusicxmlnoteduration.h"
@@ -8921,5 +8922,10 @@ MusicXmlParserDirection::MusicXmlParserDirection(XmlStreamReader& e,
     m_tpoMetro(0), m_tpoSound(0), m_offset(0, 1)
 {
     // nothing
+}
+
+bool HarmonyDesc::fretDiagramVisible() const
+{
+    return m_fretDiagram ? m_fretDiagram->visible() : false;
 }
 }

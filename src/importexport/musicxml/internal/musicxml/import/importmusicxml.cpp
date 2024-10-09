@@ -22,8 +22,10 @@
 
 #include "global/translation.h"
 
+#ifndef MUSICXML_NO_INTERACTIVE
 #include "modularity/ioc.h"
 #include "global/iinteractive.h"
+#endif
 
 #include "global/io/file.h"
 #include "global/serialization/zipreader.h"
@@ -33,13 +35,13 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/score.h"
+#include "engraving/engravingerrors.h"
 
 #include "importmusicxml.h"
 #include "importmusicxmllogger.h"
 #include "importmusicxmlpass1.h"
 #include "importmusicxmlpass2.h"
 #include "musicxmlvalidation.h"
-#include "../shared/musicxmlsupport.h"
 
 #ifndef MUSICXML_NO_INTERACTIVE
 using namespace mu;

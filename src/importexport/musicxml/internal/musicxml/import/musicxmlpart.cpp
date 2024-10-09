@@ -22,6 +22,8 @@
 
 #include "musicxmlpart.h"
 #include "dom/mscore.h"
+#include "dom/interval.h"
+#include "log.h"
 
 using namespace mu::engraving;
 using namespace mu::iex::musicxml;

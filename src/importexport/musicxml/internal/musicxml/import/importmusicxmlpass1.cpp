@@ -33,6 +33,7 @@
 #include "engraving/dom/text.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/utils.h"
+#include "engraving/engravingerrors.h"
 #include "engraving/rendering/score/tlayout.h"
 
 #include "engraving/style/style.h"
@@ -44,6 +45,7 @@
 #include "importmusicxmlnoteduration.h"
 #include "importmusicxmlpass1.h"
 #include "../shared/musicxmltypes.h"
+#include "../shared/musicxmlsupport.h"
 
 #include "modularity/ioc.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"

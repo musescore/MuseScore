@@ -23,14 +23,15 @@
 #pragma once
 
 #include "io/iodevice.h"
-#include "global/types/string.h"
-#include "dom/score.h"
+#include "types/string.h"
 
-using namespace mu::engraving;
+namespace mu::engraving {
+class Score;
+}
 
 namespace mu::iex::musicxml {
-bool saveMxl(Score*, muse::io::IODevice*);
-bool saveMxl(Score* score, const String& name);
-bool saveXml(Score*, muse::io::IODevice*);
-bool saveXml(Score*, const muse::String&);
+bool saveMxl(engraving::Score*, muse::io::IODevice*);
+bool saveMxl(engraving::Score* score, const muse::String& name);
+bool saveXml(engraving::Score*, muse::io::IODevice*);
+bool saveXml(engraving::Score*, const muse::String&);
 }

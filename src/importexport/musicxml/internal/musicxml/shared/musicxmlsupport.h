@@ -22,15 +22,16 @@
 
 #pragma once
 
-#include "engraving/types/fraction.h"
-#include "engraving/dom/note.h"
-#include "engraving/dom/fret.h"
+#include "framework/global/types/string.h"
+#include "serialization/xmlstreamreader.h"
 
-namespace muse {
-class XmlStreamReader;
+namespace mu::engraving {
+enum class AccidentalType;
+class Articulation;
+class Chord;
+class Fraction;
+enum class SymId;
 }
-
-using namespace mu::engraving;
 
 namespace mu::iex::musicxml {
 //---------------------------------------------------------
@@ -40,21 +41,21 @@ namespace mu::iex::musicxml {
 class MusicXmlSupport
 {
 public:
-    static int stringToInt(const String& s, bool* ok);
-    static Fraction noteTypeToFraction(const String& type);
-    static Fraction calculateFraction(const String& type, int dots, int normalNotes, int actualNotes);
+    static int stringToInt(const muse::String& s, bool* ok);
+    static engraving::Fraction noteTypeToFraction(const muse::String& type);
+    static engraving::Fraction calculateFraction(const muse::String& type, int dots, int normalNotes, int actualNotes);
 };
 
-extern String accSymId2MusicXmlString(const SymId id);
-extern String accSymId2SmuflMusicXmlString(const SymId id);
-extern String accidentalType2MusicXmlString(const AccidentalType type);
-extern String accidentalType2SmuflMusicXmlString(const AccidentalType type);
-extern AccidentalType musicXmlString2accidentalType(const String mxmlName, const String smufl);
-extern String musicXmlAccidentalTextToChar(const String mxmlName);
-extern SymId musicXmlString2accSymId(const String mxmlName, const String smufl = {});
-extern AccidentalType microtonalGuess(double val);
-extern bool isLaissezVibrer(const SymId id);
-extern const Articulation* findLaissezVibrer(const Chord* chord);
-extern String errorStringWithLocation(int line, int col, const String& error);
-extern String checkAtEndElement(const muse::XmlStreamReader& e, const String& expName);
+extern muse::String accSymId2MusicXmlString(const engraving::SymId id);
+extern muse::String accSymId2SmuflMusicXmlString(const engraving::SymId id);
+extern muse::String accidentalType2MusicXmlString(const engraving::AccidentalType type);
+extern muse::String accidentalType2SmuflMusicXmlString(const engraving::AccidentalType type);
+extern engraving::AccidentalType musicXmlString2accidentalType(const muse::String mxmlName, const muse::String smufl);
+extern muse::String musicXmlAccidentalTextToChar(const muse::String mxmlName);
+extern engraving::SymId musicXmlString2accSymId(const muse::String mxmlName, const muse::String smufl = {});
+extern engraving::AccidentalType microtonalGuess(double val);
+extern bool isLaissezVibrer(const engraving::SymId id);
+extern const engraving::Articulation* findLaissezVibrer(const engraving::Chord* chord);
+extern muse::String errorStringWithLocation(int line, int col, const muse::String& error);
+extern muse::String checkAtEndElement(const muse::XmlStreamReader& e, const muse::String& expName);
 } // namespace Ms

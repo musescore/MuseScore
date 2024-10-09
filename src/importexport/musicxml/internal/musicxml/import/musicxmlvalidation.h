@@ -22,8 +22,7 @@
 
 #pragma once
 
-#include "global/types/bytearray.h"
-#include "global/types/string.h"
+#include "types/string.h"
 #include "engraving/engravingerrors.h"
 
 namespace mu::iex::musicxml {

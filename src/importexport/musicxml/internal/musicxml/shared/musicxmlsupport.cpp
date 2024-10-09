@@ -24,13 +24,16 @@
  MusicXML support.
  */
 
+#include "musicxmlsupport.h"
 #include "global/serialization/xmlstreamreader.h"
 
 #include "translation.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/chord.h"
 #include "types/symnames.h"
-#include "musicxmlsupport.h"
+
+using namespace muse;
+using namespace mu::engraving;
 
 namespace mu::iex::musicxml {
 //---------------------------------------------------------

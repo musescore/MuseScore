@@ -22,10 +22,9 @@
 
 #pragma once
 
-#include "engraving/dom/text.h"
-#include "engraving/rw/xmlwriter.h"
+#include "dom/textbase.h"
+#include "rw/xmlwriter.h"
 
-using namespace mu::engraving;
 namespace mu::iex::musicxml {
 //---------------------------------------------------------
 //   MScoreTextToMXML
@@ -34,19 +33,19 @@ namespace mu::iex::musicxml {
 class MScoreTextToMusicXml
 {
 public:
-    MScoreTextToMusicXml(const String& tag, const String& attr, const CharFormat& defFmt, const String& mtf);
-    static String toPlainText(const String& text);
-    static String toPlainTextPlusSymbols(const std::list<TextFragment>& list);
-    static bool split(const std::list<TextFragment>& in, const int pos, const int len, std::list<TextFragment>& left,
-                      std::list<TextFragment>& mid, std::list<TextFragment>& right);
-    void writeTextFragments(const std::list<TextFragment>& fr, XmlWriter& xml);
+    MScoreTextToMusicXml(const muse::String& tag, const muse::String& attr, const engraving::CharFormat& defFmt, const muse::String& mtf);
+    static muse::String toPlainText(const muse::String& text);
+    static muse::String toPlainTextPlusSymbols(const std::list<engraving::TextFragment>& list);
+    static bool split(const std::list<engraving::TextFragment>& in, const int pos, const int len, std::list<engraving::TextFragment>& left,
+                      std::list<engraving::TextFragment>& mid, std::list<engraving::TextFragment>& right);
+    void writeTextFragments(const std::list<engraving::TextFragment>& fr, engraving::XmlWriter& xml);
 
 private:
-    String updateFormat();
-    String attribs;
-    String tagname;
-    CharFormat oldFormat;
-    CharFormat newFormat;
-    String musicalTextFont;
+    muse::String updateFormat();
+    muse::String attribs;
+    muse::String tagname;
+    engraving::CharFormat oldFormat;
+    engraving::CharFormat newFormat;
+    muse::String musicalTextFont;
 };
 } // namespace Ms
