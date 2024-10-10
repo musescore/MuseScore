@@ -90,6 +90,7 @@
 #include "../../dom/bracket.h"
 #include "../../dom/breath.h"
 #include "../../dom/note.h"
+#include "../../dom/noteline.h"
 #include "../../dom/spanner.h"
 #include "../../dom/fingering.h"
 #include "../../dom/notedot.h"
@@ -251,6 +252,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::NOTEDOT: read(item_cast<NoteDot*>(item), xml, ctx);
         break;
     case ElementType::NOTEHEAD: read(item_cast<NoteHead*>(item), xml, ctx);
+        break;
+    case ElementType::NOTELINE: read(item_cast<NoteLine*>(item), xml, ctx);
         break;
     case ElementType::PAGE: read(item_cast<Page*>(item), xml, ctx);
         break;
@@ -3618,6 +3621,11 @@ void TRead::read(NoteDot* d, XmlReader& e, ReadContext& ctx)
 void TRead::read(NoteHead* h, XmlReader& xml, ReadContext& ctx)
 {
     read(static_cast<Symbol*>(h), xml, ctx);
+}
+
+void TRead::read(NoteLine* nl, XmlReader& xml, ReadContext& ctx)
+{
+    TRead::read(static_cast<TextLineBase*>(nl), xml, ctx);
 }
 
 void TRead::read(Ottava* o, XmlReader& e, ReadContext& ctx)

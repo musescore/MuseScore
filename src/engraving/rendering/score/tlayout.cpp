@@ -98,6 +98,7 @@
 
 #include "dom/note.h"
 #include "dom/notedot.h"
+#include "dom/noteline.h"
 
 #include "dom/ornament.h"
 #include "dom/ottava.h"
@@ -334,6 +335,12 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::NOTEHEAD:
         layoutSymbol(item_cast<const NoteHead*>(item), static_cast<NoteHead::LayoutData*>(ldata), ctx);
+        break;
+    case ElementType::NOTELINE:
+        layoutNoteLine(item_cast<NoteLine*>(item), ctx);
+        break;
+    case ElementType::NOTELINE_SEGMENT:
+        layoutNoteLineSegment(item_cast<NoteLineSegment*>(item), ctx);
         break;
     case ElementType::ORNAMENT:
         layoutOrnament(item_cast<const Ornament*>(item), static_cast<Ornament::LayoutData*>(ldata), ctx.conf());
@@ -2758,6 +2765,7 @@ void TLayout::layoutGlissando(Glissando* item, LayoutContext& ctx)
 void TLayout::layoutGlissandoSegment(GlissandoSegment* item, LayoutContext&)
 {
     LAYOUT_CALL_ITEM(item);
+
     GlissandoSegment::LayoutData* ldata = item->mutldata();
     if (item->pos2().x() <= 0) {
         ldata->setBbox(RectF());
@@ -5035,6 +5043,30 @@ void TLayout::layoutNoteAnchoredLine(SLine* item, EngravingItem::LayoutData* lda
     ldata->setBbox(r.adjusted(-lw, -lw, lw, lw));
 }
 
+void TLayout::layoutNoteLine(NoteLine* item, LayoutContext& ctx)
+{
+    LAYOUT_CALL_ITEM(item);
+    TLayout::layoutLine(item, ctx);
+
+    // TODO check if this should be laid out like glissando
+    layoutNoteAnchoredLine(item, item->mutldata(), ctx);
+    item->addLineAttachPoints();
+}
+
+void TLayout::layoutNoteLineSegment(NoteLineSegment* item, LayoutContext& ctx)
+{
+    LAYOUT_CALL_ITEM(item);
+
+    NoteLineSegment::LayoutData* ldata = item->mutldata();
+    layoutTextLineBaseSegment(item, ctx);
+
+    if (item->staff()) {
+        ldata->setMag(item->staff()->staffMag(item->tick()));
+    }
+    Shape sh = textLineBaseSegmentShape(item);
+    ldata->setShape(sh);
+}
+
 void TLayout::layoutSlur(Slur* item, LayoutContext& ctx)
 {
     SlurTieLayout::createSlurSegments(item, ctx);
@@ -5815,11 +5847,6 @@ void TLayout::layoutTextLine(TextLine* item, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
     layoutLine(item, ctx);
-
-    if (item->anchor() == Spanner::Anchor::NOTE) {
-        layoutNoteAnchoredLine(item, item->mutldata(), ctx);
-        item->addLineAttachPoints();
-    }
 }
 
 void TLayout::layoutTextLineSegment(TextLineSegment* item, LayoutContext& ctx)

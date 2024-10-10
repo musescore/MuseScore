@@ -1070,7 +1070,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
                 note->setTieBack(toTie(sp));
             } else {
                 bool offsetEnds = true;
-                bool isNoteAnchoredTextLine = sp->isTextLine() && sp->anchor() == Spanner::Anchor::NOTE && true;
+                bool isNoteAnchoredTextLine = sp->isNoteLine() && offsetEnds;
                 if ((sp->isGlissando() || isNoteAnchoredTextLine) && note->explicitParent() && note->explicitParent()->isChord()) {
                     toChord(note->explicitParent())->setEndsNoteAnchoredLine(true);
                 }

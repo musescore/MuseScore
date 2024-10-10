@@ -60,6 +60,7 @@
 #include "mscoreview.h"
 #include "navigate.h"
 #include "note.h"
+#include "noteline.h"
 #include "ornament.h"
 #include "ottava.h"
 #include "part.h"
@@ -2118,39 +2119,37 @@ void Score::addNoteLine()
         selectedNotes.insert(selectedNotes.end(), notes.begin(), notes.end());
     }
 
-    Note* firstNote = nullptr;
-    Note* lastNote  = nullptr;
+    Note* startNote = nullptr;
+    Note* endNote  = nullptr;
 
     for (Note* note : selectedNotes) {
-        if (firstNote == nullptr || firstNote->chord()->tick() > note->chord()->tick()) {
-            firstNote = note;
+        if (startNote == nullptr || startNote->chord()->tick() > note->chord()->tick()) {
+            startNote = note;
         }
-        if (lastNote == nullptr || lastNote->chord()->tick() < note->chord()->tick()) {
-            lastNote = note;
+        if (endNote == nullptr || endNote->chord()->tick() < note->chord()->tick()) {
+            endNote = note;
         }
     }
 
-    if (!firstNote) {
-        LOGD("addNoteLine: no first note %p", firstNote);
+    if (!startNote) {
+        LOGD("addNoteLine: no first note %p", startNote);
         return;
     }
 
-    if (firstNote == lastNote) {
-        lastNote = SLine::guessFinalNote(firstNote);
+    if (startNote == endNote) {
+        endNote = SLine::guessFinalNote(startNote);
     }
 
-    if (!lastNote) {
-        LOGD("addNoteLine: no last note note %p", lastNote);
+    if (!endNote) {
+        LOGD("addNoteLine: no last note note %p", endNote);
         return;
     }
 
-    TextLine* line = new TextLine(firstNote);
-    line->setParent(firstNote);
-    line->setStartElement(firstNote);
-    line->setDiagonal(true);
-    line->setAnchor(Spanner::Anchor::NOTE);
-    line->setTick(firstNote->chord()->tick());
-    line->setEndElement(lastNote);
+    NoteLine* line = Factory::createNoteLine(startNote);
+    line->setParent(startNote);
+    line->setStartElement(startNote);
+    line->setTick(startNote->chord()->tick());
+    line->setEndElement(endNote);
 
     undoAddElement(line);
 }
@@ -2826,6 +2825,7 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
+    case ElementType::NOTELINE_SEGMENT:
     case ElementType::LET_RING_SEGMENT:
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
     case ElementType::PALM_MUTE_SEGMENT:
@@ -5906,6 +5906,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         || et == ElementType::TEXT
         || et == ElementType::GLISSANDO
         || et == ElementType::GUITAR_BEND
+        || et == ElementType::NOTELINE
         || et == ElementType::BEND
         || (et == ElementType::CHORD && toChord(element)->isGrace())
         ) {
@@ -5929,7 +5930,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             if (e == parent) {
                 ne = element;
             } else {
-                if (element->isGlissando() || element->isGuitarBend()) {            // and other spanners with Anchor::NOTE
+                if (element->isGlissando() || element->isGuitarBend() || element->isNoteLine()) {            // and other spanners with Anchor::NOTE
                     Note* newEnd = Spanner::endElementFromSpanner(toSpanner(element), e);
                     if (newEnd) {
                         ne = element->linkedClone();
@@ -6330,7 +6331,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             }
 
             doUndoAddElement(nsp);
-        } else if (et == ElementType::GLISSANDO || et == ElementType::GUITAR_BEND) {
+        } else if (et == ElementType::GLISSANDO || et == ElementType::GUITAR_BEND || et == ElementType::NOTELINE) {
             doUndoAddElement(toSpanner(ne));
         } else if (element->isType(ElementType::TREMOLO_TWOCHORD)) {
             TremoloTwoChord* tremolo = item_cast<TremoloTwoChord*>(element);

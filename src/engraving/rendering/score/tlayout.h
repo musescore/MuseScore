@@ -140,6 +140,8 @@ class Pedal;
 class PedalSegment;
 class PickScrapeSegment;
 
+class NoteLineSegment;
+
 class RasgueadoSegment;
 
 class ShadowNote;
@@ -278,6 +280,9 @@ public:
     static void layoutNote(const Note* item, Note::LayoutData* ldata);
     static void fillNoteShape(const Note* item, Note::LayoutData* ldata);
     static void layoutNoteDot(const NoteDot* item, NoteDot::LayoutData* ldata);
+    static void layoutNoteAnchoredLine(SLine* item, SLine::LayoutData* ldata, LayoutContext& ctx);
+    static void layoutNoteLine(NoteLine* item, LayoutContext& ctx);
+    static void layoutNoteLineSegment(NoteLineSegment* item, LayoutContext& ctx);
 
     static void layoutOrnament(const Ornament* item, Ornament::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx);
@@ -298,7 +303,6 @@ public:
 
     static void layoutShadowNote(ShadowNote* item, LayoutContext& ctx);
     static void layoutLine(SLine* item, LayoutContext& ctx); // base class
-    static void layoutNoteAnchoredLine(SLine* item, SLine::LayoutData* ldata, LayoutContext& ctx);
     static void layoutSlur(Slur* item, LayoutContext& ctx);
     static void layoutSpacer(Spacer* item, LayoutContext& ctx);
     static void layoutSpanner(Spanner* item, LayoutContext& ctx);

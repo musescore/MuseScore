@@ -388,7 +388,7 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
                 item->setTieBack(toTie(sp));
             } else {
                 bool offsetEnds = true;
-                bool isNoteAnchoredTextLine = sp->isTextLine() && sp->anchor() == Spanner::Anchor::NOTE && offsetEnds;
+                bool isNoteAnchoredTextLine = sp->isNoteLine() && offsetEnds;
                 if ((sp->isGlissando() || isNoteAnchoredTextLine) && item->explicitParent() && item->explicitParent()->isChord()) {
                     toChord(item->explicitParent())->setEndsNoteAnchoredLine(true);
                 }

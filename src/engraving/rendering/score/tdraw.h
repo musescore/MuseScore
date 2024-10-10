@@ -101,6 +101,7 @@ class MMRestRange;
 
 class Note;
 class NoteDot;
+class NoteLineSegment;
 
 class Ornament;
 
@@ -251,6 +252,7 @@ private:
     static void draw(const Note* item, muse::draw::Painter* painter);
     static void draw(const NoteDot* item, muse::draw::Painter* painter);
     static void draw(const NoteHead* item, muse::draw::Painter* painter);
+    static void draw(const NoteLineSegment* item, muse::draw::Painter* painter);
 
     static void draw(const Ornament* item, muse::draw::Painter* painter);
     static void draw(const OttavaSegment* item, muse::draw::Painter* painter);

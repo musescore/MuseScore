@@ -361,6 +361,7 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
     case ElementType::TEXTLINE:
     case ElementType::GLISSANDO:
     case ElementType::GUITAR_BEND:
+    case ElementType::NOTELINE:
     {
         Spanner* sp = toSpanner(info->connector());
         if (info->isStart()) {
@@ -389,7 +390,7 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
                 item->setTieBack(toTie(sp));
             } else {
                 bool offsetEnds = true;
-                bool isNoteAnchoredTextLine = sp->isTextLine() && sp->anchor() == Spanner::Anchor::NOTE && offsetEnds;
+                bool isNoteAnchoredTextLine = sp->isNoteLine() && offsetEnds;
                 if ((sp->isGlissando() || sp->isGuitarBend() || isNoteAnchoredTextLine) && item->explicitParent()
                     && item->explicitParent()->isChord()) {
                     toChord(item->explicitParent())->setEndsNoteAnchoredLine(true);

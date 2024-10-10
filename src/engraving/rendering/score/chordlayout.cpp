@@ -2803,8 +2803,8 @@ void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, La
                     TLayout::layoutGlissando(toGlissando(sp), ctx);
                 } else if (sp->isGuitarBend()) {
                     TLayout::layoutGuitarBend(toGuitarBend(sp), ctx);
-                } else if (sp->isTextLine() && sp->anchor() == Spanner::Anchor::NOTE) {
-                    TLayout::layoutTextLine(toTextLine(sp), ctx);
+                } else if (sp->isNoteLine()) {
+                    TLayout::layoutNoteLine(toNoteLine(sp), ctx);
                 }
             }
         }

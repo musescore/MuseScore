@@ -2462,7 +2462,7 @@ void Chord::updateEndsNoteAnchoredLine()
     // scan all chord notes for glissandi ending on this chord
     for (Note* note : notes()) {
         for (Spanner* sp : note->spannerBack()) {
-            bool isNoteAnchoredTextLine = sp->isTextLine() && sp->anchor() == Spanner::Anchor::NOTE && offsetEnds;
+            bool isNoteAnchoredTextLine = sp->isNoteLine() && offsetEnds;
             if (sp->type() == ElementType::GLISSANDO || isNoteAnchoredTextLine) {
                 m_endsNoteAnchoredLine = true;
                 return;
@@ -2913,6 +2913,7 @@ EngravingItem* Chord::nextElement()
 
     case ElementType::GUITAR_BEND_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
+    case ElementType::NOTELINE_SEGMENT:
     case ElementType::TIE_SEGMENT: {
         SpannerSegment* s = toSpannerSegment(e);
         Spanner* sp = s->spanner();
