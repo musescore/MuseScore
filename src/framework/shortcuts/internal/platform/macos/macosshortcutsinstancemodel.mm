@@ -309,11 +309,11 @@ static QString keyCodeToString(UCKeyboardLayout* keyboard, UInt32 keyNativeCode)
 
 static QString keyModifiersToString(UInt32 keyNativeModifiers)
 {
-    static const QMap<int, QString> qtModifiers = {
+    static const std::map<int, QString> qtModifiers = {
         { shiftKey, "Shift" },
         { rightShiftKey, "Shift" },
-        { controlKey, "Ctrl" },
-        { rightControlKey, "Ctrl" },
+        { controlKey, "Meta" },
+        { rightControlKey, "Meta" },
         { cmdKey, "Ctrl" },
         { optionKey, "Alt" },
         { rightOptionKey, "Alt" },
@@ -321,15 +321,12 @@ static QString keyModifiersToString(UInt32 keyNativeModifiers)
     };
 
     QString result;
-    QMapIterator<int, QString> it(qtModifiers);
-    while (it.hasNext()) {
-        it.next();
-
-        if (keyNativeModifiers & it.key()) {
+    for (const auto& [key, value] : qtModifiers) {
+        if (keyNativeModifiers & key) {
             if (!result.isEmpty()) {
                 result += "+";
             }
-            result += it.value();
+            result += value;
         }
     }
 
