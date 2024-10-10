@@ -1290,7 +1290,7 @@ void PlaybackController::setupSequencePlayer()
         updateCurrentTempo();
 
         secs_t endSecs = playbackEndSecs();
-        if (pos == endSecs) {
+        if (pos + milisecsToSecs(1) >= endSecs) {
             stop();
         }
     });
