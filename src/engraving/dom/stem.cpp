@@ -103,8 +103,8 @@ void Stem::startEditDrag(EditData& ed)
 
 void Stem::editDrag(EditData& ed)
 {
-    double yDelta = ed.delta.y();
-    m_userLength += up() ? Millimetre(-yDelta) : Millimetre(yDelta);
+    double yDelta = up() ? -ed.delta.y() : ed.delta.y();
+    m_userLength += Spatium::fromMM(yDelta, spatium());
     renderer()->layoutItem(this);
     Chord* c = chord();
     if (c->hook()) {
@@ -171,7 +171,7 @@ bool Stem::setProperty(Pid propertyId, const PropertyValue& v)
         setLineWidth(v.value<Spatium>());
         break;
     case Pid::USER_LEN:
-        setUserLength(v.value<Millimetre>());
+        setUserLength(v.value<Spatium>());
         break;
     case Pid::STEM_DIRECTION:
         chord()->setStemDirection(v.value<DirectionV>());
