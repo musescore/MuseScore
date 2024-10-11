@@ -74,6 +74,7 @@ enum class Sid {
     staffLowerBorder,
     staffHeaderFooterPadding,
     staffDistance,
+    staffDefaultMergeMatchingRests,
     instrumentNameOffset,
     akkoladeDistance,
     minSystemDistance,

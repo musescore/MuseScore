@@ -368,6 +368,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
             s->setId(staff->id());
             s->init(staff);
             s->setDefaultClefType(staff->defaultClefType());
+            s->setMergeMatchingRests(score->style().value(Sid::staffDefaultMergeMatchingRests).toBool());
             // the order of staff - s matters as staff should be the first entry in the
             // created link list to make primaryStaff() work
             // TODO: change implementation, maybe create an explicit "primary" flag

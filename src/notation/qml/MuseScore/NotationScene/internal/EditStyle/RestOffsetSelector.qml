@@ -21,6 +21,7 @@
  */
 
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.NotationScene 1.0
 import Muse.UiComponents 1.0
@@ -34,21 +35,41 @@ Rectangle {
         id: restsPageModel
     }
 
-    RadioButtonGroup {
-        model: [
-            { text: qsTrc("notation", "1 space"), value: false },
-            { text: qsTrc("notation", "2 spaces"), value: true }
-        ]
+    ColumnLayout {
+        anchors.fill: parent
 
-        delegate: FlatRadioButton {
-            width: 106
-            height: 30
+        RadioButtonGroup {
+            Layout.fillHeight: true
 
-            checked: modelData.value === restsPageModel.multiVoiceRestTwoSpaceOffset.value
-            text: modelData.text
+            model: [
+                { text: qsTrc("notation", "1 space"), value: false },
+                { text: qsTrc("notation", "2 spaces"), value: true }
+            ]
 
-            onToggled: {
-                restsPageModel.multiVoiceRestTwoSpaceOffset.value = modelData.value
+            delegate: FlatRadioButton {
+                width: 106
+                height: 30
+
+                checked: modelData.value === restsPageModel.multiVoiceRestTwoSpaceOffset.value
+                text: modelData.text
+
+                onToggled: {
+                    restsPageModel.multiVoiceRestTwoSpaceOffset.value = modelData.value
+                }
+            }
+        }
+
+        CheckBox {
+            id: defaultMergeMatchingRests
+            text: qsTrc("notation", "Set ‘Merge matching rests’ when creating new staves.")
+            checked: restsPageModel.staffDefaultMergeMatchingRests.value
+
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 5
+
+            onClicked: {
+                defaultMergeMatchingRests.checked = !defaultMergeMatchingRests.checked
+                restsPageModel.staffDefaultMergeMatchingRests.value = defaultMergeMatchingRests.checked
             }
         }
     }

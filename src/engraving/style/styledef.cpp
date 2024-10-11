@@ -57,6 +57,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(staffLowerBorder,                           Spatium(7.0)),
     styleDef(staffHeaderFooterPadding,                   Spatium(1.0)),
     styleDef(staffDistance,                              Spatium(6.5)),
+    styleDef(staffDefaultMergeMatchingRests,             false),
     styleDef(instrumentNameOffset,                       Spatium(1.0)),
     styleDef(akkoladeDistance,                           Spatium(6.5)),
     styleDef(minSystemDistance,                          Spatium(8.5)),
