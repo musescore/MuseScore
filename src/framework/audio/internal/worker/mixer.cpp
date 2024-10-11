@@ -38,7 +38,7 @@ Mixer::Mixer(const modularity::ContextPtr& iocCtx)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_taskScheduler = std::make_unique<TaskScheduler>(configuration()->desiredAudioThreadNumber());
+    m_taskScheduler = std::make_unique<TaskScheduler>(static_cast<thread_pool_size_t>(configuration()->desiredAudioThreadNumber()));
 
     if (!m_taskScheduler->setThreadsPriority(ThreadPriority::High)) {
         LOGE() << "Unable to change audio threads priority";
