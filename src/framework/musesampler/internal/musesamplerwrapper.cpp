@@ -286,10 +286,10 @@ bool MuseSamplerWrapper::initSampler(const sample_rate_t sampleRate, const sampl
 
     if (isFirstInit || m_samplerLib->supportsReinit()) {
         if (!m_samplerLib->initSampler(m_sampler, sampleRate, blockSize, AUDIO_CHANNELS_COUNT)) {
-            LOGE() << "Unable to init MuseSampler";
+            LOGE() << "Unable to init MuseSampler, sampleRate: " << sampleRate << ", blockSize: " << blockSize;
             return false;
         } else {
-            LOGD() << "Successfully initialized sampler, sampleRate: " << sampleRate << ", blockSize: " << blockSize;
+            LOGI() << "Successfully initialized sampler, sampleRate: " << sampleRate << ", blockSize: " << blockSize;
         }
     }
 
