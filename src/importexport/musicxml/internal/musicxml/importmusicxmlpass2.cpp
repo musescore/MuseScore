@@ -2244,8 +2244,8 @@ void MusicXmlParserPass2::part()
                 matchingNote->setTieBack(unendedTie);
             } else {
                 // try other voices in the stave
-                const Part* part = startChord->part();
-                for (track_idx_t track = part->startTrack(); track < part->endTrack() + VOICES; track++) {
+                const Part* p = startChord->part();
+                for (track_idx_t track = p->startTrack(); track < p->endTrack() + VOICES; track++) {
                     nextEl = nextSeg ? nextSeg->element(track) : nullptr;
                     nextChord = nextEl && nextEl->isChord() ? toChord(nextEl) : nullptr;
                     if (nextChord && nextChord->vStaffIdx() != startChord->vStaffIdx()) {
