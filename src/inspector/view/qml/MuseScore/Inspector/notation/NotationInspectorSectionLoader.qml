@@ -112,6 +112,7 @@ Loader {
             case Inspector.TYPE_PALM_MUTE:
             case Inspector.TYPE_LET_RING:
             case Inspector.TYPE_VOLTA:
+            case Inspector.TYPE_NOTELINE:
             case Inspector.TYPE_TEXT_LINE: return lineComp
             case Inspector.TYPE_GRADUAL_TEMPO_CHANGE: return gradualTempoChangeComp
             case Inspector.TYPE_STAFF_TYPE_CHANGES: return staffTypeComp
