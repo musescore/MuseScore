@@ -21,7 +21,6 @@
  */
 #include "exportdialogmodel.h"
 
-#include <QApplication>
 #include <QItemSelectionModel>
 
 #include "async/async.h"
@@ -384,10 +383,10 @@ bool ExportDialogModel::exportScores()
 
     m_exportPath = exportPath.val;
 
-    QMetaObject::invokeMethod(qApp, [this, notations]() {
+    async::Async::call(this, [this, notations]() {
         exportProjectScenario()->exportScores(notations, m_exportPath, m_selectedUnitType,
                                               shouldDestinationFolderBeOpenedOnExport());
-    }, Qt::QueuedConnection);
+    });
 
     return true;
 }

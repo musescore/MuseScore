@@ -25,7 +25,7 @@
 #include "diagnosticfileswriter.h"
 #include "translation.h"
 
-#include <QApplication>
+#include <QGuiApplication>
 
 using namespace muse::diagnostics;
 using namespace muse;

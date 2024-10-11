@@ -47,7 +47,7 @@ void GraphicsInfoModel::init()
 
 void GraphicsInfoModel::copyToClipboard()
 {
-    QApplication::clipboard()->setText(m_info);
+    QGuiApplication::clipboard()->setText(m_info);
 }
 
 QString GraphicsInfoModel::info() const
