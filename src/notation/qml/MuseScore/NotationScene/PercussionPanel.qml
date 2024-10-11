@@ -168,6 +168,21 @@ Item {
                         padModel: model.padModelRole
                         panelMode: percModel.currentPanelMode
                         useNotationPreview: percModel.useNotationPreview
+
+                        dragParent: root
+
+                        onDragStarted: {
+                            padGrid.model.startDrag(index)
+                        }
+
+                        onDropped: function(dropEvent) {
+                            padGrid.model.endDrag(index)
+                            dropEvent.accepted = true
+                        }
+
+                        onDragCancelled: {
+                            padGrid.model.endDrag(-1)
+                        }
                     }
                 }
             }

@@ -49,7 +49,6 @@ public:
 
     Q_INVOKABLE void startDrag(int startIndex);
     Q_INVOKABLE void endDrag(int endIndex);
-    Q_INVOKABLE bool isDragActive() const;
 
     int numColumns() const { return NUM_COLUMNS; }
     int numPads() const { return m_padModels.count(); }
@@ -79,6 +78,7 @@ private:
         }
     };
 
+    bool indexIsValid(int index) const;
     void movePad(int fromIndex, int toIndex);
 
     QList<PercussionPanelPadModel*> createDefaultItems();
