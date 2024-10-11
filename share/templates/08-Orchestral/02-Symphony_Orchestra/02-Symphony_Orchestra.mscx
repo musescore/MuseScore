@@ -904,10 +904,10 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Trumpet in B♭ 1</trackName>
+      <trackName>Trumpet in B♭ 2</trackName>
       <Instrument id="bb-trumpet">
-        <longName>Trumpet in B♭ 1</longName>
-        <shortName>Tpt. in B♭ 1</shortName>
+        <longName>Trumpet in B♭ 2</longName>
+        <shortName>Tpt. in B♭ 2</shortName>
         <trackName>Trumpet</trackName>
         <minPitchP>52</minPitchP>
         <maxPitchP>85</maxPitchP>
