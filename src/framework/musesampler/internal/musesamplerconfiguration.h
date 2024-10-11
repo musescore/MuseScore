@@ -47,6 +47,8 @@ public:
 
     bool shouldShowBuildNumber() const override;
 
+    bool useLegacyAudition() const override;
+
 private:
     io::path_t defaultPath() const;
 };
