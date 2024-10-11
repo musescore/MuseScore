@@ -23,8 +23,6 @@
 
 #include <QClipboard>
 
-#include "ui/graphicsapiprovider.h"
-
 using namespace muse::diagnostics;
 
 GraphicsInfoModel::GraphicsInfoModel()

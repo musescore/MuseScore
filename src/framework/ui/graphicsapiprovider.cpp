@@ -34,25 +34,25 @@ using namespace muse::ui;
 using namespace muse::logger;
 
 #ifdef Q_OS_WIN
-static const std::vector<GraphicsApiProvider::Api > ALLOWED_APIS = {
-    GraphicsApiProvider::Direct3D11,
-    GraphicsApiProvider::OpenGL,
-    GraphicsApiProvider::Software
+static const std::vector<GraphicsApi > ALLOWED_APIS = {
+    GraphicsApi::Direct3D11,
+    GraphicsApi::OpenGL,
+    GraphicsApi::Software
 };
 #endif
 
 #ifdef Q_OS_MACOS
-static const std::vector<GraphicsApiProvider::Api > ALLOWED_APIS = {
-    GraphicsApiProvider::Metal,
-    GraphicsApiProvider::OpenGL,
-    GraphicsApiProvider::Software
+static const std::vector<GraphicsApi > ALLOWED_APIS = {
+    GraphicsApi::Metal,
+    GraphicsApi::OpenGL,
+    GraphicsApi::Software
 };
 #endif
 
 #ifdef Q_OS_LINUX
-static const std::vector<GraphicsApiProvider::Api > ALLOWED_APIS = {
-    GraphicsApiProvider::OpenGL,
-    GraphicsApiProvider::Software
+static const std::vector<GraphicsApi > ALLOWED_APIS = {
+    GraphicsApi::OpenGL,
+    GraphicsApi::Software
 };
 #endif
 
@@ -120,24 +120,24 @@ GraphicsApiProvider::~GraphicsApiProvider()
     delete m_logDest;
 }
 
-void GraphicsApiProvider::setGraphicsApi(Api api)
+void GraphicsApiProvider::setGraphicsApi(GraphicsApi api)
 {
     QQuickWindow::setGraphicsApi(static_cast<QSGRendererInterface::GraphicsApi>(api));
 }
 
-GraphicsApiProvider::Api GraphicsApiProvider::graphicsApi()
+GraphicsApi GraphicsApiProvider::graphicsApi()
 {
     //! NOTE QQuickWindow::graphicsApi returns a not valid value,
     //! it does not take into account the current backend
 
     QString backend = QQuickWindow::sceneGraphBackend();
     if (backend == "software") {
-        return Api::Software;
+        return GraphicsApi::Software;
     } else if (backend == "openvg") {
-        return Api::OpenVG;
+        return GraphicsApi::OpenVG;
     }
 
-    return static_cast<Api>(QQuickWindow::graphicsApi());
+    return static_cast<GraphicsApi>(QQuickWindow::graphicsApi());
 }
 
 QString GraphicsApiProvider::graphicsApiName()
@@ -145,27 +145,27 @@ QString GraphicsApiProvider::graphicsApiName()
     return apiName(graphicsApi());
 }
 
-GraphicsApiProvider::Api GraphicsApiProvider::apiByName(const QString& name)
+GraphicsApi GraphicsApiProvider::apiByName(const QString& name)
 {
-    for (const Api& a : ALLOWED_APIS) {
+    for (const GraphicsApi& a : ALLOWED_APIS) {
         if (apiName(a) == name) {
             return a;
         }
     }
-    return Api::Default;
+    return GraphicsApi::Default;
 }
 
-QString GraphicsApiProvider::apiName(Api api)
+QString GraphicsApiProvider::apiName(GraphicsApi api)
 {
     switch (api) {
-    case Api::Default: return "default";
-    case Api::Software: return "software";
-    case Api::OpenVG: return "openvg";
-    case Api::OpenGL: return "opengl";
-    case Api::Direct3D11: return "d3d11";
-    case Api::Vulkan: return "vulkan";
-    case Api::Metal: return "metal";
-    case Api::Null: return "null";
+    case GraphicsApi::Default: return "default";
+    case GraphicsApi::Software: return "software";
+    case GraphicsApi::OpenVG: return "openvg";
+    case GraphicsApi::OpenGL: return "opengl";
+    case GraphicsApi::Direct3D11: return "d3d11";
+    case GraphicsApi::Vulkan: return "vulkan";
+    case GraphicsApi::Metal: return "metal";
+    case GraphicsApi::Null: return "null";
     }
 
     return QString();
@@ -195,7 +195,7 @@ GraphicsApiProvider::Data GraphicsApiProvider::readData() const
 
     //! NOTE Check format
     if (vals.size() < 3) {
-        LOGE() << "Graphics Api data has bad format: " << str << ", file: " << file.fileName();
+        LOGE() << "Graphics GraphicsApi data has bad format: " << str << ", file: " << file.fileName();
         return Data();
     }
 
@@ -217,23 +217,23 @@ void GraphicsApiProvider::writeData(const Data& d)
     file.write(str.toUtf8());
 }
 
-GraphicsApiProvider::Api GraphicsApiProvider::requiredGraphicsApi()
+GraphicsApi GraphicsApiProvider::requiredGraphicsApi()
 {
     Data data = readData();
     if (!data.isValid()) {
-        return Api::Default;
+        return GraphicsApi::Default;
     }
 
     //! NOTE For the new version, we will repeat the check starting with the default API
     if (m_appVersion.toString() != data.appVersion) {
-        LOGI() << "Graphics Api data from another version, the check will be repeated starting from the default API,"
+        LOGI() << "Graphics GraphicsApi data from another version, the check will be repeated starting from the default API,"
                << " data app version: " << data.appVersion
                << " current app version: " << m_appVersion.toString();
-        return Api::Default;
+        return GraphicsApi::Default;
     }
 
-    Api api = apiByName(data.apiName);
-    IF_ASSERT_FAILED(api != Api::Default) {
+    GraphicsApi api = apiByName(data.apiName);
+    IF_ASSERT_FAILED(api != GraphicsApi::Default) {
         return switchToNextGraphicsApi(api);
     }
 
@@ -247,9 +247,9 @@ GraphicsApiProvider::Api GraphicsApiProvider::requiredGraphicsApi()
     return api;
 }
 
-void GraphicsApiProvider::setGraphicsApiStatus(Api api, Status status)
+void GraphicsApiProvider::setGraphicsApiStatus(GraphicsApi api, Status status)
 {
-    if (api == Api::Default) {
+    if (api == GraphicsApi::Default) {
         return;
     }
 
@@ -260,10 +260,10 @@ void GraphicsApiProvider::setGraphicsApiStatus(Api api, Status status)
     writeData(d);
 }
 
-GraphicsApiProvider::Api GraphicsApiProvider::nextGraphicsApi(Api api) const
+GraphicsApi GraphicsApiProvider::nextGraphicsApi(GraphicsApi api) const
 {
     //! NOTE If this is the default value, then it means the current one, since we shouldn't have changed it yet.
-    if (api == Api::Default) {
+    if (api == GraphicsApi::Default) {
         api = graphicsApi();
     }
 
@@ -271,22 +271,22 @@ GraphicsApiProvider::Api GraphicsApiProvider::nextGraphicsApi(Api api) const
     IF_ASSERT_FAILED(it != ALLOWED_APIS.end()) {
         //! NOTE Something strange happened that shouldn't happen.
         //! Let's switch to software to avoid an infinite loop in which there is an error
-        return Api::Software;
+        return GraphicsApi::Software;
     }
 
     ++it;
 
     //! NOTE This was the last api
     if (it == ALLOWED_APIS.end()) {
-        return Api::Software;
+        return GraphicsApi::Software;
     }
 
     return *it;
 }
 
-GraphicsApiProvider::Api GraphicsApiProvider::switchToNextGraphicsApi(Api current)
+GraphicsApi GraphicsApiProvider::switchToNextGraphicsApi(GraphicsApi current)
 {
-    Api api = nextGraphicsApi(current);
+    GraphicsApi api = nextGraphicsApi(current);
 
     Data d;
     d.appVersion = m_appVersion.toString();

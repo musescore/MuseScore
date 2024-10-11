@@ -27,6 +27,7 @@
 #include <QQuickPaintedItem>
 
 #include "global/types/version.h"
+#include "uitypes.h"
 
 namespace muse::ui {
 class GraphicsProblemsDetectorLogDest;
@@ -38,36 +39,24 @@ public:
     GraphicsApiProvider(const Version& appVersion);
     ~GraphicsApiProvider();
 
-    //! NOTE Same as QSGRendererInterface::Api
-    enum Api {
-        Default,
-        Software,
-        OpenVG,
-        OpenGL,
-        Direct3D11,
-        Vulkan,
-        Metal,
-        Null
-    };
-
     enum class Status {
         NeedCheck = 1, // switched to this api
         Checking,      // try checking
         Checked        // all good
     };
 
-    static void setGraphicsApi(Api api);
-    static Api graphicsApi();
+    static void setGraphicsApi(GraphicsApi api);
+    static GraphicsApi graphicsApi();
     static QString graphicsApiName();
 
-    static Api apiByName(const QString& name);
-    static QString apiName(Api api);
+    static GraphicsApi apiByName(const QString& name);
+    static QString apiName(GraphicsApi api);
 
-    Api requiredGraphicsApi();
-    void setGraphicsApiStatus(Api api, Status status);
+    GraphicsApi requiredGraphicsApi();
+    void setGraphicsApiStatus(GraphicsApi api, Status status);
 
-    Api nextGraphicsApi(Api current) const;
-    Api switchToNextGraphicsApi(Api current);
+    GraphicsApi nextGraphicsApi(GraphicsApi current) const;
+    GraphicsApi switchToNextGraphicsApi(GraphicsApi current);
 
     using OnResult = std::function<void (bool res)>;
     void listen(const OnResult& f);

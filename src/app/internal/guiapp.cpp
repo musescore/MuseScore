@@ -144,15 +144,15 @@ void GuiApp::perform()
     {
         GraphicsApiProvider* gApiProvider = new GraphicsApiProvider(BaseApplication::appVersion());
 
-        GraphicsApiProvider::Api required = gApiProvider->requiredGraphicsApi();
-        if (required != GraphicsApiProvider::Default) {
+        GraphicsApi required = gApiProvider->requiredGraphicsApi();
+        if (required != GraphicsApi::Default) {
             LOGI() << "Setting required graphics api: " << GraphicsApiProvider::apiName(required);
             GraphicsApiProvider::setGraphicsApi(required);
         }
 
         LOGI() << "Using graphics api: " << GraphicsApiProvider::graphicsApiName();
 
-        if (GraphicsApiProvider::graphicsApi() == GraphicsApiProvider::Software) {
+        if (GraphicsApiProvider::graphicsApi() == GraphicsApi::Software) {
             gApiProvider->destroy();
         } else {
             LOGI() << "Detecting problems with graphics api";
@@ -161,7 +161,7 @@ void GuiApp::perform()
                     LOGI() << "No problems detected with graphics api";
                     gApiProvider->setGraphicsApiStatus(required, GraphicsApiProvider::Status::Checked);
                 } else {
-                    GraphicsApiProvider::Api next = gApiProvider->switchToNextGraphicsApi(required);
+                    GraphicsApi next = gApiProvider->switchToNextGraphicsApi(required);
                     LOGE() << "Detected problems with graphics api; switching from " << GraphicsApiProvider::apiName(required)
                            << " to " << GraphicsApiProvider::apiName(next);
 

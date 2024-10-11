@@ -27,7 +27,7 @@
 
 #include "modularity/imoduleinterface.h"
 
-#include "graphicsapiprovider.h"
+#include "uitypes.h"
 
 class QQmlEngine;
 class QQmlApplicationEngine;
@@ -38,7 +38,7 @@ class IUiEngine : MODULE_EXPORT_INTERFACE
     INTERFACE_ID(IUiEngine)
 
 public:
-    virtual ~IUiEngine() {}
+    virtual ~IUiEngine() = default;
 
     virtual void updateTheme() = 0;
     virtual QQmlApplicationEngine* qmlAppEngine() const = 0;
@@ -46,7 +46,7 @@ public:
     virtual void quit() = 0;
     virtual void clearComponentCache() = 0;
 
-    virtual GraphicsApiProvider::Api graphicsApi() const = 0;
+    virtual GraphicsApi graphicsApi() const = 0;
     virtual QString graphicsApiName() const = 0;
 
     virtual void addSourceImportPath(const QString& path) = 0;
