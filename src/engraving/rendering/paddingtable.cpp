@@ -224,4 +224,10 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::ARTICULATION][ElementType::NOTE] = 0.25 * spatium;
     table[ElementType::ARTICULATION][ElementType::REST] = 0.25 * spatium;
     table[ElementType::ARTICULATION][ElementType::ACCIDENTAL] = 0.25 * spatium;
+
+    // Measure repeat set same values as note
+    table[ElementType::MEASURE_REPEAT] = table[ElementType::NOTE];
+    for (auto& elem : table) {
+        elem[ElementType::MEASURE_REPEAT] = elem[ElementType::NOTE];
+    }
 }

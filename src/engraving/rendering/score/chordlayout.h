@@ -68,7 +68,6 @@ public:
     static void layoutChords3(const std::vector<Chord*>&, const std::vector<Note*>&, const Staff*, LayoutContext& ctx);
     static void layoutLedgerLines(const std::vector<Chord*>& chords);
     static void getNoteListForDots(Chord* c, std::vector<Note*>&, std::vector<Note*>&, std::vector<int>&);
-    static void updateGraceNotes(Measure* measure, LayoutContext& ctx);
     static void repositionGraceNotesAfter(Segment* segment, size_t tracks);
     static void appendGraceNotes(Chord* chord);
     static void clearLineAttachPoints(Measure* measure);
