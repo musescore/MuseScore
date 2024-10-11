@@ -801,6 +801,8 @@ void NotationParts::doInsertPart(Part* part, size_t index)
         staffCopy->setScore(score());
         staffCopy->setPart(part);
         staffCopy->init(staff);
+        // even though createStaff correctly initializes mergeMatchingRests, init() can change it when copying
+        // from score to part, so we need to override it again.
         staffCopy->setMergeMatchingRests(score()->style().value(Sid::staffDefaultMergeMatchingRests).toBool());
 
         insertStaff(staffCopy, static_cast<int>(staffIndex));

@@ -368,6 +368,8 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
             s->setId(staff->id());
             s->init(staff);
             s->setDefaultClefType(staff->defaultClefType());
+            // even though createStaff correctly initializes mergeMatchingRests, init() can change it when copying
+            // from score to part, so we need to override it again.
             s->setMergeMatchingRests(score->style().value(Sid::staffDefaultMergeMatchingRests).toBool());
             // the order of staff - s matters as staff should be the first entry in the
             // created link list to make primaryStaff() work
