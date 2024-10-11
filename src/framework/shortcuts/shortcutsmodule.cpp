@@ -21,7 +21,7 @@
  */
 #include "shortcutsmodule.h"
 
-#include <QtQml>
+#include <QQmlEngine>
 
 #include "log.h"
 

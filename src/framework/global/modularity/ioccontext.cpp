@@ -25,7 +25,7 @@
 #include "log.h"
 
 #ifndef NO_QT_SUPPORT
-#include <QtQml>
+#include <QQmlEngine>
 
 muse::Injectable::GetContext muse::iocCtxForQmlObject(const QObject* o)
 {
