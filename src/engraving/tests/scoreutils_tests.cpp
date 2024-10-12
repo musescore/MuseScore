@@ -22,6 +22,7 @@
 
 #include <gtest/gtest.h>
 
+#include "dom/excerpt.h"
 #include "dom/factory.h"
 #include "dom/part.h"
 #include "dom/staff.h"
@@ -77,6 +78,74 @@ TEST_F(Engraving_ScoreUtilsTests, StaffIdxSetFromRange)
     // [THEN] The set is correct
     expectedStaffIdxSet = { 0, 1, 2, 3, 4, 5, 6 };
     EXPECT_EQ(actualStaffIdxSet, expectedStaffIdxSet);
+
+    delete score;
+}
+
+
+TEST_F(Engraving_ScoreUtilsTests, StaffTestDefaultMergeMatchingRests)
+{
+    // [GIVEN] A score to add stuff to
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    const std::vector<Part*>& parts = score->parts();
+    Staff* staff = nullptr;
+
+    // [WHEN] style value is false
+    score->style().set(Sid::staffDefaultMergeMatchingRests, false);
+    // [THEN] appended score value is false
+    score->appendPart(new Part(score));
+    staff = Factory::createStaff(parts.at(0));
+    score->appendStaff(staff);
+    EXPECT_EQ(staff->mergeMatchingRests(), false);
+
+
+    // [WHEN] style value is true
+    score->style().set(Sid::staffDefaultMergeMatchingRests, true);
+    // [THEN] appended score value is true
+    score->appendPart(new Part(score));
+    staff = Factory::createStaff(parts.at(1));
+    score->appendStaff(staff);
+    EXPECT_EQ(staff->mergeMatchingRests(), true);
+
+    delete score;
+}
+
+
+TEST_F(Engraving_ScoreUtilsTests, StaffTestDefaultMergeMatchingRestsWithExcerpts)
+{
+    // [GIVEN] Score containing a bunch of parts/staves (+ linked staves)
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    for (int i = 0; i < 3; ++i) {
+        score->appendPart(new Part(score));
+    }
+    // [WHEN] master score value is true
+    score->style().set(Sid::staffDefaultMergeMatchingRests, true);
+
+    // [THEN] staves added are true
+    const std::vector<Part*>& scoreParts = score->parts();
+    score->appendStaff(Factory::createStaff(scoreParts.at(0)));
+    EXPECT_EQ(score->staves().at(0)->mergeMatchingRests(), true);
+
+    // [WHEN] excerpt score value is false
+    Score* nscore = score->createScore();
+    nscore->style().set(Sid::staffDefaultMergeMatchingRests, false);
+    std::vector<Part*> parts;
+    parts.push_back(scoreParts.at(0));
+    Excerpt ex(score);
+    ex.setExcerptScore(nscore);
+    ex.setName(u"voice");
+    ex.setParts(parts);
+    Excerpt::createExcerpt(&ex);
+    EXPECT_TRUE(nscore);
+
+    // [THEN] the added staff should be false
+    EXPECT_EQ(ex.excerptScore()->staves().at(0)->mergeMatchingRests(), false);
+
+    // [BUT] new score staves should be false
+    score->appendStaff(Factory::createStaff(scoreParts.at(1)));
+    EXPECT_EQ(score->staves().at(1)->mergeMatchingRests(), true);
+    score->appendStaff(Factory::createStaff(scoreParts.at(2)));
+    EXPECT_EQ(score->staves().at(1)->mergeMatchingRests(), true);
 
     delete score;
 }
