@@ -82,7 +82,6 @@ TEST_F(Engraving_ScoreUtilsTests, StaffIdxSetFromRange)
     delete score;
 }
 
-
 TEST_F(Engraving_ScoreUtilsTests, StaffTestDefaultMergeMatchingRests)
 {
     // [GIVEN] A score to add stuff to
@@ -98,7 +97,6 @@ TEST_F(Engraving_ScoreUtilsTests, StaffTestDefaultMergeMatchingRests)
     score->appendStaff(staff);
     EXPECT_EQ(staff->mergeMatchingRests(), false);
 
-
     // [WHEN] style value is true
     score->style().set(Sid::staffDefaultMergeMatchingRests, true);
     // [THEN] appended score value is true
@@ -109,7 +107,6 @@ TEST_F(Engraving_ScoreUtilsTests, StaffTestDefaultMergeMatchingRests)
 
     delete score;
 }
-
 
 TEST_F(Engraving_ScoreUtilsTests, StaffTestDefaultMergeMatchingRestsWithExcerpts)
 {
