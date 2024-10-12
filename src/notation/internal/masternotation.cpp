@@ -358,12 +358,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
         }
 
         // the new score should get the staffDefaultMergeMatchingRests from the default settings rather than the template
-        const auto& staffDefaultMergeMatchingRests = DefaultStyle::defaultStyle().value(Sid::staffDefaultMergeMatchingRests);
-        score->style().set(Sid::staffDefaultMergeMatchingRests, staffDefaultMergeMatchingRests);
-        // override the template's staves as well
-        for (auto staff : score->staves()) {
-            staff->setMergeMatchingRests(staffDefaultMergeMatchingRests.toBool());
-        }
+        score->style().set(Sid::staffDefaultMergeMatchingRests, DefaultStyle::defaultStyle().value(Sid::staffDefaultMergeMatchingRests));
     }
 
     score->checkChordList();

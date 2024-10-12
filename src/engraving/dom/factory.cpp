@@ -507,7 +507,6 @@ Staff* Factory::createStaff(Part * parent)
 {
     Staff* staff = new Staff(parent);
     staff->setPart(parent);
-    staff->setMergeMatchingRests(staff->score()->style().value(Sid::staffDefaultMergeMatchingRests).toBool());
     return staff;
 }
 

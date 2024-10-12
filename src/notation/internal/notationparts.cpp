@@ -801,9 +801,6 @@ void NotationParts::doInsertPart(Part* part, size_t index)
         staffCopy->setScore(score());
         staffCopy->setPart(part);
         staffCopy->init(staff);
-        // even though createStaff correctly initializes mergeMatchingRests, init() can change it when copying
-        // from score to part, so we need to override it again.
-        staffCopy->setMergeMatchingRests(score()->style().value(Sid::staffDefaultMergeMatchingRests).toBool());
 
         insertStaff(staffCopy, static_cast<int>(staffIndex));
         score()->undo(new mu::engraving::Link(staffCopy, staff));
@@ -989,7 +986,6 @@ void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, con
         staff->setBarLineSpan(templ.barlineSpan[cleffIndex]);
     }
     staff->setDefaultClefType(templ.clefType(cleffIndex));
-    staff->setMergeMatchingRests(score()->style().value(Sid::staffDefaultMergeMatchingRests).toBool());
 }
 
 void NotationParts::removeMissingParts(const PartInstrumentList& newParts)

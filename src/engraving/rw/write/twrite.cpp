@@ -2577,8 +2577,8 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
     if (item->hideSystemBarLine()) {
         xml.tag("hideSystemBarLine", item->hideSystemBarLine());
     }
-    if (item->mergeMatchingRests()) {
-        xml.tag("mergeMatchingRests", item->mergeMatchingRests());
+    if (item->mergeMatchingRests() != AutoOnOff::AUTO) {
+        xml.tag("mergeMatchingRests", static_cast<int>(item->mergeMatchingRests()));
     }
     if (!item->visible()) {
         xml.tag("isStaffVisible", item->visible());
