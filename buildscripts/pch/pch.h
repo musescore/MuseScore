@@ -41,111 +41,94 @@ See https://github.com/musescore/musescore_devtools/tree/main/include-what-you-u
 #include <utility> //695
 #include <algorithm> //472
 #include <map> //405
-#include <stddef.h> //381
+#include <cstddef> //381
 #include <list> //304
 #include <functional> //219
 #include <set> //219
-#include <stdint.h> //192
-#include <cmath> //155
-#include <_string.h> //154
-#include <unordered_map> //131
+#include <cstdint> //192
+#include <cmath> //155+68+28
+#include <cstring> //154+22
+#include <unordered_map> //131+50
 #include <iterator> //115
-#include <_stdlib.h> //104
+#include <cstdlib> //104+33
 #include <optional> //83
-#include <_stdio.h> //76
-#include <math.h> //68
-#include <string_view> //64
-#include <unordered_set> //63
+#include <cstdio> //76+27
+#include <string_view> //64+34
+#include <unordered_set> //63+50
 #include <array> //60
-#include <__fwd/sstream.h> //52
-#include <__hash_table> //50
+#include <sstream> //52+37
 #include <limits> //47
-#include <assert.h> //47
+#include <cassert> //47
 #include <initializer_list> //44
-#include <sstream> //37
-#include <__fwd/string_view.h> //34
-#include <stdlib.h> //33
 #include <variant> //29
-#include <__math/exponential_functions.h> //28
-#include <stdio.h> //27
 #include <tuple> //22
-#include <cstring> //22
-#include <limits.h> //22
-#include <regex> //21
+#include <climits> //22
+#include <regex> //21 and via types/string.h
+
+#include <numeric> //via types/types.h(998) -> fraction.h
+#include <iostream> //via log.h(591)
+
+#ifndef NO_QT_SUPPORT
 
 // QtCore includes
-#include <qstring.h> //928
-#include <qtmetamacros.h> //794
-#include <qlist.h> //660
-#include <qvariant.h> //452
-#include <qglobal.h> //439
-#include <qobject.h> //382
-#include <qcontainerfwd.h> //378
-#include <qbytearray.h> //354
-#include <qnamespace.h> //310
-#include <qmap.h> //292
-#include <qpoint.h> //150
-#include <qrect.h> //140
-#include <qhash.h> //137
-#include <qsize.h> //114
-#include <qabstractitemmodel.h> //100
-#include <qcoreevent.h> //91
-#include <qurl.h> //88
-#include <qdebug.h> //79
-#include <qmetatype.h> //74
-#include <qiodevice.h> //70
-#include <qtimer.h> //66
-#include <qobjectdefs.h> //54
-#include <qchar.h> //52
-#include <qjsondocument.h> //50
-#include <qfile.h> //46
-#include <qcoreapplication.h> //43
-#include <qtextstream.h> //38
-#include <qstringliteral.h> //38
-#include <qjsonvalue.h> //36
-#include <qjsonobject.h> //36
-#include <qdatetime.h> //34
-#include <qjsonarray.h> //34
-#include <qbuffer.h> //34
-#include <qset.h> //32
-#include <qpointer.h> //31
-#include <qprocess.h> //26
-#include <qdir.h> //26
-#include <qmimedata.h> //26
-#include <qloggingcategory.h> //25
-#include <qfileinfo.h> //24
-#include <qscopedvaluerollback.h> //22
-#include <qeventloop.h> //20
-#include <qalgorithms.h> //20
+#include <QObject> //382+794(qtmetamacros.h)+54(qobjectdefs.h)
+#include <QString> //928
+#include <QList> //660
+#include <QVariant> //452
+#include <QtGlobal> //439
+// #include <qcontainerfwd.h> //378 (no canonical Qt header available, but included via other headers anyway)
+#include <QByteArray> //354
+#include <Qt> //310
+#include <QMap> //292
+#include <QPoint> //150
+#include <QRect> //140
+#include <QHash> //137
+#include <QSize> //114
+#include <QAbstractItemModel> //100
+#include <QEvent> //91
+#include <QUrl> //88
+#include <QDebug> //79
+#include <QMetaType> //74
+#include <QIODevice> //70
+#include <QTimer> //66
+#include <QChar> //52
+#include <QJsonDocument> //50
+#include <QFile> //46
+#include <QCoreApplication> //43
+#include <QTextStream> //38
+#include <QStringLiteral> //38
+#include <QJsonValue> //36
+#include <QJsonObject> //36
+#include <QDateTime> //34
+#include <QJsonArray> //34
+#include <QBuffer> //34
+#include <QSet> //32
+#include <QPointer> //31
+
+#include <QPolygon> //via types/types.h -> geometry.h
+#include <QLine>
+#include <QPair>
 
 // QtGui includes
-#include <qguiapplication.h> //106
-#include <qcolor.h> //90
-#include <qevent.h> //80
-#include <qpixmap.h> //44
-#include <qpainter.h> //42
-#include <qwindow.h> //40
-#include <qfont.h> //30
-#include <qicon.h> //22
+#include <QGuiApplication> //106
+#include <QColor> //90
+#include <QEvent> //80
+#include <QPixmap> //44
+#include <QPainter> //42
+#include <QWindow> //40
+#include <QFont> //30
 
 // QtQml includes
-#include <qqml.h> //62
-#include <qjsvalue.h> //41
-#include <qqmllist.h> //30
-#include <qqmlengine.h> //26
+#include <QQmlEngine> //26+62(qqml.h)
+#include <QJSValue> //41
+#include <QQmlListProperty> //30
 
 // QtQuick includes
-#include <qquickitem.h> //106
-#include <qquickwindow.h> //20
+#include <QQuickItem> //106
 
 // QtWidgets includes
-#include <qwidget.h> //62
-#include <qapplication.h> //50
-#include <qdialog.h> //42
-#include <qpushbutton.h> //26
-#include <qspinbox.h> //24
-#include <qradiobutton.h> //22
-#include <qcombobox.h> //22
-#include <qlabel.h> //20
-#include <qcheckbox.h> //20
-#include <qdialogbuttonbox.h> //20
+#include <QWidget> //62
+#include <QApplication> //50
+#include <QDialog> //42
+
+#endif // NO_QT_SUPPORT
