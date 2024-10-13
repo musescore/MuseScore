@@ -10175,7 +10175,7 @@ tekstur x-hædd):</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="52"/>
         <source>Show g&amp;raphics info…</source>
-        <translation type="unfinished"/>
+        <translation>Vís T&amp;eknindi kunning…</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="57"/>
@@ -10599,7 +10599,7 @@ Givið út við &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="81"/>
         <source>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; for more info.</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore heintar ikki persónligar dátur hjá tær. Sí okkara &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; kunning.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="102"/>
@@ -10857,12 +10857,12 @@ Givið út við &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="42"/>
         <source>Check to see if a new version of MuseScore Studio is available</source>
-        <translation type="unfinished"/>
+        <translation>Kanna eftir um nýggj útgáva av Musescore er tøk</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
         <source>Update checking requires network access. In order to protect your privacy, MuseScore Studio does not store any personal information. See our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt; for more info.</source>
-        <translation type="unfinished"/>
+        <translation>Netverk krevst tá kannað verður eftir dagføring. MuseScore goymir ongar persónligar upplýsningar, fyri at verja teg. Sí okkara &lt;a href=&quot;%1&quot;&gt;verndarpolitikk &lt;/a&gt; um meira.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="30"/>
@@ -13705,25 +13705,25 @@ Bond %1 á streingjum %2</translation>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1540"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="170"/>
         <source>Start measure: %1</source>
-        <translation type="unfinished"/>
+        <translation>Fyrsta takt: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1543"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="172"/>
         <source>Start displayed measure: %1</source>
-        <translation type="unfinished"/>
+        <translation>Byrja sjónligu takt: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1546"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="174"/>
         <source>Start beat: %1</source>
-        <translation type="unfinished"/>
+        <translation>Byrja slag: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1553"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="177"/>
         <source>End measure: %1</source>
-        <translation type="unfinished"/>
+        <translation>Seinasta takt: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1556"/>
@@ -27314,7 +27314,7 @@ misseydnaðist</translation>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="157"/>
         <source>Are you sure you want to change sounds?</source>
-        <translation type="unfinished"/>
+        <translation>Ætlar tú veruliga at broyta ljóð?</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="158"/>

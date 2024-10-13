@@ -9602,7 +9602,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1275"/>
         <source>E&amp;xpression text</source>
-        <translation>Espressione</translation>
+        <translation>Testo di espressione</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1281"/>
@@ -10111,7 +10111,7 @@ altezza x del testo):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="456"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="457"/>
         <source>Fill with slashes</source>
-        <translation>Riempire con barre ritmiche</translation>
+        <translation>Riempi con barre ritmiche</translation>
     </message>
     <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="37"/>
@@ -24961,7 +24961,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1542"/>
         <source>Expression text</source>
-        <translation>Espressione Testo</translation>
+        <translation>Testo di espressione</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1545"/>

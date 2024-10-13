@@ -271,62 +271,62 @@
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="112"/>
         <source>C</source>
-        <translation>Do</translation>
+        <translation>do</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="117"/>
         <source>C♯</source>
-        <translation>Do♯</translation>
+        <translation>do♯</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="122"/>
         <source>D</source>
-        <translation>Re</translation>
+        <translation>re</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="127"/>
         <source>E♭</source>
-        <translation>Mi♭</translation>
+        <translation>mi♭</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="132"/>
         <source>E</source>
-        <translation>Mi</translation>
+        <translation>mi</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="137"/>
         <source>F</source>
-        <translation>Fa</translation>
+        <translation>fa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="142"/>
         <source>F♯</source>
-        <translation>Fa♯</translation>
+        <translation>fa♯</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="147"/>
         <source>G</source>
-        <translation>Sol</translation>
+        <translation>sol</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="152"/>
         <source>A♭</source>
-        <translation>La♭</translation>
+        <translation>la♭</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="157"/>
         <source>A</source>
-        <translation>La</translation>
+        <translation>la</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="162"/>
         <source>B♭</source>
-        <translation>Si♭</translation>
+        <translation>si♭</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="167"/>
         <source>B</source>
-        <translation>Si</translation>
+        <translation>si</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="172"/>
@@ -1469,7 +1469,7 @@
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="494"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="768"/>
         <source>Vertical offset:</source>
-        <translation>Distanţă verticală:</translation>
+        <translation>Decalaj vertical:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="532"/>
@@ -2696,13 +2696,13 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3635"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3706"/>
         <source>Vertical offset:</source>
-        <translation>Distanţă verticală:</translation>
+        <translation>Decalaj vertical:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3645"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3748"/>
         <source>Horizontal offset:</source>
-        <translation>Deplasament Orizontal:</translation>
+        <translation>Decalaj orizontal:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3655"/>
@@ -2867,12 +2867,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4081"/>
         <source>Semitones offset</source>
-        <translation>Deplasament semitornuri</translation>
+        <translation>Decalaj semitornuri</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4086"/>
         <source>Cents offset</source>
-        <translation>Deplasament centisunete</translation>
+        <translation>Decalaj centisunete</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4103"/>
@@ -3121,7 +3121,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5820"/>
         <source>Default vertical offset:</source>
-        <translation>Deplasare verticală implicită:</translation>
+        <translation>Decalaj vertical implicit:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5961"/>
@@ -4494,12 +4494,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12746"/>
         <source>Reset &apos;Extension vertical offset&apos; value</source>
-        <translation>Resetează valoarea pentru „Deplasare verticală extensie”</translation>
+        <translation>Resetează valoarea pentru „Decalaj vertical extensie”</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12756"/>
         <source>Extension vertical offset:</source>
-        <translation>Deplasare verticală extensie:</translation>
+        <translation>Decalaj vertical extensie:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12766"/>
@@ -4519,7 +4519,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12799"/>
         <source>Modifier vertical offset:</source>
-        <translation>Deplasare verticală modificator:</translation>
+        <translation>Decalaj vertical modificator:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12812"/>
@@ -4529,7 +4529,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12825"/>
         <source>Reset &apos;Modifier vertical offset&apos; value</source>
-        <translation>Resetează valoarea pentru „Deplasare verticală modificator”</translation>
+        <translation>Resetează valoarea pentru „Decalaj vertical modificator”</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12844"/>
@@ -4992,7 +4992,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14301"/>
         <source>Offset:</source>
-        <translation>Deplasare:</translation>
+        <translation>Decalaj:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14311"/>
@@ -5378,7 +5378,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="37"/>
         <source>Horizontal offset</source>
-        <translation>Deplasament orizontal</translation>
+        <translation>Decalaj orizontal</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="40"/>
@@ -5389,7 +5389,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="62"/>
         <source>Vertical offset</source>
-        <translation>Deplasament vertical</translation>
+        <translation>Decalaj vertical</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="81"/>
@@ -6574,19 +6574,19 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="62"/>
         <source>A</source>
         <extracomment>Note</extracomment>
-        <translation>La</translation>
+        <translation>la</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="64"/>
         <source>B</source>
         <extracomment>Note</extracomment>
-        <translation>Si</translation>
+        <translation>si</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="52"/>
         <source>C</source>
         <extracomment>Note</extracomment>
-        <translation>Do</translation>
+        <translation>do</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="91"/>
@@ -6917,25 +6917,25 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="54"/>
         <source>D</source>
         <extracomment>Note</extracomment>
-        <translation>Re</translation>
+        <translation>re</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="56"/>
         <source>E</source>
         <extracomment>Note</extracomment>
-        <translation>Mi</translation>
+        <translation>mi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="58"/>
         <source>F</source>
         <extracomment>Note</extracomment>
-        <translation>Fa</translation>
+        <translation>fa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="60"/>
         <source>G</source>
         <extracomment>Note</extracomment>
-        <translation>Sol</translation>
+        <translation>sol</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2362"/>
@@ -8281,12 +8281,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1888"/>
         <source>Add clef: treble</source>
-        <translation>Adaugă cheie: Sol</translation>
+        <translation>Adaugă cheie: sol</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1894"/>
         <source>Add clef: bass</source>
-        <translation>Adaugă cheie: Fa</translation>
+        <translation>Adaugă cheie: fa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1906"/>
@@ -12010,13 +12010,13 @@ unde vei găsi tutoriale pentru a te pune pe picioare
         <location filename="../../src/engraving/types/typesconv.cpp" line="1412"/>
         <source>♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>bemol</translation>
+        <translation>♭</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1402"/>
         <source>♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>Diez</translation>
+        <translation>♯</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1397"/>
@@ -14660,37 +14660,37 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="694"/>
         <source>Treble clef optional 8va bassa</source>
-        <translation>Cheia sol cu octavă bassa opțională</translation>
+        <translation>Cheia sol la octavă bassa opțională</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="695"/>
         <source>French violin clef</source>
-        <translation>Cheia sol pe linia 1</translation>
+        <translation>Cheia veche franceză</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="696"/>
         <source>Soprano clef</source>
-        <translation>Cheia do (soprană)</translation>
+        <translation>Cheia do-sopran</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="697"/>
         <source>Mezzo-soprano clef</source>
-        <translation>Cheia do pe (mezzo-soprană)</translation>
+        <translation>Cheia do-mezzo-sopran</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="698"/>
         <source>Alto clef</source>
-        <translation>Cheia do (alto)</translation>
+        <translation>Cheia do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="699"/>
         <source>Tenor clef</source>
-        <translation>Cheia do (tenor)</translation>
+        <translation>Cheia do-tenor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="700"/>
         <source>Baritone clef (C clef)</source>
-        <translation>Cheia do (bariton)</translation>
+        <translation>Cheia do-bariton</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="701"/>
@@ -14700,32 +14700,32 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="702"/>
         <source>Soprano clef (French, 18th century)</source>
-        <translation>Cheie soprană (Franța, sec. XVIII)</translation>
+        <translation>Cheia de sopran (Franța, sec. XVIII)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="703"/>
         <source>Alto clef (French, 18th century)</source>
-        <translation>Cheie alto (Franța, sec. XVIII)</translation>
+        <translation>Cheia de alto (Franța, sec. XVIII)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="704"/>
         <source>Tenor clef (French, 18th century)</source>
-        <translation>Cheie tenor (Franța, sec. XVIII)</translation>
+        <translation>Cheia de tenor (Franța, sec. XVIII)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="705"/>
         <source>Soprano clef (French, 20th century)</source>
-        <translation>Cheie soprană (Franța, sec. XX)</translation>
+        <translation>Cheia de sopran (Franța, sec. XX)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="706"/>
         <source>Alto clef (French, 20th century)</source>
-        <translation>Cheie alto (Franța, sec. XX)</translation>
+        <translation>Cheia de alto (Franța, sec. XX)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="707"/>
         <source>Tenor clef (French, 20th century)</source>
-        <translation>Cheie tenor (Franța, sec. XX)</translation>
+        <translation>Cheia de tenor (Franța, sec. XX)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="708"/>
@@ -14735,32 +14735,32 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="709"/>
         <source>Bass clef 15ma bassa</source>
-        <translation>Cheie bas 15ma bassa</translation>
+        <translation>Cheia fa la cvintadecimă bassa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="710"/>
         <source>Bass clef 8va bassa</source>
-        <translation>Cheie bas 8va bassa</translation>
+        <translation>Cheia fa la octavă bassa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="711"/>
         <source>Bass clef 8va alta</source>
-        <translation>Cheie bas 8va alta</translation>
+        <translation>Cheia fa la octavă alta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="712"/>
         <source>Bass clef 15ma alta</source>
-        <translation>Cheie bas 15ma alta</translation>
+        <translation>Cheia fa la cvintadecimă alta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="713"/>
         <source>Baritone clef (F clef)</source>
-        <translation>Cheia fa (bariton)</translation>
+        <translation>Cheia fa-bariton</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="714"/>
         <source>Subbass clef</source>
-        <translation>Cheia fa (sub-bass)</translation>
+        <translation>Cheia fa-bas profund</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="715"/>
@@ -14805,7 +14805,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="726"/>
         <source>Tenor clef 8va bassa</source>
-        <translation>Cheia sol la octavă bassa</translation>
+        <translation>Cheia do-tenor la octavă bassa</translation>
     </message>
 </context>
 <context>
@@ -15683,7 +15683,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="618"/>
         <source>A♯ (Name)</source>
-        <translation>A♯ (Nume)</translation>
+        <translation>La♯ (Nume)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="619"/>
@@ -15698,7 +15698,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="621"/>
         <source>B♯ (Name)</source>
-        <translation>B♯ (Nume)</translation>
+        <translation>Si♯ (Nume)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="622"/>
@@ -15713,7 +15713,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="624"/>
         <source>C♯ (Name)</source>
-        <translation>C♯ (Nume)</translation>
+        <translation>Do♯ (Nume)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="625"/>
@@ -15728,7 +15728,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="627"/>
         <source>D♯ (Name)</source>
-        <translation>D♯ (Nume)</translation>
+        <translation>Re♯ (Nume)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="628"/>
@@ -15743,7 +15743,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="630"/>
         <source>E♯ (Name)</source>
-        <translation>E♯ (Nume)</translation>
+        <translation>Mi♯ (Nume)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="631"/>
@@ -15758,7 +15758,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="633"/>
         <source>F♯ (Name)</source>
-        <translation>F♯ (Nume)</translation>
+        <translation>Fa♯ (Nume)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="634"/>
@@ -15773,7 +15773,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="636"/>
         <source>G♯ (Name)</source>
-        <translation>G♯ (Nume)</translation>
+        <translation>Sol♯ (Nume)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="637"/>
@@ -15793,7 +15793,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="640"/>
         <source>H♯ (Name)</source>
-        <translation>H♯ (Nume)</translation>
+        <translation>La♯ (Nume)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="643"/>
@@ -16846,7 +16846,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3543"/>
         <source>Reversed flat (quarter-tone flat) (Stein)</source>
-        <translation>Bemol invers (becar de un sfert de ton) (Stein)</translation>
+        <translation>Bemol invers (bemol de un sfert de ton) (Stein)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3547"/>
@@ -18432,201 +18432,201 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="45"/>
         <source>C♭♭</source>
-        <translation>Do♭♭</translation>
+        <translation>do♭♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="46"/>
         <source>C♭</source>
-        <translation>Do♭</translation>
+        <translation>do♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="47"/>
         <location filename="../../src/framework/global/utils.cpp" line="29"/>
         <location filename="../../src/framework/global/utils.cpp" line="44"/>
         <source>C</source>
-        <translation>Do</translation>
+        <translation>do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="48"/>
         <location filename="../../src/framework/global/utils.cpp" line="30"/>
         <source>C♯</source>
-        <translation>Do♯</translation>
+        <translation>do♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="49"/>
         <source>C♯♯</source>
-        <translation>Do♯♯</translation>
+        <translation>do♯♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="50"/>
         <source>D♭♭</source>
-        <translation>Re♭♭</translation>
+        <translation>re♭♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="51"/>
         <location filename="../../src/framework/global/utils.cpp" line="45"/>
         <source>D♭</source>
-        <translation>Re♭</translation>
+        <translation>re♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="52"/>
         <location filename="../../src/framework/global/utils.cpp" line="31"/>
         <location filename="../../src/framework/global/utils.cpp" line="46"/>
         <source>D</source>
-        <translation>Re</translation>
+        <translation>re</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="53"/>
         <location filename="../../src/framework/global/utils.cpp" line="32"/>
         <source>D♯</source>
-        <translation>Re♯</translation>
+        <translation>re♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="54"/>
         <source>D♯♯</source>
-        <translation>Re♯♯</translation>
+        <translation>re♯♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="55"/>
         <source>E♭♭</source>
-        <translation>Mi♭♭</translation>
+        <translation>mi♭♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="56"/>
         <location filename="../../src/framework/global/utils.cpp" line="47"/>
         <source>E♭</source>
-        <translation>Mi♭</translation>
+        <translation>mi♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="57"/>
         <location filename="../../src/framework/global/utils.cpp" line="33"/>
         <location filename="../../src/framework/global/utils.cpp" line="48"/>
         <source>E</source>
-        <translation>Mi</translation>
+        <translation>mi</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="58"/>
         <source>E♯</source>
-        <translation>Mi♯</translation>
+        <translation>mi♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="59"/>
         <source>E♯♯</source>
-        <translation>Mi♯♯</translation>
+        <translation>mi♯♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="60"/>
         <source>F♭♭</source>
-        <translation>Fa♭♭</translation>
+        <translation>fa♭♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="61"/>
         <source>F♭</source>
-        <translation>Fa♭</translation>
+        <translation>fa♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="62"/>
         <location filename="../../src/framework/global/utils.cpp" line="34"/>
         <location filename="../../src/framework/global/utils.cpp" line="49"/>
         <source>F</source>
-        <translation>Fa</translation>
+        <translation>fa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="63"/>
         <location filename="../../src/framework/global/utils.cpp" line="35"/>
         <source>F♯</source>
-        <translation>Fa♯</translation>
+        <translation>fa♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="64"/>
         <source>F♯♯</source>
-        <translation>Fa♯♯</translation>
+        <translation>fa♯♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="65"/>
         <source>G♭♭</source>
-        <translation>Sol♭♭</translation>
+        <translation>sol♭♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="66"/>
         <location filename="../../src/framework/global/utils.cpp" line="50"/>
         <source>G♭</source>
-        <translation>Sol♭</translation>
+        <translation>sol♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="67"/>
         <location filename="../../src/framework/global/utils.cpp" line="36"/>
         <location filename="../../src/framework/global/utils.cpp" line="51"/>
         <source>G</source>
-        <translation>Sol</translation>
+        <translation>sol</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="68"/>
         <location filename="../../src/framework/global/utils.cpp" line="37"/>
         <source>G♯</source>
-        <translation>Sol♯</translation>
+        <translation>sol♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="69"/>
         <source>G♯♯</source>
-        <translation>Sol♯♯</translation>
+        <translation>sol♯♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="70"/>
         <source>A♭♭</source>
-        <translation>La♭♭</translation>
+        <translation>la♭♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="71"/>
         <location filename="../../src/framework/global/utils.cpp" line="52"/>
         <source>A♭</source>
-        <translation>La♭</translation>
+        <translation>la♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="72"/>
         <location filename="../../src/framework/global/utils.cpp" line="38"/>
         <location filename="../../src/framework/global/utils.cpp" line="53"/>
         <source>A</source>
-        <translation>La</translation>
+        <translation>la</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="73"/>
         <location filename="../../src/framework/global/utils.cpp" line="39"/>
         <source>A♯</source>
-        <translation>La♯</translation>
+        <translation>la♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="74"/>
         <source>A♯♯</source>
-        <translation>La♯♯</translation>
+        <translation>la♯♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="75"/>
         <source>B♭♭</source>
-        <translation>Si♭♭</translation>
+        <translation>si♭♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="76"/>
         <location filename="../../src/framework/global/utils.cpp" line="54"/>
         <source>B♭</source>
-        <translation>Si♭</translation>
+        <translation>si♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="77"/>
         <location filename="../../src/framework/global/utils.cpp" line="40"/>
         <location filename="../../src/framework/global/utils.cpp" line="55"/>
         <source>B</source>
-        <translation>Si</translation>
+        <translation>si</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="78"/>
         <source>B♯</source>
-        <translation>Si♯</translation>
+        <translation>si♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="79"/>
         <source>B♯♯</source>
-        <translation>Si♯♯</translation>
+        <translation>si♯♯</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.cpp" line="91"/>
@@ -19327,7 +19327,7 @@ anacruzele</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="101"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="66"/>
         <source>Offset</source>
-        <translation>Deplasare</translation>
+        <translation>Decalaj</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/OffsetSection.qml" line="56"/>
@@ -22805,37 +22805,37 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="146"/>
         <source>D</source>
-        <translation>Re</translation>
+        <translation>re</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="147"/>
         <source>C</source>
-        <translation>Do</translation>
+        <translation>do</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="148"/>
         <source>B</source>
-        <translation>Si</translation>
+        <translation>si</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="149"/>
         <source>E</source>
-        <translation>Mi</translation>
+        <translation>mi</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="150"/>
         <source>F</source>
-        <translation>Fa</translation>
+        <translation>fa</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="151"/>
         <source>G</source>
-        <translation>Sol</translation>
+        <translation>sol</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="152"/>
         <source>A</source>
-        <translation>La</translation>
+        <translation>la</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="271"/>
@@ -23693,7 +23693,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="45"/>
         <source>Keep accidentals close to offset notes</source>
-        <translation>Menține alterațiile aproape de notele deplasate</translation>
+        <translation>Menține alterațiile aproape de notele decalate</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="53"/>
@@ -23708,7 +23708,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/AccidentalGroupPage.qml" line="69"/>
         <source>Align accidentals on offset octaves</source>
-        <translation>Aliniază alterațiile în octavele deplasate</translation>
+        <translation>Aliniază alterațiile în octavele decalate</translation>
     </message>
 </context>
 <context>
@@ -24423,7 +24423,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="68"/>
         <source>Content offset</source>
-        <translation>Deplasament conținut</translation>
+        <translation>Decalaj conținut</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="84"/>
@@ -25138,7 +25138,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1736"/>
         <source>C</source>
-        <translation>Do</translation>
+        <translation>do</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1737"/>
@@ -25153,7 +25153,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1740"/>
         <source>D</source>
-        <translation>Re</translation>
+        <translation>re</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1741"/>
@@ -25168,7 +25168,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1744"/>
         <source>E</source>
-        <translation>Mi</translation>
+        <translation>mi</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1745"/>
@@ -25183,7 +25183,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1748"/>
         <source>F</source>
-        <translation>Fa</translation>
+        <translation>fa</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1749"/>
@@ -25198,7 +25198,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1752"/>
         <source>G</source>
-        <translation>Sol</translation>
+        <translation>sol</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1753"/>
@@ -25213,7 +25213,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1756"/>
         <source>A</source>
-        <translation>La</translation>
+        <translation>la</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1757"/>
@@ -25228,7 +25228,7 @@ Fie că abia acum începi drumul cu software-ul de notație muzicală sau ești 
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1760"/>
         <source>B</source>
-        <translation>Si</translation>
+        <translation>si</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1761"/>

@@ -2278,17 +2278,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1381"/>
         <source>Reset &apos;Vertical frame bottom margin&apos; value</source>
-        <translation>重置“垂直占位框底边距”值</translation>
+        <translation>重置“垂直框体底边距”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1291"/>
         <source>Reset &apos;Vertical frame top margin&apos; value</source>
-        <translation>重置“垂直占位框上边距”值</translation>
+        <translation>重置“垂直框体上边距”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1368"/>
         <source>Vertical frame top margin:</source>
-        <translation>垂直占位框上边距：</translation>
+        <translation>垂直框体上边距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1404"/>
@@ -2303,7 +2303,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1391"/>
         <source>Vertical frame bottom margin:</source>
-        <translation>垂直占位框下边距：</translation>
+        <translation>垂直框体下边距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1265"/>
@@ -4872,7 +4872,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13966"/>
         <source>Frame:</source>
-        <translation>占位框：</translation>
+        <translation>框体：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13857"/>
@@ -4912,7 +4912,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13998"/>
         <source>Reset &apos;Frame&apos; value</source>
-        <translation>重置“占位框”值</translation>
+        <translation>重置“框体”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14026"/>
@@ -5068,7 +5068,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/DockWidgetBase.cpp" line="612"/>
         <source>Detach</source>
-        <translation type="unfinished"/>
+        <translation>分弓</translation>
     </message>
 </context>
 <context>
@@ -6678,12 +6678,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="197"/>
         <source>Next frame</source>
-        <translation>后一占位框</translation>
+        <translation>后一框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="203"/>
         <source>Previous frame</source>
-        <translation>前一占位框</translation>
+        <translation>前一框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="209"/>
@@ -7325,12 +7325,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="198"/>
         <source>Go to next frame</source>
-        <translation>前往后一占位框</translation>
+        <translation>前往后一框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="204"/>
         <source>Go to previous frame</source>
-        <translation>前往前一占位框</translation>
+        <translation>前往前一框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="210"/>
@@ -7620,12 +7620,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="693"/>
         <source>Insert horizontal frame</source>
-        <translation>插入水平占位框</translation>
+        <translation>插入水平框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="700"/>
         <source>Insert vertical frame</source>
-        <translation>插入垂直占位框</translation>
+        <translation>插入垂直框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="707"/>
@@ -7635,12 +7635,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="714"/>
         <source>Append horizontal frame</source>
-        <translation>后加水平占位框</translation>
+        <translation>后加水平框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="720"/>
         <source>Append vertical frame</source>
-        <translation>后加垂直占位框</translation>
+        <translation>后加垂直框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="726"/>
@@ -7840,7 +7840,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1258"/>
         <source>Add frame text</source>
-        <translation>添加占位框文本</translation>
+        <translation>添加框体文本</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1264"/>
@@ -8530,7 +8530,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2475"/>
         <source>Show/hide frames</source>
-        <translation>显示/隐藏占位框</translation>
+        <translation>显示/隐藏框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2482"/>
@@ -9207,7 +9207,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2474"/>
         <source>Show &amp;frames</source>
-        <translation>显示占位框(&amp;F)</translation>
+        <translation>显示框体(&amp;F)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2481"/>
@@ -9417,32 +9417,32 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="692"/>
         <source>Insert &amp;horizontal frame</source>
-        <translation>插入水平框(&amp;h)</translation>
+        <translation>插入水平框(&amp;s)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="699"/>
         <source>Insert &amp;vertical frame</source>
-        <translation>插入垂直框(&amp;v)</translation>
+        <translation>插入垂直框(&amp;c)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="706"/>
         <source>Insert &amp;text frame</source>
-        <translation>插入文本框(&amp;t)</translation>
+        <translation>插入文本框(&amp;w)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="713"/>
         <source>Append h&amp;orizontal frame</source>
-        <translation>后加水平占位框(&amp;o)</translation>
+        <translation>后加水平框体(&amp;p)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="719"/>
         <source>Append v&amp;ertical frame</source>
-        <translation>后加垂直占位框(&amp;e)</translation>
+        <translation>后加垂直框体(&amp;z)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="725"/>
         <source>Append te&amp;xt frame</source>
-        <translation>后加文本框(&amp;x)</translation>
+        <translation>后加文本框(&amp;b)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="870"/>
@@ -9772,22 +9772,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1803"/>
         <source>Toggle turn</source>
-        <translation type="unfinished"/>
+        <translation>切换回旋音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1804"/>
         <source>Add ornament: turn</source>
-        <translation type="unfinished"/>
+        <translation>添加装饰音：回旋音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1809"/>
         <source>Toggle inverted turn</source>
-        <translation type="unfinished"/>
+        <translation>切换逆回旋音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1810"/>
         <source>Add ornament: inverted turn</source>
-        <translation type="unfinished"/>
+        <translation>添加装饰音：逆回旋音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1815"/>
@@ -9832,7 +9832,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1840"/>
         <source>Add ornament: tremblement</source>
-        <translation type="unfinished"/>
+        <translation>添加装饰音：弹簧音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1845"/>
@@ -10188,12 +10188,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="67"/>
         <source>&amp;Dump accessibility tree to console</source>
-        <translation>将可访问性树转储到控制台 (&amp;D)</translation>
+        <translation>将无障碍树转储到控制台 (&amp;D)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="72"/>
         <source>Show engraving &amp;elements</source>
-        <translation>显示j排版元素 (&amp;e)</translation>
+        <translation>显示排版元素 (&amp;e)</translation>
     </message>
     <message>
         <location filename="../../src/framework/multiinstances/internal/multiinstancesuiactions.cpp" line="37"/>
@@ -10640,7 +10640,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="224"/>
         <source>&amp;Frames</source>
-        <translation>占位框(&amp;K)</translation>
+        <translation>框体(&amp;K)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="225"/>
@@ -12806,7 +12806,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="289"/>
         <source>Vertical frame</source>
-        <translation>垂直占位框</translation>
+        <translation>垂直框体</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="290"/>
@@ -12816,7 +12816,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="291"/>
         <source>Fretboard diagram frame</source>
-        <translation>品格图占位框</translation>
+        <translation>品格图框体</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="293"/>
@@ -12956,7 +12956,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1124"/>
         <source>Frame</source>
-        <translation>占位框</translation>
+        <translation>框体</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1129"/>
@@ -20130,7 +20130,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="111"/>
         <source>Scale to frame size</source>
-        <translation>缩放到占位框尺寸</translation>
+        <translation>缩放到框体尺寸</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="121"/>
@@ -20896,7 +20896,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="80"/>
         <source>Frames</source>
-        <translation>占位框</translation>
+        <translation>框体</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="93"/>
@@ -21037,7 +21037,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="49"/>
         <source>Frame</source>
-        <translation>占位框</translation>
+        <translation>框体</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="58"/>
@@ -22688,7 +22688,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="646"/>
         <source>Frames</source>
-        <translation>占位框</translation>
+        <translation>框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="89"/>
