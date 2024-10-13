@@ -29,5 +29,6 @@ class MacOSKeyMapper
 {
 public:
     static QString translateToCurrentKeyboardLayout(const QKeySequence& sequence);
+    static QString translateToEnglishKeyboardLayout(const QKeySequence& sequence);
 };
 }

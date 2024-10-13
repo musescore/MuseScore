@@ -74,6 +74,7 @@ private:
     QVariantMap m_conflictShortcut;
 
     QKeySequence m_newSequence;
+    QKeySequence m_newSequenceEng;
 };
 }
 

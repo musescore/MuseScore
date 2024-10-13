@@ -39,3 +39,12 @@ QString KeyMapper::translateToCurrentKeyboardLayout(const QKeySequence& sequence
     return sequence.toString();
 #endif
 }
+
+QString KeyMapper::translateToEnglishKeyboardLayout(const QKeySequence& sequence)
+{
+#ifdef Q_OS_MAC
+    return MacOSKeyMapper::translateToEnglishKeyboardLayout(sequence);
+#else
+    return sequence.toString();
+#endif
+}

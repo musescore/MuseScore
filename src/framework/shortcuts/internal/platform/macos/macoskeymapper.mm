@@ -109,6 +109,32 @@ static UCKeyboardLayout* keyboardLayout()
     return (UCKeyboardLayout*)CFDataGetBytePtr(uchr);
 }
 
+static UCKeyboardLayout* englishKeyboardLayout()
+{
+    static CFArrayRef (* TISCreateInputSourceList)(CFDictionaryRef, Boolean);
+    static void*(* TISGetInputSourceProperty)(TISInputSourceRef inputSource, CFStringRef propertyKey);
+
+    CFBundleRef bundle = CFBundleGetBundleWithIdentifier(CFSTR("com.apple.Carbon"));
+
+    if (bundle) {
+        *(void**)& TISGetInputSourceProperty = CFBundleGetFunctionPointerForName(bundle, CFSTR("TISGetInputSourceProperty"));
+        *(void**)& TISCreateInputSourceList
+            = CFBundleGetFunctionPointerForName(bundle, CFSTR("TISCreateInputSourceList"));
+    }
+
+    if (!TISCreateInputSourceList || !TISGetInputSourceProperty) {
+        LOGE() << "Error getting functions from Carbon framework";
+        return 0;
+    }
+
+    CFArrayRef sources = TISCreateInputSourceList(nil, false);
+    //! need to check that English always comes first in the source list
+    TISInputSourceRef keyboard = (TISInputSourceRef)CFArrayGetValueAtIndex(sources, 0);
+    CFDataRef uchr = (CFDataRef)TISGetInputSourceProperty(keyboard, CFSTR("TISPropertyUnicodeKeyLayoutData"));
+
+    return (UCKeyboardLayout*)CFDataGetBytePtr(uchr);
+}
+
 static UInt32 nativeKeycode(UCKeyboardLayout* keyboard, Qt::Key keyCode, bool& found)
 {
     found = true;
@@ -355,6 +381,38 @@ QString MacOSKeyMapper::translateToCurrentKeyboardLayout(const QKeySequence& seq
     UInt32 keyNativeModifiers = nativeModifiers(modifiers);
 
     QString keyStr = keyCodeToString(keyboard, keyNativeCode);
+    QString modifStr = keyModifiersToString(keyNativeModifiers);
+
+    return (modifStr.isEmpty() ? "" : modifStr + "+") + keyStr;
+}
+
+QString MacOSKeyMapper::translateToEnglishKeyboardLayout(const QKeySequence& sequence)
+{
+    const QKeyCombination keyCombination = sequence[0];
+
+    const Qt::Key qKey = keyCombination.key();
+
+    UCKeyboardLayout* englishKeyboard = englishKeyboardLayout();
+    UCKeyboardLayout* currentKeyboard = keyboardLayout();
+    if (!englishKeyboard || !currentKeyboard) {
+        LOGE() << "The keyboard layout is not valid";
+        return {};
+    }
+
+    //! find native key code and modifiers in current keyboard
+
+    bool found = false;
+    UInt32 keyNativeCode = nativeKeycode(currentKeyboard, qKey, found);
+    if (!found) {
+        LOGW() << "Key " << qKey << " not found in the keyboard layout";
+        return {};
+    }
+
+    Qt::KeyboardModifiers modifiers = keyCombination.keyboardModifiers();
+    UInt32 keyNativeModifiers = nativeModifiers(modifiers);
+
+    //! map to english keyboard
+    QString keyStr = keyCodeToString(englishKeyboard, keyNativeCode);
     QString modifStr = keyModifiersToString(keyNativeModifiers);
 
     return (modifStr.isEmpty() ? "" : modifStr + "+") + keyStr;
