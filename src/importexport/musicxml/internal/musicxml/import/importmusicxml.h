@@ -22,25 +22,16 @@
 
 #pragma once
 
-#include "global/types/string.h"
-
-namespace muse {
-class XmlStreamReader;
-}
+#include "types/string.h"
+#include "engraving/engravingerrors.h"
 
 namespace mu::engraving {
-class MusicXmlLogger
-{
-public:
-    enum class Level : char {
-        MXML_TRACE, MXML_INFO, MXML_ERROR
-    };
-    MusicXmlLogger() {}
-    void logDebugTrace(const muse::String& trace, const muse::XmlStreamReader* xmlreader = 0);
-    void logDebugInfo(const muse::String& info, const muse::XmlStreamReader* xmlreader = 0);
-    void logError(const muse::String& error, const muse::XmlStreamReader* xmlreader = 0);
-    void setLoggingLevel(const Level level) { m_level = level; }
-private:
-    Level m_level = Level::MXML_INFO;
-};
-} // namespace Ms
+class MasterScore;
+class Score;
+}
+
+namespace mu::iex::musicxml {
+engraving::Err importMusicXmlfromBuffer(engraving::Score* score, const muse::String&, const muse::ByteArray& data);
+engraving::Err importCompressedMusicXml(engraving::MasterScore* score, const muse::String& name, bool forceMode);
+engraving::Err importMusicXml(engraving::MasterScore* score, const muse::String& name, bool forceMode);
+}

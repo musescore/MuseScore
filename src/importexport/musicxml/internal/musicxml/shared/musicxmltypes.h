@@ -21,10 +21,16 @@
  */
 
 #pragma once
-#include "dom/arpeggio.h"
+
+#include "types/types.h"
+#include "types/string.h"
 #include "dom/interval.h"
 
 namespace mu::engraving {
+class Arpeggio;
+}
+
+namespace mu::iex::musicxml {
 const int MAX_NUMBER_LEVEL = 16; // maximum number of overlapping MusicXML objects
 
 enum class MusicXmlExporterSoftware : char {
@@ -45,10 +51,10 @@ enum class MusicXmlStartStop : char {
 };
 
 struct MusicXmlArpeggioDesc {
-    Arpeggio* arp;
+    engraving::Arpeggio* arp;
     int no;
 
-    MusicXmlArpeggioDesc(Arpeggio* arp, int no)
+    MusicXmlArpeggioDesc(engraving::Arpeggio* arp, int no)
         : arp(arp), no(no) {}
 };
 typedef std::multimap<int, MusicXmlArpeggioDesc> ArpeggioMap;
@@ -64,59 +70,59 @@ typedef std::multimap<int, MusicXmlArpeggioDesc> ArpeggioMap;
 
 struct MusicXmlInstrument {
     int unpitched;                     // midi-unpitched read from MusicXML
-    String name;                       // instrument-name read from MusicXML
-    String sound;                      // instrument-sound read from MusicXML
-    String virtLib;                    // virtual-library read from MusicXML
-    String virtName;                   // virtual-name read from MusicXML
+    muse::String name;                       // instrument-name read from MusicXML
+    muse::String sound;                      // instrument-sound read from MusicXML
+    muse::String virtLib;                    // virtual-library read from MusicXML
+    muse::String virtName;                   // virtual-name read from MusicXML
     int midiChannel;                   // midi-channel read from MusicXML
     int midiPort;                      // port read from MusicXML
     int midiProgram;                   // midi-program read from MusicXML
     int midiVolume;                    // volume read from MusicXML
     int midiPan;                       // pan value read from MusicXML
-    NoteHeadGroup notehead;            // notehead symbol set
+    engraving::NoteHeadGroup notehead;            // notehead symbol set
     int line = 0;                      // place notehead onto this line
-    DirectionV stemDirection;
+    engraving::DirectionV stemDirection;
 
-    String toString() const;
+    muse::String toString() const;
 
     MusicXmlInstrument()        // required by std::map
         : unpitched(-1), name(), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
-        notehead(NoteHeadGroup::HEAD_INVALID), line(0), stemDirection(DirectionV::AUTO) {}
-    MusicXmlInstrument(String s)
+        notehead(engraving::NoteHeadGroup::HEAD_INVALID), line(0), stemDirection(engraving::DirectionV::AUTO) {}
+    MusicXmlInstrument(muse::String s)
         : unpitched(-1), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
-        notehead(NoteHeadGroup::HEAD_NORMAL), line(0), stemDirection(DirectionV::AUTO) {}
+        notehead(engraving::NoteHeadGroup::HEAD_NORMAL), line(0), stemDirection(engraving::DirectionV::AUTO) {}
     /*
     MusicXmlInstrument(int p, String s, NoteHead::Group nh, int l, Direction d)
           : unpitched(p), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
           notehead(nh), line(l), stemDirection(d) {}
      */
 };
-typedef std::map<String, MusicXmlInstrument> MusicXmlInstruments;
+typedef std::map<muse::String, MusicXmlInstrument> MusicXmlInstruments;
 
-class MusicXmlIntervalList : public std::map<Fraction, Interval>
+class MusicXmlIntervalList : public std::map<engraving::Fraction, engraving::Interval>
 {
 public:
     MusicXmlIntervalList() {}
-    Interval interval(const Fraction f) const;
+    engraving::Interval interval(const engraving::Fraction f) const;
 };
 
-class MusicXmlInstrList : public std::map<Fraction, String>
+class MusicXmlInstrList : public std::map<engraving::Fraction, muse::String>
 {
 public:
     MusicXmlInstrList() {}
-    const String instrument(const Fraction f) const;
-    void setInstrument(const String instr, const Fraction f);
+    const muse::String instrument(const engraving::Fraction f) const;
+    void setInstrument(const muse::String instr, const engraving::Fraction f);
 };
 
 class LyricNumberHandler
 {
 public:
     LyricNumberHandler() {}
-    void addNumber(const String& number);
-    String toString() const;
-    int getLyricNo(const String& number) const;
+    void addNumber(const muse::String& number);
+    muse::String toString() const;
+    int getLyricNo(const muse::String& number) const;
     void determineLyricNos();
 private:
-    std::map<String, int> m_numberToNo;
+    std::map<muse::String, int> m_numberToNo;
 };
 }

@@ -23,6 +23,7 @@
 #include "musicxmlvoicedesc.h"
 
 using namespace mu::engraving;
+using namespace mu::iex::musicxml;
 //---------------------------------------------------------
 //   VoiceDesc
 //---------------------------------------------------------

@@ -22,12 +22,11 @@
 
 #pragma once
 
-#include "global/serialization/xmlstreamreader.h"
-#include "engraving/dom/accidental.h"
+#include "dom/accidental.h"
+#include "serialization/xmlstreamreader.h"
 
-namespace mu::engraving {
+namespace mu::iex::musicxml {
 class MusicXmlLogger;
-class Score;
 
 //---------------------------------------------------------
 //   musicXmlNotePitch
@@ -43,9 +42,9 @@ public:
     MusicXmlNotePitch(MusicXmlLogger* logger)
         : m_logger(logger) { /* nothing so far */ }
     void pitch(muse::XmlStreamReader& e);
-    bool readProperties(muse::XmlStreamReader& e, Score* score);
-    Accidental* acc() const { return m_acc; }
-    AccidentalType accType() const { return m_accType; }
+    bool readProperties(muse::XmlStreamReader& e, engraving::Score* score);
+    engraving::Accidental* acc() const { return m_acc; }
+    engraving::AccidentalType accType() const { return m_accType; }
     int alter() const { return m_alter; }
     double tuning() const { return m_tuning; }
     int displayOctave() const { return m_displayOctave; }
@@ -56,8 +55,8 @@ public:
     bool unpitched() const { return m_unpitched; }
 
 private:
-    Accidental* m_acc = nullptr;                             // created based on accidental element
-    AccidentalType m_accType = AccidentalType::NONE;         // set by pitch() based on alter value (can be microtonal)
+    engraving::Accidental* m_acc = nullptr;                             // created based on accidental element
+    engraving::AccidentalType m_accType = engraving::AccidentalType::NONE;         // set by pitch() based on alter value (can be microtonal)
     int m_alter = 0;
     double m_tuning = 0.0;
     int m_displayStep = -1;                                  // invalid

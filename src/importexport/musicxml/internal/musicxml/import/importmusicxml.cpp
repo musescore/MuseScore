@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-Studio-CLA-applies
  *
@@ -20,28 +20,112 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- MusicXML import.
- */
-
 #include "global/translation.h"
+
+#ifndef MUSICXML_NO_INTERACTIVE
+#include "modularity/ioc.h"
+#include "global/iinteractive.h"
+#endif
+
 #include "global/io/file.h"
 #include "global/serialization/zipreader.h"
 #include "global/serialization/xmlstreamreader.h"
 
 #include "engraving/types/types.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/score.h"
+#include "engraving/engravingerrors.h"
 
 #include "importmusicxml.h"
-#include "musicxmlsupport.h"
+#include "importmusicxmllogger.h"
+#include "importmusicxmlpass1.h"
+#include "importmusicxmlpass2.h"
 #include "musicxmlvalidation.h"
 
-#include "log.h"
+#ifndef MUSICXML_NO_INTERACTIVE
+using namespace mu;
+#endif
 
 using namespace muse;
-using namespace mu::iex::musicxml;
+using namespace mu::engraving;
 
-namespace mu::engraving {
+namespace mu::iex::musicxml {
+//---------------------------------------------------------
+//   musicXmlImportErrorDialog
+//---------------------------------------------------------
+
+/**
+ Show a dialog displaying the MusicXML import error(s).
+ */
+#ifndef MUSICXML_NO_INTERACTIVE
+static IInteractive::Button musicXmlImportErrorDialog(const String& text, const String& detailedText)
+{
+    auto interactive = modularity::fixmeIoc()->resolve<IInteractive>("musicxml");
+
+    std::string msg = text.toStdString();
+    msg += '\n';
+    msg += muse::trc("iex_musicxml", "Do you want to try to load this file anyway?");
+    msg += '\n';
+    msg += '\n';
+    msg += detailedText.toStdString();
+
+    IInteractive::Result ret = interactive->question(text.toStdString(),
+                                                     msg,
+                                                     { IInteractive::Button::Yes, IInteractive::Button::No },
+                                                     IInteractive::Button::No
+                                                     );
+
+    return ret.standardButton();
+}
+
+#endif
+
+//---------------------------------------------------------
+//   importMusicXmlfromBuffer
+//---------------------------------------------------------
+
+Err importMusicXmlfromBuffer(Score* score, const String& /*name*/, const ByteArray& data)
+{
+    MusicXmlLogger logger;
+    logger.setLoggingLevel(MusicXmlLogger::Level::MXML_ERROR);   // errors only
+    //logger.setLoggingLevel(MusicXmlLogger::Level::MXML_INFO);
+    //logger.setLoggingLevel(MusicXmlLogger::Level::MXML_TRACE); // also include tracing
+
+    // pass 1
+    MusicXmlParserPass1 pass1(score, &logger);
+    Err res = pass1.parse(data);
+    const String pass1_errors = pass1.errors();
+
+    // pass 2
+    MusicXmlParserPass2 pass2(score, pass1, &logger);
+    if (res == Err::NoError) {
+        res = pass2.parse(data);
+    }
+
+    for (const Part* part : score->parts()) {
+        for (const auto& pair : part->instruments()) {
+            pair.second->updateInstrumentId();
+        }
+    }
+
+    // report result
+    const String pass2_errors = pass2.errors();
+    if (!(pass1_errors.isEmpty() && pass2_errors.isEmpty())) {
+#ifndef MUSICXML_NO_INTERACTIVE
+        if (!MScore::noGui) {
+            const String text = muse::mtrc("iex_musicxml", "%n error(s) found, import may be incomplete.",
+                                           nullptr, int(pass1_errors.size() + pass2_errors.size()));
+            if (musicXmlImportErrorDialog(text, pass1.errors() + pass2.errors()) != IInteractive::Button::Yes) {
+                res = Err::UserAbort;
+            }
+        }
+#endif
+    }
+
+    return res;
+}
+
 //---------------------------------------------------------
 //   check assertions for tuplet handling
 //---------------------------------------------------------

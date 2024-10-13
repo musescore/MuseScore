@@ -28,7 +28,7 @@
 
 using namespace muse;
 
-namespace mu::engraving {
+namespace mu::iex::musicxml {
 //---------------------------------------------------------
 //   xmlLocation
 //---------------------------------------------------------

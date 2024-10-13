@@ -22,11 +22,14 @@
 
 #pragma once
 
-#include "global/types/string.h"
-#include "engravingerrors.h"
+#include "types/string.h"
+#include "engraving/engravingerrors.h"
 
-namespace mu::engraving {
-class Score;
+namespace mu::iex::musicxml {
+class MusicXmlValidation
+{
+public:
 
-Err importMusicXmlfromBuffer(Score* score, const muse::String&, const muse::ByteArray& data);
+    static engraving::Err validate(const muse::String& name, const muse::ByteArray& data);
+};
 }

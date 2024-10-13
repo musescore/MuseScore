@@ -21,14 +21,16 @@
  */
 
 #include "engraving/types/fraction.h"
+#include "engraving/dom/interval.h"
 #include "engraving/types/typesconv.h"
 
 #include "importmusicxmllogger.h"
 #include "importmusicxmlnoteduration.h"
+#include "importmusicxmlpass1.h"
 
 using namespace mu::engraving;
 
-namespace mu::engraving {
+namespace mu::iex::musicxml {
 //---------------------------------------------------------
 //   noteTypeToFraction
 //---------------------------------------------------------

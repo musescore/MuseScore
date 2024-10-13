@@ -22,15 +22,16 @@
 
 #pragma once
 
-#include "global/types/bytearray.h"
-#include "global/types/string.h"
-#include "engraving/engravingerrors.h"
+#include "io/iodevice.h"
+#include "types/string.h"
+
+namespace mu::engraving {
+class Score;
+}
 
 namespace mu::iex::musicxml {
-class MusicXmlValidation
-{
-public:
-
-    static engraving::Err validate(const muse::String& name, const muse::ByteArray& data);
-};
+bool saveMxl(engraving::Score*, muse::io::IODevice*);
+bool saveMxl(engraving::Score* score, const muse::String& name);
+bool saveXml(engraving::Score*, muse::io::IODevice*);
+bool saveXml(engraving::Score*, const muse::String&);
 }
