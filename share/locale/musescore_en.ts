@@ -10697,7 +10697,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
 </context>
 <context>
-    <name>appshell/menu/diagnostic</name>
+    <name>appshell/menu/diagnostics</name>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="369"/>
         <source>&amp;System</source>
@@ -10708,9 +10708,6 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <source>&amp;Muse Sampler</source>
         <translation type="unfinished">&amp;Muse Sampler</translation>
     </message>
-</context>
-<context>
-    <name>appshell/menu/diagnostics</name>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="411"/>
         <source>&amp;Accessibility</source>

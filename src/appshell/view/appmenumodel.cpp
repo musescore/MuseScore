@@ -366,7 +366,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
 
     MenuItemList items {
         makeMenuItem("diagnostic-save-diagnostic-files"),
-        makeMenu(TranslatableString("appshell/menu/diagnostic", "&System"), systemItems, "menu-system")
+        makeMenu(TranslatableString("appshell/menu/diagnostics", "&System"), systemItems, "menu-system")
     };
 
 #ifdef MUSE_MODULE_MUSESAMPLER
@@ -378,7 +378,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
         museSamplerItems << makeMenuItem("musesampler-reload");
     }
 
-    items << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Muse Sampler"), museSamplerItems, "menu-musesampler");
+    items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Muse Sampler"), museSamplerItems, "menu-musesampler");
 #endif
 
     if (globalConfiguration()->devModeEnabled()) {
