@@ -86,12 +86,14 @@ void EditShortcutModel::inputKey(Qt::Key key, Qt::KeyboardModifiers modifiers)
         return;
     }
 
+    Qt::KeyboardModifiers correctedModifiers = modifiers;
+
     // remove shift-modifier for non-letter keys, except a few keys
-    if ((modifiers & Qt::ShiftModifier) && !isShiftAllowed(key)) {
-        modifiers &= ~Qt::ShiftModifier;
+    if ((modifiers & Qt::ShiftModifier) && !isShiftAllowed(key, QKeySequence(key).toString())) {
+        correctedModifiers &= ~Qt::ShiftModifier;
     }
 
-    QKeyCombination combination(modifiers, key);
+    QKeyCombination combination(correctedModifiers, key);
 
     for (int i = 0; i < m_newSequence.count(); i++) {
         if (m_newSequence[i] == combination) {
@@ -110,9 +112,10 @@ void EditShortcutModel::inputKey(Qt::Key key, Qt::KeyboardModifiers modifiers)
     emit newSequenceChanged();
 }
 
-bool EditShortcutModel::isShiftAllowed(Qt::Key key)
+bool EditShortcutModel::isShiftAllowed(Qt::Key key, const QString& keyStr)
 {
-    if (key >= Qt::Key_A && key <= Qt::Key_Z) {
+    bool isLetter = keyStr.size() == 1 && keyStr.at(0).isLetter();
+    if (isLetter) {
         return true;
     }
 
