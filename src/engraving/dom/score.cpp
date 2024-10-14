@@ -579,20 +579,26 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
                     }
                 }
             }
-            if (!RealIsNull(stretch) && !RealIsNull(stretch)) {
+
+            if (!RealIsNull(stretch) && !RealIsEqual(stretch, 1.0)) {
                 BeatsPerSecond otempo = tempomap()->tempo(segment.tick().ticks());
                 BeatsPerSecond ntempo = otempo.val / stretch;
                 tempomap()->setTempo(segment.tick().ticks(), ntempo);
 
-                Fraction currentSegmentEndTick;
+                Fraction tempoEndTick;
 
-                if (segment.next1()) {
-                    currentSegmentEndTick = segment.next1()->tick();
-                } else {
-                    currentSegmentEndTick = segment.tick() + segment.ticks();
+                const Segment* nextActiveSegment = segment.next1();
+                while (nextActiveSegment && !nextActiveSegment->isActive()) {
+                    nextActiveSegment = nextActiveSegment->next1();
                 }
 
-                Fraction etick = currentSegmentEndTick - Fraction(1, 480 * 4);
+                if (nextActiveSegment) {
+                    tempoEndTick = nextActiveSegment->tick();
+                } else {
+                    tempoEndTick = segment.tick() + segment.ticks();
+                }
+
+                Fraction etick = tempoEndTick - Fraction(1, 480 * 4);
                 auto e = tempomap()->find(etick.ticks());
                 if (e == tempomap()->end()) {
                     tempomap()->setTempo(etick.ticks(), otempo);
