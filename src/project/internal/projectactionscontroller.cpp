@@ -79,7 +79,6 @@ void ProjectActionsController::init()
     dispatcher()->reg(this, "file-save-a-copy", [this]() { saveProject(SaveMode::SaveCopy); });
     dispatcher()->reg(this, "file-save-selection", [this]() { saveProject(SaveMode::SaveSelection, SaveLocationType::Local); });
     dispatcher()->reg(this, "file-save-to-cloud", [this]() { saveProject(SaveMode::SaveAs, SaveLocationType::Cloud); });
-    dispatcher()->reg(this, "file-retry-save-locally", this, &ProjectActionsController::retrySaveProjectLocally);
 
     dispatcher()->reg(this, "file-publish", this, &ProjectActionsController::publish);
     dispatcher()->reg(this, "file-share-audio", this, &ProjectActionsController::shareAudio);
@@ -940,14 +939,13 @@ bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& filePa
             switch (warnScoreHasBecomeCorruptedAfterSave(ret)) {
             case RETRY_SAVE_BTN_ID:
                 async::Async::call(this, [this, filePath, saveMode]() {
-                    const ActionData actionData = ActionData::make_arg2<muse::io::path_t, SaveMode>(filePath, saveMode);
-                    dispatcher()->dispatch("file-retry-save-locally", actionData);
+                    saveProjectLocally(filePath, saveMode);
                 });
                 break;
 
             case SAVE_AS_BTN_ID:
                 async::Async::call(this, [this]() {
-                    dispatcher()->dispatch("file-save-as");
+                    saveProject(SaveMode::SaveAs);
                 });
                 break;
             }
@@ -961,13 +959,6 @@ bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& filePa
 
     recentFilesController()->prependRecentFile(makeRecentFile(project));
     return true;
-}
-
-void ProjectActionsController::retrySaveProjectLocally(const ActionData& args)
-{
-    const muse::io::path_t filePath = args.arg<muse::io::path_t>(0);
-    SaveMode saveMode = args.arg<SaveMode>(1);
-    saveProjectLocally(filePath, saveMode);
 }
 
 bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode)

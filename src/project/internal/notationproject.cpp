@@ -657,13 +657,17 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
         } else {
             Ret ret = muse::make_ok();
 
-            if (!targetContainerPath.contains(" - ALL_ZEROS_CORRUPTED_ORIG_ONLY.mscz")) {
+            if (ioMode != MscIoMode::Zip
+                    || isAutosave
+                    || !globalConfiguration()->devModeEnabled()
+                    || !targetContainerPath.contains(" - ALL_ZEROS_CORRUPTED_ORIG_ONLY.mscz")) {
                 ret = fileSystem()->copy(savePath, targetContainerPath, true);
                 if (!ret) {
                     return ret;
                 }
             } else {
-                // Corrupt the original file for testing purposes. The temp file will be healthy.
+                // Corrupt the original file but leave the temp file healthy. This is so QA/devs can test the scenario
+                // where the corruption happens when overwriting the original file with the temp file.
                 size_t tempFileSize = QFileInfo(savePath).size();
                 ByteArray corruptedData = ByteArray(tempFileSize);
                 ret = AllZerosFileCorruptor::writeFile(targetContainerPath, corruptedData);
