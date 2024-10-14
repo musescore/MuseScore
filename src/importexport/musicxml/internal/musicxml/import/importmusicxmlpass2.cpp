@@ -1980,7 +1980,7 @@ void MusicXmlParserPass2::scorePartwise()
     // this creates non-generated barlines spanning only the current instrument
     // BarLine::_spanStaff is set using the default in Staff::_barLineSpan
     Measure* const lm = m_score->lastMeasure();
-    if (lm && lm->endBarLineType() == BarLineType::NORMAL) {
+    if (lm && lm->endBarLineType() & BarLineType::NORMAL) {
         for (staff_idx_t staffidx = 0; staffidx < m_score->nstaves(); ++staffidx) {
             const Staff* staff = m_score->staff(staffidx);
             auto b = createBarline(m_score, staffidx * VOICES, BarLineType::NORMAL, true, u"", staff->barLineSpan());
@@ -2239,7 +2239,7 @@ void MusicXmlParserPass2::part()
         if (!unendedTie->endNote()) {
             // Tie started with no matching end tags
             // Find a note of the same pitch in the same voice immediately following the start chord
-            Segment* nextSeg = startChord->segment();
+            Segment* nextSeg = startChord ? startChord->segment() : nullptr;
             while (nextSeg && nextSeg->tick() < startChord->tick() + startChord->ticks()) {
                 nextSeg = nextSeg->nextCR(startChord->track(), true);
             }
@@ -2250,7 +2250,7 @@ void MusicXmlParserPass2::part()
             if (matchingNote && matchingNote->tpc() == startNote->tpc() && matchingNote != startNote) {
                 unendedTie->setEndNote(matchingNote);
                 matchingNote->setTieBack(unendedTie);
-            } else {
+            } else if (startChord) {
                 // try other voices in the stave
                 const Part* p = startChord->part();
                 for (track_idx_t track = p->startTrack(); track < p->endTrack() + VOICES; track++) {
@@ -5418,10 +5418,10 @@ void MusicXmlParserPass2::barline(const String& partId, Measure* measure, const 
     bool visible = true;
     if (determineBarLineType(barStyle, repeat, type, visible)) {
         const track_idx_t track = m_pass1.trackForPart(partId);
-        if (type == BarLineType::START_REPEAT) {
+        if (type & BarLineType::START_REPEAT) {
             // combine start_repeat flag with current state initialized during measure parsing
             measure->setRepeatStart(true);
-        } else if (type == BarLineType::END_REPEAT) {
+        } else if (type & BarLineType::END_REPEAT) {
             // combine end_repeat flag with current state initialized during measure parsing
             measure->setRepeatEnd(true);
         } else {
@@ -7533,7 +7533,8 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
                 continue;
             }
             HarmonyDesc& foundHarmonyDesc = itr->second;
-            if (track2staff(foundHarmonyDesc.m_track) == track2staff(track) && foundHarmonyDesc.m_harmony->descr() == ha->descr()) {
+            if (track2staff(foundHarmonyDesc.m_track) == track2staff(track) && foundHarmonyDesc.m_harmony
+                && foundHarmonyDesc.m_harmony->descr() == ha->descr()) {
                 if (foundHarmonyDesc.m_harmony && foundHarmonyDesc.fretDiagramVisible() == newHarmonyDesc.fretDiagramVisible()) {
                     // Matching harmony with matching visibility of fret diagram.  No need to add
                     insert = false;
@@ -8450,7 +8451,7 @@ static void addTie(const Notation& notation, Note* note, const track_idx_t track
             const Chord* startChord = startNote ? startNote->chord() : nullptr;
             const Chord* endChord = note->chord();
             const Measure* startMeasure = startChord ? startChord->measure() : nullptr;
-            if (startMeasure == endChord->measure() || startChord->tick() + startChord->actualTicks() == endChord->tick()) {
+            if (startMeasure == endChord->measure() || (startChord && startChord->tick() + startChord->actualTicks() == endChord->tick())) {
                 // only connect if they're in the same bar, or there are no notes/rests in the same voice between them
                 currTie->setEndNote(note);
                 note->setTieBack(currTie);
