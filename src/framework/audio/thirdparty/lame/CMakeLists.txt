@@ -56,8 +56,8 @@ set (MODULE_SRC
     ${SOURCE_LIB}
     )
 
-set(MODULE_USE_PCH_DISABLED ON)
-set(MODULE_USE_UNITY_NONE ON)
+set(MODULE_USE_PCH OFF)
+set(MODULE_USE_UNITY OFF)
 setup_module()
 
 #target_no_warning(${MODULE} -Wunused-const-variable=0)

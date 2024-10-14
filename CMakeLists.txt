@@ -20,8 +20,6 @@
 
 cmake_minimum_required(VERSION 3.16)
 
-cmake_policy(SET CMP0091 OLD) # not set MSVC default args
-
 project(mscore LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
