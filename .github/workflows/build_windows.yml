@@ -160,6 +160,10 @@ jobs:
       run: |
         IF ${{ env.SENTRY_URL != 0 }} == true ( SET C_URL="${{ env.SENTRY_URL }}" ) ELSE ( SET C_URL="" )
         buildscripts\ci\windows\build.bat -n ${{ env.BUILD_NUMBER }} --crash_log_url %C_URL%
+    - name: Deploy
+      shell: cmd
+      run: |
+        buildscripts\ci\windows\deploy.bat
     - name: Package
       shell: cmd
       run: |
@@ -281,6 +285,10 @@ jobs:
       run: |
         IF ${{ env.SENTRY_URL != 0 }} == true ( SET C_URL="${{ env.SENTRY_URL }}" ) ELSE ( SET C_URL="" )
         buildscripts\ci\windows\build.bat --portable ON -n ${{ env.BUILD_NUMBER }} --crash_log_url %C_URL%
+    - name: Deploy
+      shell: cmd
+      run: |
+        buildscripts\ci\windows\deploy.bat --portable ON
     - name: Package
       shell: cmd
       run: |
