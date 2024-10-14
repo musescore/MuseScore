@@ -24,17 +24,16 @@ SOFTWARE.
 #ifndef KORS_PROFILER_H
 #define KORS_PROFILER_H
 
-#include <string>
-#include <string_view>
-#include <list>
-#include <vector>
-#include <set>
-#include <unordered_map>
-#include <thread>
-#include <mutex>
-#include <chrono>
-#include <sstream>
 #include <atomic>
+#include <chrono>
+#include <list>
+#include <mutex>
+#include <set>
+#include <sstream>
+#include <string>
+#include <thread>
+#include <unordered_map>
+#include <vector>
 
 #include "funcinfo.h"
 

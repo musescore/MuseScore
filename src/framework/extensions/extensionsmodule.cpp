@@ -21,7 +21,7 @@
  */
 #include "extensionsmodule.h"
 
-#include <QtQml>
+#include <QQmlEngine>
 
 #include "modularity/ioc.h"
 

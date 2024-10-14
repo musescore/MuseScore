@@ -78,7 +78,7 @@ public:
     QQmlEngine* qmlEngine() const override;
     void quit() override;
     void clearComponentCache() override;
-    GraphicsApiProvider::Api graphicsApi() const override;
+    GraphicsApi graphicsApi() const override;
     QString graphicsApiName() const override;
     void addSourceImportPath(const QString& path) override;
     // ---

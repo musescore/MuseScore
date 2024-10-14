@@ -22,8 +22,6 @@
 
 #include <gtest/gtest.h>
 
-#include <QApplication>
-#include <QClipboard>
 #include <QMimeData>
 
 #include "internal/qmimedataadapter.h"
@@ -62,7 +60,6 @@ void Engraving_CopyPasteSymbolListTests::copypastecommon(MasterScore* score, con
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
     mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
-    QApplication::clipboard()->setMimeData(mimeData);
 
     // select first chord in 5th measure
     Measure* m = score->firstMeasure();
@@ -72,13 +69,12 @@ void Engraving_CopyPasteSymbolListTests::copypastecommon(MasterScore* score, con
     score->select(m->first()->element(0));
 
     score->startCmd();
-    const QMimeData* ms = QApplication::clipboard()->mimeData();
-    if (!ms->hasFormat(mimeSymbolListFormat)) {
+    if (!mimeData->hasFormat(mimeSymbolListFormat)) {
         LOGD("wrong type mime data");
         return;
     }
 
-    QMimeDataAdapter ma(ms);
+    QMimeDataAdapter ma(mimeData);
     score->cmdPaste(&ma, 0);
     score->endCmd();
     score->doLayout();

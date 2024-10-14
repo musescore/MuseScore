@@ -43,7 +43,7 @@ public:
 
     muse::async::Notification brailleTableChanged() const override;
     QString brailleTable() const override;
-    void setBrailleTable(const QString table) override;
+    void setBrailleTable(const QString& table) override;
     QStringList brailleTableList() const override;
 
 private:

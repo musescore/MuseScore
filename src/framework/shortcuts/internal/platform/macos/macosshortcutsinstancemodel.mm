@@ -23,7 +23,7 @@
 
 #import <Carbon/Carbon.h>
 
-#include <QApplication>
+#include <QGuiApplication>
 #include <QKeyEvent>
 
 #include "log.h"

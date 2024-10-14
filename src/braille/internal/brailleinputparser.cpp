@@ -22,6 +22,8 @@
 
 #include "brailleinputparser.h"
 
+#include <QString>
+
 #include "braillecode.h"
 
 namespace mu::engraving {
@@ -93,7 +95,7 @@ BieSequencePattern::BieSequencePattern(BieSequencePatternType t, std::string seq
     max_cell_length = 0;
 
     size_t len = sequence.length();
-    QString key = QString();
+    QString key;
     bool mandatory = false;
     char openning = ' ';
     for (size_t i = 0; i < len; ++i) {

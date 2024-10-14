@@ -22,6 +22,7 @@
 #ifndef MUSE_GLOBAL_STRINGUTILS_H
 #define MUSE_GLOBAL_STRINGUTILS_H
 
+#include <locale>
 #include <string>
 #include <vector>
 #include <sstream>

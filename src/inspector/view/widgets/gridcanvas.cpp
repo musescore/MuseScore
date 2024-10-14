@@ -22,9 +22,10 @@
 
 #include "gridcanvas.h"
 
-#include <QApplication>
-#include <QPalette>
 #include <cmath>
+
+#include <QGuiApplication>
+#include <QPalette>
 
 #include "draw/types/pen.h"
 
@@ -162,7 +163,7 @@ void GridCanvas::paint(QPainter* painter)
 
     painter->setRenderHint(QPainter::Antialiasing, true);
 
-    painter->fillRect(childrenRect(), QApplication::palette().color(QPalette::Window).lighter());
+    painter->fillRect(childrenRect(), QGuiApplication::palette().color(QPalette::Window).lighter());
     QPen pen = painter->pen();
     pen.setWidth(1);
 

@@ -150,7 +150,7 @@ void UiEngine::setRootItem(QQuickItem* rootItem)
 bool UiEngine::isEffectsAllowed() const
 {
     if (m_isEffectsAllowed == -1) {
-        m_isEffectsAllowed = GraphicsApiProvider::graphicsApi() != GraphicsApiProvider::Software;
+        m_isEffectsAllowed = GraphicsApiProvider::graphicsApi() != GraphicsApi::Software;
     }
     return m_isEffectsAllowed;
 }
@@ -244,7 +244,7 @@ void UiEngine::clearComponentCache()
     m_engine->clearComponentCache();
 }
 
-GraphicsApiProvider::Api UiEngine::graphicsApi() const
+GraphicsApi UiEngine::graphicsApi() const
 {
     return GraphicsApiProvider::graphicsApi();
 }

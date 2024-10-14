@@ -35,7 +35,7 @@
 #include "shortcuts/ishortcutsregister.h"
 #include "iinteractive.h"
 
-Q_MOC_INCLUDE("uicomponents/view/itemmultiselectionmodel.h")
+Q_MOC_INCLUDE(< QItemSelectionModel >)
 
 namespace muse::uicomponents {
 class ItemMultiSelectionModel;
