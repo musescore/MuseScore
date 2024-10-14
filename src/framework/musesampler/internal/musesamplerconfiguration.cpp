@@ -29,11 +29,11 @@
 using namespace muse;
 using namespace muse::musesampler;
 
-static const Settings::Key USER_MUSESAMPLER_PATH("musesampler", "application/paths/museSampler");
+static const Settings::Key USE_LEGACY_AUDITION("musesampler", "museSampler/useLegacyAudition");
 
 void MuseSamplerConfiguration::init()
 {
-    settings()->setDefaultValue(USER_MUSESAMPLER_PATH, Val(""));
+    settings()->setDefaultValue(USE_LEGACY_AUDITION, Val(false));
 }
 
 #if defined(Q_OS_LINUX)
@@ -74,11 +74,6 @@ muse::io::path_t MuseSamplerConfiguration::userLibraryPath() const
         return io::path_t(path);
     }
 
-    io::path_t path = settings()->value(USER_MUSESAMPLER_PATH).toString();
-    if (!path.empty()) {
-        return path;
-    }
-
     return defaultPath();
 }
 
@@ -91,4 +86,9 @@ muse::io::path_t MuseSamplerConfiguration::fallbackLibraryPath() const
 bool MuseSamplerConfiguration::shouldShowBuildNumber() const
 {
     return globalConfig()->devModeEnabled();
+}
+
+bool MuseSamplerConfiguration::useLegacyAudition() const
+{
+    return settings()->value(USE_LEGACY_AUDITION).toBool();
 }
