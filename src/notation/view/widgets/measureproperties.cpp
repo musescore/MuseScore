@@ -85,15 +85,7 @@ void MeasurePropertiesDialog::initMeasure()
         return;
     }
 
-    INotationInteraction::HitElementContext ctx = m_notation->interaction()->hitElementContext();
-    mu::engraving::Measure* measure = mu::engraving::toMeasure(ctx.element);
-
-    if (!measure) {
-        INotationSelectionPtr selection = m_notation->interaction()->selection();
-        if (selection->isRange()) {
-            measure = selection->range()->measureRange().endMeasure;
-        }
-    }
+    mu::engraving::Measure* measure = m_notation->interaction()->selectedMeasure();
 
     IF_ASSERT_FAILED(measure) {
         return;
