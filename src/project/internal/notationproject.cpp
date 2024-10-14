@@ -658,9 +658,9 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
             Ret ret = muse::make_ok();
 
             if (ioMode != MscIoMode::Zip
-                    || isAutosave
-                    || !globalConfiguration()->devModeEnabled()
-                    || !targetContainerPath.contains(" - ALL_ZEROS_CORRUPTED_ORIG_ONLY.mscz")) {
+                || isAutosave
+                || !globalConfiguration()->devModeEnabled()
+                || !targetContainerPath.contains(" - ALL_ZEROS_CORRUPTED_ORIG_ONLY.mscz")) {
                 ret = fileSystem()->copy(savePath, targetContainerPath, true);
                 if (!ret) {
                     return ret;
