@@ -86,7 +86,7 @@ void ShortcutsInstanceModel::doLoadShortcuts()
             if (search == m_shortcuts.end()) {
                 // Sequence not found, add it...
                 m_shortcuts.insert(seqStrTr, QVariant(sc.autoRepeat));
-                m_shortcutMap.insert(seqStr, seqStrTr);
+                m_shortcutMap.insert(seqStr, QKeySequence(seqStrTr));
             } else if (search.value().toBool() && !sc.autoRepeat) {
                 // Sequence already exists, but we need to enforce the above rule...
                 search.value() = false;
@@ -99,5 +99,5 @@ void ShortcutsInstanceModel::doLoadShortcuts()
 
 void ShortcutsInstanceModel::doActivate(const QString& seq)
 {
-    controller()->activate(m_shortcutMap.value(seq).toStdString());
+    controller()->activate(m_shortcutMap.value(seq).toString().toStdString());
 }
