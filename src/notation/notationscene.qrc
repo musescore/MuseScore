@@ -56,5 +56,6 @@
         <file>qml/MuseScore/NotationScene/PercussionPanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/PercussionPanelPadContent.qml</file>
     </qresource>
 </RCC>

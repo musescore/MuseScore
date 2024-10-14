@@ -29,7 +29,7 @@ PercussionPanelPadListModel::PercussionPanelPadListModel(QObject* parent)
 
 QVariant PercussionPanelPadListModel::data(const QModelIndex& index, int role) const
 {
-    if (index.row() < 0 || index.row() >= m_padModels.count()) {
+    if (!indexIsValid(index.row())) {
         return QVariant();
     }
 
@@ -61,7 +61,7 @@ void PercussionPanelPadListModel::load()
 void PercussionPanelPadListModel::addRow()
 {
     for (size_t i = 0; i < NUM_COLUMNS; ++i) {
-        m_padModels.append(new PercussionPanelPadModel(QObject::parent()));
+        m_padModels.append(new PercussionPanelPadModel(this));
     }
     emit layoutChanged();
     emit numPadsChanged();
@@ -81,13 +81,12 @@ void PercussionPanelPadListModel::startDrag(int startIndex)
 
 void PercussionPanelPadListModel::endDrag(int endIndex)
 {
-    movePad(m_dragStartIndex, endIndex);
+    if (indexIsValid(m_dragStartIndex) && indexIsValid(endIndex)) {
+        movePad(m_dragStartIndex, endIndex);
+    } else {
+        emit layoutChanged();
+    }
     m_dragStartIndex = -1;
-}
-
-bool PercussionPanelPadListModel::isDragActive() const
-{
-    return m_dragStartIndex > -1;
 }
 
 void PercussionPanelPadListModel::resetLayout()
@@ -134,6 +133,11 @@ QList<PercussionPanelPadModel*> PercussionPanelPadListModel::createDefaultItems(
     }
 
     return padModels;
+}
+
+bool PercussionPanelPadListModel::indexIsValid(int index) const
+{
+    return index > -1 && index < m_padModels.count();
 }
 
 void PercussionPanelPadListModel::movePad(int fromIndex, int toIndex)
