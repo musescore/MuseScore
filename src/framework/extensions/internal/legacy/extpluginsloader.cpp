@@ -92,6 +92,9 @@ ManifestList ExtPluginsLoader::manifestList(const io::path_t& rootPath) const
     io::paths_t paths = qmlsPaths(rootPath);
     for (const io::path_t& path : paths) {
         Manifest manifest = parseManifest(rootPath, path);
+        if (!manifest.isValid()) {
+            continue;
+        }
         resolvePaths(manifest, io::FileInfo(path).dirPath());
         manifests.push_back(manifest);
     }
@@ -106,6 +109,7 @@ io::paths_t ExtPluginsLoader::qmlsPaths(const io::path_t& rootPath) const
         LOGE() << "failed scan files, err: " << paths.ret.toString()
                << ", path: " << rootPath;
     }
+
     return paths.val;
 }
 
@@ -115,6 +119,12 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& rootPath, const io::p
     Ret ret = io::File::readFile(path, data);
     if (!ret) {
         LOGE() << "failed read file: " << path << ", err: " << ret.toString();
+        return Manifest();
+    }
+
+    String content = String::fromUtf8(data);
+    if (!content.contains(u"MuseScore {")) {
+        LOGD() << "Not MuseScore plugin, path: " << path;
         return Manifest();
     }
 
@@ -148,7 +158,6 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& rootPath, const io::p
     int needProperties = 6; // title, description, pluginType, category, thumbnail, requiresScore
     int propertiesFound = 0;
     bool insideMuseScoreItem = false;
-    String content = String::fromUtf8(data);
     size_t current, previous = 0;
     current = content.indexOf(u"\n");
 
@@ -200,7 +209,7 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& rootPath, const io::p
             ++propertiesFound;
         } else if (line.startsWith(u"pluginType:")) {
             String pluginType = dropQuotes(line.mid(11).trimmed());
-            if (pluginType == "dialog") {
+            if (pluginType == "dialog" || pluginType == "dock") {
                 m.type = Type::Form;
             }
             ++propertiesFound;
