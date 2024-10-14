@@ -239,6 +239,23 @@ void MusicXMLParserPass1::addError(const String& error)
     }
 }
 
+void MusicXMLParserPass1::setExporterSoftware(String& exporter)
+{
+    if (exporter.contains(u"sibelius")) {
+        if (exporter.contains(u"dolet 6")) {
+            m_exporterSoftware = MusicXMLExporterSoftware::DOLET6;
+        } else if (exporter.contains(u"dolet 8")) {
+            m_exporterSoftware = MusicXMLExporterSoftware::DOLET8;
+        } else {
+            m_exporterSoftware = MusicXMLExporterSoftware::SIBELIUS;
+        }
+    } else if (exporter.contains(u"finale")) {
+        m_exporterSoftware = MusicXMLExporterSoftware::FINALE;
+    } else if (exporter.contains(u"noteflight")) {
+        m_exporterSoftware = MusicXMLExporterSoftware::NOTEFLIGHT;
+    }
+}
+
 //---------------------------------------------------------
 //   initPartState
 //---------------------------------------------------------
@@ -951,7 +968,7 @@ void MusicXMLParserPass1::createMeasuresAndVboxes(Score* score,
             ++pageNr;
 
             if (pageNr == 1) {
-                vbox = addCreditWords(score, crWords, pageSize, true, m_exporterString.contains(u"sibelius"));
+                vbox = addCreditWords(score, crWords, pageSize, true, sibOrDolet());
                 if (i == 0 && vbox) {
                     vbox->setExcludeFromOtherParts(false);
                 }
@@ -978,9 +995,19 @@ void MusicXMLParserPass1::createMeasuresAndVboxes(Score* score,
 
         // add a footer vbox if the next measure is on a new page or end of score has been reached
         if ((pageStartMeasureNrs.count(int(i + 1)) || i == (ml.size() - 1)) && pageNr == 1) {
-            addCreditWords(score, crWords, pageSize, false, m_exporterString.contains(u"sibelius"));
+            addCreditWords(score, crWords, pageSize, false, sibOrDolet());
         }
     }
+}
+
+bool MusicXMLParserPass1::sibOrDolet() const
+{
+    return m_exporterSoftware == MusicXMLExporterSoftware::SIBELIUS || dolet();
+}
+
+bool MusicXMLParserPass1::dolet() const
+{
+    return m_exporterSoftware == MusicXMLExporterSoftware::DOLET6 || m_exporterSoftware == MusicXMLExporterSoftware::DOLET8;
 }
 
 //---------------------------------------------------------
@@ -1272,7 +1299,8 @@ void MusicXMLParserPass1::identification()
             // TODO
             while (m_e.readNextStartElement()) {
                 if (m_e.name() == "software") {
-                    m_exporterString += m_e.readText().toLower();
+                    String exporterString = m_e.readText().toLower();
+                    setExporterSoftware(exporterString);
                 } else if (m_e.name() == "supports" && m_e.asciiAttribute("element") == "beam" && m_e.asciiAttribute("type") == "yes") {
                     m_hasBeamingInfo = true;
                     m_e.skipCurrentElement();
@@ -1702,9 +1730,9 @@ void MusicXMLParserPass1::defaults()
         if (m_e.name() == "scaling") {
             while (m_e.readNextStartElement()) {
                 if (m_e.name() == "millimeters") {
-                    millimeter = m_e.readText().toDouble();
+                    millimeter = m_e.readDouble();
                 } else if (m_e.name() == "tenths") {
-                    tenths = m_e.readText().toDouble();
+                    tenths = m_e.readDouble();
                 } else {
                     skipLogCurrElem();
                 }
@@ -1727,7 +1755,7 @@ void MusicXMLParserPass1::defaults()
                 if (m_e.name() == "system-margins") {
                     m_e.skipCurrentElement();            // skip but don't log
                 } else if (m_e.name() == "system-distance") {
-                    const Spatium val(m_e.readText().toDouble() / 10.0);
+                    const Spatium val(m_e.readDouble() / 10.0);
                     if (isImportLayout) {
                         m_score->style().set(Sid::minSystemDistance, val);
                         //LOGD("system distance %f", val.val());
@@ -1761,7 +1789,7 @@ void MusicXMLParserPass1::defaults()
         } else if (m_e.name() == "staff-layout") {
             while (m_e.readNextStartElement()) {
                 if (m_e.name() == "staff-distance") {
-                    const Spatium val(m_e.readText().toDouble() / 10.0);
+                    const Spatium val(m_e.readDouble() / 10.0);
                     if (isImportLayout) {
                         m_score->style().set(Sid::staffDistance, val);
                     }
@@ -1773,12 +1801,12 @@ void MusicXMLParserPass1::defaults()
             while (m_e.readNextStartElement()) {
                 const String type = m_e.attribute("type");
                 if (m_e.name() == "line-width") {
-                    const double val = m_e.readText().toDouble();
+                    const double val = m_e.readDouble();
                     if (isImportLayout) {
                         setStyle(type, val);
                     }
                 } else if (m_e.name() == "note-size") {
-                    const double val = m_e.readText().toDouble();
+                    const double val = m_e.readDouble();
                     if (isImportLayout) {
                         setStyle(type, val);
                     }
@@ -1903,13 +1931,13 @@ void MusicXMLParserPass1::pageLayout(PageFormat& pf, const double conversion)
             double lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
             while (m_e.readNextStartElement()) {
                 if (m_e.name() == "left-margin") {
-                    lm = m_e.readText().toDouble() * conversion;
+                    lm = m_e.readDouble() * conversion;
                 } else if (m_e.name() == "right-margin") {
-                    rm = m_e.readText().toDouble() * conversion;
+                    rm = m_e.readDouble() * conversion;
                 } else if (m_e.name() == "top-margin") {
-                    tm = m_e.readText().toDouble() * conversion;
+                    tm = m_e.readDouble() * conversion;
                 } else if (m_e.name() == "bottom-margin") {
-                    bm = m_e.readText().toDouble() * conversion;
+                    bm = m_e.readDouble() * conversion;
                 } else {
                     skipLogCurrElem();
                 }
@@ -1928,12 +1956,12 @@ void MusicXMLParserPass1::pageLayout(PageFormat& pf, const double conversion)
                 pf.evenBottomMargin = bm;
             }
         } else if (m_e.name() == "page-height") {
-            const double val = m_e.readText().toDouble();
+            const double val = m_e.readDouble();
             size.setHeight(val * conversion);
             // set pageHeight and pageWidth for use by doCredits()
             m_pageSize.setHeight(static_cast<int>(val + 0.5));
         } else if (m_e.name() == "page-width") {
-            const double val = m_e.readText().toDouble();
+            const double val = m_e.readDouble();
             size.setWidth(val * conversion);
             // set pageHeight and pageWidth for use by doCredits()
             m_pageSize.setWidth(static_cast<int>(val + 0.5));
@@ -2248,7 +2276,7 @@ void MusicXMLParserPass1::scoreInstrument(const String& partId, const String& cu
              */
 
             // Finale exports all instrument names as 'Grand Piano' - use part name
-            if (m_exporterString.contains(u"finale")) {
+            if (exporterSoftware() == MusicXMLExporterSoftware::FINALE) {
                 instrName = m_parts[partId].getName();
                 if (instrName.size() <= 1) {
                     instrName = curPartGroupName;
@@ -2304,7 +2332,7 @@ void MusicXMLParserPass1::midiInstrument(const String& partId)
         if (m_e.name() == "midi-bank") {
             skipLogCurrElem();
         } else if (m_e.name() == "midi-channel") {
-            int channel = m_e.readText().toInt();
+            int channel = m_e.readInt();
             if (channel < 1) {
                 m_logger->logError(String(u"incorrect midi-channel: %1").arg(channel), &m_e);
                 channel = 1;
@@ -2316,7 +2344,7 @@ void MusicXMLParserPass1::midiInstrument(const String& partId)
                 m_instruments[partId][instrId].midiChannel = channel - 1;
             }
         } else if (m_e.name() == "midi-program") {
-            int program = m_e.readText().toInt();
+            int program = m_e.readInt();
             // Bug fix for Cubase 6.5.5 which generates <midi-program>0</midi-program>
             // Check program number range
             if (program < 1) {
@@ -2331,10 +2359,10 @@ void MusicXMLParserPass1::midiInstrument(const String& partId)
             }
         } else if (m_e.name() == "midi-unpitched") {
             if (muse::contains(m_instruments.at(partId), instrId)) {
-                m_instruments[partId][instrId].unpitched = m_e.readText().toInt() - 1;
+                m_instruments[partId][instrId].unpitched = m_e.readInt() - 1;
             }
         } else if (m_e.name() == "volume") {
-            double vol = m_e.readText().toDouble();
+            double vol = m_e.readDouble();
             if (vol >= 0 && vol <= 100) {
                 if (muse::contains(m_instruments.at(partId), instrId)) {
                     m_instruments[partId][instrId].midiVolume = static_cast<int>((vol / 100) * 127);
@@ -2343,7 +2371,7 @@ void MusicXMLParserPass1::midiInstrument(const String& partId)
                 m_logger->logError(String(u"incorrect midi-volume: %1").arg(vol), &m_e);
             }
         } else if (m_e.name() == "pan") {
-            double pan = m_e.readText().toDouble();
+            double pan = m_e.readDouble();
             if (pan >= -90 && pan <= 90) {
                 if (muse::contains(m_instruments.at(partId), instrId)) {
                     m_instruments[partId][instrId].midiPan = static_cast<int>(((pan + 90) / 180) * 127);
@@ -2672,7 +2700,7 @@ void MusicXMLParserPass1::attributes(const String& partId, const Fraction cTime)
             }
             m_e.skipCurrentElement();
         } else if (m_e.name() == "staves") {
-            staves = m_e.readText().toInt();
+            staves = m_e.readInt();
         } else if (m_e.name() == "time") {
             time(cTime);
         } else if (m_e.name() == "transpose") {
@@ -2840,7 +2868,7 @@ void MusicXMLParserPass1::transpose(const String& partId, const Fraction& tick)
 {
     Interval interval;
     while (m_e.readNextStartElement()) {
-        int i = m_e.readText().toInt();
+        int i = m_e.readInt();
         if (m_e.name() == "diatonic") {
             interval.diatonic = i;
         } else if (m_e.name() == "chromatic") {
@@ -2873,7 +2901,7 @@ void MusicXMLParserPass1::transpose(const String& partId, const Fraction& tick)
 
 void MusicXMLParserPass1::divisions()
 {
-    m_divs = m_e.readText().toInt();
+    m_divs = m_e.readInt();
     if (!(m_divs > 0)) {
         m_logger->logError(u"illegal divisions", &m_e);
     }
@@ -3686,7 +3714,7 @@ void MusicXMLParserPass1::duration(Fraction& dura, muse::XmlStreamReader& e)
     m_logger->logDebugTrace(u"MusicXMLParserPass1::duration", &e);
 
     dura.set(0, 0);    // invalid unless set correctly
-    int intDura = e.readText().toInt();
+    int intDura = e.readInt();
     dura = calcTicks(intDura);
 }
 

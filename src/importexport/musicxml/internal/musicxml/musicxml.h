@@ -134,6 +134,9 @@ private:
     State m_state;
 };
 
+// Ties are identified by the pitch and track of their first note
+typedef std::pair<int, track_idx_t> TieLocation;
+
 //---------------------------------------------------------
 //   MusicXml
 //---------------------------------------------------------

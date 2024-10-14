@@ -550,6 +550,9 @@ TEST_F(Musicxml_Tests, divisionsDefinedTooLate2) {
 TEST_F(Musicxml_Tests, divisionsDuration) {
     mxmlIoTest("testDivisionsDuration");
 }
+TEST_F(Musicxml_Tests, doletOttavas) {
+    mxmlImportTestRef("testDoletOttavas");
+}
 TEST_F(Musicxml_Tests, doubleClefError) {
     mxmlIoTestRef("testDoubleClefError");
 }
@@ -1157,6 +1160,21 @@ TEST_F(Musicxml_Tests, textQuirkInference) {
 TEST_F(Musicxml_Tests, tieTied) {
     mxmlIoTestRef("testTieTied");
 }
+TEST_F(Musicxml_Tests, importTie1) {
+    mxmlImportTestRef("importTie1");
+}
+TEST_F(Musicxml_Tests, importTie2) {
+    // Finale ties to different voices
+    mxmlImportTestRef("importTie2");
+}
+TEST_F(Musicxml_Tests, importTie3) {
+    // Dolet6 ties to different voices & staves
+    mxmlImportTestRef("importTie3");
+}
+TEST_F(Musicxml_Tests, importTie4) {
+    // Dolet8 ties to different voices & staves
+    mxmlImportTestRef("importTie4");
+}
 TEST_F(Musicxml_Tests, timesig1) {
     mxmlIoTest("testTimesig1");
 }
@@ -1165,6 +1183,12 @@ TEST_F(Musicxml_Tests, timesig3) {
 }
 TEST_F(Musicxml_Tests, timeTick) {
     mxmlImportTestRef("testTimeTick");
+}
+TEST_F(Musicxml_Tests, timeTickExport) {
+    bool use302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+    mxmlMscxExportTestRef("testTimeTickExport");
+    MScore::useRead302InTestMode = use302;
 }
 TEST_F(Musicxml_Tests, titleSwapMu) {
     mxmlImportTestRef("testTitleSwapMu");
