@@ -103,7 +103,7 @@ bool MuseSamplerResolver::reloadMuseSampler()
 
 bool MuseSamplerResolver::doInit(const io::path_t& libPath)
 {
-    m_libHandler = std::make_shared<MuseSamplerLibHandler>(libPath);
+    m_libHandler = std::make_shared<MuseSamplerLibHandler>(libPath, configuration()->useLegacyAudition());
 
     bool ok = m_libHandler->isValid();
     if (ok) {
