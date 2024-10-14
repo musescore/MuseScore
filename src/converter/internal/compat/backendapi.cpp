@@ -36,6 +36,8 @@
 #include "engraving/dom/excerpt.h"
 #include "engraving/rw/mscsaver.h"
 
+#include "internal/converterutils.h"
+
 #include "backendjsonwriter.h"
 #include "notationmeta.h"
 
@@ -175,7 +177,7 @@ Ret BackendApi::exportScoreTranspose(const muse::io::path_t& in, const muse::io:
 
     INotationPtr notation = prj.val->masterNotation()->notation();
 
-    Ret ret = applyTranspose(notation, optionsJson);
+    Ret ret = ConverterUtils::applyTranspose(notation, optionsJson);
     if (!ret) {
         return ret;
     }
@@ -665,98 +667,6 @@ RetVal<QByteArray> BackendApi::scorePartJson(mu::engraving::Score* score, const 
     result.val = ba.toBase64();
 
     return result;
-}
-
-RetVal<TransposeOptions> BackendApi::parseTransposeOptions(const std::string& optionsJson)
-{
-    TransposeOptions options;
-
-    QJsonDocument doc = QJsonDocument::fromJson(QString::fromStdString(optionsJson).toUtf8());
-    if (!doc.isObject()) {
-        LOGW() << "Transpose options JSON is not an object: " << optionsJson;
-        return make_ret(Ret::Code::InternalError);
-    }
-
-    QJsonObject optionsObj = doc.object();
-
-    const QString modeName = optionsObj["mode"].toString();
-    if (modeName == "by_key" || modeName == "to_key") { // "by_key" for backwards compatibility
-        options.mode = TransposeMode::TO_KEY;
-    } else if (modeName == "by_interval") {
-        options.mode = TransposeMode::BY_INTERVAL;
-    } else if (modeName == "diatonically") {
-        options.mode = TransposeMode::DIATONICALLY;
-    } else {
-        LOGW() << "Transpose: invalid \"mode\" option: " << modeName;
-        return make_ret(Ret::Code::InternalError);
-    }
-
-    const QString directionName = optionsObj["direction"].toString();
-    if (directionName == "up") {
-        options.direction = TransposeDirection::UP;
-    } else if (directionName == "down") {
-        options.direction = TransposeDirection::DOWN;
-    } else if (directionName == "closest") {
-        options.direction = TransposeDirection::CLOSEST;
-    } else {
-        LOGW() << "Transpose: invalid \"direction\" option: " << directionName;
-        return make_ret(Ret::Code::InternalError);
-    }
-
-    constexpr int defaultKey = int(Key::INVALID);
-    const Key targetKey = Key(optionsObj["targetKey"].toInt(defaultKey));
-    if (options.mode == TransposeMode::TO_KEY) {
-        const bool targetKeyValid = int(Key::MIN) <= int(targetKey) && int(targetKey) <= int(Key::MAX);
-        if (!targetKeyValid) {
-            LOGW() << "Transpose: invalid targetKey: " << int(targetKey);
-            return make_ret(Ret::Code::InternalError);
-        }
-    }
-
-    const int transposeInterval = optionsObj["transposeInterval"].toInt(-1);
-    constexpr int INTERVAL_LIST_SIZE = 26;
-
-    if (options.mode != TransposeMode::TO_KEY) {
-        const bool transposeIntervalValid = -1 < transposeInterval && transposeInterval < INTERVAL_LIST_SIZE;
-        if (!transposeIntervalValid) {
-            LOGW() << "Transpose: invalid transposeInterval: " << transposeInterval;
-            return make_ret(Ret::Code::InternalError);
-        }
-    }
-
-    options.interval = transposeInterval;
-    options.key = targetKey;
-    options.needTransposeKeys = optionsObj["transposeKeySignatures"].toBool();
-    options.needTransposeChordNames = optionsObj["transposeChordNames"].toBool();
-    options.needTransposeDoubleSharpsFlats = optionsObj["useDoubleSharpsFlats"].toBool();
-
-    RetVal<TransposeOptions> result;
-    result.ret = make_ret(Ret::Code::Ok);
-    result.val = options;
-
-    return result;
-}
-
-Ret BackendApi::applyTranspose(const INotationPtr notation, const std::string& optionsJson)
-{
-    RetVal<TransposeOptions> options = parseTransposeOptions(optionsJson);
-    if (!options.ret) {
-        return options.ret;
-    }
-
-    INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
-    if (!interaction) {
-        return make_ret(Ret::Code::InternalError);
-    }
-
-    interaction->selectAll();
-
-    bool ok = interaction->transpose(options.val);
-    if (!ok) {
-        LOGW() << "Error transpose";
-    }
-
-    return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
 void BackendApi::switchToPageView(IMasterNotationPtr masterNotation)

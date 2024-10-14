@@ -26,6 +26,8 @@
 #ifndef Q_OS_WASM
 #include <QThreadPool>
 #endif
+#include <QJsonObject>
+#include <QJsonDocument>
 
 #include "modularity/ioc.h"
 
@@ -279,9 +281,13 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
     case ConvertType::Batch:
         ret = converter()->batchConvert(task.inputFile, stylePath, forceMode, soundProfile, extensionUri);
         break;
-    case ConvertType::File:
-        ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode, soundProfile, extensionUri);
-        break;
+    case ConvertType::File: {
+        QJsonDocument docTransposeOptions
+            = QJsonDocument::fromJson(QString::fromStdString(
+                                          task.params[CmdOptions::ParamKey::ScoreTransposeOptions].toString().toStdString()).toUtf8());
+        ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode, soundProfile, extensionUri,
+                                       docTransposeOptions.object());
+    } break;
     case ConvertType::ConvertScoreParts:
         ret = converter()->convertScoreParts(task.inputFile, task.outputFile, stylePath);
         break;

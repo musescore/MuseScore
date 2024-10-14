@@ -30,6 +30,8 @@
 #include "global/io/dir.h"
 #include "global/stringutils.h"
 
+#include "internal/converterutils.h"
+
 #include "convertercodes.h"
 #include "compat/backendapi.h"
 
@@ -73,7 +75,7 @@ Ret ConverterController::batchConvert(const muse::io::path_t& batchJobFile, cons
             progress->progressChanged.send(current, total, job.in.toStdString());
         }
 
-        Ret ret = fileConvert(job.in, job.out, stylePath, forceMode, soundProfile, extensionUri);
+        Ret ret = fileConvert(job.in, job.out, stylePath, forceMode, soundProfile, extensionUri, job.transposeOptions);
         if (!ret) {
             errors.emplace_back(String(u"failed convert, err: %1, in: %2, out: %3")
                                 .arg(String::fromStdString(ret.toString())).arg(job.in.toString()).arg(job.out.toString()));
@@ -95,11 +97,13 @@ Ret ConverterController::batchConvert(const muse::io::path_t& batchJobFile, cons
 }
 
 Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& stylePath,
-                                     bool forceMode, const String& soundProfile, const muse::UriQuery& extensionUri)
+                                     bool forceMode, const String& soundProfile, const muse::UriQuery& extensionUri,
+                                     const QJsonObject& transposeOptionsObj)
 {
     TRACEFUNC;
 
     LOGI() << "in: " << in << ", out: " << out;
+
     auto notationProject = notationCreator()->newProject(iocContext());
     IF_ASSERT_FAILED(notationProject) {
         return make_ret(Err::UnknownError);
@@ -115,6 +119,14 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
     if (!ret) {
         LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
         return make_ret(Err::InFileFailedLoad);
+    }
+
+    if (!(transposeOptionsObj.isEmpty())) {
+        ret = ConverterUtils::applyTranspose(notationProject->masterNotation()->notation(), transposeOptionsObj);
+        if (!ret) {
+            QJsonDocument doc(transposeOptionsObj);
+            LOGE() << "Failed to transpose with options: " << doc.toJson(QJsonDocument::Compact).toStdString();
+        }
     }
 
     if (!soundProfile.isEmpty()) {
@@ -219,6 +231,9 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
         Job job;
         job.in = correctUserInputPath(obj["in"].toString());
         job.out = correctUserInputPath(obj["out"].toString());
+
+        QJsonDocument doc(obj["transpose"].toObject());
+        job.transposeOptions = doc.object();
 
         if (!job.in.empty() && !job.out.empty()) {
             rv.val.push_back(std::move(job));
