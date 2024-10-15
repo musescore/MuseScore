@@ -32,7 +32,6 @@
 #include "dom/tremolotwochord.h"
 
 #include "playback/utils/arrangementutils.h"
-#include "playback/filters/chordfilter.h"
 #include "playback/filters/spannerfilter.h"
 #include "internal/spannersmetaparser.h"
 #include "internal/symbolsmetaparser.h"
@@ -85,7 +84,6 @@ void ChordArticulationsParser::doParse(const EngravingItem* item, const Renderin
     parseArpeggio(chord, ctx, result);
     parseGraceNotes(chord, ctx, result);
     parseChordLine(chord, ctx, result);
-
     parseArticulationSymbols(chord, ctx, result);
 
     if (ctx.profile->contains(ArticulationType::Multibend)) {
@@ -105,7 +103,7 @@ void ChordArticulationsParser::parseSpanners(const Chord* chord, const Rendering
                                                 /*excludeCollisions*/ true);
 
     for (const auto& interval : intervals) {
-        Spanner* spanner = interval.value;
+        const Spanner* spanner = interval.value;
 
         if (!SpannersMetaParser::isAbleToParse(spanner)) {
             continue;
@@ -157,8 +155,6 @@ void ChordArticulationsParser::parseArticulationSymbols(const Chord* chord, cons
     for (const Articulation* articulation : chord->articulations()) {
         SymbolsMetaParser::parse(articulation, ctx, result);
     }
-
-    ChordFilter::validateArticulations(chord, result);
 }
 
 void ChordArticulationsParser::parseAnnotations(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
@@ -194,7 +190,6 @@ void ChordArticulationsParser::parseTremolo(const Chord* chord, const RenderingC
 void ChordArticulationsParser::parseArpeggio(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
     const Arpeggio* arpeggio = chord->arpeggio();
-
     if (!arpeggio) {
         return;
     }
@@ -216,7 +211,6 @@ void ChordArticulationsParser::parseGraceNotes(const Chord* chord, const Renderi
 void ChordArticulationsParser::parseChordLine(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
     const ChordLine* chordLine = chord->chordLine();
-
     if (!chordLine || !chordLine->playChordLine()) {
         return;
     }
