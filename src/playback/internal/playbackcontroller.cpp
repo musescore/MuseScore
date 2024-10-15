@@ -980,6 +980,7 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
 
         m_instrumentTrackIdMap.insert({ instrumentTrackId, trackId });
 
+        const bool trackNewlyAdded = !audioSettings()->trackHasExistingOutputParams(instrumentTrackId);
         audioSettings()->setTrackInputParams(instrumentTrackId, appliedParams.in);
         audioSettings()->setTrackOutputParams(instrumentTrackId, appliedParams.out);
 
@@ -988,6 +989,10 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
         onFinished();
 
         m_trackAdded.send(trackId);
+
+        if (trackNewlyAdded) {
+            onTrackNewlyAdded(instrumentTrackId);
+        }
 
         if (shouldLoadDrumset(originMeta, appliedParams.in.resourceMeta)) {
             m_drumsetLoader.loadDrumset(m_notation, instrumentTrackId, appliedParams.in.resourceMeta);
@@ -1131,6 +1136,19 @@ void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
 
     m_trackRemoved.send(search->second);
     m_instrumentTrackIdMap.erase(instrumentTrackId);
+}
+
+void PlaybackController::onTrackNewlyAdded(const InstrumentTrackId& instrumentTrackId)
+{
+    for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
+        if (const INotationPtr& notation = excerpt->notation()) {
+            if (notation == m_notation) {
+                continue;
+            }
+            const INotationSoloMuteState::SoloMuteState soloMuteState = { /*mute*/ true, /*solo*/ false };
+            notation->soloMuteState()->setTrackSoloMuteState(instrumentTrackId, soloMuteState);
+        }
+    }
 }
 
 void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceId)
