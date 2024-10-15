@@ -94,14 +94,12 @@ void NoteRenderer::renderTiedNotes(const Note* firstNote, NominalNoteCtx& firstN
                                                           firstChordCtx.profile, firstChordCtx.playbackCtx);
         ChordArticulationsParser::buildChordArticulationMap(chord, currChordCtx, currChordCtx.commonArticulations);
 
-        NominalNoteCtx currNoteCtx = buildNominalNoteCtx(currNote, currChordCtx);
-
+        const NominalNoteCtx currNoteCtx = buildNominalNoteCtx(currNote, currChordCtx);
         if (isNotePlayable(currNote, currNoteCtx.articulations)) {
             break;
         }
 
-        firstNoteCtx.duration += currNoteCtx.duration;
-        firstNoteCtx.articulations.insert(currNoteCtx.articulations.begin(), currNoteCtx.articulations.end());
+        addTiedNote(currNoteCtx, firstNoteCtx);
 
         currTie = currNote->tieFor();
         renderedNotes.insert(currNote);
@@ -112,6 +110,31 @@ void NoteRenderer::renderTiedNotes(const Note* firstNote, NominalNoteCtx& firstN
     }
 
     updateArticulationBoundaries(firstNoteCtx.timestamp, firstNoteCtx.duration, firstNoteCtx.articulations);
+}
+
+void NoteRenderer::addTiedNote(const NominalNoteCtx& tiedNoteCtx, NominalNoteCtx& firstNoteCtx)
+{
+    if (tiedNoteCtx.articulations.size() == 1) {
+        if (tiedNoteCtx.articulations.begin()->first == mpe::ArticulationType::Standard) {
+            firstNoteCtx.duration += tiedNoteCtx.duration;
+            return;
+        }
+    }
+
+    const float avgDurationFactor = percentageToFactor(tiedNoteCtx.articulations.averageDurationFactor());
+    firstNoteCtx.duration += tiedNoteCtx.duration * avgDurationFactor;
+
+    // Ignore these articulations so we won't re-apply them to the total duration
+    static const ArticulationTypeSet ARTICULATION_TO_IGNORE_TYPES {
+        ArticulationType::Staccato,
+        ArticulationType::Staccatissimo,
+    };
+
+    for (const auto& pair : tiedNoteCtx.articulations) {
+        if (!muse::contains(ARTICULATION_TO_IGNORE_TYPES, pair.first)) {
+            firstNoteCtx.articulations.insert(pair);
+        }
+    }
 }
 
 void NoteRenderer::updateArticulationBoundaries(const timestamp_t noteTimestamp, const duration_t noteDuration,
