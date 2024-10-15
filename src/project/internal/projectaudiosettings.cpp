@@ -123,6 +123,11 @@ void ProjectAudioSettings::clearTrackInputParams()
     m_settingsChanged.notify();
 }
 
+bool ProjectAudioSettings::trackHasExistingOutputParams(const InstrumentTrackId& partId) const
+{
+    return muse::contains(m_trackOutputParamsMap, partId);
+}
+
 const AudioOutputParams& ProjectAudioSettings::trackOutputParams(const InstrumentTrackId& partId) const
 {
     auto search = m_trackOutputParamsMap.find(partId);

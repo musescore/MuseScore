@@ -202,6 +202,8 @@ private:
     void removeNonExistingTracks();
     void removeTrack(const engraving::InstrumentTrackId& instrumentTrackId);
 
+    void onTrackNewlyAdded(const engraving::InstrumentTrackId& instrumentTrackId);
+
     muse::audio::secs_t playedTickToSecs(int tick) const;
 
     notation::INotationPtr m_notation;

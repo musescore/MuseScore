@@ -224,6 +224,7 @@ public:
 
     void addStretch(qreal value) override;
 
+    Measure* selectedMeasure() const override;
     void addTimeSignature(Measure* measure, engraving::staff_idx_t staffIndex, TimeSignature* timeSignature) override;
 
     void explodeSelectedStaff() override;

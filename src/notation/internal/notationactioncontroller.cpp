@@ -1911,7 +1911,9 @@ void NotationActionController::openStaffTextPropertiesDialog()
 
 void NotationActionController::openMeasurePropertiesDialog()
 {
-    interactive()->open("musescore://notation/measureproperties?sync=false");
+    if (currentNotationInteraction()->selectedMeasure() != nullptr) {
+        interactive()->open("musescore://notation/measureproperties?sync=false");
+    }
 }
 
 void NotationActionController::openEditGridSizeDialog()

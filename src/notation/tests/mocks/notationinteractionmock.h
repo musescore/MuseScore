@@ -183,6 +183,7 @@ public:
 
     MOCK_METHOD(void, addStretch, (qreal), (override));
 
+    MOCK_METHOD(Measure*, selectedMeasure, (), (const, override));
     MOCK_METHOD(void, addTimeSignature, (Measure*, engraving::staff_idx_t, TimeSignature*), (override));
 
     MOCK_METHOD(void, explodeSelectedStaff, (), (override));
