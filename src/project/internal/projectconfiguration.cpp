@@ -63,6 +63,7 @@ static const Settings::Key GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY(module_name, "pro
 static const Settings::Key NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY(module_name, "project/numberOfSavesToGenerateAudio");
 static const Settings::Key SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING(module_name, "project/showCloudIsNotAvailableWarning");
 static const Settings::Key DISABLE_VERSION_CHECKING(module_name, "project/disableVersionChecking");
+static const Settings::Key DISABLE_BACKUP(module_name, "project/disableBackup");
 
 static const std::string DEFAULT_FILE_SUFFIX(".mscz");
 static const std::string DEFAULT_FILE_FILTER("*.mscz");
@@ -117,6 +118,10 @@ void ProjectConfiguration::init()
     settings()->setDefaultValue(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING, Val(true));
 
     settings()->setDefaultValue(DISABLE_VERSION_CHECKING, Val(false));
+
+    settings()->setDefaultValue(DISABLE_BACKUP, Val(false));
+    settings()->setDescription(DISABLE_BACKUP, muse::qtrc("project", "Disable Backup").toStdString());
+    settings()->setCanBeManuallyEdited(DISABLE_BACKUP, true);
 
     if (!userTemplatesPath().empty()) {
         fileSystem()->makePath(userTemplatesPath());
@@ -670,6 +675,16 @@ bool ProjectConfiguration::showCloudIsNotAvailableWarning() const
 void ProjectConfiguration::setShowCloudIsNotAvailableWarning(bool show)
 {
     settings()->setSharedValue(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING, Val(show));
+}
+
+bool ProjectConfiguration::disableBackup() const
+{
+    return settings()->value(DISABLE_BACKUP).toBool();
+}
+
+void ProjectConfiguration::setDisableBackup(bool disable)
+{
+    settings()->setSharedValue(DISABLE_BACKUP, Val(disable));
 }
 
 bool ProjectConfiguration::disableVersionChecking() const

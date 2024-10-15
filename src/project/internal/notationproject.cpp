@@ -662,6 +662,11 @@ Ret NotationProject::makeCurrentFileAsBackup()
 {
     TRACEFUNC;
 
+    bool disable = configuration()->disableBackup();
+    if (disable) {
+        return make_ret(Ret::Code::Ok);
+    }
+
     if (isNewlyCreated()) {
         LOGD() << "project just created";
         return make_ret(Ret::Code::Ok);

@@ -160,6 +160,9 @@ public:
 
     virtual bool disableVersionChecking() const = 0;
     virtual void setDisableVersionChecking(bool disable) = 0;
+
+    virtual bool disableBackup() const = 0;
+    virtual void setDisableBackup(bool disable) = 0;
 };
 }
 
