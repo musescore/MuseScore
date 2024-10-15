@@ -95,9 +95,9 @@ namespace Ms {
 //   function declarations
 //---------------------------------------------------------
 
-static void addTie(const Notation& notation, Score* score, Note* note, const int track,
-                   std::map<int, Tie*>& tie, MxmlLogger* logger, const QXmlStreamReader* const xmlreader,
-                   const bool fixForCrossStaff);
+static void addTie(const Notation& notation, Note* note, const int track, MusicXMLTieMap& tie,
+                   std::vector<Note*>& unstartedTieNotes, std::vector<Note*>& unendedTieNotes, MxmlLogger* logger,
+                   const QXmlStreamReader* const xmlreader);
 
 //---------------------------------------------------------
 //   support enums / structs / classes
@@ -171,7 +171,7 @@ static Fraction lastChordTicks(const Segment* s, const Fraction& tick, const int
 void MusicXmlLyricsExtend::setExtend(const int no, const int track, const Fraction& tick, const Lyrics* prevAddedLyrics = nullptr)
       {
       QList<Lyrics*> list;
-      for (Lyrics* l : _lyrics) {
+      for (Lyrics* l : qAsConst(_lyrics)) {
             Element* const el = l->parent();
             if (el->type() == ElementType::CHORD || el->type() == ElementType::REST) {
                   const ChordRest* par = static_cast<ChordRest*>(el);
@@ -1642,6 +1642,8 @@ void MusicXMLParserPass2::initPartState(const QString& partId)
       Q_UNUSED(partId);
       _timeSigDura = Fraction(0, 0);             // invalid
       _ties.clear();
+      _unstartedTieNotes.clear();
+      _unendedTieNotes.clear();
       _lastVolta = 0;
       _hasDrumset = false;
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
@@ -1826,7 +1828,7 @@ static bool cleanUpLayoutBreaks(Score* score, MxmlLogger* logger)
       bool copyrightVBoxAutoSizeEnabledInitial = true;
       Spatium copyrightVBoxBoxHeightInitial = Spatium(10);
 
-      for (auto system : score->systems()) {
+      for (auto& system : score->systems()) {
             if (!system->lastMeasure())
                   continue;
             else if (system->lastMeasure()->lineBreak() && !hasExplicitLineBreaks)
@@ -1910,7 +1912,7 @@ static bool cleanUpLayoutBreaks(Score* score, MxmlLogger* logger)
           || hasPageOverflow != initialHasPageOverflow)
             return true;
       else {
-            for (auto initialStyle : initialStyles)
+            for (auto& initialStyle : initialStyles)
                   score->style().set(initialStyle.first, initialStyle.second);
             if (copyrightVBox) {
                   copyrightVBox->setAutoSizeEnabled(copyrightVBoxAutoSizeEnabledInitial);
@@ -2296,14 +2298,70 @@ void MusicXMLParserPass2::part()
             }
       _spanners.clear();
 
-      // Clean up unterminated ties
-      for (auto tie : _ties) {
+      // Clean up any remaining ties
+      MusicXMLTieMap tieMap = _ties;
+      for (auto& tie : tieMap) {
             if (tie.second) {
-                  cleanupUnterminatedTie(tie.second, _score, _pass1.exporterSoftware() == MusicXMLExporterSoftware::DOLET6);
-                  _ties[tie.first] = nullptr;
+                  _unendedTieNotes.push_back(tie.second->startNote());
+                  _ties.erase(tie.first);
                   }
             }
+      // Find ties between different voices which may have been missed
+      for (Note* startNote : _unendedTieNotes) {
+            Tie* unendedTie = startNote->tieFor();
+            if (!unendedTie)
+                  continue;
+            const Chord* startChord = startNote->chord();
+            const Measure* startMeasure = startChord ? startChord->measure() : nullptr;
+            for (Note* endNote : _unstartedTieNotes) {
+                  if (endNote->tieBack())
+                        continue;
+                  const Chord* endChord = endNote->chord();
+                  if (startChord && startNote->pitch() == endNote->pitch()
+                      && endChord && (startMeasure == endChord->measure() || startChord->tick() + startChord->actualTicks() == endChord->tick())) {
+                        unendedTie->setEndNote(endNote);
+                        endNote->setTieBack(unendedTie);
+                        }
+                  }
+
+            if (startChord && !unendedTie->endNote()) {
+                  // Tie started with no matching end tags
+                  // Find a note of the same pitch in the same voice immediately following the start chord
+                  Segment* nextSeg = startChord->segment();
+                  while (nextSeg && nextSeg->tick() < startChord->tick() + startChord->ticks())
+                        nextSeg = nextSeg->nextCR(startChord->track(), true);
+                  Element* nextEl = nextSeg ? nextSeg->element(startNote->track()) : nullptr;
+                  Chord* nextChord = nextEl && nextEl->isChord() ? toChord(nextEl) : nullptr;
+                  Note* matchingNote = nextChord ? nextChord->findNote(startNote->pitch()) : nullptr;
+
+                  if (matchingNote && matchingNote->tpc() == startNote->tpc() && matchingNote != startNote) {
+                        unendedTie->setEndNote(matchingNote);
+                        matchingNote->setTieBack(unendedTie);
+                        }
+                  else {
+                        // try other voices in the stave
+                        const Part* part = startChord->part();
+                        for (int track = part->startTrack(); track < part->endTrack() + VOICES; track++) {
+                              nextEl = nextSeg ? nextSeg->element(track) : nullptr;
+                              nextChord = nextEl && nextEl->isChord() ? toChord(nextEl) : nullptr;
+                              if (nextChord && nextChord->vStaffIdx() != startChord->vStaffIdx())
+                                    continue;
+                              matchingNote = nextChord ? nextChord->findNote(startNote->pitch()) : nullptr;
+                              if (matchingNote && matchingNote->tpc() == startNote->tpc() && matchingNote != startNote) {
+                                    unendedTie->setEndNote(matchingNote);
+                                    matchingNote->setTieBack(unendedTie);
+                                    }
+                              }
+                        }
+                  }
+
+            if (!unendedTie->endNote())
+                  cleanupUnterminatedTie(unendedTie, _score, _pass1.exporterSoftware() == MusicXMLExporterSoftware::DOLET6);
+            }
+
       _ties.clear();
+      _unstartedTieNotes.clear();
+      _unendedTieNotes.clear();
 
       if (_hasDrumset) {
             Drumset* drumset = new Drumset;
@@ -2316,7 +2374,7 @@ void MusicXMLParserPass2::part()
             }
 
       bool showPart = false;
-            for (Staff* staff : *msPart->staves()) {
+            for (Staff* staff : qAsConst(*msPart->staves())) {
             if (!staff->invisible(Fraction(0,1))) {
                   showPart = true;
                   break;
@@ -2438,7 +2496,7 @@ static void markUserAccidentals(const int firstStaff,
                                 const int staves,
                                 const Key key,
                                 const Measure* measure,
-                                const QMap<Note*, int>& alterMap
+                                const QHash<Note*, int>& alterMap
                                 )
       {
       QMap<int, bool> accTmp;
@@ -2655,7 +2713,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
       Tuplets tuplets;       // Current tuplet for each voice in the current part
 
       // collect candidates for courtesy accidentals to work out at measure end
-      QMap<Note*, int> alterMap;
+      QHash<Note*, int> alterMap;
       DelayedDirectionsList delayedDirections; // Directions to be added to score *after* collecting all and sorting
       InferredFingeringsList inferredFingerings; // Directions to be reinterpreted as Fingerings
       HarmonyMap delayedHarmony;
@@ -2800,7 +2858,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
                   return std::abs(a->totalY()) < std::abs(b->totalY());
                   }
             );
-      for (MusicXMLInferredFingering* inferredFingering : inferredFingerings) {
+      for (MusicXMLInferredFingering* inferredFingering : qAsConst(inferredFingerings)) {
             if (!inferredFingering->findAndAddToNotes(measure))
                   // Could not find notes to add to; print as direction
                   delayedDirections.push_back(inferredFingering->toDelayedDirection());
@@ -2832,7 +2890,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
                       return std::abs(a->totalY()) < std::abs(b->totalY());
                       }
                 );
-      for (MusicXMLDelayedDirectionElement* direction : delayedDirections) {
+      for (MusicXMLDelayedDirectionElement* direction : qAsConst(delayedDirections)) {
             direction->addElem();
             delete direction;
             }
@@ -3443,7 +3501,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
       addInferredCrescLine(track, tick, isVocalStaff);
 
       // handle the elems
-      for (Element* elem : _elems) {
+      for (Element* elem : qAsConst(_elems)) {
             // Add element to score later, after collecting all the others and sorting by default-y
             // This allows default-y to be at least respected by the order of elements
             if (hasTotalY()) {
@@ -3456,7 +3514,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
 
       // handle the spanner stops first
-      for (MusicXmlSpannerDesc  desc : stops) {
+      for (MusicXmlSpannerDesc& desc : stops) {
             MusicXmlExtendedSpannerDesc& spdesc = _pass2.getSpanner({ desc._tp, desc._nr });
             if (spdesc._isStopped) {
                   _logger->logError("spanner already stopped", &_e);
@@ -3491,7 +3549,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
       // then handle the spanner starts
       // TBD handle offset ?
-      for (MusicXmlSpannerDesc  desc : starts) {
+      for (MusicXmlSpannerDesc& desc : starts) {
             MusicXmlExtendedSpannerDesc& spdesc = _pass2.getSpanner({ desc._tp, desc._nr });
             if (spdesc._isStarted) {
                   _logger->logError("spanner already started", &_e);
@@ -3715,16 +3773,16 @@ void MusicXMLParserDirection::otherDirection()
 QString MusicXMLParserDirection::matchRepeat() const
       {
       QString plainWords = MScoreTextToMXML::toPlainText(_wordsText.toLower().simplified());
-      QRegularExpression daCapo("^(d\\.? ?|da )(c\\.?|capo)$");
-      QRegularExpression daCapoAlFine("^(d\\.? ?|da )(c\\.? ?|capo )al fine$");
-      QRegularExpression daCapoAlCoda("^(d\\.? ?|da )(c\\.? ?|capo )al coda$");
-      QRegularExpression dalSegno("^(d\\.? ?|d[ae]l )(s\\.?|segno)$");
-      QRegularExpression dalSegnoAlFine("^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al fine$");
-      QRegularExpression dalSegnoAlCoda("^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al coda$");
-      QRegularExpression fine("^fine$");
-      QRegularExpression segno("^segno( segno)?$");
-      QRegularExpression toCoda("^to coda( coda)?$");
-      QRegularExpression coda("^coda( coda)?$");
+      static QRegularExpression daCapo("^(d\\.? ?|da )(c\\.?|capo)$");
+      static QRegularExpression daCapoAlFine("^(d\\.? ?|da )(c\\.? ?|capo )al fine$");
+      static QRegularExpression daCapoAlCoda("^(d\\.? ?|da )(c\\.? ?|capo )al coda$");
+      static QRegularExpression dalSegno("^(d\\.? ?|d[ae]l )(s\\.?|segno)$");
+      static QRegularExpression dalSegnoAlFine("^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al fine$");
+      static QRegularExpression dalSegnoAlCoda("^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al coda$");
+      static QRegularExpression fine("^fine$");
+      static QRegularExpression segno("^segno( segno)?$");
+      static QRegularExpression toCoda("^to coda( coda)?$");
+      static QRegularExpression coda("^coda( coda)?$");
       if (plainWords.contains(daCapo))          return "daCapo";
       if (plainWords.contains(daCapoAlFine))    return "daCapoAlFine";
       if (plainWords.contains(daCapoAlCoda))    return "daCapoAlCoda";
@@ -3926,13 +3984,14 @@ bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
 
 bool MusicXMLParserDirection::isLikelyLegallyDownloaded(const Fraction& tick) const
       {
+      static const QRegularExpression legallyDownloaded("This music has been legally downloaded\\.(?:\\s|\u00A0)Do not photocopy\\.");
       if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE))
             return false;
       return (tick + _offset < Fraction(5, 1)) // Only early in the piece
             && _rehearsalText.isEmpty()
             && _metroText.isEmpty()
             && _tpoSound < 0.1
-            && _wordsText.contains(QRegularExpression("This music has been legally downloaded\\.(?:\\s|\u00A0)Do not photocopy\\."));
+            && _wordsText.contains(legallyDownloaded);
       }
 
 bool MusicXMLParserDirection::isLikelyTempoText(const int track) const
@@ -4143,7 +4202,7 @@ double MusicXMLParserDirection::convertTextToNotes()
                                               {"x", QString("<sym>metNote16thUp</sym>")},      // note16_Sym
                                               {"w", QString("<sym>metNoteWhole</sym>")},
                                               {"W", QString("<sym>metNoteDoubleWhole</sym>")}};
-      for (auto noteSym : noteSyms) {
+      for (auto& noteSym : noteSyms) {
             if (notesSubstring.contains(noteSym.first)) {
                   notesSubstring.replace(noteSym.first, noteSym.second);
                   break;
@@ -4178,7 +4237,7 @@ bool MusicXMLParserDirection::attemptTempoTextCoercion(const Fraction& tick)
             }
       else if (placement() == "above" && _isBold) {
             if (tick == Fraction(0, 1)) return true;
-            for (auto tempoWord : tempoWords)
+            for (auto& tempoWord : tempoWords)
                   if (_wordsText.contains(tempoWord, Qt::CaseInsensitive))
                         return true;
             }
@@ -4597,7 +4656,6 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
 
             if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                   p->setLineColor(color);
-
             starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
             }
       else if (type == "stop" || type == "discontinue") {
@@ -5047,7 +5105,7 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure, cons
 #endif
                   QList<int> iEndingNumbers;
                   bool unsupported = false;
-                  for (const QString &s : sl) {
+                  for (const QString& s : qAsConst(sl)) {
                         int iEndingNumber = s.toInt();
                         if (iEndingNumber <= 0) {
                               unsupported = true;
@@ -6396,15 +6454,14 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
       // handle notations
       if (cr) {
-            notations.addToScore(cr, note, noteStartTime.ticks(), _slurs, _glissandi, _spanners, _trills, _ties);
+            notations.addToScore(cr, note, noteStartTime.ticks(), _slurs, _glissandi, _spanners, _trills, _ties, _unstartedTieNotes, _unendedTieNotes);
 
             // if no tie added yet, convert the "tie" into "tied" and add it.
             if (note && !note->tieFor() && !tieType.isEmpty()) {
                   Notation notation { "tied" };
                   const QString ctype { "type" };
                   notation.addAttribute(&ctype, &tieType);
-                  addTie(notation, _score, note, cr->track(), _ties, _logger, &_e,
-                         _pass1.exporterSoftware() == MusicXMLExporterSoftware::DOLET6);
+                  addTie(notation, note, cr->track(), _ties, _unstartedTieNotes, _unendedTieNotes, _logger, &_e);
                   }
             }
 
@@ -7315,7 +7372,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
                         else if (orientation.isEmpty() || placement.isEmpty())
                               ; // ignore
                         else
-                              logger->logError(QString("unknown slur orientation/placement: %1/%2").arg(orientation).arg(placement), xmlreader);
+                              logger->logError(QString("unknown slur orientation/placement: %1/%2").arg(orientation, placement), xmlreader);
                         }
 
                   newSlur->setTrack(track);
@@ -7782,26 +7839,31 @@ static void addArpeggio(ChordRest* cr, const QString& arpeggioType)
 //   addTie
 //---------------------------------------------------------
 
-static void addTie(const Notation& notation, Score* score, Note* note, const int track,
-                   std::map<int, Tie*>& ties, MxmlLogger* logger, const QXmlStreamReader* const xmlreader,
-                   const bool fixForCrossStaff)
+static void addTie(const Notation& notation, Note* note, const int track, MusicXMLTieMap& ties,
+                   std::vector<Note*>& unstartedTieNotes, std::vector<Note*>& unendedTieNotes, MxmlLogger* logger,
+                   const QXmlStreamReader* const xmlreader)
       {
       if (!note)
             return;
       const QString& type = notation.attribute("type");
+      //const QString orientation = notation.attribute("orientation");
+      //const QString placement = notation.attribute("placement");
+      //const QString lineType = notation.attribute("line-type");
+
+      TieLocation loc = TieLocation(note->pitch(), note->track());
 
       if (type.isEmpty()) {
             // ignore, nothing to do
             }
       else if (type == "start") {
-            if (ties[note->pitch()]) {
+            if (Tie* activeTie = ties[loc]) {
                   // Unterminated tie on this pitch. Clean this up, then resume.
                   logger->logError(QString("Tie already active"), xmlreader);
-                  cleanupUnterminatedTie(ties[note->pitch()], score, fixForCrossStaff);
-                  ties[note->pitch()] = nullptr;
+                  unendedTieNotes.push_back(activeTie->startNote());
+                  ties.erase(loc);
                   }
-            ties[note->pitch()] = new Tie(score);
-            Tie* currTie = ties[note->pitch()];
+            ties[loc] = new Tie(note->score());
+            Tie* currTie = ties[loc];
             note->setTieFor(currTie);
             currTie->setStartNote(note);
             currTie->setTrack(track);
@@ -7820,7 +7882,7 @@ static void addTie(const Notation& notation, Score* score, Note* note, const int
                   else if (orientation.isEmpty() || placement.isEmpty())
                         ; // ignore
                   else
-                        logger->logError(QString("unknown tied orientation/placement: %1/%2").arg(orientation).arg(placement), xmlreader);
+                        logger->logError(QString("unknown tied orientation/placement: %1/%2").arg(orientation, placement), xmlreader);
                   }
 
             const QString& lineType = notation.attribute("line-type");
@@ -7833,8 +7895,7 @@ static void addTie(const Notation& notation, Score* score, Note* note, const int
 
             }
       else if (type == "stop") {
-            if (ties[note->pitch()]) {
-                  Tie* currTie = ties[note->pitch()];
+            if (Tie* currTie = ties[loc]) {
                   const Note* startNote = currTie->startNote();
                   const Chord* startChord = startNote ? startNote->chord() : nullptr;
                   const Chord* endChord = note->chord();
@@ -7850,14 +7911,16 @@ static void addTie(const Notation& notation, Score* score, Note* note, const int
                         note->setTieBack(currTie);
                         }
                   else {
-                        qInfo() << "Discard";
-                        cleanupUnterminatedTie(ties[note->pitch()], score, fixForCrossStaff);
-                        }
-                  ties[note->pitch()] = nullptr;
+                        logger->logError(QString("Intervening note in voice"), xmlreader);
+                        unstartedTieNotes.push_back(note);
+                        unendedTieNotes.push_back(currTie->startNote());
+                                 }
+                  ties.erase(loc);
                   }
-            else
+            else {
+                  unstartedTieNotes.push_back(note);
                   logger->logError(QString("Non-started tie terminated. No-op."), xmlreader);
-            // ignore
+                  }
             }
       else if (type == "let-ring")
             addArticLaissezVibrer(note);
@@ -8168,7 +8231,8 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
 
 void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs,
                                          Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners,
-                                         TrillStack& trills, std::map<int, Tie*>& ties)
+                                         TrillStack& trills, MusicXMLTieMap& ties, std::vector<Note*>& unstartedTieNotes,
+                                         std::vector<Note*>& unendedTieNotes)
       {
       addArpeggio(cr, _arpeggioType);
       addBreath(cr, cr->tick(), _breath);
@@ -8185,8 +8249,7 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
                   addGlissandoSlide(notation, note, glissandi, spanners, _logger, &_e);
                   }
             else if (note && notation.name() == "tied") {
-                  addTie(notation, _score, note, cr->track(), ties, _logger, &_e,
-                         _pass1.exporterSoftware() == MusicXMLExporterSoftware::DOLET6);
+                  addTie(notation, note, cr->track(), ties, unstartedTieNotes, unendedTieNotes, _logger, &_e);
                   }
             else if (note && notation.parent() == "technical") {
                   addTechnical(notation, note);
@@ -8307,7 +8370,7 @@ void MusicXMLParserNotations::tuplet()
 
 void MusicXMLParserNotations::otherNotation()
       {
-      const QString type = { _e.attributes().value("type").toString() };
+      //const QString type = { _e.attributes().value("type").toString() };
       const QString smufl = { _e.attributes().value("smufl").toString() };
       if (!smufl.isEmpty()) {
             SymId id { SymId::noSym };

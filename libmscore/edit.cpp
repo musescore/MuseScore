@@ -2255,7 +2255,7 @@ void Score::deleteMeasures(MeasureBase* is, MeasureBase* ie, bool preserveTies)
                         size_t track = staffIdx * VOICES;
                         if (track < s->elist().size()) {
                               TimeSig* nts = new TimeSig(score);
-                              nts->setTrack(track);
+                              nts->setTrack(static_cast<int>(track));
                               nts->setParent(s);
                               nts->setSig(lastDeletedForThisStaff->sig());
                               nts->setStretch(nts->sig() / mAfterSel->timesig());

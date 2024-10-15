@@ -202,6 +202,7 @@ using HairpinsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using InferredHairpinsStack = std::vector<Hairpin*>;
 using SpannerStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerSet = std::set<Spanner*>;
+using MusicXMLTieMap = std::map<TieLocation, Tie*>;
 
 //---------------------------------------------------------
 //   DelayedDirectionsList
@@ -222,7 +223,7 @@ public:
       void parse();
       void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs,
                       Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners, TrillStack& trills,
-                      std::map<int, Tie*>& ties);
+                      MusicXMLTieMap& ties, std::vector<Note*>& unstartedTieNotes, std::vector<Note*>& unendedTieNotes);
       QString errors() const { return _errors; }
       MusicXmlTupletDesc tupletDesc() const { return _tupletDesc; }
       bool hasTremolo() const { return _hasTremolo; }
@@ -363,10 +364,11 @@ private:
 
       Glissando* _glissandi[MAX_NUMBER_LEVEL][2];   ///< Current slides ([0]) / glissandi ([1])
 
-      std::map<int, Tie*> _ties;
+      MusicXMLTieMap  _ties;
       Volta* _lastVolta;
       bool _hasDrumset;                           ///< drumset defined TODO: move to pass 1
-
+      std::vector<Note*> _unstartedTieNotes;
+      std::vector<Note*> _unendedTieNotes;
       MusicXmlSpannerMap _spanners;
 
       MusicXmlExtendedSpannerDesc _pedal;         ///< Current pedal

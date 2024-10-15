@@ -313,6 +313,10 @@ private slots:
       void textOrder() { mxmlImportTestRef("testTextOrder"); }
       void textQuirkInference() { mxmlImportTestRef("testTextQuirkInference"); }
       void tieTied() { mxmlIoTestRef("testTieTied"); }
+      void importTie1() { mxmlImportTestRef("importTie1"); }
+      void importTie2() { mxmlImportTestRef("importTie2"); }
+      void importTie3() { mxmlImportTestRef("importTie3"); }
+      void importTie4() { mxmlImportTestRef("importTie4"); }
       void timesig1() { mxmlIoTest("testTimesig1"); }
       void timesig3() { mxmlIoTest("testTimesig3"); }
       void titleSwapMu() {mxmlImportTestRef("testTitleSwapMu"); }

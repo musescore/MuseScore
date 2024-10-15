@@ -190,15 +190,15 @@ void ShortcutCaptureDialog::keyPress(QKeyEvent* e)
             );
       }
 
-bool ShortcutCaptureDialog::isShiftAllowed(int key)
+bool ShortcutCaptureDialog::isShiftAllowed(int k)
       {
       // Letter keys where Shift should not be removed
-      if (key >= Qt::Key_A && key <= Qt::Key_Z) {
+      if (k >= Qt::Key_A && k <= Qt::Key_Z) {
             return true;
             }
 
       // non-letter keys where Shift should not be removed
-      switch (key) {
+      switch (k) {
             case Qt::Key_Up:
             case Qt::Key_Down:
             case Qt::Key_Left:
