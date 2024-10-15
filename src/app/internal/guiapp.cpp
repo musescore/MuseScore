@@ -192,6 +192,16 @@ void GuiApp::perform()
     const QUrl url(QStringLiteral("qrc:/qml") + mainQmlFile);
 #endif
 
+    QObject::connect(engine, &QQmlApplicationEngine::objectCreated, qApp, [](QObject* obj, const QUrl&) {
+        QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
+        //! NOTE It is important that there is a connection to this signal with an error,
+        //! otherwise the default action will be performed - displaying a message and terminating.
+        //! We will not be able to switch to another backend.
+        QObject::connect(w, &QQuickWindow::sceneGraphError, qApp, [](QQuickWindow::SceneGraphError, const QString& msg) {
+            LOGE() << "scene graph error: " << msg;
+        });
+    }, Qt::DirectConnection);
+
     QObject::connect(engine, &QQmlApplicationEngine::objectCreated, qApp,
                      [this, url, splashScreen](QObject* obj, const QUrl& objUrl) {
         if (!obj && url == objUrl) {
