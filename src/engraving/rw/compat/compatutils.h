@@ -59,6 +59,7 @@ private:
     static void addMissingInitKeyForTransposingInstrument(MasterScore* score);
     static void resetFramesExclusionFromParts(MasterScore* masterScore);
     static void mapHeaderFooterStyles(MasterScore* masterScore);
+    static void convertTextLineToNoteAnchoredLine(MasterScore* masterScore);
 };
 }
 #endif // MU_ENGRAVING_COMPATUTILS_H

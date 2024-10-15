@@ -5048,9 +5048,10 @@ void TLayout::layoutNoteLine(NoteLine* item, LayoutContext& ctx)
     LAYOUT_CALL_ITEM(item);
     TLayout::layoutLine(item, ctx);
 
-    // TODO check if this should be laid out like glissando
-    layoutNoteAnchoredLine(item, item->mutldata(), ctx);
-    item->addLineAttachPoints();
+    if (item->lineEndPlacement() == NoteLineEndPlacement::OFFSET_ENDS) {
+        layoutNoteAnchoredLine(item, item->mutldata(), ctx);
+        item->addLineAttachPoints();
+    }
 }
 
 void TLayout::layoutNoteLineSegment(NoteLineSegment* item, LayoutContext& ctx)

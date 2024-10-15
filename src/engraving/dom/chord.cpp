@@ -43,6 +43,7 @@
 #include "navigate.h"
 #include "note.h"
 #include "noteevent.h"
+#include "noteline.h"
 #include "ornament.h"
 #include "part.h"
 #include "score.h"
@@ -2457,12 +2458,11 @@ void Chord::setSlash(bool flag, bool stemless)
 
 void Chord::updateEndsNoteAnchoredLine()
 {
-    bool offsetEnds = true;
     m_endsNoteAnchoredLine = false;         // assume no glissando ends here
     // scan all chord notes for glissandi ending on this chord
     for (Note* note : notes()) {
         for (Spanner* sp : note->spannerBack()) {
-            bool isNoteAnchoredTextLine = sp->isNoteLine() && offsetEnds;
+            bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
             if (sp->type() == ElementType::GLISSANDO || isNoteAnchoredTextLine) {
                 m_endsNoteAnchoredLine = true;
                 return;

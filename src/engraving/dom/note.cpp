@@ -29,6 +29,7 @@
 
 #include <assert.h>
 
+#include "dom/noteline.h"
 #include "translation.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
@@ -61,7 +62,6 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "stringdata.h"
-#include "textline.h"
 #include "tie.h"
 
 #include "undo.h"
@@ -1205,8 +1205,7 @@ void Note::addSpanner(Spanner* l)
     if (e && e->isNote()) {
         Note* note = toNote(e);
         note->addSpannerBack(l);
-        bool offsetEnds = true;
-        bool isNoteAnchoredTextLine = l->isNoteLine() && offsetEnds;
+        bool isNoteAnchoredTextLine = l->isNoteLine() && toNoteLine(l)->enforceMinLength();
         if (l->isGlissando() || l->isGuitarBend() || isNoteAnchoredTextLine) {
             note->chord()->setEndsNoteAnchoredLine(true);
         }

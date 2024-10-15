@@ -1055,6 +1055,11 @@ enum class LyricsDashSystemStart {
     UNDER_FIRST_NOTE
 };
 
+enum class NoteLineEndPlacement {
+    LEFT_EDGE,
+    OFFSET_ENDS,
+};
+
 enum class SpannerSegmentType {
     SINGLE, BEGIN, MIDDLE, END
 };

@@ -30,6 +30,7 @@
 #include "../../dom/chordrest.h"
 #include "../../dom/measure.h"
 #include "../../dom/note.h"
+#include "../../dom/noteline.h"
 #include "../../dom/tie.h"
 #include "../../dom/chord.h"
 #include "../../dom/staff.h"
@@ -389,8 +390,7 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
             if (sp->isTie()) {
                 item->setTieBack(toTie(sp));
             } else {
-                bool offsetEnds = true;
-                bool isNoteAnchoredTextLine = sp->isNoteLine() && offsetEnds;
+                bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
                 if ((sp->isGlissando() || sp->isGuitarBend() || isNoteAnchoredTextLine) && item->explicitParent()
                     && item->explicitParent()->isChord()) {
                     toChord(item->explicitParent())->setEndsNoteAnchoredLine(true);

@@ -2795,7 +2795,6 @@ void ChordLayout::clearLineAttachPoints(Measure* measure)
  * enforce minTieLength. The true layout of ties and glissandi is done much later. */
 void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, LayoutContext& ctx)
 {
-    chord->updateEndsNoteAnchoredLine();
     if (chord->endsNoteAnchoredLine()) {
         for (Note* note : chord->notes()) {
             for (Spanner* sp : note->spannerBack()) {
