@@ -63,6 +63,23 @@ Rectangle {
 
         anchors.verticalCenter: parent.verticalCenter
 
+        width: {
+            var result = 0
+            var children = content.children
+
+            for (var i = 0; i < children.length; ++i) {
+                result += children[i].width + spacing
+
+            }
+
+            if (result > 0) {
+                result -= spacing
+            }
+
+            return result
+        }
+        height: childrenRect.height
+
         clip: true
         spacing: 4
 
