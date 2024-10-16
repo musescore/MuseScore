@@ -33,6 +33,7 @@ DropArea {
 
     property int panelMode: -1
     property bool useNotationPreview: false
+    property bool showEditOutline: false
 
     property alias totalBorderWidth: padLoader.anchors.margins
     property alias showOriginBackground: originBackground.visible
@@ -58,7 +59,7 @@ DropArea {
 
         color: ui.theme.backgroundPrimaryColor
 
-        border.color: root.panelMode === PanelMode.EDIT_LAYOUT ? ui.theme.accentColor : "transparent"
+        border.color: root.showEditOutline ? ui.theme.accentColor : "transparent"
         border.width: 2
 
         DragHandler {

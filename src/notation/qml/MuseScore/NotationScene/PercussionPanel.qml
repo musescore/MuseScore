@@ -171,6 +171,9 @@ Item {
                         panelMode: percModel.currentPanelMode
                         useNotationPreview: percModel.useNotationPreview
 
+                        // When dragging, only show the outline for the dragged pad and the drag target...
+                        showEditOutline: percModel.currentPanelMode === PanelMode.EDIT_LAYOUT
+                                         && (!Boolean(padGrid.draggedPad) || padGrid.draggedPad === pad || pad.containsDrag)
                         showOriginBackground: pad.containsDrag || pad === padGrid.draggedPad
 
                         dragParent: root
