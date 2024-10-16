@@ -134,6 +134,8 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
     score->setShowUnprintable(false);
     score->setShowVBox(false);
 
+    score->doLayout();
+
     PageList pages = masterNotation->notation()->elements()->pages();
     if (pages.empty()) {
         LOGE() << "No pages";
