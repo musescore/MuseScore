@@ -179,22 +179,31 @@ inline bool isNotePlayable(const Note* note, const muse::mpe::ArticulationMap& a
             return false;
         }
 
-        //!Note Checking whether the last tied note has any multi-note articulation attached
+        //!Note Checking whether the tied note has any multi-note articulation attached
         //!     If so, we can't ignore such note
-        if (!note->tieFor()) {
-            for (const auto& pair : articualtionMap) {
-                if (muse::mpe::isMultiNoteArticulation(pair.first) && !muse::mpe::isRangedArticulation(pair.first)) {
-                    return true;
-                }
+        for (const auto& pair : articualtionMap) {
+            if (muse::mpe::isMultiNoteArticulation(pair.first) && !muse::mpe::isRangedArticulation(pair.first)) {
+                return true;
             }
         }
 
         const Chord* firstChord = tie->startNote()->chord();
         const Chord* lastChord = tie->endNote()->chord();
+        if (!firstChord || !lastChord) {
+            return false;
+        }
 
-        if (firstChord && lastChord) {
-            if (firstChord->tremoloType() != TremoloType::INVALID_TREMOLO
-                || lastChord->tremoloType() != TremoloType::INVALID_TREMOLO) {
+        if (firstChord->tremoloType() != TremoloType::INVALID_TREMOLO
+            || lastChord->tremoloType() != TremoloType::INVALID_TREMOLO) {
+            return true;
+        }
+
+        auto intervals = firstChord->score()->spannerMap().findOverlapping(firstChord->tick().ticks(),
+                                                                           firstChord->endTick().ticks(),
+                                                                           /*excludeCollisions*/ true);
+        for (auto interval : intervals) {
+            const Spanner* sp = interval.value;
+            if (sp->isTrill() && sp->playSpanner() && sp->endElement() == firstChord) {
                 return true;
             }
         }
