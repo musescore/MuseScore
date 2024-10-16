@@ -3142,6 +3142,9 @@ void Measure::computeTicks()
             }
             nextSegment = nextSegment->next();
         }
+        if (segment->ticks().isZero()) {
+            segment->setTicks(ticks() - segment->rtick());
+        }
     }
 }
 

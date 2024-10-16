@@ -23,6 +23,7 @@
 
 #include "../types/types.h"
 
+#include "dom/anchors.h"
 #include "dom/audio.h"
 #include "dom/excerpt.h"
 #include "dom/factory.h"
@@ -393,6 +394,10 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     Location loc = Location::relative();
                     TRead::read(&loc, e, ctx);
                     ctx.setLocation(loc);
+                    if (loc.isTimeTick()) {
+                        Measure* measure = score->tick2measure(ctx.tick());
+                        EditTimeTickAnchors::createTimeTickAnchor(measure, ctx.tick() - measure->tick(), track2staff(ctx.track()));
+                    }
                 } else if (tag == "Tuplet") {
                     Tuplet* oldTuplet = tuplet;
                     Fraction tick = doScale ? (ctx.tick() - dstTick) * scale + dstTick : ctx.tick();
@@ -611,7 +616,7 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
 
                     Fraction tick = doScale ? (ctx.tick() - dstTick) * scale + dstTick : ctx.tick();
                     Measure* m = score->tick2measure(tick);
-                    Segment* seg = m->undoGetSegment(SegmentType::ChordRest, tick);
+                    Segment* seg = m->getChordRestOrTimeTickSegment(tick);
                     el->setParent(seg);
 
                     // be sure to paste the element in the destination track;
