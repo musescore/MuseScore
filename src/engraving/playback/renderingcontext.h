@@ -179,13 +179,11 @@ inline bool isNotePlayable(const Note* note, const muse::mpe::ArticulationMap& a
             return false;
         }
 
-        //!Note Checking whether the last tied note has any multi-note articulation attached
+        //!Note Checking whether the tied note has any multi-note articulation attached
         //!     If so, we can't ignore such note
-        if (!note->tieFor()) {
-            for (const auto& pair : articualtionMap) {
-                if (muse::mpe::isMultiNoteArticulation(pair.first) && !muse::mpe::isRangedArticulation(pair.first)) {
-                    return true;
-                }
+        for (const auto& pair : articualtionMap) {
+            if (muse::mpe::isMultiNoteArticulation(pair.first) && !muse::mpe::isRangedArticulation(pair.first)) {
+                return true;
             }
         }
 
