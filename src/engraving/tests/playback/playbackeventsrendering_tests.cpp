@@ -2771,3 +2771,79 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TiedNotesAndRepeats)
 
     delete score;
 }
+
+/**
+ * @brief PlaybackEventsRendererTests_TrillLine_TiedNotes
+ * Checks that we can render the trill line if it doesn't last the full duration of the tied notes
+ * See: https://github.com/musescore/MuseScore/issues/18676
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, TrillLine_TiedNotes)
+{
+    // [GIVEN] Simple piece of score (violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score
+        = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "trill_line_on_tied_notes.mscx");
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
+    m_defaultProfile->setPattern(ArticulationType::Trill, m_dummyPattern);
+
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+
+    // [WHEN] Render the score
+    PlaybackEventsMap result;
+
+    for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (const Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+            const mu::engraving::EngravingItem* element = segment->element(0);
+            if (element && element->isChord()) {
+                m_renderer.render(toChord(element), 0, m_defaultProfile, ctx, result);
+            }
+        }
+    }
+
+    // [THEN] We expect 4 lists of events (for 4 tied notes)
+    EXPECT_EQ(result.size(), 4);
+
+    constexpr timestamp_t expectedTrillTimestamp = WHOLE_NOTE_DURATION; // timestamp of the 2nd tied note (where the trill starts)
+    constexpr duration_t expectedTrillDuration = WHOLE_NOTE_DURATION * 2;
+
+    size_t noteNum = 0;
+
+    for (const auto& pair : result) {
+        for (const PlaybackEvent& event : pair.second) {
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+
+            // [THEN] We expect that each note event has only one articulation applied
+            ASSERT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+
+            if (noteNum == 0 || noteNum == 3) {
+                // [THEN] Normal notes (no trill)
+                EXPECT_EQ(pair.second.size(), 1);
+                EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
+                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::A, 4));
+
+                // [THEN] Each note event has the correct duration
+                EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, WHOLE_NOTE_DURATION);
+            } else {
+                // [THEN] Notes under the trill line
+                constexpr size_t expectedSubNotes = 32;
+                EXPECT_EQ(pair.second.size(), expectedSubNotes);
+
+                // [THEN] Each note event has the correct articulation time and duration
+                const ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(ArticulationType::Trill);
+                EXPECT_EQ(articulationData.meta.timestamp, expectedTrillTimestamp);
+                EXPECT_EQ(articulationData.meta.overallDuration, expectedTrillDuration);
+
+                // [THEN] Each note event has the correct duration
+                constexpr duration_t expectedSubNoteDuration = WHOLE_NOTE_DURATION / expectedSubNotes;
+                EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedSubNoteDuration);
+            }
+        }
+
+        ++noteNum;
+    }
+
+    delete score;
+}
