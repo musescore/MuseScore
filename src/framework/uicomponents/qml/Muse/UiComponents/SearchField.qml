@@ -33,7 +33,6 @@ TextInputField {
     }
 
     width: 220
-    opacity: 0.8
 
     hint: qsTrc("ui", "Search")
     hintIcon: IconCode.SEARCH

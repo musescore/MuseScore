@@ -22,10 +22,11 @@
 
 #include "savediagnosticfilesscenario.h"
 
+#include <QCursor>
+#include <QGuiApplication>
+
 #include "diagnosticfileswriter.h"
 #include "translation.h"
-
-#include <QApplication>
 
 using namespace muse::diagnostics;
 using namespace muse;
@@ -60,7 +61,7 @@ Ret SaveDiagnosticFilesScenario::saveDiagnosticFiles()
     qApp->setOverrideCursor(Qt::WaitCursor);
     qApp->processEvents();
 
-    Ret ret = DiagnosticFilesWriter::writeDiagnosticFiles(path);
+    Ret ret = DiagnosticFilesWriter(iocContext()).writeDiagnosticFiles(path);
 
     qApp->restoreOverrideCursor();
 

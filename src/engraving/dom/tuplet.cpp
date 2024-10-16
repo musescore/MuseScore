@@ -29,6 +29,7 @@
 #include "engravingitem.h"
 #include "factory.h"
 #include "measure.h"
+#include "note.h"
 #include "rest.h"
 #include "score.h"
 #include "text.h"
@@ -843,5 +844,23 @@ int Tuplet::computeTupletDenominator(int numerator, Fraction totalDuration)
         ratio = (totalDuration / baseLen).reduced();
     }
     return ratio.numerator();
+}
+
+EngravingItem* Tuplet::nextElement()
+{
+    ChordRest* firstElement = toChordRest(elements().front());
+    if (firstElement->type() == ElementType::CHORD) {
+        Chord* chord = toChord(firstElement);
+        return chord->firstGraceOrNote();
+    }
+    return firstElement;
+}
+
+EngravingItem* Tuplet::prevElement()
+{
+    ChordRest* firstElement = toChordRest(elements().front());
+    staff_idx_t staffId = firstElement->staffIdx();
+    EngravingItem* prevItem = firstElement->segment()->prevElement(staffId);
+    return prevItem;
 }
 } // namespace mu::engraving

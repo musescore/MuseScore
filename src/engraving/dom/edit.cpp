@@ -1560,9 +1560,9 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
 //  addTiedMidiPitch
 //---------------------------------------------------------
 
-Note* Score::addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord)
+Note* Score::addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool allowTransposition)
 {
-    Note* n = addMidiPitch(pitch, addFlag);
+    Note* n = addMidiPitch(pitch, addFlag, allowTransposition);
     if (prevChord) {
         Note* nn = prevChord->findNote(n->pitch());
         if (nn) {
@@ -1580,14 +1580,14 @@ Note* Score::addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord)
     return n;
 }
 
-NoteVal Score::noteVal(int pitch) const
+NoteVal Score::noteVal(int pitch, bool allowTransposition) const
 {
     NoteVal nval(pitch);
     Staff* st = staff(inputState().track() / VOICES);
 
     // if transposing, interpret MIDI pitch as representing desired written pitch
     // set pitch based on corresponding sounding pitch
-    if (!style().styleB(Sid::concertPitch)) {
+    if (!style().styleB(Sid::concertPitch) && allowTransposition) {
         nval.pitch += st->part()->instrument(inputState().tick())->transpose().chromatic;
     }
     // let addPitch calculate tpc values from pitch
@@ -1601,9 +1601,9 @@ NoteVal Score::noteVal(int pitch) const
 //  addMidiPitch
 //---------------------------------------------------------
 
-Note* Score::addMidiPitch(int pitch, bool addFlag)
+Note* Score::addMidiPitch(int pitch, bool addFlag, bool allowTransposition)
 {
-    NoteVal nval = noteVal(pitch);
+    NoteVal nval = noteVal(pitch, allowTransposition);
     return addPitch(nval, addFlag);
 }
 
@@ -3267,6 +3267,30 @@ void Score::deleteOrShortenOutSpannersFromRange(const Fraction& t1, const Fracti
     }
 }
 
+void Score::deleteSlursFromRange(const Fraction& t1, const Fraction& t2, track_idx_t trackStart, track_idx_t trackEnd,
+                                 const SelectionFilter& filter)
+{
+    auto spanners = m_spanner.findOverlapping(t1.ticks(), t2.ticks() - 1);
+    for (auto i : spanners) {
+        Spanner* sp = i.value;
+        Fraction spStartTick = sp->tick();
+        Fraction spEndTick = sp->tick2();
+        if (!sp->isSlur()) {
+            continue;
+        }
+        if (!filter.canSelectVoice(sp->track())) {
+            continue;
+        }
+
+        if (sp->track() >= trackStart && sp->track() < trackEnd) {
+            if ((spStartTick >= t1 && spStartTick < t2)
+                || (spEndTick >= t1 && spEndTick <= t2)) {
+                undoRemoveElement(sp);
+            }
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   deleteAnnotationsFromRange
 ///   Deletes annotations in the given range that match the
@@ -4388,7 +4412,16 @@ void Score::cmdTimeDelete()
     }
 
     if (!isMaster() && masterScore()) {
-        masterScore()->doTimeDelete(startSegment, endSegment);
+        Measure* masterStartMeas = masterScore()->tick2measure(startSegment->tick());
+        Measure* masterEndMeas = masterScore()->tick2measure(endSegment->tick());
+        if (endSegment->isEndBarLineType()) {
+            Measure* prevEndMeasure = masterEndMeas->prevMeasure();
+            masterEndMeas = prevEndMeasure ? prevEndMeasure : masterEndMeas;
+        }
+        Segment* masterStartSeg
+            = masterStartMeas ? masterStartMeas->findSegment(startSegment->segmentType(), startSegment->tick()) : startSegment;
+        Segment* masterEndSeg = masterEndMeas ? masterEndMeas->findSegment(endSegment->segmentType(), endSegment->tick()) : endSegment;
+        masterScore()->doTimeDelete(masterStartSeg, masterEndSeg);
     } else {
         doTimeDelete(startSegment, endSegment);
     }
@@ -5041,8 +5074,6 @@ void Score::undoChangeElement(EngravingItem* oldElement, EngravingItem* newEleme
 {
     if (!oldElement) {
         undoAddElement(newElement);
-    } else if (oldElement->isSpanner()) {
-        undo(new ChangeElement(oldElement, newElement));
     } else {
         const std::list<EngravingObject*> links = oldElement->linkList();
         for (EngravingObject* obj : links) {
@@ -5051,7 +5082,8 @@ void Score::undoChangeElement(EngravingItem* oldElement, EngravingItem* newEleme
                 undo(new ChangeElement(oldElement, newElement));
             } else {
                 if (item->score()) {
-                    item->score()->undo(new ChangeElement(item, newElement->linkedClone()));
+                    EngravingItem* newClone = newElement->clone();
+                    item->score()->undo(new ChangeElement(item, newClone));
                 }
             }
         }
@@ -5999,7 +6031,9 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::FERMATA
             && et != ElementType::HARMONY
             && et != ElementType::HARP_DIAGRAM
-            && et != ElementType::FIGURED_BASS)
+            && et != ElementType::FIGURED_BASS
+            && et != ElementType::CLEF
+            && et != ElementType::AMBITUS)
         ) {
         doUndoAddElement(element);
         return;
@@ -6041,7 +6075,9 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             ElementType::VIBRATO,
             ElementType::TEXTLINE,
             ElementType::PEDAL,
-            ElementType::LYRICS
+            ElementType::LYRICS,
+            ElementType::CLEF,
+            ElementType::AMBITUS
         };
 
         track_idx_t linkedTrack = ostaff->getLinkedTrackInStaff(staff, strack);
@@ -6179,13 +6215,15 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                  || element->isFermata()
                  || element->isHarmony()
                  || element->isHarpPedalDiagram()
-                 || element->isFiguredBass()) {
+                 || element->isFiguredBass()
+                 || element->isClef()
+                 || element->isAmbitus()) {
             Segment* segment
                 = element->explicitParent()->isFretDiagram() ? toSegment(element->explicitParent()->explicitParent()) : toSegment(
                       element->explicitParent());
             Fraction tick    = segment->tick();
             Measure* m       = score->tick2measure(tick);
-            if ((segment->segmentType() == SegmentType::EndBarLine) && (m->tick() == tick)) {
+            if ((segment->segmentType() & (SegmentType::EndBarLine | SegmentType::Clef)) && (m->tick() == tick)) {
                 m = m->prevMeasure();
             }
             Segment* seg     = m->undoGetSegment(segment->segmentType(), tick);
@@ -6719,7 +6757,9 @@ void Score::undoInsertTime(const Fraction& tick, const Fraction& len)
     }
     for (Spanner* s : sl) {
         if (len > Fraction(0, 1)) {
-            if (tick > s->tick() && tick < s->tick2()) {
+            if (tick == s->tick() && s->isVolta()) {
+                s->undoChangeProperty(Pid::SPANNER_TICKS, s->ticks() + len);
+            } else if (tick > s->tick() && tick < s->tick2()) {
                 //
                 //  case a:
                 //  +----spanner--------+

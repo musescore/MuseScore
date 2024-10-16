@@ -21,7 +21,7 @@
  */
 #include "shortcutsmodule.h"
 
-#include <QtQml>
+#include <QQmlEngine>
 
 #include "log.h"
 
@@ -70,10 +70,10 @@ std::string ShortcutsModule::moduleName() const
 
 void ShortcutsModule::registerExports()
 {
-    m_shortcutsController = std::make_shared<ShortcutsController>();
-    m_shortcutsRegister = std::make_shared<ShortcutsRegister>();
-    m_configuration = std::make_shared<ShortcutsConfiguration>();
-    m_midiRemote = std::make_shared<MidiRemote>();
+    m_shortcutsController = std::make_shared<ShortcutsController>(iocContext());
+    m_shortcutsRegister = std::make_shared<ShortcutsRegister>(iocContext());
+    m_configuration = std::make_shared<ShortcutsConfiguration>(iocContext());
+    m_midiRemote = std::make_shared<MidiRemote>(iocContext());
 
     ioc()->registerExport<IShortcutsRegister>(moduleName(), m_shortcutsRegister);
     ioc()->registerExport<IShortcutsController>(moduleName(), m_shortcutsController);

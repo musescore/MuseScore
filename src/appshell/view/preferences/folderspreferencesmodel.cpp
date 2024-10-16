@@ -29,7 +29,7 @@ using namespace mu::appshell;
 using namespace muse;
 
 FoldersPreferencesModel::FoldersPreferencesModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 

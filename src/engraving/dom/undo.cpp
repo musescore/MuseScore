@@ -504,8 +504,8 @@ void UndoStack::undo(EditData* ed)
 {
     LOG_UNDO() << "called";
     // Are we currently editing text?
-    if (ed && ed->element && ed->element->isTextBase()) {
-        TextEditData* ted = static_cast<TextEditData*>(ed->getData(ed->element).get());
+    if (ed && ed->editTextualProperties && ed->element && ed->element->isTextBase()) {
+        TextEditData* ted = dynamic_cast<TextEditData*>(ed->getData(ed->element).get());
         if (ted && ted->startUndoIdx == curIdx) {
             // No edits to undo, so do nothing
             return;
@@ -1504,6 +1504,11 @@ void ChangeElement::flip(EditData*)
         oldElement->unlink();
     }
 
+    newElement->setTrack(oldElement->track());
+    if (newElement->isSpanner()) {
+        toSpanner(newElement)->setTrack2(toSpanner(oldElement)->track2());
+    }
+
     Score* score = oldElement->score();
     if (!score->selection().isRange()) {
         if (oldElement->selected()) {
@@ -1515,6 +1520,7 @@ void ChangeElement::flip(EditData*)
     }
 
     if (oldElement->explicitParent() == 0) {
+        newElement->setScore(score);
         score->removeElement(oldElement);
         score->addElement(newElement);
     } else {
@@ -2225,11 +2231,10 @@ void InsertRemoveMeasures::insertMeasures()
     score->setLayoutAll();
 
     // move subsequent StaffTypeChanges
-    if (moveStc) {
+    Fraction tickStart = fm->tick();
+    Fraction tickEnd = lm->endTick();
+    if (moveStc && tickEnd > tickStart) {
         for (Staff* staff : score->staves()) {
-            Fraction tickStart = fm->tick();
-            Fraction tickEnd = lm->endTick();
-
             // loop backwards until the insert point
             auto stRange = staff->staffTypeRange(score->lastMeasure()->tick());
             int moveTick = stRange.first;

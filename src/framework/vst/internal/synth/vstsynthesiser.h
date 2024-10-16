@@ -75,11 +75,12 @@ public:
 
 private:
     void toggleVolumeGain(const bool isActive);
-    void handleSequence(const VstSequencer::EventSequence& sequence, const audio::samples_t sampleOffset);
+    audio::samples_t processSequence(const VstSequencer::EventSequence& sequence, const audio::samples_t samples, float* buffer);
 
     VstPluginPtr m_pluginPtr = nullptr;
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
 
+    unsigned int m_audioChannelsCount = 2;
     async::Channel<unsigned int> m_streamsCountChanged;
 
     VstSequencer m_sequencer;

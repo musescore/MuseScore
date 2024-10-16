@@ -106,6 +106,7 @@ apt_packages_runtime=(
   libxcb-xinerama0
   libxcb-xkb-dev
   libxkbcommon-dev
+  libopengl-dev
   libvulkan-dev
   )
 
@@ -129,10 +130,11 @@ sudo apt-get install -y --no-install-recommends \
 
 # Get newer Qt (only used cached version if it is the same)
 qt_version="624"
+qt_revision="r2" # added websocket module
 qt_dir="$BUILD_TOOLS/Qt/${qt_version}"
 if [[ ! -d "${qt_dir}" ]]; then
   mkdir -p "${qt_dir}"
-  qt_url="https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64.7z"
+  qt_url="https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64_${qt_revision}.7z"
   wget -q --show-progress -O qt.7z "${qt_url}"
   7z x -y qt.7z -o"${qt_dir}"
   rm qt.7z
@@ -153,7 +155,7 @@ echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
 if [ "$COMPILER" == "gcc" ]; then
 
   gcc_version="10"
-  sudo apt install -y --no-install-recommends "g++-${gcc_version}"
+  sudo apt-get install -y --no-install-recommends "g++-${gcc_version}"
   sudo update-alternatives \
     --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
     --slave /usr/bin/g++ g++ "/usr/bin/g++-${gcc_version}"
@@ -166,7 +168,7 @@ if [ "$COMPILER" == "gcc" ]; then
 
 elif [ "$COMPILER" == "clang" ]; then
 
-  sudo apt install clang
+  sudo apt-get install clang
   echo export CC="/usr/bin/clang" >> ${ENV_FILE}
   echo export CXX="/usr/bin/clang++" >> ${ENV_FILE}
 

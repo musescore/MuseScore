@@ -443,6 +443,10 @@ public:
         BPM = 0xF474,
         CLOCK = 0xF475,
 
+        PLAYHEAD = 0xF478,
+
+        PLAYHEAD_FILLED = 0xF47A,
+
         NONE = 0xFFFF
     };
 

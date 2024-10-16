@@ -16,7 +16,7 @@
       <staffDistance>7.25</staffDistance>
       <minSystemDistance>9.25</minSystemDistance>
       <romanNumeralFontFace>Edwin</romanNumeralFontFace>
-      <Spatium>1.05833</Spatium>
+      <spatium>1.05833</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

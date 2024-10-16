@@ -207,8 +207,8 @@ static void setPitchByOttavaType(mu::engraving::Note* note, mu::engraving::Ottav
     }
 }
 
-GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
-    : _score(score), _gpDom(std::move(gpDom))
+GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom, const muse::modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx), _score(score), _gpDom(std::move(gpDom))
 {
     _drumExtension = {
         { 91, 40 }, //Snare(rim shot)
@@ -2021,7 +2021,7 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
 
     PitchValues pitchValues;
 
-    pitchValues.push_back(PitchValue(gpTimeToMuTime(0), gpBend->originValue));
+    pitchValues.push_back(PitchValue(gpTimeToMuTime(gpBend->originOffset), gpBend->originValue));
     PitchValue lastPoint = pitchValues.back();
 
     if (bendHasMiddleValue) {

@@ -55,7 +55,7 @@ public:
     void response(const QString& method, const QStringList& args, const ID& destID);
     void broadcast(const QString& method, const QStringList& args = {});
 
-    using OnReceived = std::function<bool (const QStringList&)>;
+    using OnReceived = std::function<bool (const QStringList&, const ID& srcID)>;
     Code syncRequestToAll(const QString& method, const QStringList& args, const OnReceived& onReceived);
 
     QList<ID> instances() const;

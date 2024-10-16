@@ -163,6 +163,7 @@ private:
     void toggleAutomaticallyPan();
     void toggleMetronome();
     void toggleMidiInput();
+    void setMidiUseWrittenPitch(bool useWrittenPitch);
     void toggleCountIn();
     void toggleLoopPlayback();
 
@@ -201,6 +202,8 @@ private:
     engraving::InstrumentTrackIdSet availableInstrumentTracks() const;
     void removeNonExistingTracks();
     void removeTrack(const engraving::InstrumentTrackId& instrumentTrackId);
+
+    void onTrackNewlyAdded(const engraving::InstrumentTrackId& instrumentTrackId);
 
     muse::audio::secs_t playedTickToSecs(int tick) const;
 

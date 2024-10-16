@@ -540,8 +540,7 @@ bool Measure::showsMeasureNumberInAutoMode()
 
     // Measure numbers should not show on first measure unless specified with Sid::showMeasureNumberOne
     // except, when showing numbers on each measure, and first measure is after anacrusis - then show always
-    if (!prevMeasure || prevMeasure->sectionBreak()
-        || (prevMeasure->irregular() && prevMeasure->isFirstInSection() && interval != 1)) {
+    if (isFirstInSection() || (prevMeasure->irregular() && prevMeasure->isFirstInSection() && interval != 1)) {
         return style().styleB(Sid::showMeasureNumberOne);
     }
 
@@ -1283,20 +1282,18 @@ void Measure::insertStaff(Staff* staff, staff_idx_t staffIdx)
 }
 
 //---------------------------------------------------------
-//   staffabbox
+//   staffPageBoundingRect
 //---------------------------------------------------------
 
-RectF Measure::staffabbox(staff_idx_t staffIdx) const
+RectF Measure::staffPageBoundingRect(staff_idx_t staffIdx) const
 {
     System* s = system();
     IF_ASSERT_FAILED(s) {
         return RectF();
     }
-    RectF sb(s->staff(staffIdx)->bbox());
-    RectF rrr(sb.translated(s->pagePos()));
-    RectF rr(abbox());
-    RectF r(rr.x(), rrr.y(), rr.width(), rrr.height());
-    return r;
+    RectF sysStaffPageBbox = s->staff(staffIdx)->bbox().translated(s->pagePos());
+    RectF measurePageBbox = pageBoundingRect();
+    return RectF(measurePageBbox.x(), sysStaffPageBbox.y(), measurePageBbox.width(), sysStaffPageBbox.height());
 }
 
 //---------------------------------------------------------
@@ -1801,8 +1798,12 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                 rest->undoChangeProperty(Pid::DURATION_TYPE_WITH_DOTS, DurationTypeWithDots(DurationType::V_MEASURE));
             } else {          // if measure value did change, represent with rests actual measure value
                 // convert the measure duration in a list of values (no dots for rests)
-                std::vector<TDuration> durList = toRhythmicDurationList(nf * stretch, true, tick(),
-                                                                        score()->sigmap()->timesig(tick().ticks()).nominal(), this, 0);
+                std::vector<TDuration> durList = toRhythmicDurationList(nf * stretch,
+                                                                        /*isRest=*/ true,
+                                                                        /*rtickStart=*/ Fraction(0, 1),
+                                                                        /*nominal=*/ score()->sigmap()->timesig(tick().ticks()).nominal(),
+                                                                        /*measure=*/ this,
+                                                                        /*maxDots=*/ 0);
 
                 // set the existing rest to the first value of the duration list
                 TDuration firstDur = durList[0];
@@ -1975,8 +1976,14 @@ bool Measure::isFirstInSystem() const
 
 bool Measure::isFirstInSection() const
 {
-    Measure* prevMeasure = this->prevMeasure();
-    return !prevMeasure || prevMeasure->sectionBreak();
+    for (MeasureBase* m = prev(); m; m = m->prev()) {
+        if (m->sectionBreak()) {
+            return true;
+        } else if (m->isMeasure()) {
+            return false;
+        }
+    }
+    return true;
 }
 
 //---------------------------------------------------------
@@ -3134,6 +3141,9 @@ void Measure::computeTicks()
                 break;
             }
             nextSegment = nextSegment->next();
+        }
+        if (segment->ticks().isZero()) {
+            segment->setTicks(ticks() - segment->rtick());
         }
     }
 }

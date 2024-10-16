@@ -56,8 +56,8 @@ static QString audioMime(const QString& audioFormat)
     return "audio/x-wav";
 }
 
-AudioComService::AudioComService(QObject* parent)
-    : AbstractCloudService(parent)
+AudioComService::AudioComService(const modularity::ContextPtr& iocCtx, QObject* parent)
+    : AbstractCloudService(iocCtx, parent)
 {
 }
 

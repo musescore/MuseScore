@@ -6,7 +6,7 @@
         <source>Wind section notated on a grand staff.</source>
         <comment>winds description</comment>
         <extracomment>description for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Blåssektionen noterad i pianoackolad.</translation>
+        <translation>Blåssektion noterad i pianoackolad.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="208"/>

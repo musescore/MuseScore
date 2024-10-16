@@ -42,12 +42,12 @@
 
 using namespace muse::cloud;
 
-class OAuthHttpServerReplyHandler::Impl
+class OAuthHttpServerReplyHandler::Impl : public Injectable
 {
-    INJECT(ICloudConfiguration, configuration)
+    muse::Inject<ICloudConfiguration> configuration = { this };
 
 public:
-    explicit Impl(OAuthHttpServerReplyHandler* p);
+    explicit Impl(OAuthHttpServerReplyHandler* p, const modularity::ContextPtr& iocCtx);
     ~Impl();
 
     QTcpServer m_httpServer;
@@ -99,8 +99,8 @@ private:
     OAuthHttpServerReplyHandler* m_public = nullptr;
 };
 
-OAuthHttpServerReplyHandler::Impl::Impl(OAuthHttpServerReplyHandler* p)
-    : m_public(p)
+OAuthHttpServerReplyHandler::Impl::Impl(OAuthHttpServerReplyHandler* p, const modularity::ContextPtr& iocCtx)
+    : Injectable(iocCtx), m_public(p)
 {
     QObject::connect(&m_httpServer, &QTcpServer::newConnection, [this]() { onClientConnected(); });
 }
@@ -320,17 +320,17 @@ bool OAuthHttpServerReplyHandler::Impl::HttpRequest::readHeader(QTcpSocket* sock
     return false;
 }
 
-OAuthHttpServerReplyHandler::OAuthHttpServerReplyHandler(QObject* parent)
-    : OAuthHttpServerReplyHandler(QHostAddress::Any, 0, parent)
+OAuthHttpServerReplyHandler::OAuthHttpServerReplyHandler(const modularity::ContextPtr& iocCtx, QObject* parent)
+    : OAuthHttpServerReplyHandler(QHostAddress::Any, 0, iocCtx, parent)
 {}
 
-OAuthHttpServerReplyHandler::OAuthHttpServerReplyHandler(quint16 port, QObject* parent)
-    : OAuthHttpServerReplyHandler(QHostAddress::Any, port, parent)
+OAuthHttpServerReplyHandler::OAuthHttpServerReplyHandler(quint16 port, const modularity::ContextPtr& iocCtx, QObject* parent)
+    : OAuthHttpServerReplyHandler(QHostAddress::Any, port, iocCtx, parent)
 {}
 
-OAuthHttpServerReplyHandler::OAuthHttpServerReplyHandler(const QHostAddress& address,
-                                                         quint16 port, QObject* parent)
-    : QOAuthOobReplyHandler(parent), m_impl(std::make_unique<Impl>(this))
+OAuthHttpServerReplyHandler::OAuthHttpServerReplyHandler(const QHostAddress& address, quint16 port, const modularity::ContextPtr& iocCtx,
+                                                         QObject* parent)
+    : QOAuthOobReplyHandler(parent), m_impl(std::make_unique<Impl>(this, iocCtx))
 {
     listen(address, port);
 }

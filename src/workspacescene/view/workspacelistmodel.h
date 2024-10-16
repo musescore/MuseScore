@@ -32,14 +32,14 @@
 #include "global/async/asyncable.h"
 
 namespace mu::workspacescene {
-class WorkspaceListModel : public QAbstractListModel, public muse::async::Asyncable
+class WorkspaceListModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    Inject<muse::workspace::IWorkspaceManager> workspacesManager;
-    Inject<muse::IInteractive> interactive;
-
     Q_PROPERTY(QVariant selectedWorkspace READ selectedWorkspace NOTIFY selectedWorkspaceChanged)
+
+    Inject<muse::workspace::IWorkspaceManager> workspacesManager = { this };
+    Inject<muse::IInteractive> interactive = { this };
 
 public:
     explicit WorkspaceListModel(QObject* parent = nullptr);

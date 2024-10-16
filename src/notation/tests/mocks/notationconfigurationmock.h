@@ -190,6 +190,15 @@ public:
     MOCK_METHOD(muse::ValCh<int>, pianoKeyboardNumberOfKeys, (), (const, override));
     MOCK_METHOD(void, setPianoKeyboardNumberOfKeys, (int), (override));
 
+    MOCK_METHOD(muse::ValCh<bool>, midiUseWrittenPitch, (), (const, override));
+    MOCK_METHOD(void, setMidiUseWrittenPitch, (bool), (override));
+
+    MOCK_METHOD(bool, useNewPercussionPanel, (), (const, override));
+    MOCK_METHOD(void, setUseNewPercussionPanel, (bool), (override));
+
+    MOCK_METHOD(bool, autoShowPercussionPanel, (), (const, override));
+    MOCK_METHOD(void, setAutoShowPercussionPanel, (bool), (override));
+
     MOCK_METHOD(muse::io::path_t, styleFileImportPath, (), (const, override));
     MOCK_METHOD(void, setStyleFileImportPath, (const muse::io::path_t&), (override));
 

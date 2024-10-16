@@ -29,14 +29,20 @@ using namespace mu::playback;
 using namespace mu::project;
 
 SoundProfilesModel::SoundProfilesModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
+}
+
+void SoundProfilesModel::init()
+{
+    beginResetModel();
+
     const SoundProfilesMap& availableProfiles = profilesRepo()->availableProfiles();
     for (const auto& pair : availableProfiles) {
         m_profiles.push_back(pair.second);
     }
 
-    std::sort(m_profiles.begin(), m_profiles.end(), [](const SoundProfile& left, const SoundProfile& right) {
+    std::sort(m_profiles.begin(), m_profiles.end(), [this](const SoundProfile& left, const SoundProfile& right) {
         if (left.name == config()->basicSoundProfileName()
             && right.name == config()->museSoundProfileName()) {
             return true;
@@ -51,6 +57,8 @@ SoundProfilesModel::SoundProfilesModel(QObject* parent)
     }
 
     m_defaultProjectsProfile = config()->defaultProfileForNewProjects().toQString();
+
+    endResetModel();
 }
 
 int SoundProfilesModel::rowCount(const QModelIndex& /*parent*/) const

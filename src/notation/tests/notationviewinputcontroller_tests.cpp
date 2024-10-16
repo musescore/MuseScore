@@ -93,6 +93,12 @@ public:
 
     mutable QList<QInputEvent*> m_events;
 
+    struct HitContextConfig
+    {
+        ElementType elementType = ElementType::INVALID;
+        bool start = true;
+    };
+
     QWheelEvent* make_wheelEvent(QPoint pixelDelta,
                                  QPoint angleDelta,
                                  Qt::KeyboardModifiers modifiers = Qt::NoModifier,
@@ -121,15 +127,46 @@ public:
         return ev;
     }
 
-    INotationInteraction::HitElementContext hitContext(engraving::MasterScore* score, bool start) const
+    notation::EngravingItem* findElement(ElementType type, ChordRest* chord) const
+    {
+        switch (type) {
+        case ElementType::NOTE:
+            return engraving::toChord(chord)->notes().front();
+        case ElementType::DYNAMIC: {
+            for (notation::EngravingItem* element : chord->segment()->annotations()) {
+                if (element->type() == ElementType::DYNAMIC) {
+                    return element;
+                }
+            }
+            break;
+        }
+        case ElementType::HAIRPIN: {
+            const mu::engraving::SpannerMap& spannerMap = chord->score()->spannerMap();
+            auto intervals = spannerMap.findOverlapping(0, chord->score()->endTick().ticks());
+            for (const auto& interval : intervals) {
+                mu::engraving::Spanner* spanner = interval.value;
+                if (spanner->isHairpin()) {
+                    return spanner;
+                }
+            }
+            break;
+        }
+        default:
+            break;
+        }
+
+        return nullptr;
+    }
+
+    INotationInteraction::HitElementContext hitContext(engraving::MasterScore* score, HitContextConfig config) const
     {
         INotationInteraction::HitElementContext context;
 
         Measure* firstMeasure = score->firstMeasure();
-        Segment* segment = start ? firstMeasure->segments().firstCRSegment() : firstMeasure->segments().last();
-        ChordRest* firstChord = segment->nextChordRest(0, !start);
+        Segment* segment = config.start ? firstMeasure->segments().firstCRSegment() : firstMeasure->segments().last();
+        ChordRest* chord = segment->nextChordRest(0, !config.start);
 
-        context.element = engraving::toChord(firstChord)->notes().front();
+        context.element = findElement(config.elementType, chord);
         context.staff = context.element->staff();
 
         return context;
@@ -139,7 +176,7 @@ public:
     {
         INotationInteraction::HitElementContext context;
 
-        engraving::MeasureBase* measure = score->measure(index + 1 /*Vbox*/);
+        engraving::MeasureBase* measure = score->measure(index);
         context.element = measure;
         context.staff = score->staff(0);
 
@@ -240,10 +277,10 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
     engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
 
     //! [GIVEN] Previous selected note
-    INotationInteraction::HitElementContext oldContext = hitContext(score, true /*first note*/);
+    INotationInteraction::HitElementContext oldContext = hitContext(score, { ElementType::NOTE, true /*first note*/ });
 
     //! [GIVEN] User selected new note that was already selected
-    INotationInteraction::HitElementContext newContext = hitContext(score, false /*last note*/);
+    INotationInteraction::HitElementContext newContext = hitContext(score, { ElementType::NOTE, false /*last note*/ });
     newContext.element->setSelected(true);
 
     std::vector<EngravingItem*> selectedElements {
@@ -296,6 +333,160 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
 }
 
 /**
+ * @brief Mouse_Press_On_Selected_Text_Element
+ * @details User pressed left mouse button on already selected text element
+ *          We should change text cursor position
+ */
+TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Selected_Text_Element)
+{
+    //! [GIVEN] There is a test score
+    engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
+
+    //! [GIVEN] Previous selected dynamic
+    INotationInteraction::HitElementContext oldContext = hitContext(score, { ElementType::DYNAMIC });
+
+    //! [GIVEN] User selected new dynamic that was already selected
+    INotationInteraction::HitElementContext newContext = oldContext;
+    newContext.element->setSelected(true);
+
+    std::vector<EngravingItem*> selectedElements {
+        newContext.element
+    };
+
+    EXPECT_CALL(*m_interaction, hitElement(_, _))
+    .WillOnce(Return(newContext.element));
+
+    EXPECT_CALL(*m_interaction, hitStaff(_))
+    .WillOnce(Return(newContext.element->staff()));
+
+    //! [GIVEN] The new hit element context with new dynamic will be set
+    EXPECT_CALL(*m_interaction, setHitElementContext(newContext))
+    .Times(1);
+
+    EXPECT_CALL(*m_interaction, hitElementContext())
+    .Times(2)
+    .WillOnce(ReturnRef(oldContext))
+    .WillOnce(ReturnRef(newContext));
+
+    //! [GIVEN] There isn't a range selection
+    ON_CALL(*m_selection, isRange())
+    .WillByDefault(Return(false));
+
+    ON_CALL(*m_selection, elements())
+    .WillByDefault(ReturnRef(selectedElements));
+
+    //! [GIVEN] No note enter mode, no playing
+    EXPECT_CALL(m_view, isNoteEnterMode())
+    .WillOnce(Return(false));
+
+    EXPECT_CALL(*m_playbackController, isPlaying())
+    .WillOnce(Return(false));
+
+    //! [THEN] We will seek and play selected dynamic, but no select again
+    EXPECT_CALL(*m_playbackController, seekElement(newContext.element))
+    .Times(1);
+
+    std::vector<const EngravingItem*> elements = { newContext.element };
+    EXPECT_CALL(*m_playbackController, playElements(elements))
+    .Times(0);
+
+    std::vector<EngravingItem*> selectElements = { newContext.element };
+    EXPECT_CALL(*m_interaction, select(selectElements, _, _))
+    .Times(0);
+
+    //! [GIVEN] Hit element is text element
+    EXPECT_CALL(*m_interaction, isTextSelected())
+    .WillOnce(Return(true));
+    EXPECT_CALL(*m_interaction, isTextEditingStarted())
+    .WillOnce(Return(true));
+
+    //! [THEN] We will change text cursor position
+    EXPECT_CALL(*m_interaction, changeTextCursorPosition(_))
+    .Times(1);
+
+    //! [WHEN] User pressed left mouse button
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPoint(100, 100)));
+}
+
+/**
+ * @brief Mouse_Press_On_Selected_Non_Text_Element
+ * @details User pressed left mouse button on already selected non text element
+ *          We shouldn't change text cursor position
+ */
+TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Selected_Non_Text_Element)
+{
+    //! [GIVEN] There is a test score
+    engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
+
+    //! [GIVEN] Previous selected hairpin
+    INotationInteraction::HitElementContext oldContext = hitContext(score, { ElementType::HAIRPIN });
+
+    //! [GIVEN] User selected new hairpin that was already selected
+    INotationInteraction::HitElementContext newContext = oldContext;
+    newContext.element->setSelected(true);
+
+    std::vector<EngravingItem*> selectedElements {
+        newContext.element
+    };
+
+    EXPECT_CALL(*m_interaction, hitElement(_, _))
+    .WillOnce(Return(newContext.element));
+
+    EXPECT_CALL(*m_interaction, hitStaff(_))
+    .WillOnce(Return(newContext.element->staff()));
+
+    //! [GIVEN] The new hit element context with new hairpin will be set
+    EXPECT_CALL(*m_interaction, setHitElementContext(newContext))
+    .Times(1);
+
+    EXPECT_CALL(*m_interaction, hitElementContext())
+    .Times(2)
+    .WillOnce(ReturnRef(oldContext))
+    .WillOnce(ReturnRef(newContext));
+
+    //! [GIVEN] There isn't a range selection
+    ON_CALL(*m_selection, isRange())
+    .WillByDefault(Return(false));
+
+    ON_CALL(*m_selection, elements())
+    .WillByDefault(ReturnRef(selectedElements));
+
+    //! [GIVEN] No note enter mode, no playing
+    EXPECT_CALL(m_view, isNoteEnterMode())
+    .WillOnce(Return(false));
+
+    EXPECT_CALL(*m_playbackController, isPlaying())
+    .WillOnce(Return(false));
+
+    //! [THEN] We will seek and play selected hairpin, but no select again
+    EXPECT_CALL(*m_playbackController, seekElement(newContext.element))
+    .Times(1);
+
+    std::vector<const EngravingItem*> elements = { newContext.element };
+    EXPECT_CALL(*m_playbackController, playElements(elements))
+    .Times(0);
+
+    std::vector<EngravingItem*> selectElements = { newContext.element };
+    EXPECT_CALL(*m_interaction, select(selectElements, _, _))
+    .Times(0);
+
+    //! [GIVEN] Hit element isn't text element
+    EXPECT_CALL(*m_interaction, isTextSelected())
+    .WillOnce(Return(false));
+
+    //! [THEN] No cursor changing, no editing grips and no starting edit element because needStartEditingAfterSelecting is false
+    EXPECT_CALL(*m_interaction, changeTextCursorPosition(_))
+    .Times(0);
+    EXPECT_CALL(*m_interaction, startEditGrip(newContext.element, _))
+    .Times(0);
+    EXPECT_CALL(*m_interaction, startEditElement(newContext.element, _))
+    .Times(0);
+
+    //! [WHEN] User pressed left mouse button
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPoint(100, 100)));
+}
+
+/**
  * @brief Mouse_Press_Range_Start_Play_From_First_Playable_Element
  * @details User selected a range in a note that is located after the previous selected note
  *          The new note should be selected and played, but no seeked
@@ -307,10 +498,10 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
     engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
 
     //! [GIVEN] Previous selected note
-    INotationInteraction::HitElementContext oldContext = hitContext(score, true /*first note*/);
+    INotationInteraction::HitElementContext oldContext = hitContext(score, { ElementType::NOTE, true /*first note*/ });
 
     //! [GIVEN] User selected new note that is located after the previous selected note
-    INotationInteraction::HitElementContext newContext = hitContext(score, false /*last note*/);
+    INotationInteraction::HitElementContext newContext = hitContext(score, { ElementType::NOTE, false /*last note*/ });
 
     EXPECT_CALL(*m_interaction, hitElement(_, _))
     .WillOnce(Return(newContext.element));
@@ -373,7 +564,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Already_Selected_Element
     engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
 
     //! [GIVEN] Previous selected note
-    INotationInteraction::HitElementContext oldContext = hitContext(score, true /*first note*/);
+    INotationInteraction::HitElementContext oldContext = hitContext(score, { ElementType::NOTE });
     oldContext.element->setSelected(true);
 
     //! [GIVEN] User pressed on the previous selected note

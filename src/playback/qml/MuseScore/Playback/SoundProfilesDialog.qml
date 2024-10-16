@@ -35,6 +35,10 @@ StyledDialogView {
     contentWidth: 896
     contentHeight: 424
 
+    Component.onCompleted: {
+        profilesListModel.init()
+    }
+
     SoundProfilesModel {
         id: profilesListModel
     }

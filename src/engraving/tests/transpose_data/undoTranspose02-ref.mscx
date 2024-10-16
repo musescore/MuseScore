@@ -12,7 +12,7 @@
       <beamMinLen>1.25</beamMinLen>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
-      <Spatium>1.764</Spatium>
+      <spatium>1.764</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

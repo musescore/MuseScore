@@ -466,7 +466,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
         // clone elements from underlying measure to mmr
         for (EngravingItem* e : underlyingSeg->annotations()) {
             // look at elements in underlying measure
-            if (!muse::contains(BREAK_TYPES, e->type())) {
+            if (!muse::contains(BREAK_TYPES, e->type()) || !e->visible()) {
                 continue;
             }
             // try to find a match in mmr
@@ -534,7 +534,7 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
     int n = 0;
     for (const Segment* s = m->first(); s; s = s->next()) {
         for (const EngravingItem* e : s->annotations()) {
-            if (!e->staff()->show()) {
+            if (!e->staff()->show() || !e->visible()) {
                 continue;
             }
             if (!muse::contains(BREAK_TYPES, e->type())) {
@@ -602,6 +602,9 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     auto sl = ctx.dom().spannerMap().findOverlapping(m->tick().ticks(), m->endTick().ticks());
     for (auto i : sl) {
         Spanner* s = i.value;
+        if (!s->visible()) {
+            continue;
+        }
         Fraction spannerStart = s->tick();
         Fraction spannerEnd = s->tick2();
         Fraction measureStart = m->tick();
@@ -618,6 +621,9 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
         auto prevMeasSpanners = ctx.dom().spannerMap().findOverlapping(prevMeas->tick().ticks(), prevMeas->endTick().ticks());
         for (auto i : prevMeasSpanners) {
             Spanner* s = i.value;
+            if (!s->visible()) {
+                continue;
+            }
             Fraction spannerStart = s->tick();
             Fraction spannerEnd = s->tick2();
             Fraction measureStart = prevMeas->tick();
@@ -869,6 +875,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
     checkStaffMoveValidity(measure, ctx);
 
     // ---- Modify DOM ----
+    ModifyDom::setCrossMeasure(measure, ctx);
     ModifyDom::connectTremolo(measure);
     ModifyDom::cmdUpdateNotes(measure, ctx.dom());
     ModifyDom::createStems(measure,  ctx);
@@ -2207,8 +2214,11 @@ void MeasureLayout::layoutTimeTickAnchors(Measure* m, LayoutContext& ctx)
         Fraction thisDuration = segment.ticks();
         Fraction relativeTick = segment.rtick() - refCRSeg->rtick();
 
-        double relativeX = refCRSeg->width() * (relativeTick.toDouble() / refCRSeg->ticks().toDouble());
-        double relativeWidth = refCRSeg->width() * (thisDuration.toDouble() / refSegDuration.toDouble());
+        Segment* nextCRSeg = m->findSegmentR(SegmentType::ChordRest, refCRSeg->rtick() + refCRSeg->ticks());
+        double width = nextCRSeg ? nextCRSeg->x() - refCRSeg->x() : refCRSeg->width();
+
+        double relativeX = width * (relativeTick.toDouble() / refCRSeg->ticks().toDouble());
+        double relativeWidth = width * (thisDuration.toDouble() / refSegDuration.toDouble());
 
         segment.mutldata()->setPosX(refCRSeg->x() + relativeX);
         segment.setWidth(relativeWidth);

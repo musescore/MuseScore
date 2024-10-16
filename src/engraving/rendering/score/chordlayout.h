@@ -61,6 +61,7 @@ public:
     static void computeUp(ChordRest* item, const LayoutContext& ctx);
     static int computeAutoStemDirection(const std::vector<int>& noteDistances);
     static bool isChordPosBelowBeam(Chord* item, Beam* beam);
+    static bool isChordPosBelowTrem(const Chord* item, TremoloTwoChord* trem);
 
     static void layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx);
     static double layoutChords2(std::vector<Note*>& notes, bool up, LayoutContext& ctx);

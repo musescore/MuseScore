@@ -313,7 +313,6 @@ enum class ElementType {
     HARMONIC_MARK         = int(mu::engraving::ElementType::HARMONIC_MARK),
     TEXTLINE              = int(mu::engraving::ElementType::TEXTLINE),
     TEXTLINE_BASE         = int(mu::engraving::ElementType::TEXTLINE_BASE),
-    NOTELINE              = int(mu::engraving::ElementType::NOTELINE),
     LYRICSLINE            = int(mu::engraving::ElementType::LYRICSLINE),
     GLISSANDO             = int(mu::engraving::ElementType::GLISSANDO),
     BRACKET               = int(mu::engraving::ElementType::BRACKET),

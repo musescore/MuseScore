@@ -4,37 +4,37 @@
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="51"/>
         <source>Align left edge of text to reference point</source>
-        <translation>Allinea il bordo sinistro del testo al punto di riferimento</translation>
+        <translation>Allinea bordo sinistro del testo al punto di riferimento</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="76"/>
         <source>Center text on reference point</source>
-        <translation>Centra il testo al punto di riferimento</translation>
+        <translation>Centra testo al punto di riferimento</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="101"/>
         <source>Align right edge of text to reference point</source>
-        <translation>Allinea il bordo destro del testo al punto di riferimento</translation>
+        <translation>Allinea bordo destro del testo al punto di riferimento</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="139"/>
         <source>Align top edge of text to reference point</source>
-        <translation>Allinea il bordo superiore del testo al punto di riferimento</translation>
+        <translation>Allinea bordo superiore del testo al punto di riferimento</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="164"/>
         <source>Center text vertical to reference point</source>
-        <translation>Centra il testo verticalmente al punto di riferimento</translation>
+        <translation>Centra testo verticalmente al punto di riferimento</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="189"/>
         <source>Align bottom edge of text to reference point</source>
-        <translation>Allinea il bordo inferiore del testo al punto di riferimento</translation>
+        <translation>Allinea bordo inferiore del testo al punto di riferimento</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="214"/>
         <source>Align baseline of text to reference point</source>
-        <translation>Allinea il bordo inferiore del testo al punto di riferimento</translation>
+        <translation>Allinea bordo inferiore del testo al punto di riferimento</translation>
     </message>
 </context>
 <context>
@@ -42,12 +42,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="14"/>
         <source>Add/remove system breaks</source>
-        <translation>Aggiungi/Rimuovi interruzioni di accollatura</translation>
+        <translation>Aggiungi/rimuovi interruzioni di sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="24"/>
         <source>Break systems every X measures</source>
-        <translation>Interrompi le accollature ogni X battute</translation>
+        <translation>Interrompi sistemi ogni X battute</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="34"/>
@@ -58,13 +58,13 @@
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="69"/>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="72"/>
         <source>Add system break at end of each system</source>
-        <translation>Aggiungi un&apos;interruzione di accollatura alla fine di ogni accollatura</translation>
+        <translation>Aggiungi interruzione di sistema alla fine di ogni sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="79"/>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="82"/>
         <source>Remove current system breaks</source>
-        <translation>Rimuovi le attuali interruzioni di accollatura </translation>
+        <translation>Rimuovi attuali interruzioni di sistema</translation>
     </message>
 </context>
 <context>
@@ -72,13 +72,13 @@
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="14"/>
         <source>Edit Drumset</source>
-        <translation>Modifica il set di percussioni</translation>
+        <translation>Modifica set di percussioni</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="50"/>
         <source>No.</source>
         <extracomment>Number</extracomment>
-        <translation>N°</translation>
+        <translation>No.</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="55"/>
@@ -113,7 +113,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="125"/>
         <source>Edit noteheads</source>
-        <translation>Modifica le teste delle note</translation>
+        <translation>Modifica teste delle note</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="137"/>
@@ -163,7 +163,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="281"/>
         <source>Staff line:</source>
-        <translation>Linea del pentagramma:</translation>
+        <translation>Linea del rigo:</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="307"/>
@@ -211,7 +211,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="20"/>
         <source>Select note:</source>
-        <translation>Seleziona la nota:</translation>
+        <translation>Seleziona nota:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="57"/>
@@ -271,717 +271,717 @@
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="112"/>
         <source>C</source>
-        <translation>Do</translation>
+        <translation>DO</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="117"/>
         <source>C♯</source>
-        <translation>Do♯</translation>
+        <translation>DO♯</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="122"/>
         <source>D</source>
-        <translation>Re</translation>
+        <translation>RE</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="127"/>
         <source>E♭</source>
-        <translation>Mi♭</translation>
+        <translation>MI♭</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="132"/>
         <source>E</source>
-        <translation>Mi</translation>
+        <translation>MI</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="137"/>
         <source>F</source>
-        <translation>Fa</translation>
+        <translation>FA</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="142"/>
         <source>F♯</source>
-        <translation>Fa♯</translation>
+        <translation>FA♯</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="147"/>
         <source>G</source>
-        <translation>Sol</translation>
+        <translation>SOL</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="152"/>
         <source>A♭</source>
-        <translation>La♭</translation>
+        <translation>LA♭</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="157"/>
         <source>A</source>
-        <translation>La</translation>
+        <translation>LA</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="162"/>
         <source>B♭</source>
-        <translation>Si♭</translation>
+        <translation>SI♭</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="167"/>
         <source>B</source>
-        <translation>Si</translation>
+        <translation>SI</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="172"/>
         <source>»C</source>
-        <translation>»Do</translation>
+        <translation>»DO</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="177"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="344"/>
         <source>C 9</source>
-        <translation>Do 9</translation>
+        <translation>DO 9</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="182"/>
         <source>C♯ 9</source>
-        <translation>Do♯ 9</translation>
+        <translation>DO♯ 9</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="187"/>
         <source>D 9</source>
-        <translation>Re 9</translation>
+        <translation>RE 9</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="192"/>
         <source>E♭ 9</source>
-        <translation>Mi♭9</translation>
+        <translation>MI♭ 9</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="197"/>
         <source>E 9</source>
-        <translation>Mi 9</translation>
+        <translation>MI 9</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="202"/>
         <source>F 9</source>
-        <translation>Fa 9</translation>
+        <translation>FA 9</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="207"/>
         <source>F♯ 9</source>
-        <translation>Fa♯ 9</translation>
+        <translation>FA♯ 9</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="212"/>
         <source>G 9</source>
-        <translation>Sol 9</translation>
+        <translation>SOL 9</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="242"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="454"/>
         <source>C 8</source>
-        <translation>Do 8</translation>
+        <translation>DO 8</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="256"/>
         <source>C♯ 8</source>
-        <translation>Do♯ 8</translation>
+        <translation>DO♯ 8</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="264"/>
         <source>D 8</source>
-        <translation>Re 8</translation>
+        <translation>RE 8</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="272"/>
         <source>E♭ 8</source>
-        <translation>Mi♭ 8</translation>
+        <translation>MI♭ 8</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="280"/>
         <source>E 8</source>
-        <translation>Mi 8</translation>
+        <translation>MI 8</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="288"/>
         <source>F 8</source>
-        <translation>Fa 8</translation>
+        <translation>FA 8</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="296"/>
         <source>F♯ 8</source>
-        <translation>Fa♯ 8</translation>
+        <translation>FA♯ 8</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="304"/>
         <source>G 8</source>
-        <translation>Sol 8</translation>
+        <translation>SOL 8</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="312"/>
         <source>A♭ 8</source>
-        <translation>La♭ 8</translation>
+        <translation>LA♭ 8</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="320"/>
         <source>A 8</source>
-        <translation>La 8</translation>
+        <translation>LA 8</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="328"/>
         <source>B♭ 8</source>
-        <translation>Si♭ 8</translation>
+        <translation>SI♭ 8</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="336"/>
         <source>B 8</source>
-        <translation>Si 8</translation>
+        <translation>SI 8</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="352"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="564"/>
         <source>C 7</source>
-        <translation>Do 7</translation>
+        <translation>DO 7</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="366"/>
         <source>C♯ 7</source>
-        <translation>Do♯ 7</translation>
+        <translation>DO♯ 7</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="374"/>
         <source>D 7</source>
-        <translation>Re 7</translation>
+        <translation>RE 7</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="382"/>
         <source>E♭ 7</source>
-        <translation>Mi♭ 7</translation>
+        <translation>MI♭ 7</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="390"/>
         <source>E 7</source>
-        <translation>Mi 7</translation>
+        <translation>MI 7</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="398"/>
         <source>F 7</source>
-        <translation>Fa 7</translation>
+        <translation>FA 7</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="406"/>
         <source>F♯ 7</source>
-        <translation>Fa♯ 7</translation>
+        <translation>FA♯ 7</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="414"/>
         <source>G 7</source>
-        <translation>Sol 7</translation>
+        <translation>SOL 7</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="422"/>
         <source>A♭ 7</source>
-        <translation>La♭ 7</translation>
+        <translation>LA♭ 7</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="430"/>
         <source>A 7</source>
-        <translation>La 7</translation>
+        <translation>LA 7</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="438"/>
         <source>B♭ 7</source>
-        <translation>Si♭ 7</translation>
+        <translation>SI♭ 7</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="446"/>
         <source>B 7</source>
-        <translation>Si 7</translation>
+        <translation>SI 7</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="462"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="674"/>
         <source>C 6</source>
-        <translation>Do 6</translation>
+        <translation>DO 6</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="476"/>
         <source>C♯ 6</source>
-        <translation>Do♯ 6</translation>
+        <translation>DO♯ 6</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="484"/>
         <source>D 6</source>
-        <translation>Re 6</translation>
+        <translation>RE 6</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="492"/>
         <source>E♭ 6</source>
-        <translation>Mi♭ 6</translation>
+        <translation>MI♭ 6</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="500"/>
         <source>E 6</source>
-        <translation>Mi 6</translation>
+        <translation>MI 6</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="508"/>
         <source>F 6</source>
-        <translation>Fa 6</translation>
+        <translation>FA 6</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="516"/>
         <source>F♯ 6</source>
-        <translation>Fa♯ 6</translation>
+        <translation>FA♯ 6</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="524"/>
         <source>G 6</source>
-        <translation>Sol 6</translation>
+        <translation>SOL 6</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="532"/>
         <source>A♭ 6</source>
-        <translation>La♭ 6</translation>
+        <translation>LA♭ 6</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="540"/>
         <source>A 6</source>
-        <translation>La 6</translation>
+        <translation>LA 6</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="548"/>
         <source>B♭ 6</source>
-        <translation>Si♭ 6</translation>
+        <translation>SI♭ 6</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="556"/>
         <source>B 6</source>
-        <translation>Si 6</translation>
+        <translation>SI 6</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="572"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="784"/>
         <source>C 5</source>
-        <translation>Do 5</translation>
+        <translation>DO 5</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="586"/>
         <source>C♯ 5</source>
-        <translation>Do♯ 5</translation>
+        <translation>DO♯ 5</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="594"/>
         <source>D 5</source>
-        <translation>Re 5</translation>
+        <translation>RE 5</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="602"/>
         <source>E♭ 5</source>
-        <translation>Mi♭ 5</translation>
+        <translation>MI♭ 5</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="610"/>
         <source>E 5</source>
-        <translation>Mi 5</translation>
+        <translation>MI 5</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="618"/>
         <source>F 5</source>
-        <translation>Fa 5</translation>
+        <translation>FA 5</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="626"/>
         <source>F♯ 5</source>
-        <translation>Fa♯ 5</translation>
+        <translation>FA♯ 5</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="634"/>
         <source>G 5</source>
-        <translation>Sol 5</translation>
+        <translation>SOL 5</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="642"/>
         <source>A♭ 5</source>
-        <translation>La♭ 5</translation>
+        <translation>LA♭ 5</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="650"/>
         <source>A 5</source>
-        <translation>La 5</translation>
+        <translation>LA 5</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="658"/>
         <source>B♭ 5</source>
-        <translation>Si♭ 5</translation>
+        <translation>SI♭ 5</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="666"/>
         <source>B 5</source>
-        <translation>Si 5</translation>
+        <translation>SI 5</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="682"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="894"/>
         <source>C 4</source>
-        <translation>Do 4</translation>
+        <translation>DO 4</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="696"/>
         <source>C♯ 4</source>
-        <translation>Do♯ 4</translation>
+        <translation>DO♯ 4</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="704"/>
         <source>D 4</source>
-        <translation>Re 4</translation>
+        <translation>RE 4</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="712"/>
         <source>E♭ 4</source>
-        <translation>Mi♭ 4</translation>
+        <translation>MI♭ 4</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="720"/>
         <source>E 4</source>
-        <translation>Mi 4</translation>
+        <translation>MI 4</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="728"/>
         <source>F 4</source>
-        <translation>Fa 4</translation>
+        <translation>FA 4</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="736"/>
         <source>F♯ 4</source>
-        <translation>Fa♯ 4</translation>
+        <translation>FA♯ 4</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="744"/>
         <source>G 4</source>
-        <translation>Sol 4</translation>
+        <translation>SOL 4</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="752"/>
         <source>A♭ 4</source>
-        <translation>La♭ 4</translation>
+        <translation>LA♭ 4</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="760"/>
         <source>A 4</source>
-        <translation>La 4</translation>
+        <translation>LA 4</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="768"/>
         <source>B♭ 4</source>
-        <translation>Si♭ 4</translation>
+        <translation>SI♭ 4</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="776"/>
         <source>B 4</source>
-        <translation>Si 4</translation>
+        <translation>SI 4</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="792"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1004"/>
         <source>C 3</source>
-        <translation>Do 3</translation>
+        <translation>DO 3</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="806"/>
         <source>C♯ 3</source>
-        <translation>Do♯ 3</translation>
+        <translation>DO♯ 3</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="814"/>
         <source>D 3</source>
-        <translation>Re 3</translation>
+        <translation>RE 3</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="822"/>
         <source>E♭ 3</source>
-        <translation>Mi♭ 3</translation>
+        <translation>MI♭ 3</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="830"/>
         <source>E 3</source>
-        <translation>Mi 3</translation>
+        <translation>MI 3</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="838"/>
         <source>F 3</source>
-        <translation>Fa 3</translation>
+        <translation>FA 3</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="846"/>
         <source>F♯ 3</source>
-        <translation>Fa♯ 3</translation>
+        <translation>FA♯ 3</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="854"/>
         <source>G 3</source>
-        <translation>Sol 3</translation>
+        <translation>SOL 3</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="862"/>
         <source>A♭ 3</source>
-        <translation>La♭ 3</translation>
+        <translation>LA♭ 3</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="870"/>
         <source>A 3</source>
-        <translation>La 3</translation>
+        <translation>LA 3</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="878"/>
         <source>B♭ 3</source>
-        <translation>Si♭ 3</translation>
+        <translation>SI♭ 3</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="886"/>
         <source>B 3</source>
-        <translation>Si 3</translation>
+        <translation>SI 3</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="902"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1114"/>
         <source>C 2</source>
-        <translation>Do 2</translation>
+        <translation>DO 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="916"/>
         <source>C♯ 2</source>
-        <translation>Do♯ 2</translation>
+        <translation>DO♯ 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="924"/>
         <source>D 2</source>
-        <translation>Re 2</translation>
+        <translation>RE 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="932"/>
         <source>E♭ 2</source>
-        <translation>Mi♭ 2</translation>
+        <translation>MI♭ 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="940"/>
         <source>E 2</source>
-        <translation>Mi 2</translation>
+        <translation>MI 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="948"/>
         <source>F 2</source>
-        <translation>Fa 2</translation>
+        <translation>FA 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="956"/>
         <source>F♯ 2</source>
-        <translation>Fa♯ 2</translation>
+        <translation>FA♯ 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="964"/>
         <source>G 2</source>
-        <translation>Sol 2</translation>
+        <translation>SOL 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="972"/>
         <source>A♭ 2</source>
-        <translation>L♭ 2</translation>
+        <translation>LA♭ 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="980"/>
         <source>A 2</source>
-        <translation>La 2</translation>
+        <translation>LA 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="988"/>
         <source>B♭ 2</source>
-        <translation>Si♭ 2</translation>
+        <translation>SI♭ 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="996"/>
         <source>B 2</source>
-        <translation>Si 2</translation>
+        <translation>SI 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1012"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1224"/>
         <source>C 1</source>
-        <translation>Do 1</translation>
+        <translation>DO 1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1026"/>
         <source>C♯ 1</source>
-        <translation>So♯ 1</translation>
+        <translation>DO♯ 1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1034"/>
         <source>D 1</source>
-        <translation>Re 1</translation>
+        <translation>RE 1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1042"/>
         <source>E♭ 1</source>
-        <translation>Mi♭ 1</translation>
+        <translation>MI♭ 1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1050"/>
         <source>E 1</source>
-        <translation>Mi 1</translation>
+        <translation>MI 1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1058"/>
         <source>F 1</source>
-        <translation>Fa 1</translation>
+        <translation>FA 1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1066"/>
         <source>F♯ 1</source>
-        <translation>Fa♯ 1</translation>
+        <translation>FA♯ 1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1074"/>
         <source>G 1</source>
-        <translation>Sol 1</translation>
+        <translation>SOL 1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1082"/>
         <source>A♭ 1</source>
-        <translation>La♭ 1</translation>
+        <translation>LA♭ 1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1090"/>
         <source>A 1</source>
-        <translation>La 1</translation>
+        <translation>LA 1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1098"/>
         <source>B♭ 1</source>
-        <translation>Si♭ 1</translation>
+        <translation>SI♭ 1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1106"/>
         <source>B 1</source>
-        <translation>Si 1</translation>
+        <translation>SI 1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1122"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1334"/>
         <source>C 0</source>
-        <translation>Do 0</translation>
+        <translation>DO 0</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1136"/>
         <source>C♯ 0</source>
-        <translation>Do♯ 0</translation>
+        <translation>DO♯ 0</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1144"/>
         <source>D 0</source>
-        <translation>Re 0</translation>
+        <translation>RE 0</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1152"/>
         <source>E♭ 0</source>
-        <translation>Mi♭ 0</translation>
+        <translation>MI♭ 0</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1160"/>
         <source>E 0</source>
-        <translation>Mi 0</translation>
+        <translation>MI 0</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1168"/>
         <source>F 0</source>
-        <translation>Fa 0</translation>
+        <translation>FA 0</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1176"/>
         <source>F♯ 0</source>
-        <translation>Fa♯ 0</translation>
+        <translation>FA♯ 0</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1184"/>
         <source>G 0</source>
-        <translation>Sol 0</translation>
+        <translation>SOL 0</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1192"/>
         <source>A♭ 0</source>
-        <translation>La♭ 0</translation>
+        <translation>LA♭ 0</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1200"/>
         <source>A 0</source>
-        <translation>La 0</translation>
+        <translation>LA 0</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1208"/>
         <source>B♭ 0</source>
-        <translation>Si♭ 0</translation>
+        <translation>SI♭ 0</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1216"/>
         <source>B 0</source>
-        <translation>Si 0</translation>
+        <translation>SI 0</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1232"/>
         <source>C -1</source>
-        <translation>Do -1</translation>
+        <translation>DO -1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1246"/>
         <source>C♯ -1</source>
-        <translation>Do♯ -1</translation>
+        <translation>DO♯ -1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1254"/>
         <source>D -1</source>
-        <translation>Re -1</translation>
+        <translation>RE -1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1262"/>
         <source>E♭ -1</source>
-        <translation>Mi♭ -1</translation>
+        <translation>MI♭ -1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1270"/>
         <source>E -1</source>
-        <translation>Mi -1</translation>
+        <translation>MI -1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1278"/>
         <source>F -1</source>
-        <translation>Fa -1</translation>
+        <translation>FA -1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1286"/>
         <source>F♯ -1</source>
-        <translation>Fa♯ -1</translation>
+        <translation>FA♯ -1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1294"/>
         <source>G -1</source>
-        <translation>Sol -1</translation>
+        <translation>SOL -1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1302"/>
         <source>A♭ -1</source>
-        <translation>La♭ -1</translation>
+        <translation>LA♭ -1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1310"/>
         <source>A -1</source>
-        <translation>La -1</translation>
+        <translation>LA -1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1318"/>
         <source>B♭ -1</source>
-        <translation>Si♭ -1</translation>
+        <translation>SI♭ -1</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1326"/>
         <source>B -1</source>
-        <translation>Si -1</translation>
+        <translation>SI -1</translation>
     </message>
 </context>
 <context>
@@ -989,32 +989,32 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="26"/>
         <source>Staff/Part properties</source>
-        <translation>Proprietà pentagramma/parte</translation>
+        <translation>Proprietà rigo/parte</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="44"/>
         <source>Staff properties</source>
-        <translation>Proprietà del pentagramma</translation>
+        <translation>Proprietà rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="52"/>
         <source>Show barlines</source>
-        <translation>Mostra le stanghette</translation>
+        <translation>Mostra stanghette</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="59"/>
         <source>Show clef</source>
-        <translation>Mostra la chiave</translation>
+        <translation>Mostra chiave</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="66"/>
         <source>Show time signature</source>
-        <translation>Mostra l&apos;indicazione metrica</translation>
+        <translation>Mostra indicazione metrica</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="73"/>
         <source>Do not hide if system is empty</source>
-        <translation>Non nascondere se l&apos;accollatura è vuota</translation>
+        <translation>Non nascondere se il sistema è vuoto</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="82"/>
@@ -1045,17 +1045,17 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="120"/>
         <source>Staff line color:</source>
-        <translation>Colore della linea del pentagramma:</translation>
+        <translation>Colore linea del rigo:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="139"/>
         <source>Invisible staff lines</source>
-        <translation>Linee del pentagramma invisibili</translation>
+        <translation>Linee del rigo invisibili</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="159"/>
         <source>Hide system barline</source>
-        <translation>Nascondi stanghetta di accollatura</translation>
+        <translation>Nascondi stanghetta di sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="166"/>
@@ -1065,12 +1065,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="186"/>
         <source>Merge matching rests</source>
-        <translation>Unisci le pause corrispondenti</translation>
+        <translation>Accorpa pause corrispondenti</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="193"/>
         <source>Small staff</source>
-        <translation>Pentagramma piccolo</translation>
+        <translation>Rigo piccolo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="214"/>
@@ -1086,12 +1086,12 @@
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="256"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="276"/>
         <source>sp</source>
-        <translation>spazio</translation>
+        <translation>sp</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="266"/>
         <source>Extra distance above staff:</source>
-        <translation>Distanza extra sopra il pentagramma:</translation>
+        <translation>Distanza extra sopra il rigo:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="292"/>
@@ -1111,12 +1111,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="333"/>
         <source>Advanced style properties…</source>
-        <translation>Proprietà avanzate dello stile...</translation>
+        <translation>Proprietà avanzate di stile...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="364"/>
         <source>Part properties</source>
-        <translation>Proprietà della parte</translation>
+        <translation>Proprietà parte</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="387"/>
@@ -1176,7 +1176,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="739"/>
         <source>5 - Augmented third</source>
-        <translation>Terza aumentata</translation>
+        <translation>5 - Terza aumentata</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="744"/>
@@ -1266,12 +1266,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="429"/>
         <source>Long instrument name:</source>
-        <translation>Nome dello strumento esteso:</translation>
+        <translation>Nome strumento esteso:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="445"/>
         <source>Short instrument name:</source>
-        <translation>Nome dello strumento abbreviato:</translation>
+        <translation>Nome strumento abbreviato:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="483"/>
@@ -1299,7 +1299,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="651"/>
         <source>Interval from written to sounding pitch</source>
-        <translation>Intervallo fra il suono scritto e il suono reale</translation>
+        <translation>Intervallo tra suono scritto e suono reale</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="654"/>
@@ -1314,12 +1314,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="674"/>
         <source>Octave(s) +</source>
-        <translation>Ottava(/e) +</translation>
+        <translation>Ottava(e) +</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="690"/>
         <source>Interval</source>
-        <translation>intervallo</translation>
+        <translation>Intervallo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="827"/>
@@ -1334,7 +1334,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="874"/>
         <source>Prefer sharps or flats for transposed key signatures:</source>
-        <translation>Preferisci diesis o bemolle per l&apos;armatura di chiave trasportata:</translation>
+        <translation>Preferisci diesis o bemolle per le armature di chiave trasportate:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="885"/>
@@ -1365,13 +1365,13 @@
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1005"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1008"/>
         <source>Go to previous staff</source>
-        <translation>Vai al pentagramma precedente</translation>
+        <translation>Vai al rigo precedente</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1024"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1027"/>
         <source>Go to next staff</source>
-        <translation>Vai al pentagramma successivo</translation>
+        <translation>Vai al rigo successivo</translation>
     </message>
 </context>
 <context>
@@ -1379,7 +1379,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="36"/>
         <source>STANDARD STAFF</source>
-        <translation>PENTAGRAMMA STANDARD</translation>
+        <translation>RIGO STANDARD</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="107"/>
@@ -1396,34 +1396,34 @@
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="504"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="784"/>
         <source>sp</source>
-        <translation>spazio</translation>
+        <translation>sp</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="188"/>
         <source>Show clef</source>
-        <translation>Mostra la chiave</translation>
+        <translation>Mostra chiave</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="195"/>
         <source>Show time signature</source>
-        <translation>Mostra l&apos;indicazione metrica</translation>
+        <translation>Mostra indicazione metrica</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="202"/>
         <source>Show barlines</source>
-        <translation>Mostra le stanghette</translation>
+        <translation>Mostra stanghette</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="244"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="360"/>
         <source>Show key signature</source>
-        <translation>Mostra l&apos;armatura di chiave</translation>
+        <translation>Mostra armatura di chiave</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="251"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="374"/>
         <source>Show ledger lines</source>
-        <translation>Mostra i tagli addizionali</translation>
+        <translation>Mostra tagli addizionali</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="258"/>
@@ -1451,7 +1451,7 @@
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="447"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="720"/>
         <source>Font:</source>
-        <translation>Carattere:</translation>
+        <translation>Font:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="464"/>
@@ -1519,12 +1519,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="686"/>
         <source>Show fingering in tablature</source>
-        <translation>Mostra la diteggiatura nell&apos;intavolatura</translation>
+        <translation>Mostra diteggiatura nell&apos;intavolatura</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="20"/>
         <source>Edit staff type</source>
-        <translation>Modifica tipo di pentagramma</translation>
+        <translation>Modifica tipo di rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="437"/>
@@ -1570,7 +1570,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="944"/>
         <source>At new system</source>
-        <translation>Alla nuova accollatura</translation>
+        <translation>Al nuovo sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="957"/>
@@ -1590,12 +1590,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1030"/>
         <source>Beside staff</source>
-        <translation>Accanto al pentagramma</translation>
+        <translation>Accanto al rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1037"/>
         <source>Through staff</source>
-        <translation>Attraverso il pentagramma</translation>
+        <translation>Attraverso il rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1087"/>
@@ -1636,17 +1636,17 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1233"/>
         <source>Show rests</source>
-        <translation>Mostra le pause</translation>
+        <translation>Mostra pause</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1314"/>
         <source>Template:</source>
-        <translation>Modelli:</translation>
+        <translation>Modello:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1330"/>
         <source>&lt; Reset to template</source>
-        <translation>&lt; Reimposta modelli</translation>
+        <translation>&lt; Ripristina a modello</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1356"/>
@@ -1656,7 +1656,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1353"/>
         <source>Create a new staff type of current group.</source>
-        <translation>Crea un nuovo tipo di pentagramma del gruppo attuale</translation>
+        <translation>Crea un nuovo tipo di rigo del gruppo attuale.</translation>
     </message>
 </context>
 <context>
@@ -1679,12 +1679,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="58"/>
         <source>Edit string…</source>
-        <translation>Modifica la corda…</translation>
+        <translation>Modifica corda…</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="65"/>
         <source>Delete string</source>
-        <translation>Cancella la corda</translation>
+        <translation>Elimina corda</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.ui" line="81"/>
@@ -1704,7 +1704,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13954"/>
         <source>Edit text style</source>
-        <translation>Modifica stile del testo</translation>
+        <translation>Modifica stile di testo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14072"/>
@@ -1714,7 +1714,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14118"/>
         <source>Reset &apos;Padding&apos; value</source>
-        <translation>Ripristina il valore &apos;Riempimento&apos;</translation>
+        <translation>Ripristina valore &apos;Riempimento&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="64"/>
@@ -1740,7 +1740,7 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="89"/>
         <source>System</source>
         <extracomment>a music system, a line of music</extracomment>
-        <translation>Accollatura</translation>
+        <translation>Sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3826"/>
@@ -1814,7 +1814,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="297"/>
         <source>Musical symbols font:</source>
-        <translation>Font dei simboli musicali: </translation>
+        <translation>Font simboli musicali: </translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="360"/>
@@ -1824,12 +1824,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="383"/>
         <source>Musical text font:</source>
-        <translation>Font del testo musicale: </translation>
+        <translation>Font testo musicale: </translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="427"/>
         <source>Staff line thickness:</source>
-        <translation>Spessore della linea del pentagramma:</translation>
+        <translation>Spessore linea del rigo:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="443"/>
@@ -2175,42 +2175,42 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="456"/>
         <source>Reset &apos;Staff line thickness&apos; value</source>
-        <translation>Ripristina il valore &apos;Spessore della linea del pentagramma&apos;</translation>
+        <translation>Ripristina valore &apos;Spessore linea del rigo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="468"/>
         <source>Display in concert pitch</source>
-        <translation>Visualizza la partitura in suoni reali</translation>
+        <translation>Visualizza in suoni reali</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="475"/>
         <source>Enable indentation on first system</source>
-        <translation>Attiva l&apos;indentazione sulla prima accollatura </translation>
+        <translation>Attiva rientro sul primo sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="493"/>
         <source>First system indentation:</source>
-        <translation>Indentazione sulla prima accollatura:</translation>
+        <translation>Rientro del primo sistema:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="525"/>
         <source>Reset &apos;First system indentation&apos; value</source>
-        <translation>Ripristina il valore &quot;Indentazione sulla prima accollatura&quot;</translation>
+        <translation>Ripristina valore &apos;Rientro del primo sistema&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="551"/>
         <source>Hide empty staves within systems</source>
-        <translation>Nascondi i pentagrammi vuoti all&apos;interno delle accollature</translation>
+        <translation>Nascondi pentagrammi vuoti dentro i sistemi</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="570"/>
         <source>Show brackets when spanning a single staff</source>
-        <translation>Mostra le parentesi quadre quando si estendono ad un solo pentagramma</translation>
+        <translation>Mostra parentesi quadre quando si estendono ad un solo rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="580"/>
         <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
-        <translation>Visualizza i valori delle note ignorando la stanghetta della battuta (SPERIMENTALE, solo per la musica antica!)</translation>
+        <translation>Visualizza i valori delle note ignorando la stanghetta della battuta (SPERIMENTALE, solo per musica antica!)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="726"/>
@@ -2225,7 +2225,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="774"/>
         <source>Select swing ratio:</source>
-        <translation>Seleziona il rapporto dello swing:</translation>
+        <translation>Seleziona rapporto dello swing:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="793"/>
@@ -2248,7 +2248,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="884"/>
         <source>Reset &apos;Min. vertical distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza verticale minima&apos; </translation>
+        <translation>Ripristina valore &apos;Distanza verticale minima&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="894"/>
@@ -2258,12 +2258,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="907"/>
         <source>Reset &apos;Vertical align range&apos; value</source>
-        <translation>Ripristina il valore &apos;Intervallo d&apos;allineamento verticale&apos;:</translation>
+        <translation>Ripristina valore &apos;Intervallo d&apos;allineamento verticale&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1507"/>
         <source>Reset &apos;Music top margin&apos; value</source>
-        <translation>Ripristina il valore &apos;Margine superiore della musica&apos;</translation>
+        <translation>Ripristina valore &apos;Margine superiore della musica&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1523"/>
@@ -2273,17 +2273,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1456"/>
         <source>Last system fill threshold:</source>
-        <translation>Soglia di riempimento dell&apos;ultima accollatura:</translation>
+        <translation>Soglia di riempimento dell&apos;ultimo sistema:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1381"/>
         <source>Reset &apos;Vertical frame bottom margin&apos; value</source>
-        <translation> Ripristina il valore &apos;Margine inferiore della cornice verticale&apos;</translation>
+        <translation> Ripristina valore &apos;Margine inferiore della cornice verticale&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1291"/>
         <source>Reset &apos;Vertical frame top margin&apos; value</source>
-        <translation>Ripristina il valore &apos;Margine superiore della cornice verticale&apos;</translation>
+        <translation>Ripristina valore &apos;Margine superiore della cornice verticale&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1368"/>
@@ -2293,12 +2293,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1404"/>
         <source>Reset &apos;Last system fill threshold&apos; value</source>
-        <translation>Ripristina il valore &quot;Soglia di riempimento dell&apos;ultima accollatura&quot;</translation>
+        <translation>Ripristina valore &apos;Soglia di riempimento dell&apos;ultimo sistema&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1278"/>
         <source>Reset &apos;Music bottom margin&apos; value</source>
-        <translation>Ripristina il valore &apos;Margine inferiore della musica&apos;</translation>
+        <translation>Ripristina valore &apos;Margine inferiore della musica&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1391"/>
@@ -2318,7 +2318,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1571"/>
         <source>Max. grand staff distance:</source>
-        <translation>Distanza massima dal doppio pentagramma:</translation>
+        <translation>Distanza massima dal doppio rigo:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1609"/>
@@ -2329,17 +2329,17 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1068"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1619"/>
         <source>Reset &apos;Min. system distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza minima dall&apos;accollatura&apos; </translation>
+        <translation>Ripristina valore &apos;Distanza minima dal sistema&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1660"/>
         <source>Reset &apos;Factor for distance above/below bracket&apos; value</source>
-        <translation>Ripristina il valore &quot;Fattore per la distanza sopra/sotto la parentesi quadra&quot;</translation>
+        <translation>Ripristina valore &apos;Fattore per la distanza sopra/sotto la parentesi quadra&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1705"/>
         <source>Reset &apos;Min. staff distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza minima dal pentagramma&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza minima dal rigo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1715"/>
@@ -2349,34 +2349,34 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1728"/>
         <source>Reset &apos;Factor for distance above/below brace&apos; value</source>
-        <translation>Ripristina il valore &quot;Fattore per la distanza sopra/sotto la parentesi graffa&quot;</translation>
+        <translation>Ripristina valore &apos;Fattore per la distanza sopra/sotto la parentesi graffa&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1741"/>
         <source>Reset &apos;Max. staff distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Massima distanza dal rigo&apos;</translation>
+        <translation>Ripristina valore &apos;Massima distanza dal rigo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1751"/>
         <source>Reset &apos;Max. grand staff distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza massima dal doppio pentagramma&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza massima dal doppio rigo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1761"/>
         <source>Min. staff distance:</source>
-        <translation>Distanza minima dal pentagramma:</translation>
+        <translation>Distanza minima dal rigo:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1151"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1771"/>
         <source>Max. system distance:</source>
-        <translation>Distanza massima dall&apos;accollatura:</translation>
+        <translation>Distanza massima dal sistema:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1167"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1837"/>
         <source>Min. system distance:</source>
-        <translation>Distanza minima dall&apos;accollatura:</translation>
+        <translation>Distanza minima dal sistema:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1850"/>
@@ -2392,22 +2392,22 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1081"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1924"/>
         <source>Reset &apos;Max. system distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza massima dall&apos;accollatura&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza massima dal sistema&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1934"/>
         <source>Reset &apos;Max. page fill distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza massima di riempimento della pagina&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza massima di riempimento della pagina&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1975"/>
         <source>Reset &apos;Factor for distance between systems&apos; value</source>
-        <translation>Ripristina il valore &apos;Fattore per la distanza tra accollature&apos;</translation>
+        <translation>Ripristina valore &apos;Fattore per la distanza tra sistemi&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1988"/>
         <source>Factor for distance between systems:</source>
-        <translation>Fattore per la distanza tra accollature:</translation>
+        <translation>Fattore per la distanza tra sistemi:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="996"/>
@@ -2417,42 +2417,42 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="94"/>
         <source>Clefs, key &amp; time signatures</source>
-        <translation>Chiavi, armature di chiave &amp; indicazioni metriche</translation>
+        <translation>Chiavi, indicazioni di tonalità &amp; tempo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="357"/>
         <source>MuseScore Studio will change the style to suit the font better</source>
-        <translation>MuseScore Studio cambierà lo stile per adattarlo meglio al tipo di carattere</translation>
+        <translation>MuseScore Studio cambierà lo stile per adattarlo meglio al tipo di font</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1039"/>
         <source>Reset &apos;Grand staff distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza dal doppio pentagramma&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza dal doppio rigo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1055"/>
         <source>Staff distance:</source>
-        <translation>Distanza dal pentagramma:</translation>
+        <translation>Distanza dal rigo:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1107"/>
         <source>Reset &apos;Staff distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza dal pentagramma&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza dal rigo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1211"/>
         <source>Grand staff distance:</source>
-        <translation>Distanza dal doppio pentagramma:</translation>
+        <translation>Distanza dal doppio rigo:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2065"/>
         <source>Small staff size:</source>
-        <translation>Dimensione del pentagramma piccolo:</translation>
+        <translation>Dimensione del rigo piccolo:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2103"/>
         <source>Reset &apos;Small staff size&apos; value</source>
-        <translation>Ripristina il valore &apos;Dimensione del pentagramma piccolo&apos;</translation>
+        <translation>Ripristina valore &apos;Dimensione del rigo piccolo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2132"/>
@@ -2462,7 +2462,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2170"/>
         <source>Reset &apos;Small note size&apos; value</source>
-        <translation>Ripristina il valore &apos;Dimensione delle note piccole&apos;</translation>
+        <translation>Ripristina valore &apos;Dimensione delle note piccole&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2186"/>
@@ -2472,7 +2472,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2224"/>
         <source>Reset &apos;Grace note size&apos; value</source>
-        <translation>Ripristina il valore &apos;Dimensione delle note di abbellimento&apos;</translation>
+        <translation>Ripristina valore &apos;Dimensione delle note di abbellimento&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2240"/>
@@ -2482,12 +2482,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2278"/>
         <source>Reset &apos;Small clef size&apos; value</source>
-        <translation>Ripristina il valore &apos;Dimensione della chiave piccola&apos;</translation>
+        <translation>Ripristina valore &apos;Dimensione della chiave piccola&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2349"/>
         <source>Show header also on first page</source>
-        <translation>Mostra l&apos;intestazione anche sulla prima pagina</translation>
+        <translation>Mostra intestazione anche sulla prima pagina</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2352"/>
@@ -2541,7 +2541,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2652"/>
         <source>Show footer also on first page</source>
-        <translation>Mostra il piè di pagina anche sulla prima pagina</translation>
+        <translation>Mostra piè di pagina anche sulla prima pagina</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2675"/>
@@ -2614,7 +2614,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11234"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12296"/>
         <source>Reset &apos;Position above&apos; value</source>
-        <translation>Ripristina il valore &apos;Posizione in alto&apos;</translation>
+        <translation>Ripristina valore &apos;Posizione in alto&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3050"/>
@@ -2640,7 +2640,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11324"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12273"/>
         <source>Reset &apos;Position below&apos; value</source>
-        <translation>Ripristina il valore &apos;Posizione in basso&apos;</translation>
+        <translation>Ripristina valore &apos;Posizione in basso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3073"/>
@@ -2651,12 +2651,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3107"/>
         <source>Every system</source>
-        <translation>Ogni accollatura</translation>
+        <translation>Ogni sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3127"/>
         <source>All staves</source>
-        <translation>Tutti i pentagrammi</translation>
+        <translation>Tutti i righi</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3166"/>
@@ -2689,7 +2689,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3537"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>System bracket</comment>
-        <translation>Ripristina il valore &apos;Spessore della parentesi quadra&apos;</translation>
+        <translation>Ripristina valore &apos;Spessore della parentesi quadra&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3635"/>
@@ -2718,22 +2718,22 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3839"/>
         <source>Show all clefs on every system</source>
-        <translation>Mostra tutte le chiavi su ogni accollatura</translation>
+        <translation>Mostra tutte le chiavi su ogni sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3846"/>
         <source>Hide all clefs after the first system where they appear</source>
-        <translation>Nascondi tutte le chiavi dopo la prima accollatura in cui compaiono</translation>
+        <translation>Nascondi tutte le chiavi dopo il primo sistema in cui compaiono</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3853"/>
         <source>Hide TAB clefs after the first system where they appear</source>
-        <translation>Nascondi tutte le chiavi dell&apos;intavolatura dopo la prima accollatura in cui compaiono</translation>
+        <translation>Nascondi tutte le chiavi dell&apos;intavolatura dopo il primo sistema in cui compaiono</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3860"/>
         <source>Show courtesy clefs</source>
-        <translation>Mostra le chiavi di cortesia</translation>
+        <translation>Mostra chiavi di cortesia</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3873"/>
@@ -2753,12 +2753,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3906"/>
         <source>Show on every system</source>
-        <translation>Mostra su ogni accollatura</translation>
+        <translation>Mostra su ogni sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3913"/>
         <source>Hide after the first system where they appear</source>
-        <translation>Nascondi dopo la prima accollatura in cui compaiono</translation>
+        <translation>Nascondi dopo il primo sistema in cui compaiono</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3920"/>
@@ -2773,7 +2773,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3936"/>
         <source>Show courtesy time signatures</source>
-        <translation>Mostra le indicazioni metriche di cortesia</translation>
+        <translation>Mostra indicazioni metriche di cortesia</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4006"/>
@@ -2793,7 +2793,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="587"/>
         <source>Instrument names</source>
-        <translation>Nome strumento</translation>
+        <translation>Nomi strumento</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="593"/>
@@ -2809,12 +2809,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="612"/>
         <source>Reset &apos;Instrument labels on subsequent systems&apos; value</source>
-        <translation>Ripristina il valore &apos;Etichette strumento sui sistemi successivi&apos;</translation>
+        <translation>Ripristina valore &apos;Etichette strumento sui sistemi successivi&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="632"/>
         <source>Reset &apos;Instrument labels on first system of sections&apos; value</source>
-        <translation>Ripristina il valore &apos;Etichette strumento sul primo sistema della sezione&apos;</translation>
+        <translation>Ripristina valore &apos;Etichette strumento sul primo sistema della sezione&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="642"/>
@@ -2841,7 +2841,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3990"/>
         <source>Reset &apos;Padding inside parentheses&apos; value</source>
-        <translation>Ripristina il valore &apos;Riempimento tra le parentesi&apos;</translation>
+        <translation>Ripristina valore &apos;Riempimento tra le parentesi&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4037"/>
@@ -2912,17 +2912,17 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4386"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6353"/>
         <source>Reset &apos;Time signature to barline distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza dell&apos;indicazione metrica dalla stanghetta&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza dell&apos;indicazione metrica dalla stanghetta&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4406"/>
         <source>Reset &apos;Note to barline distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza della nota dalla stanghetta&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza della nota dalla stanghetta&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4432"/>
         <source>Reset &apos;Time signature left margin&apos; value</source>
-        <translation>Ripristina il valore &apos;Margine sinistro dell&apos;indicazione metrica&apos; </translation>
+        <translation>Ripristina valore &apos;Margine sinistro dell&apos;indicazione metrica&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4462"/>
@@ -2937,17 +2937,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4485"/>
         <source>Reset &apos;Clef to time signature distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza della chiave dall&apos;indicazione metrica&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza della chiave dall&apos;indicazione metrica&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4498"/>
         <source>Reset &apos;Clef to key distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza della chiave dall&apos;armatura&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza della chiave dall&apos;armatura&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4537"/>
         <source>Reset &apos;Clef to barline distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza della chiave dalla stanghetta&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza della chiave dalla stanghetta&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4547"/>
@@ -2967,7 +2967,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4593"/>
         <source>Reset &apos;Clef left margin&apos; value</source>
-        <translation>Ripristina il valore &apos;Margine sinistro della chiave&apos;</translation>
+        <translation>Ripristina valore &apos;Margine sinistro della chiave&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4616"/>
@@ -2977,7 +2977,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4629"/>
         <source>Reset &apos;Note left margin&apos; value</source>
-        <translation>Ripristina il valore &apos;Margine sinistro della nota&apos;</translation>
+        <translation>Ripristina valore &apos;Margine sinistro della nota&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4639"/>
@@ -2987,17 +2987,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4652"/>
         <source>Reset &apos;Key signature left margin&apos; value</source>
-        <translation>Ripristina il valore &apos;Margine sinistro dell&apos;armatura di chiave&apos;</translation>
+        <translation>Ripristina valore &apos;Margine sinistro dell&apos;armatura di chiave&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4678"/>
         <source>Reset &apos;Clef/Key right margin&apos; value</source>
-        <translation>Ripristina il valore &apos;Margine destro della chiave/armatura&apos;</translation>
+        <translation>Ripristina valore &apos;Margine destro della chiave/armatura&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4704"/>
         <source>Reset &apos;Key to barline distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza dell&apos;armatura dalla stanghetta&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza dell&apos;armatura dalla stanghetta&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4747"/>
@@ -3017,7 +3017,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4796"/>
         <source>Reset &apos;Barline to accidental distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza della stanghetta dall&apos;alterazione&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza della stanghetta dall&apos;alterazione&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4806"/>
@@ -3027,12 +3027,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4819"/>
         <source>Reset &apos;Key to time signature distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza dell&apos;armatura dall&apos;indicazione metrica&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza dell&apos;armatura dall&apos;indicazione metrica&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4845"/>
         <source>Reset &apos;Barline to grace note distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza della stanghetta dalla nota di abbellimento&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza della stanghetta dalla nota di abbellimento&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4881"/>
@@ -3042,22 +3042,22 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4327"/>
         <source>Reset &apos;Spacing&apos; value</source>
-        <translation>Ripristina il valore &apos;Spaziatura&apos;</translation>
+        <translation>Ripristina valore &apos;Spaziatura&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4285"/>
         <source>Minimum measure width:</source>
-        <translation>Larghezza minima della battuta:</translation>
+        <translation>Larghezza minima di battuta:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4262"/>
         <source>Reset &apos;Minimum note distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza minima tra le note&apos; </translation>
+        <translation>Ripristina valore &apos;Distanza minima tra le note&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4249"/>
         <source>Reset &apos;Minimum measure width&apos; value</source>
-        <translation>Ripristina il valore &apos;Larghezza minima della battuta&apos;</translation>
+        <translation>Ripristina valore &apos;Larghezza minima della battuta&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4907"/>
@@ -3119,7 +3119,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5820"/>
         <source>Default vertical offset:</source>
-        <translation>Spiazzamento verticale predefinito:</translation>
+        <translation>Offset verticale predefinito:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5961"/>
@@ -3129,33 +3129,33 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5971"/>
         <source>Reset &apos;Break H-bar if it collides with number&apos; value</source>
-        <translation>Ripristina il valore &apos;Interrompi il simbolo battuta d&apos;aspetto se collide con il numero&apos;</translation>
+        <translation>Ripristina valore &apos;Interrompi il simbolo battuta d&apos;aspetto se collide con il numero&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6010"/>
         <source>Reset &apos;H-bar horizontal stroke thickness&apos; value</source>
-        <translation>Ripristina il valore &apos;Spessore tratto orizzontale battuta d&apos;aspetto&apos;</translation>
+        <translation>Ripristina valore &apos;Spessore tratto orizzontale battuta d&apos;aspetto&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6052"/>
         <source>Reset &apos;H-bar margin within barlines&apos; value</source>
-        <translation>Ripristina il valore &apos;Margine della battuta d&apos;aspetto all&apos;interno delle stanghette&apos;</translation>
+        <translation>Ripristina valore &apos;Margine della battuta d&apos;aspetto all&apos;interno delle stanghette&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6091"/>
         <source>Reset &apos;H-bar vertical stroke thickness&apos; value</source>
-        <translation>Ripristina il valore &apos;Spessore tratto verticale battuta d&apos;aspetto&apos;</translation>
+        <translation>Ripristina valore &apos;Spessore tratto verticale battuta d&apos;aspetto&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6130"/>
         <source>Reset &apos;H-bar vertical stroke height&apos; value</source>
-        <translation>Ripristina il valore &apos;Altezza tratto verticale battuta d&apos;aspetto&apos;</translation>
+        <translation>Ripristina valore &apos;Altezza tratto verticale battuta d&apos;aspetto&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6951"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>Tuplet bracket</comment>
-        <translation>Ripristina il valore &apos;Spessore parentesi quadre&apos;</translation>
+        <translation>Ripristina valore &apos;Spessore parentesi quadre&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7324"/>
@@ -3176,22 +3176,22 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7921"/>
         <source>Voices 1 &amp; 3 above staff, voices 2 &amp; 4 below staff</source>
-        <translation>Voci 1 &amp; 3 sopra il pentagramma, voci 2 &amp; 4 sotto il pentagramma</translation>
+        <translation>Voci 1 e 3 sopra il rigo, voci 2 e 4 sotto il rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7956"/>
         <source>Place above the staff on vocal instruments</source>
-        <translation>Posiziona sopra il pentagramma negli strumenti vocali</translation>
+        <translation>Posiziona sopra il rigo negli strumenti vocali</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7963"/>
         <source>Center on grand staff instruments automatically</source>
-        <translation>Centra automaticamente sugli strumenti con doppio pentagramma</translation>
+        <translation>Centra automaticamente sugli strumenti con doppio rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9802"/>
         <source>Label for full bends</source>
-        <translation>Estensione completa</translation>
+        <translation>Etichetta per full bend</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9907"/>
@@ -3206,12 +3206,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10038"/>
         <source>Use cue sized numbers for grace note bends</source>
-        <translation>Utilizza numeri di dimensioni minori per le bend delle note di abbellimento</translation>
+        <translation>Utilizza numeri di dimensioni minori per i bend delle note di abbellimento</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11209"/>
         <source>Edit lyrics text style</source>
-        <translation>Modifica stile del testo delle parole</translation>
+        <translation>Modifica stile di testo delle parole</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11244"/>
@@ -3221,12 +3221,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11311"/>
         <source>Min. margin to current staff:</source>
-        <translation>Margine minimo per il pentagramma corrente:</translation>
+        <translation>Margine minimo per il rigo corrente:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11403"/>
         <source>Min. margin to other staves:</source>
-        <translation>Margine minimo per gli altri pentagrammi:</translation>
+        <translation>Margine minimo per gli altri righi:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11550"/>
@@ -3268,7 +3268,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8129"/>
         <source>Override score font</source>
-        <translation>Sovrascrivi il carattere della partitura</translation>
+        <translation>Sovrascrivi il font della partitura</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8096"/>
@@ -3298,22 +3298,22 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3424"/>
         <source>Reset &apos;Bracket distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza tra le parentesi quadre&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza tra le parentesi quadre&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3491"/>
         <source>Reset &apos;Brace thickness&apos; value</source>
-        <translation>Ripristina il valore &apos;Spessore parentesi graffe&apos;</translation>
+        <translation>Ripristina valore &apos;Spessore parentesi graffe&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3514"/>
         <source>Reset &apos;Brace distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza tra le parentesi graffe&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza tra le parentesi graffe&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4917"/>
         <source>System header</source>
-        <translation>Intestazione d&apos;accollatura</translation>
+        <translation>Intestazione di sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4949"/>
@@ -3328,12 +3328,12 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4985"/>
         <source>Reset &apos;System header with time signature distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza dell&apos;intestazione d&apos;accollatura con indicazione metrica&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza dell&apos;intestazione di sistema con indicazione metrica&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4998"/>
         <source>Reset &apos;System header distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza dell&apos;intestazione d&apos;accollatura&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza dell&apos;intestazione dal sistema&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5069"/>
@@ -3343,7 +3343,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5095"/>
         <source>Reset &apos;Thin barline thickness&apos; value</source>
-        <translation>Ripristina il valore &apos;Spessore della stanghetta sottile&apos;</translation>
+        <translation>Ripristina valore &apos;Spessore della stanghetta sottile&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5118"/>
@@ -3353,7 +3353,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5131"/>
         <source>Reset &apos;Barline at start of multiple staves&apos; value</source>
-        <translation>Ripristina il valore &apos;Stanghetta all&apos;inizio di pentagrammi multipli&apos;</translation>
+        <translation>Ripristina valore &apos;Stanghetta all&apos;inizio di pentagrammi multipli&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5141"/>
@@ -3363,12 +3363,12 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5206"/>
         <source>Reset &apos;Repeat barline to dots distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza delle stanghette dai punti&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza delle stanghette di ritornello dai punti&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5226"/>
         <source>Reset &apos;Thick barline distance&apos; value</source>
-        <translation>Ripristina il valore &apos;distanza tra le stanghette spesse&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza tra le stanghette spesse&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5249"/>
@@ -3378,27 +3378,27 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5259"/>
         <source>Scale barlines to staff size</source>
-        <translation>Adegua le stanghette alle dimensioni del pentagramma</translation>
+        <translation>Ridimensiona stanghette alle dimensioni del rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5269"/>
         <source>Reset &apos;Double barline distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza della doppia stanghetta&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza della doppia stanghetta&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5282"/>
         <source>Reset &apos;Barline at start of single staff&apos; value</source>
-        <translation>Ripristina il valore &apos;Stanghetta all&apos;inizio del pentagramma singolo&apos;</translation>
+        <translation>Ripristina valore &apos;Stanghetta all&apos;inizio del rigo singolo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5295"/>
         <source>Reset &apos;Scale barlines to staff size&apos; value</source>
-        <translation>Ripristina il valore &apos;Adegua le stanghette alle dimensioni del pentagramma&apos;</translation>
+        <translation>Ripristina valore &apos;Ridimensiona stanghette alle dimensioni del rigo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5321"/>
         <source>Reset &apos;Double barline thickness&apos; value</source>
-        <translation>Ripristina il valore &apos;Spessore della doppia stanghetta&apos;</translation>
+        <translation>Ripristina valore &apos;Spessore della doppia stanghetta&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5331"/>
@@ -3418,12 +3418,12 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5364"/>
         <source>Reset &apos;Thick barline thickness&apos; value</source>
-        <translation>Ripristina il valore &apos;Spessore della stanghetta spessa&apos;</translation>
+        <translation>Ripristina valore &apos;Spessore della stanghetta spessa&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5374"/>
         <source>Barline at start of single staff</source>
-        <translation>Stanghetta all&apos;inizio del pentagramma singolo</translation>
+        <translation>Stanghetta all&apos;inizio del rigo singolo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5465"/>
@@ -3488,7 +3488,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5906"/>
         <source>Reset &apos;Minimum width of measure&apos; value</source>
-        <translation>Ripristina il valore &apos;Larghezza minima della battuta&apos;</translation>
+        <translation>Ripristina valore &apos;Larghezza minima della battuta&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5922"/>
@@ -3498,7 +3498,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5951"/>
         <source>Reset &apos;Vertical position of number&apos; value</source>
-        <translation>Ripristina il valore &apos;Posizione verticale del numero&apos;</translation>
+        <translation>Ripristina valore &apos;Posizione verticale del numero&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5981"/>
@@ -3563,7 +3563,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6523"/>
         <source>Reset &apos;Maximum slope&apos; value</source>
-        <translation>Ripristina il valore &apos;Pendenza massima&apos;</translation>
+        <translation>Ripristina valore &apos;Pendenza massima&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6533"/>
@@ -3578,12 +3578,12 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6581"/>
         <source>Reset &apos;Vertical distance from stem&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza verticale dal gambo&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza verticale dal gambo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6622"/>
         <source>Reset &apos;Vertical distance from notehead&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza verticale dalla testa della nota&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza verticale dalla testa della nota&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6632"/>
@@ -3608,12 +3608,12 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6712"/>
         <source>Reset &apos;Number type&apos; value</source>
-        <translation>Ripristina il valore &apos;Tipo di numero&apos;</translation>
+        <translation>Ripristina valore &apos;Tipo di numero&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6731"/>
         <source>Reset &apos;Direction&apos; value</source>
-        <translation>Ripristina il valore &apos;Direzione&apos;</translation>
+        <translation>Ripristina valore &apos;Direzione&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6742"/>
@@ -3683,18 +3683,18 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6910"/>
         <source>Reset &apos;Bracket hook height&apos; value</source>
-        <translation>Ripristina il valore &apos;Altezza dell&apos;uncino della parentesi quadra&apos;</translation>
+        <translation>Ripristina valore &apos;Altezza dell&apos;uncino della parentesi quadra&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3093"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3276"/>
         <source>Reset &apos;Horizontal placement&apos; value</source>
-        <translation>Ripristina il valore &apos;Posizionamento orizzontale&apos;</translation>
+        <translation>Ripristina valore &apos;Posizionamento orizzontale&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="79"/>
         <source>Header &amp; footer</source>
-        <translation>Intestazione &amp; piè di pagina</translation>
+        <translation>Intestazione e piè di pagina</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="104"/>
@@ -3705,7 +3705,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="144"/>
         <source>Slurs &amp; ties</source>
-        <translation>Legature di portamento &amp; di valore</translation>
+        <translation>Legature di portamento e di valore</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="154"/>
@@ -3785,13 +3785,13 @@ prima nota del sistema</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3117"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3256"/>
         <source>Reset &apos;Vertical placement&apos; value</source>
-        <translation>Ripristina il valore &apos;Posizionamento verticale&apos;</translation>
+        <translation>Ripristina valore &apos;Posizionamento verticale&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3178"/>
         <source>Reset &apos;Bracket type&apos; value</source>
         <comment>Bracket type for measure number ranges for multi-measure rests</comment>
-        <translation>Ripristina il valore &apos;Tipo di parentesi quadra&apos;</translation>
+        <translation>Ripristina valore &apos;Tipo di parentesi quadra&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3243"/>
@@ -3808,7 +3808,7 @@ prima nota del sistema</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6811"/>
         <source>Reset &apos;Bracket type&apos; value</source>
         <comment>Bracket type for tuplets</comment>
-        <translation>Ripristina il valore &apos;Tipo di parentesi quadra&apos;</translation>
+        <translation>Ripristina valore &apos;Tipo di parentesi quadra&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6821"/>
@@ -3829,17 +3829,17 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7088"/>
         <source>Reset &apos;Distance after head of last note&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza dopo la testa dell&apos;ultima nota&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza dopo la testa dell&apos;ultima nota&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7107"/>
         <source>Reset &apos;Distance before head of first note&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza prima della testa della prima nota&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza prima della testa della prima nota&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7126"/>
         <source>Reset &apos;Distance before stem of first note&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza prima del gambo della prima nota&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza prima del gambo della prima nota&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7136"/>
@@ -3854,7 +3854,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7184"/>
         <source>Reset &apos;Distance after stem of last note&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza dopo il gambo dell&apos;ultima nota&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza dopo il gambo dell&apos;ultima nota&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7243"/>
@@ -3925,30 +3925,30 @@ prima nota del sistema</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11117"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12344"/>
         <source>Reset &apos;Autoplace min. distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza dell&apos;autoposizionamento minimo&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza dell&apos;autoposizionamento minimo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7414"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7613"/>
         <source>Reset &apos;Line thickness at end&apos; value</source>
-        <translation>Ripristina il valore &apos;Spessore della linea alla fine&apos;</translation>
+        <translation>Ripristina valore &apos;Spessore della linea alla fine&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7456"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7655"/>
         <source>Reset &apos;Line thickness middle&apos; value</source>
-        <translation>Ripristina il valore &apos;Spessore della linea al centro&apos;</translation>
+        <translation>Ripristina valore &apos;Spessore della linea al centro&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7498"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7697"/>
         <source>Reset &apos;Dotted line thickness&apos; value</source>
-        <translation>Ripristina il valore &apos;Spessore della linea punteggiata&apos;</translation>
+        <translation>Ripristina valore &apos;Spessore della linea punteggiata&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7826"/>
         <source>Reset &apos;Minimum tie length&apos; value</source>
-        <translation>Ripristina il valore &apos;Lunghezza minima della legatura di valore&apos;</translation>
+        <translation>Ripristina valore &apos;Lunghezza minima della legatura di valore&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8277"/>
@@ -3963,12 +3963,12 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8410"/>
         <source>Reset &apos;Height&apos; value</source>
-        <translation>Ripristina il valore &apos;Altezza&apos;</translation>
+        <translation>Ripristina valore &apos;Altezza&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8267"/>
         <source>Reset &apos;Continue height&apos; value</source>
-        <translation>Ripristina il valore &apos;Altezza continua&apos;</translation>
+        <translation>Ripristina valore &apos;Altezza continua&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8229"/>
@@ -3978,7 +3978,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8189"/>
         <source>Reset &apos;Autoplace, distance to dynamics&apos; value</source>
-        <translation>Ripristina il valore &apos;Autoposizionamento, distanza dalla dinamica&apos;</translation>
+        <translation>Ripristina valore &apos;Autoposizionamento, distanza dalla dinamica&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9354"/>
@@ -4003,7 +4003,7 @@ prima nota del sistema</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11416"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12260"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>Ripristina il valore &apos;Collocamento&apos;</translation>
+        <translation>Ripristina valore &apos;Collocamento&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8368"/>
@@ -4012,13 +4012,13 @@ prima nota del sistema</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9367"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11989"/>
         <source>Reset &apos;Line thickness&apos; value</source>
-        <translation>Ripristina il valore &apos;Spessore della linea&apos;</translation>
+        <translation>Ripristina valore &apos;Spessore della linea&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7944"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8472"/>
         <source>Reset &apos;Position&apos; value</source>
-        <translation>Ripristina il valore &apos;Posizione&apos;</translation>
+        <translation>Ripristina valore &apos;Posizione&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8498"/>
@@ -4031,14 +4031,14 @@ prima nota del sistema</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9481"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9500"/>
         <source>Reset &apos;Line style&apos; value</source>
-        <translation>Ripristina il valore &apos;Stile della linea&apos;</translation>
+        <translation>Ripristina valore &apos;Stile della linea&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8524"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8875"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8953"/>
         <source>Reset &apos;Hook height&apos; value</source>
-        <translation>Ripristina il valore &apos;Altezza dell&apos;uncino&apos;</translation>
+        <translation>Ripristina valore &apos;Altezza dell&apos;uncino&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8534"/>
@@ -4085,7 +4085,7 @@ prima nota del sistema</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8896"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9336"/>
         <source>Dotted</source>
-        <translation>Punteggiato</translation>
+        <translation>Puntato</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8687"/>
@@ -4099,7 +4099,7 @@ prima nota del sistema</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8906"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9346"/>
         <source>Dash-dot-dotted</source>
-        <translation>Linea-punto-punteggiato</translation>
+        <translation>Linea-punto-puntato</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8700"/>
@@ -4126,12 +4126,12 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9014"/>
         <source>Reset &apos;Numbers only&apos; value</source>
-        <translation>Ripristina il valore &apos;Solo numeri&apos;</translation>
+        <translation>Ripristina valore &apos;Solo numeri&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9816"/>
         <source>Standard staff</source>
-        <translation>Pentagramma standard</translation>
+        <translation>Rigo standard</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9835"/>
@@ -4141,12 +4141,12 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9858"/>
         <source>Reset &apos;Line thickness on standard staves&apos; value</source>
-        <translation>Ripristina il valore &apos;Spessore della linea sui pentagrammi convenzionali&apos;</translation>
+        <translation>Ripristina valore &apos;Spessore della linea sui pentagrammi convenzionali&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9890"/>
         <source>Reset &apos;Arrow width&apos; value</source>
-        <translation>Ripristina il valore &apos;Larghezza della freccia&apos;</translation>
+        <translation>Ripristina valore &apos;Larghezza della freccia&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9877"/>
@@ -4156,7 +4156,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9942"/>
         <source>Reset &apos;Arrow height&apos; value</source>
-        <translation>Ripristina il valore &apos;Altezza freccia&apos;</translation>
+        <translation>Ripristina valore &apos;Altezza freccia&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9965"/>
@@ -4166,7 +4166,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10003"/>
         <source>Reset &apos;Line thickness on tablature staves&apos; value</source>
-        <translation>Ripristina il valore &apos;Spessore della linea dell&apos;intavolatura&apos;</translation>
+        <translation>Ripristina valore &apos;Spessore della linea dell&apos;intavolatura&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10348"/>
@@ -4176,7 +4176,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10354"/>
         <source>Reset &apos;Articulation distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza dell&apos;articolazione&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza dell&apos;articolazione&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10364"/>
@@ -4199,17 +4199,17 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10439"/>
         <source>Reset &apos;Stem distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza del gambo della nota&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza del gambo della nota&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10446"/>
         <source>Reset &apos;Notehead distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza della testa della nota&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza della testa della nota&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10453"/>
         <source>Distance from staff:</source>
-        <translation>Distanza dal pentagramma:</translation>
+        <translation>Distanza dal rigo:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10476"/>
@@ -4219,7 +4219,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10486"/>
         <source>Reset &apos;Articulation size&apos; value</source>
-        <translation>Ripristina il valore &apos;Dimensione dell&apos;articolazione&apos;</translation>
+        <translation>Ripristina valore &apos;Dimensione dell&apos;articolazione&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10493"/>
@@ -4269,17 +4269,17 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11790"/>
         <source>Reset &apos;Max. dash distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza max. del trattino&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza max. del trattino&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11931"/>
         <source>Reset &apos;Always force dash&apos; value</source>
-        <translation>Ripristina il valore &apos;Forza sempre il trattino&apos;</translation>
+        <translation>Ripristina valore &apos;Forza sempre il trattino&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11845"/>
         <source>Reset &apos;Min. dash length&apos; value</source>
-        <translation>Ripristina il valore &apos;Lunghezza min. del trattino&apos;</translation>
+        <translation>Ripristina valore &apos;Lunghezza min. del trattino&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11832"/>
@@ -4289,12 +4289,12 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11755"/>
         <source>Reset &apos;Max. dash length&apos; value</source>
-        <translation>Ripristina il valore &apos;Lunghezza max. del trattino&apos;</translation>
+        <translation>Ripristina valore &apos;Lunghezza max. del trattino&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11690"/>
         <source>Reset &apos;Dash thickness&apos; value</source>
-        <translation>Ripristina il valore &apos;spessore trattino&apos;</translation>
+        <translation>Ripristina valore &apos;spessore trattino&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11800"/>
@@ -4309,32 +4309,32 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11569"/>
         <source>Reset &apos;Align verse number&apos; value</source>
-        <translation>Ripristina &apos;Allinea il numero del verso&apos;</translation>
+        <translation>Ripristina valore &apos;Allinea il numero del verso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11595"/>
         <source>Reset &apos;Min. distance&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza min.&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza min.&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12490"/>
         <source>Line height:</source>
-        <translation>Interlinea:</translation>
+        <translation>Altezza linea:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11608"/>
         <source>Reset &apos;Min. bottom margin&apos; value</source>
-        <translation>Ripristina il valore &apos;Min. margine inferiore&apos;</translation>
+        <translation>Ripristina valore &apos;Min. margine inferiore&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11257"/>
         <source>Reset &apos;Line height&apos; value</source>
-        <translation>Ripristina il valore &apos;Altezza della linea&apos;</translation>
+        <translation>Ripristina valore &apos;Altezza linea&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11582"/>
         <source>Reset &apos;Min. top margin&apos; value</source>
-        <translation>Ripristina il valore &apos;Min. margine superiore&apos;</translation>
+        <translation>Ripristina valore &apos;Min. margine superiore&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14357"/>
@@ -4344,17 +4344,17 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8025"/>
         <source>Reset &apos;Avoid barlines&apos; setting</source>
-        <translation>Ripristina l&apos;impostazione &quot;Evita le stanghette&quot;</translation>
+        <translation>Ripristina impostazione &apos;Evita le stanghette&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8012"/>
         <source>Reset &apos;Scale&apos; value</source>
-        <translation>Ripristina il valore &apos;ridimensiona&apos;</translation>
+        <translation>Ripristina valore &apos;Ridimensiona&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12187"/>
         <source>Reset &apos;Snap to dynamics&apos; setting</source>
-        <translation>Ripristina l&apos;impostazione &quot;Aggancia alla dinamica&quot;.</translation>
+        <translation>Ripristina impostazione &apos;Aggancia alla dinamica&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12409"/>
@@ -4376,57 +4376,56 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12461"/>
         <source>of font height</source>
-        <translation>di altezza del carattere</translation>
+        <translation>di altezza del font</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8138"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12525"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14210"/>
         <source>Font:</source>
-        <translation>Carattere:</translation>
+        <translation>Font:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11703"/>
         <source>Reset &apos;Dash gap&apos; value</source>
-        <translation>Ripristina il valore &apos;Distanza trattino&apos;</translation>
+        <translation>Ripristina valore &apos;Distanza trattino&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11855"/>
         <source>Vertical position (% of 
 text x-height):</source>
-        <translation>Posizione verticale (% dell&apos;altezza 
-x-del testo):</translation>
+        <translation>Posizione verticale (% di 
+altezza x del testo):</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11876"/>
         <source>Reset &apos;Vertical position (% of text x-height)&apos; value</source>
-        <translation>Ripristina il valore &apos;Posizione verticale (% dell&apos;altezza 
-x-del testo)</translation>
+        <translation>Ripristina valore &apos;Posizione verticale (% di altezza x del testo)&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11903"/>
         <source>Reset &apos;Omit dash when space is limited&apos; value</source>
-        <translation>Ripristina il valore &apos;Ometti l trattino quando lo spazio è limitato&apos;</translation>
+        <translation>Ripristina valore &apos;Ometti il trattino quando lo spazio è limitato&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11947"/>
         <source>Reset &apos;Dash placement at the start of the system&apos; value</source>
-        <translation>Ripristina il valore &apos;Posizionamento del trattino all&apos;inizio del sistema&apos;</translation>
+        <translation>Ripristina valore &apos;Posizionamento del trattino all&apos;inizio del sistema&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11962"/>
         <source>Extension line</source>
-        <translation>Estensione della linea</translation>
+        <translation>Linea di estensione</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12002"/>
         <source>Reset &apos;Min. line length&apos; value</source>
-        <translation>Ripristina il valore &apos;Lunghezza minima della linea&apos;</translation>
+        <translation>Ripristina valore &apos;Lunghezza minima della linea&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12031"/>
         <source>Min. line length:</source>
-        <translation>Lunghezza minima della linea</translation>
+        <translation>Lunghezza min. della linea:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12048"/>
@@ -4436,7 +4435,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12080"/>
         <source>Reset &apos;Line gap&apos; value</source>
-        <translation>Ripristina il valore &apos;spazio vuoto della linea&apos;</translation>
+        <translation>Ripristina valore &apos;Spazio vuoto della linea&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12097"/>
@@ -4446,7 +4445,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12107"/>
         <source>Reset &apos;Omit extension line when space is limited&apos; value</source>
-        <translation>Ripristina il valore &apos;Ometti l&apos;estensione della linea quando lo spazio è limitato&apos;</translation>
+        <translation>Ripristina valore &apos;Ometti l&apos;estensione della linea quando lo spazio è limitato&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12545"/>
@@ -4492,7 +4491,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12746"/>
         <source>Reset &apos;Extension vertical offset&apos; value</source>
-        <translation>Ripristina il valore &apos;offset verticale estensione&apos;</translation>
+        <translation>Ripristina valore &apos;Offset verticale dell&apos;estensione&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12756"/>
@@ -4507,7 +4506,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12779"/>
         <source>Reset &apos;Extension scaling&apos; value</source>
-        <translation>Ripristina il valore &apos;Ridimensionamento estensione&apos;</translation>
+        <translation>Ripristina valore &apos;Ridimensionamento estensione&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12789"/>
@@ -4522,12 +4521,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12812"/>
         <source>Reset &apos;Modifier scaling&apos; value</source>
-        <translation>Ripristina il valore &apos;Modificatore ridimensionamento&apos;</translation>
+        <translation>Ripristina valore &apos;Ridimensionamento modificatore&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12825"/>
         <source>Reset &apos;Modifier vertical offset&apos; value</source>
-        <translation>Ripristina il valore &apos;Modificatore offset verticale&apos;</translation>
+        <translation>Ripristina valore &apos;Modificatore offset verticale&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12844"/>
@@ -4629,7 +4628,7 @@ x-del testo)</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="84"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2965"/>
         <source>Measure numbers</source>
-        <translation>Numeri delle battute</translation>
+        <translation>Numeri di battute</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="124"/>
@@ -4647,7 +4646,7 @@ x-del testo)</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="209"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10965"/>
         <source>Tempo text</source>
-        <translation>Testo metronomo</translation>
+        <translation>Testo di tempo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="224"/>
@@ -4675,27 +4674,27 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="249"/>
         <source>Text styles</source>
-        <translation>Stili del testo</translation>
+        <translation>Stili di testo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="718"/>
         <source>Swing settings</source>
-        <translation>Impostazioni dello Swing</translation>
+        <translation>Impostazioni swing</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="743"/>
         <source>Eighth note</source>
-        <translation>Croma (ottavo)</translation>
+        <translation>Croma</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="750"/>
         <source>Sixteenth note</source>
-        <translation>Semicroma (sedicesimo)</translation>
+        <translation>Semicroma </translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3355"/>
         <source>System brackets</source>
-        <translation>Parentesi quadre</translation>
+        <translation>Parentesi quadre di sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3576"/>
@@ -4710,7 +4709,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5108"/>
         <source>Reset &apos;Show repeat barline tips (“winged” repeats)&apos; value</source>
-        <translation>Ripristina il valore &apos;Mostra i suggerimenti per le stanghette dei ritornelli (ritornelli &quot;con le ali&quot;)&apos;</translation>
+        <translation>Ripristina valore &apos;Mostra suggerimenti per le stanghette dei ritornelli (ritornelli &quot;con le ali&quot;)&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5216"/>
@@ -4757,7 +4756,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13805"/>
         <source>Staccato</source>
-        <translation>staccato</translation>
+        <translation>Staccato</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13500"/>
@@ -4848,12 +4847,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14436"/>
         <source>Use musical symbols font for tuplet numbers</source>
-        <translation>Utilizza il font dei simboli musicali per i numeri dei gruppi irregolari</translation>
+        <translation>Usa font dei simboli musicali per i numeri dei gruppi irregolari</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14446"/>
         <source>Reset &apos;Use musical symbols font for tuplet numbers&apos; value</source>
-        <translation>Ripristina il valore &apos;Utilizza il font dei simboli musicali per i numeri dei gruppi irregolari&apos;</translation>
+        <translation>Ripristina valore &apos;Usa font dei simboli musicali per i numeri dei gruppi irregolari&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14458"/>
@@ -4863,7 +4862,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14487"/>
         <source>Reset &apos;Musical symbols scale&apos; value</source>
-        <translation>Ripristina il valore &apos;Scala dei simboli musicali&apos;</translation>
+        <translation>Ripristina valore &apos;Scala dei simboli musicali&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14556"/>
@@ -4888,7 +4887,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13870"/>
         <source>Show ties only</source>
-        <translation>Mostra solo le legature di valore</translation>
+        <translation>Mostra solo legature di valore</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13877"/>
@@ -4898,7 +4897,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13893"/>
         <source>Only show at the start of a system</source>
-        <translation>Mostra solo all&apos;inizio di un&apos;accollatura</translation>
+        <translation>Mostra solo all&apos;inizio di un sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13907"/>
@@ -4913,7 +4912,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13998"/>
         <source>Reset &apos;Frame&apos; value</source>
-        <translation>Ripristina il valore &apos;Cornice&apos;</translation>
+        <translation>Ripristina valore &apos;Cornice&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14026"/>
@@ -4923,13 +4922,13 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14049"/>
         <source>Reset &apos;Background&apos; value</source>
-        <translation>Ripristina il valore &apos;colore sfondo&apos;</translation>
+        <translation>Ripristina valore &apos;Sfondo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14062"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14095"/>
         <source>Reset &apos;Border&apos; value</source>
-        <translation>Ripristina il valore &apos;Ampiezza angoli&apos;</translation>
+        <translation>Ripristina valore &apos;Bordo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14082"/>
@@ -4949,22 +4948,22 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14158"/>
         <source>Reset &apos;Corner radius&apos; value</source>
-        <translation>Ripristina il valore &apos;Raggio dell&apos;angolo&apos;</translation>
+        <translation>Ripristina valore &apos;Raggio dell&apos;angolo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14187"/>
         <source>Reset &apos;Font style&apos; values</source>
-        <translation>Ripristina il valore &apos;stile carattere&apos;</translation>
+        <translation>Ripristina valore &apos;Stile font&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14223"/>
         <source>Reset &apos;Align&apos; values</source>
-        <translation>Ripristina il valore &apos;Allinea&apos;</translation>
+        <translation>Ripristina valore &apos;Allinea&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14236"/>
         <source>Reset &apos;Color&apos; value</source>
-        <translation>Ripristina il valore &apos;colore&apos;</translation>
+        <translation>Ripristina valore &apos;Colore&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14246"/>
@@ -4975,7 +4974,7 @@ x-del testo)</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14262"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14426"/>
         <source>Reset &apos;Font size&apos; value</source>
-        <translation>Ripristina il valore &apos;Dimensione carattere&apos;</translation>
+        <translation>Ripristina valore &apos;Dimensione font&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14275"/>
@@ -4985,7 +4984,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14291"/>
         <source>Reset &apos;Follow staff size&apos; value</source>
-        <translation>Ripristina il valore &apos;Segui le dimensioni del rigo&apos;</translation>
+        <translation>Ripristina valore &apos;Segui le dimensioni del rigo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14301"/>
@@ -5000,17 +4999,17 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14321"/>
         <source>Reset &apos;Name&apos; value</source>
-        <translation>Ripristina il valore &apos;Nome&apos;</translation>
+        <translation>Ripristina valore &apos;Nome&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14334"/>
         <source>Reset &apos;Font face&apos; value</source>
-        <translation>Ripristina il valore &apos;Aspetto carattere&apos;</translation>
+        <translation>Ripristina valore &apos;Aspetto font&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14347"/>
         <source>Reset &apos;Offset&apos; values</source>
-        <translation>Ripristina il valore &apos;offset&apos;</translation>
+        <translation>Ripristina valori &apos;Offset&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14367"/>
@@ -5025,7 +5024,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="840"/>
         <source>Show ‘1’ on 1-measure repeats</source>
-        <translation>Mostra &quot;1&quot; sulle ripetizioni di 1-battuta</translation>
+        <translation>Mostra &apos;1&apos; sulle ripetizioni di 1 battuta</translation>
     </message>
 </context>
 <context>
@@ -5133,7 +5132,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/palette/view/widgets/keyedit.ui" line="131"/>
         <source>Add time signature to master palette</source>
-        <translation>Aggiungi Indicazione metrica alla tavolozza principale</translation>
+        <translation>Aggiungi indicazione metrica alla tavolozza principale</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/keyedit.ui" line="134"/>
@@ -5255,7 +5254,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="283"/>
         <source>Do not count</source>
-        <translation>non contare</translation>
+        <translation>Non contare</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="286"/>
@@ -5275,12 +5274,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="351"/>
         <source>Layout stretch factor</source>
-        <translation>Fattore larghezza impaginazione</translation>
+        <translation>Fattore larghezza layout</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="354"/>
         <source>Layout stretch:</source>
-        <translation>Larghezza battuta:</translation>
+        <translation>Larghezza layout:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="389"/>
@@ -5461,7 +5460,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="246"/>
         <source>Unit</source>
-        <translation>Unità</translation>
+        <translation>Unità di misura</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="252"/>
@@ -5481,7 +5480,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="389"/>
         <source>Even page margins</source>
-        <translation>Margini delle pagine pari</translation>
+        <translation>Margini pagine pari</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="300"/>
@@ -5493,7 +5492,7 @@ x-del testo)</translation>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="319"/>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="401"/>
         <source>Right</source>
-        <translation>Destra:</translation>
+        <translation>Destra</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="338"/>
@@ -5587,7 +5586,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="113"/>
         <source>Same system</source>
-        <translation>Stessa accollatura</translation>
+        <translation>Stesso sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="120"/>
@@ -5640,7 +5639,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="138"/>
         <source>Same system</source>
-        <translation>Stessa accollatura</translation>
+        <translation>Stesso sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="54"/>
@@ -5737,7 +5736,7 @@ x-del testo)</translation>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="27"/>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="33"/>
         <source>Swing settings</source>
-        <translation>Impostazioni dello Swing</translation>
+        <translation>Impostazioni swing</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="54"/>
@@ -5752,17 +5751,17 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="80"/>
         <source>Eighth note</source>
-        <translation>Croma (ottavo)</translation>
+        <translation>Croma </translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="93"/>
         <source>Sixteenth note</source>
-        <translation>Semicroma (sedicesimo)</translation>
+        <translation>Semicroma </translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="112"/>
         <source>Select swing ratio:</source>
-        <translation>Seleziona rapporto di swing:</translation>
+        <translation>Seleziona rapporto swing:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="125"/>
@@ -5790,12 +5789,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/palette/view/widgets/symboldialog.ui" line="72"/>
         <source>System flag</source>
-        <translation>Marcatore di accollatura</translation>
+        <translation>Marcatore di sistema</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/symboldialog.ui" line="92"/>
         <source>Font:</source>
-        <translation>Carattere:</translation>
+        <translation>Font:</translation>
     </message>
 </context>
 <context>
@@ -5864,12 +5863,12 @@ x-del testo)</translation>
         <translation>Testo:</translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/timedialog.ui" line="290"/>
+        <location filename="../../src/palette/view/widgets/timedialog.ui" line="293"/>
         <source>Add time signature to master palette</source>
-        <translation>Aggiungi Indicazione metrica alla tavolozza principale</translation>
+        <translation>Aggiungi indicazione metrica alla tavolozza principale</translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/timedialog.ui" line="293"/>
+        <location filename="../../src/palette/view/widgets/timedialog.ui" line="296"/>
         <source>Add</source>
         <translation>Aggiungi</translation>
     </message>
@@ -5890,7 +5889,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="56"/>
         <source>Appearance (visual only; will not affect actual measure duration)</source>
-        <translation>Aspetto (solo visivo; non influisce sulla durata effettiva della battuta)</translation>
+        <translation>Aspetto (solo visivo; non influirà sulla durata effettiva della battuta)</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="65"/>
@@ -5918,12 +5917,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="23"/>
         <source>Transpose chromatically</source>
-        <translation>Trasponi cromaticamente</translation>
+        <translation>Trasporta cromaticamente</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="32"/>
         <source>Transpose to key (specified at concert pitch)</source>
-        <translation>Trasponi alla chiave (Partitura in Do specificata)</translation>
+        <translation>Trasporta alla tonalità (suoni reali specificati)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="35"/>
@@ -5933,7 +5932,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="57"/>
         <source>C♭ major / A♭ minor</source>
-        <translation>Do♭ maggiore, La♭ minore</translation>
+        <translation>DO♭ maggiore / LA♭ minore</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="62"/>
@@ -6034,7 +6033,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="171"/>
         <source>Transpose by interval</source>
-        <translation>Trasponi per intervallo</translation>
+        <translation>Trasporta per intervallo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="174"/>
@@ -6174,7 +6173,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="371"/>
         <source>Transpose diatonically</source>
-        <translation>Trasponi diatonicamente</translation>
+        <translation>Trasporta diatonicamente</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="494"/>
@@ -6194,7 +6193,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="358"/>
         <source>Transpose key signatures</source>
-        <translation>Trasporta la tonalità</translation>
+        <translation>Trasporta armature di chiave</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="405"/>
@@ -6245,7 +6244,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="480"/>
         <source>Transpose chord symbols</source>
-        <translation>Trasponi le sigle accordali</translation>
+        <translation>Trasporta sigle accordali</translation>
     </message>
 </context>
 <context>
@@ -6279,7 +6278,7 @@ x-del testo)</translation>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="152"/>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="170"/>
         <source>Number</source>
-        <translation>numero</translation>
+        <translation>Numero</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="180"/>
@@ -6290,7 +6289,7 @@ x-del testo)</translation>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="187"/>
         <source>None</source>
         <comment>no tuplet number style</comment>
-        <translation>Nessuna</translation>
+        <translation>Nessuno</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="197"/>
@@ -6307,7 +6306,7 @@ x-del testo)</translation>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="232"/>
         <source>None</source>
         <comment>no tuplet bracket style</comment>
-        <translation>Nessuna</translation>
+        <translation>Nessuno</translation>
     </message>
 </context>
 <context>
@@ -6381,7 +6380,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="127"/>
         <source>Until measure end</source>
-        <translation>Fino alla fine della battuta</translation>
+        <translation>Fino a fine battuta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="132"/>
@@ -6408,12 +6407,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="36"/>
         <source>&amp;Open…</source>
-        <translation>Apri</translation>
+        <translation>&amp;Apri</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="37"/>
         <source>Open…</source>
-        <translation>Apri</translation>
+        <translation>Apri...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="43"/>
@@ -6524,12 +6523,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="116"/>
         <source>Project propert&amp;ies…</source>
-        <translation>Propriet&amp;à del progetto...</translation>
+        <translation>Propriet&amp;à progetto...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
         <source>Project properties…</source>
-        <translation>Proprietà del progetto...</translation>
+        <translation>Proprietà progetto...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="122"/>
@@ -6589,12 +6588,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="91"/>
         <source>Put note</source>
-        <translation>Metti la nota</translation>
+        <translation>Metti nota</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="96"/>
         <source>Remove note</source>
-        <translation>Rimuovi la nota</translation>
+        <translation>Rimuovi nota</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="101"/>
@@ -6669,12 +6668,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="173"/>
         <source>Move to staff above</source>
-        <translation>Sposta al pentagramma superiore</translation>
+        <translation>Sposta al rigo superiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="179"/>
         <source>Move to staff below</source>
-        <translation>Sposta al pentagramma inferiore</translation>
+        <translation>Sposta al rigo inferiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="197"/>
@@ -6689,12 +6688,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="209"/>
         <source>Next system</source>
-        <translation>Accollatura sccessiva</translation>
+        <translation>Sistema successivo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="215"/>
         <source>Previous system</source>
-        <translation>Accollatura precedente</translation>
+        <translation>Sistema precedente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="271"/>
@@ -6709,17 +6708,17 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="289"/>
         <source>Halve duration</source>
-        <translation>Dimezza la durata</translation>
+        <translation>Dimezza durata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="295"/>
         <source>Double selected duration (dotted)</source>
-        <translation>Raddoppia la durata selezionata (puntata)</translation>
+        <translation>Raddoppia durata selezionata (puntata)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="301"/>
         <source>Halve selected duration (dotted)</source>
-        <translation>Dimezza la durata selezionata (puntata)</translation>
+        <translation>Dimezza durata selezionata (puntata)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="307"/>
@@ -6755,7 +6754,7 @@ x-del testo)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="352"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="353"/>
         <source>Toggle visibility of elements</source>
-        <translation>Attiva/disattiva la visibilità degli elementi</translation>
+        <translation>Attiva/disattiva visibilità degli elementi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="358"/>
@@ -6775,7 +6774,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="376"/>
         <source>Similar on this staff</source>
-        <translation>Simili su questo pentagramma</translation>
+        <translation>Simili su questo rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="382"/>
@@ -6817,13 +6816,13 @@ x-del testo)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="551"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="552"/>
         <source>Staff text properties…</source>
-        <translation>Proprietà testo di pentagramma...</translation>
+        <translation>Proprietà testo di rigo...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="557"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="558"/>
         <source>System text properties…</source>
-        <translation>Proprietà testo di accollatura…</translation>
+        <translation>Proprietà testo di sistema…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="563"/>
@@ -6835,7 +6834,7 @@ x-del testo)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="655"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="656"/>
         <source>Insert one measure before selection</source>
-        <translation>Inserisci una misura prima della selezione</translation>
+        <translation>Inserisci una battuta prima della selezione</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="662"/>
@@ -6853,24 +6852,24 @@ x-del testo)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="674"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="675"/>
         <source>Insert measures at start of score…</source>
-        <translation>Inserisci battute all&apos;inizio della partitura...</translation>
+        <translation>Inserisci battute ad inizio partitura...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="680"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="681"/>
         <source>Insert one measure at end of score</source>
-        <translation>Inserisci una misura alla fine della partitura</translation>
+        <translation>Inserisci una battuta a fine partitura</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="686"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="687"/>
         <source>Insert measures at end of score…</source>
-        <translation>Inserisci battute alla fine della partitura...</translation>
+        <translation>Inserisci battute a fine partitura...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="766"/>
         <source>Grace: 8th after</source>
-        <translation>Abbellimento: 1/8, dopo  </translation>
+        <translation>Abbellimento: croma dopo  </translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="801"/>
@@ -6881,13 +6880,13 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="808"/>
         <source>Break inner beams (8th)</source>
-        <translation>Interrompi travatura interna (8va)</translation>
+        <translation>Interrompi travature interne (croma)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="815"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="816"/>
         <source>Break inner beams (16th)</source>
-        <translation>Interrompi travatura interna (16ma)</translation>
+        <translation>Interrompi travature interne (16esimo)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="822"/>
@@ -6938,7 +6937,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2362"/>
         <source>Cross-staff beaming</source>
-        <translation>Travature tra pentagrammi</translation>
+        <translation>Travature tra righi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2368"/>
@@ -7012,12 +7011,12 @@ x-del testo)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1582"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1583"/>
         <source>Toggle score lock</source>
-        <translation>Attiva/disattiva blocco</translation>
+        <translation>Attiva/disattiva blocco partitura</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1609"/>
         <source>Concert pitch</source>
-        <translation>Partitura in suoni reali</translation>
+        <translation>Suoni reali</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1623"/>
@@ -7096,19 +7095,19 @@ x-del testo)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2140"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2217"/>
         <source>256th note</source>
-        <translation>Semifusa (1/256)</translation>
+        <translation>256esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2147"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2224"/>
         <source>512th note</source>
-        <translation>Nota 1/512</translation>
+        <translation>512esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2154"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2231"/>
         <source>1024th note</source>
-        <translation>Nota 1/1024</translation>
+        <translation>1024esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1821"/>
@@ -7123,12 +7122,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1869"/>
         <source>Toggle up bow</source>
-        <translation>Attiva/disattiva arco su</translation>
+        <translation>Attiva/disattiva arcata in su</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1875"/>
         <source>Toggle down bow</source>
-        <translation>Attiva/disattiva arco giù</translation>
+        <translation>Attiva/disattiva arcata in giù</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1602"/>
@@ -7184,7 +7183,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="48"/>
         <source>Search palettes</source>
-        <translation>Ricerca tavolozze</translation>
+        <translation>Cerca tavolozze</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="53"/>
@@ -7250,18 +7249,18 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="71"/>
         <source>Fret %1 (TAB)</source>
-        <translation>Tasto %1 (Tab.)</translation>
+        <translation>Tasto %1 (TAB)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="72"/>
         <source>Enter TAB: fret %1</source>
-        <translation>Inserisci Tab: tasto %1</translation>
+        <translation>Inserisci TAB: tasto %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="76"/>
         <source>%1 (TAB)</source>
         <extracomment>Addition to the name of an action to indicate that this action only applies to tablature notation. '%1' is the name of the action.</extracomment>
-        <translation>%1 (Tab.)</translation>
+        <translation>%1 (TAB)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="102"/>
@@ -7271,12 +7270,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="114"/>
         <source>Select next chord / move text right</source>
-        <translation>Seleziona l&apos;accordo successivo / sposta il testo a destra</translation>
+        <translation>Seleziona accordo successivo / sposta testo a destra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="120"/>
         <source>Select previous chord / move text left</source>
-        <translation>Seleziona l&apos;accordo successivo / sposta il testo a sinistra</translation>
+        <translation>Seleziona accordo successivo / sposta testo a sinistra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="126"/>
@@ -7286,42 +7285,42 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="138"/>
         <source>Select note/rest above</source>
-        <translation>Seleziona la nota/la pausa sopra</translation>
+        <translation>Seleziona nota/pausa sopra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="144"/>
         <source>Select note/rest below</source>
-        <translation>Seleziona la nota/la pausa sotto</translation>
+        <translation>Seleziona nota/pausa sotto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="150"/>
         <source>Select top note in chord</source>
-        <translation>Seleziona la nota superiore dell&apos;accordo</translation>
+        <translation>Seleziona nota superiore dell&apos;accordo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="156"/>
         <source>Select bottom note in chord</source>
-        <translation>Seleziona la nota inferiore dell&apos;accordo</translation>
+        <translation>Seleziona nota inferiore dell&apos;accordo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="174"/>
         <source>Move selected note/rest to staff above</source>
-        <translation>Sposta la nota/pausa selezionata al pentagramma superiore </translation>
+        <translation>Sposta nota/pausa selezionata al rigo superiore </translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="180"/>
         <source>Move selected note/rest to staff below</source>
-        <translation>Sposta la nota/pausa selezionata al pentagramma inferiore </translation>
+        <translation>Sposta nota/pausa selezionata al rigo inferiore </translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="186"/>
         <source>Go to next staff or voice</source>
-        <translation>Vai al pentagramma o alla voce successiva</translation>
+        <translation>Vai al rigo o alla voce successiva</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="192"/>
         <source>Go to previous staff or voice</source>
-        <translation>Vai al pentagramma o alla voce precedente</translation>
+        <translation>Vai al rigo o alla voce precedente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="198"/>
@@ -7336,12 +7335,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="210"/>
         <source>Go to next system</source>
-        <translation>Vai all&apos;accollatura successiva</translation>
+        <translation>Vai al successivo sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="216"/>
         <source>Go to previous system</source>
-        <translation>Vai all&apos;accollatura precedente</translation>
+        <translation>Vai al precedente sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="222"/>
@@ -7396,22 +7395,22 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="284"/>
         <source>Double selected duration</source>
-        <translation>Raddoppia la durata selezionata</translation>
+        <translation>Raddoppia durata selezionata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="290"/>
         <source>Halve selected duration</source>
-        <translation>Dimezza la durata selezionata</translation>
+        <translation>Dimezza durata selezionata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="296"/>
         <source>Double selected duration (includes dotted values)</source>
-        <translation>Raddoppia la durata selezionata (inclusi i valori puntati)</translation>
+        <translation>Raddoppia durata selezionata (inclusi valori puntati)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="302"/>
         <source>Halve selected duration (includes dotted values)</source>
-        <translation>Dimezza la durata selezionata (inclusi i valori puntati)</translation>
+        <translation>Dimezza durata selezionata (inclusi valori puntati)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="308"/>
@@ -7461,12 +7460,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="377"/>
         <source>Select similar elements on the same staff</source>
-        <translation>Seleziona gli elementi simili nello stesso pentagramma</translation>
+        <translation>Seleziona elementi simili nello stesso rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="383"/>
         <source>Select similar elements in the selected range</source>
-        <translation>Seleziona gli elementi simili nell&apos;intervallo selezionato</translation>
+        <translation>Seleziona elementi simili nell&apos;intervallo selezionato</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="389"/>
@@ -7476,7 +7475,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="395"/>
         <source>Delete</source>
-        <translation>Cancella</translation>
+        <translation>Elimina</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="402"/>
@@ -7501,7 +7500,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="426"/>
         <source>Transpose…</source>
-        <translation>Trasporre...</translation>
+        <translation>Trasporta...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="432"/>
@@ -7521,7 +7520,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="450"/>
         <source>Delete selected measures</source>
-        <translation>Cancella le battute selezionate</translation>
+        <translation>Elimina battute selezionate</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="469"/>
@@ -7583,18 +7582,18 @@ x-del testo)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="545"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="546"/>
         <source>Staff/Part properties…</source>
-        <translation>Proprietà Pentagramma/Parte...</translation>
+        <translation>Proprietà rigo/parte...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="570"/>
         <source>Add/remove system breaks…</source>
-        <translation>Aggiungi/Rimuovi interruzioni di accollatura...</translation>
+        <translation>Aggiungi/rimuovi interruzioni di sistema...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="625"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="626"/>
         <source>Add/remove system break</source>
-        <translation>Aggiungi/rimuovi interruzioni di accollatura</translation>
+        <translation>Aggiungi/rimuovi interruzioni di sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="631"/>
@@ -7611,12 +7610,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="644"/>
         <source>Split measure before selected note/rest</source>
-        <translation>Dividi la battuta prima della nota/pausa selezionata</translation>
+        <translation>Dividi battuta prima della nota/pausa selezionata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="650"/>
         <source>Join selected measures</source>
-        <translation>Unisci le battute selezionate</translation>
+        <translation>Unisci battute selezionate</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="693"/>
@@ -7691,7 +7690,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="809"/>
         <source>Break inner beams (eighth)</source>
-        <translation>Interrompi travatura interna (croma)</translation>
+        <translation>Interrompi travature interne (croma)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="830"/>
@@ -7706,7 +7705,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="864"/>
         <source>&amp;Unison</source>
-        <translation>Unisono</translation>
+        <translation>&amp;Unisono</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="865"/>
@@ -7716,82 +7715,82 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="871"/>
         <source>Enter interval: second above</source>
-        <translation>Inserisci l&apos;intervallo: seconda superiore</translation>
+        <translation>Inserisci intervallo: seconda superiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="877"/>
         <source>Enter interval: third above</source>
-        <translation>Inserisci l&apos;intervallo: terza superiore</translation>
+        <translation>Inserisci intervallo: terza superiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="883"/>
         <source>Enter interval: fourth above</source>
-        <translation>Inserisci l&apos;intervallo: quarta superiore</translation>
+        <translation>Inserisci intervallo: quarta superiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="889"/>
         <source>Enter interval: fifth above</source>
-        <translation>Inserisci l&apos;intervallo: quinta superiore</translation>
+        <translation>Inserisci intervallo: quinta superiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="895"/>
         <source>Enter interval: sixth above</source>
-        <translation>Inserisci l&apos;intervallo: sesta superiore</translation>
+        <translation>Inserisci intervallo: sesta superiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="901"/>
         <source>Enter interval: seventh above</source>
-        <translation>Inserisci l&apos;intervallo: settima superiore</translation>
+        <translation>Inserisci intervallo: settima superiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="907"/>
         <source>Enter interval: octave above</source>
-        <translation>Inserisci l&apos;intervallo: ottava superiore</translation>
+        <translation>Inserisci intervallo: ottava superiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="913"/>
         <source>Enter interval: ninth above</source>
-        <translation>Inserisci l&apos;intervallo: nona superiore</translation>
+        <translation>Inserisci intervallo: nona superiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="919"/>
         <source>Enter interval: second below</source>
-        <translation>Inserisci l&apos;intervallo: seconda inferiore</translation>
+        <translation>Inserisci intervallo: seconda inferiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="925"/>
         <source>Enter interval: third below</source>
-        <translation>Inserisci l&apos;intervallo: terza inferiore</translation>
+        <translation>Inserisci intervallo: terza inferiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="931"/>
         <source>Enter interval: fourth below</source>
-        <translation>Inserisci l&apos;intervallo: quarta inferiore</translation>
+        <translation>Inserisci intervallo: quarta inferiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="937"/>
         <source>Enter interval: fifth below</source>
-        <translation>Inserisci l&apos;intervallo: quinta inferiore</translation>
+        <translation>Inserisci intervallo: quinta inferiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="943"/>
         <source>Enter interval: sixth below</source>
-        <translation>Inserisci l&apos;intervallo: sesta inferiore</translation>
+        <translation>Inserisci intervallo: sesta inferiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="949"/>
         <source>Enter interval: seventh below</source>
-        <translation>Inserisci l&apos;intervallo: settima inferiore</translation>
+        <translation>Inserisci intervallo: settima inferiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="955"/>
         <source>Enter interval: octave below</source>
-        <translation>Inserisci l&apos;intervallo: ottava inferiore</translation>
+        <translation>Inserisci intervallo: ottava inferiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="961"/>
         <source>Enter interval: ninth below</source>
-        <translation>Inserisci l&apos;intervallo: nona inferiore</translation>
+        <translation>Inserisci intervallo: nona inferiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1200"/>
@@ -7846,12 +7845,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1264"/>
         <source>Add text: system text</source>
-        <translation>Aggiungi testo: di accollatura</translation>
+        <translation>Aggiungi testo: testo di sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1270"/>
         <source>Add text: staff text</source>
-        <translation>Aggiungi testo: di pentagramma</translation>
+        <translation>Aggiungi testo: testo di rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1276"/>
@@ -7866,7 +7865,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1288"/>
         <source>Add text: instrument change</source>
-        <translation>Aggiungi testo: cambio dello strumento</translation>
+        <translation>Aggiungi testo: cambio strumento</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1294"/>
@@ -7906,7 +7905,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1336"/>
         <source>Add text: tempo marking</source>
-        <translation>Aggiungi testo: metronomo</translation>
+        <translation>Aggiungi testo: indicazione di tempo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1342"/>
@@ -7941,7 +7940,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1378"/>
         <source>Enter tuplet: octuplet</source>
-        <translation> Inserisci gruppo irregolare: ottuplina</translation>
+        <translation> Inserisci gruppo irregolare: gruppo di otto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1383"/>
@@ -7951,27 +7950,27 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1384"/>
         <source>Enter tuplet: nonuplet</source>
-        <translation> Inserisci gruppo irregolare: nonuplina</translation>
+        <translation> Inserisci gruppo irregolare: gruppo di nove</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1390"/>
         <source>Enter tuplet: other…</source>
-        <translation>Gruppo irregolare: altri...</translation>
+        <translation>Inserisci gruppo irregolare: altro...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1396"/>
         <source>Decrease layout stretch</source>
-        <translation>Diminuisci larghezza impaginazione</translation>
+        <translation>Diminuisci larghezza d&apos;impaginazione</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1402"/>
         <source>Increase layout stretch</source>
-        <translation>Aumenta larghezza impaginazione</translation>
+        <translation>Aumenta larghezza d&apos;impaginazione</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1408"/>
         <source>Reset layout stretch</source>
-        <translation>Ripristina larghezza impaginazione</translation>
+        <translation>Ripristina larghezza d&apos;impaginazione</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1420"/>
@@ -7991,12 +7990,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1431"/>
         <source>Reset entire score to &amp;default layout</source>
-        <translation>Ripristina l&apos;intera partitura all&apos;impaginazione &amp;predefinito</translation>
+        <translation>Ripristina l&apos;intera partitura all&apos;impaginazione &amp;predefinita</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1432"/>
         <source>Reset entire score to default layout</source>
-        <translation>Ripristina l&apos;intera partitura al layout predefinito</translation>
+        <translation>Ripristina l&apos;intera partitura all&apos; impaginazione predefinita</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1457"/>
@@ -8059,7 +8058,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1524"/>
         <source>Add to selection: staff above</source>
-        <translation>Aggiungi alla selezione: pentagramma superiore</translation>
+        <translation>Aggiungi alla selezione: rigo superiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1529"/>
@@ -8069,17 +8068,17 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1530"/>
         <source>Add to selection: staff below</source>
-        <translation>Aggiungi alla selezione: pentagramma inferiore</translation>
+        <translation>Aggiungi alla selezione: rigo inferiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1547"/>
         <source>Page: Previous</source>
-        <translation>Pagina: precedente</translation>
+        <translation>Pagina: Precedente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1553"/>
         <source>Page: Next</source>
-        <translation>Pagina: successiva</translation>
+        <translation>Pagina: Successiva</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1560"/>
@@ -8094,47 +8093,47 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1589"/>
         <source>Change enharmonic spelling (concert and written pitch)</source>
-        <translation>Modifica l&apos;ortografia enarmonica (partitura in do e scritta)</translation>
+        <translation>Cambia ortografia enarmonica (suoni reali e scritti)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1596"/>
         <source>Change enharmonic spelling (current mode only)</source>
-        <translation>Modifica dell&apos;ortografia enarmonica (solo per la modalità corrente)</translation>
+        <translation>Cambia ortografia enarmonica (solo modalità corrente)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1610"/>
         <source>Toggle concert pitch</source>
-        <translation>Attiva/disattiva visualizzazione in suoni reali</translation>
+        <translation>Attiva/disattiva suoni reali</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1636"/>
         <source>Advance cursor: next beat (chord symbols)</source>
-        <translation>Avanzamento del cursore: battito successivo (sigla accordale)</translation>
+        <translation>Avanzamento cursore: tempo successivo (sigla accordale)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1647"/>
         <source>Advance longa (F.B./Chord symbol)</source>
-        <translation>Avanzamento longa (B.C./sigla accordale)</translation>
+        <translation>Avanzamento lunga (B.C./Sigla accordale)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1648"/>
         <source>Advance cursor: longa (figured bass/chord symbols)</source>
-        <translation>Avanzamento del cursore: longa (basso continuo/sigla accordale)</translation>
+        <translation>Avanzamento cursore: lunga (basso continuo/sigla accordale)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1653"/>
         <source>Advance breve (F.B./Chord symbol)</source>
-        <translation>Avanzamento breve (B.C./sigla accordale)</translation>
+        <translation>Avanzamento breve (B.C./Sigla accordale)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1654"/>
         <source>Advance cursor: breve (figured bass/chord symbols)</source>
-        <translation>Avanzamento del cursore: breve (basso continuo/sigla accordale)</translation>
+        <translation>Avanzamento cursore: breve (basso continuo/sigla accordale)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1659"/>
         <source>Advance whole note (F.B./Chord symbol)</source>
-        <translation>Avanzamento semibreve (B.C./sigla accordale)</translation>
+        <translation>Avanzamento semibreve (B.C./Sigla accordale)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1660"/>
@@ -8184,22 +8183,22 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1689"/>
         <source>Advance 32nd note (F.B./Chord symbol)</source>
-        <translation>Avanzamento biscroma (B.C./sigla accordale)</translation>
+        <translation>Avanzamento 32esimo (B.C./Sigla accordale)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1690"/>
         <source>Advance cursor: 32nd note (figured bass/chord symbols)</source>
-        <translation>Avanzamento del cursore: biscroma (basso continuo/sigla accordale)</translation>
+        <translation>Avanzamento cursore: 32esimo (basso continuo/sigla accordale)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1695"/>
         <source>Advance 64th note (F.B./Chord symbol)</source>
-        <translation>Avanzamento semibiscroma (B.C./sigla accordale)</translation>
+        <translation>Avanzamento 64esimo (B.C./Sigla accordale)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1696"/>
         <source>Advance cursor: 64th note (figured bass/chord symbols)</source>
-        <translation>Avanzamento del cursore: semibiscroma (basso continuo/sigla accordale)</translation>
+        <translation>Avanzamento cursore: 64esimo (basso continuo/sigla accordale)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1702"/>
@@ -8219,7 +8218,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1720"/>
         <source>Lyrics: enter extension line</source>
-        <translation>Parole: inserisci la linea di estensione</translation>
+        <translation>Parole: inserisci linea di estensione</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1732"/>
@@ -8279,12 +8278,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1888"/>
         <source>Add clef: treble</source>
-        <translation>Aggiungi chiave: di violino</translation>
+        <translation>Aggiungi chiave: violino</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1894"/>
         <source>Add clef: bass</source>
-        <translation>Aggiungi chiave: di basso</translation>
+        <translation>Aggiungi chiave: basso</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1906"/>
@@ -8309,7 +8308,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1966"/>
         <source>Show/hide empty staves</source>
-        <translation>Mostra/nascondi i pentagrammi vuoti</translation>
+        <translation>Mostra/nascondi pentagrammi vuoti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1972"/>
@@ -8330,7 +8329,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1995"/>
         <source>String above (TAB)</source>
-        <translation>Corda superiore (Tab.)</translation>
+        <translation>Corda superiore (TAB)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1996"/>
@@ -8340,7 +8339,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2001"/>
         <source>String below (TAB)</source>
-        <translation>Corda inferiore (Tab.)</translation>
+        <translation>Corda inferiore (TAB)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2002"/>
@@ -8350,134 +8349,134 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2071"/>
         <source>Set duration: longa</source>
-        <translation>Imposta la durata: longa</translation>
+        <translation>Imposta durata: lunga</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2078"/>
         <source>Set duration: double whole note</source>
-        <translation>Imposta la durata: breve</translation>
+        <translation>Imposta durata: breve</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2085"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2162"/>
         <source>Set duration: whole note</source>
-        <translation>Imposta la durata: semibreve</translation>
+        <translation>Imposta durata: semibreve</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2092"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2169"/>
         <source>Set duration: half note</source>
-        <translation>Imposta la durata: minima</translation>
+        <translation>Imposta durata: minima</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2099"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2176"/>
         <source>Set duration: quarter note</source>
-        <translation>Imposta la durata: semiminima</translation>
+        <translation>Imposta durata: semiminima</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2105"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2182"/>
         <source>Eighth note</source>
-        <translation>Croma (ottavo)</translation>
+        <translation>Croma</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2106"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2183"/>
         <source>Set duration: eighth note</source>
-        <translation>Imposta la durata: croma</translation>
+        <translation>Imposta durata: croma</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2113"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2190"/>
         <source>Set duration: 16th note</source>
-        <translation>Imposta la durata: semicroma</translation>
+        <translation>Imposta durata: 16esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2120"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2197"/>
         <source>Set duration: 32nd note</source>
-        <translation>Imposta la durata: biscroma</translation>
+        <translation>Imposta durata: 32esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2127"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2204"/>
         <source>Set duration: 64th note</source>
-        <translation>Imposta la durata: semibiscroma</translation>
+        <translation>Imposta durata: 64esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2134"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2211"/>
         <source>Set duration: 128th note</source>
-        <translation>Imposta la durata: fusa</translation>
+        <translation>Imposta durata: 128esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2141"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2218"/>
         <source>Set duration: 256th note</source>
-        <translation>Imposta la durata: semifusa</translation>
+        <translation>Imposta durata: 256esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2148"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2225"/>
         <source>Set duration: 512th note</source>
-        <translation>Imposta la durata: 1/512</translation>
+        <translation>Imposta durata: 512esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2155"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2232"/>
         <source>Set duration: 1024th note</source>
-        <translation>Imposta la durata: 1/1024</translation>
+        <translation>Imposta durata: 1024esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2239"/>
         <source>Toggle duration dot</source>
-        <translation>Commuta il punto di valore</translation>
+        <translation>Attiva/disattiva punto di valore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2246"/>
         <source>Toggle duration dot: double</source>
-        <translation>Commuta il punto di valore: doppio</translation>
+        <translation>Attiva/disattiva punto di valore: doppio</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2253"/>
         <source>Toggle duration dot: triple</source>
-        <translation>Commuta il punto di valore: triplo</translation>
+        <translation>Attiva/disattiva punto di valore: triplo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2260"/>
         <source>Toggle duration dot: quadruple</source>
-        <translation>Commuta il punto di valore: quadruplo</translation>
+        <translation>Attiva/disattiva punto di valore: quadruplo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2267"/>
         <source>Toggle rest</source>
-        <translation>Attiva/Disattiva pausa</translation>
+        <translation>Attiva/disattiva pausa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2274"/>
         <source>Select next in-staff element</source>
-        <translation>Seleziona l&apos;elemento successivo nel pentagramma</translation>
+        <translation>Seleziona elemento successivo nel rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2280"/>
         <source>Select previous in-staff element</source>
-        <translation>Seleziona l&apos;elemento precedente nel pentagramma</translation>
+        <translation>Seleziona elemento precedente nel rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2286"/>
         <source>Toggle accidental: flat</source>
-        <translation>Attiva/Disattiva alterazione: bemolle</translation>
+        <translation>Attiva/disattiva alterazione: bemolle</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2300"/>
         <source>Toggle accidental: natural</source>
-        <translation>Attiva/Disattiva alterazione: bequadro</translation>
+        <translation>Attiva/disattiva alterazione: bequadro</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2307"/>
         <source>Toggle accidental: sharp</source>
-        <translation>Attiva/Disattiva alterazione: diesis</translation>
+        <translation>Attiva/disattiva alterazione: diesis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2321"/>
@@ -8521,12 +8520,12 @@ x-del testo)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2450"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2451"/>
         <source>Slight bend</source>
-        <translation>Leggera piegatura</translation>
+        <translation>Leggero bend</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2461"/>
         <source>Show/hide invisible elements</source>
-        <translation>Mostra/nascondi gli elementi invisibili</translation>
+        <translation>Mostra/nascondi elementi invisibili</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2475"/>
@@ -8541,7 +8540,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2505"/>
         <source>Show element bounding rectangles</source>
-        <translation>Mostra i rettangoli di delimitazione degli elementi</translation>
+        <translation>Mostra rettangoli di delimitazione degli elementi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2511"/>
@@ -8566,12 +8565,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2535"/>
         <source>Show system bounding rectangles</source>
-        <translation>Mostra i rettangoli di delimitazione dell&apos;accollatura</translation>
+        <translation>Mostra rettangoli di delimitazione del sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2541"/>
         <source>Show corrupted measures</source>
-        <translation>Mostra le battute corrotte</translation>
+        <translation>Mostra battute corrotte</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1953"/>
@@ -8592,43 +8591,43 @@ x-del testo)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2084"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2161"/>
         <source>Whole note</source>
-        <translation>Semibreve (intero)</translation>
+        <translation>Semibreve</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2091"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2168"/>
         <source>Half note</source>
-        <translation>Minima (metà)</translation>
+        <translation>Minima </translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2098"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2175"/>
         <source>Quarter note</source>
-        <translation>Semiminima (quarto)</translation>
+        <translation>Semiminima </translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2112"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2189"/>
         <source>16th note</source>
-        <translation>Semicroma (sedicesimo)</translation>
+        <translation>16esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2119"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2196"/>
         <source>32nd note</source>
-        <translation>Biscroma (trentaduesimo)</translation>
+        <translation>32esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2126"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2203"/>
         <source>64th note</source>
-        <translation>Semibiscroma (sessantaquattresimo)</translation>
+        <translation>64esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2133"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2210"/>
         <source>128th note</source>
-        <translation>Fusa</translation>
+        <translation>128esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2238"/>
@@ -8668,27 +8667,27 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="745"/>
         <source>Grace: quarter</source>
-        <translation>Abbellimento 1/4</translation>
+        <translation>Abbellimento: quarto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="752"/>
         <source>Grace: 16th</source>
-        <translation>Abbellimento 1/16</translation>
+        <translation>Abbellimento: 16esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="759"/>
         <source>Grace: 32nd</source>
-        <translation>Abbellimento 1/32</translation>
+        <translation>Abbellimento: 32esimo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="773"/>
         <source>Grace: 16th after</source>
-        <translation>Abbellimento: 1/16, dopo  </translation>
+        <translation>Abbellimento: 16esimo dopo  </translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="780"/>
         <source>Grace: 32nd after</source>
-        <translation>Abbellimento: 1/32, dopo  </translation>
+        <translation>Abbellimento: 32esimo dopo  </translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2335"/>
@@ -8718,7 +8717,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2375"/>
         <source>Use voice 1</source>
-        <translation>Usa la voce 1</translation>
+        <translation>Usa voce 1</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2381"/>
@@ -8728,7 +8727,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2382"/>
         <source>Use voice 2</source>
-        <translation>Usa la voce 2</translation>
+        <translation>Usa voce 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2388"/>
@@ -8738,7 +8737,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2389"/>
         <source>Use voice 3</source>
-        <translation>Usa la voce 3</translation>
+        <translation>Usa voce 3</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2395"/>
@@ -8753,17 +8752,17 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1588"/>
         <source>Change enharmonic spelling (both modes)</source>
-        <translation>Modifica dell&apos;ortografia enarmonica (entrambe le modalità)</translation>
+        <translation>Cambia ortografia enarmonica (entrambe le modalità)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1595"/>
         <source>Change enharmonic spelling (current mode)</source>
-        <translation>Modifica dell&apos;ortografia enarmonica (modalità corrente)</translation>
+        <translation>Cambia ortografia enarmonica (modalità corrente)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="193"/>
         <source>Score comparison tool</source>
-        <translation>Strumento di confronto partitura</translation>
+        <translation>Strumento di confronto partiture</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="843"/>
@@ -8786,7 +8785,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2056"/>
         <source>Insert</source>
-        <translation>Inserire </translation>
+        <translation>Inserisci</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1217"/>
@@ -8827,13 +8826,13 @@ x-del testo)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="794"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="795"/>
         <source>No beam</source>
-        <translation>Scollega gruppo di note</translation>
+        <translation>Nessuna travatura</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="787"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="788"/>
         <source>Auto beam</source>
-        <translation>Gruppo automatico</translation>
+        <translation>Travatura automatica</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="53"/>
@@ -8873,17 +8872,17 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="91"/>
         <source>Revert to &amp;factory settings</source>
-        <translation>Ripristina alle impostazioni &amp;predefinite</translation>
+        <translation>Ripristina alle impostazioni di &amp;fabbrica</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="107"/>
         <source>&amp;Playback controls</source>
-        <translation>Controlli &amp;riproduzione</translation>
+        <translation>Controlli di &amp;riproduzione</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="108"/>
         <source>Show/hide playback controls</source>
-        <translation>Mostra/nascondi i controlli di riproduzione</translation>
+        <translation>Mostra/nascondi controlli di riproduzione</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="115"/>
@@ -8908,7 +8907,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="131"/>
         <source>Open instruments dialog…</source>
-        <translation>Apri la finestra di dialogo strumenti...</translation>
+        <translation>Apri finestra di dialogo strumenti...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="137"/>
@@ -8958,7 +8957,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="172"/>
         <source>Show/hide timeline</source>
-        <translation>Mostra/nascondi  successione cronologica</translation>
+        <translation>Mostra/nascondi successione cronologica</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="179"/>
@@ -8988,7 +8987,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="92"/>
         <source>Revert to factory settings</source>
-        <translation>Ripristina le impostazioni predefinite</translation>
+        <translation>Ripristina alle impostazioni di fabbrica</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="59"/>
@@ -8998,7 +8997,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="81"/>
         <source>Open online handbook</source>
-        <translation>Apri il manuale online</translation>
+        <translation>Apri manuale online</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="99"/>
@@ -9018,7 +9017,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="186"/>
         <source>Piano &amp;keyboard</source>
-        <translation>&amp;Tastiera Pianoforte</translation>
+        <translation>&amp;Tastiera del pianoforte</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="209"/>
@@ -9060,12 +9059,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="59"/>
         <source>Loop playback</source>
-        <translation>Riproduzione ciclica</translation>
+        <translation>Riproduzione in loop</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="76"/>
         <source>Open playback setup dialog</source>
-        <translation>Apri impostazioni di riproduzione</translation>
+        <translation>Apri dialog setup di riproduzione</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="101"/>
@@ -9081,7 +9080,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="86"/>
         <source>Toggle MIDI input</source>
-        <translation>Commuta ingresso MIDI</translation>
+        <translation>Attiva/disattiva ingresso MIDI</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="110"/>
@@ -9091,12 +9090,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="60"/>
         <source>Toggle ‘Loop playback’</source>
-        <translation>Commuta &quot;riproduzione ciclica&quot;</translation>
+        <translation>Attiva/disattiva &apos;Riproduzione in loop&apos;</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="68"/>
         <source>Toggle metronome playback</source>
-        <translation>Attiva/disattiva metronomo</translation>
+        <translation>Attiva/disattiva riproduzione metronomo</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="75"/>
@@ -9150,34 +9149,34 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="590"/>
         <source>Exchange voice 1-2</source>
-        <translation>Scambia le voci 1-2</translation>
+        <translation>Scambia voci 1-2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="595"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="596"/>
         <source>Exchange voice 1-3</source>
-        <translation>Scambia le voci 1-3</translation>
+        <translation>Scambia voci 1-3</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="602"/>
         <source>Exchange voice 1-4</source>
-        <translation>Scambia le voci 1-4</translation>
+        <translation>Scambia voci 1-4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="608"/>
         <source>Exchange voice 2-3</source>
-        <translation>Scambia le voci 2-3</translation>
+        <translation>Scambia voci 2-3</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="613"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="614"/>
         <source>Exchange voice 2-4</source>
-        <translation>Scambia le voci 2-4</translation>
+        <translation>Scambia voci 2-4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="620"/>
         <source>Exchange voice 3-4</source>
-        <translation>Scambia le voci 3-4</translation>
+        <translation>Scambia voci 3-4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1481"/>
@@ -9188,7 +9187,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2396"/>
         <source>Use voice 4</source>
-        <translation>Usa la voce 4</translation>
+        <translation>Usa voce 4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2460"/>
@@ -9236,7 +9235,7 @@ x-del testo)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1451"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1452"/>
         <source>Zoom to 100%</source>
-        <translation>Ingrandisci al 100%</translation>
+        <translation>Zoom al 100%</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1797"/>
@@ -9247,7 +9246,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="283"/>
         <source>Double duration</source>
-        <translation>Raddoppia durata della nota</translation>
+        <translation>Doppia durata </translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1576"/>
@@ -9263,12 +9262,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1929"/>
         <source>Transpose up</source>
-        <translation>Trasporto su</translation>
+        <translation>Trasporta su</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1935"/>
         <source>Transpose down</source>
-        <translation>Trasporto giù</translation>
+        <translation>Trasporta giù</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1713"/>
@@ -9343,12 +9342,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="462"/>
         <source>Toggle rhythmic sl&amp;ash notation</source>
-        <translation>&amp;Commuta notazione a barre ritmiche</translation>
+        <translation>&amp;Attiva/disattiva notazione a barre ritmiche</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="463"/>
         <source>Toggle rhythmic slash notation</source>
-        <translation>Attiva/Disattiva notazione ritmica slash</translation>
+        <translation>Attiva/disattiva notazione ritmica slash</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="468"/>
@@ -9383,37 +9382,37 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="569"/>
         <source>Add/remove s&amp;ystem breaks…</source>
-        <translation>&amp;Aggiungi/Rimuovi interruzioni di accollatura...</translation>
+        <translation>&amp;Aggiungi/rimuovi interruzioni di sistema...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="589"/>
         <source>Exchange voice &amp;1-2</source>
-        <translation>Scambia le voci &amp;1-2</translation>
+        <translation>Scambia voci &amp;1-2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="601"/>
         <source>Exchange voice 1-&amp;4</source>
-        <translation>Scambia le voci 1-&amp;4</translation>
+        <translation>Scambia voci 1-&amp;4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="607"/>
         <source>Exchange voice &amp;2-3</source>
-        <translation>Scambia le voci &amp;2-3</translation>
+        <translation>Scambia voci &amp;2-3</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="619"/>
         <source>Exchange voice &amp;3-4</source>
-        <translation>Scambia le voci &amp;3-4</translation>
+        <translation>Scambia voci &amp;3-4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="643"/>
         <source>&amp;Split measure before selected note/rest</source>
-        <translation>&amp;Dividi la battuta prima della nota/pausa selezionata</translation>
+        <translation>&amp;Dividi battuta prima della nota/pausa selezionata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="649"/>
         <source>&amp;Join selected measures</source>
-        <translation>&amp;Unisci le battute selezionate</translation>
+        <translation>&amp;Unisci battute selezionate</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="692"/>
@@ -9448,12 +9447,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="870"/>
         <source>Se&amp;cond above</source>
-        <translation>Se&amp;conda superiore</translation>
+        <translation>Se&amp;conda sopra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="876"/>
         <source>Thir&amp;d above</source>
-        <translation>Te&amp;rza superiore</translation>
+        <translation>Te&amp;rza sopra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="882"/>
@@ -9478,7 +9477,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="906"/>
         <source>Octave &amp;above</source>
-        <translation>Ottava &amp;superiore</translation>
+        <translation>Ottava &amp;sopra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="912"/>
@@ -9488,12 +9487,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="918"/>
         <source>&amp;Second below</source>
-        <translation>&amp;Seconda inferiore</translation>
+        <translation>&amp;Seconda sotto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="924"/>
         <source>&amp;Third below</source>
-        <translation>&amp;Terza inferiore</translation>
+        <translation>&amp;Terza sotto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="930"/>
@@ -9503,7 +9502,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="936"/>
         <source>&amp;Fifth below</source>
-        <translation>&amp;Quinta inferiore</translation>
+        <translation>&amp;Quinta sotto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="942"/>
@@ -9518,7 +9517,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="954"/>
         <source>Octave &amp;below</source>
-        <translation>Ottava &amp;inferiore</translation>
+        <translation>Ottava &amp;sotto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="960"/>
@@ -9593,7 +9592,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1263"/>
         <source>Syst&amp;em text</source>
-        <translation>Testo di accollatura</translation>
+        <translation>Testo di sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1269"/>
@@ -9603,7 +9602,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1275"/>
         <source>E&amp;xpression text</source>
-        <translation>Espressione</translation>
+        <translation>Testo di espressione</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1281"/>
@@ -9688,7 +9687,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1377"/>
         <source>&amp;Octuplet</source>
-        <translation>&amp;Ottuplina</translation>
+        <translation>&amp;Gruppo di otto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1389"/>
@@ -9698,17 +9697,17 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1395"/>
         <source>&amp;Decrease layout stretch</source>
-        <translation>&amp;Diminuisci larghezza impaginazione</translation>
+        <translation>&amp;Diminuisci larghezza d&apos;impaginazione</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1401"/>
         <source>&amp;Increase layout stretch</source>
-        <translation>&amp;Aumenta larghezza impaginazione</translation>
+        <translation>&amp;Aumenta larghezza d&apos;impaginazione</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1407"/>
         <source>&amp;Reset layout stretch</source>
-        <translation>&amp;Ripristina larghezza impaginazione</translation>
+        <translation>&amp;Ripristina larghezza d&apos;impaginazione</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1413"/>
@@ -9773,7 +9772,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1803"/>
         <source>Toggle turn</source>
-        <translation>Commuta gruppetto</translation>
+        <translation>Attiva/disattiva gruppetto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1804"/>
@@ -9783,7 +9782,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1809"/>
         <source>Toggle inverted turn</source>
-        <translation>Commuta gruppetto rovesciato</translation>
+        <translation>Attiva/disattiva gruppetto rovesciato</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1810"/>
@@ -9793,7 +9792,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1815"/>
         <source>Toggle turn with slash</source>
-        <translation>Commuta gruppetto barrato</translation>
+        <translation>Attiva/disattiva gruppetto barrato</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1816"/>
@@ -9808,7 +9807,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1827"/>
         <source>Toggle short trill</source>
-        <translation>Commuya trillo breve</translation>
+        <translation>Attiva/disattiva trillo breve</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1828"/>
@@ -9818,7 +9817,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1833"/>
         <source>Toggle mordent</source>
-        <translation>Commuta mordente</translation>
+        <translation>Attiva/disattiva mordente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1834"/>
@@ -9828,17 +9827,17 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1839"/>
         <source>Toggle tremblement</source>
-        <translation>Commuta tremolo</translation>
+        <translation>Attiva/disattiva tremblement</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1840"/>
         <source>Add ornament: tremblement</source>
-        <translation>Aggiungi abbellimento: tremolo</translation>
+        <translation>Aggiungi abbellimento: tremblement</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1845"/>
         <source>Toggle prall mordent</source>
-        <translation>Commuta mordente doppio inferiore</translation>
+        <translation>Attiva/disattiva mordente doppio inferiore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1846"/>
@@ -9848,7 +9847,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1851"/>
         <source>Toggle shake</source>
-        <translation>Commuta shake</translation>
+        <translation>Attiva/disattiva shake</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1852"/>
@@ -9858,7 +9857,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1857"/>
         <source>Toggle shake (Muffat)</source>
-        <translation>Commuta shake (Muffat)</translation>
+        <translation>Attiva/disattiva shake (Muffat)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1858"/>
@@ -9868,22 +9867,22 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1863"/>
         <source>Toggle tremblement appuyé (Couperin)</source>
-        <translation>Commuta trillo appuyé (Couperin)</translation>
+        <translation>Attiva/disattiva tremblement appuyé (Couperin)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1864"/>
         <source>Add ornament: tremblement appuyé (Couperin)</source>
-        <translation>Aggiungi abbellimento: trillo appuyé (Couperin)</translation>
+        <translation>Aggiungi abbellimento: tremblement appuyé (Couperin)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1870"/>
         <source>Add bowing: up bow</source>
-        <translation>Aggiungi arco: arco su</translation>
+        <translation>Aggiungi arcata: in su</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1876"/>
         <source>Add bowing: down bow</source>
-        <translation>Aggiungi arco: arco giù</translation>
+        <translation>Aggiungi arcata: in giù</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1899"/>
@@ -9933,74 +9932,74 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1930"/>
         <source>Transpose up a semitone</source>
-        <translation>Trasponi di un semitono in su</translation>
+        <translation>Trasporta su di un semitono</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1936"/>
         <source>Transpose down a semitone</source>
-        <translation>Trasponi un semitono in giù</translation>
+        <translation>Trasporta giù di un semitono</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1959"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1960"/>
         <source>Toggle multimeasure rests</source>
-        <translation>Commuta battute d&apos;aspetto</translation>
+        <translation>Attiva/disattiva battute d&apos;aspetto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1965"/>
         <source>Toggle empty staves</source>
-        <translation>Commuta pentagrammi vuoti</translation>
+        <translation>Attiva/disattiva righi vuoti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1989"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1990"/>
         <source>Toggle automatic placement for entire score</source>
-        <translation>Commuta posizionamento automatico per l&apos;intera partitura</translation>
+        <translation>Attiva/disattiva posizionamento automatico per l&apos;intera partitura</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2008"/>
         <source>Toggle note input mode</source>
-        <translation>Commuta modalità inserimento note</translation>
+        <translation>Attiva/disattiva modalità inserimento note</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2015"/>
         <source>Insert/overwrite</source>
-        <translation>Inserisci/Sovrascrivi</translation>
+        <translation>Inserisci/sovrascrivi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2016"/>
         <source>Toggle note input mode: insert/overwrite</source>
-        <translation>Commuta modalità inserimento note: inserisci/sovrascrivi</translation>
+        <translation>Attiva/disattiva modalità inserimento note: inserisci/sovrascrivi</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2022"/>
         <source>Toggle note input mode: default (step-time)</source>
-        <translation>Commuta modalità inserimento note: predefinito (un passo alla volta)</translation>
+        <translation>Attiva/disattiva modalità inserimento note: predefinito (un passo alla volta)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2029"/>
         <source>Toggle note input mode: rhythm only (not pitch)</source>
-        <translation>Commuta modalità inserimento note: predefinito solo ritmo (non intonazione)</translation>
+        <translation>Attiva/disattiva modalità inserimento note: predefinito solo ritmo (non intonazione)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2036"/>
         <source>Toggle note input mode: re-pitch existing notes</source>
-        <translation>Commuta modalità inserimento note: rintona le note esistenti</translation>
+        <translation>Attiva/disattiva modalità inserimento note: rintona le note esistenti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2043"/>
         <source>Toggle note input mode: real-time (metronome)</source>
-        <translation>Commuta modalità inserimento note: Tempo reale (metronomo)</translation>
+        <translation>Attiva/disattiva modalità inserimento note: tempo reale (metronomo)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2050"/>
         <source>Toggle note input mode: real-time (foot pedal)</source>
-        <translation>Commuta modalità inserimento note: Tempo reale (pedale)</translation>
+        <translation>Attiva/disattiva modalità inserimento note: tempo reale (pedale)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2057"/>
         <source>Toggle note input mode: insert (increases measure duration)</source>
-        <translation>Commuta modalità inserimento note:Inserisci (aumenta la durata della battuta) </translation>
+        <translation>Attiva/disattiva modalità inserimento note: inserisci (aumenta durata della battuta) </translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2063"/>
@@ -10011,37 +10010,37 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2285"/>
         <source>Toggle flat</source>
-        <translation>Attiva/Disattiva bemolle</translation>
+        <translation>Attiva/disattiva bemolle</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2292"/>
         <source>Toggle double-flat</source>
-        <translation>Attiva/Disattiva doppio bemolle</translation>
+        <translation>Attiva/disattiva doppio bemolle</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2293"/>
         <source>Toggle accidental: double-flat</source>
-        <translation>Attiva/Disattiva alterazione: doppio bemolle</translation>
+        <translation>Attiva/disattiva alterazione: doppio bemolle</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2299"/>
         <source>Toggle natural</source>
-        <translation>Attiva/Disattiva bequadro</translation>
+        <translation>Attiva/disattiva bequadro</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2306"/>
         <source>Toggle sharp</source>
-        <translation>Attiva/Disattiva diesis</translation>
+        <translation>Attiva/disattiva diesis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2313"/>
         <source>Toggle double-sharp</source>
-        <translation>Attiva/Disattiva doppio diesis</translation>
+        <translation>Attiva/disattiva doppio diesis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2314"/>
         <source>Toggle accidental: double-sharp</source>
-        <translation>Attiva/Disattiva alterazione: doppio diesis</translation>
+        <translation>Attiva/disattiva alterazione: doppio diesis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2328"/>
@@ -10061,22 +10060,22 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2408"/>
         <source>All voices on staff</source>
-        <translation>Tutte le voci sul pentagramma</translation>
+        <translation>Tutte le voci sul rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2409"/>
         <source>Use all voices on staff</source>
-        <translation>Usa tutte le voci sul pentagramma</translation>
+        <translation>Usa tutte le voci sul rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2488"/>
         <source>Show sound flags</source>
-        <translation>Mostra le bandierine del suono</translation>
+        <translation>Mostra bandierine sonore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2489"/>
         <source>Show/hide sound flags</source>
-        <translation>Mostra/nascondi le bandierine del suono</translation>
+        <translation>Mostra/nascondi bandierine sonore</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2495"/>
@@ -10086,12 +10085,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1641"/>
         <source>Previous beat (Chord symbol)</source>
-        <translation>Battito precedente (sigla accordale)</translation>
+        <translation>Battere precedente (sigla accordale)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1635"/>
         <source>Next beat (Chord symbol)</source>
-        <translation>Battito successivo (simbolo accordo)</translation>
+        <translation>Battere successivo (simbolo accordo)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1731"/>
@@ -10112,7 +10111,7 @@ x-del testo)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="456"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="457"/>
         <source>Fill with slashes</source>
-        <translation>Riempire con barre ritmiche</translation>
+        <translation>Riempi con barre ritmiche</translation>
     </message>
     <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="37"/>
@@ -10128,7 +10127,7 @@ x-del testo)</translation>
         <location filename="../../src/instrumentsscene/internal/instrumentsuiactions.cpp" line="38"/>
         <location filename="../../src/instrumentsscene/internal/instrumentsuiactions.cpp" line="39"/>
         <source>Add/remove instruments…</source>
-        <translation>Aggiungi o rimuovi strumenti...</translation>
+        <translation>Aggiungi/rimuovi strumenti...</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/internal/instrumentsuiactions.cpp" line="44"/>
@@ -10144,22 +10143,22 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="37"/>
         <source>Select workspace</source>
-        <translation>Seleziona area di lavoro</translation>
+        <translation>Seleziona spazio di lavoro</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="42"/>
         <source>Configure workspace</source>
-        <translation>Configura area di lavoro</translation>
+        <translation>Configura spazio di lavoro</translation>
     </message>
     <message>
         <location filename="../../src/framework/workspace/internal/workspaceuiactions.cpp" line="43"/>
         <source>Configure workspace…</source>
-        <translation>Configura area di lavoro...</translation>
+        <translation>Configura spazio di lavoro...</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="37"/>
         <source>Save diagnostic files</source>
-        <translation>Salva i file di diagnostica</translation>
+        <translation>Salva file diagnostici</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="42"/>
@@ -10173,21 +10172,26 @@ x-del testo)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="52"/>
+        <source>Show g&amp;raphics info…</source>
+        <translation>Mostra informazioni sulle g&amp;rafiche...</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="57"/>
         <source>Show &amp;navigation tree…</source>
         <translation>Mostra &amp;albero di navigazione...</translation>
     </message>
     <message>
-        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="57"/>
+        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="62"/>
         <source>Show &amp;accessibility tree…</source>
         <translation>Mostra l&apos;albero dell&apos;&amp;accessibilità...</translation>
     </message>
     <message>
-        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="62"/>
+        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="67"/>
         <source>&amp;Dump accessibility tree to console</source>
         <translation>&amp;Scarica l&apos;albero dell&apos;accessibilità nella console </translation>
     </message>
     <message>
-        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="67"/>
+        <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="72"/>
         <source>Show engraving &amp;elements</source>
         <translation>Mostra gli &amp;elementi di incisione</translation>
     </message>
@@ -10199,12 +10203,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="39"/>
         <source>&amp;Manage plugins…</source>
-        <translation>&amp;Gestione plugin…</translation>
+        <translation>&amp;Gestisci plugin…</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="40"/>
         <source>Manage plugins…</source>
-        <translation>Gestione plugin…</translation>
+        <translation>Gestisci plugin…</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="37"/>
@@ -10227,7 +10231,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="88"/>
         <source>Scores</source>
-        <translation>Spartiti</translation>
+        <translation>Partiture</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="89"/>
@@ -10244,12 +10248,12 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="110"/>
         <source>Plugins search</source>
-        <translation>Ricerca dei plugin</translation>
+        <translation>Ricerca plugin</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="129"/>
         <source>Category:</source>
-        <translation>Categoria: </translation>
+        <translation>Categoria:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="137"/>
@@ -10267,12 +10271,12 @@ x-del testo)</translation>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="136"/>
         <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="75"/>
         <source>Playback controls</source>
-        <translation>Controlli riproduzione</translation>
+        <translation>Controlli di riproduzione</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="158"/>
         <source>Undo/redo</source>
-        <translation>Annullare/ripristinare</translation>
+        <translation>Annulla/ripristina</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="180"/>
@@ -10307,7 +10311,7 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="343"/>
         <source>Piano keyboard</source>
-        <translation>Tastiera Pianoforte</translation>
+        <translation>Tastiera pianoforte</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="373"/>
@@ -10317,18 +10321,18 @@ x-del testo)</translation>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="399"/>
         <source>Drumset tools</source>
-        <translation>Attrezzi Set percussioni</translation>
+        <translation>Attrezzi drumset</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="93"/>
         <source>Undo/redo toolbar</source>
-        <translation>Barra degli strumenti Annulla/Ripristina</translation>
+        <translation>Barra strumenti annulla/ripristina</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MainToolBar.qml" line="64"/>
         <location filename="../../src/appshell/qml/WindowContent.qml" line="63"/>
         <source>Main toolbar</source>
-        <translation>Barra degli strumenti principale</translation>
+        <translation>Barra strumenti principale</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="321"/>
@@ -10342,7 +10346,7 @@ x-del testo)</translation>
 This action will not delete any of your scores.</source>
         <translation>Questa azione ripristina tutte le preferenze dell&apos;applicazione ed elimina tutte le tavolozze e le scorciatoie personalizzate. Anche l&apos;elenco delle partiture verrà cancellato.
 
-Questa azione non cancellerà nessuna delle tue partiture.</translation>
+Questa azione non eliminerà nessuna delle tue partiture.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="329"/>
@@ -10397,7 +10401,7 @@ Questa azione non cancellerà nessuna delle tue partiture.</translation>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiDevicesSection.qml" line="79"/>
         <source>Produce MIDI 2.0 output if supported by the receiver</source>
-        <translation>Produce un&apos;uscita MIDI 2.0 se supportata dal ricevitore.</translation>
+        <translation>Produci un&apos;uscita MIDI 2.0 se supportata dal ricevitore</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/platform/AppMenuBar.qml" line="71"/>
@@ -10407,12 +10411,12 @@ Questa azione non cancellerà nessuna delle tue partiture.</translation>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/loadingscreenview.cpp" line="54"/>
         <source>Loading…‎</source>
-        <translation>In caricamento…</translation>
+        <translation>Caricamento…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/loadingscreenview.cpp" line="99"/>
         <source>Version %1</source>
-        <translation>Versione: %1</translation>
+        <translation>Versione %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/AccountPage.qml" line="75"/>
@@ -10495,7 +10499,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="71"/>
         <source>Copyright © 2004-2021 the Contributors to the MusicXML Specification, published by the Music Notation Community Group under the W3C Community Final Specification Agreement (FSA):</source>
-        <translation>Diritti d&apos;autore © 2004-2021 i Collaboratori alla Specifica MusicXML, pubblicata dal Gruppo della Comunità della Notazione Musicale in base all&apos;Accordo di Specifica Finale della Comunità W3C (FSA):</translation>
+        <translation>Copyright © 2004-2021 i Collaboratori alla Specifica MusicXML, pubblicata dal Gruppo della Comunità della Notazione Musicale in base all&apos;Accordo di Specifica Finale della Comunità W3C (FSA):</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="95"/>
@@ -10571,24 +10575,24 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="117"/>
         <source>Further high contrast settings are available in Preferences.</source>
-        <translation>Altre impostazioni di contrasto elevato sono disponibili nelle Preferenze.</translation>
+        <translation>Ulteriori impostazioni di contrasto elevato sono disponibili nelle Preferenze.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="123"/>
         <source>Enable high contrast</source>
-        <translation>Abilita il contrasto elevato</translation>
+        <translation>Abilita contrasto elevato</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="32"/>
         <source>Video tutorials</source>
-        <translation>Tutorial video</translation>
+        <translation>Video tutorial</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="33"/>
         <source>Behind this dialog is the ‘Learn’ section, where you’ll find tutorials to get you started
 (Video tutorials require an internet connection)</source>
-        <translation>Dietro questa finestra di dialogo c&apos;è la sezione &quot;Impara&quot;, dove si trovano le esercitazioni per iniziare a lavorare
-(Le esercitazioni video richiedono una connessione a Internet)</translation>
+        <translation>Dietro questa finestra di dialogo c&apos;è la sezione &quot;Impara&quot;, dove troverai tutorial per iniziare a lavorare
+(I video tutorial richiedono una connessione internet)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="81"/>
@@ -10657,32 +10661,32 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/diagnostic</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="357"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="358"/>
         <source>&amp;System</source>
         <translation>&amp;Sistema</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="369"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="370"/>
         <source>&amp;Muse Sampler</source>
         <translation>Catalogo &amp;Muse </translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="395"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="396"/>
         <source>&amp;Accessibility</source>
         <translation>&amp;Accessibilità</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="396"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="397"/>
         <source>&amp;Engraving</source>
         <translation>&amp;Incisione</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="397"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="398"/>
         <source>Auto&amp;bot</source>
         <translation>Auto&amp;bot</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="401"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="402"/>
         <source>&amp;Diagnostic</source>
         <translation>&amp;Diagnostica</translation>
     </message>
@@ -10765,7 +10769,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="206"/>
         <source>W&amp;orkspaces</source>
-        <translation>&amp;Area di lavoro</translation>
+        <translation>&amp;Spazi di lavoro</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="208"/>
@@ -10798,7 +10802,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/AppearancePreferencesPage.qml" line="145"/>
         <source>Choose background wallpaper</source>
-        <translation>Scegli lo sfondo</translation>
+        <translation>Scegli sfondo</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/AppearancePreferencesPage.qml" line="184"/>
@@ -10841,7 +10845,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioEngineSection.qml" line="34"/>
         <source>Restart audio and MIDI devices</source>
-        <translation>Riavvia i dispositivi audio e MIDI</translation>
+        <translation>Riavvia dispositivi audio e MIDI</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="30"/>
@@ -10851,7 +10855,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="42"/>
         <source>Check to see if a new version of MuseScore Studio is available</source>
-        <translation>Controlla se è disponibile una nuova versione di MuseScore Studio.</translation>
+        <translation>Controlla se è disponibile una nuova versione di MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
@@ -10901,7 +10905,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CommonAudioApiConfiguration.qml" line="89"/>
         <source>Sample rate:</source>
-        <translation>Frequenza Campionamento:</translation>
+        <translation>Frequenza campionamento:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/DefaultFilesSection.qml" line="31"/>
@@ -10917,12 +10921,12 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/FoldersSection.qml" line="63"/>
         <source>Choose %1 folder</source>
-        <translation>Scegli la cartella %1 </translation>
+        <translation>Scegli cartella %1 </translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ImportStyleSection.qml" line="30"/>
         <source>Style used for import</source>
-        <translation>Stile utilizzato per l&apos;Importazione</translation>
+        <translation>Stile utilizzato per l&apos;importazione</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ImportStyleSection.qml" line="51"/>
@@ -10932,7 +10936,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ImportStyleSection.qml" line="75"/>
         <source>Use style file:</source>
-        <translation>Utilizza file di stile:</translation>
+        <translation>Usa file di stile:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/KeyboardLayoutsSection.qml" line="31"/>
@@ -10947,7 +10951,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="79"/>
         <source>Check for language updates</source>
-        <translation>Controlla gli aggiornamenti della lingua</translation>
+        <translation>Controlla aggiornamenti della lingua</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="92"/>
@@ -10998,12 +11002,12 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="60"/>
         <source>Import system and page breaks</source>
-        <translation>Importa le interruzioni di accollatura e di pagina</translation>
+        <translation>Importa interruzioni di sistema e di pagina</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="75"/>
         <source>Apply default typeface (Edwin) to imported scores</source>
-        <translation>Applica il carattere predefinito (Edwin) alle partiture importate</translation>
+        <translation>Applica carattere predefinito (Edwin) alle partiture importate</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="90"/>
@@ -11013,7 +11017,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="44"/>
         <source>Play notes when editing</source>
-        <translation>Suona la nota modificata</translation>
+        <translation>Riproduci nota in fase di modifica</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="59"/>
@@ -11023,12 +11027,12 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="82"/>
         <source>Play chord when editing</source>
-        <translation> Riproduci accordi durante la modifica</translation>
+        <translation>Riproduci accordo in fase di modifica</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="99"/>
         <source>Play chord symbol when editing</source>
-        <translation> Riproduci sigle accordali durante la modifica</translation>
+        <translation> Riproduci sigla accordale in fase di modifica</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="31"/>
@@ -11049,7 +11053,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="77"/>
         <source>Color guitar bends outside of playable range</source>
-        <translation>Colora le bend della chitarra fuori dall&apos;estensione suonabile</translation>
+        <translation>Colora i bend della chitarra fuori dall&apos;estensione suonabile</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="91"/>
@@ -11059,12 +11063,12 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PreferencesButtonsPanel.qml" line="50"/>
         <source>Reset preferences</source>
-        <translation>Ripristino delle preferenze</translation>
+        <translation>Ripristina preferenze</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ProgramStartSection.qml" line="79"/>
         <source>Choose starting score</source>
-        <translation>Scegli la partitura per iniziare</translation>
+        <translation>Scegli partitura di partenza</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/RemoteControlSection.qml" line="31"/>
@@ -11114,12 +11118,12 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemesSection.qml" line="78"/>
         <source>Follow system theme</source>
-        <translation>Segui il tema del sistema</translation>
+        <translation>Segui tema del sistema</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemesSection.qml" line="93"/>
         <source>Enable high-contrast</source>
-        <translation>Abilita il contrasto elevato</translation>
+        <translation>Abilita contrasto elevato</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="32"/>
@@ -11129,7 +11133,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="48"/>
         <source>Text and icons:</source>
-        <translation>Testo e icone:</translation>
+        <translation>Testo ed icone:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="49"/>
@@ -11150,7 +11154,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiFontSection.qml" line="42"/>
         <source>Font face:</source>
-        <translation>Aspetto carattere:</translation>
+        <translation>Aspetto font:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiFontSection.qml" line="57"/>
@@ -11191,7 +11195,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="91"/>
         <source>Scores</source>
-        <translation>Spartiti</translation>
+        <translation>Partiture</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="95"/>
@@ -11221,7 +11225,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="62"/>
         <source>Your version of %1 is up to date.</source>
-        <translation>La tua versione di %1 è aggiornata</translation>
+        <translation>Versione di %1 aggiornata.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="95"/>
@@ -11241,22 +11245,22 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="61"/>
         <source>16th</source>
-        <translation>1/16</translation>
+        <translation>16esimo</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="62"/>
         <source>32nd</source>
-        <translation>1/32</translation>
+        <translation>32esimo</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="63"/>
         <source>64th</source>
-        <translation>1/64</translation>
+        <translation>64esimo</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="64"/>
         <source>128th</source>
-        <translation>1/128</translation>
+        <translation>128esimo</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="65"/>
@@ -11266,12 +11270,12 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="66"/>
         <source>512th</source>
-        <translation>1/512</translation>
+        <translation>512esimo</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="67"/>
         <source>1024th</source>
-        <translation>1/1024</translation>
+        <translation>1024esimo</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="75"/>
@@ -11282,7 +11286,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="80"/>
         <source>Choose default style for imports</source>
-        <translation>Scegli lo stile predefinito per l&apos;importazone</translation>
+        <translation>Scegli stile predefinito per importazioni</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ProgramStartSection.qml" line="30"/>
@@ -11292,7 +11296,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="151"/>
         <source>General</source>
-        <translation>Generale:</translation>
+        <translation>Generale</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="157"/>
@@ -11302,7 +11306,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="160"/>
         <source>Save &amp; publish</source>
-        <translation>Salva e pubblica</translation>
+        <translation>Salva &amp; pubblica</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="169"/>
@@ -11337,7 +11341,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="187"/>
         <source>Advanced</source>
-        <translation>Avanzata</translation>
+        <translation>Avanzate</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="190"/>
@@ -11387,7 +11391,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="98"/>
         <source>Style for part</source>
-        <translation>Stile per le parti:</translation>
+        <translation>Stile per le parti</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="181"/>
@@ -11417,7 +11421,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/SaveToCloudSection.qml" line="41"/>
         <source>Generate MP3 audio for private cloud scores</source>
-        <translation>Genera audio MP3 per spartiti privati in cloud</translation>
+        <translation>Genera audio MP3 per partiture private in cloud</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleSection.qml" line="31"/>
@@ -11437,7 +11441,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleAdvancedSection.qml" line="41"/>
         <source>Braille table for lyrics:</source>
-        <translation>Tabella Braille per i testi:</translation>
+        <translation>Tabella braille per i testi:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleAdvancedSection.qml" line="57"/>
@@ -11453,12 +11457,12 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MeiSection.qml" line="40"/>
         <source>Import MEI layout</source>
-        <translation>Importa il layout MEI</translation>
+        <translation>Importa layout MEI</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PublishMuseScoreComSection.qml" line="30"/>
         <source>Publish to MuseScore.com</source>
-        <translation>Pubblica su MuseScore.com...</translation>
+        <translation>Pubblica su MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PublishMuseScoreComSection.qml" line="41"/>
@@ -11496,7 +11500,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="102"/>
         <source>Voice assignment</source>
-        <translation>Assegnazione della voce</translation>
+        <translation>Assegnazione voce</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="106"/>
@@ -11519,7 +11523,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="105"/>
         <source>Do you want to add the SoundFont: %1?</source>
-        <translation>Vuoi installare la libreria di suoni %1?</translation>
+        <translation>Vuoi installare la libreria di suoni: %1?</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="123"/>
@@ -11539,7 +11543,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="145"/>
         <source>You can assign soundfonts to instruments using the mixer panel.</source>
-        <translation>Puoi  assegnare le librerie di suoni agli strumenti utilizzando il pannello del mixer.</translation>
+        <translation>Puoi assegnare le librerie di suoni agli strumenti usando il pannello del mixer.</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/internal/platform/jack/jackaudiodriver.cpp" line="240"/>
@@ -11619,7 +11623,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="37"/>
         <source>Save diagnostic files?</source>
-        <translation>Salvare i file di diagnostica?</translation>
+        <translation>Salvare i file diagnostici?</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="38"/>
@@ -11629,7 +11633,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="52"/>
         <source>Save diagnostic files</source>
-        <translation>Salva i file di diagnostica</translation>
+        <translation>Salva file diagnostici</translation>
     </message>
 </context>
 <context>
@@ -11643,13 +11647,13 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="141"/>
         <source>Staff %1</source>
-        <translation>Pentagramma %1</translation>
+        <translation>Rigo %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="211"/>
         <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="214"/>
         <source>Staff %1 (%2)</source>
-        <translation>Pentagramma %1 (%2)</translation>
+        <translation>Rigo %1 (%2)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="220"/>
@@ -11689,40 +11693,40 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="510"/>
         <source>Octuplet</source>
-        <translation>Ottuplina</translation>
+        <translation>Gruppo di otto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="513"/>
         <source>Nonuplet</source>
-        <translation>Nonuplina</translation>
+        <translation>Gruppo di nove</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="517"/>
         <source>%1 note tuplet</source>
         <extracomment>%1 is tuplet ratio numerator (i.e. the number of notes in the tuplet)</extracomment>
-        <translation>%1 nota terzina</translation>
+        <translation>Gruppo irregolare di %1 note</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="527"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="415"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="416"/>
         <source>Dotted %1</source>
-        <translation>Puntato %1</translation>
+        <translation>%1 col punto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="530"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="417"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="418"/>
         <source>Double dotted %1</source>
         <translation>Doppio puntato  %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="533"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="419"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="420"/>
         <source>Triple dotted %1</source>
         <translation>Triplo puntato  %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="536"/>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="421"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="422"/>
         <source>Quadruple dotted %1</source>
         <translation>Quadruplo puntato %1</translation>
     </message>
@@ -11732,29 +11736,29 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>Inizio e fine di %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3541"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3553"/>
         <source>Current contents of measures will be replaced</source>
         <translation>Il contenuto attuale delle battute sarà sostituito</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3542"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3554"/>
         <source>Continue with inserting measure repeat?</source>
         <translation>Continuare con l&apos;inserimento della ripetizione della battuta?</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2518"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2526"/>
         <source>Measure: %1</source>
         <translation>Battuta: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2521"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2529"/>
         <source>Displayed measure: %1</source>
         <translation>Battuta visualizzata: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2525"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2533"/>
         <source>Beat: %1</source>
-        <translation>Battito: %1</translation>
+        <translation>Battere: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fingering.cpp" line="118"/>
@@ -11846,13 +11850,13 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/harmony.cpp" line="1736"/>
         <source>Roman numeral</source>
-        <translation>Numeri romani</translation>
+        <translation>Numero romano</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/harmony.cpp" line="1738"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1154"/>
         <source>Nashville number</source>
-        <translation>Sistema numerico Nashville</translation>
+        <translation>Numero Nashville</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/harmony.cpp" line="1776"/>
@@ -11888,12 +11892,12 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="2212"/>
         <source>Grace note after</source>
-        <translation>Abbellimento, dopo  </translation>
+        <translation>Abbellimento dopo  </translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="2216"/>
         <source>Grace note before</source>
-        <translation>Abbellimento, prima</translation>
+        <translation>Abbellimento prima</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="2218"/>
@@ -11902,77 +11906,77 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>Nota</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3133"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3171"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3136"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3174"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="747"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="759"/>
         <source>Voice: %1</source>
         <translation>Voce: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3141"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3144"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation>(attivo %1‰ disattivo %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3147"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3150"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3179"/>
         <source>Beat slash</source>
         <translation>Battito barra ritmica</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3147"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3176"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3150"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3179"/>
         <source>Rhythm slash</source>
         <translation>Ritmo barra ritmica</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3151"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3180"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3154"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3183"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Corda %2; Tasto: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3157"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3160"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Tono: %2; Durata: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3186"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3189"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation>%1 testa %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3188"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3191"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="762"/>
         <source>Cross-staff above</source>
-        <translation>Tra pentagrammi in alto</translation>
+        <translation>Tra righi in alto</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3190"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3193"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="764"/>
         <source>Cross-staff below</source>
-        <translation>Tra pentagrammi in basso</translation>
+        <translation>Tra righi in basso</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3194"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3197"/>
         <source>too low</source>
         <translation>troppo basso</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3196"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3199"/>
         <source>too high</source>
         <translation>troppo alto</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3198"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3201"/>
         <source>too low for amateurs</source>
         <translation>troppo basso per dilettanti</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3200"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3203"/>
         <source>too high for amateurs</source>
         <translation>troppo alto per dilettanti</translation>
     </message>
@@ -11984,7 +11988,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/noteentry.cpp" line="412"/>
         <source>This measure contains a measure repeat. If you enter notes here, it will be deleted. Do you want to continue?</source>
-        <translation>Questa battuta contiene una ripetizione di battuta. Inserendo delle note in questo punto, la misura verrà cancellata. Vuoi continuare?</translation>
+        <translation>Questa battuta contiene una ripetizione di battuta. Inserendo delle note in questo punto, la misura verrà eliminata. Vuoi continuare?</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1422"/>
@@ -11996,25 +12000,25 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="1417"/>
         <source>double ♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>doppio bemolle</translation>
+        <translation>doppio ♭</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1412"/>
         <source>♭</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>bemolle</translation>
+        <translation>♭</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1402"/>
         <source>♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>diesis</translation>
+        <translation>♯</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1397"/>
         <source>double ♯</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>doppio diesis</translation>
+        <translation>doppio ♯</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1392"/>
@@ -12033,21 +12037,21 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>Annotazioni: </translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/barline.cpp" line="1232"/>
+        <location filename="../../src/engraving/dom/barline.cpp" line="1226"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1108"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3226"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3238"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3229"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3241"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2419"/>
         <source>Start of %1</source>
         <translation>Inizio di %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/barline.cpp" line="1235"/>
+        <location filename="../../src/engraving/dom/barline.cpp" line="1229"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1100"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1110"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3230"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3246"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3233"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3249"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2434"/>
         <source>End of %1</source>
         <translation>Fine di %1</translation>
@@ -12080,47 +12084,47 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1212"/>
         <source>Tab. 6-str. simple</source>
-        <translation>Tab. 6-corde semplice</translation>
+        <translation>Tab. 6 corde semplice</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1213"/>
         <source>Tab. 6-str. common</source>
-        <translation>Tab. 6-corde comune</translation>
+        <translation>Tab. 6 corde comune</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1214"/>
         <source>Tab. 6-str. full</source>
-        <translation>Tab. 6-corde completa</translation>
+        <translation>Tab. 6 corde completa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1215"/>
         <source>Tab. 4-str. simple</source>
-        <translation>Tab. 4-corde semplice</translation>
+        <translation>Tab. 4 corde semplice</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1216"/>
         <source>Tab. 4-str. common</source>
-        <translation>Tab. 4-corde comune</translation>
+        <translation>Tab. 4 corde comune</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1217"/>
         <source>Tab. 4-str. full</source>
-        <translation>Tab. 4-corde completa</translation>
+        <translation>Tab. 4 corde completa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1218"/>
         <source>Tab. 5-str. simple</source>
-        <translation>Tab. 5-corde semplice</translation>
+        <translation>Tab. 5 corde semplice</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1219"/>
         <source>Tab. 5-str. common</source>
-        <translation>Tab. 5-corde comune</translation>
+        <translation>Tab. 5 corde comune</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1220"/>
         <source>Tab. 5-str. full</source>
-        <translation>Tab. 5-corde completa</translation>
+        <translation>Tab. 5 corde completa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1221"/>
@@ -12140,32 +12144,32 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1224"/>
         <source>Tab. 6-str. Italian</source>
-        <translation>Tab. 6-corde Italiana</translation>
+        <translation>Tab. 6 corde italiana</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1225"/>
         <source>Tab. 6-str. French</source>
-        <translation>Tab. 6-corde Francese</translation>
+        <translation>Tab. 6 corde francese</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1226"/>
         <source>Tab. 7-str. common</source>
-        <translation>Tab. 7-corde comune</translation>
+        <translation>Tab. 7 corde comune</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1227"/>
         <source>Tab. 8-str. common</source>
-        <translation>Tab. 8-corde comune</translation>
+        <translation>Tab. 8 corde comune</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1228"/>
         <source>Tab. 9-str. common</source>
-        <translation>Tab. 9-corde comune</translation>
+        <translation>Tab. 9 corde comune</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1229"/>
         <source>Tab. 10-str. common</source>
-        <translation>Tab. 10-corde comune</translation>
+        <translation>Tab. 10 corde comune</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1230"/>
@@ -12191,7 +12195,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/rw/read400/measurerw.cpp" line="99"/>
         <location filename="../../src/engraving/rw/read410/measureread.cpp" line="97"/>
         <source>MSCX error at line %1: invalid measure length: %2</source>
-        <translation>Errore MSCX sulla riga %1: lunghezza della battuta non valida: %2</translation>
+        <translation>Errore MSCX alla riga %1: lunghezza della battuta non valida: %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="166"/>
@@ -12214,7 +12218,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="169"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1145"/>
         <source>Staff</source>
-        <translation>Rigo musicale</translation>
+        <translation>Rigo </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="171"/>
@@ -12261,12 +12265,12 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="179"/>
         <source>Staff lines</source>
-        <translation>Righe pentagramma</translation>
+        <translation>Linee del rigo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="180"/>
         <source>System divider</source>
-        <translation>Separatore di accollatura</translation>
+        <translation>Divisore di sistema</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="181"/>
@@ -12347,7 +12351,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/articulation.cpp" line="159"/>
         <source>Articulation text</source>
-        <translation>Testo dell&apos;articolazione</translation>
+        <translation>Testo di articolazione</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/articulation.cpp" line="162"/>
@@ -12358,7 +12362,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/ornament.cpp" line="95"/>
         <source>Ornament text</source>
-        <translation>Testo dell&apos;abbellimento</translation>
+        <translation>Testo di abbellimento</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/ornament.cpp" line="98"/>
@@ -12384,12 +12388,12 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="204"/>
         <source>Beam</source>
-        <translation>Gruppo note</translation>
+        <translation>Travatura</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="205"/>
         <source>Beam segment</source>
-        <translation>Segmento gruppo</translation>
+        <translation>Segmento travatura</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="186"/>
@@ -12448,17 +12452,17 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="215"/>
         <source>System text</source>
-        <translation>Testo di accollatura</translation>
+        <translation>Testo di sistema</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="216"/>
         <source>Sound flag</source>
-        <translation>Bandierina del suono</translation>
+        <translation>Bandierina sonora</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="217"/>
         <source>Playing technique annotation</source>
-        <translation>Annotazione della tecnica di esecuzione</translation>
+        <translation>Annotazione tecnica di esecuzione</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="218"/>
@@ -12551,7 +12555,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="236"/>
         <source>Gradual tempo change segment</source>
-        <translation>Segmento Cambio di tempo graduale</translation>
+        <translation>Segmento cambio di tempo graduale</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="237"/>
@@ -12591,7 +12595,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="244"/>
         <source>Volta segment</source>
-        <translation>Segmento Volta</translation>
+        <translation>Segmento di volta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="245"/>
@@ -12658,7 +12662,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="257"/>
         <source>Shadow note</source>
-        <translation>Nota Ombra</translation>
+        <translation>Nota ombra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="258"/>
@@ -12668,7 +12672,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="259"/>
         <source>Font symbol</source>
-        <translation>Simbolo Carattere</translation>
+        <translation>Simbolo font</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="260"/>
@@ -12767,7 +12771,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="280"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1143"/>
         <source>System</source>
-        <translation>Accollatura</translation>
+        <translation>Sistema</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="281"/>
@@ -12787,12 +12791,12 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="286"/>
         <source>Staff list</source>
-        <translation>Elenco Pentagramma</translation>
+        <translation>Elenco rigo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="287"/>
         <source>Measure list</source>
-        <translation>Elenco Battuta</translation>
+        <translation>Elenco battuta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="288"/>
@@ -12812,7 +12816,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="291"/>
         <source>Fretboard diagram frame</source>
-        <translation>Cornice Diagramma dell&apos;accordo</translation>
+        <translation>Cornice diagramma dell&apos;accordo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="293"/>
@@ -12822,7 +12826,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="294"/>
         <source>Bagpipe embellishment</source>
-        <translation>Abbellimenti cornamusa</translation>
+        <translation>Abbellimento cornamusa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="295"/>
@@ -12848,12 +12852,12 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="302"/>
         <source>Guitar bend hold segment</source>
-        <translation>Segmento di mantenimento bending chitarra</translation>
+        <translation>Segmento di mantenimento bend chitarra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="303"/>
         <source>Guitar bend text</source>
-        <translation>Testo bending chitarra</translation>
+        <translation>Testo di bend chitarra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="487"/>
@@ -12887,7 +12891,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="1407"/>
         <source>♮</source>
         <extracomment>Visible text in the UI. Please preserve the accidental symbol in the translation</extracomment>
-        <translation>Bequadro</translation>
+        <translation>♮</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1475"/>
@@ -12922,7 +12926,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="285"/>
         <source>Element list</source>
-        <translation>Lista elementi</translation>
+        <translation>Elenco elementi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1118"/>
@@ -13003,12 +13007,12 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1126"/>
         <source>Instrument name (Long)</source>
-        <translation>Nome strumento (esteso)</translation>
+        <translation>Nome strumento (Esteso)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1127"/>
         <source>Instrument name (Short)</source>
-        <translation>Nome strumento (abbreviato)</translation>
+        <translation>Nome strumento (Abbreviato)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1131"/>
@@ -13128,13 +13132,13 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1190"/>
         <source>User-12</source>
-        <translation>User-12</translation>
+        <translation>Utente-12</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1394"/>
         <source>triple sharp</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
-        <translation>Triplo diesis</translation>
+        <translation>triplo diesis</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1399"/>
@@ -13170,22 +13174,22 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="1424"/>
         <source>triple flat</source>
         <extracomment>Accessible text for screen readers. Please avoid using accidental symbols in the translation</extracomment>
-        <translation>Triplo bemolle</translation>
+        <translation>triplo bemolle</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1466"/>
         <source>Eighth</source>
-        <translation>Croma (ottavo)</translation>
+        <translation>Croma </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1467"/>
         <source>1024th</source>
-        <translation>1/1024</translation>
+        <translation>1024esimo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1468"/>
         <source>512th</source>
-        <translation>1/512</translation>
+        <translation>512esimo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1469"/>
@@ -13195,22 +13199,22 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1470"/>
         <source>128th</source>
-        <translation>1/128</translation>
+        <translation>128esimo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1471"/>
         <source>64th</source>
-        <translation>1/64</translation>
+        <translation>64esimo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1472"/>
         <source>32nd</source>
-        <translation>1/32</translation>
+        <translation>32esimo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1473"/>
         <source>16th</source>
-        <translation>1/16</translation>
+        <translation>16esimo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1478"/>
@@ -13400,92 +13404,92 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2480"/>
         <source>To coda</source>
-        <translation>a Coda</translation>
+        <translation>Alla coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2481"/>
         <source>To coda (symbol)</source>
-        <translation>Al Coda (simbolo)</translation>
+        <translation>Alla coda (simbolo)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2722"/>
         <source>G major, E minor</source>
-        <translation>Sol maggiore, Mi minore</translation>
+        <translation>SOL maggiore, MI minore</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2714"/>
         <source>C♭ major, A♭ minor</source>
-        <translation>Do♭ maggiore, La♭ minore</translation>
+        <translation>DO♭ maggiore, LA♭ minore</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2723"/>
         <source>D major, B minor</source>
-        <translation>Re maggiore, Si minore</translation>
+        <translation>RE maggiore, SI minore</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2715"/>
         <source>G♭ major, E♭ minor</source>
-        <translation>Sol♭ maggiore, Mi♭ minore</translation>
+        <translation>SOL♭ maggiore, MI♭ minore</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2724"/>
         <source>A major, F♯ minor</source>
-        <translation>La maggiore, Fa ♯ minore</translation>
+        <translation>LA maggiore, FA♯ minore</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2716"/>
         <source>D♭ major, B♭ minor</source>
-        <translation>Re♭ maggiore, Si♭ minore</translation>
+        <translation>RE♭ maggiore, SI♭ minore</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2725"/>
         <source>E major, C♯ minor</source>
-        <translation>Mi maggiore, Do# minore</translation>
+        <translation>MI maggiore, DO♯ minore</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2717"/>
         <source>A♭ major, F minor</source>
-        <translation>Lab maggiore, Fa minore</translation>
+        <translation>LA♭ maggiore, FA minore</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2726"/>
         <source>B major, G♯ minor</source>
-        <translation>Si maggiore, Sol♯ minore</translation>
+        <translation>SI maggiore, SOL♯ minore</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2718"/>
         <source>E♭ major, C minor</source>
-        <translation>Mib maggiore, Do minore</translation>
+        <translation>MI♭ maggiore, DO minore</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2727"/>
         <source>F♯ major, D♯ minor</source>
-        <translation>Fa# maggiore, Re# minore</translation>
+        <translation>FA♯ maggiore, RE♯ minore</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2719"/>
         <source>B♭ major, G minor</source>
-        <translation>Si♭ maggiore, Sol minore</translation>
+        <translation>SI♭ maggiore, SOL minore</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2728"/>
         <source>C♯ major, A♯ minor</source>
-        <translation>Do# maggiore, La# minore</translation>
+        <translation>DO♯ maggiore, LA♯ minore</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2720"/>
         <source>F major, D minor</source>
-        <translation>Fa maggiore,  Re minore</translation>
+        <translation>FA maggiore, RE minore</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2453"/>
         <source>Da Capo al Doppia Coda</source>
-        <translation>Da Capo al Doppio Coda</translation>
+        <translation>Da Capo al Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2454"/>
         <source>Dal Segno al Doppia Coda</source>
-        <translation>Dal Segno al Doppio Coda</translation>
+        <translation>Dal Segno al Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2455"/>
@@ -13500,7 +13504,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2457"/>
         <source>Dal Doppio Segno al Doppia Coda</source>
-        <translation>Dal Doppio Segno al Doppio Coda</translation>
+        <translation>Dal Doppio Segno al Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2458"/>
@@ -13510,17 +13514,17 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2478"/>
         <source>Doppia Coda</source>
-        <translation>Doppio Coda</translation>
+        <translation>Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2483"/>
         <source>Da Doppia Coda</source>
-        <translation>Dal Doppio Coda</translation>
+        <translation>Dal Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2721"/>
         <source>C major, A minor</source>
-        <translation>Do maggiore, La minore</translation>
+        <translation>DO maggiore, LA minore</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2729"/>
@@ -13570,7 +13574,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="83"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation>Questo file è stato salvato utilizzando una versione più recente di MuseScore Studio. Visita&lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; per ottenere la versione più recente.</translation>
+        <translation>Questo file è stato salvato utilizzando una versione più recente di MuseScore Studio. Prego, visita&lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; per ottenere l&apos;ultima versione.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="87"/>
@@ -13585,17 +13589,17 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="93"/>
         <source>File “%1” is critically corrupted and cannot be processed.</source>
-        <translation>Il file &quot;%1&quot; è criticamente corrotto e non può essere elaborato.</translation>
+        <translation>Il file &quot;%1&quot; è gravemente corrotto e non può essere elaborato.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/ambitus.cpp" line="553"/>
+        <location filename="../../src/engraving/dom/ambitus.cpp" line="558"/>
         <source>Top pitch: %1; Bottom pitch: %2</source>
         <translation>Ton superiore: %1; tono inferiore: %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/accessibility/accessibleitem.cpp" line="206"/>
         <source>invisible</source>
-        <translation>Invisibile</translation>
+        <translation>invisibile</translation>
     </message>
     <message>
         <location filename="../../src/engraving/accessibility/accessibleitem.cpp" line="208"/>
@@ -13603,13 +13607,13 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>selezionato</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="459"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="460"/>
         <source>%1 note = %2 note</source>
         <extracomment>%1 and %2 are note durations. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate &quot;%1 note&quot; with &quot;%1&quot; and &quot;%2 note&quot; with &quot;%2&quot;, so that just the duration will be shown.</extracomment>
         <translation>%1 nota = %2 nota</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/tempotext.cpp" line="465"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="466"/>
         <source>%1 note = %2</source>
         <extracomment>%1 is a note duration. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate &quot;%1 note&quot; with &quot;%1&quot;, so that just the duration will be shown.</extracomment>
         <translation>%1 nota = %2</translation>
@@ -13633,24 +13637,24 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="191"/>
         <source>&lt;b&gt;Corrupted measure&lt;/b&gt;: %1, measure %2, staff %3.</source>
-        <translation>&lt;b&gt;Battuta corrotta&lt;/b&gt;: %1, battuta %2, pentagramma %3.</translation>
+        <translation>&lt;b&gt;Battuta corrotta&lt;/b&gt;: %1, battuta %2, rigo %3.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="200"/>
         <source>&lt;b&gt;Incomplete measure&lt;/b&gt;: %1, measure %2, staff %3. Found: %4. Expected: %5.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation>&lt;b&gt;Battuta incompleta&lt;/b&gt;: %1, battuta %2, pentagramma %3. Trovato: %4. Atteso: %5.</translation>
+        <translation>&lt;b&gt;Battuta incompleta&lt;/b&gt;: %1, battuta %2, rigo %3. Trovato: %4. Atteso: %5.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="215"/>
         <source>&lt;b&gt;Voice too long&lt;/b&gt;: %1, measure %2, staff %3, voice %4. Found: %5. Expected: %6.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation>&lt;b&gt;Voce troppo lunha&lt;/b&gt;: %1, battuta %2, pentagramma %3, voce %4. Trovato: %5. Atteso: %6.</translation>
+        <translation>&lt;b&gt;Voce troppo lunga&lt;/b&gt;: %1, battuta %2, rigo %3, voce %4. Trovato: %5. Atteso: %6.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="82"/>
         <source>Voice %1 color</source>
-        <translation>Voce %1 colore</translation>
+        <translation>Colore voce %1 </translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="96"/>
@@ -13717,7 +13721,7 @@ Tasto %1 sulle corde %2</translation>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1553"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="177"/>
         <source>End measure: %1</source>
-        <translation>Fine battuta: % 1</translation>
+        <translation>Fine battuta: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/spanner.cpp" line="1556"/>
@@ -13767,17 +13771,17 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1973"/>
         <source>Single grace F</source>
-        <translation>Singola acciaccatura Fa</translation>
+        <translation>Singola acciaccatura FA</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1974"/>
         <source>Single grace high G</source>
-        <translation>Singola acciaccatura Sol alto </translation>
+        <translation>Singola acciaccatura SOL alto </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1975"/>
         <source>Single grace high A</source>
-        <translation>Singola acciaccatura La alto</translation>
+        <translation>Singola acciaccatura LA alto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1978"/>
@@ -14747,7 +14751,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="713"/>
         <source>Baritone clef (F clef)</source>
-        <translation>Chiave di baritono (chiave di Fa)</translation>
+        <translation>Chiave di baritono (chiave di FA)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="714"/>
@@ -14757,12 +14761,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="715"/>
         <source>F clef (French, 18th century)</source>
-        <translation>Chiave di Fa (francese, XVIII secolo)</translation>
+        <translation>Chiave di FA (francese, XVIII secolo)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="716"/>
         <source>F clef (19th century)</source>
-        <translation>Chiave di Fa (XIX secolo)</translation>
+        <translation>Chiave di FA (XIX secolo)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="718"/>
@@ -15133,7 +15137,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="773"/>
         <source>Other dynamic</source>
-        <translation>Altre dinamiche</translation>
+        <translation>Altra dinamica</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="775"/>
@@ -15158,32 +15162,32 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="783"/>
         <source>pp (Pianissimo)</source>
-        <translation>pp (Pianissimo)</translation>
+        <translation>pp (pianissimo)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="785"/>
         <source>p (Piano)</source>
-        <translation>p (Piano)</translation>
+        <translation>p (piano)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="788"/>
         <source>mp (Mezzo-piano)</source>
-        <translation>mp (Mezzo-piano)</translation>
+        <translation>mp (mezzo-piano)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="790"/>
         <source>mf (Mezzo-forte)</source>
-        <translation>mf (Mezzo-forte)</translation>
+        <translation>mf (mezzo-forte)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="793"/>
         <source>f (Forte)</source>
-        <translation>f (Forte)</translation>
+        <translation>f (forte)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="795"/>
         <source>ff (Fortissimo)</source>
-        <translation>ff (Fortissimo)</translation>
+        <translation>ff (fortissimo)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="797"/>
@@ -15258,7 +15262,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="828"/>
         <source>rfz (Rinforzando)</source>
-        <translation>rfz (Rinforzato)</translation>
+        <translation>rfz (Rinforzando)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="830"/>
@@ -15351,33 +15355,33 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1545"/>
         <source>string.</source>
-        <translation>corda.</translation>
+        <translation>string.</translation>
     </message>
 </context>
 <context>
     <name>engraving/hairpintype</name>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="763"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="771"/>
         <source>Crescendo hairpin</source>
         <translation>Forcella crescendo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="765"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="773"/>
         <source>Decrescendo hairpin</source>
         <translation>Forcella diminuendo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="767"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="775"/>
         <source>Crescendo line</source>
         <translation>Linea crescendo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="769"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="777"/>
         <source>Decrescendo line</source>
         <translation>Linea diminuendo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="771"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="779"/>
         <source>Custom</source>
         <translation>Personalizzato</translation>
     </message>
@@ -15407,22 +15411,22 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1722"/>
         <source>System break</source>
-        <translation>Interruzione di accollatura</translation>
+        <translation>Interruzione di sistema</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1723"/>
         <source>Page break</source>
-        <translation>Interruzione pagina</translation>
+        <translation>Interruzione di pagina</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1724"/>
         <source>Section break</source>
-        <translation>Interruzione sezione</translation>
+        <translation>Interruzione di sezione</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1725"/>
         <source>Keep measures on the same system</source>
-        <translation>Mantieni le battute sulla stessa accollatura</translation>
+        <translation>Mantieni le battute sullo stesso sistema</translation>
     </message>
 </context>
 <context>
@@ -16008,7 +16012,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="421"/>
         <source>Dotted</source>
-        <translation>Punteggiato</translation>
+        <translation>Puntato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/slurtie.cpp" line="423"/>
@@ -16031,12 +16035,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/dom/spacer.cpp" line="234"/>
         <source>Staff spacer up</source>
-        <translation>Distanziatore righi su</translation>
+        <translation>Distanziatore rigo su</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/spacer.cpp" line="236"/>
         <source>Staff spacer down</source>
-        <translation>Distanziatore righi giù</translation>
+        <translation>Distanziatore rigo giù</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/spacer.cpp" line="238"/>
@@ -16137,7 +16141,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3166"/>
         <source>5:7 kleisma up, (5:7k, ~11:13k, 7C less 5C)</source>
-        <translation>5:7 semicomma su, (5:7k, ~11:13k, 7C meno 5C</translation>
+        <translation>5:7 semicomma su, (5:7k, ~11:13k, 7C meno 5C)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3169"/>
@@ -16147,7 +16151,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3170"/>
         <source>7 comma up, (7C), 1° up [43 EDO], 2° up [72 EDO], 1/6-tone up</source>
-        <translation>7 virgola su, (7C), 1° su [43 EDO], 2° su [72 EDO], 1/6 di tono suu</translation>
+        <translation>7 comma su, (7C), 1° su [43 EDO], 2° su [72 EDO], 1/6 di tono su</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3226"/>
@@ -16607,32 +16611,32 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3441"/>
         <source>Double flat lowered by one syntonic comma</source>
-        <translation>Doppio bemolle diminuito di un còmma sintonico </translation>
+        <translation>Doppio bemolle diminuito di un comma sintonico </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3442"/>
         <source>Double flat raised by one syntonic comma</source>
-        <translation>Doppio bemolle aumentato di un còmma sintonico</translation>
+        <translation>Doppio bemolle aumentato di un comma sintonico</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3444"/>
         <source>Double flat lowered by three syntonic commas</source>
-        <translation>Doppio bemolle diminuito di tre còmmi sintonici</translation>
+        <translation>Doppio bemolle diminuito di tre commi sintonici</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3445"/>
         <source>Double flat raised by three syntonic commas</source>
-        <translation>Doppio bemolle aumentato di tre còmmi sintonici</translation>
+        <translation>Doppio bemolle aumentato di tre commi sintonici</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3447"/>
         <source>Double flat lowered by two syntonic commas</source>
-        <translation>Doppio bemolle diminuito di due còmmi sintonici </translation>
+        <translation>Doppio bemolle diminuito di due commi sintonici </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3448"/>
         <source>Double flat raised by two syntonic commas</source>
-        <translation>Doppio bemolle aumentato di due còmmi sintonici </translation>
+        <translation>Doppio bemolle aumentato di due commi sintonici </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3449"/>
@@ -16647,32 +16651,32 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3452"/>
         <source>Double sharp lowered by one syntonic comma</source>
-        <translation>Doppio diesis diminuito di un còmma sintonico </translation>
+        <translation>Doppio diesis diminuito di un comma sintonico </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3453"/>
         <source>Double sharp raised by one syntonic comma</source>
-        <translation>Doppio diesis aumentato di un còmma sintonico </translation>
+        <translation>Doppio diesis aumentato di un comma sintonico </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3454"/>
         <source>Double sharp lowered by three syntonic commas</source>
-        <translation>Doppio diesis diminuito di tre còmmi sintonici </translation>
+        <translation>Doppio diesis diminuito di tre commi sintonici </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3455"/>
         <source>Double sharp raised by three syntonic commas</source>
-        <translation>Doppio diesis aumentato di tre còmmi sintonici</translation>
+        <translation>Doppio diesis aumentato di tre commi sintonici</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3456"/>
         <source>Double sharp lowered by two syntonic commas</source>
-        <translation>Doppio diesis diminuito di due còmmi sintonici </translation>
+        <translation>Doppio diesis diminuito di due commi sintonici </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3457"/>
         <source>Double sharp raised by two syntonic commas</source>
-        <translation>Doppio diesis aumentato di due còmmi sintonici</translation>
+        <translation>Doppio diesis aumentato di due commi sintonici</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3458"/>
@@ -16712,32 +16716,32 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3472"/>
         <source>Flat lowered by one syntonic comma</source>
-        <translation>Bemolle diminuito di un còmma sintonico </translation>
+        <translation>Bemolle diminuito di un comma sintonico </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3473"/>
         <source>Flat raised by one syntonic comma</source>
-        <translation>Bemolle aumentato di un còmma sintonico</translation>
+        <translation>Bemolle aumentato di un comma sintonico</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3477"/>
         <source>Flat lowered by three syntonic commas</source>
-        <translation>Bemolle diminuito di tre còmmi sintonici</translation>
+        <translation>Bemolle diminuito di tre commi sintonici</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3478"/>
         <source>Flat raised by three syntonic commas</source>
-        <translation>Bemolle aumentato di tre còmmi sintonici</translation>
+        <translation>Bemolle aumentato di tre commi sintonici</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3480"/>
         <source>Flat lowered by two syntonic commas</source>
-        <translation>Bemolle diminuito di due còmmi sintonici </translation>
+        <translation>Bemolle diminuito di due commi sintonici </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3481"/>
         <source>Flat raised by two syntonic commas</source>
-        <translation>Bemolle aumentato di due còmmi sintonici </translation>
+        <translation>Bemolle aumentato di due commi sintonici </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3500"/>
@@ -16752,7 +16756,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3504"/>
         <source>Lower by one septimal comma</source>
-        <translation>Diminuito di un 7 còmma </translation>
+        <translation>Diminuito di un 7 comma </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3505"/>
@@ -16767,7 +16771,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3507"/>
         <source>Lower by two septimal commas</source>
-        <translation>Diminuito di due 7 còmma </translation>
+        <translation>Diminuito di due 7 comma </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3511"/>
@@ -16787,12 +16791,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3516"/>
         <source>Natural lowered by one syntonic comma</source>
-        <translation>Bequadro diminuito di un còmma sintonico </translation>
+        <translation>Bequadro diminuito di un comma sintonico </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3517"/>
         <source>Natural raised by one syntonic comma</source>
-        <translation>Bequadro aumentato di un còmma sintonico</translation>
+        <translation>Bequadro aumentato di un comma sintonico</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3520"/>
@@ -16802,22 +16806,22 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3521"/>
         <source>Natural lowered by three syntonic commas</source>
-        <translation>Bequadro diminuito di tre còmmi sintonici</translation>
+        <translation>Bequadro diminuito di tre commi sintonici</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3522"/>
         <source>Natural raised by three syntonic commas</source>
-        <translation>Bequadro aumentato di tre còmmi sintonici</translation>
+        <translation>Bequadro aumentato di tre commi sintonici</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3523"/>
         <source>Natural lowered by two syntonic commas</source>
-        <translation>Bequadro diminuito di due còmmi sintonici </translation>
+        <translation>Bequadro diminuito di due commi sintonici </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3524"/>
         <source>Natural raised by two syntonic commas</source>
-        <translation>Bequadro aumentato di due còmmi sintonici</translation>
+        <translation>Bequadro aumentato di due commi sintonici</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3535"/>
@@ -16854,7 +16858,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3552"/>
         <source>Raise by one septimal comma</source>
-        <translation>Aumentato di un 7 còmma </translation>
+        <translation>Aumentato di un 7 comma </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3553"/>
@@ -16869,7 +16873,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3555"/>
         <source>Raise by two septimal commas</source>
-        <translation>Aumentato di due 7 còmma </translation>
+        <translation>Aumentato di due 7 comma </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3561"/>
@@ -16884,12 +16888,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3565"/>
         <source>Sharp lowered by one syntonic comma</source>
-        <translation>Diesis diminuito di un còmma sintonico </translation>
+        <translation>Diesis diminuito di un comma sintonico </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3566"/>
         <source>Sharp raised by one syntonic comma</source>
-        <translation>Diesis aumentato di un còmma sintonico</translation>
+        <translation>Diesis aumentato di un comma sintonico</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3572"/>
@@ -16899,22 +16903,22 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3573"/>
         <source>Sharp lowered by three syntonic commas</source>
-        <translation>Diesis diminuito di tre còmmi sintonici</translation>
+        <translation>Diesis diminuito di tre commi sintonici</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3574"/>
         <source>Sharp raised by three syntonic commas</source>
-        <translation>Diesis aumentato di tre còmmi sintonici</translation>
+        <translation>Diesis aumentato di tre commi sintonici</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3575"/>
         <source>Sharp lowered by two syntonic commas</source>
-        <translation>Diesis diminuito di due còmmi sintonici </translation>
+        <translation>Diesis diminuito di due commi sintonici </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3576"/>
         <source>Sharp raised by two syntonic commas</source>
-        <translation>Diesis aumentato di due còmmi sintonici </translation>
+        <translation>Diesis aumentato di due commi sintonici </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3583"/>
@@ -17076,12 +17080,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3698"/>
         <source>Accent-staccato above</source>
-        <translation>Accento staccato, sopra</translation>
+        <translation>Accento-staccato sopra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3699"/>
         <source>Accent-staccato below</source>
-        <translation>Accento staccato, sotto</translation>
+        <translation>Accento-staccato sotto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3700"/>
@@ -17126,7 +17130,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3708"/>
         <source>Soft accent above</source>
-        <translation>Accento leggero, sopra</translation>
+        <translation>Accento leggero sopra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3709"/>
@@ -17161,7 +17165,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3715"/>
         <source>Soft accent-tenuto-staccato below</source>
-        <translation>Accento leggero tenuto-staccato, sotto</translation>
+        <translation>Accento leggero-tenuto-staccato sotto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3716"/>
@@ -17221,12 +17225,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3727"/>
         <source>Tenuto-accent above</source>
-        <translation>Accento del Tenuto sopra</translation>
+        <translation>Tenuto-accento sopra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3728"/>
         <source>Tenuto-accent below</source>
-        <translation>Accento del Tenuto sotto</translation>
+        <translation>Tenuto-accento sotto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3729"/>
@@ -17316,7 +17320,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3797"/>
         <source>Breath mark (comma)</source>
-        <translation>Segno di respiro (comma)</translation>
+        <translation>Segno di respiro (virgola)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3798"/>
@@ -17326,22 +17330,22 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3799"/>
         <source>Breath mark (tick-like)</source>
-        <translation>Segno di respiro (tipo attimo)</translation>
+        <translation>Segno di respiro (similspunta)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3800"/>
         <source>Breath mark (upbow-like)</source>
-        <translation>Segno di respiro (tipo arco superiore)</translation>
+        <translation>Segno di respiro (similarcata in su)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3803"/>
         <source>C clef</source>
-        <translation>Chiave di Do</translation>
+        <translation>Chiave di DO</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3804"/>
         <source>C clef ottava bassa</source>
-        <translation>Chiave di Do ottava bassa</translation>
+        <translation>Chiave di DO ottava bassa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3811"/>
@@ -17367,7 +17371,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3815"/>
         <source>Thick caesura</source>
-        <translation>Spessore cesura</translation>
+        <translation>Cesura spessa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3886"/>
@@ -17397,7 +17401,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3981"/>
         <source>Piano</source>
-        <translation>Piano</translation>
+        <translation>Pianoforte</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3982"/>
@@ -17417,37 +17421,37 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4058"/>
         <source>F clef</source>
-        <translation>Chiave di Fa</translation>
+        <translation>Chiave di FA</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4068"/>
         <source>Fermata above</source>
-        <translation>Corona superiore</translation>
+        <translation>Corona sopra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4069"/>
         <source>Fermata below</source>
-        <translation>Corona inferiore</translation>
+        <translation>Corona sotto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4070"/>
         <source>Long fermata above</source>
-        <translation>Corona lunga superiore</translation>
+        <translation>Corona lunga sopra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4071"/>
         <source>Long fermata below</source>
-        <translation>Corona lunga inferiore</translation>
+        <translation>Corona lunga sotto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4072"/>
         <source>Long fermata (Henze) above</source>
-        <translation>Corona lunga (Henze) superiore</translation>
+        <translation>Corona lunga (Henze) sopra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4073"/>
         <source>Long fermata (Henze) below</source>
-        <translation>Corona lunga (Henze) inferiore</translation>
+        <translation>Corona lunga (Henze) sotto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4074"/>
@@ -17492,7 +17496,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4245"/>
         <source>G clef</source>
-        <translation>Chiave di Sol</translation>
+        <translation>Chiave di SOL</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4271"/>
@@ -17557,27 +17561,27 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4767"/>
         <source>128th note (semihemidemisemiquaver) stem up</source>
-        <translation>Nota 1/128 (Fusa) gambo in su</translation>
+        <translation>128esimo (fusa) gambo in su</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4769"/>
         <source>16th note (semiquaver) stem up</source>
-        <translation>Nota 1/16 (semicroma) gambo in su </translation>
+        <translation>16esimo (semicroma) gambo in su </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4771"/>
         <source>256th note (demisemihemidemisemiquaver) stem up</source>
-        <translation>Nota 1/256 (Semifusa) gambo in su</translation>
+        <translation>256esimo (semifusa) gambo in su</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4773"/>
         <source>32nd note (demisemiquaver) stem up</source>
-        <translation>Nota 1/32 (biscroma) gambo in su </translation>
+        <translation>32esimo (biscroma) gambo in su </translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4775"/>
         <source>512th note (hemidemisemihemidemisemiquaver) stem up</source>
-        <translation>Nota 1/512 gambo in su</translation>
+        <translation>512esimo gambo in su</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4777"/>
@@ -17597,12 +17601,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4785"/>
         <source>Quarter note (crotchet) stem up</source>
-        <translation>Nota 1/4 (semiminima) gambo in su</translation>
+        <translation>Quarto (semiminima) gambo in su</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4786"/>
         <source>Whole note (semibreve)</source>
-        <translation>Semibreve (intero)</translation>
+        <translation>Intero (semibreve)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5264"/>
@@ -17712,42 +17716,42 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5632"/>
         <source>1024th rest</source>
-        <translation>Pausa 1/1024</translation>
+        <translation>Pausa di 1024esimo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5633"/>
         <source>128th (semihemidemisemiquaver) rest</source>
-        <translation>Pausa 1/128 (Quintupla)</translation>
+        <translation>Pausa di 128esimo (Quintupla)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5634"/>
         <source>16th (semiquaver) rest</source>
-        <translation>Pausa 1/16 (semicroma)</translation>
+        <translation>Pausa di 16esimo (semicroma)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5635"/>
         <source>256th rest</source>
-        <translation>Pausa 1/256</translation>
+        <translation>Pausa di 256esimo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5636"/>
         <source>32nd (demisemiquaver) rest</source>
-        <translation>Pausa 1/32 (biscroma)</translation>
+        <translation>Pausa di 32esimo (biscroma)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5637"/>
         <source>512th rest</source>
-        <translation>Pausa 1/512</translation>
+        <translation>Pausa di 512esimo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5638"/>
         <source>64th (hemidemisemiquaver) rest</source>
-        <translation>Pausa 1/64 (Semibiscroma)</translation>
+        <translation>Pausa di 64esimo (semibiscroma)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5639"/>
         <source>Eighth (quaver) rest</source>
-        <translation>Pausa 1/8 (croma)</translation>
+        <translation>Pausa di ottavo (croma)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5640"/>
@@ -17762,7 +17766,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5646"/>
         <source>Half (minim) rest</source>
-        <translation>Pausa di minima</translation>
+        <translation>Pausa di un mezzo (minima)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5647"/>
@@ -17802,12 +17806,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5673"/>
         <source>Segno (serpent)</source>
-        <translation>Segno (Serpentone)</translation>
+        <translation>Segno (serpentina)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5751"/>
         <source>Down bow</source>
-        <translation>Arcata giù</translation>
+        <translation>Arcata in giù</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5758"/>
@@ -17822,22 +17826,22 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5776"/>
         <source>Up bow</source>
-        <translation>Arcata su</translation>
+        <translation>Arcata in su</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5786"/>
         <source>System divider</source>
-        <translation>Separatore di accollatura</translation>
+        <translation>Divisore di sistema</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5787"/>
         <source>Extra long system divider</source>
-        <translation>Separatore di accollatura extra lungo</translation>
+        <translation>Divisore di sistema extra lungo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5788"/>
         <source>Long system divider</source>
-        <translation>Separatore di accollatura lungo</translation>
+        <translation>Divisore di sistema lungo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5853"/>
@@ -17892,12 +17896,12 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5971"/>
         <source>Vibrato large, faster</source>
-        <translation>Vibrato ampio più veloce</translation>
+        <translation>Vibrato largo, più veloce</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5976"/>
         <source>Vibrato large, slowest</source>
-        <translation>vibrato ampio più lento</translation>
+        <translation>Vibrato largo, più lento</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6067"/>
@@ -17940,12 +17944,12 @@ Tasto %1 sulle corde %2</translation>
         <translation>Spazio</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="367"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="368"/>
         <source>Tick barline 2</source>
         <translation>Quarto di stanghetta 2</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="369"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="370"/>
         <source>Short barline 2</source>
         <translation>Stanghetta corta 2</translation>
     </message>
@@ -17968,35 +17972,35 @@ Tasto %1 sulle corde %2</translation>
 <context>
     <name>engraving/timesig</name>
     <message>
-        <location filename="../../src/engraving/dom/timesig.cpp" line="320"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1682"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1701"/>
+        <location filename="../../src/engraving/dom/timesig.cpp" line="330"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1684"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1703"/>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="200"/>
         <source>Common time</source>
         <translation>Tempo comune</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/timesig.cpp" line="322"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1683"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1702"/>
+        <location filename="../../src/engraving/dom/timesig.cpp" line="332"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1685"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1704"/>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="202"/>
         <source>Cut time</source>
         <translation>Alla breve</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/timesig.cpp" line="324"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1706"/>
+        <location filename="../../src/engraving/dom/timesig.cpp" line="334"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1708"/>
         <source>Cut time (Bach)</source>
         <translation>Alla Breve (Bach)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/timesig.cpp" line="326"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1707"/>
+        <location filename="../../src/engraving/dom/timesig.cpp" line="336"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1709"/>
         <source>Cut triple time (9/8)</source>
         <translation>Ternario (9/8)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/timesig.cpp" line="328"/>
+        <location filename="../../src/engraving/dom/timesig.cpp" line="338"/>
         <source>%1/%2 time</source>
         <translation>%1/%2 tempo</translation>
     </message>
@@ -18115,22 +18119,22 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2586"/>
         <source>Guitar vibrato</source>
-        <translation>Chitarra vibrato</translation>
+        <translation>Vibrato chitarra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2587"/>
         <source>Guitar vibrato wide</source>
-        <translation>Chitarra vibrato Ampio</translation>
+        <translation>Vibrato chitarra ampio</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2588"/>
         <source>Vibrato sawtooth</source>
-        <translation>Vibrato Dente di sega</translation>
+        <translation>Vibrato a dente di sega</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2590"/>
         <source>Tremolo sawtooth wide</source>
-        <translation>tremolo a dente di sega ampia</translation>
+        <translation>Tremolo a dente di sega ampio</translation>
     </message>
 </context>
 <context>
@@ -18138,18 +18142,18 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="162"/>
         <source>Reload plugins</source>
-        <translation>Ricarica Plugin</translation>
+        <translation>Ricarica plugin</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="116"/>
         <source>Enabled</source>
-        <translation>Abilita</translation>
+        <translation>Abilitato(i)</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="145"/>
         <location filename="../../src/framework/extensions/extensionsmodule.cpp" line="92"/>
         <source>Disabled</source>
-        <translation>Disabilita</translation>
+        <translation>Disabilitati</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="192"/>
@@ -18201,7 +18205,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="73"/>
         <source>Alternatively, you can enable it at any time from Home &gt; Plugins.</source>
-        <translation>In alternativa, è possibile attivarlo in qualsiasi momento da Home &gt; Plugin.</translation>
+        <translation>In alternativa, puoi attivarlo in ogni momento da Home &gt; Plugin.</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsprovider.cpp" line="42"/>
@@ -18211,7 +18215,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsprovider.cpp" line="43"/>
         <source>Color notes</source>
-        <translation>Colora le note</translation>
+        <translation>Colora note</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsprovider.cpp" line="44"/>
@@ -18248,7 +18252,7 @@ Tasto %1 sulle corde %2</translation>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml" line="98"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="251"/>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="132"/>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="98"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="96"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -18270,7 +18274,7 @@ Tasto %1 sulle corde %2</translation>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="85"/>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="145"/>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="101"/>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="111"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="109"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="340"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="375"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="397"/>
@@ -18324,7 +18328,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/DirectoriesTopPanel.qml" line="89"/>
         <source>Delete</source>
-        <translation>Cancella</translation>
+        <translation>Elimina</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/PopupPanel.qml" line="166"/>
@@ -18332,7 +18336,7 @@ Tasto %1 sulle corde %2</translation>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml" line="52"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PartsDialog.qml" line="101"/>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="266"/>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="110"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="108"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -18367,7 +18371,7 @@ Tasto %1 sulle corde %2</translation>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="52"/>
         <source>%n day(s) ago</source>
-        <translation><numerusform>%n giorno fa</numerusform><numerusform>%n giornoi fa</numerusform><numerusform>%n giorno(i) fa</numerusform></translation>
+        <translation><numerusform>%n giorno fa</numerusform><numerusform>%n giorni fa</numerusform><numerusform>%n giorno(i) fa</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="58"/>
@@ -18377,7 +18381,7 @@ Tasto %1 sulle corde %2</translation>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="62"/>
         <source>%n week(s) ago</source>
-        <translation><numerusform>%n settimana fa</numerusform><numerusform>%n settimane fa</numerusform><numerusform>%n settimana(e) fa</numerusform></translation>
+        <translation><numerusform>La settimana scorsa</numerusform><numerusform>%n settimane fa</numerusform><numerusform>%n settimane fa</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="70"/>
@@ -18424,35 +18428,35 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="45"/>
         <source>C♭♭</source>
-        <translation>Do♭♭</translation>
+        <translation>DO♭♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="46"/>
         <source>C♭</source>
-        <translation>Do♭</translation>
+        <translation>DO♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="47"/>
         <location filename="../../src/framework/global/utils.cpp" line="29"/>
         <location filename="../../src/framework/global/utils.cpp" line="44"/>
         <source>C</source>
-        <translation>Do</translation>
+        <translation>DO</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="48"/>
         <location filename="../../src/framework/global/utils.cpp" line="30"/>
         <source>C♯</source>
-        <translation>Do♯</translation>
+        <translation>DO♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="49"/>
         <source>C♯♯</source>
-        <translation>Do♯♯</translation>
+        <translation>DO♯♯</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="50"/>
         <source>D♭♭</source>
-        <translation>Re♭♭</translation>
+        <translation>RE♭♭</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="51"/>
@@ -18651,7 +18655,7 @@ Tasto %1 sulle corde %2</translation>
         <translation>pt</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="99"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="97"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
@@ -18698,11 +18702,11 @@ Tasto %1 sulle corde %2</translation>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="111"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="55"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="105"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="201"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="321"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="327"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="333"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="339"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="199"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="317"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="323"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="329"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="335"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="90"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="98"/>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="100"/>
@@ -18729,77 +18733,77 @@ Tasto %1 sulle corde %2</translation>
         <translation>s</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="100"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="98"/>
         <source>Save all</source>
         <translation>Salva tutto</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="101"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="99"/>
         <source>Don’t save</source>
         <translation>Non salvare</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="102"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="100"/>
         <source>Open</source>
         <translation>Vuota</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="103"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="101"/>
         <source>Yes</source>
-        <translation>Si</translation>
+        <translation>Sì</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="104"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="102"/>
         <source>Yes to all</source>
         <translation>Sì a tutto</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="105"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="103"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="106"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="104"/>
         <source>No to all</source>
         <translation>No a tutto</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="107"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="105"/>
         <source>Abort</source>
         <translation>Arresto</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="108"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="106"/>
         <source>Retry</source>
         <translation>Riprova</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="109"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="107"/>
         <source>Ignore</source>
         <translation>Ignora</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="112"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="110"/>
         <source>Discard</source>
         <translation>Scarta</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="113"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="111"/>
         <source>Help</source>
         <translation>Aiuto</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="114"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="112"/>
         <source>Apply</source>
         <translation>Applica</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="115"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="113"/>
         <source>Reset</source>
         <translation>Ripristina</translation>
     </message>
     <message>
-        <location filename="../../src/framework/global/internal/interactive.cpp" line="116"/>
+        <location filename="../../src/framework/global/internal/interactive.cpp" line="114"/>
         <source>Continue</source>
         <translation>Proseguimento</translation>
     </message>
@@ -18832,7 +18836,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/internal/StandardDialog.qml" line="51"/>
         <source>Show details</source>
-        <translation>mostra dettagli</translation>
+        <translation>Mostra dettagli</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="132"/>
@@ -18878,7 +18882,7 @@ Tasto %1 sulle corde %2</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="143"/>
         <source>Size</source>
         <comment>file size</comment>
-        <translation>Dimensione:</translation>
+        <translation>Dimensione</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="213"/>
@@ -18902,7 +18906,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/importexport/capella/internal/capella.cpp" line="2843"/>
         <source>Import Capella</source>
-        <translation>Importazione file Capella</translation>
+        <translation>Importa file Capella</translation>
     </message>
     <message>
         <location filename="../../src/importexport/capella/internal/capella.cpp" line="2844"/>
@@ -18926,7 +18930,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1063"/>
         <source>Words by %1</source>
-        <translation>Testi di %1</translation>
+        <translation>Parole di %1</translation>
     </message>
 </context>
 <context>
@@ -18942,7 +18946,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi.cpp" line="1276"/>
         <source>Import MIDI</source>
-        <translation>Importazione MIDI</translation>
+        <translation>Importa MIDI</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi.cpp" line="1277"/>
@@ -18962,7 +18966,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="143"/>
         <source>Staff name</source>
-        <translation>Nome rigo</translation>
+        <translation>Nome del rigo</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="174"/>
@@ -18972,7 +18976,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="206"/>
         <source>MuseScore Studio instrument</source>
-        <translation>MuseScore Studio strumento</translation>
+        <translation>Strumento MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="269"/>
@@ -18992,7 +18996,7 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="316"/>
         <source>16th</source>
-        <translation>1/16</translation>
+        <translation>16esimo</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="317"/>
@@ -19022,37 +19026,37 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="380"/>
         <source>2-plets</source>
-        <translation>2-ina</translation>
+        <translation>2-ine</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="381"/>
         <source>3-plets</source>
-        <translation>3-ina</translation>
+        <translation>3-ine</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="382"/>
         <source>4-plets</source>
-        <translation>4-ina</translation>
+        <translation>4-ine</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="383"/>
         <source>5-plets</source>
-        <translation>5-ina</translation>
+        <translation>5-ine</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="384"/>
         <source>7-plets</source>
-        <translation>7-ina</translation>
+        <translation>7-ine</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="385"/>
         <source>9-plets</source>
-        <translation>9-ina</translation>
+        <translation>9-ine</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="391"/>
         <source>Tuplets</source>
-        <translation>Gruppi  irregolari</translation>
+        <translation>Gruppi irregolari</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="556"/>
@@ -19164,7 +19168,7 @@ battuta in levare</translation>
     <message numerus="yes">
         <location filename="../../src/importexport/musicxml/internal/musicxml/importmxml.cpp" line="108"/>
         <source>%n error(s) found, import may be incomplete.</source>
-        <translation><numerusform>%n errore trovati, l&apos;importazione potrebbe essere incompleta</numerusform><numerusform>%n errori trovati, l&apos;importazione potrebbe essere incompleta</numerusform><numerusform>%n errore(i) trovati, l&apos;importazione potrebbe essere incompleta</numerusform></translation>
+        <translation><numerusform>%n errore trovato, l&apos;importazione potrebbe essere incompleta.</numerusform><numerusform>%n errori trovati, l&apos;importazione potrebbe essere incompleta.</numerusform><numerusform>%n errori trovati, l&apos;importazione potrebbe essere incompleta.</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="96"/>
@@ -19194,12 +19198,12 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="228"/>
         <source>line %1, column %2:</source>
-        <translation>linea %1 colonna %2:</translation>
+        <translation>linea %1, colonna %2:</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="241"/>
         <source>expected token type and name ‘EndElement %1’, actual ‘%2 %3’</source>
-        <translation>tipo di token e nome attesi &quot;Elemento finale %1&apos;, effettivo &apos;%2 %3&quot;</translation>
+        <translation>tipo di token e nome attesi &apos;Elemento finale %1&apos;, effettivo &apos;%2 %3&apos;</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="197"/>
@@ -19246,6 +19250,7 @@ battuta in levare</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="70"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="85"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="108"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="200"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/NoteheadTypeSelector.qml" line="39"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="214"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="190"/>
@@ -19283,7 +19288,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="128"/>
         <source>Reset property to default value</source>
-        <translation>Ripristina la proprietà al valore predefinito</translation>
+        <translation>Ripristina proprietà al valore predefinito</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="153"/>
@@ -19294,12 +19299,12 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="148"/>
         <source>Menu</source>
-        <translation>Menù</translation>
+        <translation>Menu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="127"/>
         <source>Reset “%1” to default value</source>
-        <translation>Ripristina «%1» al valore predefinito</translation>
+        <translation>Ripristina &quot;%1&quot; al valore predefinito</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="156"/>
@@ -19309,7 +19314,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="158"/>
         <source>This is set as the default style for this score</source>
-        <translation>Questo è impostato come stile predefinito per questa partitura.</translation>
+        <translation>Questo è impostato come stile predefinito per questa partitura</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/OffsetSection.qml" line="35"/>
@@ -19458,7 +19463,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/models/notation/staffs/staffsettingsmodel.cpp" line="32"/>
         <source>Staff</source>
-        <translation>Rigo musicale</translation>
+        <translation>Rigo </translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="66"/>
@@ -19475,7 +19480,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="97"/>
         <source>Change speed</source>
-        <translation>Cambia velocità:</translation>
+        <translation>Cambia velocità</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="105"/>
@@ -19575,7 +19580,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/NoteExpandableBlank.qml" line="83"/>
         <source>Tuning (cents)</source>
-        <translation>Accordatura (centesimi)</translation>
+        <translation>Accordatura (cent)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/PausesExpandableBlank.qml" line="51"/>
@@ -19586,7 +19591,7 @@ battuta in levare</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretDiagramTabPanel.qml" line="52"/>
         <location filename="../../src/inspector/models/general/generalsettingsmodel.cpp" line="34"/>
         <source>General</source>
-        <translation>Generale:</translation>
+        <translation>Generale</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="58"/>
@@ -19607,7 +19612,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="81"/>
         <source>Delete selected measures</source>
-        <translation>Cancella le battute selezionate</translation>
+        <translation>Elimina battute selezionate</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="49"/>
@@ -19623,7 +19628,7 @@ battuta in levare</translation>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="69"/>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="82"/>
         <source>None</source>
-        <translation>Nessuno</translation>
+        <translation>Nessuno1</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="57"/>
@@ -19638,7 +19643,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="66"/>
         <source>Small accidental</source>
-        <translation>Alterazioni piccole</translation>
+        <translation>Alterazione piccola</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="83"/>
@@ -19658,7 +19663,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="171"/>
         <source>Update to match the notes on the staff</source>
-        <translation>Aggiorna per far corrispondere le note sul pentagramma</translation>
+        <translation>Aggiorna per far corrispondere le note sul rigo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="188"/>
@@ -19829,7 +19834,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="104"/>
         <source>Press Enter to start editing</source>
-        <translation>Premi invio per avviare la modifica</translation>
+        <translation>Premi Invio per avviare la modifica</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="78"/>
@@ -19849,7 +19854,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/brackets/BracketSettings.qml" line="93"/>
         <source>You have multiple brackets selected. Select a single bracket to edit its settings.</source>
-        <translation>Sono state selezionate più parentesi. Selezionare una singola parentesi per modificarne le impostazioni.</translation>
+        <translation>Hai selezionato più parentesi. Seleziona una singola parentesi per modificarne le impostazioni.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="49"/>
@@ -19869,7 +19874,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="63"/>
         <source>Voicing</source>
-        <translation>Vocalità</translation>
+        <translation>Voicing</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="71"/>
@@ -19924,7 +19929,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="53"/>
         <source>Show courtesy clef on previous system</source>
-        <translation>Mostra la chiave di cortesia sull&apos;accollatura precedente</translation>
+        <translation>Mostra chiave di cortesia sul precedente sistema</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="61"/>
@@ -19947,7 +19952,7 @@ battuta in levare</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/VerticalFrameSettings.qml" line="55"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="61"/>
         <source>Scale with staff size</source>
-        <translation>Scala con le dimensioni del pentagramma</translation>
+        <translation>Scala con le dimensioni del rigo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="65"/>
@@ -19984,7 +19989,7 @@ battuta in levare</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml" line="120"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/spacers/SpacerSettings.qml" line="48"/>
         <source>Height</source>
-        <translation>Ampiezza</translation>
+        <translation>Altezza</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="89"/>
@@ -19999,7 +20004,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="200"/>
         <source>You have multiple fretboard diagrams selected. Select a single diagram to edit its settings.</source>
-        <translation>Sono stati selezionati più diagrammi di tastiera. Selezionare un singolo diagramma per modificarne le impostazioni.</translation>
+        <translation>Hai selezionato più diagrammi di tastiera. Seleziona un singolo diagramma per modificarne le impostazioni.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="57"/>
@@ -20014,7 +20019,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="74"/>
         <source>Avoid barlines</source>
-        <translation>Evita le stanghette:</translation>
+        <translation>Evita stanghette</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="107"/>
@@ -20099,7 +20104,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="116"/>
         <source>Square</source>
-        <translation>Quadre</translation>
+        <translation>Quadrato</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="117"/>
@@ -20125,23 +20130,23 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="111"/>
         <source>Scale to frame size</source>
-        <translation>Riduci a misura cornice</translation>
+        <translation>Scala a dimensione di cornice</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="121"/>
         <source>Use staff space units</source>
-        <translation>Utilizza le unità di spazio del pentagramma</translation>
+        <translation>Usa le unità di spazio del rigo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/instrumentname/InstrumentNameSettings.qml" line="53"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="123"/>
         <source>Style settings</source>
-        <translation>Impostazioni Stile</translation>
+        <translation>Impostazioni stile</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/instrumentname/InstrumentNameSettings.qml" line="66"/>
         <source>Staff/Part properties</source>
-        <translation>Proprietà Pentagramma/Parte</translation>
+        <translation>Proprietà rigo/parte</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/jumps/JumpSettings.qml" line="49"/>
@@ -20161,18 +20166,18 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/jumps/JumpSettings.qml" line="75"/>
         <source>Play repeats</source>
-        <translation>Riproduci le ripetizioni</translation>
+        <translation>Riproduci ripetizioni</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="48"/>
         <source>Show courtesy key signature on previous system</source>
-        <translation>Mostra armatura di chiave di cortesia sull&apos;accollatura precedente</translation>
+        <translation>Mostra armatura di chiave di cortesia sul precedente sistema</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="58"/>
         <source>Mode</source>
         <extracomment>Musical mode (major, minor, dorian, phrygian, lydian, etc.)</extracomment>
-        <translation>Modalità</translation>
+        <translation>Modo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="66"/>
@@ -20216,12 +20221,12 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="76"/>
         <source>Aeolian</source>
-        <translation>Eolia</translation>
+        <translation>Eolio</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="77"/>
         <source>Ionian</source>
-        <translation>Ionio</translation>
+        <translation>Ionico</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="78"/>
@@ -20231,7 +20236,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="49"/>
         <source>Glissando line</source>
-        <translation>Linea Glissando</translation>
+        <translation>Linea glissando</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="59"/>
@@ -20272,7 +20277,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml" line="142"/>
         <source>Height (new system)</source>
-        <translation>Altezza (nuova accollatura)</translation>
+        <translation>Altezza (nuovo sistema)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="47"/>
@@ -20294,7 +20299,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="101"/>
         <source>Dash</source>
-        <translation>trattino</translation>
+        <translation>Trattino</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="123"/>
@@ -20314,7 +20319,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="72"/>
         <source>Text when continuing to a new system</source>
-        <translation>Testo quando si passa a una nuova accollatura</translation>
+        <translation>Testo quando si passa a nuovo sistema</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="92"/>
@@ -20464,7 +20469,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="188"/>
         <source>Move cross-staff beam</source>
-        <translation>Sposta la travatura tra i pentagrammi</translation>
+        <translation>Sposta la travatura tra i righi</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="227"/>
@@ -20522,19 +20527,18 @@ battuta in levare</translation>
         <translation>Offset testa della nota</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="181"/>
         <source>Alignment in chords</source>
         <translation>Allineamento degli accordi</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="196"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="188"/>
         <source>Combine with voices that share the same stem direction</source>
         <translation>Combina con voci che condividono la stessa direzione dello stelo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="61"/>
         <source>No beam</source>
-        <translation>Scollega gruppo di note</translation>
+        <translation>Nessuna travatura</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="62"/>
@@ -20544,12 +20548,12 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="63"/>
         <source>Break inner beams (8th)</source>
-        <translation>Interrompi travatura interna (8va)</translation>
+        <translation>Interrompi travature interne (croma)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="64"/>
         <source>Break inner beams (16th)</source>
-        <translation>Interrompi travatura interna (16ma)</translation>
+        <translation>Interrompi travature interne (16esimo)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="65"/>
@@ -20637,8 +20641,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="65"/>
         <source>Start new section with long instrument names</source>
-        <translation>Inizia una nuova sezione con
-nomi strumento estesi</translation>
+        <translation>Inizia nuova sezione con nomi strumento estesi</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="75"/>
@@ -20648,7 +20651,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="85"/>
         <source>Indent first system of new section</source>
-        <translation>Indenta il primo sistema della nuova sezione</translation>
+        <translation>Indenta primo sistema della nuova sezione</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="111"/>
@@ -20673,7 +20676,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="172"/>
         <source>Staff line color</source>
-        <translation>Colore linea rigo</translation>
+        <translation>Colore linea del rigo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="136"/>
@@ -20761,17 +20764,17 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoSettings.qml" line="48"/>
         <source>Follow written tempo</source>
-        <translation>Segui il tempo scritto</translation>
+        <translation>Segui tempo scritto</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoSettings.qml" line="57"/>
         <source>Override written tempo</source>
-        <translation>Sovrascrivi il tempo scritto</translation>
+        <translation>Sovrascrivi tempo scritto</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoRestorePreviousSettings.qml" line="53"/>
         <source>Set specific tempo</source>
-        <translation>Imposta il tempo specifico</translation>
+        <translation>Imposta tempo specifico</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoRestorePreviousSettings.qml" line="77"/>
@@ -20782,7 +20785,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="135"/>
         <source>Show courtesy time signature on previous system</source>
-        <translation>Mostra l&apos;indicazione metrica di cortesia sull&apos;accollatura precedente</translation>
+        <translation>Mostra indicazione metrica di cortesia sul precedente sistema</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="146"/>
@@ -20827,7 +20830,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="151"/>
         <source>You have multiple tremolo bars selected. Select a single one to edit its settings.</source>
-        <translation>Sono state selezionate più barre del tremolo. Selezionare una singola barra per modificarne le impostazioni.</translation>
+        <translation>Hai selezionato più barre del tremolo. Seleziona una singola barra per modificarne le impostazioni.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolos/TremoloSettings.qml" line="49"/>
@@ -20862,12 +20865,12 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="50"/>
         <source>Empty staves</source>
-        <translation>Pentagrammi vuoti</translation>
+        <translation>Righi vuoti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="77"/>
         <source>Show options for hiding empty staves</source>
-        <translation>Mostra le opzioni per nascondere i pentagrammi vuoti</translation>
+        <translation>Mostra opzioni per nascondere i pentagrammi vuoti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="107"/>
@@ -20903,7 +20906,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="106"/>
         <source>Sound flags</source>
-        <translation>Bandierine dei suoni</translation>
+        <translation>Bandierine sonore</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="82"/>
@@ -20914,7 +20917,7 @@ nomi strumento estesi</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="96"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="49"/>
         <source>Font</source>
-        <translation>Carattere</translation>
+        <translation>Font</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="98"/>
@@ -20939,7 +20942,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="206"/>
         <source>Align left</source>
-        <translation>allineato a sinistra</translation>
+        <translation>Allinea a sinistra</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="207"/>
@@ -21009,7 +21012,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="147"/>
         <source>Size</source>
-        <translation>Dimensione:</translation>
+        <translation>Dimensione</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="160"/>
@@ -21085,7 +21088,7 @@ nomi strumento estesi</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoRestorePreviousSettings.qml" line="73"/>
         <location filename="../../src/inspector/models/notation/tempos/temposettingsmodel.cpp" line="42"/>
         <source>Tempo</source>
-        <translation>Metronomo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/chordsymbols/chordsymbolsettingsmodel.cpp" line="32"/>
@@ -21095,7 +21098,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="179"/>
         <source>Staff text properties</source>
-        <translation>Proprietà testo di pentagramma</translation>
+        <translation>Proprietà testo di rigo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/arpeggioplaybackmodel.cpp" line="33"/>
@@ -21105,12 +21108,12 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/breathplaybackmodel.cpp" line="33"/>
         <source>Breaths &amp; pauses</source>
-        <translation>Respiri &amp; Cesure</translation>
+        <translation>Respiri &amp; cesure</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/fermataplaybackmodel.cpp" line="33"/>
         <source>Fermatas</source>
-        <translation>Corona</translation>
+        <translation>Corone</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/glissandoplaybackmodel.cpp" line="33"/>
@@ -21351,17 +21354,17 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/vibratosettingsmodel.cpp" line="54"/>
         <source>Vibrato wide</source>
-        <translation>Vibrato Ampio</translation>
+        <translation>Vibrato ampio</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/vibratosettingsmodel.cpp" line="55"/>
         <source>Vibrato sawtooth</source>
-        <translation>Vibrato Dente di sega</translation>
+        <translation>Vibrato a dente di sega</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/vibratosettingsmodel.cpp" line="56"/>
         <source>Vibrato sawtooth wide</source>
-        <translation>Vibrato Dente di sega ampio</translation>
+        <translation>Vibrato a dente di sega ampio</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/voltasettingsmodel.cpp" line="37"/>
@@ -21432,7 +21435,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/models/notation/sectionbreaks/sectionbreaksettingsmodel.cpp" line="33"/>
         <source>Section break</source>
-        <translation>Interruzione sezione</translation>
+        <translation>Interruzione di sezione</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/spacers/spacersettingsmodel.cpp" line="35"/>
@@ -21442,7 +21445,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/models/notation/stafftype/stafftypesettingsmodel.cpp" line="34"/>
         <source>Staff type changes</source>
-        <translation>Cambio tipo di pentagramma</translation>
+        <translation>Cambio tipo di rigo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/timesignatures/timesignaturesettingsmodel.cpp" line="34"/>
@@ -21539,7 +21542,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="87"/>
         <source>Interval</source>
-        <translation>intervallo</translation>
+        <translation>Intervallo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="123"/>
@@ -21724,7 +21727,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/models/parts/partssettingsmodel.cpp" line="33"/>
         <source>Score and part synchronization</source>
-        <translation>Sincronizzazione della partitura e della parte</translation>
+        <translation>Sincronizzazione di partitura e parte</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/symbols/symbolsettingsmodel.cpp" line="34"/>
@@ -21749,7 +21752,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="112"/>
         <source>All voices on this staff only</source>
-        <translation>Tutte le voci solo su questo pentagramma</translation>
+        <translation>Tutte le voci solo su questo rigo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="187"/>
@@ -21758,11 +21761,13 @@ nomi strumento estesi</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="196"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="201"/>
         <source>On</source>
         <translation>Attivo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="197"/>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="202"/>
         <source>Off</source>
         <translation>Spento</translation>
     </message>
@@ -21827,7 +21832,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="66"/>
         <source>Add instruments</source>
-        <translation>Aggiungi strumento</translation>
+        <translation>Aggiungi strumenti</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="69"/>
@@ -21838,22 +21843,22 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="85"/>
         <source>Move selected staves up</source>
-        <translation>Sposta i pentagrammi selezionati in alto</translation>
+        <translation>Sposta righi selezionati in alto</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="103"/>
         <source>Move selected staves down</source>
-        <translation>Sposta i pentagrammi selezionati in basso</translation>
+        <translation>Sposta righi selezionati in basso</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="121"/>
         <source>Remove selected staves</source>
-        <translation>Rimuovi i pentagrammi selezionati</translation>
+        <translation>Rimuovi righi selezionati</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="174"/>
         <source>Add selected instruments to score</source>
-        <translation>Aggiungi gli strumenti selezionati alla partitura</translation>
+        <translation>Aggiungi strumenti selezionati alla partitura</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="236"/>
@@ -21865,12 +21870,12 @@ nomi strumento estesi</translation>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="251"/>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="103"/>
         <source>Move selected instruments down</source>
-        <translation>Sposta gli strumenti selezionati in basso</translation>
+        <translation>Sposta strumenti selezionati in basso</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="121"/>
         <source>Remove selected instruments</source>
-        <translation>Rimuovi gli strumenti selezionati</translation>
+        <translation>Rimuovi strumenti selezionati</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="64"/>
@@ -21880,7 +21885,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="65"/>
         <source>Name on part score</source>
-        <translation>Nome sulla parte partitura</translation>
+        <translation>Nome sulla parte in partitura</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="86"/>
@@ -21905,7 +21910,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="119"/>
         <source>Remove selected instruments from score</source>
-        <translation>Rimuovi gli strumenti selezionati dalla partitura</translation>
+        <translation>Rimuovi strumenti selezionati dalla partitura</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="103"/>
@@ -21930,7 +21935,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="212"/>
         <source>Choose your instruments by adding them to this list</source>
-        <translation>Scegli i tuoi strumenti aggiungendoli a questo elenco</translation>
+        <translation>Scegli gli strumenti aggiungendoli a questo elenco</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="289"/>
@@ -21956,7 +21961,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="94"/>
         <source>Voices visible in the score</source>
-        <translation>Voci visibili nella partitura</translation>
+        <translation>Voci visibili in partitura</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="143"/>
@@ -21966,12 +21971,12 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="159"/>
         <source>Hide all measures that do not contain notation (cutaway)</source>
-        <translation>Nascondere tutte le battute che non contengono notazioni (cutaway</translation>
+        <translation>Nascondi tutte le battute che non contengono notazioni (cutaway)</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="176"/>
         <source>Create a linked staff</source>
-        <translation>Crea un pentagramma collegato</translation>
+        <translation>Crea rigo collegato</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="187"/>
@@ -21991,12 +21996,12 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentsettingsmodel.cpp" line="91"/>
         <source>This action can not be undone</source>
-        <translation>Questa azione non può essere annullata</translation>
+        <translation>Quest&apos;azione non può essere annullata</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentspanelcontextmenumodel.cpp" line="182"/>
         <source>Instrument ordering</source>
-        <translation>Ordine degli strumenti</translation>
+        <translation>Disposizione strumenti</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentspanelcontextmenumodel.cpp" line="192"/>
@@ -22011,7 +22016,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/instrumentsscene/view/staffcontroltreeitem.cpp" line="33"/>
         <source>Add staff</source>
-        <translation>Aggiungi pentagramma</translation>
+        <translation>Aggiungi rigo</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/stafftreeitem.cpp" line="63"/>
@@ -22023,25 +22028,25 @@ nomi strumento estesi</translation>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml" line="129"/>
         <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;, or use the keyboard shortcut %1.</source>
         <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Instruments panel (InstrumentsControlPanel.qml)</extracomment>
-        <translation>Non ci sono strumenti nella tua partitura. Per sceglierne alcuni, premi&lt;b&gt;Aggiungi&lt;/b&gt;, o usa la scorciatoia %1.</translation>
+        <translation>Non ci sono strumenti nella partitura. Per sceglierne alcuni, premi&lt;b&gt;Aggiungi&lt;/b&gt;, o usa la scorciatoia %1.</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml" line="132"/>
         <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;.</source>
         <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Instruments panel (InstrumentsControlPanel.qml)</extracomment>
-        <translation>Non ci sono strumenti nella tua partitura. Per sceglierne qualcuno, premi &lt;b&gt;Aggiungi&lt;/b&gt;.</translation>
+        <translation>Non ci sono strumenti nella partitura. Per sceglierne qualcuno, premi &lt;b&gt;Aggiungi&lt;/b&gt;.</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/instrumentsscene/view/instrumentspaneltreemodel.cpp" line="826"/>
         <source>Are you sure you want to delete the selected %n instrument(s)?</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation><numerusform>Sei sicuro di voler eliminare lo strumento selezionato?</numerusform><numerusform>ùSei sicuro di voler eliminare gli strumenti selezionati?</numerusform><numerusform>Sei sicuro di voler eliminare lo(gli) strumento(i) selezionato(i) (%n)?</numerusform></translation>
+        <translation><numerusform>Sei sicuro di voler eliminare lo strumento selezionato?</numerusform><numerusform>Sei sicuro di voler eliminare gli strumenti selezionati?</numerusform><numerusform>Sei sicuro di voler eliminare lo(gli) strumento(i) selezionato(i) (%n)?</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/instrumentsscene/view/instrumentspaneltreemodel.cpp" line="831"/>
         <source>This will remove the %n instrument(s) from the full score and all part scores.</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation><numerusform>Questo rimuove lo strumento dalla partitura completa e da tutte le parti.</numerusform><numerusform>Questo rimuove gli strumenti dalla partitura completa e da tutte le parti.</numerusform><numerusform>Questo rimuove lo(gli) strumento(i) %n dalla partitura completa e da tutte le parti.</numerusform></translation>
+        <translation><numerusform>Questo rimuove lo strumento dalla partitura completa e da tutte le parti.</numerusform><numerusform>Questo rimuove gli strumenti dalla partitura completa e da tutte le parti.</numerusform><numerusform>Questo rimuoverà lo(gli) strumento(i) %n dalla partitura completa e da tutte le parti.</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/instrumentsrepository.cpp" line="42"/>
@@ -22054,7 +22059,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="362"/>
         <source>Checking for updates…</source>
-        <translation>Controllo degli aggiornamenti...</translation>
+        <translation>Controllo aggiornamenti...</translation>
     </message>
     <message>
         <location filename="../../src/framework/languages/internal/languagesservice.cpp" line="416"/>
@@ -22079,7 +22084,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/framework/languages/languageserrors.h" line="53"/>
         <source>Error while downloading language</source>
-        <translation>Errore durante lo scaricamento della lingua</translation>
+        <translation>Errore durante il download della lingua</translation>
     </message>
     <message>
         <location filename="../../src/framework/languages/languageserrors.h" line="54"/>
@@ -22112,12 +22117,12 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/framework/learn/qml/Muse/Learn/internal/Playlist.qml" line="137"/>
         <source>Sorry, we are unable to load these videos right now</source>
-        <translation>Spiacenti, non siamo in grado di caricare questi video in questo momento</translation>
+        <translation>Spiacenti, non siamo in grado di caricare questi video al momento</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/qml/Muse/Learn/internal/Playlist.qml" line="142"/>
         <source>Please check your internet connection or try again later.</source>
-        <translation>Controlla la tua connessione a Internet o riprova più tardi.</translation>
+        <translation>Per favore controlla la connessione internet o prova ancora più tardi.</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/qml/Muse/Learn/LearnPage.qml" line="96"/>
@@ -22155,7 +22160,7 @@ nomi strumento estesi</translation>
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="82"/>
         <source>Creator, Mastering MuseScore</source>
-        <translation>Autore, Mastering MuseScore</translation>
+        <translation>Creatore, Mastering MuseScore</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="83"/>
@@ -22173,7 +22178,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="96"/>
         <source>Mastering MuseScore</source>
-        <translation>Padroneggiare MuseScore</translation>
+        <translation>Mastering MuseScore</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/learnerrors.h" line="45"/>
@@ -22250,12 +22255,12 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="85"/>
         <source>At start of score</source>
-        <translation>All&apos;inizio della partitura</translation>
+        <translation>A inizio partitura</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="86"/>
         <source>At end of score</source>
-        <translation>Alla fine della partitura</translation>
+        <translation>A fine partitura</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/EditGridSizeDialog.qml" line="54"/>
@@ -22296,7 +22301,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="37"/>
         <source>Beam distance</source>
-        <translation>Distanza gruppo</translation>
+        <translation>Distanza travatura</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="45"/>
@@ -22382,7 +22387,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="83"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="172"/>
         <source>Delete</source>
-        <translation>Cancella</translation>
+        <translation>Elimina</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="42"/>
@@ -22424,7 +22429,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
         <source>Voices visible on this staff</source>
-        <translation>Voci visibili su questo pentagramma</translation>
+        <translation>Voci visibili su questo rigo</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="55"/>
@@ -22468,7 +22473,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="126"/>
         <source>Zoom menu</source>
-        <translation>Menù zoom</translation>
+        <translation>Menu zoom</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="129"/>
@@ -22478,7 +22483,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="138"/>
         <source>List selection</source>
-        <translation>Selezione lista</translation>
+        <translation>Selezione elenco</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="183"/>
@@ -22488,108 +22493,108 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="203"/>
         <source>Staff %1</source>
-        <translation>Pentagramma %1</translation>
+        <translation>Rigo %1</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="863"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="693"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="695"/>
         <source>Note input mode</source>
         <translation>Modalità inserimento note</translation>
     </message>
     <message>
         <location filename="../../src/braille/internal/notationbraille.cpp" line="868"/>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="693"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="695"/>
         <source>Normal mode</source>
         <translation>Modalità normale</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="867"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="869"/>
         <source>Cannot create tuplet</source>
         <translation>Impossibile creare gruppo irregolare</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="867"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="869"/>
         <source>Note value is too short</source>
         <translation>Valore della nota troppo breve</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1297"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1299"/>
         <source>All Supported Files</source>
         <translation>Tutti i file supportati</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1298"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1300"/>
         <source>Scalable Vector Graphics</source>
-        <translation>Grafica vettoriale scalabile</translation>
+        <translation>Grafiche vettoriali scalabili</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1299"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1301"/>
         <source>JPEG</source>
         <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1300"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1302"/>
         <source>PNG Bitmap Graphic</source>
         <translation>PNG Bitmap Graphic</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1301"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1303"/>
         <source>Bitmap</source>
         <translation>Bitmap</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1302"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1304"/>
         <source>TIFF</source>
         <translation>TIFF</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1305"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1307"/>
         <source>Insert Image</source>
-        <translation>Inserisci immagine</translation>
+        <translation>Inserisci Immagine</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1655"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1657"/>
         <source>MuseScore style files</source>
         <translation>File di stile di MuseScore</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1656"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1658"/>
         <source>MuseScore style file</source>
         <translation>File di stile di MuseScore</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1659"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1661"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2344"/>
         <source>Load style</source>
         <translation>Carica stile</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1660"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1662"/>
         <source>Save style</source>
         <translation>Salva stile</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1670"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1672"/>
         <source>The style file could not be loaded.</source>
         <translation>Impossibile caricare il file di stile.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1675"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1677"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
-        <translation>Poiché questo file di stile proviene da una versione diversa di MuseScore Studio, non è garantito che la tua partitura venga visualizzata correttamente.</translation>
+        <translation>Poiché questo file di stile viene da una versione differente di MuseScore Studio, non è garantito che la tua partitura si visualizzi correttamente.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1677"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1679"/>
         <source>Click OK to load anyway.</source>
         <translation>Fare clic su OK per caricare comunque.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1691"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1693"/>
         <source>The style file could not be saved.</source>
         <translation>Impossibile salvare il file di stile.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1692"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1694"/>
         <source>An error occurred.</source>
         <translation>Si è verificato un errore.</translation>
     </message>
@@ -22636,12 +22641,12 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="242"/>
         <source>At start of score…</source>
-        <translation>All&apos;inizio della partitura...</translation>
+        <translation>A inizio partitura...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="243"/>
         <source>At end of score…</source>
-        <translation>Alla fine della partitura...</translation>
+        <translation>A fine partitura...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationswitchlistmodel.cpp" line="294"/>
@@ -22688,22 +22693,22 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="89"/>
         <source>D flat</source>
-        <translation>Re bemolle</translation>
+        <translation>RE bemolle</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="89"/>
         <source>D natural</source>
-        <translation>Re naturale</translation>
+        <translation>RE naturale</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="89"/>
         <source>D sharp</source>
-        <translation>Re diesis</translation>
+        <translation>RE diesis</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="90"/>
         <source>C flat</source>
-        <translation>Do bemolle</translation>
+        <translation>DO bemolle</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="90"/>
@@ -22733,7 +22738,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="92"/>
         <source>E flat</source>
-        <translation>Mi bemolle</translation>
+        <translation>MI bemolle</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="92"/>
@@ -22798,37 +22803,37 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="146"/>
         <source>D</source>
-        <translation>Re</translation>
+        <translation>RE</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="147"/>
         <source>C</source>
-        <translation>Do</translation>
+        <translation>DO</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="148"/>
         <source>B</source>
-        <translation>Si</translation>
+        <translation>SI</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="149"/>
         <source>E</source>
-        <translation>Mi</translation>
+        <translation>MI</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="150"/>
         <source>F</source>
-        <translation>Fa</translation>
+        <translation>FA</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="151"/>
         <source>G</source>
-        <translation>Sol</translation>
+        <translation>SOL</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="152"/>
         <source>A</source>
-        <translation>La</translation>
+        <translation>LA</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="271"/>
@@ -22919,7 +22924,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
         <translation>Vista</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1303"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1305"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="161"/>
         <source>All</source>
         <translation>Tutti</translation>
@@ -23061,82 +23066,82 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
         <translation>Anteprima:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="188"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="187"/>
         <source>Edit fret number text style</source>
-        <translation>Modifica stile del testo del numero di tasto</translation>
+        <translation>Modifica stile di testo del numero di tasto</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="200"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="198"/>
         <source>Dot size:</source>
         <translation>Dimensione del punto:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="207"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="205"/>
         <source>Barré</source>
         <translation>Barré</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="220"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="218"/>
         <source>Appearance:</source>
         <translation>Aspetto:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="227"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="225"/>
         <source>Line</source>
         <translation>Linea</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="228"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="226"/>
         <source>Slur</source>
         <translation>Legatura di portamento</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="256"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="254"/>
         <source>Line thickness:</source>
         <translation>Spessore della linea:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="263"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="261"/>
         <source>Show fingerings</source>
         <translation>Mostra diteggiature</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="270"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="267"/>
         <source>Edit fingering text style</source>
-        <translation>Modifica stile del testo diteggiatutìra</translation>
+        <translation>Modifica stile di testo della diteggiatura</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="284"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="280"/>
         <source>Fretboard style:</source>
         <translation>Stile della tastiera:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="291"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="287"/>
         <source>Trimmed</source>
         <translation>Rifinito</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="292"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="288"/>
         <source>Extended</source>
         <translation>Esteso</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="320"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="316"/>
         <source>String spacing:</source>
         <translation>Spaziatura delle corde:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="326"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="322"/>
         <source>Fret spacing:</source>
         <translation>Spaziatura del tasto:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="332"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="328"/>
         <source>Maximum shift above:</source>
         <translation>Massimo spostamento in alto:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="338"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="334"/>
         <source>Maximum shift below:</source>
         <translation>Massimo spostamento in basso:</translation>
     </message>
@@ -23188,24 +23193,24 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
         <translation>Barra degli strumenti personalizzata</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="519"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="520"/>
         <source>Insert &amp;after selection…</source>
         <translation>Inserisci &amp;dopo la selezione...</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="520"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="521"/>
         <source>Insert &amp;before selection…</source>
         <translation>Inserisci &amp;prima della selezione...</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="522"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="523"/>
         <source>Insert at &amp;start of score…</source>
-        <translation>Inserisci all&apos;&amp;inizio della partitura...</translation>
+        <translation>Inserisci a &amp;inizio partitura...</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="523"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="524"/>
         <source>Insert at &amp;end of score…</source>
-        <translation>Inserisci alla &amp;fine della partitura...</translation>
+        <translation>Inserisci a &amp;fine partitura...</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="49"/>
@@ -23222,7 +23227,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="58"/>
         <location filename="../../src/notation/notationerrors.h" line="53"/>
         <source>Please select a note and retry</source>
-        <translation>Seleziona una nota e riprova</translation>
+        <translation>Per favore seleziona una nota e riprova</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="61"/>
@@ -23270,7 +23275,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="77"/>
         <source>No staff selected</source>
-        <translation>Nessun pentagramma selezionato</translation>
+        <translation>Nessun rigo selezionato</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="78"/>
@@ -23287,18 +23292,18 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="82"/>
         <location filename="../../src/notation/notationerrors.h" line="61"/>
         <source>Please select a note or figured bass and retry</source>
-        <translation>Seleziona una nota o un basso continuo e riprova.</translation>
+        <translation>Per favore seleziona una nota o un basso continuo e riprova</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="85"/>
         <source>Cannot insert chord/rest in tuplet</source>
-        <translation>Impossibile inserire accordo/pausa nel gruppo irregolare </translation>
+        <translation>Impossibile inserire accordo/pausa nel gruppo irregolare</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="88"/>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="95"/>
         <source>Cannot split tuplet</source>
-        <translation>Non si può dividere un gruppo irregolare</translation>
+        <translation>Impossibile dividere gruppo irregolare</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="91"/>
@@ -23308,7 +23313,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="94"/>
         <source>Cannot split measure here</source>
-        <translation>Non è possibile dividere la battuta qui</translation>
+        <translation>Impossibile dividere la battuta qui</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="98"/>
@@ -23323,7 +23328,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="102"/>
         <source>Cannot split measure repeat</source>
-        <translation>Non è possibile dividere la ripetizione della battuta</translation>
+        <translation>Impossibile dividere la ripetizione della battuta</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="106"/>
@@ -23409,7 +23414,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="150"/>
         <source>This key signature cannot be deleted</source>
-        <translation>Questa armatura di chiave non può essere cancellata</translation>
+        <translation>Quest&apos;armatura di chiave non può essere eliminata</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="151"/>
@@ -23424,7 +23429,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="155"/>
         <source>Please remove the staff type change and retry.</source>
-        <translation>Rimuovi la modifica del tipo di pentagramma e riprova.</translation>
+        <translation>Rimuovi la modifica del tipo di rigo e riprova.</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="64"/>
@@ -23434,7 +23439,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/notationerrors.h" line="65"/>
         <source>Please select a measure and retry</source>
-        <translation>Seleziona una misura e riprova</translation>
+        <translation>Prego, seleziona una battuta e riprova</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="68"/>
@@ -23580,7 +23585,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="76"/>
         <source>Capo settings</source>
-        <translation>Impostazioni Capotasto</translation>
+        <translation>Impostazioni capotasto</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="82"/>
@@ -23710,7 +23715,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
         <location filename="../../src/notation/view/widgets/breaksdialog.cpp" line="43"/>
         <source>Break systems every %1 measures</source>
         <extracomment>`%1` will be replaced with a number input field. Text before it will appear before that number field, text after will appear after the field.</extracomment>
-        <translation>Interrompi le accollature ogni %1 battute</translation>
+        <translation>Interrompi sistemi ogni %1 battute</translation>
     </message>
 </context>
 <context>
@@ -23736,7 +23741,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="224"/>
         <source>&lt;b&gt;Always open&lt;/b&gt;&lt;br&gt;On tablature staves, fret positions other than ‘0’ cannot be entered on strings marked ‘always open’. Useful for instruments with strings that are not on the fretboard, such as the theorbo.</source>
-        <translation>&lt;b&gt;Sempre aperto&lt;/b&gt;&lt;br&gt;Sulle pentagrammi a tabulazione, le posizioni dei tasti diverse da &apos;0&apos; non possono essere inserite sulle corde contrassegnate come &apos;sempre aperte&apos;. Utile per strumenti con corde che non sono sul manico, come il tiorba.</translation>
+        <translation>&lt;b&gt;Sempre aperto&lt;/b&gt;&lt;br&gt;Sui righi di tablatura, le posizioni dei tasti diverse da &apos;0&apos; non possono essere inserite sulle corde contrassegnate come &apos;sempre aperte&apos;. Utile per strumenti con corde che non sono sul manico, come la tiorba.</translation>
     </message>
 </context>
 <context>
@@ -23807,7 +23812,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="778"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1271"/>
         <source>System</source>
-        <translation>Accollatura</translation>
+        <translation>Sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="781"/>
@@ -23964,7 +23969,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1306"/>
         <source>None</source>
         <comment>no frame for text</comment>
-        <translation>Nessuno</translation>
+        <translation>Nessuna</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1036"/>
@@ -23986,77 +23991,77 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1324"/>
         <source>Page number, except on first page</source>
-        <translation>numera pagine eccetto la prima</translation>
+        <translation>Numero di pagina, eccetto sulla prima</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1326"/>
         <source>Page number, if there is more than one page</source>
-        <translation>numero di pagina, se c&apos;è più di una pagina</translation>
+        <translation>Numero di pagina, se c&apos;è più di una pagina</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1328"/>
         <source>Page number, on all pages</source>
-        <translation>numero di pagina su tutte le pagine</translation>
+        <translation>Numero di pagina, su tutte le pagine</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1330"/>
         <source>Number of pages</source>
-        <translation>numero di pagine</translation>
+        <translation>Numero di pagine</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1332"/>
         <source>File name</source>
-        <translation>nome file</translation>
+        <translation>Nome del file</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1334"/>
         <source>File path+name</source>
-        <translation>percorso file+nome </translation>
+        <translation>Percorso file+nome </translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1336"/>
         <source>Part name, except on first page</source>
-        <translation>nome della parte, ad eccezione della prima pagina</translation>
+        <translation>Nome della parte, eccetto sulla prima pagina</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1338"/>
         <source>Part name, on all pages</source>
-        <translation>nome della parte, su tutte le pagine</translation>
+        <translation>Nome della parte, su tutte le pagine</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1340"/>
         <source>Current date</source>
-        <translation>data corrente</translation>
+        <translation>Data corrente</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1342"/>
         <source>Creation date</source>
-        <translation>data creazione</translation>
+        <translation>Data di creazione</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1344"/>
         <source>Last modification time</source>
-        <translation>ora dell&apos;ultima modifica</translation>
+        <translation>Ora dell&apos;ultima modifica</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1346"/>
         <source>Last modification date</source>
-        <translation>data dell&apos;ultima modifica</translation>
+        <translation>Data dell&apos;ultima modifica</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1348"/>
         <source>Copyright, on first page only</source>
-        <translation>copyright solo sulla prima pagina</translation>
+        <translation>Copyright, solo sulla prima pagina</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1350"/>
         <source>Copyright, on all pages</source>
-        <translation>copyright su tutte le pagine</translation>
+        <translation>Copyright, su tutte le pagine</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1352"/>
         <source>MuseScore Studio version this score was last saved with</source>
-        <translation>Versione di MuseScore Studio con cui questa partitura è stata salvata per l&apos;ultima volta</translation>
+        <translation>Versione di MuseScore Studio con cui questa partitura è stata salvata l&apos;ultima volta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1354"/>
@@ -24066,12 +24071,12 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1356"/>
         <source>The $ sign itself</source>
-        <translation>il $ indica se stesso</translation>
+        <translation>Il segno $ indica se stesso</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1358"/>
         <source>Metadata tag, see below</source>
-        <translation>etichetta meta dati, vedere sotto</translation>
+        <translation>Etichetta meta dati, vedere sotto</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1360"/>
@@ -24120,12 +24125,12 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="56"/>
         <source>System text properties</source>
-        <translation>Proprietà testo di accollatura</translation>
+        <translation>Proprietà testo di sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="58"/>
         <source>Staff text properties</source>
-        <translation>Proprietà testo di pentagramma</translation>
+        <translation>Proprietà testo di rigo</translation>
     </message>
 </context>
 <context>
@@ -24163,14 +24168,14 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="606"/>
         <source>Show instrument in score</source>
-        <translation>Mostra lo strumento in partitura</translation>
+        <translation>Mostra strumento in partitura</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="768"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1174"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="2535"/>
         <source>Tempo</source>
-        <translation>Metronomo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="769"/>
@@ -24274,7 +24279,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="85"/>
         <source>All palettes were added</source>
-        <translation>Sono state aggiunte tutte le tavolozze</translation>
+        <translation>Tutte le tavolozze sono state aggiunte </translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="134"/>
@@ -24284,7 +24289,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="160"/>
         <source>%1 added</source>
-        <translation>%1 aggiunto</translation>
+        <translation>%1 aggiunta</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="161"/>
@@ -24294,7 +24299,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="56"/>
         <source>Name your custom palette</source>
-        <translation>Dai un nome alla tua tavolozza personalizzata</translation>
+        <translation>Dai un nome alla tavolozza personalizzata</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="99"/>
@@ -24314,7 +24319,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/MoreElementsPopup.qml" line="302"/>
         <source>Drag items to the palette or directly on your score</source>
-        <translation>Trascina gli elementi nella tavolozza o direttamente nella tua partitura</translation>
+        <translation>Trascina gli elementi nella tavolozza o direttamente in partitura</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="138"/>
@@ -24336,7 +24341,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="618"/>
         <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1114"/>
         <source>Delete</source>
-        <translation>Cancella</translation>
+        <translation>Elimina</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="619"/>
@@ -24369,7 +24374,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="158"/>
         <source>Hide/Delete palette</source>
-        <translation>Nascondi/Cancella tavolozza</translation>
+        <translation>Nascondi/Elimina tavolozza</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="159"/>
@@ -24416,7 +24421,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="68"/>
         <source>Content offset</source>
-        <translation>Offset contenuto</translation>
+        <translation>Offset del contenuto</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="84"/>
@@ -24431,7 +24436,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="101"/>
         <source>Content scale</source>
-        <translation>Dimensioni contenuto:</translation>
+        <translation>Dimensioni del contenuto</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="145"/>
@@ -24457,7 +24462,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="91"/>
         <source>Height</source>
-        <translation>Ampiezza</translation>
+        <translation>Altezza</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="98"/>
@@ -24477,12 +24482,12 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="111"/>
         <source>Start typing to search all palettes</source>
-        <translation>Inizia a digitare per cercare tutte le tavolozze</translation>
+        <translation>Inizia a digitare per cercare tra tutte le tavolozze</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="214"/>
         <source>Beam properties</source>
-        <translation>Proprietà gruppo note</translation>
+        <translation>Proprietà travatura</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="235"/>
@@ -24490,817 +24495,813 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
         <translation>Dinamiche</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="260"/>
         <source>Crescendo line</source>
         <translation>Linea crescendo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="261"/>
         <source>Diminuendo line</source>
         <translation>Linea diminuendo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="262"/>
         <source>Crescendo hairpin</source>
         <translation>Forcella crescendo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="263"/>
         <source>Diminuendo hairpin</source>
         <translation>Forcella diminuendo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1160"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1162"/>
         <source>Dynamic + hairpin</source>
         <translation>Dinamica + forcella</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="283"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="284"/>
         <location filename="../../src/palette/view/widgets/keyedit.cpp" line="309"/>
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="168"/>
         <source>Key signatures</source>
-        <translation>Armatura di chiave</translation>
+        <translation>Armature di chiave</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="318"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="319"/>
         <source>Accidentals</source>
         <translation>Alterazioni</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="348"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="349"/>
         <source>Barlines</source>
         <translation>Stanghette</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="385"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="386"/>
         <source>Repeats &amp; jumps</source>
-        <translation>Salti e Ripetizioni</translation>
+        <translation>Salti &amp; ripetizioni</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="481"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1169"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="482"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1171"/>
         <source>Prima volta</source>
         <translation>Prima volta</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="490"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1198"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="491"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1200"/>
         <source>Seconda volta, open</source>
         <translation>Seconda volta, aperta</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="499"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1179"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="500"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1181"/>
         <source>Seconda volta</source>
         <translation>Seconda volta</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="508"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1188"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="509"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1190"/>
         <source>Terza volta</source>
         <translation>Terza volta</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="529"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="530"/>
         <source>Layout</source>
         <extracomment>The name of a palette</extracomment>
-        <translation>Impaginazione</translation>
+        <translation>Layout</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="584"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="585"/>
         <source>Fingering %1</source>
         <translation>Diteggiatura %1</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="592"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1833"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="593"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1835"/>
         <source>RH guitar fingering %1</source>
         <translation>Diteggiatura chitarra mano destra %1</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="600"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1841"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="601"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1843"/>
         <source>LH guitar fingering %1</source>
         <translation>Diteggiatura chitarra mano sinistra %1</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="607"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1848"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="608"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1850"/>
         <source>String number %1</source>
         <translation>Numero corda %1</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="630"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="631"/>
         <source>Tremolos</source>
         <translation>Tremoli</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="665"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="666"/>
         <source>Noteheads</source>
         <translation>Testa nota</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="690"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="691"/>
         <source>Articulations</source>
         <translation>Articolazioni</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="695"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1137"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="696"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1138"/>
         <source>Slur</source>
         <translation>Legatura di portamento</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="773"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1801"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="774"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1803"/>
         <source>Tremolo bar</source>
         <translation>Barra del tremolo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="782"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="783"/>
         <source>Ornaments</source>
         <translation>Abbellimenti</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="846"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="847"/>
         <source>Accordion</source>
         <extracomment>The name of a palette</extracomment>
         <translation>Fisarmonica</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="925"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="926"/>
         <source>Brackets</source>
         <translation>Parentesi</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="932"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="933"/>
         <source>Bracket</source>
         <translation>Parentesi</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="933"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="934"/>
         <source>Brace</source>
         <translation>Parentesi graffa</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="934"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="935"/>
         <source>Square</source>
         <translation>Quadre</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="935"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1313"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="936"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1315"/>
         <source>Line</source>
         <translation>Linea</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="956"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="957"/>
         <source>Breaths &amp; pauses</source>
-        <translation>Respiri &amp; Cesure</translation>
+        <translation>Respiri &amp; cesure</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1055"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1056"/>
         <source>Clefs</source>
         <translation>Chiavi</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1088"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1089"/>
         <source>Grace notes</source>
         <translation>Note di abbellimento</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1108"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1109"/>
         <source>Bagpipe embellishments</source>
         <translation>Abbellimenti cornamusa</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1128"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1129"/>
         <source>Lines</source>
         <translation>Linee</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1227"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1909"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1229"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1911"/>
         <source>Pedal (with ped and line)</source>
         <translation>Pedale (con ped e linea)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1235"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1901"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1237"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1903"/>
         <source>Pedal (with ped and asterisk)</source>
         <translation>Pedale (con ped e asterisco)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1244"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1918"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1246"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1920"/>
         <source>Pedal (straight hooks)</source>
         <translation>Pedale (uncini diritti)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1254"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1927"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1256"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1929"/>
         <source>Pedal (angled end hook)</source>
         <translation>Pedale (uncino finale inclinato)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1263"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1936"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1265"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1938"/>
         <source>Pedal (both hooks angled)</source>
         <translation>Pedale (entrambi uncini inclinati)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1272"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1945"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1274"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1947"/>
         <source>Pedal (angled start hook)</source>
         <translation>Pedale (uncino iniziale inclinato)</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1307"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1309"/>
         <source>Text line</source>
         <translation>Linea testo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1787"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1789"/>
         <source>Barré line</source>
         <translation>Linea barré</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="146"/>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="148"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1815"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1816"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1817"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1818"/>
         <source>Capo</source>
         <translation>Capotasto</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="156"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1821"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1823"/>
         <source>String tunings</source>
         <translation>Accordature per archi</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1997"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1999"/>
         <source>Harp pedal diagram</source>
         <translation>Schema pedale dell&apos;arpa</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="2002"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="2004"/>
         <source>Harp pedal text diagram</source>
         <translation>Testo schema pedale dell&apos;arpa</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1294"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1524"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1296"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1526"/>
         <source>Staff text line</source>
-        <translation>Linea testo di pentagramma</translation>
+        <translation>Linea testo di rigo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="574"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="575"/>
         <source>Fingerings</source>
         <translation>Diteggiature</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1003"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1004"/>
         <source>Arpeggios &amp; glissandos</source>
         <translation>Arpeggi &amp; glissando</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1300"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1534"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1302"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1536"/>
         <source>System text line</source>
-        <translation>Linea testo di accollatura</translation>
+        <translation>Linea testo di sistema</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1316"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1984"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1318"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1986"/>
         <source>Ambitus</source>
         <translation>Ambitus</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1320"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1795"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1322"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1797"/>
         <source>Let ring</source>
         <translation>Lascia suonare</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1340"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1791"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1342"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1793"/>
         <source>Palm mute</source>
         <translation>Silenziamento col palmo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1348"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1350"/>
         <source>Tempo</source>
-        <translation>Metronomo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1369"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1371"/>
         <source>Half note = 80 BPM</source>
-        <translation>Metà = 80 BPM</translation>
+        <translation>Minima = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1372"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1374"/>
         <source>Quarter note = 80 BPM</source>
-        <translation>Quarto = 80 BPM</translation>
+        <translation>Semiminima = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1375"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1377"/>
         <source>Eighth note = 80 BPM</source>
-        <translation>Ottavo = 80 BPM</translation>
+        <translation>Croma = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1378"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1380"/>
         <source>Dotted half note = 80 BPM</source>
-        <translation>Metà puntata = 80 BPM</translation>
+        <translation>Minima puntata = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1381"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1383"/>
         <source>Dotted quarter note = 80 BPM</source>
-        <translation>Quarto puntata = 80 BPM</translation>
+        <translation>Seminima puntata = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1384"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1386"/>
         <source>Dotted eighth note = 80 BPM</source>
-        <translation>Ottavo puntata = 80 BPM</translation>
+        <translation>Croma puntata = 80 BPM</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1402"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1404"/>
         <source>Metric modulation: quarter note = dotted quarter note</source>
-        <translation>Modulazione metrica: semiminima  = semiminima puntata</translation>
+        <translation>Modulazione metrica: semiminima = semiminima puntata</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1405"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1407"/>
         <source>Metric modulation: dotted quarter note = quarter note</source>
         <translation>Modulazione metrica: semiminima puntata = semiminima </translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1408"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1410"/>
         <source>Metric modulation: half note = quarter note</source>
         <translation>Modulazione metrica: minima = semiminima </translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1411"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1413"/>
         <source>Metric modulation: quarter note = half note</source>
         <translation>Modulazione metrica: semiminima = minima </translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1414"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1416"/>
         <source>Metric modulation: eighth note = eighth note</source>
         <translation>Modulazione metrica: croma = croma </translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1417"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1419"/>
         <source>Metric modulation: quarter note = quarter note</source>
         <translation>Modulazione metrica: semiminima = semiminima </translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1420"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1422"/>
         <source>Metric modulation: dotted eighth note = quarter note</source>
         <translation>Modulazione metrica: croma puntata = semiminima </translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1441"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1448"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1443"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1450"/>
         <source>accel.</source>
         <translation>accel.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1442"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1449"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1444"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1451"/>
         <source>allarg.</source>
         <translation>allarg.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1443"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1454"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1445"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1456"/>
         <source>rall.</source>
         <translation>rall.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1444"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1455"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1446"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1457"/>
         <source>rit.</source>
         <translation>rit.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1450"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1452"/>
         <source>calando</source>
         <translation>calando</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1451"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1453"/>
         <source>lentando</source>
         <translation>lentando</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1452"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1454"/>
         <source>morendo</source>
         <translation>morendo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1453"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1455"/>
         <source>precipitando</source>
         <translation>precipitando</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1456"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1458"/>
         <source>smorz.</source>
         <translation>smorz.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1457"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1459"/>
         <source>sost.</source>
         <translation>sost.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1458"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1460"/>
         <source>string.</source>
-        <translation>corda.</translation>
+        <translation>string.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1470"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1472"/>
         <source>a tempo</source>
         <translation>a tempo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1477"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1479"/>
         <source>tempo primo</source>
         <translation>tempo primo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1486"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1488"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1490"/>
         <source>Swing</source>
         <translation>Swing</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1495"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1501"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1497"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1503"/>
         <source>Straight</source>
         <extracomment>System text to switch from swing rhythm back to straight rhythm</extracomment>
         <translation>Preciso</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1510"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1512"/>
         <source>Text</source>
         <translation>Testo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1516"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1517"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1518"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1519"/>
         <source>Staff text</source>
         <translation>Testo di rigo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1527"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1528"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1529"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1530"/>
         <source>System text</source>
-        <translation>Testo di accollatura</translation>
+        <translation>Testo di sistema</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1540"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1542"/>
         <source>Expression text</source>
-        <translation>Espressione Testo</translation>
+        <translation>Testo di espressione</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1543"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1545"/>
         <source>Change instr.</source>
         <translation>Cambia strum.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1544"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1546"/>
         <source>Instrument change</source>
         <translation>Cambio strumento</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1548"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1550"/>
         <source>Rehearsal mark</source>
         <translation>Numero di chiamata</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1551"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1553"/>
         <source>legato</source>
         <translation>legato</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1553"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1555"/>
         <source>Legato</source>
         <translation>Legato</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1556"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1558"/>
         <source>pizz.</source>
         <translation>pizz.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1558"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1560"/>
         <source>Pizzicato</source>
         <translation>Pizzicato</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1561"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1563"/>
         <source>arco</source>
         <translation>arco</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1563"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1565"/>
         <source>Arco</source>
         <translation>Arco</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1567"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1569"/>
         <source>tremolo</source>
         <translation>tremolo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1569"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1571"/>
         <source>Tremolo</source>
         <translation>Tremolo</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1573"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1575"/>
         <source>mute</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
-        <translation>Sordino</translation>
+        <translation>sordino</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1576"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1578"/>
         <source>Mute</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation>Muto</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1580"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1582"/>
         <source>open</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation>aperta</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1583"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1585"/>
         <source>Open</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
         <translation>Vuota</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1586"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1869"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1588"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1871"/>
         <source>distort</source>
         <translation>distor</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1588"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1590"/>
         <source>Distortion</source>
         <translation>Distorsione</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1591"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1870"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1593"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1872"/>
         <source>overdrive</source>
         <translation>sovramodulazione</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1593"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1595"/>
         <source>Overdrive</source>
         <translation>Overdrive</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1596"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1871"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1598"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1873"/>
         <source>harmonics</source>
         <translation>armonici</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1598"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1600"/>
         <source>Harmonics</source>
         <translation>Armonici</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1601"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1872"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1603"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1874"/>
         <source>jazz tone</source>
         <translation>tono jazzistico</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1603"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1605"/>
         <source>Jazz tone</source>
-        <translation>tono jazzistico</translation>
+        <translation>Tono jazzistico</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1606"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1873"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1608"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1875"/>
         <source>normal</source>
         <translation>normale</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1608"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1610"/>
         <source>Normal</source>
         <translation>Normale</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1617"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1618"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1619"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1620"/>
         <source>Measure number</source>
-        <translation>Numero battuta</translation>
+        <translation>Numero di battuta</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1621"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1623"/>
         <source>détaché</source>
         <translation>détaché</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1623"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1625"/>
         <source>Détaché</source>
         <translation>Détaché</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1626"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1628"/>
         <source>martelé</source>
         <translation>martellato</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1628"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1630"/>
         <source>Martelé</source>
         <translation>Martellato</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1638"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1640"/>
         <source>Sul ponticello</source>
         <translation>Sul ponticello</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1643"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1645"/>
         <source>Sul tasto</source>
         <translation>Sul tasto</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1734"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1736"/>
         <source>C</source>
         <translation>Do</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1735"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1737"/>
         <source>Cm</source>
         <translation>Dom</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1736"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1738"/>
         <source>C7</source>
         <translation>C7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1738"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1740"/>
         <source>D</source>
         <translation>Re</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1739"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1741"/>
         <source>Dm</source>
         <translation>Rem</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1740"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1742"/>
         <source>D7</source>
         <translation>Re7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1742"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1744"/>
         <source>E</source>
         <translation>Mi</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1743"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1745"/>
         <source>Em</source>
         <translation>Mim</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1744"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1746"/>
         <source>E7</source>
         <translation>Mi7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1746"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1748"/>
         <source>F</source>
         <translation>Fa</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1747"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1749"/>
         <source>Fm</source>
         <translation>Fam</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1748"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1750"/>
         <source>F7</source>
         <translation>Fa7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1750"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1752"/>
         <source>G</source>
         <translation>Sol</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1751"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1753"/>
         <source>Gm</source>
         <translation>Solm</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1752"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1754"/>
         <source>G7</source>
         <translation>Sol7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1754"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1756"/>
         <source>A</source>
         <translation>La</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1755"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1757"/>
         <source>Am</source>
         <translation>Lam</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1756"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1758"/>
         <source>A7</source>
         <translation>La7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1758"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1760"/>
         <source>B</source>
         <translation>Si</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1759"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1761"/>
         <source>Bm</source>
         <translation>Sim</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1760"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1762"/>
         <source>B7</source>
         <translation>Si7</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1991"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1993"/>
         <source>Harp</source>
         <translation>Arpa</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1631"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1633"/>
         <source>col legno</source>
         <translation>col legno</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1538"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1540"/>
         <source>expression</source>
         <translation>espressione</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1633"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1635"/>
         <source>Col legno</source>
         <translation>Col legno</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1636"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1638"/>
         <source>sul pont.</source>
         <translation>sul pont.</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1641"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1643"/>
         <source>sul tasto</source>
         <translation>sul tasto</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1646"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1648"/>
         <source>vibrato</source>
         <translation>vibrato</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1648"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1650"/>
         <source>Vibrato</source>
         <translation>Vibrato</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1664"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1666"/>
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="169"/>
         <location filename="../../src/palette/view/widgets/timedialog.cpp" line="44"/>
         <source>Time signatures</source>
         <translation>Indicazioni metriche</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1722"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1724"/>
         <source>Fretboard diagrams</source>
         <translation>Diagrammi chitarra</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1775"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1777"/>
         <source>Guitar</source>
         <translation>Chitarra</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1889"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1891"/>
         <source>Keyboard</source>
         <translation>Tastiera</translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1954"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1956"/>
         <source>Pitch</source>
         <extracomment>The name of a palette</extracomment>
         <translation>Altezza nota</translation>
@@ -25328,42 +25329,42 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="338"/>
         <source>Delete permanently</source>
-        <translation>Cancella permanentemente</translation>
+        <translation>Elimina definitivamente</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="375"/>
         <source>Do you want to hide this custom palette cell or permanently delete it?</source>
-        <translation>Vuoi nascondere questa cella della tavolozza personalizzata o cancellarla definitivamente?</translation>
+        <translation>Vuoi nascondere questa cella della tavolozza personalizzata o eliminarla definitivamente?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="376"/>
         <source>Do you want to hide these custom palette cells or permanently delete them?</source>
-        <translation>Vuoi nascondere queste celle della tavolozza personalizzata o cancellarle definitivamente?</translation>
+        <translation>Vuoi nascondere queste celle della tavolozza personalizzata o eliminarle definitivamente?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="382"/>
         <source>Do you want to permanently delete this custom palette cell?</source>
-        <translation>Vuoi cancellare definitivamente questa cella della tavolozza personalizzata?</translation>
+        <translation>Vuoi eliminare definitivamente questa cella della tavolozza personalizzata?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="383"/>
         <source>Do you want to permanently delete these custom palette cells?</source>
-        <translation>Vuoi cancellare definitivamente queste celle della tavolozza personalizzata?</translation>
+        <translation>Vuoi eliminare definitivamente queste celle della tavolozza personalizzata?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="399"/>
         <source>Do you want to hide this custom palette or permanently delete it?</source>
-        <translation>Vuoi nascondere questa tavolozza personalizzata o cancellarla definitivamente?</translation>
+        <translation>Vuoi nascondere questa tavolozza personalizzata o eliminarla definitivamente?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="400"/>
         <source>Do you want to hide these custom palettes or permanently delete them?</source>
-        <translation>Vuoi nascondere queste tavolozze personalizzate o cancellarle definitivamente?</translation>
+        <translation>Vuoi nascondere queste tavolozze personalizzate o eliminarle definitivamente?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="818"/>
         <source>Do you want to permanently delete this custom palette?</source>
-        <translation>Vuoi cancellare definitivamente questa tavolozza personalizzata?</translation>
+        <translation>Vuoi eliminare definitivamente questa tavolozza personalizzata?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="839"/>
@@ -25395,7 +25396,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="637"/>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="686"/>
         <source>MuseScore drumset file</source>
-        <translation>MuseScore File set percussioni</translation>
+        <translation>MuseScore file set percussioni</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="639"/>
@@ -25455,12 +25456,12 @@ fallita: %2</translation>
     <message>
         <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1132"/>
         <source>Delete palette cell</source>
-        <translation>Cancella cella tavolozza</translation>
+        <translation>Elimina cella della tavolozza</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1133"/>
         <source>Are you sure you want to delete palette cell “%1”?</source>
-        <translation>Sei sicuro di voler cancellare la cella della tavolozza &quot;%1&quot;?</translation>
+        <translation>Sei sicuro di voler eliminare la cella della tavolozza &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="436"/>
@@ -25470,7 +25471,7 @@ fallita: %2</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="456"/>
         <source>Musical symbols</source>
-        <translation>Simboli Musicali</translation>
+        <translation>Simboli musicali</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="479"/>
@@ -25501,7 +25502,7 @@ fallita: %2</translation>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PalettesPanelHeader.qml" line="160"/>
         <source>Search palettes</source>
-        <translation>Ricerca tavolozze</translation>
+        <translation>Cerca tavolozze</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palette.cpp" line="545"/>
@@ -26414,7 +26415,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="277"/>
         <source>Old Persian</source>
-        <translation>Old Persian</translation>
+        <translation>Persiano antico</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="278"/>
@@ -26539,12 +26540,12 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="302"/>
         <source>Old Turkic</source>
-        <translation>Antico turco</translation>
+        <translation>Turco antico</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="303"/>
         <source>Old Hungarian</source>
-        <translation>Antico ungherese</translation>
+        <translation>Ungherese antico</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="304"/>
@@ -26564,7 +26565,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="307"/>
         <source>Old Sogdian</source>
-        <translation>Antico Sogdiano</translation>
+        <translation>Sogdiano antico </translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="308"/>
@@ -26854,7 +26855,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="365"/>
         <source>Byzantine Musical Symbols</source>
-        <translation>Simboli musicali bizantini</translation>
+        <translation>Simboli Musicali Bizantini</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="366"/>
@@ -26864,7 +26865,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="367"/>
         <source>Ancient Greek Musical Notation</source>
-        <translation>Notazione musicale greco antico</translation>
+        <translation>Notazione musicale greco antica</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="368"/>
@@ -27058,7 +27059,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioResourceControl.qml" line="263"/>
         <source>Menu</source>
-        <translation>Menù</translation>
+        <translation>Menu</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerBalanceSection.qml" line="31"/>
@@ -27118,19 +27119,19 @@ non riuscita.</translation>
         <translation>Aux %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="884"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="888"/>
         <source>Metronome</source>
         <translation>Metronomo</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="894"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="898"/>
         <source>Chords</source>
         <translation>Accordi</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1216"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1220"/>
         <source>Loading audio samples</source>
-        <translation>Caricamento dei campioni audio</translation>
+        <translation>Caricamento campioni audio</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/outputresourceitem.cpp" line="15"/>
@@ -27140,7 +27141,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="44"/>
         <source>Labels</source>
-        <translation>Etichetta</translation>
+        <translation>Etichette</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="49"/>
@@ -27206,12 +27207,12 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="679"/>
         <source>Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation>Le bandierine del suono di questo strumento possono essere azzerate, ma il testo del pentagramma rimane. Questa azione non può essere annullata.</translation>
+        <translation>Le bandierine sonore di questo strumento possono essere azzerate, ma il testo del rigo rimarrà. Quest&apos;azione non può essere annullata.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/TempoSlider.qml" line="45"/>
         <source>Tempo</source>
-        <translation>Metronomo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="33"/>
@@ -27226,7 +27227,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="100"/>
         <source>Active</source>
-        <translation>è attivo</translation>
+        <translation>Attivo</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="101"/>
@@ -27241,7 +27242,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="201"/>
         <source>Set as default for new scores</source>
-        <translation>Imposta come predefinito per nuovi spartiti</translation>
+        <translation>Imposta come predefinito per nuove partiture</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="237"/>
@@ -27266,7 +27267,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="98"/>
         <source>Sound flag options are not available for this sound.</source>
-        <translation>Le opzioni delle bandierine non sono disponibili per questo suono.</translation>
+        <translation>Le opzioni delle bandierine sonore non sono disponibili per questo suono.</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="74"/>
@@ -27281,12 +27282,12 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="296"/>
         <source>Allow multiple selection</source>
-        <translation>Consenti la selezione multipla</translation>
+        <translation>Consenti selezione multipla</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="309"/>
         <source>Apply selection to all staves</source>
-        <translation>Applica la selezione a tutti i pentagrammi</translation>
+        <translation>Applica selezione a tutti i pentagrammi</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="393"/>
@@ -27296,12 +27297,12 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="90"/>
         <source>Sound flag settings</source>
-        <translation>Impostazioni delle bandierine del suono</translation>
+        <translation>Impostazioni bandierine sonore</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="137"/>
         <source>Sound flag menu</source>
-        <translation>Menù delle bandierine del suono</translation>
+        <translation>Menu bandierine sonore</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="154"/>
@@ -27316,7 +27317,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="158"/>
         <source>Sound flags may be reset, but staff text will remain. This action can’t be undone.</source>
-        <translation>Le bandierine dei suoni possono essere ripristinate, ma il testo del pentagramma rimane. Questa azione non può essere annullata.</translation>
+        <translation>Le bandierine sonore possono essere ripristinate, ma il testo del rigo rimane. Questa azione non può essere annullata.</translation>
     </message>
 </context>
 <context>
@@ -27366,13 +27367,13 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="154"/>
         <source>New &amp; recent</source>
-        <translation>Nuovo e recente</translation>
+        <translation>Nuove &amp; recenti</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="88"/>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="95"/>
         <source>Scores</source>
-        <translation>Spartiti</translation>
+        <translation>Partiture</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="108"/>
@@ -27407,13 +27408,13 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="202"/>
         <source>List view</source>
-        <translation>vista elenco</translation>
+        <translation>Vista elenco</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="322"/>
         <source>Scores actions</source>
         <extracomment>accessibility name for the panel at the bottom of the &quot;Scores&quot; page</extracomment>
-        <translation>Azioni Partiture</translation>
+        <translation>Azioni partiture</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="335"/>
@@ -27423,7 +27424,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="354"/>
         <source>New</source>
-        <translation>Singola</translation>
+        <translation>Nuova</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="366"/>
@@ -27459,12 +27460,12 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1698"/>
         <source>File “%1” is corrupted and cannot be opened</source>
-        <translation>Il file &quot;%1&quot; è corrotto e non può essere aperto.</translation>
+        <translation>Il file &quot;%1&quot; è corrotto e non può essere aperto</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1699"/>
         <source>Get help for this issue on musescore.org.</source>
-        <translation>Per avere aiuto per questo problema, visita il sito musescore.org.</translation>
+        <translation>Chiedi aiuto per questo problema su musescore.org.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1554"/>
@@ -27476,7 +27477,7 @@ non riuscita.</translation>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1469"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1551"/>
         <source>Your score cannot be uploaded to the cloud</source>
-        <translation>Il punteggio non può essere caricato nel cloud</translation>
+        <translation> La partitura non può essere caricata nel cloud</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1470"/>
@@ -27497,7 +27498,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1503"/>
         <source>This score has become corrupted and contains errors</source>
-        <translation>Questo spartito si è corrotto e contiene errori.</translation>
+        <translation>Questa partitura si è corrotta e contiene errori.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1504"/>
@@ -27608,7 +27609,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1790"/>
         <source>Overture / Score Writer files (experimental)</source>
-        <translation>Overture / File scrittura spartiti (sperimentale)</translation>
+        <translation>File Overture / Score Writer (sperimentale)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1791"/>
@@ -27628,7 +27629,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1794"/>
         <source>MEI files</source>
-        <translation>file MEI</translation>
+        <translation>File MEI</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1795"/>
@@ -27658,7 +27659,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="48"/>
         <source>Work title</source>
-        <translation>Titolo lavoro</translation>
+        <translation>Titolo del lavoro</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="51"/>
@@ -27668,7 +27669,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="58"/>
         <source>Creation date</source>
-        <translation>data creazione</translation>
+        <translation>Data di creazione</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="53"/>
@@ -27683,12 +27684,12 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="56"/>
         <source>Movement title</source>
-        <translation>Titolo del Movimento</translation>
+        <translation>Titolo del movimento</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="57"/>
         <source>Movement number</source>
-        <translation>Numero del Movimento</translation>
+        <translation>Numero del movimento</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="59"/>
@@ -27708,7 +27709,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="79"/>
         <source>Scores list</source>
-        <translation>lista delle partiture</translation>
+        <translation>Elenco partiture</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="34"/>
@@ -27745,7 +27746,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="162"/>
         <source>Publish your finished scores on MuseScore.com</source>
-        <translation>Pubblica il tuo spartito finito su MuseScore.com</translation>
+        <translation>Pubblica le tue partiture finite su MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="187"/>
@@ -27755,7 +27756,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="188"/>
         <source>Gain followers and receive score comments and ratings</source>
-        <translation>Guadagna followers e ricevi voti e commenti ai tuoi spartiti</translation>
+        <translation>Guadagna followers e ricevi voti e commenti alle tue partiture</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="189"/>
@@ -27780,12 +27781,12 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoreIndicatorButton.qml" line="43"/>
         <source>Stop download</source>
-        <translation>Interrompi il download</translation>
+        <translation>Interrompi download</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoreIndicatorButton.qml" line="43"/>
         <source>Download score</source>
-        <translation>Scarica la partitura</translation>
+        <translation>Scarica partitura</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="130"/>
@@ -27842,7 +27843,7 @@ non riuscita.</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="104"/>
         <source>Modified</source>
         <extracomment>Stands for &quot;Last time that this score was modified&quot;. Used as the header of this column in the scores list.</extracomment>
-        <translation>Modificato</translation>
+        <translation>Modificata</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="234"/>
@@ -27912,7 +27913,7 @@ non riuscita.</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="468"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="598"/>
         <source>Please try again later, or get help for this problem on musescore.org.</source>
-        <translation>Riprova più tardi o cerca aiuto per questo problema su musescore.org.</translation>
+        <translation>Per favore prova ancora più tardi, o cerca aiuto per questo problema su musescore.org.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="484"/>
@@ -27923,7 +27924,7 @@ non riuscita.</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="487"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="553"/>
         <source>Your musescore.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
-        <translation>Il tuo account musescore.com deve essere prima verificato. Attiva l&apos;account tramite il link contenuto nell&apos;e-mail di conferma.</translation>
+        <translation>Il tuo account musescore.com deve essere prima verificato. Per favore attiva l&apos;account tramite il link contenuto nell&apos;email di attivazione.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="491"/>
@@ -27933,7 +27934,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="495"/>
         <source>The score could not be found, or cannot be accessed by your account.</source>
-        <translation>La partitura non è stata trovata o non è possibile accedere al tuo account.</translation>
+        <translation>La partitura non è stata trovata, o non è possibile accedere al tuo account.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="508"/>
@@ -27944,7 +27945,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="512"/>
         <source>Please try again later.</source>
-        <translation>Riprova più tardi.</translation>
+        <translation>Per favore prova ancora più tardi.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="117"/>
@@ -27954,12 +27955,12 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="126"/>
         <source>Share your score’s audio with millions of listeners on this free streaming platform</source>
-        <translation>Condividi l&apos;audio della tua colonna sonora con milioni di ascoltatori su questa piattaforma di streaming gratuita.</translation>
+        <translation>Condividi l&apos;audio della tua partitura con milioni di ascoltatori su questa piattaforma di streaming gratuita</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
         <source>You can change this setting in Preferences at any time.</source>
-        <translation>Puoi modificare questa impostazione in Preferenze in qualsiasi momento.</translation>
+        <translation>Puoi cambiare questa impostazione in Preferenze in qualsiasi momento.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="165"/>
@@ -27978,7 +27979,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="67"/>
         <source>Select parts to export</source>
-        <translation>Seleziona le parti da esportare</translation>
+        <translation>Seleziona parti da esportare</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="95"/>
@@ -28186,7 +28187,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="76"/>
         <source>MP3 audio</source>
-        <translation>MP3 Audio</translation>
+        <translation>Audio MP3</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="77"/>
@@ -28216,7 +28217,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="88"/>
         <source>FLAC audio</source>
-        <translation>FLAC Audio</translation>
+        <translation>Audio FLAC </translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="89"/>
@@ -28247,7 +28248,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="102"/>
         <source>Braille files</source>
-        <translation>File Braille</translation>
+        <translation>File braille</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="104"/>
@@ -28257,7 +28258,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="105"/>
         <source>MEI files</source>
-        <translation>file MEI</translation>
+        <translation>File MEI</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="304"/>
@@ -28284,19 +28285,19 @@ non riuscita.</translation>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="548"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
-        <translation>Interruzioni di accollatura e di pagina</translation>
+        <translation>Interruzioni di sistema e pagina</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="550"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
-        <translation>Interruzioni di accollatura e di pagina aggiunte manualmente</translation>
+        <translation>Interruzioni di sistema e di pagina aggiunte manualmente</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="552"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
-        <translation>Nessuna interruzione di accollatura o di pagina</translation>
+        <translation>Nessuna interruzione di sistema o pagina</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportScoresListView.qml" line="72"/>
@@ -28320,17 +28321,17 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="75"/>
         <source>Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.</source>
-        <translation>Nota: l&apos;aspetto della partitura cambierà a causa dei miglioramenti apportati alle impostazioni predefinite per travi, legature di portamento e di valore, elementi dell&apos;accollatura e spaziatura orizzontale.</translation>
+        <translation>Nota: l&apos;aspetto della partitura cambierà a causa dei miglioramenti apportati alle impostazioni predefinite per travi, legature di portamento e di valore, elementi del sistema e spaziatura orizzontale.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>
         <source>Use our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation>Utilizza la nostra nuova notazione e mappatura dei suoni per le &lt;a href=&quot;%1&quot;&gt;percussioni MDL&lt;/a&gt;</translation>
+        <translation>Usa la nostra nuova notazione e mappatura dei suoni per le &lt;a href=&quot;%1&quot;&gt;percussioni MDL&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="100"/>
         <source>Watch video about changes</source>
-        <translation>Guarda il video dei cambiamenti</translation>
+        <translation>Guarda il video sui cambiamenti</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="83"/>
@@ -28345,7 +28346,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="125"/>
         <source>Our new text font, Edwin</source>
-        <translation>Il nostro nuovo carattere di testo, Edwin</translation>
+        <translation>Il nostro nuovo font di testo, Edwin</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="138"/>
@@ -28355,7 +28356,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="157"/>
         <source>Please note: score layouts will be affected by improvements to MuseScore Studio</source>
-        <translation>Nota bene: l&apos;impaginazionet della partitura sarà influenzata dai miglioramenti apportati a MuseScore Studio.</translation>
+        <translation>Nota bene: l&apos;impaginazione della partitura sarà influenzata dai miglioramenti apportati a MuseScore Studio.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="162"/>
@@ -28383,7 +28384,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="164"/>
         <source>Tempo</source>
-        <translation>Metronomo</translation>
+        <translation>Tempo</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="199"/>
@@ -28423,17 +28424,17 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="49"/>
         <source>pickup:</source>
-        <translation>Anacrusi:</translation>
+        <translation>levare:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="53"/>
         <source>no pickup</source>
-        <translation>Nessuna anacrusi</translation>
+        <translation>nessun levare</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="57"/>
         <source>%n measure(s),</source>
-        <translation><numerusform>%n battuta</numerusform><numerusform>%n battute</numerusform><numerusform>%n battuta(e)</numerusform></translation>
+        <translation><numerusform>una battuta</numerusform><numerusform>%n battute</numerusform><numerusform>%n battuta(e)</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="100"/>
@@ -28448,7 +28449,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="187"/>
         <source>Hint: You can also add &amp; delete measures after you have created your score</source>
-        <translation>Suggerimento: puoi aggiungere e cancellare le battute anche dopo aver creato la partitura.</translation>
+        <translation>Suggerimento: puoi aggiungere ed eliminare battute anche dopo aver creato la partitura</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TemplatePreview.qml" line="49"/>
@@ -28458,7 +28459,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TempoSettings.qml" line="95"/>
         <source>Show tempo marking on my score</source>
-        <translation>Mostra indicazione metronomo sulla mia partitura</translation>
+        <translation>Mostra indicazione di tempo sulla partitura</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="48"/>
@@ -28474,58 +28475,58 @@ non riuscita.</translation>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="97"/>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="118"/>
         <source>C major</source>
-        <translation>Do maggiore</translation>
+        <translation>DO maggiore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="97"/>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="118"/>
         <source>A minor</source>
-        <translation>La minore</translation>
+        <translation>LA minore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="120"/>
         <source>G major</source>
-        <translation>Sol maggiore</translation>
+        <translation>SOL maggiore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="120"/>
         <source>E minor</source>
-        <translation>Mi minore</translation>
+        <translation>MI minore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="122"/>
         <source>D major</source>
-        <translation>Re maggiore</translation>
+        <translation>RE maggiore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="122"/>
         <source>B minor</source>
-        <translation>Si minore</translation>
+        <translation>SI minore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="124"/>
         <source>A major</source>
-        <translation>La maggiore</translation>
+        <translation>LA maggiore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="124"/>
         <source>F♯ minor</source>
-        <translation>Fa♯ minore</translation>
+        <translation>FA♯ minore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="126"/>
         <source>E major</source>
-        <translation>Mi maggiore</translation>
+        <translation>MI maggiore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="126"/>
         <source>C♯ minor</source>
-        <translation>Do♯ minore</translation>
+        <translation>DO♯ minore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="128"/>
         <source>B major</source>
-        <translation>Si maggiore</translation>
+        <translation>SI maggiore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="128"/>
@@ -28545,12 +28546,12 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="132"/>
         <source>C♯ major</source>
-        <translation>Do♯ maggiore</translation>
+        <translation>DO♯ maggiore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="132"/>
         <source>A♯ minor</source>
-        <translation>La♯ minore</translation>
+        <translation>LA♯ minore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="134"/>
@@ -28560,82 +28561,82 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="136"/>
         <source>F major</source>
-        <translation>Fa maggiore</translation>
+        <translation>FA maggiore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="136"/>
         <source>D minor</source>
-        <translation>Re minore</translation>
+        <translation>RE minore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="138"/>
         <source>B♭ major</source>
-        <translation>Si♭ maggiore</translation>
+        <translation>SI♭ maggiore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="138"/>
         <source>G minor</source>
-        <translation>Sol minore</translation>
+        <translation>SOL minore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="140"/>
         <source>E♭ major</source>
-        <translation>Mi♭ maggiore</translation>
+        <translation>MI♭ maggiore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="140"/>
         <source>C minor</source>
-        <translation>Do minore</translation>
+        <translation>DO minore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="142"/>
         <source>A♭ major</source>
-        <translation>La♭ maggiore</translation>
+        <translation>LA♭ maggiore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="142"/>
         <source>F minor</source>
-        <translation>Fa minore</translation>
+        <translation>FA minore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="144"/>
         <source>D♭ major</source>
-        <translation>Re♭ maggiore</translation>
+        <translation>RE♭ maggiore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="144"/>
         <source>B♭ minor</source>
-        <translation>Si♭ minore</translation>
+        <translation>SI♭ minore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="146"/>
         <source>G♭ major</source>
-        <translation>Sol♭ maggiore</translation>
+        <translation>SOL♭ maggiore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="146"/>
         <source>E♭ minor</source>
-        <translation>Mi♭ minore</translation>
+        <translation>MI♭ minore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="148"/>
         <source>C♭ major</source>
-        <translation>Do♭ maggiore</translation>
+        <translation>DO♭ maggiore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="148"/>
         <source>A♭ minor</source>
-        <translation>La♭ minore</translation>
+        <translation>LA♭ minore</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="330"/>
         <source>Dotted 16th note</source>
-        <translation>Semicroma puntata</translation>
+        <translation>16esimo puntato</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="330"/>
         <source>16th note</source>
-        <translation>Semicroma (sedicesimo)</translation>
+        <translation>16esimo</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="332"/>
@@ -28645,7 +28646,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="332"/>
         <source>Eighth note</source>
-        <translation>Croma (ottavo)</translation>
+        <translation>Croma</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="334"/>
@@ -28655,7 +28656,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="334"/>
         <source>Quarter note</source>
-        <translation>Semiminima (quarto)</translation>
+        <translation>Semiminima</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="336"/>
@@ -28665,7 +28666,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="336"/>
         <source>Half note</source>
-        <translation>Minima (metà)</translation>
+        <translation>Minima</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="338"/>
@@ -28675,7 +28676,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="338"/>
         <source>Whole note</source>
-        <translation>Semibreve (intero)</translation>
+        <translation>Semibreve</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/KeySignatureSettings.qml" line="101"/>
@@ -28733,7 +28734,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectPropertiesDialog.qml" line="34"/>
         <source>Project properties</source>
-        <translation>Proprietà del progetto</translation>
+        <translation>Proprietà progetto</translation>
     </message>
 </context>
 <context>
@@ -28746,7 +28747,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
         <source>To the Cloud (free)</source>
-        <translation>Nel cloud (gratuito)</translation>
+        <translation>Nel Cloud (gratuito)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="79"/>
@@ -28771,7 +28772,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
         <source>If you prefer to save your files on your computer, you can do that here.</source>
-        <translation>Se preferisci salvare i tuoi file sul tuo computer, puoi farlo qui.</translation>
+        <translation>Se preferisci salvare i file sul tuo computer, puoi farlo qui.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="74"/>
@@ -28831,13 +28832,13 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="185"/>
         <source>Publish to MuseScore.com</source>
-        <translation>Pubblica su MuseScore.com...</translation>
+        <translation>Pubblica su MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="188"/>
         <source>Replace the existing &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;</source>
         <extracomment>The text between `&lt;a href=&quot;%1&quot;&gt;` and `&lt;/a&gt;` will be a clickable link to the online score in question</extracomment>
-        <translation>Sostituisci l&apos;esistente&lt;a href=&quot;%1&quot;&gt;partitura online&lt;/a&gt;</translation>
+        <translation>Sostituisci la &lt;a href=&quot;%1&quot;&gt;partitura online&lt;/a&gt; esistente</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="191"/>
@@ -28848,7 +28849,7 @@ non riuscita.</translation>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="199"/>
         <source>Replace the &lt;a href=&quot;%1&quot;&gt;existing audio&lt;/a&gt;</source>
         <extracomment>The text between `&lt;a href=&quot;%1&quot;&gt;` and `&lt;/a&gt;` will be a clickable link to the online audio in question</extracomment>
-        <translation>Sostituisci l&apos;esistente&lt;a href=&quot;%1&quot;&gt;audio online&lt;/a&gt;</translation>
+        <translation>Sostituisci l&apos;&lt;a href=&quot;%1&quot;&gt;audio esistente&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="202"/>
@@ -28882,13 +28883,13 @@ non riuscita.</translation>
         <source>copy</source>
         <comment>a copy of a file</comment>
         <extracomment>used to form a filename suggestion, like &quot;originalFile - copy&quot;</extracomment>
-        <translation>Copia</translation>
+        <translation>copia</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="100"/>
         <source>selection</source>
         <extracomment>used to form a filename suggestion, like &quot;originalFile - selection&quot;</extracomment>
-        <translation>Selezione</translation>
+        <translation>selezione</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="347"/>
@@ -28937,12 +28938,12 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="77"/>
         <source>Generate MP3 audio for web playback?</source>
-        <translation>Generare MP3 per la riproduzione da sito web?</translation>
+        <translation>Generare audio MP3 per la riproduzione web?</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="87"/>
         <source>This could take a few minutes each time you save, depending on the size of your score. These settings can always be changed in Preferences.</source>
-        <translation>Questo potrebbe richiede alcuni minuti ad ogni salvataggio, a seconda della dimensione dello spartito. Queste impostazioni possono sempre essere modificate nelle Preferenze.</translation>
+        <translation>Questo potrebbe richiedere alcuni minuti ogni volta che salvi, a seconda della dimensione della partitura. Queste impostazioni possono sempre essere modificate nelle Preferenze.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="424"/>
@@ -29014,7 +29015,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="543"/>
         <source>Get help</source>
-        <translation>Ottenere aiuto</translation>
+        <translation>Chiedi aiuto</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="558"/>
@@ -29040,7 +29041,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="571"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or save this as a new file to avoid losing changes in the current online version.</source>
-        <translation>È possibile sostituire la &lt;a href=&quot;%1&quot;&gt;partitura online&lt;/a&gt;, oppure salvare come nuovo file per evitare di perdere le modifiche nella versione online corrente.</translation>
+        <translation>Puoi sostituire la &lt;a href=&quot;%1&quot;&gt;partitura online&lt;/a&gt;, oppure salvarla come nuovo file per evitare di perdere le modifiche nella versione online corrente.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="577"/>
@@ -29078,7 +29079,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1433"/>
         <source>Please add at least one instrument to enable saving.</source>
-        <translation>Aggiungi almeno uno strumento per consentire il salvataggio.</translation>
+        <translation>Per favore aggiungi almeno uno strumento per consentire il salvataggio.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="196"/>
@@ -29096,7 +29097,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="630"/>
         <source>Your audio.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
-        <translation>Il tuo account audio.com deve essere prima verificato. Si prega di attivare il proprio account tramite il collegamento nell&apos;e-mail di attivazione.</translation>
+        <translation>Il tuo account audio.com deve essere prima verificato. Per favore attiva l&apos;account tramite il link nell&apos;email di attivazione.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="637"/>
@@ -29113,12 +29114,12 @@ non riuscita.</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="642"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="649"/>
         <source>Please try again later, or get help for this problem on audio.com.</source>
-        <translation>Riprova più tardi o richiedi assistenza per questo problema su audio.com.</translation>
+        <translation>Per favore riprova più tardi, o richiedi assistenza per questo problema su audio.com.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="645"/>
         <source>Could not connect to audio.com. Please check your internet connection or try again later.</source>
-        <translation>Impossibile connettersi a audio.com. Controlla la connessione internet o riprova più tardi.</translation>
+        <translation>Impossibile connettersi a audio.com. Per favore controlla la connessione internet o prova ancora più tardi.</translation>
     </message>
 </context>
 <context>
@@ -29126,7 +29127,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/appshell/qml/PublishPage/PublishToolBar.qml" line="31"/>
         <source>Publish toolbar</source>
-        <translation>Barra degli strumenti per la pubblicazione</translation>
+        <translation>Barra strumenti per la pubblicazione</translation>
     </message>
 </context>
 <context>
@@ -29206,12 +29207,12 @@ non riuscita.</translation>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsList.qml" line="31"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/MidiDeviceMappingPage.qml" line="93"/>
         <source>action</source>
-        <translation>Azione</translation>
+        <translation>azione</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsList.qml" line="33"/>
         <source>shortcut</source>
-        <translation>Scorciatoia</translation>
+        <translation>scorciatoia</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="45"/>
@@ -29226,12 +29227,12 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="97"/>
         <source>Search shortcut</source>
-        <translation>Ricerca scorciatoia</translation>
+        <translation>Cerca scorciatoia</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/MidiDeviceMappingPage.qml" line="95"/>
         <source>status</source>
-        <translation>Stato</translation>
+        <translation>stato</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditMidiMappingDialog.qml" line="107"/>
@@ -29291,7 +29292,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="176"/>
         <source>Reassign shortcut</source>
-        <translation>Riassegna la scorciatoia</translation>
+        <translation>Riassegna scorciatoia</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingTopPanel.qml" line="39"/>
@@ -29432,7 +29433,7 @@ non riuscita.</translation>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/MenuButton.qml" line="50"/>
         <source>Menu</source>
         <extracomment>a type of ui item</extracomment>
-        <translation>Menù</translation>
+        <translation>Menu</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="48"/>
@@ -29442,13 +29443,13 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="97"/>
         <source>Choose file</source>
-        <translation>Scegli il file</translation>
+        <translation>Scegli file</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/FilePicker.qml" line="98"/>
         <location filename="../../src/framework/uicomponents/view/selectmultipledirectoriesmodel.cpp" line="127"/>
         <source>Choose directory</source>
-        <translation>Scegli la directory</translation>
+        <translation>Scegli directory</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/DirectoriesTopPanel.qml" line="44"/>
@@ -29492,7 +29493,7 @@ non riuscita.</translation>
         <translation>non ordinato</translation>
     </message>
     <message>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/SearchField.qml" line="38"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/SearchField.qml" line="37"/>
         <source>Search</source>
         <translation>Cerca</translation>
     </message>
@@ -29576,7 +29577,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="140"/>
         <source>Yes</source>
-        <translation>Si</translation>
+        <translation>Sì</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="141"/>
@@ -29684,7 +29685,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/AppReleaseInfoBottomPanel.qml" line="70"/>
         <source>Remind me later</source>
-        <translation>Ricordamelo più tardi</translation>
+        <translation>Ricordami più tardi</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/AppReleaseInfoBottomPanel.qml" line="86"/>
@@ -29719,7 +29720,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="177"/>
         <source>Sorry - please try again later</source>
-        <translation>Ci scusiamo - ti preghiamo di riprovare più tardi</translation>
+        <translation>Spiacenti - per favore prova ancora più tardi</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="193"/>
@@ -29763,13 +29764,13 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/internal/WorkspacesTopPanel.qml" line="68"/>
         <source>Workspaces</source>
-        <translation>Aree di lavoro</translation>
+        <translation>Spazi di lavoro</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/internal/WorkspacesTopPanel.qml" line="79"/>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="66"/>
         <source>Create new workspace</source>
-        <translation>Crea una nuova area di lavoro</translation>
+        <translation>Crea nuovo spazio di lavoro</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/internal/WorkspacesTopPanel.qml" line="100"/>
@@ -29779,17 +29780,17 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/internal/WorkspacesTopPanel.qml" line="111"/>
         <source>Use workspaces to save different arrangements of the MuseScore Studio interface</source>
-        <translation>Utilizza le aree di lavoro per salvare diverse dell&apos;interfaccia di MuseScore.</translation>
+        <translation>Usa gli spazi di lavoro per salvare disposizioni differenti dell&apos;interfaccia di MuseScore Studio</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="74"/>
         <source>Workspace name:</source>
-        <translation>Nome area di lavoro:</translation>
+        <translation>Nome dello spazio di lavoro:</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="114"/>
         <source>Select the options you want remembered in your new workspace</source>
-        <translation>Seleziona le opzioni che vuoi ricordare nella tua nuova area di lavoro.</translation>
+        <translation>Seleziona le opzioni che vuoi siano memorizzate nel nuovo spazio di lavoro</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="133"/>
@@ -29799,7 +29800,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="150"/>
         <source>UI arrangement</source>
-        <translation>Disposizione dell&apos;interfaccia utente</translation>
+        <translation>Disposizione UI</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="166"/>
@@ -29809,27 +29810,27 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="182"/>
         <source>Toolbar customizations</source>
-        <translation>Personalizzazione della barra degli attrezzi</translation>
+        <translation>Personalizzazioni barra degli attrezzi</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/view/newworkspacemodel.cpp" line="44"/>
         <source>My new workspace</source>
-        <translation>La mia nuova area di lavoro</translation>
+        <translation>Il mio nuovo spazio di lavoro</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/view/newworkspacemodel.cpp" line="102"/>
         <source>A workspace with the name “%1” already exists. Please choose a different name.</source>
-        <translation>Esiste già uno spazio di lavoro con il nome &quot;%1&quot;. Scegli un nome diverso.</translation>
+        <translation>Esiste già uno spazio di lavoro con il nome &quot;%1&quot;. Per favore scegli un nome diverso.</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/view/newworkspacemodel.cpp" line="109"/>
         <source>“%1” cannot be used as a workspace name. Please choose a different name.</source>
-        <translation>&quot;%1&quot; non può essere utilizzato come nome dello spazio di lavoro. Scegli un nome diverso.</translation>
+        <translation>&quot;%1&quot; non può essere usato come nome di uno spazio di lavoro. Per favore scegli un nome diverso.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="95"/>
         <source>Workspace:</source>
-        <translation>Area di lavoro:</translation>
+        <translation>Spazio di lavoro:</translation>
     </message>
 </context>
 </TS>

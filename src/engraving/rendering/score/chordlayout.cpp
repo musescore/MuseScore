@@ -24,6 +24,7 @@
 #include "chordlayout.h"
 #include "accidentalslayout.h"
 #include "horizontalspacing.h"
+#include "beamtremololayout.h"
 
 #include "containers.h"
 
@@ -1274,16 +1275,11 @@ bool ChordLayout::isChordPosBelowBeam(Chord* item, Beam* beam)
 
     Note* baseNote = item->up() ? item->downNote() : item->upNote();
     double noteY = baseNote->pagePos().y();
-    double noteX = item->stemPosX() + item->pagePos().x();
 
-    PointF base = beam->pagePos();
-    const BeamFragment* fragment = beam->beamFragments().front();
-    double startY = fragment->py1[beam->directionIdx()] + base.y();
-    double endY = fragment->py2[beam->directionIdx()] + base.y();
-    double startX = beam->startAnchor().x();
-    double endX = beam->endAnchor().x();
-    PointF startAnchor(startX, startY);
-    PointF endAnchor(endX, endY);
+    ChordRest* startCR = beam->elements().front();
+    ChordRest* endCR = beam->elements().back();
+    PointF startAnchor = BeamLayout::chordBeamAnchor(beam, startCR, ChordBeamAnchorType::Start);
+    PointF endAnchor = BeamLayout::chordBeamAnchor(beam, endCR, ChordBeamAnchorType::End);
 
     if (item == beam->elements().front()) {
         return noteY > startAnchor.y();
@@ -1293,9 +1289,25 @@ bool ChordLayout::isChordPosBelowBeam(Chord* item, Beam* beam)
         return noteY > endAnchor.y();
     }
 
-    double proportionAlongX = muse::RealIsEqual(startX, endX) ? 0.0 : (noteX - startAnchor.x()) / (endAnchor.x() - startAnchor.x());
+    PointF noteAnchor = BeamLayout::chordBeamAnchor(beam, item, ChordBeamAnchorType::Middle);
+    double noteX = noteAnchor.x();
+
+    double proportionAlongX
+        = muse::RealIsEqual(startAnchor.x(), endAnchor.x()) ? 0.0 : (noteX - startAnchor.x()) / (endAnchor.x() - startAnchor.x());
     double desiredY = proportionAlongX * (endAnchor.y() - startAnchor.y()) + startAnchor.y();
     return noteY > desiredY;
+}
+
+bool ChordLayout::isChordPosBelowTrem(const Chord* item, TremoloTwoChord* trem)
+{
+    if (!item || !trem || !trem->ldata()->isValid()) {
+        return true;
+    }
+    Note* baseNote = item->up() ? item->downNote() : item->upNote();
+    double noteY = baseNote->pagePos().y();
+    double tremY = trem->chordBeamAnchor(item, ChordBeamAnchorType::Middle).y();
+
+    return noteY > tremY;
 }
 
 static bool computeUp_TremoloTwoNotesCase(const Chord* item, TremoloTwoChord* tremolo, const LayoutContext& ctx)
@@ -1325,10 +1337,7 @@ static bool computeUp_TremoloTwoNotesCase(const Chord* item, TremoloTwoChord* tr
     }
 
     if (tremolo->userModified()) {
-        Note* baseNote = item->up() ? item->downNote() : item->upNote();
-        double tremY = tremolo->chordBeamAnchor(item, ChordBeamAnchorType::Middle).y();
-        double noteY = baseNote->pagePos().y();
-        return noteY > tremY;
+        return ChordLayout::isChordPosBelowTrem(item, tremolo);
     } else if (cross) {
         // unmodified cross-staff trem, should be one note per staff
         if (item->staffMove() != 0) {
@@ -2016,12 +2025,18 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
             EngravingItem* e = segment->element(track);
             if (e && e->isChord() && toChord(e)->vStaffIdx() == staffIdx) {
                 Chord* chord = toChord(e);
-                // skip if we are separating voices and this voice has no collision
-                bool combineVoices = chord->combineVoice();
+                Chord::LayoutData* chordLdata = chord->mutldata();
+                // only centre chords if we are separating voices and this voice has no collision
+                const bool combineVoices = chord->shouldCombineVoice();
                 if (!combineVoices && !muse::contains(tracksToAdjust, track)) {
+                    if (chord->up()) {
+                        chordLdata->moveX(centerUp);
+                    } else {
+                        chordLdata->moveX(centerDown);
+                    }
                     continue;
                 }
-                Chord::LayoutData* chordLdata = chord->mutldata();
+
                 if (chord->up()) {
                     if (!muse::RealIsNull(upOffset)) {
                         oversizeUp = isTab ? oversizeUp / 2 : oversizeUp;
@@ -2346,7 +2361,7 @@ void ChordLayout::setDotX(const std::vector<Chord*>& chords, const std::array<do
         if (chordHasDotsAllInvisible(chord)) {
             continue;
         }
-        const bool combineVoices = chord->combineVoice();
+        const bool combineVoices = chord->shouldCombineVoice();
         const size_t idx = (VOICES * (chord->staffIdx() - staff->idx() + 1)) + chord->voice();
         if (!combineChordConflicts.empty()) {
             // There are conflicts
@@ -2721,7 +2736,8 @@ void ChordLayout::appendGraceNotes(Chord* chord)
     //Attach graceNotesAfter of this chord to the *following* segment
     if (!gna.empty()) {
         Segment* followingSeg = measure->tick2segment(segment->tick() + chord->actualTicks(), SegmentType::All);
-        while (followingSeg && !followingSeg->hasElements(staff2track(staffIdx), staff2track(staffIdx) + 3)) {
+        while (followingSeg
+               && (!followingSeg->hasElements(staff2track(staffIdx), staff2track(staffIdx) + 3) || followingSeg->isTimeTickType())) {
             // If there is nothing on this staff, go to next segment
             followingSeg = followingSeg->next();
         }

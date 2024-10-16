@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_IMPORTEXPORT_MXLWRITER_H
-#define MU_IMPORTEXPORT_MXLWRITER_H
+#pragma once
 
 #include "musicxmlwriter.h"
 
@@ -32,5 +30,3 @@ public:
     muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
 };
 }
-
-#endif // MU_IMPORTEXPORT_MXLWRITER_H

@@ -52,6 +52,9 @@ if (OS_IS_WIN)
 
 elseif(OS_IS_LIN)
 
+    # add ssl support on local linux machine
+    # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L /usr/local/lib -lcrypto -lssl")
+
     if (MUSE_APP_INSTALL_SUFFIX)
         set(MSCORE_OUTPUT_NAME "${EXECUTABLE_NAME}${MUSE_APP_INSTALL_SUFFIX}")
     endif(MUSE_APP_INSTALL_SUFFIX)
@@ -382,7 +385,9 @@ if (OS_IS_WIN)
             DESTINATION bin/platforms)
 
     install(FILES
+            ${QT_INSTALL_PLUGINS}/tls/qcertonlybackend.dll
             ${QT_INSTALL_PLUGINS}/tls/qopensslbackend.dll
+            ${QT_INSTALL_PLUGINS}/tls/qschannelbackend.dll
             DESTINATION bin/tls)
 
     install(DIRECTORY

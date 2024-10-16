@@ -36,16 +36,19 @@
 #include "../imusesoundscheckupdatescenario.h"
 
 namespace muse::update {
-class MuseSoundsCheckUpdateScenario : public IMuseSoundsCheckUpdateScenario, public async::Asyncable
+class MuseSoundsCheckUpdateScenario : public IMuseSoundsCheckUpdateScenario, public Injectable, public async::Asyncable
 {
-    Inject<IInteractive> interactive;
-    Inject<actions::IActionsDispatcher> dispatcher;
-    Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
-    Inject<IUpdateConfiguration> configuration;
+    Inject<IInteractive> interactive = { this };
+    Inject<actions::IActionsDispatcher> dispatcher = { this };
+    Inject<mi::IMultiInstancesProvider> multiInstancesProvider = { this };
+    Inject<IUpdateConfiguration> configuration = { this };
 
-    Inject<IMuseSoundsCheckUpdateService> service;
+    Inject<IMuseSoundsCheckUpdateService> service = { this };
 
 public:
+    MuseSoundsCheckUpdateScenario(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     void delayedInit();
 
     void checkForUpdate() override;
@@ -60,6 +63,7 @@ private:
     void th_checkForUpdate();
 
     void showReleaseInfo(const ReleaseInfo& info);
+    void tryOpenMuseHub(ValList actions) const;
 
     bool m_checkProgress = false;
     ProgressPtr m_checkProgressChannel = nullptr;

@@ -395,9 +395,10 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
         EngravingItem* newEl = 0;
         for (EngravingItem* target : els) {
             el->setTrack(target->track());
-            addRefresh(target->abbox());         // layout() ?!
+            addRefresh(target->pageBoundingRect()); // layout() ?!
             EditData ddata(view);
             ddata.dropElement = el.get();
+            ddata.pos = target->pageBoundingRect().topLeft();
             if (target->acceptDrop(ddata)) {
                 if (!el->isNote() || (target = prepareTarget(target, toNote(el.get()), duration))) {
                     ddata.dropElement = el->clone();
@@ -494,7 +495,7 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
 
         for (EngravingItem* target : els) {
             EngravingItem* nel = image->clone();
-            addRefresh(target->abbox());         // layout() ?!
+            addRefresh(target->pageBoundingRect()); // layout() ?!
             EditData ddata(view);
             ddata.dropElement    = nel;
             if (target->acceptDrop(ddata)) {
@@ -504,7 +505,7 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
                 }
 
                 if (m_selection.element()) {
-                    addRefresh(m_selection.element()->abbox());
+                    addRefresh(m_selection.element()->pageBoundingRect());
                 }
             }
         }

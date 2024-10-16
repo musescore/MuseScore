@@ -23,11 +23,13 @@ SOFTWARE.
 */
 #include "profiler.h"
 
-#include <iostream>
 #include <algorithm>
+#include <cstdio>
 #include <iomanip>
-
-#include <stdio.h>
+#include <iostream>
+#include <ratio>
+#include <sstream>
+#include <utility>
 
 using namespace kors::profiler;
 

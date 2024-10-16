@@ -1157,7 +1157,7 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
 
     // Remove items that the slur shouldn't try to avoid
     segShape.remove_if([&](ShapeElement& shapeEl) {
-        if (!shapeEl.item() || !shapeEl.item()->parentItem()) {
+        if (!shapeEl.item() || !shapeEl.item()->parentItem() || !shapeEl.item()->visible()) {
             return true;
         }
         const EngravingItem* item = shapeEl.item();
@@ -1513,6 +1513,53 @@ double SlurTieLayout::noteOpticalCenterForTie(const Note* note, bool up)
     }
 
     return 0.5 * (cutOutLeft.x() + cutOutRight.x());
+}
+
+void SlurTieLayout::createSlurSegments(Slur* item, LayoutContext& ctx)
+{
+    const ChordRest* startCR = item->startCR();
+    const ChordRest* endCR = item->endCR();
+    const System* startSys = startCR->measure()->system();
+    const System* endSys = endCR->measure()->system();
+
+    const std::vector<System*>& systems = ctx.dom().systems();
+    system_idx_t startSysIdx = muse::indexOf(systems, startSys);
+    system_idx_t endSysIdx = muse::indexOf(systems, endSys);
+    if (startSysIdx == muse::nidx || endSysIdx == muse::nidx) {
+        return;
+    }
+
+    int segmentsNeeded = 0;
+    for (system_idx_t i = startSysIdx; i <= endSysIdx; ++i) {
+        if (systems.at(i)->vbox()) {
+            continue;
+        }
+        ++segmentsNeeded;
+    }
+    int currentSegments = int(item->spannerSegments().size());
+
+    if (currentSegments != segmentsNeeded) {
+        item->fixupSegments(segmentsNeeded);
+    }
+
+    int segIdx = 0;
+    for (system_idx_t i = startSysIdx; i <= endSysIdx; ++i) {
+        System* system = systems.at(i);
+        if (system->vbox()) {
+            continue;
+        }
+        SlurSegment* lineSegm = item->segmentAt(segIdx++);
+        lineSegm->setSystem(system);
+        if (startSysIdx == endSysIdx) {
+            lineSegm->setSpannerSegmentType(SpannerSegmentType::SINGLE);
+        } else if (i == startSysIdx) {
+            lineSegm->setSpannerSegmentType(SpannerSegmentType::BEGIN);
+        } else if (i > 0 && i != endSysIdx) {
+            lineSegm->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
+        } else if (i == endSysIdx) {
+            lineSegm->setSpannerSegmentType(SpannerSegmentType::END);
+        }
+    }
 }
 
 void SlurTieLayout::correctForCrossStaff(Tie* tie, SlurTiePos& sPos, SpannerSegmentType type)
@@ -2288,7 +2335,9 @@ bool SlurTieLayout::isDirectionMixture(const Chord* c1, const Chord* c2, LayoutC
         }
         Chord* c = toChord(e);
         const Measure* m = c->measure();
-        if (!c->staff()->isDrumStaff(c->tick()) && c1->measure()->system() != m->system()) {
+        const System* c1Sys = c1->measure()->system();
+        const System* cSys = m->system();
+        if (!c->staff()->isDrumStaff(c->tick()) && c1Sys && cSys && c1Sys != cSys) {
             // This chord is on a different system and may not have been laid out yet
             for (Note* note : c->notes()) {
                 note->updateLine();     // because chord direction is based on note lines

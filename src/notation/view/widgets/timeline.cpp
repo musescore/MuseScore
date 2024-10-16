@@ -22,17 +22,16 @@
 
 #include "timeline.h"
 
+#include <QApplication>
 #include <QGraphicsTextItem>
 #include <QMenu>
+#include <QMouseEvent>
 #include <QScrollBar>
 #include <QTextDocument>
-#include <QMouseEvent>
 
 #include "translation.h"
 
-#include "engraving/types/typesconv.h"
 #include "engraving/dom/barline.h"
-#include "engraving/dom/chord.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/key.h"
 #include "engraving/dom/keysig.h"
@@ -43,14 +42,12 @@
 #include "engraving/dom/page.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/rehearsalmark.h"
-#include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/system.h"
-#include "engraving/dom/tempo.h"
 #include "engraving/dom/tempotext.h"
-#include "engraving/dom/text.h"
 #include "engraving/dom/timesig.h"
+#include "engraving/types/typesconv.h"
 
 #include "log.h"
 

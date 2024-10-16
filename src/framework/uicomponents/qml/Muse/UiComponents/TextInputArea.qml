@@ -34,6 +34,8 @@ FocusScope {
 
     property bool hasText: valueInput.text.length > 0
 
+    property bool resizeVerticallyWithText: false
+
     property real textSidePadding: 12
 
     readonly property alias inputField: valueInput
@@ -66,8 +68,10 @@ FocusScope {
         }
     }
 
-    implicitHeight: 90
+    implicitHeight: root.resizeVerticallyWithText ? Math.max(valueInput.height, 90) : 90
     implicitWidth: parent.width
+
+    height: implicitHeight
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
@@ -125,76 +129,83 @@ FocusScope {
             anchors.right: parent.right
         }
 
-        TextArea {
-            id: valueInput
+        contentWidth: valueInput.width
+        contentHeight: root.resizeVerticallyWithText ? -1 : valueInput.height
 
-            objectName: "TextArea"
+        // When a TextArea component is set as a direct child of a ScrollView, the result will always be scrollable in both directions. To override this,
+        // we need to place the TextArea inside an Item and manually define contentWidth/Height
+        Item {
+            TextArea {
+                id: valueInput
 
-            padding: root.textSidePadding
+                objectName: "TextArea"
 
-            color: ui.theme.fontPrimaryColor
-            font: ui.theme.bodyFont
+                padding: root.textSidePadding
 
-            background: Item {}
+                color: ui.theme.fontPrimaryColor
+                font: ui.theme.bodyFont
 
-            focus: false
-            activeFocusOnPress: false
-            selectByMouse: true
-            selectionColor: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.accentOpacityNormal)
-            selectedTextColor: ui.theme.fontPrimaryColor
-            placeholderTextColor: ui.theme.fontPrimaryColor
-            visible: true
+                background: Item {}
 
-            text: root.currentText === undefined ? "" : root.currentText
+                focus: false
+                activeFocusOnPress: false
+                selectByMouse: true
+                selectionColor: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.accentOpacityNormal)
+                selectedTextColor: ui.theme.fontPrimaryColor
+                placeholderTextColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.3)
+                visible: true
 
-            TextInputModel {
-                id: textInputModel
-            }
+                text: root.currentText === undefined ? "" : root.currentText
 
-            Component.onCompleted: {
-                textInputModel.init()
-            }
-
-            Keys.onShortcutOverride: function(event) {
-                if (readOnly) {
-                    return
+                TextInputModel {
+                    id: textInputModel
                 }
 
-                if (event.key === Qt.Key_Escape) {
-                    event.accepted = true
-                    return
+                Component.onCompleted: {
+                    textInputModel.init()
                 }
 
-                if (textInputModel.isShortcutAllowedOverride(event.key, event.modifiers)) {
-                    event.accepted = true
-                } else {
-                    event.accepted = false
+                Keys.onShortcutOverride: function(event) {
+                    if (readOnly) {
+                        return
+                    }
 
-                    root.focus = false
-                    root.textEditingFinished(valueInput.text)
+                    if (event.key === Qt.Key_Escape) {
+                        event.accepted = true
+                        return
+                    }
+
+                    if (textInputModel.isShortcutAllowedOverride(event.key, event.modifiers)) {
+                        event.accepted = true
+                    } else {
+                        event.accepted = false
+
+                        root.focus = false
+                        root.textEditingFinished(valueInput.text)
+                    }
                 }
-            }
 
-            Keys.onPressed: function(event) {
-                if (event.key === Qt.Key_Escape) {
-                    root.focus = false
-                    root.textEditingFinished(valueInput.text)
-                    root.escaped()
+                Keys.onPressed: function(event) {
+                    if (event.key === Qt.Key_Escape) {
+                        root.focus = false
+                        root.textEditingFinished(valueInput.text)
+                        root.escaped()
+                    }
                 }
-            }
 
-            onActiveFocusChanged: {
-                if (activeFocus) {
-                    navCtrl.requestActive()
-                    selectAll()
-                } else {
-                    deselect()
-                    root.textEditingFinished(valueInput.text)
+                onActiveFocusChanged: {
+                    if (activeFocus) {
+                        navCtrl.requestActive()
+                        selectAll()
+                    } else {
+                        deselect()
+                        root.textEditingFinished(valueInput.text)
+                    }
                 }
-            }
 
-            onTextChanged: {
-                root.textChanged(text)
+                onTextChanged: {
+                    root.textChanged(text)
+                }
             }
         }
     }

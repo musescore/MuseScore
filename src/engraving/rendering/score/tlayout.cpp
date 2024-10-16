@@ -1756,7 +1756,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
         lines      = st->lines();             // init values from staff type
         lineDist   = st->lineDistance().val();
         stepOffset = st->stepOffset();
-        staffOffsetY = st->yoffset().val() - (stPrev ? stPrev->yoffset().val() : 0);
+        staffOffsetY = item->isHeader() ? 0.0 : st->yoffset().val() - (stPrev ? stPrev->yoffset().val() : 0);
     }
 
     double _spatium = item->spatium();
@@ -1782,7 +1782,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
         break;
     case ClefType::PERC:                                   // percussion clefs
     case ClefType::PERC2:
-        yoff = lineDist * (lines - 1) * 0.5 + staffOffsetY;
+        yoff = lineDist * (lines - 1) * 0.5;
         stepOffset = 0;
         break;
     case ClefType::INVALID:
@@ -1797,7 +1797,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
     Shape shape(item->symShapeWithCutouts(ldata->symId));
     bool isMidMeasureClef = item->isMidMeasureClef();
     double x = isMidMeasureClef ? -shape.right() : 0.0;
-    ldata->setPos(PointF(x, yoff * _spatium + (stepOffset * 0.5 * _spatium)));
+    ldata->setPos(PointF(x, (yoff + (stepOffset * 0.5) + staffOffsetY) * _spatium));
     if (item->isMidMeasureClef()) {
         ldata->setShape(shape);
     } else {
@@ -2947,7 +2947,7 @@ void TLayout::layoutGraceNotesGroup(GraceNotesGroup* item, LayoutContext& ctx)
         double offset;
         offset = -std::max(HorizontalSpacing::minHorizontalDistance(graceShape, groupShape, grace->spatium()), 0.0);
         // Adjust spacing for cross-beam situations
-        if (i < item->size() - 1) {
+        if (i < item->size() - 1 && grace->stem()) {
             Chord* prevGrace = item->at(i + 1);
             if (prevGrace->up() != grace->up()) {
                 double crossCorrection = grace->notes().front()->headWidth() - grace->stem()->width();
@@ -3120,56 +3120,7 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
 
     ldata->disconnectSnappedItems();
 
-    EngravingItem* possibleSnapBeforeElement = nullptr;
-    EngravingItem* possibleSnapAfterElement = nullptr;
-    if (item->isSingleBeginType()) {
-        possibleSnapBeforeElement = item->findElementToSnapBefore();
-    }
-    if (item->isSingleEndType() && item->hairpin()->ticks().isNotZero()) {
-        possibleSnapAfterElement = item->findElementToSnapAfter();
-    }
-
-    // In case of dynamics/expressions before or after, make space for them horizontally
-    double hairpinDistToDynOrExpr = ctx.conf().style().styleMM(Sid::autoplaceHairpinDynamicsDistance);
-    if (possibleSnapBeforeElement && possibleSnapBeforeElement->findAncestor(ElementType::SYSTEM) == item->system()
-        && (possibleSnapBeforeElement->isDynamic() || possibleSnapBeforeElement->isExpression())) {
-        double xItemPos = possibleSnapBeforeElement->pageX() - item->system()->pageX();
-        double itemRightEdge = xItemPos + possibleSnapBeforeElement->ldata()->bbox().right();
-        double xMinHairpinStart = itemRightEdge + hairpinDistToDynOrExpr;
-        double xStartDiff = ldata->pos().x() - xMinHairpinStart;
-        if (xStartDiff < 0) {
-            ldata->setPosX(xMinHairpinStart);
-            item->rxpos2() += xStartDiff;
-        }
-    }
-    if (possibleSnapAfterElement && possibleSnapAfterElement->findAncestor(ElementType::SYSTEM) == item->system()
-        && (possibleSnapAfterElement->isDynamic() || possibleSnapAfterElement->isExpression())) {
-        double xItemPos = possibleSnapAfterElement->pageX() - item->system()->pageX();
-        double itemLeftEdge = xItemPos + possibleSnapAfterElement->ldata()->bbox().left();
-        double xMaxHairpinEnd = itemLeftEdge - hairpinDistToDynOrExpr;
-        double xEndDiff = xMaxHairpinEnd - (item->pos().x() + item->pos2().x());
-        const double EXTEND_THRESHOLD = 3.0 * _spatium;
-        if (xEndDiff < 0) {
-            item->rxpos2() += xEndDiff;
-        } else if (item->hairpin()->snapToItemAfter() && xEndDiff > EXTEND_THRESHOLD) {
-            item->rxpos2() += xEndDiff;
-        }
-    }
-
-    if (item->hairpin()->snapToItemBefore() && possibleSnapBeforeElement) {
-        if (possibleSnapBeforeElement->isExpression() || possibleSnapBeforeElement->isDynamic()
-            || (possibleSnapBeforeElement->isHairpinSegment()
-                && toHairpinSegment(possibleSnapBeforeElement)->hairpin()->snapToItemAfter())) {
-            ldata->connectItemSnappedBefore(possibleSnapBeforeElement);
-        }
-    }
-    if (item->hairpin()->snapToItemAfter() && possibleSnapAfterElement) {
-        if (possibleSnapAfterElement->isExpression() || possibleSnapAfterElement->isDynamic()
-            || (possibleSnapAfterElement->isHairpinSegment()
-                && toHairpinSegment(possibleSnapAfterElement)->hairpin()->snapToItemBefore())) {
-            ldata->connectItemSnappedAfter(possibleSnapAfterElement);
-        }
-    }
+    manageHairpinSnapping(item, ctx);
 
     HairpinType type = item->hairpin()->hairpinType();
     if (item->hairpin()->isLineType()) {
@@ -3308,6 +3259,71 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
     }
 
     Autoplace::setOffsetChanged(item, ldata, false);
+}
+
+void TLayout::manageHairpinSnapping(HairpinSegment* item, LayoutContext& ctx)
+{
+    HairpinSegment::LayoutData* ldata = item->mutldata();
+
+    EngravingItem* possibleSnapBeforeElement = nullptr;
+    EngravingItem* possibleSnapAfterElement = nullptr;
+    if (item->isSingleBeginType()) {
+        possibleSnapBeforeElement = item->findElementToSnapBefore();
+    }
+    if (item->isSingleEndType() && item->hairpin()->ticks().isNotZero()) {
+        possibleSnapAfterElement = item->findElementToSnapAfter();
+    }
+
+    bool doSnapBefore = possibleSnapBeforeElement && item->hairpin()->snapToItemBefore();
+    if (doSnapBefore && possibleSnapBeforeElement->isHairpinSegment()) {
+        doSnapBefore = doSnapBefore && toHairpinSegment(possibleSnapBeforeElement)->hairpin()->snapToItemAfter();
+    }
+
+    if (doSnapBefore) {
+        ldata->connectItemSnappedBefore(possibleSnapBeforeElement);
+    }
+
+    bool doSnapAfter = possibleSnapAfterElement && item->hairpin()->snapToItemAfter();
+    if (doSnapAfter && possibleSnapAfterElement->isHairpinSegment()) {
+        doSnapAfter = doSnapAfter && toHairpinSegment(possibleSnapAfterElement)->hairpin()->snapToItemBefore();
+    }
+
+    if (doSnapAfter) {
+        ldata->connectItemSnappedAfter(possibleSnapAfterElement);
+    }
+
+    // In case of dynamics/expressions before or after, make space for them horizontally
+    double hairpinDistToDynOrExpr = ctx.conf().style().styleMM(Sid::autoplaceHairpinDynamicsDistance);
+
+    bool makeSpaceBefore = (doSnapBefore && possibleSnapBeforeElement->isTextBase())
+                           || (possibleSnapBeforeElement && possibleSnapBeforeElement->isDynamic());
+
+    if (makeSpaceBefore && possibleSnapBeforeElement->findAncestor(ElementType::SYSTEM) == item->system()) {
+        double xItemPos = possibleSnapBeforeElement->pageX() - item->system()->pageX();
+        double itemRightEdge = xItemPos + possibleSnapBeforeElement->ldata()->bbox().right();
+        double xMinHairpinStart = itemRightEdge + hairpinDistToDynOrExpr;
+        double xStartDiff = ldata->pos().x() - xMinHairpinStart;
+        if (xStartDiff < 0) {
+            ldata->setPosX(xMinHairpinStart);
+            item->rxpos2() += xStartDiff;
+        }
+    }
+
+    bool makeSpaceAfter = (doSnapAfter && possibleSnapAfterElement->isTextBase())
+                          || (possibleSnapAfterElement && possibleSnapAfterElement->isDynamic());
+
+    if (makeSpaceAfter && possibleSnapAfterElement->findAncestor(ElementType::SYSTEM) == item->system()) {
+        double xItemPos = possibleSnapAfterElement->pageX() - item->system()->pageX();
+        double itemLeftEdge = xItemPos + possibleSnapAfterElement->ldata()->bbox().left();
+        double xMaxHairpinEnd = itemLeftEdge - hairpinDistToDynOrExpr;
+        double xEndDiff = xMaxHairpinEnd - (item->pos().x() + item->pos2().x());
+        const double EXTEND_THRESHOLD = 3.0 * item->spatium();
+        if (xEndDiff < 0) {
+            item->rxpos2() += xEndDiff;
+        } else if (item->hairpin()->snapToItemAfter() && xEndDiff > EXTEND_THRESHOLD) {
+            item->rxpos2() += xEndDiff;
+        }
+    }
 }
 
 void TLayout::layoutHairpin(Hairpin* item, LayoutContext& ctx)
@@ -3656,7 +3672,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
         Clef* c = nullptr;
         if (item->segment()) {
             for (Segment* seg = item->segment()->prev1(); !c && seg && seg->tick() == item->tick(); seg = seg->prev1()) {
-                if (seg->isClefType() || seg->isHeaderClefType()) {
+                if (seg->enabled() && (seg->isClefType() || seg->isHeaderClefType())) {
                     c = toClef(seg->element(item->track()));
                 }
             }
@@ -3871,6 +3887,8 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
             ldata->setPosY(item->staffType()->stepOffset() * 0.5 * spatium);
         }
     }
+
+    ldata->moveY(item->staffOffsetY());
 
     Shape keySigShape;
     for (const KeySym& ks : ldata->keySymbols) {
@@ -5021,8 +5039,7 @@ void TLayout::layoutLine(SLine* item, LayoutContext& ctx)
 
 void TLayout::layoutSlur(Slur* item, LayoutContext& ctx)
 {
-    UNUSED(item)
-    UNUSED(ctx)
+    SlurTieLayout::createSlurSegments(item, ctx);
 }
 
 void TLayout::layoutSpacer(Spacer* item, LayoutContext&)
@@ -5243,11 +5260,8 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
     LineF line = LineF(lineX, y1, lineX, y2);
     ldata->line = line;
 
-    // HACK: if there is a beam, extend the bounding box of the stem (NOT the stem itself) by half beam width.
-    // This way the bbox of the stem covers also the beam position. Hugely helps with all the collision checks.
-    double beamCorrection = (item->chord() && item->chord()->beam()) ? _up * conf.styleMM(Sid::beamWidth) * item->mag() / 2 : 0.0;
     // compute line and bounding rectangle
-    RectF rect(line.p1(), line.p2() + PointF(0.0, beamCorrection));
+    RectF rect(line.p1(), line.p2() + PointF(0.0, ldata->beamCorrection));
     ldata->setBbox(rect.normalized().adjusted(-lineWidthCorrection, 0, lineWidthCorrection, 0));
 }
 
@@ -6139,6 +6153,9 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
     int numOfLines = 0;
     TimeSigType sigType = item->timeSigType();
     const Staff* staff = item->staff();
+    const Segment* seg = item->segment();
+    const Measure* meas = seg ? seg->measure() : nullptr;
+    const Fraction tick = meas ? meas->tick() : item->tick();
 
     if (staff) {
         // if staff is without time sig, format as if no text at all
@@ -6154,8 +6171,8 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
             // draw() will anyway skip any drawing if staff type has no time sigs
             return;
         }
-        numOfLines  = staff->lines(item->tick());
-        lineDist    = staff->lineDistance(item->tick());
+        numOfLines  = staff->lines(tick);
+        lineDist    = staff->lineDistance(tick);
     } else {
         // assume dimensions of a standard staff
         lineDist = 1.0;

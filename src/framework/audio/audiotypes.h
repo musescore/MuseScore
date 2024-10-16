@@ -28,11 +28,11 @@
 #include <string>
 
 #include "global/types/number.h"
+#include "global/types/ratio.h"
 #include "global/realfn.h"
 #include "global/types/string.h"
 #include "global/async/channel.h"
 #include "global/io/iodevice.h"
-#include "global/io/path.h"
 
 #include "mpe/events.h"
 
@@ -49,8 +49,8 @@ inline msecs_t secsToMicrosecs(secs_t s) { return msecs_t(s * 1000000.0); }
 using samples_t = uint64_t;
 using sample_rate_t = uint64_t;
 using audioch_t = uint8_t;
-using volume_db_t = float;
-using volume_dbfs_t = float;
+using volume_db_t = db_t;
+using volume_dbfs_t = db_t;
 using gain_t = float;
 using balance_t = float;
 
@@ -345,23 +345,25 @@ struct AudioSignalVal {
 using AudioSignalValuesMap = std::map<audioch_t, AudioSignalVal>;
 using AudioSignalChanges = async::Channel<AudioSignalValuesMap>;
 
+static constexpr volume_dbfs_t MINIMUM_OPERABLE_DBFS_LEVEL = volume_dbfs_t::make(-100.f);
 struct AudioSignalsNotifier {
-    void updateSignalValues(const audioch_t audioChNumber, const float newAmplitude, const volume_dbfs_t newPressure)
+    void updateSignalValues(const audioch_t audioChNumber, const float newAmplitude)
     {
+        volume_dbfs_t newPressure = (newAmplitude > 0.f) ? volume_dbfs_t(muse::linear_to_db(newAmplitude)) : MINIMUM_OPERABLE_DBFS_LEVEL;
+        newPressure = std::max(newPressure, MINIMUM_OPERABLE_DBFS_LEVEL);
+
         AudioSignalVal& signalVal = m_signalValuesMap[audioChNumber];
 
-        volume_dbfs_t validatedPressure = std::max(newPressure, MINIMUM_OPERABLE_DBFS_LEVEL);
-
-        if (RealIsEqual(signalVal.pressure, validatedPressure)) {
+        if (muse::is_equal(signalVal.pressure, newPressure)) {
             return;
         }
 
-        if (std::abs(signalVal.pressure - validatedPressure) < PRESSURE_MINIMAL_VALUABLE_DIFF) {
+        if (std::abs(signalVal.pressure - newPressure) < PRESSURE_MINIMAL_VALUABLE_DIFF) {
             return;
         }
 
         signalVal.amplitude = newAmplitude;
-        signalVal.pressure = validatedPressure;
+        signalVal.pressure = newPressure;
 
         m_needNotifyAboutChanges = true;
     }
@@ -377,8 +379,7 @@ struct AudioSignalsNotifier {
     AudioSignalChanges audioSignalChanges;
 
 private:
-    static constexpr volume_dbfs_t PRESSURE_MINIMAL_VALUABLE_DIFF = 2.5f;
-    static constexpr volume_dbfs_t MINIMUM_OPERABLE_DBFS_LEVEL = -100.f;
+    static constexpr volume_dbfs_t PRESSURE_MINIMAL_VALUABLE_DIFF = volume_dbfs_t::make(2.5f);
 
     AudioSignalValuesMap m_signalValuesMap;
     bool m_needNotifyAboutChanges = false;

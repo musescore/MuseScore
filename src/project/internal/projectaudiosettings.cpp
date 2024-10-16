@@ -123,6 +123,11 @@ void ProjectAudioSettings::clearTrackInputParams()
     m_settingsChanged.notify();
 }
 
+bool ProjectAudioSettings::trackHasExistingOutputParams(const InstrumentTrackId& partId) const
+{
+    return muse::contains(m_trackOutputParamsMap, partId);
+}
+
 const AudioOutputParams& ProjectAudioSettings::trackOutputParams(const InstrumentTrackId& partId) const
 {
     auto search = m_trackOutputParamsMap.find(partId);
@@ -418,7 +423,7 @@ QJsonObject ProjectAudioSettings::outputParamsToJson(const AudioOutputParams& pa
     QJsonObject result;
     result.insert("fxChain", fxChainToJson(params.fxChain));
     result.insert("balance", params.balance);
-    result.insert("volumeDb", params.volume);
+    result.insert("volumeDb", params.volume.raw());
 
     if (!params.auxSends.empty()) {
         result.insert("auxSends", auxSendsToJson(params.auxSends));

@@ -777,7 +777,6 @@
     <measureNumberFontStyle>2</measureNumberFontStyle>
     <measureNumberColor r="0" g="0" b="0" a="255"/>
     <measureNumberOffset x="0" y="-2"/>
-    <measureNumberPosBelow x="0" y="1"/>
     <measureNumberOffsetType>1</measureNumberOffsetType>
     <measureNumberVPlacement>0</measureNumberVPlacement>
     <measureNumberHPlacement>0</measureNumberHPlacement>
@@ -795,8 +794,8 @@
     <mmRestRangeFontSpatiumDependent>0</mmRestRangeFontSpatiumDependent>
     <mmRestRangeFontStyle>2</mmRestRangeFontStyle>
     <mmRestRangeColor r="0" g="0" b="0" a="255"/>
-    <measureNumberPosAbove x="0" y="-3"/>
-    <measureNumberPosBelow x="0" y="1"/>
+    <measureNumberPosAbove x="0" y="-2"/>
+    <measureNumberPosBelow x="0" y="2"/>
     <mmRestRangeOffsetType>1</mmRestRangeOffsetType>
     <mmRestRangeVPlacement>1</mmRestRangeVPlacement>
     <mmRestRangeHPlacement>1</mmRestRangeHPlacement>
@@ -875,7 +874,7 @@
     <rehearsalMarkPosBelow x="0" y="4"/>
     <rehearsalMarkMinDistance>0.5</rehearsalMarkMinDistance>
     <repeatLeftFontFace>Edwin</repeatLeftFontFace>
-    <repeatLeftFontSize>11</repeatLeftFontSize>
+    <repeatLeftFontSize>18</repeatLeftFontSize>
     <repeatLeftLineSpacing>1</repeatLeftLineSpacing>
     <repeatLeftFontSpatiumDependent>1</repeatLeftFontSpatiumDependent>
     <repeatLeftFontStyle>0</repeatLeftFontStyle>

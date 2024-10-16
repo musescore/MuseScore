@@ -85,6 +85,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(lyricsDashMaxLength,                        Spatium(0.6)),
     styleDef(lyricsDashMaxDistance,                      Spatium(16.0)),
     styleDef(lyricsDashForce,                            true),
+    styleDef(lyricsDashFirstAndLastGapAreHalf,           true),
     styleDef(lyricsAlignVerseNumber,                     true),
     styleDef(lyricsLineThickness,                        Spatium(0.1)),
     styleDef(lyricsMelismaAlign,                         Align(AlignH::LEFT, AlignV::BASELINE)),
@@ -1179,7 +1180,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(rehearsalMarkMinDistance,                   Spatium(0.5)),
 
     styleDef(repeatLeftFontFace,                         "Edwin"),
-    styleDef(repeatLeftFontSize,                         11.0),
+    styleDef(repeatLeftFontSize,                         18.0),
     styleDef(repeatLeftLineSpacing,                      1.0),
     styleDef(repeatLeftFontSpatiumDependent,             true),
     styleDef(repeatLeftFontStyle,                        int(FontStyle::Normal)),
@@ -1192,8 +1193,6 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(repeatLeftFrameRound,                       0),
     styleDef(repeatLeftFrameFgColor,                     PropertyValue::fromValue(Color::BLACK)),
     styleDef(repeatLeftFrameBgColor,                     PropertyValue::fromValue(Color::transparent)),
-
-    styleDef(repeatsMusicalSymbolsScale,                 1.0), // percentage of the standard size
 
     styleDef(repeatRightFontFace,                        "Edwin"),
     styleDef(repeatRightFontSize,                        11.0),

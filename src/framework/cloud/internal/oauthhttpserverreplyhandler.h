@@ -24,8 +24,9 @@
 #define MUSE_CLOUD_OAUTHHTTPSERVERREPLYHANDLER_H
 
 #include <QOAuthOobReplyHandler>
-
 #include <QHostAddress>
+
+#include "global/modularity/ioc.h"
 
 class QUrlQuery;
 
@@ -35,9 +36,10 @@ class OAuthHttpServerReplyHandler : public QOAuthOobReplyHandler
     Q_OBJECT
 
 public:
-    explicit OAuthHttpServerReplyHandler(QObject* parent = nullptr);
-    explicit OAuthHttpServerReplyHandler(quint16 port, QObject* parent = nullptr);
-    explicit OAuthHttpServerReplyHandler(const QHostAddress& address, quint16 port, QObject* parent = nullptr);
+    explicit OAuthHttpServerReplyHandler(const modularity::ContextPtr& iocCtx, QObject* parent = nullptr);
+    explicit OAuthHttpServerReplyHandler(quint16 port, const modularity::ContextPtr& iocCtx, QObject* parent = nullptr);
+    explicit OAuthHttpServerReplyHandler(const QHostAddress& address, quint16 port, const modularity::ContextPtr& iocCtx,
+                                         QObject* parent = nullptr);
     ~OAuthHttpServerReplyHandler();
 
     QString callback() const override;

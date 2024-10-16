@@ -988,6 +988,9 @@ double System::firstNoteRestSegmentX(bool leading)
                                 width = std::max(width, e->pos().x() + e->ldata()->bbox().right());
                             }
                         }
+                        if (seg->isStartRepeatBarLineType()) {
+                            margin = style().styleMM(Sid::repeatBarlineDotSeparation);
+                        }
                         return std::min(seg->measure()->pos().x() + seg->pos().x() + width + margin, noteRestPos);
                     } else {
                         return margin;

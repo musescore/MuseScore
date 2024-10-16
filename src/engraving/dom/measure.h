@@ -298,7 +298,7 @@ public:
 
     int playbackCount() const { return m_playbackCount; }
     void setPlaybackCount(int val) { m_playbackCount = val; }
-    RectF staffabbox(staff_idx_t staffIdx) const;
+    RectF staffPageBoundingRect(staff_idx_t staffIdx) const;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

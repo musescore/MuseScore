@@ -102,6 +102,7 @@ enum class Sid {
     lyricsDashMaxLength,
     lyricsDashMaxDistance,
     lyricsDashForce,
+    lyricsDashFirstAndLastGapAreHalf,
     lyricsAlignVerseNumber,
     lyricsLineThickness,
     lyricsMelismaAlign,
@@ -1204,8 +1205,6 @@ enum class Sid {
     repeatLeftFrameRound,
     repeatLeftFrameFgColor,
     repeatLeftFrameBgColor,
-
-    repeatsMusicalSymbolsScale,
 
     repeatRightFontFace,
     repeatRightFontSize,

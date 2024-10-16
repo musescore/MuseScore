@@ -29,13 +29,16 @@
 #include "../iaudiopluginsconfiguration.h"
 
 namespace muse::audioplugins {
-class KnownAudioPluginsRegister : public IKnownAudioPluginsRegister
+class KnownAudioPluginsRegister : public IKnownAudioPluginsRegister, public Injectable
 {
 public:
-    Inject<IAudioPluginsConfiguration> configuration;
-    Inject<io::IFileSystem> fileSystem;
+    Inject<IAudioPluginsConfiguration> configuration = { this };
+    Inject<io::IFileSystem> fileSystem = { this };
 
 public:
+    KnownAudioPluginsRegister(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     Ret load() override;
 
     std::vector<AudioPluginInfo> pluginInfoList(PluginInfoAccepted accepted = PluginInfoAccepted()) const override;

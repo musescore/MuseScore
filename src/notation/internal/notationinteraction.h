@@ -113,7 +113,7 @@ public:
     bool startDrop(const QUrl& url) override;
     bool isDropAccepted(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool drop(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
-    void setDropTarget(const EngravingItem* item, bool notify = true) override;
+    void setDropTarget(EngravingItem* item, bool notify = true) override;
     void setDropRect(const muse::RectF& rect) override;
     void endDrop() override;
     muse::async::Notification dropChanged() const override;
@@ -224,6 +224,7 @@ public:
 
     void addStretch(qreal value) override;
 
+    Measure* selectedMeasure() const override;
     void addTimeSignature(Measure* measure, engraving::staff_idx_t staffIndex, TimeSignature* timeSignature) override;
 
     void explodeSelectedStaff() override;
@@ -307,7 +308,7 @@ private:
     bool needStartEditGrip(QKeyEvent* event) const;
     bool handleKeyPress(QKeyEvent* event);
 
-    void doEndEditElement();
+    void doEndEditElement(bool clearEditData = true);
     void doEndDrag();
 
     bool doDropStandard();
@@ -416,7 +417,7 @@ private:
     struct DropData
     {
         mu::engraving::EditData ed;
-        const EngravingItem* dropTarget = nullptr;
+        EngravingItem* dropTarget = nullptr;
         muse::RectF dropRect;
     };
 

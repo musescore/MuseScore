@@ -9,6 +9,9 @@ set(MODULE_SRC
 
 set (MODULE_INCLUDE
     ${FLUIDSYNTH_INC}
+    )
+
+set (MODULE_INCLUDE_PRIVATE
     ${SNDFILE_INCDIR}
     )
 
@@ -20,8 +23,8 @@ set(MODULE_LINK
     ${SNDFILE_LIB}
     )
 
-set(MODULE_USE_PCH_DISABLED ON)
-set(MODULE_USE_UNITY_NONE ON)
+set(MODULE_USE_PCH OFF)
+set(MODULE_USE_UNITY OFF)
 setup_module()
 
 #target_no_warning(${MODULE} -Wunused-const-variable=0)

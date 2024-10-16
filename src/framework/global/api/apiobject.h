@@ -31,8 +31,6 @@
 //! If we move it to the `api` module, we will have to link it to all other modules.
 //! That’s why it’s located here, because the `global` module links to everything.
 
-#define API_DOC(name, str) Q_INVOKABLE QString name##_doc() const { return str; }
-
 namespace muse::api {
 class ApiObject : public QObject, public Injectable
 {

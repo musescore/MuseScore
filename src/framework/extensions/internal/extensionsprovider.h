@@ -33,9 +33,9 @@
 namespace muse::extensions {
 class ExtensionsProvider : public IExtensionsProvider, public Injectable, public async::Asyncable
 {
-    Inject<IExtensionsConfiguration> configuration;
-    Inject<IExtensionsExecPointsRegister> execPointsRegister;
-    Inject<IInteractive> interactive;
+    Inject<IExtensionsConfiguration> configuration = { this };
+    Inject<IExtensionsExecPointsRegister> execPointsRegister = { this };
+    Inject<IInteractive> interactive = { this };
 
 public:
     ExtensionsProvider(const modularity::ContextPtr& iocCtx)

@@ -215,6 +215,7 @@ class PaletteProvider : public QObject, public IPaletteProvider, public muse::as
 
     Q_PROPERTY(bool isSinglePalette READ isSinglePalette NOTIFY isSinglePaletteChanged)
     Q_PROPERTY(bool isSingleClickToOpenPalette READ isSingleClickToOpenPalette NOTIFY isSingleClickToOpenPaletteChanged)
+    Q_PROPERTY(bool isPaletteDragEnabled READ isPaletteDragEnabled NOTIFY isPaletteDragEnabledChanged)
 
 public:
     void init() override;
@@ -245,6 +246,7 @@ public:
     Q_INVOKABLE bool loadPalette(const QModelIndex&);
 
     Q_INVOKABLE void setSearching(bool searching);
+    Q_INVOKABLE void setFilter(const QString&);
 
     bool paletteChanged() const { return m_userPaletteModel->paletteTreeChanged(); }
 
@@ -261,6 +263,7 @@ public:
 
     bool isSinglePalette() const;
     bool isSingleClickToOpenPalette() const;
+    bool isPaletteDragEnabled() const;
 
 signals:
     void userPaletteChanged();
@@ -268,6 +271,7 @@ signals:
 
     void isSinglePaletteChanged();
     void isSingleClickToOpenPaletteChanged();
+    void isPaletteDragEnabledChanged();
 
 private slots:
     void notifyAboutUserPaletteChanged()

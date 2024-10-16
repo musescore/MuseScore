@@ -54,10 +54,10 @@ void AudioExportModule::resolveImports()
 {
     auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
-        writers->reg({ "wav" }, std::make_shared<WaveWriter>());
-        writers->reg({ "mp3" }, std::make_shared<Mp3Writer>());
-        writers->reg({ "ogg" }, std::make_shared<OggWriter>());
-        writers->reg({ "flac" }, std::make_shared<FlacWriter>());
+        writers->reg({ "wav" }, std::make_shared<WaveWriter>(iocContext()));
+        writers->reg({ "mp3" }, std::make_shared<Mp3Writer>(iocContext()));
+        writers->reg({ "ogg" }, std::make_shared<OggWriter>(iocContext()));
+        writers->reg({ "flac" }, std::make_shared<FlacWriter>(iocContext()));
     }
 }
 

@@ -18,12 +18,12 @@ class GPScore;
 class GPTrack;
 class GPDomModel;
 
-class GPConverter
+class GPConverter : public muse::Injectable
 {
-    INJECT(mu::engraving::IEngravingConfiguration, engravingConfiguration);
+    muse::Inject<mu::engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
 public:
-    GPConverter(mu::engraving::Score* score, std::unique_ptr<GPDomModel>&& gpDom);
+    GPConverter(mu::engraving::Score* score, std::unique_ptr<GPDomModel>&& gpDom, const muse::modularity::ContextPtr& iocCtx);
 
     void convertGP();
 

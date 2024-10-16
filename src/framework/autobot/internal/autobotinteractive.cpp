@@ -143,6 +143,11 @@ QColor AutobotInteractive::selectColor(const QColor& color, const QString& title
     return m_real->selectColor(color, title);
 }
 
+bool AutobotInteractive::isSelectColorOpened() const
+{
+    return m_real->isSelectColorOpened();
+}
+
 RetVal<Val> AutobotInteractive::open(const std::string& uri) const
 {
     return m_real->open(uri);

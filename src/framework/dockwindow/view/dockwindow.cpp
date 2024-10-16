@@ -218,6 +218,11 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
         return;
     }
 
+    if (checkLayoutIsCorrupted()) {
+        LOGE() << "Layout is corrupted, restoring default";
+        restoreDefaultLayout();
+    }
+
     auto notifyAboutPageLoaded = [this, &uri]() {
         emit currentPageUriChanged(uri);
         emit pageLoaded();
@@ -577,6 +582,23 @@ bool DockWindow::restoreLayout(const QByteArray& layout, bool restoreRelativeToM
 
     KDDockWidgets::LayoutSaver layoutSaver(option);
     return layoutSaver.restoreLayout(layout);
+}
+
+bool DockWindow::checkLayoutIsCorrupted() const
+{
+    TRACEFUNC;
+
+    for (const DockBase* dock : m_currentPage->allDocks()) {
+        if (!dock) {
+            continue;
+        }
+
+        if (!dock->floatable() && dock->floating()) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 QByteArray DockWindow::windowState() const

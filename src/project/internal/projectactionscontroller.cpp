@@ -64,8 +64,11 @@ void ProjectActionsController::init()
     dispatcher()->reg(this, "file-open", this, &ProjectActionsController::openProject);
 
     dispatcher()->reg(this, "file-close", [this]() {
-        bool quitApp = multiInstancesProvider()->instances().size() > 1;
-        closeOpenedProject(quitApp);
+        auto anyInstanceWithoutProject = multiInstancesProvider()->isHasAppInstanceWithoutProject();
+        closeOpenedProject(anyInstanceWithoutProject);
+        if (anyInstanceWithoutProject) {
+            multiInstancesProvider()->activateWindowWithoutProject();
+        }
     });
 
     dispatcher()->reg(this, "file-save", [this]() { saveProject(SaveMode::Save); });
@@ -634,14 +637,10 @@ void ProjectActionsController::newProject()
     };
 
     if (globalContext()->currentProject()) {
-        //! Check, if any project is already open in the current window
-        //! and there is already a created instance without a project, then activate it
         if (multiInstancesProvider()->isHasAppInstanceWithoutProject()) {
-            multiInstancesProvider()->activateWindowWithoutProject();
+            multiInstancesProvider()->activateWindowWithoutProject({ "file-new" });
             return;
         }
-
-        //! Otherwise, we will create a new instance
         QStringList args;
         args << "--session-type" << "start-with-new";
         multiInstancesProvider()->openNewAppInstance(args);
@@ -701,7 +700,7 @@ bool ProjectActionsController::closeOpenedProject(bool quitApp)
 
         if (quitApp) {
             //! NOTE: we need to call `quit` in the next event loop due to controlling the lifecycle of this method
-            async::Async::call(this, [this](){
+            async::Async::call(this, [this]() {
                 dispatcher()->dispatch("quit", ActionData::make_arg1<bool>(false));
             });
         } else {

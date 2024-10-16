@@ -21,9 +21,14 @@
  */
 #include <gtest/gtest.h>
 
+#include <cstdint>
 #include <cstring>
+#include <iostream>
+#include <string>
 
 #include "io/file.h"
+#include "io/path.h"
+#include "types/bytearray.h"
 
 using namespace muse;
 using namespace muse::io;

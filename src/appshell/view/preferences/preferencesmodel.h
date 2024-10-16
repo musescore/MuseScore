@@ -33,15 +33,15 @@
 #include "preferencepageitem.h"
 
 namespace mu::appshell {
-class PreferencesModel : public QAbstractItemModel
+class PreferencesModel : public QAbstractItemModel, public muse::Injectable
 {
     Q_OBJECT
 
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(IAppShellConfiguration, configuration)
-    INJECT(muse::ui::IUiActionsRegister, actionsRegister)
-
     Q_PROPERTY(QString currentPageId READ currentPageId WRITE setCurrentPageId NOTIFY currentPageIdChanged)
+
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<IAppShellConfiguration> configuration = { this };
+    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
 
 public:
     explicit PreferencesModel(QObject* parent = nullptr);

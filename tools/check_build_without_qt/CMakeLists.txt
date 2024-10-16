@@ -26,9 +26,9 @@ include_directories(
 
 set(THIRDPARTY_DIR ${MU_ROOT}/thirdparty)
 
-add_definitions(
-    -DNO_QT_SUPPORT
-    -DGLOBAL_NO_INTERNAL
+add_compile_definitions(
+    NO_QT_SUPPORT
+    GLOBAL_NO_INTERNAL
 )
 
 configure_file(${MU_ROOT}/src/framework/cmake/muse_framework_config.h.in muse_framework_config.h )

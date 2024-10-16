@@ -78,7 +78,7 @@
       <user10FontFace>Times New Roman</user10FontFace>
       <user11FontFace>Times New Roman</user11FontFace>
       <user12FontFace>Times New Roman</user12FontFace>
-      <Spatium>1.75</Spatium>
+      <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

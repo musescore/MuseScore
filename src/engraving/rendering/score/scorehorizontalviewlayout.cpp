@@ -39,6 +39,7 @@
 #include "dom/tremolotwochord.h"
 #include "dom/part.h"
 #include "dom/box.h"
+#include "dom/slur.h"
 
 #include "passresetlayoutdata.h"
 
@@ -51,6 +52,7 @@
 #include "measurelayout.h"
 #include "horizontalspacing.h"
 #include "tremololayout.h"
+#include "slurtielayout.h"
 
 #include "log.h"
 
@@ -228,6 +230,14 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
         MeasureLayout::layout2(m, ctx);
     }
 
+    auto spanners = ctx.dom().spannerMap().findOverlapping(system->tick().ticks(), system->endTick().ticks());
+    for (auto interval : spanners) {
+        Spanner* sp = interval.value;
+        if (sp->isSlur() && toSlur(sp)->isCrossStaff()) {
+            SlurTieLayout::layoutSystem(toSlur(sp), system, ctx);
+        }
+    }
+
     const double lm = ctx.state().page()->lm();
     const double tm = ctx.state().page()->tm() + ctx.conf().styleMM(Sid::staffUpperBorder);
     const double rm = ctx.state().page()->rm();
@@ -309,6 +319,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
                     MeasureLayout::stretchMeasureInPracticeMode(m, ww, ctx);
                 } else {
                     MeasureLayout::createEndBarLines(m, false, ctx);
+                    MeasureLayout::computePreSpacingItems(m, ctx);
                     MeasureLayout::computeWidth(m, ctx, minTicks, maxTicks, 1);
                     ww = m->width();
                     MeasureLayout::layoutMeasureElements(m, ctx);

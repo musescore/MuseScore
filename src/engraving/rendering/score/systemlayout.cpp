@@ -1044,7 +1044,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             }
         }
     }
-    for (auto staffSticking : staffStickings) {
+    for (const auto& staffSticking : staffStickings) {
         AlignmentLayout::alignItemsGroup(staffSticking.second.stickingsAbove, system);
         AlignmentLayout::alignItemsGroup(staffSticking.second.stickingsBelow, system);
     }
@@ -1134,7 +1134,16 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         if (!sp->systemFlag() && sp->staff() && !sp->staff()->show()) {
             continue;
         }
+        if (sp->systemFlag() && sp->staffIdxOrNextVisible() == muse::nidx) {
+            continue;
+        }
 
+        const Measure* startMeas = sp->findStartMeasure();
+        const Measure* endMeas = sp->findEndMeasure();
+        if (!sp->visible() && ((startMeas && startMeas->isMMRest()) || (endMeas && endMeas->isMMRest()))
+            && ctx.conf().styleB(Sid::createMultiMeasureRests)) {
+            continue;
+        }
         if (sp->tick2() == stick && sp->isPedal() && toPedal(sp)->connect45HookToNext()) {
             pedal.push_back(sp);
         }
@@ -1170,6 +1179,17 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     AlignmentLayout::alignItemsWithTheirSnappingChain(dynamicsExprAndHairpinsToAlign, system);
 
     processLines(system, ctx, spanner, false);
+    for (MeasureNumber* mno : measureNumbers) {
+        Autoplace::autoplaceMeasureElement(mno, mno->mutldata());
+        system->staff(mno->staffIdx())->skyline().add(mno->ldata()->bbox().translated(mno->measure()->pos() + mno->pos()
+                                                                                      + mno->staffOffset()), mno);
+    }
+
+    for (MMRestRange* mmrr : mmrRanges) {
+        Autoplace::autoplaceMeasureElement(mmrr, mmrr->mutldata());
+        system->staff(mmrr->staffIdx())->skyline().add(mmrr->ldata()->bbox().translated(mmrr->measure()->pos() + mmrr->pos()), mmrr);
+    }
+
     processLines(system, ctx, ottavas, false);
     processLines(system, ctx, pedal,   true);
 
@@ -1182,6 +1202,9 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     bool dashOnFirstNoteSyllable = ctx.conf().style().styleB(Sid::lyricsShowDashIfSyllableOnFirstNote);
     std::set<Spanner*> unmanagedSpanners = ctx.dom().unmanagedSpanners();
     for (Spanner* sp : unmanagedSpanners) {
+        if (!sp->systemFlag() && sp->staff() && !sp->staff()->show()) {
+            continue;
+        }
         bool dashOnFirst = dashOnFirstNoteSyllable && !toLyricsLine(sp)->isEndMelisma();
         if (sp->tick() >= etick || sp->tick2() < stick || (sp->tick2() == stick && !dashOnFirst)) {
             continue;
@@ -1400,17 +1423,6 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                 TLayout::layoutItem(e, ctx);
             }
         }
-    }
-
-    for (MeasureNumber* mno : measureNumbers) {
-        Autoplace::autoplaceMeasureElement(mno, mno->mutldata());
-        system->staff(mno->staffIdx())->skyline().add(mno->ldata()->bbox().translated(mno->measure()->pos() + mno->pos()
-                                                                                      + mno->staffOffset()), mno);
-    }
-
-    for (MMRestRange* mmrr : mmrRanges) {
-        Autoplace::autoplaceMeasureElement(mmrr, mmrr->mutldata());
-        system->staff(mmrr->staffIdx())->skyline().add(mmrr->ldata()->bbox().translated(mmrr->measure()->pos() + mmrr->pos()), mmrr);
     }
 }
 
@@ -2879,6 +2891,31 @@ bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* ite
     return centerProperty == AutoOnOff::ON || item->appliesToAllVoicesInInstrument();
 }
 
+bool SystemLayout::elementHasAnotherStackedOutside(const EngravingItem* element, const Shape& elementShape, const SkylineLine& skylineLine)
+{
+    double elemShapeLeft = -elementShape.left();
+    double elemShapeRight = elementShape.right();
+    double elemShapeTop = elementShape.top();
+    double elemShapeBottom = elementShape.bottom();
+
+    for (const ShapeElement& skylineElement : skylineLine.elements()) {
+        if (!skylineElement.item() || skylineElement.item() == element || skylineElement.item()->parent() == element) {
+            continue;
+        }
+        bool intersectHorizontally = elemShapeRight > skylineElement.left() && elemShapeLeft < skylineElement.right();
+        if (!intersectHorizontally) {
+            continue;
+        }
+        bool skylineElementIsStackedOnIt = skylineLine.isNorth() ? skylineElement.top() < elemShapeBottom : skylineElement.bottom()
+                                           > elemShapeTop;
+        if (skylineElementIsStackedOnIt) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const System* system)
 {
     bool isAbove = element->placeAbove();
@@ -2909,6 +2946,10 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
     elementShape.remove_if([](ShapeElement& shEl) { return shEl.ignoreForLayout(); });
 
     const SkylineLine& skylineOfThisStaff = isAbove ? thisStaff->skyline().north() : thisStaff->skyline().south();
+
+    if (elementHasAnotherStackedOutside(element, elementShape, skylineOfThisStaff)) {
+        return;
+    }
 
     SkylineLine thisSkyline = skylineOfThisStaff.getFilteredCopy([element](const ShapeElement& shEl) {
         const EngravingItem* shapeItem = shEl.item();

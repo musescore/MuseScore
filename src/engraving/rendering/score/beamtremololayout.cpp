@@ -143,6 +143,17 @@ void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const
 
             if (innerLine == outerLine) {
                 sameLineException = 1;
+            } else if (chordRests.size() == 3) {
+                const ChordRest* otherOuterCR = outerChord == firstChordRest ? lastChordRest : firstChordRest;
+                const Chord* otherOuterChord = otherOuterCR->isChord() ? toChord(otherOuterCR) : nullptr;
+                if (!otherOuterChord) {
+                    continue;
+                }
+
+                const int otherOuterLine = ldata->up ? otherOuterChord->upNote()->line() : otherOuterChord->downNote()->line();
+                if (innerLine == otherOuterLine) {
+                    sameLineException = 1;
+                }
             }
         }
 

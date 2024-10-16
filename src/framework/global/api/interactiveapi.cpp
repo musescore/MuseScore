@@ -25,16 +25,31 @@
 
 using namespace muse::api;
 
+/** APIDOC namespace: interactive
+ * User interaction - informational messages, error messages, questions and other dialogs.
+ * @namespace
+ */
+
 InteractiveApi::InteractiveApi(IApiEngine* e)
     : ApiObject(e)
 {
 }
+
+/** APIDOC method
+ * Show information message
+ * @param {String} title Title
+ * @param {String} text Message
+ */
 
 void InteractiveApi::info(const QString& title, const QString& text)
 {
     interactive()->info(title.toStdString(), text.toStdString());
 }
 
+/** APIDOC method
+ * Open URL in external browser
+ * @param {String} url URL
+ */
 void InteractiveApi::openUrl(const QString& url)
 {
     interactive()->openUrl(QUrl(url));

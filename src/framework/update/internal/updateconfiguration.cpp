@@ -50,7 +50,7 @@ static QString userAgent()
     osName = "Linux";
 #endif
 
-    static muse::Inject<muse::IApplication> app;
+    static muse::GlobalInject<muse::IApplication> app;
 
     QString osVersion = QSysInfo::productVersion();
     QString cpuArchitecture = QSysInfo::currentCpuArchitecture();

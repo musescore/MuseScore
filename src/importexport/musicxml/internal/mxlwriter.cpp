@@ -22,7 +22,7 @@
 
 #include "mxlwriter.h"
 
-#include "musicxml/exportxml.h"
+#include "musicxml/export/exportmusicxml.h"
 
 #include "log.h"
 
@@ -41,7 +41,7 @@ Ret MxlWriter::write(notation::INotationPtr notation, io::IODevice& destinationD
         return make_ret(Ret::Code::UnknownError);
     }
 
-    Ret ret = mu::engraving::saveMxl(score, &destinationDevice);
+    Ret ret = saveMxl(score, &destinationDevice);
 
     return ret;
 }

@@ -137,8 +137,14 @@ int GuitarPro4::readBeatEffects(int track, Segment* segment)
         Arpeggio* a = Factory::createArpeggio(score->dummy()->chord());
         if (strokeup > 0) {
             a->setArpeggioType(ArpeggioType::UP_STRAIGHT);
+            if (strokeup < 7) {
+                a->setStretch(1.0 / std::pow(2, 6 - strokeup));
+            }
         } else if (strokedown > 0) {
             a->setArpeggioType(ArpeggioType::DOWN_STRAIGHT);
+            if (strokedown < 7) {
+                a->setStretch(1.0 / std::pow(2, 6 - strokedown));
+            }
         } else {
             delete a;
             a = 0;
@@ -1040,6 +1046,7 @@ bool GuitarPro4::read(IODevice* io)
                         slur->setTrack2(track);
                         slur->setTick(cr->tick());
                         slur->setTick2(cr->tick());
+                        slur->setStartElement(cr);
                         slurs[staffIdx] = slur;
                         score->addElement(slur);
                     } else if (slurs[staffIdx] && !hasSlur) {
@@ -1048,6 +1055,7 @@ bool GuitarPro4::read(IODevice* io)
                         slurs[staffIdx] = 0;
                         s->setTick2(cr->tick());
                         s->setTrack2(cr->track());
+                        s->setEndElement(cr);
                         if (cr->isChord()) {
                             lastSlurAdd = true;
                             slurSwap = false;

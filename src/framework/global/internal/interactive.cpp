@@ -23,10 +23,8 @@
 
 #include <QUrl>
 
-#include <QFileDialog>
-#include <QColorDialog>
 #include <QMainWindow>
-
+#include <QFileDialog>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QMap>
@@ -237,10 +235,15 @@ io::paths_t Interactive::selectMultipleDirectories(const QString& title, const i
 
 QColor Interactive::selectColor(const QColor& color, const QString& title)
 {
-    shortcutsRegister.get()->setActive(false);
-    QColor selectedColor = QColorDialog::getColor(color, nullptr, title);
-    shortcutsRegister.get()->setActive(true);
-    return selectedColor.isValid() ? selectedColor : color;
+    shortcutsRegister()->setActive(false);
+    QColor selectColor = provider()->selectColor(color, title).val;
+    shortcutsRegister()->setActive(true);
+    return selectColor;
+}
+
+bool Interactive::isSelectColorOpened() const
+{
+    return provider()->isSelectColorOpened();
 }
 
 RetVal<Val> Interactive::open(const std::string& uri) const

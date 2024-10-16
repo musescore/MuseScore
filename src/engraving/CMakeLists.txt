@@ -322,7 +322,7 @@ set_source_files_properties( # For these files, Unity Build does not work
     PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
     )
 
-set(MODULE_INCLUDE
+set(MODULE_INCLUDE_PRIVATE
     ${PROJECT_SOURCE_DIR}/thirdparty/dtl
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure
     )
@@ -351,7 +351,7 @@ if (MUE_BUILD_ENGRAVING_DEVTOOLS)
 endif()
 
 set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})
-set(MODULE_USE_UNITY_NONE ON)
+set(MODULE_USE_UNITY OFF)
 setup_module()
 
 set_property(TARGET ${MODULE} APPEND PROPERTY AUTOMOC_MACRO_NAMES "BEGIN_QT_REGISTERED_ENUM")

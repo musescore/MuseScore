@@ -31,12 +31,12 @@
 #include "audio/iaudioconfiguration.h"
 
 namespace mu::appshell {
-class ScorePreferencesModel : public QAbstractListModel, public muse::async::Asyncable
+class ScorePreferencesModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(muse::audio::IAudioConfiguration, audioConfiguration)
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
 
 public:
     explicit ScorePreferencesModel(QObject* parent = nullptr);

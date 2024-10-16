@@ -753,6 +753,7 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
         SymId::stringsUpBow,
         SymId::stringsDownBow,
         SymId::pluckedSnapPizzicatoAbove,
+        SymId::pictHalfOpen2,
         // SymId::stringsThumbPosition,
         // SymId::luteFingeringRHThumb,
         // SymId::luteFingeringRHFirst,
@@ -1158,6 +1159,7 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     gabel->setBeginTextAlign({ AlignH::LEFT, AlignV::VCENTER });
     gabel->setPropertyFlags(Pid::BEGIN_TEXT_ALIGN, PropertyFlags::UNSTYLED);
     gabel->setLen(w);
+    // Keep name in sync with PaletteCell::translationContext()
     sp->appendElement(gabel, QT_TRANSLATE_NOOP("palette", "Dynamic + hairpin"));
 
     auto volta = makeElement<Volta>(gpaletteScore);

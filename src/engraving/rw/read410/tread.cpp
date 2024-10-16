@@ -90,7 +90,6 @@
 #include "../../dom/bracket.h"
 #include "../../dom/breath.h"
 #include "../../dom/note.h"
-#include "../../dom/noteline.h"
 #include "../../dom/spanner.h"
 #include "../../dom/fingering.h"
 #include "../../dom/notedot.h"
@@ -252,8 +251,6 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::NOTEDOT: read(item_cast<NoteDot*>(item), xml, ctx);
         break;
     case ElementType::NOTEHEAD: read(item_cast<NoteHead*>(item), xml, ctx);
-        break;
-    case ElementType::NOTELINE: read(item_cast<NoteLine*>(item), xml, ctx);
         break;
     case ElementType::PAGE: read(item_cast<Page*>(item), xml, ctx);
         break;
@@ -1758,7 +1755,7 @@ void TRead::read(Beam* b, XmlReader& e, ReadContext& ctx)
             b->setGrowRight(e.readDouble());
         } else if (tag == "Fragment") {
             BeamFragment* f = new BeamFragment;
-            int idx = (b->beamDirection() == DirectionV::AUTO || b->beamDirection() == DirectionV::DOWN) ? 0 : 1;
+            int idx = b->directionIdx();
             b->setUserModified(true);
             double _spatium = b->spatium();
             while (e.readNextStartElement()) {
@@ -2423,8 +2420,6 @@ bool TRead::readProperties(MeasureBase* b, XmlReader& e, ReadContext& ctx)
         if (doAdd) {
             b->add(lb);
             b->cleanupLayoutBreaks(false);
-        } else {
-            delete lb;
         }
     } else if (tag == "StaffTypeChange") {
         StaffTypeChange* stc = Factory::createStaffTypeChange(b);
@@ -2719,7 +2714,13 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         TRead::read(cl, e, ctx);
         ch->add(cl);
     } else if (tag == "combineVoice") {
-        ch->setCombineVoice(e.readBool());
+        // Handle mistake in 4.4 & convert from bool
+        if (ch->score()->mscoreVersion() == u"4.4.0") {
+            bool val = e.readBool();
+            ch->setCombineVoice(val ? AutoOnOff::ON : AutoOnOff::OFF);
+        } else {
+            readProperty(ch, tag, e, ctx, Pid::COMBINE_VOICE);
+        }
     } else {
         return false;
     }
@@ -4559,8 +4560,8 @@ void TRead::read(compat::TremoloCompat* tc, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Fragment") {
             if (tc->two) {
                 BeamFragment f = BeamFragment();
-                int idx = (tc->two->direction() == DirectionV::AUTO || tc->two->direction() == DirectionV::DOWN) ? 0 : 1;
-                tc->two->setUserModified(tc->two->direction(), true);
+                int idx = tc->two->directionIdx();
+                tc->two->setUserModified(true);
                 double _spatium = tc->two->spatium();
                 while (e.readNextStartElement()) {
                     const AsciiStringView tag1(e.name());

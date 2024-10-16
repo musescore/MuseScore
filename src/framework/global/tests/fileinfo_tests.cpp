@@ -21,13 +21,11 @@
  */
 #include <gtest/gtest.h>
 
-#include <cstring>
-
 #include "io/fileinfo.h"
+#include "io/path.h"
+#include "types/string.h"
 
-#include <QFileInfo>
-#include <QDir>
-
+using namespace muse;
 using namespace muse::io;
 
 class Global_IO_FileInfoTests : public ::testing::Test
@@ -119,7 +117,7 @@ TEST_F(Global_IO_FileInfoTests, FileName)
         //! GIVE Some file path
         path_t filePath = "path/to/filename.ext1.ext2";
         //! DO
-        QString name = FileInfo(filePath).fileName();
+        String name = FileInfo(filePath).fileName();
         //! CHECK
         EXPECT_EQ(name, "filename.ext1.ext2");
     }
@@ -128,7 +126,7 @@ TEST_F(Global_IO_FileInfoTests, FileName)
         //! GIVE Some file path
         path_t filePath = "path/to/filename";
         //! DO
-        QString name = FileInfo(filePath).fileName();
+        String name = FileInfo(filePath).fileName();
         //! CHECK
         EXPECT_EQ(name, "filename");
     }
@@ -137,7 +135,7 @@ TEST_F(Global_IO_FileInfoTests, FileName)
         //! GIVE Some file path
         path_t filePath = "filename.ext1";
         //! DO
-        QString name = FileInfo(filePath).fileName();
+        String name = FileInfo(filePath).fileName();
         //! CHECK
         EXPECT_EQ(name, "filename.ext1");
     }
@@ -146,7 +144,7 @@ TEST_F(Global_IO_FileInfoTests, FileName)
         //! GIVE Some file path
         path_t filePath = "path/to/";
         //! DO
-        QString name = FileInfo(filePath).fileName();
+        String name = FileInfo(filePath).fileName();
         //! CHECK
         EXPECT_EQ(name, "");
     }
@@ -158,7 +156,7 @@ TEST_F(Global_IO_FileInfoTests, BaseName)
         //! GIVE Some file path
         path_t filePath = "path/to/filename.ext1.ext2";
         //! DO
-        QString name = FileInfo(filePath).baseName();
+        String name = FileInfo(filePath).baseName();
         //! CHECK
         EXPECT_EQ(name, "filename");
     }
@@ -167,7 +165,7 @@ TEST_F(Global_IO_FileInfoTests, BaseName)
         //! GIVE Some file path
         path_t filePath = "path/to/filename.ext1";
         //! DO
-        QString name = FileInfo(filePath).baseName();
+        String name = FileInfo(filePath).baseName();
         //! CHECK
         EXPECT_EQ(name, "filename");
     }
@@ -176,7 +174,7 @@ TEST_F(Global_IO_FileInfoTests, BaseName)
         //! GIVE Some file path
         path_t filePath = "path/to/filename";
         //! DO
-        QString name = FileInfo(filePath).baseName();
+        String name = FileInfo(filePath).baseName();
         //! CHECK
         EXPECT_EQ(name, "filename");
     }
@@ -185,7 +183,7 @@ TEST_F(Global_IO_FileInfoTests, BaseName)
         //! GIVE Some file path
         path_t filePath = "filename.ext1";
         //! DO
-        QString name = FileInfo(filePath).baseName();
+        String name = FileInfo(filePath).baseName();
         //! CHECK
         EXPECT_EQ(name, "filename");
     }
@@ -194,7 +192,7 @@ TEST_F(Global_IO_FileInfoTests, BaseName)
         //! GIVE Some file path
         path_t filePath = "filename";
         //! DO
-        QString name = FileInfo(filePath).baseName();
+        String name = FileInfo(filePath).baseName();
         //! CHECK
         EXPECT_EQ(name, "filename");
     }
@@ -203,7 +201,7 @@ TEST_F(Global_IO_FileInfoTests, BaseName)
         //! GIVE Some file path
         path_t filePath = "path/to/";
         //! DO
-        QString name = FileInfo(filePath).baseName();
+        String name = FileInfo(filePath).baseName();
         //! CHECK
         EXPECT_EQ(name, "");
     }
@@ -215,7 +213,7 @@ TEST_F(Global_IO_FileInfoTests, CompleteBaseName)
         //! GIVE Some file path
         path_t filePath = "path/to/filename.ext1.ext2";
         //! DO
-        QString name = FileInfo(filePath).completeBaseName();
+        String name = FileInfo(filePath).completeBaseName();
         //! CHECK
         EXPECT_EQ(name, "filename.ext1");
     }
@@ -224,7 +222,7 @@ TEST_F(Global_IO_FileInfoTests, CompleteBaseName)
         //! GIVE Some file path
         path_t filePath = "path/to/filename.ext1";
         //! DO
-        QString name = FileInfo(filePath).completeBaseName();
+        String name = FileInfo(filePath).completeBaseName();
         //! CHECK
         EXPECT_EQ(name, "filename");
     }
@@ -233,7 +231,7 @@ TEST_F(Global_IO_FileInfoTests, CompleteBaseName)
         //! GIVE Some file path
         path_t filePath = "path/to/filename";
         //! DO
-        QString name = FileInfo(filePath).completeBaseName();
+        String name = FileInfo(filePath).completeBaseName();
         //! CHECK
         EXPECT_EQ(name, "filename");
     }
@@ -242,7 +240,7 @@ TEST_F(Global_IO_FileInfoTests, CompleteBaseName)
         //! GIVE Some file path
         path_t filePath = "path/to/";
         //! DO
-        QString name = FileInfo(filePath).completeBaseName();
+        String name = FileInfo(filePath).completeBaseName();
         //! CHECK
         EXPECT_EQ(name, "");
     }
@@ -254,7 +252,7 @@ TEST_F(Global_IO_FileInfoTests, Suffix)
         //! GIVE Some file path
         path_t filePath = "path/to/filename.ext1.ext2";
         //! DO
-        QString name = FileInfo(filePath).suffix();
+        String name = FileInfo(filePath).suffix();
         //! CHECK
         EXPECT_EQ(name, "ext2");
     }
@@ -263,7 +261,7 @@ TEST_F(Global_IO_FileInfoTests, Suffix)
         //! GIVE Some file path
         path_t filePath = "path/to/filename.ext1";
         //! DO
-        QString name = FileInfo(filePath).suffix();
+        String name = FileInfo(filePath).suffix();
         //! CHECK
         EXPECT_EQ(name, "ext1");
     }
@@ -272,7 +270,7 @@ TEST_F(Global_IO_FileInfoTests, Suffix)
         //! GIVE Some file path
         path_t filePath = "path/to/filename";
         //! DO
-        QString name = FileInfo(filePath).suffix();
+        String name = FileInfo(filePath).suffix();
         //! CHECK
         EXPECT_EQ(name, "");
     }
@@ -281,7 +279,7 @@ TEST_F(Global_IO_FileInfoTests, Suffix)
         //! GIVE Some file path
         path_t filePath = "path/to/";
         //! DO
-        QString name = FileInfo(filePath).suffix();
+        String name = FileInfo(filePath).suffix();
         //! CHECK
         EXPECT_EQ(name, "");
     }
@@ -290,7 +288,7 @@ TEST_F(Global_IO_FileInfoTests, Suffix)
         //! GIVE Some file path
         path_t filePath = "./path/to/";
         //! DO
-        QString name = FileInfo(filePath).suffix();
+        String name = FileInfo(filePath).suffix();
         //! CHECK
         EXPECT_EQ(name, "");
     }

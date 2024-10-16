@@ -20,8 +20,6 @@
 
 cmake_minimum_required(VERSION 3.16)
 
-cmake_policy(SET CMP0091 OLD) # not set MSVC default args
-
 project(mscore LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -103,6 +101,7 @@ option(MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH "Path to precompiled dependencies
 # Important for the maintainers of Linux distributions
 option(MUE_COMPILE_USE_SYSTEM_FLAC "Try use system flac" OFF)
 option(MUE_COMPILE_USE_SYSTEM_FREETYPE "Try use system freetype" OFF)
+option(MUE_COMPILE_USE_SYSTEM_HARFBUZZ "Try use system harfbuzz" OFF)
 option(MUE_COMPILE_USE_SYSTEM_OPUS "Try use system opus" OFF)
 option(MUE_COMPILE_USE_SYSTEM_OPUSENC "Try use system libopusenc" OFF)
 option(MUE_COMPILE_USE_SYSTEM_TINYXML "Try use system tinyxml" OFF)
@@ -151,6 +150,10 @@ if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
 endif()
 
 set(QT_MIN_VERSION "6.2.4")
+if (MUSE_MODULE_NETWORK_WEBSOCKET)
+    set(QT_ADD_WEBSOCKET ON)
+endif()
+
 include(FindQt6)
 
 if (MUE_DOWNLOAD_SOUNDFONT)

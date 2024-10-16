@@ -23,15 +23,16 @@
 
 #include "preferencesmodel.h"
 
-#include "log.h"
 #include "translation.h"
 #include "ui/view/iconcodes.h"
+
+#include "log.h"
 
 using namespace mu::appshell;
 using namespace muse::ui;
 
 PreferencesModel::PreferencesModel(QObject* parent)
-    : QAbstractItemModel(parent)
+    : QAbstractItemModel(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 
@@ -142,7 +143,12 @@ void PreferencesModel::load(const QString& currentPageId)
     if (!currentPageId.isEmpty()) {
         setCurrentPageId(currentPageId);
     } else {
-        setCurrentPageId("general");
+        const QString& lastOpenedPageId = configuration()->preferencesDialogLastOpenedPageId();
+        if (lastOpenedPageId.isEmpty()) {
+            setCurrentPageId("general");
+        } else {
+            setCurrentPageId(lastOpenedPageId);
+        }
     }
 
     m_rootItem = new PreferencePageItem();
@@ -274,6 +280,7 @@ void PreferencesModel::setCurrentPageId(QString currentPageId)
     }
 
     m_currentPageId = currentPageId;
+    configuration()->setPreferencesDialogLastOpenedPageId(currentPageId);
     emit currentPageIdChanged(m_currentPageId);
 }
 

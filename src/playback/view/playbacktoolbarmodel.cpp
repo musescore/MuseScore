@@ -95,6 +95,13 @@ void PlaybackToolBarModel::updateActions()
     MenuItemList result;
     MenuItemList settingsItems;
 
+    for (const UiAction& action : PlaybackUiActions::midiInputActions()) {
+        settingsItems << makeMenuItem(action.code);
+    }
+
+    settingsItems << makeInputPitchMenu();
+    settingsItems << makeSeparator();
+
     for (const UiAction& action : PlaybackUiActions::settingsActions()) {
         settingsItems << makeMenuItem(action.code);
     }
@@ -129,6 +136,22 @@ void PlaybackToolBarModel::updateActions()
     result << settingsItem;
 
     setItems(result);
+}
+
+MenuItem* PlaybackToolBarModel::makeInputPitchMenu()
+{
+    MenuItemList items;
+
+    for (const UiAction& action : PlaybackUiActions::midiInputPitchActions()) {
+        items << makeMenuItem(action.code);
+    }
+
+    MenuItem* menu = makeMenu(muse::TranslatableString("notation", "Input pitch"), items);
+    UiAction action = menu->action();
+    action.iconCode = IconCode::Code::MUSIC_NOTES;
+    menu->setAction(action);
+
+    return menu;
 }
 
 void PlaybackToolBarModel::onActionsStateChanges(const ActionCodeList& codes)

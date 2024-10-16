@@ -31,7 +31,7 @@
 using namespace mu::appshell;
 
 NewInstanceLoadingScreenView::NewInstanceLoadingScreenView(bool forNewScore, const QString& openingFileName, QWidget* parent)
-    : QWidget(parent)
+    : QWidget(parent), muse::Injectable(muse::iocCtxForQWidget(this))
 {
     setAttribute(Qt::WA_TranslucentBackground);
 

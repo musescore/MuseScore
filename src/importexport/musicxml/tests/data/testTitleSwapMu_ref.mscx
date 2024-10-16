@@ -118,7 +118,7 @@
       <user11FontSize>11.9365</user11FontSize>
       <user12FontFace>Plantin MT Std</user12FontFace>
       <user12FontSize>11.9365</user12FontSize>
-      <Spatium>1.2192</Spatium>
+      <spatium>1.2192</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -401,7 +401,7 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>3.5</height>
+        <height>10</height>
         <Text>
           <style>title</style>
           <offset x="0" y="-0.101194"/>
@@ -429,7 +429,7 @@
           </voice>
         </Measure>
       <VBox>
-        <height>19.5</height>
+        <height>10</height>
         <sizeIsSpatiumDependent>0</sizeIsSpatiumDependent>
         <Text>
           <offset x="0" y="-0.0942"/>

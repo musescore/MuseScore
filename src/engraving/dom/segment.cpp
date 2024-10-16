@@ -585,15 +585,23 @@ Segment* Segment::nextCR(track_idx_t track, bool sameStaff) const
 //    get the next ChordRest, start at this segment
 //---------------------------------------------------------
 
-ChordRest* Segment::nextChordRest(track_idx_t track, bool backwards) const
+ChordRest* Segment::nextChordRest(track_idx_t track, bool backwards, bool stopAtMeasureBoundary) const
 {
-    for (const Segment* seg = this; seg; seg = backwards ? seg->prev1() : seg->next1()) {
+    const Segment* seg = this;
+    while (seg) {
         EngravingItem* el = seg->element(track);
         if (el && el->isChordRest()) {
             return toChordRest(el);
         }
+
+        if (backwards) {
+            seg = stopAtMeasureBoundary ? seg->prev() : seg->prev1();
+            continue;
+        }
+
+        seg = stopAtMeasureBoundary ? seg->next() : seg->next1();
     }
-    return 0;
+    return nullptr;
 }
 
 EngravingItem* Segment::element(track_idx_t track) const
@@ -1682,16 +1690,17 @@ EngravingItem* Segment::firstElementOfSegment(staff_idx_t activeStaff) const
 {
     for (auto i: m_elist) {
         if (i && i->staffIdx() == activeStaff) {
+            if (i->isDurationElement()) {
+                DurationElement* de = toDurationElement(i);
+                Tuplet* tuplet = de->tuplet();
+                if (tuplet && de == tuplet->elements().front()) {
+                    return tuplet;
+                }
+            }
+
             if (i->type() == ElementType::CHORD) {
                 Chord* chord = toChord(i);
-                GraceNotesGroup& graceNotesBefore = chord->graceNotesBefore();
-                if (!graceNotesBefore.empty()) {
-                    if (Chord* graceNotesBeforeFirstChord = graceNotesBefore.front()) {
-                        return graceNotesBeforeFirstChord->notes().front();
-                    }
-                }
-
-                return toChord(i)->notes().back();
+                return chord->firstGraceOrNote();
             } else {
                 return i;
             }
@@ -1974,7 +1983,8 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::STAFF_STATE:
     case ElementType::INSTRUMENT_CHANGE:
     case ElementType::HARP_DIAGRAM:
-    case ElementType::STICKING: {
+    case ElementType::STICKING:
+    case ElementType::TUPLET: {
         EngravingItem* next = nullptr;
         if (e->explicitParent() == this) {
             next = nextAnnotation(e);

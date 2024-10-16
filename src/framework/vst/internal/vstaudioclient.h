@@ -38,8 +38,8 @@ public:
 
     void loadSupportedParams();
 
-    bool handleEvent(const VstEvent& event, const audio::samples_t sampleOffset);
-    bool handleParamChange(const ParamChangeEvent& param, const audio::samples_t sampleOffset);
+    bool handleEvent(const VstEvent& event);
+    bool handleParamChange(const ParamChangeEvent& param);
     void setVolumeGain(const muse::audio::gain_t newVolumeGain);
 
     muse::audio::samples_t process(float* output, muse::audio::samples_t samplesPerChannel);
@@ -47,7 +47,9 @@ public:
     void flush();
     void allNotesOff();
 
-    void setMaxSamplesPerBlock(unsigned int samples);
+    audio::samples_t maxSamplesPerBlock() const;
+    void setMaxSamplesPerBlock(audio::samples_t samples);
+
     void setSampleRate(unsigned int sampleRate);
 
     ParamsMapping paramsMapping(const std::set<Steinberg::Vst::CtrlNumber>& controllers) const;
@@ -55,7 +57,7 @@ public:
 private:
     struct SamplesInfo {
         unsigned int sampleRate = 0;
-        unsigned int maxSamplesPerBlock = 0;
+        audio::samples_t maxSamplesPerBlock = 0;
 
         bool isValid()
         {
@@ -78,7 +80,7 @@ private:
 
     void flushBuffers();
 
-    void addParamChange(const ParamChangeEvent& param, const audio::samples_t sampleOffset);
+    void addParamChange(const ParamChangeEvent& param);
 
     bool m_isActive = false;
     muse::audio::gain_t m_volumeGain = 1.f; // 0.0 - 1.0

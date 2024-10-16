@@ -31,7 +31,7 @@
 
 namespace muse::extensions::api {
 //! NOTE Used for qml and scripts
-class ExtApi : public QObject
+class ExtApi : public QObject, public Injectable
 {
     Q_OBJECT
     Q_PROPERTY(QJSValue log READ log CONSTANT)
@@ -58,7 +58,10 @@ class ExtApi : public QObject
     //Q_PROPERTY(QJSValue process READ process CONSTANT)
     //Q_PROPERTY(QJSValue filesystem READ filesystem CONSTANT)
 
-    Inject<muse::api::IApiRegister> apiRegister;
+    Q_PROPERTY(QJSValue websocket READ websocket CONSTANT)
+    Q_PROPERTY(QJSValue websocketserver READ websocketserver CONSTANT)
+
+    Inject<muse::api::IApiRegister> apiRegister = { this };
 
 public:
     ExtApi(muse::api::IApiEngine* engine, QObject* parent);
@@ -78,6 +81,9 @@ public:
     QJSValue shortcuts() const { return api("api.shortcuts"); }
     QJSValue keyboard() const { return api("api.keyboard"); }
     QJSValue accessibility() const { return api("api.accessibility"); }
+
+    QJSValue websocket() const { return api("api.websocket"); }
+    QJSValue websocketserver() const { return api("api.websocketserver"); }
 
 private:
     QJSValue api(const std::string& name) const;

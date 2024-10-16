@@ -2,12 +2,6 @@ name: 'Build: macOS'
 
 on:
   pull_request:
-    branches:
-    - master
-
-  schedule:
-    - cron: '0 3 */1 */1 *' # At 03:00 on every day-of-month for master
-    - cron: '0 5 */1 */1 *' # At 05:00 on every day-of-month for current release branch
   workflow_dispatch:
     inputs:
       build_mode:
@@ -41,7 +35,6 @@ on:
         required: false
 
 env:
-  CURRENT_RELEASE_BRANCH: 4.4.0
   DEVELOPER_DIR: /Applications/Xcode_15.4.app/Contents/Developer
 
 jobs:
@@ -52,29 +45,10 @@ jobs:
       uses: styfle/cancel-workflow-action@0.12.1
       with:
         access_token: ${{ github.token }}
-    - name: Exit if current release branch configuration is incorrect
-      if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' && env.CURRENT_RELEASE_BRANCH == '' }}
-      run: |
-        echo "::error::CURRENT_RELEASE_BRANCH is not set"
-        exit 1
-    - name: Clone repository (default)
+    - name: Clone repository
       uses: actions/checkout@v4
-      if: ${{ github.event_name != 'schedule' || github.event.schedule == '0 3 */1 */1 *' }}
-    - name: Clone repository (${{ env.CURRENT_RELEASE_BRANCH }})
-      uses: actions/checkout@v4
-      if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' }}
-      with:
-        ref: ${{ env.CURRENT_RELEASE_BRANCH }}
-    - name: Ccache cache files
-      uses: actions/cache@v4
-      with:
-        path: ~/.ccache
-        key: ${{github.workflow}}-ccache-$(date -u +"%F-%T")
-        restore-keys: ${{github.workflow}}-ccache-  # restore ccache from either previous build on this branch or on master    
-    - name: Setup ccache
-      run: |
-        bash ./buildscripts/ci/tools/setup_ccache.sh          
-    - name: "Configure workflow"
+
+    - name: Configure workflow
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
         SENTRY_SERVER_MU4_KEY: ${{ secrets.SENTRY_SERVER_MU4_KEY }}
@@ -87,60 +61,42 @@ jobs:
         bash ./buildscripts/ci/tools/make_build_number.sh
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
-        DO_PUBLISH='false'
-        if [[ "${{ inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then
-          DO_PUBLISH='true'
-          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then 
-            echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled" 
-            DO_PUBLISH='false'
-          fi  
-        fi
-
         DO_NOTARIZE='false'
-        if [ "$BUILD_MODE" != "devel" ]; then 
+        if [ "$BUILD_MODE" != "devel" ]; then
           DO_NOTARIZE='true'
-          if [ -z "${{ secrets.APPLE_USERNAME }}" ]; then 
-            echo "warning: not set APPLE_USERNAME, notarize disabled" 
+          if [ -z "${{ secrets.APPLE_USERNAME }}" ]; then
+            echo "::warning::APPLE_USERNAME is empty; notarization disabled"
             DO_NOTARIZE='false'
           fi
-          if [ -z "${{ secrets.APPLE_PASSWORD }}" ]; then 
-            echo "warning: not set APPLE_PASSWORD, notarize disabled" 
+          if [ -z "${{ secrets.APPLE_PASSWORD }}" ]; then
+            echo "::warning::APPLE_PASSWORD is empty, notarization disabled"
             DO_NOTARIZE='false'
-          fi 
-        fi
-
-        DO_BUILD='true'
-        if [ "$BUILD_MODE" == "nightly" ]; then 
-          if [ "${{ github.repository }}" != "musescore/MuseScore" ]; then 
-            DO_BUILD='false'
           fi
         fi
 
         DO_UPDATE_TS='false'
-        if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then 
-            DO_UPDATE_TS='true'
-            if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then 
-              echo "warning: not set TRANSIFEX_API_TOKEN, update .ts disabled" 
-              DO_UPDATE_TS='false'
-            fi 
+        if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then
+          DO_UPDATE_TS='true'
+          if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then
+            echo "::warning::TRANSIFEX_API_TOKEN is empty; updating .ts files disabled"
+            DO_UPDATE_TS='false'
+          fi
         fi
 
         DO_PLACEHOLDER_TRANSLATIONS='false'
-        if [[ "$DO_BUILD" == "true" ]]; then
-          if [[ "$BUILD_MODE" == "nightly" || "$BUILD_MODE" == "devel" ]]; then
-            DO_PLACEHOLDER_TRANSLATIONS='true'
-          fi
+        if [[ "$BUILD_MODE" == "nightly" || "$BUILD_MODE" == "devel" ]]; then
+          DO_PLACEHOLDER_TRANSLATIONS='true'
         fi
 
         DO_UPLOAD_SYMBOLS='false'
         SENTRY_URL=""
 
-        if [ "$SENTRY_SERVER_MU4_KEY" != "" ]; then 
-          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable" ]; then 
+        if [ "$SENTRY_SERVER_MU4_KEY" != "" ]; then
+          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable" ]; then
             SENTRY_PROJECT="mu4"
           fi
 
-          if [ "$SENTRY_PROJECT" == "mu4" ]; then 
+          if [ "$SENTRY_PROJECT" == "mu4" ]; then
             DO_UPLOAD_SYMBOLS='true'
             SENTRY_URL=https://sentry.musescore.org/api/4/minidump/?sentry_key=$SENTRY_SERVER_MU4_KEY
           fi
@@ -150,51 +106,55 @@ jobs:
           SENTRY_PROJECT="sandbox"
         fi
 
-        if [ "$SENTRY_PROJECT" == "sandbox" ] && [ "$SENTRY_SERVER_SANDBOX_KEY" != "" ]; then 
+        if [ "$SENTRY_PROJECT" == "sandbox" ] && [ "$SENTRY_SERVER_SANDBOX_KEY" != "" ]; then
           DO_UPLOAD_SYMBOLS='true'
           SENTRY_URL=https://sentry.musescore.org/api/3/minidump/?sentry_key=$SENTRY_SERVER_SANDBOX_KEY
         fi
 
-        if [ $DO_BUILD == 'false' ]; then
-          DO_NOTARIZE='false'
-          DO_UPLOAD_SYMBOLS='false'
-          DO_PUBLISH='false'
+        DO_PUBLISH='false'
+        if [ "${{ inputs.publish }}" == "on" ]; then
+          DO_PUBLISH='true'
+          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
+            echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is empty; not publishing to OSUOSL"
+            DO_PUBLISH='false'
+          fi
         fi
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
-        if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
-        if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"
+        fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"MU4_${BUILD_NUMBER}_Mac${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
-        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
-        echo "BUILD_MODE: $BUILD_MODE"
-        echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
-        echo "BUILD_NUMBER: $BUILD_NUMBER"
-        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
-        echo "DO_BUILD: $DO_BUILD"
-        echo "DO_UPDATE_TS=$DO_UPDATE_TS" >> $GITHUB_ENV
-        echo "DO_UPDATE_TS: $DO_UPDATE_TS"
-        echo "DO_PLACEHOLDER_TRANSLATIONS=$DO_PLACEHOLDER_TRANSLATIONS" >> $GITHUB_ENV
-        echo "DO_PLACEHOLDER_TRANSLATIONS: $DO_PLACEHOLDER_TRANSLATIONS"
-        echo "DO_NOTARIZE=$DO_NOTARIZE" >> $GITHUB_ENV
-        echo "DO_NOTARIZE: $DO_NOTARIZE"
-        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
-        echo "DO_PUBLISH: $DO_PUBLISH"
-        echo "DO_UPLOAD_SYMBOLS=$DO_UPLOAD_SYMBOLS" >> $GITHUB_ENV
-        echo "DO_UPLOAD_SYMBOLS: $DO_UPLOAD_SYMBOLS"
-        echo "SENTRY_PROJECT=$SENTRY_PROJECT" >> $GITHUB_ENV
-        echo "SENTRY_PROJECT: $SENTRY_PROJECT"
-        echo "SENTRY_URL=$SENTRY_URL" >> $GITHUB_ENV
-        echo "SENTRY_URL: $SENTRY_URL"
-        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
-        echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
+        echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
+        echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
+        echo "DO_UPDATE_TS=$DO_UPDATE_TS" | tee -a $GITHUB_ENV
+        echo "DO_PLACEHOLDER_TRANSLATIONS=$DO_PLACEHOLDER_TRANSLATIONS" | tee -a $GITHUB_ENV
+        echo "DO_NOTARIZE=$DO_NOTARIZE" | tee -a $GITHUB_ENV
+        echo "DO_UPLOAD_SYMBOLS=$DO_UPLOAD_SYMBOLS" | tee -a $GITHUB_ENV
+        echo "SENTRY_PROJECT=$SENTRY_PROJECT" | tee -a $GITHUB_ENV
+        echo "SENTRY_URL=$SENTRY_URL" | tee -a $GITHUB_ENV
+        echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
+
+        echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_ENV
+
+    - name: Restore ccache files
+      uses: actions/cache@v4
+      with:
+        path: ${{ github.workspace }}/.ccache
+        key: ${{github.workflow}}-ccache-${{ env.CCACHE_TIMESTAMP }}
+        restore-keys: ${{github.workflow}}-ccache-
+    - name: Setup ccache
+      run: |
+        brew install ccache
+        bash ./buildscripts/ci/tools/setup_ccache_config.sh
+
     - name: Setup environment
-      if: env.DO_BUILD == 'true'
       run: |
         bash ./buildscripts/ci/macos/setup.sh
     - name: Generate _en.ts files
-      if: env.DO_BUILD == 'true'
       env:
         LUPDATE_ARGS: ""
         POSTPROCESS_ARGS: "--warn-only ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}"
@@ -206,26 +166,23 @@ jobs:
         bash ./buildscripts/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s macos
         bash ./buildscripts/ci/translation/tx_pull.sh
     - name: Build
-      if: env.DO_BUILD == 'true'
       run: |
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
         bash ./buildscripts/ci/macos/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL
         echo "============== ccache ==============="
         ccache -s
-    - name: Package 
-      if: env.DO_BUILD == 'true'
+    - name: Package
       run: |
         S_S="${{ secrets.MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET }}"; if [ -z "$S_S" ]; then S_S="''"; fi
         S_P="${{ secrets.MAC_SIGN_CERTIFICATE_PASSWORD }}"; if [ -z "$S_P" ]; then S_P="''"; fi
-        bash ./buildscripts/ci/macos/package.sh --signpass "$S_P" --signsecret "$S_S" 
+        bash ./buildscripts/ci/macos/package.sh --signpass "$S_P" --signsecret "$S_S"
     - name: Notarize
       if: env.DO_NOTARIZE == 'true'
       run: |
         USER=${{ secrets.APPLE_USERNAME }}; if [ -z "$USER" ]; then USER=""; fi
         PW=${{ secrets.APPLE_PASSWORD }}; if [ -z "$PW" ]; then PW=""; fi
         bash ./buildscripts/ci/macos/notarize.sh -u $USER -p $PW
-    - name: Checksum 
-      if: env.DO_BUILD == 'true'
+    - name: Checksum
       run: |
         bash ./buildscripts/ci/tools/checksum.sh
     - name: Generate and upload dump symbols
@@ -242,12 +199,11 @@ jobs:
               -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
               -DSENTRY_PROJECT=${SENTRY_PROJECT} \
               -P buildscripts/ci/crashdumps/ci_generate_and_upload.cmake
-    - name: Publish package 
+    - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
       run: |
         bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os macos -v 4
     - name: Upload artifacts on GitHub
-      if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}

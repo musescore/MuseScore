@@ -25,6 +25,7 @@
 
 #include "notationtypes.h"
 
+#include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/sig.h"
@@ -665,9 +666,11 @@ void NotationActionController::resetState()
         return;
     }
 
-    if (interaction->isElementEditStarted()) {
+    if (interaction->isTextEditingStarted()) {
         interaction->endEditElement();
         return;
+    } else if (interaction->isElementEditStarted()) {
+        interaction->endEditElement();
     }
 
     if (!interaction->selection()->isNone()) {
@@ -1909,7 +1912,9 @@ void NotationActionController::openStaffTextPropertiesDialog()
 
 void NotationActionController::openMeasurePropertiesDialog()
 {
-    interactive()->open("musescore://notation/measureproperties?sync=false");
+    if (currentNotationInteraction()->selectedMeasure() != nullptr) {
+        interactive()->open("musescore://notation/measureproperties?sync=false");
+    }
 }
 
 void NotationActionController::openEditGridSizeDialog()
@@ -2077,7 +2082,7 @@ bool NotationActionController::canRedo() const
 
 bool NotationActionController::isNotationPage() const
 {
-    return uiContextResolver()->matchWithCurrent(context::UiCtxNotationOpened);
+    return uiContextResolver()->matchWithCurrent(context::UiCtxProjectOpened);
 }
 
 bool NotationActionController::isStandardStaff() const

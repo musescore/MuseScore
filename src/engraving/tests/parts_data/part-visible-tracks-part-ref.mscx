@@ -41,10 +41,9 @@
       <dynamicsPosAbove x="0" y="-1.5"/>
       <dynamicsPosBelow x="0" y="2.5"/>
       <measureNumberPosBelow x="0" y="1"/>
-      <repeatLeftFontSize>18</repeatLeftFontSize>
       <systemTextLineFontSize>12</systemTextLineFontSize>
       <defaultsVersion>410</defaultsVersion>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

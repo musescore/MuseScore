@@ -21,13 +21,12 @@
  */
 #include <gtest/gtest.h>
 
-#include <cstring>
 #include <iostream>
+#include <string>
+#include <vector>
 
 #include "serialization/json.h"
-
-#include <QJsonObject>
-#include <QJsonDocument>
+#include "types/bytearray.h"
 
 using namespace muse;
 
@@ -38,24 +37,6 @@ public:
 
 TEST_F(Global_Ser_Json, WriteRead)
 {
-//    const char json[] ="{"
-//                       "   \"hello\" : \"world\", "
-//                       "   \"t\" : true , "
-//                       "   \"f\" : false, "
-//                       "   \"n\": null, "
-//                       "   \"i\":123, "
-//                       "   \"pi\": 3.1416, "
-//                       "   \"a\":[1, 2, 3, 4], "
-//                       "   \"o\":{\"key1\":\"val1\", \"key2\":\"val2\"} "
-//                       "} ";
-
-    {
-//        QJsonObject o;
-//        o["pi"] = 3.1416;
-//        QByteArray ba = QJsonDocument(o).toJson();
-//        std::cout << ba.constData() << "\n";
-    }
-
     ByteArray data;
 
     // Write

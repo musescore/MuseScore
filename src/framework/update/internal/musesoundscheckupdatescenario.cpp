@@ -23,17 +23,22 @@
 #include "musesoundscheckupdatescenario.h"
 
 #include "global/concurrency/concurrent.h"
+#include "global/defer.h"
+#include "global/containers.h"
+#include "global/stringutils.h"
+#include "global/types/val.h"
+#include "global/types/translatablestring.h"
 
 #include "updateerrors.h"
 
-#include "types/val.h"
-
-#include "defer.h"
 #include "log.h"
 
 using namespace muse;
 using namespace muse::update;
 using namespace muse::actions;
+
+static const char* DEFAULT_IMAGE_URL = "qrc:/qml/Muse/Update/resources/muse_sounds_promo.png";
+static const TranslatableString DEFAULT_ACTION_TITLE("update", "Take me to Muse Hub");
 
 void MuseSoundsCheckUpdateScenario::delayedInit()
 {
@@ -141,6 +146,18 @@ void MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info)
     query.addParam("notes", Val(info.notes));
     query.addParam("features", Val(info.additionInfo.at("features")));
 
+    if (info.actionTitle.empty()) {
+        query.addParam("actionTitle", Val(DEFAULT_ACTION_TITLE.qTranslated()));
+    } else {
+        query.addParam("actionTitle", Val(QString::fromStdString(info.actionTitle)));
+    }
+
+    if (info.imageUrl.empty()) {
+        query.addParam("imageUrl", Val(QString(DEFAULT_IMAGE_URL)));
+    } else {
+        query.addParam("imageUrl", Val(QString::fromStdString(info.imageUrl)));
+    }
+
     RetVal<Val> rv = interactive()->open(query);
     if (!rv.ret) {
         LOGD() << rv.ret.toString();
@@ -150,6 +167,26 @@ void MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info)
     QString actionCode = rv.val.toQString();
 
     if (actionCode == "openMuseHub") {
-        service()->openMuseHub();
+        tryOpenMuseHub(info.actions);
     }
+}
+
+void MuseSoundsCheckUpdateScenario::tryOpenMuseHub(ValList actions) const
+{
+    if (actions.empty()) {
+        LOGE() << "not actions to open Muse Hub";
+        return;
+    }
+
+    std::string action = muse::takeFirst(actions).toString();
+    LOGI() << "try open: " << action;
+
+    if (muse::strings::startsWith(action, "http")) { // or https
+        interactive()->openUrl(action);
+        return;
+    }
+
+    interactive()->openApp(muse::Uri(action)).onReject(this, [this, actions](int, const std::string&) {
+        tryOpenMuseHub(actions);
+    });
 }

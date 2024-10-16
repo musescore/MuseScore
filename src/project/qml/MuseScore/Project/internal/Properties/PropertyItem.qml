@@ -102,6 +102,8 @@ RowLayout {
                 currentText: root.propertyValue ? root.propertyValue : ""
                 hint: root.isStandardProperty ? "" : qsTrc("project/properties", "Value")
 
+                resizeVerticallyWithText: true
+
                 navigation.name: root.propertyName + "PropertyValue"
                 navigation.panel: root.navigationPanel
                 navigation.column: prv.navigationStartIndex + 1
@@ -146,7 +148,7 @@ RowLayout {
         Layout.fillWidth: root.valueFillWidth
 
         text: root.propertyValue ? root.propertyValue : ""
-        font: ui.theme.bodyBoldFont
+        font: ui.theme.bodyFont
         horizontalAlignment: Qt.AlignLeft
         visible: root.isFileInfoPanelProperty
     }

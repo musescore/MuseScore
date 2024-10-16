@@ -28,11 +28,13 @@
 #include "iglobalconfiguration.h"
 
 namespace muse::cloud {
-class CloudConfiguration : public ICloudConfiguration
+class CloudConfiguration : public ICloudConfiguration, public Injectable
 {
-    INJECT(IGlobalConfiguration, globalConfiguration)
+    Inject<IGlobalConfiguration> globalConfiguration = { this };
 
 public:
+    CloudConfiguration(const modularity::ContextPtr& iocCtx);
+
     void init();
 
     std::string clientId() const override;

@@ -101,7 +101,8 @@ const char* const GuitarPro::errmsg[] = {
 //   GuitarPro
 //---------------------------------------------------------
 
-GuitarPro::GuitarPro(MasterScore* s, int v)
+GuitarPro::GuitarPro(MasterScore* s, int v, const modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx)
 {
     score   = s;
     version = v;
@@ -2903,7 +2904,7 @@ static void createLinkedTabs(MasterScore* score)
 //   importScore
 //---------------------------------------------------------
 
-static Err importScore(MasterScore* score, muse::io::IODevice* io, bool experimental = false)
+static Err importScore(MasterScore* score, muse::io::IODevice* io, const muse::modularity::ContextPtr& iocCtx, bool experimental = false)
 {
     if (!io->open(IODevice::ReadOnly)) {
         return Err::FileOpenError;
@@ -2929,13 +2930,13 @@ static Err importScore(MasterScore* score, muse::io::IODevice* io, bool experime
     bool readResult = false;
     // check to see if we are dealing with a GP file via the extension
     if (strcmp(header, "PK\x3\x4") == 0) {
-        gp = new GuitarPro7(score);
+        gp = new GuitarPro7(score, iocCtx);
         readResult = gp->read(io);
         gp->setTempo(0, 0);
     }
     // check to see if we are dealing with a GPX file via the extension
     else if (strcmp(header, "BCFZ") == 0) {
-        gp = new GuitarPro6(score);
+        gp = new GuitarPro6(score, iocCtx);
         drumset::initGuitarProDrumset();
         readResult = gp->read(io);
         gp->setTempo(0, 0);
@@ -2960,15 +2961,15 @@ static Err importScore(MasterScore* score, muse::io::IODevice* io, bool experime
         int b = s.mid(2).toInt();
         int version = a * 100 + b;
         if (a == 1) {
-            gp = new GuitarPro1(score, version);
+            gp = new GuitarPro1(score, version, iocCtx);
         } else if (a == 2) {
-            gp = new GuitarPro2(score, version);
+            gp = new GuitarPro2(score, version, iocCtx);
         } else if (a == 3) {
-            gp = new GuitarPro3(score, version);
+            gp = new GuitarPro3(score, version, iocCtx);
         } else if (a == 4) {
-            gp = new GuitarPro4(score, version);
+            gp = new GuitarPro4(score, version, iocCtx);
         } else if (a == 5) {
-            gp = new GuitarPro5(score, version);
+            gp = new GuitarPro5(score, version, iocCtx);
         } else {
             LOGD("unknown gtp format %d", version);
             return Err::FileBadFormat;
@@ -3022,9 +3023,10 @@ static Err importScore(MasterScore* score, muse::io::IODevice* io, bool experime
 //   importGTP
 //---------------------------------------------------------
 
-Err importGTP(MasterScore* score, muse::io::IODevice* io, bool createLinkedTabForce, bool experimental)
+Err importGTP(MasterScore* score, muse::io::IODevice* io, const muse::modularity::ContextPtr& iocCtx, bool createLinkedTabForce,
+              bool experimental)
 {
-    Err error = importScore(score, io, experimental);
+    Err error = importScore(score, io, iocCtx, experimental);
 
     if (error != Err::NoError) {
         return error;

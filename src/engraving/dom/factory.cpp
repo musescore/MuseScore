@@ -69,7 +69,6 @@
 #include "mmrest.h"
 #include "mmrestrange.h"
 #include "note.h"
-#include "noteline.h"
 #include "ornament.h"
 #include "ottava.h"
 #include "page.h"
@@ -138,7 +137,6 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::VOLTA:             return new Volta(parent);
     case ElementType::OTTAVA:            return new Ottava(parent);
     case ElementType::TEXTLINE:          return new TextLine(parent);
-    case ElementType::NOTELINE:          return new NoteLine(parent);
     case ElementType::TRILL:             return new Trill(parent);
     case ElementType::LET_RING:          return new LetRing(parent);
     case ElementType::GRADUAL_TEMPO_CHANGE: return new GradualTempoChange(parent);

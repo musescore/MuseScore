@@ -35,14 +35,9 @@
 #include "inotationbraille.h"
 
 namespace mu::engraving {
-class BrailleModel : public QObject, public muse::async::Asyncable, public muse::actions::Actionable
+class BrailleModel : public QObject, public muse::Injectable, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
-
-    INJECT(context::IGlobalContext, context)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(braille::IBrailleConfiguration, brailleConfiguration)
-    INJECT(braille::INotationBraille, notationBraille)
 
     Q_PROPERTY(QString brailleInfo READ brailleInfo NOTIFY brailleInfoChanged)
     Q_PROPERTY(int cursorPosition READ cursorPosition WRITE setCursorPosition NOTIFY cursorPositionChanged)
@@ -53,6 +48,10 @@ class BrailleModel : public QObject, public muse::async::Asyncable, public muse:
     Q_PROPERTY(int mode READ mode WRITE setMode NOTIFY brailleModeChanged)
     Q_PROPERTY(QString cursorColor READ cursorColor NOTIFY brailleModeChanged)
 
+    muse::Inject<context::IGlobalContext> context = { this };
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<braille::IBrailleConfiguration> brailleConfiguration = { this };
+    muse::Inject<braille::INotationBraille> notationBraille = { this };
 public:
     explicit BrailleModel(QObject* parent = nullptr);
 

@@ -3,15 +3,18 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QThreadPool>
+#include <QQuickWindow>
 
 #include "appshell/view/internal/splashscreen/splashscreen.h"
 #include "ui/iuiengine.h"
 
 #include "muse_framework_config.h"
+#include "ui/graphicsapiprovider.h"
 
 #include "log.h"
 
 using namespace muse;
+using namespace muse::ui;
 using namespace mu;
 using namespace mu::app;
 using namespace mu::appshell;
@@ -131,6 +134,44 @@ void GuiApp::perform()
     // ====================================================
     // Setup Qml Engine
     // ====================================================
+    //! Needs to be set because we use transparent windows for PopupView.
+    //! Needs to be called before any QQuickWindows are shown.
+    QQuickWindow::setDefaultAlphaBuffer(true);
+
+    //! NOTE Adjust GS Api
+    //! We can hide this algorithm in GSApiProvider,
+    //! but it is intentionally left here to illustrate what is happening.
+    {
+        GraphicsApiProvider* gApiProvider = new GraphicsApiProvider(BaseApplication::appVersion());
+
+        GraphicsApi required = gApiProvider->requiredGraphicsApi();
+        if (required != GraphicsApi::Default) {
+            LOGI() << "Setting required graphics api: " << GraphicsApiProvider::apiName(required);
+            GraphicsApiProvider::setGraphicsApi(required);
+        }
+
+        LOGI() << "Using graphics api: " << GraphicsApiProvider::graphicsApiName();
+
+        if (GraphicsApiProvider::graphicsApi() == GraphicsApi::Software) {
+            gApiProvider->destroy();
+        } else {
+            LOGI() << "Detecting problems with graphics api";
+            gApiProvider->listen([this, gApiProvider, required](bool res) {
+                if (res) {
+                    LOGI() << "No problems detected with graphics api";
+                    gApiProvider->setGraphicsApiStatus(required, GraphicsApiProvider::Status::Checked);
+                } else {
+                    GraphicsApi next = gApiProvider->switchToNextGraphicsApi(required);
+                    LOGE() << "Detected problems with graphics api; switching from " << GraphicsApiProvider::apiName(required)
+                           << " to " << GraphicsApiProvider::apiName(next);
+
+                    this->restart();
+                }
+                gApiProvider->destroy();
+            });
+        }
+    }
+
     QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
 
 #if defined(Q_OS_WIN)

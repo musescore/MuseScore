@@ -83,7 +83,7 @@ std::string Uri::toString() const
 UriQuery::UriQuery(const std::string& str)
     : m_uri(str)
 {
-    parceParams(str, m_params);
+    parseParams(str, m_params);
 }
 
 UriQuery::UriQuery(const Uri& uri)
@@ -91,7 +91,7 @@ UriQuery::UriQuery(const Uri& uri)
 {
 }
 
-void UriQuery::parceParams(const std::string& uri, Params& out) const
+void UriQuery::parseParams(const std::string& uri, Params& out) const
 {
     auto paramsPos = uri.find('?');
     if (paramsPos == std::string::npos) {

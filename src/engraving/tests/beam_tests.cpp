@@ -193,7 +193,7 @@ TEST_F(Engraving_BeamTests, beamStemDir)
     Measure* m1 = score->firstMeasure();
     ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
 
-    cr->beam()->setBeamDirection(DirectionV::UP);
+    cr->beam()->setDirection(DirectionV::UP);
 
     score->update();
     score->doLayout();
@@ -223,7 +223,7 @@ TEST_F(Engraving_BeamTests, flipBeamStemDir)
     score->startCmd();
     score->cmdFlip();
     score->endCmd();
-    cr->beam()->setBeamDirection(DirectionV::DOWN);
+    cr->beam()->setDirection(DirectionV::DOWN);
 
     score->update();
     score->doLayout();

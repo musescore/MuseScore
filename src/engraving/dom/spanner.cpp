@@ -780,6 +780,8 @@ void Spanner::doComputeStartElement()
         break;
 
     case Anchor::CHORD:
+        m_startElement = startCR();
+        break;
     case Anchor::NOTE:
         break;
     }
@@ -837,7 +839,9 @@ void Spanner::doComputeEndElement()
         break;
 
     case Anchor::NOTE:
+        break;
     case Anchor::CHORD:
+        m_endElement = endCR();
         break;
     }
 }
@@ -1147,6 +1151,24 @@ Measure* Spanner::startMeasure() const
 Measure* Spanner::endMeasure() const
 {
     return toMeasure(m_endElement);
+}
+
+Measure* Spanner::findStartMeasure() const
+{
+    if (!m_startElement) {
+        return nullptr;
+    }
+
+    return toMeasure(m_startElement->findAncestor(ElementType::MEASURE));
+}
+
+Measure* Spanner::findEndMeasure() const
+{
+    if (!m_endElement) {
+        return nullptr;
+    }
+
+    return toMeasure(m_endElement->findAncestor(ElementType::MEASURE));
 }
 
 //---------------------------------------------------------

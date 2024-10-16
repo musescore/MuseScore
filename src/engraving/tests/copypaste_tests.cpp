@@ -22,8 +22,6 @@
 
 #include <gtest/gtest.h>
 
-#include <QApplication>
-#include <QClipboard>
 #include <QMimeData>
 
 #include "internal/qmimedataadapter.h"
@@ -38,6 +36,7 @@
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
+#include "utils/testutils.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -52,7 +51,6 @@ public:
     void copypastevoice(const char*, int);
     void copypastetuplet(const char*);
     void copypastenote(const String&, Fraction = Fraction(1, 1));
-    void copypastesplit(const String&);
 };
 
 //---------------------------------------------------------
@@ -84,7 +82,7 @@ void Engraving_CopyPasteTests::copypaste(const char* idx)
     QMimeData* mimeData = new QMimeData;
     QByteArray ba = score->selection().mimeData().toQByteArray();
     mimeData->setData(mimeType, ba);
-    QApplication::clipboard()->setMimeData(mimeData);
+
     EXPECT_TRUE(m4->first()->element(0));
     score->select(m4->first()->element(0));
 
@@ -220,7 +218,6 @@ void Engraving_CopyPasteTests::copypastevoice(const char* idx, int voice)
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
     mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
-    QApplication::clipboard()->setMimeData(mimeData);
 
     //paste to second measure
     score->select(m2->first()->element(0));
@@ -257,7 +254,6 @@ TEST_F(Engraving_CopyPasteTests, copypaste2Voice)
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
     mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
-    QApplication::clipboard()->setMimeData(mimeData);
 
     // paste into the second CR of second measure
     Segment* secondCRSeg = m2->first()->next1(SegmentType::ChordRest);
@@ -294,7 +290,6 @@ TEST_F(Engraving_CopyPasteTests, copypaste2Voice5)
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
     mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
-    QApplication::clipboard()->setMimeData(mimeData);
 
     score->cmdDeleteSelection();   //cut
 
@@ -335,7 +330,6 @@ TEST_F(Engraving_CopyPasteTests, copypaste2Voice6)
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
     mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
-    QApplication::clipboard()->setMimeData(mimeData);
 
     //paste to 16th rest
     EngravingItem* dest = m1->first(segTypeCR)->next(segTypeCR)->next(segTypeCR)->next(segTypeCR)->next(segTypeCR)->element(0);
@@ -374,7 +368,6 @@ TEST_F(Engraving_CopyPasteTests, copypasteOnlySecondVoice)
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
     mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
-    QApplication::clipboard()->setMimeData(mimeData);
 
     //paste to second measure
     score->deselectAll();
@@ -412,7 +405,6 @@ void Engraving_CopyPasteTests::copypastestaff(const char* idx)
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
     mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
-    QApplication::clipboard()->setMimeData(mimeData);
 
     score->deselectAll();
 
@@ -452,7 +444,6 @@ TEST_F(Engraving_CopyPasteTests, copypastePartial)
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
     mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
-    QApplication::clipboard()->setMimeData(mimeData);
 
     score->select(m1->first(SegmentType::ChordRest)->element(0));
 
@@ -487,7 +478,6 @@ void Engraving_CopyPasteTests::copypastetuplet(const char* idx)
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
     mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
-    QApplication::clipboard()->setMimeData(mimeData);
 
     EngravingItem* dest = m2->first(SegmentType::ChordRest)->element(0);
     score->select(dest);
@@ -741,7 +731,6 @@ TEST_F(Engraving_CopyPasteTests, DISABLED_copypastetremolo)
     EXPECT_TRUE(!mimeType.isEmpty());
     QMimeData* mimeData = new QMimeData;
     mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
-    QApplication::clipboard()->setMimeData(mimeData);
 
     //paste to second measure
     score->select(m2->first()->element(0));
@@ -761,7 +750,6 @@ TEST_F(Engraving_CopyPasteTests, DISABLED_copypastetremolo)
     mimeType = score->selection().mimeType();
     EXPECT_TRUE(!mimeType.isEmpty());
     mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
-    QApplication::clipboard()->setMimeData(mimeData);
 
     //paste to third measure
     score->select(m3->first()->element(0));
@@ -773,4 +761,51 @@ TEST_F(Engraving_CopyPasteTests, DISABLED_copypastetremolo)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste_tremolo.mscx"),
                                             COPYPASTE_DATA_DIR + String("copypaste_tremolo-ref.mscx")));
     delete score;
+}
+
+TEST_F(Engraving_CopyPasteTests, copypasteparts)
+{
+    bool useRead302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+
+    MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + String("copypaste_parts.mscx"));
+    EXPECT_TRUE(score);
+    // create part
+    TestUtils::createPart(score);
+
+    // select measures 1-3
+    Measure* m1 = score->firstMeasure();
+    Measure* m2 = m1->nextMeasure();
+    Measure* m3 = m2->nextMeasure();
+    Measure* m4 = m3->nextMeasure();
+
+    EXPECT_TRUE(m1);
+    EXPECT_TRUE(m2);
+    EXPECT_TRUE(m3);
+    EXPECT_TRUE(m4);
+
+    score->select(m1);
+    score->select(m3, SelectType::RANGE);
+
+    EXPECT_TRUE(score->selection().canCopy());
+
+    // copy
+
+    String mimeType = score->selection().mimeType();
+    EXPECT_TRUE(!mimeType.isEmpty());
+    QMimeData* mimeData = new QMimeData;
+    mimeData->setData(mimeType, score->selection().mimeData().toQByteArray());
+
+    // paste measure 4
+    score->select(m4);
+
+    score->startCmd();
+    QMimeDataAdapter ma(mimeData);
+    score->cmdPaste(&ma, 0);
+    score->endCmd();
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypaste_parts.mscx"),
+                                            COPYPASTE_DATA_DIR + String("copypaste_parts-ref.mscx")));
+
+    MScore::useRead302InTestMode = useRead302;
 }

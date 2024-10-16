@@ -156,6 +156,7 @@ StyledDialogView {
                 buttons: [ ButtonBoxModel.Cancel, ButtonBoxModel.Save ]
 
                 navigationPanel.section: root.navigationSection
+                navigationPanel.order: 2
 
                 onStandardButtonClicked: function(buttonId) {
                     if (buttonId === ButtonBoxModel.Cancel) {

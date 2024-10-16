@@ -415,6 +415,47 @@ DockPage {
             DrumsetPanel {
                 navigationSection: timelinePanel.navigationSection
             }
+        },
+
+        DockPanel {
+            id: percussionPanel
+
+            objectName: pageModel.percussionPanelName()
+            title: qsTrc("appshell", "Percussion")
+
+            height: 200
+            minimumHeight: root.horizontalPanelMinHeight
+            maximumHeight: root.horizontalPanelMaxHeight
+
+            groupName: root.horizontalPanelsGroup
+
+            //! NOTE: hidden by default
+            visible: false
+
+            location: Location.Bottom
+
+            dropDestinations: root.horizontalPanelDropDestinations
+
+            navigationSection: root.navigationPanelSec(percussionPanel.location)
+
+            PercussionPanel {
+                navigationSection: percussionPanel.navigationSection
+
+                // TODO: #22050 needed for this
+                /*
+                // contentNavigationPanelOrderStart: percussionPanel.contentNavigationPanelOrderStart
+
+                Component.onCompleted: {
+                    percussionPanel.contextMenuModel = contextMenuModel
+                    percussionPanel.toolbarComponent = toolbarComponent
+                }
+
+                Component.onDestruction: {
+                    percussionPanel.contextMenuModel = null
+                    percussionPanel.toolbarComponent = null
+                }
+                */
+            }
         }
     ]
 

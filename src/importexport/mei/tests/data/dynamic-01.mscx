@@ -3,7 +3,7 @@
   <Score>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -104,6 +104,7 @@
           <Dynamic>
             <subtype>sfz</subtype>
             <velocity>112</velocity>
+            <voiceAssignment>currentVoiceOnly</voiceAssignment>
             </Dynamic>
           <Chord>
             <durationType>eighth</durationType>

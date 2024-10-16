@@ -152,7 +152,7 @@ static QString getClass(const mu::engraving::EngravingItem* e)
 
 class SvgPaintEnginePrivate
 {
-    muse::Inject<muse::IApplication> application;
+    muse::GlobalInject<muse::IApplication> application;
 
 public:
     SvgPaintEnginePrivate()

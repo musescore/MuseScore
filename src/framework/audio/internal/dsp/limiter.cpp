@@ -26,7 +26,7 @@
 using namespace muse::audio;
 using namespace muse::audio::dsp;
 
-static constexpr volume_db_t THRESHOLD = 0.f;
+static constexpr volume_db_t THRESHOLD = volume_dbfs_t::make(0.f);
 
 Limiter::Limiter(const unsigned int sampleRate)
     : m_filterConfig(sampleRate, 1.f, THRESHOLD)
@@ -74,7 +74,7 @@ volume_db_t Limiter::computeGain(const volume_db_t& logarithmSample) const
 void Limiter::process(const float& linearRms, float* buffer, const audioch_t& audioChannelsCount,
                       const samples_t samplesPerChannel)
 {
-    volume_db_t rmsDb = dbFromSample(linearRms);
+    volume_db_t rmsDb = muse::linear_to_db(linearRms);
 
     if (rmsDb <= m_filterConfig.minimumOperableLevel()) {
         return;
@@ -91,7 +91,7 @@ void Limiter::process(const float& linearRms, float* buffer, const audioch_t& au
     float makeUpGain = smoothedGain + m_filterConfig.makeUpGain();
 
     // total linear gain
-    float totalLinearGain = linearFromDecibels(makeUpGain);
+    float totalLinearGain = muse::db_to_linear(makeUpGain);
 
     // apply linear gain
     for (audioch_t audioChNum = 0; audioChNum < audioChannelsCount; ++audioChNum) {

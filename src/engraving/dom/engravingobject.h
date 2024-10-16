@@ -116,7 +116,6 @@ class MStyle;
 class Note;
 class NoteDot;
 class NoteHead;
-class NoteLine;
 class Ornament;
 class Ottava;
 class OttavaSegment;
@@ -389,7 +388,6 @@ public:
     CONVERT(LedgerLine,    LEDGER_LINE)
     CONVERT(ActionIcon,    ACTION_ICON)
     CONVERT(VoltaSegment,  VOLTA_SEGMENT)
-    CONVERT(NoteLine,      NOTELINE)
     CONVERT(Trill,         TRILL)
     CONVERT(TrillSegment,  TRILL_SEGMENT)
     CONVERT(LetRing,       LET_RING)
@@ -494,7 +492,6 @@ public:
         return isHairpin()
                || isLetRing()
                || isGradualTempoChange()
-               || isNoteLine()
                || isOttava()
                || isPalmMute()
                || isWhammyBar()
@@ -768,7 +765,6 @@ CONVERT(OttavaSegment)
 CONVERT(LedgerLine)
 CONVERT(ActionIcon)
 CONVERT(VoltaSegment)
-CONVERT(NoteLine)
 CONVERT(Trill)
 CONVERT(TrillSegment)
 CONVERT(LetRing)

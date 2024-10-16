@@ -35,7 +35,7 @@
       <footerFontSize>1</footerFontSize>
       <copyrightFontSize>10</copyrightFontSize>
       <pageNumberFontSize>10</pageNumberFontSize>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -119,7 +119,7 @@ copyright copyright</metaTag>
       </Part>
     <Staff id="1">
       <VBox>
-        <height>3.5</height>
+        <height>10</height>
         <Text>
           <style>title</style>
           <size>2.3</size>

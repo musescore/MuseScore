@@ -355,31 +355,6 @@ void PageLayout::collectPage(LayoutContext& ctx)
                                     ChordLayout::computeUp(c2, ctx);
                                 }
                             }
-                            // Fingering and articulations on top of cross-staff beams must be laid out here
-                            if (c->beam() && (c->beam()->cross() || c->staffMove() != 0)) {
-                                ChordLayout::layoutArticulations(c, ctx);
-                                ChordLayout::layoutArticulations2(c, ctx, true);
-
-                                for (Note* note : c->notes()) {
-                                    for (EngravingItem* e : note->el()) {
-                                        if (!e || !e->isFingering()) {
-                                            continue;
-                                        }
-                                        Fingering* fingering = toFingering(e);
-                                        if (fingering->isOnCrossBeamSide()) {
-                                            TLayout::layoutFingering(fingering, fingering->mutldata());
-                                            if (fingering->addToSkyline()) {
-                                                const Note* n = fingering->note();
-                                                const RectF r
-                                                    = fingering->ldata()->bbox().translated(
-                                                          fingering->pos() + n->pos() + n->chord()->pos() + segment->pos()
-                                                          + segment->measure()->pos());
-                                                s->staff(fingering->note()->chord()->vStaffIdx())->skyline().add(r, fingering);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
                         }
                     } else if (e2->isBarLine()) {
                         TLayout::layoutBarLine2(toBarLine(e2), ctx);
@@ -413,8 +388,17 @@ void PageLayout::collectPage(LayoutContext& ctx)
         page->mutldata()->setBbox(0.0, 0.0, ctx.conf().loWidth(), height + ctx.state().page()->bm());
     }
 
-    // HACK: we relayout here cross-staff slurs because only now the information
-    // about staff distances is fully available.
+    layoutCrossStaffElements(ctx, page);
+
+    for (const System* system : page->systems()) {
+        SystemLayout::centerElementsBetweenStaves(system);
+    }
+
+    page->invalidateBspTree();
+}
+
+void PageLayout::layoutCrossStaffElements(LayoutContext& ctx, Page* page)
+{
     for (System* system : page->systems()) {
         if (!system->firstMeasure()) {
             continue;
@@ -427,27 +411,78 @@ void PageLayout::collectPage(LayoutContext& ctx)
             continue;
         }
 
-        if (stick >= ctx.state().endTick() || etick <= ctx.state().startTick()) {
+        if (etick <= ctx.state().startTick() || etick > ctx.state().tick()) {
             continue;
         }
 
-        auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks());
-        for (auto interval : spanners) {
-            Spanner* sp = interval.value;
-            if (!sp->isSlur() || sp->tick() == system->endTick()) {
+        layoutCrossStaffSlurs(ctx, system);
+
+        layoutArticAndFingeringOnCrossStaffBeams(ctx, system);
+    }
+}
+
+void PageLayout::layoutCrossStaffSlurs(LayoutContext& ctx, System* system)
+{
+    Fraction stick = system->firstMeasure()->tick();
+    Fraction etick = system->endTick();
+
+    auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks());
+    for (auto interval : spanners) {
+        Spanner* sp = interval.value;
+        if (!sp->isSlur() || sp->tick() == system->endTick()) {
+            continue;
+        }
+        if (toSlur(sp)->isCrossStaff()) {
+            SlurTieLayout::layoutSystem(toSlur(sp), system, ctx);
+        }
+    }
+}
+
+void PageLayout::layoutArticAndFingeringOnCrossStaffBeams(LayoutContext& ctx, System* system)
+{
+    for (const MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (const Segment& segment : toMeasure(mb)->segments()) {
+            if (!segment.isChordRestType()) {
                 continue;
             }
-            if (toSlur(sp)->isCrossStaff()) {
-                SlurTieLayout::layoutSystem(toSlur(sp), system, ctx);
+            for (EngravingItem* item : segment.elist()) {
+                if (!item || !item->isChord()) {
+                    continue;
+                }
+
+                Chord* c = toChord(item);
+                bool hasCrossBeam = c->beam() && (c->beam()->cross() || c->staffMove() != 0);
+                if (!hasCrossBeam) {
+                    continue;
+                }
+
+                ChordLayout::layoutArticulations(c, ctx);
+                ChordLayout::layoutArticulations2(c, ctx, true);
+
+                for (Note* note : c->notes()) {
+                    for (EngravingItem* e : note->el()) {
+                        if (!e || !e->isFingering()) {
+                            continue;
+                        }
+                        Fingering* fingering = toFingering(e);
+                        if (fingering->isOnCrossBeamSide()) {
+                            TLayout::layoutFingering(fingering, fingering->mutldata());
+                            if (fingering->addToSkyline()) {
+                                const Note* n = fingering->note();
+                                const RectF r = fingering->ldata()->bbox().translated(
+                                    fingering->pos() + n->pos() + n->chord()->pos() + segment.pos()
+                                    + segment.measure()->pos());
+                                system->staff(fingering->note()->chord()->vStaffIdx())->skyline().add(r, fingering);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
-
-    for (const System* system : page->systems()) {
-        SystemLayout::centerElementsBetweenStaves(system);
-    }
-
-    page->invalidateBspTree();
 }
 
 //---------------------------------------------------------

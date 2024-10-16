@@ -21,8 +21,6 @@
  */
 #include "audiomodule.h"
 
-#include <QQmlEngine>
-
 #include "ui/iuiengine.h"
 #include "global/modularity/ioc.h"
 
@@ -110,7 +108,7 @@ std::string AudioModule::moduleName() const
 
 void AudioModule::registerExports()
 {
-    m_configuration = std::make_shared<AudioConfiguration>();
+    m_configuration = std::make_shared<AudioConfiguration>(iocContext());
     m_audioEngine = std::make_shared<AudioEngine>(iocContext());
     m_audioWorker = std::make_shared<AudioThread>();
     m_audioBuffer = std::make_shared<AudioBuffer>();
@@ -118,7 +116,7 @@ void AudioModule::registerExports()
     m_fxResolver = std::make_shared<FxResolver>();
     m_synthResolver = std::make_shared<SynthResolver>();
     m_playbackFacade = std::make_shared<Playback>(iocContext());
-    m_soundFontRepository = std::make_shared<SoundFontRepository>();
+    m_soundFontRepository = std::make_shared<SoundFontRepository>(iocContext());
 
 #if defined(MUSE_MODULE_AUDIO_JACK)
     m_audioDriver = std::shared_ptr<IAudioDriver>(new JackAudioDriver());
@@ -259,7 +257,7 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
 
     if (m_configuration->shouldMeasureInputLag()) {
         requiredSpec.callback = [this](void* /*userdata*/, uint8_t* stream, int byteCount) {
-            auto samplesPerChannel = byteCount / (2 * sizeof(float));
+            auto samplesPerChannel = byteCount / (2 * sizeof(float));  // 2 == m_configuration->audioChannelsCount()
             float* dest = reinterpret_cast<float*>(stream);
             m_audioBuffer->pop(dest, samplesPerChannel);
             measureInputLag(dest, samplesPerChannel * m_audioBuffer->audioChannelCount());
@@ -298,7 +296,7 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
 
         // Setup audio engine
         m_audioEngine->init(m_audioBuffer, consts);
-        m_audioEngine->setAudioChannelsCount(activeSpec.channels);
+        m_audioEngine->setAudioChannelsCount(m_configuration->audioChannelsCount());
         m_audioEngine->setSampleRate(activeSpec.sampleRate);
         m_audioEngine->setReadBufferSize(activeSpec.samples);
 

@@ -17,7 +17,7 @@
       <concertPitch>1</concertPitch>
       <voltaPosAbove x="0" y="-2"/>
       <defaultsVersion>114</defaultsVersion>
-      <Spatium>2</Spatium>
+      <spatium>2</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

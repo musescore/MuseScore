@@ -33,6 +33,8 @@ StyledDialogView {
 
     property alias notes: view.notes
     property alias features: featuresViewRepeater.model
+    property alias imageUrl: image.source
+    property alias actionTitle: buttons.defaultButtonName
 
     contentWidth: 530
     contentHeight: 510
@@ -77,8 +79,6 @@ StyledDialogView {
 
             Layout.fillWidth: true
             Layout.preferredHeight: 186
-
-            source: "qrc:/qml/Muse/Update/resources/muse_sounds_promo.png"
         }
 
         Item {

@@ -29,6 +29,8 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/utils/scorerw.h
     ${CMAKE_CURRENT_LIST_DIR}/utils/scorecomp.cpp
     ${CMAKE_CURRENT_LIST_DIR}/utils/scorecomp.h
+    ${CMAKE_CURRENT_LIST_DIR}/utils/testutils.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/utils/testutils.h
 
     ${CMAKE_CURRENT_LIST_DIR}/barline_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/beam_tests.cpp

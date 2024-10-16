@@ -3,7 +3,7 @@
   <Score>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -688,7 +688,7 @@
       <name>Flute</name>
       <Division>480</Division>
       <Style>
-        <Spatium>1.74978</Spatium>
+        <spatium>1.74978</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -1061,7 +1061,7 @@
       <name>Oboe</name>
       <Division>480</Division>
       <Style>
-        <Spatium>1.74978</Spatium>
+        <spatium>1.74978</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>

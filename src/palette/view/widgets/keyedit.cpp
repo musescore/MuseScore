@@ -167,7 +167,7 @@ void KeyCanvas::mousePressEvent(QMouseEvent* event)
     startMove = imatrix.map(QPointF(event->pos() - base));
     moveElement = 0;
     foreach (Accidental* a, accidentals) {
-        QRectF r = a->abbox().toQRectF();
+        QRectF r = a->pageBoundingRect().toQRectF();
         if (r.contains(startMove)) {
             a->setSelected(true);
             moveElement = a;

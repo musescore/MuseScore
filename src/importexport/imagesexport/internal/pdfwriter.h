@@ -34,10 +34,13 @@ class QPdfWriter;
 namespace mu::iex::imagesexport {
 class PdfWriter : public AbstractImageWriter
 {
-    Inject<IImagesExportConfiguration> configuration;
-    Inject<muse::IApplication> application;
+    Inject<IImagesExportConfiguration> configuration = { this };
+    Inject<muse::IApplication> application = { this };
 
 public:
+    PdfWriter(const muse::modularity::ContextPtr& iocCtx)
+        : AbstractImageWriter(iocCtx) {}
+
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;
     muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
     muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& dstDevice,

@@ -86,7 +86,6 @@
 #include "../../dom/bracket.h"
 #include "../../dom/breath.h"
 #include "../../dom/note.h"
-#include "../../dom/noteline.h"
 #include "../../dom/spanner.h"
 #include "../../dom/fingering.h"
 #include "../../dom/notedot.h"
@@ -157,7 +156,7 @@ using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Arti
                                  KeySig,
                                  LayoutBreak, LedgerLine, LetRing, Lyrics,
                                  Marker, MeasureNumber, MeasureRepeat, MMRest, MMRestRange,
-                                 Note, NoteDot, NoteHead, NoteLine,
+                                 Note, NoteDot, NoteHead,
                                  Page, PalmMute, Pedal, PlayTechAnnotation,
                                  Rasgueado, RehearsalMark, Rest,
                                  Ornament, Ottava,
@@ -1567,7 +1566,7 @@ void TRead::read(Beam* b, XmlReader& e, ReadContext& ctx)
             b->setGrowRight(e.readDouble());
         } else if (tag == "Fragment") {
             BeamFragment* f = new BeamFragment;
-            int idx = (b->beamDirection() == DirectionV::AUTO || b->beamDirection() == DirectionV::DOWN) ? 0 : 1;
+            int idx = (b->direction() == DirectionV::AUTO || b->direction() == DirectionV::DOWN) ? 0 : 1;
             b->setUserModified(true);
             double _spatium = b->spatium();
             while (e.readNextStartElement()) {
@@ -2178,8 +2177,6 @@ bool TRead::readProperties(MeasureBase* b, XmlReader& e, ReadContext& ctx)
         if (doAdd) {
             b->add(lb);
             b->cleanupLayoutBreaks(false);
-        } else {
-            delete lb;
         }
     } else if (tag == "StaffTypeChange") {
         StaffTypeChange* stc = Factory::createStaffTypeChange(b);
@@ -3867,7 +3864,7 @@ bool TRead::readProperties(Stem* s, XmlReader& e, ReadContext& ctx)
     if (tag == "userLen" && s->score()->mscVersion() < 400) {
         // Ignore stem length pre-4.0
         e.skipCurrentElement();
-        s->setUserLength(Millimetre(0.0));
+        s->setUserLength(Spatium(0));
     } else if (TRead::readProperty(s, tag, e, ctx, Pid::USER_LEN)) {
     } else if (TRead::readStyledProperty(s, tag, e, ctx)) {
     } else if (readItemProperties(s, e, ctx)) {
@@ -4155,8 +4152,8 @@ void TRead::read(TremoloCompat& t, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Fragment") {
             if (t.two) {
                 BeamFragment f = BeamFragment();
-                int idx = (t.two->direction() == DirectionV::AUTO || t.two->direction() == DirectionV::DOWN) ? 0 : 1;
-                t.two->setUserModified(t.two->direction(), true);
+                int idx = t.two->directionIdx();
+                t.two->setUserModified(true);
                 double _spatium = t.two->spatium();
                 while (e.readNextStartElement()) {
                     const AsciiStringView tag1(e.name());

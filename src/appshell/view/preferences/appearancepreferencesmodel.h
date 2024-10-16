@@ -30,13 +30,9 @@
 #include "async/asyncable.h"
 
 namespace mu::appshell {
-class AppearancePreferencesModel : public QObject, public muse::async::Asyncable
+class AppearancePreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
-
-    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
 
     Q_PROPERTY(bool isFollowSystemThemeAvailable READ isFollowSystemThemeAvailable CONSTANT)
     Q_PROPERTY(bool isFollowSystemTheme READ isFollowSystemTheme WRITE setFollowSystemTheme NOTIFY isFollowSystemThemeChanged)
@@ -63,6 +59,10 @@ class AppearancePreferencesModel : public QObject, public muse::async::Asyncable
         QString foregroundWallpaperPath READ foregroundWallpaperPath WRITE setForegroundWallpaperPath NOTIFY foregroundWallpaperPathChanged)
 
     Q_PROPERTY(bool scoreInversionEnabled READ scoreInversionEnabled WRITE setScoreInversionEnabled NOTIFY invertScoreColorChanged)
+
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
+    muse::Inject<notation::INotationConfiguration> notationConfiguration = { this };
+    muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
 public:
     explicit AppearancePreferencesModel(QObject* parent = nullptr);

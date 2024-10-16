@@ -127,7 +127,7 @@ Item {
             verticalAlignment: Qt.AlignTop
             wrapMode: Text.WordWrap
 
-            visible: !paletteTree.isResultFound
+            visible: !searchHint.visible && !paletteTree.isResultFound
         }
 
         PaletteTree {

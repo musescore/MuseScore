@@ -37,24 +37,26 @@
 #include "../imusesoundscheckupdateservice.h"
 
 namespace muse::update {
-class MuseSoundsCheckUpdateService : public IMuseSoundsCheckUpdateService, public async::Asyncable
+class MuseSoundsCheckUpdateService : public IMuseSoundsCheckUpdateService, public Injectable, public async::Asyncable
 {
-    Inject<network::INetworkManagerCreator> networkManagerCreator;
-    Inject<IUpdateConfiguration> configuration;
-    Inject<io::IFileSystem> fileSystem;
-    Inject<ISystemInfo> systemInfo;
-    Inject<languages::ILanguagesConfiguration> languagesConfiguration;
-    Inject<IInteractive> interactive;
+    Inject<network::INetworkManagerCreator> networkManagerCreator = { this };
+    Inject<IUpdateConfiguration> configuration = { this };
+    Inject<io::IFileSystem> fileSystem = { this };
+    Inject<ISystemInfo> systemInfo = { this };
+    Inject<languages::ILanguagesConfiguration> languagesConfiguration = { this };
+    Inject<IInteractive> interactive = { this };
 
 public:
+
+    MuseSoundsCheckUpdateService(const modularity::ContextPtr& iocCtx)
+        : Injectable(iocCtx) {}
+
     Ret needCheckForUpdate() const override;
 
     RetVal<ReleaseInfo> checkForUpdate() override;
     RetVal<ReleaseInfo> lastCheckResult() override;
 
     Progress updateProgress() override;
-
-    void openMuseHub() override;
 
 private:
     RetVal<ReleaseInfo> parseRelease(const QByteArray& json) const;

@@ -135,3 +135,13 @@ TEST_F(Engraving_JoinTests, join08)
 {
     join1("join08.mscx");
 }
+
+TEST_F(Engraving_JoinTests, join09)
+{
+    join("join09.mscx", "join09-ref.mscx");
+}
+
+TEST_F(Engraving_JoinTests, join10)
+{
+    join("join10.mscx", "join10-ref.mscx", 1);
+}

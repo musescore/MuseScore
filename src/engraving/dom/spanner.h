@@ -225,6 +225,9 @@ public:
     Measure* startMeasure() const;
     Measure* endMeasure() const;
 
+    Measure* findStartMeasure() const;
+    Measure* findEndMeasure() const;
+
     void setStartElement(EngravingItem* e);
     void setEndElement(EngravingItem* e);
 

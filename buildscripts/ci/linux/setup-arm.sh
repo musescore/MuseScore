@@ -123,6 +123,7 @@ apt_packages_runtime=(
   libxcb-xinerama0
   libxcb-xkb-dev
   libxkbcommon-dev
+  libopengl-dev
   libvulkan-dev
   )
 
@@ -167,13 +168,32 @@ apt_packages_qt6=(
   libqt6core5compat6-dev
   qt6-scxml-dev
   qt6-wayland
+  libqt6websockets6-dev
   )
 
 apt-get install -y \
   "${apt_packages_qt6[@]}"
 
-qt_version="624"
-qt_dir="/usr/lib/aarch64-linux-gnu/qt6"
+case $PACKARCH in
+  aarch64)
+    qt_dir="/usr/lib/aarch64-linux-gnu/qt6"
+    ;;
+  armv7l)
+    qt_dir="/usr/lib/arm-linux-gnueabihf/qt6"
+    ;;
+  *)
+    echo "Unknown architecture: $PACKARCH"
+    exit 1
+    ;;
+esac
+
+if [[ ! -d "${qt_dir}" ]]; then
+  echo "Qt directory not found: ${qt_dir}"
+  exit 1
+fi
+
+# https://askubuntu.com/questions/1460242/ubuntu-22-04-with-qt6-qmake-could-not-find-a-qt-installation-of
+qtchooser -install qt6 $(which qmake6)
 
 ##########################################################################
 # GET TOOLS

@@ -46,6 +46,11 @@ const UiActionList DiagnosticsActions::m_actions = {
              muse::shortcuts::CTX_ANY,
              TranslatableString("action", "Show pr&ofiler…")
              ),
+    UiAction("diagnostic-show-graphicsinfo",
+             muse::ui::UiCtxAny,
+             muse::shortcuts::CTX_ANY,
+             TranslatableString("action", "Show g&raphics info…")
+             ),
     UiAction("diagnostic-show-navigation-tree",
              muse::ui::UiCtxAny,
              muse::shortcuts::CTX_ANY,

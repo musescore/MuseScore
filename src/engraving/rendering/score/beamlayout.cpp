@@ -155,8 +155,8 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     }
 
     if (item->staff()->isDrumStaff(Fraction(0, 1))) {
-        if (item->beamDirection() != DirectionV::AUTO) {
-            item->setUp(item->beamDirection() == DirectionV::UP);
+        if (item->direction() != DirectionV::AUTO) {
+            item->setUp(item->direction() == DirectionV::UP);
         } else if (item->isGrace()) {
             item->setUp(true);
         } else {
@@ -224,8 +224,8 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     Measure* measure = firstNote->measure();
     bool hasMultipleVoices = measure->hasVoices(firstNote->staffIdx(), item->tick(), item->ticks());
     if (computeUpForMovedCross(item)) {
-    } else if (item->beamDirection() != DirectionV::AUTO) {
-        item->setUp(item->beamDirection() == DirectionV::UP);
+    } else if (item->direction() != DirectionV::AUTO) {
+        item->setUp(item->direction() == DirectionV::UP);
     } else if (item->maxCRMove() > 0) {
         item->setUp(false);
     } else if (item->minCRMove() < 0) {
@@ -265,7 +265,7 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     if (item->minCRMove() == item->maxCRMove() && item->minCRMove() != 0) {
         isEntirelyMoved = true;
         item->setStaffIdx(staffIdx);
-        if (item->beamDirection() == DirectionV::AUTO) {
+        if (item->direction() == DirectionV::AUTO) {
             item->setUp(item->maxCRMove() > 0);
         }
     } else if (item->elements().size()) {
@@ -644,8 +644,6 @@ void BeamLayout::beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after)
 
 void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
 {
-    bool crossMeasure = ctx.conf().styleB(Sid::crossMeasureValues);
-
     for (track_idx_t track = 0; track < ctx.dom().ntracks(); ++track) {
         const Staff* stf = ctx.dom().staff(track2staff(track));
 
@@ -738,17 +736,12 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                 cr->removeDeleteBeam(false);
             }
 
-            // handle grace notes and cross-measure beaming
+            // handle grace notes
             // (tied chords?)
             if (cr->isChord()) {
                 Chord* chord = toChord(cr);
                 beamGraceNotes(ctx, chord, false);         // grace before
                 beamGraceNotes(ctx, chord, true);          // grace after
-                // set up for cross-measure values as soon as possible
-                // to have all computations (stems, hooks, ...) consistent with it
-                if (!chord->isGrace()) {
-                    ChordLayout::crossMeasureSetup(chord, crossMeasure, ctx);
-                }
             }
 
             if (cr->isRest() && cr->beamMode() == BeamMode::AUTO) {
@@ -1338,12 +1331,18 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
             continue;
         }
 
+        double _up = chord->up() ? -1.0 : 1.0;
+
         if (level == 0) {
             BeamTremoloLayout::extendStem(item->ldata(), chord, 0.0);
+            // HACK: extend the bounding box of the stem (NOT the stem itself) by half beam width.
+            // This way the bbox of the stem covers also the beam position. Hugely helps with all the collision checks.
+            chord->stem()->mutldata()->beamCorrection = _up * item->beamWidth() / 2;
         } else {
-            int stemLengthAdjustmentSteps = computeStemLengthAdjustmentSteps(cr, cr == startCr || cr == endCr, b->above, frenchStyleBeams,
-                                                                             level, beamsAbove, beamsBelow);
-            if (stemLengthAdjustmentSteps != 0) {
+            bool isStartOrEnd = cr == startCr || cr == endCr;
+            int visualStemLengthAdjustmentSteps = computeStemLengthAdjustmentSteps(cr, isStartOrEnd, b->above, frenchStyleBeams,
+                                                                                   level, beamsAbove, beamsBelow);
+            if (visualStemLengthAdjustmentSteps != 0) {
                 double grow = item->growLeft();
                 if (!muse::RealIsEqual(item->growLeft(), item->growRight())) {
                     double anchorX = BeamTremoloLayout::chordBeamAnchorX(item->ldata(), chord, ChordBeamAnchorType::Middle);
@@ -1351,9 +1350,18 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
                     grow = proportionAlongX * (item->growRight() - item->growLeft()) + item->growLeft();
                 }
 
-                double stemLengthAdjustment = grow * stemLengthAdjustmentSteps * item->beamDist();
+                double visualStemLengthAdjustment = grow * visualStemLengthAdjustmentSteps * item->beamDist();
 
-                BeamTremoloLayout::extendStem(item->ldata(), chord, stemLengthAdjustment);
+                if (frenchStyleBeams) {
+                    // Even if we visually shorten the stem, we need the 'original' length for collisions.
+                    int bboxStemLengthAdjustmentSteps = computeStemLengthAdjustmentSteps(cr, isStartOrEnd, b->above,
+                                                                                         /*frenchStyleBeams*/ false,
+                                                                                         level, beamsAbove, beamsBelow);
+                    chord->stem()->mutldata()->beamCorrection = _up * item->beamWidth() / 2 + _up * grow
+                                                                * (bboxStemLengthAdjustmentSteps - visualStemLengthAdjustmentSteps)
+                                                                * item->beamDist();
+                }
+                BeamTremoloLayout::extendStem(item->ldata(), chord, visualStemLengthAdjustment);
             }
         }
 
@@ -1474,7 +1482,6 @@ void BeamLayout::setTremAnchors(Beam* item, const LayoutContext& ctx)
             // there is an inset tremolo here!
             // figure out up / down
             bool tremUp = t->up();
-            //int fragmentIndex = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
             if (item->userModified()) {
                 tremUp = c->up();
             } else if (item->cross() && t->chord1()->staffMove() == t->chord2()->staffMove()) {

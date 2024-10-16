@@ -578,7 +578,7 @@ void MStyle::save(XmlWriter& xml, bool optimize)
         }
     }
 
-    xml.tag("Spatium", value(Sid::spatium).toReal() / DPMM);
+    xml.tag("spatium", value(Sid::spatium).toReal() / DPMM);
     xml.endElement();
 }
 

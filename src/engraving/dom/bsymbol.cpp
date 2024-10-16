@@ -123,7 +123,11 @@ EngravingItem* BSymbol::drop(EditData& data)
     EngravingItem* el = data.dropElement;
     if (el->isSymbol() || el->isImage()) {
         el->setParent(this);
-        PointF p = data.pos - pagePos() - data.dragOffset;
+        PointF p = data.pos - pageBoundingRect().topLeft() - data.dragOffset;
+        if (p == PointF()) {
+            // offset position so newly added child is visible
+            p = PointF(width(), height());
+        }
         el->setOffset(p);
         score()->undoAddElement(el);
         return el;

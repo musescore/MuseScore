@@ -22,10 +22,9 @@
 #ifndef MUSE_GLOBAL_IAPPLICATION_H
 #define MUSE_GLOBAL_IAPPLICATION_H
 
-#include <string>
-
 #include "modularity/imoduleinterface.h"
 
+#include "types/string.h"
 #include "types/version.h"
 #include "modularity/ioc.h"
 

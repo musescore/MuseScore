@@ -25,6 +25,7 @@
 //! NOTE This is dev tools
 
 #include <cassert>
+#include <set>
 #include <thread>
 
 namespace muse::audio {
@@ -37,6 +38,7 @@ public:
     static bool isMainThread();
 
     static void setupWorkerThread();
+    static void setMixerThreads(const std::set<std::thread::id>& threadIdSet);
     static std::thread::id workerThread();
     static bool isWorkerThread();
 };

@@ -63,7 +63,7 @@ void ScoreCallbacks::setSelectionProximity(qreal proximity)
     m_selectionProximity = proximity;
 }
 
-void ScoreCallbacks::setDropTarget(const mu::engraving::EngravingItem* dropTarget)
+void ScoreCallbacks::setDropTarget(mu::engraving::EngravingItem* dropTarget)
 {
     IF_ASSERT_FAILED(m_interaction) {
         return;

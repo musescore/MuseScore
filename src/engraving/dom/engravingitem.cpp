@@ -247,7 +247,7 @@ double EngravingItem::spatium() const
 
 bool EngravingItem::isInteractionAvailable() const
 {
-    if (!visible() && (score()->printing() || !score()->isShowInvisible())) {
+    if (!getProperty(Pid::VISIBLE).toBool() && (score()->printing() || !score()->isShowInvisible())) {
         return false;
     }
 
@@ -452,8 +452,15 @@ staff_idx_t EngravingItem::staffIdxOrNextVisible() const
         m = s ? s->measure() : nullptr;
     } else if (parent() && parent()->isMeasure()) {
         m = parent() ? toMeasure(parent()) : nullptr;
-    } else if (isSpanner() || isSpannerSegment()) {
+    } else if (isSpanner()) {
         m = score()->tick2measure(tick());
+    } else if (isSpannerSegment()) {
+        const SpannerSegment* spannerSeg = toSpannerSegment(this);
+        if (spannerSeg->isSingleBeginType()) {
+            m = score()->tick2measure(tick());
+        } else if (spannerSeg->isMiddleType() || spannerSeg->isEndType()) {
+            m = spannerSeg->system() ? spannerSeg->system()->firstMeasure() : nullptr;
+        }
     }
     if (!m || !m->system() || !m->system()->staff(si)) {
         return si;
@@ -615,7 +622,7 @@ Color EngravingItem::color() const
 
 Color EngravingItem::curColor() const
 {
-    return curColor(visible());
+    return curColor(getProperty(Pid::VISIBLE).toBool());
 }
 
 //---------------------------------------------------------
@@ -984,7 +991,7 @@ void EngravingItem::dump() const
          "\n  parent: %p",
          typeName(), ldata->pos().x(), ldata->pos().y(),
          ldata->bbox().x(), ldata->bbox().y(), ldata->bbox().width(), ldata->bbox().height(),
-         abbox().x(), abbox().y(), abbox().width(), abbox().height(),
+         pageBoundingRect().x(), pageBoundingRect().y(), pageBoundingRect().width(), pageBoundingRect().height(),
          explicitParent());
 }
 
@@ -1355,6 +1362,13 @@ void EngravingItem::setPlacementBasedOnVoiceAssignment(DirectionV styledDirectio
                 startTick = tick();
                 length = toSpanner(this)->ticks();
             } else if (const Segment* segment = toSegment(findAncestor(ElementType::SEGMENT))) {
+                if (segment && segment->isTimeTickType() && segment->measure() != measure) {
+                    // Edge case: this is a TimeTick segment at the end of previous measure. Happens only
+                    // when dynamic is anchorToEndOfPrevious. In this case look for preceding segment.
+                    segment = segment->prev1ChordRestOrTimeTick();
+                    assert(segment);
+                    measure = segment->measure();
+                }
                 startTick = segment->tick();
                 length = segment->ticks();
             } else if (measure) {
@@ -1448,6 +1462,13 @@ PropertyPropagation EngravingItem::propertyPropagation(const EngravingItem* dest
     const Score* sourceScore = score();
     const Score* destinationScore = destinationItem->score();
     const bool isTextProperty = propertyGroup(propertyId) == PropertyGroup::TEXT;
+    const Staff* sourceStaff = staff();
+    const Staff* destinationStaff = destinationItem->staff();
+
+    // Properties must be propagated to items cloned for MMRests
+    if (sourceScore == destinationScore && sourceStaff == destinationStaff) {
+        return PropertyPropagation::PROPAGATE;
+    }
 
     if (propertyGroup(propertyId) != PropertyGroup::TEXT && sourceScore == destinationScore) {
         return PropertyPropagation::NONE;
@@ -2365,6 +2386,7 @@ void EngravingItem::endEditDrag(EditData& ed)
 
 void EngravingItem::endEdit(EditData&)
 {
+    score()->hideAnchors();
 }
 
 //---------------------------------------------------------

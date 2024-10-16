@@ -13866,28 +13866,28 @@
         <source>Toy piano.</source>
         <comment>toy-piano description</comment>
         <extracomment>description for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Speelgoed piano.</translation>
+        <translation>Speelgoedpiano.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4671"/>
         <source>Toy Piano</source>
         <comment>toy-piano trackName</comment>
         <extracomment>trackName for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Speelgoed piano</translation>
+        <translation>Speelgoedpiano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4673"/>
         <source>Toy Piano</source>
         <comment>toy-piano longName</comment>
         <extracomment>longName for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Speelgoed piano</translation>
+        <translation>Speelgoedpiano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4675"/>
         <source>Toy Pno.</source>
         <comment>toy-piano shortName</comment>
         <extracomment>shortName for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Toy Pno.</translation>
+        <translation>Sp. Pno.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4678"/>

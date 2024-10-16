@@ -106,7 +106,7 @@ public:
     virtual bool startDrop(const QUrl& url) = 0;
     virtual bool isDropAccepted(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
     virtual bool drop(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0;
-    virtual void setDropTarget(const EngravingItem* item, bool notify = true) = 0;
+    virtual void setDropTarget(EngravingItem* item, bool notify = true) = 0;
     virtual void setDropRect(const muse::RectF& rect) = 0;
     virtual void endDrop() = 0;
     virtual muse::async::Notification dropChanged() const = 0;
@@ -221,6 +221,7 @@ public:
 
     virtual void addStretch(qreal value) = 0;
 
+    virtual Measure* selectedMeasure() const = 0;
     virtual void addTimeSignature(Measure* measure, engraving::staff_idx_t staffIndex, TimeSignature* timeSignature) = 0;
 
     virtual void explodeSelectedStaff() = 0;

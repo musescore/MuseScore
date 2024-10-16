@@ -171,6 +171,27 @@ void NotationViewInputController::initZoom()
     currentNotation()->viewState()->setMatrixInited(true);
 }
 
+void NotationViewInputController::initCanvasPos()
+{
+    RectF notationContentRect = m_view->notationContentRect();
+    double totalScoreWidth = notationContentRect.width();
+    double totalScoreHeight = notationContentRect.height();
+
+    double curScaling = m_view->currentScaling();
+    double viewWidth = m_view->width() / curScaling;
+    double viewHeight = m_view->height() / curScaling;
+
+    const double canvasMargin = MScore::horizontalPageGapOdd;
+
+    bool centerHorizontally = totalScoreWidth < viewWidth - 2 * canvasMargin;
+    bool centerVertically = totalScoreHeight < viewHeight - 2 * canvasMargin;
+
+    double xMove = centerHorizontally ? 0.5 * (viewWidth - totalScoreWidth) : canvasMargin;
+    double yMove = centerVertically ? 0.5 * (viewHeight - totalScoreHeight) : canvasMargin;
+
+    m_view->moveCanvas(xMove, yMove);
+}
+
 void NotationViewInputController::updateZoomAfterSizeChange()
 {
     IF_ASSERT_FAILED(currentNotation()) {
@@ -279,9 +300,11 @@ void NotationViewInputController::doZoomToPageWidth()
         return;
     }
 
-    qreal pageWidth = notationStyle()->styleValue(mu::engraving::Sid::pageWidth).toDouble() * mu::engraving::DPI;
+    qreal pageWidth = notationStyle()->styleValue(mu::engraving::Sid::pageWidth).toDouble() * mu::engraving::DPI
+                      + 2 * MScore::horizontalPageGapOdd;
+    double viewWidth = m_view->width();
 
-    qreal scale = m_view->width() / pageWidth;
+    qreal scale = viewWidth / pageWidth;
     setScaling(scale, PointF(), false);
 }
 
@@ -301,11 +324,16 @@ void NotationViewInputController::doZoomToWholePage()
         return;
     }
 
-    qreal pageWidth = notationStyle()->styleValue(mu::engraving::Sid::pageWidth).toDouble() * mu::engraving::DPI;
-    qreal pageHeight = notationStyle()->styleValue(mu::engraving::Sid::pageHeight).toDouble() * mu::engraving::DPI;
+    qreal pageWidth = notationStyle()->styleValue(mu::engraving::Sid::pageWidth).toDouble() * mu::engraving::DPI
+                      + 2 * MScore::horizontalPageGapOdd;
+    qreal pageHeight = notationStyle()->styleValue(mu::engraving::Sid::pageHeight).toDouble() * mu::engraving::DPI
+                       + 2 * MScore::horizontalPageGapOdd;
 
-    qreal pageWidthScale = m_view->width() / pageWidth;
-    qreal pageHeightScale = m_view->height() / pageHeight;
+    double viewWidth = m_view->width();
+    double viewHeight = m_view->height();
+
+    qreal pageWidthScale = viewWidth / pageWidth;
+    qreal pageHeightScale = viewHeight / pageHeight;
 
     qreal scale = std::min(pageWidthScale, pageHeightScale);
     setScaling(scale, PointF(), false);
@@ -329,8 +357,10 @@ void NotationViewInputController::doZoomToTwoPages()
 
     qreal viewWidth = m_view->width();
     qreal viewHeight = m_view->height();
-    qreal pageWidth = notationStyle()->styleValue(mu::engraving::Sid::pageWidth).toDouble() * mu::engraving::DPI;
-    qreal pageHeight = notationStyle()->styleValue(mu::engraving::Sid::pageHeight).toDouble() * mu::engraving::DPI;
+    qreal pageWidth = notationStyle()->styleValue(mu::engraving::Sid::pageWidth).toDouble() * mu::engraving::DPI
+                      + 2 * MScore::horizontalPageGapOdd;
+    qreal pageHeight = notationStyle()->styleValue(mu::engraving::Sid::pageHeight).toDouble() * mu::engraving::DPI
+                       + 2 * MScore::horizontalPageGapOdd;
 
     qreal pageHeightScale = 0.0;
     qreal pageWidthScale = 0.0;
@@ -645,6 +675,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         if (numHitElements > 1 && (keyState & Qt::ControlModifier)) {
             size_t currTop = numHitElements - 1;
             EngravingItem* e = hitElements[currTop];
+            std::set<EngravingItem*> selectedAtPosition;
             bool found = false;
 
             // e is the topmost element in stacking order,
@@ -658,13 +689,17 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
                     }
                 } else if (hitElements[currTop]->selected()) {
                     found = true;
+                    selectedAtPosition.emplace(hitElements[currTop]);
                     e = nullptr;
                 }
                 currTop = (currTop + 1) % numHitElements;
             }
 
             if (e && !e->selected()) {
-                viewInteraction()->select({ e }, SelectType::SINGLE, hitStaffIndex);
+                for (EngravingItem* selectedElem : selectedAtPosition) {
+                    selectedElem->score()->deselect(selectedElem);
+                }
+                viewInteraction()->select({ e }, SelectType::ADD, hitStaffIndex);
             }
         } else {
             viewInteraction()->select({ hitElement }, selectType, hitStaffIndex);
@@ -718,8 +753,8 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
     INotationSelectionPtr selection = viewInteraction()->selection();
 
     if (!selection->isRange()) {
-        if (ctx.hitElement && ctx.hitElement->needStartEditingAfterSelecting()) {
-            if (ctx.hitElement->hasGrips()) {
+        if (ctx.hitElement && ctx.hitElement->needStartEditingAfterSelecting() && !ctx.hitElement->isTextBase()) {
+            if (ctx.hitElement->hasGrips() && !ctx.hitElement->isImage() && selection->elements().size() == 1) {
                 viewInteraction()->startEditGrip(ctx.hitElement, ctx.hitElement->gripsCount() > 4 ? Grip::DRAG : Grip::MIDDLE);
             } else {
                 viewInteraction()->startEditElement(ctx.hitElement, false);
@@ -911,7 +946,7 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
     interaction->select({ ctx.element }, SelectType::SINGLE, staffIndex);
 
     if (ctx.element && ctx.element->needStartEditingAfterSelecting()) {
-        viewInteraction()->startEditElement(ctx.element);
+        viewInteraction()->startEditElement(ctx.element, /*editTextualProperties*/ false);
         return;
     }
 

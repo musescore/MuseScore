@@ -50,10 +50,10 @@ class DockPageView : public QQuickItem, public muse::Injectable
     Q_OBJECT
 
     Q_PROPERTY(QString uri READ uri WRITE setUri NOTIFY uriChanged)
-    Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> mainToolBars READ mainToolBarsProperty)
-    Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> toolBars READ toolBarsProperty)
-    Q_PROPERTY(QQmlListProperty<muse::dock::DockingHolderView> toolBarsDockingHolders READ toolBarsDockingHoldersProperty)
-    Q_PROPERTY(QQmlListProperty<muse::dock::DockPanelView> panels READ panelsProperty)
+    Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> mainToolBars READ mainToolBarsProperty CONSTANT)
+    Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> toolBars READ toolBarsProperty CONSTANT)
+    Q_PROPERTY(QQmlListProperty<muse::dock::DockingHolderView> toolBarsDockingHolders READ toolBarsDockingHoldersProperty CONSTANT)
+    Q_PROPERTY(QQmlListProperty<muse::dock::DockPanelView> panels READ panelsProperty CONSTANT)
     Q_PROPERTY(QQmlListProperty<muse::dock::DockingHolderView> panelsDockingHolders READ panelsDockingHoldersProperty)
     Q_PROPERTY(muse::dock::DockCentralView * centralDock READ centralDock WRITE setCentralDock NOTIFY centralDockChanged)
     Q_PROPERTY(muse::dock::DockStatusBarView * statusBar READ statusBar WRITE setStatusBar NOTIFY statusBarChanged)

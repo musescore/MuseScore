@@ -57,6 +57,43 @@ SlurTieSegment::SlurTieSegment(const SlurTieSegment& b)
     mutldata()->path.set_value(b.ldata()->path());
 }
 
+bool SlurTieSegment::isEditAllowed(EditData& ed) const
+{
+    if (ed.key == Key_Home && !(ed.modifiers & ~KeyboardModifier::KeypadModifier) && ed.hasCurrentGrip()) {
+        return true;
+    }
+
+    return false;
+}
+
+//---------------------------------------------------------
+//   edit
+//    return true if event is accepted
+//---------------------------------------------------------
+
+bool SlurTieSegment::edit(EditData& ed)
+{
+    if (!isEditAllowed(ed)) {
+        return false;
+    }
+
+    if (ed.key == Key_Home && !(ed.modifiers & ~KeyboardModifier::KeypadModifier)) {
+        if (ed.hasCurrentGrip()) {
+            startEditDrag(ed);
+            if (ed.curGrip == Grip::SHOULDER) {
+                ups(Grip::BEZIER1).off = PointF();
+                ups(Grip::BEZIER2).off = PointF();
+            } else {
+                ups(ed.curGrip).off = PointF();
+            }
+            renderer()->layoutItem(spanner());
+            endEditDrag(ed);
+        }
+        return true;
+    }
+    return false;
+}
+
 //---------------------------------------------------------
 //   gripAnchorLines
 //---------------------------------------------------------
@@ -83,11 +120,11 @@ std::vector<LineF> SlurTieSegment::gripAnchorLines(Grip grip) const
         break;
 
     case SpannerSegmentType::BEGIN:
-        anchorPosition = (grip == Grip::START ? p1 : system()->abbox().topRight());
+        anchorPosition = (grip == Grip::START ? p1 : system()->pageBoundingRect().topRight());
         break;
 
     case SpannerSegmentType::MIDDLE:
-        anchorPosition = (grip == Grip::START ? sp : system()->abbox().topRight());
+        anchorPosition = (grip == Grip::START ? sp : system()->pageBoundingRect().topRight());
         break;
 
     case SpannerSegmentType::END:

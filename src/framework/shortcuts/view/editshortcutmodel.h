@@ -31,15 +31,15 @@
 class QKeySequence;
 
 namespace muse::shortcuts {
-class EditShortcutModel : public QObject
+class EditShortcutModel : public QObject, public Injectable
 {
     Q_OBJECT
-
-    INJECT(IInteractive, interactive)
 
     Q_PROPERTY(QString originSequence READ originSequenceInNativeFormat NOTIFY originSequenceChanged)
     Q_PROPERTY(QString newSequence READ newSequenceInNativeFormat NOTIFY newSequenceChanged)
     Q_PROPERTY(QString conflictWarning READ conflictWarning NOTIFY newSequenceChanged)
+
+    Inject<IInteractive> interactive = { this };
 
 public:
     explicit EditShortcutModel(QObject* parent = nullptr);
@@ -47,6 +47,7 @@ public:
     QString originSequenceInNativeFormat() const;
     QString newSequenceInNativeFormat() const;
     QString conflictWarning() const;
+    bool isShiftAllowed(Qt::Key key);
 
     Q_INVOKABLE void load(const QVariant& shortcut, const QVariantList& allShortcuts);
     Q_INVOKABLE void inputKey(Qt::Key key, Qt::KeyboardModifiers modifiers);

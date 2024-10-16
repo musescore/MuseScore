@@ -58,13 +58,13 @@ std::string UpdateModule::moduleName() const
 
 void UpdateModule::registerExports()
 {
-    m_scenario = std::make_shared<UpdateScenario>();
-    m_configuration = std::make_shared<UpdateConfiguration>();
-    m_actionController = std::make_shared<UpdateActionController>();
-    m_appUpdateService = std::make_shared<AppUpdateService>();
+    m_scenario = std::make_shared<UpdateScenario>(iocContext());
+    m_configuration = std::make_shared<UpdateConfiguration>(iocContext());
+    m_actionController = std::make_shared<UpdateActionController>(iocContext());
+    m_appUpdateService = std::make_shared<AppUpdateService>(iocContext());
 
-    m_museSoundsCheckUpdateScenario = std::make_shared<MuseSoundsCheckUpdateScenario>();
-    m_museSamplerUpdateService = std::make_shared<MuseSoundsCheckUpdateService>();
+    m_museSoundsCheckUpdateScenario = std::make_shared<MuseSoundsCheckUpdateScenario>(iocContext());
+    m_museSamplerUpdateService = std::make_shared<MuseSoundsCheckUpdateService>(iocContext());
 
     ioc()->registerExport<IUpdateScenario>(moduleName(), m_scenario);
     ioc()->registerExport<IUpdateConfiguration>(moduleName(), m_configuration);
@@ -78,7 +78,7 @@ void UpdateModule::resolveImports()
 {
     auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(std::make_shared<UpdateUiActions>(m_actionController));
+        ar->reg(std::make_shared<UpdateUiActions>(m_actionController, iocContext()));
     }
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());

@@ -21,7 +21,7 @@
  */
 #include "abstractaudiowriter.h"
 
-#include <QApplication>
+#include <QCoreApplication>
 #include <QFile>
 #include <QFileInfo>
 #include <QThread>
@@ -141,7 +141,7 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
     });
 
     while (!m_isCompleted) {
-        QApplication::instance()->processEvents();
+        qApp->processEvents();
         QThread::yieldCurrentThread();
     }
 
