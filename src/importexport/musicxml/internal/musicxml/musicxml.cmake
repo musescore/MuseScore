@@ -10,6 +10,8 @@ set (MUSICXML_SRC
     ${CMAKE_CURRENT_LIST_DIR}/import/importmusicxmlnoteduration.h
     ${CMAKE_CURRENT_LIST_DIR}/import/importmusicxmlnotepitch.cpp
     ${CMAKE_CURRENT_LIST_DIR}/import/importmusicxmlnotepitch.h
+    ${CMAKE_CURRENT_LIST_DIR}/import/importmusicxmlnote.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/import/importmusicxmlnote.h
     ${CMAKE_CURRENT_LIST_DIR}/import/importmusicxmlpass1.cpp
     ${CMAKE_CURRENT_LIST_DIR}/import/importmusicxmlpass1.h
     ${CMAKE_CURRENT_LIST_DIR}/import/importmusicxmlpass2.cpp

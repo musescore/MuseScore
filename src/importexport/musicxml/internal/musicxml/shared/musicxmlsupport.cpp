@@ -25,8 +25,24 @@
  */
 
 #include "musicxmlsupport.h"
+#include "dom/beam.h"
+#include "dom/factory.h"
+#include "dom/instrument.h"
+#include "dom/lyrics.h"
+#include "dom/measure.h"
+#include "dom/note.h"
+#include "dom/rest.h"
+#include "dom/score.h"
+#include "dom/sticking.h"
+#include "dom/tie.h"
+#include "dom/tuplet.h"
+#include "dom/utils.h"
 #include "global/serialization/xmlstreamreader.h"
 
+#include "imusicxmlconfiguration.h"
+#include "internal/musicxml/import/importmusicxmllogger.h"
+#include "internal/musicxml/import/importmusicxmlpass2.h"
+#include "internal/musicxml/shared/musicxmltypes.h"
 #include "translation.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/chord.h"
@@ -36,6 +52,11 @@ using namespace muse;
 using namespace mu::engraving;
 
 namespace mu::iex::musicxml {
+std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
+{
+    return muse::modularity::globalIoc()->resolve<mu::iex::musicxml::IMusicXmlConfiguration>("iex_musicxml");
+}
+
 //---------------------------------------------------------
 //   errorStringWithLocation
 //---------------------------------------------------------
@@ -671,5 +692,540 @@ const Articulation* findLaissezVibrer(const Chord* chord)
         }
     }
     return nullptr;
+}
+
+/**
+ Set beam mode for all elements and remove the beam
+ */
+
+void removeBeam(Beam*& beam)
+{
+    for (size_t i = 0; i < beam->elements().size(); ++i) {
+        beam->elements().at(i)->setBeamMode(BeamMode::NONE);
+    }
+    delete beam;
+    beam = nullptr;
+}
+
+//---------------------------------------------------------
+//   setChordRestDuration
+//---------------------------------------------------------
+
+/**
+ * Set \a cr duration
+ */
+
+void setChordRestDuration(ChordRest* cr, TDuration duration, const Fraction dura)
+{
+    if (duration.type() == DurationType::V_MEASURE) {
+        cr->setDurationType(duration);
+        cr->setTicks(dura);
+    } else {
+        cr->setDurationType(duration);
+        cr->setTicks(cr->durationType().fraction());
+    }
+}
+
+//---------------------------------------------------------
+//   addRest
+//---------------------------------------------------------
+
+/**
+ * Add a rest to the score
+ * TODO: beam handling
+ * TODO: display step handling
+ * TODO: visible handling
+ * TODO: whole measure rest handling
+ */
+
+Rest* addRest(Score*, Measure* m,
+              const Fraction& tick, const track_idx_t track, const int move,
+              const TDuration duration, const Fraction dura)
+{
+    Segment* s = m->getSegment(SegmentType::ChordRest, tick);
+    // Sibelius might export two rests at the same place, ignore the 2nd one
+    // <?DoletSibelius Two NoteRests in same voice at same position may be an error?>
+    // Same issue may result from trying to import incomplete tuplets
+    if (s->element(track)) {
+        LOGD("cannot add rest at tick %s (%d) track %zu: element already present", muPrintable(tick.toString()), tick.ticks(), track); // TODO
+        return nullptr;
+    }
+
+    Rest* cr = Factory::createRest(s);
+    setChordRestDuration(cr, duration, dura);
+    cr->setTrack(track);
+    cr->setStaffMove(move);
+    s->add(cr);
+    return cr;
+}
+
+//---------------------------------------------------------
+//   hasDrumset
+//---------------------------------------------------------
+
+/**
+ Determine if \a instruments contains a valid drumset.
+ This is the case if any instrument has a midi-unpitched element.
+ */
+
+bool hasDrumset(const MusicXmlInstruments& instruments)
+{
+    bool res = false;
+    for (const auto& p : instruments) {
+        // debug: dump the instruments
+        //LOGD("instrument: %s %s", muPrintable(ii.key()), muPrintable(ii.value().toString()));
+        // find valid unpitched values
+        int unpitched = p.second.unpitched;
+        if (0 <= unpitched && unpitched <= 127) {
+            res = true;
+        }
+    }
+
+    /*
+    for (const auto& instr : instruments) {
+          // MusicXML elements instrument-name, midi-program, instrument-sound, virtual-library, virtual-name
+          // in a shell script use "mscore ... 2>&1 | grep GREP_ME | cut -d' ' -f3-" to extract
+          LOGD("GREP_ME '%s',%d,'%s','%s','%s'",
+                 muPrintable(instr.name),
+                 instr.midiProgram + 1,
+                 muPrintable(instr.sound),
+                 muPrintable(instr.virtLib),
+                 muPrintable(instr.virtName)
+                 );
+          }
+     */
+
+    return res;
+}
+
+//---------------------------------------------------------
+//   addGraceChordsAfter
+//---------------------------------------------------------
+
+/**
+ Move \a gac grace chords from grace chord list \a gcl
+ to the chord \a c grace note after list
+ */
+
+void addGraceChordsAfter(Chord* c, GraceChordList& gcl, size_t& gac)
+{
+    if (!c) {
+        return;
+    }
+
+    while (gac > 0) {
+        if (gcl.size() > 0) {
+            Chord* graceChord = muse::takeFirst(gcl);
+            graceChord->toGraceAfter();
+            c->add(graceChord);              // TODO check if same voice ?
+            coerceGraceCue(c, graceChord);
+            LOGD("addGraceChordsAfter chord %p grace after chord %p", c, graceChord);
+        }
+        gac--;
+    }
+}
+
+//---------------------------------------------------------
+//   addGraceChordsBefore
+//---------------------------------------------------------
+
+/**
+ Move grace chords from grace chord list \a gcl
+ to the chord \a c grace note before list
+ */
+
+void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
+{
+    for (int i = static_cast<int>(gcl.size()) - 1; i >= 0; i--) {
+        Chord* gc = gcl.at(i);
+        for (EngravingItem* e : gc->el()) {
+            if (e->isFermata()) {
+                c->segment()->add(e);
+                gc->removeFermata(toFermata(e));
+                break;                          // out of the door, line on the left, one cross each
+            }
+        }
+        c->add(gc);            // TODO check if same voice ?
+        coerceGraceCue(c, gc);
+    }
+    gcl.clear();
+}
+
+//---------------------------------------------------------
+//   coerceGraceCue
+//---------------------------------------------------------
+
+/**
+ If the mainChord is small and/or silent, the grace note should likely
+ match this. Exporters tend to incorrectly omit <cue> or <type size="cue">
+ from grace notes.
+ */
+
+void coerceGraceCue(Chord* mainChord, Chord* graceChord)
+{
+    if (mainChord->isSmall()) {
+        graceChord->setSmall(true);
+    }
+    bool anyPlays = false;
+    for (const Note* n : mainChord->notes()) {
+        anyPlays |= n->play();
+    }
+    if (!anyPlays) {
+        for (Note* gn : graceChord->notes()) {
+            gn->setPlay(false);
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   MusicXmlStepAltOct2Pitch
+//---------------------------------------------------------
+
+/**
+ Convert MusicXML \a step (0=C, 1=D, etc.) / \a alter / \a octave to midi pitch.
+ Note: same code is in pass 1 and in pass 2.
+ TODO: combine
+ */
+
+int MusicXmlStepAltOct2Pitch(int step, int alter, int octave)
+{
+    //                       c  d  e  f  g  a   b
+    static int table[7]  = { 0, 2, 4, 5, 7, 9, 11 };
+    if (step < 0 || step > 6) {
+        LOGD("MusicXmlStepAltOct2Pitch: illegal step %d", step);
+        return -1;
+    }
+    int pitch = table[step] + alter + (octave + 1) * 12;
+
+    if (pitch < 0) {
+        pitch = -1;
+    }
+    if (pitch > 127) {
+        pitch = -1;
+    }
+
+    return pitch;
+}
+
+//---------------------------------------------------------
+//   xmlSetPitch
+//---------------------------------------------------------
+
+/**
+ Convert MusicXML \a step / \a alter / \a octave to midi pitch,
+ set pitch and tpc.
+ Note that n's staff and track have not been set yet
+ */
+
+void xmlSetPitch(Note* n, int step, int alter, double tuning, int octave, const int octaveShift, const Instrument* const instr)
+{
+    //LOGD("xmlSetPitch(n=%p, step=%d, alter=%d, octave=%d, octaveShift=%d)",
+    //       n, step, alter, octave, octaveShift);
+
+    //const Staff* staff = n->score()->staff(track / VOICES);
+    //const Instrument* instr = staff->part()->instr();
+
+    const Interval intval = instr->transpose();
+
+    //LOGD("  staff=%p instr=%p dia=%d chro=%d",
+    //       staff, instr, static_cast<int>(intval.diatonic), static_cast<int>(intval.chromatic));
+
+    int pitch = MusicXmlStepAltOct2Pitch(step, alter, octave);
+    pitch += intval.chromatic;   // assume not in concert pitch
+    pitch += 12 * octaveShift;   // correct for octave shift
+    // ensure sane values
+    pitch = std::clamp(pitch, 0, 127);
+
+    int tpc2 = step2tpc(step, AccidentalVal(alter));
+    int tpc1 = mu::engraving::transposeTpc(tpc2, intval, true);
+    n->setPitch(pitch, tpc1, tpc2);
+    n->setTuning(tuning);
+    //LOGD("  pitch=%d tpc1=%d tpc2=%d", n->pitch(), n->tpc1(), n->tpc2());
+}
+
+//---------------------------------------------------------
+//   calculateTupletDuration
+//---------------------------------------------------------
+
+/**
+ Calculate the duration of all notes in the tuplet combined
+ */
+
+static Fraction calculateTupletDuration(const Tuplet* const t)
+{
+    Fraction res;
+
+    for (DurationElement* de : t->elements()) {
+        if (de->type() == ElementType::CHORD || de->type() == ElementType::REST) {
+            const ChordRest* cr = static_cast<ChordRest*>(de);
+            const Fraction fraction = cr->ticks(); // TODO : take care of nested tuplets
+            if (fraction.isValid()) {
+                res += fraction;
+            }
+        }
+    }
+    res /= t->ratio();
+
+    return res;
+}
+
+//---------------------------------------------------------
+//   determineTupletBaseLen
+//---------------------------------------------------------
+
+/**
+ Determine tuplet baseLen as determined by the tuplet ratio
+ and duration.
+ */
+
+static TDuration determineTupletBaseLen(const Tuplet* const t)
+{
+    Fraction tupletFraction;
+    Fraction tupletFullDuration;
+    MusicXmlTupletState::determineTupletFractionAndFullDuration(calculateTupletDuration(t), tupletFraction, tupletFullDuration);
+
+    Fraction baseLen = tupletFullDuration * Fraction(1, t->ratio().denominator());
+    /*
+    LOGD("tupletFraction %s tupletFullDuration %s ratio %s baseLen %s",
+           muPrintable(tupletFraction.toString()),
+           muPrintable(tupletFullDuration.toString()),
+           muPrintable(t->ratio().toString()),
+           muPrintable(baseLen.toString())
+           );
+     */
+
+    return TDuration(baseLen);
+}
+
+//---------------------------------------------------------
+//   handleTupletStart
+//---------------------------------------------------------
+
+void handleTupletStart(const ChordRest* const cr, Tuplet*& tuplet,
+                       const int actualNotes, const int normalNotes,
+                       const MusicXmlTupletDesc& tupletDesc)
+{
+    tuplet = new Tuplet(cr->measure());
+    tuplet->setTrack(cr->track());
+    tuplet->setRatio(Fraction(actualNotes, normalNotes));
+    tuplet->setTick(cr->tick());
+    tuplet->setBracketType(tupletDesc.bracket);
+    tuplet->setNumberType(tupletDesc.shownumber);
+    tuplet->setDirection(tupletDesc.direction);
+    tuplet->setParent(cr->measure());
+}
+
+//---------------------------------------------------------
+//   handleTupletStop
+//---------------------------------------------------------
+
+void handleTupletStop(Tuplet*& tuplet, const int normalNotes)
+{
+    // allow handleTupletStop to be called w/o error of no tuplet active
+    if (!tuplet) {
+        return;
+    }
+
+    // set baselen
+    TDuration td = determineTupletBaseLen(tuplet);
+    tuplet->setBaseLen(td);
+    Fraction f(normalNotes, td.fraction().denominator());
+    f.reduce();
+    if (!f.isValid()) {
+        LOGD("MusicXml::import: tuplet stop but note values too small");
+        tuplet = nullptr;
+        return;
+    }
+    tuplet->setTicks(f);
+    // TODO determine usefulness of following check
+    int totalDuration = 0;
+    int ticksPerNote = f.ticks() / tuplet->ratio().numerator();
+    bool ticksCorrect = true;
+    for (DurationElement* de : tuplet->elements()) {
+        if (de->type() == ElementType::CHORD || de->type() == ElementType::REST) {
+            int globalTicks = de->globalTicks().ticks();
+            if (globalTicks != ticksPerNote) {
+                ticksCorrect = false;
+            }
+            totalDuration += globalTicks;
+        }
+    }
+    if (totalDuration != f.ticks()) {
+        LOGD("MusicXml::import: tuplet stop but bad duration");     // TODO
+    }
+    if (!ticksCorrect) {
+        LOGD("MusicXml::import: tuplet stop but uneven note ticks"); // TODO
+    }
+    tuplet = 0;
+}
+
+//---------------------------------------------------------
+//   addArticLaissezVibrer
+//---------------------------------------------------------
+
+static void addArticLaissezVibrer(const Note* const note)
+{
+    IF_ASSERT_FAILED(note) {
+        return;
+    }
+
+    Chord* chord = note->chord();
+    if (!findLaissezVibrer(chord)) {
+        Articulation* na = Factory::createArticulation(chord);
+        na->setSymId(SymId::articLaissezVibrerBelow);
+        chord->add(na);
+    }
+}
+
+//---------------------------------------------------------
+//   addTie
+//---------------------------------------------------------
+
+void addTie(const Notation& notation, Note* note, const track_idx_t track, MusicXmlTieMap& ties,
+            std::vector<Note*>& unstartedTieNotes, std::vector<Note*>& unendedTieNotes, MusicXmlLogger* logger,
+            const XmlStreamReader* const xmlreader)
+{
+    IF_ASSERT_FAILED(note) {
+        return;
+    }
+
+    const String type = notation.attribute(u"type");
+    const String orientation = notation.attribute(u"orientation");
+    const String placement = notation.attribute(u"placement");
+    const String lineType = notation.attribute(u"line-type");
+
+    TieLocation loc = TieLocation(note->pitch(), note->track());
+
+    if (type.empty()) {
+        // ignore, nothing to do
+    } else if (type == u"start") {
+        if (Tie* activeTie = muse::value(ties, loc, nullptr)) {
+            logger->logError(String(u"Tie already active"), xmlreader);
+            unendedTieNotes.push_back(activeTie->startNote());
+            ties.erase(loc);
+        }
+        ties[loc] = Factory::createTie(note);
+        Tie* currTie = ties[loc];
+        note->setTieFor(currTie);
+        currTie->setStartNote(note);
+        currTie->setTrack(track);
+
+        const Color color = Color::fromString(notation.attribute(u"color"));
+        if (color.isValid()) {
+            currTie->setColor(color);
+        }
+
+        if (configuration()->importLayout()) {
+            if (orientation == u"over" || placement == u"above") {
+                currTie->setSlurDirection(DirectionV::UP);
+            } else if (orientation == u"under" || placement == u"below") {
+                currTie->setSlurDirection(DirectionV::DOWN);
+            } else if (orientation.empty() || placement.empty()) {
+                // ignore
+            } else {
+                logger->logError(String(u"unknown tied orientation/placement: %1/%2").arg(orientation).arg(placement), xmlreader);
+            }
+        }
+
+        if (lineType == u"dashed") {
+            currTie->setStyleType(SlurStyleType::Dashed);
+        } else if (lineType == u"dotted") {
+            currTie->setStyleType(SlurStyleType::Dotted);
+        } else if (lineType == u"solid" || lineType.empty()) {
+            currTie->setStyleType(SlurStyleType::Solid);
+        }
+        currTie = nullptr;
+    } else if (type == "stop") {
+        if (Tie* currTie = muse::value(ties, loc, nullptr)) {
+            const Note* startNote = currTie->startNote();
+            const Chord* startChord = startNote ? startNote->chord() : nullptr;
+            const Chord* endChord = note->chord();
+            const Measure* startMeasure = startChord ? startChord->measure() : nullptr;
+            if (startMeasure == endChord->measure() || startChord->tick() + startChord->actualTicks() == endChord->tick()) {
+                // only connect if they're in the same bar, or there are no notes/rests in the same voice between them
+                currTie->setEndNote(note);
+                note->setTieBack(currTie);
+            } else {
+                logger->logError(String(u"Intervening note in voice"), xmlreader);
+                unstartedTieNotes.push_back(note);
+                unendedTieNotes.push_back(currTie->startNote());
+            }
+            ties.erase(loc);
+        } else {
+            unstartedTieNotes.push_back(note);
+            logger->logError(String(u"Non-started tie terminated. No-op."), xmlreader);
+        }
+    } else if (type == "let-ring") {
+        addArticLaissezVibrer(note);
+    } else {
+        logger->logError(String(u"unknown tied type %1").arg(type), xmlreader);
+    }
+}
+
+//---------------------------------------------------------
+//   addLyric
+//---------------------------------------------------------
+
+/**
+ Add a single lyric to the score or delete it (if number too high)
+ */
+
+void addLyric(MusicXmlLogger* logger, const XmlStreamReader* const xmlreader,
+              ChordRest* cr, Lyrics* l, int lyricNo, MusicXmlLyricsExtend& extendedLyrics)
+{
+    if (lyricNo > MAX_LYRICS) {
+        logger->logError(String(u"too much lyrics (>%1)")
+                         .arg(MAX_LYRICS), xmlreader);
+        delete l;
+    } else {
+        l->setNo(lyricNo);
+        cr->add(l);
+        extendedLyrics.setExtend(lyricNo, cr->track(), cr->tick(), l);
+    }
+}
+
+//---------------------------------------------------------
+//   addLyrics
+//---------------------------------------------------------
+
+/**
+ Add a notes lyrics to the score
+ */
+
+void addLyrics(MusicXmlLogger* logger, const XmlStreamReader* const xmlreader,
+               ChordRest* cr,
+               const std::map<int, Lyrics*>& numbrdLyrics,
+               const std::set<Lyrics*>& extLyrics,
+               MusicXmlLyricsExtend& extendedLyrics)
+{
+    for (const int lyricNo : muse::keys(numbrdLyrics)) {
+        Lyrics* const lyric = numbrdLyrics.at(lyricNo);
+        addLyric(logger, xmlreader, cr, lyric, lyricNo, extendedLyrics);
+        if (muse::contains(extLyrics, lyric)) {
+            extendedLyrics.addLyric(lyric);
+        }
+    }
+}
+
+void addGraceNoteLyrics(const std::map<int, Lyrics*>& numberedLyrics, std::set<Lyrics*> extendedLyrics,
+                        std::vector<GraceNoteLyrics>& gnLyrics)
+{
+    for (const int lyricNo : muse::keys(numberedLyrics)) {
+        Lyrics* const lyric = numberedLyrics.at(lyricNo);
+        if (lyric) {
+            bool extend = muse::contains(extendedLyrics, lyric);
+            const GraceNoteLyrics gnl = GraceNoteLyrics(lyric, extend, lyricNo);
+            gnLyrics.push_back(gnl);
+        }
+    }
+}
+
+void addInferredStickings(ChordRest* cr, const std::vector<Sticking*>& numberedStickings)
+{
+    for (Sticking* sticking : numberedStickings) {
+        sticking->setParent(cr->segment());
+        sticking->setTrack(cr->track());
+        cr->score()->addElement(sticking);
+    }
 }
 }
