@@ -139,6 +139,8 @@ Item {
                 readonly property int numColumns: model.numColumns
                 readonly property int spacing: 20
 
+                property Item draggedPad: null
+
                 Layout.alignment: Qt.AlignTop
                 Layout.fillHeight: true
 
@@ -169,21 +171,48 @@ Item {
                         panelMode: percModel.currentPanelMode
                         useNotationPreview: percModel.useNotationPreview
 
+                        showOriginBackground: pad.containsDrag || pad === padGrid.draggedPad
+
                         dragParent: root
 
                         onDragStarted: {
+                            padGrid.draggedPad = pad
                             padGrid.model.startDrag(index)
                         }
 
                         onDropped: function(dropEvent) {
+                            padGrid.draggedPad = null
                             padGrid.model.endDrag(index)
                             dropEvent.accepted = true
                         }
 
                         onDragCancelled: {
+                            padGrid.draggedPad = null
                             padGrid.model.endDrag(-1)
                         }
                     }
+
+                    states: [
+                        // If this is the drop target - move the draggable area to the origin of the dragged pad (preview the drop)
+                        State {
+                            name: "DROP_TARGET"
+                            when: Boolean(padGrid.draggedPad) && pad.containsDrag && padGrid.draggedPad !== pad
+                            ParentChange {
+                                target: pad.draggableArea
+                                parent: padGrid.draggedPad
+                            }
+                            AnchorChanges {
+                                target: pad.draggableArea
+                                anchors.verticalCenter: padGrid.draggedPad.verticalCenter
+                                anchors.horizontalCenter: padGrid.draggedPad.horizontalCenter
+                            }
+                            // Origin background not needed for the dragged pad when a preview is taking place...
+                            PropertyChanges {
+                                target: padGrid.draggedPad
+                                showOriginBackground: false
+                            }
+                        }
+                    ]
                 }
             }
 

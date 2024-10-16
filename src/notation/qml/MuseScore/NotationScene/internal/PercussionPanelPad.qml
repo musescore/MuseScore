@@ -35,6 +35,8 @@ DropArea {
     property bool useNotationPreview: false
 
     property alias totalBorderWidth: padLoader.anchors.margins
+    property alias showOriginBackground: originBackground.visible
+    property alias draggableArea: draggableArea
 
     property var dragParent: null
     signal dragStarted()
@@ -118,8 +120,7 @@ DropArea {
 
                 Rectangle {
                     id: emptySlotBackground
-
-                    color: root.containsDrag ? ui.theme.buttonColor : ui.theme.backgroundSecondaryColor
+                    color: ui.theme.backgroundSecondaryColor
                 }
             }
         }
@@ -152,7 +153,7 @@ DropArea {
     }
 
     Rectangle {
-        id: dragSourceBackground
+        id: originBackground
 
         anchors.fill: parent
 
@@ -163,19 +164,14 @@ DropArea {
 
         color: draggableArea.color
 
-        // This spawns behind a pad when it is dragged away from the source position
-        visible: dragHandler.active
+        Rectangle {
+            id: originBackgroundFill
 
-        Loader {
             anchors.fill: parent
             anchors.margins: padLoader.anchors.margins
+            radius: draggableArea.radius - originBackgroundFill.anchors.margins
 
-            active: dragHandler.active
-
-            layer.enabled: padLoader.layer.enabled
-            layer.effect: padLoader.layer.effect
-
-            sourceComponent: emptySlotComponent
+            color: root.containsDrag ? ui.theme.buttonColor : ui.theme.backgroundSecondaryColor
         }
     }
 }
