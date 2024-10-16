@@ -85,6 +85,11 @@ Item {
         contentWidth: rowLayout.width
         contentHeight: rowLayout.height
 
+        function goToBottom() {
+            var endY = flickable.contentHeight * (1.0 - flickable.visibleArea.heightRatio)
+            flickable.contentY = endY
+        }
+
         RowLayout {
             id: rowLayout
 
@@ -150,7 +155,7 @@ Item {
 
                 readonly property int numRows: Math.floor(model.numPads / numColumns)
                 readonly property int numColumns: model.numColumns
-                readonly property int spacing: 20
+                readonly property int spacing: 12
 
                 property Item draggedPad: null
 
@@ -246,9 +251,9 @@ Item {
                 orientation: Qt.Horizontal
                 onClicked: {
                     padGrid.model.addRow()
+                    flickable.goToBottom()
                 }
             }
         }
     }
 }
-
