@@ -93,7 +93,7 @@ TEST_F(Engraving_ScoreUtilsTests, StaffTestDefaultMergeMatchingRests)
     }
 
     // GIVEN score style setting is false
-    score->style().set(Sid::staffDefaultMergeMatchingRests, false);
+    score->style().set(Sid::mergeMatchingRests, false);
     // GIVEN staff setting is AUTO
     score->staff(0)->setMergeMatchingRests(AutoOnOff::AUTO);
     // [THEN] rests display unmerged
@@ -108,7 +108,7 @@ TEST_F(Engraving_ScoreUtilsTests, StaffTestDefaultMergeMatchingRests)
     EXPECT_FALSE(score->staff(0)->shouldMergeMatchingRests());
 
     // GIVEN score style setting is true
-    score->style().set(Sid::staffDefaultMergeMatchingRests, true);
+    score->style().set(Sid::mergeMatchingRests, true);
     // GIVEN staff setting is AUTO
     score->staff(0)->setMergeMatchingRests(AutoOnOff::AUTO);
     // [THEN] rests display merged

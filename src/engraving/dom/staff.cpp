@@ -1017,7 +1017,7 @@ void Staff::clearCapoParams()
 bool Staff::shouldMergeMatchingRests() const
 {
     return mergeMatchingRests() == AutoOnOff::ON
-           || (mergeMatchingRests() == AutoOnOff::AUTO && style().value(Sid::staffDefaultMergeMatchingRests).toBool());
+           || (mergeMatchingRests() == AutoOnOff::AUTO && style().value(Sid::mergeMatchingRests).toBool());
 }
 
 //---------------------------------------------------------

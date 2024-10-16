@@ -1105,6 +1105,7 @@
   <tabstop>showTimesig</tabstop>
   <tabstop>showBarlines</tabstop>
   <tabstop>hideSystemBarLine</tabstop>
+  <tabstop>mergeMatchingRests</tabstop>
   <tabstop>showIfEmpty</tabstop>
   <tabstop>isSmallCheckbox</tabstop>
   <tabstop>invisible</tabstop>

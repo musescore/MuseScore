@@ -35,17 +35,17 @@ Rectangle {
         id: restsPageModel
     }
 
-    ColumnLayout {
+    Column {
         anchors.fill: parent
         spacing: 12
 
         RadioButtonGroup {
-            Layout.fillHeight: true
-
             model: [
                 { text: qsTrc("notation", "1 space"), value: false },
                 { text: qsTrc("notation", "2 spaces"), value: true }
             ]
+
+            implicitHeight: Math.max(1, contentItem.childrenRect.height)
 
             delegate: FlatRadioButton {
                 width: 106
@@ -63,14 +63,11 @@ Rectangle {
         CheckBox {
             id: defaultMergeMatchingRests
             text: qsTrc("notation", "Merge matching rests")
-            checked: restsPageModel.staffDefaultMergeMatchingRests.value
-
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 5
+            checked: restsPageModel.mergeMatchingRests.value
+            width: parent.width
 
             onClicked: {
-                defaultMergeMatchingRests.checked = !defaultMergeMatchingRests.checked
-                restsPageModel.staffDefaultMergeMatchingRests.value = defaultMergeMatchingRests.checked
+                restsPageModel.mergeMatchingRests.value = !defaultMergeMatchingRests.checked
             }
         }
     }
