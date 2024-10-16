@@ -45,8 +45,6 @@ Rectangle {
                 { text: qsTrc("notation", "2 spaces"), value: true }
             ]
 
-            implicitHeight: Math.max(1, contentItem.childrenRect.height)
-
             delegate: FlatRadioButton {
                 width: 106
                 height: 30
@@ -61,13 +59,13 @@ Rectangle {
         }
 
         CheckBox {
-            id: defaultMergeMatchingRests
+            id: mergeMatchingRestsCheckbox
             text: qsTrc("notation", "Merge matching rests")
             checked: restsPageModel.mergeMatchingRests.value
             width: parent.width
 
             onClicked: {
-                restsPageModel.mergeMatchingRests.value = !defaultMergeMatchingRests.checked
+                restsPageModel.mergeMatchingRests.value = !mergeMatchingRestsCheckbox.checked
             }
         }
     }

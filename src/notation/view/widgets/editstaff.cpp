@@ -504,7 +504,7 @@ void EditStaff::applyStaffProperties()
     config.cutaway = cutaway->isChecked();
     config.showIfEmpty = showIfEmpty->isChecked();
     config.hideSystemBarline = hideSystemBarLine->isChecked();
-    config.mergeMatchingRests = AutoOnOff(static_cast<char>(mergeMatchingRests->currentIndex()));
+    config.mergeMatchingRests = static_cast<AutoOnOff>(mergeMatchingRests->currentIndex());
     config.hideMode = Staff::HideMode(hideMode->currentIndex());
     config.clefTypeList = m_instrument.clefType(m_orgStaff->rstaff());
     config.staffType = *m_staff->staffType(mu::engraving::Fraction(0, 1));
