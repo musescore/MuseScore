@@ -22,7 +22,6 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/excerpt.h"
 #include "dom/factory.h"
 #include "dom/part.h"
 #include "dom/staff.h"
@@ -82,15 +81,12 @@ TEST_F(Engraving_ScoreUtilsTests, StaffIdxSetFromRange)
     delete score;
 }
 
-TEST_F(Engraving_ScoreUtilsTests, StaffTestDefaultMergeMatchingRests)
+TEST_F(Engraving_ScoreUtilsTests, StaffTestMergeMatchingRests)
 {
-    // [GIVEN] Score containing a parts and staff
+    // [GIVEN] Score containing a part and staff
     MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
-    const std::vector<Part*>& parts = score->parts();
-    for (int i = 0; i < 3; ++i) {
-        score->appendPart(new Part(score));
-        score->appendStaff(Factory::createStaff(parts.at(i)));
-    }
+    score->appendPart(new Part(score));
+    score->appendStaff(Factory::createStaff(score->parts().at(0)));
 
     // GIVEN score style setting is false
     score->style().set(Sid::mergeMatchingRests, false);

@@ -4156,7 +4156,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
         s->setHideSystemBarLine(e.readInt());
     } else if (tag == "mergeMatchingRests") {
         if (ctx.score()->mscVersion() < 450) {
-            s->setMergeMatchingRests(AutoOnOff(e.readInt() ? AutoOnOff::ON : AutoOnOff::AUTO));
+            s->setMergeMatchingRests(e.readInt() ? AutoOnOff::ON : AutoOnOff::AUTO);
         } else {
             s->setMergeMatchingRests(TConv::fromXml(e.readAsciiText(), AutoOnOff::AUTO));
         }

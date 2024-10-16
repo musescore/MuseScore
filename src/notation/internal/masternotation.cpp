@@ -356,9 +356,6 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
                 score->style().set(st, DefaultStyle::defaultStyle().value(st));
             }
         }
-
-        // the new score should get the mergeMatchingRests from the default settings rather than the template
-        score->style().set(Sid::mergeMatchingRests, DefaultStyle::defaultStyle().value(Sid::mergeMatchingRests));
     }
 
     score->checkChordList();
