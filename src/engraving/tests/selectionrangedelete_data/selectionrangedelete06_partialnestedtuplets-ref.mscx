@@ -468,7 +468,7 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>46</l1>
+            <l1>44</l1>
             <l2>42</l2>
             </Beam>
           <Chord>
@@ -546,7 +546,7 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>44</l1>
+            <l1>42</l1>
             <l2>40</l2>
             </Beam>
           <Chord>
@@ -651,7 +651,7 @@
             <durationType>64th</durationType>
             </Rest>
           <Beam>
-            <l1>46</l1>
+            <l1>44</l1>
             <l2>42</l2>
             </Beam>
           <Chord>
