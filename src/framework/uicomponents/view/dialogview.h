@@ -48,7 +48,12 @@ public:
     Q_INVOKABLE void accept();
     Q_INVOKABLE void reject(int code = -1);
 
+protected:
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
 private:
+    bool shortcutOverrideIsAllowed() const;
+
     bool isDialog() const override;
     void beforeOpen() override;
     void onHidden() override;
@@ -58,6 +63,8 @@ private:
     void updateGeometry() override;
 
     QRect viewGeometry() const override;
+
+    QSet<const QObject*> findButtons() const;
 
     QEventLoop m_loop;
 };
