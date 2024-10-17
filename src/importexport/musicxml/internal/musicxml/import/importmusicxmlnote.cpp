@@ -305,14 +305,13 @@ TDuration MusicXmlParserNote::determineDuration(const bool rest, const bool meas
  * This is simply ignored here, effectively using the last chords value.
  */
 
-Chord* MusicXmlParserNote::findOrCreateChord(const Fraction& tick, const int track, const int move,
-                                             const TDuration duration, const Fraction dura)
+Chord* MusicXmlParserNote::findOrCreateChord(const TDuration duration) const
 {
     //LOGD("findOrCreateChord tick %d track %d dur ticks %d ticks %s bm %hhd",
     //       tick, track, duration.ticks(), muPrintable(dura.print()), m_beamMode);
-    Chord* c = m_measure->findChord(tick, track);
+    Chord* c = m_measure->findChord(m_noteStartTime, track());
     if (c == 0) {
-        Segment* s = m_measure->getSegment(SegmentType::ChordRest, tick);
+        Segment* s = m_measure->getSegment(SegmentType::ChordRest, m_noteStartTime);
         c = Factory::createChord(s);
         // better not to force beam end, as the beam palette does not support it
         if (m_beamMode == BeamMode::END) {
@@ -320,15 +319,15 @@ Chord* MusicXmlParserNote::findOrCreateChord(const Fraction& tick, const int tra
         } else {
             c->setBeamMode(m_beamMode);
         }
-        c->setTrack(track);
+        c->setTrack(track());
         // Chord is initialized with the smallness of its first note.
         // If a non-small note is added later, this is handled in handleSmallness.
         c->setSmall(isSmall());
 
-        setChordRestDuration(c, duration, dura);
+        setChordRestDuration(c, duration, m_dura);
         s->add(c);
     }
-    c->setStaffMove(move);
+    c->setStaffMove(m_staffMove);
     return c;
 }
 
@@ -336,10 +335,10 @@ Chord* MusicXmlParserNote::findOrCreateChord(const Fraction& tick, const int tra
  * convert duration and slash to grace note type
  */
 
-NoteType MusicXmlParserNote::graceNoteType(const TDuration duration, const bool slash)
+NoteType MusicXmlParserNote::graceNoteType(const TDuration duration) const
 {
     NoteType nt = NoteType::APPOGGIATURA;
-    if (slash) {
+    if (m_graceSlash) {
         nt = NoteType::ACCIACCATURA;
     } else {
         if (duration.type() == DurationType::V_QUARTER) {
@@ -353,12 +352,11 @@ NoteType MusicXmlParserNote::graceNoteType(const TDuration duration, const bool 
     return nt;
 }
 
-Chord* MusicXmlParserNote::createGraceChord(const int track,
-                                            const TDuration duration, const bool slash)
+Chord* MusicXmlParserNote::createGraceChord(const TDuration duration) const
 {
     Chord* c = Factory::createChord(m_score->dummy()->segment());
-    c->setNoteType(graceNoteType(duration, slash));
-    c->setTrack(track);
+    c->setNoteType(graceNoteType(duration));
+    c->setTrack(track());
     // Chord is initialized with the smallness of its first note.
     // If a non-small note is added later, this is handled in handleSmallness.
     c->setSmall(isSmall());
@@ -369,14 +367,13 @@ Chord* MusicXmlParserNote::createGraceChord(const int track,
 
 // TODO: refactor: optimize parameters
 
-void MusicXmlParserNote::setPitch(const MusicXmlInstruments& instruments, const String& instrumentId,
-                                  const int octaveShift, const Instrument* const instrument)
+void MusicXmlParserNote::setPitch(const MusicXmlInstruments& instruments, const int octaveShift, const Instrument* const instrument)
 {
     if (m_notePitch.unpitched()) {
-        if (hasDrumset(instruments) && muse::contains(instruments, instrumentId)) {
+        if (hasDrumset(instruments) && muse::contains(instruments, m_instrumentId)) {
             // step and oct are display-step and ...-oct
             // get pitch from instrument definition in drumset instead
-            int unpitched = instruments.at(instrumentId).unpitched;
+            int unpitched = instruments.at(m_instrumentId).unpitched;
             m_note->setPitch(std::clamp(unpitched, 0, 127));
             // TODO - does this need to be key-aware?
             m_note->setTpc(pitch2tpc(unpitched, Key::C, Prefer::NEAREST));             // TODO: necessary ?
@@ -393,16 +390,18 @@ void MusicXmlParserNote::setPitch(const MusicXmlInstruments& instruments, const 
  * convert display-step and display-octave to staff line
  */
 
-void MusicXmlParserNote::handleDisplayStep(int step, int octave, const Fraction& tick, double spatium)
+void MusicXmlParserNote::handleDisplayStep()
 {
+    const int step = m_notePitch.displayStep();
+    const int octave = m_notePitch.displayOctave();
     if (0 <= step && step <= 6 && 0 <= octave && octave <= 9) {
         //LOGD("rest step=%d oct=%d", step, octave);
-        ClefType clef = m_chordRest->staff()->clef(tick);
+        ClefType clef = m_chordRest->staff()->clef(m_noteStartTime);
         int po = ClefInfo::pitchOffset(clef);
         //LOGD(" clef=%hhd po=%d step=%d", clef, po, step);
         int dp = 7 * (octave + 2) + step;
         //LOGD(" dp=%d po-dp=%d", dp, po-dp);
-        m_chordRest->ryoffset() = (po - dp + 3) * spatium / 2;
+        m_chordRest->ryoffset() = (po - dp + 3) * m_score->style().spatium() / 2;
     }
 }
 
@@ -428,14 +427,14 @@ void MusicXmlParserNote::handleSmallness()
  Set the notehead parameters.
  */
 
-void MusicXmlParserNote::setNoteHead(const Color noteheadColor, const bool noteheadParentheses, const String& noteheadFilled)
+void MusicXmlParserNote::setNoteHead()
 {
     Score* const score = m_note->score();
 
-    if (noteheadColor.isValid()) {
-        m_note->setColor(noteheadColor);
+    if (m_noteheadColor.isValid()) {
+        m_note->setColor(m_noteheadColor);
     }
-    if (noteheadParentheses) {
+    if (m_noteheadParentheses) {
         Symbol* s = new Symbol(m_note);
         s->setSym(SymId::noteheadParenthesisLeft);
         s->setParent(m_note);
@@ -446,19 +445,21 @@ void MusicXmlParserNote::setNoteHead(const Color noteheadColor, const bool noteh
         score->addElement(s);
     }
 
-    if (noteheadFilled == u"no") {
+    if (m_noteheadFilled == u"no") {
         m_note->setHeadType(NoteHeadType::HEAD_HALF);
-    } else if (noteheadFilled == u"yes") {
+    } else if (m_noteheadFilled == u"yes") {
         m_note->setHeadType(NoteHeadType::HEAD_QUARTER);
     }
 }
 
-void MusicXmlParserNote::addTremolo(const int tremoloNr, const String& tremoloType, const String& tremoloSmufl,
-                                    Chord*& tremStart, Fraction& timeMod)
+void MusicXmlParserNote::addTremolo(Chord*& tremStart)
 {
     if (!m_chordRest->isChord()) {
         return;
     }
+    const int tremoloNr = m_notationsParser.tremoloNr();
+    const String& tremoloType = m_notationsParser.tremoloType();
+    const String& tremoloSmufl = m_notationsParser.tremoloSmufl();
     if (tremoloNr) {
         //LOGD("tremolo %d type '%s' ticks %d tremStart %p", tremoloNr, muPrintable(tremoloType), ticks, _tremStart);
         if (tremoloNr == 1 || tremoloNr == 2 || tremoloNr == 3 || tremoloNr == 4) {
@@ -486,8 +487,8 @@ void MusicXmlParserNote::addTremolo(const int tremoloNr, const String& tremoloTy
                 }
                 tremStart = static_cast<Chord*>(m_chordRest);
                 // timeMod takes into account also the factor 2 of a two-note tremolo
-                if (timeMod.isValid() && ((timeMod.denominator() % 2) == 0)) {
-                    timeMod.setDenominator(timeMod.denominator() / 2);
+                if (m_timeMod.isValid() && ((m_timeMod.denominator() % 2) == 0)) {
+                    m_timeMod.setDenominator(m_timeMod.denominator() / 2);
                 }
             } else if (tremoloType == u"stop") {
                 if (tremStart) {
@@ -517,8 +518,8 @@ void MusicXmlParserNote::addTremolo(const int tremoloNr, const String& tremoloTy
                         tremStart->add(tremolo);
                     }
                     // timeMod takes into account also the factor 2 of a two-note tremolo
-                    if (timeMod.isValid() && ((timeMod.denominator() % 2) == 0)) {
-                        timeMod.setDenominator(timeMod.denominator() / 2);
+                    if (m_timeMod.isValid() && ((m_timeMod.denominator() % 2) == 0)) {
+                        m_timeMod.setDenominator(m_timeMod.denominator() / 2);
                     }
                 } else {
                     m_logger->logError(u"MusicXml::import: double tremolo stop w/o start", &m_e);
@@ -540,12 +541,12 @@ void MusicXmlParserNote::addTremolo(const int tremoloNr, const String& tremoloTy
  Add the figured bass elements.
  */
 
-void MusicXmlParserNote::addFiguredBassElements(const Fraction noteStartTime, const int msTrack, const Fraction dura)
+void MusicXmlParserNote::addFiguredBassElements(const Fraction dura)
 {
     if (!m_fbl.empty()) {
-        Fraction sTick = noteStartTime;                  // starting tick
+        Fraction sTick = m_noteStartTime;                  // starting tick
         for (FiguredBass* fb : m_fbl) {
-            fb->setTrack(msTrack);
+            fb->setTrack(m_track);
             // No duration tag defaults ticks() to 0; set to note value
             if (fb->ticks().isZero()) {
                 fb->setTicks(dura);
@@ -566,11 +567,10 @@ void MusicXmlParserNote::addFiguredBassElements(const Fraction noteStartTime, co
  the MusicXML values for each note are simply copied to the defaults
  */
 
-void MusicXmlParserNote::setDrumset(const String& instrumentId, const Fraction& noteStartTime,
-                                    const NoteHeadGroup headGroup)
+void MusicXmlParserNote::setDrumset() const
 {
     // determine staff line based on display-step / -octave and clef type
-    const ClefType clef = m_chord->staff()->clef(noteStartTime);
+    const ClefType clef = m_chord->staff()->clef(m_noteStartTime);
     const int po = ClefInfo::pitchOffset(clef);
     const int pitch = MusicXmlStepAltOct2Pitch(m_notePitch.displayStep(), 0, m_notePitch.displayOctave());
     int line = po - absStep(pitch);
@@ -597,12 +597,13 @@ void MusicXmlParserNote::setDrumset(const String& instrumentId, const Fraction& 
         }
     }
     // this should be done in pass 1, would make _pass1 const here
-    m_pass1.setDrumsetDefault(m_partId, instrumentId, headGroup, line, overruledStemDir);
+    m_pass1.setDrumsetDefault(m_partId, m_instrumentId, m_headGroup, line, overruledStemDir);
 }
 
-void MusicXmlParserNote::xmlSetDrumsetPitch(const Staff* staff, int step, int octave,
-                                            NoteHeadGroup headGroup, Instrument* instrument)
+void MusicXmlParserNote::xmlSetDrumsetPitch(const Staff* staff, Instrument* instrument)
 {
+    const int step = m_notePitch.displayStep();
+    const int octave = m_notePitch.displayOctave();
     Drumset* ds = instrument->drumset();
     // get line
     // determine staff line based on display-step / -octave and clef type
@@ -624,7 +625,7 @@ void MusicXmlParserNote::xmlSetDrumsetPitch(const Staff* staff, int step, int oc
     bool matchFound = false;
     do {
         if (ds->line(curDrum) == line) {
-            if (ds->noteHead(curDrum) == headGroup) {
+            if (ds->noteHead(curDrum) == m_headGroup) {
                 newPitch = curDrum;
                 matchFound = true;
                 break;
@@ -642,7 +643,7 @@ void MusicXmlParserNote::xmlSetDrumsetPitch(const Staff* staff, int step, int oc
 
             newPitch = instr.pitch;
             ds->drum(newPitch) = ds->drum(newPitch) = DrumInstrument(
-                instr.name.toStdString().c_str(), headGroup, line, m_stemDir, static_cast<int>(m_chord->voice()));
+                instr.name.toStdString().c_str(), m_headGroup, line, m_stemDir, static_cast<int>(m_chord->voice()));
         }
     }
 
@@ -657,7 +658,7 @@ void MusicXmlParserNote::xmlSetDrumsetPitch(const Staff* staff, int step, int oc
             }
         }
 
-        ds->drum(newPitch) = DrumInstrument("drum", headGroup, line, m_stemDir, static_cast<int>(m_chord->voice()));
+        ds->drum(newPitch) = DrumInstrument("drum", m_headGroup, line, m_stemDir, static_cast<int>(m_chord->voice()));
     } else if (m_stemDir == DirectionV::AUTO) {
         m_stemDir = ds->stemDirection(newPitch);
     }
@@ -784,18 +785,12 @@ Note* MusicXmlParserNote::parse()
     String type;
     String voice;
     bool hasHead = true;
-    NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
     NoteHeadScheme headScheme = NoteHeadScheme::HEAD_AUTO;
     const Color noteColor = Color::fromString(m_e.asciiAttribute("color").ascii());
-    Color noteheadColor;
     Color stemColor;
-    bool noteheadParentheses = false;
-    String noteheadFilled;
     int velocity = round(m_e.doubleAttribute("dynamics") * 0.9);
-    bool graceSlash = false;
     bool printObject = m_e.asciiAttribute("print-object") != "no";
     bool isSingleDrumset = false;
-    String instrumentId;
     String tieType;
 
     while (m_e.readNextStartElement()) {
@@ -813,10 +808,10 @@ Note* MusicXmlParserNote::parse()
             m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "grace") {
             grace = true;
-            graceSlash = m_e.asciiAttribute("slash") == "yes";
+            m_graceSlash = m_e.asciiAttribute("slash") == "yes";
             m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "instrument") {
-            instrumentId = m_e.attribute("id");
+            m_instrumentId = m_e.attribute("id");
             m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "lyric") {
             // lyrics on grace notes not (yet) supported by MuseScore
@@ -826,16 +821,16 @@ Note* MusicXmlParserNote::parse()
             m_notationsParser.parse();
             addError(m_notationsParser.errors());
         } else if (m_e.name() == "notehead") {
-            noteheadColor = Color::fromString(m_e.asciiAttribute("color").ascii());
-            noteheadParentheses = m_e.asciiAttribute("parentheses") == "yes";
-            noteheadFilled = m_e.attribute("filled");
+            m_noteheadColor = Color::fromString(m_e.asciiAttribute("color").ascii());
+            m_noteheadParentheses = m_e.asciiAttribute("parentheses") == "yes";
+            m_noteheadFilled = m_e.attribute("filled");
             String noteheadValue = m_e.readText();
             if (noteheadValue == "none") {
                 hasHead = false;
             } else if (noteheadValue == "named" && m_pass1.exporterSoftware() == MusicXmlExporterSoftware::NOTEFLIGHT) {
                 headScheme = NoteHeadScheme::HEAD_PITCHNAME;
             } else {
-                headGroup = convertNotehead(noteheadValue);
+                m_headGroup = convertNotehead(noteheadValue);
             }
         } else if (m_e.name() == "rest") {
             rest = true;
@@ -903,12 +898,8 @@ Note* MusicXmlParserNote::parse()
     // note: in case of error exit from here, the postponed <note> children
     // must still be skipped
 
-    int msMove = 0;
-    int msTrack = 0;
-    int msVoice = 0;
-
     int voiceInt = m_pass1.voiceToInt(voice);
-    if (!m_pass1.determineStaffMoveVoice(m_partId, staff, voiceInt, msMove, msTrack, msVoice)) {
+    if (!m_pass1.determineStaffMoveVoice(m_partId, staff, voiceInt, m_staffMove, m_track, m_voice)) {
         m_logger->logDebugInfo(String(u"could not map staff %1 voice '%2'").arg(staff + 1).arg(voice), &m_e);
         addError(checkAtEndElement(m_e, u"note"));
         return 0;
@@ -917,8 +908,8 @@ Note* MusicXmlParserNote::parse()
     // start time for note:
     // - sTime for non-chord / first chord note
     // - prevTime for others
-    Fraction noteStartTime = chord ? m_prevSTime : m_sTime;
-    Fraction timeMod = m_noteDuration.timeMod();
+    m_noteStartTime = chord ? m_prevSTime : m_sTime;
+    m_timeMod = m_noteDuration.timeMod();
 
     // determine tuplet state, used twice (before and after note allocation)
     MusicXmlTupletFlags tupletAction;
@@ -927,22 +918,21 @@ Note* MusicXmlParserNote::parse()
     if (!chord && !grace) {
         Tuplet* tuplet = m_tuplets[voice];
         MusicXmlTupletState& m_tupletState = m_tupletStates[voice];
-        tupletAction = m_tupletState.determineTupletAction(m_noteDuration.duration(), timeMod, m_notationsParser.tupletDesc().type,
+        tupletAction = m_tupletState.determineTupletAction(m_noteDuration.duration(), m_timeMod, m_notationsParser.tupletDesc().type,
                                                            m_noteDuration.normalType(), m_missingPrev, m_missingCurr);
         if (tupletAction & MusicXmlTupletFlag::STOP_PREVIOUS) {
             // tuplet start while already in tuplet
             if (m_missingPrev.isValid() && m_missingPrev > Fraction(0, 1)) {
-                const int track = msTrack + msVoice;
-                Rest* const extraRest = addRest(m_score, m_measure, noteStartTime, track, msMove,
+                Rest* const extraRest = addRest(m_score, m_measure, m_noteStartTime, track(), m_staffMove,
                                                 TDuration { m_missingPrev* tuplet->ratio() }, m_missingPrev);
                 if (extraRest) {
                     extraRest->setTuplet(tuplet);
                     tuplet->add(extraRest);
-                    noteStartTime += m_missingPrev;
+                    m_noteStartTime += m_missingPrev;
                 }
             }
             // recover by simply stopping the current tuplet first
-            const int normalNotes = timeMod.numerator();
+            const int normalNotes = m_timeMod.numerator();
             handleTupletStop(tuplet, normalNotes);
         }
     }
@@ -950,13 +940,12 @@ Note* MusicXmlParserNote::parse()
     TDuration duration = determineDuration(rest, measureRest, type, m_noteDuration.dots(), m_dura, m_measure->ticks());
 
     Part* part = m_pass1.getPart(m_partId);
-    Instrument* instrument = part->instrument(noteStartTime);
+    Instrument* instrument = part->instrument(m_noteStartTime);
     const MusicXmlInstruments& instruments = m_pass1.getInstruments(m_partId);
     isSingleDrumset = instrument->drumset() && instruments.size() == 1;
     // begin allocation
     if (rest) {
-        const int track = msTrack + msVoice;
-        m_chordRest = addRest(m_score, m_measure, noteStartTime, track, msMove,
+        m_chordRest = addRest(m_score, m_measure, m_noteStartTime, track(), m_staffMove,
                               duration, m_dura);
     } else {
         if (!grace) {
@@ -964,13 +953,13 @@ Note* MusicXmlParserNote::parse()
             // if there is already a chord just add to it
             // else create a new one
             // this basically ignores <chord/> errors
-            m_chord = findOrCreateChord(noteStartTime, msTrack + msVoice, msMove, duration, m_dura);
+            m_chord = findOrCreateChord(duration);
         } else {
             // grace note
             // TODO: check if explicit stem direction should also be set for grace notes
             // (the DOM parser does that, but seems to have no effect on the autotester)
             if (!chord || m_gcl.empty()) {
-                m_chord = createGraceChord(msTrack + msVoice, duration, graceSlash);
+                m_chord = createGraceChord(duration);
                 // TODO FIX
                 // the setStaffMove() below results in identical behaviour as 2.0:
                 // grace note will be at the wrong staff with the wrong pitch,
@@ -986,13 +975,13 @@ Note* MusicXmlParserNote::parse()
             }
         }
         m_note = Factory::createNote(m_chord);
-        const staff_idx_t ottavaStaff = (msTrack - m_pass1.trackForPart(m_partId)) / VOICES;
-        const int octaveShift = m_pass1.octaveShift(m_partId, ottavaStaff, noteStartTime);
+        const staff_idx_t ottavaStaff = (m_track - m_pass1.trackForPart(m_partId)) / VOICES;
+        const int octaveShift = m_pass1.octaveShift(m_partId, ottavaStaff, m_noteStartTime);
         const Staff* st = m_chord->staff();
-        if (isSingleDrumset && m_notePitch.unpitched() && instrumentId.empty()) {
-            xmlSetDrumsetPitch(st, m_notePitch.displayStep(), m_notePitch.displayOctave(), headGroup, instrument);
+        if (isSingleDrumset && m_notePitch.unpitched() && m_instrumentId.empty()) {
+            xmlSetDrumsetPitch(st, instrument);
         } else {
-            setPitch(instruments, instrumentId, octaveShift, instrument);
+            setPitch(instruments, octaveShift, instrument);
         }
         m_chord->add(m_note);
         m_chordRest = m_chord;
@@ -1000,10 +989,9 @@ Note* MusicXmlParserNote::parse()
     // end allocation
 
     if (rest) {
-        const track_idx_t track = msTrack + msVoice;
         if (m_chordRest) {
             if (currBeam) {
-                if (currBeam->track() == track) {
+                if (currBeam->track() == track()) {
                     m_chordRest->setBeamMode(BeamMode::MID);
                     currBeam->add(m_chordRest);
                 } else {
@@ -1017,12 +1005,12 @@ Note* MusicXmlParserNote::parse()
                 m_chordRest->setColor(noteColor);
             }
             m_chordRest->setVisible(printObject);
-            handleDisplayStep(m_notePitch.displayStep(), m_notePitch.displayOctave(), noteStartTime, m_score->style().spatium());
+            handleDisplayStep();
         }
     } else {
         handleSmallness();
         m_note->setPlay(!m_cue);          // cue notes don't play
-        m_note->setHeadGroup(headGroup);
+        m_note->setHeadGroup(m_headGroup);
         if (headScheme != NoteHeadScheme::HEAD_AUTO) {
             m_note->setHeadScheme(headScheme);
         }
@@ -1039,7 +1027,7 @@ Note* MusicXmlParserNote::parse()
             }
             m_chord->add(stem);
         }
-        setNoteHead(noteheadColor, noteheadParentheses, noteheadFilled);
+        setNoteHead();
         m_note->setVisible(hasHead && printObject);
         stem->setVisible(printObject);
 
@@ -1051,7 +1039,7 @@ Note* MusicXmlParserNote::parse()
             }
 
             // append any grace chord after chord to the previous chord
-            Chord* const prevChord = m_measure->findChord(m_prevSTime, msTrack + msVoice);
+            Chord* const prevChord = m_measure->findChord(m_prevSTime, track());
             if (prevChord && prevChord != m_chord) {
                 addGraceChordsAfter(prevChord, m_gcl, m_gac);
             }
@@ -1084,7 +1072,7 @@ Note* MusicXmlParserNote::parse()
         }
 
         if (m_notePitch.unpitched() && !isSingleDrumset) {
-            setDrumset(instrumentId, noteStartTime, headGroup);
+            setDrumset();
         }
 
         // accidental handling
@@ -1113,7 +1101,7 @@ Note* MusicXmlParserNote::parse()
     if (m_chordRest) {
         m_chordRest->setVisible(printObject);
         m_notationsParser.addToScore(m_chordRest, m_note,
-                                     noteStartTime.ticks(), m_pass2.slurs(), m_pass2.glissandi(), m_pass2.spanners(), m_pass2.trills(),
+                                     m_noteStartTime.ticks(), m_pass2.slurs(), m_pass2.glissandi(), m_pass2.spanners(), m_pass2.trills(),
                                      m_pass2.ties(), m_pass2.unstartedTieNotes(), m_pass2.unendedTieNotes(), m_arpMap,
                                      m_delayedArps);
 
@@ -1129,8 +1117,7 @@ Note* MusicXmlParserNote::parse()
 
     // handle tremolo before handling tuplet (two note tremolos modify timeMod)
     if (m_chordRest && m_notationsParser.hasTremolo()) {
-        addTremolo(m_notationsParser.tremoloNr(), m_notationsParser.tremoloType(), m_notationsParser.tremoloSmufl(),
-                   m_pass2.tremStart(), timeMod);
+        addTremolo(m_pass2.tremStart());
     }
 
     // handle tuplet state for the current chord or rest
@@ -1139,9 +1126,9 @@ Note* MusicXmlParserNote::parse()
             Tuplet*& tuplet = m_tuplets[voice];
             // do tuplet if valid time-modification is not 1/1 and is not 1/2 (tremolo)
             // TODO: check interaction tuplet and tremolo handling
-            if (timeMod.isValid() && timeMod != Fraction(1, 1) && timeMod != Fraction(1, 2)) {
-                const int actualNotes = timeMod.denominator();
-                const int normalNotes = timeMod.numerator();
+            if (m_timeMod.isValid() && m_timeMod != Fraction(1, 1) && m_timeMod != Fraction(1, 2)) {
+                const int actualNotes = m_timeMod.denominator();
+                const int normalNotes = m_timeMod.numerator();
                 if (tupletAction & MusicXmlTupletFlag::START_NEW) {
                     // create a new tuplet
                     handleTupletStart(m_chordRest, tuplet, actualNotes, normalNotes, m_notationsParser.tupletDesc());
@@ -1153,8 +1140,7 @@ Note* MusicXmlParserNote::parse()
                 if (tupletAction & MusicXmlTupletFlag::STOP_CURRENT) {
                     if (m_missingCurr.isValid() && m_missingCurr > Fraction(0, 1)) {
                         LOGD("add missing %s to current tuplet", muPrintable(m_missingCurr.toString()));
-                        const int track = msTrack + msVoice;
-                        Rest* const extraRest = addRest(m_score, m_measure, noteStartTime + m_dura, track, msMove,
+                        Rest* const extraRest = addRest(m_score, m_measure, m_noteStartTime + m_dura, track(), m_staffMove,
                                                         TDuration { m_missingCurr* tuplet->ratio() }, m_missingCurr);
                         if (extraRest) {
                             extraRest->setTuplet(tuplet);
@@ -1201,7 +1187,7 @@ Note* MusicXmlParserNote::parse()
     }
 
     // add figured bass element
-    addFiguredBassElements(noteStartTime, msTrack, m_dura);
+    addFiguredBassElements(m_dura);
 
     // convert to slash or rhythmic notation if needed
     // TODO in the case of slash notation, we assume that given notes do in fact correspond to slash beats

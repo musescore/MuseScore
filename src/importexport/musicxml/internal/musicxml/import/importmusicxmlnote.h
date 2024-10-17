@@ -81,36 +81,32 @@ private:
     static engraving::TDuration determineDuration(const bool rest, const bool measureRest, const muse::String& type, const int dots,
                                                   const engraving::Fraction dura, const engraving::Fraction mDura);
 
-    engraving::Chord* findOrCreateChord(const engraving::Fraction& tick, const int track, const int move,
-                                        const engraving::TDuration duration, const engraving::Fraction dura);
-    engraving::Chord* createGraceChord(const int track, const engraving::TDuration duration, const bool slash);
-    static engraving::NoteType graceNoteType(const engraving::TDuration duration, const bool slash);
+    engraving::Chord* findOrCreateChord(const engraving::TDuration duration) const;
+    engraving::Chord* createGraceChord(const engraving::TDuration duration) const;
+    engraving::NoteType graceNoteType(const engraving::TDuration duration) const;
 
-    void setPitch(const MusicXmlInstruments& instruments, const muse::String& instrumentId, const int octaveShift,
-                  const engraving::Instrument* const instrument);
+    void setPitch(const MusicXmlInstruments& instruments, const int octaveShift, const engraving::Instrument* const instrument);
 
-    void handleDisplayStep(int step, int octave, const engraving::Fraction& tick, double spatium);
+    inline bool isSmall() const { return m_cue || m_isSmall; }
+    void handleDisplayStep();
     void handleSmallness();
-    void setNoteHead(const engraving::Color noteheadColor, const bool noteheadParentheses, const muse::String& noteheadFilled);
+    void setNoteHead();
 
-    void addTremolo(const int tremoloNr, const muse::String& tremoloType, const muse::String& tremoloSmufl, engraving::Chord*& tremStart,
-                    engraving::Fraction& timeMod);
+    void addTremolo(engraving::Chord*& tremStart);
+    void addFiguredBassElements(const engraving::Fraction dura);
 
-    void addFiguredBassElements(const engraving::Fraction noteStartTime, const int msTrack, const engraving::Fraction dura);
-
-    void setDrumset(const muse::String& instrumentId, const engraving::Fraction& noteStartTime, const engraving::NoteHeadGroup headGroup);
-    void xmlSetDrumsetPitch(const engraving::Staff* staff, int step, int octave, engraving::NoteHeadGroup headGroup,
-                            engraving::Instrument* instrument);
+    void setDrumset() const;
+    void xmlSetDrumsetPitch(const engraving::Staff* staff, engraving::Instrument* instrument);
 
     void addInferredStickings() const;
     void addGraceNoteLyrics();
     void addLyrics();
     void addLyric(engraving::Lyrics* l, int lyricNo);
 
-    bool isSmall() const { return m_cue || m_isSmall; }
-
     void notePrintSpacingNo(engraving::Fraction& dura);
     void addError(const muse::String& error);
+
+    inline engraving::track_idx_t track() const { return m_track + m_voice; }
 
     muse::XmlStreamReader& m_e;
     engraving::Score* m_score;
@@ -149,11 +145,25 @@ private:
 
     bool m_cue = false;
     bool m_isSmall = false;
+    engraving::NoteHeadGroup m_headGroup = engraving::NoteHeadGroup::HEAD_NORMAL;
+    engraving::Color m_noteheadColor = engraving::Color::BLACK;
+    bool m_noteheadParentheses = false;
+    muse::String m_noteheadFilled;
+    bool m_graceSlash = false;
     engraving::DirectionV m_stemDir = engraving::DirectionV::AUTO;
     bool m_noStem = false;
 
     std::map<int, muse::String> m_beamTypes;
     engraving::BeamMode m_beamMode;
+
+    muse::String m_instrumentId;
+
+    int m_staffMove = 0;
+    int m_track = 0;
+    int m_voice = 0;
+
+    engraving::Fraction m_noteStartTime;
+    engraving::Fraction m_timeMod;
 };
 }
 #endif // IMPORTMUSICXMLNOTE_H
