@@ -35,7 +35,7 @@ using namespace muse::extensions::apiv1;
 
 Ret ExtPluginRunner::run(const Action& action)
 {
-    io::path_t qmlPath = action.main;
+    io::path_t qmlPath = action.path;
 
     //! NOTE We create extension UI using a separate engine to control what we provide,
     //! making it easier to maintain backward compatibility and stability.

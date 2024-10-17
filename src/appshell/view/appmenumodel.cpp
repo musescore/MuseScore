@@ -678,16 +678,22 @@ MenuItemList AppMenuModel::makePluginsItems()
     auto addMenuItems = [this](MenuItemList& items, const Manifest& m) {
         if (m.actions.size() == 1) {
             const muse::extensions::Action& a = m.actions.at(0);
+            if (!a.showOnAppmenu) {
+                return;
+            }
             items << makeMenuItem(makeUriQuery(m.uri, a.code).toString(), TranslatableString::untranslatable(a.title));
         } else {
             MenuItemList sub;
             for (const muse::extensions::Action& a : m.actions) {
-                if (a.hidden) {
+                if (!a.showOnAppmenu) {
                     continue;
                 }
                 sub << makeMenuItem(makeUriQuery(m.uri, a.code).toString(), TranslatableString::untranslatable(a.title));
             }
-            items << makeMenu(TranslatableString::untranslatable(m.title), sub);
+
+            if (!sub.empty()) {
+                items << makeMenu(TranslatableString::untranslatable(m.title), sub);
+            }
         }
     };
 
