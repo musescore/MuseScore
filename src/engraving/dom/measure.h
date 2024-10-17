@@ -214,12 +214,8 @@ public:
     double userStretch() const;
     void setUserStretch(double v) { m_userStretch = v; }
 
-    void setLayoutStretch(double stretchCoeff) { m_layoutStretch = stretchCoeff; }
-    double layoutStretch() const { return m_layoutStretch; }
-
     void computeTicks();
     Fraction anacrusisOffset() const;
-    Fraction shortestChordRest() const;
     Fraction maxTicks() const;
 
     bool showsMeasureNumber();
@@ -287,6 +283,7 @@ public:
     bool isFinalMeasureOfSection() const;
     bool isAnacrusis() const;
     bool isFirstInSystem() const;
+    bool isLastInSystem() const;
     bool isFirstInSection() const;
 
     bool breakMultiMeasureRest() const { return m_breakMultiMeasureRest; }
@@ -333,6 +330,8 @@ public:
     EngravingItem* nextElementStaff(staff_idx_t staff);
     EngravingItem* prevElementStaff(staff_idx_t staff);
 
+    bool hasCrossStaffOrModifiedBeams() const;
+
     String accessibleInfo() const override;
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -343,19 +342,9 @@ public:
     BarLineType endBarLineType() const;
     bool endBarLineVisible() const;
     void triggerLayout() const override;
-    double basicStretch() const;
-    double basicWidth() const;
-    void stretchToTargetWidth(double targetWidth);
+
     void checkHeader();
     void checkTrailer();
-
-    bool isWidthLocked() const { return m_isWidthLocked; }
-    // A measure is widthLocked if its width has been locked by the minMeasureWidth (or minMMRestWidth)
-    // parameter, meaning it can't be any narrower than it currently is.
-    void setWidthLocked(bool b) { m_isWidthLocked = b; }
-
-    double squeezableSpace() const { return m_squeezableSpace; }
-    void setSqueezableSpace(double val) { m_squeezableSpace = val; }
 
     void respaceSegments();
 
@@ -378,8 +367,6 @@ private:
 
     MStaff* mstaff(staff_idx_t staffIndex) const;
 
-    double m_squeezableSpace = 0.0;
-
     std::vector<MStaff*> m_mstaves;
     SegmentList m_segments;
     Measure* m_mmRest = nullptr; // multi measure rest which replaces a measure range
@@ -399,9 +386,6 @@ private:
 
     MeasureNumberMode m_noMode = MeasureNumberMode::AUTO;
     bool m_breakMultiMeasureRest = false;
-
-    double m_layoutStretch = 1.0;
-    bool m_isWidthLocked = false;
 };
 } // namespace mu::engraving
 #endif
