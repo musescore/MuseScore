@@ -164,6 +164,7 @@ void AbstractInspectorModel::onCurrentNotationChanged()
         }
 
         m_updatePropertiesAllowed = true;
+        emit requestReloadPropertyItems();
     });
 }
 
