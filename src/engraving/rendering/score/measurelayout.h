@@ -56,20 +56,19 @@ public:
     static void layoutMMRestRange(Measure* m, LayoutContext& ctx);
     static void layoutMeasureElements(Measure* m, LayoutContext& ctx);
 
-    static double createEndBarLines(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
+    static void createEndBarLines(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
     static Segment* addHeaderClef(Measure* m, bool isFirstClef, const Staff* staff, LayoutContext& ctx);
     static Segment* addHeaderKeySig(Measure* m, bool isFirstKeysig, const Staff* staff, LayoutContext& ctx);
     static void addSystemHeader(Measure* m, bool isFirstSystem, LayoutContext& ctx);
     static void removeSystemHeader(Measure* m);
     static void addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx);
-    static void removeSystemTrailer(Measure* m, LayoutContext& ctx);
+    static void removeSystemTrailer(Measure* m);
+
+    static void updateGraceNotes(Measure* measure, LayoutContext& ctx);
 
     static void createSystemBeginBarLine(Measure* m, LayoutContext& ctx);
 
     static void stretchMeasureInPracticeMode(Measure* m, double targetWidth, LayoutContext& ctx);
-
-    static void computeWidth(Measure* m, LayoutContext& ctx, Fraction minTicks, Fraction maxTicks, double stretchCoeff,
-                             bool overrideMinMeasureWidth = false);
 
     static void layoutTimeTickAnchors(Measure* m, LayoutContext& ctx);
 
@@ -83,11 +82,6 @@ private:
     static int adjustMeasureNo(MeasureBase* m, int measureNo);
 
     static void barLinesSetSpan(Segment* seg, LayoutContext& ctx);
-
-    static void computeWidth(Measure* m, LayoutContext& ctx, Segment* s, double x, bool isSystemHeader, Fraction minTicks,
-                             Fraction maxTicks, double stretchCoeff, bool overrideMinMeasureWidth = false);
-
-    static double computeMinMeasureWidth(Measure* m, LayoutContext& ctx);
 
     static void layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, double w, double wPartial, bool alignLeft);
 

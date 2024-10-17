@@ -78,12 +78,12 @@
       </score-part>
     </part-list>
   <part id="P1">
-    <measure number="1" width="234.07">
+    <measure number="1" width="224.87">
       <print>
         <system-layout>
           <system-margins>
             <left-margin>50</left-margin>
-            <right-margin>744.96</right-margin>
+            <right-margin>0</right-margin>
             </system-margins>
           <top-system-distance>169.98</top-system-distance>
           </system-layout>
@@ -110,7 +110,7 @@
           <line>4</line>
           </clef>
         </attributes>
-      <note default-x="134.27" default-y="-10">
+      <note default-x="129.67" default-y="-10">
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
@@ -166,7 +166,7 @@
         <stem>down</stem>
         <staff>2</staff>
         </note>
-      <note default-x="157.59" default-y="-135">
+      <note default-x="154.19" default-y="-135">
         <pitch>
           <step>B</step>
           <octave>3</octave>
@@ -183,7 +183,7 @@
           </direction-type>
         <staff>2</staff>
         </direction>
-      <note default-x="187.98" default-y="-125">
+      <note default-x="181.18" default-y="-125">
         <pitch>
           <step>D</step>
           <octave>3</octave>
