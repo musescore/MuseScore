@@ -24,18 +24,22 @@
 
 #include <QObject>
 
-#include "context/iglobalcontext.h"
-#include "ui/iuiactionsregister.h"
-#include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "context/iglobalcontext.h"
+#include "modularity/ioc.h"
+#include "ui/iuiactionsregister.h"
+
+namespace muse::uicomponents {
+class MenuItem;
+}
 
 namespace mu::notation {
 class UndoRedoModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    Q_PROPERTY(QVariant undoItem READ makeUndoItem NOTIFY stackChanged)
-    Q_PROPERTY(QVariant redoItem READ makeRedoItem NOTIFY stackChanged)
+    Q_PROPERTY(muse::uicomponents::MenuItem * undoItem READ undoItem NOTIFY itemsChanged)
+    Q_PROPERTY(muse::uicomponents::MenuItem * redoItem READ redoItem NOTIFY itemsChanged)
 
     muse::Inject<context::IGlobalContext> context = { this };
     muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
@@ -43,18 +47,24 @@ class UndoRedoModel : public QObject, public muse::Injectable, public muse::asyn
 public:
     explicit UndoRedoModel(QObject* parent = nullptr);
 
-    QVariant makeUndoItem();
-    QVariant makeRedoItem();
-
     Q_INVOKABLE void load();
+
+    muse::uicomponents::MenuItem* undoItem() const;
+    muse::uicomponents::MenuItem* redoItem() const;
+
     Q_INVOKABLE void undo();
     Q_INVOKABLE void redo();
 
 signals:
-    void stackChanged();
+    void itemsChanged();
 
 private:
     INotationUndoStackPtr undoStack() const;
+
+    void updateItems();
+
+    muse::uicomponents::MenuItem* m_undoItem = nullptr;
+    muse::uicomponents::MenuItem* m_redoItem = nullptr;
 };
 }
 
