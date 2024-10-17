@@ -99,3 +99,13 @@ bool ActionsDispatcher::isReg(Actionable* client) const
 {
     return client->isDispatcher(this);
 }
+
+ActionCodeList ActionsDispatcher::actionList() const
+{
+    ActionCodeList list;
+    list.reserve(m_clients.size());
+    for (const auto& p : m_clients) {
+        list.push_back(p.first);
+    }
+    return list;
+}

@@ -382,6 +382,10 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
 #endif
 
     if (globalConfiguration()->devModeEnabled()) {
+        MenuItemList actionsItems {
+            makeMenuItem("diagnostic-show-actions")
+        };
+
         MenuItemList accessibilityItems {
             makeMenuItem("diagnostic-show-navigation-tree"),
             makeMenuItem("diagnostic-show-accessible-tree"),
@@ -408,7 +412,8 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
             makeMenuItem("autobot-show-scripts"),
         };
 
-        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Accessibility"), accessibilityItems, "menu-accessibility")
+        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "A&ctions"), actionsItems, "menu-actions")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Accessibility"), accessibilityItems, "menu-accessibility")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Engraving"), engravingItems, "menu-engraving")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "E&xtensions"), extensionsItems, "menu-extensions")
               << makeMenu(TranslatableString("appshell/menu/diagnostics", "Auto&bot"), autobotItems, "menu-autobot")
