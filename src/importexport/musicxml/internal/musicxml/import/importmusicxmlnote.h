@@ -73,17 +73,16 @@ private:
     static engraving::NoteHeadGroup convertNotehead(muse::String mxmlName);
 
     void stem();
-
     void beam();
-    engraving::BeamMode computeBeamMode() const;
-    void handleBeamAndStemDir(const engraving::BeamMode bm, engraving::Beam*& beam, bool hasBeamingInfo);
+    void computeBeamMode();
+    void handleBeamAndStemDir(engraving::Beam*& beam);
 
     static bool isWholeMeasureRest(const muse::String& type, const engraving::Fraction dura, const engraving::Fraction mDura);
     static engraving::TDuration determineDuration(const bool rest, const bool measureRest, const muse::String& type, const int dots,
                                                   const engraving::Fraction dura, const engraving::Fraction mDura);
 
     engraving::Chord* findOrCreateChord(const engraving::Fraction& tick, const int track, const int move,
-                                        const engraving::TDuration duration, const engraving::Fraction dura, engraving::BeamMode bm);
+                                        const engraving::TDuration duration, const engraving::Fraction dura);
     engraving::Chord* createGraceChord(const int track, const engraving::TDuration duration, const bool slash);
     static engraving::NoteType graceNoteType(const engraving::TDuration duration, const bool slash);
 
@@ -103,10 +102,14 @@ private:
     void xmlSetDrumsetPitch(const engraving::Staff* staff, int step, int octave, engraving::NoteHeadGroup headGroup,
                             engraving::Instrument* instrument);
 
+    void addInferredStickings() const;
+    void addGraceNoteLyrics();
+    void addLyrics();
+    void addLyric(engraving::Lyrics* l, int lyricNo);
+
     bool isSmall() const { return m_cue || m_isSmall; }
 
     void notePrintSpacingNo(engraving::Fraction& dura);
-
     void addError(const muse::String& error);
 
     muse::XmlStreamReader& m_e;
@@ -150,6 +153,7 @@ private:
     bool m_noStem = false;
 
     std::map<int, muse::String> m_beamTypes;
+    engraving::BeamMode m_beamMode;
 };
 }
 #endif // IMPORTMUSICXMLNOTE_H

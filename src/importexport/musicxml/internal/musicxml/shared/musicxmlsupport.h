@@ -94,11 +94,4 @@ extern void handleTupletStop(engraving::Tuplet*& tuplet, const int normalNotes);
 extern void addTie(const Notation& notation, engraving::Note* note, const engraving::track_idx_t track, MusicXmlTieMap& ties,
                    std::vector<engraving::Note*>& unstartedTieNotes, std::vector<engraving::Note*>& unendedTieNotes, MusicXmlLogger* logger,
                    const muse::XmlStreamReader* const xmlreader);
-extern void addLyric(MusicXmlLogger* logger, const muse::XmlStreamReader* const xmlreader, engraving::ChordRest* cr, engraving::Lyrics* l,
-                     int lyricNo, MusicXmlLyricsExtend& extendedLyrics);
-extern void addLyrics(MusicXmlLogger* logger, const muse::XmlStreamReader* const xmlreader, engraving::ChordRest* cr, const std::map<int,
-                                                                                                                                     engraving::Lyrics*>& numbrdLyrics, const std::set<engraving::Lyrics*>& extLyrics, MusicXmlLyricsExtend& extendedLyrics);
-extern void addGraceNoteLyrics(const std::map<int, engraving::Lyrics*>& numberedLyrics, std::set<engraving::Lyrics*> extendedLyrics,
-                               std::vector<GraceNoteLyrics>& gnLyrics);
-extern void addInferredStickings(engraving::ChordRest* cr, const std::vector<engraving::Sticking*>& numberedStickings);
 } // namespace Ms

@@ -28,12 +28,14 @@
 #include "dom/factory.h"
 #include "dom/figuredbass.h"
 #include "dom/instrument.h"
+#include "dom/lyrics.h"
 #include "dom/note.h"
 #include "dom/part.h"
 #include "dom/rest.h"
 #include "dom/score.h"
 #include "dom/staff.h"
 #include "dom/stem.h"
+#include "dom/sticking.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
 #include "dom/tuplet.h"
@@ -87,37 +89,37 @@ void MusicXmlParserNote::beam()
  Calculate the beam mode based on the collected beamTypes.
  */
 
-BeamMode MusicXmlParserNote::computeBeamMode() const
+void MusicXmlParserNote::computeBeamMode()
 {
     // Start with uniquely-handled beam modes
     if (muse::value(m_beamTypes, 1) == u"continue"
         && muse::value(m_beamTypes, 2) == u"begin") {
-        return BeamMode::BEGIN16;
+        m_beamMode = BeamMode::BEGIN16;
     } else if (muse::value(m_beamTypes, 1) == u"continue"
                && muse::value(m_beamTypes, 2) == u"continue"
                && muse::value(m_beamTypes, 3) == u"begin") {
-        return BeamMode::BEGIN32;
+        m_beamMode = BeamMode::BEGIN32;
     }
     // Generic beam modes are naive to all except the first beam
     else if (muse::value(m_beamTypes, 1) == u"begin") {
-        return BeamMode::BEGIN;
+        m_beamMode = BeamMode::BEGIN;
     } else if (muse::value(m_beamTypes, 1) == u"continue") {
-        return BeamMode::MID;
+        m_beamMode = BeamMode::MID;
     } else if (muse::value(m_beamTypes, 1) == u"end") {
-        return BeamMode::END;
+        m_beamMode = BeamMode::END;
     } else {
         // backward-hook, forward-hook, and other unknown combinations
-        return BeamMode::AUTO;
+        m_beamMode = BeamMode::AUTO;
     }
 }
 
-void MusicXmlParserNote::handleBeamAndStemDir(const BeamMode bm, Beam*& beam, bool hasBeamingInfo)
+void MusicXmlParserNote::handleBeamAndStemDir(Beam*& beam)
 {
     if (!m_chord) {
         return;
     }
     // create a new beam
-    if (bm == BeamMode::BEGIN) {
+    if (m_beamMode == BeamMode::BEGIN) {
         // if currently in a beam, delete it
         if (beam) {
             LOGD("handleBeamAndStemDir() new beam, removing previous incomplete beam %p", beam);
@@ -139,13 +141,14 @@ void MusicXmlParserNote::handleBeamAndStemDir(const BeamMode bm, Beam*& beam, bo
                  beam->track(), m_chord->track());
             // reset beam mode for all elements and remove the beam
             removeBeam(beam);
-        } else if (bm == BeamMode::NONE) {
+        } else if (m_beamMode == BeamMode::NONE) {
             LOGD("handleBeamAndStemDir() in beam, bm BeamMode::NONE -> abort beam");
             // reset beam mode for all elements and remove the beam
             removeBeam(beam);
-        } else if (!(bm == BeamMode::BEGIN || bm == BeamMode::MID || bm == BeamMode::END || bm == BeamMode::BEGIN16
-                     || bm == BeamMode::BEGIN32)) {
-            LOGD("handleBeamAndStemDir() in beam, bm %d -> abort beam", static_cast<int>(bm));
+        } else if (!(m_beamMode == BeamMode::BEGIN || m_beamMode == BeamMode::MID || m_beamMode == BeamMode::END
+                     || m_beamMode == BeamMode::BEGIN16
+                     || m_beamMode == BeamMode::BEGIN32)) {
+            LOGD("handleBeamAndStemDir() in beam, bm %d -> abort beam", static_cast<int>(m_beamMode));
             // reset beam mode for all elements and remove the beam
             removeBeam(beam);
         } else {
@@ -160,14 +163,14 @@ void MusicXmlParserNote::handleBeamAndStemDir(const BeamMode bm, Beam*& beam, bo
         // set to auto
         bool canGetBeam = (m_chord->durationType().type() >= DurationType::V_EIGHTH
                            && m_chord->durationType().type() <= DurationType::V_1024TH);
-        if (hasBeamingInfo && canGetBeam) {
+        if (m_pass1.hasBeamingInfo() && canGetBeam) {
             m_chord->setBeamMode(BeamMode::NONE);
         } else {
             m_chord->setBeamMode(BeamMode::AUTO);
         }
     }
     // terminate the current beam and add to the score
-    if (beam && bm == BeamMode::END) {
+    if (beam && m_beamMode == BeamMode::END) {
         beam = nullptr;
     }
 }
@@ -303,19 +306,19 @@ TDuration MusicXmlParserNote::determineDuration(const bool rest, const bool meas
  */
 
 Chord* MusicXmlParserNote::findOrCreateChord(const Fraction& tick, const int track, const int move,
-                                             const TDuration duration, const Fraction dura, BeamMode bm)
+                                             const TDuration duration, const Fraction dura)
 {
     //LOGD("findOrCreateChord tick %d track %d dur ticks %d ticks %s bm %hhd",
-    //       tick, track, duration.ticks(), muPrintable(dura.print()), bm);
+    //       tick, track, duration.ticks(), muPrintable(dura.print()), m_beamMode);
     Chord* c = m_measure->findChord(tick, track);
     if (c == 0) {
         Segment* s = m_measure->getSegment(SegmentType::ChordRest, tick);
         c = Factory::createChord(s);
         // better not to force beam end, as the beam palette does not support it
-        if (bm == BeamMode::END) {
+        if (m_beamMode == BeamMode::END) {
             c->setBeamMode(BeamMode::AUTO);
         } else {
-            c->setBeamMode(bm);
+            c->setBeamMode(m_beamMode);
         }
         c->setTrack(track);
         // Chord is initialized with the smallness of its first note.
@@ -717,6 +720,55 @@ void MusicXmlParserNote::skipLogCurrElem()
     m_e.skipCurrentElement();
 }
 
+/**
+ Add a single lyric to the score or delete it (if number too high)
+ */
+
+void MusicXmlParserNote::addLyric(Lyrics* l, int lyricNo)
+{
+    if (lyricNo > MAX_LYRICS) {
+        m_logger->logError(String(u"too much lyrics (>%1)")
+                               .arg(MAX_LYRICS), &m_e);
+        delete l;
+    } else {
+        l->setNo(lyricNo);
+        m_chordRest->add(l);
+        m_pass2.extendedLyrics().setExtend(lyricNo, m_chordRest->track(), m_chordRest->tick(), l);
+    }
+}
+
+void MusicXmlParserNote::addLyrics()
+{
+    for (const int lyricNo : muse::keys(m_lyricParser.numberedLyrics())) {
+        Lyrics* const lyric = m_lyricParser.numberedLyrics().at(lyricNo);
+        addLyric(lyric, lyricNo);
+        if (muse::contains(m_lyricParser.extendedLyrics(), lyric)) {
+            m_pass2.extendedLyrics().addLyric(lyric);
+        }
+    }
+}
+
+void MusicXmlParserNote::addGraceNoteLyrics()
+{
+    for (const int lyricNo : muse::keys(m_lyricParser.numberedLyrics())) {
+        Lyrics* const lyric = m_lyricParser.numberedLyrics().at(lyricNo);
+        if (lyric) {
+            bool extend = muse::contains(m_lyricParser.extendedLyrics(), lyric);
+            const GraceNoteLyrics gnl = GraceNoteLyrics(lyric, extend, lyricNo);
+            m_pass2.graceNoteLyrics().push_back(gnl);
+        }
+    }
+}
+
+void MusicXmlParserNote::addInferredStickings()const
+{
+    for (Sticking* sticking : m_lyricParser.inferredStickings()) {
+        sticking->setParent(m_chordRest->segment());
+        sticking->setTrack(m_chordRest->track());
+        m_chordRest->score()->addElement(sticking);
+    }
+}
+
 Note* MusicXmlParserNote::parse()
 {
     if (m_e.asciiAttribute("print-spacing") == "no") {
@@ -743,7 +795,6 @@ Note* MusicXmlParserNote::parse()
     bool graceSlash = false;
     bool printObject = m_e.asciiAttribute("print-object") != "no";
     bool isSingleDrumset = false;
-    BeamMode bm;
     String instrumentId;
     String tieType;
 
@@ -834,7 +885,7 @@ Note* MusicXmlParserNote::parse()
     }
     Beam*& currBeam = m_currBeams[m_currentVoice];
 
-    bm = computeBeamMode();
+    computeBeamMode();
 
     // check for timing error(s) and set dura
     // keep in this order as checkTiming() might change dura
@@ -913,7 +964,7 @@ Note* MusicXmlParserNote::parse()
             // if there is already a chord just add to it
             // else create a new one
             // this basically ignores <chord/> errors
-            m_chord = findOrCreateChord(noteStartTime, msTrack + msVoice, msMove, duration, m_dura, bm);
+            m_chord = findOrCreateChord(noteStartTime, msTrack + msVoice, msMove, duration, m_dura);
         } else {
             // grace note
             // TODO: check if explicit stem direction should also be set for grace notes
@@ -996,7 +1047,7 @@ Note* MusicXmlParserNote::parse()
             // regular note
             // handle beam
             if (!chord) {
-                handleBeamAndStemDir(bm, currBeam, m_pass1.hasBeamingInfo());
+                handleBeamAndStemDir(currBeam);
             }
 
             // append any grace chord after chord to the previous chord
@@ -1123,7 +1174,7 @@ Note* MusicXmlParserNote::parse()
     if (m_chord && !m_chord->graceNotes().empty() && !m_pass2.graceNoteLyrics().empty()) {
         for (GraceNoteLyrics gnl : m_pass2.graceNoteLyrics()) {
             if (gnl.lyric) {
-                addLyric(m_logger, &m_e, m_chordRest, gnl.lyric, gnl.no, m_pass2.extendedLyrics());
+                addLyric(gnl.lyric, gnl.no);
                 if (gnl.extend) {
                     m_pass2.extendedLyrics().addLyric(gnl.lyric);
                 }
@@ -1133,20 +1184,20 @@ Note* MusicXmlParserNote::parse()
     }
 
     if (m_chordRest) {
-        addInferredStickings(m_chordRest, m_lyricParser.inferredStickings());
+        addInferredStickings();
     }
 
     // add lyrics found by lyric
     if (m_chordRest && !grace) {
         // add lyrics and stop corresponding extends
-        addLyrics(m_logger, &m_e, m_chordRest, m_lyricParser.numberedLyrics(), m_lyricParser.extendedLyrics(), m_pass2.extendedLyrics());
+        addLyrics();
         if (rest) {
             // stop all extends
             m_pass2.extendedLyrics().setExtend(-1, m_chordRest->track(), m_chordRest->tick(), nullptr);
         }
     } else if (m_chord && grace) {
         // Add grace note lyrics to main chord later
-        addGraceNoteLyrics(m_lyricParser.numberedLyrics(), m_lyricParser.extendedLyrics(), m_pass2.graceNoteLyrics());
+        addGraceNoteLyrics();
     }
 
     // add figured bass element
