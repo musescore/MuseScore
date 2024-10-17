@@ -34,6 +34,8 @@
 #include "dom/staff.h"
 #include "dom/tie.h"
 
+#include "realfn.h"
+
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
@@ -73,7 +75,7 @@ double HorizontalSpacing::minHorizontalDistance(const Shape& f, const Shape& s, 
                 kerningType = computeKerning(item1, item2);
             }
             if ((intersection && kerningType != KerningType::ALLOW_COLLISION)
-                || (r1.width() == 0 || r2.width() == 0)  // Temporary hack: shapes of zero-width are assumed to collide with everyghin
+                || (muse::RealIsNull(r1.width()) || muse::RealIsNull(r2.width()))  // Temporary hack: shapes of zero-width are assumed to collide with everything
                 || (!item1 && item2 && item2->isLyrics())  // Temporary hack: avoids collision with melisma line
                 || kerningType == KerningType::NON_KERNING) {
                 dist = std::max(dist, r1.right() - r2.left() + padding);

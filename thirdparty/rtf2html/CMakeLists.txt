@@ -37,3 +37,4 @@ set(MODULE_SRC
 setup_module()
 
 target_no_warning(${MODULE} -Wno-conversion)
+target_no_warning(${MODULE} -Wno-deprecated-declarations)

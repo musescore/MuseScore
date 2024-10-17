@@ -280,7 +280,7 @@ double SkylineLine::top(double startX, double endX)
         }
     }
 
-    if (top == DBL_MAX) {
+    if (top >= DBL_MAX) { // > is not possible, but silences a compiler warning (-Wfloat-equal)
         top = 0.0;
     }
 
@@ -296,7 +296,7 @@ double SkylineLine::bottom(double startX, double endX)
         }
     }
 
-    if (bottom == -DBL_MAX) {
+    if (bottom <= DBL_MAX) { // < is not possible, but silences a compiler warning (-Wfloat-equal)
         bottom = 0.0;
     }
 
