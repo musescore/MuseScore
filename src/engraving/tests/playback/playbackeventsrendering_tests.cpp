@@ -1083,32 +1083,52 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
     m_defaultProfile->setPattern(ArticulationType::DiscreteGlissando, m_dummyPattern);
     m_defaultProfile->setPattern(ArticulationType::ContinuousGlissando, m_dummyPattern);
 
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+
     // ###################################################
     // 1st case: Discrete glissando on a tied note
     // ###################################################
-    const Chord* chord = findChord(score, 1440, 0); // tied A4 with discrete glissando
+    const Chord* chord = findChord(score, 960, 0); // first tied A4
     ASSERT_TRUE(chord);
-    ASSERT_FALSE(chord->notes().empty());
+    ASSERT_EQ(chord->notes().size(), 1);
+    ASSERT_TRUE(chord->notes().front()->tieFor());
+
+    // [WHEN] Request to render a chord with the A4 note on it
+    PlaybackEventsMap result;
+    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
+
+    // [THEN] Note event has the correct duration and standard articulation (no glissando)
+    pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::A, 4);
+    duration_t glissandoNoteDuration = QUARTER_NOTE_DURATION / 4;
+
+    ASSERT_EQ(result.size(), 1);
+    ASSERT_EQ(result.begin()->second.size(), 1);
+    mpe::NoteEvent noteEvent = std::get<mpe::NoteEvent>(result.begin()->second.at(0));
+    EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+    EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
+    EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, nominalPitchLevel);
+    EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, QUARTER_NOTE_DURATION + glissandoNoteDuration); // A4 + 1st glissando note
+
+    // [GIVEN] Tied A4 with discrete glissando
+    chord = findChord(score, 1440, 0);
+    ASSERT_TRUE(chord);
+    ASSERT_EQ(chord->notes().size(), 1);
     ASSERT_TRUE(chord->notes().front()->tieBack());
 
-    // [GIVEN] Expected glissando disclosure
-    size_t expectedSubNotesCount = 4;
-    float expectedDuration = static_cast<float>(QUARTER_NOTE_DURATION) / expectedSubNotesCount;
-    mpe::timestamp_t expectedTimestamp = timestampFromTicks(score, chord->tick().ticks());
-    pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::A, 4);
-    std::vector<int> pitchesWt = { 0, -1, -2, -3 };
+    // [WHEN] Request to render a chord with the A4 note on it
+    result.clear();
+    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
+
+    // [THEN] Expected glissando disclosure
+    size_t expectedSubNotesCount = 3;
+    mpe::timestamp_t expectedTimestamp = timestampFromTicks(score, chord->tick().ticks()) + glissandoNoteDuration;
+    std::vector<int> pitchesWt = { -1, -2, -3 };
 
     std::vector<pitch_level_t> expectedPitches;
     for (size_t i = 0; i < expectedSubNotesCount; ++i) {
         expectedPitches.push_back(nominalPitchLevel + pitchesWt.at(i) * PITCH_LEVEL_STEP);
     }
-
-    // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
-
-    // [WHEN] Request to render a chord with the A4 note on it
-    PlaybackEventsMap result;
-    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -1122,8 +1142,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::DiscreteGlissando));
 
             // [THEN] We expect that each sub-note in Discrete Glissando articulation has expected duration
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, static_cast<int>(expectedDuration));
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp + static_cast<int>(i * expectedDuration));
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, glissandoNoteDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp + static_cast<int>(i * glissandoNoteDuration));
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
@@ -1138,20 +1158,20 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
     ASSERT_FALSE(chord->notes().empty());
     ASSERT_TRUE(chord->notes().front()->tieFor());
 
-    // [GIVEN] Expected glissando disclosure
+    // [WHEN] Request to render a chord with the A4 note on it
+    result.clear();
+    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
+
+    // [THEN] Expected glissando disclosure
     expectedSubNotesCount = 1;
-    expectedDuration = QUARTER_NOTE_DURATION * 2;
     expectedTimestamp = timestampFromTicks(score, chord->tick().ticks());
+    glissandoNoteDuration = QUARTER_NOTE_DURATION * 2;
     nominalPitchLevel = pitchLevel(PitchClass::A, 4);
 
     expectedPitches.clear();
     for (size_t i = 0; i < expectedSubNotesCount; ++i) {
         expectedPitches.push_back(nominalPitchLevel + int(i) * PITCH_LEVEL_STEP);
     }
-
-    // [WHEN] Request to render a chord with the A4 note on it
-    result.clear();
-    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -1165,13 +1185,15 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ContinuousGlissando));
 
             // [THEN] We expect that each sub-note has an expected duration
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp + static_cast<duration_t>(i) * expectedDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, glissandoNoteDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp + static_cast<duration_t>(i) * glissandoNoteDuration);
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
         }
     }
+
+    delete score;
 }
 
 /**

@@ -30,7 +30,9 @@ struct NominalNoteCtx;
 class GlissandosRenderer
 {
 public:
-    static void renderDiscreteGlissando(const Note* note, const NominalNoteCtx& ctx, muse::mpe::PlaybackEventList& result);
-    static void renderContinuousGlissando(const Note* note, const NominalNoteCtx& ctx, muse::mpe::PlaybackEventList& result);
+    static muse::mpe::duration_t discreteGlissandoStepDuration(const Note* note, const muse::mpe::duration_t noteDuration);
+
+    static void renderDiscreteGlissando(const Note* note, NominalNoteCtx& ctx, muse::mpe::PlaybackEventList& result);
+    static void renderContinuousGlissando(const Note* note, NominalNoteCtx& ctx, muse::mpe::PlaybackEventList& result);
 };
 }

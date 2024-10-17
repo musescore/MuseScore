@@ -96,6 +96,10 @@ void NoteRenderer::renderTiedNotes(const Note* firstNote, NominalNoteCtx& firstN
 
         const NominalNoteCtx currNoteCtx = buildNominalNoteCtx(currNote, currChordCtx);
         if (isNotePlayable(currNote, currNoteCtx.articulations)) {
+            if (currNoteCtx.articulations.contains(ArticulationType::DiscreteGlissando)) {
+                firstNoteCtx.duration += GlissandosRenderer::discreteGlissandoStepDuration(currNote, currNoteCtx.duration);
+            }
+
             break;
         }
 
