@@ -48,6 +48,18 @@ StaffText::StaffText(const StaffText& t)
     }
 }
 
+bool StaffText::isEditAllowed(EditData& ed) const
+{
+    bool ctrlPressed  = ed.modifiers & ControlModifier;
+    bool shiftPressed = ed.modifiers & ShiftModifier;
+    bool altPressed = ed.modifiers & AltModifier;
+    if (altPressed && !ctrlPressed && !shiftPressed && (ed.key == Key_Left || ed.key == Key_Right)) {
+        return false;
+    }
+
+    return TextBase::isEditAllowed(ed);
+}
+
 EngravingItem* StaffText::linkedClone()
 {
     StaffText* clone = static_cast<StaffText*>(StaffTextBase::linkedClone());
