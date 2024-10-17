@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,17 +22,22 @@
 
 #pragma once
 
-#include "mpe/events.h"
+#include "playback/renderingcontext.h"
 
 namespace mu::engraving {
 class Note;
-struct NominalNoteCtx;
-class GlissandosRenderer
+class NoteRenderer
 {
 public:
-    static muse::mpe::duration_t discreteGlissandoStepDuration(const Note* note, const muse::mpe::duration_t noteDuration);
+    static void render(const Note* note, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
 
-    static void renderDiscreteGlissando(const Note* note, const NominalNoteCtx& ctx, muse::mpe::PlaybackEventList& result);
-    static void renderContinuousGlissando(const Note* note, const NominalNoteCtx& ctx, muse::mpe::PlaybackEventList& result);
+private:
+    static void renderTiedNotes(const Note* firstNote, NominalNoteCtx& firstNoteCtx);
+    static void addTiedNote(const NominalNoteCtx& tiedNoteCtx, NominalNoteCtx& firstNoteCtx);
+    static void updateArticulationBoundaries(const muse::mpe::timestamp_t noteTimestamp, const muse::mpe::duration_t noteDuration,
+                                             muse::mpe::ArticulationMap& articulations);
+    static void applySwingIfNeed(const Note* note, NominalNoteCtx& noteCtx);
+
+    static NominalNoteCtx buildNominalNoteCtx(const Note* note, const RenderingContext& ctx);
 };
 }

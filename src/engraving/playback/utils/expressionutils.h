@@ -152,6 +152,26 @@ inline muse::mpe::ArticulationType articulationFromPlayTechType(const PlayingTec
 
     return muse::mpe::ArticulationType::Undefined;
 }
+
+inline void updateArticulationBoundaries(const muse::mpe::ArticulationType type, const muse::mpe::timestamp_t nominalTimestamp,
+                                         const muse::mpe::duration_t nominalDuration,
+                                         muse::mpe::ArticulationMap& articulations)
+{
+    if (articulations.empty()) {
+        return;
+    }
+
+    const muse::mpe::ArticulationAppliedData& articulationData = articulations.at(type);
+
+    muse::mpe::timestamp_t articulationOccupiedFrom = nominalTimestamp - articulationData.meta.timestamp;
+    muse::mpe::timestamp_t articulationOccupiedTo = nominalTimestamp + nominalDuration - articulationData.meta.timestamp;
+
+    articulations.updateOccupiedRange(type,
+                                      muse::mpe::occupiedPercentage(articulationOccupiedFrom,
+                                                                    articulationData.meta.overallDuration),
+                                      muse::mpe::occupiedPercentage(articulationOccupiedTo,
+                                                                    articulationData.meta.overallDuration));
+}
 }
 
 #endif // MU_ENGRAVING_DYNAMICUTILS_H

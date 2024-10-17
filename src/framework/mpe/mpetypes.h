@@ -286,12 +286,13 @@ enum class ArticulationType {
     Slap,
     Pop,
 
+    ContinuousGlissando,
+
     // multi-note articulations
     Trill,
     Crescendo,
     Decrescendo,
     DiscreteGlissando,
-    ContinuousGlissando,
     Legato,
     Pedal,
     Multibend,
@@ -313,7 +314,6 @@ inline bool isMultiNoteArticulation(const ArticulationType type)
         ArticulationType::Crescendo,
         ArticulationType::Decrescendo,
         ArticulationType::DiscreteGlissando,
-        ArticulationType::ContinuousGlissando,
         ArticulationType::Legato,
         ArticulationType::Pedal,
         ArticulationType::Multibend,
