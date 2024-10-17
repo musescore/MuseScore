@@ -23,7 +23,7 @@ import QtQuick 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
-
+import Muse.GraphicalEffects 1.0
 import MuseScore.NotationScene 1.0
 
 Item {
@@ -52,16 +52,33 @@ Item {
     Row {
         id: centralButtonsRow
 
+        readonly property int buttonWidth: Math.max(writeButton.implicitWidth, previewButton.implicitWidth)
+
         anchors.verticalCenter: parent.verticalCenter
         x: prv.centerX - (centralButtonsRow.width / 2)
+
+        // We only want to round the outer corners of the buttons...
+        layer.enabled: ui.isEffectsAllowed
+        layer.effect: EffectOpacityMask {
+            maskSource: Rectangle {
+                width: centralButtonsRow.width
+                height: centralButtonsRow.height
+                radius: 3
+            }
+        }
 
         visible: model.currentPanelMode !== PanelMode.EDIT_LAYOUT
 
         FlatButton {
+            id: writeButton
+
+            width: centralButtonsRow.buttonWidth
+
             icon: IconCode.EDIT
             text: qsTrc("notation", "Write")
             orientation: Qt.Horizontal
             accentButton: model.currentPanelMode === PanelMode.WRITE
+            backgroundRadius: 0
 
             navigation.panel: navPanel
             navigation.row: 0
@@ -71,11 +88,23 @@ Item {
             }
         }
 
+        Rectangle {
+            id: separator
+            height: parent.height
+            width: 1
+            color: ui.theme.strokeColor
+        }
+
         FlatButton {
+            id: previewButton
+
+            width: centralButtonsRow.buttonWidth
+
             icon: IconCode.PLAY
             text: qsTrc("notation", "Preview")
             orientation: Qt.Horizontal
             accentButton: model.currentPanelMode === PanelMode.SOUND_PREVIEW
+            backgroundRadius: 0
 
             navigation.panel: navPanel
             navigation.row: 0
