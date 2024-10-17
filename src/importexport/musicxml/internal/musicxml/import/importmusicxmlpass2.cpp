@@ -94,6 +94,7 @@
 #include "../shared/musicxmlsupport.h"
 #include "../shared/musicxmltypes.h"
 
+#include "internal/musicxml/import/importmusicxmlnote.h"
 #include "modularity/ioc.h"
 #include "engraving/iengravingfontsprovider.h"
 #include "engraving/rendering/score/tlayout.h"

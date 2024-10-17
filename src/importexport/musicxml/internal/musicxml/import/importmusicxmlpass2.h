@@ -27,6 +27,8 @@
 #include "importmusicxmlpass1.h"
 #include "../shared/musicxmlsupport.h"
 #include "../shared/musicxmltypes.h"
+#include "importmusicxmlnoteduration.h"
+#include "importmusicxmlnotepitch.h"
 #include "musicxmltupletstate.h"
 
 namespace mu::engraving {
