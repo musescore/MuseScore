@@ -147,7 +147,8 @@
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
