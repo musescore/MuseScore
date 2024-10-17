@@ -163,7 +163,7 @@ public:
         bool isValid() const { return !elements.empty() || staffStart != muse::nidx; }
     };
 
-    UndoMacro(Score* s);
+    UndoMacro(Score* s, const TranslatableString& actionName);
     void undo(EditData*) override;
     void redo(EditData*) override;
     bool empty() const;
@@ -182,6 +182,7 @@ public:
     };
 
     ChangesInfo changesInfo() const;
+    const TranslatableString& actionName() const;
 
     static bool canRecordSelectedElement(const EngravingItem* e);
 
@@ -192,6 +193,7 @@ private:
     InputState m_redoInputState;
     SelectionInfo m_undoSelectionInfo;
     SelectionInfo m_redoSelectionInfo;
+    TranslatableString m_actionName;
 
     Score* m_score = nullptr;
 
@@ -218,7 +220,7 @@ public:
     bool locked() const;
     void setLocked(bool val);
     bool active() const { return curCmd != 0; }
-    void beginMacro(Score*);
+    void beginMacro(Score*, const TranslatableString& actionString);
     void endMacro(bool rollback);
     void push(UndoCommand*, EditData*);        // push & execute
     void push1(UndoCommand*);
@@ -226,10 +228,13 @@ public:
     bool canUndo() const { return curIdx > 0; }
     bool canRedo() const { return curIdx < list.size(); }
     bool isClean() const { return cleanState == stateList[curIdx]; }
+    size_t getSize() const { return list.size(); }
     size_t getCurIdx() const { return curIdx; }
     UndoMacro* current() const { return curCmd; }
     UndoMacro* last() const { return curIdx > 0 ? list[curIdx - 1] : 0; }
     UndoMacro* prev() const { return curIdx > 1 ? list[curIdx - 2] : 0; }
+    UndoMacro* next() const { return canRedo() ? list[curIdx] : 0; }
+    UndoMacro* getAtIndex(size_t idx) const { return idx >= 0 && idx < list.size() ? list[idx] : 0; }
     void undo(EditData*);
     void redo(EditData*);
     void reopen();

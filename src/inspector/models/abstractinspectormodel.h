@@ -204,7 +204,7 @@ protected:
     QVariant styleValue(const mu::engraving::Sid& sid) const;
 
     notation::INotationUndoStackPtr undoStack() const;
-    void beginCommand();
+    void beginCommand(const muse::TranslatableString& actionName);
     void endCommand();
 
     void updateNotation();

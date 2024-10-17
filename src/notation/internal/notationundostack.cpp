@@ -89,7 +89,26 @@ Notification NotationUndoStack::redoNotification() const
     return m_redoNotification;
 }
 
-void NotationUndoStack::prepareChanges()
+void NotationUndoStack::undoRedoToIdx(size_t idx, mu::engraving::EditData* editData)
+{
+    auto stack = undoStack();
+
+    IF_ASSERT_FAILED(stack) {
+        return;
+    }
+
+    if ((stack->getCurIdx() > idx)) {
+        while ((stack->getCurIdx() > idx) && canUndo()) {
+            undo(editData);
+        }
+    } else {
+        while ((stack->getCurIdx() <= idx) && canRedo()) {
+            redo(editData);
+        }
+    }
+}
+
+void NotationUndoStack::prepareChanges(const muse::TranslatableString& actionName)
 {
     IF_ASSERT_FAILED(score()) {
         return;
@@ -99,7 +118,7 @@ void NotationUndoStack::prepareChanges()
         return;
     }
 
-    score()->startCmd();
+    score()->startCmd(actionName);
 }
 
 void NotationUndoStack::rollbackChanges()
@@ -160,6 +179,63 @@ void NotationUndoStack::unlock()
 bool NotationUndoStack::isLocked() const
 {
     return undoStack()->locked();
+}
+
+const muse::TranslatableString NotationUndoStack::topMostUndoActionName() const
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        return {};
+    }
+
+    if (auto current = undoStack()->last()) {
+        return current->actionName();
+    }
+
+    return {};
+}
+
+const muse::TranslatableString NotationUndoStack::topMostRedoActionName() const
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        return {};
+    }
+
+    if (auto current = undoStack()->next()) {
+        return current->actionName();
+    }
+
+    return {};
+}
+
+size_t NotationUndoStack::undoRedoActionCount() const
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        return muse::nidx;
+    }
+
+    return undoStack()->getSize();
+}
+
+size_t NotationUndoStack::undoRedoActionCurrentIdx() const
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        return muse::nidx;
+    }
+
+    return undoStack()->getCurIdx();
+}
+
+const muse::TranslatableString NotationUndoStack::undoRedoActionNameAtIdx(size_t idx) const
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        return {};
+    }
+
+    if (auto action = undoStack()->getAtIndex(idx)) {
+        return action->actionName();
+    }
+
+    return {};
 }
 
 muse::async::Notification NotationUndoStack::stackChanged() const

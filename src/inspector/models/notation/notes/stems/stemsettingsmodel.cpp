@@ -111,7 +111,7 @@ void StemSettingsModel::setUseStraightNoteFlags(bool use)
 
 void StemSettingsModel::onStemDirectionChanged(DirectionV newDirection)
 {
-    beginCommand();
+    beginCommand(muse::TranslatableString("undoableAction", "Change stem direction"));
 
     for (EngravingItem* element : m_elementList) {
         Stem* stem = toStem(element);

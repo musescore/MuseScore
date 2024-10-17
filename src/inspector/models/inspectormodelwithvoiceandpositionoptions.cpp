@@ -160,7 +160,7 @@ void InspectorModelWithVoiceAndPositionOptions::changeVoice(int voice)
         return;
     }
 
-    beginCommand();
+    beginCommand(TranslatableString("undoableAction", "Change voice"));
 
     for (EngravingItem* item : m_elementList) {
         IF_ASSERT_FAILED(item) {

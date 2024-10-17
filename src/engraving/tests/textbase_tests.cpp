@@ -140,11 +140,11 @@ TEST_F(Engraving_TextBaseTests, undoChangeFontStyleProperty)
     StaffText* staffText = addStaffText(score);
     staffText->setXmlText(u"normal <b>bold</b> <u>underline</u> <i>italic</i>");
     score->renderer()->layoutItem(staffText);
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving text base tests"));
     staffText->undoChangeProperty(Pid::FONT_STYLE, PropertyValue::fromValue(0), PropertyFlags::UNSTYLED);
     score->endCmd();
     EXPECT_EQ(staffText->xmlText(), u"normal <b>bold</b> <u>underline</u> <i>italic</i>");
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving text base tests"));
     staffText->undoChangeProperty(Pid::FONT_STYLE, PropertyValue::fromValue(static_cast<int>(FontStyle::Bold)),
                                   PropertyFlags::UNSTYLED);
     score->endCmd();
@@ -154,19 +154,19 @@ TEST_F(Engraving_TextBaseTests, undoChangeFontStyleProperty)
     EXPECT_EQ(staffText->xmlText(), u"normal <b>bold</b> <u>underline</u> <i>italic</i>");
     score->undoStack()->redo(&ed);
     EXPECT_EQ(staffText->xmlText(), u"<b>normal bold <u>underline</u> <i>italic</i></b>");
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving text base tests"));
     staffText->undoChangeProperty(Pid::FONT_STYLE, PropertyValue::fromValue(
                                       static_cast<int>(FontStyle::Italic + FontStyle::Bold)), PropertyFlags::UNSTYLED);
     score->endCmd();
     EXPECT_EQ(staffText->xmlText(), u"<b><i>normal bold <u>underline</u> italic</i></b>");
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving text base tests"));
     staffText->undoChangeProperty(Pid::FONT_STYLE,
                                   PropertyValue::fromValue(
                                       static_cast<int>(FontStyle::Italic + FontStyle::Bold + FontStyle::Underline)),
                                   PropertyFlags::UNSTYLED);
     score->endCmd();
     EXPECT_EQ(staffText->xmlText(), u"<b><i><u>normal bold underline italic</u></i></b>");
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving text base tests"));
     staffText->undoChangeProperty(Pid::FONT_STYLE, PropertyValue::fromValue(0), PropertyFlags::UNSTYLED);
     score->endCmd();
     EXPECT_EQ(staffText->xmlText(), u"normal bold underline italic");
