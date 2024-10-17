@@ -403,6 +403,10 @@
         <voice>
           <BarLine>
             </BarLine>
+          <KeySig>
+            <concertKey>0</concertKey>
+            <actualKey>2</actualKey>
+            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -513,6 +517,10 @@
         <voice>
           <BarLine>
             </BarLine>
+          <KeySig>
+            <concertKey>0</concertKey>
+            <actualKey>2</actualKey>
+            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -620,6 +628,10 @@
         <voice>
           <BarLine>
             </BarLine>
+          <KeySig>
+            <concertKey>0</concertKey>
+            <actualKey>1</actualKey>
+            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
