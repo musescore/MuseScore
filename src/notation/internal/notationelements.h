@@ -33,7 +33,7 @@ public:
 
     mu::engraving::Score* msScore() const override;
 
-    EngravingItem* search(const std::string& searchText) const override;
+    std::vector<EngravingItem*> search(const QString& searchText) const override;
     std::vector<EngravingItem*> elements(const FilterElementsOptions& elementsOptions) const override;
 
     Measure* measure(const int measureIndex) const override;
