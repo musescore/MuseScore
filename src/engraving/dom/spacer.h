@@ -58,6 +58,8 @@ public:
     int subtype() const override { return int(m_spacerType); }
     TranslatableString subtypeUserName() const override;
 
+    String accessibleInfo() const override;
+
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;

@@ -527,3 +527,12 @@ muse::TranslatableString Arpeggio::subtypeUserName() const
 {
     return arpeggioTypeName();
 }
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+String Arpeggio::accessibleInfo() const
+{
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
+}

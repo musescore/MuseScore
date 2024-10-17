@@ -74,6 +74,10 @@ public:
     static const BagpipeNoteInfo BAGPIPE_NOTEINFO_LIST[];
     BagpipeNoteList resolveNoteList() const;
 
+    int subtype() const override { return int(m_embelType); }
+    TranslatableString subtypeUserName() const override;
+    String accessibleInfo() const override;
+
     struct LayoutData : public EngravingItem::LayoutData {
         struct NoteData {
             PointF headXY;
