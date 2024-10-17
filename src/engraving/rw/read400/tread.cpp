@@ -3772,7 +3772,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "hideSystemBarLine") {
         s->setHideSystemBarLine(e.readInt());
     } else if (tag == "mergeMatchingRests") {
-        s->setMergeMatchingRests(e.readInt());
+        s->setMergeMatchingRests(e.readInt() ? AutoOnOff::ON : AutoOnOff::AUTO);
     } else if (tag == "isStaffVisible") {
         s->setVisible(e.readBool());
     } else if (tag == "keylist") {

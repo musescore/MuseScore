@@ -1834,7 +1834,7 @@ ChangeStaff::ChangeStaff(Staff* _staff)
 
 ChangeStaff::ChangeStaff(Staff* _staff, bool _visible, ClefTypeList _clefType,
                          double _userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
-                         bool _hideSystemBarLine, bool _mergeMatchingRests, bool _reflectTranspositionInLinkedTab)
+                         bool _hideSystemBarLine, AutoOnOff _mergeMatchingRests, bool _reflectTranspositionInLinkedTab)
 {
     staff       = _staff;
     visible     = _visible;
@@ -1861,7 +1861,7 @@ void ChangeStaff::flip(EditData*)
     bool oldShowIfEmpty = staff->showIfEmpty();
     bool oldCutaway     = staff->cutaway();
     bool oldHideSystemBarLine  = staff->hideSystemBarLine();
-    bool oldMergeMatchingRests = staff->mergeMatchingRests();
+    AutoOnOff oldMergeMatchingRests = staff->mergeMatchingRests();
     bool oldReflectTranspositionInLinkedTab = staff->reflectTranspositionInLinkedTab();
 
     staff->setVisible(visible);
