@@ -19,43 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_UNDOREDOMODEL_H
-#define MU_NOTATION_UNDOREDOMODEL_H
+#pragma once
 
-#include <QObject>
-
-#include "context/iglobalcontext.h"
-#include "ui/iuiactionsregister.h"
-#include "modularity/ioc.h"
-#include "async/asyncable.h"
+#include "uicomponents/view/abstracttoolbarmodel.h"
 
 namespace mu::notation {
-class UndoRedoModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class UndoRedoModel : public muse::uicomponents::AbstractToolBarModel
 {
-    Q_OBJECT
-
-    Q_PROPERTY(QVariant undoItem READ makeUndoItem NOTIFY stackChanged)
-    Q_PROPERTY(QVariant redoItem READ makeRedoItem NOTIFY stackChanged)
-
-    muse::Inject<context::IGlobalContext> context = { this };
-    muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
-
 public:
     explicit UndoRedoModel(QObject* parent = nullptr);
 
-    QVariant makeUndoItem();
-    QVariant makeRedoItem();
-
-    Q_INVOKABLE void load();
-    Q_INVOKABLE void undo();
-    Q_INVOKABLE void redo();
-
-signals:
-    void stackChanged();
-
-private:
-    INotationUndoStackPtr undoStack() const;
+    Q_INVOKABLE void load() override;
 };
 }
-
-#endif // MU_NOTATION_UNDOREDOMODEL_H
