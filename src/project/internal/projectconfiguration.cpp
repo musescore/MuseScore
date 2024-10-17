@@ -63,7 +63,7 @@ static const Settings::Key GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY(module_name, "pro
 static const Settings::Key NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY(module_name, "project/numberOfSavesToGenerateAudio");
 static const Settings::Key SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING(module_name, "project/showCloudIsNotAvailableWarning");
 static const Settings::Key DISABLE_VERSION_CHECKING(module_name, "project/disableVersionChecking");
-static const Settings::Key DISABLE_BACKUP(module_name, "project/disableBackup");
+static const Settings::Key CREATE_BACKUP_BEFORE_SAVING(module_name, "project/createBackupBeforeSaving");
 
 static const std::string DEFAULT_FILE_SUFFIX(".mscz");
 static const std::string DEFAULT_FILE_FILTER("*.mscz");
@@ -119,9 +119,10 @@ void ProjectConfiguration::init()
 
     settings()->setDefaultValue(DISABLE_VERSION_CHECKING, Val(false));
 
-    settings()->setDefaultValue(DISABLE_BACKUP, Val(false));
-    settings()->setDescription(DISABLE_BACKUP, muse::qtrc("project", "Disable Backup").toStdString());
-    settings()->setCanBeManuallyEdited(DISABLE_BACKUP, true);
+    settings()->setDefaultValue(CREATE_BACKUP_BEFORE_SAVING, Val(true));
+    settings()->setDescription(CREATE_BACKUP_BEFORE_SAVING, muse::trc("project",
+                                                                      "Create backup of file on disk before saving new changes"));
+    settings()->setCanBeManuallyEdited(CREATE_BACKUP_BEFORE_SAVING, true);
 
     if (!userTemplatesPath().empty()) {
         fileSystem()->makePath(userTemplatesPath());
@@ -677,14 +678,14 @@ void ProjectConfiguration::setShowCloudIsNotAvailableWarning(bool show)
     settings()->setSharedValue(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING, Val(show));
 }
 
-bool ProjectConfiguration::disableBackup() const
+bool ProjectConfiguration::createBackupBeforeSaving() const
 {
-    return settings()->value(DISABLE_BACKUP).toBool();
+    return settings()->value(CREATE_BACKUP_BEFORE_SAVING).toBool();
 }
 
-void ProjectConfiguration::setDisableBackup(bool disable)
+void ProjectConfiguration::setCreateBackupBeforeSaving(bool create)
 {
-    settings()->setSharedValue(DISABLE_BACKUP, Val(disable));
+    settings()->setSharedValue(CREATE_BACKUP_BEFORE_SAVING, Val(create));
 }
 
 bool ProjectConfiguration::disableVersionChecking() const

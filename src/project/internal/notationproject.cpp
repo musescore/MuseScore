@@ -662,8 +662,8 @@ Ret NotationProject::makeCurrentFileAsBackup()
 {
     TRACEFUNC;
 
-    bool disable = configuration()->disableBackup();
-    if (disable) {
+    bool create = configuration()->createBackupBeforeSaving();
+    if (!create) {
         return make_ret(Ret::Code::Ok);
     }
 

@@ -155,8 +155,8 @@ public:
     bool disableVersionChecking() const override;
     void setDisableVersionChecking(bool disable) override;
 
-    bool disableBackup() const override;
-    void setDisableBackup(bool disable) override;
+    bool createBackupBeforeSaving() const override;
+    void setCreateBackupBeforeSaving(bool create) override;
 
 private:
     muse::io::path_t appTemplatesPath() const;

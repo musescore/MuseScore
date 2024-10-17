@@ -138,8 +138,8 @@ public:
     MOCK_METHOD(bool, disableVersionChecking, (), (const, override));
     MOCK_METHOD(void, setDisableVersionChecking, (bool), (override));
 
-    MOCK_METHOD(bool, disableBackup, (), (const, override));
-    MOCK_METHOD(void, setDisableBackup, (bool), (override));
+    MOCK_METHOD(bool, createBackupBeforeSaving, (), (const, override));
+    MOCK_METHOD(void, setCreateBackupBeforeSaving, (bool), (override));
 };
 }
 
