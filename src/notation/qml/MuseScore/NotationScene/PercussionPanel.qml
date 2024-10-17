@@ -105,6 +105,8 @@ Item {
                 visible: percModel.currentPanelMode === PanelMode.EDIT_LAYOUT
 
                 Repeater {
+                    id: deleteRepeater
+
                     model: padGrid.numRows
 
                     delegate: Item {
@@ -119,13 +121,24 @@ Item {
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.right: parent.right
 
-                            visible: model.index > 0
+                            visible: padGrid.numRows > 1 && padGrid.model.rowIsEmpty(model.index)
 
                             icon: IconCode.DELETE_TANK
                             backgroundRadius: deleteButton.width / 2
 
                             onClicked: {
                                 padGrid.model.deleteRow(model.index)
+                            }
+
+                            Connections {
+                                target: padGrid.model
+
+                                function onRowIsEmptyChanged(row, isEmpty) {
+                                    if (row !== model.index) {
+                                        return
+                                    }
+                                    deleteButton.visible = padGrid.numRows > 1 && isEmpty
+                                }
                             }
                         }
                     }
