@@ -31,11 +31,11 @@ import "."
 Rectangle {
     id: root
 
-    property alias model: inspectorRepeater.model
+    property alias model: sectionList.model
     property alias notationView: popupController.notationView
 
     property NavigationSection navigationSection: null
-    property NavigationPanel navigationPanel: inspectorRepeater.count > 0 ? inspectorRepeater.itemAt(0).navigationPanel : null // first panel
+    property NavigationPanel navigationPanel: sectionList.count > 0 ? sectionList.itemAtIndex(0).navigationPanel : null // first panel
     property int navigationOrderStart: 0
 
     color: ui.theme.backgroundPrimaryColor
@@ -45,7 +45,7 @@ Rectangle {
     }
 
     function focusFirstItem() {
-        var item = inspectorRepeater.itemAt(0)
+        var item = sectionList.itemAtIndex(0)
         if (item) {
             item.navigation.requestActive()
         }
@@ -68,21 +68,26 @@ Rectangle {
         id: popupController
     }
 
-    StyledFlickable {
-        id: flickableArea
+    StyledListView {
+        id: sectionList
         anchors.fill: parent
 
+        topMargin: 12
+        leftMargin: 12
+        rightMargin: 12
+        bottomMargin: 12
+
+        spacing: 12
+
         function ensureContentVisible(invisibleContentHeight) {
-            if (flickableArea.contentY + invisibleContentHeight > 0) {
-                flickableArea.contentY += invisibleContentHeight
+            if (sectionList.contentY + invisibleContentHeight > 0) {
+                sectionList.contentY += invisibleContentHeight
             } else {
-                flickableArea.contentY = 0
+                sectionList.contentY = 0
             }
         }
 
         flickableDirection: Flickable.VerticalFlick
-
-        contentHeight: contentColumn.childrenRect.height + 2 * contentColumn.anchors.margins
 
         Behavior on contentY {
             NumberAnimation { duration: 250 }
@@ -90,60 +95,46 @@ Rectangle {
 
         ScrollBar.vertical: StyledScrollBar {}
 
-        Column {
-            id: contentColumn
+        model: InspectorListModel {
+            id: inspectorListModel
+        }
 
-            anchors.fill: parent
-            anchors.margins: 12
+        delegate: Column {
+            width: parent.width
 
-            height: childrenRect.height
-            spacing: 12
+            spacing: sectionList.spacing
 
-            Repeater {
-                id: inspectorRepeater
+            property var navigationPanel: _item.navigationPanel
 
-                model: InspectorListModel {
-                    id: inspectorListModel
+            SeparatorLine {
+                anchors.margins: -12
+
+                visible: model.index !== 0
+            }
+
+            InspectorSectionDelegate {
+                id: _item
+
+                sectionModel: model.inspectorSectionModel
+                anchorItem: root
+                navigationPanel.section: root.navigationSection
+                navigationPanel.order: root.navigationOrderStart + model.index
+                navigationPanel.onOrderChanged: {
+                    if (model.index === 0) {
+                        root.navigationOrderStart = navigationPanel.order
+                    }
                 }
 
-                delegate: Column {
-                    width: parent.width
+                onReturnToBoundsRequested: {
+                    sectionList.returnToBounds()
+                }
 
-                    spacing: contentColumn.spacing
+                onEnsureContentVisibleRequested: function(invisibleContentHeight) {
+                    sectionList.ensureContentVisible(invisibleContentHeight)
+                }
 
-                    property var navigationPanel: _item.navigationPanel
-
-                    SeparatorLine {
-                        anchors.margins: -12
-
-                        visible: model.index !== 0
-                    }
-
-                    InspectorSectionDelegate {
-                        id: _item
-
-                        sectionModel: model.inspectorSectionModel
-                        anchorItem: root
-                        navigationPanel.section: root.navigationSection
-                        navigationPanel.order: root.navigationOrderStart + model.index
-                        navigationPanel.onOrderChanged: {
-                            if (model.index === 0) {
-                                root.navigationOrderStart = navigationPanel.order
-                            }
-                        }
-
-                        onReturnToBoundsRequested: {
-                            flickableArea.returnToBounds()
-                        }
-
-                        onEnsureContentVisibleRequested: function(invisibleContentHeight) {
-                            flickableArea.ensureContentVisible(invisibleContentHeight)
-                        }
-
-                        onPopupOpened: function(openedPopup, visualControl) {
-                            prv.closePreviousOpenedPopup(openedPopup, visualControl)
-                        }
-                    }
+                onPopupOpened: function(openedPopup, visualControl) {
+                    prv.closePreviousOpenedPopup(openedPopup, visualControl)
                 }
             }
         }
