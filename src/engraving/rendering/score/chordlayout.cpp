@@ -3566,3 +3566,31 @@ void ChordLayout::fillShape(const MMRest* item, MMRest::LayoutData* ldata, const
 
     ldata->setShape(shape);
 }
+
+void ChordLayout::addLineAttachPoints(Spanner* spanner)
+{
+    assert(spanner->anchor() == Spanner::Anchor::NOTE);
+
+    const SpannerSegment* frontSeg = toSpannerSegment(spanner->frontSegment());
+    const SpannerSegment* backSeg = toSpannerSegment(spanner->backSegment());
+    Note* startNote = nullptr;
+    Note* endNote = nullptr;
+
+    EngravingItem* startElement = spanner->startElement();
+    EngravingItem* endElement = spanner->endElement();
+    if (startElement && startElement->isNote()) {
+        startNote = toNote(startElement);
+    }
+    if (endElement && endElement->isNote()) {
+        endNote = toNote(endElement);
+    }
+    if (!frontSeg || !backSeg || !startNote || !endNote) {
+        return;
+    }
+    double startX = frontSeg->ldata()->pos().x();
+    double endX = backSeg->pos2().x() + backSeg->ldata()->pos().x(); // because pos2 is relative to ipos
+    // Here we don't pass y() because its value is unreliable during the first stages of layout.
+    // The y() is irrelevant anyway for horizontal spacing.
+    startNote->addLineAttachPoint(PointF(startX, 0.0), spanner);
+    endNote->addLineAttachPoint(PointF(endX, 0.0), spanner);
+}

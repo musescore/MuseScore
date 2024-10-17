@@ -2759,7 +2759,7 @@ void TLayout::layoutGlissando(Glissando* item, LayoutContext& ctx)
 
     layoutNoteAnchoredLine(item, ldata, ctx);
 
-    const_cast<Glissando*>(item)->addLineAttachPoints();
+    ChordLayout::addLineAttachPoints(item);
 }
 
 void TLayout::layoutGlissandoSegment(GlissandoSegment* item, LayoutContext&)
@@ -5050,7 +5050,7 @@ void TLayout::layoutNoteLine(NoteLine* item, LayoutContext& ctx)
 
     if (item->lineEndPlacement() == NoteLineEndPlacement::OFFSET_ENDS) {
         layoutNoteAnchoredLine(item, item->mutldata(), ctx);
-        item->addLineAttachPoints();
+        ChordLayout::addLineAttachPoints(item);
     }
 }
 

@@ -2458,8 +2458,8 @@ void Chord::setSlash(bool flag, bool stemless)
 
 void Chord::updateEndsNoteAnchoredLine()
 {
-    m_endsNoteAnchoredLine = false;         // assume no glissando ends here
-    // scan all chord notes for glissandi ending on this chord
+    m_endsNoteAnchoredLine = false;         // assume no note anchored line ends here
+    // scan all chord notes for note anchored lines ending on this chord
     for (Note* note : notes()) {
         for (Spanner* sp : note->spannerBack()) {
             bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();

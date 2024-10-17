@@ -64,7 +64,6 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
 
     bool allowTimeAnchor() const override { return false; }
-    void addLineAttachPoints();
 
     NoteLineEndPlacement lineEndPlacement() { return m_lineEndPlacement; }
     void setLineEndPlacement(NoteLineEndPlacement v) { m_lineEndPlacement = v; }
@@ -72,8 +71,6 @@ public:
     void reset() override;
 
     bool enforceMinLength() { return m_lineEndPlacement != NoteLineEndPlacement::LEFT_EDGE; }
-
-    static NoteLine* createFromTextLine(TextLine* textLine);
 private:
     NoteLineEndPlacement m_lineEndPlacement = NoteLineEndPlacement::OFFSET_ENDS;
 };

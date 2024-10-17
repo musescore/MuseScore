@@ -159,29 +159,6 @@ Sid Glissando::getPropertyStyle(Pid id) const
     return SLine::getPropertyStyle(id);
 }
 
-void Glissando::addLineAttachPoints()
-{
-    GlissandoSegment* frontSeg = toGlissandoSegment(frontSegment());
-    GlissandoSegment* backSeg = toGlissandoSegment(backSegment());
-    Note* startNote = nullptr;
-    Note* endNote = nullptr;
-    if (startElement() && startElement()->isNote()) {
-        startNote = toNote(startElement());
-    }
-    if (endElement() && endElement()->isNote()) {
-        endNote = toNote(endElement());
-    }
-    if (!frontSeg || !backSeg || !startNote || !endNote) {
-        return;
-    }
-    double startX = frontSeg->ldata()->pos().x();
-    double endX = backSeg->pos2().x() + backSeg->ldata()->pos().x(); // because pos2 is relative to ipos
-    // Here we don't pass y() because its value is unreliable during the first stages of layout.
-    // The y() is irrelevant anyway for horizontal spacing.
-    startNote->addLineAttachPoint(PointF(startX, 0.0), this);
-    endNote->addLineAttachPoint(PointF(endX, 0.0), this);
-}
-
 bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffsets)
 {
     if (!spanner->endElement()->isNote()) {

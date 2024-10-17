@@ -77,32 +77,33 @@ Sid NoteLine::getPropertyStyle(Pid pid) const
 NoteLine::NoteLine(EngravingItem* parent)
     : TextLineBase(ElementType::NOTELINE, parent, ElementFlag::MOVABLE)
 {
-    setAnchor(Spanner::Anchor::NOTE);
-    setDiagonal(true);
-    setSystemFlag(false);
-    setPlacement(PlacementV::ABOVE);
-
     initElementStyle(&noteLineStyle);
 
-    setBeginText(u"");
-    setContinueText(u"");
-    setEndText(u"");
-    setBeginTextOffset(PointF(0, 0));
-    setContinueTextOffset(PointF(0, 0));
-    setEndTextOffset(PointF(0, 0));
-    setLineVisible(true);
+    static const std::array<Pid, 19> propertiesToInitialise {
+        Pid::BEGIN_TEXT,
+        Pid::CONTINUE_TEXT,
+        Pid::END_TEXT,
+        Pid::LINE_VISIBLE,
+        Pid::BEGIN_TEXT_OFFSET,
+        Pid::CONTINUE_TEXT_OFFSET,
+        Pid::END_TEXT_OFFSET,
+        Pid::BEGIN_HOOK_TYPE,
+        Pid::END_HOOK_TYPE,
+        Pid::BEGIN_TEXT_PLACE,
+        Pid::CONTINUE_TEXT_PLACE,
+        Pid::END_TEXT_PLACE,
+        Pid::BEGIN_HOOK_HEIGHT,
+        Pid::END_HOOK_HEIGHT,
+        Pid::DIAGONAL,
+        Pid::NOTELINE_PLACEMENT,
+        Pid::GAP_BETWEEN_TEXT_AND_LINE,
+        Pid::SYSTEM_FLAG,
+        Pid::ANCHOR
+    };
 
-    setBeginHookType(HookType::NONE);
-    setEndHookType(HookType::NONE);
-    setBeginHookHeight(Spatium(1.5));
-    setEndHookHeight(Spatium(1.5));
-    setGapBetweenTextAndLine(Spatium(0.5));
-
-    setLineEndPlacement(NoteLineEndPlacement::OFFSET_ENDS);
-
-    resetProperty(Pid::BEGIN_TEXT_PLACE);
-    resetProperty(Pid::CONTINUE_TEXT_PLACE);
-    resetProperty(Pid::END_TEXT_PLACE);
+    for (const Pid& pid : propertiesToInitialise) {
+        resetProperty(pid);
+    }
 }
 
 NoteLine::NoteLine(const NoteLine& nl)
@@ -148,6 +149,12 @@ PropertyValue NoteLine::propertyDefault(Pid propertyId) const
         return NoteLineEndPlacement::OFFSET_ENDS;
     case Pid::OFFSET:
         return PointF();
+    case Pid::GAP_BETWEEN_TEXT_AND_LINE:
+        return Spatium(0.5);
+    case Pid::SYSTEM_FLAG:
+        return false;
+    case Pid::ANCHOR:
+        return int(Spanner::Anchor::NOTE);
     default:
         return TextLineBase::propertyDefault(propertyId);
     }
@@ -178,73 +185,9 @@ bool NoteLine::setProperty(Pid propertyId, const PropertyValue& val)
     return true;
 }
 
-void NoteLine::addLineAttachPoints()
-{
-    assert(anchor() == Spanner::Anchor::NOTE);
-
-    NoteLineSegment* frontSeg = toNoteLineSegment(frontSegment());
-    NoteLineSegment* backSeg = toNoteLineSegment(backSegment());
-    Note* startNote = nullptr;
-    Note* endNote = nullptr;
-    if (startElement() && startElement()->isNote()) {
-        startNote = toNote(startElement());
-    }
-    if (endElement() && endElement()->isNote()) {
-        endNote = toNote(endElement());
-    }
-    if (!frontSeg || !backSeg || !startNote || !endNote) {
-        return;
-    }
-    double startX = frontSeg->ldata()->pos().x();
-    double endX = backSeg->pos2().x() + backSeg->ldata()->pos().x(); // because pos2 is relative to ipos
-    // Here we don't pass y() because its value is unreliable during the first stages of layout.
-    // The y() is irrelevant anyway for horizontal spacing.
-    startNote->addLineAttachPoint(PointF(startX, 0.0), this);
-    endNote->addLineAttachPoint(PointF(endX, 0.0), this);
-}
-
 void NoteLine::reset()
 {
     undoResetProperty(Pid::NOTELINE_PLACEMENT);
     TextLineBase::reset();
-}
-
-NoteLine* NoteLine::createFromTextLine(TextLine* textLine)
-{
-    assert(textLine->anchor() == Spanner::Anchor::NOTE);
-    Note* startNote = toNote(textLine->startElement());
-    Note* endNote = toNote(textLine->endElement());
-
-    NoteLine* noteLine = Factory::createNoteLine(startNote);
-    noteLine->setParent(startNote);
-    noteLine->setStartElement(startNote);
-    noteLine->setTrack(textLine->track());
-    noteLine->setTick(textLine->tick());
-    noteLine->setEndElement(endNote);
-    noteLine->setTick2(textLine->tick2());
-    noteLine->setVisible(textLine->visible());
-
-    // Preserve old layout style
-    noteLine->setLineEndPlacement(NoteLineEndPlacement::LEFT_EDGE);
-
-    for (Pid pid : textLine->textLineBasePropertyIds()) {
-        noteLine->setProperty(pid, textLine->getProperty(pid));
-    }
-
-    for (const SpannerSegment* oldSeg : textLine->spannerSegments()) {
-        LineSegment* newSeg = noteLine->createLineSegment(toSystem(oldSeg->parent()));
-        newSeg->setOffset(oldSeg->offset());
-        newSeg->setUserOff2(oldSeg->userOff2());
-
-        noteLine->add(newSeg);
-    }
-
-    LinkedObjects* links = textLine->links();
-    noteLine->setLinks(links);
-    if (links) {
-        links->push_back(noteLine);
-    }
-
-    return noteLine;
 }
 } // namespace mu::engraving

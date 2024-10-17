@@ -726,6 +726,45 @@ void CompatUtils::mapHeaderFooterStyles(MasterScore* score)
                                    Sid::evenFooterL, Sid::evenFooterC, Sid::evenFooterR });
 }
 
+NoteLine* CompatUtils::createNoteLineFromTextLine(TextLine* textLine)
+{
+    assert(textLine->anchor() == Spanner::Anchor::NOTE);
+    Note* startNote = toNote(textLine->startElement());
+    Note* endNote = toNote(textLine->endElement());
+
+    NoteLine* noteLine = Factory::createNoteLine(startNote);
+    noteLine->setParent(startNote);
+    noteLine->setStartElement(startNote);
+    noteLine->setTrack(textLine->track());
+    noteLine->setTick(textLine->tick());
+    noteLine->setEndElement(endNote);
+    noteLine->setTick2(textLine->tick2());
+    noteLine->setVisible(textLine->visible());
+
+    // Preserve old layout style
+    noteLine->setLineEndPlacement(NoteLineEndPlacement::LEFT_EDGE);
+
+    for (Pid pid : textLine->textLineBasePropertyIds()) {
+        noteLine->setProperty(pid, textLine->getProperty(pid));
+    }
+
+    for (const SpannerSegment* oldSeg : textLine->spannerSegments()) {
+        LineSegment* newSeg = noteLine->createLineSegment(toSystem(oldSeg->parent()));
+        newSeg->setOffset(oldSeg->offset());
+        newSeg->setUserOff2(oldSeg->userOff2());
+
+        noteLine->add(newSeg);
+    }
+
+    LinkedObjects* links = textLine->links();
+    noteLine->setLinks(links);
+    if (links) {
+        links->push_back(noteLine);
+    }
+
+    return noteLine;
+}
+
 void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
 {
     std::set<TextLine*> oldLines; // NoteLines used to be TextLines
@@ -767,7 +806,7 @@ void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
     }
 
     for (TextLine* oldLine : oldLines) {
-        NoteLine* newLine = NoteLine::createFromTextLine(oldLine);
+        NoteLine* newLine = createNoteLineFromTextLine(oldLine);
         EngravingItem* parent = newLine->parentItem();
 
         parent->remove(oldLine);
