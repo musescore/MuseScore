@@ -39,8 +39,10 @@
 #include "barline.h"
 #include "box.h"
 #include "chord.h"
+#include "chordrest.h"
 #include "clef.h"
 #include "drumset.h"
+#include "durationtype.h"
 #include "dynamic.h"
 #include "factory.h"
 #include "glissando.h"
@@ -3252,6 +3254,56 @@ void Score::cmdMirrorNoteHead()
 
 void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
 {
+    if (selection().isRange()) {
+        if (!selection().canCopy()) {
+            return;
+        }
+        ChordRest* firstCR = selection().firstChordRest();
+        if (firstCR->isGrace()) {
+            firstCR = toChordRest(firstCR->parent());
+        }
+        TDuration initialDuration = firstCR->ticks();
+        TDuration d = initialDuration.shiftRetainDots(nSteps, stepDotted);
+        if (!d.isValid()) {
+            return;
+        }
+        Fraction scale = d.ticks() / initialDuration.ticks();
+        for (ChordRest* cr : getSelectedChordRests()) {
+            Fraction newTicks = cr->ticks() * scale;
+            if (newTicks < Fraction(1, 1024)
+                || (stepDotted && cr->durationType().dots() != firstCR->durationType().dots()
+                    && !cr->isGrace())) {
+                return;
+            }
+        }
+        const muse::ByteArray mimeData(selection().mimeData());
+        XmlReader e(mimeData);
+        deleteRange(selection().startSegment(), selection().endSegment(), staff2track(selection().staffStart()),
+                    staff2track(selection().staffEnd()), selectionFilter());
+        pasteStaff(e, selection().startSegment(), selection().staffStart(), scale);
+        return;
+    }
+    if (selection().isList() && selection().elements().size() > 1) {
+        // List - act as if pressing duration toggle (distinct from range based Half/Double
+        TDuration newDuration(stepDotted
+                              ? m_is.duration().shiftRetainDots(nSteps, stepDotted)
+                              : m_is.duration().shift(nSteps));
+        m_is.duration().shiftRetainDots(nSteps, stepDotted);
+        m_is.setDuration(newDuration);
+        std::set crs = getSelectedChordRests();
+        for (auto cr : getSelectedChordRests()) {
+            changeCRlen(cr, newDuration);
+        }
+        for (auto cr : crs) {
+            EngravingItem* e = cr;
+            if (cr->isChord()) {
+                e = toChord(cr)->upNote();
+            }
+            select(e, SelectType::ADD);
+        }
+        return;
+    }
+
     EngravingItem* el = selection().element();
     if (el == 0) {
         return;
