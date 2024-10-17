@@ -2662,54 +2662,6 @@ void ChordLayout::getNoteListForDots(Chord* c, std::vector<Note*>& topDownNotes,
               [](Note* n1, Note* n2) { return n1->line() > n2->line(); });
 }
 
-/* updateGraceNotes()
- * Processes a full measure, making sure that all grace notes are
- * attacched to the correct segment. Has to be performed after
- * all the segments are known.
- * */
-void ChordLayout::updateGraceNotes(Measure* measure, LayoutContext& ctx)
-{
-    // Clean everything
-    for (Segment& s : measure->segments()) {
-        for (unsigned track = 0; track < ctx.dom().ntracks(); ++track) {
-            EngravingItem* e = s.preAppendedItem(track);
-            if (e && e->isGraceNotesGroup()) {
-                s.clearPreAppended(track);
-                std::set<staff_idx_t> stavesToReShape;
-                for (Chord* grace : *toGraceNotesGroup(e)) {
-                    stavesToReShape.insert(grace->staffIdx());
-                    stavesToReShape.insert(grace->vStaffIdx());
-                }
-                for (staff_idx_t staffToReshape : stavesToReShape) {
-                    s.createShape(staffToReshape);
-                }
-            }
-        }
-    }
-    // Append grace notes to appropriate segment
-    for (Segment& s : measure->segments()) {
-        if (!s.isChordRestType()) {
-            continue;
-        }
-        for (auto el : s.elist()) {
-            if (el && el->isChord() && !toChord(el)->graceNotes().empty()) {
-                appendGraceNotes(toChord(el));
-            }
-        }
-    }
-    // Layout grace note groups
-    for (Segment& s : measure->segments()) {
-        for (unsigned track = 0; track < ctx.dom().ntracks(); ++track) {
-            EngravingItem* e = s.preAppendedItem(track);
-            if (e && e->isGraceNotesGroup()) {
-                GraceNotesGroup* gng = toGraceNotesGroup(e);
-                TLayout::layoutGraceNotesGroup(gng, ctx);
-                gng->addToShape();
-            }
-        }
-    }
-}
-
 void ChordLayout::appendGraceNotes(Chord* chord)
 {
     Segment* segment = chord->segment();
@@ -3546,8 +3498,8 @@ void ChordLayout::fillShape(const MeasureRepeat* item, MeasureRepeat::LayoutData
 {
     Shape shape(Shape::Type::Composite);
 
-    shape.add(item->numberRect());
-    shape.add(item->symBbox(ldata->symId));
+    shape.add(item->numberRect(), item);
+    shape.add(item->symBbox(ldata->symId), item);
 
     ldata->setShape(shape);
 }

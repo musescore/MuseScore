@@ -2684,7 +2684,7 @@ void Note::normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned)
     Segment* previous = seg->prev();
 
     if (previous) {
-        double minDist = HorizontalSpacing::minHorizontalCollidingDistance(previous, seg, 1.0);
+        double minDist = HorizontalSpacing::minHorizontalDistance(previous, seg, 1.0);
 
         double diff = (ed.pos.x()) - (previous->pageX() + minDist);
 
