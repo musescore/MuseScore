@@ -26,10 +26,6 @@ set(_components
     LinguistTools
 
     Core5Compat
-
-    # Note: only used in ExampleView class.
-    # When that class is removed, don't forget to remove this dependency.
-    StateMachine
 )
 
 if (NOT OS_IS_WASM)
@@ -46,9 +42,16 @@ if (OS_IS_LIN)
     )
 endif()
 
+if (QT_ADD_STATEMACHINE)
+    set(_components ${_components}
+        # Note: only used in ExampleView class.
+        # When that class is removed, don't forget to remove this dependency.
+        StateMachine
+    )
+endif()
+
 if (QT_ADD_WEBSOCKET)
-    set(_components
-        ${_components}
+    set(_components ${_components}
         WebSockets
     )
 endif()
