@@ -1,0 +1,133 @@
+/* Auto generated from checkpoint lace_v2.pth (sha1: 41eaab33c6cbdb192d14f43c9f292856cab789e9) */
+
+
+#ifndef LACE_DATA_H
+#define LACE_DATA_H
+
+#include "nnet.h"
+
+
+#define LACE_PREEMPH 0.85f
+#define LACE_FRAME_SIZE 80
+#define LACE_OVERLAP_SIZE 40
+#define LACE_NUM_FEATURES 93
+#define LACE_PITCH_MAX 300
+#define LACE_PITCH_EMBEDDING_DIM 64
+#define LACE_NUMBITS_RANGE_LOW 50
+#define LACE_NUMBITS_RANGE_HIGH 650
+#define LACE_NUMBITS_EMBEDDING_DIM 8
+#define LACE_COND_DIM 128
+#define LACE_HIDDEN_FEATURE_DIM 96
+#define LACE_NUMBITS_SCALE_0 1.0983514785766602f
+#define LACE_NUMBITS_SCALE_1 2.0509142875671387f
+#define LACE_NUMBITS_SCALE_2 3.5729939937591553f
+#define LACE_NUMBITS_SCALE_3 4.478035926818848f
+#define LACE_NUMBITS_SCALE_4 5.926519393920898f
+#define LACE_NUMBITS_SCALE_5 7.152282238006592f
+#define LACE_NUMBITS_SCALE_6 8.277412414550781f
+#define LACE_NUMBITS_SCALE_7 8.926830291748047f
+
+#define LACE_PITCH_EMBEDDING_OUT_SIZE 64
+
+#define LACE_FNET_CONV1_OUT_SIZE 96
+
+#define LACE_FNET_CONV1_IN_SIZE 173
+
+#define LACE_FNET_CONV1_STATE_SIZE (173 * (0))
+
+#define LACE_FNET_CONV1_DELAY 0
+
+#define LACE_FNET_CONV2_OUT_SIZE 128
+
+#define LACE_FNET_CONV2_IN_SIZE 384
+
+#define LACE_FNET_CONV2_STATE_SIZE (384 * (1))
+
+#define LACE_FNET_CONV2_DELAY 0
+
+#define LACE_FNET_TCONV_KERNEL_SIZE 4
+
+#define LACE_FNET_TCONV_STRIDE 4
+
+#define LACE_FNET_TCONV_IN_CHANNELS 128
+
+#define LACE_FNET_TCONV_OUT_CHANNELS 128
+
+#define LACE_FNET_GRU_OUT_SIZE 128
+
+#define LACE_FNET_GRU_STATE_SIZE 128
+
+#define LACE_CF1_FILTER_GAIN_A 0.690776f
+#define LACE_CF1_FILTER_GAIN_B 0.000000f
+#define LACE_CF1_LOG_GAIN_LIMIT 1.151293f
+#define LACE_CF1_KERNEL_SIZE 16
+#define LACE_CF1_LEFT_PADDING 8
+#define LACE_CF1_FRAME_SIZE 80
+#define LACE_CF1_OVERLAP_SIZE 40
+#define LACE_CF1_IN_CHANNELS 1
+#define LACE_CF1_OUT_CHANNELS 1
+#define LACE_CF1_NORM_P 2
+#define LACE_CF1_FEATURE_DIM 128
+#define LACE_CF1_MAX_LAG 301
+
+#define LACE_CF1_KERNEL_OUT_SIZE 16
+
+#define LACE_CF1_GAIN_OUT_SIZE 1
+
+#define LACE_CF1_GLOBAL_GAIN_OUT_SIZE 1
+
+#define LACE_CF2_FILTER_GAIN_A 0.690776f
+#define LACE_CF2_FILTER_GAIN_B 0.000000f
+#define LACE_CF2_LOG_GAIN_LIMIT 1.151293f
+#define LACE_CF2_KERNEL_SIZE 16
+#define LACE_CF2_LEFT_PADDING 8
+#define LACE_CF2_FRAME_SIZE 80
+#define LACE_CF2_OVERLAP_SIZE 40
+#define LACE_CF2_IN_CHANNELS 1
+#define LACE_CF2_OUT_CHANNELS 1
+#define LACE_CF2_NORM_P 2
+#define LACE_CF2_FEATURE_DIM 128
+#define LACE_CF2_MAX_LAG 301
+
+#define LACE_CF2_KERNEL_OUT_SIZE 16
+
+#define LACE_CF2_GAIN_OUT_SIZE 1
+
+#define LACE_CF2_GLOBAL_GAIN_OUT_SIZE 1
+
+#define LACE_AF1_FILTER_GAIN_A 1.381551f
+#define LACE_AF1_FILTER_GAIN_B 0.000000f
+#define LACE_AF1_SHAPE_GAIN 1.000000f
+#define LACE_AF1_KERNEL_SIZE 16
+#define LACE_AF1_FRAME_SIZE 80
+#define LACE_AF1_LEFT_PADDING 15
+#define LACE_AF1_OVERLAP_SIZE 40
+#define LACE_AF1_IN_CHANNELS 1
+#define LACE_AF1_OUT_CHANNELS 1
+#define LACE_AF1_NORM_P 2
+#define LACE_AF1_FEATURE_DIM 128
+
+#define LACE_AF1_KERNEL_OUT_SIZE 16
+
+#define LACE_AF1_GAIN_OUT_SIZE 1
+
+typedef struct {
+    LinearLayer lace_pitch_embedding;
+    LinearLayer lace_fnet_conv1;
+    LinearLayer lace_fnet_conv2;
+    LinearLayer lace_fnet_tconv;
+    LinearLayer lace_fnet_gru_input;
+    LinearLayer lace_fnet_gru_recurrent;
+    LinearLayer lace_cf1_kernel;
+    LinearLayer lace_cf1_gain;
+    LinearLayer lace_cf1_global_gain;
+    LinearLayer lace_cf2_kernel;
+    LinearLayer lace_cf2_gain;
+    LinearLayer lace_cf2_global_gain;
+    LinearLayer lace_af1_kernel;
+    LinearLayer lace_af1_gain;
+} LACELayers;
+
+int init_lacelayers(LACELayers *model, const WeightArray *arrays);
+
+#endif /* LACE_DATA_H */
