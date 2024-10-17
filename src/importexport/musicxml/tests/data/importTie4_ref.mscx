@@ -85,6 +85,8 @@
       <repeatRightFontSize>22</repeatRightFontSize>
       <frameFontFace>Palatino,serif</frameFontFace>
       <frameFontSize>22</frameFontSize>
+      <noteLineFontFace>Palatino,serif</noteLineFontFace>
+      <noteLineFontSize>22</noteLineFontSize>
       <glissandoFontFace>Palatino,serif</glissandoFontFace>
       <glissandoFontSize>22</glissandoFontSize>
       <bendFontFace>Palatino,serif</bendFontFace>

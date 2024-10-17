@@ -132,6 +132,7 @@ public:
         TYPE_REST_BEAM,
         TYPE_STRING_TUNINGS,
         TYPE_SYMBOL,
+        TYPE_NOTELINE,
     };
     Q_ENUM(InspectorModelType)
 

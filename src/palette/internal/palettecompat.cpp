@@ -106,6 +106,12 @@ void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
 {
     if (palette.type() == Palette::Type::Guitar) {
         addNewGuitarItems(palette, paletteScore);
+        return;
+    }
+
+    if (palette.type() == Palette::Type::Line) {
+        addNewLineItems(palette);
+        return;
     }
 }
 
@@ -163,6 +169,26 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
         guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_BEND, "pre-bend", 1.25);
         guitarPalette.insertActionIcon(defaultPosition, ActionIconType::GRACE_NOTE_BEND, "grace-note-bend", 1.25);
         guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SLIGHT_BEND, "slight-bend", 1.25);
+    }
+}
+
+void PaletteCompat::addNewLineItems(Palette& linesPalette)
+{
+    bool containsNoteAnchoredLine = false;
+    for (const PaletteCellPtr& cell : linesPalette.cells()) {
+        const ElementPtr element = cell->element;
+        if (!element) {
+            continue;
+        }
+
+        if (element->isActionIcon() && toActionIcon(element.get())->actionType() == ActionIconType::NOTE_ANCHORED_LINE) {
+            containsNoteAnchoredLine = true;
+        }
+    }
+
+    if (!containsNoteAnchoredLine) {
+        int defaultPosition = std::min(20, linesPalette.cellsCount());
+        linesPalette.insertActionIcon(defaultPosition, ActionIconType::NOTE_ANCHORED_LINE, "add-noteline", 2);
     }
 }
 

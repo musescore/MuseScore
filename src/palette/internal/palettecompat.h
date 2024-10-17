@@ -36,6 +36,7 @@ public:
 
 private:
     static void addNewGuitarItems(Palette& guitarPalette, engraving::Score* paletteScore);
+    static void addNewLineItems(Palette& linesPalette);
     static void removeOldItems(Palette& palette);
 };
 } // namespace mu::palette

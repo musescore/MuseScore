@@ -132,6 +132,9 @@ public:
     static NoteDot* createNoteDot(Rest* parent, bool isAccessibleEnabled = true);
     static NoteDot* copyNoteDot(const NoteDot& src);
 
+    static NoteLine* createNoteLine(Note* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<NoteLine> makeNoteLine(Note* parent);
+
     static Page* createPage(RootItem* parent, bool isAccessibleEnabled = true);
 
     static Rest* createRest(Segment* parent, bool isAccessibleEnabled = true);

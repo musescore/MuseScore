@@ -1668,7 +1668,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
         };
 
         bool elementIsStandardBend = element->isActionIcon() && toActionIcon(element)->actionType() == ActionIconType::STANDARD_BEND;
-        bool isLineNoteToNote = (element->isGlissando() || elementIsStandardBend)
+        bool elementIsNoteLine = element->isActionIcon() && toActionIcon(element)->actionType() == ActionIconType::NOTE_ANCHORED_LINE;
+        bool isLineNoteToNote = (element->isGlissando() || elementIsStandardBend || elementIsNoteLine)
                                 && sel.isList() && sel.elements().size() == 2
                                 && sel.elements()[0]->isNote() && sel.elements()[1]->isNote()
                                 && sel.elements()[1]->tick() != sel.elements()[0]->tick();
@@ -2099,6 +2100,8 @@ void NotationInteraction::applyLineNoteToNote(Score* score, Note* note1, Note* n
 
     if (line->isActionIcon() && toActionIcon(line)->actionType() == ActionIconType::STANDARD_BEND) {
         score->addGuitarBend(GuitarBendType::BEND, note1, note2);
+    } else if (line->isActionIcon() && toActionIcon(line)->actionType() == ActionIconType::NOTE_ANCHORED_LINE) {
+        score->addNoteLine();
     } else if (line->isSLine()) {
         SLine* dropLine = ((SLine*)line->clone());
         dropData->dropElement = dropLine;
