@@ -48,7 +48,7 @@ namespace muse::ui {
  *
  * @details Each enum value is a UTF-16-like address of the icon in the icon font.
  *          The current icon-font (MusescoreIcon.ttf) is located in the 'MuseScore/fonts/mscore' folder,
- *          The most actual version can be found by this persistent URL: @link https://www.dropbox.com/s/ip59ren10u69hr7/MusescoreIcon.ttf?dl=0
+ *          The most actual version can be found by this persistent URL: @link https://www.dropbox.com/s/srfpt78uy7aazz1/MusescoreIcon.ttf?dl=0
  */
 
 class IconCode
