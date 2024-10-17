@@ -70,6 +70,11 @@ const UiActionList DiagnosticsActions::m_actions = {
              muse::ui::UiCtxAny,
              muse::shortcuts::CTX_ANY,
              TranslatableString("action", "Show engraving &elements")
+             ),
+    UiAction("diagnostic-show-actions",
+             muse::ui::UiCtxAny,
+             muse::shortcuts::CTX_ANY,
+             TranslatableString("action", "Show &actions list")
              )
 };
 
