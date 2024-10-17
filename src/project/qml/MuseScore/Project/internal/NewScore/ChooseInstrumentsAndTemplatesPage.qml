@@ -140,6 +140,10 @@ Item {
         }
     }
 
+    InstrumentsOnScoreListModel {
+        id: theInstrumentsOnScoreModel
+    }
+
     Loader {
         id: pageLoader
 
@@ -168,6 +172,7 @@ Item {
 
         ChooseInstrumentsPage {
             navigationSection: root.navigationSection
+            instrumentsOnScoreModel: theInstrumentsOnScoreModel
         }
     }
 

@@ -25,10 +25,12 @@ import QtQuick.Layouts 1.15
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import MuseScore.InstrumentsScene 1.0
+import MuseScore.Project 1.0
 
 StyledDialogView {
     id: root
 
+    // required property InstrumentsOnScoreListModel instrumentsOnScoreModel
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
 
@@ -52,6 +54,10 @@ StyledDialogView {
         root.hide()
     }
 
+    InstrumentsOnScoreListModel {
+        id: theInstrumentsOnScoreModel
+    }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 20
@@ -70,6 +76,8 @@ StyledDialogView {
             onSubmitRequested: {
                 root.submit()
             }
+
+            instrumentsOnScoreModel: theInstrumentsOnScoreModel
         }
 
         RowLayout {
