@@ -1385,10 +1385,8 @@ void EditStyle::setHeaderFooterToolTip()
     }
 
     toolTipHeaderFooter += QString("</table></body></html>");
-    showHeader->setToolTip(toolTipHeaderFooter);
-    showHeader->setToolTipDuration(5000);   // leaving the default value of -1 calculates the duration automatically and it takes too long
-    showFooter->setToolTip(toolTipHeaderFooter);
-    showFooter->setToolTipDuration(5000);
+
+    headerFooterMacroInfo->setText(toolTipHeaderFooter);
 }
 
 //---------------------------------------------------------
