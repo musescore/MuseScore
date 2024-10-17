@@ -569,7 +569,7 @@ HorizontalSpacing::CrossBeamType HorizontalSpacing::computeCrossBeamType(Segment
             continue;
         }
         ChordRest* thisCR = toChordRest(e);
-        if (!thisCR->visible() || thisCR->isFullMeasureRest()) {
+        if (!thisCR->visible() || thisCR->isFullMeasureRest() || (thisCR->isRest() && toRest(thisCR)->isGap())) {
             continue;
         }
         if (!thisCR->beam()) {
@@ -582,7 +582,7 @@ HorizontalSpacing::CrossBeamType HorizontalSpacing::computeCrossBeamType(Segment
                 continue;
             }
             ChordRest* nextCR = toChordRest(ee);
-            if (!nextCR->visible() || nextCR->isFullMeasureRest()) {
+            if (!nextCR->visible() || nextCR->isFullMeasureRest() || (thisCR->isRest() && toRest(thisCR)->isGap())) {
                 continue;
             }
             if (!nextCR->beam()) {
