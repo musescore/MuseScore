@@ -159,6 +159,9 @@ public:
     double rightMostEdgeAtHeight(double yAbove, double yBelow) const;
     double leftMostEdgeAtHeight(double yAbove, double yBelow) const;
 
+    double xMostEdgeAtY(const bool isTop, const bool isLeft) const;
+    double leftMostEdgeAtTop() const;
+
     bool contains(const PointF&) const;
     bool intersects(const RectF& rr) const;
     bool intersects(const Shape& other) const;

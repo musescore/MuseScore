@@ -374,6 +374,19 @@ double Shape::leftMostEdgeAtHeight(double yAbove, double yBelow) const
     return edge;
 }
 
+double Shape::leftMostEdgeAtTop() const
+{
+    double edge = DBL_MAX;
+    const double shapeTop = top();
+    for (const ShapeElement& sh : m_elements) {
+        if (muse::RealIsEqual(sh.top(), shapeTop)) {
+            edge = std::min(edge, sh.left());
+        }
+    }
+
+    return edge;
+}
+
 //---------------------------------------------------------
 //   topDistance
 //    p is on top of shape
