@@ -46,6 +46,7 @@ public:
 
     Q_INVOKABLE void addRow();
     Q_INVOKABLE void deleteRow(int row);
+    Q_INVOKABLE bool rowIsEmpty(int row) const;
 
     Q_INVOKABLE void startDrag(int startIndex);
     Q_INVOKABLE void endDrag(int endIndex);
@@ -57,6 +58,7 @@ public:
 
 signals:
     void numPadsChanged();
+    void rowIsEmptyChanged(int row, bool empty);
 
 private:
     enum Roles {
@@ -80,6 +82,8 @@ private:
 
     bool indexIsValid(int index) const;
     void movePad(int fromIndex, int toIndex);
+
+    int numEmptySlotsAtRow(int row) const;
 
     QList<PercussionPanelPadModel*> createDefaultItems();
     QList<PercussionPanelPadModel*> m_padModels;
