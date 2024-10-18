@@ -78,12 +78,11 @@ private:
     void handleBeamAndStemDir(engraving::Beam*& beam);
 
     static bool isWholeMeasureRest(const muse::String& type, const engraving::Fraction dura, const engraving::Fraction mDura);
-    static engraving::TDuration determineDuration(const bool rest, const bool measureRest, const muse::String& type, const int dots,
-                                                  const engraving::Fraction dura, const engraving::Fraction mDura);
+    engraving::TDuration determineDuration(const bool rest, const bool measureRest, const muse::String& type);
 
-    engraving::Chord* findOrCreateChord(const engraving::TDuration duration) const;
-    engraving::Chord* createGraceChord(const engraving::TDuration duration) const;
-    engraving::NoteType graceNoteType(const engraving::TDuration duration) const;
+    engraving::Chord* findOrCreateChord() const;
+    engraving::Chord* createGraceChord() const;
+    engraving::NoteType graceNoteType() const;
 
     void setPitch(const MusicXmlInstruments& instruments, const int octaveShift, const engraving::Instrument* const instrument);
 
@@ -93,7 +92,7 @@ private:
     void setNoteHead();
 
     void addTremolo(engraving::Chord*& tremStart);
-    void addFiguredBassElements(const engraving::Fraction dura);
+    void addFiguredBassElements();
 
     void setDrumset() const;
     void xmlSetDrumsetPitch(const engraving::Staff* staff, engraving::Instrument* instrument);
@@ -103,7 +102,7 @@ private:
     void addLyrics();
     void addLyric(engraving::Lyrics* l, int lyricNo);
 
-    void notePrintSpacingNo(engraving::Fraction& dura);
+    void notePrintSpacingNo();
     void addError(const muse::String& error);
 
     inline engraving::track_idx_t track() const { return m_track + m_voice; }
@@ -120,19 +119,19 @@ private:
     engraving::Note* m_note = nullptr;
 
     // ARGS FROM MusicXmlParserPass2::note
-    //TODO reduce
+    // TODO reduce by creating xml parser context object
     engraving::Measure* m_measure;
     const engraving::Fraction m_sTime;
     const engraving::Fraction m_prevSTime;
     engraving::Fraction& m_missingPrev;
-    engraving::Fraction& m_dura;
+    engraving::Fraction& m_durationFraction;
     engraving::Fraction& m_missingCurr;
     muse::String& m_currentVoice;
-    GraceChordList& m_gcl;
-    size_t& m_gac;
+    GraceChordList& m_graceChordsList;
+    size_t& m_graceAfterCount;
     Beams& m_currBeams;
-    FiguredBassList& m_fbl;
-    int& m_alt;
+    FiguredBassList& m_figuredBassList;
+    int& m_alter;
     MusicXmlTupletStates& m_tupletStates;
     Tuplets& m_tuplets;
     ArpeggioMap& m_arpMap;
@@ -140,8 +139,8 @@ private:
 
     MusicXmlParserLyric m_lyricParser;
     MusicXmlParserNotations m_notationsParser;
-    MusicXmlNoteDuration m_noteDuration;
-    MusicXmlNotePitch m_notePitch;
+    MusicXmlNoteDuration m_noteDurationParser;
+    MusicXmlNotePitch m_notePitchParser;
 
     bool m_cue = false;
     bool m_isSmall = false;
@@ -164,6 +163,7 @@ private:
 
     engraving::Fraction m_noteStartTime;
     engraving::Fraction m_timeMod;
+    engraving::TDuration m_duration;
 };
 }
 #endif // IMPORTMUSICXMLNOTE_H
