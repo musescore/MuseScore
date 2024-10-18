@@ -43,6 +43,8 @@ public:
 
     RehearsalMark(Segment* parent);
 
+    bool isEditAllowed(EditData&) const override;
+
     RehearsalMark* clone() const override { return new RehearsalMark(*this); }
 
     Segment* segment() const { return (Segment*)explicitParent(); }

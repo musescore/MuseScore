@@ -104,6 +104,15 @@ bool Fingering::isEditAllowed(EditData& ed) const
         return false;
     }
 
+    if (ed.key == Key_Left) {
+        return cursor()->column() != 0 || cursor()->hasSelection();
+    }
+
+    if (ed.key == Key_Right) {
+        bool cursorInLastColumn = cursor()->column() == cursor()->curLine().columns();
+        return !cursorInLastColumn || cursor()->hasSelection();
+    }
+
     return TextBase::isEditAllowed(ed);
 }
 
