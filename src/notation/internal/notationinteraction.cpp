@@ -5013,16 +5013,32 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         // search prev chord
         while ((nextSegment = nextSegment->prev1(mu::engraving::SegmentType::ChordRest))) {
             EngravingItem* el = nextSegment->element(track);
-            if (el && el->isChord()) {
+            if (!el) {
+                continue;
+            }
+            if (el->isChord()) {
                 break;
+            } else if (el->isRest()) {
+                mu::engraving::Lyrics* nextLyrics = toChordRest(el)->lyrics(verse, placement);
+                if (nextLyrics) {
+                    break;
+                }
             }
         }
     } else {
         // search next chord
         while ((nextSegment = nextSegment->next1(mu::engraving::SegmentType::ChordRest))) {
             EngravingItem* el = nextSegment->element(track);
-            if (el && el->isChord()) {
+            if (!el) {
+                continue;
+            }
+            if (el->isChord()) {
                 break;
+            } else if (el->isRest()) {
+                mu::engraving::Lyrics* nextLyrics = toChordRest(el)->lyrics(verse, placement);
+                if (nextLyrics) {
+                    break;
+                }
             }
         }
     }
