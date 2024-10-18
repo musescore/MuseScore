@@ -5678,6 +5678,7 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
 
     mu::engraving::EngravingItem* op = dynamic_cast<mu::engraving::EngravingItem*>(oe->parent());
     if (!op || !(op->isSegment() || op->isNote())) {
+        LOGD("navigateToNearText: parent not note or segment.");
         return;
     }
 
@@ -5686,91 +5687,144 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
     ElementType type = ot->type();
     mu::engraving::staff_idx_t staffIdx = ot->staffIdx();
     bool back = direction == MoveDirection::Left;
+    int curTrack = static_cast<int>(oe->track());
+    int minTrack = (curTrack / mu::engraving::VOICES) * mu::engraving::VOICES;
+    int maxTrack = minTrack + mu::engraving::VOICES - 1;
 
-    // get prev/next element now, as current element may be deleted if empty
-    mu::engraving::EngravingItem* el = back ? score()->prevElement() : score()->nextElement();
+    mu::engraving::EngravingItem* el = nullptr;
 
-    // find new note to add text to
-    bool here = false;      // prevent infinite loop (relevant if navigation is allowed to wrap around end of score)
-    while (el) {
-        if (el->isNote()) {
-            Note* n = mu::engraving::toNote(el);
-            if (op->isNote() && n != op) {
-                break;
-            } else if (op->isSegment() && n->chord()->segment() != op) {
-                break;
-            } else if (here) {
+    if (op->isNote()) {
+        // go to next/prev note in same chord, or go to next/prev chord, which may be in another voice
+        Note* origNote = toNote(op);
+        Chord* ch = origNote->chord();
+        if (origNote != (back ? ch->notes().back() : ch->notes().front())) {
+            // find prev/next note in same chord
+            for (auto& i : ch->notes()) {
+                if (i == origNote) {
+                    el = back ? *(&i + 1) : *(&i - 1);
+                    break;
+                }
+            }
+        } else {
+            // find prev/next chord in another voice
+            Segment* seg = ch->segment();
+            if (!seg) {
+                LOGD("navigateToNearText: no segment");
+                return;
+            }
+            int sTrack = back ? curTrack - 1 : curTrack + 1;
+            int eTrack = back ? minTrack : maxTrack;
+            int inc = back ? -1 : 1;
+            for (int track = sTrack; back ? (track >= eTrack) : (track <= eTrack); track += inc) {
+                EngravingItem* e = seg->element(track);
+                if (e && e->isChord()) {
+                    el = back ? toChord(e)->notes().front() : toChord(e)->notes().back();
+                    break;
+                }
+            }
+
+            // find chord in prev/next segments
+            if (!el) {
+                seg = back ? seg->prev1(SegmentType::ChordRest) : seg->next1(SegmentType::ChordRest);
+                sTrack = back ? maxTrack : minTrack;
+                eTrack = back ? minTrack : maxTrack;
+                while (seg) {
+                    for (int track = sTrack; back ? (track >= eTrack) : (track <= eTrack); track += inc) {
+                        EngravingItem* e = seg->element(track);
+                        if (e && e->isChord()) {
+                            el = back ? toChord(e)->notes().front() : toChord(e)->notes().back();
+                            break;
+                        }
+                    }
+
+                    if (el) {
+                        break;
+                    }
+
+                    seg = back ? seg->prev1(SegmentType::ChordRest) : seg->next1(SegmentType::ChordRest);
+                }
+            }
+        }
+    } else if (op->isSegment()) {
+        Segment* seg = toSegment(op);
+        seg = back ? seg->prev1(SegmentType::ChordRest) : seg->next1(SegmentType::ChordRest);
+
+        // go to first segment with a chord or an existing text
+        while (seg) {
+            for (int track = minTrack; track <= maxTrack; ++track) {
+                EngravingItem* e = seg->element(track);
+                if (e && e->isChord()) {
+                    el = e;
+                    break;
+                }
+            }
+            if (el) {
                 break;
             }
-            here = true;
-        } else if (el->isRest() && op->isSegment()) {
-            // skip rests, but still check for infinite loop
-            Rest* r = mu::engraving::toRest(el);
-            if (r->segment() != op) {
-            } else if (here) {
+
+            // this segment only contains rests, check for existing text
+            for (EngravingItem* e : seg->annotations()) {
+                if (e->staffIdx() != staffIdx || e->type() != type) {
+                    continue;
+                }
+                TextBase* nt = mu::engraving::toTextBase(e);
+                if (nt->textStyleType() == textStyleType) {
+                    el = seg->firstElement(staffIdx);
+                    break;
+                }
+            }
+            if (el) {
                 break;
             }
-            here = true;
+
+            seg = back ? seg->prev1(SegmentType::ChordRest) : seg->next1(SegmentType::ChordRest);
         }
-        // get prev/next note
-        score()->select(el);
-        mu::engraving::EngravingItem* el2 = back ? score()->prevElement() : score()->nextElement();
-        // start/end of score reached
-        if (el2 == el) {
-            break;
-        }
-        el = el2;
     }
 
-    if (!el || !el->isNote()) {
-        // nothing found, exit cleanly
-        if (op->selectable()) {
-            select({ op });
-        } else {
-            clearSelection();
-        }
+    if (!el) {
         return;
     }
 
-    Note* nn = mu::engraving::toNote(el);
-
-    // go to note
-    if (nn) {
-        score()->select(nn, SelectType::SINGLE);
-    }
-
     // get existing text to edit
-    el = nullptr;
+    EngravingItem* textEl = nullptr;
     if (op->isNote()) {
+        if (!el->isNote()) {
+            LOGD("navigateToNearText: new element is not Note.");
+            return;
+        }
         // check element list of new note
-        for (mu::engraving::EngravingItem* e : nn->el()) {
+        for (mu::engraving::EngravingItem* e : toNote(el)->el()) {
             if (e->type() != type) {
                 continue;
             }
             TextBase* nt = mu::engraving::toTextBase(e);
             if (nt->textStyleType() == textStyleType) {
-                el = e;
+                textEl = e;
                 break;
             }
         }
     } else if (op->isSegment()) {
+        if (!el->isChordRest()) {
+            LOGD("navigateToNearText: new element is not ChordRest.");
+            return;
+        }
         // check annotation list of new segment
-        mu::engraving::Segment* ns = nn->chord()->segment();
+        mu::engraving::Segment* ns = toChordRest(el)->segment();
         for (mu::engraving::EngravingItem* e : ns->annotations()) {
             if (e->staffIdx() != staffIdx || e->type() != type) {
                 continue;
             }
             TextBase* nt = mu::engraving::toTextBase(e);
             if (nt->textStyleType() == textStyleType) {
-                el = e;
+                textEl = e;
                 break;
             }
         }
     }
 
-    if (el) {
+    if (textEl) {
         // edit existing text
-        TextBase* text = dynamic_cast<TextBase*>(el);
+        TextBase* text = dynamic_cast<TextBase*>(textEl);
 
         if (text) {
             startEditText(text);
@@ -5783,7 +5837,7 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
         // but it pre-fills the text
         // would be better to create empty tempo element
         if (type != ElementType::TEMPO_TEXT) {
-            addTextToItem(textStyleType, selection()->element());
+            addTextToItem(textStyleType, el);
         }
     }
 }
