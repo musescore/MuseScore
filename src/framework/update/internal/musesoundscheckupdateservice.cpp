@@ -22,8 +22,6 @@
 
 #include "musesoundscheckupdateservice.h"
 
-#include <QSslSocket>
-
 #include <QBuffer>
 #include <QJsonParseError>
 #include <QJsonObject>
@@ -195,6 +193,8 @@ muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::parseRelease(const QByte
     result.val.additionInfo.insert({ "features", Val(featuresList) });
 
     result.val.actionTitle = contentLocaleObj.value("action_title").toString().toStdString();
+    result.val.cancelTitle = contentLocaleObj.value("cancel_title").toString().toStdString();
+
     QJsonObject actionsObj = releaseObj.value("actions").toObject();
 
 #ifdef Q_OS_WIN

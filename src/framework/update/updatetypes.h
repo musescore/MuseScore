@@ -54,6 +54,7 @@ struct ReleaseInfo {
     ValMap additionInfo;
 
     std::string actionTitle;        // title of action button
+    std::string cancelTitle;        // title of cancel button
     ValList actions;                // open app or web page url, try in order
 
     bool isValid() const
