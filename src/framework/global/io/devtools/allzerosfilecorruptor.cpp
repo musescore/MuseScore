@@ -19,34 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_PROJECTERRORS_H
-#define MU_PROJECT_PROJECTERRORS_H
+#include "allzerosfilecorruptor.h"
 
-#include "types/ret.h"
+using namespace muse::io;
 
-namespace mu::project {
-enum class Err {
-    Undefined       = int(muse::Ret::Code::Undefined),
-    NoError         = int(muse::Ret::Code::Ok),
-    UnknownError    = int(muse::Ret::Code::ProjectFirst),
-
-    NoProjectError,
-    NoPartsError,
-    CorruptionError,
-    CorruptionUponOpenningError,
-    CorruptionUponSavingError,
-
-    FileOpenError,
-    InvalidCloudScoreId,
-
-    UnsupportedUrl,
-    MalformedOpenScoreUrl,
-};
-
-inline muse::Ret make_ret(Err e)
+AllZerosFileCorruptor::AllZerosFileCorruptor(const path_t& filePath)
+    : File(filePath)
 {
-    return muse::Ret(static_cast<int>(e));
-}
 }
 
-#endif // MU_PROJECT_PROJECTERRORS_H
+size_t AllZerosFileCorruptor::writeData(const uint8_t*, size_t len)
+{
+    // Ignore the actual data and write all zeros so as to corrupt the file.
+    uint8_t* corruptData = new uint8_t[len];
+    memset(corruptData, 0, len);
+    return File::writeData(corruptData, len);
+}
