@@ -29,6 +29,7 @@ RowLayout {
     id: root
 
     property alias defaultButtonName: openMuseHubButton.text
+    property alias cancelButtonName: cancelBtn.text
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "UpdateBottomPanel"
@@ -45,10 +46,9 @@ RowLayout {
     }
 
     FlatButton {
+        id: cancelBtn
         Layout.alignment: Qt.AlignVCenter
         Layout.preferredWidth: (root.width - root.spacing) / 2
-
-        text: qsTrc("update", "No thanks")
 
         navigation.name: "NoButton"
         navigation.panel: root.navigationPanel

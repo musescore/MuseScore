@@ -39,6 +39,7 @@ using namespace muse::actions;
 
 static const char* DEFAULT_IMAGE_URL = "qrc:/qml/Muse/Update/resources/muse_sounds_promo.png";
 static const TranslatableString DEFAULT_ACTION_TITLE("update", "Take me to Muse Hub");
+static const TranslatableString DEFAULT_CANCEL_TITLE("update", "No thanks");
 
 void MuseSoundsCheckUpdateScenario::delayedInit()
 {
@@ -150,6 +151,12 @@ void MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info)
         query.addParam("actionTitle", Val(DEFAULT_ACTION_TITLE.qTranslated()));
     } else {
         query.addParam("actionTitle", Val(QString::fromStdString(info.actionTitle)));
+    }
+
+    if (info.cancelTitle.empty()) {
+        query.addParam("cancelTitle", Val(DEFAULT_CANCEL_TITLE.qTranslated()));
+    } else {
+        query.addParam("cancelTitle", Val(QString::fromStdString(info.cancelTitle)));
     }
 
     if (info.imageUrl.empty()) {
