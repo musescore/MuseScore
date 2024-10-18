@@ -22,8 +22,6 @@
 
 #include "musesoundscheckupdateservice.h"
 
-#include <QSslSocket>
-
 #include <QBuffer>
 #include <QJsonParseError>
 #include <QJsonObject>
@@ -73,8 +71,10 @@ muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::checkForUpdate()
     clear();
 
     QBuffer buff;
+    std::string url = configuration()->checkForMuseSamplerUpdateUrl();
     m_networkManager = networkManagerCreator()->makeNetworkManager();
-    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(configuration()->checkForMuseSamplerUpdateUrl()), &buff,
+
+    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(url), &buff,
                                               configuration()->updateHeaders());
 
     if (!getUpdateInfo) {
@@ -195,6 +195,8 @@ muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::parseRelease(const QByte
     result.val.additionInfo.insert({ "features", Val(featuresList) });
 
     result.val.actionTitle = contentLocaleObj.value("action_title").toString().toStdString();
+    result.val.cancelTitle = contentLocaleObj.value("cancel_title").toString().toStdString();
+
     QJsonObject actionsObj = releaseObj.value("actions").toObject();
 
 #ifdef Q_OS_WIN
