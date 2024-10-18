@@ -274,9 +274,12 @@ PointF Trill::linePos(Grip grip, System** system) const
 
         // Stop trill line before clefs
         if (clefSeg) {
-            EngravingItem* clef = clefSeg->element(track2());
-            if (clef) {
-                clefOffset = segment->pageX() - clef->pageX();
+            EngravingItem* clefItem = clefSeg->element(track2());
+            if (clefItem && clefItem->isClef()) {
+                Clef* clef = toClef(clefItem);
+                SymId clefSym = ClefInfo::symId(clef->clefType());
+                Shape clefShape = symShapeWithCutouts(clefSym).translated(clef->pos());
+                clefOffset = segment->pageX() - clef->pageX() + clefShape.leftMostEdgeAtTop();
             }
         }
 
