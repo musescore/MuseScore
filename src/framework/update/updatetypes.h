@@ -54,6 +54,7 @@ struct ReleaseInfo {
     ValMap additionInfo;
 
     std::string actionTitle;        // title of action button
+    std::string cancelTitle;        // title of cancel button
     ValList actions;                // open app or web page url, try in order
 
     bool isValid() const
@@ -99,6 +100,7 @@ static inline ValMap releaseInfoToValMap(const ReleaseInfo& info)
         { "additionalInfo", Val(info.additionInfo) },
         { "imageUrl", Val(info.imageUrl) },
         { "actionTitle", Val(info.actionTitle) },
+        { "cancelTitle", Val(info.cancelTitle) },
         { "actions", Val(info.actions) },
     };
 }
@@ -114,6 +116,7 @@ static inline ReleaseInfo releaseInfoFromValMap(const ValMap& map)
     info.additionInfo = map.at("additionalInfo").toMap();
     info.imageUrl = map.at("imageUrl").toString();
     info.actionTitle = map.at("actionTitle").toString();
+    info.cancelTitle = map.at("cancelTitle").toString();
     info.actions = map.at("actions").toList();
 
     return info;
