@@ -742,7 +742,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
         }
 
         for (MuseScoreView* v : score->m_viewer) {
-            v->adjustCanvasPosition(el);
+            v->adjustCanvasPosition(el, CanvasMoveCause::SelectionChange);
         }
         if (!score->selection().isRange()) {
             score->m_selection.setState(SelState::RANGE);
