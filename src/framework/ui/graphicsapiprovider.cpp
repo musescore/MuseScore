@@ -57,7 +57,7 @@ static const std::vector<GraphicsApiProvider::Api > ALLOWED_APIS = {
 #endif
 
 static const std::vector<std::string> BAD_MESSAGES = {
-    "Failed to build graphics pipeline state"
+    "Failed to build graphics pipeline state",
     "Failed to create RHI",
     "Failed to build texture render target for layer",
     "Framebuffer incomplete:"
