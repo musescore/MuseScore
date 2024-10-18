@@ -307,7 +307,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
                 MeasureLayout::removeSystemHeader(m);
             }
             if (m->trailer()) {
-                MeasureLayout::removeSystemTrailer(m, ctx);
+                MeasureLayout::removeSystemTrailer(m);
             }
 
             if (m->tick() >= ctx.state().startTick() && m->tick() <= ctx.state().endTick()) {
@@ -320,7 +320,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
                 } else {
                     MeasureLayout::createEndBarLines(m, false, ctx);
                     MeasureLayout::computePreSpacingItems(m, ctx);
-                    MeasureLayout::computeWidth(m, ctx, minTicks, maxTicks, 1);
+                    HorizontalSpacing::updateSpacingForLastAddedMeasure(system);
                     ww = m->width();
                     MeasureLayout::layoutMeasureElements(m, ctx);
                 }
@@ -384,7 +384,7 @@ void ScoreHorizontalViewLayout::layoutSegmentsWithDuration(Measure* m, const std
     Segment* current = findFirstEnabledSegment(m);
 
     auto [spacing, width] = computeCellWidth(current, visibleParts);
-    currentXPos = HorizontalSpacing::computeFirstSegmentXPosition(m, current, 1.0);
+    currentXPos = m->style().styleMM(Sid::barNoteDistance);
     current->mutldata()->setPosX(currentXPos);
     current->setWidth(width);
     current->setSpacing(spacing);
@@ -481,7 +481,7 @@ std::pair<double, double> ScoreHorizontalViewLayout::computeCellWidth(const Segm
     }
 
     if (nextSeg) {
-        return { 0, HorizontalSpacing::minHorizontalDistance(s, nextSeg, false, 1.0) };
+        return { 0, HorizontalSpacing::minHorizontalDistance(s, nextSeg, 1.0) };
     }
 
     return { 0, s->minRight() };
