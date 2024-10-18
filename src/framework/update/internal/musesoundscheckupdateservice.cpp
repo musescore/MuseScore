@@ -71,8 +71,10 @@ muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::checkForUpdate()
     clear();
 
     QBuffer buff;
+    std::string url = configuration()->checkForMuseSamplerUpdateUrl();
     m_networkManager = networkManagerCreator()->makeNetworkManager();
-    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(configuration()->checkForMuseSamplerUpdateUrl()), &buff,
+
+    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(url), &buff,
                                               configuration()->updateHeaders());
 
     if (!getUpdateInfo) {
