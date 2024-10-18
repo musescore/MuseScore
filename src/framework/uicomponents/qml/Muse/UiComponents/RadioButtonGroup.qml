@@ -27,7 +27,7 @@ StyledListView {
 
     property alias radioButtonGroup: buttonGroup
 
-    implicitHeight: contentHeight
+    implicitHeight: Math.max(1, contentItem.childrenRect.height)
     implicitWidth: contentWidth
 
     spacing: 4

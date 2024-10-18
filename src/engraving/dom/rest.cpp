@@ -442,7 +442,7 @@ int Rest::computeVoiceOffset(int lines, LayoutData* ldata) const
         }
     }
 
-    if (offsetVoices && staff()->mergeMatchingRests()) {
+    if (offsetVoices && staff()->shouldMergeMatchingRests()) {
         // automatically merge matching rests if nothing in any other voice
         // this is not always the right thing to do do, but is useful in choral music
         // and can be enabled via a staff property
