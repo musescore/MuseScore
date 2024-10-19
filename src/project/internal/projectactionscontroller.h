@@ -129,7 +129,6 @@ private:
 
     muse::Ret canSaveProject() const;
     bool saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
-    void retrySaveProjectLocally(const muse::actions::ActionData& args);
 
     struct AudioFile {
         QString format;
