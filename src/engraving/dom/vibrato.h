@@ -77,6 +77,7 @@ public:
     Vibrato* clone() const override { return new Vibrato(*this); }
 
     LineSegment* createLineSegment(System* parent) override;
+    PointF linePos(Grip grip, System** system) const override;
 
     void undoSetVibratoType(VibratoType val);
     void setVibratoType(VibratoType tt) { m_vibratoType = tt; }
