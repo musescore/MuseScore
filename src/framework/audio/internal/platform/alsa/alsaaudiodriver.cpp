@@ -124,7 +124,7 @@ bool AlsaDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     snd_pcm_t* handle;
     int rc = snd_pcm_open(&handle, m_deviceName.c_str(), SND_PCM_STREAM_PLAYBACK, 0);
     if (rc < 0) {
-        LOGE() << "Unable to open device: " << outputDevice() << ", err code: " << rc;
+        LOGE() << "Unable to open device: " << name() << ", err code: " << rc;
         return false;
     }
 
