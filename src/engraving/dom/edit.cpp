@@ -6151,6 +6151,17 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         if (lb->layoutBreakType() == LayoutBreakType::SECTION) {
             doUndoAddElement(lb);
             MeasureBase* m = lb->measure();
+
+            // add Key Signature on Section Break
+            Fraction tick = m->endTick();
+            int ticks = tick.ticks();
+            for (Staff* staff : score()->staves()) {
+                KeyList* kl = staff->keyList();
+                if (kl->currentKeyTick(ticks) != ticks) {
+                    KeySigEvent ks = kl->key(ticks);
+                    undoChangeKeySig(staff, tick, ks);
+                }
+            }
             if (m->isBox()) {
                 // for frames, use linked frames
                 LinkedObjects* links = m->links();
