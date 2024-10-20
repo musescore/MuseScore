@@ -968,6 +968,12 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         return;
     }
 
+    if (interaction->selection()->isNone()) {
+        interaction->moveSelection(direction, MoveSelectionType::EngravingItem);
+        playSelectedElement(true);
+        return;
+    }
+
     const EngravingItem* selectedElement = interaction->selection()->element();
     bool playChord = false;
 
@@ -985,8 +991,6 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             }
             interaction->moveSelection(direction, MoveSelectionType::String);
             return;
-        } else if (interaction->selection()->isNone()) {
-            interaction->selectFirstElement(false);
         } else {
             interaction->movePitch(direction, quickly ? PitchMode::OCTAVE : PitchMode::CHROMATIC);
         }
@@ -1034,9 +1038,6 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         if (selectedElement && selectedElement->isTextBase()) {
             interaction->nudge(direction, quickly);
         } else {
-            if (interaction->selection()->isNone()) {
-                interaction->selectFirstElement(false);
-            }
             interaction->moveSelection(direction, quickly ? MoveSelectionType::Measure : MoveSelectionType::Chord);
             playChord = true;
         }
