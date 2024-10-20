@@ -1539,7 +1539,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="826"/>
         <source>Shown as:</source>
-        <translation>Megjelenítés:</translation>
+        <translation>Megjelenítés mint:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="845"/>
@@ -2493,7 +2493,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2352"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2655"/>
         <source>Show on first page</source>
-        <translation>Mutasd az első oldalon.</translation>
+        <translation>Megjelenítés az első oldalon.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2372"/>
@@ -2551,7 +2551,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2977"/>
         <source>Show first</source>
-        <translation>Első ütemszám</translation>
+        <translation>Megjelenítése elsőként</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2984"/>
@@ -2661,7 +2661,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3166"/>
         <source>Show measure number range at multimeasure rests</source>
-        <translation>Több ütemes szüneteknél az ütemszám-tartomány mutatása</translation>
+        <translation>Több ütemes szüneteknél az ütemszám-tartomány megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3383"/>
@@ -3114,7 +3114,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5814"/>
         <source>Rests (multiple voices)</source>
-        <translation>Szünetek (többhangsor)</translation>
+        <translation>Szünetek (többszólamú)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5820"/>
@@ -3160,7 +3160,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7324"/>
         <source>Do not show arpeggios in standard notation when displayed in tablature</source>
-        <translation>Ne mutassa az arpeggiót a hagyományos kottán, ha a tabulatúrán látszik</translation>
+        <translation>Ne jelenítése meg az arpeggiót a hagyományos kottán, ha a tabulatúrán látszik</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7572"/>
@@ -4709,7 +4709,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5108"/>
         <source>Reset &apos;Show repeat barline tips (“winged” repeats)&apos; value</source>
-        <translation>„Ismétlővonalak végénél mutasson mutatójeleket (szárnyas ismétlések)” alaphelyzetbe</translation>
+        <translation>„Ismétlővonalak végénél jelenítésen meg mutatójeleket (szárnyas ismétlések)” alaphelyzetbe</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5216"/>
@@ -4887,17 +4887,17 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13870"/>
         <source>Show ties only</source>
-        <translation>Csak az átkötőíveket mutassa</translation>
+        <translation>Csak az átkötőíveket jelenítése meg</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13877"/>
         <source>Show initial fret mark only</source>
-        <translation>Csak a kezdeti érintőjelet mutassa</translation>
+        <translation>Csak a kezdeti érintőjelet jelenítése meg</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13893"/>
         <source>Only show at the start of a system</source>
-        <translation>Megjelenítés csak a sorcsoport kezdeténél</translation>
+        <translation>Csak a sorcsoport kezdeténél jelenítése meg</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13907"/>
@@ -5024,7 +5024,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="840"/>
         <source>Show ‘1’ on 1-measure repeats</source>
-        <translation>„1” mutatása 1-ütemes ismétléseknél</translation>
+        <translation>„1” megjelenítése 1-ütemes ismétléseknél</translation>
     </message>
 </context>
 <context>
@@ -5188,7 +5188,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="99"/>
         <source>Measure duration</source>
-        <translation>Ütem időtartama</translation>
+        <translation>Ütem ritmusértéke</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="114"/>
@@ -5566,7 +5566,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="75"/>
         <source>Same duration</source>
-        <translation>Azonos hosszúság</translation>
+        <translation>Azonos ritmusérték</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="40"/>
@@ -5654,7 +5654,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="103"/>
         <source>Same duration:</source>
-        <translation>Azonos hosszúság:</translation>
+        <translation>Azonos ritmusérték:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="61"/>
@@ -5889,7 +5889,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="56"/>
         <source>Appearance (visual only; will not affect actual measure duration)</source>
-        <translation>Megjelenés (csak vizuális; nem befolyásolja az ütem tényleges hosszát)</translation>
+        <translation>Megjelenítés (csak vizuális; nem befolyásolja az ütem tényleges ritmusértékét)</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="65"/>
@@ -6314,7 +6314,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="35"/>
         <source>Duration:</source>
-        <translation>Hosszúság:</translation>
+        <translation>Ritmusérték:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="45"/>
@@ -6385,7 +6385,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="132"/>
         <source>Chord/rest duration</source>
-        <translation>Akkord/szünet értéke</translation>
+        <translation>Akkord/szünet ritmusértéke</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="93"/>
@@ -6708,7 +6708,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="289"/>
         <source>Halve duration</source>
-        <translation>Felezett hosszúság</translation>
+        <translation>Felezett ritmusérték</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="295"/>
@@ -6738,12 +6738,12 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="328"/>
         <source>Paste &amp;half duration</source>
-        <translation>Felezett hosszúság beillesztése</translation>
+        <translation>Felezett ritmusérték beillesztése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="334"/>
         <source>Paste &amp;double duration</source>
-        <translation>Kétszeres hosszúság beillesztése</translation>
+        <translation>Kétszeres ritmusérték beillesztése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="346"/>
@@ -7315,12 +7315,12 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="186"/>
         <source>Go to next staff or voice</source>
-        <translation>Ugrás a következő kottasorba vagy szólamra</translation>
+        <translation>Ugrás a következő kottasorra vagy szólamra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="192"/>
         <source>Go to previous staff or voice</source>
-        <translation>Ugrás az előző kottasorba vagy szólamra</translation>
+        <translation>Ugrás az előző kottasorra vagy szólamra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="198"/>
@@ -7430,12 +7430,12 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="329"/>
         <source>Paste half duration</source>
-        <translation>Felezett hosszúság beillesztése</translation>
+        <translation>Felezett ritmusérték beillesztése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="335"/>
         <source>Paste double duration</source>
-        <translation>Kétszeres hosszúság beillesztése</translation>
+        <translation>Kétszeres ritmusérték beillesztése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="347"/>
@@ -8025,7 +8025,7 @@ x-magasságának %-a)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1493"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1494"/>
         <source>Select to end of measure</source>
-        <translation>kijelölés az ütem végéig</translation>
+        <translation>Kijelölés az ütem végéig</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1499"/>
@@ -8309,7 +8309,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1966"/>
         <source>Show/hide empty staves</source>
-        <translation>Üres sorok mutatása/elrejtése</translation>
+        <translation>Üres sorok megjelenítése/elrejtése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1972"/>
@@ -8541,37 +8541,37 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2505"/>
         <source>Show element bounding rectangles</source>
-        <translation>Show element bounding rectangles</translation>
+        <translation>Elemeket határoló téglalapok megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2511"/>
         <source>Color element shapes</source>
-        <translation>Color element shapes</translation>
+        <translation>Színes elem alakzatok</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2517"/>
         <source>Show segment shapes</source>
-        <translation>Show segment shapes</translation>
+        <translation>Szegmens alakzatok megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2523"/>
         <source>Color segment shapes</source>
-        <translation>Color segment shapes</translation>
+        <translation>Színes elem alakzatok</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2529"/>
         <source>Show skylines</source>
-        <translation>Show skylines</translation>
+        <translation>Légvonalak megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2535"/>
         <source>Show system bounding rectangles</source>
-        <translation>Show system bounding rectangles</translation>
+        <translation>Sorcsoport-határoló téglalapok megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2541"/>
         <source>Show corrupted measures</source>
-        <translation>Mutassa a hibás ütemeket</translation>
+        <translation>Hibás ütemeket megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1953"/>
@@ -9247,7 +9247,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="283"/>
         <source>Double duration</source>
-        <translation>Kétszeres hosszúság</translation>
+        <translation>Kétszeres ritmusérték</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1576"/>
@@ -10000,7 +10000,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2057"/>
         <source>Toggle note input mode: insert (increases measure duration)</source>
-        <translation>Hangjegybeviteli mód váltása: beszúrás (növeli a kottasor hosszát)</translation>
+        <translation>Hangjegybeviteli mód váltása: beszúrás (növeli a kottasor ritmusértékét)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2063"/>
@@ -10117,12 +10117,12 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="37"/>
         <source>Show batch tests…</source>
-        <translation>Batch tesztek mutatása...</translation>
+        <translation>Batch tesztek megjelenítése...</translation>
     </message>
     <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="42"/>
         <source>Show &amp;scripts…</source>
-        <translation>Parancsfájlok mutatása...</translation>
+        <translation>&amp;Parancsfájlok megjelenítése...</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/internal/instrumentsuiactions.cpp" line="38"/>
@@ -10174,7 +10174,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="52"/>
         <source>Show g&amp;raphics info…</source>
-        <translation type="unfinished"/>
+        <translation>G&amp;rafikai információk megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="57"/>
@@ -10775,7 +10775,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="208"/>
         <source>&amp;Show</source>
-        <translation>Megjelenítés</translation>
+        <translation>&amp;Megjelenítés</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="213"/>
@@ -11023,7 +11023,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="59"/>
         <source>Default duration:</source>
-        <translation>Alapértelmezett időtartam:</translation>
+        <translation>Alapértelmezett ritmusérték:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="82"/>
@@ -11941,7 +11941,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3160"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
-        <translation>%1; Hangmagasság: %2; Hossz: %3%4%5</translation>
+        <translation>%1; Hangmagasság: %2; Ritmusérték: %3%4%5</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3189"/>
@@ -12030,7 +12030,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/rest.cpp" line="748"/>
         <source>%1; Duration: %2; %3</source>
-        <translation>%1; Hosszúság: %2; %3</translation>
+        <translation>%1; Ritmusérték: %2; %3</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/segment.cpp" line="2393"/>
@@ -13651,17 +13651,17 @@ A 2.x verzió letöltéséhez keresse fel a &lt;a href=&quot;%1&quot;&gt;MuseSco
         <location filename="../../src/engraving/dom/check.cpp" line="215"/>
         <source>&lt;b&gt;Voice too long&lt;/b&gt;: %1, measure %2, staff %3, voice %4. Found: %5. Expected: %6.</source>
         <extracomment>%1 describes in which score the corruption is (either `Full score` or `&quot;[part name]&quot; part score`)</extracomment>
-        <translation>&lt;b&gt;Túl hosszú hang&lt;/b&gt;: %1, %2. ütem, %3. kotta, %4. hang. Találva: %4. Várt: %5.</translation>
+        <translation>&lt;b&gt;Túl hosszú szólam&lt;/b&gt;: %1, %2. ütem, %3. kotta, %4. szólam. Találva: %4. Elvárt: %5.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="82"/>
         <source>Voice %1 color</source>
-        <translation>%1. hang színe</translation>
+        <translation>%1. szólam színe</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="96"/>
         <source>All voices color</source>
-        <translation>Minden szólam színe</translation>
+        <translation>Az összes szólam színe</translation>
     </message>
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="109"/>
@@ -18325,7 +18325,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/StandardDialogPanel.qml" line="204"/>
         <source>Don’t show this message again</source>
-        <translation>Ne mutassa többet ezt az üzenetet</translation>
+        <translation>Ne jelenítse meg többet ezt az üzenetet</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/DirectoriesTopPanel.qml" line="89"/>
@@ -18629,12 +18629,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.cpp" line="91"/>
         <source>Show less…</source>
-        <translation>Mutasson kevesebbet…</translation>
+        <translation>Kevesebb megjelenítése…</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.cpp" line="91"/>
         <source>Show more…</source>
-        <translation>Mutasson többet…</translation>
+        <translation>Több megjelenítése…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="73"/>
@@ -18664,7 +18664,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="128"/>
         <source>Don’t show again</source>
-        <translation>Ne mutassa többet</translation>
+        <translation>Ne jelenítse meg többet</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PdfSettingsPage.qml" line="51"/>
@@ -18838,7 +18838,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/internal/StandardDialog.qml" line="51"/>
         <source>Show details</source>
-        <translation>Részletek be</translation>
+        <translation>Részletek megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="132"/>
@@ -19095,7 +19095,7 @@ váltások</translation>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="735"/>
         <source>Simplify
 durations</source>
-        <translation>Időtartamok
+        <translation>Ritmusértékek
 egyszerűsítése</translation>
     </message>
     <message>
@@ -19911,7 +19911,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="81"/>
         <source>Duration</source>
-        <translation>Hosszúság</translation>
+        <translation>Ritmusérték</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="88"/>
@@ -20353,7 +20353,7 @@ felismerése</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangeStyleTab.qml" line="49"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineWithHooksCommonStyleSettings.qml" line="49"/>
         <source>Show line</source>
-        <translation>Vonal mutatása</translation>
+        <translation>Vonal megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/OttavaStyleSettings.qml" line="51"/>
@@ -20430,7 +20430,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/mmrests/MMRestSettings.qml" line="48"/>
         <source>Show number</source>
-        <translation>Mutassa a számot</translation>
+        <translation>Szám megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="52"/>
@@ -20516,7 +20516,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="148"/>
         <source>Override visual duration</source>
-        <translation>Megjelenített érték felülírása</translation>
+        <translation>Megjelenített ritmusérték felülírása</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="159"/>
@@ -20570,7 +20570,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/NoteheadTypeSelector.qml" line="33"/>
         <source>Notehead duration</source>
-        <translation>Kottafej időérték</translation>
+        <translation>Kottafej ritmusértéke</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/NoteheadTypeSelector.qml" line="40"/>
@@ -20787,7 +20787,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="135"/>
         <source>Show courtesy time signature on previous system</source>
-        <translation>Rakjon figyelmeztető ütemmutatót az előző sorcsoportba</translation>
+        <translation>Figyelmeztető ütemmutató megjelenítése az előző sorcsoportba</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="146"/>
@@ -20862,7 +20862,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/HideEmptyStavesSettings.qml" line="68"/>
         <source>Show brackets when spanning a single staff</source>
-        <translation>Mindig mutassa az egysoros klammereket</translation>
+        <translation>Mindig jelenítse meg az egysoros klammereket</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="50"/>
@@ -20872,7 +20872,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="77"/>
         <source>Show options for hiding empty staves</source>
-        <translation>Mutassa az üres sorok elrejtésének beállításait</translation>
+        <translation>Üres sorok elrejtése beállításainak megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="107"/>
@@ -22455,7 +22455,7 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="209"/>
         <source>Show/hide toolbar buttons</source>
-        <translation>Eszköztár gombjainak mutatása/elrejtése</translation>
+        <translation>Eszköztár gombjainak megjelenítése/elrejtése</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml" line="60"/>
@@ -23964,7 +23964,7 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="926"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1294"/>
         <source>Chord/rest duration</source>
-        <translation>Akkord/szünet értéke</translation>
+        <translation>Akkord/szünet ritmusérték</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1035"/>
@@ -24258,7 +24258,7 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3073"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3102"/>
         <source>Show all</source>
-        <translation>Mindent mutat</translation>
+        <translation>Összes megjelenítése</translation>
     </message>
 </context>
 <context>
@@ -24479,7 +24479,7 @@ A Mastering MuseScore emellett egy támogató zenész közösséget is kínál, 
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="152"/>
         <source>Show grid</source>
-        <translation>Mutasd a rácsot</translation>
+        <translation>Rács megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="111"/>
@@ -28322,7 +28322,7 @@ palettafájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="75"/>
         <source>Please note that the appearance of your score will change due to improvements we have made to default settings for beaming, ties, slurs, system objects and horizontal spacing.</source>
-        <translation>Felhívjuk a figyelmet, hogy a kotta megjelenése meg fog változni, mivel több funkció is tovább lett fejlesztve a gerendák, kötőívek, legato-ívek, sorcsoportelemek és vízszintes elrendezés tekintetében.</translation>
+        <translation>Felhívjuk a figyelmet, hogy a kotta megjelenítése meg fog változni, mivel több, a gerendákkal, kötőívekkel, legato-ívekkel, sorcsoportelemekkel és vízszintes elrendezéssel kapcsolatos funkciót is továbbfejlesztettünk.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>
@@ -28460,7 +28460,7 @@ palettafájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TempoSettings.qml" line="95"/>
         <source>Show tempo marking on my score</source>
-        <translation>Legyen tempójelzés a kottán</translation>
+        <translation>Tempójelzés megjelenítése a kottán</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="48"/>
@@ -29563,7 +29563,7 @@ palettafájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="137"/>
         <source>Save all</source>
-        <translation>Az összes mentése</translation>
+        <translation>Összes mentése</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="138"/>
@@ -29736,7 +29736,7 @@ palettafájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/ReleaseNotesView.qml" line="80"/>
         <source>Read the %1 release notes</source>
-        <translation>A %1 kiadási megjegyzéseinek elolvasása</translation>
+        <translation>A %1 kiadás tájékoztatójának elolvasása</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="51"/>
@@ -29791,7 +29791,7 @@ palettafájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="114"/>
         <source>Select the options you want remembered in your new workspace</source>
-        <translation>Válassza ki, hogy mely opciókat szeretné rögzíteni az új munkaterületen</translation>
+        <translation>Válassza ki, hogy mely beállításokra emlékezzen az új munkaterületen</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="133"/>

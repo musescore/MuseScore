@@ -1519,7 +1519,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="686"/>
         <source>Show fingering in tablature</source>
-        <translation>Mostra diteggiatura nell&apos;intavolatura</translation>
+        <translation>Mostra diteggiatura nella tablatura</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="20"/>
@@ -2728,7 +2728,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3853"/>
         <source>Hide TAB clefs after the first system where they appear</source>
-        <translation>Nascondi tutte le chiavi dell&apos;intavolatura dopo il primo sistema in cui compaiono</translation>
+        <translation>Nascondi chiavi della TAB dopo il primo sistema in cui compaiono</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3860"/>
@@ -2738,12 +2738,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3873"/>
         <source>Standard TAB clef</source>
-        <translation>Chiave d&apos;intavolatura standard</translation>
+        <translation>Chiave TAB standard</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3880"/>
         <source>Serif TAB clef</source>
-        <translation>Chiave d&apos;intavolatura Serif</translation>
+        <translation>Chiave TAB Serif</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3893"/>
@@ -4161,12 +4161,12 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9965"/>
         <source>Line thickness on tablature staves:</source>
-        <translation>Spessore della linea delle intavolature</translation>
+        <translation>Spessore della linea sui righi di tablatura:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10003"/>
         <source>Reset &apos;Line thickness on tablature staves&apos; value</source>
-        <translation>Ripristina valore &apos;Spessore della linea dell&apos;intavolatura&apos;</translation>
+        <translation>Ripristina valore &apos;Spessore della linea sui righi di tablatura&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10348"/>
@@ -4751,7 +4751,7 @@ altezza x del testo):</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9871"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13372"/>
         <source>Tablature</source>
-        <translation>Intavolatura</translation>
+        <translation>Tablatura</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13805"/>
@@ -10509,7 +10509,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/aboutmodel.cpp" line="41"/>
         <source>Unstable prerelease for %1</source>
-        <translation>Prerelease instabile della versione: %1</translation>
+        <translation>Prerelease instabile della versione %1</translation>
     </message>
 </context>
 <context>
@@ -14781,22 +14781,22 @@ Tasto %1 sulle corde %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="721"/>
         <source>Tablature</source>
-        <translation>Intavolatura</translation>
+        <translation>Tablatura</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="722"/>
         <source>Tablature 4 lines</source>
-        <translation>Intavolatura 4 linee</translation>
+        <translation>Tablatura 4 linee</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="723"/>
         <source>Tablature Serif</source>
-        <translation>Intavolatura Serif</translation>
+        <translation>Tablatura Serif</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="724"/>
         <source>Tablature Serif 4 lines</source>
-        <translation>Intavolatura Serif 4 linee</translation>
+        <translation>Tablatura Serif 4 linee</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="726"/>
