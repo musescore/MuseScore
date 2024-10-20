@@ -143,6 +143,7 @@ jobs:
     - name: Enable sccache
       run: |
         echo "SCCACHE_GHA_ENABLED=true" >> $GITHUB_ENV
+        echo "SCCACHE_CACHE_MULTIARCH=true" >> $GITHUB_ENV
 
     - name: Setup environment
       run: |
