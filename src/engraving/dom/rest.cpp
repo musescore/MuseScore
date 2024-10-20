@@ -291,12 +291,15 @@ SymId Rest::getSymbol(DurationType type, int line, int lines) const
     case DurationType::V_LONG:
         return SymId::restLonga;
     case DurationType::V_BREVE:
+        if (style().styleB(Sid::showLedgerLinesOnBreveRests)) {
+            return (line <= 0 || line >= lines) ? SymId::restDoubleWholeLegerLine : SymId::restDoubleWhole;
+        }
         return SymId::restDoubleWhole;
     case DurationType::V_MEASURE:
         if (ticks() >= Fraction(2, 1)) {
-            return SymId::restDoubleWhole;
+            return getSymbol(DurationType::V_BREVE, line, lines);
         }
-    // fall through
+        return getSymbol(DurationType::V_WHOLE, line, lines);
     case DurationType::V_WHOLE:
         return (line < 0 || line >= lines) ? SymId::restWholeLegerLine : SymId::restWhole;
     case DurationType::V_HALF:
@@ -566,6 +569,27 @@ bool Rest::isBreveRest() const
     TDuration durType = durationType();
     return durType == DurationType::V_BREVE
            || (durType == DurationType::V_MEASURE && measure() && measure()->ticks() >= Fraction(2, 1));
+}
+
+bool Rest::hasLedgerLineOutsideStaff() const
+{
+    const bool breveRestsHaveLedgerLines = style().styleB(Sid::showLedgerLinesOnBreveRests);
+
+    switch(durationType().type()) {
+    case DurationType::V_BREVE:
+        return breveRestsHaveLedgerLines;
+    case DurationType::V_WHOLE:
+        return true;
+    case DurationType::V_HALF:
+        return true;
+    case DurationType::V_MEASURE:
+        if (breveRestsHaveLedgerLines) {
+            return true;
+        }
+        return measure()->ticks() < Fraction(2, 1);
+    default:
+        return false;
+    }
 }
 
 int Rest::computeNaturalLine(int lines) const

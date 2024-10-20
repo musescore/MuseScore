@@ -2864,10 +2864,10 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
             }
 
             rest->verticalClearance().setLocked(true);
-            bool isWholeOrHalf = rest->isWholeRest() || rest->durationType() == DurationType::V_HALF;
+            bool hasLedgerLineOutsideStaff = rest->hasLedgerLineOutsideStaff();
             bool outAboveStaff = restAbove && restShape.bottom() + margin < minRestToChordClearance;
             bool outBelowStaff = !restAbove && restShape.top() - margin > (lines - 1) * lineDistance - minRestToChordClearance;
-            bool useHalfSpaceSteps = (outAboveStaff || outBelowStaff) && !isWholeOrHalf;
+            bool useHalfSpaceSteps = (outAboveStaff || outBelowStaff) && !hasLedgerLineOutsideStaff;
             double yMove;
             if (useHalfSpaceSteps) {
                 int steps = ceil(std::abs(margin) / (lineDistance / 2));
@@ -2881,7 +2881,7 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
             for (Rest* mergedRest : rest->ldata()->mergedRests) {
                 mergedRest->mutldata()->moveY(yMove);
             }
-            if (isWholeOrHalf) {
+            if (hasLedgerLineOutsideStaff) {
                 double y = rest->pos().y();
                 int line = y < 0 ? floor(y / lineDistance) : floor(y / lineDistance);
                 rest->updateSymbol(line, lines, rest->mutldata()); // Because it may need to use the symbol with ledger line now
@@ -3012,18 +3012,18 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staf
             TLayout::layoutBeam(beam2, ctx);
         }
 
-        bool rest1IsWholeOrHalf = rest1->isWholeRest() || rest1->durationType() == DurationType::V_HALF;
-        bool rest2IsWholeOrHalf = rest2->isWholeRest() || rest2->durationType() == DurationType::V_HALF;
+        bool rest1HasLedgerLineOutsideStaff = rest1->hasLedgerLineOutsideStaff();
+        bool rest2HasLedgerLineOutsideStaff = rest2->hasLedgerLineOutsideStaff();
         double y = 0.0;
         int line = 0;
 
-        if (rest1IsWholeOrHalf) {
+        if (rest1HasLedgerLineOutsideStaff) {
             Rest::LayoutData* rest1LayoutData = rest1->mutldata();
             y = rest1->pos().y();
             line = y < 0 ? floor(y / lineDistance) : floor(y / lineDistance);
             rest1->updateSymbol(line, lines, rest1LayoutData);
         }
-        if (rest2IsWholeOrHalf) {
+        if (rest2HasLedgerLineOutsideStaff) {
             Rest::LayoutData* rest2LayoutData = rest2->mutldata();
             y = rest2->pos().y();
             line = y < 0 ? floor(y / lineDistance) : floor(y / lineDistance);
