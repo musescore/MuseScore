@@ -242,7 +242,7 @@ if (MUSE_MODULE_AUDIO_EXPORT)
         ${CMAKE_CURRENT_LIST_DIR}/internal/soundtracks/soundtrackwriter.h
         )
 
-    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/lame lame)
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/lame lame EXCLUDE_FROM_ALL)
     set(MODULE_LINK
         ${MODULE_LINK}
         lame
