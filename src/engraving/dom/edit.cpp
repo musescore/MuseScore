@@ -2786,6 +2786,15 @@ void Score::deleteItem(EngravingItem* el)
                 }
             }
         }
+        // remove section break key signatures
+        bool isFirst = mb && mb->tick().isZero();
+        for (KeySig* ks : lb->keySigs()) {
+            if (isFirst) {
+                ks->setForSectionBreak(false);
+            } else {
+                deleteItem(ks);
+            }
+        }
     }
     break;
 
@@ -6028,12 +6037,14 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             MeasureBase* m = lb->measure();
 
             // add Key Signature on Section Break
+            // TODO: special case for instrument change
             Fraction tick = m->endTick();
             int ticks = tick.ticks();
             for (Staff* staff : score()->staves()) {
                 KeyList* kl = staff->keyList();
                 if (kl->currentKeyTick(ticks) != ticks) {
                     KeySigEvent ks = kl->key(ticks);
+                    ks.setForSectionBreak(true);
                     undoChangeKeySig(staff, tick, ks);
                 }
             }
