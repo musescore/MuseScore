@@ -575,7 +575,7 @@ bool Rest::hasLedgerLineOutsideStaff() const
 {
     const bool breveRestsHaveLedgerLines = style().styleB(Sid::showLedgerLinesOnBreveRests);
 
-    switch(durationType().type()) {
+    switch (durationType().type()) {
     case DurationType::V_BREVE:
         return breveRestsHaveLedgerLines;
     case DurationType::V_WHOLE:

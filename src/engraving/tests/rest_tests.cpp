@@ -33,7 +33,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 static const String REST_DATA_DIR(u"rest_data/");
-static const int TICKS_PER_4_2_MEASURE = 8*480; // 4/2 time per measure tick (8 quarters)
+static const int TICKS_PER_4_2_MEASURE = 8 * 480; // 4/2 time per measure tick (8 quarters)
 
 class Engraving_RestTests : public ::testing::Test
 {
@@ -78,7 +78,7 @@ TEST_F(Engraving_RestTests, BreveRests_LedgerLinesNormalStaff)
 
     // [GIVEN] Breve fullmeasure rests in each bar
     for (int measureNum = 1; measureNum <= score->measures()->size(); measureNum++) {
-        Rest* rest = findRest(score, (measureNum-1)*TICKS_PER_4_2_MEASURE);
+        Rest* rest = findRest(score, (measureNum - 1) * TICKS_PER_4_2_MEASURE);
         // [THEN] ledger lines on 2 & 3
         SymId expectedSym = (measureNum == 2) || (measureNum == 3)
                             ? SymId::restDoubleWholeLegerLine
@@ -92,7 +92,7 @@ TEST_F(Engraving_RestTests, BreveRests_LedgerLinesNormalStaff)
 
     // [GIVEN] Breve fullmeasure rests in each bar
     for (int measureNum = 1; measureNum <= score->measures()->size(); measureNum++) {
-        Rest* rest = findRest(score, (measureNum-1)*TICKS_PER_4_2_MEASURE);
+        Rest* rest = findRest(score, (measureNum - 1) * TICKS_PER_4_2_MEASURE);
         // [THEN] no bars should have ledger lines
         EXPECT_EQ(rest->ldata()->sym, SymId::restDoubleWhole);
     }
@@ -111,7 +111,7 @@ TEST_F(Engraving_RestTests, BreveRests_LedgerLinesOneLineStaff)
 
     // [GIVEN] Breve fullmeasure rests in each bar
     for (int measureNum = 1; measureNum <= score->measures()->size(); measureNum++) {
-        Rest* rest = findRest(score, (measureNum-1)*TICKS_PER_4_2_MEASURE);
+        Rest* rest = findRest(score, (measureNum - 1) * TICKS_PER_4_2_MEASURE);
         // [THEN] ledger lines on all bars
         EXPECT_EQ(rest->ldata()->sym, SymId::restDoubleWholeLegerLine);
     }
@@ -122,7 +122,7 @@ TEST_F(Engraving_RestTests, BreveRests_LedgerLinesOneLineStaff)
 
     // [GIVEN] Breve fullmeasure rests in each bar
     for (int measureNum = 1; measureNum <= score->measures()->size(); measureNum++) {
-        Rest* rest = findRest(score, (measureNum-1)*TICKS_PER_4_2_MEASURE);
+        Rest* rest = findRest(score, (measureNum - 1) * TICKS_PER_4_2_MEASURE);
         // [THEN] no bars should have ledger lines
         EXPECT_EQ(rest->ldata()->sym, SymId::restDoubleWhole);
     }
