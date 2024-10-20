@@ -236,5 +236,4 @@ set(MODULE_LINK
     engraving
     )
 
-set(MODULE_USE_UNITBUILD ON)
 setup_module()
