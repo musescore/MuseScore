@@ -2991,29 +2991,21 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
     }
 
     bool isLeftDirection = MoveDirection::Left == d;
-
-    if (!el) {
-        ChordRest* cr = score()->selection().currentCR();
-        if (cr) {
-            if (cr->isChord()) {
-                if (isLeftDirection) {
-                    el = toChord(cr)->upNote();
-                } else {
-                    el = toChord(cr)->downNote();
-                }
-            } else if (cr->isRest()) {
-                el = cr;
-            }
-            score()->select(el);
-        }
-    }
-
     EngravingItem* toEl = nullptr;
 
     if (el) {
         toEl = isLeftDirection ? score()->prevElement() : score()->nextElement();
     } else {
-        toEl = isLeftDirection ? score()->lastElement() : score()->firstElement();
+        // Nothing currently selected (e.g. because user pressed Esc or clicked on
+        // an empty region of the page). Try to restore previous selection.
+        if (ChordRest* cr = score()->selection().currentCR()) {
+            el = cr->isChord() ? toChord(cr)->upNote() : toEngravingItem(cr);
+        }
+        if (el) {
+            toEl = el; // Restoring previous selection.
+        } else {
+            toEl = isLeftDirection ? score()->lastElement() : score()->firstElement();
+        }
     }
 
     if (!toEl) {
