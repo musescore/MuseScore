@@ -18198,7 +18198,7 @@ Trast %1 en cordes %2</translation>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="48"/>
         <source>Plugin is not in the correct format</source>
-        <translation type="unfinished"/>
+        <translation>El format del connector no és correcte</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="72"/>
@@ -18233,7 +18233,7 @@ Trast %1 en cordes %2</translation>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="53"/>
         <source>Run plugin %1 (%2)</source>
-        <translation type="unfinished"/>
+        <translation>Executa el connector %1 (%2)</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/view/extensionslistmodel.cpp" line="108"/>
@@ -18244,7 +18244,7 @@ Trast %1 en cordes %2</translation>
     <message>
         <location filename="../../src/framework/extensions/extensionsmodule.cpp" line="93"/>
         <source>Manually</source>
-        <translation type="unfinished"/>
+        <translation>Manualment</translation>
     </message>
 </context>
 <context>
@@ -27442,7 +27442,7 @@ ha fallat.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="723"/>
         <source>Your changes will be lost if you don’t save them.</source>
-        <translation>Els canvis es perdran si no els deseu.</translation>
+        <translation>Si no els deseu els canvis es perdran.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1664"/>
@@ -28329,7 +28329,7 @@ ha fallat.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>
         <source>Use our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation>Feu servir la nova notació i la nova assignació de sons per a &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</translation>
+        <translation>Fes servir la nova notació i la nova assignació de sons per a &lt;a href=&quot;%1&quot;&gt;percussió MDL&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="100"/>
@@ -28344,17 +28344,17 @@ ha fallat.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="112"/>
         <source>Our new notation font, Leland</source>
-        <translation>El nostre nou tipus de lletra de notació, Leland</translation>
+        <translation>El nou tipus de lletra de notació, Leland</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="125"/>
         <source>Our new text font, Edwin</source>
-        <translation>El nostre nou tipus de lletra, Edwin</translation>
+        <translation>El nou tipus de lletra de text, Edwin</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="138"/>
         <source>Our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation type="unfinished"/>
+        <translation>La nova notació i nova assignació de sons per a  &lt;a href=&quot;%1&quot;&gt;percussió MDL&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="157"/>
