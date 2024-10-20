@@ -468,7 +468,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(multiVoiceRestTwoSpaceOffset,               false),
     styleDef(mergeMatchingRests,                         false),
-    styleDef(showLedgerLinesOnBreveRests,               false),
+    styleDef(showLedgerLinesOnBreveRests,                false),
     styleDef(createMultiMeasureRests,                    false),
     styleDef(minEmptyMeasures,                           PropertyValue(2)),
     styleDef(minMMRestWidth,                             Spatium(6)),
