@@ -45,6 +45,7 @@
 
 #include "engraving/dom/actionicon.h"
 #include "engraving/dom/articulation.h"
+#include "engraving/dom/barline.h"
 #include "engraving/dom/box.h"
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/chord.h"
@@ -1646,6 +1647,22 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
 
     startEdit();
 
+    const bool isMeasureAnchoredElement = element->type() == ElementType::MARKER
+                                          || element->type() == ElementType::JUMP
+                                          || element->type() == ElementType::SPACER
+                                          || element->type() == ElementType::VBOX
+                                          || element->type() == ElementType::HBOX
+                                          || element->type() == ElementType::TBOX
+                                          || element->type() == ElementType::MEASURE
+                                          || element->type() == ElementType::BRACKET
+                                          || (element->type() == ElementType::ACTION_ICON
+                                              && (toActionIcon(element)->actionType() == mu::engraving::ActionIconType::VFRAME
+                                                  || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::HFRAME
+                                                  || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::TFRAME
+                                                  || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::STAFF_TYPE_CHANGE
+                                                  || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::MEASURE
+                                                  || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::BRACKETS));
+
     if (sel.isList()) {
         ChordRest* cr1 = sel.firstChordRest();
         ChordRest* cr2 = sel.lastChordRest();
@@ -1772,34 +1789,40 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 e = toChord(e)->notes().front();
             }
             applyDropPaletteElement(score, e, element, modifiers);
+        } else if (isMeasureAnchoredElement) {
+            // we add the following measure-based items to each measure containing selected items
+            std::vector<Measure*> measuresWithSelectedContent;
+            for (EngravingItem* e : sel.elements()) {
+                Measure* m = e->findMeasure();
+                if (!m) {
+                    continue;
+                }
+                if (element->type() == ElementType::MARKER && e->isBarLine()
+                    && toBarLine(e)->segment()->segmentType() != SegmentType::BeginBarLine
+                    && toBarLine(e)->segment()->segmentType() != SegmentType::StartRepeatBarLine) {
+                    // exception: markers are anchored to the start of a measure,
+                    // so when the user selects an end barline we take the next measure
+                    m = m->nextMeasureMM() ? m->nextMeasureMM() : m;
+                }
+                if (muse::contains(measuresWithSelectedContent, m)) {
+                    continue;
+                }
+                measuresWithSelectedContent.push_back(m);
+                applyDropPaletteElement(score, m, element, modifiers);
+                if (element->type() == ElementType::BRACKET) {
+                    break;
+                }
+            }
         } else {
             for (EngravingItem* e : sel.elements()) {
                 applyDropPaletteElement(score, e, element, modifiers);
             }
         }
     } else if (sel.isRange()) {
-        if (element->type() == ElementType::BAR_LINE
-            || element->type() == ElementType::MARKER
-            || element->type() == ElementType::JUMP
-            || element->type() == ElementType::SPACER
-            || element->type() == ElementType::VBOX
-            || element->type() == ElementType::HBOX
-            || element->type() == ElementType::TBOX
-            || element->type() == ElementType::MEASURE
-            || element->type() == ElementType::BRACKET
-            || (element->type() == ElementType::ACTION_ICON
-                && (toActionIcon(element)->actionType() == mu::engraving::ActionIconType::VFRAME
-                    || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::HFRAME
-                    || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::TFRAME
-                    || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::STAFF_TYPE_CHANGE
-                    || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::MEASURE
-                    || toActionIcon(element)->actionType() == mu::engraving::ActionIconType::BRACKETS))) {
+        if (element->type() == ElementType::BAR_LINE || isMeasureAnchoredElement) {
             Measure* last = sel.endSegment() ? sel.endSegment()->measure() : nullptr;
             for (Measure* m = sel.startSegment()->measure(); m; m = m->nextMeasureMM()) {
-                RectF r = m->staffPageBoundingRect(sel.staffStart());
-                PointF pt(r.x() + r.width() * .5, r.y() + r.height() * .5);
-                pt += m->system()->page()->pos();
-                applyDropPaletteElement(score, m, element, modifiers, pt);
+                applyDropPaletteElement(score, m, element, modifiers);
                 if ((m == last) || (element->type() == ElementType::BRACKET)) {
                     break;
                 }
