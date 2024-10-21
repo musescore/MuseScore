@@ -20,10 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "mmrestsettingsmodel.h"
+#include "dom/mmrest.h"
 
 #include "translation.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 MMRestSettingsModel::MMRestSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -37,7 +39,7 @@ MMRestSettingsModel::MMRestSettingsModel(QObject* parent, IElementRepositoryServ
 void MMRestSettingsModel::createProperties()
 {
     m_isNumberVisible = buildPropertyItem(mu::engraving::Pid::MMREST_NUMBER_VISIBLE);
-    m_numberPosition = buildPropertyItem(mu::engraving::Pid::MMREST_NUMBER_POS);
+    m_numberPosition = buildPropertyItem(mu::engraving::Pid::MMREST_NUMBER_OFFSET);
 }
 
 void MMRestSettingsModel::requestElements()
@@ -49,6 +51,8 @@ void MMRestSettingsModel::loadProperties()
 {
     loadPropertyItem(m_isNumberVisible);
     loadPropertyItem(m_numberPosition);
+
+    updateNumberOptionsEnabled();
 }
 
 void MMRestSettingsModel::resetProperties()
@@ -65,4 +69,30 @@ PropertyItem* MMRestSettingsModel::isNumberVisible() const
 PropertyItem* MMRestSettingsModel::numberPosition() const
 {
     return m_numberPosition;
+}
+
+bool MMRestSettingsModel::areNumberOptionsEnabled() const
+{
+    return m_isNumberVisibleEnabled;
+}
+
+void MMRestSettingsModel::updateNumberOptionsEnabled()
+{
+    bool enabled = true;
+    for (EngravingItem* item : m_elementList) {
+        if (!item->isMMRest()) {
+            enabled = false;
+            break;
+        }
+        MMRest* mmRest = toMMRest(item);
+        if (!mmRest->shouldShowNumber()) {
+            enabled = false;
+            break;
+        }
+    }
+
+    if (enabled != m_isNumberVisibleEnabled) {
+        m_isNumberVisibleEnabled = enabled;
+        emit isNumberVisibleEnabledChanged(m_isNumberVisibleEnabled);
+    }
 }
