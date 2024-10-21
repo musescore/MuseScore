@@ -115,11 +115,9 @@ void MasterScore::joinMeasure(const Fraction& tick1, const Fraction& tick2)
     }
 
     MeasureBase* next = m2->next();
-    for (Score* s : scoreList()) {
-        Measure* sM1 = s->tick2measure(startTick);
-        Measure* sM2 = s->tick2measure(m2->tick());
-        s->deleteMeasures(sM1, sM2, true);
-    }
+    Measure* deleteStart = tick2measure(startTick);
+    Measure* deleteEnd = tick2measure(m2->tick());
+    deleteMeasures(deleteStart, deleteEnd, true);
     InsertMeasureOptions options;
     options.createEmptyMeasures = true;
     options.moveSignaturesClef = false;
