@@ -103,9 +103,7 @@ public:
                    || colorSegmentShapes
                    || showSkylines
                    || showSystemBoundingRects
-#ifndef NDEBUG
                    || showCorruptedMeasures
-#endif
             ;
         }
     };
