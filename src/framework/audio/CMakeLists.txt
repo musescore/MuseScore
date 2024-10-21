@@ -55,7 +55,16 @@ elseif(OS_IS_LIN OR OS_IS_FBSD OR MINGW)
         ${JACK_SRC}
        )
 elseif(OS_IS_MAC)
+    set(JACK_SRC "")
+    if (MUSE_MODULE_AUDIO_JACK)
+        set(JACK_SRC
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.h
+           )
+    endif(MUSE_MODULE_AUDIO_JACK)
     set(DRIVER_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/audiomidimanager.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/audiomidimanager.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.mm
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.h
     )
@@ -275,6 +284,11 @@ else ()
 endif()
 
 if (OS_IS_MAC)
+    if (MUSE_MODULE_AUDIO_JACK)
+        find_package(Jack REQUIRED)
+        set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${JACK_INCLUDE_DIRS})
+        set(MODULE_LINK ${MODULE_LINK} ${JACK_LDFLAGS} pthread)
+    endif()
     find_library(AudioToolbox NAMES AudioToolbox)
     find_library(CoreAudio NAMES CoreAudio)
     set(MODULE_LINK ${MODULE_LINK} ${AudioToolbox} ${CoreAudio})
