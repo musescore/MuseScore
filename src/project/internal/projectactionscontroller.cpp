@@ -58,6 +58,9 @@ static const muse::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress"
 static const QString MUSESCORE_URL_SCHEME("musescore");
 static const QString OPEN_SCORE_URL_HOSTNAME("open-score");
 
+static constexpr int RETRY_SAVE_BTN_ID = int(IInteractive::Button::CustomButton);
+static constexpr int SAVE_AS_BTN_ID    = RETRY_SAVE_BTN_ID + 1;
+
 void ProjectActionsController::init()
 {
     dispatcher()->reg(this, "file-new", this, &ProjectActionsController::newProject);
@@ -930,7 +933,23 @@ bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& filePa
 
     if (!ret) {
         LOGE() << ret.toString();
-        warnScoreCouldnotBeSaved(ret);
+        if (ret.code() != (int)Err::CorruptionUponSavingError) {
+            warnScoreCouldnotBeSaved(ret);
+        } else {
+            switch (warnScoreHasBecomeCorruptedAfterSave(ret)) {
+            case RETRY_SAVE_BTN_ID:
+                async::Async::call(this, [this, filePath, saveMode]() {
+                    saveProjectLocally(filePath, saveMode);
+                });
+                break;
+
+            case SAVE_AS_BTN_ID:
+                async::Async::call(this, [this]() {
+                    saveProject(SaveMode::SaveAs);
+                });
+                break;
+            }
+        }
         return false;
     }
 
@@ -1575,6 +1594,40 @@ void ProjectActionsController::warnScoreCouldnotBeSaved(const Ret& ret)
 void ProjectActionsController::warnScoreCouldnotBeSaved(const std::string& errorText)
 {
     interactive()->warning(muse::trc("project/save", "Your score could not be saved"), errorText);
+}
+
+int ProjectActionsController::warnScoreHasBecomeCorruptedAfterSave(const Ret& ret)
+{
+    const QString errDetailsMessage = QString::fromStdString(ret.toString()).toHtmlEscaped();
+
+    const QString supportForumLink = String("<a href=\"%1\" style=\"text-decoration: none\">musescore.org</a>")
+                                     .arg(configuration()->supportForumUrl().toString());
+
+    const std::string title = muse::trc("project/save", "An error occurred while saving your score");
+
+    const std::string body = muse::qtrc("project/save",
+                                        "To preserve your score, try saving it again. "
+                                        "If this message still appears, please save your score as new copy. "
+                                        "You can also get help for this issue on %1.<br/><br/>"
+                                        "Error details (please cite when asking for support): %2")
+                             .arg(supportForumLink, errDetailsMessage)
+                             .toStdString();
+
+    IInteractive::ButtonDatas buttons;
+
+    IInteractive::ButtonData saveAsBtn(SAVE_AS_BTN_ID, muse::trc("project/save", "Save as…"));
+    saveAsBtn.role = IInteractive::ButtonRole::ContinueRole;
+    buttons.push_back(saveAsBtn);
+
+    IInteractive::ButtonData retryBtn(RETRY_SAVE_BTN_ID, muse::trc("project", "Try again"), true /*accent*/);
+    retryBtn.role = IInteractive::ButtonRole::ContinueRole;
+    buttons.push_back(retryBtn);
+
+    IInteractive::ButtonData cancelBtn = interactive()->buttonData(IInteractive::Button::Cancel);
+    buttons.push_back(cancelBtn);
+
+    return interactive()->error(title, IInteractive::Text(body, IInteractive::TextFormat::RichText),
+                                buttons, retryBtn.btn).button();
 }
 
 void ProjectActionsController::revertCorruptedScoreToLastSaved()

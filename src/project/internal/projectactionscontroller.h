@@ -180,6 +180,7 @@ private:
 
     void warnScoreCouldnotBeSaved(const muse::Ret& ret);
     void warnScoreCouldnotBeSaved(const std::string& errorText);
+    int warnScoreHasBecomeCorruptedAfterSave(const muse::Ret& ret);
 
     void revertCorruptedScoreToLastSaved();
 
