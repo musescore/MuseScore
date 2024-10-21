@@ -506,7 +506,7 @@ void HorizontalSpacing::moveRightAlignedSegments(std::vector<SegmentPosition>& p
 
 double HorizontalSpacing::chordRestSegmentNaturalWidth(Segment* segment, HorizontalSpacingContext& ctx)
 {
-    double durationStretch = segment->computeDurationStretch(segment->prev(SegmentType::ChordRest));
+    double durationStretch = computeSegmentDurationStretch(segment, segment->prev(SegmentType::ChordRest));
 
     Measure* measure = segment->measure();
     double userStretch = std::clamp(measure->userStretch(), 0.1, 10.0); // TODO: enforce via UI, not here
@@ -523,6 +523,67 @@ double HorizontalSpacing::chordRestSegmentNaturalWidth(Segment* segment, Horizon
     double naturalWidth = minNoteSpace * segTotalStretch * ctx.stretchReduction * QUARTER_NOTE_SPACING;
 
     return naturalWidth;
+}
+
+double HorizontalSpacing::computeSegmentDurationStretch(const Segment* curSeg, const Segment* prevSeg)
+{
+    if (curSeg->isMMRestSegment()) {
+        return durationStretchForMMRests(curSeg);
+    }
+
+    Fraction segTicks = curSeg->ticks();
+    Fraction shortestCR = curSeg->shortestChordRest();
+    Fraction prevShortestCR = prevSeg ? prevSeg->shortestChordRest() : Fraction(0, 1);
+
+    bool hasAdjacent = curSeg->isChordRestType() && shortestCR == segTicks;
+    bool prevHasAdjacent = prevSeg && (prevSeg->isChordRestType() && prevShortestCR == prevSeg->ticks());
+
+    double durStretch;
+    double slope = curSeg->style().styleD(Sid::measureSpacing);
+
+    if (hasAdjacent || curSeg->measure()->isMMRest()) {
+        durStretch = durationStretchForTicks(slope, segTicks);
+    } else {
+        // Polyrythms
+        if (prevSeg && !prevHasAdjacent && prevShortestCR < shortestCR) {
+            durStretch = durationStretchForTicks(slope, prevShortestCR) * (segTicks / prevShortestCR).toDouble();
+        } else {
+            durStretch = durationStretchForTicks(slope, shortestCR) * (segTicks / shortestCR).toDouble();
+        }
+    }
+
+    return durStretch;
+}
+
+double HorizontalSpacing::durationStretchForMMRests(const Segment* segment)
+{
+    static constexpr Fraction QUARTER = Fraction(1, 4);
+    static constexpr int MIN_MMREST_COUNT  = 2;
+
+    const MStyle& style = segment->style();
+    const Measure* measure = segment->measure();
+
+    Fraction timeSig = measure->timesig();
+    bool constantWidth = style.styleB(Sid::mmRestConstantWidth);
+    int mmRestWidthIncrementCap = style.styleI(Sid::mmRestMaxWidthIncrease);
+
+    Fraction baseDuration = constantWidth ? style.styleI(Sid::mmRestReferenceWidth) * QUARTER : timeSig;
+    Fraction durationIncrement = constantWidth ? QUARTER : Fraction(1, timeSig.denominator());
+    int incrementCount = std::max(measure->mmRestCount() - MIN_MMREST_COUNT, 0);
+    incrementCount = std::min(incrementCount, mmRestWidthIncrementCap);
+
+    Fraction resultDuration = baseDuration + incrementCount * durationIncrement;
+
+    return durationStretchForTicks(style.styleD(Sid::measureSpacing), resultDuration);
+}
+
+double HorizontalSpacing::durationStretchForTicks(double slope, const Fraction& ticks)
+{
+    static constexpr Fraction REFERENCE_DURATION = Fraction(1, 4);
+
+    Fraction durationRatio = ticks / REFERENCE_DURATION;
+
+    return pow(slope, log2(durationRatio.toDouble()));
 }
 
 void HorizontalSpacing::applyCrossBeamSpacingCorrection(Segment* thisSeg, Segment* nextSeg, double& width)
