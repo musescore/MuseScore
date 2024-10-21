@@ -71,6 +71,8 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
+    String accessibleInfo() const override;
+
     void init();
 
     double lineWidth() const { return m_lw; }

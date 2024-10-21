@@ -28,6 +28,10 @@
 namespace mu::engraving {
 class Note;
 
+enum class TextlineType : char {
+    CUSTOM, STAFF, SYSTEM, LINE,
+};
+
 //---------------------------------------------------------
 //   @@ TextLineSegment
 //---------------------------------------------------------
@@ -45,6 +49,9 @@ public:
     virtual EngravingItem* propertyDelegate(Pid) override;
 
     TextLine* textLine() const { return toTextLine(spanner()); }
+
+    int subtype() const override;
+    TranslatableString subtypeUserName() const override;
 
 private:
     Sid getTextLinePos(bool above) const;
@@ -80,6 +87,16 @@ public:
 
     PropertyValue propertyDefault(Pid) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
+
+    TextlineType textLineType() const { return m_textlineType; }
+    void setTextLineType(TextlineType val);
+
+    int subtype() const override { return int(m_textlineType); }
+    TranslatableString subtypeUserName() const override;
+    String accessibleInfo() const override;
+
+private:
+    TextlineType m_textlineType = TextlineType::CUSTOM;
 };
 } // namespace mu::engraving
 #endif
