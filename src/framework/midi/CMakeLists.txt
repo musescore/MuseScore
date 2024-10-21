@@ -66,6 +66,7 @@ elseif(OS_IS_FBSD)
     )
 elseif(OS_IS_MAC)
     set(DRIVER_SRC
+        ${JACK_SRC}
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidioutport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidioutport.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidiinport.cpp
