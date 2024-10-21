@@ -340,7 +340,7 @@
     <chordExtensionAdjust>0</chordExtensionAdjust>
     <chordModifierMag>1</chordModifierMag>
     <chordModifierAdjust>0</chordModifierAdjust>
-    <concertPitch>1</concertPitch>
+    <concertPitch>0</concertPitch>
     <createMultiMeasureRests>0</createMultiMeasureRests>
     <minEmptyMeasures>2</minEmptyMeasures>
     <minMMRestWidth>6</minMMRestWidth>
