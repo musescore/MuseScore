@@ -156,7 +156,14 @@ inline bool isNotePlayable(const Note* note, const muse::mpe::ArticulationMap& a
         const Chord* firstChord = tie->startNote()->chord();
         const Chord* lastChord = tie->endNote()->chord();
 
-        return !firstChord->containsEqualTremolo(lastChord);
+        if (firstChord && lastChord) {
+            if (firstChord->tremoloType() != TremoloType::INVALID_TREMOLO
+                || lastChord->tremoloType() != TremoloType::INVALID_TREMOLO) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     return true;
