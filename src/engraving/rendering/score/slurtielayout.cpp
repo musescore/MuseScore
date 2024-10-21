@@ -1369,7 +1369,7 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
         computeBezier(segment);
     }
 
-    segment->addLineAttachPoints(); // add attach points to start and end note
+    addLineAttachPoints(segment); // add attach points to start and end note
     return segment;
 }
 
@@ -1426,7 +1426,7 @@ TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system, LayoutContex
         computeBezier(segment);
     }
 
-    segment->addLineAttachPoints();
+    addLineAttachPoints(segment);
     return segment;
 }
 
@@ -2382,6 +2382,20 @@ bool SlurTieLayout::shouldHideSlurSegment(SlurSegment* item, LayoutContext& ctx)
     }
 
     return false;
+}
+
+void SlurTieLayout::addLineAttachPoints(TieSegment* segment)
+{
+    // Add tie attach point to start and end note
+    Tie* tie = segment->tie();
+    Note* startNote = tie->startNote();
+    Note* endNote = tie->endNote();
+    if (startNote) {
+        startNote->addLineAttachPoint(segment->ups(Grip::START).pos(), tie);
+    }
+    if (endNote) {
+        endNote->addLineAttachPoint(segment->ups(Grip::END).pos(), tie);
+    }
 }
 
 void SlurTieLayout::layoutSegment(SlurSegment* item, LayoutContext& ctx, const PointF& p1, const PointF& p2)

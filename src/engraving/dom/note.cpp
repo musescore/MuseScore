@@ -29,6 +29,7 @@
 
 #include <assert.h>
 
+#include "dom/noteline.h"
 #include "translation.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
@@ -1204,8 +1205,9 @@ void Note::addSpanner(Spanner* l)
     if (e && e->isNote()) {
         Note* note = toNote(e);
         note->addSpannerBack(l);
-        if (l->isGlissando() || l->isGuitarBend()) {
-            note->chord()->setEndsGlissandoOrGuitarBend(true);
+        bool isNoteAnchoredTextLine = l->isNoteLine() && toNoteLine(l)->enforceMinLength();
+        if (l->isGlissando() || l->isGuitarBend() || isNoteAnchoredTextLine) {
+            note->chord()->setEndsNoteAnchoredLine(true);
         }
     }
     addSpannerFor(l);
@@ -1224,7 +1226,7 @@ void Note::removeSpanner(Spanner* l)
             // abort();
         }
         if (l->isGlissando()) {
-            e->chord()->updateEndsGlissandoOrGuitarBend();
+            e->chord()->updateEndsNoteAnchoredLine();
         }
     }
     if (!removeSpannerFor(l)) {
@@ -1285,6 +1287,7 @@ void Note::add(EngravingItem* e)
         m_accidental = toAccidental(e);
         break;
     case ElementType::TEXTLINE:
+    case ElementType::NOTELINE:
     case ElementType::GLISSANDO:
     case ElementType::GUITAR_BEND:
         addSpanner(toSpanner(e));
@@ -1346,6 +1349,7 @@ void Note::remove(EngravingItem* e)
         break;
 
     case ElementType::TEXTLINE:
+    case ElementType::NOTELINE:
     case ElementType::GLISSANDO:
     case ElementType::GUITAR_BEND:
         removeSpanner(toSpanner(e));
@@ -1707,7 +1711,8 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::STANDARD_BEND)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::PRE_BEND)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE_NOTE_BEND)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::SLIGHT_BEND);
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::SLIGHT_BEND)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::NOTE_ANCHORED_LINE);
 }
 
 //---------------------------------------------------------
@@ -1838,6 +1843,8 @@ EngravingItem* Note::drop(EditData& data)
         case ActionIconType::SLIGHT_BEND:
             score()->addGuitarBend(GuitarBendType::SLIGHT_BEND, this);
             break;
+        case mu::engraving::ActionIconType::NOTE_ANCHORED_LINE:
+            score()->addNoteLine();
         default:
             break;
         }
@@ -1908,7 +1915,7 @@ EngravingItem* Note::drop(EditData& data)
 
         Glissando* gliss = toGlissando(e);
         EngravingItem* endEl = gliss->endElement();
-        Note* finalNote = endEl && endEl->isNote() ? toNote(endEl) : Glissando::guessFinalNote(chord(), this);
+        Note* finalNote = endEl && endEl->isNote() ? toNote(endEl) : SLine::guessFinalNote(this);
         if (finalNote) {
             // init glissando data
             gliss->setAnchor(Spanner::Anchor::NOTE);
@@ -3376,6 +3383,7 @@ EngravingItem* Note::nextElement()
         }
         return chord()->nextElement();
 
+    case ElementType::NOTELINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
     case ElementType::GUITAR_BEND_SEGMENT:
         return chord()->nextElement();
@@ -3459,6 +3467,7 @@ EngravingItem* Note::prevElement()
             return m_el.back();
         }
         return this;
+    case ElementType::NOTELINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
     case ElementType::GUITAR_BEND_SEGMENT:
         if (tieValid(m_tieFor)) {
@@ -3482,7 +3491,7 @@ EngravingItem* Note::lastElementBeforeSegment()
 {
     if (!m_spannerFor.empty()) {
         for (auto i : m_spannerFor) {
-            if (i->type() == ElementType::GLISSANDO || i->type() == ElementType::GUITAR_BEND) {
+            if (i->type() == ElementType::GLISSANDO || i->type() == ElementType::GUITAR_BEND || i->type() == ElementType::NOTELINE) {
                 return i->spannerSegments().front();
             }
         }

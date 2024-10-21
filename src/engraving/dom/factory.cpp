@@ -69,6 +69,7 @@
 #include "mmrest.h"
 #include "mmrestrange.h"
 #include "note.h"
+#include "noteline.h"
 #include "ornament.h"
 #include "ottava.h"
 #include "page.h"
@@ -137,6 +138,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::VOLTA:             return new Volta(parent);
     case ElementType::OTTAVA:            return new Ottava(parent);
     case ElementType::TEXTLINE:          return new TextLine(parent);
+    case ElementType::NOTELINE:          return new NoteLine(parent);
     case ElementType::TRILL:             return new Trill(parent);
     case ElementType::LET_RING:          return new LetRing(parent);
     case ElementType::GRADUAL_TEMPO_CHANGE: return new GradualTempoChange(parent);
@@ -236,6 +238,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::TEXTLINE_BASE:
     case ElementType::TEXTLINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
+    case ElementType::NOTELINE_SEGMENT:
     case ElementType::GUITAR_BEND_SEGMENT:
     case ElementType::GUITAR_BEND_HOLD:
     case ElementType::GUITAR_BEND_HOLD_SEGMENT:
@@ -449,7 +452,10 @@ CREATE_ITEM_IMPL(NoteDot, ElementType::NOTEDOT, Note, isAccessibleEnabled)
 CREATE_ITEM_IMPL(NoteDot, ElementType::NOTEDOT, Rest, isAccessibleEnabled)
 COPY_ITEM_IMPL(NoteDot)
 
-Page* Factory::createPage(RootItem * parent, bool isAccessibleEnabled)
+CREATE_ITEM_IMPL(NoteLine, ElementType::NOTELINE, Note, isAccessibleEnabled)
+MAKE_ITEM_IMPL(NoteLine, Note);
+
+Page* Factory::createPage(RootItem* parent, bool isAccessibleEnabled)
 {
     Page* page = new Page(parent);
     page->setAccessibleEnabled(isAccessibleEnabled);

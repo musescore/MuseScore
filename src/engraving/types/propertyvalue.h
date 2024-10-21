@@ -103,6 +103,7 @@ enum class P_TYPE {
     PLAYTECH_TYPE,
     TEMPOCHANGE_TYPE,
     SLUR_STYLE_TYPE,
+    NOTELINE_PLACEMENT_TYPE,
     LYRICS_DASH_SYSTEM_START_TYPE,
 
     VOICE_ASSIGNMENT,
@@ -267,6 +268,9 @@ public:
 
     PropertyValue(SlurStyleType v)
         : m_type(P_TYPE::SLUR_STYLE_TYPE), m_data(make_data<SlurStyleType>(v)) {}
+
+    PropertyValue(const NoteLineEndPlacement& v)
+        : m_type(P_TYPE::NOTELINE_PLACEMENT_TYPE), m_data(make_data<NoteLineEndPlacement>(v)) {}
 
     // Other
     PropertyValue(const GroupNodes& v)

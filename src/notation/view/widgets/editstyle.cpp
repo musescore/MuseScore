@@ -143,6 +143,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "harp-pedal-diagram",
     "harp-pedal-text-diagram",
     "text-line",
+    "note-line"
     "volta",
     "ottava",
     "glissando",
@@ -1743,6 +1744,9 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
 
         case TextStyleType::TEXTLINE:
             return "text-line";
+
+        case TextStyleType::NOTELINE:
+            return "note-line";
 
         case TextStyleType::VOLTA:
             return "volta";

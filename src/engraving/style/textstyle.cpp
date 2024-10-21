@@ -729,6 +729,24 @@ const TextStyle textLineTextStyle { {
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
 } };
 
+const TextStyle noteLineTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::noteLineFontFace,                      Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::noteLineFontSize,                      Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::noteLineLineSpacing,                   Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::noteLineFontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::noteLineFontStyle,                     Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::noteLineColor,                         Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::noteLineAlign,                         Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::noteLineOffset,                        Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::noteLineFrameType,                     Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::noteLineFramePadding,                  Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::noteLineFrameWidth,                    Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::noteLineFrameRound,                    Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::noteLineFrameFgColor,                  Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::noteLineFrameBgColor,                  Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,              Pid::MUSICAL_SYMBOLS_SCALE },
+} };
+
 const TextStyle glissandoTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::glissandoFontFace,                      Pid::FONT_FACE },
     { TextStylePropertyType::FontSize,             Sid::glissandoFontSize,                      Pid::FONT_SIZE },
@@ -1252,6 +1270,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::HARP_PEDAL_TEXT_DIAGRAM: return &harpPedalTextDiagramTextStyle;
 
     case TextStyleType::TEXTLINE: return &textLineTextStyle;
+    case TextStyleType::NOTELINE: return &noteLineTextStyle;
     case TextStyleType::VOLTA: return &voltaTextStyle;
     case TextStyleType::OTTAVA: return &ottavaTextStyle;
     case TextStyleType::GLISSANDO: return &glissandoTextStyle;
