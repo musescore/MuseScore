@@ -82,11 +82,34 @@ PreferencesPage {
 
         SeparatorLine { }
 
+        AutoPanSection {
+            autoPanInInputMode: preferencesModel.autoPanInInputMode
+            autoPanDuringPlayback: preferencesModel.autoPanDuringPlayback
+            autoPanOtherwise: preferencesModel.autoPanOtherwise
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 3
+
+            onAutoPanInInputModeChangeRequested: function(autoPan) {
+                preferencesModel.autoPanInInputMode = autoPan
+            }
+
+            onAutoPanDuringPlaybackChangeRequested: function(autoPan) {
+                preferencesModel.autoPanDuringPlayback = autoPan
+            }
+            
+            onAutoPanOtherwiseChangeRequested: function(autoPan) {
+                preferencesModel.autoPanOtherwise = autoPan
+            }
+        }
+
+        SeparatorLine { }
+
         MiscellaneousSection {
             selectionProximity: preferencesModel.selectionProximity
 
             navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 3
+            navigation.order: root.navigationOrderStart + 4
 
             onSelectionProximityChangeRequested: function(proximity) {
                 preferencesModel.selectionProximity = proximity
