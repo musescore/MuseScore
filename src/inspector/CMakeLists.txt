@@ -236,11 +236,4 @@ set(MODULE_LINK
     engraving
     )
 
-set(MODULE_USE_UNITBUILD ON)
 setup_module()
-
-target_sources(inspector
-  PRIVATE
-    types/voicetypes.h
-    models/inspectormodelwithvoiceandpositionoptions.h models/inspectormodelwithvoiceandpositionoptions.cpp
-)

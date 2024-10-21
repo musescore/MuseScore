@@ -55,7 +55,6 @@ if(MUSE_COMPILE_ASAN)
         add_link_options("-fsanitize=address")
     elseif(CC_IS_MSVC)
         add_compile_options("/fsanitize=address")
-        add_link_options("/fsanitize=address")
     endif()
 endif()
 

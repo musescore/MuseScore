@@ -301,6 +301,15 @@ set(MODULE_QRC audio.qrc)
 set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
+if (OS_IS_WIN)
+    # Prevent mysterious compile errors in debug builds
+    set_source_files_properties(
+        ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiostream.cpp
+        PROPERTIES
+        SKIP_UNITY_BUILD_INCLUSION ON
+    )
+endif()
+
 setup_module()
 
 if (MUSE_MODULE_AUDIO_TESTS)
