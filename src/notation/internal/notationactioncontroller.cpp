@@ -335,6 +335,7 @@ void NotationActionController::init()
     registerAction("nashville-number-text", [this]() { addText(TextStyleType::HARMONY_NASHVILLE); });
     registerAction("lyrics", [this]() { addText(TextStyleType::LYRICS_ODD); });
     registerAction("tempo", [this]() { addText(TextStyleType::TEMPO); });
+    registerAction("dynamics", [this]() { addText(TextStyleType::DYNAMICS); });
 
     registerAction("figured-bass", [this]() { addFiguredBass(); });
 
