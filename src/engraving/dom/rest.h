@@ -106,6 +106,7 @@ public:
     void setAccent(bool flag);
 
     bool isWholeRest() const;
+    bool hasLedgerLineOutsideStaff() const;
 
     DeadSlapped* deadSlapped() const { return m_deadSlapped; }
 
