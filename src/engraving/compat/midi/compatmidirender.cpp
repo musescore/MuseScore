@@ -495,7 +495,20 @@ void CompatMidiRender::updateGateTime(const Instrument* instrument, int& gateTim
 
 void CompatMidiRender::createGraceNotesPlayEvents(const Score* score, const Fraction& tick, Chord* chord, int& ontime, int& trailtime)
 {
-    std::vector<Chord*> gnb = chord->graceNotesBefore();
+    auto hasNoPrebendGrace = [] (Chord* chord) -> bool {
+        return std::any_of(chord->notes().begin(), chord->notes().end(), [](Note* n) {
+            return !n->isPreBendStart();
+        });
+    };
+
+    std::vector<Chord*> gnbNotExcludingPrebends = chord->graceNotesBefore();
+    std::vector<Chord*> gnb;
+    for (Chord* ch : gnbNotExcludingPrebends) {
+        if (hasNoPrebendGrace(ch)) {
+            gnb.push_back(ch);
+        }
+    }
+
     std::vector<Chord*> gna = chord->graceNotesAfter();
     int nb = int(gnb.size());
     int na = int(gna.size());
@@ -932,7 +945,7 @@ void CompatMidiRender::createSlideOutNotePlayEvents(Note* note, NoteEventList* e
     int slideOn = NoteEvent::NOTE_LENGTH - totalSlideDuration;
     double velocity = !note->ghost() ? NoteEvent::DEFAULT_VELOCITY_MULTIPLIER : NoteEvent::GHOST_VELOCITY_MULTIPLIER;
     if (!hasTremolo) {
-        el->push_back(NoteEvent(0, onTime, slideOn, velocity, !note->tieBack()));
+        el->push_back(NoteEvent(0, onTime, slideOn - onTime, velocity, !note->tieBack()));
     }
 
     int pitch = 0;

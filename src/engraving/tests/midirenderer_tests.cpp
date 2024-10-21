@@ -33,6 +33,20 @@ using namespace mu;
 using namespace mu::engraving;
 class MidiRenderer_Tests : public ::testing::Test
 {
+protected:
+    void SetUp() override
+    {
+        m_useRead302 = MScore::useRead302InTestMode;
+        MScore::useRead302InTestMode = false;
+    }
+
+    void TearDown() override
+    {
+        MScore::useRead302InTestMode = m_useRead302;
+    }
+
+private:
+    bool m_useRead302 = false;
 };
 
 static const String MIDIRENDERER_TESTS_DIR = u"midirenderer_data/";
@@ -69,6 +83,25 @@ static void checkEventInterval(EventsHolder& events, int tickStart, int tickEnd,
 
     EXPECT_EQ(it->second.pitch(), pitch);
     EXPECT_EQ(it->second.velo(), NOTE_OFF_VOLUME);
+    EXPECT_EQ(it->second.channel(), channel);
+    EXPECT_EQ(it->second.effect(), effect);
+
+    events[channel].erase(it);
+}
+
+static void checkPitchBend(EventsHolder& events, int tick, int pitchValue, MidiInstrumentEffect effect = MidiInstrumentEffect::NONE,
+                           int channel = DEFAULT_CHANNEL)
+{
+    auto it = events[channel].find(tick);
+    EXPECT_NE(it, events[channel].end());
+    if (it == events[channel].end()) {
+        return;
+    }
+
+    int dataA = pitchValue % 128;
+    int dataB = pitchValue / 128;
+    EXPECT_EQ(it->second.dataA(), dataA);
+    EXPECT_EQ(it->second.dataB(), dataB);
     EXPECT_EQ(it->second.channel(), channel);
     EXPECT_EQ(it->second.effect(), effect);
 
@@ -170,7 +203,7 @@ TEST_F(MidiRenderer_Tests, mergePitchWheelEvents)
     noteEvents[DEFAULT_CHANNEL].insert(std::make_pair(200, note2_ON));
     noteEvents[DEFAULT_CHANNEL].insert(std::make_pair(300, note2_OFF));
     noteEvents.mergePitchWheelEvents(pitchWheelEvents);
-    EXPECT_NE(noteEvents[DEFAULT_CHANNEL].find(145), noteEvents[DEFAULT_CHANNEL].end());
+    EXPECT_NE(noteEvents[DEFAULT_CHANNEL].find(190), noteEvents[DEFAULT_CHANNEL].end());
 }
 
 TEST_F(MidiRenderer_Tests, subscriptOperator)
@@ -275,6 +308,7 @@ TEST_F(MidiRenderer_Tests, graceOnBeatGroup)
 
 TEST_F(MidiRenderer_Tests, graceOnBeatAndGlissando)
 {
+    // ??
     constexpr int defVol = 80; // f
 
     EventsHolder events = renderMidiEvents(u"grace_on_beat_and_glissando.mscx");
@@ -965,6 +999,149 @@ TEST_F(MidiRenderer_Tests, hairpinTwoInstruments)
     checkEventInterval(events, 480, 959, 55, 80, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
     checkEventInterval(events, 960, 1439, 55, 80, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
     checkEventInterval(events, 1440, 1919, 55, 80, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+}
+
+TEST_F(MidiRenderer_Tests, bends_1)
+{
+    constexpr int defVol = 80; // mf
+
+    auto pb = [](int a, int b) {
+        return b * 128 + a;
+    };
+
+    EventsHolder events = renderMidiEvents(u"", true, true);
+    LOGE() << "@# events size = " << events.size();
+
+    for (size_t i = 0; i < events.size(); i++) {
+        LOGE() << "@# === channel " << i <<", size = " << events[i].size();
+        for (const auto& ev : events[i]) {
+            if (ev.second.type() == (uint8_t)mu::engraving::ME_NOTEON) {
+                LOGE() << "@# tick = " << ev.first << ", a = " << ev.second.dataA() << ", b = " << ev.second.dataB();
+            } else if (ev.second.type() == (uint8_t)mu::engraving::ME_PITCHBEND) {
+                LOGE() << "@# tick = " << ev.first << ", PV = " << pb(ev.second.dataA(), ev.second.dataB());
+            } else {
+                LOGE() << "@# ...SKIPPING event... tick = " << ev.first << ", a = " << ev.second.dataA() << ", b = " << ev.second.dataB();
+            }
+        }
+    }
+
+    EXPECT_EQ(events.size(), 2);
+
+    /// bend with startFactor 0, endFactor 1
+    checkEventInterval(events,  0,  119, 52, defVol);
+    checkPitchBend(events,  0, 8192);
+    checkPitchBend(events,  10, 8229);
+    checkPitchBend(events,  20, 8343);
+    checkPitchBend(events,  30, 8533);
+    checkPitchBend(events,  40, 8798);
+    checkPitchBend(events,  50, 9140);
+
+    /// bend with startFactor 0.25, endFactor 0.75
+    checkPitchBend(events, 470, 8192); /// pitchwheel reset
+    checkEventInterval(events, 480, 599, 52, defVol);
+    checkPitchBend(events, 480, 8192);
+    checkPitchBend(events, 490, 8192);
+    checkPitchBend(events, 500, 8229);
+    checkPitchBend(events, 510, 8533);
+    checkPitchBend(events, 520, 9140);
+    checkPitchBend(events, 530, 9557);
+
+    /// bend followed by another bend
+    checkPitchBend(events, 950, 8192); /// pitchwheel reset
+    checkEventInterval(events, 960, 1139, 52, defVol);
+    checkPitchBend(events, 960, 8192);
+    checkPitchBend(events, 970, 8229);
+    checkPitchBend(events, 980, 8343);
+    checkPitchBend(events, 990, 8533);
+    checkPitchBend(events, 1000, 8798);
+    checkPitchBend(events, 1010, 9140); /// 1 tone
+    checkPitchBend(events, 1020, 9557);
+    checkPitchBend(events, 1030, 9595);
+    checkPitchBend(events, 1040, 9709);
+    checkPitchBend(events, 1050, 9898);
+    checkPitchBend(events, 1060, 10164);
+    checkPitchBend(events, 1070, 10505); /// 2 tones
+
+    /// bend, followed by release
+    checkPitchBend(events, 1430, 8192); /// pitchwheel reset
+    checkEventInterval(events, 1440, 1619, 52, defVol);
+    checkPitchBend(events, 1440, 8192);
+    checkPitchBend(events, 1450, 8267);
+    checkPitchBend(events, 1460, 8495);
+    checkPitchBend(events, 1470, 8874);
+    checkPitchBend(events, 1480, 9405);
+    checkPitchBend(events, 1490, 10088);
+    checkPitchBend(events, 1500, 10922);
+    checkPitchBend(events, 1510, 10865);
+    checkPitchBend(events, 1520, 10695);
+    checkPitchBend(events, 1530, 10410);
+    checkPitchBend(events, 1540, 10012);
+    checkPitchBend(events, 1550, 9500);
+
+    /// bend, followed by note
+    checkPitchBend(events, 1910, 8192);
+    checkEventInterval(events, 1920, 2039, 52, defVol);
+    checkPitchBend(events, 1920, 8192);
+    checkPitchBend(events, 1930, 8229);
+    checkPitchBend(events, 1940, 8343);
+    checkPitchBend(events, 1950, 8533);
+    checkPitchBend(events, 1960, 8798);
+    checkPitchBend(events, 1970, 9140);
+    checkPitchBend(events, 2030, 8192); /// pitchwheel reset
+    checkEventInterval(events, 2040, 2159, 52, defVol);
+
+    /// bend, followed by slide out
+    checkPitchBend(events, 2390, 8192); /// pitchwheel reset - TODO: зачем он нужен
+    checkEventInterval(events, 2400, 2489, 52, defVol);
+    checkPitchBend(events, 2400, 8192);
+    checkPitchBend(events, 2410, 8229);
+    checkPitchBend(events, 2420, 8343);
+    checkPitchBend(events, 2430, 8533);
+    checkPitchBend(events, 2440, 8798);
+    checkPitchBend(events, 2450, 9140);
+    checkEventInterval(events, 2490, 2498, 53, defVol, MidiInstrumentEffect::SLIDE, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 2499, 2507, 52, defVol, MidiInstrumentEffect::SLIDE, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 2509, 2517, 51, defVol, MidiInstrumentEffect::SLIDE, DEFAULT_CHANNEL + 1);
+
+    /// slide in, followed by bend
+    checkEventInterval(events, 2820, 2838, 55, defVol, MidiInstrumentEffect::SLIDE, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 2840, 2858, 54, defVol, MidiInstrumentEffect::SLIDE, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 2860, 2878, 53, defVol, MidiInstrumentEffect::SLIDE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 2870, 8192); /// pitchwheel reset
+    checkEventInterval(events, 2880, 2999, 52, defVol);
+    checkPitchBend(events, 2880, 8192);
+    checkPitchBend(events, 2890, 8229);
+    checkPitchBend(events, 2900, 8343);
+    checkPitchBend(events, 2910, 8533);
+    checkPitchBend(events, 2920, 8798);
+    checkPitchBend(events, 2930, 9140);
+
+    /// slight bend
+    checkPitchBend(events, 3350, 8192); /// pitchwheel reset
+    checkEventInterval(events, 3360, 3419, 52, defVol);
+    checkPitchBend(events, 3360, 8192);
+    checkPitchBend(events, 3370, 8201);
+    checkPitchBend(events, 3380, 8229);
+    checkPitchBend(events, 3390, 8277);
+    checkPitchBend(events, 3400, 8343);
+    checkPitchBend(events, 3410, 8429);
+
+    /// slide in, followed by slight bend
+    checkEventInterval(events, 3540, 3558, 55, defVol, MidiInstrumentEffect::SLIDE, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 3560, 3578, 54, defVol, MidiInstrumentEffect::SLIDE, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 3580, 3598, 53, defVol, MidiInstrumentEffect::SLIDE, DEFAULT_CHANNEL + 1);
+    checkPitchBend(events, 3590, 8192); /// pitchwheel reset
+    checkEventInterval(events, 3600, 3659, 52, defVol);
+    checkPitchBend(events, 3600, 8192);
+    checkPitchBend(events, 3610, 8201);
+    checkPitchBend(events, 3620, 8229);
+    checkPitchBend(events, 3630, 8277);
+    checkPitchBend(events, 3640, 8343);
+    checkPitchBend(events, 3650, 8429);
+
+    // only ME_CONTROLLER events are left
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 9);
+    EXPECT_EQ(events[DEFAULT_CHANNEL + 1].size(), 9);
 }
 
 /*****************************************************************************
