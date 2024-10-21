@@ -191,6 +191,23 @@ Column {
         ]
     }
 
+    FlatRadioButtonGroupPropertyView {
+        id: showCueNote
+        visible: root.model ? root.model.isFullIntervalChoiceAvailable : false
+
+        titleText: qsTrc("inspector", "Cue note visibility")
+        propertyItem: root.model ? root.model.showCueNote : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: interval.navigationRowEnd + 1
+
+        model: [
+            { text: qsTrc("inspector", "Auto"), value: CommonTypes.AUTO_ON_OFF_AUTO},
+            { text: qsTrc("inspector", "On"), value: CommonTypes.AUTO_ON_OFF_ON},
+            { text: qsTrc("inspector", "Off"), value: CommonTypes.AUTO_ON_OFF_OFF},
+        ]
+    }
+
     PropertyCheckBox {
         id: startOnUpperNote
         visible: false // prepared for future option but not implemented yet

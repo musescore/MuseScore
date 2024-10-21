@@ -243,6 +243,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(articulationAnchorOther,                    int(ArticulationAnchor::TOP)),
     styleDef(articulationStemHAlign,                     int(ArticulationStemSideAlign::AVERAGE)),
     styleDef(articulationKeepTogether,                   true),
+    styleDef(trillAlwaysShowCueNote,                  false),
     styleDef(lastSystemFillLimit,                        PropertyValue(0.3)),
 
     styleDef(hairpinPlacement,                           PlacementV::BELOW),

@@ -277,6 +277,10 @@ EditStyle::EditStyle(QWidget* parent)
     articulationKeepTogether->addButton(radioArticKeepTogether, 1);
     articulationKeepTogether->addButton(radioArticAllowSeparate, 0);
 
+    QButtonGroup* trillAlwaysShowCueNote = new QButtonGroup(this);
+    trillAlwaysShowCueNote->addButton(ornamentShowCueNoteAlways, 1);
+    trillAlwaysShowCueNote->addButton(ornamentShowCueNoteOnlyNonSeconds, 0);
+
     QButtonGroup* tabShowTiedFrets = new QButtonGroup(this);
     tabShowTiedFrets->addButton(tabShowTiesAndFret, int(ShowTiedFret::TIE_AND_FRET));
     tabShowTiedFrets->addButton(tabShowTies, int(ShowTiedFret::TIE));
@@ -506,6 +510,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::propertyDistance,        false, articStaffDist,          resetArticStaffDist },
         { StyleId::articulationStemHAlign,  false, articulationStemSide,    0 },
         { StyleId::articulationKeepTogether, false, articulationKeepTogether, 0 },
+        { StyleId::trillAlwaysShowCueNote, false, trillAlwaysShowCueNote, 0 },
         { StyleId::voltaPosAbove,           false, voltaPosAbove,           resetVoltaPosAbove },
         { StyleId::voltaHook,               false, voltaHook,               resetVoltaHook },
         { StyleId::voltaLineWidth,          false, voltaLineWidth,          resetVoltaLineWidth },
@@ -2015,6 +2020,21 @@ void EditStyle::unhandledType(const StyleWidget sw)
                                sw.widget->metaObject()->className()));
 }
 
+bool EditStyle::isBoolStyleRepresentedByButtonGroup(StyleId id)
+{
+    switch (id) {
+    case StyleId::articulationKeepTogether:
+    case StyleId::trillAlwaysShowCueNote:
+    case StyleId::genClef:
+    case StyleId::genKeysig:
+    case StyleId::singleMeasureMMRestUseNormalRest:
+    case StyleId::mmRestConstantWidth:
+        return true;
+    default:
+        return false;
+    }
+}
+
 //---------------------------------------------------------
 //   getValue
 //    return current gui value
@@ -2046,8 +2066,7 @@ PropertyValue EditStyle::getValue(StyleId idx)
         if (sw.idx == StyleId::harmonyVoiceLiteral) { // special case for bool represented by a two-item combobox
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
             v = cb->currentIndex();
-        } else if (sw.idx == StyleId::articulationKeepTogether || sw.idx == StyleId::genClef || sw.idx == StyleId::genKeysig
-                   || sw.idx == StyleId::singleMeasureMMRestUseNormalRest || sw.idx == StyleId::mmRestConstantWidth) {                                                                                                           // special case for bool represented by a two-item buttonGroup
+        } else if (isBoolStyleRepresentedByButtonGroup(idx)) { // special case for bool represented by a two-item buttonGroup
             QButtonGroup* bg = qobject_cast<QButtonGroup*>(sw.widget);
             v = bool(bg->checkedId());
         } else if (sw.idx == StyleId::lyricsDashForce || sw.idx == StyleId::lyricsMelismaForce) { // special case where UI is presented with opposite wording
@@ -2168,8 +2187,7 @@ void EditStyle::setValues()
             bool value = val.toBool();
             if (sw.idx == StyleId::harmonyVoiceLiteral) { // special case for bool represented by a two-item combobox
                 voicingSelectWidget->interpretBox->setCurrentIndex(value);
-            } else if (sw.idx == StyleId::articulationKeepTogether || sw.idx == StyleId::genClef || sw.idx == StyleId::genKeysig
-                       || sw.idx == StyleId::singleMeasureMMRestUseNormalRest || sw.idx == StyleId::mmRestConstantWidth) {                                                                                                           // special case for bool represented by a two-item buttonGroup
+            } else if (isBoolStyleRepresentedByButtonGroup(sw.idx)) { // special case for bool represented by a two-item buttonGroup
                 qobject_cast<QButtonGroup*>(sw.widget)->button(1)->setChecked(value);
                 qobject_cast<QButtonGroup*>(sw.widget)->button(0)->setChecked(!value);
             } else if (sw.idx == StyleId::lyricsDashForce || sw.idx == StyleId::lyricsMelismaForce) { // special case where UI is presented with opposite wording
