@@ -45,7 +45,7 @@ public:
     bool operator>(const Millimetre& a) const { return m_val > a.m_val; }
     bool operator<(const Millimetre& a) const { return m_val < a.m_val; }
     bool operator==(const Millimetre& a) const { return muse::RealIsEqual(m_val, a.m_val); }
-    bool operator!=(const Millimetre& a) const { return m_val != a.m_val; }
+    bool operator!=(const Millimetre& a) const { return !muse::RealIsEqual(m_val, a.m_val); }
     bool isZero() const { return muse::RealIsNull(m_val); }
 
     Millimetre& operator=(double v)
@@ -167,7 +167,7 @@ public:
     bool operator>(const Spatium& a) const { return m_val > a.m_val; }
     bool operator<(const Spatium& a) const { return m_val < a.m_val; }
     bool operator==(const Spatium& a) const { return muse::RealIsEqual(m_val, a.m_val); }
-    bool operator!=(const Spatium& a) const { return m_val != a.m_val; }
+    bool operator!=(const Spatium& a) const { return !muse::RealIsEqual(m_val, a.m_val); }
     bool isZero() const { return muse::RealIsNull(m_val); }
 
     Spatium& operator+=(const Spatium& a)

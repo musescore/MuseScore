@@ -26,6 +26,7 @@
 #include "pianokeyboardcontroller.h"
 
 #include "log.h"
+#include "realfn.h"
 
 using namespace mu::notation;
 
@@ -403,7 +404,7 @@ void PianoKeyboardView::moveCanvas(qreal dx)
         return;
     }
 
-    if (qFuzzyIsNull(dx)) {
+    if (muse::RealIsNull(dx)) {
         return;
     }
 
@@ -412,7 +413,7 @@ void PianoKeyboardView::moveCanvas(qreal dx)
 
 void PianoKeyboardView::setScrollOffset(qreal offset)
 {
-    if (qFuzzyCompare(m_scrollOffset, offset)) {
+    if (muse::RealIsEqual(m_scrollOffset, offset)) {
         return;
     }
 
@@ -441,7 +442,7 @@ void PianoKeyboardView::setScaling(qreal scaling, qreal x)
     qreal newScaling = std::clamp(scaling, SMALL_KEY_WIDTH_SCALING, LARGE_KEY_WIDTH_SCALING);
     qreal correctedFactor = newScaling / m_keyWidthScaling;
 
-    if (qFuzzyCompare(correctedFactor, 1.0)) {
+    if (muse::RealIsEqual(correctedFactor, 1.0)) {
         return;
     }
 
@@ -469,8 +470,8 @@ void PianoKeyboardView::updateScrollBar()
     qreal newPosition = -m_scrollOffset / m_keysAreaRect.width();
     qreal newSize = width() / m_keysAreaRect.width();
 
-    if (qFuzzyCompare(newPosition, m_scrollBarPosition)
-        && qFuzzyCompare(newSize, m_scrollBarSize)) {
+    if (muse::RealIsEqual(newPosition, m_scrollBarPosition)
+        && muse::RealIsEqual(newSize, m_scrollBarSize)) {
         return;
     }
 

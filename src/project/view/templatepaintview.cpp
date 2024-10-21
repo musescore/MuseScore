@@ -75,7 +75,7 @@ void TemplatePaintView::adjustCanvas()
 {
     qreal scaling = resolveDefaultScaling();
 
-    if (qFuzzyIsNull(scaling) || scaling < 0) {
+    if (RealIsNull(scaling) || scaling < 0) {
         return;
     }
 

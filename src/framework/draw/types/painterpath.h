@@ -153,7 +153,7 @@ private:
     {
         const PainterPath::Element& first = m_elements.at(m_cStart);
         const PainterPath::Element& last = m_elements.back();
-        return first.x == last.x && first.y == last.y;
+        return RealIsEqual(first.x, last.x) && RealIsEqual(first.y, last.y);
     }
 
     static inline bool isValidCoord(double c)

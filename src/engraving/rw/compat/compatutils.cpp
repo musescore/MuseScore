@@ -46,6 +46,7 @@
 #include "types/string.h"
 
 #include "log.h"
+#include "realfn.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::compat;
@@ -514,7 +515,7 @@ void CompatUtils::resetRestVerticalOffset(MasterScore* masterScore)
                         continue;
                     }
                     Rest* rest = toRest(item);
-                    if (rest->offset().y() != 0) {
+                    if (!muse::RealIsEqual(rest->offset().y(), 0)) {
                         PointF newOffset = PointF(rest->offset().x(), 0.0);
                         rest->setProperty(Pid::OFFSET, newOffset);
                     }
