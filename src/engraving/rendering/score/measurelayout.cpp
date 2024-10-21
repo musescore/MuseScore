@@ -1293,8 +1293,7 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 continue;
             }
             staff_idx_t staffIdx = e->staffIdx();
-            bool modernMMRest = e->isMMRest() && (!ctx.conf().styleB(Sid::oldStyleMultiMeasureRests)
-                                                  || toMMRest(e)->ldata()->number > ctx.conf().styleI(Sid::mmRestOldStyleMaxMeasures));
+            bool modernMMRest = e->isMMRest() && !toMMRest(e)->isOldStyle();
             if ((e->isRest() && toRest(e)->isFullMeasureRest()) || e->isMMRest() || e->isMeasureRepeat()) {
                 //
                 // element has to be centered in free space

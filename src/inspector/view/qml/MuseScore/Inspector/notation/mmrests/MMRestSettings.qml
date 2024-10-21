@@ -47,6 +47,7 @@ Column {
         id: numberVisibilityCheckBox
         text: qsTrc("inspector", "Show number")
         propertyItem: root.model ? root.model.isNumberVisible : null
+        enabled: root.model ? root.model.areNumberOptionsEnabled : true
 
         navigation.name: "NumberVisibilityCheckBox"
         navigation.panel: root.navigationPanel
@@ -54,8 +55,8 @@ Column {
     }
 
     SpinBoxPropertyView {
-        enabled: numberVisibilityCheckBox.checked
-        titleText: qsTrc("inspector", "Number position")
+        enabled: (root.model ? root.model.areNumberOptionsEnabled : true) && numberVisibilityCheckBox.checked
+        titleText: qsTrc("inspector", "Number offset")
         propertyItem: root.model ? root.model.numberPosition : null
 
         icon: IconCode.VERTICAL
