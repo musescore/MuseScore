@@ -25,16 +25,24 @@
 
 #include "async/asyncable.h"
 
+#include "framework/midi/imidiinport.h"
+#include "framework/midi/midimodule.h"
 #include "iaudiodriver.h"
 
-#include "audiodeviceslistener.h"
+#include "platform/lin/audiodeviceslistener.h"
+#include "playback/iplaybackconfiguration.h"
+#include "playback/iplaybackcontroller.h"
 
 namespace muse::audio {
-class LinuxAudioDriver : public IAudioDriver, public async::Asyncable
+class AudioMidiManager : public IAudioDriver, public async::Asyncable
 {
+    Inject<mu::playback::IPlaybackConfiguration> playbackConfiguration;
+    Inject<mu::playback::IPlaybackController> playbackController;
+
+    Inject<muse::midi::IMidiInPort> midiInPort;
 public:
-    LinuxAudioDriver();
-    ~LinuxAudioDriver();
+    AudioMidiManager();
+    ~AudioMidiManager();
 
     void init() override;
 
@@ -59,16 +67,31 @@ public:
 
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
 
+    int audioDelayCompensate() const override;
+    void setAudioDelayCompensate(const int frames) override;
+
+    bool pushMidiEvent(muse::midi::Event& e) override;
+    std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection direction) const override;
+
     unsigned int outputDeviceSampleRate() const override;
     bool setOutputDeviceSampleRate(unsigned int sampleRate) override;
     async::Notification outputDeviceSampleRateChanged() const override;
 
     std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
 
+    void isPlayingChanged();
+    void positionChanged(muse::audio::secs_t secs, muse::midi::tick_t tick);
+
+    bool isPlaying() const override;
+    void remotePlayOrStop(bool) const override;
+    void remoteSeek(msecs_t) const override;
+
     void resume() override;
     void suspend() override;
 
 private:
+    bool makeDevice(const AudioDeviceID& deviceId);
+    bool reopen(const AudioDeviceID& deviceId, Spec newSpec);
     async::Notification m_outputDeviceChanged;
 
     mutable std::mutex m_devicesMutex;
@@ -79,6 +102,10 @@ private:
 
     async::Notification m_bufferSizeChanged;
     async::Notification m_sampleRateChanged;
+    int m_audioDelayCompensate;
+
+    struct IAudioDriver::Spec m_spec;
+    std::unique_ptr<AudioDriverState> m_current_audioDriverState;
 };
 }
 

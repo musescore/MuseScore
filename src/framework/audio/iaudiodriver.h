@@ -32,8 +32,12 @@
 #include "modularity/imoduleinterface.h"
 
 #include "audiotypes.h"
+#include "framework/midi/miditypes.h"
+#include "framework/audio/midiqueue.h"
 
 namespace muse::audio {
+class AudioDriverState;
+
 class IAudioDriver : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioDriver)
@@ -86,11 +90,38 @@ public:
     virtual async::Notification outputDeviceSampleRateChanged() const = 0;
 
     virtual std::vector<unsigned int> availableOutputDeviceSampleRates() const = 0;
+    virtual bool isPlaying() const = 0;
+    virtual void remotePlayOrStop(bool) const = 0;
+    virtual void remoteSeek(msecs_t) const = 0;
+
+    virtual int audioDelayCompensate() const = 0;
+    virtual void setAudioDelayCompensate(const int frames) = 0;
+
+    virtual bool pushMidiEvent(muse::midi::Event&) = 0;
+    virtual std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection dir) const = 0;
 
     virtual void resume() = 0;
     virtual void suspend() = 0;
 };
-using IAudioDriverPtr = std::shared_ptr<IAudioDriver>;
+
+class AudioDriverState
+{
+public:
+    virtual std::string name() const = 0;
+    virtual bool open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec) = 0;
+    virtual void close() = 0;
+    virtual bool isOpened() const = 0;
+    virtual void setAudioDelayCompensate(const int frames) = 0;
+    virtual bool pushMidiEvent(muse::midi::Event&) = 0;
+    virtual void registerMidiInputQueue(async::Channel<muse::midi::tick_t, muse::midi::Event >) = 0;
+    virtual std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection dir) const = 0;
+
+    virtual void changedPlaying() const = 0;
+    virtual void changedPosition(muse::audio::secs_t secs, muse::midi::tick_t tick) const = 0;
+
+    IAudioDriver::Spec deviceSpec; // current running spec
+    std::string deviceId;
+};
 }
 
 #endif // MUSE_AUDIO_IAUDIODRIVER_H
