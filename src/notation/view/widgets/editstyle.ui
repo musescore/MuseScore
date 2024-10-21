@@ -2395,22 +2395,16 @@
                 <layout class="QGridLayout" name="gridLayout_5">
                  <item row="1" column="3">
                   <widget class="QTextEdit" name="oddHeaderR">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="minimumSize">
                     <size>
-                     <width>0</width>
-                     <height>30</height>
+                     <width>200</width>
+                     <height>76</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>207</width>
-                     <height>80</height>
+                     <width>400</width>
+                     <height>200</height>
                     </size>
                    </property>
                    <property name="tabChangesFocus">
@@ -2420,22 +2414,16 @@
                  </item>
                  <item row="2" column="1">
                   <widget class="QTextEdit" name="evenHeaderL">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="minimumSize">
                     <size>
-                     <width>0</width>
-                     <height>30</height>
+                     <width>200</width>
+                     <height>76</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>207</width>
-                     <height>80</height>
+                     <width>400</width>
+                     <height>200</height>
                     </size>
                    </property>
                    <property name="tabChangesFocus">
@@ -2461,22 +2449,16 @@
                  </item>
                  <item row="1" column="1">
                   <widget class="QTextEdit" name="oddHeaderL">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="minimumSize">
                     <size>
-                     <width>0</width>
-                     <height>30</height>
+                     <width>200</width>
+                     <height>76</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>207</width>
-                     <height>80</height>
+                     <width>400</width>
+                     <height>200</height>
                     </size>
                    </property>
                    <property name="tabChangesFocus">
@@ -2486,22 +2468,16 @@
                  </item>
                  <item row="2" column="3">
                   <widget class="QTextEdit" name="evenHeaderR">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="minimumSize">
                     <size>
-                     <width>0</width>
-                     <height>30</height>
+                     <width>200</width>
+                     <height>76</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>207</width>
-                     <height>80</height>
+                     <width>400</width>
+                     <height>200</height>
                     </size>
                    </property>
                    <property name="tabChangesFocus">
@@ -2524,22 +2500,16 @@
                  </item>
                  <item row="1" column="2">
                   <widget class="QTextEdit" name="oddHeaderC">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="minimumSize">
                     <size>
-                     <width>0</width>
-                     <height>30</height>
+                     <width>200</width>
+                     <height>76</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>207</width>
-                     <height>80</height>
+                     <width>400</width>
+                     <height>200</height>
                     </size>
                    </property>
                    <property name="tabChangesFocus">
@@ -2565,22 +2535,16 @@
                  </item>
                  <item row="2" column="2">
                   <widget class="QTextEdit" name="evenHeaderC">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="minimumSize">
                     <size>
-                     <width>0</width>
-                     <height>30</height>
+                     <width>200</width>
+                     <height>76</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>207</width>
-                     <height>80</height>
+                     <width>400</width>
+                     <height>200</height>
                     </size>
                    </property>
                    <property name="tabChangesFocus">
@@ -2711,22 +2675,16 @@
                  </item>
                  <item row="1" column="1">
                   <widget class="QTextEdit" name="oddFooterL">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="minimumSize">
                     <size>
-                     <width>0</width>
-                     <height>30</height>
+                     <width>200</width>
+                     <height>76</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>207</width>
-                     <height>80</height>
+                     <width>400</width>
+                     <height>200</height>
                     </size>
                    </property>
                    <property name="tabChangesFocus">
@@ -2752,22 +2710,16 @@
                  </item>
                  <item row="1" column="2">
                   <widget class="QTextEdit" name="oddFooterC">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="minimumSize">
                     <size>
-                     <width>0</width>
-                     <height>30</height>
+                     <width>200</width>
+                     <height>76</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>207</width>
-                     <height>80</height>
+                     <width>400</width>
+                     <height>200</height>
                     </size>
                    </property>
                    <property name="tabChangesFocus">
@@ -2777,22 +2729,16 @@
                  </item>
                  <item row="2" column="1">
                   <widget class="QTextEdit" name="evenFooterL">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="minimumSize">
                     <size>
-                     <width>0</width>
-                     <height>30</height>
+                     <width>200</width>
+                     <height>76</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>207</width>
-                     <height>80</height>
+                     <width>400</width>
+                     <height>200</height>
                     </size>
                    </property>
                    <property name="tabChangesFocus">
@@ -2831,22 +2777,16 @@
                  </item>
                  <item row="2" column="2">
                   <widget class="QTextEdit" name="evenFooterC">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="minimumSize">
                     <size>
-                     <width>0</width>
-                     <height>30</height>
+                     <width>200</width>
+                     <height>76</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>207</width>
-                     <height>80</height>
+                     <width>400</width>
+                     <height>200</height>
                     </size>
                    </property>
                    <property name="tabChangesFocus">
@@ -2856,22 +2796,16 @@
                  </item>
                  <item row="2" column="3">
                   <widget class="QTextEdit" name="evenFooterR">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="minimumSize">
                     <size>
-                     <width>0</width>
-                     <height>30</height>
+                     <width>200</width>
+                     <height>76</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>207</width>
-                     <height>80</height>
+                     <width>400</width>
+                     <height>200</height>
                     </size>
                    </property>
                    <property name="tabChangesFocus">
@@ -2881,22 +2815,16 @@
                  </item>
                  <item row="1" column="3">
                   <widget class="QTextEdit" name="oddFooterR">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
                    <property name="minimumSize">
                     <size>
-                     <width>0</width>
-                     <height>30</height>
+                     <width>200</width>
+                     <height>76</height>
                     </size>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>207</width>
-                     <height>80</height>
+                     <width>400</width>
+                     <height>200</height>
                     </size>
                    </property>
                    <property name="tabChangesFocus">
@@ -2936,6 +2864,22 @@
                 </layout>
                </item>
               </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="headerFooterMacroInfo">
+              <property name="maximumSize">
+               <size>
+                <width>576</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Special symbols in header/footer</string>
+              </property>
+              <property name="textInteractionFlags">
+               <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextSelectableByKeyboard|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+              </property>
              </widget>
             </item>
             <item>
