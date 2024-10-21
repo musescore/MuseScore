@@ -551,6 +551,10 @@ double HorizontalSpacing::computeSegmentDurationStretch(const Segment* curSeg, c
         }
     }
 
+    if (segmentIsAllCueSized(curSeg)) {
+        durStretch *= curSeg->style().styleD(Sid::smallNoteMag);
+    }
+
     return durStretch;
 }
 
@@ -583,6 +587,21 @@ double HorizontalSpacing::durationStretchForTicks(double slope, const Fraction& 
     Fraction durationRatio = ticks / REFERENCE_DURATION;
 
     return pow(slope, log2(durationRatio.toDouble()));
+}
+
+bool HorizontalSpacing::segmentIsAllCueSized(const Segment* segment)
+{
+    IF_ASSERT_FAILED(segment->isChordRestType()) {
+        return false;
+    }
+
+    for (EngravingItem* item : segment->elist()) {
+        if (item && !toChordRest(item)->isSmall()) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void HorizontalSpacing::applyCrossBeamSpacingCorrection(Segment* thisSeg, Segment* nextSeg, double& width)
