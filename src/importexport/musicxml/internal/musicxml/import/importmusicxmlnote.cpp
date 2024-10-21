@@ -62,14 +62,30 @@ MusicXmlParserNote::MusicXmlParserNote(muse::XmlStreamReader& e, engraving::Scor
                                        Fraction& missingCurr, String& currentVoice, GraceChordList& gcl, size_t& gac, Beams& currBeams,
                                        FiguredBassList& fbl, int& alt, MusicXmlTupletStates& tupletStates, Tuplets& tuplets,
                                        ArpeggioMap& arpMap, DelayedArpMap& delayedArps)
-    : m_e(e), m_score(score), m_logger(logger), m_pass1(pass1), m_pass2(pass2), m_partId(partId), m_measure(measure), m_sTime(sTime),
-    m_prevSTime(prevSTime), m_missingPrev(missingPrev), m_durationFraction(dura), m_missingCurr(missingCurr), m_currentVoice(currentVoice),
-    m_graceChordsList(gcl), m_graceAfterCount(gac), m_currBeams(currBeams), m_figuredBassList(fbl), m_alter(alt), m_tupletStates(
-          tupletStates), m_tuplets(tuplets), m_arpMap(arpMap), m_delayedArps(delayedArps), m_lyricParser(m_pass1.getMusicXmlPart(
-                               m_partId).lyricNumberHandler(), m_e, m_score, m_logger, m_pass1.isVocalStaff(
-                        m_partId)), m_notationsParser(
-          m_e, m_score, m_logger,
-          m_pass2),
+    : m_e(e),
+    m_score(score),
+    m_logger(logger),
+    m_pass1(pass1),
+    m_pass2(pass2),
+    m_partId(partId),
+    m_measure(measure),
+    m_sTime(sTime),
+    m_prevSTime(prevSTime),
+    m_missingPrev(missingPrev),
+    m_durationFraction(dura),
+    m_missingCurr(missingCurr),
+    m_currentVoice(currentVoice),
+    m_graceChordsList(gcl),
+    m_graceAfterCount(gac),
+    m_currBeams(currBeams),
+    m_figuredBassList(fbl),
+    m_alter(alt),
+    m_tupletStates(tupletStates),
+    m_tuplets(tuplets),
+    m_arpMap(arpMap),
+    m_delayedArps(delayedArps),
+    m_lyricParser(m_pass1.getMusicXmlPart(m_partId).lyricNumberHandler(), m_e, m_score, m_logger, m_pass1.isVocalStaff(m_partId)),
+    m_notationsParser(m_e, m_score, m_logger, m_pass2),
     m_noteDurationParser(m_pass2.divs(), m_logger, &m_pass1), m_notePitchParser(m_logger)
 {
 }
@@ -732,7 +748,7 @@ void MusicXmlParserNote::addLyric(Lyrics* l, int lyricNo)
 {
     if (lyricNo > MAX_LYRICS) {
         m_logger->logError(String(u"too much lyrics (>%1)")
-                               .arg(MAX_LYRICS), &m_e);
+                           .arg(MAX_LYRICS), &m_e);
         delete l;
     } else {
         l->setNo(lyricNo);
