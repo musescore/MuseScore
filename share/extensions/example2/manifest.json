@@ -3,5 +3,23 @@
     "type": "macros",
     "title": "Example 2 (default)",
 
-    "main": "main.js"
+    "actions": [
+        {
+            "code": "save",
+            "title": "Save",
+            "icon": "SAVE",
+            "show_on_toolbar": true,
+            "show_on_appmenu": false,
+            "path": "main.js",
+            "func": "save"
+        },
+        {
+            "code": "open",
+            "title": "Open",
+            "icon": "OPEN_FILE",
+            "show_on_toolbar": true,
+            "show_on_appmenu": false,
+            "path": "main.js",
+            "func": "open"}
+    ]
 }
