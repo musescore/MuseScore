@@ -107,6 +107,7 @@ Item {
         id: mainItem
 
         anchors.fill: parent
+        label.anchors.rightMargin: 30
 
         text: root.displayText
 
