@@ -183,7 +183,7 @@ public:
 
     double stretch() const { return m_stretch; }
     void setStretch(double v) { m_stretch = v; }
-    double computeDurationStretch(const Segment* prevSeg, Fraction minTicks, Fraction maxTicks);
+    double computeDurationStretch(const Segment* prevSeg);
 
     Fraction rtick() const override { return m_tick; }
     void setRtick(const Fraction& v) { assert(v >= Fraction(0, 1)); m_tick = v; }
@@ -256,9 +256,9 @@ public:
     double minLeft() const;
 
     double widthOffset() const { return m_widthOffset; }
+    void clearWidthOffset() { m_widthOffset = 0.0; }
+    void addWidthOffset(double w) { m_widthOffset += w; }
     void setWidthOffset(double w) { m_widthOffset = w; }
-
-    static void stretchSegmentsToWidth(std::vector<Spring>& springs, double width);
 
     double elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const;
     double elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const;
@@ -286,6 +286,7 @@ public:
     bool isTimeSigAnnounceType() const { return m_segmentType == SegmentType::TimeSigAnnounce; }
     bool isTimeTickType() const { return m_segmentType == SegmentType::TimeTick; }
     bool isRightAligned() const { return isClefType() || isBreathType(); }
+    bool isMMRestSegment() const { return isChordRestType() && m_elist.front() && m_elist.front()->isMMRest(); }
 
     static constexpr SegmentType CHORD_REST_OR_TIME_TICK_TYPE = SegmentType::ChordRest | SegmentType::TimeTick;
     static constexpr SegmentType durationSegmentsMask = CHORD_REST_OR_TIME_TICK_TYPE; // segment types which may have non-zero tick length
@@ -293,8 +294,6 @@ public:
     bool canWriteSpannerStartEnd(track_idx_t track, const Spanner* spanner) const;
 
     Fraction shortestChordRest() const;
-    void computeCrossBeamType(Segment* nextSeg);
-    CrossBeamType crossBeamType() const { return m_crossBeamType; }
 
     bool hasAccidentals() const;
 
@@ -306,6 +305,12 @@ public:
     bool goesBefore(const Segment* nextSegment) const;
 
     void checkEmpty() const;
+
+    double xPosInSystemCoords() const;
+    void setXPosInSystemCoords(double x);
+
+    double durationStretchForMMRests() const;
+    double durationStretchForTicks(const Fraction& ticks) const;
 
 private:
 
@@ -333,8 +338,6 @@ private:
     std::vector<EngravingItem*> m_preAppendedItems; // Container for items appended to the left of this segment (example: grace notes), size = staves * VOICES.
     std::vector<Shape> m_shapes;           // size = staves
     double m_spacing = 0;
-
-    CrossBeamType m_crossBeamType; // Will affect segment-to-segment horizontal spacing
 };
 } // namespace mu::engraving
 

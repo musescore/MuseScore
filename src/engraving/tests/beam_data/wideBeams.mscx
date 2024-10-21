@@ -518,7 +518,7 @@
             <durationType>eighth</durationType>
             </Rest>
           <Beam>
-            <l1>18</l1>
+            <l1>16</l1>
             <l2>14</l2>
             </Beam>
           <Chord>
@@ -561,7 +561,7 @@
             </Rest>
           <Beam>
             <l1>14</l1>
-            <l2>18</l2>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>

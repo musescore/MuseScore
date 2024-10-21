@@ -24,6 +24,8 @@
 
 #include <vector>
 
+#include "../dom/measure.h"
+
 #include "../layoutoptions.h"
 #include "layoutcontext.h"
 
@@ -65,6 +67,35 @@ public:
     static void updateSkylineForElement(EngravingItem* element, const System* system, double yMove);
 
 private:
+    struct MeasureState
+    {
+        Measure* measure = nullptr;
+        double measureWidth = 0.0;
+        double measurePos = 0.0;
+        std::vector < std::pair<Segment*, double> > segmentsPos;
+        bool curHeader = false;
+        bool curTrailer = false;
+
+        void clear()
+        {
+            measure = nullptr;
+            measureWidth = 0.0;
+            measurePos = 0.0;
+            segmentsPos.clear();
+        }
+
+        void restoreMeasure()
+        {
+            measure->mutldata()->setPosX(measurePos);
+            measure->setWidth(measureWidth);
+            for (auto pair : segmentsPos) {
+                Segment* segment = pair.first;
+                double x = pair.second;
+                segment->mutldata()->setPosX(x);
+            }
+        }
+    };
+
     static System* getNextSystem(LayoutContext& lc);
     static void processLines(System* system, LayoutContext& ctx, std::vector<Spanner*> lines, bool align);
     static void layoutTies(Chord* ch, System* system, const Fraction& stick, LayoutContext& ctx);
@@ -72,11 +103,9 @@ private:
     static void doLayoutNoteSpannersLinear(System* system, LayoutContext& ctx);
     static void layoutNoteAnchoredSpanners(System* system, Chord* chord);
     static void layoutGuitarBends(const std::vector<Segment*>& sl, LayoutContext& ctx);
-    static void justifySystem(System* system, double curSysWidth, double targetSystemWidth);
     static void updateCrossBeams(System* system, LayoutContext& ctx);
+    static bool measureHasCrossStuffOrModifiedBeams(const Measure* measure);
     static void restoreTiesAndBends(System* system, LayoutContext& ctx);
-    static void manageNarrowSpacing(System* system, LayoutContext& ctx, double& curSysWidth, double targetSysWidth, const Fraction minTicks,
-                                    const Fraction maxTicks);
 
     static double instrumentNamesWidth(System* system, LayoutContext& ctx, bool isFirstSystem);
     static double totalBracketOffset(LayoutContext& ctx);
@@ -89,6 +118,8 @@ private:
     static bool elementShouldBeCenteredBetweenStaves(const EngravingItem* item, const System* system);
     static bool elementHasAnotherStackedOutside(const EngravingItem* element, const Shape& elementShape, const SkylineLine& skylineLine);
     static void centerElementBetweenStaves(EngravingItem* element, const System* system);
+
+    static bool shouldBeJustified(System* system, double curSysWidth, double targetSystemWidth, LayoutContext& ctx);
 };
 }
 

@@ -193,18 +193,14 @@ public:
     staff_idx_t lastSysStaffOfPart(const Part* part) const;
     staff_idx_t lastVisibleSysStaffOfPart(const Part* part) const;
 
-    Fraction minSysTicks() const;
-    Fraction maxSysTicks() const;
-
-    double squeezableSpace() const;
-    bool hasCrossStaffOrModifiedBeams();
-
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
 #endif
 
     void setBracketsXPosition(const double xOffset);
     size_t getBracketsColumnsCount();
+
+    void resetShortestLongestChordRest();
 
 private:
     friend class Factory;
