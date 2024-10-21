@@ -138,7 +138,11 @@ void GeneralSettingsModel::onCurrentNotationChanged()
 
 void GeneralSettingsModel::onVisibleChanged(bool visible)
 {
-    beginCommand();
+    const muse::TranslatableString actionName = visible
+                                                ? TranslatableString("undoableAction", "Show item(s)")
+                                                : TranslatableString("undoableAction", "Hide item(s)");
+
+    beginCommand(actionName);
 
     Score* score = currentNotation()->elements()->msScore();
 

@@ -46,7 +46,7 @@ public:
     void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset, bool undoable = true) override;
 
 private:
-    void startGlobalEdit();
+    void startGlobalEdit(const muse::TranslatableString& actionName);
     void endGlobalEdit();
 
     void onPartsRemoved(const std::vector<Part*>& parts) override;

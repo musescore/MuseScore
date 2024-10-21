@@ -225,8 +225,10 @@ public:
      * a corresponding endCmd() call. Should be used at
      * least once by "dock" type plugins in case they
      * modify the score.
+     * \param qActionName - Optional action name that appears in Undo/Redo
+     * menus, palettes, and lists.
      */
-    Q_INVOKABLE void startCmd();
+    Q_INVOKABLE void startCmd(const QString& qActionName = {});
     /**
      * For "dock" type plugins: to be used after score
      * modifications to make them undoable.

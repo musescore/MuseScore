@@ -245,7 +245,7 @@ void OrnamentSettingsModel::setIntervalStep(Pid id, engraving::IntervalStep step
         return;
     }
 
-    beginCommand();
+    beginCommand(muse::TranslatableString("undoableAction", "Set ornament interval step"));
 
     for (mu::engraving::EngravingItem* item : m_elementList) {
         IF_ASSERT_FAILED(item) {
@@ -277,7 +277,7 @@ void OrnamentSettingsModel::setIntervalType(Pid id, engraving::IntervalType type
         return;
     }
 
-    beginCommand();
+    beginCommand(muse::TranslatableString("undoableAction", "Set ornament interval type"));
 
     for (mu::engraving::EngravingItem* item : m_elementList) {
         IF_ASSERT_FAILED(item) {

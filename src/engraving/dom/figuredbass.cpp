@@ -750,7 +750,7 @@ void FiguredBass::regenerateText()
         FiguredBassItem* pItem = new FiguredBassItem(this, idx++);
         if (!pItem->parse(str)) {               // if any item fails parsing
             clearItems();
-            score()->startCmd();
+            score()->startCmd(TranslatableString("undoableAction", "Regenerate figured bass text"));
             triggerLayout();
             score()->endCmd();
             delete pItem;
@@ -769,7 +769,7 @@ void FiguredBass::regenerateText()
         undoChangeProperty(Pid::TEXT, normalizedText);
     }
 
-    score()->startCmd();
+    score()->startCmd(TranslatableString("undoableAction", "Update layout"));
     triggerLayout();
     score()->endCmd();
 }

@@ -83,7 +83,7 @@ protected:
 
     Part* partModifiable(const muse::ID& partId) const;
 
-    void startEdit();
+    void startEdit(const muse::TranslatableString& actionName);
     void apply();
     void rollback();
 

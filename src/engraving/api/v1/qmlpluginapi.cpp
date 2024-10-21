@@ -278,7 +278,7 @@ apiv1::Score* PluginAPI::newScore(const QString& /*name*/, const QString& part, 
 
     qApp->processEvents();
     Q_ASSERT(currentScore() == score);
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "New score"));
     return wrap<Score>(score, Ownership::SCORE);
 }
 

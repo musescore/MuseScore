@@ -73,8 +73,8 @@ protected:
     muse::RectF fromLogical(muse::RectF rect) const;
 
     notation::INotationUndoStackPtr undoStack() const;
-    void beginCommand();
-    void beginMultiCommands();
+    void beginCommand(const muse::TranslatableString& actionName);
+    void beginMultiCommands(const muse::TranslatableString& actionName);
     void endCommand();
     void endMultiCommands();
     void updateNotation();

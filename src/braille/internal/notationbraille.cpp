@@ -699,7 +699,7 @@ bool NotationBraille::addTie()
         return false;
     }
 
-    score()->startCmd();
+    score()->startCmd(TranslatableString("undoableAction", "Add tie"));
     Note* note = toNote(currentEngravingItem());
 
     Tie* tie = Factory::createTie(score()->dummy());
@@ -725,7 +725,7 @@ bool NotationBraille::addSlur()
             ChordRest* firstChordRest = toChordRest(note1->parent());
             ChordRest* secondChordRest = toChordRest(note2->parent());
 
-            score()->startCmd();
+            score()->startCmd(TranslatableString("undoableAction", "Add slur"));
 
             Slur* slur = Factory::createSlur(firstChordRest->measure()->system());
             slur->setScore(firstChordRest->score());
@@ -770,7 +770,7 @@ bool NotationBraille::addLongSlur()
             ChordRest* firstChordRest = toChordRest(note1->parent());
             ChordRest* secondChordRest = toChordRest(note2->parent());
 
-            score()->startCmd();
+            score()->startCmd(TranslatableString("undoableAction", "Add long slur"));
 
             Slur* slur = Factory::createSlur(firstChordRest->measure()->system());
             slur->setScore(firstChordRest->score());

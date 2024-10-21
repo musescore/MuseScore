@@ -47,6 +47,7 @@ static constexpr bool DONT_PLAY_CHORD = false;
 
 static const ActionCode UNDO_ACTION_CODE = "undo";
 static const ActionCode REDO_ACTION_CODE = "redo";
+static const ActionCode UNDO_HISTORY_CODE = "undo-history";
 
 static const QMap<ActionCode, Fraction> DURATIONS_FOR_TEXT_NAVIGATION {
     { "advance-longa", Fraction(4, 1) },
@@ -224,6 +225,7 @@ void NotationActionController::init()
 
     registerAction(UNDO_ACTION_CODE, &Interaction::undo, &Controller::canUndo);
     registerAction(REDO_ACTION_CODE, &Interaction::redo, &Controller::canRedo);
+    registerAction(UNDO_HISTORY_CODE, &Controller::openUndoRedoHistory, &Controller::canUndoOrRedo);
 
     registerAction("select-next-chord", &Interaction::addToSelection, MoveDirection::Right, MoveSelectionType::Chord, PlayMode::NoPlay,
                    &Controller::isNotNoteInputMode);
@@ -541,7 +543,7 @@ bool NotationActionController::canReceiveAction(const ActionCode& code) const
     }
 
     if (!masterNotation->hasParts()) {
-        return code == UNDO_ACTION_CODE || code == REDO_ACTION_CODE;
+        return code == UNDO_ACTION_CODE || code == REDO_ACTION_CODE || code == UNDO_HISTORY_CODE;
     }
 
     auto iter = m_isEnabledMap.find(code);
@@ -1971,9 +1973,14 @@ void NotationActionController::toggleConcertPitch()
         return;
     }
 
-    currentNotationUndoStack()->prepareChanges();
-    bool enabled = style->styleValue(StyleId::concertPitch).toBool();
-    style->setStyleValue(StyleId::concertPitch, !enabled);
+    bool toggle = !style->styleValue(StyleId::concertPitch).toBool();
+
+    const TranslatableString actionName = toggle
+                                          ? TranslatableString("undoableAction", "Display concert pitch")
+                                          : TranslatableString("undoableAction", "Display transposed");
+
+    currentNotationUndoStack()->prepareChanges(actionName);
+    style->setStyleValue(StyleId::concertPitch, toggle);
     currentNotationUndoStack()->commitChanges();
 }
 
@@ -2079,6 +2086,25 @@ bool NotationActionController::canUndo() const
 bool NotationActionController::canRedo() const
 {
     return currentNotationUndoStack() ? currentNotationUndoStack()->canRedo() : false;
+}
+
+bool NotationActionController::canUndoOrRedo() const
+{
+    return canUndo() || canRedo();
+}
+
+void NotationActionController::openUndoRedoHistory()
+{
+    TRACEFUNC;
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    RetVal<Val> result = interactive()->open("musescore://notation/undohistory");
+    if (result.ret) {
+        interaction->undoHistory(static_cast<size_t>(result.val.toInt()));
+    }
 }
 
 bool NotationActionController::isNotationPage() const

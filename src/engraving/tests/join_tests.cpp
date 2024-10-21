@@ -61,7 +61,7 @@ void Engraving_JoinTests::join(const char* p1, const char* p2, int index)
 
     EXPECT_NE(m1, m2);
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Engraving join tests"));
     score->cmdJoinMeasure(m1, m2);
     score->endCmd();
 
