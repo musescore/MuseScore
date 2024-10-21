@@ -477,7 +477,9 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
 
     {
         mu::engraving::ScoreLoad sl;
-        score->doLayout();
+        for (mu::engraving::Score* s : score->scoreList()) {
+            s->doLayout();
+        }
     }
 }
 
