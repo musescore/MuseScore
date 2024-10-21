@@ -822,11 +822,16 @@ void TDraw::draw(const BarLine* item, Painter* painter)
     break;
     }
     Segment* s = item->segment();
-    if (s && s->isEndBarLineType() && !item->score()->printing()) {
-        Measure* m = s->measure();
-        if (m->isIrregular() && item->score()->markIrregularMeasures() && !m->isMMRest()) {
+    if (s && s->isEndBarLineType() && !item->score()->printing() && item->score()->showUnprintable()
+        && item->score()->markIrregularMeasures()) {
+        Measure* m;
+        if (s->isEndBarLineType()) {
+            m = s->measure();
+        } else {
+            m = s->measure()->prevMeasure();
+        }
+        if (m && m->isIrregular() && item->score()->markIrregularMeasures() && !m->isMMRest()) {
             painter->setPen(item->configuration()->formattingColor());
-
             Font f(u"Edwin", Font::Type::Text);
             f.setPointSizeF(12 * item->spatium() / SPATIUM20);
             f.setBold(true);
