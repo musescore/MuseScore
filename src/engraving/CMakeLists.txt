@@ -233,6 +233,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/tremolorenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/chordarticulationsrenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/chordarticulationsrenderer.h
+    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/noterenderer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/noterenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/bendsrenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/bendsrenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/symbolsmetaparser.cpp

@@ -25,6 +25,7 @@
 
 #include "mpe/tests/utils/articulationutils.h"
 
+#include "dom/note.h"
 #include "dom/factory.h"
 #include "dom/measure.h"
 #include "dom/part.h"
@@ -1082,32 +1083,52 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
     m_defaultProfile->setPattern(ArticulationType::DiscreteGlissando, m_dummyPattern);
     m_defaultProfile->setPattern(ArticulationType::ContinuousGlissando, m_dummyPattern);
 
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+
     // ###################################################
     // 1st case: Discrete glissando on a tied note
     // ###################################################
-    const Chord* chord = findChord(score, 1440, 0); // tied A4 with discrete glissando
+    const Chord* chord = findChord(score, 960, 0); // first tied A4
     ASSERT_TRUE(chord);
-    ASSERT_FALSE(chord->notes().empty());
+    ASSERT_EQ(chord->notes().size(), 1);
+    ASSERT_TRUE(chord->notes().front()->tieFor());
+
+    // [WHEN] Request to render a chord with the A4 note on it
+    PlaybackEventsMap result;
+    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
+
+    // [THEN] Note event has the correct duration and standard articulation (no glissando)
+    pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::A, 4);
+    duration_t glissandoNoteDuration = QUARTER_NOTE_DURATION / 4;
+
+    ASSERT_EQ(result.size(), 1);
+    ASSERT_EQ(result.begin()->second.size(), 1);
+    mpe::NoteEvent noteEvent = std::get<mpe::NoteEvent>(result.begin()->second.at(0));
+    EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+    EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
+    EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, nominalPitchLevel);
+    EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, QUARTER_NOTE_DURATION + glissandoNoteDuration); // A4 + 1st glissando note
+
+    // [GIVEN] Tied A4 with discrete glissando
+    chord = findChord(score, 1440, 0);
+    ASSERT_TRUE(chord);
+    ASSERT_EQ(chord->notes().size(), 1);
     ASSERT_TRUE(chord->notes().front()->tieBack());
 
-    // [GIVEN] Expected glissando disclosure
-    size_t expectedSubNotesCount = 4;
-    float expectedDuration = static_cast<float>(QUARTER_NOTE_DURATION) / expectedSubNotesCount;
-    mpe::timestamp_t expectedTimestamp = timestampFromTicks(score, chord->tick().ticks());
-    pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::A, 4);
-    std::vector<int> pitchesWt = { 0, -1, -2, -3 };
+    // [WHEN] Request to render a chord with the A4 note on it
+    result.clear();
+    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
+
+    // [THEN] Expected glissando disclosure
+    size_t expectedSubNotesCount = 3;
+    mpe::timestamp_t expectedTimestamp = timestampFromTicks(score, chord->tick().ticks()) + glissandoNoteDuration;
+    std::vector<int> pitchesWt = { -1, -2, -3 };
 
     std::vector<pitch_level_t> expectedPitches;
     for (size_t i = 0; i < expectedSubNotesCount; ++i) {
         expectedPitches.push_back(nominalPitchLevel + pitchesWt.at(i) * PITCH_LEVEL_STEP);
     }
-
-    // [GIVEN] Dummy context
-    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
-
-    // [WHEN] Request to render a chord with the A4 note on it
-    PlaybackEventsMap result;
-    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -1121,8 +1142,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::DiscreteGlissando));
 
             // [THEN] We expect that each sub-note in Discrete Glissando articulation has expected duration
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, static_cast<int>(expectedDuration));
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp + static_cast<int>(i * expectedDuration));
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, glissandoNoteDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp + static_cast<int>(i * glissandoNoteDuration));
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
@@ -1132,25 +1153,25 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
     // ###################################################
     // 2nd case: Continuous glissando on a tied note
     // ###################################################
-    chord = findChord(score, 5280, 0); // tied A4 with continuous glissando
+    chord = findChord(score, 4800, 0); // tied A4 with continuous glissando
     ASSERT_TRUE(chord);
     ASSERT_FALSE(chord->notes().empty());
-    ASSERT_TRUE(chord->notes().front()->tieBack());
+    ASSERT_TRUE(chord->notes().front()->tieFor());
 
-    // [GIVEN] Expected glissando disclosure
+    // [WHEN] Request to render a chord with the A4 note on it
+    result.clear();
+    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
+
+    // [THEN] Expected glissando disclosure
     expectedSubNotesCount = 1;
-    expectedDuration = QUARTER_NOTE_DURATION;
     expectedTimestamp = timestampFromTicks(score, chord->tick().ticks());
+    glissandoNoteDuration = QUARTER_NOTE_DURATION * 2;
     nominalPitchLevel = pitchLevel(PitchClass::A, 4);
 
     expectedPitches.clear();
     for (size_t i = 0; i < expectedSubNotesCount; ++i) {
         expectedPitches.push_back(nominalPitchLevel + int(i) * PITCH_LEVEL_STEP);
     }
-
-    // [WHEN] Request to render a chord with the A4 note on it
-    result.clear();
-    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -1164,13 +1185,15 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ContinuousGlissando));
 
             // [THEN] We expect that each sub-note has an expected duration
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
-            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp + static_cast<duration_t>(i) * expectedDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, glissandoNoteDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp + static_cast<duration_t>(i) * glissandoNoteDuration);
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
         }
     }
+
+    delete score;
 }
 
 /**
@@ -2290,6 +2313,83 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo)
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
         }
     }
+}
+
+/**
+ * @brief PlaybackEventsRendererTests_Single_Note_Tremolo_OnTiedNote
+ * @details In this case we're gonna render a simple piece of score with 3 measures,
+ *          which starts with an A4 half note tied to another A4 half note marked by the 32nd Tremolo articulation
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo_OnTiedNote)
+{
+    // [GIVEN] Simple piece of score (violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "single_note_tremolo_on_tied_note/single_note_tremolo_on_tied_note.mscx");
+    ASSERT_TRUE(score);
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
+    m_defaultProfile->setPattern(ArticulationType::Tremolo32nd, m_dummyPattern);
+
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+
+    // [GIVEN] Chord of the 1st tied note (without tremolo)
+    const Chord* chord = findChord(score, 1920);
+    ASSERT_TRUE(chord);
+    ASSERT_EQ(chord->notes().size(), 1);
+
+    const Note* firstTiedNote = chord->notes().front();
+    ASSERT_TRUE(firstTiedNote->tieFor() && !firstTiedNote->tieBack());
+
+    // [WHEN] Request to render the 1st chord
+    PlaybackEventsMap result;
+    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
+
+    // [THEN] Note event has normal duration and standard articulation (no tremolo)
+    ASSERT_EQ(result.size(), 1);
+    ASSERT_EQ(result.begin()->second.size(), 1);
+    mpe::NoteEvent noteEvent = std::get<mpe::NoteEvent>(result.begin()->second.at(0));
+    EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+    EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
+    EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::A, 4));
+    EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, HALF_NOTE_DURATION);
+
+    // [GIVEN] Chord of the 2nd tied note (with tremolo)
+    chord = findChord(score, 2880);
+    ASSERT_TRUE(chord);
+    ASSERT_EQ(chord->notes().size(), 1);
+
+    const Note* lastTiedNote = chord->notes().front();
+    ASSERT_TRUE(lastTiedNote->tieBack() && !lastTiedNote->tieFor());
+
+    // [WHEN] Request to render the 2nd chord
+    result.clear();
+    m_renderer.render(chord, 0, m_defaultProfile, ctx, result);
+
+    constexpr int expectedSubNotesCount = 16;
+    constexpr mpe::duration_t expectedDuration = HALF_NOTE_DURATION / expectedSubNotesCount;
+
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
+
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
+
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Tremolo32nd));
+
+            // [THEN] We expect that each sub-note has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
+
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::A, 4));
+        }
+    }
+
+    delete score;
 }
 
 /**
