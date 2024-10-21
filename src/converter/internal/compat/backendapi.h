@@ -96,9 +96,6 @@ private:
 
     static muse::RetVal<QByteArray> scorePartJson(mu::engraving::Score* score, const std::string& fileName);
 
-    static muse::RetVal<notation::TransposeOptions> parseTransposeOptions(const std::string& optionsJson);
-    static muse::Ret applyTranspose(const notation::INotationPtr notation, const std::string& optionsJson);
-
     static void switchToPageView(notation::IMasterNotationPtr masterNotation);
     static void renderExcerptsContents(notation::IMasterNotationPtr masterNotation);
 
