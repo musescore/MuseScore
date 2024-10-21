@@ -1335,6 +1335,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Tempo &marking"),
              TranslatableString("action", "Add text: tempo marking")
              ),
+    UiAction("dynamics",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Dynamics"),
+             TranslatableString("action", "Add text: dynamics")
+             ),
     UiAction("duplet",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,

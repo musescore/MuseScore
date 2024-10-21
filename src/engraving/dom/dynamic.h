@@ -153,6 +153,9 @@ private:
     static const std::vector<Dyn> DYN_LIST;
 
     bool m_anchorToEndOfPrevious = false;
+
+protected:
+    void commitText() override;
 };
 } // namespace mu::engraving
 

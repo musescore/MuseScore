@@ -735,7 +735,11 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createRehearsalMark(dummy()->segment());
+        textBox = Factory::createRehearsalMark(chordRest->segment());
+        textBox->setParent(chordRest->segment());
+        textBox->setTrack(0);
+        RehearsalMark* r = toRehearsalMark(textBox);
+        textBox->setXmlText(score()->createRehearsalMarkText(r));
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -936,6 +940,15 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
 
         textBox = tempoText;
         undoAddElement(textBox);
+        break;
+    }
+    case TextStyleType::DYNAMICS: {
+        ChordRest* chordRest = chordOrRest(destinationElement);
+        if (!chordRest) {
+            break;
+        }
+        textBox = Factory::createDynamic(dummy()->segment());
+        chordRest->undoAddAnnotation(textBox);
         break;
     }
     case TextStyleType::HARP_PEDAL_DIAGRAM:

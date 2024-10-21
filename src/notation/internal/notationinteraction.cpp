@@ -4538,6 +4538,7 @@ Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIte
         TextStyleType::HARMONY_NASHVILLE,
         TextStyleType::LYRICS_ODD,
         TextStyleType::TEMPO,
+        TextStyleType::DYNAMICS,
     };
 
     if (muse::contains(needSelectNoteOrRestTypes, type)) {
@@ -4592,6 +4593,10 @@ void NotationInteraction::addText(TextStyleType type, EngravingItem* item)
 
     if (!text->isInstrumentChange()) {
         startEditText(text);
+    }
+    
+    if (text->isRehearsalMark() || text->isTempoText()) {
+        text->cursor()->selectWord();
     }
 }
 

@@ -335,6 +335,7 @@ void NotationActionController::init()
     registerAction("nashville-number-text", [this]() { addText(TextStyleType::HARMONY_NASHVILLE); });
     registerAction("lyrics", [this]() { addText(TextStyleType::LYRICS_ODD); });
     registerAction("tempo", [this]() { addText(TextStyleType::TEMPO); });
+    registerAction("dynamics", [this]() { addText(TextStyleType::DYNAMICS); });
 
     registerAction("figured-bass", [this]() { addFiguredBass(); });
 
@@ -1260,7 +1261,13 @@ void NotationActionController::addText(TextStyleType type)
         return;
     }
 
-    EngravingItem* item = contextItem(interaction);
+    EngravingItem* item;
+    if (interaction->selection()->isRange()) {
+        const mu::engraving::Selection sel = currentNotationElements()->msScore()->selection();
+        item = sel.startSegment()->firstElementForNavigation(sel.staffStart());
+    } else {
+        item = contextItem(interaction);
+    }
 
     if (isVerticalBoxTextStyle(type)) {
         if (!item || !item->isVBox()) {
