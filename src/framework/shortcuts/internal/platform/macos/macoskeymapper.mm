@@ -19,12 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "macosshortcutsinstancemodel.h"
+#include "macoskeymapper.h"
 
 #import <Carbon/Carbon.h>
 
-#include <QGuiApplication>
-#include <QKeyEvent>
+#include "global/containers.h"
 
 #include "log.h"
 
@@ -333,7 +332,7 @@ static QString keyModifiersToString(UInt32 keyNativeModifiers)
     return result;
 }
 
-static QString translateToCurrentKeyboardLayout(const QKeySequence& sequence)
+QString MacOSKeyMapper::translateToCurrentKeyboardLayout(const QKeySequence& sequence)
 {
     const QKeyCombination keyCombination = sequence[0];
 
@@ -359,52 +358,4 @@ static QString translateToCurrentKeyboardLayout(const QKeySequence& sequence)
     QString modifStr = keyModifiersToString(keyNativeModifiers);
 
     return (modifStr.isEmpty() ? "" : modifStr + "+") + keyStr;
-}
-
-MacOSShortcutsInstanceModel::MacOSShortcutsInstanceModel(QObject* parent)
-    : ShortcutsInstanceModel(parent)
-{
-    connect(qApp->inputMethod(), &QInputMethod::localeChanged, this, [this]() {
-        doLoadShortcuts();
-    });
-}
-
-void MacOSShortcutsInstanceModel::doLoadShortcuts()
-{
-    m_shortcuts.clear();
-    m_macSequenceMap.clear();
-
-    ShortcutList shortcuts = shortcutsRegister()->shortcuts();
-
-    for (const Shortcut& sc : shortcuts) {
-        for (const std::string& seq : sc.sequences) {
-            QString sequence = QString::fromStdString(seq);
-
-            QString seqStr = translateToCurrentKeyboardLayout(QKeySequence::fromString(sequence, QKeySequence::PortableText));
-            if (seqStr.isEmpty()) {
-                LOGW() << "Failed to translate sequence " << sequence;
-                continue;
-            }
-
-            // RULE: If a sequence is used for several shortcuts but the values for autoRepeat vary depending on
-            // the context, then we should force autoRepeat to false for all shortcuts sharing the sequence in
-            // question. This prevents the creation of ambiguous shortcuts (see QShortcutEvent::isAmbiguous)
-            auto search = m_shortcuts.find(seqStr);
-            if (search == m_shortcuts.end()) {
-                // Sequence not found, add it...
-                m_shortcuts.insert(seqStr, QVariant(sc.autoRepeat));
-                m_macSequenceMap.insert(seqStr, sequence);
-            } else if (search.value().toBool() && !sc.autoRepeat) {
-                // Sequence already exists, but we need to enforce the above rule...
-                search.value() = false;
-            }
-        }
-    }
-
-    emit shortcutsChanged();
-}
-
-void MacOSShortcutsInstanceModel::doActivate(const QString& seq)
-{
-    ShortcutsInstanceModel::doActivate(m_macSequenceMap.value(seq));
 }

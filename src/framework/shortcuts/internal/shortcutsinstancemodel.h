@@ -63,6 +63,7 @@ protected:
 
     // Key = sequence (QString), value = autoRepeat (QVariant/bool)
     QVariantMap m_shortcuts;
+    QHash<QString, QString> m_shortcutMap;
 };
 }
 
