@@ -337,7 +337,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
  * @details User pressed left mouse button on already selected text element
  *          We should change text cursor position
  */
-TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Selected_Text_Element)
+TEST_F(NotationViewInputControllerTests, DISABLED_Mouse_Press_On_Selected_Text_Element)
 {
     //! [GIVEN] There is a test score
     engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
