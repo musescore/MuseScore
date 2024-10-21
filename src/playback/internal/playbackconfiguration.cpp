@@ -37,6 +37,7 @@ static const std::string moduleName("playback");
 
 static const Settings::Key PLAYBACK_CURSOR_TYPE_KEY(moduleName, "application/playback/cursorType");
 static const Settings::Key PLAY_NOTES_WHEN_EDITING(moduleName, "score/note/playOnClick");
+static const Settings::Key PLAY_NOTES_ON_MIDI_INPUT(moduleName, "score/note/playOnMidiInput");
 static const Settings::Key PLAY_CHORD_WHEN_EDITING(moduleName, "score/chord/playOnAddNote");
 static const Settings::Key PLAY_HARMONY_WHEN_EDITING(moduleName, "score/harmony/play/onedit");
 
@@ -92,6 +93,7 @@ static Settings::Key auxChannelVisibleKey(aux_channel_idx_t index)
 void PlaybackConfiguration::init()
 {
     settings()->setDefaultValue(PLAY_NOTES_WHEN_EDITING, Val(true));
+    settings()->setDefaultValue(PLAY_NOTES_ON_MIDI_INPUT, Val(true));
     settings()->setDefaultValue(PLAY_CHORD_WHEN_EDITING, Val(true));
     settings()->setDefaultValue(PLAY_HARMONY_WHEN_EDITING, Val(true));
     settings()->setDefaultValue(PLAYBACK_CURSOR_TYPE_KEY, Val(PlaybackCursorType::STEPPED));
@@ -139,6 +141,16 @@ bool PlaybackConfiguration::playNotesWhenEditing() const
 void PlaybackConfiguration::setPlayNotesWhenEditing(bool value)
 {
     settings()->setSharedValue(PLAY_NOTES_WHEN_EDITING, Val(value));
+}
+
+bool PlaybackConfiguration::playNotesOnMidiInput() const
+{
+    return settings()->value(PLAY_NOTES_ON_MIDI_INPUT).toBool();
+}
+
+void PlaybackConfiguration::setPlayNotesOnMidiInput(bool value)
+{
+    settings()->setSharedValue(PLAY_NOTES_ON_MIDI_INPUT, Val(value));
 }
 
 bool PlaybackConfiguration::playChordWhenEditing() const
