@@ -957,4 +957,10 @@ String Dynamic::screenReaderInfo() const
     }
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), s);
 }
+
+void Dynamic::commitText()
+{
+    setDynamicType(xmlText());
+    TextBase::commitText();
+}
 }

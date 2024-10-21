@@ -4515,6 +4515,7 @@ Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIte
         TextStyleType::HARMONY_NASHVILLE,
         TextStyleType::LYRICS_ODD,
         TextStyleType::TEMPO,
+        TextStyleType::DYNAMICS,
     };
 
     if (muse::contains(needSelectNoteOrRestTypes, type)) {
