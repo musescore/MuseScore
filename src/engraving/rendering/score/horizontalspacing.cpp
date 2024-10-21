@@ -539,7 +539,8 @@ double HorizontalSpacing::computeSegmentDurationStretch(const Segment* curSeg, c
     bool prevHasAdjacent = prevSeg && (prevSeg->isChordRestType() && prevShortestCR == prevSeg->ticks());
 
     double durStretch;
-    double slope = curSeg->style().styleD(Sid::measureSpacing);
+    const MStyle& style = curSeg->style();
+    double slope = style.styleD(Sid::measureSpacing);
 
     if (hasAdjacent || curSeg->measure()->isMMRest()) {
         durStretch = durationStretchForTicks(slope, segTicks);
@@ -550,6 +551,10 @@ double HorizontalSpacing::computeSegmentDurationStretch(const Segment* curSeg, c
         } else {
             durStretch = durationStretchForTicks(slope, shortestCR) * (segTicks / shortestCR).toDouble();
         }
+    }
+
+    if (style.styleB(Sid::scaleRythmicSpacingForSmallNotes) && needsCueSizeSpacing(curSeg)) {
+        durStretch *= curSeg->style().styleD(Sid::smallNoteMag);
     }
 
     return durStretch;
@@ -584,6 +589,28 @@ double HorizontalSpacing::durationStretchForTicks(double slope, const Fraction& 
     Fraction durationRatio = ticks / REFERENCE_DURATION;
 
     return pow(slope, log2(durationRatio.toDouble()));
+}
+
+bool HorizontalSpacing::needsCueSizeSpacing(const Segment* segment)
+{
+    IF_ASSERT_FAILED(segment->isChordRestType()) {
+        return false;
+    }
+
+    bool hasCueSizedCR = false;
+    for (EngravingItem* item : segment->elist()) {
+        if (!item) {
+            continue;
+        }
+        const ChordRest* cr = toChordRest(item);
+        if (cr->isSmall()) {
+            hasCueSizedCR = true;
+        } else if (cr->actualTicks() == segment->ticks()) {
+            return false;
+        }
+    }
+
+    return hasCueSizedCR;
 }
 
 void HorizontalSpacing::applyCrossBeamSpacingCorrection(Segment* thisSeg, Segment* nextSeg, double& width)

@@ -588,6 +588,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::graceNoteMag,             true,  graceNoteSize,                resetGraceNoteSize },
         { StyleId::smallStaffMag,            true,  smallStaffSize,               resetSmallStaffSize },
         { StyleId::smallNoteMag,             true,  smallNoteSize,                resetSmallNoteSize },
+        { StyleId::scaleRythmicSpacingForSmallNotes, true, reduceRythmicSpacing, 0 },
         { StyleId::smallClefMag,             true,  smallClefSize,                resetSmallClefSize },
         { StyleId::lastSystemFillLimit,      true,  lastSystemFillThreshold,      resetLastSystemFillThreshold },
         { StyleId::hideTabClefAfterFirst,    false, hideTabClefs,                 0 },
