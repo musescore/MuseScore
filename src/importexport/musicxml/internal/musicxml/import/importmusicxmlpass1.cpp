@@ -48,7 +48,6 @@
 #include "../shared/musicxmlsupport.h"
 
 #include "modularity/ioc.h"
-#include "importexport/musicxml/imusicxmlconfiguration.h"
 
 #include "log.h"
 
@@ -57,11 +56,7 @@ using namespace muse;
 using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
-
-static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
-{
-    return muse::modularity::globalIoc()->resolve<mu::iex::musicxml::IMusicXmlConfiguration>("iex_musicxml");
-}
+using namespace mu::iex::musicxml;
 
 static std::shared_ptr<mu::engraving::IEngravingFontsProvider> engravingFonts()
 {
