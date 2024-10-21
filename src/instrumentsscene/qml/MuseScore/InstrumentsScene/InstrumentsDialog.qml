@@ -30,7 +30,6 @@ import MuseScore.Project 1.0
 StyledDialogView {
     id: root
 
-    // required property InstrumentsOnScoreListModel instrumentsOnScoreModel
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
 
@@ -52,6 +51,10 @@ StyledDialogView {
 
         root.ret = { errcode: 0, value: result }
         root.hide()
+    }
+
+    Component.onCompleted: {
+        theInstrumentsOnScoreModel.load()
     }
 
     InstrumentsOnScoreListModel {

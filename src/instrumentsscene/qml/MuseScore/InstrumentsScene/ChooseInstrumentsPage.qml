@@ -25,21 +25,21 @@ import QtQuick.Layouts 1.15
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import MuseScore.InstrumentsScene 1.0
-import MuseScore.Project 1.0
 
 import "internal"
 
 Rectangle {
     id: root
+
     required property InstrumentsOnScoreListModel instrumentsOnScoreModel
 
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
     property string description: instrumentsModel.selectedInstrument ? instrumentsModel.selectedInstrument.description : ""
 
-    property bool hasSelectedInstruments: root.canSelectMultipleInstruments
-                                          ? instrumentsOnScoreView.hasInstruments
-                                          : Boolean(instrumentsModel.selectedInstrument)
+    readonly property bool hasSelectedInstruments: root.canSelectMultipleInstruments
+                                                   ? instrumentsOnScoreModel.count > 0
+                                                   : Boolean(instrumentsModel.selectedInstrument)
 
     property NavigationSection navigationSection: null
 
@@ -203,6 +203,7 @@ Rectangle {
 
             Layout.fillWidth: true
             Layout.fillHeight: true
+
             instrumentsOnScoreModel: root.instrumentsOnScoreModel
         }
 

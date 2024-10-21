@@ -75,6 +75,10 @@ Item {
         pageLoader.item.navigation.requestActive()
     }
 
+    Component.onCompleted: {
+        theInstrumentsOnScoreModel.load()
+    }
+
     StyledTabBar {
         id: bar
 
