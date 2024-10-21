@@ -116,6 +116,7 @@ if (MUSE_ENABLE_UNIT_TESTS)
         FULL_DOCS "List XML files outputted by google test."
     )
 
+    set(INSTALL_GTEST OFF)
     add_subdirectory(testing/thirdparty/googletest)
 endif()
 

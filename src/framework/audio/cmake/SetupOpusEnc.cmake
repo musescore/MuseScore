@@ -28,6 +28,6 @@ if (MUE_COMPILE_USE_SYSTEM_OPUSENC)
 
     set(LIBOPUSENC_TARGETS PkgConfig::libopusenc PkgConfig::opus)
 else()
-    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../thirdparty/opusenc opusenc)
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../thirdparty/opusenc opusenc EXCLUDE_FROM_ALL)
     set(LIBOPUSENC_TARGETS opusenc)
 endif()
