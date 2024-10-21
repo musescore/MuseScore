@@ -46,6 +46,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/shortcutsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiremote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiremote.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/keymapper.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/keymapper.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/shortcutsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/shortcutsmodel.h
@@ -63,12 +65,12 @@ if (OS_IS_MAC)
     find_library(CARBON_LIBRARY Carbon)
 
     set(MODULE_SRC ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosshortcutsinstancemodel.mm
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosshortcutsinstancemodel.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macoskeymapper.mm
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macoskeymapper.h
     )
 
     set_source_files_properties(
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosshortcutsinstancemodel.mm
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macoskeymapper.mm
         PROPERTIES
         SKIP_UNITY_BUILD_INCLUSION ON
         SKIP_PRECOMPILE_HEADERS ON

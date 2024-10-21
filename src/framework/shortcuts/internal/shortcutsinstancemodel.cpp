@@ -21,6 +21,8 @@
  */
 #include "shortcutsinstancemodel.h"
 
+#include "keymapper.h"
+
 #include "log.h"
 
 using namespace muse::shortcuts;
@@ -38,6 +40,10 @@ void ShortcutsInstanceModel::init()
 
     shortcutsRegister()->activeChanged().onNotify(this, [this](){
         emit activeChanged();
+    });
+
+    connect(qApp->inputMethod(), &QInputMethod::localeChanged, this, [this]() {
+        doLoadShortcuts();
     });
 
     doLoadShortcuts();
@@ -61,11 +67,17 @@ void ShortcutsInstanceModel::activate(const QString& seq)
 void ShortcutsInstanceModel::doLoadShortcuts()
 {
     m_shortcuts.clear();
+    m_shortcutMap.clear();
 
     const ShortcutList& shortcuts = shortcutsRegister()->shortcuts();
     for (const Shortcut& sc : shortcuts) {
         for (const std::string& seq : sc.sequences) {
             QString seqStr = QString::fromStdString(seq);
+            QString seqStrTr = KeyMapper::translateToCurrentKeyboardLayout(QKeySequence(seqStr));
+            if (seqStrTr.isEmpty()) {
+                LOGW() << "Failed to translate sequence " << seqStr;
+                continue;
+            }
 
             // RULE: If a sequence is used for several shortcuts but the values for autoRepeat vary depending on
             // the context, then we should force autoRepeat to false for all shortcuts sharing the sequence in
@@ -73,7 +85,8 @@ void ShortcutsInstanceModel::doLoadShortcuts()
             auto search = m_shortcuts.find(seqStr);
             if (search == m_shortcuts.end()) {
                 // Sequence not found, add it...
-                m_shortcuts.insert(seqStr, QVariant(sc.autoRepeat));
+                m_shortcuts.insert(seqStrTr, QVariant(sc.autoRepeat));
+                m_shortcutMap.insert(seqStr, QKeySequence(seqStrTr));
             } else if (search.value().toBool() && !sc.autoRepeat) {
                 // Sequence already exists, but we need to enforce the above rule...
                 search.value() = false;
@@ -86,5 +99,5 @@ void ShortcutsInstanceModel::doLoadShortcuts()
 
 void ShortcutsInstanceModel::doActivate(const QString& seq)
 {
-    controller()->activate(seq.toStdString());
+    controller()->activate(m_shortcutMap.value(seq).toString().toStdString());
 }

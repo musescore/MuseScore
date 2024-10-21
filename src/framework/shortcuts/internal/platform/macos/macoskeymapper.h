@@ -19,27 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_SHORTCUTS_MACOSSHORTCUTSINSTANCEMODEL_H
-#define MUSE_SHORTCUTS_MACOSSHORTCUTSINSTANCEMODEL_H
+#pragma once
 
-#include <QObject>
-
-#include "../../shortcutsinstancemodel.h"
+#include <QString>
+#include <QKeySequence>
 
 namespace muse::shortcuts {
-class MacOSShortcutsInstanceModel : public ShortcutsInstanceModel
+class MacOSKeyMapper
 {
-    Q_OBJECT
-
 public:
-    explicit MacOSShortcutsInstanceModel(QObject* parent = nullptr);
-
-private:
-    void doLoadShortcuts() override;
-    void doActivate(const QString& seq) override;
-
-    QHash<QString, QString> m_macSequenceMap;
+    static QString translateToCurrentKeyboardLayout(const QKeySequence& sequence);
+    static QString translateToEnglishKeyboardLayout(const QKeySequence& sequence);
 };
 }
-
-#endif // MUSE_SHORTCUTS_MACOSSHORTCUTSINSTANCEMODEL_H
