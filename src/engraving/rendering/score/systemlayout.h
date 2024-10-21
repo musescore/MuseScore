@@ -104,6 +104,7 @@ private:
     static void layoutNoteAnchoredSpanners(System* system, Chord* chord);
     static void layoutGuitarBends(const std::vector<Segment*>& sl, LayoutContext& ctx);
     static void updateCrossBeams(System* system, LayoutContext& ctx);
+    static bool measureHasCrossStuffOrModifiedBeams(const Measure* measure);
     static void restoreTiesAndBends(System* system, LayoutContext& ctx);
 
     static double instrumentNamesWidth(System* system, LayoutContext& ctx, bool isFirstSystem);

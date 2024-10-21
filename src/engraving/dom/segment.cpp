@@ -1088,7 +1088,7 @@ void Segment::checkEmpty() const
 
 double Segment::xPosInSystemCoords() const
 {
-    return x() + measure()->x();
+    return ldata()->pos().x() + measure()->x();
 }
 
 void Segment::setXPosInSystemCoords(double x)
@@ -2631,28 +2631,6 @@ void Segment::setSpacing(double val)
 double Segment::spacing() const
 {
     return m_spacing;
-}
-
-bool Segment::isFullMeasureRestOrMMRestSegment() const
-{
-    if (isMMRestSegment()) {
-        return true;
-    }
-
-    if (m_ticks != measure()->ticks()) {
-        return false;
-    }
-
-    for (EngravingItem* item : m_elist) {
-        if (!item) {
-            continue;
-        }
-        if (!item->isRest() || !toRest(item)->isFullMeasureRest()) {
-            return false;
-        }
-    }
-
-    return true;
 }
 
 bool Segment::canWriteSpannerStartEnd(track_idx_t track, const Spanner* spanner) const

@@ -330,8 +330,6 @@ public:
     EngravingItem* nextElementStaff(staff_idx_t staff);
     EngravingItem* prevElementStaff(staff_idx_t staff);
 
-    bool hasCrossStaffOrModifiedBeams() const;
-
     String accessibleInfo() const override;
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY

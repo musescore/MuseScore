@@ -143,7 +143,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                 MeasureLayout::computePreSpacingItems(m, ctx);
             }
 
-            if (m->hasCrossStaffOrModifiedBeams()) {
+            if (measureHasCrossStuffOrModifiedBeams(m)) {
                 updateCrossBeams(system, ctx);
             }
 
@@ -1537,12 +1537,41 @@ void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick, 
     }
 }
 
-/****************************************************************************
- * updateCrossBeams
- * Performs a pre-calculation of staff distances (final staff distances will
- * be calculated at the very end of layout) and updates the up() property
- * of cross-beam chords accordingly.
- * *************************************************************************/
+bool SystemLayout::measureHasCrossStuffOrModifiedBeams(const Measure* measure)
+{
+    for (const Segment& seg : measure->segments()) {
+        if (!seg.isChordRestType()) {
+            continue;
+        }
+        for (const EngravingItem* e : seg.elist()) {
+            if (!e || !e->isChordRest()) {
+                continue;
+            }
+            const Beam* beam = toChordRest(e)->beam();
+            if (beam && (beam->cross() || beam->userModified())) {
+                return true;
+            }
+            const Chord* c = e->isChord() ? toChord(e) : nullptr;
+            if (c && c->tremoloTwoChord()) {
+                const TremoloTwoChord* trem = c->tremoloTwoChord();
+                const Chord* c1 = trem->chord1();
+                const Chord* c2 = trem->chord2();
+                if (trem->userModified() || c1->staffMove() != c2->staffMove()) {
+                    return true;
+                }
+            }
+            if (e->isChord() && !toChord(e)->graceNotes().empty()) {
+                for (const Chord* grace : toChord(e)->graceNotes()) {
+                    if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())) {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
+}
 
 void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
 {

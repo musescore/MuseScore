@@ -180,7 +180,7 @@ void HorizontalSpacing::justifySystem(System* system, double curSysWidth, double
                 double springConst = 1 / s.stretch();
                 double width = s.width() - s.widthOffset();
                 double preTension = width * springConst;
-                springs.push_back(Spring(springConst, width, preTension, &s));
+                springs.emplace_back(springConst, width, preTension, &s);
             }
         }
     }
@@ -679,7 +679,7 @@ void HorizontalSpacing::stretchMeasureToTargetWidth(Measure* m, double targetWid
     for (Segment& s : m->segments()) {
         if (s.isChordRestType() && s.visible() && s.enabled() && !s.allElementsInvisible()) {
             double springConst = 1 / s.stretch();
-            double width = s.width(LD_ACCESS::BAD) - s.widthOffset();
+            double width = s.width() - s.widthOffset();
             double preTension = width * springConst;
             springs.emplace_back(springConst, width, preTension, &s);
         }

@@ -3116,41 +3116,6 @@ EngravingItem* Measure::prevElementStaff(staff_idx_t staff)
     return score()->firstElement();
 }
 
-bool Measure::hasCrossStaffOrModifiedBeams() const
-{
-    for (const Segment& seg : m_segments) {
-        if (!seg.isChordRestType()) {
-            continue;
-        }
-        for (EngravingItem* e : seg.elist()) {
-            if (!e || !e->isChordRest()) {
-                continue;
-            }
-            if (toChordRest(e)->beam() && (toChordRest(e)->beam()->cross() || toChordRest(e)->beam()->userModified())) {
-                return true;
-            }
-            Chord* c = e->isChord() ? toChord(e) : nullptr;
-            if (c && c->tremoloTwoChord()) {
-                TremoloTwoChord* trem = c->tremoloTwoChord();
-                Chord* c1 = trem->chord1();
-                Chord* c2 = trem->chord2();
-                if (trem->userModified() || c1->staffMove() != c2->staffMove()) {
-                    return true;
-                }
-            }
-            if (e->isChord() && !toChord(e)->graceNotes().empty()) {
-                for (Chord* grace : toChord(e)->graceNotes()) {
-                    if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())) {
-                        return true;
-                    }
-                }
-            }
-        }
-    }
-
-    return false;
-}
-
 //---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------

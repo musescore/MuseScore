@@ -287,7 +287,6 @@ public:
     bool isTimeTickType() const { return m_segmentType == SegmentType::TimeTick; }
     bool isRightAligned() const { return isClefType() || isBreathType(); }
     bool isMMRestSegment() const { return isChordRestType() && m_elist.front() && m_elist.front()->isMMRest(); }
-    bool isFullMeasureRestOrMMRestSegment() const;
 
     static constexpr SegmentType CHORD_REST_OR_TIME_TICK_TYPE = SegmentType::ChordRest | SegmentType::TimeTick;
     static constexpr SegmentType durationSegmentsMask = CHORD_REST_OR_TIME_TICK_TYPE; // segment types which may have non-zero tick length
