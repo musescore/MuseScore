@@ -70,11 +70,7 @@
 #include "view/widgets/timelineview.h"
 #include "view/widgets/realizeharmonydialog.h"
 #include "view/notationcontextmenumodel.h"
-#include "view/abstractelementpopupmodel.h"
 #include "view/internal/undoredomodel.h"
-#include "view/internal/harppedalpopupmodel.h"
-#include "view/internal/caposettingsmodel.h"
-#include "view/internal/stringtuningssettingsmodel.h"
 
 #include "view/percussionpanel/percussionpanelmodel.h"
 
@@ -179,11 +175,6 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<EditGridSizeDialogModel>("MuseScore.NotationScene", 1, 0, "EditGridSizeDialogModel");
     qmlRegisterType<PianoKeyboardView>("MuseScore.NotationScene", 1, 0, "PianoKeyboardView");
     qmlRegisterType<PianoKeyboardPanelContextMenuModel>("MuseScore.NotationScene", 1, 0, "PianoKeyboardPanelContextMenuModel");
-    qmlRegisterUncreatableType<AbstractElementPopupModel>("MuseScore.NotationScene", 1, 0, "Notation",
-                                                          "Not creatable as it is an enum type");
-    qmlRegisterType<HarpPedalPopupModel>("MuseScore.NotationScene", 1, 0, "HarpPedalPopupModel");
-    qmlRegisterType<CapoSettingsModel>("MuseScore.NotationScene", 1, 0, "CapoSettingsModel");
-    qmlRegisterType<StringTuningsSettingsModel>("MuseScore.NotationScene", 1, 0, "StringTuningsSettingsModel");
 
     qmlRegisterType<PercussionPanelModel>("MuseScore.NotationScene", 1, 0, "PercussionPanelModel");
     qmlRegisterUncreatableType<PanelMode>("MuseScore.NotationScene", 1, 0, "PanelMode", "Cannot create");
