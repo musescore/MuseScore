@@ -114,7 +114,7 @@ inline muse::mpe::duration_t tiedNotesTotalDuration(const Score* score, const No
 
     int startTick = secondNote->tick().ticks();
 
-    const Note* lastNote = firstNote->lastTiedNote(false);
+    const Note* lastNote = firstNote->lastTiedNote(false, tickPositionOffset);
 
     int endTick = lastNote
                   ? lastNote->tick().ticks() + lastNote->chord()->actualTicks().ticks()
