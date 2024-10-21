@@ -1259,7 +1259,13 @@ void NotationActionController::addText(TextStyleType type)
         return;
     }
 
-    EngravingItem* item = contextItem(interaction);
+    EngravingItem* item;
+    if (interaction->selection()->isRange()) {
+        const mu::engraving::Selection sel = currentNotationElements()->msScore()->selection();
+        item = sel.startSegment()->firstElementForNavigation(sel.staffStart());
+    } else {
+        item = contextItem(interaction);
+    }
 
     if (isVerticalBoxTextStyle(type)) {
         if (!item || !item->isVBox()) {
