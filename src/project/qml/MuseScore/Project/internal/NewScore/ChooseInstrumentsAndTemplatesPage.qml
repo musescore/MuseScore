@@ -75,6 +75,14 @@ Item {
         pageLoader.item.navigation.requestActive()
     }
 
+    Component.onCompleted: {
+        theInstrumentsOnScoreModel.load()
+    }
+
+    InstrumentsOnScoreListModel {
+        id: theInstrumentsOnScoreModel
+    }
+
     StyledTabBar {
         id: bar
 
@@ -138,10 +146,6 @@ Item {
 
             bar.completed = true
         }
-    }
-
-    InstrumentsOnScoreListModel {
-        id: theInstrumentsOnScoreModel
     }
 
     Loader {

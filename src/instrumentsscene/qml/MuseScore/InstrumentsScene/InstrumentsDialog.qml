@@ -25,12 +25,10 @@ import QtQuick.Layouts 1.15
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import MuseScore.InstrumentsScene 1.0
-import MuseScore.Project 1.0
 
 StyledDialogView {
     id: root
 
-    // required property InstrumentsOnScoreListModel instrumentsOnScoreModel
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
 
@@ -52,6 +50,10 @@ StyledDialogView {
 
         root.ret = { errcode: 0, value: result }
         root.hide()
+    }
+
+    Component.onCompleted: {
+        theInstrumentsOnScoreModel.load()
     }
 
     InstrumentsOnScoreListModel {
