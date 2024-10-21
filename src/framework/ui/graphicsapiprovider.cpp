@@ -56,7 +56,13 @@ static const std::vector<GraphicsApi > ALLOWED_APIS = {
 };
 #endif
 
-static const std::string BAD_MESSAGE = "Failed to build graphics pipeline state";
+static const std::vector<std::string> BAD_MESSAGES = {
+    "Failed to build graphics pipeline state",
+    "Failed to create RHI",
+    "Failed to build texture render target for layer",
+    "Framebuffer incomplete:"
+};
+
 GraphicsTestObject* GraphicsApiProvider::graphicsTestObject = nullptr;
 
 namespace muse::ui {
@@ -74,9 +80,12 @@ public:
             return;
         }
 
-        if (logMsg.message.find(BAD_MESSAGE) != std::string::npos) {
-            isProblemDetected = true;
-            std::cout << "found message: " << BAD_MESSAGE << std::endl;
+        for (const std::string& m : BAD_MESSAGES) {
+            if (logMsg.message.find(m) != std::string::npos) {
+                isProblemDetected = true;
+                std::cout << "found message: " << m << std::endl;
+                break;
+            }
         }
     }
 
