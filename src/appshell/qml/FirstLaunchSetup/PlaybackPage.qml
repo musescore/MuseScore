@@ -36,7 +36,7 @@ Page {
     extraButtonTitle: qsTrc("appshell/gettingstarted", "Watch video")
 
     onExtraButtonClicked: {
-        Qt.openUrlExternally("https://youtu.be/n7UgN69e2Y8")
+        Qt.openUrlExternally("https://youtu.be/L8OdWHOjL8c")
     }
 
     Image {
