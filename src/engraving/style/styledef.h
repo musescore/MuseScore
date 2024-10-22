@@ -442,6 +442,7 @@ enum class Sid {
     measureNumberAllStaves,
 
     smallNoteMag,
+    scaleRythmicSpacingForSmallNotes,
     graceNoteMag,
     graceToMainNoteDist,
     graceToGraceNoteDist,

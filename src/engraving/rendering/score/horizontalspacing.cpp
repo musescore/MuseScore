@@ -538,7 +538,8 @@ double HorizontalSpacing::computeSegmentDurationStretch(const Segment* curSeg, c
     bool prevHasAdjacent = prevSeg && (prevSeg->isChordRestType() && prevShortestCR == prevSeg->ticks());
 
     double durStretch;
-    double slope = curSeg->style().styleD(Sid::measureSpacing);
+    const MStyle& style = curSeg->style();
+    double slope = style.styleD(Sid::measureSpacing);
 
     if (hasAdjacent || curSeg->measure()->isMMRest()) {
         durStretch = durationStretchForTicks(slope, segTicks);
@@ -551,7 +552,7 @@ double HorizontalSpacing::computeSegmentDurationStretch(const Segment* curSeg, c
         }
     }
 
-    if (segmentIsAllCueSized(curSeg)) {
+    if (style.styleB(Sid::scaleRythmicSpacingForSmallNotes) && segmentIsAllCueSized(curSeg)) {
         durStretch *= curSeg->style().styleD(Sid::smallNoteMag);
     }
 
