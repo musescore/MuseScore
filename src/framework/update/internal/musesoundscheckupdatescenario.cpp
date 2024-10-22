@@ -38,7 +38,7 @@ using namespace muse::update;
 using namespace muse::actions;
 
 static const char* DEFAULT_IMAGE_URL = "qrc:/qml/Muse/Update/resources/muse_sounds_promo.png";
-static const TranslatableString DEFAULT_ACTION_TITLE("update", "Take me to Muse Hub");
+static const TranslatableString DEFAULT_ACTION_TITLE("update", "Take me to MuseHub");
 static const TranslatableString DEFAULT_CANCEL_TITLE("update", "No thanks");
 
 void MuseSoundsCheckUpdateScenario::delayedInit()
@@ -181,7 +181,7 @@ void MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info)
 void MuseSoundsCheckUpdateScenario::tryOpenMuseHub(ValList actions) const
 {
     if (actions.empty()) {
-        LOGE() << "not actions to open Muse Hub";
+        LOGE() << "no actions to open MuseHub";
         return;
     }
 
