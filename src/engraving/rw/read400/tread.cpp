@@ -3052,6 +3052,10 @@ void TRead::read(MMRest* r, XmlReader& e, ReadContext& ctx)
             NoteDot* dot = Factory::createNoteDot(r);
             TRead::read(dot, e, ctx);
             r->add(dot);
+        } else if (tag == "mmRestNumberPos") {
+            // Old property, deprecated in 4.5
+            r->setNumberOffset(e.readDouble() - ctx.style().styleS(Sid::mmRestNumberPos).val());
+        } else if (TRead::readProperty(r, tag, e, ctx, Pid::MMREST_NUMBER_OFFSET)) {
         } else if (TRead::readStyledProperty(r, tag, e, ctx)) {
         } else if (readProperties(r, e, ctx)) {
         } else {

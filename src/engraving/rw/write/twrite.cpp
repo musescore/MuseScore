@@ -2183,7 +2183,7 @@ void TWrite::write(const MMRest* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement("Rest"); // for compatibility, see also Measure::readVoice()
     writeProperties(static_cast<const ChordRest*>(item), xml, ctx);
-    writeProperty(item, xml, Pid::MMREST_NUMBER_POS);
+    writeProperty(item, xml, Pid::MMREST_NUMBER_OFFSET);
     writeProperty(item, xml, Pid::MMREST_NUMBER_VISIBLE);
     writeItems(item->el(), xml, ctx);
     xml.endElement();

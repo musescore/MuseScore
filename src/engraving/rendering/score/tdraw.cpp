@@ -2165,15 +2165,14 @@ void TDraw::draw(const MMRest* item, Painter* painter)
     // draw number
     painter->setPen(item->curColor());
     RectF numberBox = item->symBbox(ldata->numberSym);
-    PointF numberPos = item->numberPosition(numberBox);
-    if (item->numberVisible()) {
+    PointF numberPos = item->numberPos();
+    if (item->shouldShowNumber()) {
         item->drawSymbols(ldata->numberSym, painter, numberPos);
     }
 
     numberBox.translate(numberPos);
 
-    if (item->style().styleB(Sid::oldStyleMultiMeasureRests)
-        && ldata->number <= item->style().styleI(Sid::mmRestOldStyleMaxMeasures)) {
+    if (item->isOldStyle()) {
         // draw rest symbols
         double x = (ldata->restWidth - ldata->symsWidth) * 0.5;
         double spacing = item->style().styleMM(Sid::mmRestOldStyleSpacing);

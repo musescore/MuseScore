@@ -310,6 +310,14 @@ EditStyle::EditStyle(QWidget* parent)
     subsSysLabels->addButton(subsShortBtn, int(InstrumentLabelVisibility::SHORT));
     subsSysLabels->addButton(subsHideBtn, int(InstrumentLabelVisibility::HIDE));
 
+    QButtonGroup* singleMeasureMMRest = new QButtonGroup(this);
+    singleMeasureMMRest->addButton(mmRestSingleUseHBar, 0);
+    singleMeasureMMRest->addButton(mmRestSingleUseNormalRest, 1);
+
+    QButtonGroup* mmRestConstantWidth = new QButtonGroup(this);
+    mmRestConstantWidth->addButton(mmRestWidthProportional, 0);
+    mmRestConstantWidth->addButton(mmRestWidthConstant, 1);
+
     // ====================================================
     // Style widgets
     // ====================================================
@@ -410,8 +418,14 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::concertPitch,            false, concertPitch,            0 },
         { StyleId::createMultiMeasureRests, false, multiMeasureRests,       0 },
         { StyleId::minEmptyMeasures,        false, minEmptyMeasures,        0 },
+        { StyleId::singleMeasureMMRestUseNormalRest, false, singleMeasureMMRest, 0 },
+        { StyleId::singleMeasureMMRestShowNumber,    false, singleMMRestShowNumber, 0 },
+        { StyleId::mmRestConstantWidth,     false, mmRestConstantWidth, 0 },
+        { StyleId::mmRestReferenceWidth,    false, mmRestRefDuration, resetMMRestRefDuration },
+        { StyleId::mmRestMaxWidthIncrease,  false, mmRestMaxMeasures, mmRestMaxMeasuresReset },
         { StyleId::minMMRestWidth,          false, minMeasureWidth,         resetMinMMRestWidth },
         { StyleId::mmRestNumberPos,         false, mmRestNumberPos,         resetMMRestNumberPos },
+        { StyleId::mmRestBetweenStaves,     false, placeBetweenStaves,      resetPlaceBetweenStaves },
         { StyleId::mmRestNumberMaskHBar,    false, mmRestNumberMaskHBar,    resetMMRestNumberMaskHBar },
         { StyleId::mmRestHBarThickness,     false, mmRestHBarThickness,     resetMMRestHBarThickness },
         { StyleId::multiMeasureRestMargin,  false, multiMeasureRestMargin,  resetMultiMeasureRestMargin },
@@ -2032,7 +2046,8 @@ PropertyValue EditStyle::getValue(StyleId idx)
         if (sw.idx == StyleId::harmonyVoiceLiteral) { // special case for bool represented by a two-item combobox
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
             v = cb->currentIndex();
-        } else if (sw.idx == StyleId::articulationKeepTogether || sw.idx == StyleId::genClef || sw.idx == StyleId::genKeysig) { // special case for bool represented by a two-item buttonGroup
+        } else if (sw.idx == StyleId::articulationKeepTogether || sw.idx == StyleId::genClef || sw.idx == StyleId::genKeysig
+                   || sw.idx == StyleId::singleMeasureMMRestUseNormalRest || sw.idx == StyleId::mmRestConstantWidth) {                                                                                                           // special case for bool represented by a two-item buttonGroup
             QButtonGroup* bg = qobject_cast<QButtonGroup*>(sw.widget);
             v = bool(bg->checkedId());
         } else if (sw.idx == StyleId::lyricsDashForce || sw.idx == StyleId::lyricsMelismaForce) { // special case where UI is presented with opposite wording
@@ -2153,7 +2168,8 @@ void EditStyle::setValues()
             bool value = val.toBool();
             if (sw.idx == StyleId::harmonyVoiceLiteral) { // special case for bool represented by a two-item combobox
                 voicingSelectWidget->interpretBox->setCurrentIndex(value);
-            } else if (sw.idx == StyleId::articulationKeepTogether || sw.idx == StyleId::genClef || sw.idx == StyleId::genKeysig) { // special case for bool represented by a two-item buttonGroup
+            } else if (sw.idx == StyleId::articulationKeepTogether || sw.idx == StyleId::genClef || sw.idx == StyleId::genKeysig
+                       || sw.idx == StyleId::singleMeasureMMRestUseNormalRest || sw.idx == StyleId::mmRestConstantWidth) {                                                                                                           // special case for bool represented by a two-item buttonGroup
                 qobject_cast<QButtonGroup*>(sw.widget)->button(1)->setChecked(value);
                 qobject_cast<QButtonGroup*>(sw.widget)->button(0)->setChecked(!value);
             } else if (sw.idx == StyleId::lyricsDashForce || sw.idx == StyleId::lyricsMelismaForce) { // special case where UI is presented with opposite wording
@@ -2332,6 +2348,11 @@ void EditStyle::setValues()
     for (const LineStyleSelect* lineStyleSelect : m_lineStyleSelects) {
         lineStyleSelect->update();
     }
+
+    singleMeasureMMRestOption->setEnabled(styleValue(StyleId::minEmptyMeasures).toInt() == 1);
+    singleMMRestShowNumber->setEnabled(styleValue(StyleId::singleMeasureMMRestUseNormalRest).toBool());
+    mmRestSingleUseHBar->setEnabled(!styleValue(StyleId::oldStyleMultiMeasureRests).toBool());
+    mmRestRefDuration->setEnabled(styleValue(StyleId::mmRestConstantWidth).toBool());
 
     updateParenthesisIndicatingTiesGroupState();
 }
@@ -2632,6 +2653,24 @@ void EditStyle::valueChanged(int i)
     if (idx == StyleId::dynamicsHairpinVoiceBasedPlacement || idx == StyleId::dynamicsHairpinsAutoCenterOnGrandStaff
         || idx == StyleId::dynamicsHairpinsAboveForVocalStaves) {
         resetDynamicsAndHairpinPos->setEnabled(!dynamicsAndHairpinPosPropertiesHaveDefaultStyleValue());
+    }
+
+    if (idx == StyleId::minEmptyMeasures) {
+        singleMeasureMMRestOption->setEnabled(styleValue(StyleId::minEmptyMeasures).toInt() == 1);
+    }
+    if (idx == StyleId::singleMeasureMMRestUseNormalRest) {
+        singleMMRestShowNumber->setEnabled(styleValue(StyleId::singleMeasureMMRestUseNormalRest).toBool());
+    }
+    if (idx == StyleId::mmRestConstantWidth) {
+        mmRestRefDuration->setEnabled(styleValue(StyleId::mmRestConstantWidth).toBool());
+    }
+    if (idx == StyleId::oldStyleMultiMeasureRests) {
+        bool useOldStyle = styleValue(StyleId::oldStyleMultiMeasureRests).toBool();
+        if (useOldStyle && !styleValue(StyleId::singleMeasureMMRestUseNormalRest).toBool()) {
+            setStyleValue(StyleId::singleMeasureMMRestUseNormalRest, true);
+            setValues();
+        }
+        mmRestSingleUseHBar->setEnabled(!useOldStyle);
     }
 }
 
