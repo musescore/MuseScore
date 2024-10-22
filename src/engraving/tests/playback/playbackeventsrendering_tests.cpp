@@ -2361,6 +2361,75 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo)
 }
 
 /**
+ * @brief PlaybackEventsRendererTests_Single_Chord_Tremolo_TiedNotes
+ * @details In this case we're gonna render a simple piece of score with 3 single measures.
+ *          The second measure has a whole note tied to a whole note in the third measure.
+ *          Each note has a Tremolo32nd.
+ *          This test checks that all tied notes have the correct tremolo time and duration
+ *          See: https://github.com/musescore/MuseScore/issues/23168
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo_TiedNotes)
+{
+    // [GIVEN] Simple piece of score (violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score
+        = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "single_chord_tremolo_tied_notes/single_chord_tremolo_tied_notes.mscx");
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Tremolo32nd, m_dummyPattern);
+
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+
+    // [WHEN] Render the score
+    PlaybackEventsMap result;
+
+    for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (const Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+            const mu::engraving::EngravingItem* element = segment->element(0);
+            if (element && element->isChord()) {
+                m_renderer.render(toChord(element), 0, m_defaultProfile, ctx, result);
+            }
+        }
+    }
+
+    // [THEN] We expect 2 lists of events (for 2 tied notes)
+    EXPECT_EQ(result.size(), 2);
+
+    constexpr timestamp_t expectedTremoloTimestamp = 2000000; // timestamp of the 1st tied note
+    constexpr timestamp_t expectedTremoloDuration = WHOLE_NOTE_DURATION * 2; // total duration of all tied notes
+
+    constexpr pitch_level_t expectedPitchLevel = pitchLevel(PitchClass::F, 4);
+    constexpr duration_t expectedSubNoteDuration = 62500;
+
+    for (const auto& pair : result) {
+        // [THEN] Expected number of sub-notes
+        EXPECT_EQ(pair.second.size(), 32);
+
+        for (const PlaybackEvent& event : pair.second) {
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            ASSERT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Tremolo32nd));
+
+            // [THEN] Each note event has the correct articulation time and duration
+            const ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(ArticulationType::Tremolo32nd);
+            EXPECT_EQ(articulationData.meta.timestamp, expectedTremoloTimestamp);
+            EXPECT_EQ(articulationData.meta.overallDuration, expectedTremoloDuration);
+
+            // [THEN] Each note event has the correct pitch level
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitchLevel);
+
+            // [THEN] Each note event has the correct duration
+            EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedSubNoteDuration);
+        }
+    }
+
+    delete score;
+}
+
+/**
  * @brief PlaybackEventsRendererTests_Two_Chords_Tremolo
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4+A4+C5 chord and ends with C5+E5+G5 chord connected by the 16-th Tremolo articulation
