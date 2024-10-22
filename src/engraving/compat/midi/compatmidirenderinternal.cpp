@@ -1285,7 +1285,20 @@ uint32_t getChannel(const Instrument* instr, const Note* note, MidiInstrumentEff
     }
 
     if (context.eachStringHasChannel && instr->hasStrings()) {
-        lookupData.string = note->string();
+        if (note->string() >= 0) {
+            lookupData.string = note->string();
+        } else {
+            int string = 0;
+            int fret = 0;
+            const StringData* stringData = instr->stringData();
+            IF_ASSERT_FAILED(stringData && stringData->convertPitch(note->pitch(), note->staff(), &string, &fret)) {
+                LOGE() << "channel isn't calculated for instrument " << instr->nameAsPlainText();
+                return channel;
+            }
+
+            lookupData.string = string;
+        }
+
         lookupData.staffIdx = note->staffIdx();
     }
 
