@@ -73,7 +73,8 @@ apt_packages=(
   wget
   xxd
   p7zip-full
-  libasound2-dev 
+  libasound2-dev
+  libcups2-dev
   libfontconfig1-dev
   libfreetype6-dev
   libfreetype6
@@ -102,7 +103,6 @@ apt_packages=(
 
 # MuseScore compiles without these but won't run without them
 apt_packages_runtime=(
-  libcups2
   libdbus-1-3
   libegl1-mesa-dev
   libgles2-mesa-dev
@@ -129,8 +129,8 @@ apt_packages_runtime=(
 
 apt_packages_ffmpeg=(
   ffmpeg
-  libavcodec-dev 
-  libavformat-dev 
+  libavcodec-dev
+  libavformat-dev
   libswscale-dev
   )
 
@@ -147,6 +147,7 @@ git config --global --add safe.directory /MuseScore
 # GET QT
 ##########################################################################
 
+# TODO: Update to Qt 6.8
 apt_packages_qt6=(
   qt6-base-dev
   qt6-declarative-dev
@@ -195,6 +196,15 @@ fi
 # https://askubuntu.com/questions/1460242/ubuntu-22-04-with-qt6-qmake-could-not-find-a-qt-installation-of
 qtchooser -install qt6 $(which qmake6)
 
+echo export QT_ROOT_DIR="${qt_dir}" >> ${ENV_FILE}
+echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >> ${ENV_FILE}
+echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
+
+echo export CFLAGS="-Wno-psabi" >> ${ENV_FILE}
+echo export CXXFLAGS="-Wno-psabi" >> ${ENV_FILE}
+# explicitly set QMAKE path for linuxdeploy-plugin-qt
+echo export QMAKE="/usr/bin/qmake6" >> ${ENV_FILE}
+
 ##########################################################################
 # GET TOOLS
 ##########################################################################
@@ -218,14 +228,6 @@ cmake --version
 apt-get install -y --no-install-recommends ninja-build
 echo "ninja version"
 ninja --version
-
-echo export QT_PATH="${qt_dir}" >> ${ENV_FILE}
-echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >> ${ENV_FILE}
-echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
-echo export CFLAGS="-Wno-psabi" >> ${ENV_FILE}
-echo export CXXFLAGS="-Wno-psabi" >> ${ENV_FILE}
-# explicitly set QMAKE path for linuxdeploy-plugin-qt
-echo export QMAKE="/usr/bin/qmake6" >> ${ENV_FILE}
 
 ##########################################################################
 # POST INSTALL

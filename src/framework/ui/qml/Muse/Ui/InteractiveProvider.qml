@@ -68,7 +68,7 @@ Item {
             if (page.type === ContainerType.QmlDialog) {
                 var dialogPath = "../../" + page.path
 
-                var dialogObj = createDialog(dialogPath, page.params)
+                var dialogObj = root.createDialog(dialogPath, page.params)
                 data.setValue("ret", dialogObj.ret)
                 data.setValue("objectId", dialogObj.object.objectId)
 
@@ -86,7 +86,7 @@ Item {
 
         function onFireOpenStandardDialog(data) {
             var dialog = data.data()
-            var dialogObj = createDialog("internal/StandardDialog.qml", dialog.params)
+            var dialogObj = root.createDialog("internal/StandardDialog.qml", dialog.params)
             data.setValue("ret", dialogObj.ret)
             data.setValue("objectId", dialogObj.object.objectId)
 
@@ -116,9 +116,9 @@ Item {
             var dialog = data.data()
             var dialogObj = null
             if (dialog.selectFolder) {
-                dialogObj = createDialog("internal/FolderDialog.qml", dialog.params)
+                dialogObj = root.createDialog("internal/FolderDialog.qml", dialog.params)
             } else {
-                dialogObj = createDialog("internal/FileDialog.qml", dialog.params)
+                dialogObj = root.createDialog("internal/FileDialog.qml", dialog.params)
             }
 
             data.setValue("ret", dialogObj.ret)

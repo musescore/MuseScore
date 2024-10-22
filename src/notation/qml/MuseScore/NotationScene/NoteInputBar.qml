@@ -109,8 +109,8 @@ Item {
         itemDelegate: FlatButton {
             id: btn
 
-            property var item: Boolean(itemModel) ? itemModel.itemRole : null
-            property var hasMenu: Boolean(item) && item.subitems.length !== 0
+            readonly property QtObject item: Boolean(itemModel) ? itemModel.itemRole : null
+            readonly property bool hasMenu: Boolean(item) && item.subitems.length !== 0
 
             width: gridView.cellWidth
             height: gridView.cellWidth
