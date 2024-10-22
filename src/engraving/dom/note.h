@@ -298,10 +298,10 @@ public:
     void setTieFor(Tie* t) { m_tieFor = t; }
     void setTieBack(Tie* t) { m_tieBack = t; }
     Note* firstTiedNote(bool ignorePlayback = true) const;
-    const Note* lastTiedNote(bool ignorePlayback = true) const;
-    Note* lastTiedNote(bool ignorePlayback = true)
+    const Note* lastTiedNote(bool ignorePlayback = true, const int positionTickOffset = 0) const;
+    Note* lastTiedNote(bool ignorePlayback = true, const int positionTickOffset = 0)
     {
-        return const_cast<Note*>(static_cast<const Note*>(this)->lastTiedNote(ignorePlayback));
+        return const_cast<Note*>(static_cast<const Note*>(this)->lastTiedNote(ignorePlayback, positionTickOffset));
     }
 
     int unisonIndex() const;
