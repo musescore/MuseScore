@@ -60,7 +60,6 @@ public:
 
     Color defaultColor() const override;
     Color scoreInversionColor() const override;
-    Color invisibleColor() const override;
     Color lassoColor() const override;
     Color warningColor() const override;
     Color warningSelectedColor() const override;
@@ -90,6 +89,9 @@ public:
     Color formattingColor() const override;
     muse::async::Channel<Color> formattingColorChanged() const override;
 
+    Color invisibleColor() const override;
+    muse::async::Channel<Color> invisibleColorChanged() const override;
+
     Color unlinkedColor() const override;
     muse::async::Channel<Color> unlinkedColorChanged() const override;
 
@@ -114,6 +116,7 @@ private:
     muse::async::Channel<voice_idx_t, Color> m_voiceColorChanged;
     muse::async::Notification m_scoreInversionChanged;
     muse::async::Channel<Color> m_formattingColorChanged;
+    muse::async::Channel<Color> m_invisibleColorChanged;
     muse::async::Channel<Color> m_unlinkedColorChanged;
 
     muse::ValNt<DebuggingOptions> m_debuggingOptions;
