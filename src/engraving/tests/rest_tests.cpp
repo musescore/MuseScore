@@ -22,7 +22,6 @@
 
 #include <gtest/gtest.h>
 
-#include "dom/measure.h"
 #include "dom/rest.h"
 
 #include "utils/scorerw.h"
