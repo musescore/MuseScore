@@ -1498,7 +1498,9 @@ static const std::vector<Item<PlayingTechniqueType> > PLAY_TECH_TYPES = {
     { PlayingTechniqueType::Undefined,     "undefined",      muse::TranslatableString::untranslatable("Undefined") },
     { PlayingTechniqueType::Natural,       "natural",        muse::TranslatableString("engraving/playtechtype", "Normal") },
     { PlayingTechniqueType::Pizzicato,     "pizzicato",      muse::TranslatableString("engraving/playtechtype", "Pizzicato") },
+    //: For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)
     { PlayingTechniqueType::Open,          "open",           muse::TranslatableString("engraving/playtechtype", "Open") },
+    //: For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)
     { PlayingTechniqueType::Mute,          "mute",           muse::TranslatableString("engraving/playtechtype", "Mute") },
     { PlayingTechniqueType::Tremolo,       "tremolo",        muse::TranslatableString("engraving/playtechtype", "Tremolo") },
     { PlayingTechniqueType::Detache,       "detache",        muse::TranslatableString("engraving/playtechtype", "Détaché") },
