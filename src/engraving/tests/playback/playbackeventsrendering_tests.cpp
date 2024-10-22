@@ -2688,3 +2688,86 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Pauses)
 
     EXPECT_EQ(tndNum, expectedTnDList.size());
 }
+
+/**
+ * @brief PlaybackEventsRendererTests_TiedNotesAndRepeats
+ *  @details Checks whether we correctly calculate tied note durations when they are inside/outside repeats. See:
+ *  https://github.com/musescore/MuseScore/issues/22863
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, TiedNotesAndRepeats)
+{
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "tied_notes_and_repeats.mscx");
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
+
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+
+    // [WHEN] Render the score
+    PlaybackEventsMap result;
+
+    for (const RepeatSegment* repeatSegment : score->repeatList()) {
+        int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
+
+        for (const Measure* m : repeatSegment->measureList()) {
+            for (const Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                const EngravingItem* el = s->element(0);
+                if (!el || !el->isChord()) {
+                    continue;
+                }
+
+                m_renderer.render(toChord(el), tickPositionOffset, m_defaultProfile, ctx, result);
+            }
+        }
+    }
+
+    // [THEN] Expected pitch, time and duration of each event
+    std::vector<pitch_level_t> expectedPitchList {
+        pitchLevel(PitchClass::C, 5),
+        pitchLevel(PitchClass::A, 4),
+        pitchLevel(PitchClass::C, 5),
+        pitchLevel(PitchClass::A, 4),
+    };
+
+    timestamp_t secondMeasureTime = WHOLE_NOTE_DURATION;
+    timestamp_t secondMesaureRepeatedTime = secondMeasureTime + QUARTER_NOTE_DURATION * 2 + HALF_NOTE_DURATION;
+
+    std::vector<TimestampAndDuration> expectedTnDList {
+        // 1st measure (no notes)
+
+        // 2nd measure
+        { secondMeasureTime, QUARTER_NOTE_DURATION* 2 },  // 2 tied C5
+        { secondMeasureTime + QUARTER_NOTE_DURATION * 2, HALF_NOTE_DURATION }, // A4 tied to a whole A4 outside of the repeat
+
+        // 2nd measure (repeated)
+        { secondMesaureRepeatedTime, QUARTER_NOTE_DURATION* 2 },  // 2 tied C5
+        { secondMesaureRepeatedTime + QUARTER_NOTE_DURATION * 2, HALF_NOTE_DURATION + WHOLE_NOTE_DURATION }, // A4 tied to a whole A4 outside of the repeat
+
+        // 3rd measure (there is only the whole tied A4)
+    };
+
+    ASSERT_EQ(expectedPitchList.size(), expectedTnDList.size());
+    EXPECT_FALSE(result.empty());
+
+    int eventNum = 0;
+    for (const auto& pair : result) {
+        for (const mpe::PlaybackEvent& event : pair.second) {
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+
+            const TimestampAndDuration& expectedTnD = expectedTnDList.at(eventNum);
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+
+            EXPECT_EQ(pair.first, expectedTnD.timestamp);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, expectedTnD.timestamp);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedTnD.duration);
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitchList.at(eventNum));
+
+            ++eventNum;
+        }
+    }
+
+    EXPECT_EQ(eventNum, expectedTnDList.size());
+
+    delete score;
+}
