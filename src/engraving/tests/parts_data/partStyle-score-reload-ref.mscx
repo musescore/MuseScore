@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
@@ -591,6 +591,7 @@
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
+              <placement>above</placement>
               <durationType>measure</durationType>
               <duration>32/4</duration>
               </Rest>
