@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
@@ -132,6 +132,7 @@
             <text>test1</text>
             </StaffText>
           <Rest>
+            <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>
             </Rest>
@@ -185,6 +186,7 @@
             <text>test2</text>
             </StaffText>
           <Rest>
+            <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>
             </Rest>
@@ -235,6 +237,7 @@
             <text>test3</text>
             </StaffText>
           <Rest>
+            <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>
             </Rest>
