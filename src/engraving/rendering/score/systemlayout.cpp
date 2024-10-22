@@ -2596,6 +2596,11 @@ void SystemLayout::centerElementsBetweenStaves(const System* system)
             continue;
         }
         for (const Segment& seg : toMeasure(mb)->segments()) {
+            for (EngravingItem* item : seg.elist()) {
+                if (item && item->isMMRest() && mmRestShouldBeCenteredBetweenStaves(toMMRest(item), system)) {
+                    centerMMRestBetweenStaves(toMMRest(item), system);
+                }
+            }
             for (EngravingItem* item : seg.annotations()) {
                 if ((item->isDynamic() || item->isExpression()) && elementShouldBeCenteredBetweenStaves(item, system)) {
                     centerElementBetweenStaves(item, system);
@@ -2649,6 +2654,23 @@ bool SystemLayout::elementShouldBeCenteredBetweenStaves(const EngravingItem* ite
     }
 
     return centerProperty == AutoOnOff::ON || item->appliesToAllVoicesInInstrument();
+}
+
+bool SystemLayout::mmRestShouldBeCenteredBetweenStaves(const MMRest* mmRest, const System* system)
+{
+    if (!mmRest->style().styleB(Sid::mmRestBetweenStaves)) {
+        return false;
+    }
+
+    const Part* itemPart = mmRest->part();
+    if (itemPart->nstaves() <= 1) {
+        return false;
+    }
+
+    staff_idx_t thisStaffIdx = mmRest->staffIdx();
+    staff_idx_t prevStaffIdx = system->prevVisibleStaff(thisStaffIdx);
+
+    return prevStaffIdx != muse::nidx && mmRest->score()->staff(prevStaffIdx)->part() == itemPart;
 }
 
 bool SystemLayout::elementHasAnotherStackedOutside(const EngravingItem* element, const Shape& elementShape, const SkylineLine& skylineLine)
@@ -2740,4 +2762,29 @@ void SystemLayout::centerElementBetweenStaves(EngravingItem* element, const Syst
     element->mutldata()->setStaffCenteringInfo(std::max(availSpaceAbove, 0.0), std::max(availSpaceBelow, 0.0));
 
     updateSkylineForElement(element, system, yMove);
+}
+
+void SystemLayout::centerMMRestBetweenStaves(MMRest* mmRest, const System* system)
+{
+    staff_idx_t thisIdx = mmRest->staffIdx();
+    IF_ASSERT_FAILED(thisIdx > 0) {
+        return;
+    }
+
+    staff_idx_t prevIdx = system->prevVisibleStaff(thisIdx);
+    IF_ASSERT_FAILED(prevIdx != muse::nidx) {
+        return;
+    }
+
+    SysStaff* thisStaff = system->staff(thisIdx);
+    SysStaff* prevStaff = system->staff(prevIdx);
+    double prevStaffHeight = system->score()->staff(prevIdx)->staffHeight(mmRest->tick());
+    double yStaffDiff = prevStaff->y() + prevStaffHeight - thisStaff->y();
+
+    PointF mmRestDefaultNumberPosition = mmRest->numberPos() - PointF(0.0, mmRest->spatium() * mmRest->numberOffset());
+    RectF numberBbox = mmRest->numberRect().translated(mmRestDefaultNumberPosition + mmRest->pos());
+    double yBaseLine = 0.5 * (yStaffDiff - numberBbox.height());
+    double yDiff = yBaseLine - numberBbox.top();
+
+    mmRest->mutldata()->yNumberPos += yDiff;
 }
