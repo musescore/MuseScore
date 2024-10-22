@@ -25,6 +25,7 @@
 #include "dom/note.h"
 #include "dom/staff.h"
 #include "dom/swing.h"
+#include "dom/repeatlist.h"
 
 #include "glissandosrenderer.h"
 
@@ -34,6 +35,33 @@
 using namespace mu::engraving;
 using namespace muse;
 using namespace muse::mpe;
+
+static bool notesInSameRepeat(const Score* score, const Note* note1, const Note* note2, const int tickPositionOffset)
+{
+    const RepeatList& repeats = score->repeatList();
+    if (repeats.size() == 1) {
+        return true;
+    }
+
+    const int firstNoteTick = note1->tick().ticks();
+    const int secondNoteTick = note2->tick().ticks();
+
+    for (const RepeatSegment* repeat : repeats) {
+        const int offset = repeat->utick - repeat->tick;
+        if (offset != tickPositionOffset) {
+            continue;
+        }
+
+        if (firstNoteTick >= repeat->tick && secondNoteTick >= repeat->tick) {
+            const int lastRepeatTick = repeat->tick + repeat->len();
+            if (firstNoteTick < lastRepeatTick && secondNoteTick < lastRepeatTick) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
 
 void NoteRenderer::render(const Note* note, const RenderingContext& ctx, mpe::PlaybackEventList& result)
 {
@@ -83,6 +111,10 @@ void NoteRenderer::renderTiedNotes(const Note* firstNote, NominalNoteCtx& firstN
 
         if (muse::contains(renderedNotes, currNote)) {
             break; // prevents infinite loop
+        }
+
+        if (!notesInSameRepeat(firstChordCtx.score, firstNote, currNote, firstChordCtx.positionTickOffset)) {
+            break;
         }
 
         const Chord* chord = currNote->chord();
