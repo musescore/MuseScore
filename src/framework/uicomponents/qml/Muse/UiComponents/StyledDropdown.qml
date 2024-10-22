@@ -103,19 +103,91 @@ Item {
         }
     }
 
-    DropdownItem {
+    Item {
         id: mainItem
 
         anchors.fill: parent
 
-        text: root.displayText
+        property bool selected: false
+        property bool insideDropdownList: false
 
-        background.border.width: ui.theme.borderWidth
-        background.border.color: ui.theme.strokeColor
+        property alias label: labelItem
+        property alias dropIcon: dropIconItem
 
-        navigation.accessible.role: MUAccessible.ComboBox
+        property color hoveredColor: backgroundItem.color
 
-        onClicked: {
+        property alias navigation: navCtrl
+
+        NavigationControl {
+            id: navCtrl
+
+            name: mainItem.objectName != "" ? mainItem.objectName : "Dropdown"
+            enabled: mainItem.enabled && mainItem.visible
+            accessible.role: MUAccessible.ComboBox
+            accessible.name: labelItem.text
+
+            onActiveChanged: {
+                if (!mainItem.activeFocus) {
+                    mainItem.forceActiveFocus()
+                }
+            }
+
+            onTriggered: mainItem.clicked()
+        }
+
+        Rectangle {
+            id: backgroundItem
+            anchors.fill: parent
+            border.width: ui.theme.borderWidth
+            border.color: ui.theme.strokeColor
+            color: ui.theme.buttonColor
+            radius: 3
+            opacity: 0.7
+
+            NavigationFocusBorder { navigationCtrl: navCtrl }
+        }
+
+        StyledTextLabel {
+            id: labelItem
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: dropIconItem.left
+            anchors.leftMargin: 12
+            anchors.rightMargin: 6
+            horizontalAlignment: Text.AlignLeft
+            text: root.displayText
+        }
+
+        StyledIconLabel {
+            id: dropIconItem
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: 8
+
+            iconCode: IconCode.SMALL_ARROW_DOWN
+        }
+
+        MouseArea {
+            id: mouseAreaItem
+            anchors.fill: parent
+            hoverEnabled: true
+            onClicked: mainItem.clicked()
+
+            onContainsMouseChanged: {
+                if (!labelItem.truncated) {
+                    return
+                }
+
+                if (mouseAreaItem.containsMouse) {
+                    ui.tooltip.show(mainItem, labelItem.text)
+                } else {
+                    ui.tooltip.hide(mainItem)
+                }
+            }
+        }
+
+        function clicked() {
             dropdownLoader.toggleOpened(root.model)
         }
 
@@ -136,5 +208,49 @@ Item {
                 root.activated(index, value)
             }
         }
+
+        states: [
+            State {
+                name: "FOCUSED_INSIDE_DROPDOWN"
+                when: mainItem.insideDropdownList && navCtrl.active
+
+                PropertyChanges {
+                    target: backgroundItem
+                    anchors.margins: ui.theme.navCtrlBorderWidth //this effectively cancels its child's margins and draws everything inside
+                }
+            },
+
+            State {
+                name: "HOVERED"
+                when: mouseAreaItem.containsMouse && !mouseAreaItem.pressed
+
+                PropertyChanges {
+                    target: backgroundItem
+                    opacity: ui.theme.buttonOpacityHover
+                    color: mainItem.hoveredColor
+                }
+            },
+
+            State {
+                name: "PRESSED"
+                when: mouseAreaItem.pressed
+
+                PropertyChanges {
+                    target: backgroundItem
+                    opacity: ui.theme.buttonOpacityHit
+                }
+            },
+
+            State {
+                name: "SELECTED"
+                when: mainItem.selected
+
+                PropertyChanges {
+                    target: backgroundItem
+                    opacity: ui.theme.accentOpacityHit
+                    color: ui.theme.accentColor
+                }
+            }
+        ]
     }
 }
