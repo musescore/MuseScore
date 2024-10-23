@@ -71,6 +71,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/readwriteundoreset_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/remove_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/repeat_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rest_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rhythmicgrouping_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scantree_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/selectionfilter_tests.cpp

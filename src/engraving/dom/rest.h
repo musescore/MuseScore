@@ -140,9 +140,9 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(Rest)
 
-    int computeNaturalLine(int lines) const; // Natural rest vertical position
+    int computeNaturalLine(DurationType type, int lines) const; // Natural rest vertical position
     int computeVoiceOffset(int lines, LayoutData* ldata) const; // Vertical displacement in multi-voice cases
-    int computeWholeRestOffset(int voiceOffset, int lines) const;
+    int computeFullMeasureRestOffset(int lines, int naturalLine, int voiceOffset) const;
 
     SymId getSymbol(DurationType type, int line, int lines) const;
     void updateSymbol(int line, int lines, LayoutData* ldata) const;

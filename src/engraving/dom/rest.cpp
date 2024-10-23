@@ -484,21 +484,13 @@ int Rest::computeVoiceOffset(int lines, LayoutData* ldata) const
     return voiceLineOffset * upSign;
 }
 
-int Rest::computeWholeRestOffset(int voiceOffset, int lines) const
+int Rest::computeFullMeasureRestOffset(int lines, int naturalLine, int voiceOffset) const
 {
-    if (!isWholeRest()) {
+    if (!isFullMeasureRest() || !measure()) {
         return 0;
     }
-    int lineMove = 0;
-    bool moveToLineAbove = (lines > 5)
-                           || ((lines > 1 || voiceOffset == -1 || voiceOffset == 2) && !(voiceOffset == -2 || voiceOffset == 1));
-    if (moveToLineAbove) {
-        lineMove = -1;
-    }
 
-    if (!isFullMeasureRest()) {
-        return lineMove;
-    }
+    int lineMove = 0;
 
     track_idx_t startTrack = staffIdx() * VOICES;
     track_idx_t endTrack = startTrack + VOICES;
@@ -533,17 +525,33 @@ int Rest::computeWholeRestOffset(int voiceOffset, int lines) const
         return lineMove; // Don't do anything
     }
 
-    double lineDistance = staff()->lineDistance(tick()) * spatium();
-    int centerLine = floor(double(lines) / 2);
+    const double lineDistance = staff()->lineDistance(tick()) * spatium();
+    const int centerLine = floor(double(lines) / 2);
+    const int floatLine = naturalLine + voiceOffset;
 
     if (hasNotesAbove) {
-        int bottomLine = floor(bottomY / lineDistance);
-        lineMove = std::max(lineMove, bottomLine - centerLine);
+        double bottomLine = round((2 * bottomY) / lineDistance) / 2; // round to nearest half-space
+        lineMove = std::max<int>(lineMove, lround(bottomLine) - floatLine);
+        lineMove = std::max<int>(lineMove, std::max(0, centerLine - naturalLine)); // adjust for whole note offset (if any)
+        if ((floatLine + lineMove) < (bottomLine + 0.5)) {
+            lineMove++;
+        }
+        // Breve rests ascend a space, so make room for one if needed.
+        if (!isWholeRest() && (floatLine + lineMove) <= (bottomLine + 1.0)) {
+            lineMove++;
+        }
     }
 
     if (hasNotesBelow) {
-        int topLine = floor(topY / lineDistance);
-        lineMove = std::min(lineMove, topLine - centerLine);
+        double topLine = round((2* topY) / lineDistance) / 2; // round to nearest half-space
+        lineMove = std::min<int>(lineMove, lround(topLine) - floatLine);
+        if ((floatLine + lineMove) > (topLine - 0.5)) {
+            lineMove--;
+        }
+        // Whole rests descend a space, so make room for one if needed.
+        if (isWholeRest() && ((floatLine + lineMove) >= topLine - 1.0)) {
+            lineMove--;
+        }
     }
 
     return lineMove;
@@ -556,9 +564,31 @@ bool Rest::isWholeRest() const
            || (durType == DurationType::V_MEASURE && measure() && measure()->ticks() < Fraction(2, 1));
 }
 
-int Rest::computeNaturalLine(int lines) const
+int Rest::computeNaturalLine(DurationType type, int lines) const
 {
     int line = (lines % 2) ? floor(double(lines) / 2) : ceil(double(lines) / 2);
+
+    switch (type) {
+    case DurationType::V_WHOLE:
+        if (lines > 1) {
+            line--;
+        }
+        break;
+    case DurationType::V_BREVE:
+        if (lines <= 1) {
+            line++;
+        }
+        break;
+    case DurationType::V_MEASURE:
+        if (!isWholeRest()) {
+            return computeNaturalLine(DurationType::V_BREVE, lines);
+        }
+        return computeNaturalLine(DurationType::V_WHOLE, lines);
+    default:
+        break;
+
+    }
+
     return line;
 }
 

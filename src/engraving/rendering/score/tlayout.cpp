@@ -4630,9 +4630,9 @@ void TLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Layout
     int userLine   = RealIsNull(yOff) ? 0 : lrint(yOff / (lineDist * spatium));
     int lines      = st ? st->lines() : 5;
 
-    int naturalLine = item->computeNaturalLine(lines); // Measured in 1sp steps
+    int naturalLine = item->computeNaturalLine(item->durationType().type(), lines); // Measured in 1sp steps
     int voiceOffset = item->computeVoiceOffset(lines, ldata); // Measured in 1sp steps
-    int wholeRestOffset = item->computeWholeRestOffset(voiceOffset, lines);
+    int wholeRestOffset = item->computeFullMeasureRestOffset(lines, naturalLine, voiceOffset);
     int finalLine = naturalLine + voiceOffset + wholeRestOffset;
 
     ldata->sym = item->getSymbol(item->durationType().type(), finalLine + userLine, lines);
