@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <limits>
 #include "instrtemplate.h"
 
 #include "io/file.h"
@@ -717,9 +718,46 @@ const InstrumentTemplate* searchTemplate(const String& name)
     return 0;
 }
 
+static int levenshteinDistance(const std::string& s1, const std::string& s2)
+{
+    size_t N1 = s1.length();
+    size_t N2 = s2.length();
+    int i, j;
+    std::vector<int> T(N2 + 1);
+
+    for (i = 0; i <= N2; i++) {
+        T[i] = i;
+    }
+
+    for (i = 0; i < N1; i++) {
+        T[0] = i + 1;
+        int corner = i;
+        for (j = 0; j < N2; j++) {
+            int upper = T[j + 1];
+            if (s1[i] == s2[j]) {
+                T[j + 1] = corner;
+            } else {
+                T[j + 1] = std::min(T[j], std::min(upper, corner)) + 1;
+            }
+            corner = upper;
+        }
+    }
+    return T[N2];
+}
+
 const InstrumentTemplate* combinedTemplateSearch(const String& mxmlId, const String& name, const int transposition, int bank,
                                                  int program)
 {
+    struct InstrumentTemplateScored
+    {
+        const InstrumentTemplate* instrumentTemplate=nullptr;
+        int score = std::numeric_limits<int>::max();
+        InstrumentTemplateScored() { instrumentTemplate = nullptr; score = std::numeric_limits<int>::max(); }
+    };
+
+    std::vector <InstrumentTemplateScored> instTemplateScoredVector;
+    int minLevenshteinDistance = std::numeric_limits<int>::max();
+
     if (mxmlId.empty() && name.empty() && bank == 0 && program == -1) {
         // No instrument information provided
         return nullptr;
@@ -792,7 +830,44 @@ const InstrumentTemplate* combinedTemplateSearch(const String& mxmlId, const Str
                 bestMatchStrength = matchStrength;
                 if (bestMatchStrength - nameWeight == perfectMatchStrength && nameWeight > 0) {
                     return bestMatch; // stop looking for matches
+                } else {
+                    // Initialize list
+                    instTemplateScoredVector.clear();
+                    minLevenshteinDistance = std::numeric_limits<int>::max();
                 }
+            }
+            // We keep a list of every instrument with the current bestMatchStrength
+            if ((matchStrength == bestMatchStrength) && (matchStrength > 0)) {
+                InstrumentTemplateScored instTemplateScored;
+                instTemplateScored.instrumentTemplate = it;
+
+                // if the name is meaningless keep the longest distance
+                if ((name == "MusicXML Part") || (name == "Staff")) {
+                    instTemplateScored.score = std::numeric_limits<int>::max();
+                } else {
+                    // We keep the lowest distance with trackName ...
+                    instTemplateScored.score = levenshteinDistance(StaffName(name).toString().toStdString(), it->trackName.toStdString());
+
+                    // ... and longNames
+                    for (const muse::String& instLongName : it->longNames.toStringList()) {
+                        instTemplateScored.score = std::min(instTemplateScored.score,
+                                                            levenshteinDistance(StaffName(name).toString().toStdString(),
+                                                                                instLongName.toStdString()));
+                    }
+                }
+
+                instTemplateScoredVector.insert(instTemplateScoredVector.end(), instTemplateScored);
+                minLevenshteinDistance = std::min(minLevenshteinDistance, instTemplateScored.score);
+            }
+        }
+    }
+
+    // We keep the first instrument with the bigger score and the lower Levenshtein fistance
+    if (instTemplateScoredVector.size() > 1) {
+        for (const InstrumentTemplateScored itg : instTemplateScoredVector) {
+            if (itg.score == minLevenshteinDistance) {
+                bestMatch = itg.instrumentTemplate;
+                break;
             }
         }
     }
