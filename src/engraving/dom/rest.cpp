@@ -484,9 +484,14 @@ int Rest::computeVoiceOffset(int lines, LayoutData* ldata) const
     return voiceLineOffset * upSign;
 }
 
-int Rest::computeFullMeasureRestOffset(int lines, int naturalLine, int voiceOffset) const
+int Rest::computeWholeAndFullMeasureRestOffset(int lines, int naturalLine, int voiceOffset) const
 {
-    if (!isFullMeasureRest() || !measure()) {
+    const int centerLine = floor(double(lines) / 2);
+
+    if (!isFullMeasureRest()) {
+        if (isWholeRest()) {
+            return (lines == 5) && (naturalLine + voiceOffset) == centerLine ? 1 : 0;
+        }
         return 0;
     }
 
@@ -526,7 +531,6 @@ int Rest::computeFullMeasureRestOffset(int lines, int naturalLine, int voiceOffs
     }
 
     const double lineDistance = staff()->lineDistance(tick()) * spatium();
-    const int centerLine = floor(double(lines) / 2);
     const int floatLine = naturalLine + voiceOffset;
 
     if (hasNotesAbove) {
