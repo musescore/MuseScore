@@ -490,7 +490,9 @@ int Rest::computeWholeAndFullMeasureRestOffset(int lines, int naturalLine, int v
 
     if (!isFullMeasureRest() || !measure()) {
         if (isWholeRest()) {
-            return (lines == 5) && (naturalLine + voiceOffset) == centerLine ? 1 : 0;
+            // if we are moving a whole rest down because of voices on a 5-line staff, it must
+            //      not end up on the center line. (This is handled elsewhere for fullmeasure wholes.)
+            return (lines == 5) && (voiceOffset > 0) && (naturalLine + voiceOffset) == centerLine ? 1 : 0;
         }
         return 0;
     }
