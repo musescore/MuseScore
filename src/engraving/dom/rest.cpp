@@ -543,7 +543,7 @@ int Rest::computeFullMeasureRestOffset(int lines, int naturalLine, int voiceOffs
     }
 
     if (hasNotesBelow) {
-        double topLine = round((2* topY) / lineDistance) / 2; // round to nearest half-space
+        double topLine = round((2 * topY) / lineDistance) / 2; // round to nearest half-space
         lineMove = std::min<int>(lineMove, lround(topLine) - floatLine);
         if ((floatLine + lineMove) > (topLine - 0.5)) {
             lineMove--;
@@ -586,7 +586,6 @@ int Rest::computeNaturalLine(DurationType type, int lines) const
         return computeNaturalLine(DurationType::V_WHOLE, lines);
     default:
         break;
-
     }
 
     return line;

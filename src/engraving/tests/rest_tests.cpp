@@ -78,7 +78,7 @@ protected:
             int visibleLine = std::floor(rest->pos().y() / (rest->staff()->lineDistance(rest->tick()) * rest->spatium()));
             EXPECT_EQ(visibleLine, expectedLines[measureNum - 1]);
         }
-    };
+    }
 
 public:
 };
@@ -129,7 +129,6 @@ TEST_F(Engraving_RestTests, BreveRests_TestFullmeasure1Line)
 
     delete score;
 }
-
 
 TEST_F(Engraving_RestTests, BreveRests_TestFullmeasureFloats)
 {
