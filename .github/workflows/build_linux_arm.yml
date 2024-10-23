@@ -156,7 +156,7 @@ jobs:
 
         # Re. `export QT_SELECT=qt6`, see https://askubuntu.com/questions/1460242/ubuntu-22-04-with-qt6-qmake-could-not-find-a-qt-installation-of
         # and accompanying `qtchooser` comment in `buildscripts/ci/linux/setup-arm.sh`.
-        sudo docker run -i -v "${PWD}:/MuseScore" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static "arm32v7/ubuntu:jammy" /bin/bash -c "\
+        sudo docker run --platform linux/arm -i -v "${PWD}:/MuseScore" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static "arm32v7/ubuntu:jammy" /bin/bash -c "\
           cd /MuseScore && \
           export QT_SELECT=qt6 && \
           bash /MuseScore/buildscripts/ci/linux/setup-arm.sh --arch armv7l && \
@@ -285,7 +285,7 @@ jobs:
 
         # Re. `export QT_SELECT=qt6`, see https://askubuntu.com/questions/1460242/ubuntu-22-04-with-qt6-qmake-could-not-find-a-qt-installation-of
         # and accompanying `qtchooser` comment in `buildscripts/ci/linux/setup-arm.sh`.
-        sudo docker run -i -v "${PWD}:/MuseScore" -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "arm64v8/ubuntu:jammy" /bin/bash -c "\
+        sudo docker run --platform linux/arm64 -i -v "${PWD}:/MuseScore" -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "arm64v8/ubuntu:jammy" /bin/bash -c "\
           cd /MuseScore && \
           export QT_SELECT=qt6 && \
           bash /MuseScore/buildscripts/ci/linux/setup-arm.sh --arch aarch64 && \
