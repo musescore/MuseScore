@@ -488,7 +488,7 @@ int Rest::computeWholeAndFullMeasureRestOffset(int lines, int naturalLine, int v
 {
     const int centerLine = floor(double(lines) / 2);
 
-    if (!isFullMeasureRest()) {
+    if (!isFullMeasureRest() || !measure()) {
         if (isWholeRest()) {
             return (lines == 5) && (naturalLine + voiceOffset) == centerLine ? 1 : 0;
         }
