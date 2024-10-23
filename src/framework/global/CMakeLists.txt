@@ -104,6 +104,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/number.h
     ${CMAKE_CURRENT_LIST_DIR}/types/config.h
     ${CMAKE_CURRENT_LIST_DIR}/types/ratio.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/secs.h
 
     ${CMAKE_CURRENT_LIST_DIR}/io/ioenums.h
     ${CMAKE_CURRENT_LIST_DIR}/io/path.cpp
@@ -264,6 +265,11 @@ endif()
 
 if (MUSE_MODULE_GLOBAL_MULTI_IOC)
     set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_GLOBAL_MULTI_IOC)
+
+target_sources(muse_global
+  PRIVATE
+    types/secs.h
+)
 endif()
 
 setup_module()
