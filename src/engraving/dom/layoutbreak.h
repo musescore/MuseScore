@@ -77,6 +77,8 @@ public:
     const RectF& iconBorderRect() const { return m_iconBorderRect; }
     const muse::draw::PainterPath& iconPath() const { return m_iconPath; }
 
+    std::vector<KeySig*> keySigs(bool all=false) const;
+
 protected:
     void added() override;
     void removed() override;
