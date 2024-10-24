@@ -510,7 +510,7 @@ int Rest::computeWholeOrBreveRestOffset(int lines, int naturalLine, int voiceOff
                         lineMove = 1;  // float whole rest past the center line
                     }
                 } else if (voiceOffset < naturalLine - centerLine) {
-                     // compensate for 2-space voice offset
+                    // compensate for 2-space voice offset
                     wholeRestAdjustmentFor2SpaceMultiVoice = centerLine - naturalLine;
                     lineMove = wholeRestAdjustmentFor2SpaceMultiVoice;
                 }
