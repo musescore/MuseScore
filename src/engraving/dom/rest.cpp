@@ -484,20 +484,60 @@ int Rest::computeVoiceOffset(int lines, LayoutData* ldata) const
     return voiceLineOffset * upSign;
 }
 
-int Rest::computeWholeAndFullMeasureRestOffset(int lines, int naturalLine, int voiceOffset) const
+int Rest::computeWholeOrBreveRestOffset(int lines, int naturalLine, int voiceOffset) const
 {
-    const int centerLine = floor(double(lines) / 2);
-
-    if (!isFullMeasureRest() || !measure()) {
-        if (isWholeRest()) {
-            // if we are moving a whole rest down because of voices on a 5-line staff, it must
-            //      not end up on the center line. (This is handled elsewhere for fullmeasure wholes.)
-            return (lines == 5) && (voiceOffset > 0) && (naturalLine + voiceOffset) == centerLine ? 1 : 0;
-        }
+    if (!measure()) {
         return 0;
     }
 
+    const int centerLine = floor(double(lines) / 2);
+    const int floatLine = naturalLine + voiceOffset;
+
     int lineMove = 0;
+
+    // adjust rest positions for multivoice situations
+
+    int wholeRestAdjustmentFor2SpaceMultiVoice = 0;
+    if (isWholeRest()) {
+        if (lines <= 5) {  // 6 lines or more don't get adjustments
+            if (naturalLine < centerLine) {
+                // if floating whole rest down
+                if (voiceOffset > 0) {
+                    if (voiceOffset > centerLine - naturalLine) {
+                        wholeRestAdjustmentFor2SpaceMultiVoice = centerLine - naturalLine;
+                    }
+                    if (floatLine == centerLine) {
+                        lineMove = 1;  // float whole rest past the center line
+                    }
+                } else if (voiceOffset < naturalLine - centerLine) {
+                     // compensate for 2-space voice offset
+                    wholeRestAdjustmentFor2SpaceMultiVoice = centerLine - naturalLine;
+                    lineMove = wholeRestAdjustmentFor2SpaceMultiVoice;
+                }
+            } else if (lines == 1 && naturalLine == centerLine) {
+                if (voiceOffset > 0) {
+                    lineMove = 1 - voiceOffset; // force wholes onto line 1 for voiceOffset 1 or 2
+                } else if (voiceOffset < 0) {
+                    lineMove = -2 - voiceOffset; // force wholes onto line -2 for voiceOffset -1 or -2
+                }
+            }
+        }
+    } else if (isBreveRest()) {
+        if (naturalLine > centerLine && lines <= 1) {
+            // compensate for natural position of breve rest below center line
+            if (voiceOffset > 1) {
+                lineMove = -1;
+            } else if (voiceOffset < 0) {
+                lineMove = -1;
+            }
+        }
+    }
+
+    if (!isFullMeasureRest()) {
+        return lineMove;
+    }
+
+    // float full measure rests above/below voices as needed
 
     track_idx_t startTrack = staffIdx() * VOICES;
     track_idx_t endTrack = startTrack + VOICES;
@@ -533,12 +573,13 @@ int Rest::computeWholeAndFullMeasureRestOffset(int lines, int naturalLine, int v
     }
 
     const double lineDistance = staff()->lineDistance(tick()) * spatium();
-    const int floatLine = naturalLine + voiceOffset;
 
     if (hasNotesAbove) {
         double bottomLine = round((2 * bottomY) / lineDistance) / 2; // round to nearest half-space
+        if (bottomLine >= centerLine && wholeRestAdjustmentFor2SpaceMultiVoice) {
+            lineMove += wholeRestAdjustmentFor2SpaceMultiVoice;
+        }
         lineMove = std::max<int>(lineMove, lround(bottomLine) - floatLine);
-        lineMove = std::max<int>(lineMove, std::max(0, centerLine - naturalLine)); // adjust for whole note offset (if any)
         if ((floatLine + lineMove) < (bottomLine + 0.5)) {
             lineMove++;
         }
@@ -550,6 +591,9 @@ int Rest::computeWholeAndFullMeasureRestOffset(int lines, int naturalLine, int v
 
     if (hasNotesBelow) {
         double topLine = round((2 * topY) / lineDistance) / 2; // round to nearest half-space
+        if (topLine <= centerLine && wholeRestAdjustmentFor2SpaceMultiVoice) {
+            lineMove -= wholeRestAdjustmentFor2SpaceMultiVoice;
+        }
         lineMove = std::min<int>(lineMove, lround(topLine) - floatLine);
         if ((floatLine + lineMove) > (topLine - 0.5)) {
             lineMove--;
@@ -567,7 +611,14 @@ bool Rest::isWholeRest() const
 {
     TDuration durType = durationType();
     return durType == DurationType::V_WHOLE
-           || (durType == DurationType::V_MEASURE && measure() && measure()->ticks() < Fraction(2, 1));
+           || (isFullMeasureRest() && measure() && measure()->ticks() < Fraction(2, 1));
+}
+
+bool Rest::isBreveRest() const
+{
+    TDuration durType = durationType();
+    return durType == DurationType::V_BREVE
+           || (isFullMeasureRest() && measure() && measure()->ticks() <= Fraction(2, 1));
 }
 
 int Rest::computeNaturalLine(DurationType type, int lines) const

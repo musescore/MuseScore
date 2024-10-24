@@ -101,7 +101,7 @@ TEST_F(Engraving_RestTests, BreveRests_TestFullmeasureLines)
     // [GIVEN] Style setting for multiVoice 2 space is true
     score->style().set(Sid::multiVoiceRestTwoSpaceOffset, true);
     score->doLayout();
-    expectedLines = { 2, 0, 4, 1, -1, 4 };
+    expectedLines = { 2, 0, 4, 1, -1, 3 };
     testFullmeasureRestLines(score, calcTick, expectedLines, restTracks);
 
     // [GIVEN] Style setting for multiVoice 2 space is false

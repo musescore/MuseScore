@@ -32,6 +32,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/utils/testutils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/utils/testutils.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/rest_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/barline_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/beam_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/box_tests.cpp
@@ -71,7 +72,6 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/readwriteundoreset_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/remove_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/repeat_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rest_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rhythmicgrouping_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scantree_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/selectionfilter_tests.cpp

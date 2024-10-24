@@ -106,6 +106,7 @@ public:
     void setAccent(bool flag);
 
     bool isWholeRest() const;
+    bool isBreveRest() const;
 
     DeadSlapped* deadSlapped() const { return m_deadSlapped; }
 
@@ -142,7 +143,7 @@ public:
 
     int computeNaturalLine(DurationType type, int lines) const; // Natural rest vertical position
     int computeVoiceOffset(int lines, LayoutData* ldata) const; // Vertical displacement in multi-voice cases
-    int computeWholeAndFullMeasureRestOffset(int lines, int naturalLine, int voiceOffset) const;
+    int computeWholeOrBreveRestOffset(int lines, int naturalLine, int voiceOffset) const;
 
     SymId getSymbol(DurationType type, int line, int lines) const;
     void updateSymbol(int line, int lines, LayoutData* ldata) const;
