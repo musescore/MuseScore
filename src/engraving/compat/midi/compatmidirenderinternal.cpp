@@ -65,6 +65,7 @@
 #include "dom/volta.h"
 
 #include "log.h"
+#include "realfn.h"
 
 namespace mu::engraving {
 static PitchWheelSpecs wheelSpec;
@@ -261,7 +262,7 @@ static void playNote(EventsHolder& events, const Note* note, PlayNoteParams para
                 Note* nextNote = toNote(spanner->endElement());
                 double pitchDelta = nextNote->ppitch() - params.pitch;
                 int timeDelta = params.offTime - params.onTime;
-                if (pitchDelta != 0 && timeDelta != 0) {
+                if (!muse::RealIsNull(pitchDelta) && timeDelta != 0) {
                     collectGlissando(params.channel, params.effect, params.onTime, params.offTime, pitchDelta, pitchWheelRenderer,
                                      glissando->staffIdx());
                 }
@@ -424,7 +425,7 @@ static void renderSnd(EventsHolder& events, const Chord* chord, int noteChannel,
 
         for (int t = change.first.ticks(); t <= endPoint; t++) {
             int mult = multEvents.val(Fraction::fromTicks(t));
-            if (mult == lastVal || mult == CONVERSION_FACTOR) {
+            if (mult == lastVal || muse::RealIsEqual(mult, CONVERSION_FACTOR)) {
                 continue;
             }
             lastVal = mult;

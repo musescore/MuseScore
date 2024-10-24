@@ -68,6 +68,7 @@
 #endif
 
 #include "log.h"
+#include "realfn.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -1320,7 +1321,7 @@ int Chord::stemOpticalAdjustment(int stemEndPosition) const
     if (beamCount == 0 || beamCount > 2) {
         return 0;
     }
-    bool isOnEvenLine = fmod(stemEndPosition + 4, 4) == 2;
+    bool isOnEvenLine = muse::RealIsEqual(fmod(stemEndPosition + 4, 4), 2);
     if (isOnEvenLine) {
         return 1;
     }

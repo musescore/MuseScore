@@ -42,6 +42,7 @@
 #endif
 
 #include "log.h"
+#include "realfn.h"
 
 using namespace muse::uicomponents;
 
@@ -425,7 +426,7 @@ QRect PopupView::geometry() const
 
 void PopupView::setLocalX(qreal x)
 {
-    if (qFuzzyCompare(m_localPos.x(), x)) {
+    if (RealIsEqual(m_localPos.x(), x)) {
         return;
     }
 
@@ -437,7 +438,7 @@ void PopupView::setLocalX(qreal x)
 
 void PopupView::setLocalY(qreal y)
 {
-    if (qFuzzyCompare(m_localPos.y(), y)) {
+    if (RealIsEqual(m_localPos.y(), y)) {
         return;
     }
 
