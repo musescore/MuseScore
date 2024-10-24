@@ -47,7 +47,7 @@ public:
     QString originSequenceInNativeFormat() const;
     QString newSequenceInNativeFormat() const;
     QString conflictWarning() const;
-    bool isShiftAllowed(Qt::Key key);
+    bool isShiftAllowed(Qt::Key key, const QString& keyStr);
 
     Q_INVOKABLE void load(const QVariant& shortcut, const QVariantList& allShortcuts);
     Q_INVOKABLE void inputKey(Qt::Key key, Qt::KeyboardModifiers modifiers);
@@ -74,6 +74,7 @@ private:
     QVariantMap m_conflictShortcut;
 
     QKeySequence m_newSequence;
+    QKeySequence m_newSequenceEng;
 };
 }
 
