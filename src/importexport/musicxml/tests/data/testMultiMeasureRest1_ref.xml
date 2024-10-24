@@ -72,6 +72,11 @@
         </note>
       </measure>
     <measure number="4">
+      <attributes>
+        <measure-style>
+          <multiple-rest>1</multiple-rest>
+          </measure-style>
+        </attributes>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>

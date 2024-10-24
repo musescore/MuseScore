@@ -183,7 +183,6 @@ public:
 
     double stretch() const { return m_stretch; }
     void setStretch(double v) { m_stretch = v; }
-    double computeDurationStretch(const Segment* prevSeg);
 
     Fraction rtick() const override { return m_tick; }
     void setRtick(const Fraction& v) { assert(v >= Fraction(0, 1)); m_tick = v; }
@@ -308,9 +307,6 @@ public:
 
     double xPosInSystemCoords() const;
     void setXPosInSystemCoords(double x);
-
-    double durationStretchForMMRests() const;
-    double durationStretchForTicks(const Fraction& ticks) const;
 
 private:
 
