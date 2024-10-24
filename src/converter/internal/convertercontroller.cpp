@@ -224,8 +224,7 @@ Ret ConverterController::convertScoreParts(const muse::io::path_t& in, const mus
         ret = convertScorePartsToPdf(writer, notationProject->masterNotation(), out);
     } else if (suffix == PNG_SUFFIX) {
         ret = convertScorePartsToPngs(writer, notationProject->masterNotation(), out);
-    } 
-    else if (suffix == MP3_SUFFIX) {
+    } else if (suffix == MP3_SUFFIX) {
         ret = convertScorePartsToMp3(writer, notationProject->masterNotation(), out);
     } else {
         ret = make_ret(Ret::Code::NotSupported);
@@ -264,6 +263,7 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
 
         Job job;
         job.in = correctUserInputPath(obj["in"].toString());
+<<<<<<< HEAD
         job.out = correctUserInputPath(obj["out"].toString());
 
         QJsonObject transposeOptionsObj = obj["transpose"].toObject();
@@ -279,6 +279,9 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
 
         if (!job.in.empty() && !job.out.empty()) {
         
+=======
+
+>>>>>>> c7c5a3f4a0 (Code style adjustment)
         QJsonValue outValue = obj["out"];
         if (outValue.isString()) {
             job.out = correctUserInputPath(outValue.toString());
@@ -444,7 +447,7 @@ Ret ConverterController::convertScorePartsToPngs(INotationWriterPtr writer, mu::
         QString partName = notations[i]->name();
         QString baseName = QString::fromStdString(io::completeBasename(out).toStdString());
         baseName.chop(1);  // Remove the * placeholder
-        muse::io::path_t pngFilePath = io::dirpath(out) + "/" + baseName.toStdString() + partName.toStdString() + ".png";;
+        muse::io::path_t pngFilePath = io::dirpath(out) + "/" + baseName.toStdString() + partName.toStdString() + ".png";
         Ret ret2 = convertPageByPage(writer, notations[i], pngFilePath);
         if (!ret2) {
             return ret2;
@@ -491,7 +494,6 @@ Ret ConverterController::convertScorePartsToMp3(INotationWriterPtr writer, IMast
 
     return make_ret(Ret::Code::Ok);
 }
-
 
 Ret ConverterController::exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out,
                                           const muse::io::path_t& highlightConfigPath,

@@ -109,4 +109,7 @@ private:
 =======
 
 #endif // MU_CONVERTER_CONVERTERCONTROLLER_H
+<<<<<<< HEAD
 >>>>>>> 0bc135de85 (Fixes part convert and multiple conversions)
+=======
+>>>>>>> c7c5a3f4a0 (Code style adjustment)
