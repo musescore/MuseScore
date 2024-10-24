@@ -584,7 +584,7 @@ int Rest::computeWholeOrBreveRestOffset(int lines, int naturalLine, int voiceOff
             lineMove++;
         }
         // Breve rests ascend a space, so make room for one if needed.
-        if (!isWholeRest() && (floatLine + lineMove) <= (bottomLine + 1.0)) {
+        if (isBreveRest() && (floatLine + lineMove) <= (bottomLine + 1.0)) {
             lineMove++;
         }
     }
@@ -618,7 +618,7 @@ bool Rest::isBreveRest() const
 {
     TDuration durType = durationType();
     return durType == DurationType::V_BREVE
-           || (isFullMeasureRest() && measure() && measure()->ticks() <= Fraction(2, 1));
+           || (isFullMeasureRest() && measure() && measure()->ticks() >= Fraction(2, 1));
 }
 
 int Rest::computeNaturalLine(DurationType type, int lines) const
