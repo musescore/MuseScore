@@ -4578,7 +4578,7 @@ void NotationInteraction::addText(TextStyleType type, EngravingItem* item)
     if (!text->isInstrumentChange()) {
         startEditText(text);
     }
-    
+
     if (text->isRehearsalMark() || text->isTempoText()) {
         text->cursor()->selectWord();
     }
