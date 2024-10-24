@@ -24,6 +24,10 @@
 #include "types/translatablestring.h"
 #include "ui/view/iconcodes.h"
 
+#include "engraving/dom/factory.h"
+
+#include "defer.h"
+
 static const QString INSTRUMENT_NAMES_CODE("percussion-instrument-names");
 static const QString NOTATION_PREVIEW_CODE("percussion-notation-preview");
 static const QString EDIT_LAYOUT_CODE("percussion-edit-layout");
@@ -57,6 +61,13 @@ void PercussionPanelModel::setCurrentPanelMode(const PanelMode::Mode& panelMode)
 
     m_currentPanelMode = panelMode;
     emit currentPanelModeChanged(m_currentPanelMode);
+
+    if (!interaction() || !interaction()->noteInput()) {
+        return;
+    }
+
+    const INotationNoteInputPtr noteInput = interaction()->noteInput();
+    panelMode == PanelMode::Mode::WRITE ? noteInput->startNoteInput() : noteInput->endNoteInput();
 }
 
 bool PercussionPanelModel::useNotationPreview() const
@@ -143,21 +154,82 @@ void PercussionPanelModel::finishEditing()
 
 void PercussionPanelModel::setUpConnections()
 {
-    if (!notation()) {
-        return;
-    }
-
     const auto updatePadModels = [this](const mu::engraving::Drumset* drumset) {
         m_padListModel->setDrumset(drumset);
         m_padListModel->resetLayout(); //! NOTE: Placeholder until we implement saving/loading
     };
 
+    if (!notation()) {
+        updatePadModels(nullptr);
+        return;
+    }
+
     const INotationNoteInputPtr noteInput = interaction()->noteInput();
     updatePadModels(noteInput->state().drumset);
 
-    noteInput->stateChanged().onNotify(this, [updatePadModels, noteInput]() {
-        updatePadModels(noteInput->state().drumset);
+    noteInput->stateChanged().onNotify(this, [this, updatePadModels]() {
+        if (!notation()) {
+            updatePadModels(nullptr);
+            return;
+        }
+        const INotationNoteInputPtr ni = interaction()->noteInput();
+        updatePadModels(ni->state().drumset);
     });
+
+    m_padListModel->padTriggered().onReceive(this, [this](int pitch) {
+        switch (currentPanelMode()) {
+        case PanelMode::Mode::EDIT_LAYOUT: return;
+        case PanelMode::Mode::WRITE: writePitch(pitch); // fall through
+        case PanelMode::Mode::SOUND_PREVIEW: playPitch(pitch);
+        }
+    });
+}
+
+void PercussionPanelModel::writePitch(int pitch)
+{
+    INotationUndoStackPtr undoStack = notation()->undoStack();
+    if (!interaction() || !undoStack) {
+        return;
+    }
+
+    DEFER {
+        undoStack->commitChanges();
+    };
+
+    undoStack->prepareChanges();
+
+    interaction()->noteInput()->startNoteInput();
+
+    score()->addMidiPitch(pitch, false, /*transpose*/ false);
+
+    const mu::engraving::InputState& inputState = score()->inputState();
+    if (inputState.cr()) {
+        interaction()->showItem(inputState.cr());
+    }
+}
+
+void PercussionPanelModel::playPitch(int pitch)
+{
+    const mu::engraving::InputState& inputState = score()->inputState();
+    if (!inputState.cr()) {
+        return;
+    }
+
+    Chord* chord = mu::engraving::Factory::createChord(inputState.lastSegment());
+    chord->setParent(inputState.lastSegment());
+
+    Note* note = mu::engraving::Factory::createNote(chord);
+    note->setParent(chord);
+
+    note->setStaffIdx(mu::engraving::track2staff(inputState.cr()->track()));
+
+    const mu::engraving::NoteVal nval = score()->noteVal(pitch, /*transpose*/ false);
+    note->setNval(nval);
+
+    playbackController()->playElements({ note });
+
+    note->setParent(nullptr);
+    delete note;
 }
 
 const INotationPtr PercussionPanelModel::notation() const
@@ -168,4 +240,9 @@ const INotationPtr PercussionPanelModel::notation() const
 const INotationInteractionPtr PercussionPanelModel::interaction() const
 {
     return notation() ? notation()->interaction() : nullptr;
+}
+
+mu::engraving::Score* PercussionPanelModel::score() const
+{
+    return notation() ? notation()->elements()->msScore() : nullptr;
 }

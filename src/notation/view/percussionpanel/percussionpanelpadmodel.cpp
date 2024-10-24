@@ -66,3 +66,8 @@ void PercussionPanelPadModel::setIsEmptySlot(bool isEmptySlot)
     m_isEmptySlot = isEmptySlot;
     emit isEmptySlotChanged();
 }
+
+void PercussionPanelPadModel::triggerPad()
+{
+    m_triggeredNotification.notify();
+}

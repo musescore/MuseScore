@@ -24,13 +24,16 @@
 
 #include <QAbstractListModel>
 
+#include "async/asyncable.h"
+#include "async/channel.h"
+
 #include "engraving/dom/drumset.h"
 
 #include "percussionpanelpadmodel.h"
 
 static constexpr int NUM_COLUMNS(8);
 
-class PercussionPanelPadListModel : public QAbstractListModel
+class PercussionPanelPadListModel : public QAbstractListModel, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -59,6 +62,8 @@ public:
     void setDrumset(const mu::engraving::Drumset* drumset);
     void resetLayout();
 
+    muse::async::Channel<int /*pitch*/> padTriggered() const { return m_triggeredChannel; }
+
 signals:
     void numPadsChanged();
     void rowIsEmptyChanged(int row, bool empty);
@@ -77,4 +82,6 @@ private:
     QList<PercussionPanelPadModel*> m_padModels;
 
     int m_dragStartIndex = -1;
+
+    muse::async::Channel<int /*pitch*/> m_triggeredChannel;
 };

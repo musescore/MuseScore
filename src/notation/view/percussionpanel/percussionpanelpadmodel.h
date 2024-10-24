@@ -24,7 +24,10 @@
 
 #include <QObject>
 
-class PercussionPanelPadModel : public QObject
+#include "async/asyncable.h"
+#include "async/notification.h"
+
+class PercussionPanelPadModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -50,6 +53,9 @@ public:
     bool isEmptySlot() const { return m_isEmptySlot; }
     void setIsEmptySlot(bool isEmptySlot);
 
+    Q_INVOKABLE void triggerPad();
+    muse::async::Notification padTriggered() const { return m_triggeredNotification; }
+
 signals:
     void instrumentNameChanged();
 
@@ -65,4 +71,6 @@ private:
     QString m_midiNote;
 
     bool m_isEmptySlot = true;
+
+    muse::async::Notification m_triggeredNotification;
 };

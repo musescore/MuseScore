@@ -28,6 +28,7 @@
 #include "async/asyncable.h"
 
 #include "context/iglobalcontext.h"
+#include "playback/iplaybackcontroller.h"
 
 #include "percussionpanelpadlistmodel.h"
 
@@ -47,6 +48,7 @@ public:
 class PercussionPanelModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<playback::IPlaybackController> playbackController = { this };
 
     Q_OBJECT
 
@@ -84,8 +86,13 @@ signals:
 private:
     void setUpConnections();
 
+    void writePitch(int pitch);
+    void playPitch(int pitch);
+
     const mu::notation::INotationPtr notation() const;
     const mu::notation::INotationInteractionPtr interaction() const;
+
+    mu::engraving::Score* score() const;
 
     PanelMode::Mode m_currentPanelMode = PanelMode::Mode::WRITE;
     PanelMode::Mode m_panelModeToRestore = PanelMode::Mode::WRITE;

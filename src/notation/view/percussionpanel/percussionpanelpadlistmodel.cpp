@@ -128,6 +128,10 @@ void PercussionPanelPadListModel::resetLayout()
         const QString midiNote = QString::fromStdString(muse::pitchToString(pitch));
         model->setMidiNote(midiNote);
 
+        model->padTriggered().onNotify(this, [this, pitch]() {
+            m_triggeredChannel.send(pitch);
+        });
+
         model->setIsEmptySlot(false);
 
         m_padModels.append(model);
