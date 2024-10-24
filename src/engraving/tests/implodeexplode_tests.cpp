@@ -53,12 +53,12 @@ void Engraving_ImplodeExplodeTests::testUndoExplode(String fileName)
     score->doLayout();
 
     // select all
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Implode/explode select all"));
     score->cmdSelectAll();
     score->endCmd();
 
     // do
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Implode/explode tests"));
     score->cmdExplode();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
@@ -84,12 +84,12 @@ void Engraving_ImplodeExplodeTests::testUndoImplode(String filename)
     score->doLayout();
 
     // select all
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Implode/explode select all"));
     score->cmdSelectAll();
     score->endCmd();
 
     // do
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Implode/explode tests"));
     score->cmdImplode();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));

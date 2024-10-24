@@ -91,7 +91,7 @@ void TieSegment::changeAnchor(EditData& ed, EngravingItem* element)
 
         TieSegment* newSegment = toTieSegment(ed.curGrip == Grip::END ? ss.back() : ss.front());
         score()->endCmd();
-        score()->startCmd();
+        score()->startCmd(TranslatableString("undoableAction", "Change tie anchor"));
         ed.view()->changeEditElement(newSegment);
         triggerLayout();
     }

@@ -22,6 +22,7 @@
 #ifndef MU_APPSHELL_APPMENUMODEL_H
 #define MU_APPSHELL_APPMENUMODEL_H
 
+#include "context/iglobalcontext.h"
 #include "uicomponents/view/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
@@ -58,6 +59,7 @@ public:
     muse::Inject<muse::update::IUpdateConfiguration> updateConfiguration = { this };
     muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
     muse::Inject<project::IProjectConfiguration> projectConfiguration = { this };
+    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
@@ -66,6 +68,9 @@ public:
     Q_INVOKABLE bool isGlobalMenuAvailable();
 
 private:
+    mu::notation::INotationUndoStackPtr undoStack() const;
+    void updateUndoRedoItems();
+
     void setupConnections();
 
     using muse::uicomponents::AbstractMenuModel::makeMenuItem;
