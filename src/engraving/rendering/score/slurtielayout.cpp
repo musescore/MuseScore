@@ -1625,19 +1625,24 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
 {
     bool start = startOrEnd == Grip::START;
 
-    Tie* tie = tieSegment->tie();
+    const Tie* tie = tieSegment->tie();
     Note* note = start ? tie->startNote() : tie->endNote();
+    const Note* otherNote = start ? tie->endNote() : tie->startNote();
     if (!note || note->shouldHideFret()) {
         return;
     }
 
     Chord* chord = note->chord();
+    const Chord* otherChord = otherNote ? otherNote->chord() : nullptr;
+    const Segment* chordSeg = chord->segment();
     const double spatium = tieSegment->spatium();
+    const bool isGrace = (chord && chord->isGrace())
+                         || ((otherChord && otherChord->isGrace()) && chord->segment() == otherChord->segment());
 
     PointF& tiePoint = start ? sPos.p1 : sPos.p2;
     double resultingX = tiePoint.x();
 
-    bool isOuterTieOfChord = tie->isOuterTieOfChord(startOrEnd);
+    const bool isOuterTieOfChord = tie->isOuterTieOfChord(startOrEnd);
 
     if (isOuterTieOfChord) {
         Tie* otherTie = start ? note->tieBack() : note->tieFor();
@@ -1647,7 +1652,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
         }
     }
 
-    bool avoidStem = chord->stem() && chord->stem()->visible() && chord->up() == tie->up();
+    const bool avoidStem = chord->stem() && chord->stem()->visible() && chord->up() == tie->up();
 
     if (isOuterTieOfChord && !avoidStem) {
         tieSegment->addAdjustmentOffset(PointF(resultingX - tiePoint.x(), 0.0), startOrEnd);
@@ -1655,39 +1660,43 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
         return;
     }
 
-    PointF chordSystemPos = chord->pos() + chord->segment()->pos() + chord->measure()->pos();
+    // Use segment shape except for when either end of the tie is a grace note
+    PointF systemPos = chordSeg->pos() + chordSeg->measure()->pos() + (isGrace ? chord->pos() : PointF());
     if (chord->vStaffIdx() != tieSegment->vStaffIdx()) {
         System* system = tieSegment->system();
         double yDiff = system->staff(chord->vStaffIdx())->y() - system->staff(tie->staffIdx())->y();
-        chordSystemPos += PointF(0.0, yDiff);
+        systemPos += PointF(0.0, yDiff);
     }
-    Shape chordShape = chord->shape().translate(chordSystemPos);
-    bool ignoreDot = start && isOuterTieOfChord;
-    bool ignoreAccidental = !start && isOuterTieOfChord;
+    Shape shape = isGrace ? chord->shape().translate(systemPos) : chordSeg->staffShape(chord->vStaffIdx()).translated(systemPos);
+
+    const bool ignoreDot = start && isOuterTieOfChord;
+    const bool ignoreAccidental = !start && isOuterTieOfChord;
     static const std::set<ElementType> IGNORED_TYPES = {
         ElementType::HOOK,
         ElementType::STEM_SLASH,
         ElementType::LEDGER_LINE,
         ElementType::LYRICS
     };
-    chordShape.remove_if([&](ShapeElement& s) {
-        return !s.item() || s.item() == note || muse::contains(IGNORED_TYPES, s.item()->type())
-               || (s.item()->isNoteDot() && ignoreDot) || (s.item()->isAccidental() && ignoreAccidental) || !s.item()->addToSkyline();
+    shape.remove_if([&](ShapeElement& s) {
+        bool remove =  !s.item() || s.item() == note || muse::contains(IGNORED_TYPES, s.item()->type())
+                      || (s.item()->isNoteDot() && ignoreDot)
+                      || (s.item()->isAccidental() && ignoreAccidental && s.item()->track() == chord->track()) || !s.item()->addToSkyline();
+        return remove;
     });
 
     const double arcSideMargin = 0.3 * spatium;
     const double pointsSideMargin = 0.15 * spatium;
     const double yBelow = tiePoint.y() - (tie->up() ? arcSideMargin : pointsSideMargin);
     const double yAbove = tiePoint.y() + (tie->up() ? pointsSideMargin : arcSideMargin);
-    double pointToClear = start ? chordShape.rightMostEdgeAtHeight(yBelow, yAbove)
-                          : chordShape.leftMostEdgeAtHeight(yBelow, yAbove);
+    double pointToClear = start ? shape.rightMostEdgeAtHeight(yBelow, yAbove)
+                          : shape.leftMostEdgeAtHeight(yBelow, yAbove);
 
     const double padding = 0.20 * spatium * (start ? 1 : -1); // TODO: style
     pointToClear += padding;
 
     resultingX = start ? std::max(resultingX, pointToClear) : std::min(resultingX, pointToClear);
 
-    adjustXforLedgerLines(tieSegment, start, chord, note, chordSystemPos, padding, resultingX);
+    adjustXforLedgerLines(tieSegment, start, chord, note, systemPos, padding, resultingX);
 
     tieSegment->addAdjustmentOffset(PointF(resultingX - tiePoint.x(), 0.0), startOrEnd);
     tiePoint.setX(resultingX);
