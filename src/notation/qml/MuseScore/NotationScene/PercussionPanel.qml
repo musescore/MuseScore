@@ -49,11 +49,15 @@ Item {
     */
 
     Component.onCompleted: {
-        padGrid.model.load()
+        padGrid.model.init()
     }
 
     PercussionPanelModel {
         id: percModel
+
+        Component.onCompleted: {
+            percModel.init()
+        }
     }
 
     // TODO: Will live inside percussion panel until #22050 is implemented

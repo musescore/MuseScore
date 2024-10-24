@@ -24,6 +24,11 @@
 
 #include <QObject>
 
+#include "modularity/ioc.h"
+#include "async/asyncable.h"
+
+#include "context/iglobalcontext.h"
+
 #include "percussionpanelpadlistmodel.h"
 
 class PanelMode
@@ -39,8 +44,10 @@ public:
     Q_ENUM(Mode)
 };
 
-class PercussionPanelModel : public QObject
+class PercussionPanelModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+
     Q_OBJECT
 
     Q_PROPERTY(PanelMode::Mode currentPanelMode READ currentPanelMode WRITE setCurrentPanelMode NOTIFY currentPanelModeChanged)
@@ -61,6 +68,8 @@ public:
 
     PercussionPanelPadListModel* padListModel() const;
 
+    Q_INVOKABLE void init();
+
     QList<QVariantMap> layoutMenuItems() const;
     Q_INVOKABLE void handleMenuItem(const QString& itemId);
 
@@ -73,6 +82,11 @@ signals:
     void padListModelChanged();
 
 private:
+    void setUpConnections();
+
+    const mu::notation::INotationPtr notation() const;
+    const mu::notation::INotationInteractionPtr interaction() const;
+
     PanelMode::Mode m_currentPanelMode = PanelMode::Mode::WRITE;
     PanelMode::Mode m_panelModeToRestore = PanelMode::Mode::WRITE;
     bool m_useNotationPreview = false;

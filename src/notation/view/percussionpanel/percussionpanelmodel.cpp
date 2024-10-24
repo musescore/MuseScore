@@ -31,6 +31,7 @@ static const QString RESET_LAYOUT_CODE("percussion-reset-layout");
 
 using namespace muse;
 using namespace ui;
+using namespace mu::notation;
 
 PercussionPanelModel::PercussionPanelModel(QObject* parent)
     : QObject(parent)
@@ -76,6 +77,15 @@ void PercussionPanelModel::setUseNotationPreview(bool useNotationPreview)
 PercussionPanelPadListModel* PercussionPanelModel::padListModel() const
 {
     return m_padListModel;
+}
+
+void PercussionPanelModel::init()
+{
+    setUpConnections();
+
+    globalContext()->currentNotationChanged().onNotify(this, [this] {
+        setUpConnections();
+    });
 }
 
 QList<QVariantMap> PercussionPanelModel::layoutMenuItems() const
@@ -129,4 +139,33 @@ void PercussionPanelModel::handleMenuItem(const QString& itemId)
 void PercussionPanelModel::finishEditing()
 {
     setCurrentPanelMode(m_panelModeToRestore);
+}
+
+void PercussionPanelModel::setUpConnections()
+{
+    if (!notation()) {
+        return;
+    }
+
+    const auto updatePadModels = [this](const mu::engraving::Drumset* drumset) {
+        m_padListModel->setDrumset(drumset);
+        m_padListModel->resetLayout(); //! NOTE: Placeholder until we implement saving/loading
+    };
+
+    const INotationNoteInputPtr noteInput = interaction()->noteInput();
+    updatePadModels(noteInput->state().drumset);
+
+    noteInput->stateChanged().onNotify(this, [updatePadModels, noteInput]() {
+        updatePadModels(noteInput->state().drumset);
+    });
+}
+
+const INotationPtr PercussionPanelModel::notation() const
+{
+    return globalContext()->currentNotation();
+}
+
+const INotationInteractionPtr PercussionPanelModel::interaction() const
+{
+    return notation() ? notation()->interaction() : nullptr;
 }

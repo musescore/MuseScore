@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "global/utils.h"
 #include "percussionpanelpadlistmodel.h"
 
 PercussionPanelPadListModel::PercussionPanelPadListModel(QObject* parent)
@@ -51,11 +52,10 @@ QHash<int, QByteArray> PercussionPanelPadListModel::roleNames() const
     return roles;
 }
 
-void PercussionPanelPadListModel::load()
+void PercussionPanelPadListModel::init()
 {
-    m_padModels = createDefaultItems();
-    emit layoutChanged();
-    emit numPadsChanged();
+    m_padModels.clear();
+    addRow();
 }
 
 void PercussionPanelPadListModel::addRow()
@@ -94,50 +94,53 @@ void PercussionPanelPadListModel::endDrag(int endIndex)
     m_dragStartIndex = -1;
 }
 
+void PercussionPanelPadListModel::setDrumset(const mu::engraving::Drumset* drumset)
+{
+    if (drumset == m_drumset) {
+        return;
+    }
+    m_drumset = drumset;
+}
+
 void PercussionPanelPadListModel::resetLayout()
 {
     beginResetModel();
-    m_padModels = createDefaultItems();
+
+    m_padModels.clear();
+
+    if (!m_drumset) {
+        endResetModel();
+        addRow();
+        return;
+    }
+
+    for (int pitch = 0; pitch < mu::engraving::DRUM_INSTRUMENTS; ++pitch) {
+        if (!m_drumset->isValid(pitch)) {
+            continue;
+        }
+
+        PercussionPanelPadModel* model = new PercussionPanelPadModel(this);
+        model->setInstrumentName(m_drumset->name(pitch));
+
+        const QString shortcut = m_drumset->shortcut(pitch) ? QChar(m_drumset->shortcut(pitch)) : QString("-");
+        model->setKeyboardShortcut(shortcut);
+
+        const QString midiNote = QString::fromStdString(muse::pitchToString(pitch));
+        model->setMidiNote(midiNote);
+
+        model->setIsEmptySlot(false);
+
+        m_padModels.append(model);
+    }
+
+    // Fill the remainder of the column with empty pads...
+    while (m_padModels.size() % NUM_COLUMNS > 0) {
+        m_padModels.append(new PercussionPanelPadModel(this));
+    }
+
     endResetModel();
 
     emit numPadsChanged();
-}
-
-QList<PercussionPanelPadModel*> PercussionPanelPadListModel::createDefaultItems()
-{
-    QMap<size_t, PadInfo> dummyPads;
-    dummyPads.insert(2, { "Bass Drum (Kit): Mid", "S", "B2" });
-    dummyPads.insert(0, { "This is a pad with a really long text label that truncates.", "A", "F2" });
-    dummyPads.insert(8, { "Hi-hat (Kit)", "J", "G#2" });
-    dummyPads.insert(17, { "Splash (Kit)", "X", "F3" });
-    dummyPads.insert(11, { "Tom (Kit): High", "L", "A#2" });
-    dummyPads.insert(9, { "Tom (Kit): Mid", "K", "F#2" });
-    dummyPads.insert(12, { "Crash (Kit)", ";", "D#3" });
-    dummyPads.insert(3, { "Snare (Kit)", "D", "D3" });
-    dummyPads.insert(15, { "Ride (Kit)", "Z", "E3" });
-    dummyPads.insert(5, { "Floor Tom (Kit)", "F", "D2" });
-
-    // Get the largest key and round up to the nearest multiple of 8
-    size_t maxIndex = dummyPads.lastKey();
-    maxIndex = std::ceil(maxIndex / (double)NUM_COLUMNS) * NUM_COLUMNS;
-
-    QList<PercussionPanelPadModel*> padModels;
-
-    for (size_t i = 0; i < maxIndex; ++i) {
-        PercussionPanelPadModel* model = new PercussionPanelPadModel(this);
-        const PadInfo info = dummyPads.value(i);
-        if (info.isValid()) {
-            model->setInstrumentName(info.instrumentName);
-
-            model->setKeyboardShortcut(info.keyboardShortcut);
-            model->setMidiNote(info.midiNote);
-
-            model->setIsEmptySlot(false);
-        }
-        padModels.append(model);
-    }
-
-    return padModels;
 }
 
 bool PercussionPanelPadListModel::indexIsValid(int index) const
