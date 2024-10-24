@@ -255,7 +255,7 @@ void TextSettingsModel::onNotationChanged(const PropertyIdSet& changedProperyIds
         if (changedStyleIds.find(s) != changedStyleIds.cend()) {
             m_textStyles.clear();
             emit textStylesChanged();
-            return;
+            break;
         }
     }
 }
