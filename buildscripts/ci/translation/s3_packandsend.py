@@ -75,7 +75,7 @@ translationChanged = False
 
 # read languages.json and store language code and name
 langCode_file = open("share/locale/languages.json", "r+")
-langCodeNameDict = json.load(langCode_file)  # language code --> name
+langCodeNameDict = json.load(langCode_file)  # language code --> props
 langCode_file.close()
 
 detailsJson = outputDir + "details.json"
@@ -92,7 +92,7 @@ else:
 
 
 translationChanged = newDetailsFile
-for lang_code, languageName in langCodeNameDict.items():
+for lang_code, languageProps in langCodeNameDict.items():
     updateMscore = processTsFile("musescore", lang_code, data)
     translationChanged = updateMscore or translationChanged
 
@@ -121,7 +121,7 @@ for lang_code, languageName in langCodeNameDict.items():
         file.close()
 
         data[lang_code]["file_name"] = zipName
-        data[lang_code]["name"] = langCodeNameDict[lang_code]
+        data[lang_code]["name"] = languageProps["name"]
         data[lang_code]["hash"] = str(hash_file.hexdigest())
         data[lang_code]["file_size"] = file_size
 
