@@ -217,7 +217,7 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
     sc->activeMidiPitches().push_back(inputEv);
 
     if (is.cr()) {
-        m_notationInteraction->showItem(is.cr());
+        m_notationInteraction->showItem(is.cr(), CanvasMoveCause::InputAction);
     }
 
     return note;

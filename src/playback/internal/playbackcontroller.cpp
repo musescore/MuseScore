@@ -134,6 +134,10 @@ void PlaybackController::init()
         });
     });
 
+    notationConfiguration()->isAutomaticallyPanDuringPlaybackChanged().onNotify(this, [this]() {
+        m_actionCheckedChanged.send(PAN_CODE);
+    });
+
     m_totalPlayTimeChanged.onNotify(this, [this]() {
         updateCurrentTempo();
 
@@ -711,8 +715,8 @@ void PlaybackController::togglePlayChordSymbols()
 
 void PlaybackController::toggleAutomaticallyPan()
 {
-    bool panEnabled = notationConfiguration()->isAutomaticallyPanEnabled();
-    notationConfiguration()->setIsAutomaticallyPanEnabled(!panEnabled);
+    bool panEnabled = notationConfiguration()->isAutomaticallyPanDuringPlaybackEnabled();
+    notationConfiguration()->setIsAutomaticallyPanDuringPlaybackEnabled(!panEnabled);
     notifyActionCheckedChanged(PAN_CODE);
 }
 
@@ -1434,7 +1438,7 @@ bool PlaybackController::actionChecked(const ActionCode& actionCode) const
         { INPUT_SOUNDING_PITCH, !notationConfiguration()->midiUseWrittenPitch().val },
         { REPEAT_CODE, notationConfiguration()->isPlayRepeatsEnabled() },
         { PLAY_CHORD_SYMBOLS_CODE, notationConfiguration()->isPlayChordSymbolsEnabled() },
-        { PAN_CODE, notationConfiguration()->isAutomaticallyPanEnabled() },
+        { PAN_CODE, notationConfiguration()->isAutomaticallyPanDuringPlaybackEnabled() },
         { METRONOME_CODE, notationConfiguration()->isMetronomeEnabled() },
         { COUNT_IN_CODE, notationConfiguration()->isCountInEnabled() }
     };
