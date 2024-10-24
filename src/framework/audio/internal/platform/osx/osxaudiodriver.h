@@ -66,7 +66,15 @@ public:
     bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
     async::Notification outputDeviceBufferSizeChanged() const override;
 
+    int audioDelayCompensate() const override;
+    void setAudioDelayCompensate(const int frames) override;
+    bool isPlaying() const override;
+    void remotePlayOrStop(bool) const override;
+    void remoteSeek(msecs_t) const override;
+
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
+    bool pushMidiEvent(muse::midi::Event& e) override;
+    std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection dir) const override;
 
     unsigned int outputDeviceSampleRate() const override;
     bool setOutputDeviceSampleRate(unsigned int sampleRate) override;
@@ -86,7 +94,7 @@ private:
 
     struct Data;
 
-    std::shared_ptr<Data> m_data = nullptr;
+    std::shared_ptr<Data> m_data;
     std::map<unsigned int, std::string> m_outputDevices = {}, m_inputDevices = {};
     mutable std::mutex m_devicesMutex;
     async::Notification m_outputDeviceChanged;

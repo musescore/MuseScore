@@ -41,6 +41,7 @@ void CommonAudioApiConfigurationModel::load()
     });
 
     audioDriver()->outputDeviceChanged().onNotify(this, [this]() {
+        LOGE("---- emit currentDeviceIdChanged ----");
         emit currentDeviceIdChanged();
         emit sampleRateChanged();
         emit bufferSizeListChanged();
@@ -125,5 +126,6 @@ QList<unsigned int> CommonAudioApiConfigurationModel::sampleRateList() const
 
 void CommonAudioApiConfigurationModel::sampleRateSelected(const QString& sampleRateStr)
 {
+    LOGE("------- selected samplerate: %s ------", qPrintable(sampleRateStr));
     audioConfiguration()->setSampleRate(sampleRateStr.toInt());
 }

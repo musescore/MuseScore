@@ -340,6 +340,28 @@ void WasapiAudioDriver::reopen()
     open(m_activeSpec, &m_activeSpec);
 }
 
+int WasapiAudioDriver::audioDelayCompensate(void) const
+{
+    return 0;
+}
+
+void WasapiAudioDriver::setAudioDelayCompensate(const int frames)
+{
+}
+
+bool WasapiAudioDriver::isPlaying() const
+{
+    return false;
+}
+
+void WasapiAudioDriver::remotePlayOrStop(bool ps) const
+{
+}
+
+void WasapiAudioDriver::remoteSeek(msecs_t millis) const
+{
+}
+
 AudioDeviceID WasapiAudioDriver::defaultDeviceId() const
 {
     using namespace winrt::Windows::Media::Devices;
@@ -369,4 +391,15 @@ unsigned int WasapiAudioDriver::minSupportedBufferSize() const
     }
 
     return closestBufferSize;
+}
+
+bool WasapiAudioDriver::pushMidiEvent(muse::midi::Event&)
+{
+    return true;
+}
+
+std::vector<muse::midi::MidiDevice> WasapiAudioDriver::availableMidiDevices(muse::midi::MidiPortDirection dir) const
+{
+    std::vector<muse::midi::MidiDevice> x;
+    return x; // dummy
 }

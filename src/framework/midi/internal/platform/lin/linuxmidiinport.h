@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,28 +19,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_MIDI_ALSAMIDIINPORT_H
-#define MUSE_MIDI_ALSAMIDIINPORT_H
+#ifndef MU_MIDI_LINUXMIDIINPORT_H
+#define MU_MIDI_LINUXMIDIINPORT_H
 
 #include <memory>
 #include <thread>
 
+#include "modularity/ioc.h"
 #include "async/asyncable.h"
 
+#include "framework/audio/audiomodule.h"
+#include "framework/audio/iaudiodriver.h"
 #include "imidiinport.h"
 #include "internal/midideviceslistener.h"
 
+#if defined(JACK_AUDIO)
+#include "internal/platform/jack/jackmidiinport.h"
+#endif
+
+#include "internal/platform/alsa/alsamidiinport.h"
+
 namespace muse::midi {
-class AlsaMidiInPort : public IMidiInPort, public async::Asyncable
+class LinuxMidiInPort : public IMidiInPort, public async::Asyncable
 {
+    Inject<muse::audio::IAudioDriver> audioDriver;
 public:
-    AlsaMidiInPort() = default;
-    ~AlsaMidiInPort() = default;
+    LinuxMidiInPort() = default;
+    ~LinuxMidiInPort() = default;
 
     void init();
     void deinit();
 
-    MidiDeviceList availableDevices() const override;
+    std::vector<MidiDevice> availableDevices() const override;
     async::Notification availableDevicesChanged() const override;
 
     Ret connect(const MidiDeviceID& deviceID) override;
@@ -55,13 +65,11 @@ private:
     Ret run();
     void stop();
 
-    static void process(AlsaMidiInPort* self);
+    static void process(LinuxMidiInPort* self);
     void doProcess();
 
     bool deviceExists(const MidiDeviceID& deviceId) const;
 
-    struct Alsa;
-    std::shared_ptr<Alsa> m_alsa;
     MidiDeviceID m_deviceID;
     std::shared_ptr<std::thread> m_thread;
     std::atomic<bool> m_running{ false };
@@ -73,7 +81,12 @@ private:
     mutable std::mutex m_devicesMutex;
 
     async::Channel<tick_t, Event > m_eventReceived;
+
+#if defined(JACK_AUDIO)
+    std::unique_ptr<JackMidiInPort> m_midiInPortJack;
+#endif
+    std::unique_ptr<AlsaMidiInPort> m_midiInPortAlsa;
 };
 }
 
-#endif // MUSE_MIDI_ALSAMIDIINPORT_H
+#endif // MU_MIDI_LINUXMIDIINPORT_H

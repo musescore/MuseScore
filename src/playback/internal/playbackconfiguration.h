@@ -68,6 +68,10 @@ public:
     void setMuteHiddenInstruments(bool mute) override;
     muse::async::Channel<bool> muteHiddenInstrumentsChanged() const override;
 
+    bool jackTransportEnable() const override;
+    void setJackTransportEnable(bool mute) override;
+    muse::async::Channel<bool> jackTransportEnableChanged() const override;
+
     const SoundProfileName& basicSoundProfileName() const override;
     const SoundProfileName& museSoundProfileName() const override;
     SoundProfileName defaultProfileForNewProjects() const override;
@@ -92,6 +96,8 @@ private:
     muse::async::Channel<MixerSectionType, bool> m_isMixerSectionVisibleChanged;
 
     muse::async::Channel<bool> m_muteHiddenInstrumentsChanged;
+
+    muse::async::Channel<bool> m_jackTransportEnableChanged;
 };
 }
 

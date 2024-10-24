@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,51 +19,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_MIDI_ALSAMIDIOUTPORT_H
-#define MUSE_MIDI_ALSAMIDIOUTPORT_H
+#ifndef MU_MIDI_JACKMIDIOUTPORT_H
+#define MU_MIDI_JACKMIDIOUTPORT_H
 
 #include <memory>
-
-#include "async/asyncable.h"
-#include "midi/imidioutport.h"
-#include "internal/midideviceslistener.h"
+#include "framework/audio/midiqueue.h"
+#include "framework/audio/audiomodule.h"
+#include "midi/midiportstate.h"
 
 namespace muse::midi {
-class AlsaMidiOutPort : public IMidiOutPort, public async::Asyncable
+class JackMidiOutPort : public MidiPortState
 {
 public:
-    AlsaMidiOutPort() = default;
-    ~AlsaMidiOutPort() = default;
-
+    JackMidiOutPort() = default;
+    ~JackMidiOutPort() = default;
     void init();
     void deinit();
 
-    MidiDeviceList availableDevices() const override;
-    async::Notification availableDevicesChanged() const override;
-
+    std::vector<MidiDevice> availableDevices() const override;
     Ret connect(const MidiDeviceID& deviceID) override;
     void disconnect() override;
     bool isConnected() const override;
     MidiDeviceID deviceID() const override;
-    async::Notification deviceChanged() const override;
-
     bool supportsMIDI20Output() const override;
-
     Ret sendEvent(const Event& e) override;
 
 private:
     bool deviceExists(const MidiDeviceID& deviceId) const;
-
-    struct Alsa;
-    std::shared_ptr<Alsa> m_alsa;
+    std::shared_ptr<ThreadSafeQueue<const Event> > m_midiQueue;
+    struct Jack {
+        void* midiOut = nullptr;
+        void* client = nullptr;
+        int port = -1;
+        int segmentSize;
+    };
+    std::unique_ptr<Jack> m_jack;
     MidiDeviceID m_deviceID;
-    async::Notification m_deviceChanged;
-
-    async::Notification m_availableDevicesChanged;
-    MidiDevicesListener m_devicesListener;
-
-    mutable std::mutex m_devicesMutex;
 };
 }
 
-#endif // MUSE_MIDI_ALSAMIDIOUTPORT_H
+#endif // MU_MIDI_JACKMIDIOUTPORT_H

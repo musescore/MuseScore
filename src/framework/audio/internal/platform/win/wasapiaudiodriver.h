@@ -62,7 +62,16 @@ public:
     unsigned int outputDeviceSampleRate() const override;
     bool setOutputDeviceSampleRate(unsigned int sampleRate) override;
     async::Notification outputDeviceSampleRateChanged() const override;
+
     std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
+
+    int audioDelayCompensate(void) const override;
+    void setAudioDelayCompensate(const int frames) override;
+    bool isPlaying() const override;
+    void remotePlayOrStop(bool) const override;
+    void remoteSeek(msecs_t) const override;
+    bool pushMidiEvent(muse::midi::Event& e) override;
+    std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection dir) const override;
 
     void resume() override;
     void suspend() override;
@@ -82,6 +91,7 @@ private:
     std::unique_ptr<AudioDevicesListener> m_devicesListener;
 
     async::Notification m_outputDeviceChanged;
+    async::Notification m_sampleRateChanged;
     async::Notification m_availableOutputDevicesChanged;
     async::Notification m_outputDeviceBufferSizeChanged;
     async::Notification m_outputDeviceSampleRateChanged;
