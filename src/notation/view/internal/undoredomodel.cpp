@@ -22,74 +22,31 @@
 
 #include "undoredomodel.h"
 
-#include "uicomponents/view/menuitem.h"
+#include "uicomponents/view/toolbaritem.h"
 
 using namespace mu::notation;
 using namespace muse::uicomponents;
 
 UndoRedoModel::UndoRedoModel(QObject* parent)
-    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
+    : AbstractToolBarModel(parent)
 {
-}
-
-QVariant UndoRedoModel::makeUndoItem()
-{
-    MenuItem* item = new MenuItem(actionsRegister()->action("undo"), this);
-
-    muse::ui::UiActionState state;
-    state.enabled = undoStack() ? undoStack()->canUndo() : false;
-    item->setState(state);
-
-    return QVariant::fromValue(item);
-}
-
-QVariant UndoRedoModel::makeRedoItem()
-{
-    MenuItem* item = new MenuItem(actionsRegister()->action("redo"), this);
-
-    muse::ui::UiActionState state;
-    state.enabled = undoStack() ? undoStack()->canRedo() : false;
-    item->setState(state);
-
-    return QVariant::fromValue(item);
 }
 
 void UndoRedoModel::load()
 {
-    context()->currentNotationChanged().onNotify(this, [this]() {
-        if (!undoStack()) {
-            emit stackChanged();
-            return;
-        }
+    muse::actions::ActionCodeList itemsCodes = {
+        "undo",
+        "redo"
+    };
 
-        undoStack()->stackChanged().onNotify(this, [this]() {
-            emit stackChanged();
-        });
-    });
-
-    context()->currentProjectChanged().onNotify(this, [this]() {
-        emit stackChanged();
-    });
-
-    emit stackChanged();
-}
-
-void UndoRedoModel::redo()
-{
-    if (undoStack()) {
-        undoStack()->redo(nullptr);
+    ToolBarItemList items;
+    for (const muse::actions::ActionCode& code : itemsCodes) {
+        ToolBarItem* item = makeItem(code);
+        item->setIsTransparent(true);
+        items << item;
     }
-}
 
-void UndoRedoModel::undo()
-{
-    if (undoStack()) {
-        undoStack()->undo(nullptr);
-    }
-}
+    setItems(items);
 
-INotationUndoStackPtr UndoRedoModel::undoStack() const
-{
-    INotationPtr notation = context()->currentNotation();
-    return notation ? notation->undoStack() : nullptr;
+    AbstractToolBarModel::load();
 }
