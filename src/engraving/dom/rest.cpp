@@ -637,7 +637,7 @@ int Rest::computeNaturalLine(DurationType type, int lines) const
         }
         break;
     case DurationType::V_MEASURE:
-        if (!isWholeRest()) {
+        if (isBreveRest()) {
             return computeNaturalLine(DurationType::V_BREVE, lines);
         }
         return computeNaturalLine(DurationType::V_WHOLE, lines);

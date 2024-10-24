@@ -140,7 +140,7 @@ TEST_F(Engraving_RestTests, BreveRests_TestFullmeasureFloats)
 
     auto calcTick = [](int measureNum) -> int {
         const int measureIdx = measureNum - 1;
-        // 3 bars of 4/2 followed by 3 bars of 4/4
+        // 4 bars of 4/2 followed by 5 bars of 4/4
         return (std::max(0, std::min(4, measureIdx)) * TICKS_PER_4_2_MEASURE)
                + (std::max(0, measureIdx - 4) * TICKS_PER_4_4_MEASURE);
     };
