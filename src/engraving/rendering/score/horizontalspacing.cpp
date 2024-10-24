@@ -658,6 +658,9 @@ void HorizontalSpacing::enforceMinimumMeasureWidths(const std::vector<Measure*> 
 {
     for (int i = 0; i < measureGroup.size(); ++i) {
         Measure* measure = measureGroup[i];
+        if (measure->isMMRest()) {
+            continue; // minimum mmRest width is already enforced during spacing
+        }
         double minWidth = computeMinMeasureWidth(measure);
         double diff = minWidth - measure->width();
         if (diff > 0) {
