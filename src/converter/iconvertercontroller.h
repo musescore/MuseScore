@@ -22,6 +22,8 @@
 #ifndef MU_CONVERTER_ICONVERTERCONTROLLER_H
 #define MU_CONVERTER_ICONVERTERCONTROLLER_H
 
+#include <QJsonObject>
+
 #include "modularity/imoduleinterface.h"
 #include "global/types/ret.h"
 #include "global/types/uri.h"
@@ -38,7 +40,8 @@ public:
     virtual muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out,
                                   const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
                                   const muse::String& soundProfile = muse::String(),
-                                  const muse::UriQuery& extensionUri = muse::UriQuery()) = 0;
+                                  const muse::UriQuery& extensionUri = muse::UriQuery(),
+                                  const QJsonObject& transposeOptionsObj = QJsonObject()) = 0;
 
     virtual muse::Ret batchConvert(const muse::io::path_t& batchJobFile,
                                    const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
