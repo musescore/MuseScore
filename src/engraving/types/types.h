@@ -147,6 +147,7 @@ enum class ElementType {
     PEDAL_SEGMENT,
     LYRICSLINE_SEGMENT,
     GLISSANDO_SEGMENT,
+    NOTELINE_SEGMENT,
     LAYOUT_BREAK,
     SPACER,
     STAFF_STATE,
@@ -174,6 +175,7 @@ enum class ElementType {
     PICK_SCRAPE,
     TEXTLINE,
     TEXTLINE_BASE,
+    NOTELINE,
     LYRICSLINE,
     GLISSANDO,
     BRACKET,
@@ -803,6 +805,7 @@ enum class TextStyleType {
 
     // Line-oriented styles
     TEXTLINE,
+    NOTELINE,
     VOLTA,
     OTTAVA,
     GLISSANDO,
@@ -1050,6 +1053,11 @@ enum class LyricsDashSystemStart {
     STANDARD,
     UNDER_HEADER,
     UNDER_FIRST_NOTE
+};
+
+enum class NoteLineEndPlacement {
+    LEFT_EDGE,
+    OFFSET_ENDS,
 };
 
 enum class SpannerSegmentType {

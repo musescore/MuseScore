@@ -172,19 +172,6 @@ bool TieSegment::isEdited() const
     return false;
 }
 
-void TieSegment::addLineAttachPoints()
-{
-    // Add tie attach point to start and end note
-    Note* startNote = tie()->startNote();
-    Note* endNote = tie()->endNote();
-    if (startNote) {
-        startNote->addLineAttachPoint(ups(Grip::START).pos(), tie());
-    }
-    if (endNote) {
-        endNote->addLineAttachPoint(ups(Grip::END).pos(), tie());
-    }
-}
-
 //---------------------------------------------------------
 //   Tie
 //---------------------------------------------------------

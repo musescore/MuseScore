@@ -54,8 +54,6 @@ public:
 
     Tie* tie() const { return (Tie*)spanner(); }
 
-    void addLineAttachPoints();
-
     void setStaffMove(int val) { m_staffMove = val; }
     staff_idx_t vStaffIdx() const override { return staffIdx() + m_staffMove; }
 

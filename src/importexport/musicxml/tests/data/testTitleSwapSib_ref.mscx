@@ -78,6 +78,8 @@
       <repeatRightFontSize>11.9365</repeatRightFontSize>
       <frameFontFace>Plantin MT Std</frameFontFace>
       <frameFontSize>11.9365</frameFontSize>
+      <noteLineFontFace>Plantin MT Std</noteLineFontFace>
+      <noteLineFontSize>11.9365</noteLineFontSize>
       <glissandoFontFace>Plantin MT Std</glissandoFontFace>
       <glissandoFontSize>11.9365</glissandoFontSize>
       <bendFontFace>Plantin MT Std</bendFontFace>

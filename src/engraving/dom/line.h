@@ -142,6 +142,8 @@ public:
     void undoMoveStart(Fraction tickDiff);
     void undoMoveEnd(Fraction tickDiff);
 
+    static Note* guessFinalNote(Note* startNote);
+
 private:
 
     friend class LineSegment;

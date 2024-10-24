@@ -43,6 +43,7 @@
 #include "navigate.h"
 #include "note.h"
 #include "noteevent.h"
+#include "noteline.h"
 #include "ornament.h"
 #include "part.h"
 #include "score.h"
@@ -265,7 +266,7 @@ Chord::Chord(Segment* parent)
     m_stemDirection    = DirectionV::AUTO;
     m_arpeggio         = 0;
     m_spanArpeggio     = 0;
-    m_endsGlissando    = false;
+    m_endsNoteAnchoredLine    = false;
     m_noteType         = NoteType::NORMAL;
     m_stemSlash        = 0;
     m_noStem           = false;
@@ -304,7 +305,7 @@ Chord::Chord(const Chord& c, bool link)
     }
     m_stem          = 0;
     m_hook          = 0;
-    m_endsGlissando = false;
+    m_endsNoteAnchoredLine = false;
     m_arpeggio      = 0;
     m_stemSlash     = 0;
 
@@ -673,7 +674,7 @@ void Chord::add(EngravingItem* e)
         setTremoloSingleChord(item_cast<TremoloSingleChord*>(e));
         break;
     case ElementType::GLISSANDO:
-        m_endsGlissando = true;
+        m_endsNoteAnchoredLine = true;
         break;
     case ElementType::STEM:
         assert(!m_stem);
@@ -781,7 +782,7 @@ void Chord::remove(EngravingItem* e)
         setTremoloSingleChord(nullptr);
         break;
     case ElementType::GLISSANDO:
-        m_endsGlissando = false;
+        m_endsNoteAnchoredLine = false;
         break;
     case ElementType::STEM:
         m_stem = 0;
@@ -2395,19 +2396,20 @@ void Chord::setSlash(bool flag, bool stemless)
 }
 
 //---------------------------------------------------------
-//  updateEndsGlissando
-//    sets/resets the chord _endsGlissando according any glissando (or more)
+//  updateEndsNoteAnchoredLine
+//    sets/resets the chord m_endsNoteAnchoredLine according any note anchored line
 //    end into this chord or no.
 //---------------------------------------------------------
 
-void Chord::updateEndsGlissandoOrGuitarBend()
+void Chord::updateEndsNoteAnchoredLine()
 {
-    m_endsGlissando = false;         // assume no glissando ends here
-    // scan all chord notes for glissandi ending on this chord
+    m_endsNoteAnchoredLine = false;         // assume no note anchored line ends here
+    // scan all chord notes for note anchored lines ending on this chord
     for (Note* note : notes()) {
         for (Spanner* sp : note->spannerBack()) {
-            if (sp->type() == ElementType::GLISSANDO) {
-                m_endsGlissando = true;
+            bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
+            if (sp->type() == ElementType::GLISSANDO || isNoteAnchoredTextLine) {
+                m_endsNoteAnchoredLine = true;
                 return;
             }
         }
@@ -2856,6 +2858,7 @@ EngravingItem* Chord::nextElement()
 
     case ElementType::GUITAR_BEND_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
+    case ElementType::NOTELINE_SEGMENT:
     case ElementType::TIE_SEGMENT: {
         SpannerSegment* s = toSpannerSegment(e);
         Spanner* sp = s->spanner();
