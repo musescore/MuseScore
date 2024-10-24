@@ -254,6 +254,7 @@ enum class Sid {
     articulationAnchorOther,
     articulationStemHAlign,
     articulationKeepTogether,
+    trillAlwaysShowCueNote,
     lastSystemFillLimit,
 
     hairpinPlacement,
