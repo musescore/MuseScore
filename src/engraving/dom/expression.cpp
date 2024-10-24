@@ -48,6 +48,18 @@ Expression::Expression(const Expression& expression)
     _snapToDynamics = expression._snapToDynamics;
 }
 
+bool Expression::isEditAllowed(EditData& ed) const
+{
+    bool ctrlPressed  = ed.modifiers & ControlModifier;
+    bool shiftPressed = ed.modifiers & ShiftModifier;
+    bool altPressed = ed.modifiers & AltModifier;
+    if (altPressed && !ctrlPressed && !shiftPressed && (ed.key == Key_Left || ed.key == Key_Right)) {
+        return false;
+    }
+
+    return TextBase::isEditAllowed(ed);
+}
+
 PropertyValue Expression::propertyDefault(Pid id) const
 {
     switch (id) {

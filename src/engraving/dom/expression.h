@@ -35,6 +35,9 @@ class Expression final : public TextBase
 public:
     Expression(Segment* parent);
     Expression(const Expression& expression);
+
+    bool isEditAllowed(EditData&) const override;
+
     Expression* clone() const override { return new Expression(*this); }
 
     Segment* segment() const { return toSegment(explicitParent()); }

@@ -405,6 +405,10 @@ EngravingItem* Score::lastElement(bool frame)
     if (frame) {
         MeasureBase* mb = measures()->last();
         if (mb && mb->isBox()) {
+            auto boxChildren = toChildPairsSet(mb);
+            if (!boxChildren.empty()) {
+                return boxChildren.rbegin()->first;
+            }
             return mb;
         }
     }
