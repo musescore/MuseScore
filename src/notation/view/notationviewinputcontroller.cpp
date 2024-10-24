@@ -1014,7 +1014,12 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
         return;
     }
 
-    m_view->showShadowNote(pos);
+    viewInteraction()->showShadowNoteForPosition(pos);
+}
+
+void NotationViewInputController::hoverLeaveEvent(QHoverEvent*)
+{
+    viewInteraction()->hideShadowNote();
 }
 
 bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
