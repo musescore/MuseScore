@@ -75,6 +75,14 @@ Item {
         pageLoader.item.navigation.requestActive()
     }
 
+    Component.onCompleted: {
+        theInstrumentsOnScoreModel.load()
+    }
+
+    InstrumentsOnScoreListModel {
+        id: theInstrumentsOnScoreModel
+    }
+
     StyledTabBar {
         id: bar
 
@@ -168,6 +176,7 @@ Item {
 
         ChooseInstrumentsPage {
             navigationSection: root.navigationSection
+            instrumentsOnScoreModel: theInstrumentsOnScoreModel
         }
     }
 
