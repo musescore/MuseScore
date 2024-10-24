@@ -28,10 +28,18 @@
 
 namespace mu::engraving {
 class Arpeggio;
+class Beam;
+class Chord;
+class FiguredBass;
+class Tie;
+class Tuplet;
+enum class TupletBracketType : char;
+enum class TupletNumberType : char;
 }
 
 namespace mu::iex::musicxml {
 const int MAX_NUMBER_LEVEL = 16; // maximum number of overlapping MusicXML objects
+constexpr int MAX_LYRICS       = 16;
 
 enum class MusicXmlExporterSoftware : char {
     SIBELIUS,
@@ -58,6 +66,47 @@ struct MusicXmlArpeggioDesc {
         : arp(arp), no(no) {}
 };
 typedef std::multimap<int, MusicXmlArpeggioDesc> ArpeggioMap;
+
+struct DelayedArpeggio
+{
+    muse::String m_arpeggioType = u"";
+    int m_arpeggioNo = 0;
+
+    DelayedArpeggio(muse::String arpType, int no)
+        : m_arpeggioType(arpType), m_arpeggioNo(no) {}
+
+    DelayedArpeggio()
+        : m_arpeggioType(muse::String(u"")), m_arpeggioNo(0) {}
+
+    void clear() { m_arpeggioType = u""; m_arpeggioNo = 0; }
+};
+using DelayedArpMap = std::map<int, DelayedArpeggio>;
+
+using GraceChordList = std::vector<engraving::Chord*>;
+using FiguredBassList = std::vector<engraving::FiguredBass*>;
+using Tuplets = std::map<muse::String, engraving::Tuplet*>;
+using Beams = std::map<muse::String, engraving::Beam*>;
+
+// Ties are identified by the pitch and track of their first note
+typedef std::pair<int, engraving::track_idx_t> TieLocation;
+using MusicXmlTieMap = std::map<TieLocation, engraving::Tie*>;
+
+//---------------------------------------------------------
+//   MusicXmlTupletDesc
+//---------------------------------------------------------
+
+/**
+ Describe the information extracted from
+ a single note/notations/tuplet element.
+ */
+
+struct MusicXmlTupletDesc {
+    MusicXmlTupletDesc();
+    MusicXmlStartStop type;
+    engraving::DirectionV direction;
+    engraving::TupletBracketType bracket;
+    engraving::TupletNumberType shownumber;
+};
 
 //---------------------------------------------------------
 //   MusicXmlInstrument
