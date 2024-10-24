@@ -731,6 +731,10 @@
     <seq>Alt+Shift+T</seq>
     </SC>
   <SC>
+    <key>dynamics</key>
+    <seq>Ctrl+D</seq>
+    </SC>
+  <SC>
     <key>system-text</key>
     <seq>Ctrl+Shift+T</seq>
     </SC>
