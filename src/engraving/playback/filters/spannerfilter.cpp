@@ -52,17 +52,19 @@ bool SpannerFilter::isPlayable(const EngravingItem* item, const RenderingContext
 
 int SpannerFilter::spannerActualDurationTicks(const Spanner* spanner, const int nominalDurationTicks)
 {
-    if (spanner->type() == ElementType::SLUR) {
-        EngravingItem* startItem = spanner->startElement();
-        EngravingItem* endItem = spanner->endElement();
+    const ElementType type = spanner->type();
+
+    if (type == ElementType::SLUR || type == ElementType::TRILL) {
+        const EngravingItem* startItem = spanner->startElement();
+        const EngravingItem* endItem = spanner->endElement();
 
         if (!startItem || !endItem) {
             return nominalDurationTicks;
         }
 
         if (startItem->isChordRest() && endItem->isChordRest()) {
-            ChordRest* startChord = toChordRest(startItem);
-            ChordRest* endChord = toChordRest(endItem);
+            const ChordRest* startChord = toChordRest(startItem);
+            const ChordRest* endChord = toChordRest(endItem);
             return endChord->tick().ticks() + endChord->ticks().ticks() - startChord->tick().ticks();
         }
     }

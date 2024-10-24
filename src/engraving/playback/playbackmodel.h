@@ -145,6 +145,9 @@ private:
 
     PlaybackContextPtr playbackCtx(const InstrumentTrackId& trackId);
 
+    static void applyTiedNotesTickBoundaries(const Note* note, TickBoundaries& tickBoundaries);
+    static void applyTieTickBoundaries(const Tie* tie, TickBoundaries& tickBoundaries);
+
     Score* m_score = nullptr;
     bool m_expandRepeats = true;
     bool m_playChordSymbols = true;

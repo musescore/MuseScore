@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,35 +20,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_RENDERBASE_H
-#define MU_ENGRAVING_RENDERBASE_H
-
-#include "log.h"
+#pragma once
 
 #include "playback/renderingcontext.h"
 
 namespace mu::engraving {
-template<class T>
-class RenderBase
+class Note;
+class NoteRenderer
 {
 public:
-    static bool isAbleToRender(const muse::mpe::ArticulationType& type)
-    {
-        const muse::mpe::ArticulationTypeSet& supportedTypes = T::supportedTypes();
+    static void render(const Note* note, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
 
-        return supportedTypes.find(type) != supportedTypes.cend();
-    }
+private:
+    static void renderTiedNotes(const Note* firstNote, NominalNoteCtx& firstNoteCtx);
+    static void addTiedNote(const NominalNoteCtx& tiedNoteCtx, NominalNoteCtx& firstNoteCtx);
+    static void updateArticulationBoundaries(const muse::mpe::timestamp_t noteTimestamp, const muse::mpe::duration_t noteDuration,
+                                             muse::mpe::ArticulationMap& articulations);
+    static void applySwingIfNeed(const Note* note, NominalNoteCtx& noteCtx);
 
-    static void render(const EngravingItem* item, const muse::mpe::ArticulationType preferredType, const RenderingContext& context,
-                       muse::mpe::PlaybackEventList& result)
-    {
-        IF_ASSERT_FAILED(item) {
-            return;
-        }
-
-        T::doRender(item, preferredType, context, result);
-    }
+    static NominalNoteCtx buildNominalNoteCtx(const Note* note, const RenderingContext& ctx);
 };
 }
-
-#endif // MU_ENGRAVING_RENDERBASE_H
