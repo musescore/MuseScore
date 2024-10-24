@@ -111,7 +111,6 @@ private:
     static bool isGlissandoValid(Glissando* glissando);
     static const Drumset* getDrumset(const Chord* chord);
     static int totalTiedNoteTicks(Note* note);
-    static int slideTicks(Chord* chord);
 };
 }
 
