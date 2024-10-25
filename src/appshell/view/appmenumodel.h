@@ -68,9 +68,6 @@ public:
     Q_INVOKABLE bool isGlobalMenuAvailable();
 
 private:
-    mu::notation::INotationUndoStackPtr undoStack() const;
-    void updateUndoRedoItems();
-
     void setupConnections();
 
     using muse::uicomponents::AbstractMenuModel::makeMenuItem;
@@ -101,6 +98,9 @@ private:
     muse::uicomponents::MenuItemList makeWorkspacesItems();
     muse::uicomponents::MenuItemList makeShowItems();
     muse::uicomponents::MenuItemList makePluginsItems();
+
+    mu::notation::INotationUndoStackPtr undoStack() const;
+    void updateUndoRedoItems();
 };
 }
 

@@ -2103,7 +2103,7 @@ void NotationActionController::openUndoRedoHistory()
 
     RetVal<Val> result = interactive()->open("musescore://notation/undohistory");
     if (result.ret) {
-        interaction->undoHistory(static_cast<size_t>(result.val.toInt()));
+        interaction->undoRedoToIdx(static_cast<size_t>(result.val.toInt()));
     }
 }
 

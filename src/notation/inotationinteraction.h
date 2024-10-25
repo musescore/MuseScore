@@ -114,7 +114,7 @@ public:
     virtual bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) = 0;
     virtual void undo() = 0;
     virtual void redo() = 0;
-    virtual void undoHistory(size_t moveToIdx) = 0;
+    virtual void undoRedoToIdx(size_t idx) = 0;
 
     // Change selection
     virtual bool moveSelectionAvailable(MoveSelectionType type) const = 0;

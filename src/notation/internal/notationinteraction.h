@@ -121,7 +121,7 @@ public:
     bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) override;
     void undo() override;
     void redo() override;
-    void undoHistory(size_t moveToIdx) override;
+    void undoRedoToIdx(size_t idx) override;
 
     // Change selection
     bool moveSelectionAvailable(MoveSelectionType type) const override;

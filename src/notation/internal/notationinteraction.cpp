@@ -3388,9 +3388,9 @@ void NotationInteraction::redo()
     m_undoStack->redo(&m_editData);
 }
 
-void NotationInteraction::undoHistory(size_t moveToIdx)
+void NotationInteraction::undoRedoToIdx(size_t idx)
 {
-    m_undoStack->undoRedoToIdx(moveToIdx, &m_editData);
+    m_undoStack->undoRedoToIdx(idx, &m_editData);
 }
 
 muse::async::Notification NotationInteraction::textEditingStarted() const

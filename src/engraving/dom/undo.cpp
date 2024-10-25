@@ -327,7 +327,7 @@ void UndoStack::setLocked(bool val)
 //   beginMacro
 //---------------------------------------------------------
 
-void UndoStack::beginMacro(Score* score, const TranslatableString& undoString)
+void UndoStack::beginMacro(Score* score, const TranslatableString& actionName)
 {
     if (isLocked) {
         return;
@@ -337,7 +337,7 @@ void UndoStack::beginMacro(Score* score, const TranslatableString& undoString)
         LOGW("already active");
         return;
     }
-    curCmd = new UndoMacro(score, undoString);
+    curCmd = new UndoMacro(score, actionName);
 }
 
 //---------------------------------------------------------

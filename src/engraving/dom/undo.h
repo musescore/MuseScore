@@ -220,7 +220,7 @@ public:
     bool locked() const;
     void setLocked(bool val);
     bool active() const { return curCmd != 0; }
-    void beginMacro(Score*, const TranslatableString& actionString);
+    void beginMacro(Score*, const TranslatableString& actionName);
     void endMacro(bool rollback);
     void push(UndoCommand*, EditData*);        // push & execute
     void push1(UndoCommand*);
