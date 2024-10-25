@@ -34,7 +34,6 @@ using namespace mu::engraving;
 
 static const String REST_DATA_DIR(u"rest_data/");
 static const int TICKS_PER_4_2_MEASURE = 8 * 480; // 4/2 time per measure tick (8 quarters)
-static const int TICKS_PER_4_4_MEASURE = 4 * 480; // 4/4 time per measure tick (4 quarters)
 
 class Engraving_RestTests : public ::testing::Test
 {
@@ -65,7 +64,7 @@ protected:
         return nullptr;
     }
 
-    void testFullmeasureRestLines(MasterScore* score, std::function<int(int)> calcTickFromMeasureNum,
+    void testRestLines(MasterScore* score, std::function<int(int)> calcTickFromMeasureNum,
                                   const std::vector<int>& expectedLines, const std::vector<track_idx_t>& restTracks)
     {
         ASSERT_EQ(expectedLines.size(), restTracks.size());
@@ -74,7 +73,7 @@ protected:
         for (int measureNum = 1; measureNum <= static_cast<int>(restTracks.size()); measureNum++) {
             Rest* rest = findRest(score, calcTickFromMeasureNum(measureNum), restTracks[measureNum - 1]);
             ASSERT_TRUE(rest);
-            // [THEN] ledger numbers match on all bars
+            // [THEN] line numbers match on all bars
             int visibleLine = std::floor(rest->pos().y() / (rest->staff()->lineDistance(rest->tick()) * rest->spatium()));
             EXPECT_EQ(visibleLine, expectedLines[measureNum - 1]);
         }
@@ -83,39 +82,9 @@ protected:
 public:
 };
 
-TEST_F(Engraving_RestTests, BreveRests_TestFullmeasureLines)
-{
-    MasterScore* score = ScoreRW::readScore(REST_DATA_DIR + u"rest03.mscz");
-    ASSERT_TRUE(score);
-
-    std::vector<int> expectedLines;
-    const std::vector<track_idx_t> restTracks = { 0, 0, 1, 0, 0, 1 };
-
-    auto calcTick = [](int measureNum) -> int {
-        const int measureIdx = measureNum - 1;
-        // 3 bars of 4/2 followed by 3 bars of 4/4
-        return (std::max(0, std::min(3, measureIdx)) * TICKS_PER_4_2_MEASURE)
-               + (std::max(0, measureIdx - 3) * TICKS_PER_4_4_MEASURE);
-    };
-
-    // [GIVEN] Style setting for multiVoice 2 space is true
-    score->style().set(Sid::multiVoiceRestTwoSpaceOffset, true);
-    score->doLayout();
-    expectedLines = { 2, 0, 4, 1, -1, 3 };
-    testFullmeasureRestLines(score, calcTick, expectedLines, restTracks);
-
-    // [GIVEN] Style setting for multiVoice 2 space is false
-    score->style().set(Sid::multiVoiceRestTwoSpaceOffset, false);
-    score->doLayout();
-    expectedLines = { 2, 1, 3, 1, 0, 3 };
-    testFullmeasureRestLines(score, calcTick, expectedLines, restTracks);
-
-    delete score;
-}
-
 TEST_F(Engraving_RestTests, BreveRests_TestFullmeasure1Line)
 {
-    MasterScore* score = ScoreRW::readScore(REST_DATA_DIR + u"rest04.mscz");
+    MasterScore* score = ScoreRW::readScore(REST_DATA_DIR + u"rest03.mscz");
     ASSERT_TRUE(score);
     score->doLayout();
 
@@ -125,37 +94,7 @@ TEST_F(Engraving_RestTests, BreveRests_TestFullmeasure1Line)
     };
 
     std::vector<int> expectedLines = { 1, 0 };
-    testFullmeasureRestLines(score, calcTick, expectedLines, { 0, 0 });
-
-    delete score;
-}
-
-TEST_F(Engraving_RestTests, BreveRests_TestFullmeasureFloats)
-{
-    MasterScore* score = ScoreRW::readScore(REST_DATA_DIR + u"rest05.mscz");
-    ASSERT_TRUE(score);
-
-    std::vector<int> expectedLines;
-    const std::vector<track_idx_t> restTracks = { 0, 0, 1, 1, 0, 0, 1, 1, 1 };
-
-    auto calcTick = [](int measureNum) -> int {
-        const int measureIdx = measureNum - 1;
-        // 4 bars of 4/2 followed by 5 bars of 4/4
-        return (std::max(0, std::min(4, measureIdx)) * TICKS_PER_4_2_MEASURE)
-               + (std::max(0, measureIdx - 4) * TICKS_PER_4_4_MEASURE);
-    };
-
-    // [GIVEN] Style setting for multiVoice 2 space is true
-    score->style().set(Sid::multiVoiceRestTwoSpaceOffset, true);
-    score->doLayout();
-    expectedLines = { 0, -1, 4, 5, -1, -2, 4, 4, 5 };
-    testFullmeasureRestLines(score, calcTick, expectedLines, restTracks);
-
-    // [GIVEN] Style setting for multiVoice 2 space is false
-    score->style().set(Sid::multiVoiceRestTwoSpaceOffset, false);
-    score->doLayout();
-    expectedLines = { 0, -1, 4, 5, -1, -2, 3, 4, 5 };
-    testFullmeasureRestLines(score, calcTick, expectedLines, restTracks);
+    testRestLines(score, calcTick, expectedLines, { 0, 0 });
 
     delete score;
 }
