@@ -99,6 +99,10 @@ Rectangle {
             id: inspectorListModel
         }
 
+        onContentHeightChanged: {
+            returnToBounds()
+        }
+
         delegate: Column {
             width: parent.width
 
