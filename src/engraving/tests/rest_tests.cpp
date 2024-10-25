@@ -65,7 +65,7 @@ protected:
     }
 
     void testRestLines(MasterScore* score, std::function<int(int)> calcTickFromMeasureNum,
-                                  const std::vector<int>& expectedLines, const std::vector<track_idx_t>& restTracks)
+                       const std::vector<int>& expectedLines, const std::vector<track_idx_t>& restTracks)
     {
         ASSERT_EQ(expectedLines.size(), restTracks.size());
         ASSERT_TRUE(score->measures()->size() >= static_cast<int>(restTracks.size()));
