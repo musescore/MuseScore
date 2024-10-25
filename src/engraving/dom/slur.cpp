@@ -319,6 +319,21 @@ bool SlurSegment::isEndPointsEdited() const
     return !(m_ups[int(Grip::START)].off.isNull() && m_ups[int(Grip::END)].off.isNull());
 }
 
+double SlurSegment::endWidth() const
+{
+    return style().styleMM(Sid::slurEndWidth);
+}
+
+double SlurSegment::midWidth() const
+{
+    return style().styleMM(Sid::slurMidWidth);
+}
+
+double SlurSegment::dottedWidth() const
+{
+    return style().styleMM(Sid::slurDottedWidth);
+}
+
 Slur::Slur(const Slur& s)
     : SlurTie(s)
 {

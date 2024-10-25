@@ -449,6 +449,13 @@ public:
 
         NOTE_ANCHORED_LINE = 0xF47B,
 
+        NOTE_LV = 0xF47C,
+
+        LV_OUTSIDE = 0xF47D,
+        LV_INSIDE = 0xF47E,
+        LV_CHORD_OUTSIDE = 0xF47F,
+        LV_CHORD_INSIDE = 0xF480,
+
         NONE = 0xFFFF
     };
 

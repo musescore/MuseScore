@@ -77,6 +77,8 @@ enum class ElementType {
     INSTRUMENT_NAME,
     SLUR_SEGMENT,
     TIE_SEGMENT,
+    LAISSEZ_VIB_SEGMENT,
+    LAISSEZ_VIB,
     BAR_LINE,
     STAFF_LINES,
     SYSTEM_DIVIDER,

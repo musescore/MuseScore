@@ -232,6 +232,7 @@ public:
 
     static void write(const KeySig* item, XmlWriter& xml, WriteContext& ctx);
 
+    static void write(const LaissezVib* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const LayoutBreak* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const LedgerLine* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const LetRing* item, XmlWriter& xml, WriteContext& ctx);

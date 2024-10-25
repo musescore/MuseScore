@@ -2334,6 +2334,13 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Add tied note"),
              IconCode::Code::NOTE_TIE
              ),
+    UiAction("lv",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Laissez vibrer"),
+             TranslatableString("action", "Add laissez vibrer"),
+             IconCode::Code::NOTE_LV
+             ),
     UiAction("add-slur",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
@@ -2839,6 +2846,7 @@ const muse::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
             { "", true },
             { "tie", true },
             { "add-slur", true },
+            { "lv", false },
             { "", true },
             { "add-marcato", true },
             { "add-sforzato", true },

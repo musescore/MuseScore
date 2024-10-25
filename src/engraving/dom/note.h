@@ -295,6 +295,7 @@ public:
     GuitarBend* bendBack() const;
     Tie* tieFor() const { return m_tieFor; }
     Tie* tieBack() const { return m_tieBack; }
+    LaissezVib* laissezVib() const;
     void setTieFor(Tie* t) { m_tieFor = t; }
     void setTieBack(Tie* t) { m_tieBack = t; }
     Note* firstTiedNote(bool ignorePlayback = true) const;

@@ -4215,6 +4215,14 @@ void NotationInteraction::addTieToSelection()
     notifyAboutNotationChanged();
 }
 
+void NotationInteraction::addLaissezVibToSelection()
+{
+    // Calls `startEdit` internally
+    score()->cmdToggleLaissezVib();
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::addTiedNoteToChord()
 {
     // Calls `startEdit` internally

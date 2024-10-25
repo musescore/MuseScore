@@ -66,6 +66,7 @@
 
 #include "../../dom/keysig.h"
 
+#include "../../dom/laissezvib.h"
 #include "../../dom/layoutbreak.h"
 
 #include "../../dom/marker.h"
@@ -259,6 +260,7 @@ public:
 
     static void layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const LayoutConfiguration& conf);
 
+    static void layoutLaissezVib(LaissezVib* item);
     static void layoutLayoutBreak(const LayoutBreak* item, LayoutBreak::LayoutData* ldata);
     static void layoutLedgerLine(LedgerLine* item, LayoutContext& ctx);
     static void layoutLetRing(LetRing* item, LayoutContext& ctx);

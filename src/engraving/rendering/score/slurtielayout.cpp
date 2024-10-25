@@ -41,6 +41,7 @@
 #include "dom/engravingitem.h"
 #include "dom/measure.h"
 #include "dom/guitarbend.h"
+#include "dom/laissezvib.h"
 
 #include "tlayout.h"
 #include "chordlayout.h"
@@ -1350,48 +1351,6 @@ void SlurTieLayout::avoidPreBendsOnTab(const Chord* sc, const Chord* ec, SlurTie
     }
 }
 
-TieSegment* SlurTieLayout::layoutTieWithNoEndNote(Tie* item)
-{
-    StaffType* st = item->staff()->staffType(item->startNote()->tick());
-    Chord* c1 = item->startNote()->chord();
-    item->setTick(c1->tick());
-
-    if (item->slurDirection() == DirectionV::AUTO) {
-        bool simpleException = st && st->isSimpleTabStaff();
-        if (simpleException) {
-            item->setUp(isUpVoice(c1->voice()));
-        } else {
-            if (c1->measure()->hasVoices(c1->staffIdx(), c1->tick(), c1->actualTicks())) {
-                // in polyphonic passage, ties go on the stem side
-                item->setUp(c1->up());
-            } else {
-                item->setUp(!c1->up());
-            }
-        }
-    } else {
-        item->setUp(item->slurDirection() == DirectionV::UP ? true : false);
-    }
-
-    item->fixupSegments(1);
-    TieSegment* segment = item->segmentAt(0);
-    segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
-    segment->setSystem(item->startNote()->chord()->segment()->measure()->system());
-    segment->resetAdjustmentOffset();
-
-    SlurTiePos sPos;
-    computeStartAndEndSystem(item, sPos);
-    sPos.p1 = computeDefaultStartOrEndPoint(item, Grip::START);
-
-    Segment* chordSeg = c1->segment();
-    sPos.p2 = PointF(sPos.p1.x() + chordSeg->width(), sPos.p1.y());
-
-    segment->ups(Grip::START).p = sPos.p1;
-    segment->ups(Grip::END).p = sPos.p2;
-
-    computeBezier(segment);
-    return segment;
-}
-
 static bool tieSegmentShouldBeSkipped(Tie* item)
 {
     Note* startNote = item->startNote();
@@ -1416,10 +1375,6 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
     if (!item->startNote()) {
         LOGD("no start note");
         return nullptr;
-    }
-
-    if (!item->endNote()) {
-        return layoutTieWithNoEndNote(item);
     }
 
     // do not layout ties in tablature if not showing back-tied fret marks
@@ -1670,6 +1625,119 @@ void SlurTieLayout::createSlurSegments(Slur* item, LayoutContext& ctx)
     }
 }
 
+LaissezVibSegment* SlurTieLayout::createLaissezVibSegment(LaissezVib* item)
+{
+    Chord* startChord = item->startNote()->chord();
+    item->setTick(startChord->tick());
+
+    item->calculateDirection();
+    item->calculateIsInside();
+
+    item->fixupSegments(1);
+    LaissezVibSegment* segment = item->segmentAt(0);
+    segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
+    segment->setSystem(item->startNote()->chord()->segment()->measure()->system());
+    segment->resetAdjustmentOffset();
+
+    return segment;
+}
+
+void SlurTieLayout::calculateLaissezVibX(LaissezVibSegment* segment, SlurTiePos& sPos, bool smufl)
+{
+    LaissezVib* lv = segment->laissezVib();
+
+    computeStartAndEndSystem(lv, sPos);
+    sPos.p1 = computeDefaultStartOrEndPoint(lv, Grip::START);
+
+    if (segment->autoplace() && !segment->isEdited()) {
+        adjustX(segment, sPos, Grip::START);
+    }
+
+    if (smufl) {
+        LaissezVibSegment::LayoutData* ldata = segment->mutldata();
+        ldata->symbol = lv->symId();
+        ldata->setBbox(segment->symBbox(ldata->symbol));
+        ldata->setShape(Shape(ldata->bbox(), segment));
+        ldata->setMag(segment->laissezVib()->startNote()->mag());
+    }
+
+    const double width = smufl ? segment->width() : lv->absoluteFromSpatium(lv->minLength());
+
+    sPos.p2 = PointF(sPos.p1.x() + width, sPos.p1.y());
+}
+
+void SlurTieLayout::calculateLaissezVibY(LaissezVibSegment* segment, SlurTiePos& sPos)
+{
+    LaissezVib* lv = segment->laissezVib();
+    correctForCrossStaff(lv, sPos, SpannerSegmentType::SINGLE);
+
+    adjustYforLedgerLines(segment, sPos);
+
+    segment->ups(Grip::START).p = sPos.p1;
+    segment->ups(Grip::END).p = sPos.p2;
+
+    if (segment->autoplace() && !segment->isEdited()) {
+        adjustY(segment);
+    } else {
+        computeBezier(segment);
+    }
+}
+
+void SlurTieLayout::layoutLaissezVibChord(Chord* chord, System* system, LayoutContext& ctx)
+{
+    // Laissez vib ties should all end at the same rightmost point while honouring each tie's minimum length
+    // Ties drawn by MuseScore can start at differing points
+    // SMuFL symbols will also start at the same point because they are of fixed length
+    double chordLvEndPoint = -DBL_MAX;
+    std::map<LaissezVibSegment*, SlurTiePos> lvSegmentsWithPositions;
+    SysStaff* staff = system->staff(chord->staffIdx());
+    const bool smuflLayout = ctx.conf().styleB(Sid::laissezVibUseSmuflSym);
+    const double chordX = chord->pos().x() + chord->segment()->pos().x() + chord->measure()->pos().x();
+
+    for (const Note* note : chord->notes()) {
+        LaissezVib* lv = note->laissezVib();
+        if (!lv) {
+            continue;
+        }
+        SlurTiePos sPos;
+        LaissezVibSegment* lvSeg = createLaissezVibSegment(lv);
+
+        calculateLaissezVibX(lvSeg, sPos, smuflLayout);
+
+        chordLvEndPoint = std::max(chordLvEndPoint, sPos.p2.x());
+
+        lvSegmentsWithPositions.insert({ lvSeg, sPos });
+    }
+
+    for (auto& segWithPos : lvSegmentsWithPositions) {
+        LaissezVibSegment* lvSeg = segWithPos.first;
+        const Note* note = lvSeg->laissezVib()->startNote();
+        SlurTiePos sPos = segWithPos.second;
+        const double xDiff = chordLvEndPoint - sPos.p2.x();
+        sPos.p2.setX(chordLvEndPoint);
+        if (smuflLayout) {
+            sPos.p1.setX(sPos.p1.x() + xDiff);
+        }
+
+        calculateLaissezVibY(lvSeg, sPos);
+
+        LaissezVibSegment::LayoutData* ldata = lvSeg->mutldata();
+        if (smuflLayout) {
+            ldata->setBbox(lvSeg->symBbox(ldata->symbol));
+            ldata->setShape(Shape(ldata->bbox(), lvSeg));
+            ldata->setPos(sPos.p1);
+        }
+
+        const double noteX = chordX + note->pos().x() + note->headWidth();
+        const double extension = sPos.p2.x() - noteX;
+        ldata->extensionBeyondNote = extension;
+
+        if (lvSeg && lvSeg->addToSkyline()) {
+            staff->skyline().add(lvSeg->shape().translate(lvSeg->pos()));
+        }
+    }
+}
+
 void SlurTieLayout::correctForCrossStaff(Tie* tie, SlurTiePos& sPos, SpannerSegmentType type)
 {
     Chord* startChord = tie->startNote() ? tie->startNote()->chord() : nullptr;
@@ -1700,6 +1768,10 @@ void SlurTieLayout::correctForCrossStaff(Tie* tie, SlurTiePos& sPos, SpannerSegm
             double yMoved = sPos.system1->staff(startChord->vStaffIdx())->y();
             double yDiff = yMoved - yOrigin;
             sPos.p1.setY(curY1 + yDiff);
+            if (tie->isLaissezVib()) {
+                sPos.p2.setY(curY2 + yDiff);
+                return;
+            }
         }
         if (!endChord) {
             return;
@@ -2187,8 +2259,8 @@ void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
     const double _spatium = tieSeg->spatium();
     double tieLengthInSp = tieEndNormalized.x() / _spatium;
 
-    const double minShoulderHeight = tieSeg->style().styleMM(Sid::tieMinShoulderHeight);
-    const double maxShoulderHeight = tieSeg->style().styleMM(Sid::tieMaxShoulderHeight);
+    const double minShoulderHeight = tieSeg->minShoulderHeight();
+    const double maxShoulderHeight = tieSeg->maxShoulderHeight();
     double shoulderH = minShoulderHeight + _spatium * 0.3 * sqrt(std::abs(tieLengthInSp - 1));
     shoulderH = std::clamp(shoulderH, minShoulderHeight, maxShoulderHeight);
 
@@ -2538,10 +2610,8 @@ void SlurTieLayout::layoutSegment(SlurSegment* item, LayoutContext& ctx, const P
 
 void SlurTieLayout::computeMidThickness(SlurTieSegment* slurTieSeg, double slurTieLengthInSp)
 {
-    const Millimetre endWidth = slurTieSeg->isTieSegment() ? slurTieSeg->style().styleMM(Sid::tieEndWidth)
-                                : slurTieSeg->style().styleMM(Sid::slurEndWidth);
-    const Millimetre midWidth = slurTieSeg->isTieSegment() ? slurTieSeg->style().styleMM(Sid::tieMidWidth)
-                                : slurTieSeg->style().styleMM(Sid::slurMidWidth);
+    const double endWidth = slurTieSeg->endWidth();
+    const double midWidth = slurTieSeg->midWidth();
     Staff* staff = slurTieSeg->score() ? slurTieSeg->score()->staff(slurTieSeg->vStaffIdx()) : nullptr;
     const double mag = staff ? staff->staffMag(slurTieSeg->slurTie()->tick()) : 1.0;
     const double minTieLength = mag * slurTieSeg->style().styleS(Sid::minTieLength).val();

@@ -530,12 +530,16 @@ enum class Sid {
     minWigglyGlissandoLength,
     slurMinDistance,
     tieMinDistance,
+    laissezVibMinDistance,
     headerToLineStartDistance, // determines start point of "dangling" lines (ties, gliss, lyrics...) at start of system
 
     tiePlacementSingleNote,
     tiePlacementChord,
     tieMinShoulderHeight,
     tieMaxShoulderHeight,
+
+    minLaissezVibLength,
+    laissezVibUseSmuflSym,
 
     sectionPause,
     musicalSymbolFont,

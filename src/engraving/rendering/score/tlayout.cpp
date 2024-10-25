@@ -299,6 +299,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::KEYSIG:
         layoutKeySig(item_cast<const KeySig*>(item), static_cast<KeySig::LayoutData*>(ldata), ctx.conf());
         break;
+    case ElementType::LAISSEZ_VIB:
+        layoutLaissezVib(item_cast<LaissezVib*>(item));
+        break;
     case ElementType::LAYOUT_BREAK:
         layoutLayoutBreak(item_cast<const LayoutBreak*>(item), static_cast<LayoutBreak::LayoutData*>(ldata));
         break;
@@ -3747,6 +3750,11 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
         keySigShape.add(item->symBbox(ks.sym).translated(x, y), item);
     }
     ldata->setShape(keySigShape);
+}
+
+void TLayout::layoutLaissezVib(LaissezVib* item)
+{
+    UNUSED(item);
 }
 
 void TLayout::layoutLayoutBreak(const LayoutBreak* item, LayoutBreak::LayoutData* ldata)

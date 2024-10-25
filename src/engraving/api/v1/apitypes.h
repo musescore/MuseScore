@@ -225,6 +225,8 @@ enum class ElementType {
     INSTRUMENT_NAME       = int(mu::engraving::ElementType::INSTRUMENT_NAME),
     SLUR_SEGMENT          = int(mu::engraving::ElementType::SLUR_SEGMENT),
     TIE_SEGMENT           = int(mu::engraving::ElementType::TIE_SEGMENT),
+    LAISSEZ_VIB_SEGMENT   = int(mu::engraving::ElementType::LAISSEZ_VIB_SEGMENT),
+    LAISSEZ_VIB           = int(mu::engraving::ElementType::LAISSEZ_VIB),
     BAR_LINE              = int(mu::engraving::ElementType::BAR_LINE),
     STAFF_LINES           = int(mu::engraving::ElementType::STAFF_LINES),
     SYSTEM_DIVIDER        = int(mu::engraving::ElementType::SYSTEM_DIVIDER),

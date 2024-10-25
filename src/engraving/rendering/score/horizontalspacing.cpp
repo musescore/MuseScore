@@ -26,6 +26,7 @@
 #include "dom/chord.h"
 #include "dom/engravingitem.h"
 #include "dom/glissando.h"
+#include "dom/laissezvib.h"
 #include "dom/lyrics.h"
 #include "dom/note.h"
 #include "dom/rest.h"
@@ -1014,6 +1015,10 @@ double HorizontalSpacing::computePadding(const EngravingItem* item1, const Engra
         computeLedgerRestPadding(toRest(item2), padding);
     }
 
+    if (type1 == ElementType::NOTE && toNote(item1)->laissezVib()) {
+        computeLaissezVibPadding(toNote(item1), item2, padding);
+    }
+
     return padding;
 }
 
@@ -1147,6 +1152,19 @@ void HorizontalSpacing::computeLyricsPadding(const Lyrics* lyrics1, const Engrav
             padding = std::max(padding, spaceForDash);
         }
     }
+}
+
+void HorizontalSpacing::computeLaissezVibPadding(const Note* note, const EngravingItem* item2, double& padding)
+{
+    const LaissezVib* laissezVib = note->laissezVib();
+    const LaissezVibSegment* laissezVibSeg = laissezVib && !laissezVib->segmentsEmpty() ? laissezVib->frontSegment() : nullptr;
+
+    if (!laissezVibSeg) {
+        return;
+    }
+
+    const double lvPadding = laissezVibSeg->ldata()->extensionBeyondNote + computePadding(laissezVibSeg, item2);
+    padding = std::max(padding, lvPadding);
 }
 
 KerningType HorizontalSpacing::computeKerning(const EngravingItem* item1, const EngravingItem* item2)

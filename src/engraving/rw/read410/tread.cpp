@@ -85,6 +85,7 @@
 #include "../../dom/bend.h"
 #include "../../dom/stretchedbend.h"
 #include "../../dom/box.h"
+#include "../../dom/laissezvib.h"
 #include "../../dom/layoutbreak.h"
 #include "../../dom/stafftypechange.h"
 #include "../../dom/bracket.h"
@@ -228,6 +229,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::JUMP: read(item_cast<Jump*>(item), xml, ctx);
         break;
     case ElementType::KEYSIG: read(item_cast<KeySig*>(item), xml, ctx);
+        break;
+    case ElementType::LAISSEZ_VIB: read(item_cast<LaissezVib*>(item), xml, ctx);
         break;
     case ElementType::LAYOUT_BREAK: read(item_cast<LayoutBreak*>(item), xml, ctx);
         break;
@@ -1487,6 +1490,18 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
     }
 
     s->setKeySigEvent(sig);
+}
+
+void TRead::read(LaissezVib* lv, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+        if (TRead::readProperty(lv, tag, xml, ctx, Pid::TIE_PLACEMENT)) {
+        } else if (TRead::readProperty(lv, tag, xml, ctx, Pid::MIN_LENGTH)) {
+        } else if (!readProperties(static_cast<SlurTie*>(lv), xml, ctx)) {
+            xml.unknown();
+        }
+    }
 }
 
 void TRead::read(StaffState* s, XmlReader& e, ReadContext& ctx)
@@ -3587,6 +3602,11 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         TRead::read(cl, e, ctx);
         cl->setNote(n);
         n->chord()->add(cl);
+    } else if (tag == "LaissezVib") {
+        LaissezVib* lv = Factory::createLaissezVib(n);
+        TRead::read(lv, e, ctx);
+        lv->setParent(n);
+        n->add(lv);
     } else if (readItemProperties(n, e, ctx)) {
     } else {
         return false;

@@ -610,6 +610,18 @@ void NotationNoteInput::addTie()
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 }
 
+void NotationNoteInput::addLaissezVib()
+{
+    TRACEFUNC;
+
+    // Calls `startEdit` internally
+    score()->cmdToggleLaissezVib();
+
+    notifyAboutStateChanged();
+
+    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+}
+
 Notification NotationNoteInput::noteAdded() const
 {
     return m_noteAdded;

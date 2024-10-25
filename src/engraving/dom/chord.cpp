@@ -37,6 +37,7 @@
 #include "guitarbend.h"
 #include "hook.h"
 #include "key.h"
+#include "laissezvib.h"
 #include "ledgerline.h"
 #include "measure.h"
 #include "mscore.h"
@@ -2868,6 +2869,7 @@ EngravingItem* Chord::nextElement()
     case ElementType::GUITAR_BEND_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
     case ElementType::NOTELINE_SEGMENT:
+    case ElementType::LAISSEZ_VIB_SEGMENT:
     case ElementType::TIE_SEGMENT: {
         SpannerSegment* s = toSpannerSegment(e);
         Spanner* sp = s->spanner();

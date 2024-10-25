@@ -35,6 +35,7 @@
 #include "factory.h"
 #include "guitarbend.h"
 #include "harmony.h"
+#include "laissezvib.h"
 #include "layoutbreak.h"
 #include "linkedobjects.h"
 #include "lyrics.h"
@@ -769,7 +770,7 @@ static void processLinkedClone(EngravingItem* ne, Score* score, track_idx_t stra
 
 static void addTies(Note* originalNote, Note* newNote, TieMap& tieMap, Score* score)
 {
-    if (originalNote->tieFor()) {
+    if (originalNote->tieFor() && !originalNote->tieFor()->isLaissezVib()) {
         Tie* tie = toTie(originalNote->tieFor()->linkedClone());
         tie->setScore(score);
         newNote->setTieFor(tie);

@@ -19,12 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SLURTIELAYOUT_DEV_H
-#define MU_ENGRAVING_SLURTIELAYOUT_DEV_H
+#pragma once
 
 #include "layoutcontext.h"
 
 namespace mu::engraving {
+class LaissezVib;
+class LaissezVibSegment;
 class Slur;
 class SlurSegment;
 struct SlurTiePos;
@@ -60,6 +61,7 @@ public:
     static double noteOpticalCenterForTie(const Note* note, bool up);
     static void createSlurSegments(Slur* item, LayoutContext& ctx);
 
+    static void layoutLaissezVibChord(Chord* chord, System* system, LayoutContext& ctx);
 private:
 
     static void slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx);
@@ -89,8 +91,6 @@ private:
     static void adjustY(TieSegment* tieSegment);
     static bool hasEndPointAboveNote(TieSegment* tieSegment);
 
-    static TieSegment* layoutTieWithNoEndNote(Tie* item);
-
     static double defaultStemLengthStart(TremoloTwoChord* tremolo);
     static double defaultStemLengthEnd(TremoloTwoChord* tremolo);
 
@@ -103,7 +103,9 @@ private:
     static bool shouldHideSlurSegment(SlurSegment* item, LayoutContext& ctx);
 
     static void addLineAttachPoints(TieSegment* segment);
+
+    static LaissezVibSegment* createLaissezVibSegment(LaissezVib* item);
+    static void calculateLaissezVibX(LaissezVibSegment* segment, SlurTiePos& sPos, bool smufl);
+    static void calculateLaissezVibY(LaissezVibSegment* segment, SlurTiePos& sPos);
 };
 }
-
-#endif // MU_ENGRAVING_SLURTIELAYOUT_DEV_H

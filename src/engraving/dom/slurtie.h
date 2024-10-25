@@ -126,6 +126,10 @@ public:
 
     virtual void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
 
+    virtual double endWidth() const = 0;
+    virtual double midWidth() const = 0;
+    virtual double dottedWidth() const = 0;
+
     struct LayoutData : public SpannerSegment::LayoutData
     {
         ld_field<muse::draw::PainterPath> path = "path";

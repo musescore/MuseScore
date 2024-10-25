@@ -53,6 +53,11 @@ TieSegment::TieSegment(System* parent)
 {
 }
 
+TieSegment::TieSegment(const ElementType& type, System* parent)
+    : SlurTieSegment(type, parent)
+{
+}
+
 TieSegment::TieSegment(const TieSegment& s)
     : SlurTieSegment(s)
 {
@@ -172,9 +177,40 @@ bool TieSegment::isEdited() const
     return false;
 }
 
+double TieSegment::minShoulderHeight() const
+{
+    return style().styleMM(Sid::tieMinShoulderHeight);
+}
+
+double TieSegment::maxShoulderHeight() const
+{
+    return style().styleMM(Sid::tieMaxShoulderHeight);
+}
+
+double TieSegment::endWidth() const
+{
+    return style().styleMM(Sid::tieEndWidth);
+}
+
+double TieSegment::midWidth() const
+{
+    return style().styleMM(Sid::tieMidWidth);
+}
+
+double TieSegment::dottedWidth() const
+{
+    return style().styleMM(Sid::tieDottedWidth);
+}
+
 //---------------------------------------------------------
 //   Tie
 //---------------------------------------------------------
+
+Tie::Tie(const ElementType& type, EngravingItem* parent)
+    : SlurTie(type, parent)
+{
+    setAnchor(Anchor::NOTE);
+}
 
 Tie::Tie(EngravingItem* parent)
     : SlurTie(ElementType::TIE, parent)

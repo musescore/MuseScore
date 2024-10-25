@@ -48,6 +48,7 @@
 #include "hairpin.h"
 #include "harmony.h"
 #include "key.h"
+#include "laissezvib.h"
 #include "linkedobjects.h"
 #include "lyrics.h"
 #include "masterscore.h"
@@ -732,8 +733,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
             continue;
         }
         tmpnl.push_back(n);
-        if (n->tieFor()
-            && (std::find(tmpnl.begin(), tmpnl.end(), n->tieFor()->endNote()) == tmpnl.end())) {
+        if (n->tieFor() && n->tieFor()->endNote() && std::find(tmpnl.begin(), tmpnl.end(), n->tieFor()->endNote()) == tmpnl.end()) {
             Note* currNote = n->tieFor()->endNote();
             do {
                 tmpnl.push_back(currNote);
@@ -824,8 +824,10 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
             undoAddElement(tie);
             prevTied = nullptr;
         }
-        if (on->tieFor()) {
-            Tie* tie = Factory::createTie(this->dummy());
+
+        Tie* tieFor = on->tieFor();
+        if (tieFor) {
+            Tie* tie = tieFor->isLaissezVib() ? Factory::createLaissezVib(this->dummy()->note()) : Factory::createTie(this->dummy());
             tie->setStartNote(note);
             tie->setTick(note->tick());
             tie->setTrack(note->track());
