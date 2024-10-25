@@ -1729,8 +1729,8 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("add-lyric-verse",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Add lyric verse"),
-             TranslatableString("action", "Add lyric verse")
+             TranslatableString("action", "Add lyrics verse"),
+             TranslatableString("action", "Add lyrics verse")
              ),
     UiAction("text-b",
              mu::context::UiCtxProjectOpened,

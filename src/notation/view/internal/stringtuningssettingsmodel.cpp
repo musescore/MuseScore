@@ -229,7 +229,7 @@ void StringTuningsSettingsModel::setCurrentPreset(const QString& preset)
 {
     bool isCurrentCustom = currentPreset() == customPreset();
 
-    beginMultiCommands(TranslatableString("undoableAction", "Set current string preset"));
+    beginMultiCommands(TranslatableString("undoableAction", "Load string tunings preset"));
 
     changeItemProperty(mu::engraving::Pid::STRINGTUNINGS_PRESET, String::fromQString(preset));
     emit currentPresetChanged();
@@ -353,7 +353,7 @@ void StringTuningsSettingsModel::saveStrings()
         stringList[i].useFlat = item->useFlat();
     }
 
-    beginCommand(TranslatableString("undoableAction", "Save strings"));
+    beginCommand(TranslatableString("undoableAction", "Edit strings"));
 
     StringData newStringData(originStringData->frets(), stringList);
     stringTunings->undoStringData(newStringData);

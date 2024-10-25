@@ -255,7 +255,7 @@ void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& 
     TRACEFUNC;
 
     endInteractionWithScore();
-    startEdit(TranslatableString("undoableAction", "Add or remove instruments"));
+    startEdit(TranslatableString("undoableAction", "Add/remove instruments"));
 
     doSetScoreOrder(order);
     removeMissingParts(parts);
@@ -325,12 +325,12 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
 
     auto calcActionName = [](const SharpFlat& sharpFlat) -> TranslatableString {
         switch (sharpFlat) {
-        case SharpFlat::NONE: return TranslatableString("undoableAction", "Set sharp/flat no preference");
+        case SharpFlat::NONE: return TranslatableString("undoableAction", "Set sharps/flats no preference");
         case SharpFlat::FLATS: return TranslatableString("undoableAction", "Set prefer flats");
         case SharpFlat::SHARPS: return TranslatableString("undoableAction", "Set prefer sharps");
-        case SharpFlat::AUTO: return TranslatableString("undoableAction", "Set sharp/flat automatic");
+        case SharpFlat::AUTO: return TranslatableString("undoableAction", "Set sharps/flats automatic");
         }
-        return TranslatableString("undoableAction", "Set sharp/flat preference");
+        return TranslatableString("undoableAction", "Set sharps/flats preference");
     };
 
     startEdit(calcActionName(sharpFlat));
@@ -398,7 +398,7 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Set abbreviated name"));
+    startEdit(TranslatableString("undoableAction", "Set abbreviated instrument name"));
 
     score()->undo(new mu::engraving::ChangeInstrumentShort(instrumentKey.tick, part, { StaffName(abbreviature, 0) }));
 
@@ -505,7 +505,7 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Set staff properties"));
+    startEdit(TranslatableString("undoableAction", "Edit staff properties"));
 
     doSetStaffConfig(staff, config);
 
@@ -527,7 +527,7 @@ bool NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
         return false;
     }
 
-    startEdit(TranslatableString("undoableAction", "Append staff"));
+    startEdit(TranslatableString("undoableAction", "Add staff"));
     doAppendStaff(staff, destinationPart);
     apply();
 
@@ -550,7 +550,7 @@ bool NotationParts::appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffI
         return false;
     }
 
-    startEdit(TranslatableString("undoableAction", "Append linked staff"));
+    startEdit(TranslatableString("undoableAction", "Add linked staff"));
 
     doAppendStaff(staff, destinationPart);
 
@@ -573,7 +573,7 @@ void NotationParts::insertPart(Part* part, size_t index)
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Insert instrument"));
+    startEdit(TranslatableString("undoableAction", "Add instrument"));
 
     doInsertPart(part, index);
 
@@ -660,7 +660,7 @@ void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Dru
     }
 
     if (undoable) {
-        startEdit(TranslatableString("undoableAction", "Replace drumset"));
+        startEdit(TranslatableString("undoableAction", "Edit drumset"));
         score()->undo(new mu::engraving::ChangeDrumset(instrument, &newDrumset, part));
         apply();
     } else {
@@ -719,7 +719,7 @@ void NotationParts::removeParts(const IDList& partsIds)
     }
 
     endInteractionWithScore();
-    startEdit(TranslatableString("undoableAction", "Delete instrument(s)"));
+    startEdit(TranslatableString("undoableAction", "Remove instruments"));
 
     doRemoveParts(partsToRemove);
 
@@ -895,7 +895,7 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
     }
 
     endInteractionWithScore();
-    startEdit(TranslatableString("undoableAction", "Move instrument(s)"));
+    startEdit(TranslatableString("undoableAction", "Move instruments"));
 
     sortParts(parts);
     setBracketsAndBarlines();

@@ -177,7 +177,7 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
         m_undoStack->commitChanges();
     };
 
-    m_undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Add note"));
+    m_undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Enter note"));
 
     if (e.opcode() == muse::midi::Event::Opcode::NoteOff) {
         if (isRealtime()) {

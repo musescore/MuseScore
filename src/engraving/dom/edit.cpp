@@ -4002,7 +4002,7 @@ void Score::cmdEnterRest(const TDuration& d)
         LOGD("cmdEnterRest: track invalid");
         return;
     }
-    startCmd(TranslatableString("undoableAction", "Add rest"));
+    startCmd(TranslatableString("undoableAction", "Enter rest"));
     enterRest(d);
     endCmd();
 }

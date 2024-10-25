@@ -209,7 +209,7 @@ void TimeSignaturePropertiesDialog::accept()
     Groups g = groups->groups();
     m_editedTimeSig->setGroups(g);
 
-    notation->undoStack()->prepareChanges(TranslatableString("undoableAction", "Set time signature properties"));
+    notation->undoStack()->prepareChanges(TranslatableString("undoableAction", "Edit time signature properties"));
 
     // Change linked mmr timesigs too
     for (EngravingObject* obj : m_originTimeSig->linkList()) {

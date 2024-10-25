@@ -136,7 +136,7 @@ void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const 
         flags = mu::engraving::PropertyFlags::UNSTYLED;
     }
 
-    beginCommand(muse::TranslatableString("undoableAction", "Change item property"));
+    beginCommand(muse::TranslatableString("undoableAction", "Edit element property"));
     m_item->undoChangeProperty(id, value, flags);
     endCommand();
     updateNotation();
@@ -148,7 +148,7 @@ void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const 
         return;
     }
 
-    beginCommand(muse::TranslatableString("undoableAction", "Change item property"));
+    beginCommand(muse::TranslatableString("undoableAction", "Edit element property"));
     m_item->undoChangeProperty(id, value, flags);
     endCommand();
     updateNotation();

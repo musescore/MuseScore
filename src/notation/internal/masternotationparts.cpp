@@ -67,7 +67,7 @@ void MasterNotationParts::setParts(const PartInstrumentList& partList, const Sco
     mu::engraving::KeyList keyList = score()->keyList();
 
     endInteractionWithScore();
-    startGlobalEdit(TranslatableString("undoableAction", "Add or remove instruments"));
+    startGlobalEdit(TranslatableString("undoableAction", "Add/remove instruments"));
 
     doSetScoreOrder(order);
     removeMissingParts(partList);
@@ -137,7 +137,7 @@ bool MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
         return false;
     }
 
-    startGlobalEdit(TranslatableString("undoableAction", "Append staff"));
+    startGlobalEdit(TranslatableString("undoableAction", "Add staff"));
 
     //! NOTE: will be generated later after adding to the score
     staff->setId(mu::engraving::INVALID_ID);
@@ -165,7 +165,7 @@ bool MasterNotationParts::appendLinkedStaff(Staff* staff, const muse::ID& source
         return false;
     }
 
-    startGlobalEdit(TranslatableString("undoableAction", "Append linked staff"));
+    startGlobalEdit(TranslatableString("undoableAction", "Add linked staff"));
 
     //! NOTE: will be generated later after adding to the score
     staff->setId(mu::engraving::INVALID_ID);
@@ -223,7 +223,7 @@ void MasterNotationParts::replaceDrumset(const InstrumentKey& instrumentKey, con
 {
     TRACEFUNC;
 
-    startGlobalEdit(TranslatableString("undoableAction", "Replace drumset"));
+    startGlobalEdit(TranslatableString("undoableAction", "Edit drumset"));
 
     NotationParts::replaceDrumset(instrumentKey, newDrumset, undoable);
 

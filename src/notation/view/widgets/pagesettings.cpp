@@ -98,7 +98,7 @@ PageSettings::PageSettings(QWidget* parent)
 
 void PageSettings::showEvent(QShowEvent* event)
 {
-    globalContext()->currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Save page settings"));
+    globalContext()->currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Edit page settings"));
     updateValues();
     QWidget::showEvent(event);
 }

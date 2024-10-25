@@ -446,10 +446,13 @@ void NotationActionController::init()
     registerAction("toggle-insert-mode", [this]() { toggleNoteInputInsert(); }, &NotationActionController::isNotEditingElement);
 
     registerAction("get-location", &Interaction::getLocation, &Controller::isNotationPage);
-    registerAction("toggle-mmrest", &Interaction::execute, &mu::engraving::Score::cmdToggleMmrest);
-    registerAction("toggle-hide-empty", &Interaction::execute, &mu::engraving::Score::cmdToggleHideEmpty);
+    registerAction("toggle-mmrest", &Interaction::execute, &mu::engraving::Score::cmdToggleMmrest,
+                   TranslatableString("undoableAction", "Toggle multimeasure rests"));
+    registerAction("toggle-hide-empty", &Interaction::execute, &mu::engraving::Score::cmdToggleHideEmpty,
+                   TranslatableString("undoableAction", "Toggle empty staves"));
 
-    registerAction("mirror-note", &Interaction::execute, &mu::engraving::Score::cmdMirrorNoteHead);
+    registerAction("mirror-note", &Interaction::execute, &mu::engraving::Score::cmdMirrorNoteHead,
+                   TranslatableString("undoableAction", "Mirror notehead"));
 
     registerAction("clef-violin", [this]() { insertClef(mu::engraving::ClefType::G); });
     registerAction("clef-bass", [this]() { insertClef(mu::engraving::ClefType::F); });
@@ -463,9 +466,12 @@ void NotationActionController::init()
                    PlayMode::PlayNote);
     registerAction("pitch-down-diatonic-alterations", &Interaction::transposeDiatonicAlterations, mu::engraving::TransposeDirection::DOWN,
                    PlayMode::PlayNote);
-    registerAction("full-measure-rest", &Interaction::execute, &mu::engraving::Score::cmdFullMeasureRest);
-    registerAction("set-visible", &Interaction::execute, &mu::engraving::Score::cmdSetVisible);
-    registerAction("unset-visible", &Interaction::execute, &mu::engraving::Score::cmdUnsetVisible);
+    registerAction("full-measure-rest", &Interaction::execute, &mu::engraving::Score::cmdFullMeasureRest,
+                   TranslatableString("undoableAction", "Enter full-measure rest"));
+    registerAction("set-visible", &Interaction::execute, &mu::engraving::Score::cmdSetVisible,
+                   TranslatableString("undoableAction", "Make element(s) visible"));
+    registerAction("unset-visible", &Interaction::execute, &mu::engraving::Score::cmdUnsetVisible,
+                   TranslatableString("undoableAction", "Make element(s) invisible"));
     registerAction("toggle-autoplace", &Interaction::toggleAutoplace, false);
     registerAction("autoplace-enabled", &Interaction::toggleAutoplace, true);
 
@@ -499,8 +505,6 @@ void NotationActionController::init()
     registerTabPadNoteAction("pad-note-512-TAB", Pad::NOTE512);
     registerTabPadNoteAction("pad-note-1024-TAB", Pad::NOTE1024);
     registerAction("rest-TAB", &Interaction::putRestToSelection);
-
-    registerAction("edit-strings", &Interaction::changeEnharmonicSpelling, true);
 
     registerAction("standard-bend", [this]() { addGuitarBend(GuitarBendType::BEND); });
     registerAction("pre-bend",  [this]() { addGuitarBend(GuitarBendType::PRE_BEND); });

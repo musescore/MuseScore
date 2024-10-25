@@ -291,8 +291,7 @@ public:
     void transposeSemitone(int) override;
     void transposeDiatonicAlterations(mu::engraving::TransposeDirection) override;
     void getLocation() override;
-//    void execute(void (mu::engraving::Score::*)(), const muse::TranslatableString& actionName) override;
-    void execute(void (mu::engraving::Score::*)()) override;
+    void execute(void (mu::engraving::Score::*)(), const muse::TranslatableString& actionName) override;
 
     void showItem(const mu::engraving::EngravingItem* item, int staffIndex = -1) override;
     muse::async::Channel<ShowItemRequest> showItemRequested() const override;

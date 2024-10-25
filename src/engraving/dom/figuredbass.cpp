@@ -771,7 +771,7 @@ void FiguredBass::regenerateText()
     }
 
     // TODO: this `startCmd` call is possibly invalid
-    score()->startCmd(TranslatableString("undoableAction", "Update layout"));
+    score()->startCmd(TranslatableString("undoableAction", "Regenerate figured bass text"));
     triggerLayout();
     score()->endCmd();
 }

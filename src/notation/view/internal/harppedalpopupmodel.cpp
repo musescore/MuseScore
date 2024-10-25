@@ -176,7 +176,7 @@ void HarpPedalPopupModel::setDiagramPedalState(QVector<Position> pedalState)
         return;
     }
 
-    beginCommand(muse::TranslatableString("undoableAction", "Set harp diagram"));
+    beginCommand(muse::TranslatableString("undoableAction", "Edit harp pedal diagram"));
     setPopupPedalState(stdPedalState);
     toHarpPedalDiagram(m_item)->undoChangePedalState(getPopupPedalState());
     updateNotation();

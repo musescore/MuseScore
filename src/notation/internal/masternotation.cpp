@@ -523,7 +523,7 @@ void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
         return;
     }
 
-    undoStack()->prepareChanges(TranslatableString("undoableAction", "Parts dialog"));
+    undoStack()->prepareChanges(TranslatableString("undoableAction", "Add/remove parts"));
 
     // Delete old excerpts (that are not included in the new list)
     for (IExcerptNotationPtr excerptNotation : m_excerpts) {

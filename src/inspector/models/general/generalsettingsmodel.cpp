@@ -139,8 +139,8 @@ void GeneralSettingsModel::onCurrentNotationChanged()
 void GeneralSettingsModel::onVisibleChanged(bool visible)
 {
     const muse::TranslatableString actionName = visible
-                                                ? TranslatableString("undoableAction", "Show item(s)")
-                                                : TranslatableString("undoableAction", "Hide item(s)");
+                                                ? TranslatableString("undoableAction", "Make element(s) visible")
+                                                : TranslatableString("undoableAction", "Make element(s) invisible");
 
     beginCommand(actionName);
 

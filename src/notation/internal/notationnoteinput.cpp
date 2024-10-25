@@ -337,7 +337,7 @@ void NotationNoteInput::addNote(NoteName noteName, NoteAddingMode addingMode)
 
     mu::engraving::EditData editData(m_scoreCallbacks);
 
-    startEdit(TranslatableString("undoableAction", "Add note"));
+    startEdit(TranslatableString("undoableAction", "Enter note"));
     int inote = static_cast<int>(noteName);
     bool addToUpOnCurrentChord = addingMode == NoteAddingMode::CurrentChord;
     bool insertNewChord = addingMode == NoteAddingMode::InsertChord;
@@ -369,7 +369,7 @@ Ret NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
 {
     TRACEFUNC;
 
-    startEdit(TranslatableString("undoableAction", "Put note"));
+    startEdit(TranslatableString("undoableAction", "Enter note"));
     Ret ret = score()->putNote(pos, replace, insert);
     apply();
 
@@ -388,7 +388,7 @@ void NotationNoteInput::removeNote(const PointF& pos)
     mu::engraving::InputState& inputState = score()->inputState();
     bool restMode = inputState.rest();
 
-    startEdit(TranslatableString("undoableAction", "Remove note"));
+    startEdit(TranslatableString("undoableAction", "Delete note"));
     inputState.setRest(!restMode);
     score()->putNote(pos, false, false);
     inputState.setRest(restMode);
