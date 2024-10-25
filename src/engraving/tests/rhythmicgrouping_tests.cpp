@@ -44,7 +44,7 @@ void Engraving_RhythmicGroupingTests::group(const char* p1, const char* p2, size
     MasterScore* score = ScoreRW::readScore(RHYTHMICGRP_DATA_DIR + String::fromUtf8(p1));
     EXPECT_TRUE(score);
 
-    score->startCmd(TranslatableString("undoableAction", "Regroup notes and rests"));
+    score->startCmd(TranslatableString::untranslatable("Regroup notes and rests"));
     if (!staves) {
         score->cmdSelectAll();
         score->cmdResetNoteAndRestGroupings();

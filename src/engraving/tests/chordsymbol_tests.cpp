@@ -97,7 +97,7 @@ void Engraving_ChordSymbolTests::realizeSelectionVoiced(MasterScore* score, Voic
             e->setProperty(Pid::HARMONY_VOICING, int(voicing));
         }
     }
-    score->startCmd(TranslatableString("undoableAction", "Realize selection voiced"));
+    score->startCmd(TranslatableString::untranslatable("Realize selection voiced"));
     score->cmdRealizeChordSymbols();
     score->endCmd();
 }
@@ -199,7 +199,7 @@ TEST_F(Engraving_ChordSymbolTests, testNoSystem)
 TEST_F(Engraving_ChordSymbolTests, testTranspose)
 {
     MasterScore* score = test_pre(u"transpose");
-    score->startCmd(TranslatableString("undoableAction", "Engraving chord symbol tests"));
+    score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
     score->cmdSelectAll();
     score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
     score->endCmd();
@@ -209,7 +209,7 @@ TEST_F(Engraving_ChordSymbolTests, testTranspose)
 TEST_F(Engraving_ChordSymbolTests, testTransposePart)
 {
     MasterScore* score = test_pre(u"transpose-part");
-    score->startCmd(TranslatableString("undoableAction", "Engraving chord symbol tests"));
+    score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
     score->cmdSelectAll();
     score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4, false, true, true);
     score->endCmd(false, /*layoutAllParts = */ true);
@@ -279,13 +279,13 @@ TEST_F(Engraving_ChordSymbolTests, testRealizeConcertPitch)
 {
     MasterScore* score = test_pre(u"realize-concert-pitch");
     //concert pitch off
-    score->startCmd(TranslatableString("undoableAction", "Engraving chord symbol tests"));
+    score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
     score->cmdConcertPitchChanged(false);
     score->endCmd();
 
     //realize all chord symbols
     selectAllChordSymbols(score);
-    score->startCmd(TranslatableString("undoableAction", "Engraving chord symbol tests"));
+    score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
     score->cmdRealizeChordSymbols();
     score->endCmd();
     test_post(score, u"realize-concert-pitch");
@@ -304,7 +304,7 @@ TEST_F(Engraving_ChordSymbolTests, testRealizeTransposed)
 
     //realize all chord symbols
     selectAllChordSymbols(score);
-    score->startCmd(TranslatableString("undoableAction", "Engraving chord symbol tests"));
+    score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
     score->cmdRealizeChordSymbols();
     score->endCmd();
     test_post(score, u"realize-transpose");
@@ -319,7 +319,7 @@ TEST_F(Engraving_ChordSymbolTests, testRealizeOverrides)
     MasterScore* score = test_pre(u"realize-override");
     //realize all chord symbols
     selectAllChordSymbols(score);
-    score->startCmd(TranslatableString("undoableAction", "Engraving chord symbol tests"));
+    score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
     score->cmdRealizeChordSymbols(true, Voicing::ROOT_ONLY, HDuration::SEGMENT_DURATION);
     score->endCmd();
     test_post(score, u"realize-override");
@@ -333,7 +333,7 @@ TEST_F(Engraving_ChordSymbolTests, testRealizeTriplet)
     MasterScore* score = test_pre(u"realize-triplet");
     //realize all chord symbols
     selectAllChordSymbols(score);
-    score->startCmd(TranslatableString("undoableAction", "Engraving chord symbol tests"));
+    score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
     score->cmdRealizeChordSymbols();
     score->endCmd();
     test_post(score, u"realize-triplet");
@@ -348,7 +348,7 @@ TEST_F(Engraving_ChordSymbolTests, testRealizeDuration)
     MasterScore* score = test_pre(u"realize-duration");
     //realize all chord symbols
     selectAllChordSymbols(score);
-    score->startCmd(TranslatableString("undoableAction", "Engraving chord symbol tests"));
+    score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
     score->cmdRealizeChordSymbols();
     score->endCmd();
     test_post(score, u"realize-duration");
@@ -363,7 +363,7 @@ TEST_F(Engraving_ChordSymbolTests, testRealizeJazz)
     MasterScore* score = test_pre(u"realize-jazz");
     //realize all chord symbols
     selectAllChordSymbols(score);
-    score->startCmd(TranslatableString("undoableAction", "Engraving chord symbol tests"));
+    score->startCmd(TranslatableString::untranslatable("Engraving chord symbol tests"));
     score->cmdRealizeChordSymbols();
     score->endCmd();
     test_post(score, u"realize-jazz");

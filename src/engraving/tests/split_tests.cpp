@@ -52,7 +52,7 @@ void Engraving_SplitTests::split(const char* f1, const char* ref, int index)
     }
     ChordRest* cr = toChordRest(s->element(0));
 
-    score->startCmd(TranslatableString("undoableAction", "Engraving split tests"));
+    score->startCmd(TranslatableString::untranslatable("Engraving split tests"));
     score->cmdSplitMeasure(cr);
     score->endCmd();
 

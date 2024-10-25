@@ -97,7 +97,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
         for (Part* part : score->m_parts) {
             if (!part->show()) {
                 if (!unhide) {
-                    score->startCmd(TranslatableString("undoableAction", "Unhide instruments for save"));
+                    score->startCmd(TranslatableString::untranslatable("Unhide instruments for save"));
                     unhide = true;
                 }
                 part->undoChangeProperty(Pid::VISIBLE, true);
