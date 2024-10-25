@@ -50,18 +50,10 @@ Column {
             hoverEnabled: true
 
             onPressed: {
-                var instName = Boolean(root.padModel) ? root.padModel.instrumentName : ""
-
-                // Placeholder logic...
-                switch(root.panelMode) {
-                case PanelMode.EDIT_LAYOUT: return
-                case PanelMode.SOUND_PREVIEW:
-                    console.log("PLAYING: " + instName)
-                    break
-                case PanelMode.WRITE:
-                    console.log("WRITING: " + instName)
-                    break
+                if (!Boolean(root.padModel)) {
+                    return
                 }
+                root.padModel.triggerPad()
             }
         }
 
