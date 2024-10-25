@@ -4993,7 +4993,15 @@ void ExportMusicXml::tempoText(TempoText const* const text, staff_idx_t staff)
            muPrintable(text->xmlText()));
     */
     m_attr.doAttr(m_xml, false);
-    m_xml.startElement("direction", { { "placement", (text->placement() == PlacementV::BELOW) ? "below" : "above" } });
+    #
+
+    XmlWriter::Attributes tempoAttrs;
+    tempoAttrs = { { "placement", (text->placement() == PlacementV::BELOW) ? "below" : "above" } };
+    if (text->systemFlag()) {
+        tempoAttrs.push_back({ "system", "only-top" });
+    }
+
+    m_xml.startElement("direction", tempoAttrs);
     wordsMetronome(m_xml, m_score->style(), text, offset);
 
     if (staff) {
