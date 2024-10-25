@@ -4998,7 +4998,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, staff_idx_t staff)
     XmlWriter::Attributes tempoAttrs;
     tempoAttrs = { { "placement", (text->placement() == PlacementV::BELOW) ? "below" : "above" } };
     if (text->systemFlag()) {
-        tempoAttrs.push_back({ "system", "only-top" });
+        tempoAttrs.push_back({ "system", text->isLinked() ? "also-top" : "only-top" });
     }
 
     m_xml.startElement("direction", tempoAttrs);
