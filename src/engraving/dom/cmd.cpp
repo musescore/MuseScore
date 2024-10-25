@@ -2790,7 +2790,6 @@ void Score::cmdResetNoteAndRestGroupings()
     staff_idx_t sStaff = selection().staffStart();
     staff_idx_t eStaff = selection().staffEnd();
 
-    startCmd(TranslatableString("undoableAction", "Reset note/rest groupings"));
     for (staff_idx_t staff = sStaff; staff < eStaff; staff++) {
         track_idx_t sTrack = staff * VOICES;
         track_idx_t eTrack = sTrack + VOICES;
@@ -2800,7 +2799,7 @@ void Score::cmdResetNoteAndRestGroupings()
             }
         }
     }
-    endCmd();
+
     if (noSelection) {
         deselectAll();
     }

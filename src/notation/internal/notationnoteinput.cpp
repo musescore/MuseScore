@@ -602,9 +602,8 @@ void NotationNoteInput::addTie()
 {
     TRACEFUNC;
 
-    startEdit(TranslatableString("undoableAction", "Add tie"));
+    // Calls `startEdit` internally
     score()->cmdAddTie();
-    apply();
 
     notifyAboutStateChanged();
 

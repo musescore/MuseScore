@@ -4148,16 +4148,18 @@ void NotationInteraction::flipSelection()
 
 void NotationInteraction::addTieToSelection()
 {
-    startEdit(TranslatableString("undoableAction", "Add tie to selection"));
+    // Calls `startEdit` internally
     score()->cmdToggleTie();
-    apply();
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::addTiedNoteToChord()
 {
-    startEdit(TranslatableString("undoableAction", "Add tied note to chord"));
+    // Calls `startEdit` internally
     score()->cmdAddTie(true);
-    apply();
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::addSlurToSelection()
@@ -4166,9 +4168,8 @@ void NotationInteraction::addSlurToSelection()
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Add slur to selection"));
+    // Calls `startEdit` internally
     doAddSlur();
-    apply();
 }
 
 void NotationInteraction::addOttavaToSelection(OttavaType type)
@@ -4236,9 +4237,10 @@ void NotationInteraction::putRest(Duration duration)
         return;
     }
 
-    startEdit(TranslatableString("undoableAction", "Put rest"));
+    // Calls `startEdit` internally
     score()->cmdEnterRest(duration);
-    apply();
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::addBracketsToSelection(BracketsType type)
