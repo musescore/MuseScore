@@ -113,10 +113,10 @@ Column {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                navigation.name: root.navigationName + " Dropdown"
-                navigation.panel: root.navigationPanel
+                navigation.name: interval.navigationName + " Dropdown"
+                navigation.panel: interval.navigationPanel
                 navigation.row: interval.navigationRowStart + 1
-                navigation.accessible.name: root.titleText + " " + currentText
+                navigation.accessible.name: interval.titleText + " " + currentText
 
                 model: root.model && root.model.isPerfectStep ? [
                     { text: qsTrc("inspector", "Auto (diatonic)"), value: OrnamentTypes.TYPE_AUTO},
@@ -149,10 +149,10 @@ Column {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
 
-                navigation.name: root.navigationName + " Dropdown"
-                navigation.panel: root.navigationPanel
+                navigation.name: interval.navigationName + " Dropdown"
+                navigation.panel: interval.navigationPanel
                 navigation.row: intervalType.navigation.row + 1
-                navigation.accessible.name: root.titleText + " " + currentText
+                navigation.accessible.name: interval.titleText + " " + currentText
 
                 model:  [
                     { text: qsTrc("inspector", "Unison"), value: OrnamentTypes.STEP_UNISON},
