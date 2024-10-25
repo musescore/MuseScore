@@ -1831,6 +1831,10 @@ void TextBase::createBlocks(LayoutData* ldata) const
     String token;
     String sym;
     bool symState = false;
+
+    String prevFontFace;
+    double prevFontSize = 0;
+
     for (size_t i = 0; i < m_text.size(); i++) {
         const Char& c = m_text.at(i);
         if (state == 0) {
@@ -1880,7 +1884,7 @@ void TextBase::createBlocks(LayoutData* ldata) const
         } else if (state == 1) {
             if (c == '>') {
                 state = 0;
-                const_cast<TextBase*>(this)->prepareFormat(token, cursor);
+                const_cast<TextBase*>(this)->prepareFormat(token, cursor, prevFontFace, prevFontSize);
                 if (token == "sym") {
                     symState = true;
                     sym.clear();
@@ -1931,7 +1935,7 @@ void TextBase::createBlocks(LayoutData* ldata) const
 //---------------------------------------------------------
 //   prepareFormat - used when reading from XML and when pasting from clipboard
 //---------------------------------------------------------
-bool TextBase::prepareFormat(const String& token, CharFormat& format)
+bool TextBase::prepareFormat(const String& token, CharFormat& format, String& prevFontFace, double& prevFontSize) const
 {
     if (token == "b") {
         format.setBold(true);
@@ -1955,24 +1959,47 @@ bool TextBase::prepareFormat(const String& token, CharFormat& format)
         format.setStrike(false);
     } else if (token == "sub") {
         format.setValign(VerticalAlignment::AlignSubScript);
+        return true;
     } else if (token == "/sub") {
         format.setValign(VerticalAlignment::AlignNormal);
     } else if (token == "sup") {
         format.setValign(VerticalAlignment::AlignSuperScript);
+        return true;
     } else if (token == "/sup") {
         format.setValign(VerticalAlignment::AlignNormal);
     } else if (token.startsWith(u"font ")) {
-        String remainder = token.mid(5);
-        if (remainder.startsWith(u"size=\"")) {
-            format.setFontSize(parseNumProperty(remainder.mid(6)));
-            return true;
-        } else if (remainder.startsWith(u"face=\"")) {
-            String face = parseStringProperty(remainder.mid(6));
-            face = unEscape(face);
-            format.setFontFamily(face);
-            return true;
-        } else {
-            LOGD("cannot parse html property <%s> in text <%s>", muPrintable(token), muPrintable(m_text));
+        String remainder = token.mid(5).trimmed();
+        while (!remainder.empty()) {
+            if (remainder.startsWith(u"size=\"")) {
+                double size = parseNumProperty(remainder.mid(6));
+                remainder = remainder.mid(remainder.indexOf(u'"', 6) + 1).trimmed();
+                if (!token.endsWith(u"/")) {
+                    prevFontSize = format.fontSize();
+                }
+                format.setFontSize(size);
+            } else if (remainder.startsWith(u"face=\"")) {
+                String face = unEscape(parseStringProperty(remainder.mid(6)));
+                remainder = remainder.mid(remainder.indexOf(u'"', 6) + 1).trimmed();
+                if (!token.endsWith(u"/")) {
+                    prevFontFace = format.fontFamily();
+                }
+                format.setFontFamily(face);
+            } else if (remainder == u"/") {
+                break;
+            } else {
+                LOGD("cannot parse html property <%s> in text <%s>", muPrintable(remainder), muPrintable(m_text));
+                break;
+            }
+        }
+        return true;
+    } else if (token == u"/font") {
+        if (prevFontSize) {
+            format.setFontSize(prevFontSize);
+            prevFontSize = 0;
+        }
+        if (!prevFontFace.isEmpty()) {
+            format.setFontFamily(prevFontFace);
+            prevFontFace = u"";
         }
     }
     return false;
@@ -1981,10 +2008,21 @@ bool TextBase::prepareFormat(const String& token, CharFormat& format)
 //---------------------------------------------------------
 //   prepareFormat - used when reading from XML
 //---------------------------------------------------------
-void TextBase::prepareFormat(const String& token, TextCursor& cursor)
+void TextBase::prepareFormat(const String& token, TextCursor& cursor, String& prevFontFace, double& prevFontSize)
 {
-    if (prepareFormat(token, *cursor.format()) && cursor.format()->fontFamily() != propertyDefault(Pid::FONT_FACE).value<String>()) {
-        setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
+    if (prepareFormat(token, *cursor.format(), prevFontFace, prevFontSize)) {
+        if (cursor.format()->fontFamily() != propertyDefault(Pid::FONT_FACE).value<String>()) {
+            setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
+        }
+        if (cursor.format()->fontSize() != propertyDefault(Pid::FONT_SIZE).value<double>()) {
+            setPropertyFlags(Pid::FONT_SIZE, PropertyFlags::UNSTYLED);
+        }
+        if (cursor.format()->style() != propertyDefault(Pid::FONT_STYLE).value<FontStyle>()) {
+            setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+        }
+        if (cursor.format()->valign() != propertyDefault(Pid::TEXT_SCRIPT_ALIGN).value<VerticalAlignment>()) {
+            setPropertyFlags(Pid::TEXT_SCRIPT_ALIGN, PropertyFlags::UNSTYLED);
+        }
     }
 }
 
@@ -2234,11 +2272,16 @@ String TextBase::genText(const LayoutData* ldata) const
                 }
             }
 
-            if (format.fontSize() != fmt.fontSize()) {
-                text += String(u"<font size=\"%1\"/>").arg(format.fontSize());
-            }
-            if (format.fontFamily() != "ScoreText" && format.fontFamily() != fmt.fontFamily()) {
-                text += String(u"<font face=\"%1\"/>").arg(TextBase::escape(format.fontFamily()));
+            if (fmt.fontSize() != format.fontSize()
+                || (fmt.fontFamily() != format.fontFamily() && format.fontFamily() != "ScoreText")) {
+                text += String(u"<font");
+                if (fmt.fontSize() != format.fontSize()) {
+                    text += String(u" size=\"%1\"").arg(format.fontSize());
+                }
+                if (fmt.fontFamily() != format.fontFamily() && format.fontFamily() != "ScoreText") {
+                    text += String(u" face=\"%1\"").arg(TextBase::escape(format.fontFamily()));
+                }
+                text += u"/>"; // TODO: proper nesting and end tag "</font>"
             }
 
             VerticalAlignment va = format.valign();
