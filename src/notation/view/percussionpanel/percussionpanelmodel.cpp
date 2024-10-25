@@ -196,7 +196,7 @@ void PercussionPanelModel::writePitch(int pitch)
         undoStack->commitChanges();
     };
 
-    undoStack->prepareChanges();
+    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Write pitch"));
 
     interaction()->noteInput()->startNoteInput();
 
