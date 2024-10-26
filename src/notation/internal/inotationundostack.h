@@ -41,11 +41,9 @@ public:
 
     virtual bool canUndo() const = 0;
     virtual void undo(mu::engraving::EditData*) = 0;
-    virtual muse::async::Notification undoNotification() const = 0;
 
     virtual bool canRedo() const = 0;
     virtual void redo(mu::engraving::EditData*) = 0;
-    virtual muse::async::Notification redoNotification() const = 0;
 
     virtual void undoRedoToIdx(size_t, mu::engraving::EditData*) = 0;
 
@@ -67,6 +65,7 @@ public:
 
     virtual muse::async::Notification stackChanged() const = 0;
     virtual muse::async::Channel<ChangesRange> changesChannel() const = 0;
+    virtual muse::async::Notification undoRedoNotification() const = 0;
 };
 
 using INotationUndoStackPtr = std::shared_ptr<INotationUndoStack>;

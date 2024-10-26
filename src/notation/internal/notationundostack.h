@@ -41,11 +41,9 @@ public:
 
     bool canUndo() const override;
     void undo(mu::engraving::EditData*) override;
-    muse::async::Notification undoNotification() const override;
 
     bool canRedo() const override;
     void redo(mu::engraving::EditData*) override;
-    muse::async::Notification redoNotification() const override;
 
     void undoRedoToIdx(size_t idx, mu::engraving::EditData* editData) override;
 
@@ -67,12 +65,12 @@ public:
 
     muse::async::Notification stackChanged() const override;
     muse::async::Channel<ChangesRange> changesChannel() const override;
+    muse::async::Notification undoRedoNotification() const override;
 
 private:
     void notifyAboutNotationChanged();
     void notifyAboutStateChanged();
-    void notifyAboutUndo();
-    void notifyAboutRedo();
+    void notifyAboutUndoRedo();
 
     mu::engraving::Score* score() const;
     mu::engraving::MasterScore* masterScore() const;
@@ -82,8 +80,7 @@ private:
 
     muse::async::Notification m_notationChanged;
     muse::async::Notification m_stackStateChanged;
-    muse::async::Notification m_undoNotification;
-    muse::async::Notification m_redoNotification;
+    muse::async::Notification m_undoRedoNotification;
 };
 }
 

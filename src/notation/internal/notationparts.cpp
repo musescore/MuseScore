@@ -77,11 +77,7 @@ static QString formatInstrumentTitleOnScore(const QString& instrumentName, const
 NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
     : m_getScore(getScore), m_undoStack(undoStack), m_interaction(interaction)
 {
-    m_undoStack->undoNotification().onNotify(this, [this]() {
-        m_partChangedNotifier.changed();
-    });
-
-    m_undoStack->redoNotification().onNotify(this, [this]() {
+    m_undoStack->undoRedoNotification().onNotify(this, [this]() {
         m_partChangedNotifier.changed();
     });
 }
