@@ -46,7 +46,7 @@ public:
 
     std::string deviceName() const;
     void deviceName(const std::string newDeviceName);
-    std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection direction) const;
+    std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection direction) const override;
 
     void changedPlaying() const override;
     void changedPosition(muse::audio::secs_t secs, muse::midi::tick_t tick) const override;
