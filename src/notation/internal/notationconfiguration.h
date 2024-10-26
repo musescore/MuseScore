@@ -88,12 +88,15 @@ public:
 
     int selectionProximity() const override;
     void setSelectionProximity(int proximity) override;
+    muse::async::Channel<int> selectionProximityChanged() const override;
 
     ZoomType defaultZoomType() const override;
     void setDefaultZoomType(ZoomType zoomType) override;
 
     int defaultZoom() const override;
     void setDefaultZoom(int zoomPercentage) override;
+
+    muse::async::Notification defaultZoomChanged() const override;
 
     qreal scalingFromZoomPercentage(int zoomPercentage) const override;
     int zoomPercentageFromScaling(qreal scaling) const override;
@@ -102,6 +105,7 @@ public:
 
     int mouseZoomPrecision() const override;
     void setMouseZoomPrecision(int precision) override;
+    muse::async::Notification mouseZoomPrecisionChanged() const override;
 
     std::string fontFamily() const override;
     int fontSize() const override;
@@ -235,10 +239,13 @@ private:
     muse::async::Notification m_backgroundChanged;
     muse::async::Notification m_foregroundChanged;
 
+    muse::async::Notification m_defaultZoomChanged;
+    muse::async::Notification m_mouseZoomPrecisionChanged;
     muse::async::Channel<muse::Orientation> m_canvasOrientationChanged;
     muse::async::Channel<muse::io::path_t> m_userStylesPathChanged;
     muse::async::Notification m_scoreOrderListPathsChanged;
     muse::async::Notification m_isLimitCanvasScrollAreaChanged;
+    muse::async::Channel<int> m_selectionProximityChanged;
     muse::async::Notification m_isPlayRepeatsChanged;
     muse::async::Notification m_isPlayChordSymbolsChanged;
     muse::ValCh<int> m_pianoKeyboardNumberOfKeys;
