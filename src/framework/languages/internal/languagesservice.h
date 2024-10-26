@@ -73,6 +73,7 @@ private:
     RetVal<QString> fileHash(const io::path_t& path);
 
 private:
+    QString m_activeLanguageCode;
     LanguagesHash m_languagesHash;
     Language m_currentLanguage;
     async::Notification m_currentLanguageChanged;
