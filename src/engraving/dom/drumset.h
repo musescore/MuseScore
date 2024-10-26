@@ -23,7 +23,6 @@
 #ifndef MU_ENGRAVING_DRUMSET_H
 #define MU_ENGRAVING_DRUMSET_H
 
-#include "mscore.h"
 #include "pitchspelling.h"
 #include "../types/types.h"
 
