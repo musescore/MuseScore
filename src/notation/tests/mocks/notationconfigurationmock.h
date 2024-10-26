@@ -76,12 +76,15 @@ public:
 
     MOCK_METHOD(int, selectionProximity, (), (const, override));
     MOCK_METHOD(void, setSelectionProximity, (int), (override));
+    MOCK_METHOD(muse::async::Channel<int>, selectionProximityChanged, (), (const, override));
 
     MOCK_METHOD(ZoomType, defaultZoomType, (), (const, override));
     MOCK_METHOD(void, setDefaultZoomType, (ZoomType), (override));
 
     MOCK_METHOD(int, defaultZoom, (), (const, override));
     MOCK_METHOD(void, setDefaultZoom, (int), (override));
+
+    MOCK_METHOD(muse::async::Notification, defaultZoomChanged, (), (const, override));
 
     MOCK_METHOD(QList<int>, possibleZoomPercentageList, (), (const, override));
 
@@ -90,6 +93,7 @@ public:
 
     MOCK_METHOD(int, mouseZoomPrecision, (), (const, override));
     MOCK_METHOD(void, setMouseZoomPrecision, (int), (override));
+    MOCK_METHOD(muse::async::Notification, mouseZoomPrecisionChanged, (), (const, override));
 
     MOCK_METHOD(std::string, fontFamily, (), (const, override));
     MOCK_METHOD(int, fontSize, (), (const, override));

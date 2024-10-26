@@ -153,9 +153,18 @@ void NotationConfiguration::init()
     });
 
     settings()->setDefaultValue(DEFAULT_ZOOM_TYPE, Val(ZoomType::Percentage));
+    settings()->valueChanged(DEFAULT_ZOOM_TYPE).onReceive(nullptr, [this](const Val&) {
+        m_defaultZoomChanged.notify();
+    });
     settings()->setDefaultValue(DEFAULT_ZOOM, Val(100));
+    settings()->valueChanged(DEFAULT_ZOOM).onReceive(nullptr, [this](const Val&) {
+        m_defaultZoomChanged.notify();
+    });
     settings()->setDefaultValue(KEYBOARD_ZOOM_PRECISION, Val(2));
     settings()->setDefaultValue(MOUSE_ZOOM_PRECISION, Val(6));
+    settings()->valueChanged(MOUSE_ZOOM_PRECISION).onReceive(nullptr, [this](const Val&) {
+        m_mouseZoomPrecisionChanged.notify();
+    });
 
     settings()->setDefaultValue(USER_STYLES_PATH, Val(globalConfiguration()->userDataPath() + "/Styles"));
     settings()->valueChanged(USER_STYLES_PATH).onReceive(nullptr, [this](const Val& val) {
@@ -167,6 +176,9 @@ void NotationConfiguration::init()
     }
 
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(2));
+    settings()->valueChanged(SELECTION_PROXIMITY).onReceive(nullptr, [this](const Val& val) {
+        m_selectionProximityChanged.send(val.toInt());
+    });
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(true));
     settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(true));
     settings()->setDefaultValue(IS_PLAY_REPEATS_ENABLED, Val(true));
@@ -484,6 +496,11 @@ void NotationConfiguration::setSelectionProximity(int proximity)
     settings()->setSharedValue(SELECTION_PROXIMITY, Val(proximity));
 }
 
+Channel<int> NotationConfiguration::selectionProximityChanged() const
+{
+    return m_selectionProximityChanged;
+}
+
 ZoomType NotationConfiguration::defaultZoomType() const
 {
     return settings()->value(DEFAULT_ZOOM_TYPE).toEnum<ZoomType>();
@@ -502,6 +519,11 @@ int NotationConfiguration::defaultZoom() const
 void NotationConfiguration::setDefaultZoom(int zoomPercentage)
 {
     settings()->setSharedValue(DEFAULT_ZOOM, Val(zoomPercentage));
+}
+
+Notification NotationConfiguration::defaultZoomChanged() const
+{
+    return m_defaultZoomChanged;
 }
 
 qreal NotationConfiguration::scalingFromZoomPercentage(int zoomPercentage) const
@@ -529,6 +551,11 @@ int NotationConfiguration::mouseZoomPrecision() const
 void NotationConfiguration::setMouseZoomPrecision(int precision)
 {
     settings()->setSharedValue(MOUSE_ZOOM_PRECISION, Val(precision));
+}
+
+muse::async::Notification NotationConfiguration::mouseZoomPrecisionChanged() const
+{
+    return m_mouseZoomPrecisionChanged;
 }
 
 std::string NotationConfiguration::fontFamily() const

@@ -86,12 +86,15 @@ public:
 
     virtual int selectionProximity() const = 0;
     virtual void setSelectionProximity(int proximity) = 0;
+    virtual muse::async::Channel<int> selectionProximityChanged() const = 0;
 
     virtual ZoomType defaultZoomType() const = 0;
     virtual void setDefaultZoomType(ZoomType zoomType) = 0;
 
     virtual int defaultZoom() const = 0;
     virtual void setDefaultZoom(int zoomPercentage) = 0;
+
+    virtual muse::async::Notification defaultZoomChanged() const = 0;
 
     virtual QList<int> possibleZoomPercentageList() const = 0;
 
@@ -100,6 +103,7 @@ public:
 
     virtual int mouseZoomPrecision() const = 0;
     virtual void setMouseZoomPrecision(int precision) = 0;
+    virtual muse::async::Notification mouseZoomPrecisionChanged() const = 0;
 
     virtual std::string fontFamily() const = 0;
     virtual int fontSize() const = 0;

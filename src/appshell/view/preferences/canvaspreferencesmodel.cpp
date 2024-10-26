@@ -37,6 +37,25 @@ void CanvasPreferencesModel::load()
     setupConnections();
 }
 
+void CanvasPreferencesModel::setupConnections()
+{
+    notationConfiguration()->defaultZoomChanged().onNotify(this, [this]() {
+        emit defaultZoomChanged();
+    });
+    notationConfiguration()->mouseZoomPrecisionChanged().onNotify(this, [this]() {
+        emit mouseZoomPrecisionChanged();
+    });
+    notationConfiguration()->canvasOrientation().ch.onReceive(this, [this](muse::Orientation) {
+        emit scrollPagesOrientationChanged();
+    });
+    notationConfiguration()->isLimitCanvasScrollAreaChanged().onNotify(this, [this]() {
+        emit limitScrollAreaChanged();
+    });
+    notationConfiguration()->selectionProximityChanged().onReceive(this, [this](int selectionProximity) {
+        emit selectionProximityChanged(selectionProximity);
+    });
+}
+
 QVariantList CanvasPreferencesModel::zoomTypes() const
 {
     QVariantList types = {
@@ -138,13 +157,6 @@ void CanvasPreferencesModel::setSelectionProximity(int proximity)
 
     notationConfiguration()->setSelectionProximity(proximity);
     emit selectionProximityChanged(proximity);
-}
-
-void CanvasPreferencesModel::setupConnections()
-{
-    notationConfiguration()->canvasOrientation().ch.onReceive(this, [this](muse::Orientation) {
-        emit scrollPagesOrientationChanged();
-    });
 }
 
 ZoomType CanvasPreferencesModel::defaultZoomType() const
