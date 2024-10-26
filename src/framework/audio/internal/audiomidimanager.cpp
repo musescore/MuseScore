@@ -189,7 +189,7 @@ bool AudioMidiManager::resetToDefaultOutputDevice()
 #endif
 }
 
-async::Notification AudioMidiManager::outputDeviceChanged() const
+muse::async::Notification AudioMidiManager::outputDeviceChanged() const
 {
     return m_outputDeviceChanged;
 }
@@ -206,7 +206,7 @@ AudioDeviceList AudioMidiManager::availableOutputDevices() const
     return devices;
 }
 
-async::Notification AudioMidiManager::availableOutputDevicesChanged() const
+muse::async::Notification AudioMidiManager::availableOutputDevicesChanged() const
 {
     return m_availableOutputDevicesChanged;
 }
@@ -268,7 +268,7 @@ bool AudioMidiManager::setOutputDeviceBufferSize(unsigned int bufferSize)
     return true;
 }
 
-async::Notification AudioMidiManager::outputDeviceBufferSizeChanged() const
+muse::async::Notification AudioMidiManager::outputDeviceBufferSizeChanged() const
 {
     return m_bufferSizeChanged;
 }
@@ -332,7 +332,7 @@ bool AudioMidiManager::setOutputDeviceSampleRate(unsigned int sampleRate)
 #endif
 }
 
-async::Notification AudioMidiManager::outputDeviceSampleRateChanged() const
+muse::async::Notification AudioMidiManager::outputDeviceSampleRateChanged() const
 {
     return m_sampleRateChanged;
 }
