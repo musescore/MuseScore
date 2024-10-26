@@ -27,8 +27,6 @@
 
 #include "measure.h"
 
-#include <cmath>
-
 #include "accidental.h"
 #include "actionicon.h"
 #include "anchors.h"
@@ -61,7 +59,6 @@
 #include "segment.h"
 #include "select.h"
 #include "sig.h"
-#include "slur.h"
 #include "spacer.h"
 #include "staff.h"
 #include "stafflines.h"
@@ -72,7 +69,6 @@
 #include "tie.h"
 #include "tiemap.h"
 #include "timesig.h"
-
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
 #include "tuplet.h"

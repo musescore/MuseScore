@@ -34,7 +34,6 @@
 #include "internal/converterutils.h"
 
 #include "log.h"
-#include <iostream>
 
 using namespace mu::converter;
 using namespace mu::project;

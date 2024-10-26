@@ -24,11 +24,6 @@
 
 #include "containers.h"
 
-#include "engraving/dom/part.h"
-#include "engraving/dom/note.h"
-#include "engraving/dom/drumset.h"
-#include "engraving/dom/utils.h"
-
 #include "log.h"
 
 using namespace mu::engraving;

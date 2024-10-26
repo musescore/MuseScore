@@ -24,7 +24,6 @@
 #include "systemlayout.h"
 
 #include "realfn.h"
-#include "defer.h"
 
 #include "style/defaultstyle.h"
 

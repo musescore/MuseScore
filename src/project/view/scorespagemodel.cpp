@@ -26,8 +26,6 @@
 
 #include "actions/actiontypes.h"
 
-#include "types/projecttypes.h"
-
 using namespace mu::project;
 using namespace muse::actions;
 
