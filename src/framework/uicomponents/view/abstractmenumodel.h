@@ -19,13 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UICOMPONENTS_ABSTRACTMENUMODEL_H
-#define MUSE_UICOMPONENTS_ABSTRACTMENUMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 
 #include "async/asyncable.h"
-#include "ui/uitypes.h"
 #include "menuitem.h"
 
 #include "modularity/ioc.h"
@@ -107,5 +105,3 @@ private:
     MenuItemList m_items;
 };
 }
-
-#endif // MUSE_UICOMPONENTS_ABSTRACTMENUMODEL_H
