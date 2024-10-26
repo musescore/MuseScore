@@ -56,14 +56,14 @@ public:
     AudioDeviceID outputDevice() const override;
     bool selectOutputDevice(const AudioDeviceID& deviceId) override;
     bool resetToDefaultOutputDevice() override;
-    async::Notification outputDeviceChanged() const override;
+    muse::async::Notification outputDeviceChanged() const override;
 
     AudioDeviceList availableOutputDevices() const override;
-    async::Notification availableOutputDevicesChanged() const override;
+    muse::async::Notification availableOutputDevicesChanged() const override;
 
     unsigned int outputDeviceBufferSize() const override;
     bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
-    async::Notification outputDeviceBufferSizeChanged() const override;
+    muse::async::Notification outputDeviceBufferSizeChanged() const override;
 
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
 
@@ -75,7 +75,7 @@ public:
 
     unsigned int outputDeviceSampleRate() const override;
     bool setOutputDeviceSampleRate(unsigned int sampleRate) override;
-    async::Notification outputDeviceSampleRateChanged() const override;
+    muse::async::Notification outputDeviceSampleRateChanged() const override;
 
     std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
 
@@ -92,16 +92,16 @@ public:
 private:
     bool makeDevice(const AudioDeviceID& deviceId);
     bool reopen(const AudioDeviceID& deviceId, Spec newSpec);
-    async::Notification m_outputDeviceChanged;
+    muse::async::Notification m_outputDeviceChanged;
 
     mutable std::mutex m_devicesMutex;
     AudioDevicesListener m_devicesListener;
-    async::Notification m_availableOutputDevicesChanged;
+    muse::async::Notification m_availableOutputDevicesChanged;
 
     std::string m_deviceId;
 
-    async::Notification m_bufferSizeChanged;
-    async::Notification m_sampleRateChanged;
+    muse::async::Notification m_bufferSizeChanged;
+    muse::async::Notification m_sampleRateChanged;
     int m_audioDelayCompensate;
 
     struct IAudioDriver::Spec m_spec;
