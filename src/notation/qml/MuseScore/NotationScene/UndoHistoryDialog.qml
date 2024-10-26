@@ -30,10 +30,13 @@ StyledDialogView {
     id: root
     
     title: qsTrc("notation", "Undo/redo history")
+    modal: true
 
     contentWidth: content.implicitWidth
-    contentHeight: content.implicitHeight
+    contentHeight: 360
     margins: 16
+
+    resizable: true
 
     Component.onCompleted: {
         model.load()
@@ -44,9 +47,7 @@ StyledDialogView {
         id: model
     }
 
-    modal: true
-
-    property int selectedIndex: (() => {
+    property int selectedIndex: {
         var val = model.undoRedoActionCount() - model.undoRedoActionCurrentIdx()
         if (val < 0) {
             return 0
@@ -54,7 +55,7 @@ StyledDialogView {
             return model.undoRedoActionCount() - 1
         }
         return val
-    })()
+    }
 
     function populateList() {
         listView.model.clear() // Clear the existing model
@@ -71,107 +72,78 @@ StyledDialogView {
     ColumnLayout {
         id: content
         anchors.fill: parent
-        spacing: 20
+        spacing: 16
 
+        NavigationPanel {
+            id: navPanel
+            name: "UndoRedoItemsView"
+            section: root.navigationSection
+            direction: NavigationPanel.Vertical
+            order: 1
+            accessible.name: qsTrc("notation", "Undo/redo history list")
+        }
 
-        RowLayout {
-            Layout.fillHeight: true
+        StyledTextLabel {
             Layout.fillWidth: true
-            spacing: 24
 
-            ColumnLayout {
-                id: contentColumn
+            text: qsTrc("notation", "Select one or more actions to undo or redo")
+            font: ui.theme.bodyBoldFont
+            horizontalAlignment: Text.AlignLeft
+        }
 
-                Layout.fillHeight: true
-                Layout.preferredWidth: root.width * 0.45
+        StyledListView {
+            id: listView
 
-                spacing: 20
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-                property NavigationPanel navigationPanel: NavigationPanel {
-                    name: "UndoRedoItemsView"
-                    section: root.navigationSection
-                    direction: NavigationPanel.Vertical
-                    order: 1
-                    accessible.name: qsTrc("notation", "Undo/redo items")
+            model: ListModel {}
+
+            delegate: ListItemBlank {
+                isSelected: root.selectedIndex === model.index
+
+                navigation.panel: navPanel
+                navigation.order: index
+                navigation.accessible.name: model.text
+                navigation.accessible.row: model.index
+
+                StyledTextLabel {
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: 12
+                    anchors.right: parent.right
+                    anchors.rightMargin: 12
+
+                    text: model.text
+                    font: ui.theme.bodyBoldFont
+                    horizontalAlignment: Text.AlignLeft
                 }
 
-                StyledListView {
-                    id: listView
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: 300
-
-                    model: ListModel {}
-
-                    delegate: ListItemBlank {
-                        navigation.panel: contentColumn.navigationPanel
-                        navigation.order: index
-
-                        StyledTextLabel {
-                            text: model.text
-
-                            anchors.fill: parent
-                            anchors.centerIn: parent
-                            font: Qt.font(Object.assign({}, ui.theme.bodyBoldFont, {}))
-                            horizontalAlignment: Text.AlignLeft
-                            verticalAlignment: Text.AlignVCenter
-                        }
-
-                        onClicked: {
-                            root.selectedIndex = index // Store selected index
-                        }
-
-                        onDoubleClicked: {
-                            root.ret = { errcode: 0, value: actionIndex() }
-                            root.hide()
-                        }
-
-                        isSelected: {
-                            root.selectedIndex === index // Highlight selected item
-                        }
-
-                    }
-
-
-                    clip: true
+                onClicked: {
+                    root.selectedIndex = model.index
                 }
 
-                RowLayout {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    spacing: 24
-
-                    ColumnLayout {
-                        id: listColumn
-
-                        Layout.fillHeight: true
-                        Layout.preferredWidth: root.width * 0.45
-
-                        spacing: 20
-                    }
+                onDoubleClicked: {
+                    root.ret = { errcode: 0, value: actionIndex() }
+                    root.hide()
                 }
             }
         }
 
         ButtonBox {
-            Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
             navigationPanel.section: root.navigationSection
             navigationPanel.order: 2
 
-            // Cancel button
-            FlatButton {
-                text: qsTrc("global", "Cancel")
-                buttonRole: ButtonBoxModel.RejectRole
-                buttonId: ButtonBoxModel.Cancel
-                enabled: true
+            buttons: [ ButtonBoxModel.Cancel ]
 
-                onClicked: {
+            onStandardButtonClicked: {
+                if (buttonId === ButtonBoxModel.Cancel) {
                     root.reject()
                 }
             }
 
-            // Ok button
             FlatButton {
                 text: qsTrc("global", "OK")
                 buttonRole: ButtonBoxModel.AcceptRole
