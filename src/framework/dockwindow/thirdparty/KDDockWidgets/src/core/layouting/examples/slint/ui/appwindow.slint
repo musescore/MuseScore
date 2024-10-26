@@ -1,0 +1,100 @@
+/*
+  This file is part of KDDockWidgets.
+
+  SPDX-FileCopyrightText: 2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+  Author: Sérgio Martins <sergio.martins@kdab.com>
+
+  SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
+
+  Contact KDAB at <info@kdab.com> for commercial licensing options.
+*/
+
+import { Button, VerticalBox } from "std-widgets.slint";
+
+struct DockWidgetDescriptor {
+    isVisible: bool,
+    uniqueName: string,
+    x: length,
+    y: length,
+    width: length,
+    height: length,
+}
+
+struct SeparatorDescriptor {
+    x: length,
+    y: length,
+    width: length,
+    height: length,
+    id: int,
+    is_vertical: bool
+}
+
+export component AppWindow inherits Window {
+    preferred-width: 800px;
+    preferred-height: 800px;
+
+    callback clickme();
+    callback separator_event(int, PointerEvent);
+    callback separator_moved(int, length, length);
+    pure callback window_size_changed_callback(length, length) -> bool;
+    in property <[DockWidgetDescriptor]> dockWidgets;
+    in property <[SeparatorDescriptor]> separators;
+    in property <image> image;
+
+    layout := Rectangle {
+        visible: root.window_size_changed_callback(root.width, root.height);
+        background: white;
+        for dw in dockWidgets : Rectangle {
+            x: dw.x;
+            y: dw.y;
+            visible: dw.isVisible;
+            width: dw.width;
+            height: dw.height;
+            background: {
+                if (dw.uniqueName == "1") {
+                    return #818FB4;
+                } else if (dw.uniqueName == "2") {
+                    return #435585;
+                } else if (dw.uniqueName == "3") {
+                    return #F5E8C7;
+                } else {
+                    return #2a2932;
+                }
+            }
+
+            Image {
+                width: dw.width - 40px;
+                height: dw.height - 40px;
+                source: root.image;
+
+                image-fit: contain;
+                colorize: {
+                    if (dw.uniqueName == "3") {
+                        return #2379f4;
+                    } else {
+                        return white;
+                    }
+                }
+            }
+        }
+
+        for sep in separators : Rectangle {
+            x: sep.x;
+            y: sep.y;
+            width: sep.width;
+            height: sep.height;
+            background: black;
+            TouchArea {
+                mouse-cursor: sep.is_vertical ? row-resize : col-resize;
+
+                pointer-event(ev) => {
+                    root.separator-event(sep.id, ev);
+                }
+
+                moved => {
+                    root.separator-moved(sep.id, self.mouse-x, self.mouse-y);
+                }
+            }
+        }
+    }
+}

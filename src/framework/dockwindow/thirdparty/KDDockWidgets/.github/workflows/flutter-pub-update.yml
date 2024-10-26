@@ -1,0 +1,68 @@
+# SPDX-FileCopyrightText: 2024 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+#
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
+
+# On demand flutter action to trigger flutter pub upgrade
+
+name: (Scheduled) Runs flutter pub upgrade
+
+on:
+  schedule:
+  - cron: '0 0 1 * *' # monthly
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          ref: "main" # always main branch
+
+      - name: Install dependencies
+        run: |
+          sudo apt update -qq
+          sudo apt install wget curl file unzip zip xz-utils -y
+
+      - name: Install Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.6'
+          channel: 'stable'
+
+      - name: Setup git author name
+        uses: fregante/setup-git-user@v2
+
+      - name: pub upgrade on flutter_tests_embedder
+        run: |
+          cd tests/flutter_tests_embedder/
+          flutter pub upgrade
+
+      - name: pub upgrade on flutter_tests_embedder
+        run: |
+          cd tests/flutter_tests_embedder/
+          flutter pub upgrade --major-versions
+
+      - name: pub upgrade on examples
+        run: |
+          cd examples/flutter
+          flutter pub upgrade --major-versions
+
+      - name: pub upgrade on src/flutter
+        run: |
+          cd src/flutter
+          flutter pub upgrade --major-versions
+
+      - name: pub upgrade on src/flutter/dart
+        run: |
+          cd src/flutter/dart
+          flutter pub upgrade --major-versions
+
+      - name: Create PR
+        run: sh src/flutter/create_pub_upgrade_pr.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -69,5 +69,5 @@ SpaceInEmptyParentheses: false
 SpacesInAngles: false
 SpacesInCStyleCastParentheses: true
 SpacesInParentheses: false
+StatementAttributeLikeMacros: [emit,KDDW_CO_AWAIT]
 ...
-

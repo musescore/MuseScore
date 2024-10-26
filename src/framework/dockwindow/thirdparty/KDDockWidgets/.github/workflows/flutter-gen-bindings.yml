@@ -1,0 +1,78 @@
+# SPDX-FileCopyrightText: 2024 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+#
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
+
+# On demand flutter action to trigger binding regeneration
+
+name: Generate Flutter Bindings
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Remove clang 13
+        run: sudo apt remove clang-13 clang-14 libclang-common-13-dev libclang-common-14-dev -y
+
+      - name: Install dependencies on Ubuntu
+        run: |
+          sudo apt update -qq
+          sudo apt install libgtk-3-dev libglib2.0-dev ninja-build libspdlog-dev lld \
+          python3 python3-dev clang-15 llvm-15 libclang-15-dev libxslt-dev mesa-common-dev libglu1-mesa-dev libglib2.0-dev libfontconfig \
+          libxkbcommon-dev mesa-utils libgl1-mesa-dev libglu1-mesa-dev nlohmann-json3-dev clang-format-15 qt6-base-dev wget curl \
+          file unzip zip xz-utils -y
+
+      - name: Install Dart SDK
+        uses: dart-lang/setup-dart@v1
+
+      - name: Clone Dartagnan
+        uses: actions/checkout@v4
+        with:
+          repository: "KDABLabs/dartagnan.git"
+          submodules: true
+          ref: "main"
+          path: "${{ github.workspace }}/dartagnan"
+
+      - name: Build Dartagnan
+        run: |
+          cd dartagnan
+          cmake --preset=release -DCMAKE_INSTALL_PREFIX=installed
+          cd build-release
+          ninja && ninja install
+
+      - name: Add Dartagnan to PATH
+        run: |
+          echo ${{ github.workspace }}/dartagnan/installed/bin/ >> $GITHUB_PATH
+
+      - name: Refresh bindings
+        run: |
+          cd src/flutter
+          dart pub get
+          dart refresh_bindings.dart
+          git status
+          git checkout generated/KDDockWidgetsBindings/dart/lib/LibraryLoader.dart
+        env:
+          DARTAGNAN_CLANG_FORMAT: /usr/bin/clang-format-15
+
+      - name: Setup git author name
+        uses: fregante/setup-git-user@v2
+
+      - name: Create PR
+        run: |
+          rm -rf dartagnan/
+          find src/flutter/generated/ -name '*.cpp' -o -name '*.h' | xargs clang-format-15 -i
+          git add .
+          git commit -m "flutter: regenerate bindings"
+          git checkout -B flutter/bindings-`git log -1 --pretty=format:"%H"`
+          git push --set-upstream origin `git branch --show-current`
+          gh pr create --base main --title "flutter: Regenerate bindings" --body "Automatically created via GH action."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,7 +1,7 @@
 /*
   This file is part of KDDockWidgets.
 
-  SPDX-FileCopyrightText: 2019-2021 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+  SPDX-FileCopyrightText: 2019 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -19,9 +19,9 @@
  * @author Sérgio Martins \<sergio.martins@kdab.com\>
  */
 
-#include "docks_export.h"
+#include "kddockwidgets/docks_export.h"
 
-#include "KDDockWidgets.h"
+#include "kddockwidgets/KDDockWidgets.h"
 
 QT_BEGIN_NAMESPACE
 class QByteArray;
@@ -31,8 +31,9 @@ class TestDocks;
 
 namespace KDDockWidgets {
 
-class DockWidgetBase;
-
+namespace Core {
+class DockWidget;
+}
 
 /**
  * @brief LayoutSaver allows to save or restore layouts.
@@ -100,17 +101,30 @@ public:
      * @brief returns a list of dock widgets which were restored since the last
      * @ref restoreLayout() or @ref restoreFromFile()
      *
-     * Useful since some dock widgets can be new, and hence not be included in the last saved layout.
+     * Useful since some dock widgets can be new, and hence not be included in the last saved
+     * layout.
      */
-    QVector<DockWidgetBase *> restoredDockWidgets() const;
+    Vector<Core::DockWidget *> restoredDockWidgets() const;
 
     /**
      * @brief Sets the list of affinity names for which restore and save will be applied on.
      * Allows to save/restore only a subset of the windows.
      * Empty by default, all windows are subject to save/restore.
-     * Any window with empty affinity will also be subject to save/restore, regardless of @p affinityNames.
+     * Any window with empty affinity will also be subject to save/restore, regardless of @p
+     * affinityNames.
      */
-    void setAffinityNames(const QStringList &affinityNames);
+    void setAffinityNames(const Vector<QString> &affinityNames);
+
+    /**
+     * @brief Returns the list of opened dock widgets in the specified layout
+     *
+     * This operation does not have side-effects, no dock widget will be actually restored.
+     */
+    static Vector<QString> openedDockWidgetsInLayout(const QString &jsonFilename);
+    static Vector<QString> openedDockWidgetsInLayout(const QByteArray &serialized);
+
+    static Vector<QString> sideBarDockWidgetsInLayout(const QString &jsonFilename);
+    static Vector<QString> sideBarDockWidgetsInLayout(const QByteArray &serialized);
 
     /// @internal Returns the private-impl. Not intended for public use.
     class Private;
@@ -122,13 +136,13 @@ public:
     struct DockWidget;
     struct Position;
     struct MultiSplitter;
-    struct Frame;
+    struct Group;
     struct Placeholder;
     struct ScalingInfo;
     struct ScreenInfo;
 
 private:
-    Q_DISABLE_COPY(LayoutSaver)
+    KDDW_DELETE_COPY_CTOR(LayoutSaver)
     friend class ::TestDocks;
 
     Private *const d;

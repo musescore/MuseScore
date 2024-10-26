@@ -1,7 +1,7 @@
-#
 # This file is part of KDDockWidgets.
 #
-# SPDX-FileCopyrightText: 2020-2021 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+# SPDX-FileCopyrightText: 2020 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+#
 # SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
 #
 # Contact KDAB at <info@kdab.com> for commercial licensing options.
@@ -9,9 +9,10 @@
 
 from conans import ConanFile, CMake, tools
 
+
 class KDDockWidgetsConan(ConanFile):
     name = "kddockwidgets"
-    version = "1.4.0"
+    version = "2.1.0"
     default_user = "kdab"
     default_channel = "stable"
     license = ("https://raw.githubusercontent.com/KDAB/KDDockWidgets/master/LICENSES/GPL-2.0-only.txt",
@@ -20,7 +21,7 @@ class KDDockWidgetsConan(ConanFile):
     url = "https://github.com/KDAB/KDDockWidgets"
     description = "Advanced Dock Widget Framework for Qt"
     generators = "cmake"
-    topics = ("qt", "dockwidget" , "kdab")
+    topics = ("qt", "dockwidget", "kdab")
     settings = "os", "compiler", "build_type", "arch"
     options = {
         "qt_version": "ANY",
@@ -65,4 +66,5 @@ class KDDockWidgetsConan(ConanFile):
         self.env_info.CMAKE_PREFIX_PATH.append(self.package_folder)
 
     def package_id(self):
-        self.info.requires["qt"].minor_mode() # Check only the major and minor version!
+        # Check only the major and minor version!
+        self.info.requires["qt"].minor_mode()

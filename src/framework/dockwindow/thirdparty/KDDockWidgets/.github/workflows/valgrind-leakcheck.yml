@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: 2024 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+#
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
+
+name: Valgrind qtwidgets_leak_test
+
+on:
+  push:
+    branches:
+      - 2.1
+      - main
+  pull_request:
+    branches:
+      - 2.1
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: true
+    steps:
+      - name: Install Qt 6.6.0
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: 6.6.0
+          cache: true
+
+      - name: Install dependencies
+        run: |
+          sudo apt update -qq
+          sudo apt install lld ninja-build libspdlog-dev valgrind -y
+
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake --preset=dev6 -DKDDockWidgets_EXAMPLES=OFF
+
+      - name: Build
+        run: cmake --build build-dev6 --parallel
+
+      - name: Run valgrind
+        run: valgrind --leak-check=full --show-leak-kinds=all --gen-suppressions=all --error-exitcode=1 --exit-on-first-error=yes --suppressions=./valgrind.sup ./build-dev6/bin/qtwidgets_leak_test -platform offscreen

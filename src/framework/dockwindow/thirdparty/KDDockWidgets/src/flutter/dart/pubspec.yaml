@@ -1,0 +1,21 @@
+name: KDDockWidgets
+description: Dart counterpart of the KDDockWidget Flutter frontend
+
+environment:
+  sdk: '>=3.0.0'
+
+dependencies:
+  ffi:
+  intl:
+  meta:
+  KDDockWidgetsBindings:
+    path: '../generated/KDDockWidgetsBindings/dart/'
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  pedantic: ^1.9.0
+
+flutter:
+  assets:
+    - assets/classic_indicators/

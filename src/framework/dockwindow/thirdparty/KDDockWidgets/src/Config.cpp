@@ -1,7 +1,7 @@
 /*
   This file is part of KDDockWidgets.
 
-  SPDX-FileCopyrightText: 2019-2021 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+  SPDX-FileCopyrightText: 2019 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -11,72 +11,78 @@
 
 /**
  * @file
- * @brief Application wide config to tune certain beahviours of the framework.
+ * @brief Application wide config to tune certain framework behaviors.
  *
  * @author Sérgio Martins \<sergio.martins@kdab.com\>
  */
 
 #include "Config.h"
-#include "private/multisplitter/MultiSplitterConfig.h"
-#include "private/multisplitter/Widget.h"
-#include "private/DockRegistry_p.h"
-#include "private/Utils_p.h"
-#include "private/DragController_p.h"
-#include "FrameworkWidgetFactory.h"
+#include "core/layouting/Item_p.h"
+#include "core/DockRegistry.h"
+#include "core/DockRegistry_p.h"
+#include "core/Utils_p.h"
+#include "core/DragController_p.h"
+#include "core/ViewFactory.h"
+#include "core/Separator.h"
+#include "core/Platform.h"
+#include "core/View.h"
+#include "core/Logging_p.h"
 
-#include <QDebug>
-#include <QOperatingSystemVersion>
+#include <iostream>
+#include <limits>
 
-#ifdef KDDOCKWIDGETS_QTQUICK
-#include "private/quick/Helpers_p.h"
-#include <QQmlEngine>
-#include <QQmlContext>
-#endif
+using namespace KDDockWidgets::Core;
 
 namespace KDDockWidgets {
+
+static ViewFactory *createDefaultViewFactory()
+{
+    if (auto platform = Platform::instance())
+        return platform->createDefaultViewFactory();
+
+    KDDW_ERROR("No Platform found. Forgot to call KDDockWidgets::initFrontend(<platform>) ?");
+    std::terminate();
+    return nullptr;
+}
 
 class Config::Private
 {
 public:
     Private()
-        : m_frameworkWidgetFactory(new DefaultWidgetFactory())
+        : m_viewFactory(createDefaultViewFactory())
     {
     }
 
     ~Private()
     {
-        delete m_frameworkWidgetFactory;
+        delete m_viewFactory;
     }
 
     void fixFlags();
 
-    QQmlEngine *m_qmlEngine = nullptr;
     DockWidgetFactoryFunc m_dockWidgetFactoryFunc = nullptr;
     MainWindowFactoryFunc m_mainWindowFactoryFunc = nullptr;
-    TabbingAllowedFunc m_tabbingAllowedFunc = nullptr;
-    FrameworkWidgetFactory *m_frameworkWidgetFactory = nullptr;
+    DropIndicatorAllowedFunc m_dropIndicatorAllowedFunc = nullptr;
+    DragAboutToStartFunc m_dragAboutToStartFunc = nullptr;
+    DragEndedFunc m_dragEndedFunc = nullptr;
+    ViewFactory *m_viewFactory = nullptr;
     Flags m_flags = Flag_Default;
+    MDIFlags m_mdiFlags = MDIFlag_None;
     InternalFlags m_internalFlags = InternalFlag_None;
     CustomizableWidgets m_disabledPaintEvents = CustomizableWidget_None;
-    qreal m_draggedWindowOpacity = Q_QNAN;
+    double m_draggedWindowOpacity = std::numeric_limits<double>::quiet_NaN();
+    bool m_transparencyOnlyOverDropIndicator = false;
     int m_mdiPopupThreshold = 250;
+    int m_startDragDistance = -1;
     bool m_dropIndicatorsInhibited = false;
-#ifdef KDDOCKWIDGETS_QTQUICK
-    QtQuickHelpers m_qquickHelpers;
-#endif
+    bool m_layoutSaverStrictMode = false;
+    bool m_onlyProgrammaticDrag = false;
 };
 
 Config::Config()
     : d(new Private())
 {
     d->fixFlags();
-
-    // stuff in multisplitter/ can't include the framework widget factory, so set it here
-    auto separatorCreator = [](Layouting::Widget *parent) {
-        return Config::self().frameworkWidgetFactory()->createSeparator(parent);
-    };
-
-    Layouting::Config::self().setSeparatorFactoryFunc(separatorCreator);
 }
 
 Config &Config::self()
@@ -88,6 +94,9 @@ Config &Config::self()
 Config::~Config()
 {
     delete d;
+    if (Platform::isInitialized()) {
+        delete Platform::instance();
+    }
 }
 
 Config::Flags Config::flags() const
@@ -95,22 +104,52 @@ Config::Flags Config::flags() const
     return d->m_flags;
 }
 
+Config::MDIFlags Config::mdiFlags() const
+{
+    return d->m_mdiFlags;
+}
+
+void Config::setMDIFlags(MDIFlags flags)
+{
+    d->m_mdiFlags = flags;
+}
+
 void Config::setFlags(Flags f)
 {
-    auto dr = DockRegistry::self();
-    if (!dr->isEmpty(/*excludeBeingDeleted=*/true)) {
-        qWarning() << Q_FUNC_INFO << "Only use this function at startup before creating any DockWidget or MainWindow"
-                   << "; These are already created: " << dr->mainWindowsNames()
-                   << dr->dockWidgetNames() << dr->floatingWindows();
-        return;
+    // Most flags aren't allowed to be changed at runtime.
+    // Some are. More can be supported but they need to be examined in a case-by-case
+    // basis.
+
+    static const Flags mutableFlags = Flag::Flag_AutoHideAsTabGroups;
+    const Flags changedFlags = f ^ d->m_flags;
+    const bool nonMutableFlagsChanged = (changedFlags & ~mutableFlags);
+
+    if (nonMutableFlagsChanged) {
+        auto dr = DockRegistry::self();
+        if (!dr->isEmpty(/*excludeBeingDeleted=*/true)) {
+            std::cerr
+                << "Config::setFlags: "
+                << "Only use this function at startup before creating any DockWidget or MainWindow"
+                << "; These are already created: " << dr->mainWindowsNames().size() << dr->dockWidgetNames().size()
+                << dr->floatingWindows().size() << "\n";
+            return;
+        }
     }
 
     d->m_flags = f;
     d->fixFlags();
+}
 
-    auto multisplitterFlags = Layouting::Config::self().flags();
-    multisplitterFlags.setFlag(Layouting::Config::Flag::LazyResize, d->m_flags & Flag_LazyResize);
-    Layouting::Config::self().setFlags(multisplitterFlags);
+/** static*/
+bool Config::hasFlag(Flag flag)
+{
+    return (Config::self().flags() & flag) == flag;
+}
+
+/** static*/
+bool Config::hasMDIFlag(MDIFlag flag)
+{
+    return (Config::self().mdiFlags() & flag) == flag;
 }
 
 void Config::setDockWidgetFactoryFunc(DockWidgetFactoryFunc func)
@@ -133,81 +172,141 @@ MainWindowFactoryFunc Config::mainWindowFactoryFunc() const
     return d->m_mainWindowFactoryFunc;
 }
 
-void Config::setFrameworkWidgetFactory(FrameworkWidgetFactory *wf)
+void Config::setViewFactory(ViewFactory *wf)
 {
-    Q_ASSERT(wf);
-    delete d->m_frameworkWidgetFactory;
-    d->m_frameworkWidgetFactory = wf;
+    assert(wf);
+    delete d->m_viewFactory;
+    d->m_viewFactory = wf;
 }
 
-FrameworkWidgetFactory *Config::frameworkWidgetFactory() const
+ViewFactory *Config::viewFactory() const
 {
-    return d->m_frameworkWidgetFactory;
+    return d->m_viewFactory;
 }
 
 int Config::separatorThickness() const
 {
-    return Layouting::Config::self().separatorThickness();
+    return Item::separatorThickness;
+}
+
+int Config::layoutSpacing() const
+{
+    return Item::layoutSpacing;
 }
 
 void Config::setSeparatorThickness(int value)
 {
     if (!DockRegistry::self()->isEmpty(/*excludeBeingDeleted=*/true)) {
-        qWarning() << Q_FUNC_INFO << "Only use this function at startup before creating any DockWidget or MainWindow";
+        std::cerr
+            << "Config::setSeparatorThickness: Only use this function at startup before creating any DockWidget or MainWindow\n";
         return;
     }
 
-    Layouting::Config::self().setSeparatorThickness(value);
+    if (value < 0 || value >= 100) {
+        std::cerr << "Config::setSeparatorThickness: Invalid value" << value << "\n";
+        return;
+    }
+
+    Item::separatorThickness = value;
+    Item::layoutSpacing = value;
 }
 
-void Config::setDraggedWindowOpacity(qreal opacity)
+void Config::setLayoutSpacing(int value)
+{
+    if (!DockRegistry::self()->isEmpty(/*excludeBeingDeleted=*/true)) {
+        std::cerr
+            << "Config::setLayoutSpacing: Only use this function at startup before creating any DockWidget or MainWindow\n";
+        return;
+    }
+
+    if (value < 0 || value >= 100) {
+        std::cerr << "Config::setLayoutSpacing: Invalid value" << value << "\n";
+        return;
+    }
+
+    Item::layoutSpacing = value;
+}
+
+void Config::setDraggedWindowOpacity(double opacity)
 {
     d->m_draggedWindowOpacity = opacity;
 }
 
-qreal Config::draggedWindowOpacity() const
+void Config::setTransparencyOnlyOverDropIndicator(bool only)
+{
+    d->m_transparencyOnlyOverDropIndicator = only;
+}
+
+double Config::draggedWindowOpacity() const
 {
     return d->m_draggedWindowOpacity;
 }
 
-void Config::setTabbingAllowedFunc(TabbingAllowedFunc func)
+bool Config::transparencyOnlyOverDropIndicator() const
 {
-    d->m_tabbingAllowedFunc = func;
+    return d->m_transparencyOnlyOverDropIndicator;
 }
 
-TabbingAllowedFunc Config::tabbingAllowedFunc() const
+void Config::setDropIndicatorAllowedFunc(DropIndicatorAllowedFunc func)
 {
-    return d->m_tabbingAllowedFunc;
+    d->m_dropIndicatorAllowedFunc = func;
 }
 
-void Config::setAbsoluteWidgetMinSize(QSize size)
+DropIndicatorAllowedFunc Config::dropIndicatorAllowedFunc() const
+{
+    return d->m_dropIndicatorAllowedFunc;
+}
+
+void Config::setDragAboutToStartFunc(DragAboutToStartFunc func)
+{
+    d->m_dragAboutToStartFunc = func;
+}
+
+DragAboutToStartFunc Config::dragAboutToStartFunc() const
+{
+    return d->m_dragAboutToStartFunc;
+}
+
+void Config::setDragEndedFunc(DragEndedFunc func)
+{
+    d->m_dragEndedFunc = func;
+}
+
+DragEndedFunc Config::dragEndedFunc() const
+{
+    return d->m_dragEndedFunc;
+}
+
+void Config::setAbsoluteWidgetMinSize(Size size)
 {
     if (!DockRegistry::self()->isEmpty(/*excludeBeingDeleted=*/false)) {
-        qWarning() << Q_FUNC_INFO << "Only use this function at startup before creating any DockWidget or MainWindow";
+        std::cerr
+            << "Config::setAbsoluteWidgetMinSize: Only use this function at startup before creating any DockWidget or MainWindow\n";
         return;
     }
 
-    Layouting::Item::hardcodedMinimumSize = size;
+    Item::hardcodedMinimumSize = size;
 }
 
-QSize Config::absoluteWidgetMinSize() const
+Size Config::absoluteWidgetMinSize() const
 {
-    return Layouting::Item::hardcodedMinimumSize;
+    return Item::hardcodedMinimumSize;
 }
 
-void Config::setAbsoluteWidgetMaxSize(QSize size)
+void Config::setAbsoluteWidgetMaxSize(Size size)
 {
     if (!DockRegistry::self()->isEmpty(/*excludeBeingDeleted=*/false)) {
-        qWarning() << Q_FUNC_INFO << "Only use this function at startup before creating any DockWidget or MainWindow";
+        std::cerr
+            << "Config::setAbsoluteWidgetMinSize: Only use this function at startup before creating any DockWidget or MainWindow\n";
         return;
     }
 
-    Layouting::Item::hardcodedMaximumSize = size;
+    Item::hardcodedMaximumSize = size;
 }
 
-QSize Config::absoluteWidgetMaxSize() const
+Size Config::absoluteWidgetMaxSize() const
 {
-    return Layouting::Item::hardcodedMaximumSize;
+    return Item::hardcodedMaximumSize;
 }
 
 Config::InternalFlags Config::internalFlags() const
@@ -220,47 +319,13 @@ void Config::setInternalFlags(InternalFlags flags)
     d->m_internalFlags = flags;
 }
 
-#ifdef KDDOCKWIDGETS_QTQUICK
-void Config::setQmlEngine(QQmlEngine *qmlEngine)
-{
-    if (d->m_qmlEngine) {
-        qWarning() << Q_FUNC_INFO << "Already has QML engine";
-        return;
-    }
-
-    if (!qmlEngine) {
-        qWarning() << Q_FUNC_INFO << "Null QML engine";
-        return;
-    }
-
-    auto dr = DockRegistry::self(); // make sure our QML types are registered
-    QQmlContext *context = qmlEngine->rootContext();
-    context->setContextProperty(QStringLiteral("_kddwHelpers"), &d->m_qquickHelpers);
-    context->setContextProperty(QStringLiteral("_kddwDockRegistry"), dr);
-    context->setContextProperty(QStringLiteral("_kddwDragController"), DragController::instance());
-    context->setContextProperty(QStringLiteral("_kddw_widgetFactory"), d->m_frameworkWidgetFactory);
-
-    d->m_qmlEngine = qmlEngine;
-}
-
-QQmlEngine *Config::qmlEngine() const
-{
-    if (!d->m_qmlEngine)
-        qWarning() << "Please call KDDockWidgets::Config::self()->setQmlEngine(engine)";
-
-    return d->m_qmlEngine;
-}
-#endif
-
 void Config::Private::fixFlags()
 {
-#if defined(Q_OS_WIN)
-    if (QOperatingSystemVersion::current().majorVersion() < 10) {
-        // Aero-snap requires Windows 10
-        m_flags = m_flags & ~Flag_AeroSnapWithClientDecos;
-    } else {
+    if (Platform::instance()->supportsAeroSnap()) {
         // Unconditional now
         m_flags |= Flag_AeroSnapWithClientDecos;
+    } else {
+        m_flags = m_flags & ~Flag_AeroSnapWithClientDecos;
     }
 
     // These are mutually exclusive:
@@ -268,26 +333,23 @@ void Config::Private::fixFlags()
         // We're either using native or client decorations, let's use native.
         m_flags = m_flags & ~Flag_AeroSnapWithClientDecos;
     }
-#elif defined(Q_OS_MACOS)
-    // Not supported on macOS:
-    m_flags = m_flags & ~Flag_AeroSnapWithClientDecos;
-#else
+
+#if defined(Q_OS_LINUX)
     if (KDDockWidgets::isWayland()) {
         // Native title bar is forced on Wayland. Needed for moving the window.
         // The inner KDDW title bar is used for DnD.
         m_flags |= Flag_NativeTitleBar;
     } else {
-        // Not supported on linux/X11
         // On Linux, dragging the title bar of a window doesn't generate NonClientMouseEvents
         // at least with KWin anyway. We can make this more granular and allow it for other
         // X11 window managers
         m_flags = m_flags & ~Flag_NativeTitleBar;
-        m_flags = m_flags & ~Flag_AeroSnapWithClientDecos;
     }
 #endif
 
-#if (!defined(Q_OS_WIN) && !defined(Q_OS_MACOS))
-    // QtQuick doesn't support AeroSnap yet. Some problem with the native events not being received...
+#if (!defined(KDDW_FRONTEND_QT_WINDOWS) && !defined(Q_OS_MACOS))
+    // QtQuick doesn't support AeroSnap yet. Some problem with the native events not being
+    // received...
     m_flags = m_flags & ~Flag_AeroSnapWithClientDecos;
 #endif
 
@@ -335,13 +397,48 @@ void Config::setDropIndicatorsInhibited(bool inhibit) const
 {
     if (d->m_dropIndicatorsInhibited != inhibit) {
         d->m_dropIndicatorsInhibited = inhibit;
-        Q_EMIT DockRegistry::self()->dropIndicatorsInhibitedChanged(inhibit);
+        DockRegistry::self()->dptr()->dropIndicatorsInhibitedChanged.emit(inhibit);
     }
 }
 
 bool Config::dropIndicatorsInhibited() const
 {
     return d->m_dropIndicatorsInhibited;
+}
+
+void Config::setStartDragDistance(int pixels)
+{
+    d->m_startDragDistance = pixels;
+}
+
+int Config::startDragDistance() const
+{
+    return d->m_startDragDistance;
+}
+
+void Config::printDebug()
+{
+    std::cerr << "Flags: " << d->m_flags << d->m_internalFlags << "\n";
+}
+
+void Config::setLayoutSaverStrictMode(bool is)
+{
+    d->m_layoutSaverStrictMode = is;
+}
+
+bool Config::layoutSaverUsesStrictMode() const
+{
+    return d->m_layoutSaverStrictMode;
+}
+
+void Config::setOnlyProgrammaticDrag(bool only)
+{
+    d->m_onlyProgrammaticDrag = only;
+}
+
+bool Config::onlyProgrammaticDrag() const
+{
+    return d->m_onlyProgrammaticDrag;
 }
 
 }

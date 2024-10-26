@@ -1,0 +1,27 @@
+{
+    "version": 2,
+    "configurePresets": [
+        {
+            "name": "dev6-custom-qt",
+            "binaryDir": "${sourceDir}/build-dev6-custom-qt",
+            "description": "Preset which hardcodes Qt location instead of relying on PATH",
+            "cacheVariables": {
+                "CMAKE_PREFIX_PATH": "/data/installation/qt/qt6-dev/"
+            },
+            "inherits": [
+                "dev6"
+            ]
+        },
+        {
+            "name": "dev-asan6-custom-qt",
+            "binaryDir": "${sourceDir}/build-dev-asan6-custom-qt",
+            "description": "Preset which hardcodes Qt location instead of relying on PATH",
+            "cacheVariables": {
+                "CMAKE_PREFIX_PATH": "/data/installation/qt/qt6-dev/"
+            },
+            "inherits": [
+                "dev-asan6"
+            ]
+        }
+    ]
+}

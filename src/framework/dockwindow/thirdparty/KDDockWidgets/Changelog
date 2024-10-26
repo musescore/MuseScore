@@ -1,12 +1,91 @@
-* v1.5.0 (unreleased)
+* v2.1.1 (unreleased)
+  - Fix windows having transparency when drop indicators inhibited
+
+* v2.1.0 (08 May 2024)
+  - Added standalone layouting example using Slint
+  - Fixed DPI of icons in TitleBar.qml Looks better when using 150% and 200% scalling now.
+  - QtQuick: Fixed redock not working when mixing MDI with docking
+  - QtQuick: Allow to mix MDI with docking, as already done with QtWidgets
+  - QtQuick: Fixed MDI widgets not raising when clicked on
+  - QtQuick: Added API to set affinities via QML (#465)
+  - MDI: Don't show resize handles if widget is fixed size
+  - MDI: Fixed mouse cursor not being restored when dock widgets were overlapping
+  - MDI: Added Config::setMDIFlags() and MDIFlag_NoClickToRaise
+  - QtWidgets: Introduced MainWindowOption_QDockWidgets and MainWindowOption_ManualInit
+  - QtWidgets: Honours overriding DockWidget::closeEvent() to prevent closing
+  - QtWidgets: Fixed crash when unpinning a window
+  - Fix crash when doing sequential open() and close() calls (#326)
+  - Fix double-clicking the guest widget would make window float
+  - 3rdparty: Update to nlohmann json v3.11.3, from v3.10.5. Only relevant if you're not using
+    system nlohmann.
+  - Fixed dock widget float button when using main window nesting
+  - Fixed auto-hide overlay not updating its position when main window was resized
+  - Fixed double-click on titlebar not floating it if auto-hide flag was enabled
+  - Added Config::setLayoutSpacing(int)
+  - LayoutSaverOption::Skip now honours docked dock widgets
+  - Fixed DockWidget::addDockWidgetToContainingWindow() when using nested main windows (#386)
+
+* v2.0.0 (05 December 2023)
+  - Architecture rewrite to support more frontends besides QtWidgets and QtQuick.
+    2.0 isn't very interesting for users, but will allow developers to make KDDW
+    support other GUI frameworks more easily. Also QtQuick is now better integrated,
+    without being shoehorned with ifdefs into the QtWidgets implementation.
+    - Split into a view/controller architecture
+    - Non-gui logic moved to controllers
+    - Each controller has a gui counter part, implemented for each supported frontend
+  - Uses nlohmann JSON library (MIT) instead of QJsonDocument, for saving/restoring layouts
+  - Added Config::setStartDragDistance()
+  - Removed Config::setTabbingAllowedFunc() which was already deprecated in favor of Config::setDropIndicatorAllowedFunc()
+  - Slint and Flutter WIP. Waiting for these frameworks to support multi-window before finishing.
+  - Blacklisted Qt 6.6.1 and 6.5.3 on Windows due to QTBUG-117704
+
+* v1.7.1 (unreleased)
+ - Fixed pin button appearing by mistake when using Flag_TitleBarNoFloatButton (#359)
+ - Added Config::Flag_AutoHideAsTabGroups, which allows all tabs to go to/from sidebar at once.
+ - Fixed resize gap of auto-hide overlay resize on its left border
+ - Blacklisted Qt 6.6.1 and 6.5.3 on Windows due to QTBUG-117704
+
+* v1.7.0 (03 May 2023)
+ - Introduce DockWidget::setFloatingWindowFlags(flags). Allows for different
+   FloatingWindows to have different window flags. For example, some having
+   Qt::Tool while others having Qt::Window (#314).
+ - Fixed fixed-sized windows being able to be resized on Windows (#345)
+ - Allow restoring layouts without touching floating dock widgets
+ - Fix setDropIndicatorsInhibited(false) not showing drop indicators (#334, #337)
+ - Fix relayouting when dock widget is deleted directly (#336)
+ - Minor performance improvement: Cache TitleBar icons
+ - Save side bar overlay geometry when frame is resized
+ - Fixed case of corrupt layout when using setDockWidgetFactoryFunc()
+ - Fix layout scaling factor when main window is native
+ - Fix moving floating windows to negative positions (#321)
+ - Fixed using normal geometry of platform window if fractional scaling is enabled
+ - Allow to specify Qt::Tool or Qt::Window per floating window
+
+* v1.6.0 (14 September 2022)
+ - Minimum Qt6 version is now 6.2.0
+ - Minimum CMake version is now 3.12.0
+ - Fixed restoring of normal geometry when closing a maximized window (#259)
+ - Experimental support for docking into dock widgets which are in a MDI area.
+ - Fixed potential crash involving infinite loop between QWidget::create() and QWidget::createWinId()
+ - Moved DropIndicatorOverlayInterface::DropLocation enum to KDDockWidgets namespace scope
+ - Added Config::setDropIndicatorAllowedFunc() and corresponding example
+   (kddockwidgets_example --hide-certain-docking-indicators)
+ - Fixed case where unfloating wouldn't restore to the main window (#44 and #96)
+ - Fixed MainWindow not propagating close events to docked widgets
+ - X11: Improved detecting which window is under the cursor, by using native X11 API
+ - X11: Fixed dragging a maximized floating window. Its size is now restored to normal size when the drag starts.
+ - Added DockWidgetBase::currentTabIndex()
+ - Added InitialVisibilityOption::PreserveCurrentTab
+ - Added MainWindow::internalLayout() for advanced customization
+
+* v1.5.0 (24 November 2021)
  - Install the Python bindings to "site-packages"
  - The Python bindings for Qt6 use the "PyKDDockWidgetsQt6" namespace
  - Co-installable with Qt6
  - Adds support for non-detachable central widget, MainWindowOption_HasCentralWidget. (#225)
  - Fix corrupt layout when restoring old JSON
-
-* v1.4.1 (unreleased)
- -
+ - Fix "Unpin" button not showing up in overlayed widgets
+ - Minimum Qt version is now 5.15
 
 * v1.4.0 (16 July 2021)
   - No longer supports Qt versions less than 5.12
@@ -22,7 +101,7 @@
   - FloatingWindow now honours the dockwidget's max-size, if there's a single
     dock widget docked. Tabbed cases are more difficult since QStackedLayout doesn't
     propagate size constraints.
-  - Added MainWindowBase::frameCountChanged()
+  - Added MainWindowBase::groupCountChanged()
   - Introduced Config::setDropIndicatorsInhibited(), which allows you to disable support
   for drop indicators while dragging.
   - Fixed embedding the main window into a non-kddw main window (#204, #168)

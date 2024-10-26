@@ -1,0 +1,8 @@
+site_name: KDDockWidgets
+site_url: https://github.com/KDAB/KDDockWidgets/
+docs_dir: docs_devel
+nav:
+  - Home: index.md
+  - Concepts: concepts.md
+  - About: about.md
+theme: readthedocs

@@ -36,7 +36,7 @@ version of ECM is < 5.83)::
 
   <prefix>_VERSION_STRING - <version> (use <prefix>_VERSION instead)
 
-If CMake policy CMP0048 is not NEW, the following CMake variables will also
+If CMake policy CMP0048 is not ``NEW``, the following CMake variables will also
 be set::
 
   PROJECT_VERSION_MAJOR   - <major>
@@ -44,14 +44,14 @@ be set::
   PROJECT_VERSION_PATCH   - <patch>
   PROJECT_VERSION         - <version>
 
-For backward-compatibility, if CMake policy CMP0048 is not NEW, also this variable is set
+For backward-compatibility, if CMake policy CMP0048 is not ``NEW``, also this variable is set
 (only if the minimum required version of ECM is < 5.83)::
 
   PROJECT_VERSION_STRING  - <version> (use PROJECT_VERSION instead)
 
-If the VERSION_HEADER option is used, a simple C header is generated with the
+If the ``VERSION_HEADER`` option is used, a simple C header is generated with the
 given filename. If filename is a relative path, it is interpreted as relative
-to CMAKE_CURRENT_BINARY_DIR.  The generated header contains the following
+to ``CMAKE_CURRENT_BINARY_DIR``.  The generated header contains the following
 macros::
 
    <prefix>_VERSION_MAJOR  - <major> as an integer
@@ -64,15 +64,15 @@ macros::
 next 8 bits and ``<major>`` in the remaining bits.  Note that ``<patch>`` and
 ``<minor>`` must be less than 256.
 
-If the PACKAGE_VERSION_FILE option is used, a simple CMake package version
-file is created using the write_basic_package_version_file() macro provided by
+If the ``PACKAGE_VERSION_FILE`` option is used, a simple CMake package version
+file is created using the ``write_basic_package_version_file()`` macro provided by
 CMake. It should be installed in the same location as the Config.cmake file of
-the library so that it can be found by find_package().  If the filename is a
-relative path, it is interpreted as relative to CMAKE_CURRENT_BINARY_DIR. The
-optional COMPATIBILITY option is forwarded to
-write_basic_package_version_file(), and defaults to AnyNewerVersion.
+the library so that it can be found by ``find_package()``.  If the filename is a
+relative path, it is interpreted as relative to ``CMAKE_CURRENT_BINARY_DIR``. The
+optional ``COMPATIBILITY`` option is forwarded to
+``write_basic_package_version_file()``, and defaults to ``AnyNewerVersion``.
 
-If CMake policy CMP0048 is NEW, an alternative form of the command is
+If CMake policy CMP0048 is ``NEW``, an alternative form of the command is
 available::
 
   ecm_setup_version(PROJECT
@@ -81,14 +81,14 @@ available::
                     [VERSION_HEADER <filename>]
                     [PACKAGE_VERSION_FILE <filename>] )
 
-This will use the version information set by the project() command.
-VARIABLE_PREFIX defaults to the project name.  Note that PROJECT must be the
+This will use the version information set by the ``project()`` command.
+``VARIABLE_PREFIX`` defaults to the project name.  Note that ``PROJECT`` must be the
 first argument.  In all other respects, it behaves like the other form of the
 command.
 
 Since pre-1.0.0.
 
-COMPATIBILITY option available since 1.6.0.
+``COMPATIBILITY`` option available since 1.6.0.
 #]=======================================================================]
 
 include(CMakePackageConfigHelpers)
@@ -132,16 +132,17 @@ function(ecm_setup_version _version)
 
     if(use_project_version)
         set(_version "${PROJECT_VERSION}")
-        set(_major "${PROJECT_VERSION_MAJOR}")
-        set(_minor "${PROJECT_VERSION_MINOR}")
-        set(_patch "${PROJECT_VERSION_PATCH}")
+        # drop leading 0 from values to avoid bogus octal values in c/C++ e.g. with 08 or 09
+        string(REGEX REPLACE "0*([0-9]+)" "\\1" _major "${PROJECT_VERSION_MAJOR}")
+        string(REGEX REPLACE "0*([0-9]+)" "\\1" _minor "${PROJECT_VERSION_MINOR}")
+        string(REGEX REPLACE "0*([0-9]+)" "\\1" _patch "${PROJECT_VERSION_PATCH}")
     else()
         string(REGEX REPLACE "^0*([0-9]+)\\.[0-9]+\\.[0-9]+.*" "\\1" _major "${_version}")
         string(REGEX REPLACE "^[0-9]+\\.0*([0-9]+)\\.[0-9]+.*" "\\1" _minor "${_version}")
         string(REGEX REPLACE "^[0-9]+\\.[0-9]+\\.0*([0-9]+).*" "\\1" _patch "${_version}")
     endif()
 
-    if(NOT ESV_SOVERSION)
+    if(NOT DEFINED ESV_SOVERSION) # use DEFINED, so "0" as valid SO version is not evaluated to FALSE
         set(ESV_SOVERSION ${_major})
     endif()
 

@@ -1,0 +1,2 @@
+shiboken6-generator == 6.6.0
+pyside6 == 6.6.0

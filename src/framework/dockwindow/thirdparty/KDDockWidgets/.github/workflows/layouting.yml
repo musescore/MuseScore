@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: 2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+#
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
+
+name: Layouting library
+
+on:
+  push:
+    branches:
+      - 2.1
+      - 2.0
+      - main
+  pull_request:
+    branches:
+      - 2.1
+      - 2.0
+      - main
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - ubuntu-22.04
+          - windows-2022
+          - macos-12
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Install ninja
+        uses: turtlesec-no/get-ninja@main
+
+      - name: Make sure MSVC is found when Ninja generator is in use
+        if: ${{ runner.os == 'Windows' }}
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Configure
+        run: cmake --preset=dev-none
+
+      - name: Build from top-level
+        run: cmake --build build-dev-none --parallel

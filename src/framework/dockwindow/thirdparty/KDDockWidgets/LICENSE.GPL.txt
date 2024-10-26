@@ -1,4 +1,4 @@
- The KDDockWidgets software is Copyright (C) 2018-2021 Klaralvdalens Datakonsult AB.
+ The KDDockWidgets software © Klaralvdalens Datakonsult AB.
 
  You may use, distribute and copy the KDDockWidgets software under the terms of
  the GNU General Public License version 2 or under the terms of GNU General

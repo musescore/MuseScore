@@ -1,0 +1,50 @@
+# SPDX-FileCopyrightText: 2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+#
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
+
+# Builds the flutter frontend
+# Doesn't run tests yet though
+
+name: Flutter
+
+on:
+  push:
+    branches:
+      - 2.1
+      - main
+  pull_request:
+    branches:
+      - 2.1
+      - main
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - ubuntu-latest
+
+        preset:
+          - name: release-flutter
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Install dependencies on Ubuntu
+        run: |
+          sudo apt update -qq
+          sudo apt install libgtk-3-dev libglib2.0-dev ninja-build -y
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.13.7'
+          channel: 'stable'
+
+      - name: Configure project
+        run: cmake -S . -B ./build-${{ matrix.preset.name }} --preset ${{ matrix.preset.name }}
+
+      - name: Build Project ${{ matrix.preset.build_preset_arg }}
+        run: cmake --build ./build-${{ matrix.preset.name }}

@@ -1,0 +1,164 @@
+{
+  "folders": [
+    {
+      "name": "kddockwidgets",
+      "path": "."
+    }
+  ],
+  "extensions": {
+    "recommendations": [
+      "vadimcn.vscode-lldb",
+      "llvm-vs-code-extensions.vscode-clangd",
+      "Dart-Code.dart-code",
+      "Dart-Code.flutter",
+      "mhutchie.git-graph",
+      "Gruntfuggly.todo-tree",
+      "bbenoist.QML",
+      "ms-vscode.cmake-tools"
+    ]
+  },
+  "settings": {
+    "files.trimTrailingWhitespace": true,
+    "editor.formatOnSave": true,
+    "C_Cpp.autocompleteAddParentheses": true,
+    "clangd.arguments": [
+      "-header-insertion=never",
+      "--clang-tidy=false"
+    ],
+    "todo-tree.tree.scanMode": "workspace only",
+    "todo-tree.tree.disableCompactFolders": false,
+    "todo-tree.tree.showBadges": true,
+    "todo-tree.general.tags": [
+      "TODO"
+    ],
+    "testMate.cpp.test.executables": "{build-dev}/**/*{tst}*",
+    "todo-tree.filtering.excludeGlobs": [
+      "**/ECM",
+      "**/3rdparty"
+    ],
+    "cmake.copyCompileCommands": "${workspaceFolder:kddockwidgets}/compile_commands.json",
+    "files.insertFinalNewline": true,
+    "files.associations": {
+      "*.code-workspace.template": "json"
+    }
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Current Target (LLDB)",
+        "type": "lldb",
+        "request": "launch",
+        "program": "${command:cmake.launchTargetPath}",
+        "args": [],
+        "cwd": "${command:cmake.buildDirectory}",
+        "env": {
+          "KDDW_TEST_FRONTEND": "1"
+        }
+      },
+      {
+        "name": "Example via Wayland",
+        "type": "lldb",
+        "request": "launch",
+        "program": "kwin_wayland",
+        "args": [
+          "--width",
+          "1600",
+          "--height",
+          "1600",
+          "${command:cmake.launchTargetPath} -platform wayland"
+        ],
+        "cwd": "${command:cmake.buildDirectory}"
+      },
+      {
+        "name": "Current Target (VS)",
+        "type": "cppvsdbg",
+        "request": "launch",
+        "program": "${command:cmake.launchTargetPath}",
+        "args": [],
+        "cwd": "${command:cmake.buildDirectory}",
+        "sourceFileMap": {
+          "C:/work/build/qt5_workdir/w/s": "${QTDIR}/../Src",
+          "Q:/qt5_workdir/w/s": "${QTDIR}/../Src",
+          "C:/Users/qt/work/install": "${QTDIR}/../Src",
+          "C:/Users/qt/work/qt": "${QTDIR}/../Src"
+        }
+      },
+      {
+        "name": "Flutter attach",
+        "request": "attach",
+        "type": "dart",
+        "packages": "tests/flutter_tests_embedder/.dart_tool/package_config.json",
+        "vmServiceUri": "${command:dart.promptForVmService}"
+      },
+      {
+        "name": "Flutter test (dart)",
+        "request": "launch",
+        "type": "dart",
+        "flutterMode": "debug",
+        "cwd": "${workspaceFolder:kddockwidgets}/tests/flutter_tests_embedder/",
+        "deviceId": "kddw_test_gltf_embedder",
+        "args": [
+          "-v"
+        ]
+      },
+      {
+        "name": "Flutter example (dart)",
+        "request": "launch",
+        "type": "dart",
+        "flutterMode": "debug",
+        "cwd": "${workspaceFolder:kddockwidgets}/examples/flutter",
+        "deviceId": "linux"
+      },
+      {
+        "name": "Flutter example (native)",
+        "request": "launch",
+        "type": "lldb",
+        "program": "${workspaceFolder:kddockwidgets}/examples/flutter/build/linux/x64/debug/bundle/kddockwidgets_flutter_example",
+        "cwd": "${workspaceFolder:kddockwidgets}"
+      },
+      {
+        "name": "Flutter example (native,wait)",
+        "request": "launch",
+        "type": "lldb",
+        "program": "${workspaceFolder:kddockwidgets}/examples/flutter/build/linux/x64/debug/bundle/kddockwidgets_flutter_example",
+        "cwd": "${workspaceFolder:kddockwidgets}",
+        "args": [
+          "--wait"
+        ]
+      }
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "problemMatcher": [],
+        "label": "Run current target under valgrind",
+        "command": "/usr/bin/valgrind",
+        "type": "shell",
+        "args": [
+          "${command:cmake.launchTargetPath}"
+        ],
+        "presentation": {
+          "reveal": "always"
+        },
+        "options": {
+          "cwd": "${command:cmake.buildDirectory}"
+        }
+      },
+      {
+        "label": "Run Qt Assistant",
+        "type": "shell",
+        "command": "assistant",
+        "problemMatcher": []
+      },
+      {
+        "label": "Run Qt Designer",
+        "type": "shell",
+        "command": "designer",
+        "problemMatcher": []
+      }
+    ]
+  }
+}

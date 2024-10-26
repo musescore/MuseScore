@@ -1,0 +1,8 @@
+linter:
+  rules:
+
+analyzer:
+  errors:
+    unused_import: false
+    file_names: false
+    undefined_hidden_name: false

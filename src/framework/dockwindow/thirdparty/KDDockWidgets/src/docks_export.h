@@ -1,7 +1,7 @@
 /*
   This file is part of KDDockWidgets.
 
-  SPDX-FileCopyrightText: 2019-2021 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+  SPDX-FileCopyrightText: 2019 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
   Author: Sérgio Martins <sergio.martins@kdab.com>
 
   SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -9,8 +9,9 @@
   Contact KDAB at <info@kdab.com> for commercial licensing options.
 */
 
-#ifndef KD_DOCKS_EXPORT_H
-#define KD_DOCKS_EXPORT_H
+#pragma once
+
+#ifdef KDDW_FRONTEND_QT
 
 #include <QtCore/QtGlobal>
 
@@ -33,6 +34,29 @@
 #define DOCKS_EXPORT_FOR_UNIT_TESTS Q_DECL_IMPORT
 #endif
 #endif
+#endif
+
+#else // non-Qt
+
+
+#ifdef DARTAGNAN_BINDINGS_RUN
+
+// no-op if bindings are being generated
+#define DOCKS_EXPORT
+#define DOCKS_EXPORT_FOR_UNIT_TESTS
+
+#else
+
+// Auto-generated in build directory, defines DOCKS_EXPORT
+#include "kddockwidgets_export.h"
+
+// DOCKS_EXPORT_FOR_UNIT_TESTS
+#if defined(DOCKS_DEVELOPER_MODE)
+#define DOCKS_EXPORT_FOR_UNIT_TESTS DOCKS_EXPORT
+#else
+#define DOCKS_EXPORT_FOR_UNIT_TESTS
+#endif
+
 #endif
 
 #endif

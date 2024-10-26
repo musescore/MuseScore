@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<typesystem package="KDDockWidgetsBindings">
+    <primitive-type name="int"/>
+    <primitive-type name="bool"/>
+    <primitive-type name="char"/>
+    <primitive-type name="float"/>
+    <primitive-type name="double"/>
+
+    <object-type name="QString" />
+    <namespace-type name="Qt">
+        <enum-type name="CursorShape" />
+        <enum-type name="WindowFlags" />
+    </namespace-type>
+
+    <namespace-type name="KDDockWidgets">
+        <include file-name="KDDockWidgets.h" location="local"/>
+        <object-type name="Event">
+            <enum-type identified-by-value="Type" />
+        </object-type>
+        <object-type name="Config" />
+        <object-type name="LayoutSaver" />
+        <object-type name="DockRegistry" />
+        <value-type name="InitialOption" />
+        <enum-type name="MainWindowOption" flags="MainWindowOptions" />
+        <enum-type name="DropLocation" />
+        <enum-type name="Location" />
+        <enum-type name="InitialVisibilityOption" />
+        <enum-type name="AddingOption" />
+        <enum-type name="DefaultSizeMode" />
+        <enum-type name="FrontendType" />
+        <enum-type name="IconPlace" />
+        <enum-type name="LayoutSaverOption" flags="LayoutSaverOptions" />
+        <enum-type name="DockWidgetOption" flags="DockWidgetOptions" />
+
+        <value-type name="Size" />
+        <value-type name="Rect" />
+        <value-type name="Point" />
+        <value-type name="Margins" />
+
+        <namespace-type name="Core">
+            <object-type name="Object" />
+            <value-type name="CreateViewOptions" />
+            <object-type name="DelayedCall" />
+            <object-type name="Platform" />
+            <object-type name="View" />
+            <object-type name="ViewFactory" />
+            <object-type name="Controller" />
+            <object-type name="Layout" />
+            <object-type name="DropArea">
+                <include file-name="core/DropArea.h" location="local"/>
+            </object-type>
+            <object-type name="Group" />
+            <object-type name="Stack">
+                <include file-name="core/Stack.h" location="local"/>
+            </object-type>
+            <object-type name="TabBar" />
+            <object-type name="TitleBar">
+                <include file-name="core/TitleBar.h" location="local"/>
+            </object-type>
+            <object-type name="Separator" />
+            <object-type name="SideBar" />
+            <object-type name="FloatingWindow" />
+            <object-type name="DropIndicatorOverlay" />
+            <object-type name="ClassicDropIndicatorOverlay" />
+            <object-type name="DockWidget" />
+            <object-type name="MainWindow">
+                <include file-name="core/MainWindow.h" location="local"/>
+            </object-type>
+            <object-type name="ClassicIndicatorWindowViewInterface" />
+            <object-type name="Item" />
+            <enum-type name="ViewType" />
+        </namespace-type>
+
+        <namespace-type name="flutter">
+            <object-type name="ViewFactory" />
+            <object-type name="Platform">
+                <enum-type identified-by-value="DisplayType" />
+            </object-type>
+            <object-type name="DropArea" />
+            <object-type name="View" />
+            <object-type name="Stack" />
+            <object-type name="TitleBar" />
+            <object-type name="TabBar" />
+            <object-type name="Group" />
+            <object-type name="DockWidget" />
+            <object-type name="Window" />
+            <object-type name="MainWindow" />
+            <object-type name="IndicatorWindow" />
+        </namespace-type>
+
+    </namespace-type>
+</typesystem>

@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: 2024 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+#
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
+
+name: 'build-against-qt6-asan'
+description: 'Builds and runs KDDW tests against a Qt6 built with ASAN/UBSAN'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

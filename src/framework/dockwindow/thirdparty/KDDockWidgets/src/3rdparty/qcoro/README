@@ -1,0 +1,2 @@
+qcoro is only used by a Flutter developer-mode build, used by the tests.
+Allows to pause the C++ tests and return to flutter event loop to process events, for example for waiting for window activation.

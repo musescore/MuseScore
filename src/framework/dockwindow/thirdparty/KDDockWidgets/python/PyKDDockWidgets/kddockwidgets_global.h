@@ -1,7 +1,7 @@
 /*
   This file is part of KDDockWidgets.
 
-  SPDX-FileCopyrightText: 2020-2021 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+  SPDX-FileCopyrightText: 2020 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
   Author: Renato Araujo Oliveira Filho <renato.araujo@kdab.com>
 
   SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
@@ -11,6 +11,10 @@
 
 #pragma once
 
+// We only support Qt backend
+#define KDDW_FRONTEND_QT 1
+#define KDDW_FRONTEND_QTWIDGETS 1
+
 // Make "signals:", "slots:" visible as access specifiers
 #define QT_ANNOTATE_ACCESS_SPECIFIER(a) __attribute__((annotate(#a)))
 
@@ -18,11 +22,14 @@
 #define PYTHON_BINDINGS
 
 #ifndef QT_WIDGETS_LIB
-# define QT_WIDGETS_LIB
+#define QT_WIDGETS_LIB
 #endif
 
-#include <kddockwidgets/MainWindowBase.h>
-#include <kddockwidgets/MainWindow.h>
-#include <kddockwidgets/DockWidgetBase.h>
-#include <kddockwidgets/DockWidget.h>
+#include <kddockwidgets/KDDockWidgets.h>
 #include <kddockwidgets/LayoutSaver.h>
+#include <kddockwidgets/Config.h>
+#include <kddockwidgets/core/views/MainWindowViewInterface.h>
+#include <kddockwidgets/core/views/DockWidgetViewInterface.h>
+#include <kddockwidgets/qtwidgets/views/MainWindow.h>
+#include <kddockwidgets/qtwidgets/views/DockWidget.h>
+#include <kddockwidgets/qtcommon/View.h>
