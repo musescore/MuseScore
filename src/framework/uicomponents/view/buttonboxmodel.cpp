@@ -22,6 +22,8 @@
 
 #include "buttonboxmodel.h"
 
+#include "containers.h"
+
 #include "log.h"
 
 using namespace muse::uicomponents;
