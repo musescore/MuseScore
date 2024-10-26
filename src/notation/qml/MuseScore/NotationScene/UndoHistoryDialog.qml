@@ -39,20 +39,19 @@ StyledDialogView {
     resizable: true
 
     Component.onCompleted: {
-        model.load()
         populateList()
     }
 
-    UndoRedoModel {
-        id: model
+    UndoRedoHistoryModel {
+        id: undoRedoHistoryModel
     }
 
     property int selectedIndex: {
-        var val = model.undoRedoActionCount() - model.undoRedoActionCurrentIdx()
+        var val = undoRedoHistoryModel.undoRedoActionCount() - undoRedoHistoryModel.undoRedoActionCurrentIdx()
         if (val < 0) {
             return 0
-        } else if ((val > 0) && (val >= model.undoRedoActionCount())) {
-            return model.undoRedoActionCount() - 1
+        } else if ((val > 0) && (val >= undoRedoHistoryModel.undoRedoActionCount())) {
+            return undoRedoHistoryModel.undoRedoActionCount() - 1
         }
         return val
     }
@@ -60,13 +59,13 @@ StyledDialogView {
     function populateList() {
         listView.model.clear() // Clear the existing model
 
-        for (var i = model.undoRedoActionCount() - 1; i >= 0; i--) {
-            listView.model.append({ text: model.undoRedoActionNameAtIdx(i) }) // Add each action name
+        for (var i = undoRedoHistoryModel.undoRedoActionCount() - 1; i >= 0; i--) {
+            listView.model.append({ text: undoRedoHistoryModel.undoRedoActionNameAtIdx(i) }) // Add each action name
         }
     }
 
     function actionIndex() {
-        return model.undoRedoActionCount() - selectedIndex - 1
+        return undoRedoHistoryModel.undoRedoActionCount() - selectedIndex - 1
     }
 
     ColumnLayout {

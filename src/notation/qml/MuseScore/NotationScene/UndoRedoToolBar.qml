@@ -42,7 +42,7 @@ Item {
         accessible.name: qsTrc("notation", "Undo redo toolbar")
     }
 
-    UndoRedoModel {
+    UndoRedoToolbarModel {
         id: model
     }
 
