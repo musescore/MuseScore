@@ -313,7 +313,7 @@ void EditStaff::bboxClicked(QAbstractButton* button)
 
 void EditStaff::apply()
 {
-    size_t index = m_staff->score()->undoStack()->getCurIdx();
+    size_t index = m_staff->score()->undoStack()->currentIndex();
     applyStaffProperties();
     applyPartProperties();
     m_staff->score()->undoStack()->mergeCommands(index);

@@ -97,12 +97,12 @@ void NotationUndoStack::undoRedoToIdx(size_t idx, mu::engraving::EditData* editD
         return;
     }
 
-    if ((stack->getCurIdx() > idx)) {
-        while ((stack->getCurIdx() > idx) && canUndo()) {
+    if (stack->currentIndex() > idx) {
+        while (stack->currentIndex() > idx && canUndo()) {
             undo(editData);
         }
     } else {
-        while ((stack->getCurIdx() <= idx) && canRedo()) {
+        while (stack->currentIndex() <= idx && canRedo()) {
             redo(editData);
         }
     }
@@ -178,7 +178,7 @@ void NotationUndoStack::unlock()
 
 bool NotationUndoStack::isLocked() const
 {
-    return undoStack()->locked();
+    return undoStack()->isLocked();
 }
 
 const muse::TranslatableString NotationUndoStack::topMostUndoActionName() const
@@ -213,7 +213,7 @@ size_t NotationUndoStack::undoRedoActionCount() const
         return muse::nidx;
     }
 
-    return undoStack()->getSize();
+    return undoStack()->size();
 }
 
 size_t NotationUndoStack::undoRedoActionCurrentIdx() const
@@ -222,7 +222,7 @@ size_t NotationUndoStack::undoRedoActionCurrentIdx() const
         return muse::nidx;
     }
 
-    return undoStack()->getCurIdx();
+    return undoStack()->currentIndex();
 }
 
 const muse::TranslatableString NotationUndoStack::undoRedoActionNameAtIdx(size_t idx) const
@@ -231,7 +231,7 @@ const muse::TranslatableString NotationUndoStack::undoRedoActionNameAtIdx(size_t
         return {};
     }
 
-    if (auto action = undoStack()->getAtIndex(idx)) {
+    if (auto action = undoStack()->atIndex(idx)) {
         return action->actionName();
     }
 

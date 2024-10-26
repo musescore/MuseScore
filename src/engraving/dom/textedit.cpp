@@ -109,10 +109,10 @@ void TextBase::startEdit(EditData& ed)
     ted->e = this;
     ted->cursor()->startEdit();
 
-    assert(!score()->undoStack()->active());        // make sure we are not in a Cmd
+    assert(!score()->undoStack()->hasActiveCommand()); // make sure we are not in a Cmd
 
     ted->oldXmlText = xmlText();
-    ted->startUndoIdx = score()->undoStack()->getCurIdx();
+    ted->startUndoIdx = score()->undoStack()->currentIndex();
 
     const LayoutData* ldata = this->ldata();
     if (!ldata || ldata->layoutInvalid) {
@@ -157,7 +157,7 @@ void TextBase::endEdit(EditData& ed)
 
     //! NOTE: Current index can be less than the start index if the text element is newly added and immediately removed through
     //! undo (the "add element" command will have been popped from the stack before the calling of this method)...
-    const bool textWasEdited = undo->getCurIdx() > ted->startUndoIdx;
+    const bool textWasEdited = undo->currentIndex() > ted->startUndoIdx;
     if (textWasEdited) {
         undo->mergeCommands(ted->startUndoIdx);
         undo->last()->filterChildren(Filter::TextEdit, this);
@@ -204,9 +204,9 @@ void TextBase::endEdit(EditData& ed)
             Filter::Link,
         };
 
-        if (newlyAdded && !undo->current()->hasUnfilteredChildren(filters, this)) {
+        if (newlyAdded && !undo->activeCommand()->hasUnfilteredChildren(filters, this)) {
             for (Filter f : filters) {
-                undo->current()->filterChildren(f, this);
+                undo->activeCommand()->filterChildren(f, this);
             }
 
             ted->setDeleteText(true); // mark this text element for deletion

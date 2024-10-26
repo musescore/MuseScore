@@ -203,44 +203,53 @@ private:
 
 class UndoStack
 {
-    UndoMacro* curCmd = nullptr;
-    std::vector<UndoMacro*> list;
-    std::vector<int> stateList;
-    int nextState = 0;
-    int cleanState = 0;
-    size_t curIdx = 0;
-    bool isLocked = false;
-
-    void remove(size_t idx);
-
 public:
     UndoStack();
     ~UndoStack();
 
-    bool locked() const;
-    void setLocked(bool val);
-    bool active() const { return curCmd != 0; }
+    bool isLocked() const;
+    void setLocked(bool locked);
+
+    bool hasActiveCommand() const { return m_activeCommand != nullptr; }
+
     void beginMacro(Score*, const TranslatableString& actionName);
     void endMacro(bool rollback);
-    void push(UndoCommand*, EditData*);        // push & execute
-    void push1(UndoCommand*);
+
+    void pushAndPerform(UndoCommand*, EditData*);
+    void pushWithoutPerforming(UndoCommand*);
     void pop();
-    bool canUndo() const { return curIdx > 0; }
-    bool canRedo() const { return curIdx < list.size(); }
-    bool isClean() const { return cleanState == stateList[curIdx]; }
-    size_t getSize() const { return list.size(); }
-    size_t getCurIdx() const { return curIdx; }
-    UndoMacro* current() const { return curCmd; }
-    UndoMacro* last() const { return curIdx > 0 ? list[curIdx - 1] : 0; }
-    UndoMacro* prev() const { return curIdx > 1 ? list[curIdx - 2] : 0; }
-    UndoMacro* next() const { return canRedo() ? list[curIdx] : 0; }
-    UndoMacro* getAtIndex(size_t idx) const { return idx >= 0 && idx < list.size() ? list[idx] : 0; }
+
+    bool canUndo() const { return m_currentIndex > 0; }
+    bool canRedo() const { return m_currentIndex < m_macroList.size(); }
+    bool isClean() const { return m_cleanState == m_stateList[m_currentIndex]; }
+
+    size_t size() const { return m_macroList.size(); }
+    size_t currentIndex() const { return m_currentIndex; }
+
+    UndoMacro* activeCommand() const { return m_activeCommand; }
+
+    UndoMacro* last() const { return m_currentIndex > 0 ? m_macroList[m_currentIndex - 1] : nullptr; }
+    UndoMacro* prev() const { return m_currentIndex > 1 ? m_macroList[m_currentIndex - 2] : nullptr; }
+    UndoMacro* next() const { return canRedo() ? m_macroList[m_currentIndex] : nullptr; }
+    UndoMacro* atIndex(size_t idx) const { return idx >= 0 && idx < m_macroList.size() ? m_macroList[idx] : nullptr; }
+
     void undo(EditData*);
     void redo(EditData*);
     void reopen();
 
     void mergeCommands(size_t startIdx);
-    void cleanRedoStack() { remove(curIdx); }
+    void cleanRedoStack() { remove(m_currentIndex); }
+
+private:
+    void remove(size_t idx);
+
+    UndoMacro* m_activeCommand = nullptr;
+    std::vector<UndoMacro*> m_macroList;
+    std::vector<int> m_stateList;
+    int m_nextState = 0;
+    int m_cleanState = 0;
+    size_t m_currentIndex = 0;
+    bool m_isLocked = false;
 };
 
 class InsertPart : public UndoCommand
