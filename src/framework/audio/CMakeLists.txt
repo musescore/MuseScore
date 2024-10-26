@@ -59,6 +59,8 @@ elseif(OS_IS_MAC)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/audiomidimanager.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/audiomidimanager.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.mm
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.h
         ${JACK_SRC}
