@@ -20,10 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TREMOLOSINGLECHORD_H
-#define MU_ENGRAVING_TREMOLOSINGLECHORD_H
-
-#include <memory>
+#pragma once
 
 #include "engravingitem.h"
 
@@ -107,7 +104,6 @@ private:
     muse::draw::PainterPath m_path;
     bool m_playTremolo = true;
 
-    int m_lines = 0;         // derived from _subtype
+    int m_lines = 0; // derived from _subtype
 };
 } // namespace mu::engraving
-#endif

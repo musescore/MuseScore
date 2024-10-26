@@ -31,9 +31,9 @@
 #include "dom/part.h"
 #include "dom/segment.h"
 #include "dom/tempotext.h"
+#include "dom/text.h"
 #include "dom/undo.h"
 #include "utils/scorerw.h"
-#include "utils/scorecomp.h"
 
 using namespace mu;
 using namespace mu::engraving;

@@ -24,12 +24,12 @@
 #include <string>
 
 #ifndef NO_QT_SUPPORT
-#include <QString>
+class QString;
 #endif
 
-#include "types/string.h"
-
 namespace muse {
+class String;
+
 std::string trc(const char* context, const char* key, const char* disambiguation = nullptr, int n = -1);
 
 String mtrc(const char* context, const char* key, const char* disambiguation = nullptr, int n = -1);
@@ -41,10 +41,10 @@ QString qtrc(const char* context, const char* key, const char* disambiguation = 
 QString qtrc(const char* context, const String& key, const char* disambiguation = nullptr, int n = -1);
 QString qtrc(const char* context, const String& key, const String& disambiguation, int n = -1);
 #endif
+}
 
 #ifdef NO_QT_SUPPORT
 #define QT_TRANSLATE_NOOP(ctx, msg) msg
 #endif
 
 #define QT_TRANSLATE_NOOP_U16(ctx, msg) u##msg
-}
