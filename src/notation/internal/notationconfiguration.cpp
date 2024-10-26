@@ -205,9 +205,21 @@ void NotationConfiguration::init()
     });
 
     settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
+    settings()->valueChanged(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE).onReceive(nullptr, [this](const Val& val) {
+        m_colorNotesOutsideOfUsablePitchRangeChanged.send(val.toBool());
+    });
     settings()->setDefaultValue(WARN_GUITAR_BENDS, Val(true));
+    settings()->valueChanged(WARN_GUITAR_BENDS).onReceive(nullptr, [this](const Val& val) {
+        m_warnGuitarBendsChanged.send(val.toBool());
+    });
     settings()->setDefaultValue(REALTIME_DELAY, Val(750));
+    settings()->valueChanged(REALTIME_DELAY).onReceive(nullptr, [this](const Val& val) {
+        m_delayBetweenNotesInRealTimeModeMillisecondsChanged.send(val.toInt());
+    });
     settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(500));
+    settings()->valueChanged(NOTE_DEFAULT_PLAY_DURATION).onReceive(nullptr, [this](const Val& val) {
+        m_notePlayDurationMillisecondsChanged.send(val.toInt());
+    });
 
     settings()->setDefaultValue(FIRST_SCORE_ORDER_LIST_KEY,
                                 Val(globalConfiguration()->appDataPath().toStdString() + "instruments/orders.xml"));
@@ -738,6 +750,11 @@ void NotationConfiguration::setColorNotesOutsideOfUsablePitchRange(bool value)
     settings()->setSharedValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(value));
 }
 
+muse::async::Channel<bool> NotationConfiguration::colorNotesOutsideOfUsablePitchRangeChanged() const
+{
+    return m_colorNotesOutsideOfUsablePitchRangeChanged;
+}
+
 bool NotationConfiguration::warnGuitarBends() const
 {
     return settings()->value(WARN_GUITAR_BENDS).toBool();
@@ -747,6 +764,11 @@ void NotationConfiguration::setWarnGuitarBends(bool value)
 {
     mu::engraving::MScore::warnGuitarBends = value;
     settings()->setSharedValue(WARN_GUITAR_BENDS, Val(value));
+}
+
+muse::async::Channel<bool> NotationConfiguration::warnGuitarBendsChanged() const
+{
+    return m_warnGuitarBendsChanged;
 }
 
 int NotationConfiguration::delayBetweenNotesInRealTimeModeMilliseconds() const
@@ -759,6 +781,11 @@ void NotationConfiguration::setDelayBetweenNotesInRealTimeModeMilliseconds(int d
     settings()->setSharedValue(REALTIME_DELAY, Val(delayMs));
 }
 
+muse::async::Channel<int> NotationConfiguration::delayBetweenNotesInRealTimeModeMillisecondsChanged() const
+{
+    return m_delayBetweenNotesInRealTimeModeMillisecondsChanged;
+}
+
 int NotationConfiguration::notePlayDurationMilliseconds() const
 {
     return settings()->value(NOTE_DEFAULT_PLAY_DURATION).toInt();
@@ -768,6 +795,11 @@ void NotationConfiguration::setNotePlayDurationMilliseconds(int durationMs)
 {
     mu::engraving::MScore::defaultPlayDuration = durationMs;
     settings()->setSharedValue(NOTE_DEFAULT_PLAY_DURATION, Val(durationMs));
+}
+
+muse::async::Channel<int> NotationConfiguration::notePlayDurationMillisecondsChanged() const
+{
+    return m_notePlayDurationMillisecondsChanged;
 }
 
 void NotationConfiguration::setTemplateModeEnabled(std::optional<bool> enabled)

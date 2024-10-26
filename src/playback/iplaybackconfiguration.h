@@ -36,12 +36,15 @@ public:
 
     virtual bool playNotesWhenEditing() const = 0;
     virtual void setPlayNotesWhenEditing(bool value) = 0;
+    virtual muse::async::Channel<bool> playNotesWhenEditingChanged() const = 0;
 
     virtual bool playChordWhenEditing() const = 0;
     virtual void setPlayChordWhenEditing(bool value) = 0;
+    virtual muse::async::Channel<bool> playChordWhenEditingChanged() const = 0;
 
     virtual bool playHarmonyWhenEditing() const = 0;
     virtual void setPlayHarmonyWhenEditing(bool value) = 0;
+    virtual muse::async::Channel<bool> playHarmonyWhenEditingChanged() const = 0;
 
     virtual PlaybackCursorType cursorType() const = 0;
 

@@ -77,6 +77,7 @@ public:
 
     virtual bool dynamicsApplyToAllVoices() const = 0;
     virtual void setDynamicsApplyToAllVoices(bool v) = 0;
+    virtual muse::async::Channel<bool> dynamicsApplyToAllVoicesChanged() const = 0;
 
     virtual Color formattingColor() const = 0;
     virtual muse::async::Channel<Color> formattingColorChanged() const = 0;

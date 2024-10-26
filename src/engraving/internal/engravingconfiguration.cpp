@@ -104,6 +104,9 @@ void EngravingConfiguration::init()
     VOICE_COLORS[ALL_VOICES_IDX] = VoiceColor { std::move(ALL_VOICES_COLOR), currentColor };
 
     settings()->setDefaultValue(DYNAMICS_APPLY_TO_ALL_VOICES, Val(true));
+    settings()->valueChanged(DYNAMICS_APPLY_TO_ALL_VOICES).onReceive(nullptr, [this](const Val& val) {
+        m_dynamicsApplyToAllVoicesChanged.send(val.toBool());
+    });
 
     settings()->setDefaultValue(FORMATTING_COLOR, Val(Color("#A0A0A4").toQColor()));
     settings()->setDescription(FORMATTING_COLOR, muse::trc("engraving", "Formatting color"));
@@ -302,6 +305,11 @@ bool EngravingConfiguration::dynamicsApplyToAllVoices() const
 void EngravingConfiguration::setDynamicsApplyToAllVoices(bool v)
 {
     settings()->setSharedValue(DYNAMICS_APPLY_TO_ALL_VOICES, Val(v));
+}
+
+muse::async::Channel<bool> EngravingConfiguration::dynamicsApplyToAllVoicesChanged() const
+{
+    return m_dynamicsApplyToAllVoicesChanged;
 }
 
 muse::async::Notification EngravingConfiguration::scoreInversionChanged() const
