@@ -29,6 +29,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <math.h>
+#include <algorithm>
 #include <thread>
 #include <chrono>
 
@@ -587,7 +588,7 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     deviceSpec.sampleRate = jackSamplerate;
     g_samplerate = jackSamplerate;
     // FIX: at samplerate change, this need to be adjusted
-    g_frameslimit = static_cast<msecs_t>((double)g_samplerate * (double)FRAMESLIMIT / 1000.0d);
+    g_frameslimit = static_cast<msecs_t>((double)g_samplerate * (double)FRAMESLIMIT / 1000.0L);
     if (spec.sampleRate != jackSamplerate) {
         LOGW() << "Musescores samplerate: " << spec.sampleRate << ", is NOT the same as jack's: " << jackSamplerate;
         // FIX: enable this if it is possible for user to adjust samplerate (AUDIO_SAMPLE_RATE_KEY)
