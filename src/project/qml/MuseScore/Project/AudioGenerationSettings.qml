@@ -55,6 +55,10 @@ RadioButtonGroup {
         id: settingsModel
     }
 
+    Component.onCompleted: {
+        settingsModel.load()
+    }
+
     model: [
         { text: qsTrc("project/save", "Never"), type: GenerateAudioTimePeriodType.Never },
         { text: qsTrc("project/save", "Always"), type: GenerateAudioTimePeriodType.Always },
