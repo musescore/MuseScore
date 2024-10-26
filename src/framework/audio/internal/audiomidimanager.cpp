@@ -299,7 +299,7 @@ unsigned int AudioMidiManager::outputDeviceSampleRate() const
 bool AudioMidiManager::setOutputDeviceSampleRate(unsigned int sampleRate)
 {
     LOGE("------ setSamplerate: %u", sampleRate);
-    if (m_spec.sampleRate == (int)sampleRate) {
+    if (m_spec.sampleRate == sampleRate) {
         LOGE("------ SAME setSamplerate, doing nothing ------");
         return true;
     }
