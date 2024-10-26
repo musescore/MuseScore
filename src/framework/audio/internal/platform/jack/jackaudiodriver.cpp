@@ -94,7 +94,8 @@ void musescore_state_do_seek()
     auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(now - musescore_act_time);
     auto ms = static_cast<msecs_t>(diff.count());
     auto millis = static_cast<msecs_t>((double)musescore_act_seek * 1000 / (double)g_samplerate);
-    millis = std::max(millis - ms, 0L);
+
+    millis = static_cast<msecs_t>(std::max(static_cast<long int>(millis - ms), 0L));
     LOGW("Jack mst: really do musescore-seek to %lu (%lims) (diff: %i)  mf=%u/%li jf=%u lag: %lims",
          musescore_act_seek, millis, muse_frame - jack_frame, muse_frame, mpos_frame, jack_frame, ms);
     s_jackDriver->remoteSeek(millis);
