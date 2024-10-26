@@ -58,7 +58,6 @@
 #include "engraving/dom/factory.h"
 #include "engraving/style/defaultstyle.h"
 #include "engraving/style/style.h"
-#include "engraving/compat/dummyelement.h"
 
 #include "notation/utilities/engravingitempreviewpainter.h"
 
