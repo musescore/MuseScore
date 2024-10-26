@@ -45,6 +45,14 @@ void GeneralPreferencesModel::load()
     languagesService()->needRestartToApplyLanguageChangeChanged().onReceive(this, [this](bool need) {
         setIsNeedRestart(need);
     });
+
+    configuration()->startupModeType().ch.onReceive(this, [this](const StartupModeType&) {
+        emit startupModesChanged();
+    });
+
+    configuration()->startupScorePath().ch.onReceive(this, [this](const muse::io::path_t&) {
+        emit startupModesChanged();
+    });
 }
 
 void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
@@ -204,8 +212,8 @@ GeneralPreferencesModel::StartModeList GeneralPreferencesModel::allStartupModes(
         StartMode mode;
         mode.type = type;
         mode.title = modeTitles[type];
-        mode.checked = configuration()->startupModeType() == type;
-        mode.scorePath = canSelectScorePath ? configuration()->startupScorePath().toQString() : QString();
+        mode.checked = configuration()->startupModeType().val == type;
+        mode.scorePath = canSelectScorePath ? configuration()->startupScorePath().val.toQString() : QString();
         mode.canSelectScorePath = canSelectScorePath;
 
         modes << mode;
@@ -229,7 +237,7 @@ void GeneralPreferencesModel::setCurrentStartupMode(int modeIndex)
     }
 
     StartupModeType selectedType = modes[modeIndex].type;
-    if (selectedType == configuration()->startupModeType()) {
+    if (selectedType == configuration()->startupModeType().val) {
         return;
     }
 
@@ -239,7 +247,7 @@ void GeneralPreferencesModel::setCurrentStartupMode(int modeIndex)
 
 void GeneralPreferencesModel::setStartupScorePath(const QString& scorePath)
 {
-    if (scorePath.isEmpty() || scorePath == configuration()->startupScorePath().toQString()) {
+    if (scorePath.isEmpty() || scorePath == configuration()->startupScorePath().val.toQString()) {
         return;
     }
 

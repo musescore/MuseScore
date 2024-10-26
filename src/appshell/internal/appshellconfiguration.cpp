@@ -63,7 +63,14 @@ void AppShellConfiguration::init()
     settings()->setDefaultValue(HAS_COMPLETED_FIRST_LAUNCH_SETUP, Val(false));
 
     settings()->setDefaultValue(STARTUP_MODE_TYPE, Val(StartupModeType::StartEmpty));
+    settings()->valueChanged(STARTUP_MODE_TYPE).onReceive(nullptr, [this](const Val& val) {
+        m_startupModeTypeChanged.send(val.toEnum<StartupModeType>());
+    });
+
     settings()->setDefaultValue(STARTUP_SCORE_PATH, Val(projectConfiguration()->myFirstProjectPath().toStdString()));
+    settings()->valueChanged(STARTUP_SCORE_PATH).onReceive(nullptr, [this](const Val& val) {
+        m_startupScorePathChanged.send(val.toString());
+    });
 
     fileSystem()->makePath(sessionDataPath());
 }
@@ -78,9 +85,12 @@ void AppShellConfiguration::setHasCompletedFirstLaunchSetup(bool has)
     settings()->setSharedValue(HAS_COMPLETED_FIRST_LAUNCH_SETUP, Val(has));
 }
 
-StartupModeType AppShellConfiguration::startupModeType() const
+ValCh<StartupModeType> AppShellConfiguration::startupModeType() const
 {
-    return settings()->value(STARTUP_MODE_TYPE).toEnum<StartupModeType>();
+    ValCh<StartupModeType> result;
+    result.ch = m_startupModeTypeChanged;
+    result.val = settings()->value(STARTUP_MODE_TYPE).toEnum<StartupModeType>();
+    return result;
 }
 
 void AppShellConfiguration::setStartupModeType(StartupModeType type)
@@ -88,9 +98,12 @@ void AppShellConfiguration::setStartupModeType(StartupModeType type)
     settings()->setSharedValue(STARTUP_MODE_TYPE, Val(type));
 }
 
-muse::io::path_t AppShellConfiguration::startupScorePath() const
+muse::ValCh<muse::io::path_t> AppShellConfiguration::startupScorePath() const
 {
-    return settings()->value(STARTUP_SCORE_PATH).toString();
+    ValCh<muse::io::path_t> result;
+    result.ch = m_startupScorePathChanged;
+    result.val = settings()->value(STARTUP_SCORE_PATH).toString();
+    return result;
 }
 
 void AppShellConfiguration::setStartupScorePath(const muse::io::path_t& scorePath)

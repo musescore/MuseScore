@@ -48,7 +48,7 @@ void SessionsManager::deinit()
         return;
     }
 
-    if (configuration()->startupModeType() != StartupModeType::ContinueLastSession) {
+    if (configuration()->startupModeType().val != StartupModeType::ContinueLastSession) {
         reset();
     }
 }

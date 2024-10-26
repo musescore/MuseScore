@@ -63,10 +63,11 @@ void LanguagesService::init()
 
     ValCh<QString> languageCode = configuration()->currentLanguageCode();
     setCurrentLanguage(languageCode.val);
+    m_activeLanguageCode = languageCode.val;
 
-    languageCode.ch.onReceive(this, [this](const QString&) {
+    languageCode.ch.onReceive(this, [this](const QString& newLanguageCode) {
         //! NOTE To change the language at the moment, a restart is required
-        m_needRestartToApplyLanguageChange = true;
+        m_needRestartToApplyLanguageChange = newLanguageCode != m_activeLanguageCode;
         m_needRestartToApplyLanguageChangeChanged.send(m_needRestartToApplyLanguageChange);
     });
 
