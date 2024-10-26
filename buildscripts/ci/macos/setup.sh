@@ -34,7 +34,7 @@ brew install cmake --formula --quiet
 wget -q https://github.com/jackaudio/jack2-releases/releases/download/v1.9.22/jack2-macOS-universal-v1.9.22.tar.gz
 tar xvf jack2-macOS-universal-v1.9.22.tar.gz
 ls -ltr
-installer -pkg ./jack2-osx-1.9.22.pkg -target /
+sudo installer -pkg ./jack2-osx-1.9.22.pkg -target /
 
 # Download dependencies
 echo "Download dependencies"
