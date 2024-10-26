@@ -74,7 +74,6 @@ elseif(OS_IS_MAC)
     )
 endif()
 
-
 set(MODULE_SRC
     ${DRIVER_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/midimodule.cpp
@@ -101,9 +100,15 @@ if (OS_IS_MAC)
     find_library(CoreMIDI NAMES CoreMIDI)
     find_library(CoreAudio NAMES CoreAudio)
     set(MODULE_LINK ${MODULE_LINK} ${CoreMIDI} ${CoreAudio})
+    if (MUSE_MODULE_AUDIO_JACK)
+        find_package(Jack REQUIRED)
+        set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${JACK_INCLUDE_DIRS})
+        set(MODULE_LINK ${MODULE_LINK} ${JACK_LDFLAGS} pthread)
+    endif()
 elseif (OS_IS_WIN)
     set(MODULE_LINK ${MODULE_LINK} winmm)
 elseif (OS_IS_LIN)
+    # FIX: why does jack sources compile without a find_library here?
     find_package(ALSA REQUIRED)
     set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${ALSA_INCLUDE_DIRS} )
     set(MODULE_LINK ${MODULE_LINK} ${ALSA_LIBRARIES} pthread )

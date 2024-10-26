@@ -23,6 +23,14 @@ set(MODULE_ALIAS muse::audio)
 
 include(GetPlatformInfo)
 
+set(JACK_SRC "")
+if (MUSE_MODULE_AUDIO_JACK)
+    set(JACK_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.h
+    )
+endif(MUSE_MODULE_AUDIO_JACK)
+
 if (OS_IS_WIN AND (NOT MINGW))
     set(DRIVER_SRC
         #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.cpp
@@ -38,13 +46,6 @@ if (OS_IS_WIN AND (NOT MINGW))
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/audiodeviceslistener.h
     )
 elseif(OS_IS_LIN OR OS_IS_FBSD OR MINGW)
-    set(JACK_SRC "")
-    if (MUSE_MODULE_AUDIO_JACK)
-        set(JACK_SRC
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.h
-           )
-    endif(MUSE_MODULE_AUDIO_JACK)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/audiomidimanager.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/audiomidimanager.h
@@ -55,18 +56,12 @@ elseif(OS_IS_LIN OR OS_IS_FBSD OR MINGW)
         ${JACK_SRC}
        )
 elseif(OS_IS_MAC)
-    set(JACK_SRC "")
-    if (MUSE_MODULE_AUDIO_JACK)
-        set(JACK_SRC
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.h
-           )
-    endif(MUSE_MODULE_AUDIO_JACK)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/audiomidimanager.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/audiomidimanager.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.mm
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.h
+        ${JACK_SRC}
     )
 
     set_source_files_properties(
