@@ -91,7 +91,7 @@ private:
     void setTitleBarVisible(bool visible);
     void setIsHorizontalPanel(bool is);
 
-    KDDockWidgets::DockWidgetBase* currentDockWidget() const;
+    KDDockWidgets::Core::DockWidget* currentDockWidget() const;
     QVariant currentDockProperty(const char* propertyName) const;
 
     QObject* currentNavigationSection() const;

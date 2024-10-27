@@ -83,7 +83,7 @@ QVariantList DockFrameModel::tabs() const
         return result;
     }
 
-    for (const KDDockWidgets::DockWidgetBase* dock : m_frame->dockWidgets()) {
+    for (const KDDockWidgets::Core::DockWidget* dock : m_frame->dockWidgets()) {
         QVariantMap tab;
         tab["title"] = dock->title();
         tab[CONTEXT_MENU_MODEL_PROPERTY] = dock->property(CONTEXT_MENU_MODEL_PROPERTY);
@@ -247,7 +247,7 @@ QRect DockFrameModel::highlightingRect() const
     return QRect();
 }
 
-KDDockWidgets::DockWidgetBase* DockFrameModel::currentDockWidget() const
+KDDockWidgets::Core::DockWidget* DockFrameModel::currentDockWidget() const
 {
     return m_frame && !m_frame->isEmpty() ? m_frame->currentDockWidget() : nullptr;
 }

@@ -169,6 +169,8 @@ if(KDDockWidgets_FRONTENDS)
     endforeach()
 endif()
 
+message("============== ${KDDockWidgets_FRONTENDS}")
+
 if(KDDockWidgets_FRONTENDS)
     if("qtwidgets" IN_LIST KDDockWidgets_FRONTENDS)
         find_package(Qt${QT_VERSION_MAJOR} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS Widgets)

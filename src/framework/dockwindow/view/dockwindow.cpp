@@ -72,12 +72,12 @@ static void clearRegistry()
 
     registry->clear();
 
-    for (KDDockWidgets::DockWidgetBase* dock : registry->dockwidgets()) {
+    for (KDDockWidgets::Core::DockWidget* dock : registry->dockwidgets()) {
         registry->unregisterDockWidget(dock);
     }
 
     for (KDDockWidgets::Frame* frame : registry->frames()) {
-        for (KDDockWidgets::DockWidgetBase* dock : frame->dockWidgets()) {
+        for (KDDockWidgets::Core::DockWidget* dock : frame->dockWidgets()) {
             frame->removeWidget(dock);
         }
 
@@ -469,7 +469,7 @@ void DockWindow::addDock(DockBase* dock, Location location, const DockBase* rela
 
     registerDock(dock);
 
-    KDDockWidgets::DockWidgetBase* relativeDock = relativeTo ? relativeTo->dockWidget() : nullptr;
+    KDDockWidgets::Core::DockWidget* relativeDock = relativeTo ? relativeTo->dockWidget() : nullptr;
 
     auto visibilityOption = dock->isVisible() ? KDDockWidgets::InitialVisibilityOption::StartVisible
                             : KDDockWidgets::InitialVisibilityOption::StartHidden;

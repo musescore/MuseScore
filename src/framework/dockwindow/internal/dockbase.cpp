@@ -28,9 +28,9 @@
 
 #include "log.h"
 
-#include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
+#include "thirdparty/KDDockWidgets/src/core/DockWidgetQuick.h"
 #include "thirdparty/KDDockWidgets/src/private/quick/FrameQuick_p.h"
-#include "thirdparty/KDDockWidgets/src/private/FloatingWindow_p.h"
+#include "thirdparty/KDDockWidgets/src/core/FloatingWindow_p.h"
 
 namespace muse::dock {
 static QSize adjustSizeByConstraints(const QSize& size, const QSize& min, const QSize& max)
@@ -46,11 +46,11 @@ static bool sizeInRange(const QSize& size, const QSize& min, const QSize& max)
     return widthInRange && heightInRange;
 }
 
-class DockWidgetImpl : public KDDockWidgets::DockWidgetQuick
+class DockWidgetImpl : public KDDockWidgets::Core::DockWidget
 {
 public:
     DockWidgetImpl(const QString& uniqueName)
-        : KDDockWidgets::DockWidgetQuick(uniqueName)
+        : KDDockWidgets::Core::DockWidget(uniqueName)
     {
         setObjectName(uniqueName);
     }
@@ -211,7 +211,7 @@ DockType DockBase::type() const
     return m_properties.type;
 }
 
-KDDockWidgets::DockWidgetQuick* DockBase::dockWidget() const
+KDDockWidgets::Core::DockWidget *DockBase::dockWidget() const
 {
     return m_dockWidget;
 }
@@ -572,13 +572,13 @@ void DockBase::componentComplete()
     writeProperties();
     listenFloatingChanges();
 
-    connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::widthChanged, this, [this]() {
+    connect(m_dockWidget, &KDDockWidgets::Core::DockWidget::widthChanged, this, [this]() {
         if (m_dockWidget) {
             setWidth(m_dockWidget->width());
         }
     });
 
-    connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::heightChanged, this, [this]() {
+    connect(m_dockWidget, &KDDockWidgets::Core::DockWidget::heightChanged, this, [this]() {
         if (m_dockWidget) {
             setHeight(m_dockWidget->height());
         }
@@ -675,7 +675,7 @@ void DockBase::listenFloatingChanges()
 
     auto frameConn = std::make_shared<QMetaObject::Connection>();
 
-    connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::parentChanged, this, [this, frameConn]() {
+    connect(m_dockWidget, &KDDockWidgets::Core::DockWidget::parentChanged, this, [this, frameConn]() {
         if (frameConn) {
             disconnect(*frameConn);
             doSetFloating(false);
