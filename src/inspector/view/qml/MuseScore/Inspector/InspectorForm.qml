@@ -79,6 +79,8 @@ Rectangle {
 
         spacing: 12
 
+        cacheBuffer: contentHeight
+
         function ensureContentVisible(invisibleContentHeight) {
             if (sectionList.contentY + invisibleContentHeight > 0) {
                 sectionList.contentY += invisibleContentHeight
