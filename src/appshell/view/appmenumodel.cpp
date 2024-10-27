@@ -119,6 +119,17 @@ void AppMenuModel::setupConnections()
         MenuItem& pluginsItem = findMenu("menu-plugins");
         pluginsItem.setSubitems(makePluginsMenuSubitems());
     });
+
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        auto stack = undoStack();
+        if (stack) {
+            stack->stackChanged().onNotify(this, [this]() {
+                updateUndoRedoItems();
+            });
+        }
+
+        updateUndoRedoItems();
+    });
 }
 
 MenuItem* AppMenuModel::makeMenuItem(const ActionCode& actionCode, MenuItemRole menuRole)
@@ -169,6 +180,7 @@ MenuItem* AppMenuModel::makeEditMenu()
     MenuItemList editItems {
         makeMenuItem("undo"),
         makeMenuItem("redo"),
+        makeMenuItem("undo-history"),
         makeSeparator(),
         makeMenuItem("notation-cut"),
         makeMenuItem("notation-copy"),
@@ -186,6 +198,29 @@ MenuItem* AppMenuModel::makeEditMenu()
     };
 
     return makeMenu(TranslatableString("appshell/menu/edit", "&Edit"), editItems, "menu-edit");
+}
+
+mu::notation::INotationUndoStackPtr AppMenuModel::undoStack() const
+{
+    mu::notation::INotationPtr notation = globalContext()->currentNotation();
+    return notation ? notation->undoStack() : nullptr;
+}
+
+void AppMenuModel::updateUndoRedoItems()
+{
+    auto stack = undoStack();
+
+    MenuItem& undoItem = findItem(ActionCode("undo"));
+    const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
+    undoItem.setTitle(undoActionName.isEmpty()
+                      ? TranslatableString("action", "Undo")
+                      : TranslatableString("action", "Undo ‘%1’").arg(undoActionName));
+
+    MenuItem& redoItem = findItem(ActionCode("redo"));
+    const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
+    redoItem.setTitle(redoActionName.isEmpty()
+                      ? TranslatableString("action", "Redo")
+                      : TranslatableString("action", "Redo ‘%1’").arg(redoActionName));
 }
 
 MenuItem* AppMenuModel::makeViewMenu()

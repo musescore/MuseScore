@@ -1205,7 +1205,7 @@ void EditStyle::showEvent(QShowEvent* ev)
 {
     setValues();
     pageList->setFocus();
-    globalContext()->currentNotation()->undoStack()->prepareChanges();
+    globalContext()->currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Edit style"));
     buttonApplyToAllParts->setEnabled(globalContext()->currentNotation()->style()->canApplyToAllParts());
     QWidget::showEvent(ev);
 }

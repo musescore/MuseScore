@@ -528,7 +528,7 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
 void EngravingObject::undoPushProperty(Pid id)
 {
     PropertyValue val = getProperty(id);
-    score()->undoStack()->push1(new ChangeProperty(this, id, val));
+    score()->undoStack()->pushWithoutPerforming(new ChangeProperty(this, id, val));
 }
 
 //---------------------------------------------------------

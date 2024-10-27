@@ -355,7 +355,7 @@ void AbstractInspectorModel::setPropertyValue(const QList<engraving::EngravingIt
         return;
     }
 
-    beginCommand();
+    beginCommand(TranslatableString("undoableAction", "Edit element property"));
 
     for (mu::engraving::EngravingItem* item : items) {
         IF_ASSERT_FAILED(item) {
@@ -437,7 +437,7 @@ bool AbstractInspectorModel::updateStyleValue(const mu::engraving::Sid& sid, con
 {
     PropertyValue newVal = PropertyValue::fromQVariant(newValue, mu::engraving::MStyle::valueType(sid));
     if (style() && style()->styleValue(sid) != newVal) {
-        beginCommand();
+        beginCommand(TranslatableString("undoableAction", "Edit style"));
         style()->setStyleValue(sid, newVal);
         endCommand();
         return true;
@@ -685,10 +685,10 @@ INotationUndoStackPtr AbstractInspectorModel::undoStack() const
     return currentNotation() ? currentNotation()->undoStack() : nullptr;
 }
 
-void AbstractInspectorModel::beginCommand()
+void AbstractInspectorModel::beginCommand(const muse::TranslatableString& actionName)
 {
     if (undoStack()) {
-        undoStack()->prepareChanges();
+        undoStack()->prepareChanges(actionName);
     }
 
     //! NOTE prevents unnecessary updating of properties

@@ -4334,7 +4334,7 @@ void Score::cmdSelectSection()
 
 void Score::undo(UndoCommand* cmd, EditData* ed) const
 {
-    undoStack()->push(cmd, ed);
+    undoStack()->pushAndPerform(cmd, ed);
 }
 
 //---------------------------------------------------------

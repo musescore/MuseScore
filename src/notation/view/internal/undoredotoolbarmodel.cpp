@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "undoredomodel.h"
+#include "undoredotoolbarmodel.h"
 
 #include "uicomponents/view/menuitem.h"
 
@@ -28,12 +28,12 @@ using namespace mu::notation;
 using namespace muse;
 using namespace muse::uicomponents;
 
-UndoRedoModel::UndoRedoModel(QObject* parent)
+UndoRedoToolbarModel::UndoRedoToolbarModel(QObject* parent)
     : QObject(parent), Injectable(iocCtxForQmlObject(this))
 {
 }
 
-void UndoRedoModel::load()
+void UndoRedoToolbarModel::load()
 {
     context()->currentNotationChanged().onNotify(this, [this]() {
         updateItems();
@@ -63,48 +63,56 @@ void UndoRedoModel::load()
     emit itemsChanged();
 }
 
-MenuItem* UndoRedoModel::undoItem() const
+MenuItem* UndoRedoToolbarModel::undoItem() const
 {
     return m_undoItem;
 }
 
-MenuItem* UndoRedoModel::redoItem() const
+MenuItem* UndoRedoToolbarModel::redoItem() const
 {
     return m_redoItem;
 }
 
-void UndoRedoModel::updateItems()
+void UndoRedoToolbarModel::updateItems()
 {
     auto stack = undoStack();
 
     if (m_undoItem) {
+        const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
         ui::UiActionState state;
         state.enabled = stack ? stack->canUndo() : false;
         m_undoItem->setState(state);
+        m_undoItem->setTitle(undoActionName.isEmpty()
+                             ? TranslatableString("action", "Undo")
+                             : TranslatableString("action", "Undo ‘%1’").arg(undoActionName));
     }
 
     if (m_redoItem) {
+        const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
         ui::UiActionState state;
         state.enabled = stack ? stack->canRedo() : false;
         m_redoItem->setState(state);
+        m_redoItem->setTitle(redoActionName.isEmpty()
+                             ? TranslatableString("action", "Redo")
+                             : TranslatableString("action", "Redo ‘%1’").arg(redoActionName));
     }
 }
 
-void UndoRedoModel::redo()
+void UndoRedoToolbarModel::redo()
 {
     if (undoStack()) {
         undoStack()->redo(nullptr);
     }
 }
 
-void UndoRedoModel::undo()
+void UndoRedoToolbarModel::undo()
 {
     if (undoStack()) {
         undoStack()->undo(nullptr);
     }
 }
 
-INotationUndoStackPtr UndoRedoModel::undoStack() const
+INotationUndoStackPtr UndoRedoToolbarModel::undoStack() const
 {
     INotationPtr notation = context()->currentNotation();
     return notation ? notation->undoStack() : nullptr;

@@ -69,7 +69,7 @@ TEST_F(Engraving_EarlymusicTests, earlymusic01)
     // set crossMeasureValue flag ON: score should not change
     MStyle newStyle = score->style();
     newStyle.set(Sid::crossMeasureValues, true);
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Early music tests"));
     score->deselectAll();
     score->undo(new ChangeStyle(score, newStyle));
     score->update();

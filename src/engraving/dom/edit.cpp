@@ -1421,7 +1421,7 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
                 for (size_t i = 0; i < nstaves(); ++i) {
                     if (staff(i)->timeSig(tick) && staff(i)->timeSig(tick)->isLocal()) {
                         if (!mScore->rewriteMeasures(mf, ns, i)) {
-                            undoStack()->current()->unwind();
+                            undoStack()->activeCommand()->unwind();
                             return;
                         }
                     }
@@ -1435,7 +1435,7 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
         // this means, however, that the rewrite cannot depend on the time signatures being in place
         if (mf) {
             if (!mScore->rewriteMeasures(mf, ns, local ? staffIdx : muse::nidx)) {
-                undoStack()->current()->unwind();
+                undoStack()->activeCommand()->unwind();
                 return;
             }
         }
@@ -1527,7 +1527,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
     Fraction ns(pm ? pm->timesig() : Fraction(4, 4));
 
     if (!rScore->rewriteMeasures(rm, ns, muse::nidx)) {
-        undoStack()->current()->unwind();
+        undoStack()->activeCommand()->unwind();
     } else {
         m = tick2measure(tick);           // old m may have been replaced
         // hack: fix measure rest durations for staves with local time signatures
@@ -1876,7 +1876,7 @@ void Score::cmdAddTie(bool addToChord)
         return;
     }
 
-    startCmd();
+    startCmd(TranslatableString("undoableAction", "Add tie"));
     Chord* lastAddedChord = 0;
     for (Note* note : noteList) {
         if (note->tieFor()) {
@@ -2010,7 +2010,11 @@ void Score::cmdToggleTie()
         }
     }
 
-    startCmd();
+    const TranslatableString actionName = canAddTies
+                                          ? TranslatableString("undoableAction", "Add tie")
+                                          : TranslatableString("undoableAction", "Remove tie");
+
+    startCmd(actionName);
 
     if (canAddTies) {
         for (size_t i = 0; i < notes; ++i) {
@@ -3998,7 +4002,7 @@ void Score::cmdEnterRest(const TDuration& d)
         LOGD("cmdEnterRest: track invalid");
         return;
     }
-    startCmd();
+    startCmd(TranslatableString("undoableAction", "Enter rest"));
     enterRest(d);
     endCmd();
 }
@@ -4928,7 +4932,7 @@ bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyV
 
     if ((currentPropValue != propValue) || (currentPropFlags != propFlags)) {
         item->setPropertyFlags(propId, propFlags);
-        undoStack()->push1(new ChangeProperty(item, propId, propValue, propFlags));
+        undoStack()->pushWithoutPerforming(new ChangeProperty(item, propId, propValue, propFlags));
         changed = true;
     }
 
@@ -4942,7 +4946,7 @@ bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyV
         switch (propertyPropagate) {
         case PropertyPropagation::PROPAGATE:
             if (linkedItem->getProperty(propId) != currentPropValue) {
-                undoStack()->push(new ChangeProperty(linkedItem, propId, currentPropValue, propFlags), nullptr);
+                undoStack()->pushAndPerform(new ChangeProperty(linkedItem, propId, currentPropValue, propFlags), nullptr);
                 changed = true;
             }
             break;
@@ -4960,7 +4964,7 @@ bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyV
 void Score::undoPropertyChanged(EngravingObject* e, Pid t, const PropertyValue& st, PropertyFlags ps)
 {
     if (e->getProperty(t) != st) {
-        undoStack()->push1(new ChangeProperty(e, t, st, ps));
+        undoStack()->pushWithoutPerforming(new ChangeProperty(e, t, st, ps));
     }
 }
 
@@ -5098,7 +5102,7 @@ void Score::undoChangePitch(Note* note, int pitch, int tpc1, int tpc2)
 {
     for (EngravingObject* e : note->linkList()) {
         Note* n = toNote(e);
-        undoStack()->push(new ChangePitch(n, pitch, tpc1, tpc2), 0);
+        undoStack()->pushAndPerform(new ChangePitch(n, pitch, tpc1, tpc2), 0);
     }
 }
 

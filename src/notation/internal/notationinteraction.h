@@ -121,6 +121,7 @@ public:
     bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) override;
     void undo() override;
     void redo() override;
+    void undoRedoToIdx(size_t idx) override;
 
     // Change selection
     bool moveSelectionAvailable(MoveSelectionType type) const override;
@@ -290,7 +291,7 @@ public:
     void transposeSemitone(int) override;
     void transposeDiatonicAlterations(mu::engraving::TransposeDirection) override;
     void getLocation() override;
-    void execute(void (mu::engraving::Score::*)()) override;
+    void execute(void (mu::engraving::Score::*)(), const muse::TranslatableString& actionName) override;
 
     void showItem(const mu::engraving::EngravingItem* item, int staffIndex = -1) override;
     muse::async::Channel<ShowItemRequest> showItemRequested() const override;
@@ -301,7 +302,7 @@ private:
     mu::engraving::Score* score() const;
     void onScoreInited();
 
-    void startEdit();
+    void startEdit(const muse::TranslatableString& actionName);
     void apply();
     void rollback();
 
@@ -394,7 +395,7 @@ private:
     bool elementsSelected(const std::set<ElementType>& elementsTypes) const;
 
     template<typename P>
-    void execute(void (mu::engraving::Score::* function)(P), P param);
+    void execute(void (mu::engraving::Score::* function)(P), P param, const muse::TranslatableString& actionName);
 
     struct HitMeasureData
     {

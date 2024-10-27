@@ -96,7 +96,7 @@ static UndoMacro::ChangesInfo changesInfo(const UndoStack* stack)
         return empty;
     }
 
-    const UndoMacro* actualMacro = stack->current();
+    const UndoMacro* actualMacro = stack->activeCommand();
 
     if (!actualMacro) {
         actualMacro = stack->last();
@@ -319,9 +319,9 @@ void CmdState::setUpdateMode(UpdateMode m)
 ///   and starting a user-visible undo.
 //---------------------------------------------------------
 
-void Score::startCmd()
+void Score::startCmd(const TranslatableString& actionName)
 {
-    if (undoStack()->locked()) {
+    if (undoStack()->isLocked()) {
         return;
     }
 
@@ -335,11 +335,11 @@ void Score::startCmd()
 
     // Start collecting low-level undo operations for a
     // user-visible undo action.
-    if (undoStack()->active()) {
+    if (undoStack()->hasActiveCommand()) {
         LOGD("Score::startCmd(): cmd already active");
         return;
     }
-    undoStack()->beginMacro(this);
+    undoStack()->beginMacro(this, actionName);
 }
 
 //---------------------------------------------------------
@@ -396,11 +396,11 @@ void Score::undoRedo(bool undo, EditData* ed)
 
 void Score::endCmd(bool rollback, bool layoutAllParts)
 {
-    if (undoStack()->locked()) {
+    if (undoStack()->isLocked()) {
         return;
     }
 
-    if (!undoStack()->active()) {
+    if (!undoStack()->hasActiveCommand()) {
         LOGW() << "no command active";
         update();
         return;
@@ -411,17 +411,17 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
     }
 
     if (rollback) {
-        undoStack()->current()->unwind();
+        undoStack()->activeCommand()->unwind();
     }
 
     update(false, layoutAllParts);
 
     ScoreChangesRange range = changesRange();
 
-    LOGD() << "Undo stack current macro child count: " << undoStack()->current()->childCount();
+    LOGD() << "Undo stack current macro child count: " << undoStack()->activeCommand()->childCount();
 
-    const bool noUndo = undoStack()->current()->empty(); // nothing to undo?
-    undoStack()->endMacro(noUndo);
+    const bool isCurrentCommandEmpty = undoStack()->activeCommand()->empty(); // nothing to undo?
+    undoStack()->endMacro(isCurrentCommandEmpty);
 
     if (dirty()) {
         masterScore()->setPlaylistDirty(); // TODO: flag individual operations
@@ -429,7 +429,7 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
 
     cmdState().reset();
 
-    if (!rollback) {
+    if (!isCurrentCommandEmpty && !rollback) {
         changesChannel().send(range);
     }
 }
@@ -2790,7 +2790,6 @@ void Score::cmdResetNoteAndRestGroupings()
     staff_idx_t sStaff = selection().staffStart();
     staff_idx_t eStaff = selection().staffEnd();
 
-    startCmd();
     for (staff_idx_t staff = sStaff; staff < eStaff; staff++) {
         track_idx_t sTrack = staff * VOICES;
         track_idx_t eTrack = sTrack + VOICES;
@@ -2800,7 +2799,7 @@ void Score::cmdResetNoteAndRestGroupings()
             }
         }
     }
-    endCmd();
+
     if (noSelection) {
         deselectAll();
     }
@@ -2822,7 +2821,7 @@ void Score::cmdResetAllPositions(bool undoable)
     TRACEFUNC;
 
     if (undoable) {
-        startCmd();
+        startCmd(TranslatableString("undoableAction", "Reset all positions"));
     }
     resetAutoplace();
     if (undoable) {

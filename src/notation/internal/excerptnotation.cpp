@@ -141,7 +141,8 @@ void ExcerptNotation::undoSetName(const QString& name)
         return;
     }
 
-    undoStack()->prepareChanges();
+    //: Means: "edit the name of a part score"
+    undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Rename part"));
 
     score()->undo(new engraving::ChangeExcerptTitle(m_excerpt, name));
 

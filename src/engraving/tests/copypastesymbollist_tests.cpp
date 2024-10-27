@@ -68,7 +68,7 @@ void Engraving_CopyPasteSymbolListTests::copypastecommon(MasterScore* score, con
     }
     score->select(m->first()->element(0));
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Copy/paste symbol tests"));
     if (!mimeData->hasFormat(mimeSymbolListFormat)) {
         LOGD("wrong type mime data");
         return;

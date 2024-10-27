@@ -44,21 +44,23 @@ void Engraving_RhythmicGroupingTests::group(const char* p1, const char* p2, size
     MasterScore* score = ScoreRW::readScore(RHYTHMICGRP_DATA_DIR + String::fromUtf8(p1));
     EXPECT_TRUE(score);
 
+    score->startCmd(TranslatableString::untranslatable("Regroup notes and rests"));
     if (!staves) {
         score->cmdSelectAll();
         score->cmdResetNoteAndRestGroupings();
     } else {
         assert(staves < score->nstaves());
-        score->startCmd();
         for (size_t track = 0; track < staves * VOICES; track++) {
             score->regroupNotesAndRests(score->firstSegment(SegmentType::All)->tick(),
                                         score->lastSegment()->tick(), static_cast<int>(track));
         }
-        score->endCmd();
     }
 
+    score->endCmd();
     score->doLayout();
+
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String::fromUtf8(p1), RHYTHMICGRP_DATA_DIR + String::fromUtf8(p2)));
+
     delete score;
 }
 
