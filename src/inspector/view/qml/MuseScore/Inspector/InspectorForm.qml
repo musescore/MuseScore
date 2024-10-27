@@ -87,13 +87,9 @@ Rectangle {
             }
         }
 
-        flickableDirection: Flickable.VerticalFlick
-
         Behavior on contentY {
             NumberAnimation { duration: 250 }
         }
-
-        ScrollBar.vertical: StyledScrollBar {}
 
         model: InspectorListModel {
             id: inspectorListModel
@@ -127,10 +123,6 @@ Rectangle {
                     if (model.index === 0) {
                         root.navigationOrderStart = navigationPanel.order
                     }
-                }
-
-                onReturnToBoundsRequested: {
-                    sectionList.returnToBounds()
                 }
 
                 onEnsureContentVisibleRequested: function(invisibleContentHeight) {
