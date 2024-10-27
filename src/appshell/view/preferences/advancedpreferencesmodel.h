@@ -24,10 +24,11 @@
 
 #include <QAbstractListModel>
 
+#include "async/asyncable.h"
 #include "settings.h"
 
 namespace mu::appshell {
-class AdvancedPreferencesModel : public QAbstractListModel
+class AdvancedPreferencesModel : public QAbstractListModel, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -53,7 +54,8 @@ private:
         MaxValueRole
     };
 
-    void changeVal(int index, QVariant newVal);
+    void changeVal(int index, const muse::Val& newVal);
+    void changeModelVal(muse::Settings::Item& item, const muse::Val& newVal);
     QString typeToString(muse::Val::Type type) const;
 
     QList<muse::Settings::Item> m_items;
