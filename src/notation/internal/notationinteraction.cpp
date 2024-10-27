@@ -5713,11 +5713,12 @@ void NotationInteraction::navigateToNearText(MoveDirection direction)
         // go to next/prev note in same chord, or go to next/prev chord, which may be in another voice
         Note* origNote = toNote(op);
         Chord* ch = origNote->chord();
-        if (origNote != (back ? ch->notes().back() : ch->notes().front())) {
+        const std::vector<Note*>& notes = ch->notes();
+        if (origNote != (back ? notes.back() : notes.front())) {
             // find prev/next note in same chord
-            for (auto& i : ch->notes()) {
-                if (i == origNote) {
-                    el = back ? *(&i + 1) : *(&i - 1);
+            for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
+                if (*it == origNote) {
+                    el = back ? *(it + 1) : *(it - 1);
                     break;
                 }
             }
