@@ -19020,7 +19020,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="324"/>
         <source>Max. quantization</source>
-        <translation>Max. cuantificare</translation>
+        <translation>Discretizare max.</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="352"/>
