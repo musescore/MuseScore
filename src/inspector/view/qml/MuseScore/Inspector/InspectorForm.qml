@@ -35,7 +35,7 @@ Rectangle {
     property alias notationView: popupController.notationView
 
     property NavigationSection navigationSection: null
-    property NavigationPanel navigationPanel: sectionList.count > 0 ? sectionList.itemAtIndex(0).navigationPanel : null // first panel
+    property NavigationPanel navigationPanel: sectionList.count > 0 ? sectionList.itemAtIndex(0)?.navigationPanel : null // first panel
     property int navigationOrderStart: 0
 
     color: ui.theme.backgroundPrimaryColor
@@ -100,7 +100,7 @@ Rectangle {
         }
 
         delegate: Column {
-            width: parent.width
+            width: ListView.view.width - ListView.view.leftMargin - ListView.view.rightMargin
 
             spacing: sectionList.spacing
 
