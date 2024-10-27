@@ -28,12 +28,10 @@
 
 #include "global/io/file.h"
 #include "global/io/dir.h"
-#include "global/stringutils.h"
-
-#include "internal/converterutils.h"
 
 #include "convertercodes.h"
 #include "compat/backendapi.h"
+#include "internal/converterutils.h"
 
 #include "log.h"
 
@@ -96,9 +94,33 @@ Ret ConverterController::batchConvert(const muse::io::path_t& batchJobFile, cons
     return ret;
 }
 
-Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io::path_t& out, const muse::io::path_t& stylePath,
-                                     bool forceMode, const String& soundProfile, const muse::UriQuery& extensionUri,
-                                     const QJsonObject& transposeOptionsObj)
+Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io::path_t& out,
+                                     const muse::io::path_t& stylePath,
+                                     bool forceMode,
+                                     const muse::String& soundProfile,
+                                     const muse::UriQuery& extensionUri,
+                                     const std::string& transposeOptionsJson)
+{
+    std::optional<TransposeOptions> transposeOptions;
+
+    if (!transposeOptionsJson.empty()) {
+        RetVal<TransposeOptions> transposeOptionsRet = ConverterUtils::parseTransposeOptions(transposeOptionsJson);
+        if (!transposeOptionsRet.ret) {
+            return transposeOptionsRet.ret;
+        }
+
+        transposeOptions = transposeOptionsRet.val;
+    }
+
+    return fileConvert(in, out, stylePath, forceMode, soundProfile, extensionUri, transposeOptions);
+}
+
+Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io::path_t& out,
+                                     const muse::io::path_t& stylePath,
+                                     bool forceMode,
+                                     const String& soundProfile,
+                                     const muse::UriQuery& extensionUri,
+                                     const std::optional<notation::TransposeOptions>& transposeOptions)
 {
     TRACEFUNC;
 
@@ -121,17 +143,17 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
         return make_ret(Err::InFileFailedLoad);
     }
 
-    if (!(transposeOptionsObj.isEmpty())) {
-        ret = ConverterUtils::applyTranspose(notationProject->masterNotation()->notation(), transposeOptionsObj);
-        if (!ret) {
-            QJsonDocument doc(transposeOptionsObj);
-            LOGE() << "Failed to transpose with options: " << doc.toJson(QJsonDocument::Compact).toStdString();
-        }
-    }
-
     if (!soundProfile.isEmpty()) {
         notationProject->audioSettings()->clearTrackInputParams();
         notationProject->audioSettings()->setActiveSoundProfile(soundProfile);
+    }
+
+    if (transposeOptions.has_value()) {
+        ret = ConverterUtils::applyTranspose(notationProject->masterNotation()->notation(), transposeOptions.value());
+        if (!ret) {
+            LOGE() << "Failed to apply transposition, err: " << ret.toString();
+            return ret;
+        }
     }
 
     globalContext()->setCurrentProject(notationProject);
@@ -232,8 +254,16 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
         job.in = correctUserInputPath(obj["in"].toString());
         job.out = correctUserInputPath(obj["out"].toString());
 
-        QJsonDocument doc(obj["transpose"].toObject());
-        job.transposeOptions = doc.object();
+        QJsonObject transposeOptionsObj = obj["transpose"].toObject();
+        if (!transposeOptionsObj.isEmpty()) {
+            RetVal<TransposeOptions> transposeOptions = ConverterUtils::parseTransposeOptions(transposeOptionsObj);
+            if (!transposeOptions.ret) {
+                rv.ret = transposeOptions.ret;
+                return rv;
+            }
+
+            job.transposeOptions = transposeOptions.val;
+        }
 
         if (!job.in.empty() && !job.out.empty()) {
             rv.val.push_back(std::move(job));

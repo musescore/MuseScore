@@ -19,23 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CONVERTER_CONVERTERUTILS_H
-#define MU_CONVERTER_CONVERTERUTILS_H
+#pragma once
 
-#include <QJsonObject>
+#include "notation/inotation.h"
+#include "notation/notationtypes.h"
 
 namespace mu::converter {
 class ConverterUtils
 {
 public:
     static muse::RetVal<notation::TransposeOptions> parseTransposeOptions(const std::string& optionsJson);
-
     static muse::RetVal<notation::TransposeOptions> parseTransposeOptions(const QJsonObject& optionsObj);
 
     static muse::Ret applyTranspose(const notation::INotationPtr notation, const std::string& optionsJson);
-
-    static muse::Ret applyTranspose(const notation::INotationPtr notation, const QJsonObject& optionsObj);
+    static muse::Ret applyTranspose(const notation::INotationPtr notation, const notation::TransposeOptions& options);
 };
 }
-
-#endif // MU_CONVERTER_CONVERTERUTILS_H

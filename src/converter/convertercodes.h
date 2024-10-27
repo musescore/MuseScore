@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CONVERTER_CONVERTERCODES_H
-#define MU_CONVERTER_CONVERTERCODES_H
+#pragma once
 
 #include "types/ret.h"
 
@@ -34,8 +33,10 @@ enum class Err {
     BatchJobFileFailedParse = 1302,
 
     ConvertFailed = 1303,
+    TransposeFailed = 1304,
 
     ConvertTypeUnknown = 1310,
+    InvalidTransposeOptions = 1311,
 
     InFileFailedLoad = 1320,
 
@@ -53,5 +54,3 @@ inline muse::Ret make_ret(Err e, const std::string& text)
     return muse::Ret(static_cast<int>(e), text);
 }
 }
-
-#endif // MU_CONVERTER_CONVERTERCODES_H

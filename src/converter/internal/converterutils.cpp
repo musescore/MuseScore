@@ -21,7 +21,26 @@
  */
 #include "converterutils.h"
 
-#include <QJsonDocument>
+#include <QJsonObject>
+
+#include "convertercodes.h"
+
+using namespace muse;
+using namespace mu::converter;
+using namespace mu::notation;
+
+RetVal<TransposeOptions> ConverterUtils::parseTransposeOptions(const std::string& optionsJson)
+{
+    QJsonDocument doc = QJsonDocument::fromJson(QByteArray::fromStdString(optionsJson));
+    if (!doc.isObject()) {
+        LOGW() << "Transpose options JSON is not an object: " << optionsJson;
+        return make_ret(Err::InvalidTransposeOptions);
+    }
+
+    QJsonObject optionsObj = doc.object();
+
+    return parseTransposeOptions(optionsObj);
+}
 
 RetVal<TransposeOptions> ConverterUtils::parseTransposeOptions(const QJsonObject& optionsObj)
 {
@@ -36,7 +55,7 @@ RetVal<TransposeOptions> ConverterUtils::parseTransposeOptions(const QJsonObject
         options.mode = TransposeMode::DIATONICALLY;
     } else {
         LOGW() << "Transpose: invalid \"mode\" option: " << modeName;
-        return make_ret(Ret::Code::InternalError);
+        return make_ret(Err::InvalidTransposeOptions);
     }
 
     const QString directionName = optionsObj["direction"].toString();
@@ -48,7 +67,7 @@ RetVal<TransposeOptions> ConverterUtils::parseTransposeOptions(const QJsonObject
         options.direction = TransposeDirection::CLOSEST;
     } else {
         LOGW() << "Transpose: invalid \"direction\" option: " << directionName;
-        return make_ret(Ret::Code::InternalError);
+        return make_ret(Err::InvalidTransposeOptions);
     }
 
     constexpr int defaultKey = int(Key::INVALID);
@@ -57,7 +76,7 @@ RetVal<TransposeOptions> ConverterUtils::parseTransposeOptions(const QJsonObject
         const bool targetKeyValid = int(Key::MIN) <= int(targetKey) && int(targetKey) <= int(Key::MAX);
         if (!targetKeyValid) {
             LOGW() << "Transpose: invalid targetKey: " << int(targetKey);
-            return make_ret(Ret::Code::InternalError);
+            return make_ret(Err::InvalidTransposeOptions);
         }
     }
 
@@ -68,7 +87,7 @@ RetVal<TransposeOptions> ConverterUtils::parseTransposeOptions(const QJsonObject
         const bool transposeIntervalValid = -1 < transposeInterval && transposeInterval < INTERVAL_LIST_SIZE;
         if (!transposeIntervalValid) {
             LOGW() << "Transpose: invalid transposeInterval: " << transposeInterval;
-            return make_ret(Ret::Code::InternalError);
+            return make_ret(Err::InvalidTransposeOptions);
         }
     }
 
@@ -85,41 +104,6 @@ RetVal<TransposeOptions> ConverterUtils::parseTransposeOptions(const QJsonObject
     return result;
 }
 
-RetVal<TransposeOptions> ConverterUtils::parseTransposeOptions(const std::string& optionsJson)
-{
-    QJsonDocument doc = QJsonDocument::fromJson(QString::fromStdString(optionsJson).toUtf8());
-    if (!doc.isObject()) {
-        LOGW() << "Transpose options JSON is not an object: " << optionsJson;
-        return make_ret(Ret::Code::InternalError);
-    }
-
-    QJsonObject optionsObj = doc.object();
-
-    return parseTransposeOptions(optionsObj);
-}
-
-Ret ConverterUtils::applyTranspose(const INotationPtr notation, const QJsonObject& optionsObj)
-{
-    RetVal<TransposeOptions> options = parseTransposeOptions(optionsObj);
-    if (!options.ret) {
-        return options.ret;
-    }
-
-    INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
-    if (!interaction) {
-        return make_ret(Ret::Code::InternalError);
-    }
-
-    interaction->selectAll();
-
-    bool ok = interaction->transpose(options.val);
-    if (!ok) {
-        LOGW() << "Error transpose";
-    }
-
-    return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
-}
-
 Ret ConverterUtils::applyTranspose(const INotationPtr notation, const std::string& optionsJson)
 {
     RetVal<TransposeOptions> options = parseTransposeOptions(optionsJson);
@@ -127,6 +111,11 @@ Ret ConverterUtils::applyTranspose(const INotationPtr notation, const std::strin
         return options.ret;
     }
 
+    return applyTranspose(notation, options.val);
+}
+
+Ret ConverterUtils::applyTranspose(const INotationPtr notation, const TransposeOptions& options)
+{
     INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
     if (!interaction) {
         return make_ret(Ret::Code::InternalError);
@@ -134,10 +123,7 @@ Ret ConverterUtils::applyTranspose(const INotationPtr notation, const std::strin
 
     interaction->selectAll();
 
-    bool ok = interaction->transpose(options.val);
-    if (!ok) {
-        LOGW() << "Error transpose";
-    }
+    bool ok = interaction->transpose(options);
 
-    return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
+    return ok ? make_ret(Ret::Code::Ok) : make_ret(Err::TransposeFailed);
 }
