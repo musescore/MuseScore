@@ -13671,7 +13671,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="116"/>
         <source>Desynchronized color</source>
-        <translation>Senkronize edilmemiş renk</translation>
+        <translation>Senkronize olmayanların rengi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="141"/>
@@ -29138,7 +29138,7 @@ yazılamadı.</translation>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditMidiMappingDialog.qml" line="32"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingTopPanel.qml" line="50"/>
         <source>MIDI remote control</source>
-        <translation>MIDI uzak denetçisi</translation>
+        <translation>MIDI uzaktan kontrolü</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditMidiMappingDialog.qml" line="83"/>

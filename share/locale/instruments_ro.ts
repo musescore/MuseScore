@@ -13873,14 +13873,14 @@
         <source>Toy Piano</source>
         <comment>toy-piano trackName</comment>
         <extracomment>trackName for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pian de Jucărie</translation>
+        <translation>Pian de jucărie</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4673"/>
         <source>Toy Piano</source>
         <comment>toy-piano longName</comment>
         <extracomment>longName for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pian de Jucărie</translation>
+        <translation>Pian de jucărie</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4675"/>
