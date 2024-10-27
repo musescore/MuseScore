@@ -64,6 +64,9 @@ void UpdateConfiguration::init()
     m_config = ConfigReader::read(":/configs/update.cfg");
 
     settings()->setDefaultValue(CHECK_FOR_UPDATE_KEY, Val(isAppUpdatable()));
+    settings()->valueChanged(CHECK_FOR_UPDATE_KEY).onReceive(this, [this](const Val&) {
+        m_needCheckForUpdateChanged.notify();
+    });
 
     bool allowUpdateOnPreRelease = false;
 #ifdef MUSESCORE_ALLOW_UPDATE_ON_PRERELEASE
@@ -97,6 +100,11 @@ bool UpdateConfiguration::needCheckForUpdate() const
 void UpdateConfiguration::setNeedCheckForUpdate(bool needCheck)
 {
     settings()->setSharedValue(CHECK_FOR_UPDATE_KEY, Val(needCheck));
+}
+
+async::Notification UpdateConfiguration::needCheckForUpdateChanged() const
+{
+    return m_needCheckForUpdateChanged;
 }
 
 std::string UpdateConfiguration::skippedReleaseVersion() const
