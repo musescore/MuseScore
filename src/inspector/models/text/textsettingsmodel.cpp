@@ -162,9 +162,7 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
             QVariantList list = elementPropertyValue.toList();
             return list.size() >= 2 ? list[0] : QVariant();
         });
-    }
 
-    if (muse::contains(propertyIdSet, Pid::ALIGN)) {
         loadPropertyItem(m_verticalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
             QVariantList list = elementPropertyValue.toList();
             return list.size() >= 2 ? list[1] : QVariant();
