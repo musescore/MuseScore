@@ -244,7 +244,7 @@ endif()
 # Executable declaration
 ###########################################
 
-add_executable(mscore
+add_executable(MuseScoreStudio
     WIN32 MACOSX_BUNDLE
     ${APP_RCC_SOURCES}
     ${MSCORE_APPEND_SRC}
@@ -265,28 +265,28 @@ add_executable(mscore
 # Setting target properties
 ###########################################
 
-set_target_properties(mscore PROPERTIES OUTPUT_NAME ${EXECUTABLE_NAME})
+set_target_properties(MuseScoreStudio PROPERTIES OUTPUT_NAME ${EXECUTABLE_NAME})
 
 if (OS_IS_MAC)
-    set_target_properties(mscore PROPERTIES
+    set_target_properties(MuseScoreStudio PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/buildscripts/packaging/macOS/Info.plist.in
         XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER ${MACOSX_BUNDLE_GUI_IDENTIFIER})
 endif (OS_IS_MAC)
 
 if (CC_IS_MINGW)
     if (CMAKE_BUILD_TYPE MATCHES "DEBUG")
-        set_target_properties(mscore PROPERTIES LINK_FLAGS "-mwindows -mconsole")
+        set_target_properties(MuseScoreStudio PROPERTIES LINK_FLAGS "-mwindows -mconsole")
     else (CMAKE_BUILD_TYPE MATCHES "DEBUG")
-        set_target_properties(mscore PROPERTIES LINK_FLAGS "-Wl,-S -mwindows")
+        set_target_properties(MuseScoreStudio PROPERTIES LINK_FLAGS "-Wl,-S -mwindows")
     endif (CMAKE_BUILD_TYPE MATCHES "DEBUG")
 endif(CC_IS_MINGW)
 
 if (CC_IS_MSVC)
-    target_link_options(mscore PRIVATE /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup)
+    target_link_options(MuseScoreStudio PRIVATE /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup)
 endif(CC_IS_MSVC)
 
 if (OS_IS_WASM)
-    set_target_properties(mscore PROPERTIES LINK_FLAGS "${EMCC_LINKER_FLAGS}")
+    set_target_properties(MuseScoreStudio PROPERTIES LINK_FLAGS "${EMCC_LINKER_FLAGS}")
 endif(OS_IS_WASM)
 
 
@@ -295,12 +295,12 @@ endif(OS_IS_WASM)
 ###########################################
 
 if (NOT CC_IS_EMSCRIPTEN)
-    target_link_libraries(mscore ${LINK_LIB} )
+    target_link_libraries(MuseScoreStudio ${LINK_LIB} )
 else()
-    target_link_libraries(mscore PRIVATE ${QT_LIBRARIES})
+    target_link_libraries(MuseScoreStudio PRIVATE ${QT_LIBRARIES})
 
     find_package(Qt6QmlImportScanner REQUIRED)
-    qt_import_qml_plugins(mscore PATH_TO_SCAN ${CMAKE_SOURCE_DIR})
+    qt_import_qml_plugins(MuseScoreStudio PATH_TO_SCAN ${CMAKE_SOURCE_DIR})
 endif()
 
 
@@ -308,7 +308,7 @@ endif()
 # INSTALL
 ###########################################
 
-install(TARGETS mscore
+install(TARGETS MuseScoreStudio
     BUNDLE  DESTINATION .
     RUNTIME DESTINATION bin
 )
@@ -472,7 +472,7 @@ elseif(OS_IS_WASM)
         configure_file("${_qt6Core_install_prefix}/plugins/platforms/qtlogo.svg" public_html/qtlogo.svg COPYONLY)
     endfunction()
 
-    copy_html_js_launch_files(mscore)
+    copy_html_js_launch_files(MuseScoreStudio)
 
 else()
     message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
@@ -487,12 +487,12 @@ if (MSVC)
     set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY true)
     set(CMAKE_SKIP_PACKAGE_ALL_DEPENDENCY true)
 
-    # Set the startup project to "mscore".
-    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT mscore)
+    # Set the startup project to "MuseScoreStudio".
+    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT MuseScoreStudio)
 
-    # Set the debugging properties for the "mscore" project.
+    # Set the debugging properties for the "MuseScoreStudio" project.
     file(TO_NATIVE_PATH "${CMAKE_INSTALL_PREFIX}/bin" VS_DEBUGGER_WORKING_DIRECTORY)
-    set_target_properties(mscore PROPERTIES VS_DEBUGGER_COMMAND "${VS_DEBUGGER_WORKING_DIRECTORY}\\${MUSESCORE_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
-    set_target_properties(mscore PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${VS_DEBUGGER_WORKING_DIRECTORY}")
-    set_target_properties(mscore PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--debug")
+    set_target_properties(MuseScoreStudio PROPERTIES VS_DEBUGGER_COMMAND "${VS_DEBUGGER_WORKING_DIRECTORY}\\${MUSESCORE_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
+    set_target_properties(MuseScoreStudio PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${VS_DEBUGGER_WORKING_DIRECTORY}")
+    set_target_properties(MuseScoreStudio PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--debug")
 endif (MSVC)
