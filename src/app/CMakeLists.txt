@@ -313,6 +313,17 @@ install(TARGETS MuseScoreStudio
     RUNTIME DESTINATION bin
 )
 
+if(OS_IS_WIN)
+    # Doing this only on Windows for now. On other platforms, it is not necessary
+    # for development builds because rpath exists, and it takes very long. However,
+    # on those platforms we must not forget to deploy manually during packaging.
+    qt_generate_deploy_qml_app_script(
+        TARGET MuseScoreStudio
+        OUTPUT_SCRIPT deploy_script
+    )
+    install(SCRIPT ${deploy_script})
+endif()
+
 ###########################################
 # Windows
 ###########################################
@@ -422,7 +433,6 @@ elseif(OS_IS_WASM)
 else()
     message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()
-
 
 #################################################
 # Miscellaneous Microsoft Visual Studio settings
