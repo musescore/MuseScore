@@ -34,7 +34,7 @@ using namespace winrt;
 using namespace muse;
 using namespace muse::audio;
 
-static constexpr char DEFAULT_DEVICE_ID[] = "default";
+static constexpr char DEFAULT_DEVICE_ID[] = "default"; // Must match DEFAULT_DEVICE_ID in audioconfiguration.cpp!
 
 inline int refTimeToSamples(const REFERENCE_TIME& t, double sampleRate) noexcept
 {

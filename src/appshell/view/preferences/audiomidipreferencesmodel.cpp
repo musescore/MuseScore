@@ -92,6 +92,10 @@ void AudioMidiPreferencesModel::init()
         emit midiOutputDeviceIdChanged();
     });
 
+    midiConfiguration()->useMIDI20OutputChanged().onReceive(this, [this](bool) {
+        emit useMIDI20OutputChanged();
+    });
+
     playbackConfiguration()->muteHiddenInstrumentsChanged().onReceive(this, [this](bool mute) {
         emit muteHiddenInstrumentsChanged(mute);
     });
