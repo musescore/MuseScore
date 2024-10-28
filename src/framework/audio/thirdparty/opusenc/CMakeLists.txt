@@ -1,5 +1,5 @@
 
-declare_module(opusenc)
+declare_thirdparty_module(opusenc)
 
 include(GetPlatformInfo)
 include(GetCompilerInfo)
@@ -32,7 +32,6 @@ set(MODULE_SRC
 
 set(MODULE_LINK ${OPUS_LIBRARIES})
 
-set(MODULE_USE_PCH OFF)
 set(MODULE_USE_UNITY OFF)
 setup_module()
 
