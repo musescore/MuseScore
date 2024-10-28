@@ -35,6 +35,10 @@ static const Settings::Key MEI_EXPORT_LAYOUT_KEY(module_name, "export/mei/export
 void MeiConfiguration::init()
 {
     settings()->setDefaultValue(MEI_IMPORT_LAYOUT_KEY, Val(true));
+    settings()->valueChanged(MEI_IMPORT_LAYOUT_KEY).onReceive(this, [this](const Val& val) {
+        m_meiImportLayoutChanged.send(val.toBool());
+    });
+
     settings()->setDefaultValue(MEI_EXPORT_LAYOUT_KEY, Val(true));
 }
 
@@ -46,6 +50,11 @@ bool MeiConfiguration::meiImportLayout() const
 void MeiConfiguration::setMeiImportLayout(bool value)
 {
     settings()->setSharedValue(MEI_IMPORT_LAYOUT_KEY, Val(value));
+}
+
+async::Channel<bool> MeiConfiguration::meiImportLayoutChanged() const
+{
+    return m_meiImportLayoutChanged;
 }
 
 bool MeiConfiguration::meiExportLayout() const
