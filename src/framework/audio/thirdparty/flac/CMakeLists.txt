@@ -1,5 +1,5 @@
 
-declare_module(flac)
+declare_thirdparty_module(flac)
 
 include(GetPlatformInfo)
 include(GetCompilerInfo)
@@ -68,7 +68,6 @@ set (MODULE_SRC
     $<$<BOOL:${OS_IS_WIN}>:${FLAC_SRC}/share/win_utf8_io/win_utf8_io.c>
     )
 
-set(MODULE_USE_PCH OFF)
 set(MODULE_USE_UNITY OFF)
 setup_module()
 
