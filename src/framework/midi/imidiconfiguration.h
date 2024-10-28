@@ -53,6 +53,7 @@ public:
 
     virtual bool useMIDI20Output() const = 0;
     virtual void setUseMIDI20Output(bool use) = 0;
+    virtual async::Channel<bool> useMIDI20OutputChanged() const = 0;
 };
 }
 

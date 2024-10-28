@@ -47,11 +47,13 @@ public:
 
     bool useMIDI20Output() const override;
     void setUseMIDI20Output(bool use) override;
+    async::Channel<bool> useMIDI20OutputChanged() const override;
 
 private:
     async::Notification m_midiInputDeviceIdChanged;
     async::Notification m_midiOutputDeviceIdChanged;
     async::Channel<bool> m_useRemoteControlChanged;
+    async::Channel<bool> m_useMIDI20OutputChanged;
 };
 }
 
