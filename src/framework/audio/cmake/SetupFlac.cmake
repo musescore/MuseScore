@@ -41,5 +41,5 @@ if (MUE_COMPILE_USE_SYSTEM_FLAC)
     endif()
 endif()
 
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../thirdparty/flac flac)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../thirdparty/flac flac EXCLUDE_FROM_ALL)
 set(FLAC_TARGETS flac)
