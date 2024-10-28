@@ -81,6 +81,7 @@ static const QStringList ALL_PAGE_CODES {
     "pedal",
     "trill",
     "vibrato",
+    "glissando-note-line",
     "bend",
     "text-line",
     "system-text-line",
@@ -143,10 +144,10 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "harp-pedal-diagram",
     "harp-pedal-text-diagram",
     "text-line",
+    "glissando",
     "note-line"
     "volta",
     "ottava",
-    "glissando",
     "pedal",
     "bend",
     "let-ring",
@@ -681,6 +682,17 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::guitarBendArrowHeight,   false, bendArrowHeight,   resetBendArrowHeight },
         { StyleId::useCueSizeFretForGraceBends, false, guitarBendCueSizedGraceFrets, 0 },
 
+        { StyleId::glissandoLineStyle, false, glissandoLineStyle, resetGlissandoLineStyle },
+        { StyleId::glissandoDashLineLen, false, glissandoLineStyleDashSize, resetGlissandoLineStyleDashSize },
+        { StyleId::glissandoDashGapLen, false, glissandoLineStyleGapSize, resetGlissandoLineStyleGapSize },
+        { StyleId::glissandoLineWidth, false, glissandoLineWidth, resetGlissandoLineWidth },
+        { StyleId::glissandoShowText, false, glissandoShowText, 0 },
+
+        { StyleId::noteLineStyle, false, noteLineStyle, resetNoteLineStyle },
+        { StyleId::noteLineDashLineLen, false, noteLineStyleDashSize, resetNoteLineStyleDashSize },
+        { StyleId::noteLineDashGapLen, false, noteLineStyleGapSize, resetNoteLineStyleGapSize },
+        { StyleId::noteLineWidth, false, noteLineWidth, resetNoteLineWidth },
+
         /// Tablature styles
 
         { StyleId::slurShowTabSimple, false, slurShowTabSimple, 0 },
@@ -747,6 +759,24 @@ EditStyle::EditStyle(QWidget* parent)
             label_pedalLine_lineStyle_gapSize,
             pedalLineStyleGapSize,
             resetPedalLineStyleGapSize
+        }),
+
+        new LineStyleSelect(this, glissandoLineStyle, {
+            label_glissando_lineStyle_dashSize,
+            glissandoLineStyleDashSize,
+            resetGlissandoLineStyleDashSize,
+            label_glissando_lineStyle_gapSize,
+            glissandoLineStyleGapSize,
+            resetGlissandoLineStyleGapSize
+        }),
+
+        new LineStyleSelect(this, noteLineStyle, {
+            label_note_lineStyle_dashSize,
+            noteLineStyleDashSize,
+            resetNoteLineStyleDashSize,
+            label_note_lineStyle_gapSize,
+            noteLineStyleGapSize,
+            resetNoteLineStyleGapSize
         })
     };
 
@@ -1591,6 +1621,12 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
     case ElementType::TEXTLINE:
     case ElementType::TEXTLINE_SEGMENT:
         return "text-line";
+
+    case ElementType::GLISSANDO:
+    case ElementType::GLISSANDO_SEGMENT:
+    case ElementType::NOTELINE:
+    case ElementType::NOTELINE_SEGMENT:
+        return "glissando-note-line";
 
     case ElementType::ARTICULATION:
         return "articulations-and-ornaments";

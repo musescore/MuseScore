@@ -54,13 +54,18 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 static const ElementStyle glissandoElementStyle {
-    { Sid::glissandoFontFace,  Pid::FONT_FACE },
-    { Sid::glissandoFontSize,  Pid::FONT_SIZE },
-    { Sid::glissandoFontStyle, Pid::FONT_STYLE },
-    { Sid::glissandoLineWidth, Pid::LINE_WIDTH },
-    { Sid::glissandoText,      Pid::GLISS_TEXT },
-    { Sid::glissandoStyle,     Pid::GLISS_STYLE },
-    { Sid::glissandoStyleHarp, Pid::GLISS_STYLE }
+    { Sid::glissandoFontFace,    Pid::FONT_FACE },
+    { Sid::glissandoFontSize,    Pid::FONT_SIZE },
+    { Sid::glissandoFontStyle,   Pid::FONT_STYLE },
+    { Sid::glissandoLineWidth,   Pid::LINE_WIDTH },
+    { Sid::glissandoShowText,    Pid::GLISS_SHOW_TEXT },
+    { Sid::glissandoText,        Pid::GLISS_TEXT },
+    { Sid::glissandoStyle,       Pid::GLISS_STYLE },
+    { Sid::glissandoStyleHarp,   Pid::GLISS_STYLE },
+    { Sid::glissandoLineWidth,   Pid::LINE_WIDTH },
+    { Sid::glissandoLineStyle,   Pid::LINE_STYLE },
+    { Sid::glissandoDashLineLen, Pid::DASH_LINE_LEN },
+    { Sid::glissandoDashGapLen,  Pid::DASH_GAP_LEN },
 };
 
 //=========================================================
