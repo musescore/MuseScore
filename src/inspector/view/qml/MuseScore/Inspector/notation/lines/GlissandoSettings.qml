@@ -27,6 +27,7 @@ import Muse.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
 import "../../common"
+import "internal"
 
 Column {
     id: root
@@ -54,6 +55,21 @@ Column {
         navigationRowStart: root.navigationRowStart
     }
 
+    LineStyleSection {
+        id: lineStyleSection
+
+        thickness: root.model ? root.model.thickness : null
+
+        lineStyle: root.model ? root.model.lineStyle : null
+        dashLineLength: root.model ? root.model.dashLineLength : null
+        dashGapLength: root.model ? root.model.dashGapLength : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: lineSection.navigationRowEnd + 1
+    }
+
+    SeparatorLine { anchors.margins: -12; visible: hooksSection.visible }
+
     PropertyCheckBox {
         id: showTextCheckBox
         text: qsTrc("inspector", "Show text")
@@ -61,7 +77,7 @@ Column {
 
         navigation.name: "ShowTextCheckBox"
         navigation.panel: root.navigationPanel
-        navigation.row: lineSection.navigationRowEnd + 1
+        navigation.row: lineStyleSection.navigationRowEnd + 1
     }
 
     TextSection {
