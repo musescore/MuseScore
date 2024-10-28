@@ -317,13 +317,15 @@ endif()
 # INSTALL
 ###########################################
 
+install(TARGETS mscore
+    BUNDLE  DESTINATION .
+    RUNTIME DESTINATION bin
+)
+
 ###########################################
 # Windows
 ###########################################
 if (OS_IS_WIN)
-
-    install(TARGETS mscore RUNTIME DESTINATION bin )
-
     include(GetCompilerInfo)
 
     if (CC_IS_MINGW)
@@ -415,8 +417,6 @@ if (OS_IS_WIN)
 # Linux
 ###########################################
 elseif(OS_IS_LIN)
-
-    install(TARGETS mscore RUNTIME DESTINATION bin )
     # Install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
     if (LN_EXECUTABLE)
        add_custom_target(mscore_alias ALL
@@ -433,7 +433,6 @@ elseif(OS_IS_FBSD)
 ###########################################
 # FreeBSD
 ###########################################
-    install(TARGETS mscore RUNTIME DESTINATION bin )
     add_custom_target(mscore_alias ALL
            COMMAND echo "Creating symlink alias for mscore executable."
            COMMAND ln -sfv "mscore" "musescore"
@@ -444,9 +443,6 @@ elseif(OS_IS_FBSD)
 # macOS
 ###########################################
 elseif(OS_IS_MAC)
-
-    install(TARGETS mscore BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
-
     install(FILES
             ${PROJECT_SOURCE_DIR}/fonts/bravura/BravuraText.otf
             ${PROJECT_SOURCE_DIR}/fonts/campania/Campania.otf
