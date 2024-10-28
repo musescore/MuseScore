@@ -330,8 +330,8 @@ public:
     bool nextIsOneMeasureRepeat(staff_idx_t staffidx) const;
     bool prevIsOneMeasureRepeat(staff_idx_t staffIdx) const;
 
-    EngravingItem* nextElementStaff(staff_idx_t staff);
-    EngravingItem* prevElementStaff(staff_idx_t staff);
+    EngravingItem* nextElementStaff(staff_idx_t staff, EngravingItem* fromItem = nullptr);
+    EngravingItem* prevElementStaff(staff_idx_t staff, EngravingItem* fromItem = nullptr);
 
     String accessibleInfo() const override;
 

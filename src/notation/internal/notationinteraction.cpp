@@ -2980,11 +2980,36 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
         el = score()->selection().elements().back();
     }
 
-    bool isLeftDirection = MoveDirection::Left == d;
+    const bool isLeftDirection = MoveDirection::Left == d;
+
+    if (isTextEditingStarted() && el && el->isTextBase()) {
+        navigateToNearText(d);
+        return;
+    }
+
+    const bool isHorizontalLayout = score()->isLayoutMode(LayoutMode::LINE) || score()->isLayoutMode(LayoutMode::HORIZONTAL_FIXED);
+
+    // VBoxes are not included in horizontal layouts - skip over them (and their contents) when moving selections...
+    const auto nextNonVBox = [this, isLeftDirection](EngravingItem* currElem) -> EngravingItem* {
+        while (const EngravingItem* vBox = currElem->findAncestor(ElementType::VBOX)) {
+            currElem = isLeftDirection ? toVBox(vBox)->prevMM() : toVBox(vBox)->nextMM();
+            if (currElem && currElem->isMeasure()) {
+                const ChordRest* cr = score()->selection().currentCR();
+                const staff_idx_t si = cr ? cr->staffIdx() : 0;
+                Measure* mb = toMeasure(currElem);
+                currElem = isLeftDirection ? mb->prevElementStaff(si, currElem) : mb->nextElementStaff(si, currElem);
+            }
+        }
+        return currElem;
+    };
+
     EngravingItem* toEl = nullptr;
 
     if (el) {
         toEl = isLeftDirection ? score()->prevElement() : score()->nextElement();
+        if (isHorizontalLayout) {
+            toEl = nextNonVBox(toEl);
+        }
     } else {
         // Nothing currently selected (e.g. because user pressed Esc or clicked on
         // an empty region of the page). Try to restore previous selection.
@@ -2995,6 +3020,9 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
             toEl = el; // Restoring previous selection.
         } else {
             toEl = isLeftDirection ? score()->lastElement() : score()->firstElement();
+            if (isHorizontalLayout) {
+                toEl = nextNonVBox(toEl);
+            }
         }
     }
 
