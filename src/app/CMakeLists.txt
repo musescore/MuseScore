@@ -251,7 +251,7 @@ endif()
 # Executable declaration
 ###########################################
 
-add_executable(MuseScoreStudio
+qt_add_executable(MuseScoreStudio
     WIN32 MACOSX_BUNDLE
     ${APP_RCC_SOURCES}
     ${MSCORE_APPEND_SRC}
@@ -309,7 +309,7 @@ endif(OS_IS_WASM)
 ###########################################
 
 if (NOT CC_IS_EMSCRIPTEN)
-    target_link_libraries(MuseScoreStudio ${LINK_LIB} ${COVERAGE_LINK_FLAGS})
+    target_link_libraries(MuseScoreStudio PRIVATE ${LINK_LIB} ${COVERAGE_LINK_FLAGS})
 else()
     target_link_libraries(MuseScoreStudio PRIVATE ${QT_LIBRARIES})
 
