@@ -103,24 +103,29 @@ macro(setup_module)
         message(STATUS "Configuring ${MODULE} <${MODULE_ALIAS}>")
     endif()
 
-    add_library(${MODULE}) # STATIC/SHARED set global in the SetupBuildEnvironment.cmake
+    if (MODULE_USE_QT AND QT_SUPPORT)
+        # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
+        qt_add_library(${MODULE} ${MODULE_SRC})
+    else()
+        # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
+        add_library(${MODULE} ${MODULE_SRC})
+    endif()
 
     if (MODULE_ALIAS)
         add_library(${MODULE_ALIAS} ALIAS ${MODULE})
     endif()
 
     if (MODULE_USE_QT AND QT_SUPPORT)
-        if (MODULE_QRC AND NOT NO_QT_SUPPORT)
+        if (MODULE_QRC)
             qt_add_resources(RCC_SOURCES ${MODULE_QRC})
+            target_sources(${MODULE} PRIVATE ${RCC_SOURCES})
         endif()
 
-        if (MODULE_BIG_QRC AND NOT NO_QT_SUPPORT)
+        if (MODULE_BIG_QRC)
             qt_add_big_resources(RCC_BIG_SOURCES ${MODULE_BIG_QRC})
+            target_sources(${MODULE} PRIVATE ${RCC_BIG_SOURCES})
         endif()
     else()
-        set(RCC_SOURCES)
-        set(RCC_BIG_SOURCES)
-
         set_target_properties(${MODULE} PROPERTIES
             AUTOMOC OFF
             AUTOUIC OFF
@@ -157,12 +162,6 @@ macro(setup_module)
             set_target_properties(${MODULE} PROPERTIES UNITY_BUILD OFF)
         endif()
     endif()
-
-    target_sources(${MODULE} PRIVATE
-        ${RCC_SOURCES}
-        ${RCC_BIG_SOURCES}
-        ${MODULE_SRC}
-    )
 
     target_include_directories(${MODULE} PUBLIC
         ${MODULE_INCLUDE}

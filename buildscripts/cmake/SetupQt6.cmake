@@ -87,11 +87,11 @@ if(QT_ADD_WEBSOCKET)
     list(APPEND QT_LIBRARIES Qt::WebSockets)
 endif()
 
-find_package(Qt6 6.3 REQUIRED COMPONENTS ${qt_components})
+find_package(Qt6 REQUIRED COMPONENTS ${qt_components})
 
 include(QtInstallPaths)
 
-qt_standard_project_setup()
+qt_standard_project_setup(REQUIRES 6.3 SUPPORTS_UP_TO 6.8)
 
 if (CC_IS_EMCC)
     # see SetupBuildEnvironment.cmake
