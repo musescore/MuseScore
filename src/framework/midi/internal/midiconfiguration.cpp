@@ -38,6 +38,9 @@ static const Settings::Key USE_MIDI20_OUTPUT_KEY(module_name, "io/midi/useMIDI20
 void MidiConfiguration::init()
 {
     settings()->setDefaultValue(USE_REMOTE_CONTROL_KEY, Val(true));
+    settings()->valueChanged(USE_REMOTE_CONTROL_KEY).onReceive(this, [this](const Val& val) {
+        m_useRemoteControlChanged.send(val.toBool());
+    });
 
     settings()->setDefaultValue(MIDI_INPUT_DEVICE_ID, Val(""));
     settings()->valueChanged(MIDI_INPUT_DEVICE_ID).onReceive(nullptr, [this](const Val&) {
@@ -65,6 +68,11 @@ bool MidiConfiguration::useRemoteControl() const
 void MidiConfiguration::setUseRemoteControl(bool value)
 {
     settings()->setSharedValue(USE_REMOTE_CONTROL_KEY, Val(value));
+}
+
+async::Channel<bool> MidiConfiguration::useRemoteControlChanged() const
+{
+    return m_useRemoteControlChanged;
 }
 
 MidiDeviceID MidiConfiguration::midiInputDeviceId() const
