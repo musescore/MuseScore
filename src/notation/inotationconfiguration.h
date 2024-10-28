@@ -219,6 +219,7 @@ public:
 
     virtual muse::io::path_t styleFileImportPath() const = 0;
     virtual void setStyleFileImportPath(const muse::io::path_t& path) = 0;
+    virtual muse::async::Channel<std::string> styleFileImportPathChanged() const = 0;
 
     virtual int styleDialogLastPageIndex() const = 0;
     virtual void setStyleDialogLastPageIndex(int value) = 0;

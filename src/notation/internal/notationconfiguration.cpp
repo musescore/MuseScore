@@ -221,6 +221,11 @@ void NotationConfiguration::init()
         m_notePlayDurationMillisecondsChanged.send(val.toInt());
     });
 
+    settings()->setDefaultValue(STYLE_FILE_IMPORT_PATH_KEY, Val(""));
+    settings()->valueChanged(STYLE_FILE_IMPORT_PATH_KEY).onReceive(this, [this](const Val& val) {
+        m_styleFileImportPathChanged.send(val.toString());
+    });
+
     settings()->setDefaultValue(FIRST_SCORE_ORDER_LIST_KEY,
                                 Val(globalConfiguration()->appDataPath().toStdString() + "instruments/orders.xml"));
     settings()->valueChanged(FIRST_SCORE_ORDER_LIST_KEY).onReceive(nullptr, [this](const Val&) {
@@ -1063,6 +1068,11 @@ muse::io::path_t NotationConfiguration::styleFileImportPath() const
 void NotationConfiguration::setStyleFileImportPath(const muse::io::path_t& path)
 {
     settings()->setSharedValue(STYLE_FILE_IMPORT_PATH_KEY, Val(path.toStdString()));
+}
+
+async::Channel<std::string> NotationConfiguration::styleFileImportPathChanged() const
+{
+    return m_styleFileImportPathChanged;
 }
 
 int NotationConfiguration::styleDialogLastPageIndex() const

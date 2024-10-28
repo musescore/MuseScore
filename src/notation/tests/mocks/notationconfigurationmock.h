@@ -209,6 +209,7 @@ public:
 
     MOCK_METHOD(muse::io::path_t, styleFileImportPath, (), (const, override));
     MOCK_METHOD(void, setStyleFileImportPath, (const muse::io::path_t&), (override));
+    MOCK_METHOD((muse::async::Channel<std::string>), styleFileImportPathChanged, (), (const, override));
 
     MOCK_METHOD(int, styleDialogLastPageIndex, (), (const, override));
     MOCK_METHOD(void, setStyleDialogLastPageIndex, (int), (override));
