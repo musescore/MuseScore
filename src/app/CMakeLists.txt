@@ -22,12 +22,14 @@
 # Setup main application
 ###########################################
 
+set(EXECUTABLE_NAME mscore)
+
 ###########################################
 # Platform specific
 ###########################################
 include(GetPlatformInfo)
 if (OS_IS_WIN)
-    set(MSCORE_OUTPUT_NAME ${MUSE_APP_NAME}${MUSE_APP_VERSION_MAJOR})
+    set(EXECUTABLE_NAME ${MUSE_APP_NAME}${MUSE_APP_VERSION_MAJOR})
 
     include(GetCompilerInfo)
 
@@ -51,7 +53,7 @@ elseif(OS_IS_LIN)
     # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L /usr/local/lib -lcrypto -lssl")
 
     if (MUSE_APP_INSTALL_SUFFIX)
-        set(MSCORE_OUTPUT_NAME "mscore${MUSE_APP_INSTALL_SUFFIX}")
+        set(EXECUTABLE_NAME "${EXECUTABLE_NAME}${MUSE_APP_INSTALL_SUFFIX}")
     endif(MUSE_APP_INSTALL_SUFFIX)
 
     set(CMAKE_INSTALL_RPATH "${QT_INSTALL_LIBS}")
@@ -263,12 +265,7 @@ add_executable(mscore
 # Setting target properties
 ###########################################
 
-# If MSCORE_OUTPUT_NAME is set (e.g, when cmake is called by the user), the output executable will be
-# called MSCORE_OUTPUT_NAME instead of 'mscore'. This can be used to have MuseScore stable and unstable
-# both installed in the same prefix on a Linux system.
-if (MSCORE_OUTPUT_NAME)
-  set_target_properties(mscore PROPERTIES OUTPUT_NAME ${MSCORE_OUTPUT_NAME})
-endif (MSCORE_OUTPUT_NAME)
+set_target_properties(mscore PROPERTIES OUTPUT_NAME ${EXECUTABLE_NAME})
 
 if (OS_IS_MAC)
     set_target_properties(mscore PROPERTIES
@@ -292,12 +289,6 @@ if (OS_IS_WASM)
     set_target_properties(mscore PROPERTIES LINK_FLAGS "${EMCC_LINKER_FLAGS}")
 endif(OS_IS_WASM)
 
-if (MSCORE_OUTPUT_NAME)
-    set(MUSESCORE_EXECUTABLE_NAME ${MSCORE_OUTPUT_NAME})
-else (MSCORE_OUTPUT_NAME)
-    set(MUSESCORE_EXECUTABLE_NAME mscore)
-endif (MSCORE_OUTPUT_NAME)
-set(MUSESCORE_EXECUTABLE_NAME "${MUSESCORE_EXECUTABLE_NAME}" PARENT_SCOPE)
 
 ###########################################
 # Link
