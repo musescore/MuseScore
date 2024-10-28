@@ -4993,7 +4993,6 @@ void ExportMusicXml::tempoText(TempoText const* const text, staff_idx_t staff)
            muPrintable(text->xmlText()));
     */
     m_attr.doAttr(m_xml, false);
-    #
 
     XmlWriter::Attributes tempoAttrs;
     tempoAttrs = { { "placement", (text->placement() == PlacementV::BELOW) ? "below" : "above" } };
