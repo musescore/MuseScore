@@ -224,6 +224,7 @@ public:
 
     muse::io::path_t styleFileImportPath() const override;
     void setStyleFileImportPath(const muse::io::path_t& path) override;
+    muse::async::Channel<std::string> styleFileImportPathChanged() const override;
 
     int styleDialogLastPageIndex() const override;
     void setStyleDialogLastPageIndex(int value) override;
@@ -254,6 +255,7 @@ private:
     muse::async::Channel<bool> m_warnGuitarBendsChanged;
     muse::async::Channel<int> m_delayBetweenNotesInRealTimeModeMillisecondsChanged;
     muse::async::Channel<int> m_notePlayDurationMillisecondsChanged;
+    muse::async::Channel<std::string> m_styleFileImportPathChanged;
     muse::async::Notification m_isPlayRepeatsChanged;
     muse::async::Notification m_isPlayChordSymbolsChanged;
     muse::ValCh<int> m_pianoKeyboardNumberOfKeys;

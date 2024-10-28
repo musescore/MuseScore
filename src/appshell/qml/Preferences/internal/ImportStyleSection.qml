@@ -41,7 +41,12 @@ BaseSection {
     QtObject {
         id: prv
 
-        property bool useStyleFile: root.styleFileImportPath !== ""
+        property bool useStyleFileExplicitlySet: root.styleFileImportPath !== ""
+        property bool useStyleFile: prv.useStyleFileExplicitlySet || root.styleFileImportPath !== ""
+    }
+
+    function reset() {
+        prv.useStyleFileExplicitlySet = false
     }
 
     RoundedRadioButton {
@@ -57,7 +62,7 @@ BaseSection {
         navigation.column: 0
 
         onToggled: {
-            prv.useStyleFile = false
+            prv.useStyleFileExplicitlySet = false
             root.styleFileImportPathChangeRequested("")
         }
     }
@@ -81,7 +86,7 @@ BaseSection {
             navigation.column: 0
 
             onToggled: {
-                prv.useStyleFile = true
+                prv.useStyleFileExplicitlySet = true
             }
         }
 
