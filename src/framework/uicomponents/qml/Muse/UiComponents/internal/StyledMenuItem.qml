@@ -65,7 +65,7 @@ ListItemBlank {
 
     isSelected: subMenuShowed || (itemPrv.isSelectable && itemPrv.isSelected) || navigation.highlight
 
-    navigation.name: Boolean(itemPrv.id) ? itemPrv.id : titleLabel.text
+    navigation.name: itemPrv.id ?? titleLabel.text
     navigation.accessible.role: MUAccessible.MenuItem
     navigation.accessible.name: {
         var text = itemPrv.title
@@ -114,10 +114,10 @@ ListItemBlank {
     QtObject {
         id: itemPrv
 
-        property string id: Boolean(modelData) && Boolean(modelData.id) ? modelData.id : ""
+        property string id: root.modelData?.id ?? ""
 
-        property string title: Boolean(modelData) && Boolean(modelData.title) ? modelData.title : ""
-        property string titleWithMnemonicUnderline: Boolean(modelData) && Boolean(modelData.titleWithMnemonicUnderline) ? modelData.titleWithMnemonicUnderline : title
+        property string title: root.modelData?.title ?? ""
+        property string titleWithMnemonicUnderline: modelData?.titleWithMnemonicUnderline ?? title
 
         property bool hasShortcuts: Boolean(modelData) && Boolean(modelData.shortcuts)
         property string shortcuts: hasShortcuts ? modelData.shortcuts : ""
@@ -125,8 +125,8 @@ ListItemBlank {
         property bool isCheckable: Boolean(modelData) && Boolean(modelData.checkable)
         property bool isChecked: isCheckable && Boolean(modelData.checked)
 
-        property bool isSelectable: Boolean(modelData) && Boolean(modelData.selectable)
-        property bool isSelected: isSelectable && Boolean(modelData.selected)
+        property bool isSelectable: Boolean(root.modelData?.selectable)
+        property bool isSelected: isSelectable && Boolean(root.modelData?.selected)
 
         property bool hasIcon: Boolean(modelData) && Boolean(modelData.icon) && modelData.icon !== IconCode.NONE
     }
@@ -186,7 +186,7 @@ ListItemBlank {
             width: 16
             iconCode: {
                 if (root.iconAndCheckMarkMode !== StyledMenuItem.ShowBoth && itemPrv.hasIcon) {
-                    return itemPrv.hasIcon ? modelData.icon : IconCode.NONE
+                    return root.modelData?.icon ?? IconCode.NONE
                 } else if (itemPrv.isCheckable) {
                     return itemPrv.isChecked ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
                 } else  if (itemPrv.isSelectable) {
@@ -202,7 +202,7 @@ ListItemBlank {
             id: secondaryIconLabel
             Layout.alignment: Qt.AlignLeft
             width: 16
-            iconCode: itemPrv.hasIcon ? modelData.icon : IconCode.NONE
+            iconCode: root.modelData?.icon ?? IconCode.NONE
             visible: root.iconAndCheckMarkMode === StyledMenuItem.ShowBoth
         }
 

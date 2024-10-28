@@ -33,9 +33,9 @@ Item {
     property string cloudTitle: ""
     property bool userIsAuthorized: false
     property string userName: ""
-    property var userProfileUrl: null
-    property var userAvatarUrl: null
-    property var userCollectionUrl: null
+    property url userProfileUrl
+    property url userAvatarUrl
+    property url userCollectionUrl
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: root.cloudTitle + "Item"

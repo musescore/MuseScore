@@ -27,8 +27,8 @@ import Muse.UiComponents 1.0
 StyledPopupView {
     id: root
 
-    property var voicesVisibility: [] // array of bool
-    signal voiceVisibilityChangeRequested(var voiceIndex, var voiceVisible)
+    property list<bool> voicesVisibility: []
+    signal voiceVisibilityChangeRequested(int voiceIndex, bool voiceVisible)
 
     contentHeight: contentColumn.childrenRect.height
     contentWidth: contentColumn.childrenRect.width

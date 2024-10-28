@@ -30,7 +30,7 @@ Item {
     id: root
 
     property var playbackModel: null
-    property var navPanel: null
+    property NavigationPanel navPanel: null
     property bool floating: false
 
     width: childrenRect.width

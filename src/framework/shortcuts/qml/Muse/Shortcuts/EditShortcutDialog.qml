@@ -38,14 +38,6 @@ StyledDialogView {
 
     signal applySequenceRequested(string newSequence, int conflictShortcutIndex)
 
-    property NavigationPanel navigationPanel: NavigationPanel {
-            name: "EditShortcutSequenceDialog"
-            section: root.navigationSection
-            enabled: root.enabled && root.visible
-            order: 1
-            direction: NavigationPanel.Horizontal
-        }
-
     function startEdit(shortcut, allShortcuts) {
         model.load(shortcut, allShortcuts)
         open()
@@ -55,12 +47,9 @@ StyledDialogView {
         newSequenceField.navigation.requestActive()
     }
 
-    Rectangle {
+    Item {
         id: content
-
         anchors.fill: parent
-
-        color: ui.theme.backgroundPrimaryColor
 
         focus: true
 
@@ -72,18 +61,25 @@ StyledDialogView {
             }
         }
 
+        NavigationPanel {
+            id: navPanel
+            name: "EditShortcutSequenceDialog"
+            section: root.navigationSection
+            enabled: content.enabled && content.visible
+            order: 1
+            direction: NavigationPanel.Horizontal
+        }
+
         Column {
             anchors.fill: parent
 
             spacing: 20
 
             StyledTextLabel {
-                anchors.horizontalCenter: parent.horizontalCenter
-
                 width: parent.width
                 text: qsTrc("shortcuts", "Define keyboard shortcut")
                 horizontalAlignment: Text.AlignLeft
-                font:ui.theme.headerBoldFont
+                font: ui.theme.headerBoldFont
             }
 
             Column {
@@ -134,7 +130,7 @@ StyledDialogView {
 
                         background.border.color: ui.theme.accentColor
 
-                        navigation.panel: root.navigationPanel
+                        navigation.panel: navPanel
                         navigation.order: 1
 
                         hint: qsTrc("shortcuts", "Type to set shortcut")
