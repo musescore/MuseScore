@@ -22,9 +22,6 @@
 # Setup main application
 ###########################################
 
-###########################################
-# Common
-###########################################
 set(EXECUTABLE_NAME mscore)
 
 ###########################################
@@ -32,7 +29,7 @@ set(EXECUTABLE_NAME mscore)
 ###########################################
 include(GetPlatformInfo)
 if (OS_IS_WIN)
-    set(MSCORE_OUTPUT_NAME ${MUSE_APP_NAME}${MUSE_APP_VERSION_MAJOR})
+    set(EXECUTABLE_NAME ${MUSE_APP_NAME}${MUSE_APP_VERSION_MAJOR})
 
     include(GetCompilerInfo)
 
@@ -56,7 +53,7 @@ elseif(OS_IS_LIN)
     # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L /usr/local/lib -lcrypto -lssl")
 
     if (MUSE_APP_INSTALL_SUFFIX)
-        set(MSCORE_OUTPUT_NAME "${EXECUTABLE_NAME}${MUSE_APP_INSTALL_SUFFIX}")
+        set(EXECUTABLE_NAME "${EXECUTABLE_NAME}${MUSE_APP_INSTALL_SUFFIX}")
     endif(MUSE_APP_INSTALL_SUFFIX)
 
     set(CMAKE_INSTALL_RPATH "${QT_INSTALL_LIBS}")
@@ -66,7 +63,6 @@ elseif(OS_IS_LIN)
 
 elseif(OS_IS_MAC)
 
-    set(EXECUTABLE_NAME mscore MACOSX_BUNDLE)
     set(MACOSX_BUNDLE_ICON_FILE AppIcon.icns)
     set(MACOSX_BUNDLE_GUI_IDENTIFIER ${MUSE_APP_GUI_IDENTIFIER})
     set(MACOSX_BUNDLE_BUNDLE_NAME ${MUSE_APP_TITLE})
@@ -114,7 +110,6 @@ elseif(OS_IS_WASM)
     ")
 elseif(OS_IS_FBSD)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L /usr/local/lib -lasound -lpthread")
-    set(MSCORE_OUTPUT_NAME "${EXECUTABLE_NAME}")
 
     set(CMAKE_INSTALL_RPATH "${QT_INSTALL_LIBS}")
     if (BUILD_SHARED_LIBS)
@@ -249,7 +244,8 @@ endif()
 # Executable declaration
 ###########################################
 
-add_executable(${EXECUTABLE_NAME}
+add_executable(MuseScoreStudio
+    WIN32 MACOSX_BUNDLE
     ${APP_RCC_SOURCES}
     ${MSCORE_APPEND_SRC}
     main.cpp
@@ -263,61 +259,48 @@ add_executable(${EXECUTABLE_NAME}
     internal/consoleapp.h
     internal/guiapp.cpp
     internal/guiapp.h
-
 )
 
 ###########################################
 # Setting target properties
 ###########################################
 
-
-# If MSCORE_OUTPUT_NAME is set (e.g, when cmake is called by the user), the output executable will be
-# called MSCORE_OUTPUT_NAME instead of 'mscore'. This can be used to have MuseScore stable and unstable
-# both installed in the same prefix on a Linux system.
-if (MSCORE_OUTPUT_NAME)
-  set_target_properties(${EXECUTABLE_NAME} PROPERTIES OUTPUT_NAME ${MSCORE_OUTPUT_NAME})
-endif (MSCORE_OUTPUT_NAME)
+set_target_properties(MuseScoreStudio PROPERTIES OUTPUT_NAME ${EXECUTABLE_NAME})
 
 if (OS_IS_MAC)
-    set_target_properties(mscore PROPERTIES
+    set_target_properties(MuseScoreStudio PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${PROJECT_SOURCE_DIR}/buildscripts/packaging/macOS/Info.plist.in
         XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER ${MACOSX_BUNDLE_GUI_IDENTIFIER})
 endif (OS_IS_MAC)
 
 if (CC_IS_MINGW)
     if (CMAKE_BUILD_TYPE MATCHES "DEBUG")
-        set_target_properties(mscore PROPERTIES LINK_FLAGS "-mwindows -mconsole")
+        set_target_properties(MuseScoreStudio PROPERTIES LINK_FLAGS "-mwindows -mconsole")
     else (CMAKE_BUILD_TYPE MATCHES "DEBUG")
-        set_target_properties(mscore PROPERTIES LINK_FLAGS "-Wl,-S -mwindows")
+        set_target_properties(MuseScoreStudio PROPERTIES LINK_FLAGS "-Wl,-S -mwindows")
     endif (CMAKE_BUILD_TYPE MATCHES "DEBUG")
 endif(CC_IS_MINGW)
 
 if (CC_IS_MSVC)
-    target_link_options(mscore PRIVATE /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup)
+    target_link_options(MuseScoreStudio PRIVATE /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup)
 endif(CC_IS_MSVC)
 
 if (OS_IS_WASM)
-    set_target_properties(mscore PROPERTIES LINK_FLAGS "${EMCC_LINKER_FLAGS}")
+    set_target_properties(MuseScoreStudio PROPERTIES LINK_FLAGS "${EMCC_LINKER_FLAGS}")
 endif(OS_IS_WASM)
 
-if (MSCORE_OUTPUT_NAME)
-    set(MUSESCORE_EXECUTABLE_NAME ${MSCORE_OUTPUT_NAME})
-else (MSCORE_OUTPUT_NAME)
-    set(MUSESCORE_EXECUTABLE_NAME ${EXECUTABLE_NAME})
-endif (MSCORE_OUTPUT_NAME)
-set(MUSESCORE_EXECUTABLE_NAME "${MUSESCORE_EXECUTABLE_NAME}" PARENT_SCOPE)
 
 ###########################################
 # Link
 ###########################################
 
 if (NOT CC_IS_EMSCRIPTEN)
-    target_link_libraries(mscore ${LINK_LIB} )
+    target_link_libraries(MuseScoreStudio ${LINK_LIB} )
 else()
-    target_link_libraries(mscore PRIVATE ${QT_LIBRARIES})
+    target_link_libraries(MuseScoreStudio PRIVATE ${QT_LIBRARIES})
 
     find_package(Qt6QmlImportScanner REQUIRED)
-    qt_import_qml_plugins(mscore PATH_TO_SCAN ${CMAKE_SOURCE_DIR})
+    qt_import_qml_plugins(MuseScoreStudio PATH_TO_SCAN ${CMAKE_SOURCE_DIR})
 endif()
 
 
@@ -325,13 +308,15 @@ endif()
 # INSTALL
 ###########################################
 
+install(TARGETS MuseScoreStudio
+    BUNDLE  DESTINATION .
+    RUNTIME DESTINATION bin
+)
+
 ###########################################
 # Windows
 ###########################################
 if (OS_IS_WIN)
-
-    install(TARGETS ${EXECUTABLE_NAME} RUNTIME DESTINATION bin )
-
     include(GetCompilerInfo)
 
     if (CC_IS_MINGW)
@@ -423,8 +408,6 @@ if (OS_IS_WIN)
 # Linux
 ###########################################
 elseif(OS_IS_LIN)
-
-    install(TARGETS ${EXECUTABLE_NAME} RUNTIME DESTINATION bin )
     # Install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
     if (LN_EXECUTABLE)
        add_custom_target(mscore_alias ALL
@@ -441,7 +424,6 @@ elseif(OS_IS_FBSD)
 ###########################################
 # FreeBSD
 ###########################################
-    install(TARGETS ${EXECUTABLE_NAME} RUNTIME DESTINATION bin )
     add_custom_target(mscore_alias ALL
            COMMAND echo "Creating symlink alias for mscore executable."
            COMMAND ln -sfv "mscore" "musescore"
@@ -452,9 +434,6 @@ elseif(OS_IS_FBSD)
 # macOS
 ###########################################
 elseif(OS_IS_MAC)
-
-    install(TARGETS mscore BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
-
     install(FILES
             ${PROJECT_SOURCE_DIR}/fonts/bravura/BravuraText.otf
             ${PROJECT_SOURCE_DIR}/fonts/campania/Campania.otf
@@ -493,7 +472,7 @@ elseif(OS_IS_WASM)
         configure_file("${_qt6Core_install_prefix}/plugins/platforms/qtlogo.svg" public_html/qtlogo.svg COPYONLY)
     endfunction()
 
-    copy_html_js_launch_files(mscore)
+    copy_html_js_launch_files(MuseScoreStudio)
 
 else()
     message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
@@ -504,26 +483,16 @@ endif()
 # Miscellaneous Microsoft Visual Studio settings
 #################################################
 if (MSVC)
+    # Force the "install" and "package" targets not to depend on the "all" target.
+    set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY true)
+    set(CMAKE_SKIP_PACKAGE_ALL_DEPENDENCY true)
 
-   # Force the "install" and "package" targets not to depend on the "all" target.
-   set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY true)
-   set(CMAKE_SKIP_PACKAGE_ALL_DEPENDENCY true)
+    # Set the startup project to "MuseScoreStudio".
+    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT MuseScoreStudio)
 
-   # Set the startup project to "mscore".
-   if (NOT ${CMAKE_VERSION} VERSION_LESS "3.6.0")
-      set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT mscore)
-   endif ()
-
-   # Set the debugging properties for the "mscore" project.
-   file(TO_NATIVE_PATH "${CMAKE_INSTALL_PREFIX}/bin" VS_DEBUGGER_WORKING_DIRECTORY)
-   if (NOT ${CMAKE_VERSION} VERSION_LESS "3.12.0")
-      set_target_properties(${EXECUTABLE_NAME} PROPERTIES VS_DEBUGGER_COMMAND "${VS_DEBUGGER_WORKING_DIRECTORY}\\${MUSESCORE_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
-   endif ()
-   if (NOT ${CMAKE_VERSION} VERSION_LESS "3.8.0")
-      set_target_properties(${EXECUTABLE_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${VS_DEBUGGER_WORKING_DIRECTORY}")
-   endif ()
-   if (NOT ${CMAKE_VERSION} VERSION_LESS "3.13.0")
-      set_target_properties(${EXECUTABLE_NAME} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--debug")
-   endif ()
-
+    # Set the debugging properties for the "MuseScoreStudio" project.
+    file(TO_NATIVE_PATH "${CMAKE_INSTALL_PREFIX}/bin" VS_DEBUGGER_WORKING_DIRECTORY)
+    set_target_properties(MuseScoreStudio PROPERTIES VS_DEBUGGER_COMMAND "${VS_DEBUGGER_WORKING_DIRECTORY}\\${MUSESCORE_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
+    set_target_properties(MuseScoreStudio PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${VS_DEBUGGER_WORKING_DIRECTORY}")
+    set_target_properties(MuseScoreStudio PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--debug")
 endif (MSVC)
