@@ -445,8 +445,9 @@ public:
         CLOCK = 0xF475,
 
         PLAYHEAD = 0xF478,
-
         PLAYHEAD_FILLED = 0xF47A,
+
+        NOTE_ANCHORED_LINE = 0xF47B,
 
         NONE = 0xFFFF
     };

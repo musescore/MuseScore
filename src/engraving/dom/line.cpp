@@ -1130,4 +1130,80 @@ void SLine::undoMoveEnd(Fraction tickDiff)
         }
     }
 }
+
+Note* SLine::guessFinalNote(Note* startNote)
+{
+    Chord* chord = startNote->chord();
+    if (chord->isGraceBefore()) {
+        Chord* parentChord = toChord(chord->parent());
+        GraceNotesGroup& gracesBefore = parentChord->graceNotesBefore();
+        auto positionOfThis = std::find(gracesBefore.begin(), gracesBefore.end(), chord);
+        if (positionOfThis != gracesBefore.end()) {
+            auto nextPosition = ++positionOfThis;
+            if (nextPosition != gracesBefore.end()) {
+                return (*nextPosition)->upNote();
+            }
+        }
+        return parentChord->upNote();
+    } else if (chord->isGraceAfter()) {
+        Chord* parentChord = toChord(chord->parent());
+        GraceNotesGroup& gracesAfter = parentChord->graceNotesAfter();
+        auto positionOfThis = std::find(gracesAfter.begin(), gracesAfter.end(), chord);
+        if (positionOfThis != gracesAfter.end()) {
+            auto nextPosition = ++positionOfThis;
+            if (nextPosition != gracesAfter.end()) {
+                return (*nextPosition)->upNote();
+            }
+        }
+        chord = toChord(chord->parent());
+    } else {
+        std::vector<Chord*> graces = chord->graceNotesAfter();
+        if (graces.size() > 0) {
+            return graces.front()->upNote();
+        }
+    }
+
+    if (!chord->explicitParent()->isSegment()) {
+        return 0;
+    }
+
+    Segment* segm = chord->score()->tick2rightSegment(chord->tick() + chord->actualTicks());
+    while (segm && !segm->isChordRestType()) {
+        segm = segm->next1();
+    }
+
+    if (!segm) {
+        return nullptr;
+    }
+
+    track_idx_t chordTrack = chord->track();
+    Part* part = chord->part();
+
+    Chord* target = nullptr;
+    if (segm->element(chordTrack) && segm->element(chordTrack)->isChord()) {
+        target = toChord(segm->element(chordTrack));
+    } else {
+        for (EngravingItem* currChord : segm->elist()) {
+            if (currChord && currChord->isChord() && toChord(currChord)->part() == part) {
+                target = toChord(currChord);
+                break;
+            }
+        }
+    }
+
+    if (target && target->notes().size() > 0) {
+        const std::vector<Chord*>& graces = target->graceNotesBefore();
+        if (graces.size() > 0) {
+            return graces.front()->upNote();
+        }
+        // normal case: try to return the note in the next chord that is in the
+        // same position as the start note relative to the end chord
+        size_t startNoteIdx = muse::indexOf(chord->notes(), startNote);
+        size_t endNoteIdx = std::min(startNoteIdx, target->notes().size() - 1);
+        return target->notes().at(endNoteIdx);
+    }
+
+    LOGD("no second note for note anchored line found");
+    return nullptr;
+}
 }

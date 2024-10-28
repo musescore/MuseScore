@@ -93,6 +93,8 @@ private:
     static void computeMidThickness(SlurTieSegment* slurTieSeg, double slurTieLengthInSp);
     static void fillShape(SlurTieSegment* slurTieSeg, double slurTieLengthInSp);
     static bool shouldHideSlurSegment(SlurSegment* item, LayoutContext& ctx);
+
+    static void addLineAttachPoints(TieSegment* segment);
 };
 }
 

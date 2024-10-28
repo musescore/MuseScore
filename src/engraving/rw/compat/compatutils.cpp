@@ -27,6 +27,7 @@
 #include "dom/dynamic.h"
 #include "dom/expression.h"
 #include "dom/masterscore.h"
+#include "dom/note.h"
 #include "dom/score.h"
 #include "dom/excerpt.h"
 #include "dom/part.h"
@@ -40,6 +41,8 @@
 #include "dom/stafftextbase.h"
 #include "dom/playtechannotation.h"
 #include "dom/capo.h"
+#include "dom/noteline.h"
+#include "dom/textline.h"
 
 #include "engraving/style/textstyle.h"
 
@@ -102,6 +105,10 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
     }
     if (masterScore->mscVersion() < 440) {
         mapHeaderFooterStyles(masterScore);
+    }
+
+    if (masterScore->mscVersion() < 450) {
+        convertTextLineToNoteAnchoredLine(masterScore);
     }
 }
 
@@ -717,4 +724,94 @@ void CompatUtils::mapHeaderFooterStyles(MasterScore* score)
                                    Sid::evenHeaderL, Sid::evenHeaderC, Sid::evenHeaderR });
     doMap(TextStyleType::FOOTER, { Sid::oddFooterL,  Sid::oddFooterC,  Sid::oddFooterR,
                                    Sid::evenFooterL, Sid::evenFooterC, Sid::evenFooterR });
+}
+
+NoteLine* CompatUtils::createNoteLineFromTextLine(TextLine* textLine)
+{
+    assert(textLine->anchor() == Spanner::Anchor::NOTE);
+    Note* startNote = toNote(textLine->startElement());
+    Note* endNote = toNote(textLine->endElement());
+
+    NoteLine* noteLine = Factory::createNoteLine(startNote);
+    noteLine->setParent(startNote);
+    noteLine->setStartElement(startNote);
+    noteLine->setTrack(textLine->track());
+    noteLine->setTick(textLine->tick());
+    noteLine->setEndElement(endNote);
+    noteLine->setTick2(textLine->tick2());
+    noteLine->setVisible(textLine->visible());
+
+    // Preserve old layout style
+    noteLine->setLineEndPlacement(NoteLineEndPlacement::LEFT_EDGE);
+
+    for (Pid pid : textLine->textLineBasePropertyIds()) {
+        noteLine->setProperty(pid, textLine->getProperty(pid));
+    }
+
+    for (const SpannerSegment* oldSeg : textLine->spannerSegments()) {
+        LineSegment* newSeg = noteLine->createLineSegment(toSystem(oldSeg->parent()));
+        newSeg->setOffset(oldSeg->offset());
+        newSeg->setUserOff2(oldSeg->userOff2());
+
+        noteLine->add(newSeg);
+    }
+
+    LinkedObjects* links = textLine->links();
+    noteLine->setLinks(links);
+    if (links) {
+        links->push_back(noteLine);
+    }
+
+    return noteLine;
+}
+
+void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
+{
+    std::set<TextLine*> oldLines; // NoteLines used to be TextLines
+
+    for (Measure* measure = masterScore->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (Segment& segment : measure->segments()) {
+            if (!segment.isChordRestType()) {
+                continue;
+            }
+            for (track_idx_t track = 0; track <= masterScore->ntracks(); track++) {
+                EngravingItem* el = segment.elementAt(track);
+                if (!el || !el->isChord()) {
+                    continue;
+                }
+                Chord* chord = toChord(el);
+                for (Note* note : chord->notes()) {
+                    for (Spanner* spanner : note->spannerFor()) {
+                        if (!spanner->isTextLine() || spanner->anchor() != Spanner::Anchor::NOTE) {
+                            continue;
+                        }
+
+                        oldLines.insert(toTextLine(spanner));
+
+                        LinkedObjects* links = spanner->links();
+                        if (!links || links->empty()) {
+                            continue;
+                        }
+
+                        for (EngravingObject* linked : *links) {
+                            if (linked != spanner && linked && linked->isTextLine()
+                                && toTextLine(linked)->anchor() == Spanner::Anchor::NOTE) {
+                                oldLines.insert(toTextLine(linked));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for (TextLine* oldLine : oldLines) {
+        NoteLine* newLine = createNoteLineFromTextLine(oldLine);
+        EngravingItem* parent = newLine->parentItem();
+
+        parent->remove(oldLine);
+        parent->add(newLine);
+
+        delete oldLine;
+    }
 }

@@ -84,6 +84,8 @@
       <repeatRightFontSize>10.25</repeatRightFontSize>
       <frameFontFace>Times New Roman</frameFontFace>
       <frameFontSize>10.25</frameFontSize>
+      <noteLineFontFace>Times New Roman</noteLineFontFace>
+      <noteLineFontSize>10.25</noteLineFontSize>
       <glissandoFontFace>Times New Roman</glissandoFontFace>
       <glissandoFontSize>10.25</glissandoFontSize>
       <bendFontFace>Times New Roman</bendFontFace>

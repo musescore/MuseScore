@@ -85,6 +85,8 @@
       <repeatRightFontSize>8.8</repeatRightFontSize>
       <frameFontFace>Times</frameFontFace>
       <frameFontSize>8.8</frameFontSize>
+      <noteLineFontFace>Times</noteLineFontFace>
+      <noteLineFontSize>8.8</noteLineFontSize>
       <glissandoFontFace>Times</glissandoFontFace>
       <glissandoFontSize>8.8</glissandoFontSize>
       <bendFontFace>Times</bendFontFace>

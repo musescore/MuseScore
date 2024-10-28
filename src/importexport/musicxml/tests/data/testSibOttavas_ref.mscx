@@ -94,6 +94,8 @@
       <repeatRightFontSize>11.9365</repeatRightFontSize>
       <frameFontFace>Quicksand</frameFontFace>
       <frameFontSize>11.9365</frameFontSize>
+      <noteLineFontFace>Quicksand</noteLineFontFace>
+      <noteLineFontSize>11.9365</noteLineFontSize>
       <glissandoFontFace>Quicksand</glissandoFontFace>
       <glissandoFontSize>11.9365</glissandoFontSize>
       <bendFontFace>Quicksand</bendFontFace>

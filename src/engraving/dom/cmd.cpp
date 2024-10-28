@@ -942,7 +942,7 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
         }
 
         if (!endNote) {
-            endNote = Glissando::guessFinalNote(chord, note);
+            endNote = SLine::guessFinalNote(note);
         }
 
         bool suitableEndNote = endNote;

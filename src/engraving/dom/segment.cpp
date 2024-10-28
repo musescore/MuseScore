@@ -2219,7 +2219,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
         EngravingItem* el = e;
         Segment* seg = this;
         if (e->type() == ElementType::TIE_SEGMENT
-            || e->type() == ElementType::GLISSANDO_SEGMENT) {
+            || e->type() == ElementType::GLISSANDO_SEGMENT || e->type() == ElementType::NOTELINE_SEGMENT) {
             SpannerSegment* s = toSpannerSegment(e);
             Spanner* sp = s->spanner();
             el = sp->startElement();

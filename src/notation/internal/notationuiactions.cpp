@@ -2458,6 +2458,13 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Slight bend"),
              IconCode::Code::GUITAR_SLIGHT_BEND
              ),
+    UiAction("add-noteline",
+             mu::context::UiCtxProjectFocused,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Note-anchored line"),
+             TranslatableString("action", "Note-anchored line"),
+             IconCode::Code::NOTE_ANCHORED_LINE
+             ),
 };
 
 const UiActionList NotationUiActions::m_scoreConfigActions = {
