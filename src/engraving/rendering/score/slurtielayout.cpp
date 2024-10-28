@@ -1300,9 +1300,9 @@ double SlurTieLayout::computeAdjustmentStep(int upSign, double spatium, double s
 {
     double step = upSign * 0.30 * spatium;
 
-    static constexpr double longSlurLimit = 16.0; // in spaces
-    if (slurLength > longSlurLimit) {
-        step *= slurLength / longSlurLimit;
+    static constexpr double LONG_SLUR_LIMIT = 16.0; // in spaces
+    if (slurLength > LONG_SLUR_LIMIT) {
+        step *= slurLength / LONG_SLUR_LIMIT;
         step = std::min(step, 1.5 * spatium);
     }
 
