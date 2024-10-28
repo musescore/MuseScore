@@ -56,6 +56,7 @@ macro(declare_module name)
     unset(MODULE_LINK)
     unset(MODULE_LINK_PUBLIC)
     set(MODULE_LINK_GLOBAL ON)
+    set(MODULE_USE_QT ON)
     unset(MODULE_QRC)
     unset(MODULE_BIG_QRC)
     unset(MODULE_UI)
@@ -65,6 +66,13 @@ macro(declare_module name)
     set(MODULE_USE_UNITY ON)
     unset(MODULE_OVERRIDDEN_PCH)
     unset(MODULE_IS_STUB)
+endmacro()
+
+macro(declare_thirdparty_module name)
+    declare_module(${name})
+    set(MODULE_USE_QT OFF)
+    set(MODULE_LINK_GLOBAL OFF)
+    set(MODULE_USE_PCH OFF)
 endmacro()
 
 
@@ -90,6 +98,22 @@ macro(setup_module)
         set(MUSE_FRAMEWORK_PATH ${PROJECT_SOURCE_DIR})
     endif()
 
+    if (MODULE_USE_QT AND QT_SUPPORT)
+        if (CC_IS_EMSCRIPTEN)
+            qt_add_library(${MODULE} OBJECT)
+        else()
+            # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
+            qt_add_library(${MODULE})
+        endif()
+    else()
+        if (CC_IS_EMSCRIPTEN)
+            add_library(${MODULE} OBJECT)
+        else()
+            # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
+            add_library(${MODULE})
+        endif()
+    endif()
+
     if (MODULE_QRC AND NOT NO_QT_SUPPORT)
         qt_add_resources(RCC_SOURCES ${MODULE_QRC})
     endif()
@@ -105,12 +129,6 @@ macro(setup_module)
 
     add_qml_import_path(MODULE_QML_IMPORT)
     add_qml_import_path(MODULE_QMLAPI_IMPORT)
-
-    if (CC_IS_EMSCRIPTEN)
-        add_library(${MODULE} OBJECT)
-    else()
-        add_library(${MODULE}) # STATIC/SHARED set global in the SetupBuildEnvironment.cmake
-    endif()
 
     if (MODULE_ALIAS)
         add_library(${MODULE_ALIAS} ALIAS ${MODULE})
