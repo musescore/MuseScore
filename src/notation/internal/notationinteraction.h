@@ -301,6 +301,7 @@ public:
 private:
     mu::engraving::Score* score() const;
     void onScoreInited();
+    void onViewModeChanged();
 
     void startEdit(const muse::TranslatableString& actionName);
     void apply();
