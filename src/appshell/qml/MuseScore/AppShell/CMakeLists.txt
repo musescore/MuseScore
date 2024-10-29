@@ -18,7 +18,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-qt_add_qml_module(appshell
+# Workaround for https://bugreports.qt.io/browse/QTBUG-122702
+# preferred way would be no extra `appshellqml` library, and just passing `appshell` to `qt_add_qml_module`
+qt_add_library(appshellqml)
+
+qt_add_qml_module(appshellqml
     URI MuseScore.AppShell
     QML_FILES
         AboutDialog.qml
