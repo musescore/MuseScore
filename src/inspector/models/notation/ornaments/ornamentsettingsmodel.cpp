@@ -92,6 +92,7 @@ void OrnamentSettingsModel::createProperties()
     });
 
     m_showAccidental = buildPropertyItem(Pid::ORNAMENT_SHOW_ACCIDENTAL);
+    m_showCueNote = buildPropertyItem(Pid::ORNAMENT_SHOW_CUE_NOTE);
     m_startOnUpperNote = buildPropertyItem(Pid::START_ON_UPPER_NOTE);
 }
 
@@ -138,6 +139,7 @@ void OrnamentSettingsModel::loadProperties()
     });
 
     loadPropertyItem(m_showAccidental);
+    loadPropertyItem(m_showCueNote);
     loadPropertyItem(m_startOnUpperNote);
 
     updateIsFullIntervalChoiceAvailable();
@@ -154,6 +156,7 @@ void OrnamentSettingsModel::resetProperties()
     m_intervalStep->resetToDefault();
     m_intervalType->resetToDefault();
     m_showAccidental->resetToDefault();
+    m_showCueNote->resetToDefault();
     m_startOnUpperNote->resetToDefault();
 }
 
@@ -185,6 +188,11 @@ PropertyItem* OrnamentSettingsModel::intervalType() const
 PropertyItem* OrnamentSettingsModel::showAccidental() const
 {
     return m_showAccidental;
+}
+
+PropertyItem* OrnamentSettingsModel::showCueNote() const
+{
+    return m_showCueNote;
 }
 
 PropertyItem* OrnamentSettingsModel::startOnUpperNote() const

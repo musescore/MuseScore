@@ -636,6 +636,7 @@ void TWrite::write(const Ornament* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::INTERVAL_ABOVE);
     writeProperty(item, xml, Pid::INTERVAL_BELOW);
     writeProperty(item, xml, Pid::ORNAMENT_SHOW_ACCIDENTAL);
+    writeProperty(item, xml, Pid::ORNAMENT_SHOW_CUE_NOTE);
     writeProperty(item, xml, Pid::START_ON_UPPER_NOTE);
     writeProperties(static_cast<const Articulation*>(item), xml, ctx);
     xml.endElement();

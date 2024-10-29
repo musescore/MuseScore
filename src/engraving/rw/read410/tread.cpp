@@ -2041,6 +2041,7 @@ bool TRead::readProperties(Ornament* o, XmlReader& xml, ReadContext& ctx)
     if (readProperty(o, tag, xml, ctx, Pid::INTERVAL_ABOVE)) {
     } else if (readProperty(o, tag, xml, ctx, Pid::INTERVAL_BELOW)) {
     } else if (readProperty(o, tag, xml, ctx, Pid::ORNAMENT_SHOW_ACCIDENTAL)) {
+    } else if (readProperty(o, tag, xml, ctx, Pid::ORNAMENT_SHOW_CUE_NOTE)) {
     } else if (readProperty(o, tag, xml, ctx, Pid::START_ON_UPPER_NOTE)) {
     } else if (readProperties(static_cast<Articulation*>(o), xml, ctx)) {
     } else if (tag == "Accidental") {

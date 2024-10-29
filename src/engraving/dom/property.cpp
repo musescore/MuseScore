@@ -214,6 +214,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::INTERVAL_ABOVE,          true,  "intervalAbove",         P_TYPE::ORNAMENT_INTERVAL,  PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "interval above") },
     { Pid::INTERVAL_BELOW,          true,  "intervalBelow",         P_TYPE::ORNAMENT_INTERVAL,  PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "interval below") },
     { Pid::ORNAMENT_SHOW_ACCIDENTAL,true,  "ornamentShowAccidental",P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "ornament show accidental") },
+    { Pid::ORNAMENT_SHOW_CUE_NOTE,  true,  "ornamentShowCueNote",   P_TYPE::AUTO_ON_OFF,        PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "ornament show cue note") },
     { Pid::START_ON_UPPER_NOTE,     true,  "startOnUpperNote",      P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "start on upper note") },
 
     { Pid::TIMESIG,                 false, "timesig",               P_TYPE::FRACTION,           PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "time signature") },
