@@ -33,6 +33,7 @@ Rectangle {
     property alias spacing: content.spacing
     property int padding: 4
     property int rowHeight: 32
+    property int separatorHeight: rowHeight
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: root.objectName !== "" ? root.objectName : "ToolBarView"
@@ -130,7 +131,7 @@ Rectangle {
                             property var itemData: loader.itemData
 
                             width: 1
-                            height: root.rowHeight
+                            height: root.separatorHeight
 
                             orientation: Qt.Vertical
                         }
