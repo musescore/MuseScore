@@ -4,6 +4,7 @@
     <Division>480</Division>
     <Style>
       <beamNoSlope>1</beamNoSlope>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>

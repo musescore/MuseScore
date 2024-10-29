@@ -9,6 +9,7 @@
       <endBarWidth>0.4</endBarWidth>
       <stemWidth>0.2</stemWidth>
       <staffLineWidth>0.15</staffLineWidth>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <genCourtesyTimesig>0</genCourtesyTimesig>
       <genCourtesyClef>0</genCourtesyClef>
       <sectionPause>2</sectionPause>

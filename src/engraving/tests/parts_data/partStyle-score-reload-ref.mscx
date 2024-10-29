@@ -4,6 +4,7 @@
     <Division>480</Division>
     <Style>
       <frameSystemDistance>21</frameSystemDistance>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <defaultFramePadding>0</defaultFramePadding>
       <defaultFrameWidth>0</defaultFrameWidth>
       <titleFontFace>Arial</titleFontFace>
@@ -310,6 +311,7 @@
       <Division>480</Division>
       <Style>
         <frameSystemDistance>21</frameSystemDistance>
+        <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <defaultFramePadding>0</defaultFramePadding>
         <defaultFrameWidth>0</defaultFrameWidth>
@@ -505,6 +507,7 @@
       <Division>480</Division>
       <Style>
         <frameSystemDistance>21</frameSystemDistance>
+        <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <defaultFramePadding>0</defaultFramePadding>
         <defaultFrameWidth>0</defaultFrameWidth>

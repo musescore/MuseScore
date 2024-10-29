@@ -3,6 +3,7 @@
   <Score>
     <Division>480</Division>
     <Style>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -782,6 +783,7 @@
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
+        <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
         <spatium>1.74978</spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -1234,6 +1236,7 @@
       <initialPartId>2</initialPartId>
       <Division>480</Division>
       <Style>
+        <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
         <spatium>1.74978</spatium>
         </Style>
       <showInvisible>1</showInvisible>
