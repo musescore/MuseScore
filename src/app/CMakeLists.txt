@@ -313,14 +313,16 @@ install(TARGETS MuseScoreStudio
     RUNTIME DESTINATION bin
 )
 
+qt_generate_deploy_qml_app_script(
+    TARGET MuseScoreStudio
+    OUTPUT_SCRIPT deploy_script
+    MACOS_BUNDLE_POST_BUILD
+)
+
 if(OS_IS_WIN)
     # Doing this only on Windows for now. On other platforms, it is not necessary
     # for development builds because rpath exists, and it takes very long. However,
     # on those platforms we must not forget to deploy manually during packaging.
-    qt_generate_deploy_qml_app_script(
-        TARGET MuseScoreStudio
-        OUTPUT_SCRIPT deploy_script
-    )
     install(SCRIPT ${deploy_script})
 endif()
 

@@ -21,26 +21,16 @@
  */
 import QtQuick 2.15
 
-import MuseScore.AppShell 1.0
+import Muse.Ui 1.0
+import Muse.UiComponents 1.0
 
-import "../"
-import "../../"
+import MuseScore.AppShell
 
-AppWindow {
-    id: root
+StyledToolBarView {
+    navigationPanel.name: "PublishToolBar"
+    navigationPanel.accessible.name: qsTrc("publish", "Publish toolbar")
 
-    PlatformMenuBar {
-        id: menuBar
-    }
+    spacing: 8
 
-    Component.onCompleted: {
-        menuBar.load();
-        window.init()
-    }
-
-    WindowContent {
-        id: window
-
-        anchors.fill: parent
-    }
+    model: PublishToolBarModel { }
 }

@@ -26,7 +26,7 @@ import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import Muse.Dock 1.0
 import Muse.Extensions 1.0
-import MuseScore.AppShell 1.0
+import MuseScore.AppShell
 
 import MuseScore.NotationScene 1.0
 import MuseScore.Palette 1.0

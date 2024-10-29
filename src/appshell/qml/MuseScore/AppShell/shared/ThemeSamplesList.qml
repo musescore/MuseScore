@@ -65,8 +65,8 @@ ListView {
     spacing: 64
 
     delegate: Column {
-        width: sampleWidth
-        height: sampleHeight
+        width: root.sampleWidth
+        height: root.sampleHeight
 
         spacing: 16
 
