@@ -70,11 +70,12 @@ Item {
 
                 var dialogObj = root.createDialog(page.module, dialogPath, page.params)
                 data.setValue("ret", dialogObj.ret)
-                data.setValue("objectId", dialogObj.object.objectId)
 
                 if (dialogObj.ret.errcode > 0) {
                     return
                 }
+
+                data.setValue("objectId", dialogObj.object.objectId)
 
                 if (Boolean(data.value("sync")) && data.value("sync") === true) {
                     dialogObj.object.exec()
@@ -118,15 +119,16 @@ Item {
             if (dialog.selectFolder) {
                 dialogObj = root.createDialog("", "internal/FolderDialog.qml", dialog.params)
             } else {
-                dialogObj = root.createDialog("internal/FileDialog.qml", dialog.params)
+                dialogObj = root.createDialog("", "internal/FileDialog.qml", dialog.params)
             }
 
             data.setValue("ret", dialogObj.ret)
-            data.setValue("objectId", dialogObj.object.objectId)
 
             if (dialogObj.ret.errcode > 0) {
                 return
             }
+
+            data.setValue("objectId", dialogObj.object.objectId)
 
             dialogObj.object.open()
         }
@@ -135,11 +137,12 @@ Item {
             var dialog = data.data()
             var dialogObj = root.createDialog("", "internal/ProgressDialog.qml", dialog.params)
             data.setValue("ret", dialogObj.ret)
-            data.setValue("objectId", dialogObj.object.objectId)
 
             if (dialogObj.ret.errcode > 0) {
                 return
             }
+
+            data.setValue("objectId", dialogObj.object.objectId)
 
             dialogObj.object.open()
         }
@@ -148,7 +151,7 @@ Item {
     function createDialog(module, path, params) {
         var comp = module ? Qt.createComponent(module, path) : Qt.createComponent(path)
         if (comp.status !== Component.Ready) {
-            console.log("[qml] failed create component: " + path + ", err: " + comp.errorString())
+            console.error("Could not create component: " + path + ", err: " + comp.errorString())
             return { "ret": { "errcode": 102 } } // CreateFailed
         }
 
