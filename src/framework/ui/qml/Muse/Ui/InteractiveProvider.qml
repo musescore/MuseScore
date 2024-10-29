@@ -66,9 +66,9 @@ Item {
             }
 
             if (page.type === ContainerType.QmlDialog) {
-                var dialogPath = "../../" + page.path
+                var dialogPath = page.module ? page.path : "../../" + page.path
 
-                var dialogObj = root.createDialog(dialogPath, page.params)
+                var dialogObj = root.createDialog(page.module, dialogPath, page.params)
                 data.setValue("ret", dialogObj.ret)
                 data.setValue("objectId", dialogObj.object.objectId)
 
@@ -86,7 +86,7 @@ Item {
 
         function onFireOpenStandardDialog(data) {
             var dialog = data.data()
-            var dialogObj = root.createDialog("internal/StandardDialog.qml", dialog.params)
+            var dialogObj = root.createDialog("", "internal/StandardDialog.qml", dialog.params)
             data.setValue("ret", dialogObj.ret)
             data.setValue("objectId", dialogObj.object.objectId)
 
@@ -116,7 +116,7 @@ Item {
             var dialog = data.data()
             var dialogObj = null
             if (dialog.selectFolder) {
-                dialogObj = root.createDialog("internal/FolderDialog.qml", dialog.params)
+                dialogObj = root.createDialog("", "internal/FolderDialog.qml", dialog.params)
             } else {
                 dialogObj = root.createDialog("internal/FileDialog.qml", dialog.params)
             }
@@ -133,7 +133,7 @@ Item {
 
         function onFireOpenProgressDialog(data) {
             var dialog = data.data()
-            var dialogObj = createDialog("internal/ProgressDialog.qml", dialog.params)
+            var dialogObj = root.createDialog("", "internal/ProgressDialog.qml", dialog.params)
             data.setValue("ret", dialogObj.ret)
             data.setValue("objectId", dialogObj.object.objectId)
 
@@ -145,8 +145,8 @@ Item {
         }
     }
 
-    function createDialog(path, params) {
-        var comp = Qt.createComponent(path)
+    function createDialog(module, path, params) {
+        var comp = module ? Qt.createComponent(module, path) : Qt.createComponent(path)
         if (comp.status !== Component.Ready) {
             console.log("[qml] failed create component: " + path + ", err: " + comp.errorString())
             return { "ret": { "errcode": 102 } } // CreateFailed
