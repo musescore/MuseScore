@@ -4086,8 +4086,9 @@ void TLayout::layoutMMRest(const MMRest* item, MMRest::LayoutData* ldata, const 
     //! NOTE This is not look like layout data, perhaps this is should be set not here
     ldata->number = item->measure()->mmRestCount();
     ldata->setNumberSym(ldata->number);
+    ldata->yNumberPos = ctx.conf().styleMM(Sid::mmRestNumberPos);
 
-    if (ctx.conf().styleB(Sid::oldStyleMultiMeasureRests)) {
+    if (item->isOldStyle()) {
         SymIdList restSyms;
         double symsWidth = 0.0;
 

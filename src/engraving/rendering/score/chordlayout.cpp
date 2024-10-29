@@ -3511,9 +3511,9 @@ void ChordLayout::fillShape(const MMRest* item, MMRest::LayoutData* ldata, const
     Shape shape(Shape::Type::Composite);
 
     double vStrokeHeight = conf.styleMM(Sid::mmRestHBarVStrokeHeight);
-    shape.add(RectF(0.0, -(vStrokeHeight * .5), ldata->restWidth, vStrokeHeight));
+    shape.add(RectF(0.0, -(vStrokeHeight * .5), ldata->restWidth, vStrokeHeight), item);
     if (item->numberVisible()) {
-        shape.add(item->numberRect());
+        shape.add(item->numberRect().translated(item->numberPos()), item);
     }
 
     ldata->setShape(shape);
