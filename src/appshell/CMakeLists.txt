@@ -151,3 +151,5 @@ if (QT_SUPPORT)
 endif()
 
 setup_module()
+
+add_subdirectory(qml/MuseScore/AppShell)
