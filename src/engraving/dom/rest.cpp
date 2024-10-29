@@ -287,19 +287,23 @@ EngravingItem* Rest::drop(EditData& data)
 
 SymId Rest::getSymbol(DurationType type, int line, int lines) const
 {
-    switch (type) {
-    case DurationType::V_LONG:
-        return SymId::restLonga;
-    case DurationType::V_BREVE:
+    auto getBreveSymbol = [&]() {
         if (style().styleB(Sid::showLedgerLinesOnBreveRests)) {
             return (line <= 0 || line >= lines) ? SymId::restDoubleWholeLegerLine : SymId::restDoubleWhole;
         }
         return SymId::restDoubleWhole;
+    };
+
+    switch (type) {
+    case DurationType::V_LONG:
+        return SymId::restLonga;
+    case DurationType::V_BREVE:
+        return getBreveSymbol();
     case DurationType::V_MEASURE:
         if (ticks() >= Fraction(2, 1)) {
-            return getSymbol(DurationType::V_BREVE, line, lines);
+            return getBreveSymbol();
         }
-        return getSymbol(DurationType::V_WHOLE, line, lines);
+    // fall through
     case DurationType::V_WHOLE:
         return (line < 0 || line >= lines) ? SymId::restWholeLegerLine : SymId::restWhole;
     case DurationType::V_HALF:
