@@ -35,6 +35,8 @@ Rectangle {
     property int rowHeight: 32
     property int separatorHeight: rowHeight
 
+    property int maximumWidth: -1
+
     property NavigationPanel navigationPanel: NavigationPanel {
         name: root.objectName !== "" ? root.objectName : "ToolBarView"
         enabled: root.enabled && root.visible
@@ -74,7 +76,7 @@ Rectangle {
                 result -= spacing
             }
 
-            return result
+            return root.maximumWidth !== -1 ? Math.min(result, root.maximumWidth) : result
         }
         height: childrenRect.height
 
