@@ -155,3 +155,4 @@ endif()
 setup_module()
 
 add_subdirectory(qml/MuseScore/AppShell)
+target_link_libraries(appshell PRIVATE appshellqmlplugin)
