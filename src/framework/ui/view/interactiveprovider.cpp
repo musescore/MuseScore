@@ -391,6 +391,7 @@ void InteractiveProvider::fillExtData(QmlLaunchData* data, const UriQuery& q) co
 void InteractiveProvider::fillData(QmlLaunchData* data, const UriQuery& q) const
 {
     ContainerMeta meta = uriRegister()->meta(q.uri());
+    data->setValue("module", meta.qmlModule);
     data->setValue("path", meta.qmlPath);
     data->setValue("type", meta.type);
     data->setValue("uri", QString::fromStdString(q.uri().toString()));

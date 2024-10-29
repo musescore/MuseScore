@@ -45,6 +45,11 @@ public:
         registerUri(uri, ContainerMeta(ContainerType::Type::QmlDialog, qmlPath));
     }
 
+    void registerQmlUri(const Uri& uri, const QString& qmlModule, const QString& qmlPath)
+    {
+        registerUri(uri, ContainerMeta(ContainerType::Type::QmlDialog, qmlModule, qmlPath));
+    }
+
     template<typename T>
     void registerWidgetUri(const Uri& uri)
     {
