@@ -735,7 +735,11 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createRehearsalMark(dummy()->segment());
+        textBox = Factory::createRehearsalMark(chordRest->segment());
+        textBox->setParent(chordRest->segment());
+        textBox->setTrack(0);
+        RehearsalMark* r = toRehearsalMark(textBox);
+        textBox->setXmlText(score()->createRehearsalMarkText(r));
         chordRest->undoAddAnnotation(textBox);
         break;
     }
