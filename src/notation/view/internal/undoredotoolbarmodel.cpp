@@ -22,98 +22,93 @@
 
 #include "undoredotoolbarmodel.h"
 
-#include "uicomponents/view/menuitem.h"
+#include "uicomponents/view/toolbaritem.h"
 
 using namespace mu::notation;
 using namespace muse;
 using namespace muse::uicomponents;
 
+static const actions::ActionCode UNDO_ACTION_CODE("undo");
+static const actions::ActionCode REDO_ACTION_CODE("redo");
+
 UndoRedoToolbarModel::UndoRedoToolbarModel(QObject* parent)
-    : QObject(parent), Injectable(iocCtxForQmlObject(this))
+    : AbstractToolBarModel(parent)
 {
 }
 
 void UndoRedoToolbarModel::load()
 {
+    actions::ActionCodeList itemsCodes = {
+        UNDO_ACTION_CODE,
+        REDO_ACTION_CODE
+    };
+
+    ToolBarItemList items;
+    for (const actions::ActionCode& code : itemsCodes) {
+        ToolBarItem* item = makeItem(code);
+        item->setIsTransparent(true);
+        items << item;
+    }
+
+    setItems(items);
+
+    AbstractToolBarModel::load();
+
     context()->currentNotationChanged().onNotify(this, [this]() {
         updateItems();
 
-        auto stack = undoStack();
-        if (stack) {
-            stack->stackChanged().onNotify(this, [this]() {
-                updateItems();
-            });
-        }
+        subsribeOnUndoStackChanges();
     });
 
-    auto stack = undoStack();
-    if (stack) {
-        stack->stackChanged().onNotify(this, [this]() {
-            updateItems();
-        });
-    }
-
-    m_undoItem = new MenuItem(actionsRegister()->action("undo"), this);
-    m_redoItem = new MenuItem(actionsRegister()->action("redo"), this);
-
-    updateItems();
-
-    // Only to let QML know that `m_undoItem` and `m_redoItem` have been initialised;
-    // changes to their properties will be communicated via those MenuItems' own signals.
-    emit itemsChanged();
+    subsribeOnUndoStackChanges();
 }
 
-MenuItem* UndoRedoToolbarModel::undoItem() const
-{
-    return m_undoItem;
-}
-
-MenuItem* UndoRedoToolbarModel::redoItem() const
-{
-    return m_redoItem;
-}
-
-void UndoRedoToolbarModel::updateItems()
+void UndoRedoToolbarModel::onActionsStateChanges(const muse::actions::ActionCodeList& codes)
 {
     auto stack = undoStack();
 
-    if (m_undoItem) {
-        const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
-        ui::UiActionState state;
-        state.enabled = stack ? stack->canUndo() : false;
-        m_undoItem->setState(state);
-        m_undoItem->setTitle(undoActionName.isEmpty()
-                             ? TranslatableString("action", "Undo")
-                             : TranslatableString("action", "Undo ‘%1’").arg(undoActionName));
+    for (const actions::ActionCode& code : codes) {
+        if (code == UNDO_ACTION_CODE) {
+            ToolBarItem* undoItem = findItemPtr(UNDO_ACTION_CODE);
+            if (undoItem) {
+                const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
+                undoItem->setTitle(undoActionName.isEmpty()
+                                   ? TranslatableString("action", "Undo")
+                                   : TranslatableString("action", "Undo ‘%1’").arg(undoActionName));
+            }
+        } else if (code == REDO_ACTION_CODE) {
+            ToolBarItem* redoItem = findItemPtr(REDO_ACTION_CODE);
+            if (redoItem) {
+                const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
+                redoItem->setTitle(redoActionName.isEmpty()
+                                   ? TranslatableString("action", "Redo")
+                                   : TranslatableString("action", "Redo ‘%1’").arg(redoActionName));
+            }
+        }
     }
 
-    if (m_redoItem) {
-        const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
-        ui::UiActionState state;
-        state.enabled = stack ? stack->canRedo() : false;
-        m_redoItem->setState(state);
-        m_redoItem->setTitle(redoActionName.isEmpty()
-                             ? TranslatableString("action", "Redo")
-                             : TranslatableString("action", "Redo ‘%1’").arg(redoActionName));
-    }
-}
-
-void UndoRedoToolbarModel::redo()
-{
-    if (undoStack()) {
-        undoStack()->redo(nullptr);
-    }
-}
-
-void UndoRedoToolbarModel::undo()
-{
-    if (undoStack()) {
-        undoStack()->undo(nullptr);
-    }
+    AbstractToolBarModel::onActionsStateChanges(codes);
 }
 
 INotationUndoStackPtr UndoRedoToolbarModel::undoStack() const
 {
     INotationPtr notation = context()->currentNotation();
     return notation ? notation->undoStack() : nullptr;
+}
+
+void UndoRedoToolbarModel::updateItems()
+{
+    onActionsStateChanges({ UNDO_ACTION_CODE, REDO_ACTION_CODE });
+}
+
+void UndoRedoToolbarModel::subsribeOnUndoStackChanges()
+{
+    auto stack = undoStack();
+    if (!stack) {
+        return;
+    }
+
+    stack->stackChanged().onNotify(this, [this]() {
+        updateItems();
+    });
 }
