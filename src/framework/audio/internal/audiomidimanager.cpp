@@ -21,9 +21,17 @@
  */
 #include "framework/audio/midiqueue.h"
 #include "audiomidimanager.h"
+
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
 #include "platform/alsa/alsaaudiodriver.h" //FIX: relative path, set path in CMakeLists
+#endif
+
 #if JACK_AUDIO
 #include "platform/jack/jackaudiodriver.h" //FIX: relative path, set path in CMakeLists
+#endif
+
+#ifdef Q_OS_MACOS
+#include "internal/platform/osx/osxaudiodriver.h"
 #endif
 
 #include "translation.h"
@@ -126,11 +134,18 @@ bool AudioMidiManager::makeDevice(const AudioDeviceID& deviceId)
     } else if (deviceId == "alsa") {
         m_current_audioDriverState = std::make_unique<AlsaDriverState>();
 #endif
+//#ifdef Q_OS_MACOS
+//    } else if (deviceId == "osx") {
+//        m_current_audioDriverState = std::make_unique<OSXAudioDriverState>();
+//#endif
 #else
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     if (deviceId == "alsa") {
         m_current_audioDriverState = std::make_unique<AlsaDriverState>();
 #endif
+//#ifdef Q_OS_MACOS
+//    m_current_audioDriverState = std::make_unique<OSXAudioDriverState>();
+//#endif
 #endif
     } else {
         LOGE() << "Unknown device name: " << deviceId;
