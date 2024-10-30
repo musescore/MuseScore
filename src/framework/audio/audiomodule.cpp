@@ -55,7 +55,7 @@ using namespace muse::audio;
 using namespace muse::audio::synth;
 using namespace muse::audio::fx;
 
-#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(MINGW)
+#if defined(Q_OS_MACOS) || defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(MINGW)
 #include "internal/audiomidimanager.h"
 #endif
 
@@ -63,10 +63,6 @@ using namespace muse::audio::fx;
 //#include "internal/platform/win/winmmdriver.h"
 //#include "internal/platform/win/wincoreaudiodriver.h"
 #include "internal/platform/win/wasapiaudiodriver.h"
-#endif
-
-#ifdef Q_OS_MACOS
-#include "internal/platform/osx/osxaudiodriver.h"
 #endif
 
 #ifdef Q_OS_WASM
@@ -112,7 +108,7 @@ void AudioModule::registerExports()
     m_playbackFacade = std::make_shared<Playback>(iocContext());
     m_soundFontRepository = std::make_shared<SoundFontRepository>(iocContext());
 
-#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(MINGW)
+#if defined(Q_OS_MACOS) || defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(MINGW)
     m_audioDriver = std::shared_ptr<IAudioDriver>(new AudioMidiManager());
 #endif
 
@@ -120,10 +116,6 @@ void AudioModule::registerExports()
     //m_audioDriver = std::shared_ptr<IAudioDriver>(new WinmmDriver());
     //m_audioDriver = std::shared_ptr<IAudioDriver>(new CoreAudioDriver());
     m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver());
-#endif
-
-#ifdef Q_OS_MACOS
-    m_audioDriver = std::shared_ptr<IAudioDriver>(new OSXAudioDriver());
 #endif
 
 #ifdef Q_OS_WASM
