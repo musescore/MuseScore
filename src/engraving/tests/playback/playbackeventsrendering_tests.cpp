@@ -31,6 +31,7 @@
 #include "dom/part.h"
 #include "dom/segment.h"
 #include "dom/harppedaldiagram.h"
+#include "dom/ornament.h"
 
 #include "utils/scorerw.h"
 #include "playback/playbackeventsrenderer.h"
@@ -2843,6 +2844,77 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TrillLine_TiedNotes)
         }
 
         ++noteNum;
+    }
+
+    delete score;
+}
+
+/**
+ * @brief PlaybackEventsRendererTests_Trill_TiedNotes
+ * Checks that we can render the normal trill (ornament) if it starts from a tied note
+ * See: https://github.com/musescore/MuseScore/issues/18676
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, Trill_TiedNotes)
+{
+    // [GIVEN] Simple piece of score (violin, 4/4, 120 bpm, Treble Cleff)
+    Score* score
+        = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "trill_on_tied_notes.mscx");
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Trill, m_dummyPattern);
+
+    // [GIVEN] Dummy context
+    PlaybackContextPtr ctx = std::make_shared<PlaybackContext>();
+
+    // [GIVEN] The chord we want to render
+    const Measure* firstMeasure = score->firstMeasure();
+    ASSERT_TRUE(firstMeasure);
+
+    const Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    ASSERT_TRUE(firstSegment);
+
+    const ChordRest* cr = firstSegment->nextChordRest(0);
+    ASSERT_TRUE(cr && cr->isChord());
+
+    const Chord* chord = toChord(cr);
+    ASSERT_EQ(chord->notes().size(), 1);
+    ASSERT_EQ(chord->articulations().size(), 1);
+
+    const Articulation* articulation = chord->articulations().front();
+    ASSERT_TRUE(articulation->isOrnament());
+    ASSERT_EQ(toOrnament(articulation)->symId(), SymId::ornamentTrill);
+
+    // [WHEN] Render the chord
+    PlaybackEventsMap result;
+    m_renderer.render(toChord(chord), 0, m_defaultProfile, ctx, result);
+
+    // [THEN] We expect 1 list of events (for 2 tied notes)
+    EXPECT_EQ(result.size(), 1);
+
+    constexpr timestamp_t expectedTrillTimestamp = 0;
+    constexpr duration_t expectedTrillDuration = WHOLE_NOTE_DURATION * 2; // 2 tied notes
+
+    for (const auto& pair : result) {
+        for (const PlaybackEvent& event : pair.second) {
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+
+            // [THEN] We expect that each note event has only one articulation applied
+            ASSERT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+
+            // [THEN] Sub-notes of the trill
+            constexpr size_t expectedSubNotes = 64;
+            EXPECT_EQ(pair.second.size(), expectedSubNotes);
+
+            // [THEN] Each note event has the correct articulation time and duration
+            const ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(ArticulationType::Trill);
+            EXPECT_EQ(articulationData.meta.timestamp, expectedTrillTimestamp);
+            EXPECT_EQ(articulationData.meta.overallDuration, expectedTrillDuration);
+
+            // [THEN] Each note event has the correct duration
+            constexpr duration_t expectedSubNoteDuration = expectedTrillDuration / expectedSubNotes;
+            EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedSubNoteDuration);
+        }
     }
 
     delete score;

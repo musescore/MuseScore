@@ -32,10 +32,12 @@ class OrnamentsRenderer : public RenderBase<OrnamentsRenderer>
 public:
     static const muse::mpe::ArticulationTypeSet& supportedTypes();
 
-    static void doRender(const EngravingItem* item, const muse::mpe::ArticulationType preferredType, const RenderingContext& context,
+    static void doRender(const EngravingItem* item, const muse::mpe::ArticulationType preferredType, const RenderingContext& ctx,
                          muse::mpe::PlaybackEventList& result);
 
 private:
+    static void applyTiedNotesDuration(const Note* note, const muse::mpe::ArticulationType ornamentType, RenderingContext& ctx);
+
     static void convert(const muse::mpe::ArticulationType type, const DisclosurePattern& pattern, NominalNoteCtx&& noteCtx,
                         muse::mpe::PlaybackEventList& result);
 

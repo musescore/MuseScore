@@ -295,7 +295,7 @@ const ArticulationTypeSet& OrnamentsRenderer::supportedTypes()
 }
 
 void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationType preferredType,
-                                 const RenderingContext& context,
+                                 const RenderingContext& ctx,
                                  mpe::PlaybackEventList& result)
 {
     const Chord* chord = toChord(item);
@@ -309,8 +309,11 @@ void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationTy
     }
 
     IntervalsInfo intervalsInfo;
-    if (const Ornament* ornament = chord->findOrnament(true)) {
+    bool isArticulation = false;
+
+    if (Ornament* ornament = chord->findOrnament(true)) {
         intervalsInfo = makeIntervalsInfo(ornament->intervalBelow(), ornament->intervalAbove());
+        isArticulation = muse::contains(chord->articulations(), static_cast<Articulation*>(ornament));
     } else {
         intervalsInfo = makeIntervalsInfo(DEFAULT_ORNAMENT_INTERVAL, DEFAULT_ORNAMENT_INTERVAL);
     }
@@ -318,16 +321,36 @@ void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationTy
     const DisclosurePattern& nominalPattern = search->second;
 
     for (const Note* note : chord->notes()) {
-        if (!isNotePlayable(note, context.commonArticulations)) {
+        if (!isNotePlayable(note, ctx.commonArticulations)) {
             continue;
         }
 
-        NominalNoteCtx noteCtx(note, context);
+        RenderingContext ornamentCtx(ctx);
+        if (isArticulation && note->tieFor()) {
+            applyTiedNotesDuration(note, preferredType, ornamentCtx);
+        }
+
+        NominalNoteCtx noteCtx(note, ornamentCtx);
         NoteArticulationsParser::buildNoteArticulationMap(note, noteCtx.chordCtx, noteCtx.articulations);
 
-        convert(preferredType, nominalPattern.buildActualPattern(note, intervalsInfo, context.beatsPerSecond.val),
+        convert(preferredType, nominalPattern.buildActualPattern(note, intervalsInfo, ornamentCtx.beatsPerSecond.val),
                 std::move(noteCtx), result);
     }
+}
+
+void OrnamentsRenderer::applyTiedNotesDuration(const Note* note, const ArticulationType ornamentType, RenderingContext& ctx)
+{
+    const Note* lastTiedNote = note->lastTiedNote(false);
+    if (!lastTiedNote || lastTiedNote == note) {
+        return;
+    }
+
+    ctx.nominalPositionEndTick = lastTiedNote->chord()->endTick().ticks();
+    ctx.nominalDuration = timestampFromTicks(ctx.score, ctx.nominalPositionEndTick) - ctx.nominalTimestamp;
+    ctx.nominalDurationTicks = ctx.nominalPositionEndTick - ctx.nominalPositionStartTick;
+
+    mpe::ArticulationMeta& meta = ctx.commonArticulations.at(ornamentType).meta;
+    meta.overallDuration = ctx.nominalDuration;
 }
 
 void OrnamentsRenderer::convert(const ArticulationType type, const DisclosurePattern& pattern, NominalNoteCtx&& noteCtx,
