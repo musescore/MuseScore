@@ -535,6 +535,7 @@ static const std::vector<Item<NoteHeadScheme> > NOTEHEAD_SCHEMES = {
     { NoteHeadScheme::HEAD_PITCHNAME_GERMAN,    "name-pitch-german", muse::TranslatableString("engraving/noteheadscheme", "German pitch names") },
     { NoteHeadScheme::HEAD_SOLFEGE,             "solfege-movable",   muse::TranslatableString("engraving/noteheadscheme", "Solf\u00e8ge movable Do") },  // &egrave;
     { NoteHeadScheme::HEAD_SOLFEGE_FIXED,       "solfege-fixed",     muse::TranslatableString("engraving/noteheadscheme", "Solf\u00e8ge fixed Do") },    // &egrave;
+    { NoteHeadScheme::HEAD_FIGURENOTES_STAGE_3, "figurenotes-stage-3", muse::TranslatableString("engraving/noteheadscheme", "Figurenotes (stage 3)") },
     { NoteHeadScheme::HEAD_SHAPE_NOTE_4,        "shape-4",           muse::TranslatableString("engraving/noteheadscheme", "4-shape (Walker)") },
     { NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN,  "shape-7-aikin",     muse::TranslatableString("engraving/noteheadscheme", "7-shape (Aikin)") },
     { NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK,   "shape-7-funk",      muse::TranslatableString("engraving/noteheadscheme", "7-shape (Funk)") },
@@ -2750,4 +2751,43 @@ const muse::TranslatableString& TConv::userName(Key v, bool isAtonal, bool isCus
 String TConv::translatedUserName(Key v, bool isAtonal, bool isCustom)
 {
     return userName(v, isAtonal, isCustom).translated();
+}
+
+const std::array<Item<ScoreStylePreset>, 6> SCORE_STYLE_PRESETS = { {
+    //: Score notation style: Default
+    { ScoreStylePreset::DEFAULT,  "Default",  muse::TranslatableString("engraving/scorestylepreset", "Default") },
+    //: Score notation style: Modified Stave Notation (MSN) with 16mm staff size. Intended for visually-impaired musicians.
+    { ScoreStylePreset::MSN_16MM, "16mm MSN", muse::TranslatableString("engraving/scorestylepreset", "16mm MSN") },
+    //: Score notation style: Modified Stave Notation (MSN) with 18mm staff size. Intended for visually-impaired musicians.
+    { ScoreStylePreset::MSN_18MM, "18mm MSN", muse::TranslatableString("engraving/scorestylepreset", "18mm MSN") },
+    //: Score notation style: Modified Stave Notation (MSN) with 20mm staff size. Intended for visually-impaired musicians.
+    { ScoreStylePreset::MSN_20MM, "20mm MSN", muse::TranslatableString("engraving/scorestylepreset", "20mm MSN") },
+    //: Score notation style: Modified Stave Notation (MSN) with 22mm staff size. Intended for visually-impaired musicians.
+    { ScoreStylePreset::MSN_22MM, "22mm MSN", muse::TranslatableString("engraving/scorestylepreset", "22mm MSN") },
+    //: Score notation style: Modified Stave Notation (MSN) with 25mm staff size. Intended for visually-impaired musicians.
+    { ScoreStylePreset::MSN_25MM, "25mm MSN", muse::TranslatableString("engraving/scorestylepreset", "25mm MSN") }
+} };
+
+AsciiStringView TConv::toXml(ScoreStylePreset preset)
+{
+    return findXmlTagByType<ScoreStylePreset>(SCORE_STYLE_PRESETS, preset);
+}
+
+ScoreStylePreset TConv::fromXml(const AsciiStringView& tag, ScoreStylePreset def)
+{
+    if (tag == "Default") {
+        return def;
+    }
+
+    return findTypeByXmlTag<ScoreStylePreset>(SCORE_STYLE_PRESETS, tag, def);
+}
+
+const muse::TranslatableString& TConv::userName(ScoreStylePreset v)
+{
+    return findUserNameByType<ScoreStylePreset>(SCORE_STYLE_PRESETS, v);
+}
+
+String TConv::translatedUserName(ScoreStylePreset v)
+{
+    return findUserNameByType<ScoreStylePreset>(SCORE_STYLE_PRESETS, v).translated();
 }

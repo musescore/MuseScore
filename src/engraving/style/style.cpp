@@ -113,6 +113,16 @@ int MStyle::defaultStyleVersion() const
     return styleI(Sid::defaultsVersion);
 }
 
+void MStyle::setPreset(ScoreStylePreset preset)
+{
+    m_preset = preset;
+}
+
+void MStyle::setPresetEdited(bool isEdited)
+{
+    m_presetedited = isEdited;
+}
+
 bool MStyle::readProperties(XmlReader& e)
 {
     const AsciiStringView tag(e.name());
@@ -191,6 +201,9 @@ bool MStyle::readProperties(XmlReader& e)
                 break;
             case P_TYPE::GLISS_STYLE:
                 set(idx, GlissandoStyle(e.readText().toInt()));
+                break;
+            case  P_TYPE::NOTEHEAD_SCHEME:
+                set(idx, NoteHeadScheme(e.readText().toInt()));
                 break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
@@ -293,6 +306,8 @@ bool MStyle::read(IODevice* device, bool ign)
             readVersion(e.attribute("version"));
             while (e.readNextStartElement()) {
                 if (e.name() == "Style") {
+                    m_preset = TConv::fromXml(e.asciiAttribute("preset", "Default"), ScoreStylePreset::DEFAULT);
+                    m_presetedited = e.attribute("edited", String(u"false")) == "true";
                     read(e, nullptr);
                 } else {
                     e.unknown();
@@ -542,7 +557,17 @@ bool MStyle::write(IODevice* device)
 
 void MStyle::save(XmlWriter& xml, bool optimize)
 {
-    xml.startElement("Style");
+    muse::XmlStreamWriter::Attributes attributes;
+
+    if (preset() != ScoreStylePreset::DEFAULT) {
+        attributes.push_back({ "preset", TConv::toXml(preset()) });
+    }
+
+    if (presetEdited()) {
+        attributes.push_back({ "edited", String(u"true") });
+    }
+
+    xml.startElement("Style", attributes);
 
     for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
         Sid idx = st.styleIdx();

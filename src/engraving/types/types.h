@@ -437,6 +437,7 @@ enum class NoteHeadScheme : signed char {
     HEAD_PITCHNAME_GERMAN,
     HEAD_SOLFEGE,
     HEAD_SOLFEGE_FIXED,
+    HEAD_FIGURENOTES_STAGE_3,
     HEAD_SHAPE_NOTE_4,
     HEAD_SHAPE_NOTE_7_AIKIN,
     HEAD_SHAPE_NOTE_7_FUNK,
@@ -1166,6 +1167,16 @@ struct std::hash<mu::engraving::InstrumentTrackId>
         std::size_t h2 = std::hash<muse::String> {}(s.instrumentId);
         return h1 ^ (h2 << 1);
     }
+};
+
+enum class ScoreStylePreset {
+    DEFAULT = 0,
+    MSN_16MM,
+    MSN_18MM,
+    MSN_20MM,
+    MSN_22MM,
+    MSN_25MM,
+    MAX_PRESET
 };
 
 #ifndef NO_QT_SUPPORT
