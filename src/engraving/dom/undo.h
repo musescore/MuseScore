@@ -231,7 +231,7 @@ public:
     UndoMacro* last() const { return m_currentIndex > 0 ? m_macroList[m_currentIndex - 1] : nullptr; }
     UndoMacro* prev() const { return m_currentIndex > 1 ? m_macroList[m_currentIndex - 2] : nullptr; }
     UndoMacro* next() const { return canRedo() ? m_macroList[m_currentIndex] : nullptr; }
-    UndoMacro* atIndex(size_t idx) const { return idx >= 0 && idx < m_macroList.size() ? m_macroList[idx] : nullptr; }
+    UndoMacro* lastAtIndex(size_t idx) const { return idx > 0 && idx - 1 < m_macroList.size() ? m_macroList[idx - 1] : nullptr; }
 
     void undo(EditData*);
     void redo(EditData*);

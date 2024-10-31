@@ -583,13 +583,6 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Redo"),
              IconCode::Code::REDO
              ),
-    UiAction("undo-history",
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Undo/redo history…"),
-             TranslatableString("action", "Undo/redo history…"),
-             IconCode::Code::NONE
-             ),
     UiAction("voice-x12",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

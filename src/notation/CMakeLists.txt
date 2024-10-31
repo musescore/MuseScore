@@ -150,8 +150,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractelementpopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredotoolbarmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredotoolbarmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredohistorymodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredohistorymodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/undohistorymodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/undohistorymodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/harppedalpopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/harppedalpopupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/caposettingsmodel.cpp

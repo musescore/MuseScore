@@ -45,7 +45,7 @@
 #include "view/noteinputbarcustomisemodel.h"
 #include "view/noteinputbarcustomiseitem.h"
 #include "view/internal/undoredotoolbarmodel.h"
-#include "view/internal/undoredohistorymodel.h"
+#include "view/internal/undohistorymodel.h"
 #include "view/notationtoolbarmodel.h"
 #include "view/notationnavigator.h"
 #include "view/selectionfiltermodel.h"
@@ -148,7 +148,6 @@ void NotationModule::resolveImports()
         ir->registerWidgetUri<StaffTextPropertiesDialog>(Uri("musescore://notation/stafftextproperties"));
         ir->registerWidgetUri<RealizeHarmonyDialog>(Uri("musescore://notation/realizechordsymbols"));
 
-        ir->registerQmlUri(Uri("musescore://notation/undohistory"), "MuseScore/NotationScene/UndoHistoryDialog.qml");
         ir->registerQmlUri(Uri("musescore://notation/parts"), "MuseScore/NotationScene/PartsDialog.qml");
         ir->registerQmlUri(Uri("musescore://notation/selectmeasurescount"), "MuseScore/NotationScene/SelectMeasuresCountDialog.qml");
         ir->registerQmlUri(Uri("musescore://notation/editgridsize"), "MuseScore/NotationScene/EditGridSizeDialog.qml");
@@ -174,7 +173,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
     qmlRegisterType<NotationNavigator>("MuseScore.NotationScene", 1, 0, "NotationNavigator");
     qmlRegisterType<UndoRedoToolbarModel>("MuseScore.NotationScene", 1, 0, "UndoRedoToolbarModel");
-    qmlRegisterType<UndoRedoHistoryModel>("MuseScore.NotationScene", 1, 0, "UndoRedoHistoryModel");
+    qmlRegisterType<UndoHistoryModel>("MuseScore.NotationScene", 1, 0, "UndoHistoryModel");
     qmlRegisterType<TimelineView>("MuseScore.NotationScene", 1, 0, "TimelineView");
     qmlRegisterType<SelectionFilterModel>("MuseScore.NotationScene", 1, 0, "SelectionFilterModel");
     qmlRegisterType<EditGridSizeDialogModel>("MuseScore.NotationScene", 1, 0, "EditGridSizeDialogModel");

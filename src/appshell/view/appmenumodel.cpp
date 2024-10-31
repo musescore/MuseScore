@@ -180,7 +180,7 @@ MenuItem* AppMenuModel::makeEditMenu()
     MenuItemList editItems {
         makeMenuItem("undo"),
         makeMenuItem("redo"),
-        makeMenuItem("undo-history"),
+        makeMenuItem("toggle-undo-history-panel"),
         makeSeparator(),
         makeMenuItem("notation-cut"),
         makeMenuItem("notation-copy"),
@@ -234,6 +234,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-instruments"),
         makeMenuItem("inspector"),
         makeMenuItem("toggle-selection-filter"),
+        makeMenuItem("toggle-undo-history-panel"),
         makeMenuItem("toggle-navigator"),
         makeMenuItem("toggle-braille-panel"),
         makeMenuItem("toggle-timeline"),

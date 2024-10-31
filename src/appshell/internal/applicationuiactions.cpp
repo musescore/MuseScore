@@ -145,6 +145,13 @@ const UiActionList ApplicationUiActions::m_actions = {
              TranslatableString("action", "Show/hide selection filter"),
              Checkable::Yes
              ),
+    UiAction("toggle-undo-history-panel",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "&History"),
+             TranslatableString("action", "Show/hide undo history"),
+             Checkable::Yes
+             ),
 
     // Navigator
     UiAction(TOGGLE_NAVIGATOR_ACTION_CODE,
@@ -325,6 +332,7 @@ const QMap<ActionCode, DockName>& ApplicationUiActions::toggleDockActions()
         { "toggle-instruments", INSTRUMENTS_PANEL_NAME },
         { "inspector", INSPECTOR_PANEL_NAME },
         { "toggle-selection-filter", SELECTION_FILTERS_PANEL_NAME },
+        { "toggle-undo-history-panel", UNDO_HISTORY_PANEL_NAME },
 
         { TOGGLE_NAVIGATOR_ACTION_CODE, NOTATION_NAVIGATOR_PANEL_NAME },
         { TOGGLE_BRAILLE_ACTION_CODE, NOTATION_BRAILLE_PANEL_NAME },

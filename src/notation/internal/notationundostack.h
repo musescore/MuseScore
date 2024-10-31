@@ -45,7 +45,7 @@ public:
     bool canRedo() const override;
     void redo(mu::engraving::EditData*) override;
 
-    void undoRedoToIdx(size_t idx, mu::engraving::EditData* editData) override;
+    void undoRedoToIndex(size_t idx, mu::engraving::EditData* editData) override;
 
     void prepareChanges(const muse::TranslatableString& actionName) override;
     void rollbackChanges() override;

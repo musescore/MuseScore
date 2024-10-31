@@ -45,7 +45,7 @@ public:
     virtual bool canRedo() const = 0;
     virtual void redo(mu::engraving::EditData*) = 0;
 
-    virtual void undoRedoToIdx(size_t, mu::engraving::EditData*) = 0;
+    virtual void undoRedoToIndex(size_t, mu::engraving::EditData*) = 0;
 
     virtual void prepareChanges(const muse::TranslatableString&) = 0;
     virtual void rollbackChanges() = 0;
