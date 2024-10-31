@@ -95,6 +95,13 @@ void Settings::reset(bool keepDefaultSettings, bool notifyAboutChanges)
     m_settings->clear();
 
     m_isTransactionStarted = false;
+
+    std::vector<Settings::Key> locallyAddedKeys;
+    for (auto it = m_localSettings.begin(); it != m_localSettings.end(); ++it) {
+        if (m_items.count(it->first) == 0) {
+            locallyAddedKeys.push_back(it->first);
+        }
+    }
     m_localSettings.clear();
 
     if (!keepDefaultSettings) {
@@ -111,6 +118,10 @@ void Settings::reset(bool keepDefaultSettings, bool notifyAboutChanges)
 
         Channel<Val>& channel = findChannel(it->first);
         channel.send(it->second.value);
+    }
+    for (auto it = locallyAddedKeys.cbegin(); it != locallyAddedKeys.cend(); ++it) {
+        Channel<Val>& channel = findChannel(*it);
+        channel.send(Val());
     }
 }
 

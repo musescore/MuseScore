@@ -610,6 +610,11 @@ void NotationConfiguration::setDefaultStyleFilePath(const muse::io::path_t& path
     engravingConfiguration()->setDefaultStyleFilePath(path.toQString());
 }
 
+async::Channel<muse::io::path_t> NotationConfiguration::defaultStyleFilePathChanged() const
+{
+    return engravingConfiguration()->defaultStyleFilePathChanged();
+}
+
 muse::io::path_t NotationConfiguration::partStyleFilePath() const
 {
     return engravingConfiguration()->partStyleFilePath();
@@ -618,6 +623,11 @@ muse::io::path_t NotationConfiguration::partStyleFilePath() const
 void NotationConfiguration::setPartStyleFilePath(const muse::io::path_t& path)
 {
     engravingConfiguration()->setPartStyleFilePath(path.toQString());
+}
+
+async::Channel<muse::io::path_t> NotationConfiguration::partStyleFilePathChanged() const
+{
+    return engravingConfiguration()->partStyleFilePathChanged();
 }
 
 bool NotationConfiguration::isMidiInputEnabled() const
