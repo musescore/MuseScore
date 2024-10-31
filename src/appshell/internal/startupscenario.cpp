@@ -152,7 +152,7 @@ StartupModeType StartupScenario::resolveStartupModeType() const
         return modeTypeTromString(m_startupTypeStr);
     }
 
-    return configuration()->startupModeType().val;
+    return configuration()->startupModeType();
 }
 
 void StartupScenario::onStartupPageOpened(StartupModeType modeType)
@@ -173,7 +173,7 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
         break;
     case StartupModeType::StartWithScore: {
         project::ProjectFile file
-            = m_startupScoreFile.isValid() ? m_startupScoreFile : project::ProjectFile(configuration()->startupScorePath().val);
+            = m_startupScoreFile.isValid() ? m_startupScoreFile : project::ProjectFile(configuration()->startupScorePath());
         openScore(file);
     } break;
     }

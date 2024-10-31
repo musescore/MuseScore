@@ -23,7 +23,7 @@
 #define MU_APPSHELL_IAPPSHELLCONFIGURATION_H
 
 #include "modularity/imoduleinterface.h"
-#include "types/retval.h"
+#include "types/ret.h"
 
 #include "io/path.h"
 #include "appshelltypes.h"
@@ -40,11 +40,13 @@ public:
     virtual bool hasCompletedFirstLaunchSetup() const = 0;
     virtual void setHasCompletedFirstLaunchSetup(bool has) = 0;
 
-    virtual muse::ValCh<StartupModeType> startupModeType() const = 0;
+    virtual StartupModeType startupModeType() const = 0;
     virtual void setStartupModeType(StartupModeType type) = 0;
+    virtual muse::async::Notification startupModeTypeChanged() const = 0;
 
-    virtual muse::ValCh<muse::io::path_t> startupScorePath() const = 0;
+    virtual muse::io::path_t startupScorePath() const = 0;
     virtual void setStartupScorePath(const muse::io::path_t& scorePath) = 0;
+    virtual muse::async::Notification startupScorePathChanged() const = 0;
 
     virtual muse::io::path_t userDataPath() const = 0;
 
