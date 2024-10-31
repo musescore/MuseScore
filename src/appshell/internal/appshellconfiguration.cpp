@@ -63,13 +63,13 @@ void AppShellConfiguration::init()
     settings()->setDefaultValue(HAS_COMPLETED_FIRST_LAUNCH_SETUP, Val(false));
 
     settings()->setDefaultValue(STARTUP_MODE_TYPE, Val(StartupModeType::StartEmpty));
-    settings()->valueChanged(STARTUP_MODE_TYPE).onReceive(nullptr, [this](const Val& val) {
-        m_startupModeTypeChanged.send(val.toEnum<StartupModeType>());
+    settings()->valueChanged(STARTUP_MODE_TYPE).onReceive(this, [this](const Val&) {
+        m_startupModeTypeChanged.notify();
     });
 
     settings()->setDefaultValue(STARTUP_SCORE_PATH, Val(projectConfiguration()->myFirstProjectPath().toStdString()));
-    settings()->valueChanged(STARTUP_SCORE_PATH).onReceive(nullptr, [this](const Val& val) {
-        m_startupScorePathChanged.send(val.toString());
+    settings()->valueChanged(STARTUP_SCORE_PATH).onReceive(this, [this](const Val&) {
+        m_startupScorePathChanged.notify();
     });
 
     fileSystem()->makePath(sessionDataPath());
@@ -85,12 +85,9 @@ void AppShellConfiguration::setHasCompletedFirstLaunchSetup(bool has)
     settings()->setSharedValue(HAS_COMPLETED_FIRST_LAUNCH_SETUP, Val(has));
 }
 
-ValCh<StartupModeType> AppShellConfiguration::startupModeType() const
+StartupModeType AppShellConfiguration::startupModeType() const
 {
-    ValCh<StartupModeType> result;
-    result.ch = m_startupModeTypeChanged;
-    result.val = settings()->value(STARTUP_MODE_TYPE).toEnum<StartupModeType>();
-    return result;
+    return settings()->value(STARTUP_MODE_TYPE).toEnum<StartupModeType>();
 }
 
 void AppShellConfiguration::setStartupModeType(StartupModeType type)
@@ -98,17 +95,24 @@ void AppShellConfiguration::setStartupModeType(StartupModeType type)
     settings()->setSharedValue(STARTUP_MODE_TYPE, Val(type));
 }
 
-muse::ValCh<muse::io::path_t> AppShellConfiguration::startupScorePath() const
+async::Notification AppShellConfiguration::startupModeTypeChanged() const
 {
-    ValCh<muse::io::path_t> result;
-    result.ch = m_startupScorePathChanged;
-    result.val = settings()->value(STARTUP_SCORE_PATH).toString();
-    return result;
+    return m_startupModeTypeChanged;
+}
+
+muse::io::path_t AppShellConfiguration::startupScorePath() const
+{
+    return settings()->value(STARTUP_SCORE_PATH).toString();
 }
 
 void AppShellConfiguration::setStartupScorePath(const muse::io::path_t& scorePath)
 {
     settings()->setSharedValue(STARTUP_SCORE_PATH, Val(scorePath.toStdString()));
+}
+
+async::Notification AppShellConfiguration::startupScorePathChanged() const
+{
+    return m_startupScorePathChanged;
 }
 
 muse::io::path_t AppShellConfiguration::userDataPath() const
