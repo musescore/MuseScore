@@ -119,9 +119,11 @@ public:
 
     muse::io::path_t defaultStyleFilePath() const override;
     void setDefaultStyleFilePath(const muse::io::path_t& path) override;
+    muse::async::Channel<muse::io::path_t> defaultStyleFilePathChanged() const override;
 
     muse::io::path_t partStyleFilePath() const override;
     void setPartStyleFilePath(const muse::io::path_t& path) override;
+    muse::async::Channel<muse::io::path_t> partStyleFilePathChanged() const override;
 
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled) override;

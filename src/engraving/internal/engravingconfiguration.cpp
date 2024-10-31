@@ -70,6 +70,14 @@ void EngravingConfiguration::init()
         "#6038FC", // "all voices"
     };
 
+    settings()->valueChanged(DEFAULT_STYLE_FILE_PATH).onReceive(nullptr, [this](const Val& val) {
+        m_defaultStyleFilePathChanged.send(val.toPath());
+    });
+
+    settings()->valueChanged(PART_STYLE_FILE_PATH).onReceive(nullptr, [this](const Val& val) {
+        m_partStyleFilePathChanged.send(val.toPath());
+    });
+
     settings()->setDefaultValue(INVERT_SCORE_COLOR, Val(false));
     settings()->valueChanged(INVERT_SCORE_COLOR).onReceive(nullptr, [this](const Val&) {
         m_scoreInversionChanged.notify();
@@ -138,6 +146,11 @@ void EngravingConfiguration::setDefaultStyleFilePath(const muse::io::path_t& pat
     settings()->setSharedValue(DEFAULT_STYLE_FILE_PATH, Val(path.toStdString()));
 }
 
+async::Channel<muse::io::path_t> EngravingConfiguration::defaultStyleFilePathChanged() const
+{
+    return m_defaultStyleFilePathChanged;
+}
+
 muse::io::path_t EngravingConfiguration::partStyleFilePath() const
 {
     return settings()->value(PART_STYLE_FILE_PATH).toPath();
@@ -146,6 +159,11 @@ muse::io::path_t EngravingConfiguration::partStyleFilePath() const
 void EngravingConfiguration::setPartStyleFilePath(const muse::io::path_t& path)
 {
     settings()->setSharedValue(PART_STYLE_FILE_PATH, Val(path.toStdString()));
+}
+
+async::Channel<muse::io::path_t> EngravingConfiguration::partStyleFilePathChanged() const
+{
+    return m_partStyleFilePathChanged;
 }
 
 static bool defaultPageSizeIsLetter()
