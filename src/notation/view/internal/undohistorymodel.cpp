@@ -103,11 +103,7 @@ QVariant UndoHistoryModel::data(const QModelIndex& index, int role) const
 
 int UndoHistoryModel::rowCount(const QModelIndex&) const
 {
-    if (auto stack = undoStack()) {
-        return int(stack->undoRedoActionCount()) + 1;
-    }
-
-    return 0;
+    return m_rowCount;
 }
 
 QHash<int, QByteArray> UndoHistoryModel::roleNames() const
