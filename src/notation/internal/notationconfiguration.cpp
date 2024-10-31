@@ -153,16 +153,16 @@ void NotationConfiguration::init()
     });
 
     settings()->setDefaultValue(DEFAULT_ZOOM_TYPE, Val(ZoomType::Percentage));
-    settings()->valueChanged(DEFAULT_ZOOM_TYPE).onReceive(nullptr, [this](const Val&) {
+    settings()->valueChanged(DEFAULT_ZOOM_TYPE).onReceive(this, [this](const Val&) {
         m_defaultZoomChanged.notify();
     });
     settings()->setDefaultValue(DEFAULT_ZOOM, Val(100));
-    settings()->valueChanged(DEFAULT_ZOOM).onReceive(nullptr, [this](const Val&) {
+    settings()->valueChanged(DEFAULT_ZOOM).onReceive(this, [this](const Val&) {
         m_defaultZoomChanged.notify();
     });
     settings()->setDefaultValue(KEYBOARD_ZOOM_PRECISION, Val(2));
     settings()->setDefaultValue(MOUSE_ZOOM_PRECISION, Val(6));
-    settings()->valueChanged(MOUSE_ZOOM_PRECISION).onReceive(nullptr, [this](const Val&) {
+    settings()->valueChanged(MOUSE_ZOOM_PRECISION).onReceive(this, [this](const Val&) {
         m_mouseZoomPrecisionChanged.notify();
     });
 
@@ -176,7 +176,7 @@ void NotationConfiguration::init()
     }
 
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(2));
-    settings()->valueChanged(SELECTION_PROXIMITY).onReceive(nullptr, [this](const Val& val) {
+    settings()->valueChanged(SELECTION_PROXIMITY).onReceive(this, [this](const Val& val) {
         m_selectionProximityChanged.send(val.toInt());
     });
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(true));
