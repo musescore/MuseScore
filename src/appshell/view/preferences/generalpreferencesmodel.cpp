@@ -46,11 +46,11 @@ void GeneralPreferencesModel::load()
         setIsNeedRestart(need);
     });
 
-    configuration()->startupModeType().ch.onReceive(this, [this](const StartupModeType&) {
+    configuration()->startupModeTypeChanged().onNotify(this, [this]() {
         emit startupModesChanged();
     });
 
-    configuration()->startupScorePath().ch.onReceive(this, [this](const muse::io::path_t&) {
+    configuration()->startupScorePathChanged().onNotify(this, [this]() {
         emit startupModesChanged();
     });
 }
@@ -212,8 +212,8 @@ GeneralPreferencesModel::StartModeList GeneralPreferencesModel::allStartupModes(
         StartMode mode;
         mode.type = type;
         mode.title = modeTitles[type];
-        mode.checked = configuration()->startupModeType().val == type;
-        mode.scorePath = canSelectScorePath ? configuration()->startupScorePath().val.toQString() : QString();
+        mode.checked = configuration()->startupModeType() == type;
+        mode.scorePath = canSelectScorePath ? configuration()->startupScorePath().toQString() : QString();
         mode.canSelectScorePath = canSelectScorePath;
 
         modes << mode;
@@ -237,7 +237,7 @@ void GeneralPreferencesModel::setCurrentStartupMode(int modeIndex)
     }
 
     StartupModeType selectedType = modes[modeIndex].type;
-    if (selectedType == configuration()->startupModeType().val) {
+    if (selectedType == configuration()->startupModeType()) {
         return;
     }
 
@@ -247,11 +247,10 @@ void GeneralPreferencesModel::setCurrentStartupMode(int modeIndex)
 
 void GeneralPreferencesModel::setStartupScorePath(const QString& scorePath)
 {
-    if (scorePath.isEmpty() || scorePath == configuration()->startupScorePath().val.toQString()) {
+    if (scorePath.isEmpty() || scorePath == configuration()->startupScorePath().toQString()) {
         return;
     }
 
     configuration()->setStartupScorePath(scorePath);
-
     emit startupModesChanged();
 }
