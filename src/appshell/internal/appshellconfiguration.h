@@ -28,7 +28,6 @@
 #include "global/iglobalconfiguration.h"
 #include "global/iapplication.h"
 #include "global/io/ifilesystem.h"
-#include "global/async/channel.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "ui/iuiconfiguration.h"
 #include "project/iprojectconfiguration.h"
@@ -60,11 +59,13 @@ public:
     bool hasCompletedFirstLaunchSetup() const override;
     void setHasCompletedFirstLaunchSetup(bool has) override;
 
-    muse::ValCh<StartupModeType> startupModeType() const override;
+    StartupModeType startupModeType() const override;
     void setStartupModeType(StartupModeType type) override;
+    muse::async::Notification startupModeTypeChanged() const override;
 
-    muse::ValCh<muse::io::path_t> startupScorePath() const override;
+    muse::io::path_t startupScorePath() const override;
     void setStartupScorePath(const muse::io::path_t& scorePath) override;
+    muse::async::Notification startupScorePathChanged() const override;
 
     muse::io::path_t userDataPath() const override;
 
@@ -113,8 +114,8 @@ private:
 
     QString m_preferencesDialogCurrentPageId;
 
-    muse::async::Channel<StartupModeType> m_startupModeTypeChanged;
-    muse::async::Channel<muse::io::path_t> m_startupScorePathChanged;
+    muse::async::Notification m_startupModeTypeChanged;
+    muse::async::Notification m_startupScorePathChanged;
 };
 }
 
