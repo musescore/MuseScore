@@ -92,15 +92,15 @@ static Settings::Key auxChannelVisibleKey(aux_channel_idx_t index)
 void PlaybackConfiguration::init()
 {
     settings()->setDefaultValue(PLAY_NOTES_WHEN_EDITING, Val(true));
-    settings()->valueChanged(PLAY_NOTES_WHEN_EDITING).onReceive(nullptr, [this](const Val& val) {
+    settings()->valueChanged(PLAY_NOTES_WHEN_EDITING).onReceive(this, [this](const Val& val) {
         m_playNotesWhenEditingChanged.send(val.toBool());
     });
     settings()->setDefaultValue(PLAY_CHORD_WHEN_EDITING, Val(true));
-    settings()->valueChanged(PLAY_CHORD_WHEN_EDITING).onReceive(nullptr, [this](const Val& val) {
+    settings()->valueChanged(PLAY_CHORD_WHEN_EDITING).onReceive(this, [this](const Val& val) {
         m_playChordWhenEditingChanged.send(val.toBool());
     });
     settings()->setDefaultValue(PLAY_HARMONY_WHEN_EDITING, Val(true));
-    settings()->valueChanged(PLAY_HARMONY_WHEN_EDITING).onReceive(nullptr, [this](const Val& val) {
+    settings()->valueChanged(PLAY_HARMONY_WHEN_EDITING).onReceive(this, [this](const Val& val) {
         m_playHarmonyWhenEditingChanged.send(val.toBool());
     });
     settings()->setDefaultValue(PLAYBACK_CURSOR_TYPE_KEY, Val(PlaybackCursorType::STEPPED));
@@ -150,7 +150,7 @@ void PlaybackConfiguration::setPlayNotesWhenEditing(bool value)
     settings()->setSharedValue(PLAY_NOTES_WHEN_EDITING, Val(value));
 }
 
-muse::async::Channel<bool> PlaybackConfiguration::playNotesWhenEditingChanged() const
+async::Channel<bool> PlaybackConfiguration::playNotesWhenEditingChanged() const
 {
     return m_playNotesWhenEditingChanged;
 }
@@ -165,7 +165,7 @@ void PlaybackConfiguration::setPlayChordWhenEditing(bool value)
     settings()->setSharedValue(PLAY_CHORD_WHEN_EDITING, Val(value));
 }
 
-muse::async::Channel<bool> PlaybackConfiguration::playChordWhenEditingChanged() const
+async::Channel<bool> PlaybackConfiguration::playChordWhenEditingChanged() const
 {
     return m_playChordWhenEditingChanged;
 }
@@ -180,7 +180,7 @@ void PlaybackConfiguration::setPlayHarmonyWhenEditing(bool value)
     settings()->setSharedValue(PLAY_HARMONY_WHEN_EDITING, Val(value));
 }
 
-muse::async::Channel<bool> PlaybackConfiguration::playHarmonyWhenEditingChanged() const
+async::Channel<bool> PlaybackConfiguration::playHarmonyWhenEditingChanged() const
 {
     return m_playHarmonyWhenEditingChanged;
 }
