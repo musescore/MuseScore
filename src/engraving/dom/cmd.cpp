@@ -903,7 +903,6 @@ Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
     chord->mutldata()->setMag(ch->staff()->staffMag(chord->tick()) * style().styleD(Sid::graceNoteMag));
 
     undoAddElement(chord);
-    select(note, SelectType::SINGLE, 0);
     return note;
 }
 
@@ -3461,7 +3460,8 @@ void Score::cmdAddGrace(NoteType graceType, int duration)
     for (EngravingItem* e : copyOfElements) {
         if (e->type() == ElementType::NOTE) {
             Note* n = toNote(e);
-            setGraceNote(n->chord(), n->pitch(), graceType, duration);
+            Note* graceNote = setGraceNote(n->chord(), n->pitch(), graceType, duration);
+            select(graceNote, SelectType::SINGLE, 0);
         }
     }
 }

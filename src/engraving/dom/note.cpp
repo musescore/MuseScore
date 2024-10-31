@@ -1797,29 +1797,54 @@ EngravingItem* Note::drop(EditData& data)
     {
         switch (toActionIcon(e)->actionType()) {
         case ActionIconType::ACCIACCATURA:
-            score()->setGraceNote(ch, pitch(), NoteType::ACCIACCATURA, Constants::DIVISION / 2);
+        {
+            Note* note = score()->setGraceNote(ch, pitch(), NoteType::ACCIACCATURA, Constants::DIVISION / 2);
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
         case ActionIconType::APPOGGIATURA:
-            score()->setGraceNote(ch, pitch(), NoteType::APPOGGIATURA, Constants::DIVISION / 2);
+        {
+            Note* note = score()->setGraceNote(ch, pitch(), NoteType::APPOGGIATURA, Constants::DIVISION / 2);
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
         case ActionIconType::GRACE4:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE4, Constants::DIVISION);
+        {
+            Note* note = score()->setGraceNote(ch, pitch(), NoteType::GRACE4, Constants::DIVISION);
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
         case ActionIconType::GRACE16:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE16,  Constants::DIVISION / 4);
+        {
+            Note* note = score()->setGraceNote(ch, pitch(), NoteType::GRACE16,  Constants::DIVISION / 4);
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
         case ActionIconType::GRACE32:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE32, Constants::DIVISION / 8);
+        {
+            Note* note = score()->setGraceNote(ch, pitch(), NoteType::GRACE32, Constants::DIVISION / 8);
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
         case ActionIconType::GRACE8_AFTER:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE8_AFTER, Constants::DIVISION / 2);
+        {
+            Note* note = score()->setGraceNote(ch, pitch(), NoteType::GRACE8_AFTER, Constants::DIVISION / 2);
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
         case ActionIconType::GRACE16_AFTER:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE16_AFTER, Constants::DIVISION / 4);
+        {
+            Note* note = score()->setGraceNote(ch, pitch(), NoteType::GRACE16_AFTER, Constants::DIVISION / 4);
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
         case ActionIconType::GRACE32_AFTER:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE32_AFTER, Constants::DIVISION / 8);
+        {
+            Note* note = score()->setGraceNote(ch, pitch(), NoteType::GRACE32_AFTER, Constants::DIVISION / 8);
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
+
         case ActionIconType::BEAM_AUTO:
         case ActionIconType::BEAM_NONE:
         case ActionIconType::BEAM_BREAK_LEFT:
@@ -1835,11 +1860,20 @@ EngravingItem* Note::drop(EditData& data)
             score()->addGuitarBend(GuitarBendType::BEND, this);
             break;
         case ActionIconType::PRE_BEND:
-            score()->addGuitarBend(GuitarBendType::PRE_BEND, this);
-            break;
         case ActionIconType::GRACE_NOTE_BEND:
-            score()->addGuitarBend(GuitarBendType::GRACE_NOTE_BEND, this);
+        {
+            GuitarBendType type = (toActionIcon(e)->actionType() == ActionIconType::PRE_BEND)
+                                  ? GuitarBendType::PRE_BEND : GuitarBendType::GRACE_NOTE_BEND;
+            GuitarBend* guitarBend = score()->addGuitarBend(type, this);
+            Note* note = guitarBend->startNote();
+            IF_ASSERT_FAILED(note) {
+                LOGE() << "not valid start note of the bend";
+                break;
+            }
+
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
         case ActionIconType::SLIGHT_BEND:
             score()->addGuitarBend(GuitarBendType::SLIGHT_BEND, this);
             break;
