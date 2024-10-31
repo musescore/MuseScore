@@ -40,7 +40,7 @@ void ShortcutsConfiguration::init()
     m_config = ConfigReader::read(":/configs/shortcuts.cfg");
 
     settings()->setDefaultValue(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE, Val(true));
-    settings()->valueChanged(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE).onReceive(nullptr, [this](const Val& val) {
+    settings()->valueChanged(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE).onReceive(this, [this](const Val& val) {
         m_advanceToNextNoteOnKeyReleaseChanged.send(val.toBool());
     });
 }
