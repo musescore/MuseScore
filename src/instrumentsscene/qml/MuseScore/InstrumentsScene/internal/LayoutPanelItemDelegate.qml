@@ -36,7 +36,7 @@ FocusableControl {
     property var index: styleData.index
     property string filterKey
 
-    readonly property int type: item ? item.type : InstrumentsTreeItemType.UNDEFINED
+    readonly property int type: item ? item.type : LayoutPanelItemType.UNDEFINED
     readonly property bool isSelected: item && item.isSelected
     readonly property bool isDragAvailable: item && item.isSelectable
     readonly property bool isExpandable: item && item.isExpandable
@@ -90,7 +90,7 @@ FocusableControl {
     Drag.hotSpot.x: width / 2
     Drag.hotSpot.y: height / 2
 
-    navigation.name: "InstrumentsTreeItemDelegate"
+    navigation.name: "LayoutPanelItemDelegate"
     navigation.column: 0
 
     navigation.accessible.role: MUAccessible.ListItem
@@ -208,7 +208,7 @@ FocusableControl {
             Layout.alignment: Qt.AlignLeft
             Layout.preferredWidth: width
 
-            objectName: "VisibleBtnInstrument"
+            objectName: "VisibleBtn"
             navigation.panel: root.navigation.panel
             navigation.row: root.navigation.row
             navigation.column: 1
@@ -239,7 +239,7 @@ FocusableControl {
 
                 visible: root.isExpandable
 
-                objectName: "ExpandBtnInstrument"
+                objectName: "ExpandBtn"
                 enabled: expandButton.visible
                 navigation.panel: root.navigation.panel
                 navigation.row: root.navigation.row
@@ -276,7 +276,7 @@ FocusableControl {
                 opacity: model && model.itemRole.isVisible ? 1 : 0.75
 
                 font: {
-                    if (Boolean(model) && root.type === InstrumentsTreeItemType.PART && model.itemRole.isVisible) {
+                    if (Boolean(model) && root.type === LayoutPanelItemType.PART && model.itemRole.isVisible) {
                         return ui.theme.bodyBoldFont
                     }
 
@@ -293,7 +293,7 @@ FocusableControl {
 
             visible: root.isEditable
 
-            objectName: "SettingsBtnInstrument"
+            objectName: "SettingsBtn"
             enabled: root.visible
             navigation.panel: root.navigation.panel
             navigation.row: root.navigation.row
@@ -311,12 +311,12 @@ FocusableControl {
                 let comp = null
                 let item = {}
 
-                if (root.type === InstrumentsTreeItemType.PART) {
+                if (root.type === LayoutPanelItemType.PART) {
                     comp = instrumentSettingsComp
 
                     item["partId"] = model.itemRole.id
                     item["instrumentId"] = model.itemRole.instrumentId()
-                } else if (root.type === InstrumentsTreeItemType.STAFF) {
+                } else if (root.type === LayoutPanelItemType.STAFF) {
                     comp = staffSettingsComp
 
                     item["id"] = model.itemRole.id
@@ -405,7 +405,7 @@ FocusableControl {
         State {
             name: "PART_EXPANDED"
             when: styleData.isExpanded && !root.isSelected &&
-                  root.type === InstrumentsTreeItemType.PART
+                  root.type === LayoutPanelItemType.PART
 
             PropertyChanges {
                 target: root.background
@@ -417,8 +417,8 @@ FocusableControl {
         State {
             name: "PARENT_EXPANDED"
             when: root.visible && !root.isSelected &&
-                  (root.type === InstrumentsTreeItemType.INSTRUMENT ||
-                   root.type === InstrumentsTreeItemType.STAFF)
+                  (root.type === LayoutPanelItemType.INSTRUMENT ||
+                   root.type === LayoutPanelItemType.STAFF)
 
             PropertyChanges {
                 target: root.background

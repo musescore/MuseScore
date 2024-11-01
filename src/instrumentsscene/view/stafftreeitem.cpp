@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,9 +27,9 @@ using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
 StaffTreeItem::StaffTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
-    : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::STAFF, masterNotation, notation, parent)
+    : AbstractLayoutPanelTreeItem(LayoutPanelItemType::ItemType::STAFF, masterNotation, notation, parent)
 {
-    connect(this, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, [this](bool isVisible) {
+    connect(this, &AbstractLayoutPanelTreeItem::isVisibleChanged, [this](bool isVisible) {
         if (!m_isInited) {
             return;
         }
