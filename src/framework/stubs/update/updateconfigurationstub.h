@@ -35,6 +35,7 @@ public:
 
     bool needCheckForUpdate() const override;
     void setNeedCheckForUpdate(bool needCheck) override;
+    muse::async::Notification needCheckForUpdateChanged() const override;
 
     std::string skippedReleaseVersion() const override;
     void setSkippedReleaseVersion(const std::string& version) override;
