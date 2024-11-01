@@ -54,8 +54,6 @@ static const AudioResourceAttributes DEFAULT_AUDIO_RESOURCE_ATTRIBUTES = {
 static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META
     = { DEFAULT_SOUND_FONT_NAME, AudioResourceType::FluidSoundfont, "Fluid", DEFAULT_AUDIO_RESOURCE_ATTRIBUTES, false /*hasNativeEditor*/ };
 
-static constexpr char DEFAULT_DEVICE_ID[] = "default"; // Must match DEFAULT_DEVICE_ID in wasapiaudiodriver.cpp!
-
 void AudioConfiguration::init()
 {
     int defaultBufferSize = 0;
