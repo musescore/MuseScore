@@ -54,6 +54,7 @@ private:
         MaxValueRole
     };
 
+    QModelIndex findIndex(const muse::Settings::Key& key);
     void changeVal(int index, const muse::Val& newVal);
     void changeModelVal(muse::Settings::Item& item, const muse::Val& newVal);
     QString typeToString(muse::Val::Type type) const;
