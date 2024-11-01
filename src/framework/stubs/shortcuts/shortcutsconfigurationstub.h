@@ -38,6 +38,7 @@ public:
 
     bool advanceToNextNoteOnKeyRelease() const override;
     void setAdvanceToNextNoteOnKeyRelease(bool value) override;
+    muse::async::Channel<bool> advanceToNextNoteOnKeyReleaseChanged() const override;
 };
 }
 
