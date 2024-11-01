@@ -943,6 +943,15 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         undoAddElement(textBox);
         break;
     }
+    case TextStyleType::DYNAMICS: {
+        ChordRest* chordRest = chordOrRest(destinationElement);
+        if (!chordRest) {
+            break;
+        }
+        textBox = Factory::createDynamic(dummy()->segment());
+        chordRest->undoAddAnnotation(textBox);
+        break;
+    }
     case TextStyleType::HARP_PEDAL_DIAGRAM:
     case TextStyleType::HARP_PEDAL_TEXT_DIAGRAM: {
         ChordRest* chordRest = getSelectedChordRest();
