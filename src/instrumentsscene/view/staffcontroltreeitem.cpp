@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -28,7 +28,7 @@ using namespace mu::notation;
 using namespace mu::engraving;
 
 StaffControlTreeItem::StaffControlTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
-    : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::CONTROL_ADD_STAFF, masterNotation, notation, parent)
+    : AbstractLayoutPanelTreeItem(LayoutPanelItemType::ItemType::CONTROL_ADD_STAFF, masterNotation, notation, parent)
 {
     setTitle(muse::qtrc("instruments", "Add staff"));
 }

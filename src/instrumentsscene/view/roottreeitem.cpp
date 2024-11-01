@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -31,11 +31,11 @@ static inline bool isIndexInRange(int index, int start, int end)
 }
 
 RootTreeItem::RootTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
-    : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::ROOT, masterNotation, notation, parent)
+    : AbstractLayoutPanelTreeItem(LayoutPanelItemType::ItemType::ROOT, masterNotation, notation, parent)
 {
 }
 
-MoveParams RootTreeItem::buildMoveParams(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent,
+MoveParams RootTreeItem::buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,
                                          int destinationRow) const
 {
     MoveParams moveParams;
@@ -56,7 +56,7 @@ MoveParams RootTreeItem::buildMoveParams(int sourceRow, int count, AbstractInstr
     int childCount = destinationParent->childCount();
     bool moveDown = destinationRow > sourceRow;
     INotationParts::InsertMode moveMode = INotationParts::InsertMode::Before;
-    const AbstractInstrumentsPanelTreeItem* destinationPartItem = nullptr;
+    const AbstractLayoutPanelTreeItem* destinationPartItem = nullptr;
 
     do {
         destinationPartItem = destinationParent->childAtRow(destinationRow_);
@@ -86,7 +86,7 @@ MoveParams RootTreeItem::buildMoveParams(int sourceRow, int count, AbstractInstr
     return moveParams;
 }
 
-void RootTreeItem::moveChildren(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent,
+void RootTreeItem::moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,
                                 int destinationRow, bool updateNotation)
 {
     if (updateNotation) {
@@ -95,7 +95,7 @@ void RootTreeItem::moveChildren(int sourceRow, int count, AbstractInstrumentsPan
             notation()->parts()->moveParts(moveParams.childIdListToMove, moveParams.destinationParentId, moveParams.insertMode);
         }
     }
-    AbstractInstrumentsPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow, updateNotation);
+    AbstractLayoutPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow, updateNotation);
 }
 
 void RootTreeItem::removeChildren(int row, int count, bool deleteChild)
@@ -110,5 +110,5 @@ void RootTreeItem::removeChildren(int row, int count, bool deleteChild)
         masterNotation()->notation()->parts()->removeParts(partIds);
     }
 
-    AbstractInstrumentsPanelTreeItem::removeChildren(row, count, deleteChild);
+    AbstractLayoutPanelTreeItem::removeChildren(row, count, deleteChild);
 }

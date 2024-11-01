@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,10 +27,10 @@ using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace muse;
 
-using ItemType = InstrumentsTreeItemType::ItemType;
+using ItemType = LayoutPanelItemType::ItemType;
 
 PartTreeItem::PartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
-    : AbstractInstrumentsPanelTreeItem(ItemType::PART, masterNotation, notation, parent), Injectable(iocCtxForQmlObject(this))
+    : AbstractLayoutPanelTreeItem(ItemType::PART, masterNotation, notation, parent), Injectable(iocCtxForQmlObject(this))
 {
     listenVisibilityChanged();
 }
@@ -67,7 +67,7 @@ bool PartTreeItem::isSelectable() const
 
 void PartTreeItem::listenVisibilityChanged()
 {
-    connect(this, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, this, [this](bool isVisible) {
+    connect(this, &AbstractLayoutPanelTreeItem::isVisibleChanged, this, [this](bool isVisible) {
         if (!m_isInited) {
             return;
         }
@@ -106,7 +106,7 @@ size_t PartTreeItem::resolveNewPartIndex(const ID& partId) const
     bool partFound = false;
     ID firstVisiblePartId;
 
-    for (const AbstractInstrumentsPanelTreeItem* item : parentItem()->childItems()) {
+    for (const AbstractLayoutPanelTreeItem* item : parentItem()->childItems()) {
         if (item->id() == partId) {
             partFound = true;
             continue;
@@ -133,7 +133,12 @@ size_t PartTreeItem::resolveNewPartIndex(const ID& partId) const
     return parts.size();
 }
 
-MoveParams PartTreeItem::buildMoveParams(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent,
+QString PartTreeItem::instrumentId() const
+{
+    return m_instrumentId;
+}
+
+MoveParams PartTreeItem::buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,
                                          int destinationRow) const
 {
     MoveParams moveParams;
@@ -155,7 +160,7 @@ MoveParams PartTreeItem::buildMoveParams(int sourceRow, int count, AbstractInstr
         moveMode = INotationParts::InsertMode::After;
     }
 
-    AbstractInstrumentsPanelTreeItem* destinationStaffItem = destinationParent->childAtRow(destinationRowLast);
+    AbstractLayoutPanelTreeItem* destinationStaffItem = destinationParent->childAtRow(destinationRowLast);
 
     moveParams.destinationParentId = destinationStaffItem->id();
     moveParams.insertMode = moveMode;
@@ -163,14 +168,14 @@ MoveParams PartTreeItem::buildMoveParams(int sourceRow, int count, AbstractInstr
     return moveParams;
 }
 
-void PartTreeItem::moveChildren(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent,
+void PartTreeItem::moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,
                                 int destinationRow, bool updateNotation)
 {
     if (updateNotation) {
         MoveParams moveParams = buildMoveParams(sourceRow, count, destinationParent, destinationRow);
         notation()->parts()->moveStaves(moveParams.childIdListToMove, moveParams.destinationParentId, moveParams.insertMode);
     }
-    AbstractInstrumentsPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow, updateNotation);
+    AbstractLayoutPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow, updateNotation);
 }
 
 void PartTreeItem::removeChildren(int row, int count, bool deleteChild)
@@ -185,7 +190,7 @@ void PartTreeItem::removeChildren(int row, int count, bool deleteChild)
         masterNotation()->parts()->removeStaves(stavesIds);
     }
 
-    AbstractInstrumentsPanelTreeItem::removeChildren(row, count, deleteChild);
+    AbstractLayoutPanelTreeItem::removeChildren(row, count, deleteChild);
 }
 
 QString PartTreeItem::instrumentId() const

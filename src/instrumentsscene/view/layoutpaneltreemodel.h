@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTSSCENE_INSTRUMENTPANELTREEMODEL_H
-#define MU_INSTRUMENTSSCENE_INSTRUMENTPANELTREEMODEL_H
+
+#pragma once
 
 #include <QAbstractItemModel>
 #include <QVariant>
 
-#include "abstractinstrumentspaneltreeitem.h"
+#include "abstractlayoutpaneltreeitem.h"
 #include "modularity/ioc.h"
 #include "notation/iselectinstrumentscenario.h"
 #include "context/iglobalcontext.h"
@@ -44,7 +44,7 @@ class ItemMultiSelectionModel;
 class QItemSelectionModel;
 
 namespace mu::instrumentsscene {
-class InstrumentsPanelTreeModel : public QAbstractItemModel, public muse::async::Asyncable, public muse::actions::Actionable
+class LayoutPanelTreeModel : public QAbstractItemModel, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
 
@@ -63,8 +63,8 @@ class InstrumentsPanelTreeModel : public QAbstractItemModel, public muse::async:
     Q_PROPERTY(bool isInstrumentSelected READ isInstrumentSelected NOTIFY isInstrumentSelectedChanged)
 
 public:
-    explicit InstrumentsPanelTreeModel(QObject* parent = nullptr);
-    ~InstrumentsPanelTreeModel() override;
+    explicit LayoutPanelTreeModel(QObject* parent = nullptr);
+    ~LayoutPanelTreeModel() override;
 
     QModelIndex index(int row, int column, const QModelIndex& parent) const override;
     QModelIndex parent(const QModelIndex& child) const override;
@@ -82,7 +82,7 @@ public:
     bool isInstrumentSelected() const;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void setInstrumentsPanelVisible(bool visible);
+    Q_INVOKABLE void setLayoutPanelVisible(bool visible);
     Q_INVOKABLE void selectRow(const QModelIndex& rowIndex);
     Q_INVOKABLE void clearSelection();
     Q_INVOKABLE void addInstruments();
@@ -148,11 +148,11 @@ private:
 
     bool warnAboutRemovingInstrumentsIfNecessary(int count);
 
-    AbstractInstrumentsPanelTreeItem* loadMasterPart(const notation::Part* masterPart);
-    AbstractInstrumentsPanelTreeItem* buildPartItem(const mu::notation::Part* masterPart);
-    AbstractInstrumentsPanelTreeItem* buildMasterStaffItem(const mu::notation::Staff* masterStaff, QObject* parent);
-    AbstractInstrumentsPanelTreeItem* buildAddStaffControlItem(const muse::ID& partId, QObject* parent);
-    AbstractInstrumentsPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
+    AbstractLayoutPanelTreeItem* loadMasterPart(const notation::Part* masterPart);
+    AbstractLayoutPanelTreeItem* buildPartItem(const mu::notation::Part* masterPart);
+    AbstractLayoutPanelTreeItem* buildMasterStaffItem(const mu::notation::Staff* masterStaff, QObject* parent);
+    AbstractLayoutPanelTreeItem* buildAddStaffControlItem(const muse::ID& partId, QObject* parent);
+    AbstractLayoutPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
 
     bool m_isMovingUpAvailable = false;
     bool m_isMovingDownAvailable = false;
@@ -161,7 +161,7 @@ private:
     bool m_isLoadingBlocked = false;
     bool m_notationChangedWhileLoadingWasBlocked = false;
 
-    AbstractInstrumentsPanelTreeItem* m_rootItem = nullptr;
+    AbstractLayoutPanelTreeItem* m_rootItem = nullptr;
     muse::uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
     mu::notation::IMasterNotationPtr m_masterNotation = nullptr;
     mu::notation::INotationPtr m_notation = nullptr;
@@ -170,12 +170,10 @@ private:
     using NotationKey = QString;
     QHash<NotationKey, QList<muse::ID> > m_sortedPartIdList;
 
-    bool m_instrumentsPanelVisible = true;
+    bool m_layoutPanelVisible = true;
 
     bool m_dragInProgress = false;
     bool m_activeDragIsStave = false;
     MoveParams m_activeDragMoveParams;
 };
 }
-
-#endif // MU_INSTRUMENTSSCENE_INSTRUMENTPANELTREEMODEL_H
