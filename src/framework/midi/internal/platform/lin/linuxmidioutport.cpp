@@ -34,10 +34,6 @@ using namespace muse::midi;
 
 void LinuxMidiOutPort::init()
 {
-#if JACK_AUDIO
-    m_midiOutPortJack = std::make_unique<JackMidiOutPort>();
-    m_midiOutPortJack->init();
-#endif
     m_midiOutPortAlsa = std::make_unique<AlsaMidiOutPort>();
     m_midiOutPortAlsa->init();
 
@@ -73,10 +69,6 @@ std::vector<MidiDevice> LinuxMidiOutPort::availableDevices() const
     std::lock_guard lock(m_devicesMutex);
 
     std::vector<MidiDevice> ret;
-#if JACK_AUDIO
-    auto vj = m_midiOutPortJack->availableDevices();
-    ret.insert(ret.end(), vj.begin(), vj.end());
-#endif
     auto va = m_midiOutPortAlsa->availableDevices();
     ret.insert(ret.end(), va.begin(), va.end());
 
@@ -107,9 +99,6 @@ muse::Ret LinuxMidiOutPort::connect(const MidiDeviceID& deviceID)
         }
 
         if (deviceParams.at(1) == 9999) { // This is an jack device
-#if JACK_AUDIO
-            m_midiOutPortCurrent = /* JackMidiOutPort */ m_midiOutPortJack.get();
-#endif
         } else {
             m_midiOutPortCurrent = /* AlsaMidiOutPort */ m_midiOutPortAlsa.get();
         }
@@ -175,8 +164,7 @@ muse::Ret LinuxMidiOutPort::sendEvent(const Event& e)
     }
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    Event e2(e);
-    return muse::Ret(audioDriver()->pushMidiEvent(e2));
+    return muse::Ret(true);
 #else // alsa
     return m_midiOutPortCurrent->sendEvent(e);
 #endif

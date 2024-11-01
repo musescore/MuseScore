@@ -287,7 +287,7 @@ ReverbProcessor::ReverbProcessor(const AudioFxParams& params, audioch_t audioCha
     setParameter(Params::PreDelayMs, getParameter(Params::PreDelayMs));
     setParameter(Params::FeedbackTop, getParameter(Params::FeedbackTop));
 
-    setFormat(audioChannelsCount, audioConfiguration()->sampleRate(), 512 /*maximumBlockSize*/);
+    setFormat(audioChannelsCount, 44100.0 /*sampleRate*/, 512 /*maximumBlockSize*/);
 }
 
 ReverbProcessor::~ReverbProcessor()
@@ -380,7 +380,7 @@ float ReverbProcessor::getParameter(int32_t index)
 void ReverbProcessor::calculateTailParams()
 {
     const int* delayTimes = _delayTimesForN(m_delays);
-    float scale = float(getParameter(LateRoomScale) * m_processor._sampleRate / static_cast<float>(audioConfiguration()->sampleRate()));
+    float scale = float(getParameter(LateRoomScale) * m_processor._sampleRate / 44100.);
 
     const float log_db60 = std::log(fromDecibel(-60.f));
 
@@ -438,7 +438,7 @@ void ReverbProcessor::calculateModParams()
 
     float modDepthSmp = float(depthMs * 0.001f * m_processor._sampleRate);
     d->sinLfo.setup(m_delays, freqHz * d->modStep, modDepthSmp, m_processor._sampleRate);
-    float scale = float(getParameter(LateRoomScale) * m_processor._sampleRate / static_cast<float>(audioConfiguration()->sampleRate()));
+    float scale = float(getParameter(LateRoomScale) * m_processor._sampleRate / 44100.);
     for (int i = 0; i < m_delays; ++i) {
         d->modDelay[i].setBaseDelay(delayTimes[i] * scale, modDepthSmp * 2.f);
     }

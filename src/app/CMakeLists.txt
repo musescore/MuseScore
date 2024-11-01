@@ -239,12 +239,6 @@ if (CC_IS_EMSCRIPTEN)
     list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:fluidsynth>)
 endif()
 
-# if any above modules are using dynamic-library loading (musesampler)
-# then if mingw, use dl-lib which emulates unix-dl
-if (MINGW)
-    list(APPEND LINK_LIB "-ldl -fstack-protector")
-endif (MINGW)
-
 ###########################################
 # Resources
 ###########################################

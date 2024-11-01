@@ -205,19 +205,3 @@ void AlsaDriverState::changedPlaying() const
 void AlsaDriverState::changedPosition(muse::audio::secs_t secs, muse::midi::tick_t tick) const
 {
 }
-
-bool AlsaDriverState::pushMidiEvent(muse::midi::Event&)
-{
-    return true; // dummy
-}
-
-void AlsaDriverState::registerMidiInputQueue(async::Channel<muse::midi::tick_t, muse::midi::Event > midiInputQueue)
-{
-    m_eventReceived = midiInputQueue;
-}
-
-std::vector<muse::midi::MidiDevice> AlsaDriverState::availableMidiDevices([[maybe_unused]] muse::midi::MidiPortDirection direction) const
-{
-    std::vector<muse::midi::MidiDevice> x;
-    return x; // dummy
-}

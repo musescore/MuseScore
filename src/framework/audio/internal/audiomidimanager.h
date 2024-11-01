@@ -25,8 +25,6 @@
 
 #include "async/asyncable.h"
 
-#include "framework/midi/imidiinport.h"
-#include "framework/midi/midimodule.h"
 #include "iaudiodriver.h"
 
 #include "platform/lin/audiodeviceslistener.h"
@@ -39,7 +37,6 @@ class AudioMidiManager : public IAudioDriver, public async::Asyncable
     Inject<mu::playback::IPlaybackConfiguration> playbackConfiguration;
     Inject<mu::playback::IPlaybackController> playbackController;
 
-    Inject<muse::midi::IMidiInPort> midiInPort;
 public:
     AudioMidiManager();
     ~AudioMidiManager();
@@ -69,9 +66,6 @@ public:
 
     int audioDelayCompensate() const override;
     void setAudioDelayCompensate(const int frames) override;
-
-    bool pushMidiEvent(muse::midi::Event& e) override;
-    std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection direction) const override;
 
     unsigned int outputDeviceSampleRate() const override;
     bool setOutputDeviceSampleRate(unsigned int sampleRate) override;

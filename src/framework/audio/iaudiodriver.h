@@ -33,7 +33,6 @@
 
 #include "audiotypes.h"
 #include "framework/midi/miditypes.h"
-#include "framework/audio/midiqueue.h"
 
 namespace muse::audio {
 class AudioDriverState;
@@ -97,9 +96,6 @@ public:
     virtual int audioDelayCompensate() const = 0;
     virtual void setAudioDelayCompensate(const int frames) = 0;
 
-    virtual bool pushMidiEvent(muse::midi::Event&) = 0;
-    virtual std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection dir) const = 0;
-
     virtual void resume() = 0;
     virtual void suspend() = 0;
 };
@@ -112,9 +108,6 @@ public:
     virtual void close() = 0;
     virtual bool isOpened() const = 0;
     virtual void setAudioDelayCompensate(const int frames) = 0;
-    virtual bool pushMidiEvent(muse::midi::Event&) = 0;
-    virtual void registerMidiInputQueue(async::Channel<muse::midi::tick_t, muse::midi::Event >) = 0;
-    virtual std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection dir) const = 0;
 
     virtual void changedPlaying() const = 0;
     virtual void changedPosition(muse::audio::secs_t secs, muse::midi::tick_t tick) const = 0;
