@@ -70,11 +70,11 @@ void EngravingConfiguration::init()
         "#6038FC", // "all voices"
     };
 
-    settings()->valueChanged(DEFAULT_STYLE_FILE_PATH).onReceive(nullptr, [this](const Val& val) {
+    settings()->valueChanged(DEFAULT_STYLE_FILE_PATH).onReceive(this, [this](const Val& val) {
         m_defaultStyleFilePathChanged.send(val.toPath());
     });
 
-    settings()->valueChanged(PART_STYLE_FILE_PATH).onReceive(nullptr, [this](const Val& val) {
+    settings()->valueChanged(PART_STYLE_FILE_PATH).onReceive(this, [this](const Val& val) {
         m_partStyleFilePathChanged.send(val.toPath());
     });
 
