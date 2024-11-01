@@ -29,6 +29,7 @@
 #include "parttreeitem.h"
 #include "stafftreeitem.h"
 #include "staffcontroltreeitem.h"
+#include "systemobjectslayertreeitem.h"
 
 #include "uicomponents/view/itemmultiselectionmodel.h"
 
@@ -330,8 +331,27 @@ void LayoutPanelTreeModel::load()
     async::NotifyList<const Part*> masterParts = m_masterNotation->parts()->partList();
     sortParts(masterParts);
 
-    for (const Part* part : masterParts) {
-        m_rootItem->appendChild(loadMasterPart(part));
+    const mu::engraving::Score* score = m_masterNotation->notation()->elements()->msScore();
+    const bool scoreHasSystemObjectStaves = !score->systemObjectStaves().empty();
+
+    for (size_t i = 0; i < masterParts.size(); ++i) {
+        const Part* part = masterParts.at(i);
+
+        if (i == 0) {
+            if (!part->staves().empty()) {
+                m_rootItem->appendChild(buildSystemObjectsLayerItem(part->staves().front(), true /*isTopLayer*/));
+            }
+        }
+
+        if (scoreHasSystemObjectStaves) {
+            for (Staff* staff : part->staves()) {
+                if (score->isSystemObjectStaff(staff)) {
+                    m_rootItem->appendChild(buildSystemObjectsLayerItem(staff, false /*isTopLayer*/));
+                }
+            }
+        }
+
+        m_rootItem->appendChild(buildMasterPartItem(part));
     }
 
     endResetModel();
@@ -835,11 +855,12 @@ bool LayoutPanelTreeModel::warnAboutRemovingInstrumentsIfNecessary(int count)
            .standardButton() == IInteractive::Button::Yes;
 }
 
-AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::loadMasterPart(const Part* masterPart)
+AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::buildMasterPartItem(const Part* masterPart)
 {
     TRACEFUNC;
 
-    auto partItem = buildPartItem(masterPart);
+    auto partItem = new PartTreeItem(m_masterNotation, m_notation, m_rootItem);
+    partItem->init(masterPart);
 
     for (const Staff* staff : m_masterNotation->parts()->staffList(partItem->id())) {
         auto staffItem = buildMasterStaffItem(staff, partItem);
@@ -854,18 +875,18 @@ AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::loadMasterPart(const Part* ma
     return partItem;
 }
 
-AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::buildPartItem(const Part* masterPart)
-{
-    auto result = new PartTreeItem(m_masterNotation, m_notation, m_rootItem);
-    result->init(masterPart);
-
-    return result;
-}
-
 AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::buildMasterStaffItem(const Staff* masterStaff, QObject* parent)
 {
     auto result = new StaffTreeItem(m_masterNotation, m_notation, parent);
     result->init(masterStaff);
+
+    return result;
+}
+
+AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::buildSystemObjectsLayerItem(const mu::notation::Staff* masterStaff, bool isTopLayer)
+{
+    auto result = new SystemObjectsLayerTreeItem(m_masterNotation, m_notation, m_rootItem);
+    result->init(masterStaff, isTopLayer);
 
     return result;
 }

@@ -53,7 +53,7 @@ class AbstractLayoutPanelTreeItem : public QObject
     Q_PROPERTY(bool isSelected READ isSelected NOTIFY isSelectedChanged)
 
 public:
-    AbstractLayoutPanelTreeItem(const LayoutPanelItemType::ItemType& type, notation::IMasterNotationPtr masterNotation,
+    AbstractLayoutPanelTreeItem(LayoutPanelItemType::ItemType type, notation::IMasterNotationPtr masterNotation,
                                 notation::INotationPtr notation, QObject* parent);
     virtual ~AbstractLayoutPanelTreeItem();
 
@@ -66,7 +66,7 @@ public:
     bool isEditable() const;
     bool isRemovable() const;
 
-    virtual bool isSelectable() const;
+    bool isSelectable() const;
     bool isSelected() const;
 
     Q_INVOKABLE virtual bool canAcceptDrop(const QVariant& item) const;
@@ -101,6 +101,7 @@ public slots:
     void setIsExpandable(bool expandable);
     void setIsEditable(bool editable);
     void setIsRemovable(bool removable);
+    void setIsSelectable(bool selectable);
     void setIsSelected(bool selected);
 
 signals:
@@ -110,6 +111,7 @@ signals:
     void isExpandableChanged(bool isExpandable);
     void isEditableChanged(bool isEditable);
     void isRemovableChanged(bool isRemovable);
+    void isSelectableChanged(bool isSelectable);
     void isSelectedChanged(bool isSelected);
 
 protected:
@@ -129,6 +131,7 @@ private:
     bool m_isExpandable = false;
     bool m_isEditable = false;
     bool m_isRemovable = false;
+    bool m_isSelectable = false;
     bool m_isSelected = false;
 
     notation::IMasterNotationPtr m_masterNotation = nullptr;

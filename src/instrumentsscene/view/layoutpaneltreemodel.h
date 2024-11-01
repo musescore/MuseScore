@@ -148,9 +148,9 @@ private:
 
     bool warnAboutRemovingInstrumentsIfNecessary(int count);
 
-    AbstractLayoutPanelTreeItem* loadMasterPart(const notation::Part* masterPart);
-    AbstractLayoutPanelTreeItem* buildPartItem(const mu::notation::Part* masterPart);
+    AbstractLayoutPanelTreeItem* buildMasterPartItem(const notation::Part* masterPart);
     AbstractLayoutPanelTreeItem* buildMasterStaffItem(const mu::notation::Staff* masterStaff, QObject* parent);
+    AbstractLayoutPanelTreeItem* buildSystemObjectsLayerItem(const mu::notation::Staff* masterStaff, bool isTopLayer);
     AbstractLayoutPanelTreeItem* buildAddStaffControlItem(const muse::ID& partId, QObject* parent);
     AbstractLayoutPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
 

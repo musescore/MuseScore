@@ -27,16 +27,13 @@
 #include "notation/inotationparts.h"
 
 namespace mu::instrumentsscene {
-class StaffTreeItem : public AbstractLayoutPanelTreeItem
+class SystemObjectsLayerTreeItem : public AbstractLayoutPanelTreeItem
 {
     Q_OBJECT
 
 public:
-    StaffTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
+    SystemObjectsLayerTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
 
-    void init(const notation::Staff* masterStaff);
-
-private:
-    bool m_isInited = false;
+    void init(const mu::engraving::Staff* staff, bool isTopLayer);
 };
 }

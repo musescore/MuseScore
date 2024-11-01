@@ -42,6 +42,7 @@ StaffTreeItem::StaffTreeItem(IMasterNotationPtr masterNotation, INotationPtr not
 
     setIsEditable(true);
     setIsRemovable(true);
+    setIsSelectable(true);
 }
 
 void StaffTreeItem::init(const Staff* masterStaff)
@@ -67,9 +68,4 @@ void StaffTreeItem::init(const Staff* masterStaff)
     setIsVisible(visible);
 
     m_isInited = true;
-}
-
-bool StaffTreeItem::isSelectable() const
-{
-    return true;
 }

@@ -55,14 +55,10 @@ void PartTreeItem::init(const notation::Part* masterPart)
     setIsEditable(partExists);
     setIsExpandable(partExists);
     setIsRemovable(partExists);
+    setIsSelectable(partExists);
 
     m_instrumentId = part->instrumentId();
     m_isInited = true;
-}
-
-bool PartTreeItem::isSelectable() const
-{
-    return true;
 }
 
 void PartTreeItem::listenVisibilityChanged()
