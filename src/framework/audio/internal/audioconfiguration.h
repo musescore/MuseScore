@@ -79,6 +79,8 @@ public:
     bool shouldMeasureInputLag() const override;
 
 private:
+    static constexpr char DEFAULT_DEVICE_ID[] = "default"; // Must match DEFAULT_DEVICE_ID in wasapiaudiodriver.cpp and possibly others!
+
     void updateSamplesToPreallocate();
 
     async::Channel<io::paths_t> m_soundFontDirsChanged;
