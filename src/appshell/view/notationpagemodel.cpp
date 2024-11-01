@@ -98,9 +98,9 @@ QString NotationPageModel::palettesPanelName() const
     return PALETTES_PANEL_NAME;
 }
 
-QString NotationPageModel::instrumentsPanelName() const
+QString NotationPageModel::layoutPanelName() const
 {
-    return INSTRUMENTS_PANEL_NAME;
+    return LAYOUT_PANEL_NAME;
 }
 
 QString NotationPageModel::inspectorPanelName() const

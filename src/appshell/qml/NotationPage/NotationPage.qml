@@ -295,12 +295,12 @@ DockPage {
         },
 
         DockPanel {
-            id: instrumentsPanel
+            id: layoutPanel
 
-            objectName: root.pageModel.instrumentsPanelName()
-            title: qsTrc("appshell", "Instruments")
+            objectName: root.pageModel.layoutPanelName()
+            title: qsTrc("appshell", "Layout")
 
-            navigationSection: root.navigationPanelSec(instrumentsPanel.location)
+            navigationSection: root.navigationPanelSec(layoutPanel.location)
 
             width: root.verticalPanelDefaultWidth
             minimumWidth: root.verticalPanelDefaultWidth
@@ -310,12 +310,12 @@ DockPage {
 
             dropDestinations: root.verticalPanelDropDestinations
 
-            InstrumentsPanel {
-                navigationSection: instrumentsPanel.navigationSection
-                navigationOrderStart: instrumentsPanel.contentNavigationPanelOrderStart
+            LayoutPanel {
+                navigationSection: layoutPanel.navigationSection
+                navigationOrderStart: layoutPanel.contentNavigationPanelOrderStart
 
                 Component.onCompleted: {
-                    instrumentsPanel.contextMenuModel = contextMenuModel
+                    layoutPanel.contextMenuModel = contextMenuModel
                 }
             }
         },
