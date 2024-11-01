@@ -6511,7 +6511,16 @@ void NotationInteraction::setGetViewRectFunc(const std::function<RectF()>& func)
 namespace mu::notation {
 EngravingItem* contextItem(INotationInteractionPtr interaction)
 {
-    EngravingItem* item = interaction->selection()->element();
+    EngravingItem* item = nullptr;
+    const INotationSelectionPtr sel = interaction->selection();
+
+    if (sel->isRange()) {
+        const INotationSelectionRangePtr range = sel->range();
+        item = range->rangeStartSegment()->firstElementForNavigation(range->startStaffIndex());
+    } else {
+        item = sel->element();
+    }
+
     if (item == nullptr) {
         return interaction->hitElementContext().element;
     }
