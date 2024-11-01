@@ -28,14 +28,11 @@
 #include <utility>
 #include <vector>
 
-#include "modularity/ioc.h"
-#include "iaudioconfiguration.h"
 #include "ifxprocessor.h"
 
 namespace muse::audio::fx {
 class ReverbProcessor : public IFxProcessor
 {
-    Inject<muse::audio::IAudioConfiguration> audioConfiguration;
 public:
     ReverbProcessor(const audio::AudioFxParams& params, audioch_t audioChannelsCount = 2);
     ~ReverbProcessor() override;

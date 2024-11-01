@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "framework/audio/midiqueue.h"
 #include "audiomidimanager.h"
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
@@ -77,16 +76,6 @@ std::string AudioMidiManager::name() const
 
 bool AudioMidiManager::open(const Spec& spec, Spec* activeSpec)
 {
-    /**************************************************************************/
-    // a bit lazy registering the midi-input-queue here, but midimodule isn't
-    // available at audiomodule init, because midimodule starts after audiomodule
-    // not sure we got the identity of eventQueue (ie, passed by reference)
-#if defined(JACK_AUDIO)
-    muse::async::Channel<muse::midi::tick_t, muse::midi::Event> queue = midiInPort()->eventReceived();
-    m_current_audioDriverState->registerMidiInputQueue(queue);
-#endif
-    /**************************************************************************/
-
     // re-initialize devide
     m_current_audioDriverState->setAudioDelayCompensate(m_audioDelayCompensate);
 
@@ -363,24 +352,6 @@ std::vector<unsigned int> AudioMidiManager::availableOutputDeviceSampleRates() c
         88200,
         96000,
     };
-}
-
-bool AudioMidiManager::pushMidiEvent(muse::midi::Event& e)
-{
-    if (m_current_audioDriverState) {
-        m_current_audioDriverState->pushMidiEvent(e);
-        return true;
-    }
-    return false;
-}
-
-std::vector<muse::midi::MidiDevice> AudioMidiManager::availableMidiDevices(muse::midi::MidiPortDirection direction) const
-{
-    if (m_current_audioDriverState) {
-        return m_current_audioDriverState->availableMidiDevices(direction);
-    }
-    std::vector<muse::midi::MidiDevice> x;
-    return x;
 }
 
 void AudioMidiManager::resume()

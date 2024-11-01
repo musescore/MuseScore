@@ -390,14 +390,3 @@ unsigned int WasapiAudioDriver::minSupportedBufferSize() const
 
     return closestBufferSize;
 }
-
-bool WasapiAudioDriver::pushMidiEvent(muse::midi::Event&)
-{
-    return true;
-}
-
-std::vector<muse::midi::MidiDevice> WasapiAudioDriver::availableMidiDevices(muse::midi::MidiPortDirection dir) const
-{
-    std::vector<muse::midi::MidiDevice> x;
-    return x; // dummy
-}
