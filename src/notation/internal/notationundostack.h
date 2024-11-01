@@ -60,8 +60,8 @@ public:
     const muse::TranslatableString topMostUndoActionName() const override;
     const muse::TranslatableString topMostRedoActionName() const override;
     size_t undoRedoActionCount() const override;
-    size_t undoRedoActionCurrentIdx() const override;
-    const muse::TranslatableString undoRedoActionNameAtIdx(size_t idx) const override;
+    size_t currentStateIndex() const override;
+    const muse::TranslatableString lastActionNameAtIdx(size_t idx) const override;
 
     muse::async::Notification stackChanged() const override;
     muse::async::Channel<ChangesRange> changesChannel() const override;

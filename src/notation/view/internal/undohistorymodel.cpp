@@ -76,7 +76,7 @@ void UndoHistoryModel::onUndoRedo()
     // redo stack is cleared, and the new action is pushed onto the stack;
     // that means that the item at the current index now represents the new
     // action, rather than the action on the redo stack.
-    int newCurrentIndex = stack ? int(stack->undoRedoActionCurrentIdx()) : 0;
+    int newCurrentIndex = stack ? int(stack->currentStateIndex()) : 0;
     emit dataChanged(index(newCurrentIndex), index(newCurrentIndex));
 
     emit currentIndexChanged();
@@ -95,7 +95,7 @@ QVariant UndoHistoryModel::data(const QModelIndex& index, int role) const
         if (row == 0) {
             return qtrc("notation/undohistory", "File opened");
         }
-        return stack->undoRedoActionNameAtIdx(static_cast<size_t>(row)).qTranslated();
+        return stack->lastActionNameAtIdx(static_cast<size_t>(row)).qTranslated();
     default:
         return {};
     }
@@ -114,7 +114,7 @@ QHash<int, QByteArray> UndoHistoryModel::roleNames() const
 int UndoHistoryModel::currentIndex() const
 {
     if (auto stack = undoStack()) {
-        return int(stack->undoRedoActionCurrentIdx());
+        return int(stack->currentStateIndex());
     }
 
     return 0;
@@ -127,7 +127,7 @@ void UndoHistoryModel::undoRedoToIndex(int index)
         return;
     }
 
-    return notation->interaction()->undoRedoToIndex(size_t(index));
+    return notation->interaction()->undoRedoToIndex(static_cast<size_t>(index));
 }
 
 INotationUndoStackPtr UndoHistoryModel::undoStack() const

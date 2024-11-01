@@ -211,7 +211,7 @@ size_t NotationUndoStack::undoRedoActionCount() const
     return undoStack()->size();
 }
 
-size_t NotationUndoStack::undoRedoActionCurrentIdx() const
+size_t NotationUndoStack::currentStateIndex() const
 {
     IF_ASSERT_FAILED(undoStack()) {
         return muse::nidx;
@@ -220,7 +220,7 @@ size_t NotationUndoStack::undoRedoActionCurrentIdx() const
     return undoStack()->currentIndex();
 }
 
-const muse::TranslatableString NotationUndoStack::undoRedoActionNameAtIdx(size_t idx) const
+const muse::TranslatableString NotationUndoStack::lastActionNameAtIdx(size_t idx) const
 {
     IF_ASSERT_FAILED(undoStack()) {
         return {};

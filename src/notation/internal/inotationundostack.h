@@ -60,8 +60,8 @@ public:
     virtual const muse::TranslatableString topMostUndoActionName() const = 0;
     virtual const muse::TranslatableString topMostRedoActionName() const = 0;
     virtual size_t undoRedoActionCount() const = 0;
-    virtual size_t undoRedoActionCurrentIdx() const = 0;
-    virtual const muse::TranslatableString undoRedoActionNameAtIdx(size_t) const = 0;
+    virtual size_t currentStateIndex() const = 0;
+    virtual const muse::TranslatableString lastActionNameAtIdx(size_t) const = 0;
 
     virtual muse::async::Notification stackChanged() const = 0;
     virtual muse::async::Channel<ChangesRange> changesChannel() const = 0;
