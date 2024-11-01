@@ -99,21 +99,28 @@ void AdvancedPreferencesModel::load()
 
             muse::Settings::Key key = it->second.key;
             settings()->valueChanged(key).onReceive(this, [this, key](const Val& val) {
-                for (int i = 0; i < m_items.size(); ++i) {
-                    if (m_items[i].key == key) {
-                        if (!(m_items[i].value == val)) { // Notice the ! to negate the condition, so == becomes !=
-                            changeModelVal(m_items[i], val);
-                            QModelIndex modelIndex = index(i, 0);
-                            emit dataChanged(modelIndex, modelIndex, { ValueRole });
-                        }
-                        break;
-                    }
+                QModelIndex index = findIndex(key);
+                if (!index.isValid() || m_items[index.row()].value == val) {
+                    return;
                 }
+
+                changeModelVal(m_items[index.row()], val);
+                emit dataChanged(index, index, { ValueRole });
             });
         }
     }
 
     endResetModel();
+}
+
+QModelIndex AdvancedPreferencesModel::findIndex(const muse::Settings::Key& key)
+{
+    for (int i = 0; i < m_items.size(); ++i) {
+        if (m_items[i].key == key) {
+            return index(i, 0);
+        }
+    }
+    return QModelIndex();
 }
 
 void AdvancedPreferencesModel::changeVal(int index, const Val& newVal)
@@ -125,6 +132,9 @@ void AdvancedPreferencesModel::changeVal(int index, const Val& newVal)
 
 void AdvancedPreferencesModel::changeModelVal(Settings::Item& item, const Val& newVal)
 {
+    if (item.value == newVal) {
+        return;
+    }
     Val::Type type = item.value.type();
     item.value = newVal;
     item.value.setType(type);
