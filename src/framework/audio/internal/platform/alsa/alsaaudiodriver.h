@@ -37,9 +37,6 @@ public:
     void close() override;
     bool isOpened() const override;
     void setAudioDelayCompensate(const int frames) override;
-    bool pushMidiEvent(muse::midi::Event& e) override;
-    void registerMidiInputQueue(async::Channel<muse::midi::tick_t, muse::midi::Event >) override;
-    std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection direction) const override;
     std::string deviceName() const;
     void deviceName(const std::string newDeviceName);
     void changedPlaying() const override;

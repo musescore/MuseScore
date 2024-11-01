@@ -33,10 +33,6 @@
 #include "imidiinport.h"
 #include "internal/midideviceslistener.h"
 
-#if defined(JACK_AUDIO)
-#include "internal/platform/jack/jackmidiinport.h"
-#endif
-
 #include "internal/platform/alsa/alsamidiinport.h"
 
 namespace muse::midi {
@@ -82,9 +78,6 @@ private:
 
     async::Channel<tick_t, Event > m_eventReceived;
 
-#if defined(JACK_AUDIO)
-    std::unique_ptr<JackMidiInPort> m_midiInPortJack;
-#endif
     std::unique_ptr<AlsaMidiInPort> m_midiInPortAlsa;
 };
 }

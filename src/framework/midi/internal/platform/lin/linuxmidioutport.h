@@ -30,10 +30,6 @@
 #include "midi/imidioutport.h"
 #include "internal/midideviceslistener.h"
 
-#if defined(JACK_AUDIO)
-#include "internal/platform/jack/jackmidioutport.h"
-#endif
-
 #include "internal/platform/alsa/alsamidioutport.h"
 
 namespace muse::midi {
@@ -72,9 +68,6 @@ private:
     mutable std::mutex m_devicesMutex;
 
     MidiPortState* m_midiOutPortCurrent;
-#if defined(JACK_AUDIO)
-    std::unique_ptr<JackMidiOutPort> m_midiOutPortJack;
-#endif
     std::unique_ptr<AlsaMidiOutPort> m_midiOutPortAlsa;
 };
 }

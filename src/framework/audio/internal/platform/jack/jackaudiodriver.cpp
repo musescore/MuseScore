@@ -21,9 +21,6 @@
  */
 #include "jackaudiodriver.h"
 #include <jack/midiport.h>
-#include "framework/midi/miditypes.h"
-#include "framework/midi/midierrors.h"
-#include "framework/midi/imidiinport.h"
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -47,7 +44,6 @@
 static int g_jackTransportDelay = 0;
 
 using namespace muse::audio;
-using namespace muse::midi;
 namespace muse::audio {
 static bool g_transportEnable = false;
 // variables to communicate between soft-realtime jack thread and musescore
@@ -212,89 +208,6 @@ void JackDriverState::changedPosition(muse::audio::secs_t secs, muse::midi::tick
     }
 }
 
-/*
- * MIDI
- */
-
-muse::Ret sendEvent_noteonoff(void* pb, int framePos, const muse::midi::Event& e)
-{
-    unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
-    if (p == 0) {
-        LOGE("JackMidi: buffer overflow, event lost");
-        return muse::Ret(false);
-    }
-    // FIX: is opcode an compatible MIDI enumeration?
-    if (e.opcode() == muse::midi::Event::Opcode::NoteOn) {
-        p[0] = /* e.opcode() */ 0x90 | e.channel();
-    } else {
-        p[0] = /* e.opcode() */ 0x80 | e.channel();
-    }
-    p[1] = e.note();
-    p[2] = e.velocity();
-    return muse::Ret(true);
-}
-
-muse::Ret sendEvent_control(void* pb, int framePos, const Event& e)
-{
-    unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
-    if (p == 0) {
-        LOGE("JackMidi: buffer overflow, event lost");
-        return muse::Ret(false);
-    }
-    p[0] = /* e.opcode() */ 0xb0 | e.channel();
-    p[1] = e.index();
-    p[2] = e.data();
-    return muse::Ret(true);
-}
-
-muse::Ret sendEvent_program(void* pb, int framePos, const Event& e)
-{
-    unsigned char* p = jack_midi_event_reserve(pb, framePos, 2);
-    if (p == 0) {
-        LOGE("JackMidiOutput: buffer overflow, event lost");
-        return muse::Ret(false);
-    }
-    p[0] = /* e.opcode() */ 0xc0 | e.channel();
-    p[1] = e.program();
-    return muse::Ret(true);
-}
-
-muse::Ret sendEvent_pitchbend(void* pb, int framePos, const Event& e)
-{
-    unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
-    if (p == 0) {
-        LOGE("JackMidiOutput: buffer overflow, event lost");
-        return muse::Ret(false);
-    }
-    p[0] = /* e.opcode() */ 0xe0 | e.channel();
-    p[1] = e.data(); // dataA
-    p[2] = e.velocity(); // dataB
-    return muse::Ret(true);
-}
-
-muse::Ret sendEvent(const Event& e, void* pb)
-{
-    int framePos = 0;
-    switch (e.opcode()) {
-    // FIX: Event::Opcode::POLYAFTER ?
-    case Event::Opcode::NoteOn:
-        return sendEvent_noteonoff(pb, framePos, e);
-    case Event::Opcode::NoteOff:
-        return sendEvent_noteonoff(pb, framePos, e);
-    case Event::Opcode::ControlChange:
-        return sendEvent_control(pb, framePos, e);
-    case Event::Opcode::ProgramChange:
-        return sendEvent_control(pb, framePos, e);
-    case Event::Opcode::PitchBend:
-        return sendEvent_pitchbend(pb, framePos, e);
-    default:
-        NOT_SUPPORTED << "event: " << e.to_string();
-        return make_ret(muse::midi::Err::MidiNotSupported);
-    }
-
-    return Ret(true);
-}
-
 // musescore has around 200ms inaccuracy in playbackPositionInSeconds
 bool is_muse_jack_frame_sync(jack_nframes_t mf, jack_nframes_t jf)
 {
@@ -438,69 +351,6 @@ static int jack_process_callback(jack_nframes_t nframes, void* args)
         check_jack_midi_transport(state, nframes);
     }
 
-    if (!state->midiOutputPorts.empty()) {
-        jack_port_t* port = state->midiOutputPorts.front();
-        if (port) {
-            int segmentSize = jack_get_buffer_size(client);
-            void* pb = jack_port_get_buffer(port, segmentSize);
-            // handle midi
-            // FIX: can portBuffer be nullptr?
-            muse::midi::Event e;
-            while (1) {
-                if (state->midiQueue.pop(e)) {
-                    sendEvent(e, pb);
-                } else {
-                    break;
-                }
-            }
-        }
-    } else {
-        muse::midi::Event e;
-        while (1) {
-            if (state->midiQueue.pop(e)) {
-                LOGW() << "no jack-midi-outport, consumed unused Event: " << e.to_string();
-            } else {
-                break;
-            }
-        }
-    }
-
-    if (!state->midiInputPorts.empty()) {
-        jack_port_t* port = state->midiInputPorts.front();
-        if (port) {
-            int segmentSize = jack_get_buffer_size(client);
-            void* pb = jack_port_get_buffer(port, segmentSize);
-            if (pb) {
-                muse::midi::Event ev;
-                jack_nframes_t n = jack_midi_get_event_count(pb);
-                for (jack_nframes_t i = 0; i < n; ++i) {
-                    jack_midi_event_t event;
-                    if (jack_midi_event_get(&event, pb, i) != 0) {
-                        continue;
-                    }
-                    int type = event.buffer[0];
-                    uint32_t data = 0;
-                    if ((type & 0xf0) == 0x90
-                        || (type & 0xf0) == 0x90) {
-                        data = 0x90
-                               | (type & 0x0f)
-                               | ((event.buffer[1] & 0x7F) << 8)
-                               | ((event.buffer[2] & 0x7F) << 16);
-                        Event e = Event::fromMIDI10Package(data);
-                        e = e.toMIDI20();
-                        if (e) {
-                            LOGI("-- jack midi-input-port send %i,%i,%i",
-                                 event.buffer[1],
-                                 event.buffer[2],
-                                 event.buffer[0]);
-                            state->eventReceived.send(static_cast<tick_t>(0), e);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     return 0;
 }
 
@@ -632,16 +482,6 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
         return false;
     }
 
-    // midi input
-    jack_port_t* midi_input_port = jack_port_register(handle, "midi_in", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0);
-    midiInputPorts.push_back(midi_input_port);
-
-    // midi output
-    int portFlag = JackPortIsOutput;
-    const char* portType = JACK_DEFAULT_MIDI_TYPE;
-    jack_port_t* port = jack_port_register(handle, "Musescore", portType, portFlag, 0);
-    midiOutputPorts.push_back(port);
-
     muse_seek_requested = 0;
     mpos_frame = muse_frame = static_cast<unsigned int>(s_jackDriver->playbackPositionInSeconds() * jackSamplerate);
     if (muse_frame >= g_jackTransportDelay) {
@@ -690,60 +530,4 @@ void JackDriverState::remotePlayOrStop(bool ps) const
 void JackDriverState::remoteSeek(msecs_t millis) const
 {
     m_audiomidiManager->remoteSeek(millis);
-}
-
-/*
- * MIDI
- */
-
-bool JackDriverState::pushMidiEvent(muse::midi::Event& e)
-{
-    midiQueue.push(e);
-    return true;
-}
-
-void JackDriverState::registerMidiInputQueue(async::Channel<muse::midi::tick_t, muse::midi::Event > midiInputQueue)
-{
-    eventReceived = midiInputQueue;
-}
-
-std::vector<muse::midi::MidiDevice> JackDriverState::availableMidiDevices(muse::midi::MidiPortDirection direction) const
-{
-    std::vector<muse::midi::MidiDevice> ports;
-    std::vector<muse::midi::MidiDevice> ret;
-    jack_client_t* client = static_cast<jack_client_t*>(jackDeviceHandle);
-    const char** prts = jack_get_ports(client, 0, "midi", 0);
-    if (!prts) {
-        return ports;
-    }
-    int devIndex = 0;
-    for (const char** p = prts; p && *p; ++p) {
-        jack_port_t* port = jack_port_by_name(client, *p);
-        int flags = jack_port_flags(port);
-
-        if ((flags & JackPortIsInput)
-            && direction == muse::midi::MidiPortDirection::Output) {
-            continue;
-        }
-        if ((flags & JackPortIsOutput)
-            && direction == muse::midi::MidiPortDirection::Input) {
-            continue;
-        }
-
-        char buffer[128];
-        strncpy(buffer, *p, sizeof(buffer) - 1);
-        buffer[sizeof(buffer) - 1] = 0;
-
-        if (strncmp(buffer, "MuseScore", 9) == 0) {
-            continue;
-        }
-        muse::midi::MidiDevice dev;
-        dev.name = buffer;
-        dev.id = makeUniqueDeviceId(devIndex++, 0, 0);
-        ports.push_back(std::move(dev));
-    }
-
-    free(prts);
-
-    return ports;
 }
