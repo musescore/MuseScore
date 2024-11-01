@@ -38,7 +38,7 @@ FocusableControl {
 
     readonly property int type: item ? item.type : LayoutPanelItemType.UNDEFINED
     readonly property bool isSelected: item && item.isSelected
-    readonly property bool isDragAvailable: item && item.isSelectable
+    readonly property bool isSelectable: item && item.isSelectable
     readonly property bool isExpandable: item && item.isExpandable
     readonly property bool isEditable: item && item.isEditable
 
@@ -85,7 +85,7 @@ FocusableControl {
     implicitWidth: 248
 
     Drag.keys: [ root.filterKey ]
-    Drag.active: prv.dragged && isDragAvailable
+    Drag.active: prv.dragged && root.isSelectable
     Drag.source: root
     Drag.hotSpot.x: width / 2
     Drag.hotSpot.y: height / 2
@@ -238,6 +238,7 @@ FocusableControl {
                 anchors.left: parent.left
 
                 visible: root.isExpandable
+                width: expandButton.visible || styleData.depth !== 0 ? expandButton.implicitWidth : 0
 
                 objectName: "ExpandBtn"
                 enabled: expandButton.visible
@@ -419,6 +420,17 @@ FocusableControl {
             when: root.visible && !root.isSelected &&
                   (root.type === LayoutPanelItemType.INSTRUMENT ||
                    root.type === LayoutPanelItemType.STAFF)
+
+            PropertyChanges {
+                target: root.background
+                color: ui.theme.textFieldColor
+                opacity: 1
+            }
+        },
+
+        State {
+            name: "SYSTEM_OBJECTS_LAYER_NORMAL"
+            when: root.type === LayoutPanelItemType.SYSTEM_OBJECTS_LAYER
 
             PropertyChanges {
                 target: root.background

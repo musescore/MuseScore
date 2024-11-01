@@ -41,8 +41,6 @@ public:
 
     void init(const notation::Part* masterPart);
 
-    bool isSelectable() const override;
-
     Q_INVOKABLE QString instrumentId() const;
 
     MoveParams buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,

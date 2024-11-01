@@ -36,8 +36,8 @@ public:
         PART,
         INSTRUMENT,
         STAFF,
+        SYSTEM_OBJECTS_LAYER,
         CONTROL_ADD_STAFF,
-        CONTROL_ADD_DOUBLE_INSTRUMENT
     };
 
     Q_ENUM(ItemType)

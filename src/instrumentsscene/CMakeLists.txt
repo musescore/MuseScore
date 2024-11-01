@@ -44,10 +44,13 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/parttreeitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/stafftreeitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/stafftreeitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/systemobjectslayertreeitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/systemobjectslayertreeitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/staffcontroltreeitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/staffcontroltreeitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/layoutpaneltreemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/layoutpaneltreemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/layoutpanelutils.h
     ${CMAKE_CURRENT_LIST_DIR}/view/staffsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/staffsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentsettingsmodel.cpp
