@@ -106,12 +106,12 @@ void ScorePreferencesModel::load()
         setPath(DefaultFileType::SecondScoreOrderList, secondScoreOrderListPath());
     });
 
-    notationConfiguration()->defaultStyleFilePathChanged().onReceive(this, [this](const io::path_t&) {
-        setPath(DefaultFileType::Style, stylePath());
+    notationConfiguration()->defaultStyleFilePathChanged().onReceive(this, [this](const io::path_t& val) {
+        setPath(DefaultFileType::Style, val.toQString());
     });
 
-    notationConfiguration()->partStyleFilePathChanged().onReceive(this, [this](const io::path_t&) {
-        setPath(DefaultFileType::PartStyle, partStylePath());
+    notationConfiguration()->partStyleFilePathChanged().onReceive(this, [this](const io::path_t& val) {
+        setPath(DefaultFileType::PartStyle, val.toQString());
     });
 }
 
