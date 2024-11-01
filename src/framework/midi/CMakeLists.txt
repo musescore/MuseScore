@@ -23,16 +23,6 @@ set(MODULE_ALIAS muse::midi)
 
 include(GetPlatformInfo)
 
-set(JACK_SRC "")
-if (MUSE_MODULE_AUDIO_JACK)
-    set(JACK_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackmidioutport.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackmidioutport.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackmidiinport.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackmidiinport.h
-        )
-endif()
-
 if (OS_IS_WIN)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidioutport.cpp
@@ -42,7 +32,6 @@ if (OS_IS_WIN)
     )
 elseif(OS_IS_LIN)
     set(DRIVER_SRC
-        ${JACK_SRC}
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsamidioutport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsamidioutport.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsamidiinport.cpp
@@ -54,7 +43,6 @@ elseif(OS_IS_LIN)
     )
 elseif(OS_IS_FBSD)
     set(DRIVER_SRC
-        ${JACK_SRC}
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsamidioutport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsamidioutport.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsamidiinport.cpp
@@ -66,7 +54,6 @@ elseif(OS_IS_FBSD)
     )
 elseif(OS_IS_MAC)
     set(DRIVER_SRC
-        ${JACK_SRC}
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidioutport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidioutport.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidiinport.cpp
@@ -100,11 +87,6 @@ if (OS_IS_MAC)
     find_library(CoreMIDI NAMES CoreMIDI)
     find_library(CoreAudio NAMES CoreAudio)
     set(MODULE_LINK ${MODULE_LINK} ${CoreMIDI} ${CoreAudio})
-    if (MUSE_MODULE_AUDIO_JACK)
-        find_package(Jack REQUIRED)
-        set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${JACK_INCLUDE_DIRS})
-        set(MODULE_LINK ${MODULE_LINK} ${JACK_LDFLAGS} pthread)
-    endif()
 elseif (OS_IS_WIN)
     set(MODULE_LINK ${MODULE_LINK} winmm)
 elseif (OS_IS_LIN)

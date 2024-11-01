@@ -33,7 +33,6 @@ using namespace muse::midi;
 void LinuxMidiInPort::init()
 {
 #if defined(JACK_AUDIO)
-    m_midiInPortJack = std::make_unique<JackMidiInPort>();
 #else
     m_midiInPortAlsa = std::make_unique<AlsaMidiInPort>();
 #endif
@@ -50,8 +49,8 @@ std::vector<MidiDevice> LinuxMidiInPort::availableDevices() const
 {
 // FIX: this is compile-time, change so that we call availableMidiDevices if jack is selected
 #if defined(JACK_AUDIO)
-    // the external jack-midi-ports that are connecing to Musescore are of output type
-    return audioDriver()->availableMidiDevices(muse::midi::MidiPortDirection::Output);
+    std::vector<MidiDevice> ret;
+    return ret;
 #else
     std::lock_guard lock(m_devicesMutex);
     std::vector<MidiDevice> ret;
