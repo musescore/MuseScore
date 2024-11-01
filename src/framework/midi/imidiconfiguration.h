@@ -41,7 +41,7 @@ public:
 
     virtual bool useRemoteControl() const = 0;
     virtual void setUseRemoteControl(bool value) = 0;
-    virtual muse::async::Channel<bool> useRemoteControlChanged() const = 0;
+    virtual async::Channel<bool> useRemoteControlChanged() const = 0;
 
     virtual MidiDeviceID midiInputDeviceId() const = 0;
     virtual void setMidiInputDeviceId(const MidiDeviceID& deviceId) = 0;
