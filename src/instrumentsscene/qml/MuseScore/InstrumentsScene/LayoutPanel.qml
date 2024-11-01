@@ -126,10 +126,10 @@ Item {
             Layout.rightMargin: 20
 
             text: Boolean(treeModel.addInstrumentsKeyboardShortcut)
-                  //: Keep in sync with the text of the "Add" button at the top of the Instruments panel (LayoutControlPanel.qml)
+                  //: Keep in sync with the text of the "Add" button at the top of the Layout panel (LayoutControlPanel.qml)
                   ? qsTrc("instruments", "There are no instruments in your score. To choose some, press <b>Add</b>, or use the keyboard shortcut %1.")
                     .arg("<b>" + treeModel.addInstrumentsKeyboardShortcut + "</b>")
-                  //: Keep in sync with the text of the "Add" button at the top of the Instruments panel (LayoutControlPanel.qml)
+                  //: Keep in sync with the text of the "Add" button at the top of the Layout panel (LayoutControlPanel.qml)
                   : qsTrc("instruments", "There are no instruments in your score. To choose some, press <b>Add</b>.")
             visible: treeModel.isEmpty && treeModel.isAddingAvailable
 
@@ -256,6 +256,8 @@ Item {
                             id: treeItemDelegateComponent
 
                             LayoutPanelItemDelegate {
+                                id: itemDelegate
+
                                 treeView: layoutPanelTreeView
                                 item: model ? model.itemRole : null
                                 originalParent: treeItemDelegateLoader
@@ -274,7 +276,9 @@ Item {
                                 }
 
                                 onClicked: {
-                                    treeModel.selectRow(styleData.index)
+                                    if (itemDelegate.isSelectable) {
+                                        treeModel.selectRow(styleData.index)
+                                    }
                                 }
 
                                 onDoubleClicked: {

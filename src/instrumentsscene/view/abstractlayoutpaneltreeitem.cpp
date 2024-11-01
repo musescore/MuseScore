@@ -28,7 +28,7 @@ using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace muse;
 
-AbstractLayoutPanelTreeItem::AbstractLayoutPanelTreeItem(const LayoutPanelItemType::ItemType& type,
+AbstractLayoutPanelTreeItem::AbstractLayoutPanelTreeItem(LayoutPanelItemType::ItemType type,
                                                          IMasterNotationPtr masterNotation,
                                                          INotationPtr notation,
                                                          QObject* parent)
@@ -71,7 +71,7 @@ bool AbstractLayoutPanelTreeItem::isVisible() const
 
 bool AbstractLayoutPanelTreeItem::isSelectable() const
 {
-    return false;
+    return m_isSelectable;
 }
 
 bool AbstractLayoutPanelTreeItem::isSelected() const
@@ -309,6 +309,16 @@ void AbstractLayoutPanelTreeItem::setIsRemovable(bool removable)
 
     m_isRemovable = removable;
     emit isRemovableChanged(removable);
+}
+
+void AbstractLayoutPanelTreeItem::setIsSelectable(bool selectable)
+{
+    if (m_isSelectable == selectable) {
+        return;
+    }
+
+    m_isSelectable = selectable;
+    emit isSelectableChanged(selectable);
 }
 
 void AbstractLayoutPanelTreeItem::setIsSelected(bool selected)
