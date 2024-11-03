@@ -648,6 +648,10 @@ void PwAudioDriver::init()
     }
 
     // Nothing to do
+    constexpr auto pwVersion = pw_get_headers_version();
+    LOGD() << "Initialized Pipewire";
+    LOGD() << "Compiled with version " << pwVersion;
+    LOGD() << "Running with version " << pw_get_library_version();
 }
 
 std::string PwAudioDriver::name() const { return "MUAUDIO(PipeWire)"; }
