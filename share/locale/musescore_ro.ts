@@ -3280,7 +3280,7 @@ prima notă a sistemului</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12164"/>
         <source>Snap to dynamics</source>
-        <translation>Agață la nuanțe</translation>
+        <translation>Fixează la nuanțe</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12682"/>
@@ -4357,7 +4357,7 @@ prima notă a sistemului</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12187"/>
         <source>Reset &apos;Snap to dynamics&apos; setting</source>
-        <translation>Resetează valoarea pentru „Agață la nuanțe”</translation>
+        <translation>Resetează valoarea pentru „Fixează la nuanțe”</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12409"/>
@@ -19375,7 +19375,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/AppearanceOffsetSection.qml" line="65"/>
         <source>Snap to grid</source>
-        <translation>Agață la grilă</translation>
+        <translation>Fixează la grilă</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/AppearanceOffsetSection.qml" line="82"/>

@@ -21229,12 +21229,12 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/glissandosettingsmodel.cpp" line="56"/>
         <source>Straight</source>
-        <translation>Straight</translation>
+        <translation>Dritta</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/glissandosettingsmodel.cpp" line="57"/>
         <source>Wavy</source>
-        <translation>Ondulato</translation>
+        <translation>Ondulata</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/hairpinlinesettingsmodel.cpp" line="40"/>
