@@ -47,8 +47,8 @@ public:
 
 class PercussionPanelModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
-    muse::Inject<context::IGlobalContext> globalContext = { this };
-    muse::Inject<playback::IPlaybackController> playbackController = { this };
+    muse::Inject<mu::context::IGlobalContext> globalContext = { this };
+    muse::Inject<mu::playback::IPlaybackController> playbackController = { this };
 
     Q_OBJECT
 
