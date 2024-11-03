@@ -783,9 +783,6 @@ PwAudioDriver::availableOutputDeviceBufferSizes() const
 {
     std::vector<unsigned int> result;
 
-    // 0 stands for default buffer size
-    result.push_back(0);
-
     unsigned int n = MAXIMUM_BUFFER_SIZE;
     while (n >= MINIMUM_BUFFER_SIZE) {
         result.push_back(n);
