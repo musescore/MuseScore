@@ -460,18 +460,21 @@ PwStream::PwStream(pw_thread_loop* loop, pw_core* core, const IAudioDriver::Spec
         PW_KEY_MEDIA_ROLE, "Production",
         nullptr);
 
-    if (m_spec.samples) {
-        m_spec.samples = std::max(static_cast<uint16_t>(MINIMUM_BUFFER_SIZE), m_spec.samples);
-        m_spec.samples = std::min(static_cast<uint16_t>(MAXIMUM_BUFFER_SIZE), m_spec.samples);
-        // Request for a specific number of samples.
-        // This is done through the "node.latency" property.
-        // Note: user system configuration can override this. e.g.:
-        //  - PIPEWIRE_QUANTUM environment variable.
-        //  - "clock.force-quantum" setting
-        std::ostringstream lat;
-        lat << m_spec.samples << "/" << m_spec.sampleRate;
-        pw_properties_set(props, PW_KEY_NODE_LATENCY, lat.str().c_str());
+    if (!m_spec.samples) {
+        // could be null if upgrading from a previous version
+        m_spec.samples = MINIMUM_BUFFER_SIZE * 4;
     }
+
+    m_spec.samples = std::max(static_cast<uint16_t>(MINIMUM_BUFFER_SIZE), m_spec.samples);
+    m_spec.samples = std::min(static_cast<uint16_t>(MAXIMUM_BUFFER_SIZE), m_spec.samples);
+    // Request for a specific number of samples.
+    // This is done through the "node.latency" property.
+    // Note: user system configuration can override this. e.g.:
+    //  - PIPEWIRE_QUANTUM or PIPEWIRE_LATENCY environment variable.
+    //  - "clock.force-quantum" setting
+    std::ostringstream lat;
+    lat << m_spec.samples << "/" << m_spec.sampleRate;
+    pw_properties_set(props, PW_KEY_NODE_LATENCY, lat.str().c_str());
 
     if (deviceId != PW_DEFAULT_DEVICE) {
         // Request for a specific output device.
