@@ -23,6 +23,7 @@
 #include "commonaudioapiconfigurationmodel.h"
 
 #include "audio/audiotypes.h"
+#include "global/translation.h"
 
 #include "log.h"
 
