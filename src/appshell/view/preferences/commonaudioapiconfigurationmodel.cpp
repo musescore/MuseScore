@@ -83,42 +83,18 @@ void CommonAudioApiConfigurationModel::deviceSelected(const QString& deviceId)
     audioConfiguration()->setAudioOutputDeviceId(deviceId.toStdString());
 }
 
-static QString defaultBufferSizeStr()
+unsigned int CommonAudioApiConfigurationModel::bufferSize() const
 {
-    static const QString res = muse::qtrc("audio", "System default");
-    return res;
+    return audioDriver()->outputDeviceBufferSize();
 }
 
-static QString bufferSizeToString(unsigned int bufferSize)
+QList<unsigned int> CommonAudioApiConfigurationModel::bufferSizeList() const
 {
-    if (bufferSize == 0) {
-        return defaultBufferSizeStr();
-    }
-    return QString::number(bufferSize);
-}
-
-static unsigned int bufferSizeFromString(QString bufferSizeStr)
-{
-    if (bufferSizeStr == defaultBufferSizeStr()) {
-        return 0;
-    }
-    return bufferSizeStr.toInt();
-}
-
-QString CommonAudioApiConfigurationModel::bufferSize() const
-{
-    return bufferSizeToString(audioDriver()->outputDeviceBufferSize());
-}
-
-QStringList CommonAudioApiConfigurationModel::bufferSizeList() const
-{
-    QStringList result;
+    QList<unsigned int> result;
     std::vector<unsigned int> bufferSizes = audioDriver()->availableOutputDeviceBufferSizes();
 
-    std::sort(bufferSizes.begin(), bufferSizes.end());
-
     for (unsigned int bufferSize : bufferSizes) {
-        result << bufferSizeToString(bufferSize);
+        result << bufferSize;
     }
 
     return result;
@@ -126,7 +102,7 @@ QStringList CommonAudioApiConfigurationModel::bufferSizeList() const
 
 void CommonAudioApiConfigurationModel::bufferSizeSelected(const QString& bufferSizeStr)
 {
-    audioConfiguration()->setDriverBufferSize(bufferSizeFromString(bufferSizeStr));
+    audioConfiguration()->setDriverBufferSize(bufferSizeStr.toInt());
 }
 
 unsigned int CommonAudioApiConfigurationModel::sampleRate() const
