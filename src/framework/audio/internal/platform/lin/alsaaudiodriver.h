@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_LINUXAUDIODRIVER_H
-#define MUSE_AUDIO_LINUXAUDIODRIVER_H
+#pragma once
 
 #include "async/asyncable.h"
 
@@ -81,5 +80,3 @@ private:
     async::Notification m_sampleRateChanged;
 };
 }
-
-#endif // MUSE_AUDIO_LINUXAUDIODRIVER_H
