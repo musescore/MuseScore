@@ -518,8 +518,7 @@ PwStream::PwStream(pw_thread_loop* loop, pw_core* core, const IAudioDriver::Spec
 
     pw_stream_connect(m_stream, PW_DIRECTION_OUTPUT, PW_ID_ANY,
                       static_cast<pw_stream_flags>(PW_STREAM_FLAG_AUTOCONNECT
-                                                   | PW_STREAM_FLAG_MAP_BUFFERS
-                                                   | PW_STREAM_FLAG_RT_PROCESS),
+                                                   | PW_STREAM_FLAG_MAP_BUFFERS),
                       &param, 1);
 }
 
