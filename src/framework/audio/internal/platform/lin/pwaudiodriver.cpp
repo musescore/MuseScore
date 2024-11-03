@@ -46,6 +46,7 @@
 #include <spa/param/latency-utils.h>
 #include <spa/support/log.h>
 
+#include <algorithm>
 #include <chrono>
 #include <condition_variable>
 #include <mutex>
@@ -460,6 +461,8 @@ PwStream::PwStream(pw_thread_loop* loop, pw_core* core, const IAudioDriver::Spec
         nullptr);
 
     if (m_spec.samples) {
+        m_spec.samples = std::max(static_cast<uint16_t>(MINIMUM_BUFFER_SIZE), m_spec.samples);
+        m_spec.samples = std::min(static_cast<uint16_t>(MAXIMUM_BUFFER_SIZE), m_spec.samples);
         // Request for a specific number of samples.
         // This is done through the "node.latency" property.
         // Note: user system configuration can override this. e.g.:
