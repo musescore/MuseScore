@@ -342,9 +342,9 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     // Create end barlines and system trailer if needed (cautionary time/key signatures etc)
     Measure* lm  = system->lastMeasure();
     if (lm) {
+        MeasureLayout::createEndBarLines(lm, true, ctx);
         Measure* nm = lm->nextMeasure();
         if (nm) {
-            MeasureLayout::createEndBarLines(lm, true, ctx);
             MeasureLayout::addSystemTrailer(lm, nm, ctx);
         }
     }
