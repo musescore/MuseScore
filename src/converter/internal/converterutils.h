@@ -21,36 +21,17 @@
  */
 #pragma once
 
-#include "types/ret.h"
+#include "notation/inotation.h"
+#include "notation/notationtypes.h"
 
 namespace mu::converter {
-enum class Err {
-    Undefined       = int(muse::Ret::Code::Undefined),
-    NoError         = int(muse::Ret::Code::Ok),
-    UnknownError    = int(muse::Ret::Code::ConverterFirst), // 1300
+class ConverterUtils
+{
+public:
+    static muse::RetVal<notation::TransposeOptions> parseTransposeOptions(const std::string& optionsJson);
+    static muse::RetVal<notation::TransposeOptions> parseTransposeOptions(const QJsonObject& optionsObj);
 
-    BatchJobFileFailedOpen = 1301,
-    BatchJobFileFailedParse = 1302,
-
-    ConvertFailed = 1303,
-    TransposeFailed = 1304,
-
-    ConvertTypeUnknown = 1310,
-    InvalidTransposeOptions = 1311,
-
-    InFileFailedLoad = 1320,
-
-    OutFileFailedOpen = 1330,
-    OutFileFailedWrite = 1331,
+    static muse::Ret applyTranspose(const notation::INotationPtr notation, const std::string& optionsJson);
+    static muse::Ret applyTranspose(const notation::INotationPtr notation, const notation::TransposeOptions& options);
 };
-
-inline muse::Ret make_ret(Err e)
-{
-    return muse::Ret(static_cast<int>(e));
-}
-
-inline muse::Ret make_ret(Err e, const std::string& text)
-{
-    return muse::Ret(static_cast<int>(e), text);
-}
 }
