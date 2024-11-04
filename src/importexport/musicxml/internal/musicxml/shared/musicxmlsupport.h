@@ -55,7 +55,6 @@ extern muse::String musicXmlAccidentalTextToChar(const muse::String mxmlName);
 extern engraving::SymId musicXmlString2accSymId(const muse::String mxmlName, const muse::String smufl = {});
 extern engraving::AccidentalType microtonalGuess(double val);
 extern bool isLaissezVibrer(const engraving::SymId id);
-extern const engraving::Articulation* findLaissezVibrer(const engraving::Chord* chord);
 extern muse::String errorStringWithLocation(int line, int col, const muse::String& error);
 extern muse::String checkAtEndElement(const muse::XmlStreamReader& e, const muse::String& expName);
 } // namespace Ms
