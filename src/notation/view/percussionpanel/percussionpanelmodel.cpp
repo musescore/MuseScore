@@ -155,6 +155,9 @@ void PercussionPanelModel::finishEditing()
 void PercussionPanelModel::setUpConnections()
 {
     const auto updatePadModels = [this](const mu::engraving::Drumset* drumset) {
+        if (drumset == m_padListModel->drumset()) {
+            return;
+        }
         m_padListModel->setDrumset(drumset);
         m_padListModel->resetLayout(); //! NOTE: Placeholder until we implement saving/loading
     };
