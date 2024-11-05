@@ -60,6 +60,8 @@ public:
     int numPads() const { return m_padModels.count(); }
 
     void setDrumset(const mu::engraving::Drumset* drumset);
+    const mu::engraving::Drumset* drumset() const { return m_drumset; }
+
     void resetLayout();
 
     muse::async::Channel<int /*pitch*/> padTriggered() const { return m_triggeredChannel; }
