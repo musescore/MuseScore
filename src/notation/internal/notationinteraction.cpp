@@ -4676,6 +4676,10 @@ void NotationInteraction::addText(TextStyleType type, EngravingItem* item)
         }
     }
 
+    if (text->hasVoiceAssignmentProperties()) {
+        text->setInitialTrackAndVoiceAssignment(item->track(), false);
+    }
+
     apply();
     showItem(text);
 
