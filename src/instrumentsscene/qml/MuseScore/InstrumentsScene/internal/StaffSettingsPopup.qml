@@ -30,6 +30,8 @@ StyledPopupView {
 
     property bool needActiveFirstItem: false
 
+    property bool unloadAfterClose: true
+
     contentHeight: contentColumn.childrenRect.height
     contentWidth: 240
 

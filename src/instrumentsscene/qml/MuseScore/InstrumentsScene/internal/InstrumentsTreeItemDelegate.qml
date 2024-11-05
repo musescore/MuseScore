@@ -132,10 +132,10 @@ FocusableControl {
     Loader {
         id: popupLoader
 
-        property alias openedPopup: popupLoader.item
-        property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
+        readonly property StyledPopupView openedPopup: popupLoader.item as StyledPopupView
+        readonly property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
 
-        function openPopup(comp, btn, item) {
+        function openPopup(comp: Component, btn: Item, item) {
             popupLoader.sourceComponent = comp
             if (!openedPopup) {
                 return
@@ -152,10 +152,7 @@ FocusableControl {
 
             openedPopup.closed.connect(function() {
                 root.popupClosed()
-
-                Qt.callLater(function() {
-                    popupLoader.sourceComponent = null
-                })
+                Qt.callLater(maybeUnload)
             })
 
             openedPopup.open()
@@ -165,6 +162,26 @@ FocusableControl {
             if (isPopupOpened) {
                 openedPopup.close()
             }
+        }
+
+        function unload() {
+            sourceComponent = null
+        }
+
+        function maybeUnload() {
+            if (!openedPopup) {
+                return
+            }
+            if (openedPopup.unloadAfterClose) {
+                unload()
+                return
+            }
+
+            openedPopup.unloadAfterCloseChanged.connect(function() {
+                if (openedPopup && openedPopup.unloadAfterClose && !openedPopup.isOpened) {
+                    unload()
+                }
+            })
         }
     }
 

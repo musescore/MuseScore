@@ -30,6 +30,8 @@ StyledPopupView {
 
     property bool needActiveFirstItem: false
 
+    property bool unloadAfterClose: true
+
     contentHeight: contentColumn.childrenRect.height
 
     onOpened: {
@@ -113,9 +115,10 @@ StyledPopupView {
             visible: settingsModel.isMainScore
 
             onClicked: {
+                root.unloadAfterClose = false
                 root.close()
-
                 settingsModel.replaceInstrument()
+                root.unloadAfterClose = true
             }
         }
 
@@ -130,9 +133,10 @@ StyledPopupView {
             visible: !settingsModel.isMainScore
 
             onClicked: {
-                root.close()
-
+                root.unloadAfterClose = false
                 settingsModel.resetAllFormatting()
+                root.close()
+                root.unloadAfterClose = true
             }
         }
     }
