@@ -56,39 +56,39 @@ DockWindow {
         order: 1
     }
 
-    // toolBars: [
-    //     DockToolBar {
-    //         id: mainToolBar
+    toolBars: [
+        DockToolBar {
+            id: mainToolBar
 
-    //         objectName: "mainToolBar"
-    //         title: qsTrc("appshell", "Main toolbar")
+            objectName: "mainToolBar"
+            title: qsTrc("appshell", "Main toolbar")
 
-    //         floatable: false
-    //         closable: false
+            floatable: false
+            closable: false
 
-    //         MainToolBar {
-    //             id: toolBar
-    //             navigation.section: root.topToolKeyNavSec
-    //             navigation.order: 1
+            MainToolBar {
+                id: toolBar
+                navigation.section: root.topToolKeyNavSec
+                navigation.order: 1
 
-    //             currentUri: root.currentPageUri
+                currentUri: root.currentPageUri
 
-    //             navigation.onActiveChanged: {
-    //                 if (navigation.active) {
-    //                     mainToolBar.forceActiveFocus()
-    //                 }
-    //             }
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        mainToolBar.forceActiveFocus()
+                    }
+                }
 
-    //             onSelected: function(uri) {
-    //                 api.launcher.open(uri)
-    //             }
+                onSelected: function(uri) {
+                    api.launcher.open(uri)
+                }
 
-    //             Component.onCompleted: {
-    //                 toolBar.focusOnFirst()
-    //             }
-    //         }
-    //     }
-    // ]
+                Component.onCompleted: {
+                    toolBar.focusOnFirst()
+                }
+            }
+        }
+    ]
 
     pages: [
         HomePage {

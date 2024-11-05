@@ -33,7 +33,7 @@
 
 #include "view/dockwindow.h"
 // #include "view/dockpanelview.h"
-// #include "view/docktoolbarview.h"
+#include "view/docktoolbarview.h"
 // #include "view/dockstatusbarview.h"
 // #include "view/dockingholderview.h"
 #include "view/dockcentralview.h"
@@ -150,13 +150,13 @@ void DockModule::registerUiTypes()
     qmlRegisterType<DockWindow>("Muse.Dock", 1, 0, "DockWindow");
     // qmlRegisterType<DockPanelView>("Muse.Dock", 1, 0, "DockPanelView");
     // qmlRegisterType<DockStatusBarView>("Muse.Dock", 1, 0, "DockStatusBar");
-    // qmlRegisterType<DockToolBarView>("Muse.Dock", 1, 0, "DockToolBarView");
+    qmlRegisterType<DockToolBarView>("Muse.Dock", 1, 0, "DockToolBarView");
     // qmlRegisterType<DockingHolderView>("Muse.Dock", 1, 0, "DockingHolderView");
     qmlRegisterType<DockCentralView>("Muse.Dock", 1, 0, "DockCentralView");
     qmlRegisterType<DockPageView>("Muse.Dock", 1, 0, "DockPageView");
     qmlRegisterType<DockFrameModel>("Muse.Dock", 1, 0, "DockFrameModel");
 
-    // qmlRegisterUncreatableType<DockToolBarAlignment>("Muse.Dock", 1, 0, "DockToolBarAlignment", "Not creatable from QML");
+    qmlRegisterUncreatableType<DockToolBarAlignment>("Muse.Dock", 1, 0, "DockToolBarAlignment", "Not creatable from QML");
     qmlRegisterUncreatableType<DockLocation>("Muse.Dock", 1, 0, "Location", "Not creatable from QML");
 }
 

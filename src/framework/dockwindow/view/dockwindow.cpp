@@ -34,7 +34,7 @@
 #include "dockpageview.h"
 // #include "dockpanelview.h"
 // #include "dockstatusbarview.h"
-// #include "docktoolbarview.h"
+#include "docktoolbarview.h"
 // #include "dockingholderview.h"
 #include "dockwindow.h"
 
@@ -357,15 +357,15 @@ void DockWindow::loadTopLevelToolBars(const DockPageView* page)
     TRACEFUNC;
 
     QList<DockToolBarView*> allToolBars = m_toolBars.list();
-    // allToolBars << page->mainToolBars();
+    allToolBars << page->mainToolBars();
 
     DockToolBarView* prevToolBar = nullptr;
 
-    // for (DockToolBarView* toolBar : allToolBars) {
-    //     auto location = prevToolBar ? Location::Right : Location::Top;
-    //     addDock(toolBar, location, prevToolBar);
-    //     prevToolBar = toolBar;
-    // }
+    for (DockToolBarView* toolBar : allToolBars) {
+        auto location = prevToolBar ? Location::Right : Location::Top;
+        addDock(toolBar, location, prevToolBar);
+        prevToolBar = toolBar;
+    }
 }
 
 void DockWindow::loadToolBars(const DockPageView* page)
@@ -426,25 +426,25 @@ void DockWindow::alignTopLevelToolBars(const DockPageView* page)
 
     int separatorThickness = KDDockWidgets::Config::self().separatorThickness();
 
-    // for (DockToolBarView* toolBar : topToolBars) {
-    //     if (toolBar->floating() || !toolBar->isVisible()) {
-    //         continue;
-    //     }
+    for (DockToolBarView* toolBar : topToolBars) {
+        if (toolBar->floating() || !toolBar->isVisible()) {
+            continue;
+        }
 
-    //     switch (static_cast<DockToolBarAlignment::Type>(toolBar->alignment())) {
-    //     case DockToolBarAlignment::Left:
-    //         lastLeftToolBar = toolBar;
-    //         leftToolBarsWidth += toolBar->contentWidth();
-    //         break;
-    //     case DockToolBarAlignment::Center:
-    //         lastCentralToolBar = toolBar;
-    //         centralToolBarsWidth += (toolBar->contentWidth() + separatorThickness);
-    //         break;
-    //     case DockToolBarAlignment::Right:
-    //         rightToolBarsWidth += (toolBar->contentWidth() + separatorThickness);
-    //         break;
-    //     }
-    // }
+        switch (static_cast<DockToolBarAlignment::Type>(toolBar->alignment())) {
+        case DockToolBarAlignment::Left:
+            lastLeftToolBar = toolBar;
+            leftToolBarsWidth += toolBar->contentWidth();
+            break;
+        case DockToolBarAlignment::Center:
+            lastCentralToolBar = toolBar;
+            centralToolBarsWidth += (toolBar->contentWidth() + separatorThickness);
+            break;
+        case DockToolBarAlignment::Right:
+            rightToolBarsWidth += (toolBar->contentWidth() + separatorThickness);
+            break;
+        }
+    }
 
     if (!lastLeftToolBar || !lastCentralToolBar) {
         return;
@@ -463,8 +463,8 @@ void DockWindow::alignTopLevelToolBars(const DockPageView* page)
         deltaForLastCentralToolBar = 0;
     }
 
-    // lastLeftToolBar->setMinimumWidth(lastLeftToolBar->contentWidth() + deltaForLastLeftToolbar);
-    // lastCentralToolBar->setMinimumWidth(lastCentralToolBar->contentWidth() + deltaForLastCentralToolBar);
+    lastLeftToolBar->setMinimumWidth(lastLeftToolBar->contentWidth() + deltaForLastLeftToolbar);
+    lastCentralToolBar->setMinimumWidth(lastCentralToolBar->contentWidth() + deltaForLastCentralToolBar);
 }
 
 void DockWindow::addDock(DockBase* dock, Location location, const DockBase* relativeTo)
@@ -657,9 +657,9 @@ void DockWindow::initDocks(DockPageView* page)
 {
     TRACEFUNC;
 
-    // for (DockToolBarView* toolbar : m_toolBars.list()) {
-    //     toolbar->init();
-    // }
+    for (DockToolBarView* toolbar : m_toolBars.list()) {
+        toolbar->init();
+    }
 
     if (page) {
         page->setParentItem(this);
@@ -693,9 +693,9 @@ void DockWindow::notifyAboutDocksOpenStatus()
 
     QStringList dockNames;
 
-    // for (DockToolBarView* toolBar : page->mainToolBars()) {
-    //     dockNames << toolBar->objectName();
-    // }
+    for (DockToolBarView* toolBar : page->mainToolBars()) {
+        dockNames << toolBar->objectName();
+    }
 
     // for (DockToolBarView* toolBar : page->toolBars()) {
     //     dockNames << toolBar->objectName();
@@ -717,7 +717,7 @@ QList<DockToolBarView*> DockWindow::topLevelToolBars(const DockPageView* page) c
     QList<DockToolBarView*> toolBars = m_toolBars.list();
 
     if (page) {
-        // toolBars << page->mainToolBars();
+        toolBars << page->mainToolBars();
     }
 
     return toolBars;

@@ -53,8 +53,8 @@ set(MODULE_SRC
     # ${CMAKE_CURRENT_LIST_DIR}/view/dockpanelview.h
     # ${CMAKE_CURRENT_LIST_DIR}/view/dockstatusbarview.cpp
     # ${CMAKE_CURRENT_LIST_DIR}/view/dockstatusbarview.h
-    # ${CMAKE_CURRENT_LIST_DIR}/view/docktoolbarview.cpp
-    # ${CMAKE_CURRENT_LIST_DIR}/view/docktoolbarview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/docktoolbarview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/docktoolbarview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/docktitlebar.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/docktitlebar.h
     # ${CMAKE_CURRENT_LIST_DIR}/view/dockingholderview.cpp

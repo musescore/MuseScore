@@ -33,6 +33,9 @@
 #include "thirdparty/KDDockWidgets/src/core/Layout.h"
 #include "thirdparty/KDDockWidgets/src/core/Group.h"
 #include "thirdparty/KDDockWidgets/src/qtquick/ViewFactory.h"
+#include "thirdparty/KDDockWidgets/src/core/MainWindow.h"
+#include "thirdparty/KDDockWidgets/src/core/DropArea.h"
+// #include "thirdparty/KDDockWidgets/src/core/layouting/Item_p.h"
 // #include "thirdparty/KDDockWidgets/src/private/quick/FrameQuick_p.h"
 // #include "thirdparty/KDDockWidgets/src/core/FloatingWindow_p.h"
 
@@ -651,28 +654,35 @@ void DockBase::applySizeConstraints()
     //     }
     // }
 
-    // if (!frame || !m_inited) {
-    //     return;
-    // }
+    if (!frame || !m_inited) {
+        return;
+    }
 
-    // QSize currentSize = m_dockWidget->size();
+    QSize currentSize = m_dockWidget->group()->size();
 
-    // //! NOTE: Initial size for all dock-widgets
-    // //! See QWidgetAdapter_quick.cpp, QWidgetAdapter::QWidgetAdapter
-    // static constexpr QSize INITIAL_DOCK_SIZE(800, 800);
-    // if (currentSize == INITIAL_DOCK_SIZE) {
-    //     return;
-    // }
+    //! NOTE: Initial size for all dock-widgets
+    //! See QWidgetAdapter_quick.cpp, QWidgetAdapter::QWidgetAdapter
+    static constexpr QSize INITIAL_DOCK_SIZE(800, 800);
+    if (currentSize == INITIAL_DOCK_SIZE) {
+        return;
+    }
 
-    // if (sizeInRange(currentSize, minimumSize, maximumSize)) {
-    //     return;
-    // }
+    if (sizeInRange(currentSize, minimumSize, maximumSize)) {
+        return;
+    }
 
-    // if (const Layouting::Item* layout = frame->layoutItem()) {
-    //     if (Layouting::ItemBoxContainer* container = layout->parentBoxContainer()) {
-    //         container->layoutEqually_recursive();
-    //     }
-    // }
+    frame->group()->mainWindow()->multiSplitter()->layoutEqually();
+
+    // // frame->asMainWindowController()->multiSplitter()->rootItem()->itemForView(frame->group());
+    // KDDockWidgets::Core::ItemBoxContainer* root = frame->asMainWindowController()->multiSplitter()->rootItem();
+    // KDDockWidgets::Core::Item* item = root->itemForView(frame->group()->asLayoutingGuest());
+    // item->parentBoxContainer()->layoutEqually_recursive();
+
+    // // if (const Layouting::Item* layout = root->itemForView(frame)) {
+    // // if (Layouting::ItemBoxContainer* container = layout->parentBoxContainer()) {
+    // // container->layoutEqually_recursive();
+    // // }
+    // // }
 }
 
 void DockBase::listenFloatingChanges()

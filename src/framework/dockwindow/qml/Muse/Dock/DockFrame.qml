@@ -128,12 +128,12 @@ Rectangle {
 
         color: ui.theme.backgroundSecondaryColor
 
-        readonly property QtObject tabBarCpp: Boolean(root.groupCpp) ? root.groupCpp.tabWidget.tabBar : null
+        readonly property QtObject tabBarCpp: Boolean(root.groupCpp) ? root.groupCpp.tabBar : null
         property int currentIndex: Boolean(root.groupCpp) && root.groupCpp.currentIndex >= 0 ? root.groupCpp.currentIndex : 0
 
         onTabBarCppChanged: {
             if (Boolean(tabBarCpp)) {
-                tabBarCpp.setDraggableMouseArea(dragMouseArea)
+                // tabBarCpp.setDraggableMouseArea(dragMouseArea)
                 tabBarCpp.tabBarQmlItem = this
             }
         }

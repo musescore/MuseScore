@@ -40,7 +40,7 @@ class NavigationControl;
 }
 
 namespace muse::dock {
-// class DockToolBarView;
+class DockToolBarView;
 // class DockPanelView;
 class DockCentralView;
 // class DockStatusBarView;
@@ -50,7 +50,7 @@ class DockPageView : public QQuickItem, public muse::Injectable
     Q_OBJECT
 
     Q_PROPERTY(QString uri READ uri WRITE setUri NOTIFY uriChanged)
-    // Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> mainToolBars READ mainToolBarsProperty CONSTANT)
+    Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> mainToolBars READ mainToolBarsProperty CONSTANT)
     // Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> toolBars READ toolBarsProperty CONSTANT)
     // Q_PROPERTY(QQmlListProperty<muse::dock::DockingHolderView> toolBarsDockingHolders READ toolBarsDockingHoldersProperty CONSTANT)
     // Q_PROPERTY(QQmlListProperty<muse::dock::DockPanelView> panels READ panelsProperty CONSTANT)
@@ -70,13 +70,13 @@ public:
 
     void setParams(const QVariantMap& params);
 
-    // QQmlListProperty<DockToolBarView> mainToolBarsProperty();
+    QQmlListProperty<DockToolBarView> mainToolBarsProperty();
     // QQmlListProperty<DockToolBarView> toolBarsProperty();
     // QQmlListProperty<DockingHolderView> toolBarsDockingHoldersProperty();
     // QQmlListProperty<DockPanelView> panelsProperty();
     // QQmlListProperty<DockingHolderView> panelsDockingHoldersProperty();
 
-    // QList<DockToolBarView*> mainToolBars() const;
+    QList<DockToolBarView*> mainToolBars() const;
     // QList<DockToolBarView*> toolBars() const;
     // QList<DockingHolderView*> toolBarsHolders() const;
     DockCentralView* centralDock() const;
@@ -121,7 +121,7 @@ private:
     void reorderNavigationSectionPanels(QList<DockBase*>& sectionDocks);
 
     QString m_uri;
-    // uicomponents::QmlListProperty<DockToolBarView> m_mainToolBars;
+    uicomponents::QmlListProperty<DockToolBarView> m_mainToolBars;
     // uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
     // uicomponents::QmlListProperty<DockingHolderView> m_toolBarsDockingHolders;
     // uicomponents::QmlListProperty<DockPanelView> m_panels;

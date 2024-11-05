@@ -24,7 +24,7 @@
 
 #include <QTimer>
 
-// #include "docktoolbarview.h"
+#include "docktoolbarview.h"
 // #include "dockingholderview.h"
 #include "dockcentralview.h"
 // #include "dockpanelview.h"
@@ -38,8 +38,8 @@ using namespace muse::dock;
 using namespace muse::ui;
 
 DockPageView::DockPageView(QQuickItem* parent)
-    : QQuickItem(parent), muse::Injectable(muse::iocCtxForQmlObject(this))/*,*/
-    // m_mainToolBars(this),
+    : QQuickItem(parent), muse::Injectable(muse::iocCtxForQmlObject(this)),
+    m_mainToolBars(this)
     // m_toolBars(this),
     // m_toolBarsDockingHolders(this),
     // m_panels(this),
@@ -87,10 +87,10 @@ void DockPageView::setParams(const QVariantMap& params)
     emit setParamsRequested(params);
 }
 
-// QQmlListProperty<DockToolBarView> DockPageView::mainToolBarsProperty()
-// {
-//     return m_mainToolBars.property();
-// }
+QQmlListProperty<DockToolBarView> DockPageView::mainToolBarsProperty()
+{
+    return m_mainToolBars.property();
+}
 
 // QQmlListProperty<DockToolBarView> DockPageView::toolBarsProperty()
 // {
@@ -112,10 +112,10 @@ void DockPageView::setParams(const QVariantMap& params)
 //     return m_panelsDockingHolders.property();
 // }
 
-// QList<DockToolBarView*> DockPageView::mainToolBars() const
-// {
-//     return m_mainToolBars.list();
-// }
+QList<DockToolBarView*> DockPageView::mainToolBars() const
+{
+    return m_mainToolBars.list();
+}
 
 // QList<DockToolBarView*> DockPageView::toolBars() const
 // {
@@ -423,12 +423,12 @@ void DockPageView::componentComplete()
 
 QList<DockBase*> DockPageView::allDocks() const
 {
-    // auto mainToolBars = this->mainToolBars();
+    auto mainToolBars = this->mainToolBars();
     // auto toolbars = this->toolBars();
     // auto panels = this->panels();
 
     QList<DockBase*> docks;
-    // docks << QList<DockBase*>(mainToolBars.begin(), mainToolBars.end());
+    docks << QList<DockBase*>(mainToolBars.begin(), mainToolBars.end());
     // docks << QList<DockBase*>(toolbars.begin(), toolbars.end());
     // docks << QList<DockBase*>(panels.begin(), panels.end());
 

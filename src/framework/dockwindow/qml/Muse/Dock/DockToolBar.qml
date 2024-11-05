@@ -94,7 +94,7 @@ DockToolBarView {
             }
 
             Component.onCompleted: {
-                root.setDraggableMouseArea(gripButton.mouseArea)
+                // root.setDraggableMouseArea(gripButton.mouseArea)
             }
         }
 

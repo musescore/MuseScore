@@ -8,7 +8,7 @@
         <file>qml/Muse/Dock/DockPanelTab.qml</file>
 <!--        <file>qml/Muse/Dock/DockSeparator.qml</file>-->
         <file>qml/Muse/Dock/DockTitleBar.qml</file>
-<!--        <file>qml/Muse/Dock/DockToolBar.qml</file>-->
+        <file>qml/Muse/Dock/DockToolBar.qml</file>
         <file>qml/Muse/Dock/DockWidget.qml</file>
         <file>qml/Muse/Dock/qmldir</file>
     </qresource>
