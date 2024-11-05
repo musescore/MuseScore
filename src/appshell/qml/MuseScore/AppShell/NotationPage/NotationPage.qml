@@ -109,409 +109,409 @@ DockPage {
 
     property var notationView: null
 
-    mainToolBars: [
-        DockToolBar {
-            id: notationToolBar
+    // mainToolBars: [
+    //     DockToolBar {
+    //         id: notationToolBar
 
-            objectName: "notationToolBar"
-            title: qsTrc("appshell", "Notation toolbar")
+    //         objectName: "notationToolBar"
+    //         title: qsTrc("appshell", "Notation toolbar")
 
-            floatable: false
-            closable: false
-            resizable: false
-            separatorsVisible: false
+    //         floatable: false
+    //         closable: false
+    //         resizable: false
+    //         separatorsVisible: false
 
-            alignment: DockToolBarAlignment.Center
-            contentBottomPadding: 2
-
-            NotationToolBar {
-                navigationPanel.section: root.topToolbarKeyNavSec
-                navigationPanel.order: 2
-            }
-        },
+    //         alignment: DockToolBarAlignment.Center
+    //         contentBottomPadding: 2
+
+    //         NotationToolBar {
+    //             navigationPanel.section: root.topToolKeyNavSec
+    //             navigationPanel.order: 2
+    //         }
+    //     },
 
-        DockToolBar {
-            id: playbackToolBar
+    //     DockToolBar {
+    //         id: playbackToolBar
 
-            objectName: root.pageModel.playbackToolBarName()
-            title: qsTrc("appshell", "Playback controls")
+    //         objectName: pageModel.playbackToolBarName()
+    //         title: qsTrc("appshell", "Playback controls")
 
-            separatorsVisible: false
-            alignment: DockToolBarAlignment.Right
-
-            contentBottomPadding: floating ? 8 : 2
-            contentTopPadding: floating ? 8 : 0
+    //         separatorsVisible: false
+    //         alignment: DockToolBarAlignment.Right
+
+    //         contentBottomPadding: floating ? 8 : 2
+    //         contentTopPadding: floating ? 8 : 0
 
-            dropDestinations: [
-                { "dock": notationToolBar, "dropLocation": Location.Right }
-            ]
+    //         dropDestinations: [
+    //             { "dock": notationToolBar, "dropLocation": Location.Right }
+    //         ]
 
-            PlaybackToolBar {
-                navigationPanelSection: root.topToolbarKeyNavSec
-                navigationPanelOrder: 3
+    //         PlaybackToolBar {
+    //             navigationPanelSection: root.topToolKeyNavSec
+    //             navigationPanelOrder: 3
 
-                floating: playbackToolBar.floating
-            }
-        },
+    //             floating: playbackToolBar.floating
+    //         }
+    //     },
 
-        DockToolBar {
-            id: extDockToolBar
+    //     DockToolBar {
+    //         id: extDockToolBar
 
-            objectName: "extensionsToolBar"
-            title: qsTrc("appshell", "Extensions toolbar")
+    //         objectName: "extensionsToolBar"
+    //         title: qsTrc("appshell", "Extensions toolbar")
 
-            separatorsVisible: false
-            orientation: Qt.Horizontal
-            alignment: DockToolBarAlignment.Right
+    //         separatorsVisible: false
+    //         orientation: Qt.Horizontal
+    //         alignment: DockToolBarAlignment.Right
 
-            contentBottomPadding: floating ? 8 : 2
-            contentTopPadding: floating ? 8 : 0
+    //         contentBottomPadding: floating ? 8 : 2
+    //         contentTopPadding: floating ? 8 : 0
 
-            dropDestinations: [
-                { "dock": notationToolBar, "dropLocation": Location.Right },
-                { "dock": playbackToolBar, "dropLocation": Location.Right }
-            ]
+    //         dropDestinations: [
+    //             { "dock": notationToolBar, "dropLocation": Location.Right },
+    //             { "dock": playbackToolBar, "dropLocation": Location.Right }
+    //         ]
 
-            ExtensionsToolBar {
-                id: extToolBar
+    //         ExtensionsToolBar {
+    //             id: extToolBar
 
 
-                function updateVisible() {
-                    if (!extDockToolBar.inited) {
-                        return;
-                    }
+    //             function updateVisible() {
+    //                 if (!extDockToolBar.inited) {
+    //                     return;
+    //                 }
 
-                    if (!root.visible) {
-                        return;
-                    }
+    //                 if (!root.visible) {
+    //                     return;
+    //                 }
 
-                    if (extToolBar.isEmpty) {
-                        extDockToolBar.close()
-                    } else {
-                        extDockToolBar.open()
-                    }
-                }
+    //                 if (extToolBar.isEmpty) {
+    //                     extDockToolBar.close()
+    //                 } else {
+    //                     extDockToolBar.open()
+    //                 }
+    //             }
 
-                onIsEmptyChanged: extToolBar.updateVisible()
+    //             onIsEmptyChanged: extToolBar.updateVisible()
 
-                Connections {
-                    target: extDockToolBar
-                    function onInitedChanged() { extToolBar.updateVisible() }
-                }
+    //             Connections {
+    //                 target: extDockToolBar
+    //                 function onInitedChanged() { extToolBar.updateVisible() }
+    //             }
 
-                Connections {
-                    target: root
-                    function onVisibleChanged() { extToolBar.updateVisible() }
-                }
-            }
-        },
+    //             Connections {
+    //                 target: root
+    //                 function onVisibleChanged() { extToolBar.updateVisible() }
+    //             }
+    //         }
+    //     },
 
-        DockToolBar {
-            objectName: root.pageModel.undoRedoToolBarName()
-            title: qsTrc("appshell", "Undo/redo")
+    //     DockToolBar {
+    //         objectName: pageModel.undoRedoToolBarName()
+    //         title: qsTrc("appshell", "Undo/redo")
 
-            floatable: false
-            closable: false
-            resizable: false
-            separatorsVisible: false
+    //         floatable: false
+    //         closable: false
+    //         resizable: false
+    //         separatorsVisible: false
 
-            alignment: DockToolBarAlignment.Right
-            contentBottomPadding: 2
+    //         alignment: DockToolBarAlignment.Right
+    //         contentBottomPadding: 2
 
-            UndoRedoToolBar {
-                navigationPanel.section: root.topToolbarKeyNavSec
-                navigationPanel.order: 4
-            }
-        }
-    ]
+    //         UndoRedoToolBar {
+    //             navigationPanel.section: root.topToolKeyNavSec
+    //             navigationPanel.order: 4
+    //         }
+    //     }
+    // ]
 
-    toolBars: [
+    // toolBars: [
 
-        DockToolBar {
-            id: noteInputBar
+    //     DockToolBar {
+    //         id: noteInputBar
 
-            objectName: root.pageModel.noteInputBarName()
-            title: qsTrc("appshell", "Note input")
+    //         objectName: pageModel.noteInputBarName()
+    //         title: qsTrc("appshell", "Note input")
 
-            dropDestinations: [
-                root.toolBarTopDropDestination,
-                root.toolBarBottomDropDestination,
-                root.toolBarLeftDropDestination,
-                root.toolBarRightDropDestination
-            ]
+    //         dropDestinations: [
+    //             root.toolBarTopDropDestination,
+    //             root.toolBarBottomDropDestination,
+    //             root.toolBarLeftDropDestination,
+    //             root.toolBarRightDropDestination
+    //         ]
 
-            thickness: orientation === Qt.Horizontal ? 40 : 76
+    //         thickness: orientation === Qt.Horizontal ? 40 : 76
 
-            NoteInputBar {
-                orientation: noteInputBar.orientation
-                floating: noteInputBar.floating
+    //         NoteInputBar {
+    //             orientation: noteInputBar.orientation
+    //             floating: noteInputBar.floating
 
-                maximumWidth: noteInputBar.width
-                maximumHeight: noteInputBar.height
+    //             maximumWidth: noteInputBar.width
+    //             maximumHeight: noteInputBar.height
 
-                navigationPanel.section: root.noteInputKeyNavSec
-                navigationPanel.order: 1
-            }
-        }
-    ]
+    //             navigationPanel.section: root.noteInputKeyNavSec
+    //             navigationPanel.order: 1
+    //         }
+    //     }
+    // ]
 
-    panels: [
-        DockPanel {
-            id: palettesPanel
+    // panels: [
+    //     DockPanel {
+    //         id: palettesPanel
 
-            objectName: root.pageModel.palettesPanelName()
-            title: qsTrc("appshell", "Palettes")
+    //         objectName: pageModel.palettesPanelName()
+    //         title: qsTrc("appshell", "Palettes")
 
-            navigationSection: root.navigationPanelSec(palettesPanel.location)
+    //         navigationSection: root.navigationPanelSec(palettesPanel.location)
 
-            width: root.verticalPanelDefaultWidth
-            minimumWidth: root.verticalPanelDefaultWidth
-            maximumWidth: root.verticalPanelDefaultWidth
+    //         width: root.verticalPanelDefaultWidth
+    //         minimumWidth: root.verticalPanelDefaultWidth
+    //         maximumWidth: root.verticalPanelDefaultWidth
 
-            groupName: root.verticalPanelsGroup
+    //         groupName: root.verticalPanelsGroup
 
-            dropDestinations: root.verticalPanelDropDestinations
+    //         dropDestinations: root.verticalPanelDropDestinations
 
-            PalettesPanel {
-                navigationSection: palettesPanel.navigationSection
+    //         PalettesPanel {
+    //             navigationSection: palettesPanel.navigationSection
 
-                Component.onCompleted: {
-                    palettesPanel.contextMenuModel = contextMenuModel
-                }
-            }
-        },
+    //             Component.onCompleted: {
+    //                 palettesPanel.contextMenuModel = contextMenuModel
+    //             }
+    //         }
+    //     },
 
-        DockPanel {
-            id: instrumentsPanel
+    //     DockPanel {
+    //         id: instrumentsPanel
 
-            objectName: root.pageModel.instrumentsPanelName()
-            title: qsTrc("appshell", "Instruments")
+    //         objectName: pageModel.instrumentsPanelName()
+    //         title: qsTrc("appshell", "Instruments")
 
-            navigationSection: root.navigationPanelSec(instrumentsPanel.location)
+    //         navigationSection: root.navigationPanelSec(instrumentsPanel.location)
 
-            width: root.verticalPanelDefaultWidth
-            minimumWidth: root.verticalPanelDefaultWidth
-            maximumWidth: root.verticalPanelDefaultWidth
+    //         width: root.verticalPanelDefaultWidth
+    //         minimumWidth: root.verticalPanelDefaultWidth
+    //         maximumWidth: root.verticalPanelDefaultWidth
 
-            groupName: root.verticalPanelsGroup
+    //         groupName: root.verticalPanelsGroup
 
-            dropDestinations: root.verticalPanelDropDestinations
+    //         dropDestinations: root.verticalPanelDropDestinations
 
-            InstrumentsPanel {
-                navigationSection: instrumentsPanel.navigationSection
+    //         InstrumentsPanel {
+    //             navigationSection: instrumentsPanel.navigationSection
 
-                Component.onCompleted: {
-                    instrumentsPanel.contextMenuModel = contextMenuModel
-                }
-            }
-        },
+    //             Component.onCompleted: {
+    //                 instrumentsPanel.contextMenuModel = contextMenuModel
+    //             }
+    //         }
+    //     },
 
-        DockPanel {
-            id: inspectorPanel
+    //     DockPanel {
+    //         id: inspectorPanel
 
-            objectName: root.pageModel.inspectorPanelName()
-            title: qsTrc("appshell", "Properties")
+    //         objectName: pageModel.inspectorPanelName()
+    //         title: qsTrc("appshell", "Properties")
 
-            navigationSection: root.navigationPanelSec(inspectorPanel.location)
+    //         navigationSection: root.navigationPanelSec(inspectorPanel.location)
 
-            width: root.verticalPanelDefaultWidth
-            minimumWidth: root.verticalPanelDefaultWidth
-            maximumWidth: root.verticalPanelDefaultWidth
+    //         width: root.verticalPanelDefaultWidth
+    //         minimumWidth: root.verticalPanelDefaultWidth
+    //         maximumWidth: root.verticalPanelDefaultWidth
 
-            groupName: root.verticalPanelsGroup
+    //         groupName: root.verticalPanelsGroup
 
-            dropDestinations: root.verticalPanelDropDestinations
+    //         dropDestinations: root.verticalPanelDropDestinations
 
-            InspectorForm {
-                navigationSection: inspectorPanel.navigationSection
-                notationView: root.notationView
-            }
-        },
+    //         InspectorForm {
+    //             navigationSection: inspectorPanel.navigationSection
+    //             notationView: root.notationView
+    //         }
+    //     },
 
-        DockPanel {
-            id: selectionFilterPanel
+    //     DockPanel {
+    //         id: selectionFilterPanel
 
-            objectName: root.pageModel.selectionFiltersPanelName()
-            title: qsTrc("appshell", "Selection filter")
+    //         objectName: pageModel.selectionFiltersPanelName()
+    //         title: qsTrc("appshell", "Selection filter")
 
-            navigationSection: root.navigationPanelSec(selectionFilterPanel.location)
+    //         navigationSection: root.navigationPanelSec(selectionFilterPanel.location)
 
-            width: root.verticalPanelDefaultWidth
-            minimumWidth: root.verticalPanelDefaultWidth
-            maximumWidth: root.verticalPanelDefaultWidth
+    //         width: root.verticalPanelDefaultWidth
+    //         minimumWidth: root.verticalPanelDefaultWidth
+    //         maximumWidth: root.verticalPanelDefaultWidth
 
-            groupName: root.verticalPanelsGroup
+    //         groupName: root.verticalPanelsGroup
 
-            //! NOTE: hidden by default
-            visible: false
+    //         //! NOTE: hidden by default
+    //         visible: false
 
-            dropDestinations: root.verticalPanelDropDestinations
+    //         dropDestinations: root.verticalPanelDropDestinations
 
-            SelectionFilterPanel {
-                navigationSection: selectionFilterPanel.navigationSection
-            }
-        },
+    //         SelectionFilterPanel {
+    //             navigationSection: selectionFilterPanel.navigationSection
+    //         }
+    //     },
         
-        // =============================================
-        // Horizontal Panels
-        // =============================================
+    //     // =============================================
+    //     // Horizontal Panels
+    //     // =============================================
 
-        DockPanel {
-            id: mixerPanel
+    //     DockPanel {
+    //         id: mixerPanel
 
-            objectName: root.pageModel.mixerPanelName()
-            title: qsTrc("appshell", "Mixer")
+    //         objectName: pageModel.mixerPanelName()
+    //         title: qsTrc("appshell", "Mixer")
 
-            height: 368
-            minimumHeight: root.horizontalPanelMinHeight
-            maximumHeight: root.horizontalPanelMaxHeight
+    //         height: 368
+    //         minimumHeight: root.horizontalPanelMinHeight
+    //         maximumHeight: root.horizontalPanelMaxHeight
 
-            groupName: root.horizontalPanelsGroup
+    //         groupName: root.horizontalPanelsGroup
 
-            //! NOTE: hidden by default
-            visible: false
+    //         //! NOTE: hidden by default
+    //         visible: false
 
-            location: Location.Bottom
+    //         location: Location.Bottom
 
-            dropDestinations: root.horizontalPanelDropDestinations
+    //         dropDestinations: root.horizontalPanelDropDestinations
 
-            navigationSection: root.navigationPanelSec(mixerPanel.location)
+    //         navigationSection: root.navigationPanelSec(mixerPanel.location)
 
-            MixerPanel {
-                navigationSection: mixerPanel.navigationSection
+    //         MixerPanel {
+    //             navigationSection: mixerPanel.navigationSection
 
-                Component.onCompleted: {
-                    mixerPanel.contextMenuModel = contextMenuModel
-                }
+    //             Component.onCompleted: {
+    //                 mixerPanel.contextMenuModel = contextMenuModel
+    //             }
 
-                onResizeRequested: function(newWidth, newHeight) {
-                    mixerPanel.resize(newWidth, newHeight)
-                }
-            }
-        },
+    //             onResizeRequested: function(newWidth, newHeight) {
+    //                 mixerPanel.resize(newWidth, newHeight)
+    //             }
+    //         }
+    //     },
 
-        DockPanel {
-            id: pianoKeyboardPanel
+    //     DockPanel {
+    //         id: pianoKeyboardPanel
 
-            objectName: root.pageModel.pianoKeyboardPanelName()
-            title: qsTrc("appshell", "Piano keyboard")
+    //         objectName: pageModel.pianoKeyboardPanelName()
+    //         title: qsTrc("appshell", "Piano keyboard")
 
-            height: 200
-            minimumHeight: root.horizontalPanelMinHeight
-            maximumHeight: root.horizontalPanelMaxHeight
+    //         height: 200
+    //         minimumHeight: root.horizontalPanelMinHeight
+    //         maximumHeight: root.horizontalPanelMaxHeight
 
-            groupName: root.horizontalPanelsGroup
+    //         groupName: root.horizontalPanelsGroup
 
-            //! NOTE: hidden by default
-            visible: false
+    //         //! NOTE: hidden by default
+    //         visible: false
 
-            location: Location.Bottom
+    //         location: Location.Bottom
 
-            dropDestinations: root.horizontalPanelDropDestinations
+    //         dropDestinations: root.horizontalPanelDropDestinations
 
-            navigationSection: root.navigationPanelSec(pianoKeyboardPanel.location)
+    //         navigationSection: root.navigationPanelSec(pianoKeyboardPanel.location)
 
-            PianoKeyboardPanel {
-                navigationSection: pianoKeyboardPanel.navigationSection
+    //         PianoKeyboardPanel {
+    //             navigationSection: pianoKeyboardPanel.navigationSection
 
-                Component.onCompleted: {
-                    pianoKeyboardPanel.contextMenuModel = contextMenuModel
-                }
-            }
-        },
+    //             Component.onCompleted: {
+    //                 pianoKeyboardPanel.contextMenuModel = contextMenuModel
+    //             }
+    //         }
+    //     },
 
-        DockPanel {
-            id: timelinePanel
+    //     DockPanel {
+    //         id: timelinePanel
 
-            objectName: root.pageModel.timelinePanelName()
-            title: qsTrc("appshell", "Timeline")
+    //         objectName: pageModel.timelinePanelName()
+    //         title: qsTrc("appshell", "Timeline")
 
-            height: 200
-            minimumHeight: root.horizontalPanelMinHeight
-            maximumHeight: root.horizontalPanelMaxHeight
+    //         height: 200
+    //         minimumHeight: root.horizontalPanelMinHeight
+    //         maximumHeight: root.horizontalPanelMaxHeight
 
-            groupName: root.horizontalPanelsGroup
+    //         groupName: root.horizontalPanelsGroup
 
-            //! NOTE: hidden by default
-            visible: false
+    //         //! NOTE: hidden by default
+    //         visible: false
 
-            location: Location.Bottom
+    //         location: Location.Bottom
 
-            dropDestinations: root.horizontalPanelDropDestinations
+    //         dropDestinations: root.horizontalPanelDropDestinations
 
-            navigationSection: root.navigationPanelSec(timelinePanel.location)
+    //         navigationSection: root.navigationPanelSec(timelinePanel.location)
 
-            Timeline {
-                navigationSection: timelinePanel.navigationSection
-            }
-        },
+    //         Timeline {
+    //             navigationSection: timelinePanel.navigationSection
+    //         }
+    //     },
 
-        DockPanel {
-            id: drumsetPanel
+    //     DockPanel {
+    //         id: drumsetPanel
 
-            objectName: root.pageModel.drumsetPanelName()
-            title: qsTrc("appshell", "Drumset tools")
+    //         objectName: pageModel.drumsetPanelName()
+    //         title: qsTrc("appshell", "Drumset tools")
 
-            height: 64
-            minimumHeight: 64
-            maximumHeight: 64
+    //         height: 64
+    //         minimumHeight: 64
+    //         maximumHeight: 64
 
-            //! NOTE: hidden by default
-            visible: false
+    //         //! NOTE: hidden by default
+    //         visible: false
 
-            floatable: false
-            closable: false
+    //         floatable: false
+    //         closable: false
 
-            location: Location.Bottom
+    //         location: Location.Bottom
 
-            navigationSection: root.navigationPanelSec(drumsetPanel.location)
+    //         navigationSection: root.navigationPanelSec(drumsetPanel.location)
 
-            DrumsetPanel {
-                navigationSection: timelinePanel.navigationSection
-            }
-        },
+    //         DrumsetPanel {
+    //             navigationSection: timelinePanel.navigationSection
+    //         }
+    //     },
 
-        DockPanel {
-            id: percussionPanel
+    //     DockPanel {
+    //         id: percussionPanel
 
-            objectName: root.pageModel.percussionPanelName()
-            title: qsTrc("appshell", "Percussion")
+    //         objectName: pageModel.percussionPanelName()
+    //         title: qsTrc("appshell", "Percussion")
 
-            height: 200
-            minimumHeight: root.horizontalPanelMinHeight
-            maximumHeight: root.horizontalPanelMaxHeight
+    //         height: 200
+    //         minimumHeight: root.horizontalPanelMinHeight
+    //         maximumHeight: root.horizontalPanelMaxHeight
 
-            groupName: root.horizontalPanelsGroup
+    //         groupName: root.horizontalPanelsGroup
 
-            //! NOTE: hidden by default
-            visible: false
+    //         //! NOTE: hidden by default
+    //         visible: false
 
-            location: Location.Bottom
+    //         location: Location.Bottom
 
-            dropDestinations: root.horizontalPanelDropDestinations
+    //         dropDestinations: root.horizontalPanelDropDestinations
 
-            navigationSection: root.navigationPanelSec(percussionPanel.location)
+    //         navigationSection: root.navigationPanelSec(percussionPanel.location)
 
-            PercussionPanel {
-                navigationSection: percussionPanel.navigationSection
+    //         PercussionPanel {
+    //             navigationSection: percussionPanel.navigationSection
 
-                // TODO: #22050 needed for this
-                /*
-                // contentNavigationPanelOrderStart: percussionPanel.contentNavigationPanelOrderStart
+    //             // TODO: #22050 needed for this
+    //             /*
+    //             // contentNavigationPanelOrderStart: percussionPanel.contentNavigationPanelOrderStart
 
-                Component.onCompleted: {
-                    percussionPanel.contextMenuModel = contextMenuModel
-                    percussionPanel.toolbarComponent = toolbarComponent
-                }
+    //             Component.onCompleted: {
+    //                 percussionPanel.contextMenuModel = contextMenuModel
+    //                 percussionPanel.toolbarComponent = toolbarComponent
+    //             }
 
-                Component.onDestruction: {
-                    percussionPanel.contextMenuModel = null
-                    percussionPanel.toolbarComponent = null
-                }
-                */
-            }
-        }
-    ]
+    //             Component.onDestruction: {
+    //                 percussionPanel.contextMenuModel = null
+    //                 percussionPanel.toolbarComponent = null
+    //             }
+    //             */
+    //         }
+    //     }
+    // ]
 
     central: NotationView {
         id: notationView
@@ -532,13 +532,13 @@ DockPage {
         }
     }
 
-    statusBar: DockStatusBar {
-        objectName: root.pageModel.statusBarName()
+    // statusBar: DockStatusBar {
+    //     objectName: pageModel.statusBarName()
 
-        contentNavigationPanel: content.navigationPanel
+    //     contentNavigationPanel: content.navigationPanel
 
-        NotationStatusBar {
-            id: content
-        }
-    }
+    //     NotationStatusBar {
+    //         id: content
+    //     }
+    // }
 }

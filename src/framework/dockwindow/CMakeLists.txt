@@ -32,14 +32,14 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockbase.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/dropcontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/dropcontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/dockseparator.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/dockseparator.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/dockframemodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/dockframemodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/docktabbar.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/docktabbar.h
+    # ${CMAKE_CURRENT_LIST_DIR}/internal/dropcontroller.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/internal/dropcontroller.h
+    # ${CMAKE_CURRENT_LIST_DIR}/internal/dockseparator.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/internal/dockseparator.h
+    # ${CMAKE_CURRENT_LIST_DIR}/internal/dockframemodel.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/internal/dockframemodel.h
+    # ${CMAKE_CURRENT_LIST_DIR}/internal/docktabbar.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/internal/docktabbar.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockwindowactionscontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockwindowactionscontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockwindowprovider.cpp
@@ -49,16 +49,16 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/dockwindow.h
     ${CMAKE_CURRENT_LIST_DIR}/view/dockpageview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/dockpageview.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/dockpanelview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/dockpanelview.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/dockstatusbarview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/dockstatusbarview.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/docktoolbarview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/docktoolbarview.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/docktitlebar.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/docktitlebar.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/dockingholderview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/dockingholderview.h
+    # ${CMAKE_CURRENT_LIST_DIR}/view/dockpanelview.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/view/dockpanelview.h
+    # ${CMAKE_CURRENT_LIST_DIR}/view/dockstatusbarview.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/view/dockstatusbarview.h
+    # ${CMAKE_CURRENT_LIST_DIR}/view/docktoolbarview.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/view/docktoolbarview.h
+    # ${CMAKE_CURRENT_LIST_DIR}/view/docktitlebar.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/view/docktitlebar.h
+    # ${CMAKE_CURRENT_LIST_DIR}/view/dockingholderview.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/view/dockingholderview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/dockcentralview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/dockcentralview.h
     )

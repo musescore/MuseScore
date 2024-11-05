@@ -63,52 +63,52 @@ DockPage {
 
         switch (name) {
         case "scores": root.central = scoresComp; break
-        case "plugins": root.central = extensionsComp; break // backward compatibility
-        case "extensions": root.central = extensionsComp; break
-        case "audio": root.central = audioComp; break
-        case "learn": root.central = learnComp; break
-        case "account": root.central = accountComp; break
+        // case "plugins": root.central = extensionsComp; break // backward compatibility
+        // case "extensions": root.central = extensionsComp; break
+        // case "audio": root.central = audioComp; break
+        // case "learn": root.central = learnComp; break
+        // case "account": root.central = accountComp; break
         }
     }
 
-    panels: [
-        DockPanel {
-            id: menuPanel
+    // panels: [
+    //     DockPanel {
+    //         id: menuPanel
 
-            objectName: "homeMenu"
+    //         objectName: "homeMenu"
 
-            readonly property int maxFixedWidth: 260
-            readonly property int minFixedWidth: 76
-            readonly property bool iconsOnly: root.window
-                                                ? root.window.width < (root.window.minimumWidth + maxFixedWidth - minFixedWidth)
-                                                : false
-            readonly property int currentFixedWidth: iconsOnly ? minFixedWidth : maxFixedWidth
+    //         readonly property int maxFixedWidth: 260
+    //         readonly property int minFixedWidth: 76
+    //         readonly property bool iconsOnly: root.window
+    //                                             ? root.window.width < (root.window.minimumWidth + maxFixedWidth - minFixedWidth)
+    //                                             : false
+    //         readonly property int currentFixedWidth: iconsOnly ? minFixedWidth : maxFixedWidth
 
-            width: currentFixedWidth
-            minimumWidth: currentFixedWidth
-            maximumWidth: currentFixedWidth
+    //         width: currentFixedWidth
+    //         minimumWidth: currentFixedWidth
+    //         maximumWidth: currentFixedWidth
 
-            floatable: false
-            closable: false
+    //         floatable: false
+    //         closable: false
 
-            HomeMenu {
-                currentPageName: root.section
-                iconsOnly: menuPanel.iconsOnly
+    //         HomeMenu {
+    //             currentPageName: root.section
+    //             iconsOnly: menuPanel.iconsOnly
 
-                onSelected: function(name) {
-                    root.setCurrentCentral(name)
-                }
-            }
-        }
-    ]
+    //             onSelected: function(name) {
+    //                 root.setCurrentCentral(name)
+    //             }
+    //         }
+    //     }
+    // ]
 
     central: scoresComp
 
-    Component {
-        id: accountComp
+    // Component {
+    //     id: accountComp
 
-        AccountPage {}
-    }
+    //     AccountPage {}
+    // }
 
     Component {
         id: scoresComp
@@ -116,28 +116,28 @@ DockPage {
         ScoresPage {}
     }
 
-    Component {
-        id: extensionsComp
+    // Component {
+    //     id: extensionsComp
 
-        PluginsPage {
-            section: root.subSection
-        }
-    }
+    //     PluginsPage {
+    //         section: root.subSection
+    //     }
+    // }
 
-    Component {
-        id: audioComp
+    // Component {
+    //     id: audioComp
 
-        StyledTextLabel {
-            anchors.centerIn: parent
-            text: "Audio & VST"
-        }
-    }
+    //     StyledTextLabel {
+    //         anchors.centerIn: parent
+    //         text: "Audio & VST"
+    //     }
+    // }
 
-    Component {
-        id: learnComp
+    // Component {
+    //     id: learnComp
 
-        LearnPage {
-            section: root.subSection
-        }
-    }
+    //     LearnPage {
+    //         section: root.subSection
+    //     }
+    // }
 }
