@@ -24,11 +24,11 @@
 
 #include <QTimer>
 
-#include "docktoolbarview.h"
-#include "dockingholderview.h"
+// #include "docktoolbarview.h"
+// #include "dockingholderview.h"
 #include "dockcentralview.h"
-#include "dockpanelview.h"
-#include "dockstatusbarview.h"
+// #include "dockpanelview.h"
+// #include "dockstatusbarview.h"
 
 #include "ui/view/navigationcontrol.h"
 
@@ -38,12 +38,12 @@ using namespace muse::dock;
 using namespace muse::ui;
 
 DockPageView::DockPageView(QQuickItem* parent)
-    : QQuickItem(parent), muse::Injectable(muse::iocCtxForQmlObject(this)),
-    m_mainToolBars(this),
-    m_toolBars(this),
-    m_toolBarsDockingHolders(this),
-    m_panels(this),
-    m_panelsDockingHolders(this)
+    : QQuickItem(parent), muse::Injectable(muse::iocCtxForQmlObject(this))/*,*/
+    // m_mainToolBars(this),
+    // m_toolBars(this),
+    // m_toolBarsDockingHolders(this),
+    // m_panels(this),
+    // m_panelsDockingHolders(this)
 {
     //! NOTE: dockwindow controls the visible state
     setVisible(false);
@@ -87,65 +87,65 @@ void DockPageView::setParams(const QVariantMap& params)
     emit setParamsRequested(params);
 }
 
-QQmlListProperty<DockToolBarView> DockPageView::mainToolBarsProperty()
-{
-    return m_mainToolBars.property();
-}
+// QQmlListProperty<DockToolBarView> DockPageView::mainToolBarsProperty()
+// {
+//     return m_mainToolBars.property();
+// }
 
-QQmlListProperty<DockToolBarView> DockPageView::toolBarsProperty()
-{
-    return m_toolBars.property();
-}
+// QQmlListProperty<DockToolBarView> DockPageView::toolBarsProperty()
+// {
+//     return m_toolBars.property();
+// }
 
-QQmlListProperty<DockPanelView> DockPageView::panelsProperty()
-{
-    return m_panels.property();
-}
+// QQmlListProperty<DockPanelView> DockPageView::panelsProperty()
+// {
+//     return m_panels.property();
+// }
 
-QQmlListProperty<DockingHolderView> DockPageView::toolBarsDockingHoldersProperty()
-{
-    return m_toolBarsDockingHolders.property();
-}
+// QQmlListProperty<DockingHolderView> DockPageView::toolBarsDockingHoldersProperty()
+// {
+//     return m_toolBarsDockingHolders.property();
+// }
 
-QQmlListProperty<DockingHolderView> DockPageView::panelsDockingHoldersProperty()
-{
-    return m_panelsDockingHolders.property();
-}
+// QQmlListProperty<DockingHolderView> DockPageView::panelsDockingHoldersProperty()
+// {
+//     return m_panelsDockingHolders.property();
+// }
 
-QList<DockToolBarView*> DockPageView::mainToolBars() const
-{
-    return m_mainToolBars.list();
-}
+// QList<DockToolBarView*> DockPageView::mainToolBars() const
+// {
+//     return m_mainToolBars.list();
+// }
 
-QList<DockToolBarView*> DockPageView::toolBars() const
-{
-    return m_toolBars.list();
-}
+// QList<DockToolBarView*> DockPageView::toolBars() const
+// {
+//     return m_toolBars.list();
+// }
 
-QList<DockingHolderView*> DockPageView::toolBarsHolders() const
-{
-    return m_toolBarsDockingHolders.list();
-}
+// QList<DockingHolderView*> DockPageView::toolBarsHolders() const
+// {
+//     return m_toolBarsDockingHolders.list();
+// }
 
 DockCentralView* DockPageView::centralDock() const
 {
     return m_central;
 }
 
-DockStatusBarView* DockPageView::statusBar() const
-{
-    return m_statusBar;
-}
+// DockStatusBarView* DockPageView::statusBar() const
+// {
+//     return m_statusBar;
+// }
 
-QList<DockPanelView*> DockPageView::panels() const
-{
-    return m_panels.list();
-}
+// QList<DockPanelView*> DockPageView::panels() const
+// {
+//     return m_panels.list();
+// }
 
-QList<DockingHolderView*> DockPageView::panelsHolders() const
-{
-    return m_panelsDockingHolders.list();
-}
+// QList<DockingHolderView*> DockPageView::panelsHolders() const
+// {
+//     return m_panelsDockingHolders.list();
+// }
 
 DockBase* DockPageView::dockByName(const QString& dockName) const
 {
@@ -158,37 +158,37 @@ DockBase* DockPageView::dockByName(const QString& dockName) const
     return nullptr;
 }
 
-DockingHolderView* DockPageView::holder(DockType type, Location location) const
-{
-    QList<DockingHolderView*> holders;
+// DockingHolderView* DockPageView::holder(DockType type, Location location) const
+// {
+//     QList<DockingHolderView*> holders;
 
-    if (type == DockType::ToolBar) {
-        holders = m_toolBarsDockingHolders.list();
-    } else if (type == DockType::Panel) {
-        holders = m_panelsDockingHolders.list();
-    }
+//     if (type == DockType::ToolBar) {
+//         holders = m_toolBarsDockingHolders.list();
+//     } else if (type == DockType::Panel) {
+//         holders = m_panelsDockingHolders.list();
+//     }
 
-    for (DockingHolderView* holder : holders) {
-        if (holder->location() == location) {
-            return holder;
-        }
-    }
+//     for (DockingHolderView* holder : holders) {
+//         if (holder->location() == location) {
+//             return holder;
+//         }
+//     }
 
-    return nullptr;
-}
+//     return nullptr;
+// }
 
-QList<DockPanelView*> DockPageView::possiblePanelsForTab(const DockPanelView* tab) const
-{
-    QList<DockPanelView*> result;
+// QList<DockPanelView*> DockPageView::possiblePanelsForTab(const DockPanelView* tab) const
+// {
+//     QList<DockPanelView*> result;
 
-    for (DockPanelView* panel : panels()) {
-        if (panel->isTabAllowed(tab)) {
-            result << panel;
-        }
-    }
+//     for (DockPanelView* panel : panels()) {
+//         if (panel->isTabAllowed(tab)) {
+//             result << panel;
+//         }
+//     }
 
-    return result;
-}
+//     return result;
+// }
 
 bool DockPageView::isDockOpen(const QString& dockName) const
 {
@@ -213,25 +213,25 @@ void DockPageView::setDockOpen(const QString& dockName, bool open)
         return;
     }
 
-    DockPanelView* panel = dynamic_cast<DockPanelView*>(dock);
-    if (!panel) {
-        dock->open();
-        return;
-    }
+    // DockPanelView* panel = dynamic_cast<DockPanelView*>(dock);
+    // if (!panel) {
+    //     dock->open();
+    //     return;
+    // }
 
-    DockPanelView* destinationPanel = findPanelForTab(panel);
-    if (destinationPanel) {
-        destinationPanel->addPanelAsTab(panel);
-    } else {
-        panel->open();
-    }
+    // DockPanelView* destinationPanel = findPanelForTab(panel);
+    // if (destinationPanel) {
+    //     destinationPanel->addPanelAsTab(panel);
+    // } else {
+    //     panel->open();
+    // }
 }
 
-DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab) const
-{
-    QList<DockPanelView*> panels = possiblePanelsForTab(tab);
-    return !panels.isEmpty() ? panels.first() : nullptr;
-}
+// DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab) const
+// {
+//     QList<DockPanelView*> panels = possiblePanelsForTab(tab);
+//     return !panels.isEmpty() ? panels.first() : nullptr;
+// }
 
 void DockPageView::reorderSections()
 {
@@ -397,15 +397,15 @@ void DockPageView::setCentralDock(DockCentralView* central)
     emit centralDockChanged(central);
 }
 
-void DockPageView::setStatusBar(DockStatusBarView* statusBar)
-{
-    if (statusBar == m_statusBar) {
-        return;
-    }
+// void DockPageView::setStatusBar(DockStatusBarView* statusBar)
+// {
+//     if (statusBar == m_statusBar) {
+//         return;
+//     }
 
-    m_statusBar = statusBar;
-    emit statusBarChanged(statusBar);
-}
+//     m_statusBar = statusBar;
+//     emit statusBarChanged(statusBar);
+// }
 
 void DockPageView::componentComplete()
 {
@@ -423,20 +423,20 @@ void DockPageView::componentComplete()
 
 QList<DockBase*> DockPageView::allDocks() const
 {
-    auto mainToolBars = this->mainToolBars();
-    auto toolbars = this->toolBars();
-    auto panels = this->panels();
+    // auto mainToolBars = this->mainToolBars();
+    // auto toolbars = this->toolBars();
+    // auto panels = this->panels();
 
     QList<DockBase*> docks;
-    docks << QList<DockBase*>(mainToolBars.begin(), mainToolBars.end());
-    docks << QList<DockBase*>(toolbars.begin(), toolbars.end());
-    docks << QList<DockBase*>(panels.begin(), panels.end());
+    // docks << QList<DockBase*>(mainToolBars.begin(), mainToolBars.end());
+    // docks << QList<DockBase*>(toolbars.begin(), toolbars.end());
+    // docks << QList<DockBase*>(panels.begin(), panels.end());
 
     docks << m_central;
 
-    if (m_statusBar) {
-        docks << m_statusBar;
-    }
+    // if (m_statusBar) {
+    // docks << m_statusBar;
+    // }
 
     return docks;
 }

@@ -40,23 +40,23 @@ class NavigationControl;
 }
 
 namespace muse::dock {
-class DockToolBarView;
-class DockPanelView;
+// class DockToolBarView;
+// class DockPanelView;
 class DockCentralView;
-class DockStatusBarView;
-class DockingHolderView;
+// class DockStatusBarView;
+// class DockingHolderView;
 class DockPageView : public QQuickItem, public muse::Injectable
 {
     Q_OBJECT
 
     Q_PROPERTY(QString uri READ uri WRITE setUri NOTIFY uriChanged)
-    Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> mainToolBars READ mainToolBarsProperty CONSTANT)
-    Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> toolBars READ toolBarsProperty CONSTANT)
-    Q_PROPERTY(QQmlListProperty<muse::dock::DockingHolderView> toolBarsDockingHolders READ toolBarsDockingHoldersProperty CONSTANT)
-    Q_PROPERTY(QQmlListProperty<muse::dock::DockPanelView> panels READ panelsProperty CONSTANT)
-    Q_PROPERTY(QQmlListProperty<muse::dock::DockingHolderView> panelsDockingHolders READ panelsDockingHoldersProperty)
+    // Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> mainToolBars READ mainToolBarsProperty CONSTANT)
+    // Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> toolBars READ toolBarsProperty CONSTANT)
+    // Q_PROPERTY(QQmlListProperty<muse::dock::DockingHolderView> toolBarsDockingHolders READ toolBarsDockingHoldersProperty CONSTANT)
+    // Q_PROPERTY(QQmlListProperty<muse::dock::DockPanelView> panels READ panelsProperty CONSTANT)
+    // Q_PROPERTY(QQmlListProperty<muse::dock::DockingHolderView> panelsDockingHolders READ panelsDockingHoldersProperty)
     Q_PROPERTY(muse::dock::DockCentralView * centralDock READ centralDock WRITE setCentralDock NOTIFY centralDockChanged)
-    Q_PROPERTY(muse::dock::DockStatusBarView * statusBar READ statusBar WRITE setStatusBar NOTIFY statusBarChanged)
+    // Q_PROPERTY(muse::dock::DockStatusBarView * statusBar READ statusBar WRITE setStatusBar NOTIFY statusBarChanged)
 
     muse::Inject<ui::INavigationController> navigationController = { this };
 
@@ -70,24 +70,24 @@ public:
 
     void setParams(const QVariantMap& params);
 
-    QQmlListProperty<DockToolBarView> mainToolBarsProperty();
-    QQmlListProperty<DockToolBarView> toolBarsProperty();
-    QQmlListProperty<DockingHolderView> toolBarsDockingHoldersProperty();
-    QQmlListProperty<DockPanelView> panelsProperty();
-    QQmlListProperty<DockingHolderView> panelsDockingHoldersProperty();
+    // QQmlListProperty<DockToolBarView> mainToolBarsProperty();
+    // QQmlListProperty<DockToolBarView> toolBarsProperty();
+    // QQmlListProperty<DockingHolderView> toolBarsDockingHoldersProperty();
+    // QQmlListProperty<DockPanelView> panelsProperty();
+    // QQmlListProperty<DockingHolderView> panelsDockingHoldersProperty();
 
-    QList<DockToolBarView*> mainToolBars() const;
-    QList<DockToolBarView*> toolBars() const;
-    QList<DockingHolderView*> toolBarsHolders() const;
+    // QList<DockToolBarView*> mainToolBars() const;
+    // QList<DockToolBarView*> toolBars() const;
+    // QList<DockingHolderView*> toolBarsHolders() const;
     DockCentralView* centralDock() const;
-    DockStatusBarView* statusBar() const;
-    QList<DockPanelView*> panels() const;
-    QList<DockingHolderView*> panelsHolders() const;
+    // DockStatusBarView* statusBar() const;
+    // QList<DockPanelView*> panels() const;
+    // QList<DockingHolderView*> panelsHolders() const;
     QList<DockBase*> allDocks() const;
 
     DockBase* dockByName(const QString& dockName) const;
-    DockingHolderView* holder(DockType type, Location location) const;
-    QList<DockPanelView*> possiblePanelsForTab(const DockPanelView* tab) const;
+    // DockingHolderView* holder(DockType type, Location location) const;
+    // QList<DockPanelView*> possiblePanelsForTab(const DockPanelView* tab) const;
 
     bool isDockOpen(const QString& dockName) const;
     void toggleDock(const QString& dockName);
@@ -101,19 +101,19 @@ public:
 public slots:
     void setUri(const QString& uri);
     void setCentralDock(DockCentralView* central);
-    void setStatusBar(DockStatusBarView* statusBar);
+    // void setStatusBar(DockStatusBarView* statusBar);
 
 signals:
     void inited();
     void setParamsRequested(const QVariantMap& params);
     void uriChanged(const QString& uri);
     void centralDockChanged(DockCentralView* central);
-    void statusBarChanged(DockStatusBarView* statusBar);
+    // void statusBarChanged(DockStatusBarView* statusBar);
 
 private:
     void componentComplete() override;
 
-    DockPanelView* findPanelForTab(const DockPanelView* tab) const;
+    // DockPanelView* findPanelForTab(const DockPanelView* tab) const;
 
     void reorderSections();
     void doReorderSections();
@@ -121,13 +121,13 @@ private:
     void reorderNavigationSectionPanels(QList<DockBase*>& sectionDocks);
 
     QString m_uri;
-    uicomponents::QmlListProperty<DockToolBarView> m_mainToolBars;
-    uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
-    uicomponents::QmlListProperty<DockingHolderView> m_toolBarsDockingHolders;
-    uicomponents::QmlListProperty<DockPanelView> m_panels;
-    uicomponents::QmlListProperty<DockingHolderView> m_panelsDockingHolders;
+    // uicomponents::QmlListProperty<DockToolBarView> m_mainToolBars;
+    // uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
+    // uicomponents::QmlListProperty<DockingHolderView> m_toolBarsDockingHolders;
+    // uicomponents::QmlListProperty<DockPanelView> m_panels;
+    // uicomponents::QmlListProperty<DockingHolderView> m_panelsDockingHolders;
     DockCentralView* m_central = nullptr;
-    DockStatusBarView* m_statusBar = nullptr;
+    // DockStatusBarView* m_statusBar = nullptr;
 };
 }
 

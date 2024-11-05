@@ -46,7 +46,7 @@ public:
     virtual void toggleDockFloating(const QString& dockName) = 0;
 
     virtual DockPageView* currentPage() const = 0;
-    virtual QQuickItem& asItem() const = 0;
+    // virtual QQuickItem& asItem() const = 0;
 
     virtual void restoreDefaultLayout() = 0;
 };

@@ -40,7 +40,9 @@
 Q_MOC_INCLUDE(< QQuickWindow >)
 
 namespace KDDockWidgets {
-class MainWindowBase;
+namespace QtQuick {
+class MainWindow;
+}
 class LayoutSaver;
 }
 
@@ -88,7 +90,7 @@ public:
     void toggleDockFloating(const QString& dockName) override;
 
     DockPageView* currentPage() const override;
-    QQuickItem& asItem() const override;
+    // QQuickItem& asItem() const override;
 
     void restoreDefaultLayout() override;
 
@@ -135,7 +137,7 @@ private:
 
     QList<DockToolBarView*> topLevelToolBars(const DockPageView* page) const;
 
-    KDDockWidgets::MainWindowBase* m_mainWindow = nullptr;
+    KDDockWidgets::QtQuick::MainWindow* m_mainWindow = nullptr;
     DockPageView* m_currentPage = nullptr;
     uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
     uicomponents::QmlListProperty<DockPageView> m_pages;

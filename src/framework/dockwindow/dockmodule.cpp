@@ -24,86 +24,99 @@
 
 #include <QQmlEngine>
 
-#include "internal/dropcontroller.h"
-#include "internal/dockseparator.h"
-#include "internal/dockframemodel.h"
-#include "internal/docktabbar.h"
+// #include "internal/dropcontroller.h"
+// #include "internal/dockseparator.h"
+// #include "internal/dockframemodel.h"
+// #include "internal/docktabbar.h"
 #include "internal/dockwindowactionscontroller.h"
 #include "internal/dockwindowprovider.h"
 
 #include "view/dockwindow.h"
-#include "view/dockpanelview.h"
+// #include "view/dockpanelview.h"
 #include "view/docktoolbarview.h"
-#include "view/dockstatusbarview.h"
-#include "view/dockingholderview.h"
+// #include "view/dockstatusbarview.h"
+// #include "view/dockingholderview.h"
 #include "view/dockcentralview.h"
 #include "view/dockpageview.h"
-#include "view/docktitlebar.h"
+// #include "view/docktitlebar.h"
 
 #include "docktypes.h"
 
 #include "thirdparty/KDDockWidgets/src/Config.h"
-#include "thirdparty/KDDockWidgets/src/DockWidgetBase.h"
-#include "thirdparty/KDDockWidgets/src/FrameworkWidgetFactory.h"
-#include "thirdparty/KDDockWidgets/src/private/FloatingWindow_p.h"
+// #include "thirdparty/KDDockWidgets/src/DockWidgetBase.h"
+#include "thirdparty/KDDockWidgets/src/qtquick/ViewFactory.h"
+// #include "thirdparty/KDDockWidgets/src/private/FloatingWindow_p.h"
+#include "thirdparty/KDDockWidgets/src/qtquick/Platform.h"
 
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
 namespace muse::dock {
-class DockWidgetFactory : public KDDockWidgets::DefaultWidgetFactory
+class DockViewFactory : public KDDockWidgets::QtQuick::ViewFactory
 {
 public:
-    DockWidgetFactory(const modularity::ContextPtr& iocCtx)
+    DockViewFactory(const modularity::ContextPtr& iocCtx)
         : m_iocContext(iocCtx) {}
 
-    KDDockWidgets::DropIndicatorOverlayInterface* createDropIndicatorOverlay(KDDockWidgets::DropArea* dropArea) const override
-    {
-        return new DropController(dropArea, m_iocContext);
-    }
+    // KDDockWidgets::DropIndicatorOverlayInterface* createDropIndicatorOverlay(KDDockWidgets::DropArea* dropArea) const override
+    // {
+    // return new DropController(dropArea, m_iocContext);
+    // }
 
-    Layouting::Separator* createSeparator(Layouting::Widget* parent = nullptr) const override
-    {
-        return new DockSeparator(parent);
-    }
+    // Layouting::Separator* createSeparator(Layouting::Widget* parent = nullptr) const override
+    // {
+    //     return new DockSeparator(parent);
+    // }
 
-    KDDockWidgets::TitleBar* createTitleBar(KDDockWidgets::Frame* frame) const override
-    {
-        return new DockTitleBar(frame);
-    }
+    // KDDockWidgets::TitleBar* createTitleBar(KDDockWidgets::Frame* frame) const override
+    // {
+    //     return new DockTitleBar(frame);
+    // }
 
-    KDDockWidgets::TitleBar* createTitleBar(KDDockWidgets::FloatingWindow* floatingWindow) const override
-    {
-        return new DockTitleBar(floatingWindow);
-    }
+    // KDDockWidgets::TitleBar* createTitleBar(KDDockWidgets::FloatingWindow* floatingWindow) const override
+    // {
+    //     return new DockTitleBar(floatingWindow);
+    // }
 
-    KDDockWidgets::TabBar* createTabBar(KDDockWidgets::TabWidget* parent) const override
-    {
-        return new DockTabBar(parent);
-    }
+    // KDDockWidgets::TabBar* createTabBar(KDDockWidgets::TabWidget* parent) const override
+    // {
+    //     return new DockTabBar(parent);
+    // }
 
-    QUrl titleBarFilename() const override
-    {
-        return QUrl("qrc:/qml/Muse/Dock/DockTitleBar.qml");
-    }
+    // QUrl titleBarFilename() const override
+    // {
+    //     return QUrl("qrc:/qml/Muse/Dock/DockTitleBar.qml");
+    // }
 
-    QUrl dockwidgetFilename() const override
-    {
-        return QUrl("qrc:/qml/Muse/Dock/DockWidget.qml");
-    }
+    // QUrl dockwidgetFilename() const override
+    // {
+    //     return QUrl("qrc:/qml/Muse/Dock/DockWidget.qml");
+    // }
 
-    QUrl frameFilename() const override
-    {
-        return QUrl("qrc:/qml/Muse/Dock/DockFrame.qml");
-    }
+    // QUrl frameFilename() const override
+    // {
+    //     return QUrl("qrc:/qml/Muse/Dock/DockFrame.qml");
+    // }
 
-    QUrl floatingWindowFilename() const override
-    {
-        return QUrl("qrc:/qml/Muse/Dock/DockFloatingWindow.qml");
-    }
+    // QUrl floatingWindowFilename() const override
+    // {
+    //     return QUrl("qrc:/qml/Muse/Dock/DockFloatingWindow.qml");
+    // }
 
 private:
     const modularity::ContextPtr m_iocContext;
+
+    // ViewFactory interface
+public:
+    // KDDockWidgets::Core::View* createDockWidget(const QString& uniqueName, QQmlEngine*, KDDockWidgets::DockWidgetOptions options,
+    // KDDockWidgets::LayoutSaverOptions layoutSaverOptions,
+    // Qt::WindowFlags windowFlags) const override;
+    // QUrl titleBarFilename() const override;
+    // QUrl tabbarFilename() const override;
+    QUrl dockwidgetFilename() const override { return QUrl("qrc:/qml/Muse/Dock/DockWidget.qml"); }
+    // QUrl groupFilename() const override;
+    // QUrl floatingWindowFilename() const override;
+    // QUrl separatorFilename() const override;
 };
 }
 
@@ -135,15 +148,15 @@ void DockModule::registerResources()
 void DockModule::registerUiTypes()
 {
     qmlRegisterType<DockWindow>("Muse.Dock", 1, 0, "DockWindow");
-    qmlRegisterType<DockPanelView>("Muse.Dock", 1, 0, "DockPanelView");
-    qmlRegisterType<DockStatusBarView>("Muse.Dock", 1, 0, "DockStatusBar");
-    qmlRegisterType<DockToolBarView>("Muse.Dock", 1, 0, "DockToolBarView");
-    qmlRegisterType<DockingHolderView>("Muse.Dock", 1, 0, "DockingHolderView");
+    // qmlRegisterType<DockPanelView>("Muse.Dock", 1, 0, "DockPanelView");
+    // qmlRegisterType<DockStatusBarView>("Muse.Dock", 1, 0, "DockStatusBar");
+    // qmlRegisterType<DockToolBarView>("Muse.Dock", 1, 0, "DockToolBarView");
+    // qmlRegisterType<DockingHolderView>("Muse.Dock", 1, 0, "DockingHolderView");
     qmlRegisterType<DockCentralView>("Muse.Dock", 1, 0, "DockCentralView");
     qmlRegisterType<DockPageView>("Muse.Dock", 1, 0, "DockPageView");
-    qmlRegisterType<DockFrameModel>("Muse.Dock", 1, 0, "DockFrameModel");
+    // qmlRegisterType<DockFrameModel>("Muse.Dock", 1, 0, "DockFrameModel");
 
-    qmlRegisterUncreatableType<DockToolBarAlignment>("Muse.Dock", 1, 0, "DockToolBarAlignment", "Not creatable from QML");
+    // qmlRegisterUncreatableType<DockToolBarAlignment>("Muse.Dock", 1, 0, "DockToolBarAlignment", "Not creatable from QML");
     qmlRegisterUncreatableType<DockLocation>("Muse.Dock", 1, 0, "Location", "Not creatable from QML");
 }
 
@@ -159,20 +172,24 @@ void DockModule::onInit(const IApplication::RunMode& mode)
     // Setup KDDockWidgets
     // ===================================
 
+    KDDockWidgets::initFrontend(KDDockWidgets::FrontendType::QtQuick);
+
     QQmlEngine* engine = ioc()->resolve<ui::IUiEngine>(moduleName())->qmlEngine();
 
-    KDDockWidgets::Config::self().setFrameworkWidgetFactory(new DockWidgetFactory(iocContext()));
-    KDDockWidgets::Config::self().setQmlEngine(engine);
+    KDDockWidgets::Config::self().setViewFactory(new muse::dock::DockViewFactory(iocContext()));
+    KDDockWidgets::QtQuick::Platform::instance()->setQmlEngine(engine);
 
     auto flags = KDDockWidgets::Config::self().flags()
                  | KDDockWidgets::Config::Flag_HideTitleBarWhenTabsVisible
                  | KDDockWidgets::Config::Flag_TitleBarNoFloatButton;
 
+    flags &= ~KDDockWidgets::Config::Flag_AutoHideSupport;
+
     KDDockWidgets::Config::self().setFlags(flags);
 
-    KDDockWidgets::FloatingWindow::s_windowFlagsOverride = Qt::Tool
-                                                           | Qt::NoDropShadowWindowHint
-                                                           | Qt::FramelessWindowHint;
+    // KDDockWidgets::FloatingWindow::s_windowFlagsOverride = Qt::Tool
+    //                                                        | Qt::NoDropShadowWindowHint
+    //                                                        | Qt::FramelessWindowHint;
 
     auto internalFlags = KDDockWidgets::Config::self().internalFlags()
                          | KDDockWidgets::Config::InternalFlag_UseTransparentFloatingWindow;
