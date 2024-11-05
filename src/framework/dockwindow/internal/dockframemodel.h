@@ -28,9 +28,9 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 
-namespace KDDockWidgets {
-class Frame;
-class DockWidgetBase;
+namespace KDDockWidgets::QtQuick {
+class DockWidget;
+class Group;
 }
 
 namespace muse::dock {
@@ -91,7 +91,7 @@ private:
     void setTitleBarVisible(bool visible);
     void setIsHorizontalPanel(bool is);
 
-    KDDockWidgets::Core::DockWidget* currentDockWidget() const;
+    KDDockWidgets::QtQuick::DockWidget* currentDockWidget() const;
     QVariant currentDockProperty(const char* propertyName) const;
 
     QObject* currentNavigationSection() const;
@@ -100,7 +100,7 @@ private:
     QQmlComponent* currentTitleBar() const;
     void updateTitleBar();
 
-    KDDockWidgets::Frame* m_frame = nullptr;
+    KDDockWidgets::QtQuick::Group* m_frame = nullptr;
     QQmlComponent* m_titleBar = nullptr;
     bool m_titleBarVisible = false;
     bool m_isHorizontalPanel = false;

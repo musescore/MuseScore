@@ -25,12 +25,15 @@
 #include <QQuickItem>
 #include <QApplication>
 
-#include "private/TitleBar_p.h"
-#include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
+// #include "private/TitleBar_p.h"
+#include "thirdparty/KDDockWidgets/src/core/Group.h"
+#include "thirdparty/KDDockWidgets/src/qtquick/views/Group.h"
+#include "thirdparty/KDDockWidgets/src/qtquick/views/DockWidget.h"
+#include "thirdparty/KDDockWidgets/src/core/TabBar.h"
 #include "uicomponents/view/abstractmenumodel.h"
 
 #include "../docktypes.h"
-#include "../view/dockpanelview.h"
+// #include "../view/dockpanelview.h"
 
 #include "log.h"
 
@@ -72,18 +75,26 @@ bool DockFrameModel::eventFilter(QObject* watched, QEvent* event)
 
 QQuickItem* DockFrameModel::frame() const
 {
-    return m_frame;
+    return m_frame->visualItem();
 }
 
 QVariantList DockFrameModel::tabs() const
 {
     QVariantList result;
 
-    if (!m_frame || m_frame->hasSingleDockWidget()) {
+    auto group = m_frame ? m_frame->group() : nullptr;
+    if (!group || group->hasSingleDockWidget()) {
         return result;
     }
 
-    for (const KDDockWidgets::Core::DockWidget* dock : m_frame->dockWidgets()) {
+    auto tabBar = group->tabBar();
+    if (!tabBar) {
+        return result;
+    }
+
+    for (int i = 0; i < tabBar->numDockWidgets(); ++i) {
+        auto dock = tabBar->dockWidgetAt(i);
+
         QVariantMap tab;
         tab["title"] = dock->title();
         tab[CONTEXT_MENU_MODEL_PROPERTY] = dock->property(CONTEXT_MENU_MODEL_PROPERTY);
@@ -115,7 +126,7 @@ void DockFrameModel::setFrame(QQuickItem* frame)
         return;
     }
 
-    m_frame = dynamic_cast<KDDockWidgets::Frame*>(frame);
+    m_frame = dynamic_cast<KDDockWidgets::QtQuick::Group*>(frame);
     emit frameChanged(frame);
 
     listenChangesInFrame();
@@ -127,36 +138,36 @@ void DockFrameModel::listenChangesInFrame()
         return;
     }
 
-    connect(m_frame, &KDDockWidgets::Frame::numDockWidgetsChanged, this, [this]() {
-        emit tabsChanged();
+    // connect(m_frame, &KDDockWidgets::Core::TabBar::numDockWidgetsChanged, this, [this]() {
+    //     emit tabsChanged();
 
-        if (!currentDockWidget()) {
-            m_frame->setCurrentTabIndex(0);
-        }
+    //     if (!currentDockWidget()) {
+    //         m_frame->setCurrentTabIndex(0);
+    //     }
 
-        auto allDocks = m_frame->dockWidgets();
-        if (allDocks.isEmpty()) {
-            setTitleBarVisible(false);
-            return;
-        }
+    //     auto allDocks = m_frame->dockWidgets();
+    //     if (allDocks.isEmpty()) {
+    //         setTitleBarVisible(false);
+    //         return;
+    //     }
 
-        DockProperties properties = readPropertiesFromObject(allDocks.first());
-        bool isHorizontalPanel = (properties.type == DockType::Panel)
-                                 && (properties.location == Location::Top || properties.location == Location::Bottom);
-        setIsHorizontalPanel(isHorizontalPanel);
+    //     DockProperties properties = readPropertiesFromObject(allDocks.first());
+    //     bool isHorizontalPanel = (properties.type == DockType::Panel)
+    //                              && (properties.location == Location::Top || properties.location == Location::Bottom);
+    //     setIsHorizontalPanel(isHorizontalPanel);
 
-        updateTitleBar();
-        bool visible = (allDocks.size() == 1) && (properties.type == DockType::Panel) && (properties.floatable || properties.closable);
-        setTitleBarVisible(visible);
+    //     updateTitleBar();
+    //     bool visible = (allDocks.size() == 1) && (properties.type == DockType::Panel) && (properties.floatable || properties.closable);
+    //     setTitleBarVisible(visible);
 
-        updateNavigationSection();
-    });
+    //     updateNavigationSection();
+    // });
 
-    connect(m_frame, &KDDockWidgets::Frame::currentDockWidgetChanged, this, [this]() {
-        updateNavigationSection();
+    // connect(m_frame, &KDDockWidgets::Frame::currentDockWidgetChanged, this, [this]() {
+    //     updateNavigationSection();
 
-        emit currentDockChanged();
-    });
+    //     emit currentDockChanged();
+    // });
 }
 
 void DockFrameModel::setTitleBarVisible(bool visible)
@@ -181,8 +192,10 @@ void DockFrameModel::setIsHorizontalPanel(bool is)
 
 QObject* DockFrameModel::currentNavigationSection() const
 {
-    auto dockPanel = currentDockProperty(DOCK_PANEL_PROPERTY).value<DockPanelView*>();
-    return dockPanel ? dockPanel->navigationSection() : nullptr;
+    return nullptr;
+
+    // auto dockPanel = currentDockProperty(DOCK_PANEL_PROPERTY).value<DockPanelView*>();
+    // return dockPanel ? dockPanel->navigationSection() : nullptr;
 }
 
 void DockFrameModel::updateNavigationSection()
@@ -232,11 +245,14 @@ bool DockFrameModel::highlightingVisible() const
 
 QRect DockFrameModel::highlightingRect() const
 {
-    if (!m_frame) {
+    auto group = m_frame ? m_frame->group() : nullptr;
+    auto tabBar = group ? group->tabBar() : nullptr;
+    if (!tabBar) {
         return QRect();
     }
 
-    for (auto dock : m_frame->dockWidgets()) {
+    for (int i = 0; i < tabBar->numDockWidgets(); ++i) {
+        auto dock = tabBar->dockWidgetAt(i);
         DockProperties properties = readPropertiesFromObject(dock);
 
         if (properties.highlightingRect.isValid()) {
@@ -247,9 +263,11 @@ QRect DockFrameModel::highlightingRect() const
     return QRect();
 }
 
-KDDockWidgets::Core::DockWidget* DockFrameModel::currentDockWidget() const
+KDDockWidgets::QtQuick::DockWidget* DockFrameModel::currentDockWidget() const
 {
-    return m_frame && !m_frame->isEmpty() ? m_frame->currentDockWidget() : nullptr;
+    return m_frame && !m_frame->group()->isEmpty()
+           ? dynamic_cast<KDDockWidgets::QtQuick::DockWidget*>(m_frame->group()->currentDockWidget())
+           : nullptr;
 }
 
 QVariant DockFrameModel::currentDockProperty(const char* propertyName) const

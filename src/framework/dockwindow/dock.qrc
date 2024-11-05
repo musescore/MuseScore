@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
 <!--        <file>qml/Muse/Dock/DockFloatingWindow.qml</file>-->
-<!--        <file>qml/Muse/Dock/DockFrame.qml</file>-->
+        <file>qml/Muse/Dock/DockFrame.qml</file>
 <!--        <file>qml/Muse/Dock/DockingHolder.qml</file>-->
         <file>qml/Muse/Dock/DockPage.qml</file>
 <!--        <file>qml/Muse/Dock/DockPanel.qml</file>-->

@@ -26,14 +26,14 @@
 
 // #include "internal/dropcontroller.h"
 // #include "internal/dockseparator.h"
-// #include "internal/dockframemodel.h"
+#include "internal/dockframemodel.h"
 // #include "internal/docktabbar.h"
 #include "internal/dockwindowactionscontroller.h"
 #include "internal/dockwindowprovider.h"
 
 #include "view/dockwindow.h"
 // #include "view/dockpanelview.h"
-#include "view/docktoolbarview.h"
+// #include "view/docktoolbarview.h"
 // #include "view/dockstatusbarview.h"
 // #include "view/dockingholderview.h"
 #include "view/dockcentralview.h"
@@ -114,7 +114,7 @@ public:
     // QUrl titleBarFilename() const override;
     // QUrl tabbarFilename() const override;
     QUrl dockwidgetFilename() const override { return QUrl("qrc:/qml/Muse/Dock/DockWidget.qml"); }
-    // QUrl groupFilename() const override;
+    QUrl groupFilename() const override { return QUrl("qrc:/qml/Muse/Dock/DockFrame.qml"); }
     // QUrl floatingWindowFilename() const override;
     // QUrl separatorFilename() const override;
 };
@@ -154,7 +154,7 @@ void DockModule::registerUiTypes()
     // qmlRegisterType<DockingHolderView>("Muse.Dock", 1, 0, "DockingHolderView");
     qmlRegisterType<DockCentralView>("Muse.Dock", 1, 0, "DockCentralView");
     qmlRegisterType<DockPageView>("Muse.Dock", 1, 0, "DockPageView");
-    // qmlRegisterType<DockFrameModel>("Muse.Dock", 1, 0, "DockFrameModel");
+    qmlRegisterType<DockFrameModel>("Muse.Dock", 1, 0, "DockFrameModel");
 
     // qmlRegisterUncreatableType<DockToolBarAlignment>("Muse.Dock", 1, 0, "DockToolBarAlignment", "Not creatable from QML");
     qmlRegisterUncreatableType<DockLocation>("Muse.Dock", 1, 0, "Location", "Not creatable from QML");
