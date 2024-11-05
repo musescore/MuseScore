@@ -76,40 +76,62 @@ StyledDialogView {
             columns: 2
             spacing: 12
 
-            Repeater {
-                id: repeater
+            ListModel {
+                id: gridModel
 
-                model: [
-                    {
+                Component.onCompleted: {
+                    // NOTE: We must use append() to populate the ListModel because ListItems directly inside
+                    // the ListModel do not support property bindings due to Qt limitations.
+                    // See https://stackoverflow.com/questions/7659442/listelement-fields-as-properties
+                    gridModel.append({
                         title: qsTrc("palette", "Width"),
                         value: propertiesModel.cellWidth,
                         incrementStep: 1,
                         minValue: 1,
                         maxValue: 500
-                    },
-                    {
+                    })
+                    gridModel.append({
                         title: qsTrc("palette", "Height"),
                         value: propertiesModel.cellHeight,
                         incrementStep: 1,
                         minValue: 1,
                         maxValue: 500
-                    },
-                    {
+                    })
+                    gridModel.append({
                         title: qsTrc("palette", "Element offset"),
                         value: propertiesModel.elementOffset,
                         measureUnit: qsTrc("global", "sp"),
                         incrementStep: 0.1,
                         minValue: -10,
                         maxValue: 10
-                    },
-                    {
+                    })
+                    gridModel.append({
                         title: qsTrc("palette", "Scale"),
                         value: propertiesModel.scaleFactor,
                         incrementStep: 0.1,
                         minValue: 0.1,
                         maxValue: 15
-                    }
-                ]
+                    })
+
+                    propertiesModel.onPropertiesChanged.connect(function () {
+                        if (gridModel.count > 0) {
+                            gridModel.setProperty(0, "value", propertiesModel.cellWidth)
+                            gridModel.setProperty(1, "value", propertiesModel.cellHeight)
+                            gridModel.setProperty(2, "value", propertiesModel.elementOffset)
+                            gridModel.setProperty(3, "value", propertiesModel.scaleFactor)
+                        }
+                    })
+                }
+            }
+
+            Repeater {
+                id: repeater
+
+                // This model cannot be a simple array as the Repeater cannot see changes to individual properties
+                // of array elements and update only those properties. Instead, it destroys and recreates all of
+                // its items which leads to weird issues (and degraded performance of course).
+                // See https://github.com/musescore/MuseScore/issues/11530 and https://stackoverflow.com/a/76228394
+                model: gridModel
 
                 function setValue(index, value) {
                     if (index === 0) {
@@ -129,15 +151,15 @@ StyledDialogView {
                     spacing: 8
 
                     StyledTextLabel {
-                        text: modelData["title"]
+                        text: model.title
                     }
 
                     IncrementalPropertyControl {
-                        currentValue: modelData["value"]
-                        measureUnitsSymbol: Boolean(modelData["measureUnit"]) ? modelData["measureUnit"] : ""
-                        step: modelData["incrementStep"]
-                        minValue: modelData["minValue"]
-                        maxValue: modelData["maxValue"]
+                        currentValue: model.value
+                        measureUnitsSymbol: Boolean(model.measureUnit) ? model.measureUnit : ""
+                        step: model.incrementStep
+                        minValue: model.minValue
+                        maxValue: model.maxValue
 
                         onValueEdited: function(newValue) {
                             repeater.setValue(model.index, newValue)
