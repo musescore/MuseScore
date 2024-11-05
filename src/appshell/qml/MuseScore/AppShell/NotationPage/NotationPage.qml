@@ -109,121 +109,121 @@ DockPage {
 
     property var notationView: null
 
-    // mainToolBars: [
-    //     DockToolBar {
-    //         id: notationToolBar
+    mainToolBars: [
+        // DockToolBar {
+        //     id: notationToolBar
 
-    //         objectName: "notationToolBar"
-    //         title: qsTrc("appshell", "Notation toolbar")
+        //     objectName: "notationToolBar"
+        //     title: qsTrc("appshell", "Notation toolbar")
 
-    //         floatable: false
-    //         closable: false
-    //         resizable: false
-    //         separatorsVisible: false
+        //     floatable: false
+        //     closable: false
+        //     resizable: false
+        //     separatorsVisible: false
 
-    //         alignment: DockToolBarAlignment.Center
-    //         contentBottomPadding: 2
+        //     alignment: DockToolBarAlignment.Center
+        //     contentBottomPadding: 2
 
-    //         NotationToolBar {
-    //             navigationPanel.section: root.topToolKeyNavSec
-    //             navigationPanel.order: 2
-    //         }
-    //     },
+        //     NotationToolBar {
+        //         navigationPanel.section: root.topToolKeyNavSec
+        //         navigationPanel.order: 2
+        //     }
+        // },
 
-    //     DockToolBar {
-    //         id: playbackToolBar
+        DockToolBar {
+            id: playbackToolBar
 
-    //         objectName: pageModel.playbackToolBarName()
-    //         title: qsTrc("appshell", "Playback controls")
+            objectName: pageModel.playbackToolBarName()
+            title: qsTrc("appshell", "Playback controls")
 
-    //         separatorsVisible: false
-    //         alignment: DockToolBarAlignment.Right
+            separatorsVisible: false
+            alignment: DockToolBarAlignment.Right
 
-    //         contentBottomPadding: floating ? 8 : 2
-    //         contentTopPadding: floating ? 8 : 0
+            contentBottomPadding: floating ? 8 : 2
+            contentTopPadding: floating ? 8 : 0
 
-    //         dropDestinations: [
-    //             { "dock": notationToolBar, "dropLocation": Location.Right }
-    //         ]
+            dropDestinations: [
+                { "dock": notationToolBar, "dropLocation": Location.Right }
+            ]
 
-    //         PlaybackToolBar {
-    //             navigationPanelSection: root.topToolKeyNavSec
-    //             navigationPanelOrder: 3
+            PlaybackToolBar {
+                navigationPanelSection: root.topToolKeyNavSec
+                navigationPanelOrder: 3
 
-    //             floating: playbackToolBar.floating
-    //         }
-    //     },
+                floating: playbackToolBar.floating
+            }
+        }/*,
 
-    //     DockToolBar {
-    //         id: extDockToolBar
+        DockToolBar {
+            id: extDockToolBar
 
-    //         objectName: "extensionsToolBar"
-    //         title: qsTrc("appshell", "Extensions toolbar")
+            objectName: "extensionsToolBar"
+            title: qsTrc("appshell", "Extensions toolbar")
 
-    //         separatorsVisible: false
-    //         orientation: Qt.Horizontal
-    //         alignment: DockToolBarAlignment.Right
+            separatorsVisible: false
+            orientation: Qt.Horizontal
+            alignment: DockToolBarAlignment.Right
 
-    //         contentBottomPadding: floating ? 8 : 2
-    //         contentTopPadding: floating ? 8 : 0
+            contentBottomPadding: floating ? 8 : 2
+            contentTopPadding: floating ? 8 : 0
 
-    //         dropDestinations: [
-    //             { "dock": notationToolBar, "dropLocation": Location.Right },
-    //             { "dock": playbackToolBar, "dropLocation": Location.Right }
-    //         ]
+            dropDestinations: [
+                { "dock": notationToolBar, "dropLocation": Location.Right },
+                { "dock": playbackToolBar, "dropLocation": Location.Right }
+            ]
 
-    //         ExtensionsToolBar {
-    //             id: extToolBar
+            ExtensionsToolBar {
+                id: extToolBar
 
 
-    //             function updateVisible() {
-    //                 if (!extDockToolBar.inited) {
-    //                     return;
-    //                 }
+                function updateVisible() {
+                    if (!extDockToolBar.inited) {
+                        return;
+                    }
 
-    //                 if (!root.visible) {
-    //                     return;
-    //                 }
+                    if (!root.visible) {
+                        return;
+                    }
 
-    //                 if (extToolBar.isEmpty) {
-    //                     extDockToolBar.close()
-    //                 } else {
-    //                     extDockToolBar.open()
-    //                 }
-    //             }
+                    if (extToolBar.isEmpty) {
+                        extDockToolBar.close()
+                    } else {
+                        extDockToolBar.open()
+                    }
+                }
 
-    //             onIsEmptyChanged: extToolBar.updateVisible()
+                onIsEmptyChanged: extToolBar.updateVisible()
 
-    //             Connections {
-    //                 target: extDockToolBar
-    //                 function onInitedChanged() { extToolBar.updateVisible() }
-    //             }
+                Connections {
+                    target: extDockToolBar
+                    function onInitedChanged() { extToolBar.updateVisible() }
+                }
 
-    //             Connections {
-    //                 target: root
-    //                 function onVisibleChanged() { extToolBar.updateVisible() }
-    //             }
-    //         }
-    //     },
+                Connections {
+                    target: root
+                    function onVisibleChanged() { extToolBar.updateVisible() }
+                }
+            }
+        },
 
-    //     DockToolBar {
-    //         objectName: pageModel.undoRedoToolBarName()
-    //         title: qsTrc("appshell", "Undo/redo")
+        DockToolBar {
+            objectName: pageModel.undoRedoToolBarName()
+            title: qsTrc("appshell", "Undo/redo")
 
-    //         floatable: false
-    //         closable: false
-    //         resizable: false
-    //         separatorsVisible: false
+            floatable: false
+            closable: false
+            resizable: false
+            separatorsVisible: false
 
-    //         alignment: DockToolBarAlignment.Right
-    //         contentBottomPadding: 2
+            alignment: DockToolBarAlignment.Right
+            contentBottomPadding: 2
 
-    //         UndoRedoToolBar {
-    //             navigationPanel.section: root.topToolKeyNavSec
-    //             navigationPanel.order: 4
-    //         }
-    //     }
-    // ]
+            UndoRedoToolBar {
+                navigationPanel.section: root.topToolKeyNavSec
+                navigationPanel.order: 4
+            }
+        }*/
+    ]
 
     // toolBars: [
 

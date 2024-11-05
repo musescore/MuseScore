@@ -93,11 +93,11 @@ DockWindow {
     pages: [
         HomePage {
             window: root.window
-        }/*,
+        },
 
         NotationPage {
             topToolbarKeyNavSec: topToolbarKeyNavSec
-        },
+        }/*,
 
         PublishPage {
             topToolbarKeyNavSec: topToolbarKeyNavSec

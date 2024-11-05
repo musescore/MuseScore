@@ -213,6 +213,8 @@ void DockPageView::setDockOpen(const QString& dockName, bool open)
         return;
     }
 
+    dock->open();
+
     // DockPanelView* panel = dynamic_cast<DockPanelView*>(dock);
     // if (!panel) {
     //     dock->open();
@@ -238,7 +240,7 @@ void DockPageView::reorderSections()
     //! NOTE: In some cases, such as setting visible true,
     //! it is necessary to give the UI time to render the content, so we will add a delay.
     QTimer::singleShot(2000, this, [this](){
-        doReorderSections();
+        // doReorderSections();
     });
 }
 
