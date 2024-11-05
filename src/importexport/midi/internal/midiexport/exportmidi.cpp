@@ -236,7 +236,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
 
     EventsHolder events;
     CompatMidiRendererInternal::Context context;
-    context.eachStringHasChannel = false;
+    context.eachStringHasChannel = true;
     context.instrumentsHaveEffects = false;
     context.harmonyChannelSetting = CompatMidiRendererInternal::HarmonyChannelSetting::DEFAULT;
     context.sndController = CompatMidiRender::getControllerForSnd(m_score, synthState.ccToUse());
