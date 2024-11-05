@@ -892,7 +892,7 @@ EditStyle::EditStyle(QWidget* parent)
     auto tiePlacementSelector = createQmlWidget(
         groupBox_ties,
         QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml")));
-    tiePlacementSelector.widget->setMinimumSize(224, 120);
+    tiePlacementSelector.widget->setMinimumSize(224, 240);
     groupBox_ties->layout()->addWidget(tiePlacementSelector.widget);
 
     // ====================================================

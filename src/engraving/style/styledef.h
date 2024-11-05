@@ -536,6 +536,7 @@ enum class Sid {
 
     tiePlacementSingleNote,
     tiePlacementChord,
+    tieDotsPlacement,
     tieMinShoulderHeight,
     tieMaxShoulderHeight,
 

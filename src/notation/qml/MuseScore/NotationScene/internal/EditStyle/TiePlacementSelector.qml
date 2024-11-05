@@ -87,6 +87,43 @@ Rectangle {
                 }
             }
         }
+
+        StyledTextLabel {
+            text: qsTrc("notation", "Placement of inner ties with respect to augmentation dots:")
+        }
+
+        Row {
+            spacing: 8
+            RoundedRadioButton {
+                checked: tiePlacementSelector.placementDots.value === 0
+                onToggled: tiePlacementSelector.placementDots.value = 0
+            }
+            StyledTextLabel {
+                text: qsTrc("notation", "Auto")
+            }
+        }
+
+        Row {
+            spacing: 8
+            RoundedRadioButton {
+                checked: tiePlacementSelector.placementDots.value === 1
+                onToggled: tiePlacementSelector.placementDots.value = 1
+            }
+            StyledTextLabel {
+                text: qsTrc("notation", "Always before dots")
+            }
+        }
+
+        Row {
+            spacing: 8
+            RoundedRadioButton {
+                checked: tiePlacementSelector.placementDots.value === 2
+                onToggled: tiePlacementSelector.placementDots.value = 2
+            }
+            StyledTextLabel {
+                text: qsTrc("notation", "Always after dots")
+            }
+        }
     }
 }
 

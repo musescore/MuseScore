@@ -524,6 +524,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(tiePlacementSingleNote,                     TiePlacement::OUTSIDE),
     styleDef(tiePlacementChord,                          TiePlacement::OUTSIDE),
+    styleDef(tieDotsPlacement,                           TieDotsPlacement::AUTO),
     styleDef(tieMinShoulderHeight,                       Spatium(0.3)),
     styleDef(tieMaxShoulderHeight,                       Spatium(2.0)),
 
