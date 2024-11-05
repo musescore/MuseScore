@@ -21,26 +21,21 @@
  */
 
 #include "docktitlebar.h"
-#include "docktypes.h"
+// #include "docktypes.h"
 
 using namespace muse::dock;
 
-DockTitleBar::DockTitleBar(KDDockWidgets::Frame* parent)
-    : KDDockWidgets::TitleBarQuick(parent)
+DockTitleBar::DockTitleBar(KDDockWidgets::Core::TitleBar* controller, QQuickItem* parent)
+    : KDDockWidgets::QtQuick::TitleBar(controller, parent)
 {
 }
 
-DockTitleBar::DockTitleBar(KDDockWidgets::FloatingWindow* parent)
-    : KDDockWidgets::TitleBarQuick(parent)
-{
-}
+// QPoint DockTitleBar::mapToWindow(QPoint pos) const
+// {
+//     QPoint result = pos;
 
-QPoint DockTitleBar::mapToWindow(QPoint pos) const
-{
-    QPoint result = pos;
+//     result.setX(result.x() + DOCK_WINDOW_SHADOW);
+//     result.setY(result.y() + DOCK_WINDOW_SHADOW);
 
-    result.setX(result.x() + DOCK_WINDOW_SHADOW);
-    result.setY(result.y() + DOCK_WINDOW_SHADOW);
-
-    return result;
-}
+//     return result;
+// }

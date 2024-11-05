@@ -25,18 +25,17 @@
 
 #include "internal/dockbase.h"
 
-#include "thirdparty/KDDockWidgets/src/private/quick/TitleBarQuick_p.h"
+#include "thirdparty/KDDockWidgets/src/qtquick/views/TitleBar.h"
 
 #include <QtGlobal>
 
 namespace muse::dock {
-class DockTitleBar : public KDDockWidgets::TitleBarQuick
+class DockTitleBar : public KDDockWidgets::QtQuick::TitleBar
 {
 public:
-    explicit DockTitleBar(KDDockWidgets::Frame* parent);
-    explicit DockTitleBar(KDDockWidgets::FloatingWindow* parent);
+    explicit DockTitleBar(KDDockWidgets::Core::TitleBar *controller, QQuickItem *parent = nullptr);
 
-    QPoint mapToWindow(QPoint pos) const override;
+    // QPoint mapToWindow(QPoint pos) const override;
 };
 }
 

@@ -26,7 +26,7 @@ import QtQuick.Layouts 1.12
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 
-import "qrc:/kddockwidgets/private/quick/qml/" as KDDW
+import "qrc:/kddockwidgets/qtquick/views/qml/" as KDDW
 
 Item {
     id: root

@@ -38,7 +38,7 @@
 // #include "view/dockingholderview.h"
 #include "view/dockcentralview.h"
 #include "view/dockpageview.h"
-// #include "view/docktitlebar.h"
+#include "view/docktitlebar.h"
 
 #include "docktypes.h"
 
@@ -68,10 +68,10 @@ public:
     //     return new DockSeparator(parent);
     // }
 
-    // KDDockWidgets::TitleBar* createTitleBar(KDDockWidgets::Frame* frame) const override
-    // {
-    //     return new DockTitleBar(frame);
-    // }
+    KDDockWidgets::Core::View* createTitleBar(KDDockWidgets::Core::TitleBar* controller, KDDockWidgets::Core::View* parent) const override
+    {
+        return new DockTitleBar(controller, KDDockWidgets::QtQuick::asQQuickItem(parent));
+    }
 
     // KDDockWidgets::TitleBar* createTitleBar(KDDockWidgets::FloatingWindow* floatingWindow) const override
     // {
@@ -111,7 +111,7 @@ public:
     // KDDockWidgets::Core::View* createDockWidget(const QString& uniqueName, QQmlEngine*, KDDockWidgets::DockWidgetOptions options,
     // KDDockWidgets::LayoutSaverOptions layoutSaverOptions,
     // Qt::WindowFlags windowFlags) const override;
-    // QUrl titleBarFilename() const override;
+    QUrl titleBarFilename() const override { return QUrl("qrc:/qml/Muse/Dock/DockTitleBar.qml"); }
     // QUrl tabbarFilename() const override;
     QUrl dockwidgetFilename() const override { return QUrl("qrc:/qml/Muse/Dock/DockWidget.qml"); }
     QUrl groupFilename() const override { return QUrl("qrc:/qml/Muse/Dock/DockFrame.qml"); }

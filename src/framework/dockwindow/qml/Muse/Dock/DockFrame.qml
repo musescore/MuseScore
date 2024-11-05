@@ -32,8 +32,8 @@ Rectangle {
     id: root
 
     //! NOTE: please, don't rename those properties because they are used in c++
-    property QtObject frameCpp
-    readonly property QtObject titleBarCpp: Boolean(frameCpp) ? frameCpp.actualTitleBar : null
+    property QtObject groupCpp
+    readonly property QtObject titleBarCpp: Boolean(groupCpp) ? groupCpp.actualTitleBar : null
     readonly property int nonContentsHeight: titleBar.visible ? titleBar.heightWhenVisible + tabsPanel.height : 0
     property int titleBarNavigationPanelOrder: 1
     //! ---
@@ -41,15 +41,15 @@ Rectangle {
     anchors.fill: parent
     color: ui.theme.backgroundPrimaryColor
 
-    onFrameCppChanged: {
-        if (Boolean(frameCpp)) {
-            frameCpp.setStackLayout(stackLayout)
+    onGroupCppChanged: {
+        if (Boolean(groupCpp)) {
+            groupCpp.setStackLayout(stackLayout)
         }
     }
 
     onNonContentsHeightChanged: {
-        if (Boolean(frameCpp)) {
-            frameCpp.geometryUpdated()
+        if (Boolean(groupCpp)) {
+            groupCpp.geometryUpdated()
         }
     }
 
@@ -60,7 +60,7 @@ Rectangle {
     DockFrameModel {
         id: frameModel
 
-        frame: root.frameCpp
+        frame: root.groupCpp
     }
 
     NavigationPanel {
@@ -128,8 +128,8 @@ Rectangle {
 
         color: ui.theme.backgroundSecondaryColor
 
-        readonly property QtObject tabBarCpp: Boolean(root.frameCpp) ? root.frameCpp.tabWidget.tabBar : null
-        property int currentIndex: Boolean(root.frameCpp) && root.frameCpp.currentIndex >= 0 ? root.frameCpp.currentIndex : 0
+        readonly property QtObject tabBarCpp: Boolean(root.groupCpp) ? root.groupCpp.tabWidget.tabBar : null
+        property int currentIndex: Boolean(root.groupCpp) && root.groupCpp.currentIndex >= 0 ? root.groupCpp.currentIndex : 0
 
         onTabBarCppChanged: {
             if (Boolean(tabBarCpp)) {
@@ -139,8 +139,8 @@ Rectangle {
         }
 
         onCurrentIndexChanged: {
-            if (Boolean(root) && Boolean(root.frameCpp)) {
-                root.frameCpp.tabWidget.setCurrentDockWidget(currentIndex)
+            if (Boolean(root) && Boolean(root.groupCpp)) {
+                root.groupCpp.tabWidget.setCurrentDockWidget(currentIndex)
             }
         }
 
