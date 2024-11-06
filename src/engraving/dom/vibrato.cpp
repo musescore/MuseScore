@@ -30,6 +30,7 @@
 #include "score.h"
 #include "system.h"
 #include "chord.h"
+#include "trill.h"
 
 #include "log.h"
 
@@ -144,61 +145,7 @@ LineSegment* Vibrato::createLineSegment(System* parent)
 
 PointF Vibrato::linePos(Grip grip, System** system) const
 {
-    bool start = grip == Grip::START;
-    bool mmRest = style().styleB(Sid::createMultiMeasureRests);
-    double graceOffset = 0.0;
-    double clefOffset = 0.0;
-
-    Segment* segment = start ? startSegment() : endSegment();
-    if (!segment) {
-        return PointF();
-    }
-    if (!start) {
-        Segment* graceNoteSeg = segment->preAppendedItem(track2()) ? segment : nullptr;
-        Segment* clefSeg = segment->isClefType() ? segment : nullptr;
-        Fraction curTick = segment->tick();
-        while (true) {
-            Segment* prevSeg = mmRest ? segment->prev1MM() : segment->prev1();
-            if (prevSeg && prevSeg->tick() == curTick) {
-                graceNoteSeg = prevSeg->preAppendedItem(track2()) ? prevSeg : graceNoteSeg;
-                clefSeg = prevSeg->isClefType() ? prevSeg : clefSeg;
-                segment = prevSeg;
-            } else {
-                break;
-            }
-        }
-
-        // Stop trill line before clefs
-        if (clefSeg) {
-            EngravingItem* clef = clefSeg->element(track2());
-            if (clef) {
-                clefOffset = segment->pageX() - clef->pageX();
-            }
-        }
-
-        // Stop trill line before grace notes
-        if (graceNoteSeg) {
-            const EngravingItem* preAppendedItem = graceNoteSeg->preAppendedItem(track2());
-            if (preAppendedItem && preAppendedItem->isGraceNotesGroup()) {
-                // get x position of leftmost grace note
-                const Chord* leftMostGraceChord = nullptr;
-                const GraceNotesGroup* graceGroup = toGraceNotesGroup(preAppendedItem);
-                for (const Chord* graceChord : *graceGroup) {
-                    leftMostGraceChord = leftMostGraceChord
-                                         && leftMostGraceChord->x() < graceChord->x() ? leftMostGraceChord : graceChord;
-                }
-                if (leftMostGraceChord) {
-                    graceOffset = segment->pageX() - leftMostGraceChord->pageX();
-                }
-            }
-        }
-    }
-
-    double offset = std::max(graceOffset, clefOffset);
-
-    *system = segment->measure()->system();
-    double x = segment->x() + segment->measure()->x() - (start ? 0.0 : spatium()) - offset;
-    return PointF(x, 0.0);
+    return Trill::trillLinePos(this, grip, system);
 }
 
 //---------------------------------------------------------
