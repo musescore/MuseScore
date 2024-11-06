@@ -1717,7 +1717,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                     Fraction tick = seg->tick();
                     track_idx_t tr = chord->track();
                     Fraction sd   = noteTicks;
-                    Tie* tie      = 0;
+                    std::vector<Tie*> ties;
                     Segment* segment = seg;
                     ChordRest* cr = toChordRest(segment->element(tr));
                     Chord* nchord = toChord(chord->clone());
@@ -1760,7 +1760,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             std::vector<Note*> nl2 = nchord2->notes();
                             if (!firstpart) {
                                 for (size_t j = 0; j < nl1.size(); ++j) {
-                                    tie = Factory::createTie(this->dummy());
+                                    Tie* tie = Factory::createTie(this->dummy());
                                     tie->setStartNote(nl1[j]);
                                     tie->setEndNote(nl2[j]);
                                     tie->setTick(tie->startNote()->tick());
@@ -1768,6 +1768,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                                     tie->setTrack(tr);
                                     nl1[j]->setTieFor(tie);
                                     nl2[j]->setTieBack(tie);
+                                    ties.push_back(tie);
                                 }
                             }
                             undoAddCR(nchord2, measure, tick);
@@ -1813,7 +1814,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                         Note* n = startChord->notes()[i];
                         Note* nn = nchord->notes()[i];
                         if (tieBack[i]) {
-                            tie = Factory::createTie(this->dummy());
+                            Tie* tie = Factory::createTie(this->dummy());
                             tie->setStartNote(tieBack[i]);
                             tie->setEndNote(n);
                             tie->setTick(tie->startNote()->tick());
@@ -1821,10 +1822,10 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             tie->setTrack(track);
                             n->setTieBack(tie);
                             tieBack[i]->setTieFor(tie);
-                            undoAddElement(tie);
+                            ties.push_back(tie);
                         }
                         if (tieFor[i]) {
-                            tie = Factory::createTie(this->dummy());
+                            Tie* tie = Factory::createTie(this->dummy());
                             tie->setStartNote(nn);
                             tie->setEndNote(tieFor[i]);
                             tie->setTick(tie->startNote()->tick());
@@ -1832,10 +1833,13 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             tie->setTrack(track);
                             nn->setTieFor(tie);
                             tieFor[i]->setTieBack(tie);
-                            undoAddElement(tie);
+                            ties.push_back(tie);
                         }
                     }
-                    if (tie) {         // at least one tie was created
+                    if (!ties.empty()) {         // at least one tie was created
+                        for (Tie* tie : ties) {
+                            undoAddElement(tie);
+                        }
                         connectTies();
                     }
                 }
