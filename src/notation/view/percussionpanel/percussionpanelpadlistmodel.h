@@ -31,8 +31,6 @@
 
 #include "percussionpanelpadmodel.h"
 
-static constexpr int NUM_COLUMNS(8);
-
 class PercussionPanelPadListModel : public QAbstractListModel, public muse::async::Asyncable
 {
     Q_OBJECT
@@ -71,6 +69,8 @@ signals:
     void rowIsEmptyChanged(int row, bool empty);
 
 private:
+    static constexpr int NUM_COLUMNS = 8;
+
     enum Roles {
         PadModelRole = Qt::UserRole + 1,
     };
