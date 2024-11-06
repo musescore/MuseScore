@@ -47,7 +47,7 @@ Column {
 
     FlatRadioButtonGroupPropertyView {
         id: lineSection
-        titleText: qsTrc("inspector", "Glissando line")
+        titleText: qsTrc("inspector", "Line type")
         propertyItem: root.model ? root.model.lineType : null
         model: root.model ? root.model.possibleLineTypes() : null
 

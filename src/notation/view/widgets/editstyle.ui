@@ -101,11 +101,6 @@
       </item>
       <item>
        <property name="text">
-        <string>Glissandos &amp; note-anchored lines</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
         <string>Measures</string>
        </property>
       </item>
@@ -177,6 +172,11 @@
       <item>
        <property name="text">
         <string>Vibrato lines</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Glissandos &amp; note-anchored lines</string>
        </property>
       </item>
       <item>
@@ -14100,8 +14100,8 @@ first note of the system</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>28</height>
+             <width>701</width>
+             <height>744</height>
             </rect>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
