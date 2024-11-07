@@ -158,8 +158,6 @@ public:
     double bottom() const;
     double rightMostEdgeAtHeight(double yAbove, double yBelow) const;
     double leftMostEdgeAtHeight(double yAbove, double yBelow) const;
-
-    double xMostEdgeAtY(const bool isTop, const bool isLeft) const;
     double leftMostEdgeAtTop() const;
 
     bool contains(const PointF&) const;
