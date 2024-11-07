@@ -31,6 +31,7 @@
 
 #include "percussionpanelpadmodel.h"
 
+namespace mu::notation {
 class PercussionPanelPadListModel : public QAbstractListModel, public muse::async::Asyncable
 {
     Q_OBJECT
@@ -87,3 +88,4 @@ private:
 
     muse::async::Channel<int /*pitch*/> m_triggeredChannel;
 };
+}

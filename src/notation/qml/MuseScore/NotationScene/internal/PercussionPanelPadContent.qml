@@ -72,6 +72,16 @@ Column {
             text: Boolean(root.padModel) ? root.padModel.instrumentName : ""
         }
 
+        PaintedEngravingItem {
+            id: notationPreview
+
+            visible: root.useNotationPreview
+
+            anchors.fill: parent
+
+            engravingItem: Boolean(root.padModel) ? root.padModel.notationPreviewItem : null
+        }
+
         states: [
             State {
                 name: "MOUSE_HOVERED"
@@ -98,7 +108,7 @@ Column {
         width: parent.width
         height: 1
 
-        color: ui.theme.accentColor
+        color: root.useNotationPreview ? ui.theme.strokeColor : ui.theme.accentColor
     }
 
     Rectangle {
