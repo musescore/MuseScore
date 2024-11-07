@@ -64,11 +64,10 @@
             <Articulation>
               <subtype>noSym</subtype>
               </Articulation>
-            <Articulation>
-              <subtype>articLaissezVibrerAbove</subtype>
-              <anchor>0</anchor>
-              </Articulation>
             <Note>
+              <LaissezVib>
+                <up>up</up>
+                </LaissezVib>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -83,11 +82,10 @@
               <subtype>noSym</subtype>
               <anchor>1</anchor>
               </Articulation>
-            <Articulation>
-              <subtype>articLaissezVibrerBelow</subtype>
-              <anchor>1</anchor>
-              </Articulation>
             <Note>
+              <LaissezVib>
+                <up>down</up>
+                </LaissezVib>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -101,11 +99,10 @@
             <Articulation>
               <subtype>noSym</subtype>
               </Articulation>
-            <Articulation>
-              <subtype>articLaissezVibrerAbove</subtype>
-              <anchor>0</anchor>
-              </Articulation>
             <Note>
+              <LaissezVib>
+                <up>up</up>
+                </LaissezVib>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -120,12 +117,11 @@
               <subtype>noSym</subtype>
               <color r="255" g="38" b="0" a="255"/>
               </Articulation>
-            <Articulation>
-              <subtype>articLaissezVibrerAbove</subtype>
-              <anchor>0</anchor>
-              <color r="255" g="38" b="0" a="255"/>
-              </Articulation>
             <Note>
+              <LaissezVib>
+                <color r="255" g="38" b="0" a="255"/>
+                <up>up</up>
+                </LaissezVib>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
