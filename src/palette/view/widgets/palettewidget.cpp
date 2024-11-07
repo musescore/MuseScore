@@ -59,7 +59,8 @@
 #include "engraving/style/defaultstyle.h"
 #include "engraving/style/style.h"
 #include "engraving/compat/dummyelement.h"
-#include "engraving/rendering/engravingitempreviewpainter.h"
+
+#include "notation/utilities/engravingitempreviewpainter.h"
 
 #include "internal/palettecelliconengine.h"
 
@@ -610,11 +611,11 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
 
     painter.setPen(Pen(color));
 
-    rendering::EngravingItemPreviewPainter::PaintParams params;
+    notation::EngravingItemPreviewPainter::PaintParams params;
     params.painter = &painter;
     params.color = configuration()->elementsColor();
 
-    rendering::EngravingItemPreviewPainter::paintItem(element.get(), params);
+    notation::EngravingItemPreviewPainter::paintItem(element.get(), params);
 
     element->setPos(pos);
     return pm;
@@ -1091,14 +1092,14 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
 
         painter.setPen(Pen(color));
 
-        rendering::EngravingItemPreviewPainter::PaintParams params;
+        notation::EngravingItemPreviewPainter::PaintParams params;
         params.painter = &painter;
         params.color = configuration()->elementsColor();
 
         params.useElementColors = m_paintOptions.useElementColors;
         params.colorsInversionEnabled = m_paintOptions.colorsInverionsEnabled;
 
-        rendering::EngravingItemPreviewPainter::paintItem(el.get(), params);
+        notation::EngravingItemPreviewPainter::paintItem(el.get(), params);
 
         painter.restore();
     }

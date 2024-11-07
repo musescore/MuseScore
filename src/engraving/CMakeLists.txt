@@ -207,8 +207,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rendering/layoutoptions.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.h
-    ${CMAKE_CURRENT_LIST_DIR}/rendering/engravingitempreviewpainter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rendering/engravingitempreviewpainter.h
 
     ${RENDERING_SCORE_SRC}
     ${RENDERING_SINGLE_SRC}

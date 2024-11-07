@@ -30,7 +30,8 @@
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/style/defaultstyle.h"
-#include "engraving/rendering/engravingitempreviewpainter.h"
+
+#include "notation/utilities/engravingitempreviewpainter.h"
 
 #include "log.h"
 
@@ -71,7 +72,7 @@ void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool 
         return;
     }
 
-    rendering::EngravingItemPreviewPainter::PaintParams params;
+    notation::EngravingItemPreviewPainter::PaintParams params;
     params.painter = &painter;
 
     params.color = configuration()->elementsColor();
@@ -86,7 +87,7 @@ void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool 
 
     params.drawStaff = m_cell->drawStaff;
 
-    rendering::EngravingItemPreviewPainter::paintPreview(element, params);
+    notation::EngravingItemPreviewPainter::paintPreview(element, params);
 }
 
 void PaletteCellIconEngine::paintBackground(Painter& painter, const RectF& rect, bool selected, bool current) const

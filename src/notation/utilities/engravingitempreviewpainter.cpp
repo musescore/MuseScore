@@ -26,7 +26,8 @@
 #include "engraving/style/defaultstyle.h"
 #include "engraving/dom/masterscore.h"
 
-using namespace mu::engraving::rendering;
+using namespace mu::notation;
+using namespace mu::engraving;
 using namespace muse::draw;
 
 /// Paint an EngravingItem - include a staff if specified in the params.
