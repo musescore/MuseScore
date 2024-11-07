@@ -29,6 +29,8 @@
 
 #include "score.h"
 #include "system.h"
+#include "chord.h"
+#include "trill.h"
 
 #include "log.h"
 
@@ -139,6 +141,11 @@ LineSegment* Vibrato::createLineSegment(System* parent)
     seg->setColor(color());
     seg->initElementStyle(&vibratoSegmentStyle);
     return seg;
+}
+
+PointF Vibrato::linePos(Grip grip, System** system) const
+{
+    return Trill::trillLinePos(this, grip, system);
 }
 
 //---------------------------------------------------------
