@@ -1532,7 +1532,7 @@ void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick, 
         }
     }
 
-    SlurTieLayout::layoutLaissezVibChord(ch, system, ctx);
+    SlurTieLayout::layoutLaissezVibChord(ch, ctx);
 
     if (!ch->staffType()->isTabStaff()) {
         SlurTieLayout::resolveVerticalTieCollisions(stackedForwardTies);

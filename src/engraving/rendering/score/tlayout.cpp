@@ -4255,6 +4255,13 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
     if (acc && acc->addToSkyline()) {
         shape.add(acc->ldata()->shape().translated(acc->pos()));
     }
+    const LaissezVib* lv = item->laissezVib();
+    const LaissezVibSegment* lvSeg = lv && !lv->segmentsEmpty() ? lv->frontSegment() : nullptr;
+    if (lvSeg && lvSeg->addToSkyline()) {
+        const PointF cornerClosestToNote = lv->up() ? lvSeg->shape().bbox().bottomLeft() : lvSeg->shape().bbox().topLeft();
+        const PointF pos = lvSeg->ldata()->posRelativeToNote.value() - cornerClosestToNote;
+        shape.add(lvSeg->shape().translate(pos));
+    }
     for (auto e : item->el()) {
         if (e->addToSkyline()) {
             if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {

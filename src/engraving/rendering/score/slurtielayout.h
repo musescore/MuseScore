@@ -61,7 +61,7 @@ public:
     static double noteOpticalCenterForTie(const Note* note, bool up);
     static void createSlurSegments(Slur* item, LayoutContext& ctx);
 
-    static void layoutLaissezVibChord(Chord* chord, System* system, LayoutContext& ctx);
+    static void layoutLaissezVibChord(Chord* chord, LayoutContext& ctx);
 private:
 
     static void slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx);

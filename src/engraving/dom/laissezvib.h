@@ -44,7 +44,7 @@ public:
 
     struct LayoutData : public SlurTieSegment::LayoutData {
         SymId symbol = SymId::noSym;
-        ld_field<double> extensionBeyondNote = { "[LaissezVibSegment] extensionBeyondNote", 0.0 };
+        ld_field<PointF> posRelativeToNote = { "[LaissezVibSegment] posRelativeToNote", PointF() };
     };
     DECLARE_LAYOUTDATA_METHODS(LaissezVibSegment)
 };

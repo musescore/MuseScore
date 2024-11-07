@@ -2778,7 +2778,7 @@ void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, La
         }
     }
 
-    SlurTieLayout::layoutLaissezVibChord(chord, chord->findMeasure()->system(), ctx);
+    SlurTieLayout::layoutLaissezVibChord(chord, ctx);
 }
 
 void ChordLayout::resolveVerticalRestConflicts(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx)

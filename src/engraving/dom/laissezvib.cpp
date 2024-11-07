@@ -57,7 +57,7 @@ PropertyValue LaissezVib::propertyDefault(Pid propertyId) const
     case Pid::MIN_LENGTH:
         return Spatium(2.0);
     default:
-        return Tie::getProperty(propertyId);
+        return Tie::propertyDefault(propertyId);
     }
 }
 

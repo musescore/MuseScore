@@ -125,7 +125,7 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
                 Tie* tieBack = note->tieBack();
                 LaissezVib* lv = note->laissezVib();
                 if (lv && lv->isCrossStaff()) {
-                    SlurTieLayout::layoutLaissezVibChord(chord, item->system(), ctx);
+                    SlurTieLayout::layoutLaissezVibChord(chord, ctx);
                 }
                 if (tieFor && !lv && tieFor->isCrossStaff()) {
                     SlurTieLayout::tieLayoutFor(tieFor, item->system());

@@ -1683,16 +1683,15 @@ void SlurTieLayout::calculateLaissezVibY(LaissezVibSegment* segment, SlurTiePos&
     }
 }
 
-void SlurTieLayout::layoutLaissezVibChord(Chord* chord, System* system, LayoutContext& ctx)
+void SlurTieLayout::layoutLaissezVibChord(Chord* chord, LayoutContext& ctx)
 {
     // Laissez vib ties should all end at the same rightmost point while honouring each tie's minimum length
     // Ties drawn by MuseScore can start at differing points
     // SMuFL symbols will also start at the same point because they are of fixed length
     double chordLvEndPoint = -DBL_MAX;
     std::map<LaissezVibSegment*, SlurTiePos> lvSegmentsWithPositions;
-    SysStaff* staff = system->staff(chord->staffIdx());
     const bool smuflLayout = ctx.conf().styleB(Sid::laissezVibUseSmuflSym);
-    const double chordX = chord->pos().x() + chord->segment()->pos().x() + chord->measure()->pos().x();
+    const PointF chordPos = chord->pos() + chord->segment()->pos() + chord->measure()->pos();
 
     for (const Note* note : chord->notes()) {
         LaissezVib* lv = note->laissezVib();
@@ -1728,13 +1727,8 @@ void SlurTieLayout::layoutLaissezVibChord(Chord* chord, System* system, LayoutCo
             ldata->setPos(sPos.p1);
         }
 
-        const double noteX = chordX + note->pos().x() + note->headWidth();
-        const double extension = sPos.p2.x() - noteX;
-        ldata->extensionBeyondNote = extension;
-
-        if (lvSeg && lvSeg->addToSkyline()) {
-            staff->skyline().add(lvSeg->shape().translate(lvSeg->pos()));
-        }
+        const PointF notePos = chordPos + note->pos();
+        ldata->posRelativeToNote = sPos.p1 - notePos;
     }
 }
 
@@ -1851,6 +1845,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
 
     const bool ignoreDot = start && isOuterTieOfChord;
     const bool ignoreAccidental = !start && isOuterTieOfChord;
+    bool ignoreLvSeg = tieSegment->isLaissezVibSegment();
     static const std::set<ElementType> IGNORED_TYPES = {
         ElementType::HOOK,
         ElementType::STEM_SLASH,
@@ -1860,7 +1855,8 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
     shape.remove_if([&](ShapeElement& s) {
         bool remove =  !s.item() || s.item() == note || muse::contains(IGNORED_TYPES, s.item()->type())
                       || (s.item()->isNoteDot() && ignoreDot)
-                      || (s.item()->isAccidental() && ignoreAccidental && s.item()->track() == chord->track()) || !s.item()->addToSkyline();
+                      || (s.item()->isAccidental() && ignoreAccidental && s.item()->track() == chord->track())
+                      || (s.item()->isLaissezVibSegment() && ignoreLvSeg) || !s.item()->addToSkyline();
         return remove;
     });
 
@@ -1917,7 +1913,9 @@ void SlurTieLayout::adjustXforLedgerLines(TieSegment* tieSegment, bool start, Ch
     }
 
     Shape noteShape = note->shape();
-    noteShape.remove_if([&](ShapeElement& s) { return !s.item()->addToSkyline(); });
+    noteShape.remove_if([&](ShapeElement& s) {
+        return !s.item()->addToSkyline() || (tieSegment->isLaissezVibSegment() && s.item()->isLaissezVibSegment());
+    });
     noteShape.translate(note->pos() + chordSystemPos);
     double xNoteEdge = (start ? noteShape.right() : -noteShape.left()) + padding;
 
