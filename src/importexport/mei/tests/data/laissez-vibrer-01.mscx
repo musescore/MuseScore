@@ -61,9 +61,19 @@
             </TimeSig>
           <Chord>
             <durationType>half</durationType>
-            <Articulation>
-              <subtype>noSym</subtype>
-              </Articulation>
+            <Note>
+              <LaissezVib>
+                </LaissezVib>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
             <Note>
               <LaissezVib>
                 <up>up</up>
@@ -78,10 +88,6 @@
         <voice>
           <Chord>
             <durationType>half</durationType>
-            <Articulation>
-              <subtype>noSym</subtype>
-              <anchor>1</anchor>
-              </Articulation>
             <Note>
               <LaissezVib>
                 <up>down</up>
@@ -96,12 +102,9 @@
         <voice>
           <Chord>
             <durationType>half</durationType>
-            <Articulation>
-              <subtype>noSym</subtype>
-              </Articulation>
             <Note>
               <LaissezVib>
-                <up>up</up>
+                <lineType>3</lineType>
                 </LaissezVib>
               <pitch>72</pitch>
               <tpc>14</tpc>
@@ -113,14 +116,23 @@
         <voice>
           <Chord>
             <durationType>half</durationType>
-            <Articulation>
-              <subtype>noSym</subtype>
-              <color r="255" g="38" b="0" a="255"/>
-              </Articulation>
+            <Note>
+              <LaissezVib>
+                <lineType>1</lineType>
+                </LaissezVib>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
             <Note>
               <LaissezVib>
                 <color r="255" g="38" b="0" a="255"/>
-                <up>up</up>
                 </LaissezVib>
               <pitch>72</pitch>
               <tpc>14</tpc>
