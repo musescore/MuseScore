@@ -2675,13 +2675,13 @@ void ChordLayout::appendGraceNotes(Chord* chord)
     if (!gnb.empty()) {
         // If this segment already contains grace notes in the same voice (could happen if a
         // previous chord has appended grace-notes-after here) put them in the same vector.
-        EngravingItem* item = segment->preAppendedItem(static_cast<int>(track));
+        EngravingItem* item = segment->preAppendedItem(track);
         if (item && item->isGraceNotesGroup()) {
             GraceNotesGroup* gng = toGraceNotesGroup(item);
             gng->insert(gng->end(), gnb.begin(), gnb.end());
         } else {
             gnb.setAppendedSegment(segment);
-            segment->preAppend(&gnb, static_cast<int>(track));
+            segment->preAppend(&gnb, track);
         }
     }
 
@@ -2695,7 +2695,7 @@ void ChordLayout::appendGraceNotes(Chord* chord)
         }
         if (followingSeg) {
             gna.setAppendedSegment(followingSeg);
-            followingSeg->preAppend(&gna, static_cast<int>(track));
+            followingSeg->preAppend(&gna, track);
         }
     }
 }
@@ -2705,8 +2705,8 @@ void ChordLayout::appendGraceNotes(Chord* chord)
 *  is needed and must be called AFTER horizontal spacing is calculated. */
 void ChordLayout::repositionGraceNotesAfter(Segment* segment, size_t tracks)
 {
-    for (size_t track = 0; track < tracks; track++) {
-        EngravingItem* item = segment->preAppendedItem(static_cast<int>(track));
+    for (track_idx_t track = 0; track < tracks; track++) {
+        EngravingItem* item = segment->preAppendedItem(track);
         if (!item || !item->isGraceNotesGroup()) {
             continue;
         }
