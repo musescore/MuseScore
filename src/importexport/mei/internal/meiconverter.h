@@ -226,8 +226,8 @@ public:
     static void layerIdentFromMEI(engraving::EngravingItem* item, const libmei::Element& meiElement);
     static void layerIdentToMEI(const engraving::EngravingItem* item, libmei::Element& meiElement);
 
-    static void lvFromMEI(engraving::Articulation* lv, const libmei::Lv& meiLv, bool& warning);
-    static libmei::Lv lvToMEI(const engraving::Articulation* lv);
+    static void lvFromMEI(engraving::LaissezVib* lv, const libmei::Lv& meiLv, bool& warning);
+    // static libmei::Lv lvToMEI(const engraving::LaissezVib* lv);
 
     static void jumpFromMEI(engraving::Jump* jump, const libmei::RepeatMark& meiRepeatMark, bool& warning);
     static libmei::RepeatMark jumpToMEI(const engraving::Jump* jump, muse::String& text);
