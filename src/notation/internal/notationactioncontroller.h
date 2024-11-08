@@ -53,6 +53,8 @@ class NotationActionController : public muse::actions::Actionable, public muse::
 public:
     void init();
 
+    void checkForScoreCorruptions();
+
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 
     muse::async::Notification currentNotationChanged() const;
