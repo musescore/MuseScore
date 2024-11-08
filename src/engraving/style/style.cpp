@@ -192,6 +192,9 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::GLISS_STYLE:
                 set(idx, GlissandoStyle(e.readText().toInt()));
                 break;
+            case P_TYPE::GLISS_TYPE:
+                set(idx, GlissandoType(e.readText().toInt()));
+                break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
             }

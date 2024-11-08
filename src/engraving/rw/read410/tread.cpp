@@ -395,6 +395,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
         return PropertyValue(TConv::fromXml(e.readAsciiText(), VeloType::OFFSET_VAL));
     case P_TYPE::GLISS_STYLE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), GlissandoStyle::CHROMATIC));
+    case P_TYPE::GLISS_TYPE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), GlissandoType::STRAIGHT));
     case P_TYPE::BARLINE_TYPE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), BarLineType::NORMAL));
 

@@ -120,6 +120,7 @@ QVariant PropertyValue::toQVariant() const
     } break;
     case P_TYPE::ORNAMENT_SHOW_ACCIDENTAL: return static_cast<int>(value<OrnamentShowAccidental>());
     case P_TYPE::GLISS_STYLE: return static_cast<int>(value<GlissandoStyle>());
+    case P_TYPE::GLISS_TYPE: return static_cast<int>(value<GlissandoType>());
 
     // Layout
     case P_TYPE::ALIGN: {
@@ -222,6 +223,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     } break;
     case P_TYPE::ORNAMENT_SHOW_ACCIDENTAL: return PropertyValue(OrnamentShowAccidental(v.toInt()));
     case P_TYPE::GLISS_STYLE:   return PropertyValue(GlissandoStyle(v.toInt()));
+    case P_TYPE::GLISS_TYPE:   return PropertyValue(GlissandoType(v.toInt()));
 
     // Layout
     case P_TYPE::ALIGN: {

@@ -66,6 +66,7 @@ static const ElementStyle glissandoElementStyle {
     { Sid::glissandoLineStyle,   Pid::LINE_STYLE },
     { Sid::glissandoDashLineLen, Pid::DASH_LINE_LEN },
     { Sid::glissandoDashGapLen,  Pid::DASH_GAP_LEN },
+    { Sid::glissandoType,        Pid::GLISS_TYPE }
 };
 
 //=========================================================
@@ -450,7 +451,7 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::GLISS_TYPE:
-        return int(GlissandoType::STRAIGHT);
+        return style().styleV(Sid::glissandoType);
     case Pid::GLISS_SHOW_TEXT:
         return true;
     case Pid::GLISS_STYLE:

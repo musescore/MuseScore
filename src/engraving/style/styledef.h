@@ -1306,6 +1306,7 @@ enum class Sid {
     glissandoStyle,
     glissandoStyleHarp,
 
+    glissandoType,
     glissandoLineStyle,
     glissandoDashLineLen,
     glissandoDashGapLen,
