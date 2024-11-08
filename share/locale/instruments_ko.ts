@@ -1826,7 +1826,7 @@
         <source>South American traditional flute pitched in F.</source>
         <comment>f-quena description</comment>
         <extracomment>description for Quena; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>F에 조율된 남미 전통 플루트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="796"/>
@@ -5949,7 +5949,7 @@
         <source>B♭ alto</source>
         <comment>bb-horn-alto traitName</comment>
         <extracomment>traitName for Horn; transposition: B♭ alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>B♭ 알토</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2114"/>
@@ -8091,7 +8091,7 @@
         <source>*D</source>
         <comment>d-baroque-trumpet traitName</comment>
         <extracomment>traitName for Baroque Trumpet; transposition: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>*D</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2779"/>
@@ -10562,7 +10562,7 @@
         <source>Marimba notated on a single staff.</source>
         <comment>marimba-single description</comment>
         <extracomment>description for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>작은 보표에 표기된 마림바.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3568"/>
@@ -10898,7 +10898,7 @@
         <source>Soprano xylophone for the Orff Schulwerk.</source>
         <comment>orff-soprano-xylophone description</comment>
         <extracomment>description for Orff Soprano Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>오르프 교수법을 위한 소프라노 실로폰</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3676"/>
@@ -17387,7 +17387,7 @@
         <source>14-course archlute.</source>
         <comment>archlute-14-course description</comment>
         <extracomment>description for Archlute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation
+        <translation>14현 아치루트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5718"/>
@@ -17555,7 +17555,7 @@
         <source>Bass balalaika, tuned an octave below the alto.</source>
         <comment>balalaika-bass description</comment>
         <extracomment>description for Bass Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>베이스 발랄라이카, 알토보다 1 옥타브 낮게 조율됨.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5772"/>
@@ -18304,7 +18304,7 @@
         <source>Violoncello.</source>
         <comment>violoncello description</comment>
         <extracomment>description for Violoncello; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>비올론첼로</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6012"/>
@@ -18353,7 +18353,7 @@
         <source>Violoncello section.</source>
         <comment>violoncellos description</comment>
         <extracomment>description for Violoncellos (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>비올론첼로 파트.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6027"/>
