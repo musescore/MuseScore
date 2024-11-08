@@ -270,7 +270,7 @@ static void changeProperty(ScoreElement* e, Pid t, const QVariant& st, PropertyF
 static void changeProperties(ScoreElement* e, Pid t, const QVariant& st, PropertyFlags ps)
       {
       if (propertyLink(t)) {
-            for (ScoreElement* ee : e->linkList())
+            for (ScoreElement*& ee : e->linkList())
                   changeProperty(ee, t, st, ps);
             }
       else
@@ -580,10 +580,17 @@ void ScoreElement::unlink()
 ///  linked to this element
 //---------------------------------------------------------
 
-bool ScoreElement::isLinked(ScoreElement* se)
+bool ScoreElement::isLinked(ScoreElement* se) const
       {
-      return se != this && _links && _links->contains(se);
+      if (se == this || !_links) {
+          return false;
       }
+
+      if (se == nullptr) {
+          return !_links->empty() && _links->mainElement() != this;
+      }
+
+      return _links->contains(se);      }
 
 //---------------------------------------------------------
 //   undoUnlink

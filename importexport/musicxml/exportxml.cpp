@@ -4616,7 +4616,10 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
              qPrintable(text->xmlText()));
       */
       _attr.doAttr(_xml, false);
-      _xml.stag(QString("direction placement=\"%1\"").arg((text->placement() == Placement::BELOW ) ? "below" : "above"));
+      QString tempoAttrs = QString("direction placement=\"%1\"").arg(text->placement() == Placement::BELOW ? "below" : "above");
+      if (text->systemFlag())
+            tempoAttrs += QString(" system=\"%1\"").arg(text->isLinked() ? "also-top" : "only-top");
+      _xml.stag(tempoAttrs);
       wordsMetronome(_xml, _score, text, offset);
 
       if (staff)

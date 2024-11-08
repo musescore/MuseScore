@@ -241,7 +241,7 @@ class ScoreElement {
 
       void linkTo(ScoreElement*);
       void unlink();
-      bool isLinked(ScoreElement*);
+      bool isLinked(ScoreElement* se = nullptr) const;
 
       virtual void undoUnlink();
       int lid() const                         { return _links ? _links->lid() : 0; }

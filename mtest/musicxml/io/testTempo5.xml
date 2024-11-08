@@ -49,7 +49,7 @@
           <line>2</line>
           </clef>
         </attributes>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>breve</beat-unit>
@@ -69,7 +69,7 @@
         </note>
       </measure>
     <measure number="2">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>whole</beat-unit>
@@ -89,7 +89,7 @@
         </note>
       </measure>
     <measure number="3">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>half</beat-unit>
@@ -109,7 +109,7 @@
         </note>
       </measure>
     <measure number="4">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -129,7 +129,7 @@
         </note>
       </measure>
     <measure number="5">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>eighth</beat-unit>
@@ -149,7 +149,7 @@
         </note>
       </measure>
     <measure number="6">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>16th</beat-unit>
@@ -169,7 +169,7 @@
         </note>
       </measure>
     <measure number="7">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>32nd</beat-unit>
@@ -189,7 +189,7 @@
         </note>
       </measure>
     <measure number="8">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>64th</beat-unit>
@@ -209,7 +209,7 @@
         </note>
       </measure>
     <measure number="9">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>128th</beat-unit>
@@ -229,7 +229,7 @@
         </note>
       </measure>
     <measure number="10">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>256th</beat-unit>
@@ -249,7 +249,7 @@
         </note>
       </measure>
     <measure number="11">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>512th</beat-unit>
@@ -269,7 +269,7 @@
         </note>
       </measure>
     <measure number="12">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>1024th</beat-unit>

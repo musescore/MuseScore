@@ -275,7 +275,7 @@ private slots:
       void slurs2() { mxmlIoTest("testSlurs2"); }
       void slurTieDirecton() { mxmlIoTest("testSlurTieDirection"); }
       void slurTieLineStyle() { mxmlIoTest("testSlurTieLineStyle"); }
-      void sound1() { mxmlIoTest("testSound1"); }
+      void sound1() { mxmlIoTestRef("testSound1"); }
       void sound2() { mxmlIoTestRef("testSound2"); }
       // void specialCharacters() { mxmlIoTest("testSpecialCharacters"); } // TODO
       void staffEmptiness() { mxmlImportTestRef("testStaffEmptiness"); }

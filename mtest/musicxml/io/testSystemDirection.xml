@@ -113,7 +113,7 @@
       </measure>
     <measure number="4">
       <print new-system="yes"/>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <words font-weight="bold" font-size="12">Largo</words>
           </direction-type>
