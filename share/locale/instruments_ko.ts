@@ -6,7 +6,7 @@
         <source>Wind section notated on a grand staff.</source>
         <comment>winds description</comment>
         <extracomment>description for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>대보표에 관악기 부분이 표시되어 있습니다.</translation>
+        <translation>대보표에 관악기 파트이 표시되어 있습니다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="208"/>
@@ -2540,7 +2540,7 @@
         <source>Renaissance double-reed instrument with straight end and single bore, pitched in C.</source>
         <comment>cornamuse description</comment>
         <extracomment>description for Cornamuse; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>
+        <translation>르네상스 시대의 겹리드 악기로, 일자 모양의 끝과 단일 튜브를 가짐. C에 조율됨.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1025"/>
@@ -3436,7 +3436,7 @@
         <source>Soprano clarinet in B♭. One of the standard orchestral clarinets.</source>
         <comment>bb-clarinet description</comment>
         <extracomment>description for Clarinet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B♭에 조율된 소프라노 클라리넷. 표준 오케스트라 클라리넷 중 하나.</translation>
+        <translation>B♭에 조율된 소프라노 클라리넷. 표준 관현악단 클라리넷 중 하나.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1310"/>
@@ -3471,7 +3471,7 @@
         <source>Soprano clarinet in B♭. One of the standard orchestral clarinets.</source>
         <comment>clarinet description</comment>
         <extracomment>description for Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>B♭에 조율된 소프라노 클라리넷. 표준 오케스트라 클라리넷 중 하나.</translation>
+        <translation>B♭에 조율된 소프라노 클라리넷. 표준 관현악단 클라리넷 중 하나.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1321"/>
@@ -3499,7 +3499,7 @@
         <source>Soprano clarinet in A. One of the standard orchestral clarinets.</source>
         <comment>a-clarinet description</comment>
         <extracomment>description for Clarinet; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>A에 조율된 소프라노 클라리넷. 표준 오케스트라 클라리넷 중 하나.</translation>
+        <translation>A에 조율된 소프라노 클라리넷. 표준 관현악단 클라리넷 중 하나.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1330"/>
@@ -4045,7 +4045,7 @@
         <source>Keyless single-reed instrument with a cylindrical bore and slightly flared bell, in D.</source>
         <comment>d-xaphoon description</comment>
         <extracomment>description for Pocket Sax; transposition: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>키가 없는 단일리드 악기로, 윈통형 구멍과 약간 넓은 벨을 가짐. D에 조율됨.
+        <translation>키가 없는 단일리드 악기로, 윈통형 구멍과 약간 넓은 벨을 가짐. D에 조율됨.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1504"/>
@@ -4185,7 +4185,7 @@
         <source>Single-reed, conical bore instrument used in Hungarian and Romanian folk music.</source>
         <comment>tarogato description</comment>
         <extracomment>description for Tarogato; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>헝가리와 루마니아 민요에서 사용되는 단일리드, 원뿔형 구멍 악기.
+        <translation>헝가리와 루마니아 민요에서 사용되는 단일리드, 원뿔형 구멍 악기.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1548"/>
@@ -4353,7 +4353,7 @@
         <source>Saxophone in F (a tone above the alto).</source>
         <comment>mezzo-soprano-saxophone description</comment>
         <extracomment>description for Mezzo-Soprano Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>F에 조율된 색소폰 (알토보다 1음 높음).
+        <translation>F에 조율된 색소폰 (알토보다 1음 높음).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1602"/>
@@ -6264,7 +6264,7 @@
         <source>Horn in F. The most common modern orchestral horn.</source>
         <comment>horn description</comment>
         <extracomment>description for Horn; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>가장 흔한 현대 오케스트라 호른, F에 조율됨</translation>
+        <translation>가장 흔한 현대 관현악단 호른, F에 조율됨</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2211"/>
@@ -6460,7 +6460,7 @@
         <source>Horn used primarily in Vienna for classical orchestral music.</source>
         <comment>vienna-horn description</comment>
         <extracomment>description for Vienna Horn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>주로 비엔나에서 사용되는 고전 오케스트라 호른</translation>
+        <translation>주로 비엔나에서 사용되는 고전 관현악단 호른</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2271"/>
@@ -7482,7 +7482,7 @@
         <source>Trumpet in C. Nowadays the most common orchestral trumpet.</source>
         <comment>c-trumpet description</comment>
         <extracomment>description for Trumpet; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>C에 조율된 트럼펫. 현대 오케스트라에서 가장 흔한 트럼펫이다.</translation>
+        <translation>C에 조율된 트럼펫. 현대 관현악단에서 가장 흔한 트럼펫이다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2586"/>
@@ -9099,7 +9099,7 @@
         <source>Orchestral trombone (either tenor or bass; this is often not explicitly specified in scores).</source>
         <comment>trombone description</comment>
         <extracomment>description for Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>오케스트라 트롬본(테너 또는 베이스. 악보에 명시되지 않는 경우가 많음).</translation>
+        <translation>관현악단 트롬본(테너 또는 베이스. 악보에 명시되지 않는 경우가 많음).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3097"/>
@@ -9435,7 +9435,7 @@
         <source>Orchestral tuba (where the exact type is not specified).</source>
         <comment>tuba description</comment>
         <extracomment>description for Tuba (unspecified); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>오케스트라 튜바 (일반).</translation>
+        <translation>관현악단 튜바 (일반).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3203"/>
@@ -10030,7 +10030,7 @@
         <source>Typically made from a ram’s horn and used for Jewish religious purposes.</source>
         <comment>shofar description</comment>
         <extracomment>description for Shofar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>양의 뿔로 만들어진 유대교 종교 행사용 악기.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3394"/>
@@ -10058,7 +10058,7 @@
         <source>Plastic horn that produces a loud single pitch.</source>
         <comment>vuvuzela description</comment>
         <extracomment>description for Vuvuzela; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>큰 소리의 단일 음을 내는 플라스틱 나팔.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3403"/>
@@ -10086,7 +10086,7 @@
         <source>Large pitched orchestral drums, also known as kettle drums. Sometimes fitted with a pedal to allow quick changes of tuning.</source>
         <comment>timpani description</comment>
         <extracomment>description for Timpani; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>조율된 대형 교향악단 드럼. 케틀 드럼으로도 불린다. 가끔 빠른 조율을 위해 페달이 부착되어있다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3415"/>
@@ -10114,35 +10114,35 @@
         <source>Pitched drums that can be tuned quickly by rotating the drumhead.</source>
         <comment>roto-toms description</comment>
         <extracomment>description for Roto-Toms; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>드럼헤드를 회전시킴으로써 빠르게 조율할 수 있는 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3424"/>
         <source>Roto-Toms</source>
         <comment>roto-toms trackName</comment>
         <extracomment>trackName for Roto-Toms; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Roto-Toms</translation>
+        <translation>로토탐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3426"/>
         <source>Roto-Toms</source>
         <comment>roto-toms longName</comment>
         <extracomment>longName for Roto-Toms; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Roto-Toms</translation>
+        <translation>로토탐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3428"/>
         <source>Roto</source>
         <comment>roto-toms shortName</comment>
         <extracomment>shortName for Roto-Toms; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Roto</translation>
+        <translation>로토</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3431"/>
         <source>Constructed from a series of metal tubes arranged in a keyboard configuration.</source>
         <comment>tubaphone description</comment>
         <extracomment>description for Tubaphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>키보드 형태로 배열된 금속 관의 묶음으로 만들어짐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3433"/>
@@ -10170,7 +10170,7 @@
         <source>Soprano steel drums.</source>
         <comment>soprano-steel-drums description</comment>
         <extracomment>description for Soprano Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>소프라노 스틸 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3442"/>
@@ -10198,7 +10198,7 @@
         <source>Alto steel drums.</source>
         <comment>alto-steel-drums description</comment>
         <extracomment>description for Alto Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>알토 스틸 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3451"/>
@@ -10226,7 +10226,7 @@
         <source>Guitar steel drums.</source>
         <comment>guitar-steel-drums description</comment>
         <extracomment>description for Guitar Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>기타 스틸 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3460"/>
@@ -10254,7 +10254,7 @@
         <source>Tenor steel drums.</source>
         <comment>tenor-steel-drums description</comment>
         <extracomment>description for Tenor Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 스틸 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3469"/>
@@ -10282,7 +10282,7 @@
         <source>Cello steel drums.</source>
         <comment>cello-steel-drums description</comment>
         <extracomment>description for Cello Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>첼로 스틸 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3478"/>
@@ -10310,7 +10310,7 @@
         <source>Steel drums on a grand staff.</source>
         <comment>steel-drums description</comment>
         <extracomment>description for Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>대보표의 스틸 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3487"/>
@@ -10338,7 +10338,7 @@
         <source>Bass steel drums.</source>
         <comment>bass-steel-drums description</comment>
         <extracomment>description for Bass Steel Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>베이스 스틸 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3496"/>
@@ -10366,7 +10366,7 @@
         <source>Glockenspiel.</source>
         <comment>glockenspiel description</comment>
         <extracomment>description for Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>글로켄슈필</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3505"/>
@@ -10394,7 +10394,7 @@
         <source>Xylophone.</source>
         <comment>xylophone description</comment>
         <extracomment>description for Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>실로폰</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3514"/>
@@ -10422,7 +10422,7 @@
         <source>Xylophone with an extended range, matching a 5-octave marimba but sounding an octave higher.</source>
         <comment>xylomarimba description</comment>
         <extracomment>description for Xylomarimba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>음역대가 확장된 실로폰으로, 5 옥타브 마림바보다 1 옥타브 높은 소리를 낸다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3523"/>
@@ -10450,7 +10450,7 @@
         <source>Vibraphone.</source>
         <comment>vibraphone description</comment>
         <extracomment>description for Vibraphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>비브라폰</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3532"/>
@@ -10478,7 +10478,7 @@
         <source>Hammered dulcimer.</source>
         <comment>dulcimer description</comment>
         <extracomment>description for Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>망치로 치는 덜시머</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3541"/>
@@ -10506,7 +10506,7 @@
         <source>Concert cimbalom.</source>
         <comment>cimbalom description</comment>
         <extracomment>description for Cimbalom; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>연주용 침발롬</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3550"/>
@@ -10534,14 +10534,14 @@
         <source>Marimba notated on a grand staff.</source>
         <comment>marimba description</comment>
         <extracomment>description for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>대보표에 표기된 마림바</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3559"/>
         <source>Marimba (grand staff)</source>
         <comment>marimba trackName</comment>
         <extracomment>trackName for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>마림바 (대보표)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3561"/>
@@ -10569,7 +10569,7 @@
         <source>Marimba (single staff)</source>
         <comment>marimba-single trackName</comment>
         <extracomment>trackName for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>마림바 (작은 보표)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3570"/>
@@ -10590,7 +10590,7 @@
         <source>Bass marimba.</source>
         <comment>bass-marimba description</comment>
         <extracomment>description for Bass Marimba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>베이스 마림바</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3577"/>
@@ -10618,7 +10618,7 @@
         <source>Contrabass marimba.</source>
         <comment>contrabass-marimba description</comment>
         <extracomment>description for Contrabass Marimba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>콘트라베이스 마림바.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3586"/>
@@ -10646,21 +10646,21 @@
         <source>Crotales, sometimes called antique cymbals.</source>
         <comment>crotales description</comment>
         <extracomment>description for Crotales; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>크로탈레스, 고대 심벌즈라고도 불리움.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3595"/>
         <source>Crotales</source>
         <comment>crotales trackName</comment>
         <extracomment>trackName for Crotales; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>고대 심벌즈</translation>
+        <translation>크로탈레스</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3597"/>
         <source>Crotales</source>
         <comment>crotales longName</comment>
         <extracomment>longName for Crotales; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>고대 심벌즈</translation>
+        <translation>크로탈레스</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3599"/>
@@ -10674,21 +10674,21 @@
         <source>Almglocken, or cow bells.</source>
         <comment>almglocken description</comment>
         <extracomment>description for Almglocken; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>암글로켄, 또는 카우 벨.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3604"/>
         <source>Almglocken</source>
         <comment>almglocken trackName</comment>
         <extracomment>trackName for Almglocken; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>변형 카우 벨</translation>
+        <translation>카우 벨</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3606"/>
         <source>Almglocken</source>
         <comment>almglocken longName</comment>
         <extracomment>longName for Almglocken; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>변형 카우 벨</translation>
+        <translation>카우 벨</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3608"/>
@@ -10702,21 +10702,21 @@
         <source>Tubular bells (British English), or chimes (American English).</source>
         <comment>tubular-bells description</comment>
         <extracomment>description for Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>튜블러 벨 (영국식 영어), 또는 차임스 (미국식 영어).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3613"/>
         <source>Chimes</source>
         <comment>tubular-bells trackName</comment>
         <extracomment>trackName for Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chimes</translation>
+        <translation>차임스</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3615"/>
         <source>Chimes</source>
         <comment>tubular-bells longName</comment>
         <extracomment>longName for Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chimes</translation>
+        <translation>차임스</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3617"/>
@@ -10730,7 +10730,7 @@
         <source>Tuned bells installed in a bell tower and played with a keyboard.</source>
         <comment>carillon description</comment>
         <extracomment>description for Carillon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>종탑에 설치된 조율된 종으로, 키보드를 통해 연주된다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3622"/>
@@ -10758,21 +10758,21 @@
         <source>Tuned gongs.</source>
         <comment>tuned-gongs description</comment>
         <extracomment>description for Tuned Gongs; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>조율된 징</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3631"/>
         <source>Tuned Gongs</source>
         <comment>tuned-gongs trackName</comment>
         <extracomment>trackName for Tuned Gongs; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>종</translation>
+        <translation>조율된 징</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3633"/>
         <source>Tuned Gongs</source>
         <comment>tuned-gongs longName</comment>
         <extracomment>longName for Tuned Gongs; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>종</translation>
+        <translation>조율된 징</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3635"/>
@@ -10786,7 +10786,7 @@
         <source>Tuned hand bells.</source>
         <comment>hand-bells description</comment>
         <extracomment>description for Hand Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>조율된 핸드벨</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3640"/>
@@ -10814,7 +10814,7 @@
         <source>Soprano glockenspiel for the Orff Schulwerk.</source>
         <comment>orff-soprano-glockenspiel description</comment>
         <extracomment>description for Orff Soprano Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>오르프 교수법을 위한 소프라노 글로켄슈필</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3649"/>
@@ -10842,7 +10842,7 @@
         <source>Alto glockenspiel for the Orff Schulwerk.</source>
         <comment>orff-alto-glockenspiel description</comment>
         <extracomment>description for Orff Alto Glockenspiel; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>오르프 교수법을 위한 알토 글로켄슈필</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3658"/>
@@ -10870,7 +10870,7 @@
         <source>Soprano metallophone for the Orff Schulwerk.</source>
         <comment>orff-soprano-metallophone description</comment>
         <extracomment>description for Orff Soprano Metallophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>오르프 교수법을 위한 소프라노 메탈로폰</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3667"/>
@@ -10926,7 +10926,7 @@
         <source>Generic metallophone for the Orff Schulwerk.</source>
         <comment>metallophone description</comment>
         <extracomment>description for Metallophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>오르프 교수법을 위한 일반 메탈로폰</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3685"/>
@@ -10954,7 +10954,7 @@
         <source>Alto metallophone for the Orff Schulwerk.</source>
         <comment>orff-alto-metallophone description</comment>
         <extracomment>description for Orff Alto Metallophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>오르프 교수법을 위한 알토 메탈로폰</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3694"/>
@@ -10982,7 +10982,7 @@
         <source>Alto xylophone for the Orff Schulwerk.</source>
         <comment>orff-alto-xylophone description</comment>
         <extracomment>description for Orff Alto Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>오르프 교수법을 위한 알토 실로폰</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3703"/>
@@ -11010,7 +11010,7 @@
         <source>Bass metallophone for the Orff Schulwerk.</source>
         <comment>orff-bass-metallophone description</comment>
         <extracomment>description for Orff Bass Metallophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>오르프 교수법을 위한 베이스 메탈로폰</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3712"/>
@@ -11038,7 +11038,7 @@
         <source>Bass xylophone for the Orff Schulwerk.</source>
         <comment>orff-bass-xylophone description</comment>
         <extracomment>description for Orff Bass Xylophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>오르프 교수법을 위한 베이스 실로폰</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3721"/>
@@ -11066,7 +11066,7 @@
         <source>Flexatone.</source>
         <comment>flexatone description</comment>
         <extracomment>description for Flexatone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>플렉사톤</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3730"/>
@@ -11094,21 +11094,21 @@
         <source>Musical saw, played with a violin or cello bow.</source>
         <comment>musical-saw description</comment>
         <extracomment>description for Musical Saw; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>바이올린이나 첼로 활로 연주되는 연주용 톱</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3739"/>
         <source>Musical Saw</source>
         <comment>musical-saw trackName</comment>
         <extracomment>trackName for Musical Saw; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>연주 톱</translation>
+        <translation>연주용 톱</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3741"/>
         <source>Musical Saw</source>
         <comment>musical-saw longName</comment>
         <extracomment>longName for Musical Saw; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>연주 톱</translation>
+        <translation>연주용 톱</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3743"/>
@@ -11122,21 +11122,21 @@
         <source>Wine glasses played by running moistened fingers around the rim. Sometimes called a glass harp.</source>
         <comment>musical-glasses description</comment>
         <extracomment>description for Musical Glasses; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>와인잔. 물기 있는 손가락을 와인잔의 가장자리에 문질러 소리낸다. 글라스 하프라고도 불린다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3748"/>
         <source>Musical Glasses</source>
         <comment>musical-glasses trackName</comment>
         <extracomment>trackName for Musical Glasses; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>뮤지컬 글라시즈</translation>
+        <translation>글라스 하프</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3750"/>
         <source>Musical Glasses</source>
         <comment>musical-glasses longName</comment>
         <extracomment>longName for Musical Glasses; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>뮤지컬 글라시즈</translation>
+        <translation>글라스 하프</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3752"/>
@@ -11150,7 +11150,7 @@
         <source>Instrument made of spinning glass disks or bowls played by touching with the fingers.</source>
         <comment>glass-harmonica description</comment>
         <extracomment>description for Glass Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>회전하는 유리 원판이나 그릇을 손가락으로 만져 연주하는 악기.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3757"/>
@@ -11178,21 +11178,21 @@
         <source>Tuned klaxon horns or car horns.</source>
         <comment>tuned-klaxon-horns description</comment>
         <extracomment>description for Tuned Klaxon Horns; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>조율된 크락션 나팔, 또는 자동차 경적.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3766"/>
         <source>Tuned Klaxon Horns</source>
         <comment>tuned-klaxon-horns trackName</comment>
         <extracomment>trackName for Tuned Klaxon Horns; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>크락숀 나팔</translation>
+        <translation>조율된 크락션 나팔</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3768"/>
         <source>Tuned Klaxon Horns</source>
         <comment>tuned-klaxon-horns longName</comment>
         <extracomment>longName for Tuned Klaxon Horns; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>크락숀 나팔</translation>
+        <translation>조율된 크락션 나팔</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3770"/>
@@ -11206,7 +11206,7 @@
         <source>Alto kalimba. A modern interpretation of the traditional Shona mbira.</source>
         <comment>alto-kalimba description</comment>
         <extracomment>description for Alto Kalimba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>알토 칼림바. 전통적인 Shona mbira의 현대적 해석.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3775"/>
@@ -11234,7 +11234,7 @@
         <source>Kalimba (generic). A modern interpretation of the traditional Shona mbira.</source>
         <comment>kalimba description</comment>
         <extracomment>description for Kalimba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>칼림바 (일반). 전통적인 Shona mbira의 현대적 해석.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3784"/>
@@ -11262,7 +11262,7 @@
         <source>Treble kalimba. A modern interpretation of the traditional Shona mbira.</source>
         <comment>treble-kalimba description</comment>
         <extracomment>description for Treble Kalimba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>트레블 칼림바. 전통적인 Shona mbira의 현대적 해석.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3793"/>
@@ -11290,21 +11290,21 @@
         <source>Automobile brake drums.</source>
         <comment>automobile-brake-drums description</comment>
         <extracomment>description for Automobile Brake Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>자동차의 브레이크 드럼.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3805"/>
         <source>Automobile Brake Drums</source>
         <comment>automobile-brake-drums trackName</comment>
         <extracomment>trackName for Automobile Brake Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Automobile Brake Drums</translation>
+        <translation>자동차의 브레이크 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3807"/>
         <source>Automobile Brake Drums</source>
         <comment>automobile-brake-drums longName</comment>
         <extracomment>longName for Automobile Brake Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Automobile Brake Drums</translation>
+        <translation>자동차의 브레이크 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3809"/>
@@ -11318,7 +11318,7 @@
         <source>Bongos.</source>
         <comment>bongos description</comment>
         <extracomment>description for Bongos; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>봉고</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3814"/>
@@ -11346,21 +11346,21 @@
         <source>Chinese tom-toms.</source>
         <comment>chinese-tom-toms description</comment>
         <extracomment>description for Chinese Tom-Toms; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>중국의 탐탐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3823"/>
         <source>Chinese Tom-Toms</source>
         <comment>chinese-tom-toms trackName</comment>
         <extracomment>trackName for Chinese Tom-Toms; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>차이니스 탐탐</translation>
+        <translation>중국의 탐탐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3825"/>
         <source>Chinese Tom-Toms</source>
         <comment>chinese-tom-toms longName</comment>
         <extracomment>longName for Chinese Tom-Toms; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>차이니스 탐탐</translation>
+        <translation>중국의 탐탐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3827"/>
@@ -11374,7 +11374,7 @@
         <source>Bass drum.</source>
         <comment>bass-drum description</comment>
         <extracomment>description for Bass Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>베이스 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3834"/>
@@ -11395,7 +11395,7 @@
         <source>Snare drum, also known as side drum.</source>
         <comment>snare-drum description</comment>
         <extracomment>description for Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>스네어 드럼. 사이드 드럼으로도 불리움.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3843"/>
@@ -11416,14 +11416,14 @@
         <source>Concert tom-toms.</source>
         <comment>tom-toms description</comment>
         <extracomment>description for Concert Toms; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>연주용 탐탐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3850"/>
         <source>Concert Toms</source>
         <comment>tom-toms trackName</comment>
         <extracomment>trackName for Concert Toms; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>콘서트 탐</translation>
+        <translation>연주용 탐탐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3852"/>
@@ -11444,7 +11444,7 @@
         <source>Congas.</source>
         <comment>congas description</comment>
         <extracomment>description for Congas; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>콩가.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3859"/>
@@ -11472,21 +11472,21 @@
         <source>Cuica.</source>
         <comment>cuica description</comment>
         <extracomment>description for Cuica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>쿠이카</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3868"/>
         <source>Cuica</source>
         <comment>cuica trackName</comment>
         <extracomment>trackName for Cuica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cuica</translation>
+        <translation>쿠이카</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3870"/>
         <source>Cuica</source>
         <comment>cuica longName</comment>
         <extracomment>longName for Cuica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cuica</translation>
+        <translation>쿠이카</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3872"/>
@@ -11500,91 +11500,91 @@
         <source>Drum Kit.</source>
         <comment>drumset description</comment>
         <extracomment>description for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>드럼 키트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3877"/>
         <source>Large Drum Kit</source>
         <comment>drumset trackName</comment>
         <extracomment>trackName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>대형 드럼 키트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3879"/>
         <source>Drum Kit</source>
         <comment>drumset longName</comment>
         <extracomment>longName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>드럼 키트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3881"/>
         <source>D. Kit</source>
         <comment>drumset shortName</comment>
         <extracomment>shortName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>D. Kit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3884"/>
         <source>4 piece drum kit.</source>
         <comment>drum-kit-4 description</comment>
         <extracomment>description for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>4피스 드럼 키트.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3886"/>
         <source>4-Piece Drum Kit</source>
         <comment>drum-kit-4 trackName</comment>
         <extracomment>trackName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>4피스 드럼 키트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3888"/>
         <source>Drum Kit</source>
         <comment>drum-kit-4 longName</comment>
         <extracomment>longName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>드럼 키트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3890"/>
         <source>D. Kit</source>
         <comment>drum-kit-4 shortName</comment>
         <extracomment>shortName for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>D. Kit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3893"/>
         <source>5 piece drum kit.</source>
         <comment>drum-kit-5 description</comment>
         <extracomment>description for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>5피스 드럼 키트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3895"/>
         <source>5-Piece Drum Kit</source>
         <comment>drum-kit-5 trackName</comment>
         <extracomment>trackName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>5피스 드럼 키트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3897"/>
         <source>Drum Kit</source>
         <comment>drum-kit-5 longName</comment>
         <extracomment>longName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>드럼 키트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3899"/>
         <source>D. Kit</source>
         <comment>drum-kit-5 shortName</comment>
         <extracomment>shortName for 5-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>D. Kit</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3902"/>
         <source>Military field drum.</source>
         <comment>military-drum description</comment>
         <extracomment>description for Field Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>군용 필드 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3904"/>
@@ -11612,7 +11612,7 @@
         <source>Frame drum.</source>
         <comment>frame-drum description</comment>
         <extracomment>description for Frame Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>프레임 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3913"/>
@@ -11640,7 +11640,7 @@
         <source>Piccolo snare drum.</source>
         <comment>piccolo-snare-drum description</comment>
         <extracomment>description for Piccolo Snare; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>피콜로 스네어 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3922"/>
@@ -11668,7 +11668,7 @@
         <source>Slit drum.</source>
         <comment>slit-drum description</comment>
         <extracomment>description for Slit Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>슬릿 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3931"/>
@@ -11696,7 +11696,7 @@
         <source>Pair of twin hand drums used in Indian classical music.</source>
         <comment>tablas description</comment>
         <extracomment>description for Tablas; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>인도 고전 음악에서 사용되는 두 짝의 북</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3940"/>
@@ -11724,7 +11724,7 @@
         <source>Timbales.</source>
         <comment>timbales description</comment>
         <extracomment>description for Timbales; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>팀발레스.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3949"/>
@@ -11752,7 +11752,7 @@
         <source>Anvil.</source>
         <comment>anvil description</comment>
         <extracomment>description for Anvil; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>모루.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3958"/>
@@ -11780,7 +11780,7 @@
         <source>Bell plate.</source>
         <comment>bell-plate description</comment>
         <extracomment>description for Bell Plate; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>벨 플레이트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3967"/>
@@ -11808,7 +11808,7 @@
         <source>Inverted metal bowls nested on a vertical rod in order of pitch. The pitches are indefinite.</source>
         <comment>bell-tree description</comment>
         <extracomment>description for Bell Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>긴 막대에 철 그릇들이 뒤집힌 채 음정 순서로 꽂혀있는 악기. 음정은 부정확하다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3976"/>
@@ -11829,14 +11829,14 @@
         <source>Be. Tr.</source>
         <comment>bell-tree shortName</comment>
         <extracomment>shortName for Bell Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Be. Tr.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3983"/>
         <source>Bowl gongs.</source>
         <comment>bowl-gongs description</comment>
         <extracomment>description for Bowl Gongs; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>징</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3985"/>
@@ -11864,21 +11864,21 @@
         <source>Chains.</source>
         <comment>chains description</comment>
         <extracomment>description for Chains; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>사슬</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3994"/>
         <source>Chains</source>
         <comment>chains trackName</comment>
         <extracomment>trackName for Chains; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chains</translation>
+        <translation>사슬</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3996"/>
         <source>Chains</source>
         <comment>chains longName</comment>
         <extracomment>longName for Chains; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Chains</translation>
+        <translation>사슬</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3998"/>
@@ -11899,7 +11899,7 @@
         <source>Cowbell.</source>
         <comment>cowbell description</comment>
         <extracomment>description for Cowbell; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>카우벨</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4012"/>
@@ -11927,42 +11927,42 @@
         <source>Suspended Cymbal.</source>
         <comment>crash-cymbal description</comment>
         <extracomment>description for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>서스펜디드 심벌</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4021"/>
         <source>Suspended Cymbal</source>
         <comment>crash-cymbal trackName</comment>
         <extracomment>trackName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>서스펜디드 심벌</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4023"/>
         <source>Suspended Cymbal</source>
         <comment>crash-cymbal longName</comment>
         <extracomment>longName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>서스펜디드 심벌</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4025"/>
         <source>Sus. Cym.</source>
         <comment>crash-cymbal shortName</comment>
         <extracomment>shortName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Sus. Cym.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4028"/>
         <source>Hand Cymbals.</source>
         <comment>cymbal description</comment>
         <extracomment>description for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>핸드 심벌즈</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4030"/>
         <source>Hand Cymbals</source>
         <comment>cymbal trackName</comment>
         <extracomment>trackName for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>핸드 심벌즈</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4034"/>
@@ -11976,7 +11976,7 @@
         <source>Finger cymbals of unspecified pitch.</source>
         <comment>finger-cymbals description</comment>
         <extracomment>description for Finger Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>음정이 정해지지 않은 핑거 심벌즈</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4039"/>
@@ -12004,7 +12004,7 @@
         <source>Hi-hat. Combination of two cymbals and a pedal.</source>
         <comment>hi-hat description</comment>
         <extracomment>description for Hi-hat; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>하이햇. 두 개의 심벌과 페달의 조합</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4048"/>
@@ -12032,7 +12032,7 @@
         <source>Iron pipes.</source>
         <comment>iron-pipes description</comment>
         <extracomment>description for Iron Pipes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>쇠파이프</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4057"/>
@@ -12060,35 +12060,35 @@
         <source>Chimes hung from a horizontal bar in order of pitch. The pitches are indefinite.</source>
         <comment>mark-tree description</comment>
         <extracomment>description for Mark Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>수평 막대에 음정 순서대로 매달린 차임스. 음정은 부정확하다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4066"/>
         <source>Mark Tree</source>
         <comment>mark-tree trackName</comment>
         <extracomment>trackName for Mark Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>마크 트리</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4068"/>
         <source>Mark Tree</source>
         <comment>mark-tree longName</comment>
         <extracomment>longName for Mark Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>마크 트리</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4070"/>
         <source>Mk. Tr.</source>
         <comment>mark-tree shortName</comment>
         <extracomment>shortName for Mark Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mk. Tr.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4073"/>
         <source>Metal castanets.</source>
         <comment>metal-castanets description</comment>
         <extracomment>description for Metal Castanets; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>메탈 캐스터네츠</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4075"/>
@@ -12116,7 +12116,7 @@
         <source>Metal wind chimes.</source>
         <comment>metal-wind-chimes description</comment>
         <extracomment>description for Metal Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>금속 풍경</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4084"/>
@@ -12144,7 +12144,7 @@
         <source>Ride cymbal.</source>
         <comment>ride-cymbal description</comment>
         <extracomment>description for Ride Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>라이드 심벌</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4093"/>
@@ -12172,21 +12172,21 @@
         <source>Sleigh bells.</source>
         <comment>sleigh-bells description</comment>
         <extracomment>description for Sleigh Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>슬레이벨</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4102"/>
         <source>Sleigh Bells</source>
         <comment>sleigh-bells trackName</comment>
         <extracomment>trackName for Sleigh Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>슬레이 벨</translation>
+        <translation>슬레이벨</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4104"/>
         <source>Sleigh Bells</source>
         <comment>sleigh-bells longName</comment>
         <extracomment>longName for Sleigh Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>슬레이 벨</translation>
+        <translation>슬레이벨</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4106"/>
@@ -12200,7 +12200,7 @@
         <source>Splash cymbal.</source>
         <comment>splash-cymbal description</comment>
         <extracomment>description for Splash Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>스플래시 심벌</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4111"/>
@@ -12228,7 +12228,7 @@
         <source>Large unpitched gong.</source>
         <comment>tam-tam description</comment>
         <extracomment>description for Tam-tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>조율되지 않은 대형 징</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4124"/>
@@ -12242,21 +12242,21 @@
         <source>Thundersheet.</source>
         <comment>thundersheet description</comment>
         <extracomment>description for Thundersheet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>선더시트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4129"/>
         <source>Thundersheet</source>
         <comment>thundersheet trackName</comment>
         <extracomment>trackName for Thundersheet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>썬더 시트</translation>
+        <translation>선더시트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4131"/>
         <source>Thundersheet</source>
         <comment>thundersheet longName</comment>
         <extracomment>longName for Thundersheet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>썬더 시트</translation>
+        <translation>선더시트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4133"/>
@@ -12270,7 +12270,7 @@
         <source>Triangle.</source>
         <comment>triangle description</comment>
         <extracomment>description for Triangle; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>트라이앵글</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4138"/>
@@ -12298,7 +12298,7 @@
         <source>Bamboo wind chimes.</source>
         <comment>bamboo-wind-chimes description</comment>
         <extracomment>description for Bamboo Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>대나무 풍경</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4147"/>
@@ -12326,7 +12326,7 @@
         <source>Castanets.</source>
         <comment>castanets description</comment>
         <extracomment>description for Castanets; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>캐스터네츠</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4156"/>
@@ -12354,7 +12354,7 @@
         <source>Claves.</source>
         <comment>claves description</comment>
         <extracomment>description for Claves; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>클라베</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4165"/>
@@ -12382,21 +12382,21 @@
         <source>Güiro.</source>
         <comment>guiro description</comment>
         <extracomment>description for Güiro; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>귀로</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4174"/>
         <source>Güiro</source>
         <comment>guiro trackName</comment>
         <extracomment>trackName for Güiro; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Güiro</translation>
+        <translation>귀로</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4176"/>
         <source>Güiro</source>
         <comment>guiro longName</comment>
         <extracomment>longName for Güiro; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Güiro</translation>
+        <translation>귀로</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4178"/>
@@ -12410,21 +12410,21 @@
         <source>Temple blocks, sometimes known as Chinese temple blocks or wooden bells.</source>
         <comment>temple-blocks description</comment>
         <extracomment>description for Temple Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>템플블록, 중국 템플블록 또는 나무 종으로 알려져 있음</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4183"/>
         <source>Temple Blocks</source>
         <comment>temple-blocks trackName</comment>
         <extracomment>trackName for Temple Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Temple Blocks</translation>
+        <translation>템플블록</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4185"/>
         <source>Temple Blocks</source>
         <comment>temple-blocks longName</comment>
         <extracomment>longName for Temple Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Temple Blocks</translation>
+        <translation>템플블록</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4187"/>
@@ -12438,7 +12438,7 @@
         <source>Wood blocks.</source>
         <comment>wood-blocks description</comment>
         <extracomment>description for Wood Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>우드 블록</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4192"/>
@@ -12466,7 +12466,7 @@
         <source>Wooden wind chimes.</source>
         <comment>wooden-wind-chimes description</comment>
         <extracomment>description for Wooden Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>나무 풍경</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4201"/>
@@ -12494,7 +12494,7 @@
         <source>Cabasa.</source>
         <comment>cabasa description</comment>
         <extracomment>description for Cabasa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>카바사</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4210"/>
@@ -12522,7 +12522,7 @@
         <source>Glass wind chimes.</source>
         <comment>glass-wind-chimes description</comment>
         <extracomment>description for Glass Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>유리 풍경</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4219"/>
@@ -12550,7 +12550,7 @@
         <source>Maracas.</source>
         <comment>maracas description</comment>
         <extracomment>description for Maracas; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>마라카스</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4228"/>
@@ -12578,7 +12578,7 @@
         <source>Orchestral percussion drumset.</source>
         <comment>percussion description</comment>
         <extracomment>description for Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>관현악 타악기 드럼 세트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4237"/>
@@ -12606,7 +12606,7 @@
         <source>Dried donkey or horse jawbone, traditionally used as a rattle in some Latin American countries.</source>
         <comment>quijada description</comment>
         <extracomment>description for Quijada; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>건조된 당나귀나 말의 턱뼈, 일부 라틴 아메리카 국가들에서 전통적인 래틀로 사용되었다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4246"/>
@@ -12634,7 +12634,7 @@
         <source>Ratchet, also known as a rattle.</source>
         <comment>ratchet description</comment>
         <extracomment>description for Ratchet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>키하다</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4255"/>
@@ -12662,7 +12662,7 @@
         <source>Pair of blocks wrapped in sandpaper, played by rubbing together.</source>
         <comment>sandpaper-blocks description</comment>
         <extracomment>description for Sandpaper Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>사포로 감싼 두 개의 블럭, 서로 비비면서 소리낸다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4264"/>
@@ -12690,7 +12690,7 @@
         <source>Shaker.</source>
         <comment>shaker description</comment>
         <extracomment>description for Shaker; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>셰이커</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4273"/>
@@ -12718,7 +12718,7 @@
         <source>Shell wind chimes.</source>
         <comment>shell-wind-chimes description</comment>
         <extracomment>description for Shell Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>조개 풍경</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4282"/>
@@ -12746,7 +12746,7 @@
         <source>Stones.</source>
         <comment>stones description</comment>
         <extracomment>description for Stones; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>돌</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4291"/>
@@ -12774,7 +12774,7 @@
         <source>Tambourine.</source>
         <comment>tambourine description</comment>
         <extracomment>description for Tambourine; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>탬버린</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4300"/>
@@ -12802,7 +12802,7 @@
         <source>Large shaker in the form of a tube.</source>
         <comment>tubo description</comment>
         <extracomment>description for Tubo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>튜브 형태의 큰 셰이커</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4309"/>
@@ -12830,7 +12830,7 @@
         <source>Vibraslap.</source>
         <comment>vibraslap description</comment>
         <extracomment>description for Vibraslap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>비브라슬랩</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4318"/>
@@ -12858,7 +12858,7 @@
         <source>Two wooden boards joined by a hinge, played by being brought together rapidly. Also known as a slap stick.</source>
         <comment>whip description</comment>
         <extracomment>description for Whip; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>경첩으로 연결된 두 개의 나무 판, 빠르게 모아서 연주된다. 슬랩 스틱으로도 알려져 있다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4327"/>
@@ -12886,7 +12886,7 @@
         <source>Marching snare drum.</source>
         <comment>marching-snare description</comment>
         <extracomment>description for Marching Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>행진 스네어 드럼.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4341"/>
@@ -12907,7 +12907,7 @@
         <source>Marching tenor drums.</source>
         <comment>marching-tenor-drums description</comment>
         <extracomment>description for Marching Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>행진 테너 드럼.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4350"/>
@@ -12928,7 +12928,7 @@
         <source>Marching bass drums.</source>
         <comment>marching-bass-drums description</comment>
         <extracomment>description for Marching Bass Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>행진 베이스 드럼.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4359"/>
@@ -12949,7 +12949,7 @@
         <source>Marching cymbals.</source>
         <comment>marching-cymbals description</comment>
         <extracomment>description for Marching Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>행진 심벌즈.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4368"/>
@@ -12970,7 +12970,7 @@
         <source>Finger snap.</source>
         <comment>finger-snap description</comment>
         <extracomment>description for Finger Snap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>핑거 스냅</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4378"/>
@@ -12998,7 +12998,7 @@
         <source>Hand clap.</source>
         <comment>hand-clap description</comment>
         <extracomment>description for Hand Clap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>박수.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4387"/>
@@ -13026,7 +13026,7 @@
         <source>Hand slap.</source>
         <comment>slap description</comment>
         <extracomment>description for Slap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>슬랩</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4396"/>
@@ -13054,21 +13054,21 @@
         <source>Foot stamp.</source>
         <comment>stamp description</comment>
         <extracomment>description for Stamp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>발 구르기</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4405"/>
         <source>Stamp</source>
         <comment>stamp trackName</comment>
         <extracomment>trackName for Stamp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>스탬프</translation>
+        <translation>발 구르기</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4407"/>
         <source>Stamp</source>
         <comment>stamp longName</comment>
         <extracomment>longName for Stamp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>스탬프</translation>
+        <translation>발 구르기</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4409"/>
@@ -13082,21 +13082,21 @@
         <source>Boy soprano voice.</source>
         <comment>boy-soprano description</comment>
         <extracomment>description for Boy Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>소프라노 소년 성부.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4417"/>
         <source>Boy Soprano</source>
         <comment>boy-soprano trackName</comment>
         <extracomment>trackName for Boy Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>보이 소프라노</translation>
+        <translation>소프라노 소년</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4419"/>
         <source>Boy Soprano</source>
         <comment>boy-soprano longName</comment>
         <extracomment>longName for Boy Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>보이 소프라노</translation>
+        <translation>소프라노 소년</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4421"/>
@@ -13110,7 +13110,7 @@
         <source>Soprano voice.</source>
         <comment>soprano description</comment>
         <extracomment>description for Soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>소프라노 성부.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4426"/>
@@ -13138,14 +13138,14 @@
         <source>Soprano voice (notated in C clef).</source>
         <comment>soprano-c-clef description</comment>
         <extracomment>description for Soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>소프라노 성부 (가온음자리표로 표기됨).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4435"/>
         <source>Soprano (C clef)</source>
         <comment>soprano-c-clef trackName</comment>
         <extracomment>trackName for Soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>소프라노 (가온음자리표)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4437"/>
@@ -13166,21 +13166,21 @@
         <source>Mezzo-soprano voice.</source>
         <comment>mezzo-soprano description</comment>
         <extracomment>description for Mezzo-soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>메조 소프라노 성부.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4444"/>
         <source>Mezzo-soprano</source>
         <comment>mezzo-soprano trackName</comment>
         <extracomment>trackName for Mezzo-soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>메조-소프라노</translation>
+        <translation>메조 소프라노</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4446"/>
         <source>Mezzo-soprano</source>
         <comment>mezzo-soprano longName</comment>
         <extracomment>longName for Mezzo-soprano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>메조-소프라노</translation>
+        <translation>메조 소프라노</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4448"/>
@@ -13194,21 +13194,21 @@
         <source>Mezzo-soprano voice (notated in C clef).</source>
         <comment>mezzo-soprano-c-clef description</comment>
         <extracomment>description for Mezzo-soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>메조 소프라노 성부 (가온음자리표로 표기됨).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4453"/>
         <source>Mezzo-soprano (C clef)</source>
         <comment>mezzo-soprano-c-clef trackName</comment>
         <extracomment>trackName for Mezzo-soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>메조 소프라노 (가온음자리표)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4455"/>
         <source>Mezzo-soprano</source>
         <comment>mezzo-soprano-c-clef longName</comment>
         <extracomment>longName for Mezzo-soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>메조-소프라노</translation>
+        <translation>메조 소프라노</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4457"/>
@@ -13222,7 +13222,7 @@
         <source>Counter tenor or male alto voice.</source>
         <comment>countertenor description</comment>
         <extracomment>description for Countertenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>카운터 테너 또는 남성 알토 성부.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4462"/>
@@ -13250,7 +13250,7 @@
         <source>Alto voice.</source>
         <comment>alto description</comment>
         <extracomment>description for Alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>알토 성부.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4471"/>
@@ -13278,14 +13278,14 @@
         <source>Alto voice (notated in C clef).</source>
         <comment>alto-c-clef description</comment>
         <extracomment>description for Alto (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>알토 성부 (가온음자리표로 표기됨)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4480"/>
         <source>Alto (C clef)</source>
         <comment>alto-c-clef trackName</comment>
         <extracomment>trackName for Alto (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>알토 (가온음자리표)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4482"/>
@@ -13306,7 +13306,7 @@
         <source>Female alto voice.</source>
         <comment>contralto description</comment>
         <extracomment>description for Contralto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>여성 알토 성부.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4489"/>
@@ -13334,7 +13334,7 @@
         <source>Tenor voice.</source>
         <comment>tenor description</comment>
         <extracomment>description for Tenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 성부.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4498"/>
@@ -13362,14 +13362,14 @@
         <source>Tenor voice (notated in C clef).</source>
         <comment>tenor-c-clef description</comment>
         <extracomment>description for Tenor (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 성부 (가온음자리표로 표기됨).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4507"/>
         <source>Tenor (C clef)</source>
         <comment>tenor-c-clef trackName</comment>
         <extracomment>trackName for Tenor (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 (가온음자리표)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4509"/>
@@ -13390,7 +13390,7 @@
         <source>Baritone voice.</source>
         <comment>baritone description</comment>
         <extracomment>description for Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>바리톤 성부.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4516"/>
@@ -13418,14 +13418,14 @@
         <source>Baritone voice (notated in C clef).</source>
         <comment>baritone-c-clef description</comment>
         <extracomment>description for Baritone (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>바리톤 성부 (가온음자리표로 표기됨).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4525"/>
         <source>Baritone (C clef)</source>
         <comment>baritone-c-clef trackName</comment>
         <extracomment>trackName for Baritone (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>바리톤 (가온음자리표)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4527"/>
@@ -13446,21 +13446,21 @@
         <source>Voice (unspecified type).</source>
         <comment>voice description</comment>
         <extracomment>description for Voice; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>성부 (일반).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4534"/>
         <source>Voice</source>
         <comment>voice trackName</comment>
         <extracomment>trackName for Voice; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>목소리</translation>
+        <translation>성부</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4536"/>
         <source>Voice</source>
         <comment>voice longName</comment>
         <extracomment>longName for Voice; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>목소리</translation>
+        <translation>성부</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4538"/>
@@ -13474,7 +13474,7 @@
         <source>Bass voice.</source>
         <comment>bass description</comment>
         <extracomment>description for Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>베이스 성부.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4543"/>
@@ -13502,7 +13502,7 @@
         <source>Women’s voices.</source>
         <comment>women description</comment>
         <extracomment>description for Women; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>여성 성부.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4552"/>
@@ -13544,7 +13544,7 @@
         <source>Men’s voices.</source>
         <comment>men description</comment>
         <extracomment>description for Men; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>남성 성부.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4565"/>
@@ -13586,7 +13586,7 @@
         <source>Kazoo.</source>
         <comment>kazoo description</comment>
         <extracomment>description for Kazoo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>카주.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4578"/>
@@ -13614,7 +13614,7 @@
         <source>Celesta.</source>
         <comment>celesta description</comment>
         <extracomment>description for Celesta; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>첼레스타.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4590"/>
@@ -13642,7 +13642,7 @@
         <source>Clavichord.</source>
         <comment>clavichord description</comment>
         <extracomment>description for Clavichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>클라비코드.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4599"/>
@@ -13670,7 +13670,7 @@
         <source>Electrically amplified clavichord.</source>
         <comment>clavinet description</comment>
         <extracomment>description for Clavinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>전력으로 증폭된 클라비코드.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4608"/>
@@ -13698,7 +13698,7 @@
         <source>Harpsichord.</source>
         <comment>harpsichord description</comment>
         <extracomment>description for Harpsichord; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>하프시코드.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4617"/>
@@ -13726,7 +13726,7 @@
         <source>Virginal.</source>
         <comment>virginal description</comment>
         <extracomment>description for Virginal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>버지널.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4626"/>
@@ -13754,7 +13754,7 @@
         <source>Electric piano.</source>
         <comment>electric-piano description</comment>
         <extracomment>description for Electric Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>전자 피아노.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4635"/>
@@ -13782,7 +13782,7 @@
         <source>Specifically a grand piano.</source>
         <comment>grand-piano description</comment>
         <extracomment>description for Grand Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>그랜드 피아노.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4644"/>
@@ -13810,7 +13810,7 @@
         <source>Honky-tonk (very out of tune) piano.</source>
         <comment>honky-tonk-piano description</comment>
         <extracomment>description for Honky Tonk Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>혼키 통크 (조율 상태가 굉장히 나쁨) 피아노.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4653"/>
@@ -13838,7 +13838,7 @@
         <source>Piano.</source>
         <comment>piano description</comment>
         <extracomment>description for Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>피아노.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4662"/>
@@ -13866,7 +13866,7 @@
         <source>Toy piano.</source>
         <comment>toy-piano description</comment>
         <extracomment>description for Toy Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>장난감 피아노.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4671"/>
@@ -13894,7 +13894,7 @@
         <source>Specifically an upright piano.</source>
         <comment>upright-piano description</comment>
         <extracomment>description for Upright Piano; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>업라이트 피아노.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4680"/>
@@ -13922,7 +13922,7 @@
         <source>Hammond electronic organ.</source>
         <comment>hammond-organ description</comment>
         <extracomment>description for Hammond Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>해먼드 전자 오르간.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4689"/>
@@ -13950,7 +13950,7 @@
         <source>Organ (generic).</source>
         <comment>organ description</comment>
         <extracomment>description for Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>오르간 (일반)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4698"/>
@@ -13978,7 +13978,7 @@
         <source>Electronic organ with percussion feature.</source>
         <comment>percussive-organ description</comment>
         <extracomment>description for Percussive Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>타악기 기능이 있는 전자 오르간</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4707"/>
@@ -14006,7 +14006,7 @@
         <source>Pipe organ.</source>
         <comment>pipe-organ description</comment>
         <extracomment>description for Pipe Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>파이프 오르간</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4716"/>
@@ -14034,7 +14034,7 @@
         <source>Hammond organ with Leslie rotary speaker.</source>
         <comment>rotary-organ description</comment>
         <extracomment>description for Rotary Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>레슬리 로터리 스피커가 있는 해먼드 오르간</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4725"/>
@@ -14062,7 +14062,7 @@
         <source>Harmonium.</source>
         <comment>harmonium description</comment>
         <extracomment>description for Harmonium; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>하모니움</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4734"/>
@@ -14090,7 +14090,7 @@
         <source>Reed organ.</source>
         <comment>reed-organ description</comment>
         <extracomment>description for Reed Organ; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>리드 오르간</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4743"/>
@@ -14118,21 +14118,21 @@
         <source>Mallet synthesizer.</source>
         <comment>mallet-synthesizer description</comment>
         <extracomment>description for Mallet Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>말렛 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4755"/>
         <source>Mallet Synthesizer</source>
         <comment>mallet-synthesizer trackName</comment>
         <extracomment>trackName for Mallet Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>나무망치 신디사이저</translation>
+        <translation>말렛 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4757"/>
         <source>Mallet Synthesizer</source>
         <comment>mallet-synthesizer longName</comment>
         <extracomment>longName for Mallet Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>나무망치 신디사이저</translation>
+        <translation>말렛 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4759"/>
@@ -14146,7 +14146,7 @@
         <source>Ondes Martenot.</source>
         <comment>ondes-martenot description</comment>
         <extracomment>description for Ondes Martenot; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>옹드 마르트노.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4764"/>
@@ -14174,7 +14174,7 @@
         <source>Percussion synthesizer.</source>
         <comment>percussion-synthesizer description</comment>
         <extracomment>description for Percussion Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>퍼커션 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4773"/>
@@ -14202,21 +14202,21 @@
         <source>Atmosphere synth effect (General MIDI program 100).</source>
         <comment>atmosphere-synth description</comment>
         <extracomment>description for Atmosphere Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>대기 신디사이저 효과 (일반 MIDI 프로그램 100)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4782"/>
         <source>Atmosphere Synthesizer</source>
         <comment>atmosphere-synth trackName</comment>
         <extracomment>trackName for Atmosphere Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>공기 신디사이저</translation>
+        <translation>대기 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4784"/>
         <source>Atmosphere Synthesizer</source>
         <comment>atmosphere-synth longName</comment>
         <extracomment>longName for Atmosphere Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>공기 신디사이저</translation>
+        <translation>대기 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4786"/>
@@ -14230,7 +14230,7 @@
         <source>Bass synthesizer.</source>
         <comment>bass-synthesizer description</comment>
         <extracomment>description for Bass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>베이스 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4791"/>
@@ -14258,35 +14258,35 @@
         <source>synth-bass-1</source>
         <comment>bass-synthesizer channel</comment>
         <extracomment>channel for Bass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>synth-bass-1</translation>
+        <translation>베이스 신디사이저 채널 1</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4799"/>
         <source>synth-bass-2</source>
         <comment>bass-synthesizer channel</comment>
         <extracomment>channel for Bass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>synth-bass-2</translation>
+        <translation>베이스 신다사이저 채널 2</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4802"/>
         <source>Bowed synth pad (General MIDI program 93).</source>
         <comment>bowed-synth description</comment>
         <extracomment>description for Bowed Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>활 신디사이저 패드 (일반 MIDI 프로그램 93).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4804"/>
         <source>Bowed Synthesizer</source>
         <comment>bowed-synth trackName</comment>
         <extracomment>trackName for Bowed Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>굽음 신디사이저</translation>
+        <translation>활 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4806"/>
         <source>Bowed Synthesizer</source>
         <comment>bowed-synth longName</comment>
         <extracomment>longName for Bowed Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>굽음 신디사이저</translation>
+        <translation>활 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4808"/>
@@ -14300,21 +14300,21 @@
         <source>Brass synthesizer.</source>
         <comment>brass-synthesizer description</comment>
         <extracomment>description for Brass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>금관악기 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4813"/>
         <source>Brass Synthesizer</source>
         <comment>brass-synthesizer trackName</comment>
         <extracomment>trackName for Brass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>브라스 신디사이저</translation>
+        <translation>금관악기 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4815"/>
         <source>Brass Synthesizer</source>
         <comment>brass-synthesizer longName</comment>
         <extracomment>longName for Brass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>브라스 신디사이저</translation>
+        <translation>금관악기 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4817"/>
@@ -14328,35 +14328,35 @@
         <source>synth-brass-1</source>
         <comment>brass-synthesizer channel</comment>
         <extracomment>channel for Brass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>synth-brass-1</translation>
+        <translation>금관악기 신디사이저 채널 1</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4821"/>
         <source>synth-brass-2</source>
         <comment>brass-synthesizer channel</comment>
         <extracomment>channel for Brass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>synth-brass-2</translation>
+        <translation>금관악기 신디사이저 채널 2</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4824"/>
         <source>Brightness synth effect (General MIDI program 101).</source>
         <comment>brightness-synth description</comment>
         <extracomment>description for Brightness Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>밝기 신디사이저 효과 (일반 MIDI 프로그램 101).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4826"/>
         <source>Brightness Synthesizer</source>
         <comment>brightness-synth trackName</comment>
         <extracomment>trackName for Brightness Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>밝음 신디사이저</translation>
+        <translation>밝기 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4828"/>
         <source>Brightness Synthesizer</source>
         <comment>brightness-synth longName</comment>
         <extracomment>longName for Brightness Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>밝음 신디사이저</translation>
+        <translation>밝기 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4830"/>
@@ -14370,7 +14370,7 @@
         <source>Choir synth pad (General MIDI program 92).</source>
         <comment>choir-synth description</comment>
         <extracomment>description for Choir Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>합창단 신디사이저 패드 (일반 MIDI 프로그램 92).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4835"/>
@@ -14398,7 +14398,7 @@
         <source>Crystal synth effect (General MIDI program 99).</source>
         <comment>crystal-synth description</comment>
         <extracomment>description for Crystal Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>크리스탈 신디사이저 효과 (일반 MIDI 프로그램 99).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4844"/>
@@ -14426,21 +14426,21 @@
         <source>Echoes synth effect (General MIDI program 103).</source>
         <comment>echoes-synth description</comment>
         <extracomment>description for Echoes Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>메아리 신디사이저 효과 (일반 MIDI 프로그램 103).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4853"/>
         <source>Echoes Synthesizer</source>
         <comment>echoes-synth trackName</comment>
         <extracomment>trackName for Echoes Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>울림 신디사이저</translation>
+        <translation>메아리 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4855"/>
         <source>Echoes Synthesizer</source>
         <comment>echoes-synth longName</comment>
         <extracomment>longName for Echoes Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>울림 신디사이저</translation>
+        <translation>메아리 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4857"/>
@@ -14454,7 +14454,7 @@
         <source>General MIDI effect synthesizer (generic).</source>
         <comment>effect-synth description</comment>
         <extracomment>description for Effect Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>일반 MIDI 효과 신디사이저 (일반).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4862"/>
@@ -14482,7 +14482,7 @@
         <source>rain</source>
         <comment>effect-synth channel</comment>
         <extracomment>channel for Effect Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>비</translation>
+        <translation>빗소리</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4870"/>
@@ -14503,14 +14503,14 @@
         <source>atmosphere</source>
         <comment>effect-synth channel</comment>
         <extracomment>channel for Effect Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>공기</translation>
+        <translation>대기</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4876"/>
         <source>brightness</source>
         <comment>effect-synth channel</comment>
         <extracomment>channel for Effect Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>밝음</translation>
+        <translation>밝기</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4878"/>
@@ -14524,7 +14524,7 @@
         <source>echoes</source>
         <comment>effect-synth channel</comment>
         <extracomment>channel for Effect Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>울림</translation>
+        <translation>메아리</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4882"/>
@@ -14538,7 +14538,7 @@
         <source>Goblins synth effect (General MIDI program 102).</source>
         <comment>goblins-synth description</comment>
         <extracomment>description for Goblins Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>고블린 신디사이저 효과 (일반 MIDI 프로그램 102).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4887"/>
@@ -14566,21 +14566,21 @@
         <source>Halo synth pad (General MIDI program 95).</source>
         <comment>halo-synth description</comment>
         <extracomment>description for Halo Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>헤일로 신디사이저 패드 (일반 MIDI 프로그램 95).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4896"/>
         <source>Halo Synthesizer</source>
         <comment>halo-synth trackName</comment>
         <extracomment>trackName for Halo Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>광륜 신디사이저</translation>
+        <translation>헤일로 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4898"/>
         <source>Halo Synthesizer</source>
         <comment>halo-synth longName</comment>
         <extracomment>longName for Halo Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>광륜 신디사이저</translation>
+        <translation>헤일로 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4900"/>
@@ -14594,7 +14594,7 @@
         <source>Metallic synth pad (General MIDI program 94).</source>
         <comment>metallic-synth description</comment>
         <extracomment>description for Metallic Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>메탈 신디사이저 패드 (일반 MIDI 프로그램 94).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4905"/>
@@ -14622,7 +14622,7 @@
         <source>New age synth pad (General MIDI program 89).</source>
         <comment>new-age-synth description</comment>
         <extracomment>description for New Age Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>뉴에이지 신디사이저 패드 (일반 MIDI 프로그램 89).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4914"/>
@@ -14650,7 +14650,7 @@
         <source>General MIDI synth pad (generic).</source>
         <comment>pad-synth description</comment>
         <extracomment>description for Pad Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>일반 MIDI 신디사이저 패드 (일반).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4923"/>
@@ -14706,7 +14706,7 @@
         <source>bowed</source>
         <comment>pad-synth channel</comment>
         <extracomment>channel for Pad Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>굽은</translation>
+        <translation>활이 달린</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4939"/>
@@ -14720,7 +14720,7 @@
         <source>halo</source>
         <comment>pad-synth channel</comment>
         <extracomment>channel for Pad Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>광륜</translation>
+        <translation>헤일로</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4943"/>
@@ -14734,7 +14734,7 @@
         <source>Polysynth synth pad (General MIDI program 91).</source>
         <comment>poly-synth description</comment>
         <extracomment>description for Poly Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>폴리포닉 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4948"/>
@@ -14762,21 +14762,21 @@
         <source>Rain synth effect (General MIDI program 97).</source>
         <comment>rain-synth description</comment>
         <extracomment>description for Rain Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>빗소리 신디사이저 효과 (일반 MIDI 프로그램 97).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4957"/>
         <source>Rain Synthesizer</source>
         <comment>rain-synth trackName</comment>
         <extracomment>trackName for Rain Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>비 신디사이저</translation>
+        <translation>빗소리 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4959"/>
         <source>Rain Synthesizer</source>
         <comment>rain-synth longName</comment>
         <extracomment>longName for Rain Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>비 신디사이저</translation>
+        <translation>빗소리 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4961"/>
@@ -14790,21 +14790,21 @@
         <source>Sawtooth wave synthesizer.</source>
         <comment>saw-synth description</comment>
         <extracomment>description for Saw Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>톱니파 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4966"/>
         <source>Saw Synthesizer</source>
         <comment>saw-synth trackName</comment>
         <extracomment>trackName for Saw Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>톱 신디사이저</translation>
+        <translation>톱니파 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4968"/>
         <source>Saw Synthesizer</source>
         <comment>saw-synth longName</comment>
         <extracomment>longName for Saw Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>톱 신디사이저</translation>
+        <translation>톱니파 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4970"/>
@@ -14818,7 +14818,7 @@
         <source>Sci-fi synth effect (General MIDI program 104).</source>
         <comment>sci-fi-synth description</comment>
         <extracomment>description for Sci-fi Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>SF 신디사이저 효과 (일반 MIDI 프로그램 104).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4975"/>
@@ -14846,21 +14846,21 @@
         <source>Sine wave synthesizer.</source>
         <comment>sine-synth description</comment>
         <extracomment>description for Sine Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>사인파 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4984"/>
         <source>Sine Synthesizer</source>
         <comment>sine-synth trackName</comment>
         <extracomment>trackName for Sine Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>사인 신디사이저</translation>
+        <translation>사인파 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4986"/>
         <source>Sine Synthesizer</source>
         <comment>sine-synth longName</comment>
         <extracomment>longName for Sine Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>사인 신디사이저</translation>
+        <translation>사인파 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4988"/>
@@ -14874,7 +14874,7 @@
         <source>Soundtrack synth effect (General MIDI program 98).</source>
         <comment>soundtrack-synth description</comment>
         <extracomment>description for Soundtrack Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>사운드트랙 신디사이저 효과 (일반 MIDI 프로그램 98).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4993"/>
@@ -14902,21 +14902,21 @@
         <source>Square wave synthesizer.</source>
         <comment>square-synth description</comment>
         <extracomment>description for Square Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>구형파 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5002"/>
         <source>Square Synthesizer</source>
         <comment>square-synth trackName</comment>
         <extracomment>trackName for Square Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>사각 신디사이저</translation>
+        <translation>구형파 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5004"/>
         <source>Square Synthesizer</source>
         <comment>square-synth longName</comment>
         <extracomment>longName for Square Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>사각 신디사이저</translation>
+        <translation>구형파 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5006"/>
@@ -14930,21 +14930,21 @@
         <source>String synthesizer.</source>
         <comment>string-synthesizer description</comment>
         <extracomment>description for String Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>현악기 신디사이저.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5011"/>
         <source>String Synthesizer</source>
         <comment>string-synthesizer trackName</comment>
         <extracomment>trackName for String Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>스트링 신디사이저</translation>
+        <translation>현악기 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5013"/>
         <source>String Synthesizer</source>
         <comment>string-synthesizer longName</comment>
         <extracomment>longName for String Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>스트링 신디사이저</translation>
+        <translation>현악기 신디사이저</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5015"/>
@@ -14958,21 +14958,21 @@
         <source>synth-string-1</source>
         <comment>string-synthesizer channel</comment>
         <extracomment>channel for String Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>synth-string-1</translation>
+        <translation>현악기 신디사이저 채널 1</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5019"/>
         <source>synth-string-2</source>
         <comment>string-synthesizer channel</comment>
         <extracomment>channel for String Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>synth-string-2</translation>
+        <translation>현악기 신디사이저 채널 2</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5022"/>
         <source>Sweep synth pad (General MIDI program 96).</source>
         <comment>sweep-synth description</comment>
         <extracomment>description for Sweep Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>빗질 신디사이저 패드 (일반 MIDI 프로그램 96).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5024"/>
@@ -15000,7 +15000,7 @@
         <source>Theremin.</source>
         <comment>theremin description</comment>
         <extracomment>description for Theremin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테레민.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5033"/>
@@ -15028,7 +15028,7 @@
         <source>Warm synth pad (General MIDI program 90).</source>
         <comment>warm-synth description</comment>
         <extracomment>description for Warm Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>따뜻한 신디사이저 패드 (일반 MIDI 프로그램 90).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5042"/>
@@ -15056,7 +15056,7 @@
         <source>Harp.</source>
         <comment>harp description</comment>
         <extracomment>description for Harp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>하프.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5054"/>
@@ -15098,7 +15098,7 @@
         <source>Small Portuguese 4-string guitar (staff notation).</source>
         <comment>cavaquinho description</comment>
         <extracomment>description for Cavaquinho; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>포르투갈의 작은 4현 기타 (오선보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5067"/>
@@ -15126,14 +15126,14 @@
         <source>Small Portuguese 4-string guitar (tablature).</source>
         <comment>cavaquinho-tablature description</comment>
         <extracomment>description for Cavaquinho (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>포르투갈의 작은 4현 기타 (TAB 악보).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5076"/>
         <source>Cavaquinho (tablature)</source>
         <comment>cavaquinho-tablature trackName</comment>
         <extracomment>trackName for Cavaquinho (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>카바킨호 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5078"/>
@@ -15147,7 +15147,7 @@
         <source>Soprano guitar.</source>
         <comment>soprano-guitar description</comment>
         <extracomment>description for Soprano Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>소프라노 기타</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5083"/>
@@ -15189,7 +15189,7 @@
         <source>Alto guitar.</source>
         <comment>alto-guitar description</comment>
         <extracomment>description for Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>알토 기타.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5096"/>
@@ -15231,7 +15231,7 @@
         <source>Electric guitar (notated with 8va bassa treble clef).</source>
         <comment>electric-guitar description</comment>
         <extracomment>description for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>일렉트릭 기타 (8va bassa 높은음자리표)</translation>
+        <translation>일렉트릭 기타 (8도 아래 높은음자리표로 표기됨)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5109"/>
@@ -15280,7 +15280,7 @@
         <source>harmonics</source>
         <comment>electric-guitar channel</comment>
         <extracomment>channel for Electric Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>화성</translation>
+        <translation>하모닉스</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5123"/>
@@ -15329,119 +15329,119 @@
         <source>Acoustic steel-string guitar (staff notation, with 8va bassa treble clef).</source>
         <comment>guitar-steel description</comment>
         <extracomment>description for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>어쿠스틱 기타 (8도 아래 높은음자리표와 오선보로 표기됨).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5152"/>
         <source>Acoustic steel-string guitar (staff notation, with normal treble clef).</source>
         <comment>guitar-steel-treble-clef description</comment>
         <extracomment>description for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>어쿠스틱 기타 (높은음자리표와 오선보로 표기됨).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5161"/>
         <source>Acoustic nylon-string guitar (staff notation, with 8va bassa treble clef).</source>
         <comment>guitar-nylon description</comment>
         <extracomment>description for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>어쿠스틱 나일론 기타 (8도 아래 높은음자리표와 오선보로 표기됨).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5174"/>
         <source>Acoustic nylon-string guitar (staff notation, with normal treble clef).</source>
         <comment>guitar-nylon-treble-clef description</comment>
         <extracomment>description for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>어쿠스틱 나일론 기타 (높은음자리표와 오선보로 표기됨).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5607"/>
         <source>Very large mountain or Appalachian dulcimer, an octave lower than the regular dulcimer. (Tablature).</source>
         <comment>mtn-dulcimer-bass-chrom-tab description</comment>
         <extracomment>description for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>매우 커다란 산 또는 알펜시아의 덜시머. 일반 덜시머보다 1 옥타브 낮은 음정. (TAB 악보).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6070"/>
         <source>Treble viola da gamba. Second highest member of the viol family.</source>
         <comment>treble-viol description</comment>
         <extracomment>description for Treble Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>트레블 비올. 비올 계열에서 두 번째로 가장 높다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6085"/>
         <source>Alto viola da gamba. Third highest member of the viol family.</source>
         <comment>alto-viol description</comment>
         <extracomment>description for Alto Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>알토 비올. 비올 계열에서 세 번쨰로 가장 높다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6115"/>
         <source>Tenor viola da gamba. Middle member of the viol family.</source>
         <comment>tenor-viol description</comment>
         <extracomment>description for Tenor Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 비올. 비올 계열에서 중부에 해당한다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6145"/>
         <source>Bass viola da gamba (staff notation). Third lowest member of the viol family.</source>
         <comment>viola-da-gamba description</comment>
         <extracomment>description for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>베이스 비올 (오선보). 비올 계열에서 가장 낮다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6147"/>
         <source>Bass Viol</source>
         <comment>viola-da-gamba trackName</comment>
         <extracomment>trackName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>베이스 비올</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6149"/>
         <source>Bass Viol</source>
         <comment>viola-da-gamba longName</comment>
         <extracomment>longName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>베이스 비올</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6151"/>
         <source>B. Vl.</source>
         <comment>viola-da-gamba shortName</comment>
         <extracomment>shortName for Bass Viol; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>B. Vl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6160"/>
         <source>Bass viola da gamba (tablature). Third lowest member of the viol family.</source>
         <comment>viola-da-gamba-tablature description</comment>
         <extracomment>description for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>베이스 비올 (TAB 악보). 비올 계열에서 세 번째로 가장 낮다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6162"/>
         <source>Bass Viol (tablature)</source>
         <comment>viola-da-gamba-tablature trackName</comment>
         <extracomment>trackName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>베이스 비올 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6164"/>
         <source>Bass Viol</source>
         <comment>viola-da-gamba-tablature longName</comment>
         <extracomment>longName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>베이스 비올</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6166"/>
         <source>B. Vl.</source>
         <comment>viola-da-gamba-tablature shortName</comment>
         <extracomment>shortName for Bass Viol (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>B. Vl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6169"/>
         <source>Large viol with the lowest string tuned to G. Sometimes called the G violone or great bass viol. Second lowest member of the viol family.</source>
         <comment>violone description</comment>
         <extracomment>description for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>가장 낮은 현이 G에 조율된 대형 비올. 가끔 G 비올로네, 또는 그레이트 베이스 비올이라고 불린다. 비올 계열에서 두 번째로 가장 낮다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6171"/>
@@ -15455,7 +15455,7 @@
         <source>Large viol with the lowest string tuned to D. Sometimes called the D violone or contrabass viol. Lowest-pitched member of the viol family.</source>
         <comment>d-violone description</comment>
         <extracomment>description for Violone; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>가장 낮은 현이 D에 조율된 대형 비올. 가끔 D 비올로네, 또는 콘트라베이스 비올이라고 불린다. 비올 계열에서 가장 낮다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6188"/>
@@ -15476,7 +15476,7 @@
         <source>Flute in E♭, sounding a minor third above the standard flute.</source>
         <comment>soprano-flute description</comment>
         <extracomment>description for Soprano Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>E♭에 조율된 플룻. 표준 플룻보다 단3도 높은 음정.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="603"/>
@@ -15504,21 +15504,21 @@
         <source>Trumpet in B♭. Still the most common trumpet in non-orchestral contexts.</source>
         <comment>bb-trumpet description</comment>
         <extracomment>description for Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>B♭에 조율된 트럼펫. 관현악을 제외하면 가장 흔한 트럼펫이다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2620"/>
         <source>*B♭</source>
         <comment>bb-trumpet traitName</comment>
         <extracomment>traitName for Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>*B♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3340"/>
         <source>Hel.</source>
         <comment>helicon shortName</comment>
         <extracomment>shortName for Helicon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Hel.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3832"/>
@@ -15539,21 +15539,21 @@
         <source>China cymbal for drum kit.</source>
         <comment>chinese-cymbal description</comment>
         <extracomment>description for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>드럼 키트를 위한 중국 심벌.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4003"/>
         <source>China Cymbal</source>
         <comment>chinese-cymbal trackName</comment>
         <extracomment>trackName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>중국 심벌</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4005"/>
         <source>China Cymbal</source>
         <comment>chinese-cymbal longName</comment>
         <extracomment>longName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>중국 심벌</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4032"/>
@@ -15581,28 +15581,28 @@
         <source>Marching Snare Drum</source>
         <comment>marching-snare trackName</comment>
         <extracomment>trackName for Marching Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>행진 스네어 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4348"/>
         <source>Marching Tenor Drums</source>
         <comment>marching-tenor-drums trackName</comment>
         <extracomment>trackName for Marching Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>행진 테너 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4357"/>
         <source>Marching Bass Drums</source>
         <comment>marching-bass-drums trackName</comment>
         <extracomment>trackName for Marching Bass Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>행진 베이스 드럼</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4366"/>
         <source>Marching Cymbals</source>
         <comment>marching-cymbals trackName</comment>
         <extracomment>trackName for Marching Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>행진 심벌즈</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5141"/>
@@ -15644,7 +15644,7 @@
         <source>Acoustic Guitar (treble clef)</source>
         <comment>guitar-steel-treble-clef trackName</comment>
         <extracomment>trackName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>어쿠스틱 기타 (높은음자리표)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5156"/>
@@ -15700,7 +15700,7 @@
         <source>Guitar (treble clef)</source>
         <comment>guitar-nylon-treble-clef trackName</comment>
         <extracomment>trackName for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>기타 (높은음자리표)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5178"/>
@@ -15735,14 +15735,14 @@
         <source>Electric guitar (tablature).</source>
         <comment>electric-guitar-tablature description</comment>
         <extracomment>description for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>일렉트릭 기타 (TAB)</translation>
+        <translation>일렉트릭 기타 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5189"/>
         <source>Electric Guitar (tablature)</source>
         <comment>electric-guitar-tablature trackName</comment>
         <extracomment>trackName for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>일렉트릭 기타 (TAB)</translation>
+        <translation>일렉트릭 기타 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5191"/>
@@ -15756,14 +15756,14 @@
         <source>Acoustic nylon-string guitar (tablature).</source>
         <comment>guitar-nylon-tablature description</comment>
         <extracomment>description for Classical Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>어쿠스틱 나일론 기타 (TAB 악보).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5196"/>
         <source>Classical Guitar (tablature)</source>
         <comment>guitar-nylon-tablature trackName</comment>
         <extracomment>trackName for Classical Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>클래식 기타 (TAB)</translation>
+        <translation>클래식 기타 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5198"/>
@@ -15777,7 +15777,7 @@
         <source>Acoustic steel-string guitar (tablature).</source>
         <comment>guitar-steel-tablature description</comment>
         <extracomment>description for Acoustic Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>어쿠스틱 기타 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5203"/>
@@ -15798,7 +15798,7 @@
         <source>Pedal steel guitar.</source>
         <comment>pedal-steel-guitar description</comment>
         <extracomment>description for Pedal Steel Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>페달 스틸 기타.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5210"/>
@@ -15847,7 +15847,7 @@
         <source>Baritone guitar.</source>
         <comment>baritone-guitar description</comment>
         <extracomment>description for Baritone Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>바리톤 기타</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5225"/>
@@ -15875,7 +15875,7 @@
         <source>Guitar with a second, fretless neck with up to nine bass strings. Developed in Vienna in the mid-19th century.</source>
         <comment>contra-guitar description</comment>
         <extracomment>description for Contra Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>프렛이 없고 9개의 베이스 현이 달린 두번째 넥이 있는 기타. 19세기 중반 비엔나에서 개발되었다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5234"/>
@@ -15917,7 +15917,7 @@
         <source>7-string guitar (staff notation).</source>
         <comment>7-string-guitar description</comment>
         <extracomment>description for 7-string Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>7현 기타 (오선보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5247"/>
@@ -15945,14 +15945,14 @@
         <source>7-string guitar (tablature).</source>
         <comment>7-string-guitar-tablature description</comment>
         <extracomment>description for 7-string Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>7현 기타 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5256"/>
         <source>7-string Guitar (tablature)</source>
         <comment>7-string-guitar-tablature trackName</comment>
         <extracomment>trackName for 7-string Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>7현 기타 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5258"/>
@@ -15966,21 +15966,21 @@
         <source>11-string alto guitar.</source>
         <comment>11-string-alto-guitar description</comment>
         <extracomment>description for 11-string Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>11현 알토 기타</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5263"/>
         <source>11-string Alto Guitar</source>
         <comment>11-string-alto-guitar trackName</comment>
         <extracomment>trackName for 11-string Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>11줄 알토 기타</translation>
+        <translation>11현 알토 기타</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5265"/>
         <source>11-string Alto Guitar</source>
         <comment>11-string-alto-guitar longName</comment>
         <extracomment>longName for 11-string Alto Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>11줄 알토 기타</translation>
+        <translation>11현 알토 기타</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5267"/>
@@ -16008,21 +16008,21 @@
         <source>12-string guitar.</source>
         <comment>12-string-guitar description</comment>
         <extracomment>description for 12-string Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>12현 기타</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5276"/>
         <source>12-string Guitar</source>
         <comment>12-string-guitar trackName</comment>
         <extracomment>trackName for 12-string Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>12줄 기타</translation>
+        <translation>12현 기타</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5278"/>
         <source>12-string Guitar</source>
         <comment>12-string-guitar longName</comment>
         <extracomment>longName for 12-string Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>12줄 기타</translation>
+        <translation>12현 기타</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5280"/>
@@ -16064,14 +16064,14 @@
         <source>5-str. Electric Bass</source>
         <comment>5-string-electric-bass trackName</comment>
         <extracomment>trackName for 5-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>5줄 일렉트릭 베이스</translation>
+        <translation>5현 일렉트릭 베이스</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5293"/>
         <source>5-str. Electric Bass</source>
         <comment>5-string-electric-bass longName</comment>
         <extracomment>longName for 5-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>5줄 일렉트릭 베이스</translation>
+        <translation>5현 일렉트릭 베이스</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5295"/>
@@ -16085,35 +16085,35 @@
         <source>slap</source>
         <comment>5-string-electric-bass channel</comment>
         <extracomment>channel for 5-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>slap</translation>
+        <translation>슬랩</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5299"/>
         <source>pop</source>
         <comment>5-string-electric-bass channel</comment>
         <extracomment>channel for 5-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>pop</translation>
+        <translation>팝</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5302"/>
         <source>5-string electric bass guitar, high C tuning (staff notation).</source>
         <comment>5-string-electric-bass-high-c description</comment>
         <extracomment>description for 5-str. Electric Bass (high C/tenor); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>High C 5현 일렉트릭 베이스 기타</translation>
+        <translation>높은 C로 조율된 5현 일렉트릭 베이스 기타 (오선보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5304"/>
         <source>5-str. Electric Bass (high C/tenor)</source>
         <comment>5-string-electric-bass-high-c trackName</comment>
         <extracomment>trackName for 5-str. Electric Bass (high C/tenor); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>5현 일렉트릭 베이스 (높은 C/테너)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5306"/>
         <source>5-str. Electric Bass</source>
         <comment>5-string-electric-bass-high-c longName</comment>
         <extracomment>longName for 5-str. Electric Bass (high C/tenor); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>5줄 일렉트릭 베이스</translation>
+        <translation>5현 일렉트릭 베이스</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5308"/>
@@ -16127,77 +16127,77 @@
         <source>slap</source>
         <comment>5-string-electric-bass-high-c channel</comment>
         <extracomment>channel for 5-str. Electric Bass (high C/tenor); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>slap</translation>
+        <translation>슬랩</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5312"/>
         <source>pop</source>
         <comment>5-string-electric-bass-high-c channel</comment>
         <extracomment>channel for 5-str. Electric Bass (high C/tenor); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>pop</translation>
+        <translation>팝</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5315"/>
         <source>5-string electric bass guitar (tablature).</source>
         <comment>5-string-electric-bass-tab description</comment>
         <extracomment>description for 5-str. Electric Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>5현 일렉트릭 베이스 기타 (TAB)</translation>
+        <translation>5현 일렉트릭 베이스 기타 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5317"/>
         <source>5-str. Electric Bass (tablature)</source>
         <comment>5-string-electric-bass-tab trackName</comment>
         <extracomment>trackName for 5-str. Electric Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>5현 일렉트릭 베이스 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5319"/>
         <source>5-str. Electric Bass</source>
         <comment>5-string-electric-bass-tab longName</comment>
         <extracomment>longName for 5-str. Electric Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>5줄 일렉트릭 베이스</translation>
+        <translation>5현 일렉트릭 베이스</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5322"/>
         <source>5-string electric bass guitar, high C tuning (tablature).</source>
         <comment>5-string-electric-bass-tab-high-c description</comment>
         <extracomment>description for 5-str. Electric Bass (high C/tenor) (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>High C 5현 일렉트릭 베이스 기타 (TAB)</translation>
+        <translation>높은 C 5현 일렉트릭 베이스 기타 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5324"/>
         <source>5-str. Electric Bass (high C/tenor) (tablature)</source>
         <comment>5-string-electric-bass-tab-high-c trackName</comment>
         <extracomment>trackName for 5-str. Electric Bass (high C/tenor) (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>5현 일렉트릭 베이스 (높은 C/테너) (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5326"/>
         <source>5-str. Electric Bass</source>
         <comment>5-string-electric-bass-tab-high-c longName</comment>
         <extracomment>longName for 5-str. Electric Bass (high C/tenor) (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>5줄 일렉트릭 베이스</translation>
+        <translation>5현 일렉트릭 베이스</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5329"/>
         <source>6-string electric bass guitar (staff notation).</source>
         <comment>6-string-electric-bass description</comment>
         <extracomment>description for 6-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>6현 일렉트릭 베이스 기타</translation>
+        <translation>6현 일렉트릭 베이스 기타 (오선보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5331"/>
         <source>6-str. Electric Bass</source>
         <comment>6-string-electric-bass trackName</comment>
         <extracomment>trackName for 6-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>6줄 일렉트릭 베이스</translation>
+        <translation>6현 일렉트릭 베이스</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5333"/>
         <source>6-str. Electric Bass</source>
         <comment>6-string-electric-bass longName</comment>
         <extracomment>longName for 6-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>6줄 일렉트릭 베이스</translation>
+        <translation>6현 일렉트릭 베이스</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5335"/>
@@ -16211,28 +16211,28 @@
         <source>slap</source>
         <comment>6-string-electric-bass channel</comment>
         <extracomment>channel for 6-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>slap</translation>
+        <translation>슬랩</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5339"/>
         <source>pop</source>
         <comment>6-string-electric-bass channel</comment>
         <extracomment>channel for 6-str. Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>pop</translation>
+        <translation>팝</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5342"/>
         <source>6-string electric bass guitar (tablature).</source>
         <comment>6-string-electric-bass-tab description</comment>
         <extracomment>description for 6-str. Electric Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>6현 일렉트릭 베이스 기타 (TAB)</translation>
+        <translation>6현 일렉트릭 베이스 기타 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5344"/>
         <source>6-str. Electric Bass (tablature)</source>
         <comment>6-string-electric-bass-tab trackName</comment>
         <extracomment>trackName for 6-str. Electric Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>6현 일렉트릭 베이스 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5346"/>
@@ -16246,7 +16246,7 @@
         <source>Bass guitar (staff notation).</source>
         <comment>bass-guitar description</comment>
         <extracomment>description for Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>베이스 기타</translation>
+        <translation>베이스 기타 (오선보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5351"/>
@@ -16274,21 +16274,21 @@
         <source>slap</source>
         <comment>bass-guitar channel</comment>
         <extracomment>channel for Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>slap</translation>
+        <translation>슬랩</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5359"/>
         <source>pop</source>
         <comment>bass-guitar channel</comment>
         <extracomment>channel for Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>pop</translation>
+        <translation>팝</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5362"/>
         <source>Electric bass guitar (staff notation).</source>
         <comment>electric-bass description</comment>
         <extracomment>description for Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>일렉트릭 베이스 기타</translation>
+        <translation>일렉트릭 베이스 기타 (오선보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5364"/>
@@ -16316,14 +16316,14 @@
         <source>slap</source>
         <comment>electric-bass channel</comment>
         <extracomment>channel for Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>slap</translation>
+        <translation>슬랩</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5372"/>
         <source>pop</source>
         <comment>electric-bass channel</comment>
         <extracomment>channel for Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>pop</translation>
+        <translation>팝</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5375"/>
@@ -16358,14 +16358,14 @@
         <source>slap</source>
         <comment>fretless-electric-bass channel</comment>
         <extracomment>channel for Fretless Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>slap</translation>
+        <translation>슬랩</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5385"/>
         <source>pop</source>
         <comment>fretless-electric-bass channel</comment>
         <extracomment>channel for Fretless Electric Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>pop</translation>
+        <translation>팝</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5388"/>
@@ -16400,14 +16400,14 @@
         <source>slap</source>
         <comment>acoustic-bass channel</comment>
         <extracomment>channel for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>slap</translation>
+        <translation>슬랩</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5398"/>
         <source>pop</source>
         <comment>acoustic-bass channel</comment>
         <extracomment>channel for Acoustic Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>pop</translation>
+        <translation>팝</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5400"/>
@@ -16435,14 +16435,14 @@
         <source>Bass guitar (tablature).</source>
         <comment>bass-guitar-tablature description</comment>
         <extracomment>description for Bass Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>베이스 기타 (TAB)</translation>
+        <translation>베이스 기타 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5409"/>
         <source>Bass Guitar (tablature)</source>
         <comment>bass-guitar-tablature trackName</comment>
         <extracomment>trackName for Bass Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>베이스 기타 (TAB)</translation>
+        <translation>베이스 기타 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5411"/>
@@ -16456,14 +16456,14 @@
         <source>Electric bass guitar (tablature).</source>
         <comment>electric-bass-4-str-tab description</comment>
         <extracomment>description for Electric Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>일렉트릭 베이스 기타 (TAB)</translation>
+        <translation>일렉트릭 베이스 기타 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5416"/>
         <source>Electric Bass (tablature)</source>
         <comment>electric-bass-4-str-tab trackName</comment>
         <extracomment>trackName for Electric Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>일렉트릭 베이스 (TAB 악보).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5418"/>
@@ -16477,7 +16477,7 @@
         <source>5-string banjo (staff notation).</source>
         <comment>banjo description</comment>
         <extracomment>description for Banjo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>5현 밴조</translation>
+        <translation>5현 밴조 (오선보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5423"/>
@@ -16533,14 +16533,14 @@
         <source>5-string banjo (tablature).</source>
         <comment>banjo-tablature description</comment>
         <extracomment>description for Banjo (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>5현 밴조 (TAB)</translation>
+        <translation>5현 밴조 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5441"/>
         <source>Banjo (tablature)</source>
         <comment>banjo-tablature trackName</comment>
         <extracomment>trackName for Banjo (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>밴조 (TAB)</translation>
+        <translation>밴조 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5443"/>
@@ -16554,7 +16554,7 @@
         <source>4-string Irish tenor banjo (staff notation).</source>
         <comment>irish-tenor-banjo description</comment>
         <extracomment>description for Irish Tenor Banjo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>4현 아이리쉬 테너 밴조</translation>
+        <translation>4현 아이리쉬 테너 밴조 (오선보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5448"/>
@@ -16582,14 +16582,14 @@
         <source>4-string Irish tenor banjo (tablature).</source>
         <comment>irish-tenor-banjo-tablature description</comment>
         <extracomment>description for Irish Tenor Banjo (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>4현 아이리쉬 테너 밴조 (TAB)</translation>
+        <translation>4현 아이리쉬 테너 밴조 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5457"/>
         <source>Irish Tenor Banjo (tablature)</source>
         <comment>irish-tenor-banjo-tablature trackName</comment>
         <extracomment>trackName for Irish Tenor Banjo (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>아이리쉬 테너 밴조 (TAB)</translation>
+        <translation>아이리쉬 테너 밴조 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5459"/>
@@ -16603,7 +16603,7 @@
         <source>Tenor ukulele with bottom string tuned to G4.</source>
         <comment>tenor-ukulele description</comment>
         <extracomment>description for Tenor Ukulele; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>밑의 현이 G4로 조율된 테너 우쿨렐레.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5464"/>
@@ -16631,7 +16631,7 @@
         <source>Standard ukulele (staff notation).</source>
         <comment>ukulele description</comment>
         <extracomment>description for Ukulele; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>우쿨렐레</translation>
+        <translation>표준 우쿨렐레 (오선보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5473"/>
@@ -16659,14 +16659,14 @@
         <source>Tenor ukulele with bottom string tuned to G3.</source>
         <comment>ukulele-low-g description</comment>
         <extracomment>description for Ukulele (low G); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>밑의 현이 G3으로 조율된 테너 우쿨렐레.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5482"/>
         <source>Ukulele (low G)</source>
         <comment>ukulele-low-g trackName</comment>
         <extracomment>trackName for Ukulele (low G); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Low G 우쿨렐레</translation>
+        <translation>낮은 G 우쿨렐레</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5484"/>
@@ -16687,14 +16687,14 @@
         <source>Standard ukulele (tablature).</source>
         <comment>ukulele-4-str-tab description</comment>
         <extracomment>description for Ukulele (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>우쿨렐레 (TAB)</translation>
+        <translation>우쿨렐레 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5491"/>
         <source>Ukulele (tablature)</source>
         <comment>ukulele-4-str-tab trackName</comment>
         <extracomment>trackName for Ukulele (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>우쿨렐레 (TAB)</translation>
+        <translation>우쿨렐레 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5493"/>
@@ -16736,7 +16736,7 @@
         <source>Mandolin (staff notation).</source>
         <comment>mandolin description</comment>
         <extracomment>description for Mandolin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>만돌린 (오선보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5507"/>
@@ -16764,14 +16764,14 @@
         <source>Mandolin (tablature).</source>
         <comment>mandolin-tablature description</comment>
         <extracomment>description for Mandolin (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>만돌린 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5516"/>
         <source>Mandolin (tablature)</source>
         <comment>mandolin-tablature trackName</comment>
         <extracomment>trackName for Mandolin (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>만돌린 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5518"/>
@@ -16785,7 +16785,7 @@
         <source>Larger ancestor of the mandolin.</source>
         <comment>alto-mandola description</comment>
         <extracomment>description for Alto Mandola; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>만돌린의 더 큰 조상.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5523"/>
@@ -16813,7 +16813,7 @@
         <source>Larger ancestor of the mandolin.</source>
         <comment>mandola description</comment>
         <extracomment>description for Mandola; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>만돌린의 더 큰 조상.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5532"/>
@@ -16841,7 +16841,7 @@
         <source>Larger ancestor of the mandolin.</source>
         <comment>tenor-mandola description</comment>
         <extracomment>description for Tenor Mandola; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>만돌린의 더 큰 조상.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5541"/>
@@ -16869,7 +16869,7 @@
         <source>Larger ancestor of the mandolin. Tuned an octave lower than the mandolin.</source>
         <comment>octave-mandolin description</comment>
         <extracomment>description for Octave Mandolin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>만돌린의 더 큰 조상. 만돌린보다 1 옥타브 낮게 조율됨.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5550"/>
@@ -16897,7 +16897,7 @@
         <source>Larger ancestor of the mandolin. Tuned an octave lower than the standard mandola.</source>
         <comment>mandocello description</comment>
         <extracomment>description for Mandocello; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>만돌린의 더 큰 조상. 표준 만돌린보다 1 옥타브 낮게 조율됨.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5559"/>
@@ -16925,7 +16925,7 @@
         <source>Also known as the Appalachian dulcimer, among other names. A fretted string instrument of the zither family. (Staff notation).</source>
         <comment>mtn-dulcimer-std description</comment>
         <extracomment>description for Mtn. Dulcimer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>지터 계열의 프렛이 달려있는 현악기. 다른 이름들과 더불어 알펜시아 덜시머로도 알려져있다. (오선보).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5568"/>
@@ -16953,14 +16953,14 @@
         <source>Also known as the Appalachian dulcimer, among other names. A fretted string instrument of the zither family. (Tablature).</source>
         <comment>mtn-dulcimer-std-chrom-tab description</comment>
         <extracomment>description for Mtn. Dulcimer (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>지터 계열의 프렛이 달려있는 현악기. 다른 이름들과 더불어 알펜시아 덜시머로도 알려져있다. (TAB 악보).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5577"/>
         <source>Mtn. Dulcimer (tablature)</source>
         <comment>mtn-dulcimer-std-chrom-tab trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>마운틴 덜시머 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5579"/>
@@ -16974,7 +16974,7 @@
         <source>Larger version of the mountain or Appalachian dulcimer. (Staff notation).</source>
         <comment>mtn-dulcimer-baritone description</comment>
         <extracomment>description for Mtn. Dulcimer - Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>마운틴 덜시머의 더 큰 버전. (오선보).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5584"/>
@@ -16995,21 +16995,21 @@
         <source>Bar. M.D.</source>
         <comment>mtn-dulcimer-baritone shortName</comment>
         <extracomment>shortName for Mtn. Dulcimer - Baritone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>바리톤 마운틴 덜시머</translation>
+        <translation>Bar. M.D.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5591"/>
         <source>Larger version of the mountain or Appalachian dulcimer. (Tablature).</source>
         <comment>mtn-dulcimer-bartn-chrom-tab description</comment>
         <extracomment>description for Mtn. Dulcimer - Baritone (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>마운틴 덜시머의 더 큰 버전. (TAB 악보).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5593"/>
         <source>Mtn. Dulcimer - Baritone (tablature)</source>
         <comment>mtn-dulcimer-bartn-chrom-tab trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Baritone (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>마운틴 덜시머 - 바리톤 (TAB 악보).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5595"/>
@@ -17023,7 +17023,7 @@
         <source>Very large mountain or Appalachian dulcimer, an octave lower than the regular dulcimer. (Staff notation).</source>
         <comment>mtn-dulcimer-bass description</comment>
         <extracomment>description for Mtn. Dulcimer - Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>매우 큰 마운틴 덜시머, 일반 덜시머보다 1 옥타브 낮은 음정. (오선보).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5600"/>
@@ -17051,7 +17051,7 @@
         <source>Mtn. Dulcimer - Bass (tablature)</source>
         <comment>mtn-dulcimer-bass-chrom-tab trackName</comment>
         <extracomment>trackName for Mtn. Dulcimer - Bass (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>마운틴 덜시머 - 베이스 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5611"/>
@@ -17065,7 +17065,7 @@
         <source>6-course lute (staff notation).</source>
         <comment>lute description</comment>
         <extracomment>description for Lute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>6현 류트 (오선보).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5616"/>
@@ -17093,14 +17093,14 @@
         <source>6-course lute (tablature).</source>
         <comment>lute-tablature description</comment>
         <extracomment>description for Lute (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>6현 류트 (TAB 악보).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5625"/>
         <source>Lute (tablature)</source>
         <comment>lute-tablature trackName</comment>
         <extracomment>trackName for Lute (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>류트 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5627"/>
@@ -17114,21 +17114,21 @@
         <source>5-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-5-course description</comment>
         <extracomment>description for Tenor Lute; course: 5-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>5현 르네상스 테너 류트.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5632"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-5-course trackName</comment>
         <extracomment>trackName for Tenor Lute; course: 5-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5634"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-5-course longName</comment>
         <extracomment>longName for Tenor Lute; course: 5-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5636"/>
@@ -17142,28 +17142,28 @@
         <source>5-course</source>
         <comment>ren.-tenor-lute-5-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 5-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>5현</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5641"/>
         <source>6-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-6-course description</comment>
         <extracomment>description for Tenor Lute; course: 6-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>6현 르네상스 테너 류트.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5643"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-6-course trackName</comment>
         <extracomment>trackName for Tenor Lute; course: 6-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5645"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-6-course longName</comment>
         <extracomment>longName for Tenor Lute; course: 6-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5647"/>
@@ -17177,28 +17177,28 @@
         <source>6-course</source>
         <comment>ren.-tenor-lute-6-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 6-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>6현</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5652"/>
         <source>7-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-7-course description</comment>
         <extracomment>description for Tenor Lute; course: 7-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>7현 르네상스 테너 류트.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5654"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-7-course trackName</comment>
         <extracomment>trackName for Tenor Lute; course: 7-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5656"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-7-course longName</comment>
         <extracomment>longName for Tenor Lute; course: 7-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5658"/>
@@ -17212,28 +17212,28 @@
         <source>7-course</source>
         <comment>ren.-tenor-lute-7-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 7-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>7현</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5663"/>
         <source>8-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-8-course description</comment>
         <extracomment>description for Tenor Lute; course: 8-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>8현 르네상스 테너 류트.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5665"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-8-course trackName</comment>
         <extracomment>trackName for Tenor Lute; course: 8-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5667"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-8-course longName</comment>
         <extracomment>longName for Tenor Lute; course: 8-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5669"/>
@@ -17247,28 +17247,28 @@
         <source>8-course</source>
         <comment>ren.-tenor-lute-8-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 8-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>8현</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5674"/>
         <source>9-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-9-course description</comment>
         <extracomment>description for Tenor Lute; course: 9-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>9현 르네상스 테너 류트.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5676"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-9-course trackName</comment>
         <extracomment>trackName for Tenor Lute; course: 9-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5678"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-9-course longName</comment>
         <extracomment>longName for Tenor Lute; course: 9-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5680"/>
@@ -17282,28 +17282,28 @@
         <source>9-course</source>
         <comment>ren.-tenor-lute-9-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 9-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>9현</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5685"/>
         <source>10-course Renaissance tenor lute.</source>
         <comment>ren.-tenor-lute-10-course description</comment>
         <extracomment>description for Tenor Lute; course: 10-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>10현 르네상스 테너 류트.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5687"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-10-course trackName</comment>
         <extracomment>trackName for Tenor Lute; course: 10-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5689"/>
         <source>Tenor Lute</source>
         <comment>ren.-tenor-lute-10-course longName</comment>
         <extracomment>longName for Tenor Lute; course: 10-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5691"/>
@@ -17317,28 +17317,28 @@
         <source>10-course</source>
         <comment>ren.-tenor-lute-10-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 10-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>10현</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5696"/>
         <source>13-course Baroque lute.</source>
         <comment>baroque-lute-13-course description</comment>
         <extracomment>description for Tenor Lute; course: 13-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>13현 바로크 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5698"/>
         <source>Tenor Lute</source>
         <comment>baroque-lute-13-course trackName</comment>
         <extracomment>trackName for Tenor Lute; course: 13-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5700"/>
         <source>Tenor Lute</source>
         <comment>baroque-lute-13-course longName</comment>
         <extracomment>longName for Tenor Lute; course: 13-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>테너 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5702"/>
@@ -17352,14 +17352,14 @@
         <source>13-course</source>
         <comment>baroque-lute-13-course traitName</comment>
         <extracomment>traitName for Tenor Lute; course: 13-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>13현</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5707"/>
         <source>14-course theorbo.</source>
         <comment>theorbo-14-course description</comment>
         <extracomment>description for Theorbo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>14현 테오르보</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5709"/>
@@ -17387,21 +17387,21 @@
         <source>14-course archlute.</source>
         <comment>archlute-14-course description</comment>
         <extracomment>description for Archlute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5718"/>
         <source>Archlute</source>
         <comment>archlute-14-course trackName</comment>
         <extracomment>trackName for Archlute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>데오르보</translation>
+        <translation>아치류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5720"/>
         <source>Archlute</source>
         <comment>archlute-14-course longName</comment>
         <extracomment>longName for Archlute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>데오르보</translation>
+        <translation>아치류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5722"/>
@@ -17415,7 +17415,7 @@
         <source>Piccolo balalaika, tuned a fifth above the prima.</source>
         <comment>balalaika-piccolo description</comment>
         <extracomment>description for Piccolo Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>피콜로 발랄라이카, 제1 발랄라이카보다 5도 높은 음정.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5727"/>
@@ -17443,7 +17443,7 @@
         <source>Prima balalaika. The most common balalaika.</source>
         <comment>balalaika description</comment>
         <extracomment>description for Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>제1 발랄라이카. 가장 흔한 발랄라이카.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5736"/>
@@ -17471,7 +17471,7 @@
         <source>Prima balalaika. The most common balalaika.</source>
         <comment>balalaika-prima description</comment>
         <extracomment>description for Prima Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>제1 발랄라이카. 가장 흔한 발랄라이카.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5745"/>
@@ -17499,7 +17499,7 @@
         <source>Secunda balalaika, tuned a fifth below the prima.</source>
         <comment>balalaika-secunda description</comment>
         <extracomment>description for Secunda Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>제2 발랄라이카</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5754"/>
@@ -17527,7 +17527,7 @@
         <source>Alto balalaika, tuned an octave below the prima.</source>
         <comment>balalaika-alto description</comment>
         <extracomment>description for Alto Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>알토 발랄라이카, 제1 발랄라이카보다 1옥타브 낮은 음정.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5763"/>
@@ -17583,7 +17583,7 @@
         <source>Contrabass balalaika, tuned an octave below the bass.</source>
         <comment>balalaika-contrabass description</comment>
         <extracomment>description for Contrabass Balalaika; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>콘트라베이스 발랄라이카, 베이스보다 1옥타브 낮은 음정.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5781"/>
@@ -17611,7 +17611,7 @@
         <source>Greek lute, with 3 courses.</source>
         <comment>bouzouki-3-course description</comment>
         <extracomment>description for Bouzouki; course: 3-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>3현 그리스 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5790"/>
@@ -17639,14 +17639,14 @@
         <source>3-course</source>
         <comment>bouzouki-3-course traitName</comment>
         <extracomment>traitName for Bouzouki; course: 3-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>3현</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5799"/>
         <source>Greek lute, with 4 courses.</source>
         <comment>bouzouki-4-course description</comment>
         <extracomment>description for Bouzouki; course: 4-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>4현 그리스 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5801"/>
@@ -17674,28 +17674,28 @@
         <source>4-course</source>
         <comment>bouzouki-4-course traitName</comment>
         <extracomment>traitName for Bouzouki; course: 4-course; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>4현</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5810"/>
         <source>Japanese plucked half-tube zither.</source>
         <comment>koto description</comment>
         <extracomment>description for Koto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>일본의 반관형 발현악기.</translation> 
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5812"/>
         <source>Koto</source>
         <comment>koto trackName</comment>
         <extracomment>trackName for Koto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>거문고</translation>
+        <translation>고토</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5814"/>
         <source>Koto</source>
         <comment>koto longName</comment>
         <extracomment>longName for Koto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>거문고</translation>
+        <translation>고토</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5816"/>
@@ -17709,21 +17709,21 @@
         <source>Short-neck lute-type fretless stringed instrument, common in the Middle East and North Africa.</source>
         <comment>oud description</comment>
         <extracomment>description for Oud; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>짧은 넥을 가진 류트 계열의 프렛리스 현악기. 중동과 북 아프리카에서 흔하다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5821"/>
         <source>Oud</source>
         <comment>oud trackName</comment>
         <extracomment>trackName for Oud; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oud</translation>
+        <translation>우드</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5823"/>
         <source>Oud</source>
         <comment>oud longName</comment>
         <extracomment>longName for Oud; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Oud</translation>
+        <translation>우드</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5825"/>
@@ -17737,7 +17737,7 @@
         <source>Traditional Japanese three-stringed instrument played with a plectrum.</source>
         <comment>shamisen description</comment>
         <extracomment>description for Shamisen; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>일본의 전통 3현 악기로, 피크를 이용해 연주한다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5830"/>
@@ -17765,7 +17765,7 @@
         <source>Plucked string instrument used in Indian classical music.</source>
         <comment>sitar description</comment>
         <extracomment>description for Sitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>인도의 고전 음악에서 사용되는 발현악기.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5839"/>
@@ -17793,21 +17793,21 @@
         <source>The smallest tamburica, mostly used as a lead instrument.</source>
         <comment>prim description</comment>
         <extracomment>description for Prim; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>가장 작은 탬버리카. 대부분 주연 악기로 사용된다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5848"/>
         <source>Prim</source>
         <comment>prim trackName</comment>
         <extracomment>trackName for Prim; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Prim</translation>
+        <translation>프림</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5850"/>
         <source>Prim</source>
         <comment>prim longName</comment>
         <extracomment>longName for Prim; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Prim</translation>
+        <translation>프림</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5852"/>
@@ -17821,21 +17821,21 @@
         <source>A larger tamburica than the prim, played in a similar way.</source>
         <comment>brac description</comment>
         <extracomment>description for Brač; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>프림보다 더 큰 탬버리카로, 비슷한 방식으로 연주된다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5857"/>
         <source>Brač</source>
         <comment>brac trackName</comment>
         <extracomment>trackName for Brač; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Brač</translation>
+        <translation>브락</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5859"/>
         <source>Brač</source>
         <comment>brac longName</comment>
         <extracomment>longName for Brač; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Brač</translation>
+        <translation>브락</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5861"/>
@@ -17849,21 +17849,21 @@
         <source>A tamburica mostly used as a harmony/rhythm instrument.</source>
         <comment>bugarija description</comment>
         <extracomment>description for Bugarija; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>대부분 선율이나 박자를 담당하는 탬버리카.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5866"/>
         <source>Bugarija</source>
         <comment>bugarija trackName</comment>
         <extracomment>trackName for Bugarija; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bugarija</translation>
+        <translation>부가리자</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5868"/>
         <source>Bugarija</source>
         <comment>bugarija longName</comment>
         <extracomment>longName for Bugarija; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bugarija</translation>
+        <translation>부가리자</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5870"/>
@@ -17877,21 +17877,21 @@
         <source>The largest tamburica, used for playing bass lines.</source>
         <comment>berda description</comment>
         <extracomment>description for Berda; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>가장 큰 탬버리카로, 근음을 연주하는 데 사용된다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5875"/>
         <source>Berda</source>
         <comment>berda trackName</comment>
         <extracomment>trackName for Berda; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Berda</translation>
+        <translation>베르다</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5877"/>
         <source>Berda</source>
         <comment>berda longName</comment>
         <extracomment>longName for Berda; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Berda</translation>
+        <translation>베르다</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5879"/>
@@ -17905,21 +17905,21 @@
         <source>A tamburica similar in size to the bugarija, usually given counterpoint lines.</source>
         <comment>celo description</comment>
         <extracomment>description for Čelo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>부가리자와 비슷한 크기의 탬버리카로, 보통 대위선율을 연주한다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5884"/>
         <source>Čelo</source>
         <comment>celo trackName</comment>
         <extracomment>trackName for Čelo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Čelo</translation>
+        <translation>첼로(Čelo)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5886"/>
         <source>Čelo</source>
         <comment>celo longName</comment>
         <extracomment>longName for Čelo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Čelo</translation>
+        <translation>첼로(Čelo)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5888"/>
@@ -17933,7 +17933,7 @@
         <source>Spanish folk instrument similar to the mandolin. (Staff notation).</source>
         <comment>bandurria description</comment>
         <extracomment>description for Bandurria; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>스페인 민요 악기로, 만돌린과 비슷하다. (오선보).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5893"/>
@@ -17961,14 +17961,14 @@
         <source>Spanish folk instrument similar to the mandolin. (Tablature).</source>
         <comment>bandurria-tablature description</comment>
         <extracomment>description for Bandurria (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>스페인 민요 악기로, 만돌린과 비슷하다. (TAB 악보).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5902"/>
         <source>Bandurria (tablature)</source>
         <comment>bandurria-tablature trackName</comment>
         <extracomment>trackName for Bandurria (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>반두리아 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5904"/>
@@ -17982,7 +17982,7 @@
         <source>Spanish lute similar to the bandurria. (Staff notation).</source>
         <comment>laud description</comment>
         <extracomment>description for Laúd; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>스페인의 류트로, 반두리아와 비슷하다. (오선보).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5909"/>
@@ -18010,14 +18010,14 @@
         <source>Spanish lute similar to the bandurria. (Tablature).</source>
         <comment>laud-tablature description</comment>
         <extracomment>description for Laúd (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>스페인의 류트로, 반두리아와 비슷하다. (TAB 악보).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5918"/>
         <source>Laúd (tablature)</source>
         <comment>laud-tablature trackName</comment>
         <extracomment>trackName for Laúd (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>스페인 류트 (TAB 악보)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5920"/>
@@ -18031,7 +18031,7 @@
         <source>String section notated on a grand staff.</source>
         <comment>strings description</comment>
         <extracomment>description for Strings; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>대보표에 표시된 현악기 파트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5928"/>
@@ -18080,7 +18080,7 @@
         <source>Contrabass (double bass).</source>
         <comment>double-bass description</comment>
         <extracomment>description for Double Bass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>콘트라베이스 (더블 베이스)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5943"/>
@@ -18108,7 +18108,7 @@
         <source>Solo violin.</source>
         <comment>violin description</comment>
         <extracomment>description for Violin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>바이올린 독주</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5952"/>
@@ -18157,14 +18157,14 @@
         <source>Violin section.</source>
         <comment>violins description</comment>
         <extracomment>description for Violins (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>바이올린 파트.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5967"/>
         <source>Violins (section)</source>
         <comment>violins trackName</comment>
         <extracomment>trackName for Violins (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>바이올린 (파트)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5969"/>
@@ -18206,7 +18206,7 @@
         <source>Solo viola.</source>
         <comment>viola description</comment>
         <extracomment>description for Viola; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>비올라 독주.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5982"/>
@@ -18255,14 +18255,14 @@
         <source>Viola section.</source>
         <comment>violas description</comment>
         <extracomment>description for Violas (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>비올라 파트.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5997"/>
         <source>Violas (section)</source>
         <comment>violas trackName</comment>
         <extracomment>trackName for Violas (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>비올라 (파트)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5999"/>
@@ -18360,7 +18360,7 @@
         <source>Violoncellos (section)</source>
         <comment>violoncellos trackName</comment>
         <extracomment>trackName for Violoncellos (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>비올론첼로 (파트)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6029"/>
@@ -18402,7 +18402,7 @@
         <source>Contrabass (double bass).</source>
         <comment>contrabass description</comment>
         <extracomment>description for Contrabass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>콘트라베이스 (더블 베이스)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6042"/>
@@ -18451,14 +18451,14 @@
         <source>Contrabass (double bass) section.</source>
         <comment>contrabasses description</comment>
         <extracomment>description for Contrabasses (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>콘트라베이스 (더블 베이스) 파트.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6057"/>
         <source>Contrabasses (section)</source>
         <comment>contrabasses trackName</comment>
         <extracomment>trackName for Contrabasses (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>콘트라베이스 (파트)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6059"/>
@@ -18584,21 +18584,21 @@
         <source>Highest-pitched member of the viol family.</source>
         <comment>pardessus-de-viole description</comment>
         <extracomment>description for Pardessus de viole; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>비올 계열에서 가장 높은 음정을 내는 악기.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6102"/>
         <source>Pardessus de viole</source>
         <comment>pardessus-de-viole trackName</comment>
         <extracomment>trackName for Pardessus de viole; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>여러 가지 비올</translation>
+        <translation>파르데수 드 비올</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6104"/>
         <source>Pardessus de viole</source>
         <comment>pardessus-de-viole longName</comment>
         <extracomment>longName for Pardessus de viole; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>여러 가지 비올</translation>
+        <translation>파르데수 드 비올</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6106"/>
@@ -18675,7 +18675,7 @@
         <source>Similar to the viol, but with an extra set of plucked strings.</source>
         <comment>baryton description</comment>
         <extracomment>description for Baryton; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>비올과 비슷하지만, 발현용 추가 현들이 있는 악기.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6132"/>
@@ -18745,14 +18745,14 @@
         <source>G Violone</source>
         <comment>violone longName</comment>
         <extracomment>longName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>G 비올로네</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6175"/>
         <source>G Vne.</source>
         <comment>violone shortName</comment>
         <extracomment>shortName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>G Vne.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6177"/>
@@ -18829,7 +18829,7 @@
         <source>Extremely large and rare bowed string instrument, essentially a larger version of the double bass.</source>
         <comment>octobass description</comment>
         <extracomment>description for Octobass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>굉장하게 크고 희귀한 활이 달린 현악기로, 더블 베이스의 더 큰 버전이다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6205"/>
@@ -18878,7 +18878,7 @@
         <source>Chinese two-stringed bowed instrument.</source>
         <comment>erhu description</comment>
         <extracomment>description for Erhu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>중국의 활이 달린 2현 악기.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6220"/>
@@ -18927,7 +18927,7 @@
         <source>Swedish bowed instrument with keys to change the pitch of the strings.</source>
         <comment>nyckelharpa description</comment>
         <extracomment>description for Nyckelharpa; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>스웨덴의 활이 달린 악기로, 현의 음정을 조절하는 키가 달려있다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6235"/>
@@ -18977,7 +18977,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="88"/>
         <source>Winds</source>
-        <translation>Winds</translation>
+        <translation>관악기</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="89"/>
@@ -18987,27 +18987,27 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="90"/>
         <source>Dizis</source>
-        <translation type="unfinished"/>
+        <translation>디지</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="91"/>
         <source>Shakuhachis</source>
-        <translation type="unfinished"/>
+        <translation>샤쿠하치</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="92"/>
         <source>Fifes</source>
-        <translation type="unfinished"/>
+        <translation>피페</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="93"/>
         <source>Whistles</source>
-        <translation type="unfinished"/>
+        <translation>휘슬</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="94"/>
         <source>Flageolets</source>
-        <translation type="unfinished"/>
+        <translation>플래절렛</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="95"/>
@@ -19017,22 +19017,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="96"/>
         <source>Ocarinas</source>
-        <translation type="unfinished"/>
+        <translation>오카리나</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="97"/>
         <source>Gemshorns</source>
-        <translation type="unfinished"/>
+        <translation>젬호른</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="98"/>
         <source>Pan Flutes</source>
-        <translation type="unfinished"/>
+        <translation>팬 플루트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="99"/>
         <source>Quenas</source>
-        <translation type="unfinished"/>
+        <translation>퀘나</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="100"/>
@@ -19042,42 +19042,42 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="101"/>
         <source>Shawms</source>
-        <translation type="unfinished"/>
+        <translation>숌</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="102"/>
         <source>Cromornes</source>
-        <translation type="unfinished"/>
+        <translation>크로모른</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="103"/>
         <source>Crumhorns</source>
-        <translation type="unfinished"/>
+        <translation>크룸호른</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="104"/>
         <source>Cornamuses</source>
-        <translation type="unfinished"/>
+        <translation>코르나뮤스</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="105"/>
         <source>Kelhorns</source>
-        <translation type="unfinished"/>
+        <translation>켈호른</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="106"/>
         <source>Rauschpfeifes</source>
-        <translation type="unfinished"/>
+        <translation>라우슈파이페</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="107"/>
         <source>Duduks</source>
-        <translation type="unfinished"/>
+        <translation>두둑</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="108"/>
         <source>Shenais</source>
-        <translation type="unfinished"/>
+        <translation>쉐나이</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="109"/>
@@ -19087,22 +19087,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="110"/>
         <source>Chalumeaus</source>
-        <translation type="unfinished"/>
+        <translation>샬뤼모</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="111"/>
         <source>Xaphoons</source>
-        <translation type="unfinished"/>
+        <translation>포켓 색소폰</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="112"/>
         <source>Tarogatos</source>
-        <translation type="unfinished"/>
+        <translation>타로가토</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="113"/>
         <source>Octavins</source>
-        <translation type="unfinished"/>
+        <translation>옥타빈</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="114"/>
@@ -19117,47 +19117,47 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="116"/>
         <source>Reed Contrabasses</source>
-        <translation type="unfinished"/>
+        <translation>리드 콘트라베이스</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="117"/>
         <source>Dulcians</source>
-        <translation type="unfinished"/>
+        <translation>덜시안</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="118"/>
         <source>Racketts</source>
-        <translation type="unfinished"/>
+        <translation>라케트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="119"/>
         <source>Sarrusophones</source>
-        <translation type="unfinished"/>
+        <translation>사뤼소폰</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="120"/>
         <source>Bagpipes</source>
-        <translation type="unfinished"/>
+        <translation>백파이프</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="121"/>
         <source>Accordions</source>
-        <translation type="unfinished"/>
+        <translation>아코디언</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="122"/>
         <source>Harmonicas</source>
-        <translation type="unfinished"/>
+        <translation>하모니카</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="123"/>
         <source>Melodicas</source>
-        <translation type="unfinished"/>
+        <translation>멜로디카</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="124"/>
         <source>Shengs</source>
-        <translation type="unfinished"/>
+        <translation>생황</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="125"/>
@@ -19172,7 +19172,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="127"/>
         <source>Wagner Tubas</source>
-        <translation type="unfinished"/>
+        <translation>와그너 튜바</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="128"/>
@@ -19182,7 +19182,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="129"/>
         <source>Saxhorns</source>
-        <translation type="unfinished"/>
+        <translation>색스호른</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="130"/>
@@ -19197,7 +19197,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="132"/>
         <source>Posthorns</source>
-        <translation type="unfinished"/>
+        <translation>포스트호른</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="133"/>
@@ -19207,12 +19207,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="134"/>
         <source>Baroque Trumpets</source>
-        <translation type="unfinished"/>
+        <translation>바로크 트럼펫</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="135"/>
         <source>Bugles</source>
-        <translation type="unfinished"/>
+        <translation>뷰글</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="136"/>
@@ -19222,17 +19222,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="137"/>
         <source>Ophicleides</source>
-        <translation type="unfinished"/>
+        <translation>오피클라이드</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="138"/>
         <source>Cornetts</source>
-        <translation type="unfinished"/>
+        <translation>코넷</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="139"/>
         <source>Serpents</source>
-        <translation type="unfinished"/>
+        <translation>세르팡</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="140"/>
@@ -19242,12 +19242,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="141"/>
         <source>Cimbassos</source>
-        <translation type="unfinished"/>
+        <translation>침바소</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="142"/>
         <source>Sackbuts</source>
-        <translation type="unfinished"/>
+        <translation>색버트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="143"/>
@@ -19262,37 +19262,37 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="145"/>
         <source>Sousaphones</source>
-        <translation type="unfinished"/>
+        <translation>수자폰</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="146"/>
         <source>Conches</source>
-        <translation type="unfinished"/>
+        <translation>소라고둥</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="147"/>
         <source>Alphorns</source>
-        <translation type="unfinished"/>
+        <translation>알펜호른</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="148"/>
         <source>Rag Dungs</source>
-        <translation type="unfinished"/>
+        <translation>락등</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="149"/>
         <source>Didgeridoos</source>
-        <translation type="unfinished"/>
+        <translation>디저리두</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="150"/>
         <source>Shofars</source>
-        <translation type="unfinished"/>
+        <translation>쇼파르</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="151"/>
         <source>Vuvuzelas</source>
-        <translation type="unfinished"/>
+        <translation>부부젤라</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="152"/>
@@ -19302,12 +19302,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="153"/>
         <source>Roto Toms</source>
-        <translation type="unfinished"/>
+        <translation>로토탐</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="154"/>
         <source>Tubaphones</source>
-        <translation type="unfinished"/>
+        <translation>튜바폰</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="155"/>
@@ -19322,37 +19322,37 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="157"/>
         <source>Pitched Metal Percussion</source>
-        <translation type="unfinished"/>
+        <translation>음정이 있는 금속 타악기</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="158"/>
         <source>Orff Percussion</source>
-        <translation>오르프 악기</translation>
+        <translation>오르프 타악기</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="159"/>
         <source>Flexatones</source>
-        <translation type="unfinished"/>
+        <translation>플렉사톤</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="160"/>
         <source>Musical Saws</source>
-        <translation type="unfinished"/>
+        <translation>연주용 톱</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="161"/>
         <source>Glass Percussion</source>
-        <translation type="unfinished"/>
+        <translation>유리 타악기</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="162"/>
         <source>Klaxon Horns</source>
-        <translation type="unfinished"/>
+        <translation>크락션 나팔</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="163"/>
         <source>Kalimbas</source>
-        <translation type="unfinished"/>
+        <translation>칼림바</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="164"/>
@@ -19377,12 +19377,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="168"/>
         <source>Batterie</source>
-        <translation>오케스트라의 타악기 파트</translation>
+        <translation>관현악단의 타악기 파트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="169"/>
         <source>Body Percussion</source>
-        <translation type="unfinished"/>
+        <translation>몸으로 소리내기</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="170"/>
@@ -19392,12 +19392,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="171"/>
         <source>Voice Groups</source>
-        <translation type="unfinished"/>
+        <translation>성부 그룹</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="172"/>
         <source>Kazoos</source>
-        <translation type="unfinished"/>
+        <translation>카주</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="173"/>
@@ -19442,62 +19442,62 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="181"/>
         <source>Mandolins</source>
-        <translation type="unfinished"/>
+        <translation>만돌린</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="182"/>
         <source>Mtn. Dulcimers</source>
-        <translation type="unfinished"/>
+        <translation>마운틴 덜시머</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="183"/>
         <source>Lutes</source>
-        <translation type="unfinished"/>
+        <translation>류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="184"/>
         <source>Balalaikas</source>
-        <translation type="unfinished"/>
+        <translation>발랄라이카</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="185"/>
         <source>Bouzoukis</source>
-        <translation type="unfinished"/>
+        <translation>부주키</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="186"/>
         <source>Kotos</source>
-        <translation type="unfinished"/>
+        <translation>고토</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="187"/>
         <source>Ouds</source>
-        <translation type="unfinished"/>
+        <translation>우드</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="188"/>
         <source>Shamisens</source>
-        <translation type="unfinished"/>
+        <translation>샤미센</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="189"/>
         <source>Sitars</source>
-        <translation type="unfinished"/>
+        <translation>시타르</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="190"/>
         <source>Tamburicas</source>
-        <translation type="unfinished"/>
+        <translation>탬버리카</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="191"/>
         <source>Bandurrias</source>
-        <translation type="unfinished"/>
+        <translation>반두리아</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="192"/>
         <source>Laúds</source>
-        <translation type="unfinished"/>
+        <translation>스페인 류트</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="193"/>
@@ -19507,7 +19507,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="194"/>
         <source>Orchestral Strings</source>
-        <translation>오케스트라 현악기</translation>
+        <translation>관현악단 현악기</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="195"/>
@@ -19517,17 +19517,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="196"/>
         <source>Octobasses</source>
-        <translation type="unfinished"/>
+        <translation>옥토베이스</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="197"/>
         <source>Erhus</source>
-        <translation type="unfinished"/>
+        <translation>얼후</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="198"/>
         <source>Nyckelharpas</source>
-        <translation type="unfinished"/>
+        <translation>니켈하르파</translation>
     </message>
 </context>
 <context>
@@ -19535,7 +19535,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="75"/>
         <source>Common</source>
-        <translation>Common</translation>
+        <translation>일반</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="76"/>
@@ -19555,7 +19555,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="79"/>
         <source>Orchestra</source>
-        <translation>오케스트라</translation>
+        <translation>관현악단</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="80"/>
@@ -19598,7 +19598,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1816"/>
         <source>Free Reed</source>
-        <translation>자유 리드</translation>
+        <translation>프리 리드</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2077"/>
@@ -19656,7 +19656,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6248"/>
         <source>Orchestra</source>
-        <translation>오케스트라</translation>
+        <translation>관현악단</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6249"/>
@@ -19666,7 +19666,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6250"/>
         <source>Marching Band</source>
-        <translation>마칭 밴드</translation>
+        <translation>행진악대</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6251"/>
@@ -19691,7 +19691,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6255"/>
         <source>Brass Band</source>
-        <translation>브라스 밴드</translation>
+        <translation>금관 밴드</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6256"/>
@@ -19724,7 +19724,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="27"/>
         <source>Grand Staff</source>
-        <translation>큰 보표</translation>
+        <translation>대보표</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="29"/>
@@ -19819,12 +19819,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="49"/>
         <source>Guitar + Tablature</source>
-        <translation>기타 + 타브악보</translation>
+        <translation>기타 + TAB 악보</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="50"/>
         <source>Guitar Tablature</source>
-        <translation>기타 타브악보</translation>
+        <translation>기타 TAB 악보</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="51"/>
@@ -19874,12 +19874,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="63"/>
         <source>Marching Band</source>
-        <translation>행진 악대</translation>
+        <translation>행진악대</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="64"/>
         <source>Small Marching Band</source>
-        <translation>소형 행진 악대</translation>
+        <translation>소형 행진악대</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="65"/>
@@ -19904,17 +19904,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="70"/>
         <source>Classical Orchestra</source>
-        <translation>클래식 오케스트라</translation>
+        <translation>클래식 관현악단</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="71"/>
         <source>Symphony Orchestra</source>
-        <translation>교향곡 오케스트라</translation>
+        <translation>교향 관현악단</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="72"/>
         <source>String Orchestra</source>
-        <translation>스트링 오케스트라</translation>
+        <translation>현악단</translation>
     </message>
 </context>
 <context>
@@ -19937,7 +19937,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="47"/>
         <source>Solo</source>
-        <translation>Solo</translation>
+        <translation>독주</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="52"/>
@@ -19957,7 +19957,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="69"/>
         <source>Orchestral</source>
-        <translation>오케스트라</translation>
+        <translation>관현악</translation>
     </message>
 </context>
 </TS>
