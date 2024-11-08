@@ -2994,7 +2994,6 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
         ctx.addSpanner(e.intAttribute("id", -1), g);
     }
 
-    g->setShowText(false);
     staff_idx_t staffIdx = track2staff(ctx.track());
     Staff* staff = ctx.score()->staff(staffIdx);
     if (staff) {
@@ -3003,10 +3002,13 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
     }
     g->resetProperty(Pid::GLISS_STYLE);
 
+    bool textRead = false;
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
         if (tag == "text") {
             g->setShowText(true);
+            textRead = true;
             TRead::readProperty(g, e, ctx, Pid::GLISS_TEXT);
         } else if (tag == "isHarpGliss" && ctx.pasteMode()) {
             g->setIsHarpGliss(e.readBool());
@@ -3025,6 +3027,10 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
         } else if (!TRead::readProperties(static_cast<SLine*>(g), e, ctx)) {
             e.unknown();
         }
+    }
+
+    if (g->score()->mscVersion() < 450 && !textRead) {
+        g->setShowText(false);
     }
 }
 

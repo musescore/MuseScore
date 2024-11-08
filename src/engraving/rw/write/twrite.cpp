@@ -1447,7 +1447,7 @@ void TWrite::write(const Glissando* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     if (item->showText() && !item->text().isEmpty()) {
-        xml.tag("text", item->text());
+        xml.tagProperty("text", item->text(), item->propertyDefault(Pid::GLISS_TEXT));
     }
 
     if (ctx.clipboardmode() && item->isHarpGliss().has_value()) {

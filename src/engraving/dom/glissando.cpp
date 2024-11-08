@@ -108,18 +108,24 @@ EngravingItem* GlissandoSegment::propertyDelegate(Pid pid)
 Glissando::Glissando(EngravingItem* parent)
     : SLine(ElementType::GLISSANDO, parent, ElementFlag::MOVABLE)
 {
-    setAnchor(Spanner::Anchor::NOTE);
-    setDiagonal(true);
-
     initElementStyle(&glissandoElementStyle);
 
-    resetProperty(Pid::GLISS_SHOW_TEXT);
-    resetProperty(Pid::GLISS_STYLE);
-    resetProperty(Pid::GLISS_SHIFT);
-    resetProperty(Pid::GLISS_TYPE);
-    resetProperty(Pid::GLISS_TEXT);
-    resetProperty(Pid::GLISS_EASEIN);
-    resetProperty(Pid::GLISS_EASEOUT);
+    static const std::array<Pid, 10> propertiesToInitialise {
+        Pid::GLISS_SHOW_TEXT,
+        Pid::GLISS_STYLE,
+        Pid::GLISS_SHIFT,
+        Pid::GLISS_TYPE,
+        Pid::GLISS_TEXT,
+        Pid::GLISS_EASEIN,
+        Pid::GLISS_EASEOUT,
+        Pid::GLISS_TEXT,
+        Pid::DIAGONAL,
+        Pid::ANCHOR
+    };
+
+    for (const Pid& pid : propertiesToInitialise) {
+        resetProperty(pid);
+    }
 }
 
 Glissando::Glissando(const Glissando& g)
@@ -454,6 +460,12 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
     case Pid::GLISS_EASEIN:
     case Pid::GLISS_EASEOUT:
         return 0;
+    case Pid::GLISS_TEXT:
+        return style().styleV(Sid::glissandoText);
+    case Pid::DIAGONAL:
+        return true;
+    case Pid::ANCHOR:
+        return int(Spanner::Anchor::NOTE);
     default:
         break;
     }

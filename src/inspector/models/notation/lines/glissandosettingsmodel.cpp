@@ -101,7 +101,7 @@ void GlissandoSettingsModel::createProperties()
 
     m_lineType = buildPropertyItem(mu::engraving::Pid::GLISS_TYPE, applyPropertyValueAndUpdateAvailability);
     m_showText = buildPropertyItem(mu::engraving::Pid::GLISS_SHOW_TEXT);
-    m_text = buildPropertyItem(mu::engraving::Pid::GLISS_TEXT);
+    m_text = buildPropertyItem(mu::engraving::Pid::GLISS_TEXT, applyPropertyValueAndUpdateAvailability);
 
     m_thickness = buildPropertyItem(mu::engraving::Pid::LINE_WIDTH);
 
