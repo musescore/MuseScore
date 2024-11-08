@@ -682,17 +682,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::guitarBendArrowHeight,   false, bendArrowHeight,   resetBendArrowHeight },
         { StyleId::useCueSizeFretForGraceBends, false, guitarBendCueSizedGraceFrets, 0 },
 
-        { StyleId::glissandoLineStyle, false, glissandoLineStyle, resetGlissandoLineStyle },
-        { StyleId::glissandoDashLineLen, false, glissandoLineStyleDashSize, resetGlissandoLineStyleDashSize },
-        { StyleId::glissandoDashGapLen, false, glissandoLineStyleGapSize, resetGlissandoLineStyleGapSize },
-        { StyleId::glissandoLineWidth, false, glissandoLineWidth, resetGlissandoLineWidth },
-        { StyleId::glissandoShowText, false, glissandoShowText, 0 },
-
-        { StyleId::noteLineStyle, false, noteLineStyle, resetNoteLineStyle },
-        { StyleId::noteLineDashLineLen, false, noteLineStyleDashSize, resetNoteLineStyleDashSize },
-        { StyleId::noteLineDashGapLen, false, noteLineStyleGapSize, resetNoteLineStyleGapSize },
-        { StyleId::noteLineWidth, false, noteLineWidth, resetNoteLineWidth },
-
         /// Tablature styles
 
         { StyleId::slurShowTabSimple, false, slurShowTabSimple, 0 },
@@ -759,24 +748,6 @@ EditStyle::EditStyle(QWidget* parent)
             label_pedalLine_lineStyle_gapSize,
             pedalLineStyleGapSize,
             resetPedalLineStyleGapSize
-        }),
-
-        new LineStyleSelect(this, glissandoLineStyle, {
-            label_glissando_lineStyle_dashSize,
-            glissandoLineStyleDashSize,
-            resetGlissandoLineStyleDashSize,
-            label_glissando_lineStyle_gapSize,
-            glissandoLineStyleGapSize,
-            resetGlissandoLineStyleGapSize
-        }),
-
-        new LineStyleSelect(this, noteLineStyle, {
-            label_note_lineStyle_dashSize,
-            noteLineStyleDashSize,
-            resetNoteLineStyleDashSize,
-            label_note_lineStyle_gapSize,
-            noteLineStyleGapSize,
-            resetNoteLineStyleGapSize
         })
     };
 
@@ -945,6 +916,26 @@ EditStyle::EditStyle(QWidget* parent)
     fretboardsPage.widget->setMinimumSize(224, 1000);
     connect(fretboardsPage.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
     fretboardsWidget->layout()->addWidget(fretboardsPage.widget);
+
+    // ====================================================
+    // GLISSANDO STYLE SECTION (QML)
+    // ====================================================
+
+    auto glissandoSection = createQmlWidget(
+        groupBox_glissando,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml")));
+    glissandoSection.widget->setMinimumSize(224, 260);
+    groupBox_glissando->layout()->addWidget(glissandoSection.widget);
+
+    // ====================================================
+    // NOTE LINE STYLE SECTION (QML)
+    // ====================================================
+
+    auto noteLineSection = createQmlWidget(
+        groupBox_noteline,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/NoteLineSection.qml")));
+    noteLineSection.widget->setMinimumSize(224, 158);
+    groupBox_noteline->layout()->addWidget(noteLineSection.widget);
 
     // ====================================================
     // Figured Bass

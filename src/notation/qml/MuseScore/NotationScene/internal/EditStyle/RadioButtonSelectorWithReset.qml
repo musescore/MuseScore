@@ -30,8 +30,7 @@ import Muse.Ui 1.0
 RowLayout {
     required property StyleItem styleItem
     required property string label
-    property string suffix: ''
-    property bool inPercentage: false
+    property alias model: radioButtonGroup.model
 
     StyledTextLabel {
         id: optionLabel
@@ -40,20 +39,23 @@ RowLayout {
         text: label
     }
 
-    IncrementalPropertyControl {
-        Layout.preferredWidth: 80
-        Layout.fillWidth: false
+    RadioButtonGroup {
+        id: radioButtonGroup
 
-        currentValue: inPercentage ? Math.round(styleItem.value * 100) : styleItem.value
-        minValue: 0
-        maxValue: inPercentage ? 999 : 99
-        step: inPercentage ? 1 : 0.01
-        decimals: inPercentage ? 0 : 2
+        height: 30
 
-        measureUnitsSymbol: inPercentage ? '%' : suffix
+        delegate: FlatRadioButton {
+            width: 106
+            height: 30
 
-        onValueEdited: function(newValue) {
-            styleItem.value = inPercentage ? newValue / 100 : newValue
+            checked: modelData.value === styleItem.value
+            text: modelData.text ? modelData.text : ""
+            iconCode: modelData.iconCode ? modelData.iconCode : IconCode.NONE
+            navigation.accessible.name: modelData.title ? modelData.title : (modelData.text ? modelData.text : "")
+
+            onToggled: {
+                styleItem.value = modelData.value
+            }
         }
     }
 
