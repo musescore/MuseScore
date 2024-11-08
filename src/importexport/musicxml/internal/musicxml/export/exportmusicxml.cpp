@@ -394,6 +394,7 @@ public:
     double getTenthsFromInches(double) const;
     double getTenthsFromDots(double) const;
     Fraction tick() const { return m_tick; }
+    void writeInstrumentChange(const InstrumentChange* instrChange);
     void writeInstrumentDetails(const Instrument* instrument, const bool concertPitch);
 
     static bool canWrite(const EngravingItem* e);
@@ -6403,7 +6404,7 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
     // optionally writing the associated staff text is done below
     if (e->isInstrumentChange()) {
         const InstrumentChange* instrChange = toInstrumentChange(e);
-        exp->writeInstrumentDetails(instrChange->instrument(), false);
+        exp->writeInstrumentChange(instrChange);
         instrChangeHandled = true;
     }
 
@@ -7767,6 +7768,45 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
             xml.endElement();
         }
     }
+}
+
+//---------------------------------------------------------
+//  writeInstrumentChange
+//---------------------------------------------------------
+
+/**
+ Write the instrument change.
+ */
+
+void ExportMusicXml::writeInstrumentChange(const InstrumentChange* instrChange)
+{
+    const Instrument* instr = instrChange->instrument();
+    const Part* part = instrChange->part();
+    const size_t partNr = muse::indexOf(m_score->parts(), part);
+    const int instNr = muse::value(m_instrMap, instr, -1);
+    const String longName = instr->nameAsPlainText();
+    const String shortName = instr->abbreviatureAsPlainText();
+
+    m_xml.startElement("print");
+    if (!longName.isEmpty()) {
+        m_xml.startElement("part-name-display");
+        writeDisplayName(m_xml, longName);
+        m_xml.endElement();
+    }
+    if (!shortName.isEmpty()) {
+        m_xml.startElement("part-abbreviation-display");
+        writeDisplayName(m_xml, shortName);
+        m_xml.endElement();
+    }
+    m_xml.endElement();
+
+    writeInstrumentDetails(instr, m_score->style().styleB(Sid::concertPitch));
+
+    m_xml.startElement("sound");
+    m_xml.startElement("instrument-change");
+    scoreInstrument(m_xml, static_cast<int>(partNr) + 1, instNr + 1, instr->trackName(), instr);
+    m_xml.endElement();
+    m_xml.endElement();
 }
 
 //---------------------------------------------------------

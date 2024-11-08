@@ -83,6 +83,21 @@
         </note>
       </measure>
     <measure number="3">
+      <print>
+        <part-name-display>
+          <display-text>Piano</display-text>
+          </part-name-display>
+        <part-abbreviation-display>
+          <display-text>Pno.</display-text>
+          </part-abbreviation-display>
+        </print>
+      <sound>
+        <instrument-change>
+          <score-instrument id="P1-I2">
+            <instrument-name>Flute</instrument-name>
+            </score-instrument>
+          </instrument-change>
+        </sound>
       <direction placement="above">
         <direction-type>
           <words font-weight="bold" font-size="12">Flute</words>
