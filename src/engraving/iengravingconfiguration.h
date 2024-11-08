@@ -115,9 +115,7 @@ public:
                    || showSkylines
                    || showSystemBoundingRects
                    || showElementMasks
-#ifndef NDEBUG
                    || showCorruptedMeasures
-#endif
             ;
         }
     };

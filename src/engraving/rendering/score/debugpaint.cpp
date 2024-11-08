@@ -248,8 +248,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::v
         }
     }
 
-#ifndef NDEBUG
-    if (options.showCorruptedMeasures) {
+    if (score->hasCorruptedMeasures() && options.showCorruptedMeasures) {
         painter.setPen(Pen(Color::RED, 4.0));
         painter.setBrush(BrushStyle::NoBrush);
 
@@ -270,7 +269,6 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::v
             }
         }
     }
-#endif
 
     painter.restore();
 }
