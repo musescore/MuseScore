@@ -342,6 +342,15 @@ Chord::Chord(const Chord& c, bool link)
             score()->undo(new Link(t, const_cast<TremoloSingleChord*>(c.m_tremoloSingleChord)));
         }
         add(t);
+    } else if (c.m_tremoloTwoChord) {
+        if (c.m_tremoloTwoChord->chord1() == &c) {
+            TremoloTwoChord* t = Factory::copyTremoloTwoChord(*(c.m_tremoloTwoChord));
+            if (link) {
+                score()->undo(new Link(t, const_cast<TremoloTwoChord*>(c.m_tremoloTwoChord)));
+            }
+            t->setChords(this, nullptr);
+            add(t);
+        }
     }
 
     for (EngravingItem* e : c.el()) {

@@ -784,6 +784,7 @@
               </Note>
             <TremoloTwoChord>
               <subtype>c32</subtype>
+              <linkedMain/>
               <l1>22</l1>
               <l2>22</l2>
               </TremoloTwoChord>
@@ -1658,6 +1659,13 @@
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
+              <TremoloTwoChord>
+                <subtype>c32</subtype>
+                <linked>
+                  </linked>
+                <l1>0</l1>
+                <l2>0</l2>
+                </TremoloTwoChord>
               </Chord>
             <Chord>
               <linked>
