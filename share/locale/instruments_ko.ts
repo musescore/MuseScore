@@ -6,7 +6,7 @@
         <source>Wind section notated on a grand staff.</source>
         <comment>winds description</comment>
         <extracomment>description for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>대보표에 관악기 파트이 표시되어 있습니다.</translation>
+        <translation>대보표에 관악기 파트가 표시되어 있습니다.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="208"/>
