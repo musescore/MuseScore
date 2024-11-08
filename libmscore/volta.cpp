@@ -19,7 +19,6 @@
 #include "style.h"
 #include "system.h"
 #include "tempo.h"
-#include "text.h"
 #include "xml.h"
 
 #include <algorithm>
@@ -142,7 +141,11 @@ void Volta::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "endings") {
                   QString s = e.readElementText();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+                  QStringList sl = s.split(",", Qt::SkipEmptyParts);
+#else
                   QStringList sl = s.split(",", QString::SkipEmptyParts);
+#endif
                   _endings.clear();
                   for (const QString& l : qAsConst(sl)) {
                         int i = l.simplified().toInt();
@@ -153,6 +156,11 @@ void Volta::read(XmlReader& e)
                   ;
             else if (!readProperties(e))
                   e.unknown();
+            }
+      if (this->anchor() != Volta::VOLTA_ANCHOR) {
+            // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
+            qWarning("Correcting volta anchor type from %d to %d", int(this->anchor()), int(Volta::VOLTA_ANCHOR));
+            this->setAnchor(Volta::VOLTA_ANCHOR);
             }
       }
 

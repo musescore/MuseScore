@@ -720,7 +720,7 @@ Note* Spanner::startElementFromSpanner(Spanner* sp, Element* newEnd)
       int   newTrack    = (newEnd->track() - oldEnd->track()) + oldStart->track();
       // look in notes linked to oldStart for a note with the
       // same score as new score and appropriate track
-      for (ScoreElement* newEl : oldStart->linkList())
+      for (ScoreElement*& newEl : oldStart->linkList())
             if (toNote(newEl)->score() == score && toNote(newEl)->track() == newTrack) {
                   newStart = toNote(newEl);
                   break;
@@ -753,7 +753,7 @@ Note* Spanner::endElementFromSpanner(Spanner* sp, Element* newStart)
       int   newTrack    = newStart->track() + (oldEnd->track() - oldStart->track());
       // look in notes linked to oldEnd for a note with the
       // same score as new score and appropriate track
-      for (ScoreElement* newEl : oldEnd->linkList())
+      for (ScoreElement*& newEl : oldEnd->linkList())
             if (toNote(newEl)->score() == score && toNote(newEl)->track() == newTrack) {
                   newEnd = toNote(newEl);
                   break;
@@ -872,6 +872,7 @@ Measure* Spanner::startMeasure() const
 
 Measure* Spanner::endMeasure() const
       {
+      Q_ASSERT(anchor() == Spanner::Anchor::MEASURE);
       return toMeasure(_endElement);
       }
 

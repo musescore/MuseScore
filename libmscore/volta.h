@@ -49,9 +49,9 @@ class VoltaSegment final : public TextLineBaseSegment {
 
 class Volta final : public TextLineBase {
       QList<int> _endings;
-      static constexpr Anchor VOLTA_ANCHOR = Anchor::MEASURE;
 
    public:
+      static constexpr Anchor VOLTA_ANCHOR = Anchor::MEASURE;
       enum class Type : char {
             OPEN, CLOSED
             };

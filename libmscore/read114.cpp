@@ -1140,6 +1140,11 @@ static void readVolta114(XmlReader& e, Volta* volta)
             else if (!readTextLineProperties114(e, volta))
                   e.unknown();
             }
+      if (volta->anchor() != Volta::VOLTA_ANCHOR) {
+          // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
+          qWarning("Correcting volta anchor type from %d to %d", int(volta->anchor()), int(Volta::VOLTA_ANCHOR));
+          volta->setAnchor(Volta::VOLTA_ANCHOR);
+      }
       volta->setOffset(QPointF());        // ignore offsets
       volta->setAutoplace(true);
       }
@@ -1449,7 +1454,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
       QList<Chord*> graceNotes;
 
       //sort tuplet elements. needed for nested tuplets #22537
-      for (Tuplet* t : e.tuplets())
+      for (Tuplet*& t : e.tuplets())
             t->sortElements();
       e.tuplets().clear();
       e.setTrack(staffIdx * VOICES);
@@ -2080,11 +2085,11 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             }
       // For nested tuplets created with MuseScore 1.3 tuplet dialog (i.e. "Other..." dialog),
       // the parent tuplet was not set. Try to infere if the tuplet was actually a nested tuplet
-      for (Tuplet* tuplet : e.tuplets()) {
+      for (Tuplet*& tuplet : e.tuplets()) {
             Fraction tupletTick = tuplet->tick();
             Fraction tupletDuration = tuplet->actualTicks() - Fraction::fromTicks(1);
             std::vector<DurationElement*> tElements = tuplet->elements();
-            for (Tuplet* tuplet2 : e.tuplets()) {
+            for (Tuplet*& tuplet2 : e.tuplets()) {
                   if ((tuplet2->tuplet()) || (tuplet2->voice() != tuplet->voice())) // already a nested tuplet or in a different voice
                         continue;
                   // int possibleDuration = tuplet2->duration().ticks() * tuplet->ratio().denominator() / tuplet->ratio().numerator() - 1;
@@ -2529,7 +2534,7 @@ static void readPart(Part* part, XmlReader& e)
             part->setPartName(part->instrument()->trackName());
 
       if (part->instrument()->useDrumset()) {
-            for (Staff* staff : *part->staves()) {
+            for (Staff*& staff : *part->staves()) {
                   int lines = staff->lines(Fraction(0,1));
                   int bf    = staff->barLineFrom();
                   int bt    = staff->barLineTo();
@@ -2677,7 +2682,7 @@ static void readStyle(MStyle* style, XmlReader& e)
             else if (tag == "ChordList") {
                   style->chordList()->clear();
                   style->chordList()->read(e);
-                  for (ChordFont f : style->chordList()->fonts) {
+                  for (ChordFont& f : style->chordList()->fonts) {
                         if (f.family == "MuseJazz") {
                               f.family = "MuseJazz Text";
                               }
@@ -2989,7 +2994,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
 
       setEnableVerticalSpread(false);
 
-      for (Staff* s : staves()) {
+      for (Staff*& s : staves()) {
             int idx   = s->idx();
             int track = idx * VOICES;
 
@@ -3154,7 +3159,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
       //
       //    sanity check for barLineSpan and update ottavas
       //
-      for (Staff* staff : staves()) {
+      for (Staff*& staff : staves()) {
             int barLineSpan = staff->barLineSpan();
             int idx = staff->idx();
             int n = nstaves();
@@ -3230,7 +3235,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
 
       fixTicks();
 
-      for (Part* p : parts()) {
+      for (Part*& p : parts()) {
             p->updateHarmonyChannels(false);
             }
 
