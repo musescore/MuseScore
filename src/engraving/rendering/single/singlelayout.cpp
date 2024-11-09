@@ -1444,8 +1444,8 @@ void SingleLayout::layout(StaffText* item, const Context& ctx)
 
         for (TextBlock& block : item->mutldata()->blocks) {
             auto& fragments = block.fragments();
-            for (std::list<TextFragment>::iterator it = fragments.begin(); it != fragments.end(); ++it) {
-                it->pos.setX(it->pos.x() + xMove);
+            for (std::list<std::shared_ptr<TextFragment> >::iterator it = fragments.begin(); it != fragments.end(); ++it) {
+                (*it)->pos.setX((*it)->pos.x() + xMove);
             }
         }
     }
@@ -1463,13 +1463,13 @@ void SingleLayout::layout(StringTunings* item, const Context& ctx)
     layoutTextBase(item, ctx, item->mutldata());
 
     for (TextBlock& block : item->mutldata()->blocks) {
-        for (TextFragment& fragment : block.fragments()) {
-            Font font = fragment.font(item);
+        for (std::shared_ptr<TextFragment>& fragment : block.fragments()) {
+            Font font = fragment->font(item);
             if (font.type() != Font::Type::MusicSymbol) {
                 // HACK: the music symbol doesn't have a good baseline
                 // to go with text so we correct text here
                 const double baselineAdjustment = font.pointSizeF();
-                fragment.pos.setY(fragment.pos.y() - baselineAdjustment);
+                fragment->pos.setY(fragment->pos.y() - baselineAdjustment);
             }
         }
     }

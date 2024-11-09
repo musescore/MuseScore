@@ -1448,9 +1448,9 @@ void Timeline::jumpMarkerMeta(Segment* seg, int* stagger, int pos)
         elementType = ElementType::JUMP;
     } else {
         Marker* marker = toMarker(std::get<3>(_repeatInfo));
-        std::list<TextFragment> tf_list = marker->fragmentList();
-        for (TextFragment tf : tf_list) {
-            text.push_back(tf.text);
+        std::list<std::shared_ptr<TextFragment>> tf_list = marker->fragmentList();
+        for (std::shared_ptr<TextFragment> tf : tf_list) {
+            text.push_back(tf->text);
         }
         measure = marker->measure();
         if (marker->markerType() == MarkerType::FINE
