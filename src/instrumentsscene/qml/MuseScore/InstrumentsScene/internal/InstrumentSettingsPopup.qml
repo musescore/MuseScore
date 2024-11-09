@@ -30,7 +30,8 @@ StyledPopupView {
 
     property bool needActiveFirstItem: false
 
-    property bool unloadAfterClose: true
+    signal replaceInstrumentRequested()
+    signal resetAllFormattingRequested()
 
     contentHeight: contentColumn.childrenRect.height
 
@@ -115,10 +116,8 @@ StyledPopupView {
             visible: settingsModel.isMainScore
 
             onClicked: {
-                root.unloadAfterClose = false
+                root.replaceInstrumentRequested()
                 root.close()
-                settingsModel.replaceInstrument()
-                root.unloadAfterClose = true
             }
         }
 
@@ -133,10 +132,8 @@ StyledPopupView {
             visible: !settingsModel.isMainScore
 
             onClicked: {
-                root.unloadAfterClose = false
-                settingsModel.resetAllFormatting()
+                root.resetAllFormattingRequested()
                 root.close()
-                root.unloadAfterClose = true
             }
         }
     }
