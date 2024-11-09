@@ -33,7 +33,7 @@ Rectangle {
 
     //! NOTE: please, don't rename those properties because they are used in c++
     property QtObject groupCpp
-    readonly property QtObject titleBarCpp: Boolean(groupCpp) ? groupCpp.actualTitleBar : null
+    readonly property QtObject titleBarCpp: Boolean(groupCpp) ? groupCpp.titleBar : null
     readonly property int nonContentsHeight: titleBar.visible ? titleBar.heightWhenVisible + tabsPanel.height : 0
     property int titleBarNavigationPanelOrder: 1
     //! ---
@@ -140,7 +140,7 @@ Rectangle {
 
         onCurrentIndexChanged: {
             if (Boolean(root) && Boolean(root.groupCpp)) {
-                root.groupCpp.tabWidget.setCurrentDockWidget(currentIndex)
+                root.groupCpp.tabBar.setCurrentIndex(currentIndex)
             }
         }
 

@@ -27,6 +27,8 @@
 #include "thirdparty/KDDockWidgets/src/qtquick/views/DockWidget.h"
 #include "thirdparty/KDDockWidgets/src/LayoutSaver.h"
 #include "thirdparty/KDDockWidgets/src/core/View.h"
+#include "thirdparty/KDDockWidgets/src/core/Group.h"
+#include "thirdparty/KDDockWidgets/src/core/TabBar.h"
 #include "thirdparty/KDDockWidgets/src/core/DockRegistry.h"
 #include "thirdparty/KDDockWidgets/src/Config.h"
 
@@ -78,13 +80,19 @@ static void clearRegistry()
         registry->unregisterDockWidget(dock);
     }
 
-    // for (KDDockWidgets::Frame* frame : registry->frames()) {
-    //     for (KDDockWidgets::Core::DockWidget* dock : frame->dockWidgets()) {
-    //         frame->removeWidget(dock);
-    //     }
+    for (KDDockWidgets::Core::Group* group : registry->groups()) {
+        auto tabBar = group ? group->tabBar() : nullptr;
+        if (!tabBar) {
+            continue;
+        }
 
-    //     registry->unregisterFrame(frame);
-    // }
+        for (int i = 0; i < tabBar->numDockWidgets(); ++i) {
+            auto dock = tabBar->dockWidgetAt(i);
+            group->removeWidget(dock);
+        }
+
+        registry->unregisterGroup(group);
+    }
 }
 }
 
@@ -140,10 +148,10 @@ void DockWindow::geometryChange(const QRectF& newGeometry, const QRectF& oldGeom
     //! NOTE: it is important to reset the current minimum width for all top-level toolbars
     //! Otherwise, the window content can be displaced after LayoutWidget::onResize(QSize newSize)
     //! due to lack of free space
-    // QList<DockToolBarView*> topToolBars = topLevelToolBars(m_currentPage);
-    // for (DockToolBarView* toolBar : topToolBars) {
-    //     toolBar->setMinimumWidth(toolBar->contentWidth());
-    // }
+    QList<DockToolBarView*> topToolBars = topLevelToolBars(m_currentPage);
+    for (DockToolBarView* toolBar : topToolBars) {
+        toolBar->setMinimumWidth(toolBar->contentWidth());
+    }
 
     QQuickItem::geometryChange(newGeometry, oldGeometry);
 
@@ -668,19 +676,22 @@ void DockWindow::initDocks(DockPageView* page)
 
     alignTopLevelToolBars(page);
 
-    // for (DockToolBarView* toolbar : topLevelToolBars(page)) {
-    //     connect(toolbar, &DockToolBarView::floatingChanged, this, [this, page]() {
-    //         alignTopLevelToolBars(page);
-    //     }, Qt::UniqueConnection);
+    if (!m_pageConnections.contains(page)) {
+        m_pageConnections[page] = new UniqueConnectionHolder(page, this);
+    }
 
-    //     connect(toolbar, &DockToolBarView::contentSizeChanged, this, [this, page]() {
-    //         alignTopLevelToolBars(page);
-    //     }, Qt::UniqueConnection);
+    UniqueConnectionHolder* holder = m_pageConnections[page];
 
-    //     connect(toolbar, &DockToolBarView::visibleChanged, this, [this, page]() {
-    //         alignTopLevelToolBars(page);
-    //     }, Qt::UniqueConnection);
-    // }
+    for (DockToolBarView* toolbar : topLevelToolBars(page)) {
+        connect(toolbar, &DockToolBarView::floatingChanged,
+                holder, &UniqueConnectionHolder::alignTopLevelToolBars, Qt::UniqueConnection);
+
+        connect(toolbar, &DockToolBarView::contentSizeChanged,
+                holder, &UniqueConnectionHolder::alignTopLevelToolBars, Qt::UniqueConnection);
+
+        connect(toolbar, &DockToolBarView::visibleChanged,
+                holder, &UniqueConnectionHolder::alignTopLevelToolBars, Qt::UniqueConnection);
+    }
 }
 
 void DockWindow::notifyAboutDocksOpenStatus()

@@ -68,7 +68,7 @@ DockWindow {
 
             MainToolBar {
                 id: toolBar
-                navigation.section: root.topToolKeyNavSec
+                navigation.section: topToolbarKeyNavSec
                 navigation.order: 1
 
                 currentUri: root.currentPageUri

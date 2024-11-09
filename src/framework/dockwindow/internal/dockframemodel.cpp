@@ -163,11 +163,11 @@ void DockFrameModel::listenChangesInFrame()
     //     updateNavigationSection();
     // });
 
-    // connect(m_frame, &KDDockWidgets::Frame::currentDockWidgetChanged, this, [this]() {
-    //     updateNavigationSection();
+    connect(m_frame, &KDDockWidgets::QtQuick::Group::currentDockWidgetChanged, this, [this]() {
+        updateNavigationSection();
 
-    //      Q_EMIT currentDockChanged();
-    // });
+        Q_EMIT currentDockChanged();
+    });
 }
 
 void DockFrameModel::setTitleBarVisible(bool visible)
@@ -265,8 +265,8 @@ QRect DockFrameModel::highlightingRect() const
 
 KDDockWidgets::QtQuick::DockWidget* DockFrameModel::currentDockWidget() const
 {
-    return m_frame && !m_frame->group()->isEmpty()
-           ? dynamic_cast<KDDockWidgets::QtQuick::DockWidget*>(m_frame->group()->currentDockWidget())
+    return m_frame
+           ? dynamic_cast<KDDockWidgets::QtQuick::DockWidget*>(m_frame->group()->tabBar()->currentDockWidget())
            : nullptr;
 }
 
