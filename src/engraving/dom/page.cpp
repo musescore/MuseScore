@@ -380,13 +380,13 @@ void Page::doRebuildBspTree()
 
 TextBlock Page::replaceTextMacros(const TextBlock& tb) const
 {
-    std::list<TextFragment> newFragments(1);
-    for (const TextFragment& tf: tb.fragments()) {
-        const CharFormat defaultFormat = tf.format;
-        const String& s = tf.text;
+    std::list<std::shared_ptr<TextFragment>> newFragments = { std::make_shared<TextFragment>() };
+    for (const std::shared_ptr<TextFragment>& tf: tb.fragments()) {
+        const CharFormat defaultFormat = tf->format;
+        const String& s = tf->text;
 
         for (size_t i = 0, n = s.size(); i < n; ++i) {
-            newFragments.back().format = defaultFormat;
+            newFragments.back()->format = defaultFormat;
             Char c = s.at(i);
             if (c == '$' && (i < (n - 1))) {
                 Char nc = s.at(i + 1);
@@ -409,18 +409,18 @@ TextBlock Page::replaceTextMacros(const TextBlock& tb) const
                         const CharFormat pageNumberFormat = formatForMacro(String('$' + nc));
                         // If the default format equals the format for this macro, we don't need to create a new fragment...
                         if (defaultFormat == pageNumberFormat) {
-                            newFragments.back().text += pageNumberString;
+                            newFragments.back()->text += pageNumberString;
                             break;
                         }
-                        TextFragment pageNumberFragment(pageNumberString);
-                        pageNumberFragment.format = pageNumberFormat;
+                        std::shared_ptr<TextFragment> pageNumberFragment = std::make_shared<TextFragment>(pageNumberString);
+                        pageNumberFragment->format = pageNumberFormat;
                         newFragments.emplace_back(pageNumberFragment);
-                        newFragments.emplace_back(TextFragment());    // Start next fragment
+                        newFragments.emplace_back(std::make_shared<TextFragment>());    // Start next fragment
                     }
                 }
                 break;
                 case 'n':
-                    newFragments.back().text += String::number(score()->npages() + score()->pageNumberOffset());
+                    newFragments.back()->text += String::number(score()->npages() + score()->pageNumberOffset());
                     break;
                 case 'i': // not on first page
                     if (!m_no) {
@@ -428,42 +428,42 @@ TextBlock Page::replaceTextMacros(const TextBlock& tb) const
                     }
                 // FALLTHROUGH
                 case 'I':
-                    newFragments.back().text += score()->metaTag(u"partName");
+                    newFragments.back()->text += score()->metaTag(u"partName");
                     break;
                 case 'f':
-                    newFragments.back().text += masterScore()->fileInfo()->fileName(false).toString();
+                    newFragments.back()->text += masterScore()->fileInfo()->fileName(false).toString();
                     break;
                 case 'F':
-                    newFragments.back().text += masterScore()->fileInfo()->path().toString();
+                    newFragments.back()->text += masterScore()->fileInfo()->path().toString();
                     break;
                 case 'd':
-                    newFragments.back().text += muse::Date::currentDate().toString(muse::DateFormat::ISODate);
+                    newFragments.back()->text += muse::Date::currentDate().toString(muse::DateFormat::ISODate);
                     break;
                 case 'D':
                 {
                     String creationDate = score()->metaTag(u"creationDate");
                     if (creationDate.isEmpty()) {
-                        newFragments.back().text += masterScore()->fileInfo()->birthTime().date().toString(
+                        newFragments.back()->text += masterScore()->fileInfo()->birthTime().date().toString(
                             muse::DateFormat::ISODate);
                     } else {
-                        newFragments.back().text += muse::Date::fromStringISOFormat(creationDate).toString(
+                        newFragments.back()->text += muse::Date::fromStringISOFormat(creationDate).toString(
                             muse::DateFormat::ISODate);
                     }
                 }
                 break;
                 case 'm':
                     if (score()->dirty() || !masterScore()->saved()) {
-                        newFragments.back().text += muse::Time::currentTime().toString(muse::DateFormat::ISODate);
+                        newFragments.back()->text += muse::Time::currentTime().toString(muse::DateFormat::ISODate);
                     } else {
-                        newFragments.back().text += masterScore()->fileInfo()->lastModified().time().toString(
+                        newFragments.back()->text += masterScore()->fileInfo()->lastModified().time().toString(
                             muse::DateFormat::ISODate);
                     }
                     break;
                 case 'M':
                     if (score()->dirty() || !masterScore()->saved()) {
-                        newFragments.back().text += muse::Date::currentDate().toString(muse::DateFormat::ISODate);
+                        newFragments.back()->text += muse::Date::currentDate().toString(muse::DateFormat::ISODate);
                     } else {
-                        newFragments.back().text += masterScore()->fileInfo()->lastModified().date().toString(
+                        newFragments.back()->text += masterScore()->fileInfo()->lastModified().date().toString(
                             muse::DateFormat::ISODate);
                     }
                     break;
@@ -478,36 +478,36 @@ TextBlock Page::replaceTextMacros(const TextBlock& tb) const
                     const CharFormat copyrightFormat = formatForMacro(String('$' + nc));
                     // If the default format equals the format for this macro, we don't need to create a new fragment...
                     if (defaultFormat == copyrightFormat) {
-                        newFragments.back().text += copyrightString;
+                        newFragments.back()->text += copyrightString;
                         break;
                     }
-                    TextFragment copyrightFragment(copyrightString);
-                    copyrightFragment.format = copyrightFormat;
+                    std::shared_ptr<TextFragment> copyrightFragment = std::make_shared<TextFragment>(copyrightString);
+                    copyrightFragment->format = copyrightFormat;
                     newFragments.emplace_back(copyrightFragment);
-                    newFragments.emplace_back(TextFragment());    // Start next fragment
+                    newFragments.emplace_back(std::make_shared<TextFragment>());    // Start next fragment
                 }
                 break;
                 case 'v':
                     if (score()->dirty()) {
-                        newFragments.back().text += score()->appVersion();
+                        newFragments.back()->text += score()->appVersion();
                     } else {
-                        newFragments.back().text += score()->mscoreVersion();
+                        newFragments.back()->text += score()->mscoreVersion();
                     }
                     break;
                 case 'r':
                     if (score()->dirty()) {
-                        newFragments.back().text += revision;
+                        newFragments.back()->text += revision;
                     } else {
                         int rev = score()->mscoreRevision();
                         if (rev > 99999) { // MuseScore 1.3 is decimal 5702, 2.0 and later uses a 7-digit hex SHA
-                            newFragments.back().text += String::number(rev, 16);
+                            newFragments.back()->text += String::number(rev, 16);
                         } else {
-                            newFragments.back().text += String::number(rev, 10);
+                            newFragments.back()->text += String::number(rev, 10);
                         }
                     }
                     break;
                 case '$':
-                    newFragments.back().text += '$';
+                    newFragments.back()->text += '$';
                     break;
                 case ':':
                 {
@@ -520,19 +520,19 @@ TextBlock Page::replaceTextMacros(const TextBlock& tb) const
                         tag += s.at(k);
                     }
                     if (k != n) {      // found ':' ?
-                        newFragments.back().text += score()->metaTag(tag);
+                        newFragments.back()->text += score()->metaTag(tag);
                         i = k - 1;
                     }
                 }
                 break;
                 default:
-                    newFragments.back().text += '$';
-                    newFragments.back().text += nc;
+                    newFragments.back()->text += '$';
+                    newFragments.back()->text += nc;
                     break;
                 }
                 ++i;
             } else {
-                newFragments.back().text += c;
+                newFragments.back()->text += c;
             }
         }
     }

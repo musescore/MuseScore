@@ -78,11 +78,11 @@ String MScoreTextToMusicXml::toPlainText(const String& text)
 //    convert to plain text plus <sym>[name]</sym> encoded symbols
 //---------------------------------------------------------
 
-String MScoreTextToMusicXml::toPlainTextPlusSymbols(const std::list<TextFragment>& list)
+String MScoreTextToMusicXml::toPlainTextPlusSymbols(const std::list<std::shared_ptr<TextFragment>>& list)
 {
     String res;
-    for (const TextFragment& f : list) {
-        res += f.text;
+    for (const std::shared_ptr<TextFragment>& f : list) {
+        res += f->text;
     }
     return res;
 }
@@ -91,19 +91,19 @@ String MScoreTextToMusicXml::toPlainTextPlusSymbols(const std::list<TextFragment
 //   plainTextPlusSymbolsSize
 //---------------------------------------------------------
 
-static int plainTextPlusSymbolsFragmentSize(const TextFragment& f)
+static int plainTextPlusSymbolsFragmentSize(const std::shared_ptr<TextFragment>& f)
 {
-    return f.columns();
+    return f->columns();
 }
 
 //---------------------------------------------------------
 //   plainTextPlusSymbolsSize
 //---------------------------------------------------------
 
-static int plainTextPlusSymbolsListSize(const std::list<TextFragment>& list)
+static int plainTextPlusSymbolsListSize(const std::list<std::shared_ptr<TextFragment>>& list)
 {
     int res = 0;
-    for (const TextFragment& f : list) {
+    for (const std::shared_ptr<TextFragment>& f : list) {
         res += plainTextPlusSymbolsFragmentSize(f);
     }
     return res;
@@ -120,8 +120,8 @@ static int plainTextPlusSymbolsListSize(const std::list<TextFragment>& list)
  Return true if OK, false on error.
  */
 
-bool MScoreTextToMusicXml::split(const std::list<TextFragment>& in, const int pos, const int len,
-                                 std::list<TextFragment>& left, std::list<TextFragment>& mid, std::list<TextFragment>& right)
+bool MScoreTextToMusicXml::split(const std::list<std::shared_ptr<TextFragment>>& in, const int pos, const int len,
+                                 std::list<std::shared_ptr<TextFragment>>& left, std::list<std::shared_ptr<TextFragment>>& mid, std::list<std::shared_ptr<TextFragment>>& right)
 {
     //LOGD("MScoreTextToMXML::split in size %d pos %d len %d", plainTextPlusSymbolsListSize(in), pos, len);
     //LOGD("-> in");
@@ -137,12 +137,12 @@ bool MScoreTextToMusicXml::split(const std::list<TextFragment>& in, const int po
     right.clear();
 
     // set pos to begin of first fragment
-    std::list<TextFragment>::const_iterator fragmentNr = in.begin();
-    TextFragment fragment;
+    std::list<std::shared_ptr<TextFragment>>::const_iterator fragmentNr = in.begin();
+    std::shared_ptr<TextFragment> fragment;
     if (fragmentNr != in.end()) {
         fragment = *fragmentNr;
     }
-    std::list<TextFragment>* currentDest = &left;
+    std::list<std::shared_ptr<TextFragment>>* currentDest = &left;
     int currentMaxSize = pos;
 
     // while text left
@@ -172,7 +172,7 @@ bool MScoreTextToMusicXml::split(const std::list<TextFragment>& in, const int po
             }
         } else {
             // split current fragment
-            TextFragment rightPart = fragment.split(currentMaxSize - plainTextPlusSymbolsListSize(*currentDest));
+            std::shared_ptr<TextFragment> rightPart = fragment->split(currentMaxSize - plainTextPlusSymbolsListSize(*currentDest));
             // add first part to current destination
             currentDest->push_back(fragment);
             fragment = rightPart;
@@ -195,14 +195,14 @@ bool MScoreTextToMusicXml::split(const std::list<TextFragment>& in, const int po
 //   writeTextFragments
 //---------------------------------------------------------
 
-void MScoreTextToMusicXml::writeTextFragments(const std::list<TextFragment>& fr, XmlWriter& xml)
+void MScoreTextToMusicXml::writeTextFragments(const std::list<std::shared_ptr<TextFragment>>& fr, XmlWriter& xml)
 {
     //dumpText(fr);
     bool firstTime = true;   // write additional attributes only the first time characters are written
-    for (const TextFragment& f : fr) {
-        newFormat = f.format;
+    for (const std::shared_ptr<TextFragment>& f : fr) {
+        newFormat = f->format;
         String formatAttr = updateFormat();
-        xml.tagRaw(tagname + (firstTime ? attribs : String()) + formatAttr, f.text);
+        xml.tagRaw(tagname + (firstTime ? attribs : String()) + formatAttr, f->text);
         firstTime = false;
     }
 }

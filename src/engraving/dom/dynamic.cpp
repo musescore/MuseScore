@@ -252,7 +252,7 @@ double Dynamic::customTextOffset() const
     referenceDynamic.setXmlText(referenceString);
     renderer()->layoutItem(toTextBase(&referenceDynamic));
 
-    TextFragment referenceFragment;
+    std::shared_ptr<TextFragment> referenceFragment;
     if (!referenceDynamic.ldata()->blocks.empty()) {
         TextBlock referenceBlock = referenceDynamic.ldata()->blocks.front();
         if (!referenceBlock.fragments().empty()) {
@@ -265,9 +265,9 @@ double Dynamic::customTextOffset() const
         return 0.0;
     }
     for (const TextBlock& block : ldata->blocks) {
-        for (const TextFragment& fragment : block.fragments()) {
-            if (fragment.text == referenceFragment.text) {
-                return fragment.pos.x() - referenceFragment.pos.x();
+        for (const std::shared_ptr<TextFragment>& fragment : block.fragments()) {
+            if (fragment->text == referenceFragment->text) {
+                return fragment->pos.x() - referenceFragment->pos.x();
             }
         }
     }
