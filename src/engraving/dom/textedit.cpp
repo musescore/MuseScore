@@ -28,6 +28,7 @@
 #include "mscoreview.h"
 #include "navigate.h"
 #include "score.h"
+#include "dynamic.h"
 #include "lyrics.h"
 
 #include "log.h"
@@ -141,6 +142,12 @@ void TextBase::endEdit(EditData& ed)
     }
 
     ted->cursor()->endEdit();
+
+    if (isDynamic()) {
+        Dynamic* d = toDynamic(this);
+        const DynamicType dt = d->parseDynamicText(xmlText());
+        undoChangeProperty(Pid::DYNAMIC_TYPE, dt);
+    }
 
     UndoStack* undo = score()->undoStack();
     IF_ASSERT_FAILED(undo) {
