@@ -28,6 +28,12 @@
 
 #include "log.h"
 
+#ifdef emit
+// Private KDDockWidgets classes use KDBindings, which in turn uses the emit term, which leads to compilation errors.
+// Here we turn off the use of emit - now we use Q_EMIT
+#undef emit
+#endif
+
 #include "thirdparty/KDDockWidgets/src/qtquick/views/DockWidget.h"
 #include "thirdparty/KDDockWidgets/src/core/View.h"
 #include "thirdparty/KDDockWidgets/src/core/Layout.h"
@@ -232,7 +238,7 @@ void DockBase::setTitle(const QString& title)
     }
 
     m_title = title;
-    emit titleChanged();
+    Q_EMIT titleChanged();
 }
 
 void DockBase::setMinimumWidth(int width)
@@ -242,7 +248,7 @@ void DockBase::setMinimumWidth(int width)
     }
 
     m_minimumWidth = width;
-    emit minimumSizeChanged();
+    Q_EMIT minimumSizeChanged();
 }
 
 void DockBase::setMinimumHeight(int height)
@@ -252,7 +258,7 @@ void DockBase::setMinimumHeight(int height)
     }
 
     m_minimumHeight = height;
-    emit minimumSizeChanged();
+    Q_EMIT minimumSizeChanged();
 }
 
 void DockBase::setMaximumWidth(int width)
@@ -262,7 +268,7 @@ void DockBase::setMaximumWidth(int width)
     }
 
     m_maximumWidth = width;
-    emit maximumSizeChanged();
+    Q_EMIT maximumSizeChanged();
 }
 
 void DockBase::setMaximumHeight(int height)
@@ -272,7 +278,7 @@ void DockBase::setMaximumHeight(int height)
     }
 
     m_maximumHeight = height;
-    emit maximumSizeChanged();
+    Q_EMIT maximumSizeChanged();
 }
 
 void DockBase::setContentWidth(int width)
@@ -282,7 +288,7 @@ void DockBase::setContentWidth(int width)
     }
 
     m_contentWidth = width;
-    emit contentSizeChanged();
+    Q_EMIT contentSizeChanged();
 }
 
 void DockBase::setContentHeight(int height)
@@ -292,7 +298,7 @@ void DockBase::setContentHeight(int height)
     }
 
     m_contentHeight = height;
-    emit contentSizeChanged();
+    Q_EMIT contentSizeChanged();
 }
 
 void DockBase::setLocation(int location)
@@ -302,7 +308,7 @@ void DockBase::setLocation(int location)
     }
 
     m_properties.location = static_cast<Location>(location);
-    emit locationChanged();
+    Q_EMIT locationChanged();
 }
 
 void DockBase::setDropDestinations(const QVariantList& destinations)
@@ -312,7 +318,7 @@ void DockBase::setDropDestinations(const QVariantList& destinations)
     }
 
     m_dropDestinations = destinations;
-    emit dropDestinationsChanged();
+    Q_EMIT dropDestinationsChanged();
 }
 
 void DockBase::setFloatable(bool floatable)
@@ -322,7 +328,7 @@ void DockBase::setFloatable(bool floatable)
     }
 
     m_properties.floatable = floatable;
-    emit floatableChanged();
+    Q_EMIT floatableChanged();
 }
 
 void DockBase::setClosable(bool closable)
@@ -332,7 +338,7 @@ void DockBase::setClosable(bool closable)
     }
 
     m_properties.closable = closable;
-    emit closableChanged();
+    Q_EMIT closableChanged();
 }
 
 void DockBase::setResizable(bool resizable)
@@ -342,7 +348,7 @@ void DockBase::setResizable(bool resizable)
     }
 
     m_properties.resizable = resizable;
-    emit resizableChanged();
+    Q_EMIT resizableChanged();
 }
 
 void DockBase::setSeparatorsVisible(bool visible)
@@ -352,7 +358,7 @@ void DockBase::setSeparatorsVisible(bool visible)
     }
 
     m_properties.separatorsVisible = visible;
-    emit separatorsVisibleChanged();
+    Q_EMIT separatorsVisibleChanged();
 }
 
 void DockBase::setFloating(bool floating)
@@ -371,7 +377,7 @@ void DockBase::setContentNavigationPanel(ui::NavigationPanel* panel)
     }
 
     m_contentNavigationPanel = panel;
-    emit contentNavigationPanelChanged();
+    Q_EMIT contentNavigationPanelChanged();
 }
 
 void DockBase::init()
@@ -599,7 +605,7 @@ void DockBase::componentComplete()
     connect(this, &DockBase::maximumSizeChanged, this, &DockBase::applySizeConstraints);
 
     connect(this, &DockBase::visibleChanged, [this](){
-        emit reorderNavigationRequested();
+        Q_EMIT reorderNavigationRequested();
     });
 
     m_defaultVisibility = isVisible();
@@ -750,7 +756,7 @@ void DockBase::doSetFloating(bool floating)
     }
 
     m_floating = floating;
-    emit floatingChanged();
+    Q_EMIT floatingChanged();
 }
 
 void DockBase::writeProperties()
@@ -767,7 +773,7 @@ void DockBase::setInited(bool inited)
     }
 
     m_inited = inited;
-    emit initedChanged();
+    Q_EMIT initedChanged();
 }
 
 bool DropDestination::operator==(const DropDestination& dest) const

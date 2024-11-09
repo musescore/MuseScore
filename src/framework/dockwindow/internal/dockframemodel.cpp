@@ -59,15 +59,15 @@ bool DockFrameModel::eventFilter(QObject* watched, QEvent* event)
     }
 
     if (propertyChangeEvent->propertyName() == CONTEXT_MENU_MODEL_PROPERTY) {
-        emit tabsChanged();
+        Q_EMIT tabsChanged();
 
         if (watched == currentDockWidget()) {
-            emit currentDockChanged();
+            Q_EMIT currentDockChanged();
         }
     }
 
     if (propertyChangeEvent->propertyName() == "highlightingRect") {
-        emit highlightingVisibleChanged();
+        Q_EMIT highlightingVisibleChanged();
     }
 
     return QObject::eventFilter(watched, event);
@@ -127,7 +127,7 @@ void DockFrameModel::setFrame(QQuickItem* frame)
     }
 
     m_frame = dynamic_cast<KDDockWidgets::QtQuick::Group*>(frame);
-    emit frameChanged(frame);
+    Q_EMIT frameChanged(frame);
 
     listenChangesInFrame();
 }
@@ -139,7 +139,7 @@ void DockFrameModel::listenChangesInFrame()
     }
 
     // connect(m_frame, &KDDockWidgets::Core::TabBar::numDockWidgetsChanged, this, [this]() {
-    //     emit tabsChanged();
+    //      Q_EMIT tabsChanged();
 
     //     if (!currentDockWidget()) {
     //         m_frame->setCurrentTabIndex(0);
@@ -166,7 +166,7 @@ void DockFrameModel::listenChangesInFrame()
     // connect(m_frame, &KDDockWidgets::Frame::currentDockWidgetChanged, this, [this]() {
     //     updateNavigationSection();
 
-    //     emit currentDockChanged();
+    //      Q_EMIT currentDockChanged();
     // });
 }
 
@@ -177,7 +177,7 @@ void DockFrameModel::setTitleBarVisible(bool visible)
     }
 
     m_titleBarVisible = visible;
-    emit titleBarVisibleChanged(visible);
+    Q_EMIT titleBarVisibleChanged(visible);
 }
 
 void DockFrameModel::setIsHorizontalPanel(bool is)
@@ -187,7 +187,7 @@ void DockFrameModel::setIsHorizontalPanel(bool is)
     }
 
     m_isHorizontalPanel = is;
-    emit isHorizontalPanelChanged();
+    Q_EMIT isHorizontalPanelChanged();
 }
 
 QObject* DockFrameModel::currentNavigationSection() const
@@ -203,7 +203,7 @@ void DockFrameModel::updateNavigationSection()
     QObject* n = currentNavigationSection();
     if (m_navigationSection != n) {
         m_navigationSection = n;
-        emit navigationSectionChanged();
+        Q_EMIT navigationSectionChanged();
     }
 }
 
@@ -218,7 +218,7 @@ void DockFrameModel::updateTitleBar()
     QQmlComponent* tb = currentTitleBar();
     if (m_titleBar != tb) {
         m_titleBar = tb;
-        emit titleBarChanged();
+        Q_EMIT titleBarChanged();
     }
 }
 

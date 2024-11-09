@@ -75,6 +75,8 @@ set(KDDockWidgets_QT6 ON CACHE BOOL "Build against Qt 6" FORCE)
 set(KDDockWidgets_EXAMPLES OFF CACHE BOOL "Build the examples" FORCE)
 add_subdirectory(thirdparty/KDDockWidgets EXCLUDE_FROM_ALL)
 
+set(MODULE_DEF QT_NO_EMIT)
+
 set(MODULE_LINK kddockwidgets)
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)

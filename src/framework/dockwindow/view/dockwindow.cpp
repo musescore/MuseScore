@@ -242,8 +242,8 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
     }
 
     auto notifyAboutPageLoaded = [this, &uri]() {
-        emit currentPageUriChanged(uri);
-        emit pageLoaded();
+        Q_EMIT currentPageUriChanged(uri);
+        Q_EMIT pageLoaded();
         notifyAboutDocksOpenStatus();
     };
 

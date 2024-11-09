@@ -65,7 +65,7 @@ void DockPageView::init()
         });
     }
 
-    emit inited();
+    Q_EMIT inited();
 }
 
 void DockPageView::deinit()
@@ -84,7 +84,7 @@ QString DockPageView::uri() const
 
 void DockPageView::setParams(const QVariantMap& params)
 {
-    emit setParamsRequested(params);
+    Q_EMIT setParamsRequested(params);
 }
 
 QQmlListProperty<DockToolBarView> DockPageView::mainToolBarsProperty()
@@ -386,7 +386,7 @@ void DockPageView::setUri(const QString& uri)
     }
 
     m_uri = uri;
-    emit uriChanged(uri);
+    Q_EMIT uriChanged(uri);
 }
 
 void DockPageView::setCentralDock(DockCentralView* central)
@@ -396,7 +396,7 @@ void DockPageView::setCentralDock(DockCentralView* central)
     }
 
     m_central = central;
-    emit centralDockChanged(central);
+    Q_EMIT centralDockChanged(central);
 }
 
 // void DockPageView::setStatusBar(DockStatusBarView* statusBar)
@@ -406,7 +406,7 @@ void DockPageView::setCentralDock(DockCentralView* central)
 //     }
 
 //     m_statusBar = statusBar;
-//     emit statusBarChanged(statusBar);
+//      Q_EMIT statusBarChanged(statusBar);
 // }
 
 void DockPageView::componentComplete()

@@ -135,7 +135,7 @@ void DockToolBarView::setOrientation(Qt::Orientation orientation)
     }
 
     m_orientation = orientation;
-    emit orientationChanged(orientation);
+    Q_EMIT orientationChanged(orientation);
 }
 
 void DockToolBarView::setAlignment(int alignment)
@@ -145,7 +145,7 @@ void DockToolBarView::setAlignment(int alignment)
     }
 
     m_alignment = alignment;
-    emit alignmentChanged(alignment);
+    Q_EMIT alignmentChanged(alignment);
 }
 
 void DockToolBarView::setDraggableMouseArea(QQuickItem* mouseArea)
