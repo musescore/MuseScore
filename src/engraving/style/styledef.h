@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_STYLEDEF_H
-#define MU_ENGRAVING_STYLEDEF_H
+#pragma once
 
 #include <array>
 #include <vector>
@@ -1871,5 +1870,3 @@ private:
     static const std::array<StyleValue, size_t(Sid::STYLES)> styleValues;
 };
 }
-
-#endif // MU_ENGRAVING_STYLEDEF_H

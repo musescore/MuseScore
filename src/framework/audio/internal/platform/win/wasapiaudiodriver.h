@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_AUDIO_WASAPIAUDIODRIVER_H
-#define MUSE_AUDIO_WASAPIAUDIODRIVER_H
+#pragma once
 
 #include <memory>
 
@@ -90,5 +88,3 @@ private:
     Spec m_activeSpec;
 };
 }
-
-#endif // MUSE_AUDIO_WASAPIAUDIODRIVER_H

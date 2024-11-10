@@ -39,6 +39,8 @@
 #include "dom/tie.h"
 #include "dom/timesig.h"
 
+#include "types/fraction.h"
+
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
