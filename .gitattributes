@@ -1,7 +1,5 @@
-buildscripts/packaging/Windows/PortableApps/**/*.ini eol=crlf
-buildscripts/packaging/Windows/PortableApps/**/*.txt eol=crlf
-buildscripts/packaging/Windows/PortableApps/**/*.ini.in eol=crlf
-buildscripts/packaging/Windows/PortableApps/**/*.html eol=crlf
+# Normalise text files by default
+*               text=auto
 
 # Shell scripts with shebang lines must have LF line endings
 *.sh            text            eol=lf
@@ -12,3 +10,9 @@ build.cmake     text            eol=lf
 # Batch files need CRLF line endings
 *.bat           text            eol=crlf
 *.cmd           text            eol=crlf
+
+# Windows PortableApps packaging files need CRLF line endings
+buildscripts/packaging/Windows/PortableApps/**/*.ini eol=crlf
+buildscripts/packaging/Windows/PortableApps/**/*.txt eol=crlf
+buildscripts/packaging/Windows/PortableApps/**/*.ini.in eol=crlf
+buildscripts/packaging/Windows/PortableApps/**/*.html eol=crlf
