@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_MSCWRITER_H
-#define MU_ENGRAVING_MSCWRITER_H
+#pragma once
 
 #include "types/string.h"
 #include "types/ret.h"
@@ -145,5 +144,3 @@ private:
     bool m_hadError = false;
 };
 }
-
-#endif // MU_ENGRAVING_MSCWRITER_H
