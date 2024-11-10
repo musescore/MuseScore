@@ -8820,13 +8820,29 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         }
         break;
         case HarmonyType::ROMAN: {
-            static const std::regex roman("[iv]+|[IV]+");
-            if (std::regex_match(textName.toStdString(), roman)) {
+            int alter = 0;
+            static const std::wregex roman(L"(b|#)?([ivIV]+)");
+            if (textName.contains(roman)) {
+                StringList matches = textName.search(roman, { 1, 2 });
                 m_xml.startElement("numeral");
-                m_xml.tag("numeral-root", { { "text", textName } }, "1");
+                if (matches.at(0) == u"b") {
+                    alter = -1;
+                } else if (matches.at(0) == u"#") {
+                    alter = 1;
+                }
+                m_xml.tag("numeral-root", { { "text", matches.at(1) } }, "1");
+                if (alter) {
+                    m_xml.tag("numeral-alter", alter);
+                }
                 m_xml.endElement();
-                // only check for major or minor
-                m_xml.tag("kind", textName.at(0).isUpper() ? "major" : "minor");
+                // simple check for major or minor
+                m_xml.tag("kind", matches.at(1).at(0).isUpper() ? "major" : "minor");
+                // infer inversion from ending digits
+                if (textName.endsWith(u"64")) {
+                    m_xml.tag("inversion", 2);
+                } else if (textName.endsWith(u"6")) {
+                    m_xml.tag("inversion", 1);
+                }
                 break;
             }
         }
