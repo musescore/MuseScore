@@ -9582,7 +9582,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1245"/>
         <source>&amp;Lyricist</source>
-        <translation>&amp;Texter</translation>
+        <translation>T&amp;exter</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1251"/>
@@ -9592,7 +9592,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1263"/>
         <source>Syst&amp;em text</source>
-        <translation>Syst&amp;emtext</translation>
+        <translation>&amp;Systemtext</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1269"/>
@@ -9627,7 +9627,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1305"/>
         <source>Chor&amp;d symbol</source>
-        <translation>Akkor&amp;dsymbol</translation>
+        <translation>Akko&amp;rdsymbol</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1311"/>

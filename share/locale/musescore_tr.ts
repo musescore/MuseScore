@@ -27510,7 +27510,7 @@ yazılamadı.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1506"/>
         <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on musescore.org.</source>
-        <translation>Dosya kullanılamaz hâle gelse de yerel olarak kaydetmeye devam edebilirsiniz. Puanınızı korumak için en son kaydedilen sürüme dönün veya hataları manuel olarak düzeltin. Bu konuda musescore.org adresinden de yardım alabilirsiniz.</translation>
+        <translation>Dosya kullanılamaz hâle gelse de yerel olarak kaydetmeye devam edebilirsiniz. Partisyonunuzu korumak için en son kaydedilen sürüme dönün veya hataları manuel olarak düzeltin. Bu konuda musescore.org adresinden de yardım alabilirsiniz.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1513"/>
@@ -29822,7 +29822,7 @@ yazılamadı.</translation>
     <message>
         <location filename="../../src/workspacescene/view/newworkspacemodel.cpp" line="102"/>
         <source>A workspace with the name “%1” already exists. Please choose a different name.</source>
-        <translation>&apos;%1&apos; adında bir çalışma alanı zaten var. Lütfen farklı bir ad seçin.</translation>
+        <translation>”%1“ adında bir çalışma alanı zaten var. Lütfen farklı bir ad seçin.</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/view/newworkspacemodel.cpp" line="109"/>

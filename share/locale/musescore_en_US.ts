@@ -9627,7 +9627,7 @@ text x-height):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1305"/>
         <source>Chor&amp;d symbol</source>
-        <translation>Chor&amp;d symbol</translation>
+        <translation>C&amp;hord symbol</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1311"/>
