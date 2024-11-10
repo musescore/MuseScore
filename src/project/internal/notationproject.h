@@ -94,8 +94,8 @@ public:
     bool needAutoSave() const override;
     void setNeedAutoSave(bool val) override;
 
-    muse::Ret save(const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save,
-                   bool forceNoBackupCreate = false) override;
+    muse::Ret save(
+        const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save, bool createBackup = true) override;
     muse::Ret writeToDevice(QIODevice* device) override;
 
     ProjectMeta metaInfo() const override;

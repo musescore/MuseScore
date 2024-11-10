@@ -93,7 +93,7 @@ public:
     bool closeOpenedProject(bool quitApp = false) override;
     bool saveProject(const muse::io::path_t& path = muse::io::path_t()) override;
     bool saveProjectLocally(
-        const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save, bool forceNoBackupCreate = false) override;
+        const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save, bool createBackup = true) override;
 
     // mi::IProjectProvider
     bool isProjectOpened(const muse::io::path_t& scorePath) const override;

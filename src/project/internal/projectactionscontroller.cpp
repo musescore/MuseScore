@@ -915,7 +915,7 @@ bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveM
     return false;
 }
 
-bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& filePath, SaveMode saveMode, bool forceNoBackupCreate)
+bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& filePath, SaveMode saveMode, bool createBackup)
 {
     INotationProjectPtr project = currentNotationProject();
     if (!project) {
@@ -928,7 +928,7 @@ bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& filePa
     }
 
     if (ret) {
-        ret = project->save(filePath, saveMode, forceNoBackupCreate);
+        ret = project->save(filePath, saveMode, createBackup);
     }
 
     if (!ret) {
@@ -942,7 +942,7 @@ bool ProjectActionsController::saveProjectLocally(const muse::io::path_t& filePa
                     // Retry the save. Do not create a backup this time because the target file has been corrupted
                     // already. Creating a backup file of a corrupted file now makes no sense and will corrupt
                     // the healthy backup file created on the first save attempt.
-                    saveProjectLocally(filePath, saveMode, true /*forceNoBackupCreate*/);
+                    saveProjectLocally(filePath, saveMode, false /*createBackup*/);
                 });
                 break;
 

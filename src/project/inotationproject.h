@@ -70,7 +70,7 @@ public:
     virtual void setNeedAutoSave(bool val) = 0;
 
     virtual muse::Ret save(
-        const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save, bool forceNoBackupCreate = false) = 0;
+        const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save, bool createBackup = true) = 0;
     virtual muse::Ret writeToDevice(QIODevice* device) = 0;
 
     virtual ProjectMeta metaInfo() const = 0;

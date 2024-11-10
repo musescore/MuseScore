@@ -460,7 +460,7 @@ void NotationProject::setCloudAudioInfo(const CloudAudioInfo& audioInfo)
     m_masterNotation->masterScore()->setMetaTag(AUDIO_COM_URL_TAG, audioInfo.url.toString());
 }
 
-Ret NotationProject::save(const muse::io::path_t& path, SaveMode saveMode, bool forceNoBackupCreate)
+Ret NotationProject::save(const muse::io::path_t& path, SaveMode saveMode, bool createBackup)
 {
     TRACEFUNC;
 
@@ -481,7 +481,10 @@ Ret NotationProject::save(const muse::io::path_t& path, SaveMode saveMode, bool 
 
         std::string suffix = io::suffix(savePath);
 
-        Ret ret = saveScore(savePath, suffix, !forceNoBackupCreate /*generateBackup*/);
+        // Whether a backup file will be created depends on both the caller's and user's will
+        bool shouldCreateBackup = createBackup && configuration()->createBackupBeforeSaving();
+
+        Ret ret = saveScore(savePath, suffix, shouldCreateBackup);
         if (ret) {
             if (saveMode != SaveMode::SaveCopy) {
                 markAsSaved(savePath);
@@ -694,11 +697,6 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
 Ret NotationProject::makeBackup(muse::io::path_t filePath)
 {
     TRACEFUNC;
-
-    bool create = configuration()->createBackupBeforeSaving();
-    if (!create) {
-        return make_ret(Ret::Code::Ok);
-    }
 
     if (io::suffix(filePath) != engraving::MSCZ) {
         LOGW() << "backup allowed only for MSCZ, currently: " << filePath;
