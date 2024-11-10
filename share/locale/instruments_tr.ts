@@ -356,7 +356,7 @@
         <source>Flute in G, sounding an octave below the alto flute.</source>
         <comment>contra-alto-flute description</comment>
         <extracomment>description for Contra-alto Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sol flüt, alto flütün bir oktav pesten duyulur.</translation>
+        <translation>Sol flüt, alto flütün bir oktav altından duyulur.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="322"/>
@@ -412,7 +412,7 @@
         <source>Flute in G, sounding two octaves below the alto flute.</source>
         <comment>subcontra-alto-flute description</comment>
         <extracomment>description for Sub Contra-alto Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sol flüt, alto flütten iki oktav daha pesten duyulur.</translation>
+        <translation>Sol flüt, alto flütün iki oktav daha altında duyulur.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="340"/>
@@ -440,7 +440,7 @@
         <source>Flute in C, sounding three octaves below the standard flute.</source>
         <comment>double-contrabass-flute description</comment>
         <extracomment>description for Double Contrabass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Do flüt, standart flütten üç oktav daha pesten duyulur.</translation>
+        <translation>Do flüt, standart flütün üç oktav daha altında duyulur.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="349"/>
@@ -468,7 +468,7 @@
         <source>Flute in C, sounding four octaves below the standard flute.</source>
         <comment>hyperbass-flute description</comment>
         <extracomment>description for Hyperbass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Do flüt, standart flütten dört oktav daha pesten duyulur.</translation>
+        <translation>Do flüt, standart flütün dört oktav daha altında duyulur.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="358"/>
@@ -734,7 +734,7 @@
         <source>Fife pitched in B♭ (when all 6 holes are covered), notated in A♭, sounding a minor sixth higher than written.</source>
         <comment>fife description</comment>
         <extracomment>description for Fife; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Fife, B♭ ile gösterilir (6 deliğin tamamı kapatıldığında), A♭ ile notalanır ve yazılandan küçük altılı tizden seslendirilir.</translation>
+        <translation>Fife, Si♭ ile gösterilir (6 deliğin tamamı kapatıldığında), La♭ ile notalanır ve yazılandan küçük altılı tizden seslendirilir.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="444"/>
@@ -1896,7 +1896,7 @@
         <source>Very rare variant of the heckelphone in F, sounding a fourth higher than the oboe.</source>
         <comment>piccolo-heckelphone description</comment>
         <extracomment>description for Piccolo Heckelphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>F perdeli heckelphone&apos;un çok nadir bir çeşidi, sesi obuadan tam dörttlü daha tizdir.</translation>
+        <translation>Fa perdeli heckelphone&apos;un çok nadir bir çeşidi, sesi obuadan tam dörttlü daha tizdir.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="818"/>
@@ -1924,7 +1924,7 @@
         <source>Oboe in E♭, sounding a minor third above the standard oboe. Historically called the oboe musette.</source>
         <comment>piccolo-oboe description</comment>
         <extracomment>description for Piccolo Oboe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>E♭ Obua, standart obuadan küçük üçlü yukarıdan ses çıkarır. Tarihsel olarak obua musette olarak adlandırılır.</translation>
+        <translation>Mi♭ Obua, standart obuadan küçük üçlü yukarıdan ses çıkarır. Tarihsel olarak obua musette olarak adlandırılır.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="827"/>

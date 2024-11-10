@@ -118,7 +118,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="137"/>
         <source>Quarter note</source>
-        <translation>Kertvirtinė nata</translation>
+        <translation>Ketvirtinė nata</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="150"/>
@@ -11756,7 +11756,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/engravingitem.cpp" line="2533"/>
         <source>Beat: %1</source>
-        <translation type="unfinished"/>
+        <translation>Takto dalis: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fingering.cpp" line="118"/>
@@ -11938,7 +11938,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3160"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
-        <translation type="unfinished"/>
+        <translation>%1; Garso aukštis: %2; Trukmė: %3%4%5</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3189"/>
@@ -13592,7 +13592,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/ambitus.cpp" line="558"/>
         <source>Top pitch: %1; Bottom pitch: %2</source>
-        <translation type="unfinished"/>
+        <translation>Viršutinis garso aukštis: %1; Apatinis garso aukštis: %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/accessibility/accessibleitem.cpp" line="206"/>

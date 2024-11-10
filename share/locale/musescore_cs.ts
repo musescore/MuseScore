@@ -6779,7 +6779,7 @@ pro čísla u nepravidelných rytm. skupin</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="382"/>
         <source>Similar in this range</source>
-        <translation>Podobné v tomto rozsahu</translation>
+        <translation>Podobné v tomto výběru</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="388"/>
@@ -11661,7 +11661,7 @@ Vydáno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3&lt;/
     <message>
         <location filename="../../src/engraving/accessibility/accessibleroot.cpp" line="220"/>
         <source>Range selection starts %1%2 ends %3%4</source>
-        <translation>Výběr rozsahu začíná %1%2 končí %3%4</translation>
+        <translation>Výběr začíná %1%2 končí %3%4</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="492"/>
@@ -22491,7 +22491,7 @@ Mastering MuseScore navíc nabízí podporující společenství hudebníků s d
     <message>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="183"/>
         <source>Range selection; %1; %2</source>
-        <translation>Výběr rozsahu; %1; %2</translation>
+        <translation>Výběr; %1; %2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="203"/>
