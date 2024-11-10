@@ -29,7 +29,6 @@
 
 #include "score.h"
 #include "system.h"
-#include "chord.h"
 #include "trill.h"
 
 #include "log.h"

@@ -1005,7 +1005,7 @@ void MeasureLayout::updateGraceNotes(Measure* measure, LayoutContext& ctx)
 {
     // Clean everything
     for (Segment& s : measure->segments()) {
-        for (unsigned track = 0; track < ctx.dom().ntracks(); ++track) {
+        for (track_idx_t track = 0; track < ctx.dom().ntracks(); ++track) {
             EngravingItem* e = s.preAppendedItem(track);
             if (e && e->isGraceNotesGroup()) {
                 s.clearPreAppended(track);
@@ -1035,7 +1035,7 @@ void MeasureLayout::updateGraceNotes(Measure* measure, LayoutContext& ctx)
 
     // Layout grace note groups
     for (Segment& s : measure->segments()) {
-        for (unsigned track = 0; track < ctx.dom().ntracks(); ++track) {
+        for (track_idx_t track = 0; track < ctx.dom().ntracks(); ++track) {
             EngravingItem* e = s.preAppendedItem(track);
             if (e && e->isGraceNotesGroup()) {
                 GraceNotesGroup* gng = toGraceNotesGroup(e);

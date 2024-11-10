@@ -6049,7 +6049,7 @@
                 </widget>
                </item>
                <item row="6" column="0" colspan="7">
-                <widget class="QGroupBox" name="groupBox">
+                <widget class="QGroupBox" name="groupBox_1">
                  <property name="title">
                   <string>Number layout</string>
                  </property>
@@ -10809,7 +10809,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBox">
+         <widget class="QGroupBox" name="groupBox_21">
           <property name="title">
            <string>Trill cue note</string>
           </property>

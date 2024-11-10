@@ -749,26 +749,23 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
             collectBend(stretchedBend->pitchValues(), stretchedBend->staffIdx(), noteChannel, tick1, tick1 + getPlayTicksForBend(
                             note).ticks(), pitchWheelRenderer, noteEffect);
         }
+    } else if (bendFor) {
+        collectGuitarBend(note, noteChannel, tick1, noteParams.graceOffsetOn, noteParams.previousChordTicks, pitchWheelRenderer,
+                          noteEffect);
     } else {
-        const GuitarBend* bendFor = note->bendFor();
-        if (bendFor) {
-            collectGuitarBend(note, noteChannel, tick1, noteParams.graceOffsetOn, noteParams.previousChordTicks, pitchWheelRenderer,
-                              noteEffect);
-        } else {
-            // old bends implementation
-            for (const EngravingItem* e : note->el()) {
-                if (!e || (e->type() != ElementType::BEND)) {
-                    continue;
-                }
-
-                const Bend* bend = toBend(e);
-                if (!bend->playBend()) {
-                    break;
-                }
-
-                collectBend(bend->points(), bend->staffIdx(), noteChannel, tick1, tick1 + getPlayTicksForBend(
-                                note).ticks(), pitchWheelRenderer, noteEffect);
+        // old bends implementation
+        for (const EngravingItem* e : note->el()) {
+            if (!e || (e->type() != ElementType::BEND)) {
+                continue;
             }
+
+            const Bend* bend = toBend(e);
+            if (!bend->playBend()) {
+                break;
+            }
+
+            collectBend(bend->points(), bend->staffIdx(), noteChannel, tick1, tick1 + getPlayTicksForBend(
+                            note).ticks(), pitchWheelRenderer, noteEffect);
         }
     }
 }
