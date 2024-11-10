@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_MACOSAPPMENUMODELHOOK_H
-#define MU_APPSHELL_MACOSAPPMENUMODELHOOK_H
+#pragma once
 
 #include "../../iappmenumodelhook.h"
 
@@ -31,5 +30,3 @@ public:
     void onAppMenuInited() override;
 };
 }
-
-#endif // MU_APPSHELL_MACOSAPPMENUMODELHOOK_H

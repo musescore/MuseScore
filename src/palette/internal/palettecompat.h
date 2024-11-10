@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PALETTE_PALETTECOMPAT_H
-#define MU_PALETTE_PALETTECOMPAT_H
+#pragma once
 
 #include "engraving/dom/engravingitem.h"
 
@@ -39,5 +38,4 @@ private:
     static void addNewLineItems(Palette& linesPalette);
     static void removeOldItems(Palette& palette);
 };
-} // namespace mu::palette
-#endif // MU_PALETTE_PALETTECOMPAT_H
+}

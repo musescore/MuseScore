@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_UICOMPONENTS_POPUPVIEWCLOSECONTROLLER_H
-#define MUSE_UICOMPONENTS_POPUPVIEWCLOSECONTROLLER_H
+#pragma once
 
 #include <QObject>
 #include <QQuickItem>
@@ -88,5 +86,3 @@ private:
     async::Notification m_closeNotification;
 };
 }
-
-#endif // MUSE_UICOMPONENTS_POPUPVIEWCLOSECONTROLLER_H

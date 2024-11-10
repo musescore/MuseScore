@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_UICOMPONENTS_POPUPVIEW_H
-#define MUSE_UICOMPONENTS_POPUPVIEW_H
+#pragma once
 
 #include <QQuickItem>
 #include <QQmlParserStatus>
@@ -327,5 +326,3 @@ protected:
     bool m_forceClosed = false;
 };
 }
-
-#endif // MUSE_UICOMPONENTS_POPUPVIEW_H
