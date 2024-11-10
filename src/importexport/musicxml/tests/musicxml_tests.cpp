@@ -953,6 +953,9 @@ TEST_F(MusicXml_Tests, notesRests2) {
 TEST_F(MusicXml_Tests, numberedLyrics) {
     musicXmlIoTestRef("testNumberedLyrics");
 }
+TEST_F(MusicXml_Tests, numerals) {
+    musicXmlIoTest("testNumerals");
+}
 TEST_F(MusicXml_Tests, overlappingSpanners) {
     musicXmlIoTest("testOverlappingSpanners");
 }
