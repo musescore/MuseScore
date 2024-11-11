@@ -5984,7 +5984,7 @@
                   <item row="4" column="2">
                    <widget class="QToolButton" name="mmRestMaxMeasuresReset">
                     <property name="text">
-                     <string>...</string>
+                     <string notr="true"/>
                     </property>
                    </widget>
                   </item>
@@ -5998,7 +5998,7 @@
                   <item row="2" column="2">
                    <widget class="QToolButton" name="resetMMRestRefDuration">
                     <property name="text">
-                     <string>...</string>
+                     <string notr="true"/>
                     </property>
                    </widget>
                   </item>
@@ -6060,7 +6060,7 @@
                   <item row="3" column="2">
                    <widget class="QToolButton" name="resetPlaceBetweenStaves">
                     <property name="text">
-                     <string>...</string>
+                     <string notr="true"/>
                     </property>
                    </widget>
                   </item>
