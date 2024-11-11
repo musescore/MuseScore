@@ -8832,8 +8832,8 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                 }
                 const String numberStr = matches.at(1);
                 size_t harmoy = 1;
-                if (numberStr.contains("v", CaseSensitivity::CaseInsensitive)) {
-                    if (numberStr.startsWith("i", CaseSensitivity::CaseInsensitive))) {
+                if (numberStr.contains(u"v", CaseSensitivity::CaseInsensitive)) {
+                    if (numberStr.startsWith(u"i", CaseSensitivity::CaseInsensitive)) {
                         harmoy = 4;
                     } else {
                         harmoy = 4 + numberStr.size();
