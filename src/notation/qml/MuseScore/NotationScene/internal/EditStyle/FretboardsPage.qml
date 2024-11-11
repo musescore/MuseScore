@@ -63,8 +63,8 @@ Rectangle {
 
             RowLayout {
                 StyledTextLabel {
-                    Layout.fillWidth: true
                     horizontalAlignment: Qt.AlignLeft
+                    Layout.minimumWidth: 120
                     text: qsTrc("notation", "Orientation:")
                 }
 
@@ -96,6 +96,10 @@ Rectangle {
                         checked: fretboardsPage.fretOrientation.value === modelData.value
                         onToggled: fretboardsPage.fretOrientation.value = modelData.value
                     }
+                }
+
+                Item {
+                    Layout.fillWidth: true
                 }
             }
 
@@ -213,7 +217,7 @@ Rectangle {
                         width: parent.width
 
                         StyledTextLabel {
-                            Layout.fillWidth: true
+                            Layout.minimumWidth: 120
                             horizontalAlignment: Text.AlignLeft
                             text: qsTrc("notation", "Appearance:")
                         }
@@ -247,6 +251,9 @@ Rectangle {
                                 onToggled: fretboardsPage.barreAppearanceSlur.value = modelData.value
                             }
                         }
+                        Item {
+                            Layout.fillWidth: true
+                        }
                     }
 
                     BasicStyleSelectorWithSpinboxAndReset {
@@ -275,7 +282,7 @@ Rectangle {
                 width: parent.width
 
                 StyledTextLabel {
-                    Layout.fillWidth: true
+                    Layout.minimumWidth: 120
                     horizontalAlignment: Text.AlignLeft
                     text: qsTrc("notation", "Fretboard style:")
                 }
@@ -308,6 +315,10 @@ Rectangle {
                         checked: fretboardsPage.fretStyleExtended.value === modelData.value
                         onToggled: fretboardsPage.fretStyleExtended.value = modelData.value
                     }
+                }
+
+                Item {
+                    Layout.fillWidth: true
                 }
             }
 
