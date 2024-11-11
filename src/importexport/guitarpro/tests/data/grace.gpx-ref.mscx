@@ -171,7 +171,6 @@
               <Spanner type="Glissando">
                 <Glissando>
                   <diagonal>1</diagonal>
-                  <anchor>3</anchor>
                   </Glissando>
                 <next>
                   <location>
