@@ -3813,13 +3813,6 @@ first note of the system</translation>
         <translation type="unfinished"> / 4</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5987"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6001"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6063"/>
-        <source>...</source>
-        <translation type="unfinished">...</translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5994"/>
         <source> measures</source>
         <translation type="unfinished"> measures</translation>
@@ -22680,6 +22673,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Find / Go to:</translation>
     </message>
     <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
+        <source>Voices visible on this staff</source>
+        <translation type="unfinished">Voices visible on this staff</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="55"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="163"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="165"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="167"/>
@@ -24649,13 +24648,13 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="487"/>
-        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1119"/>
+        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1120"/>
         <source>Delete</source>
         <translation type="unfinished">Delete</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="488"/>
-        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1120"/>
+        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1121"/>
         <source>Properties…</source>
         <translation type="unfinished">Properties…</translation>
     </message>
@@ -25603,7 +25602,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Save palette</translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/drumsetpalette.cpp" line="68"/>
+        <location filename="../../src/palette/view/widgets/drumsetpalette.cpp" line="64"/>
         <source>Drumset</source>
         <translation type="unfinished">Drumset</translation>
     </message>
@@ -25669,12 +25668,12 @@ failed: %2</translation>
         <translation type="unfinished">Beam selector</translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1137"/>
+        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1138"/>
         <source>Delete palette cell</source>
         <translation type="unfinished">Delete palette cell</translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1138"/>
+        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1139"/>
         <source>Are you sure you want to delete palette cell “%1”?</source>
         <translation type="unfinished">Are you sure you want to delete palette cell “%1”?</translation>
     </message>
