@@ -27,6 +27,9 @@
 #include "async/asyncable.h"
 #include "async/notification.h"
 
+#include "engraving/dom/engravingitem.h"
+
+namespace mu::notation {
 class PercussionPanelPadModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
@@ -35,6 +38,8 @@ class PercussionPanelPadModel : public QObject, public muse::async::Asyncable
 
     Q_PROPERTY(QString keyboardShortcut READ keyboardShortcut NOTIFY keyboardShortcutChanged)
     Q_PROPERTY(QString midiNote READ midiNote NOTIFY midiNoteChanged)
+
+    Q_PROPERTY(QVariant notationPreviewItem READ notationPreviewItemVariant NOTIFY notationPreviewItemChanged)
 
     Q_PROPERTY(bool isEmptySlot READ isEmptySlot NOTIFY isEmptySlotChanged)
 
@@ -50,6 +55,11 @@ public:
     QString midiNote() const { return m_midiNote; }
     void setMidiNote(const QString& midiNote);
 
+    void setNotationPreviewItem(mu::engraving::ElementPtr item);
+    mu::engraving::ElementPtr notationPreviewItem() const { return m_notationPreviewItem; }
+
+    const QVariant notationPreviewItemVariant() const;
+
     bool isEmptySlot() const { return m_isEmptySlot; }
     void setIsEmptySlot(bool isEmptySlot);
 
@@ -62,6 +72,8 @@ signals:
     void keyboardShortcutChanged();
     void midiNoteChanged();
 
+    void notationPreviewItemChanged();
+
     void isEmptySlotChanged();
 
 private:
@@ -70,7 +82,10 @@ private:
     QString m_keyboardShortcut;
     QString m_midiNote;
 
+    mu::engraving::ElementPtr m_notationPreviewItem;
+
     bool m_isEmptySlot = true;
 
     muse::async::Notification m_triggeredNotification;
 };
+}

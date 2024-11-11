@@ -26,7 +26,7 @@
 #include "engraving/dom/engravingitem.h"
 #include "engraving/rendering/isinglerenderer.h"
 
-namespace mu::engraving::rendering {
+namespace mu::notation {
 class EngravingItemPreviewPainter
 {
     INJECT_STATIC(engraving::rendering::ISingleRenderer, engravingRender)
@@ -36,7 +36,7 @@ public:
     {
         muse::draw::Painter* painter = nullptr;
 
-        Color color;
+        mu::engraving::Color color;
 
         double mag = 1.0;
         double xoffset = 0.0;

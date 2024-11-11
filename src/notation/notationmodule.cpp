@@ -50,6 +50,7 @@
 #include "view/notationnavigator.h"
 #include "view/selectionfiltermodel.h"
 #include "view/editgridsizedialogmodel.h"
+#include "view/paintedengravingitem.h"
 
 #include "view/pianokeyboard/pianokeyboardview.h"
 #include "view/pianokeyboard/pianokeyboardpanelcontextmenumodel.h"
@@ -184,6 +185,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<HarpPedalPopupModel>("MuseScore.NotationScene", 1, 0, "HarpPedalPopupModel");
     qmlRegisterType<CapoSettingsModel>("MuseScore.NotationScene", 1, 0, "CapoSettingsModel");
     qmlRegisterType<StringTuningsSettingsModel>("MuseScore.NotationScene", 1, 0, "StringTuningsSettingsModel");
+    qmlRegisterType<PaintedEngravingItem>("MuseScore.NotationScene", 1, 0, "PaintedEngravingItem");
 
     qmlRegisterType<PercussionPanelModel>("MuseScore.NotationScene", 1, 0, "PercussionPanelModel");
     qmlRegisterUncreatableType<PanelMode>("MuseScore.NotationScene", 1, 0, "PanelMode", "Cannot create");

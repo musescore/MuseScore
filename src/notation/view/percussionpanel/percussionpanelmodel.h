@@ -32,6 +32,7 @@
 
 #include "percussionpanelpadlistmodel.h"
 
+namespace mu::notation {
 class PanelMode
 {
     Q_GADGET
@@ -100,3 +101,4 @@ private:
 
     PercussionPanelPadListModel* m_padListModel = nullptr;
 };
+}

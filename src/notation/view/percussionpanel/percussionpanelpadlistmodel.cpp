@@ -23,6 +23,11 @@
 #include "global/utils.h"
 #include "percussionpanelpadlistmodel.h"
 
+#include "notation/utilities/engravingitempreviewpainter.h"
+#include "notation/utilities/percussionutilities.h"
+
+using namespace mu::notation;
+
 PercussionPanelPadListModel::PercussionPanelPadListModel(QObject* parent)
     : QAbstractListModel(parent)
 {
@@ -131,6 +136,8 @@ void PercussionPanelPadListModel::resetLayout()
         model->padTriggered().onNotify(this, [this, pitch]() {
             m_triggeredChannel.send(pitch);
         });
+
+        model->setNotationPreviewItem(PercussionUtilities::getDrumNoteForPreview(m_drumset, pitch));
 
         model->setIsEmptySlot(false);
 

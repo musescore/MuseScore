@@ -22,6 +22,8 @@
 
 #include "percussionpanelpadmodel.h"
 
+using namespace mu::notation;
+
 PercussionPanelPadModel::PercussionPanelPadModel(QObject* parent)
     : QObject(parent)
 {
@@ -55,6 +57,21 @@ void PercussionPanelPadModel::setMidiNote(const QString& midiNote)
 
     m_midiNote = midiNote;
     emit midiNoteChanged();
+}
+
+void PercussionPanelPadModel::setNotationPreviewItem(mu::engraving::ElementPtr item)
+{
+    if (m_notationPreviewItem == item) {
+        return;
+    }
+
+    m_notationPreviewItem = item;
+    emit notationPreviewItemChanged();
+}
+
+const QVariant PercussionPanelPadModel::notationPreviewItemVariant() const
+{
+    return QVariant::fromValue(m_notationPreviewItem);
 }
 
 void PercussionPanelPadModel::setIsEmptySlot(bool isEmptySlot)

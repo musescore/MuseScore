@@ -818,6 +818,7 @@ extern void collectElements(void* data, EngravingItem* e);
 } // mu::engraving
 
 #ifndef NO_QT_SUPPORT
+Q_DECLARE_METATYPE(mu::engraving::ElementPtr)
 Q_DECLARE_METATYPE(mu::engraving::ElementType)
 #endif
 
