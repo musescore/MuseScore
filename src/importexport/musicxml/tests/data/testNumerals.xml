@@ -65,7 +65,7 @@
         </note>
       <harmony print-frame="no">
         <numeral>
-          <numeral-root text="ii">1</numeral-root>
+          <numeral-root text="ii">2</numeral-root>
           </numeral>
         <kind>minor</kind>
         </harmony>
@@ -83,7 +83,7 @@
     <measure number="2">
       <harmony print-frame="no">
         <numeral>
-          <numeral-root text="iii">1</numeral-root>
+          <numeral-root text="iii">3</numeral-root>
           </numeral>
         <kind>minor</kind>
         </harmony>
@@ -99,7 +99,7 @@
         </note>
       <harmony print-frame="no">
         <numeral>
-          <numeral-root text="IV">1</numeral-root>
+          <numeral-root text="IV">4</numeral-root>
           </numeral>
         <kind>major</kind>
         </harmony>
@@ -117,7 +117,7 @@
     <measure number="3">
       <harmony print-frame="no">
         <numeral>
-          <numeral-root text="V">1</numeral-root>
+          <numeral-root text="V">5</numeral-root>
           </numeral>
         <kind>major</kind>
         </harmony>
