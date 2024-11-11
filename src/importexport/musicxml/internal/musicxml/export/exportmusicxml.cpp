@@ -8830,13 +8830,24 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                 } else if (matches.at(0) == u"#") {
                     alter = 1;
                 }
-                m_xml.tag("numeral-root", { { "text", matches.at(1) } }, "1");
+                const String numberStr = matches.at(1);
+                size_t harmoy = 1;
+                if (numberStr.contains("v", CaseSensitivity::CaseInsensitive)) {
+                    if (numberStr.startsWith("i", CaseSensitivity::CaseInsensitive))) {
+                        harmoy = 4;
+                    } else {
+                        harmoy = 4 + numberStr.size();
+                    }
+                } else {
+                    harmoy = numberStr.size();
+                }
+                m_xml.tag("numeral-root", { { "text", numberStr } }, harmoy);
                 if (alter) {
                     m_xml.tag("numeral-alter", alter);
                 }
                 m_xml.endElement();
                 // simple check for major or minor
-                m_xml.tag("kind", matches.at(1).at(0).isUpper() ? "major" : "minor");
+                m_xml.tag("kind", numberStr.at(0).isUpper() ? "major" : "minor");
                 // infer inversion from ending digits
                 if (textName.endsWith(u"64")) {
                     m_xml.tag("inversion", 2);
