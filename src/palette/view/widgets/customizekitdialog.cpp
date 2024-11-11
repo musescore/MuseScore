@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "editdrumsetdialog.h"
+#include "customizekitdialog.h"
 
 #include "io/file.h"
 
@@ -50,17 +50,17 @@ using namespace muse::io;
 using namespace mu::notation;
 using namespace mu::engraving;
 
-static const QString EDIT_DRUMSET_DIALOG_NAME("EditDrumsetDialog");
+static const QString CUSTOMIZE_KIT_DIALOG_NAME("CustomizeKitDialog");
 static const std::string_view POSSIBLE_SHORTCUTS("ABCDEFG");
 
 enum Column : char {
     PITCH, NOTE, SHORTCUT, NAME
 };
 
-class EditDrumsetTreeWidgetItem : public QTreeWidgetItem
+class CustomizeKitTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-    EditDrumsetTreeWidgetItem(QTreeWidget* parent)
+    CustomizeKitTreeWidgetItem(QTreeWidget* parent)
         : QTreeWidgetItem(parent) {}
 
     bool operator<(const QTreeWidgetItem& other) const override
@@ -107,7 +107,7 @@ NoteHeadGroup noteHeadNames[] = {
 };
 
 //---------------------------------------------------------
-//   EditDrumsetDialog
+//   CustomizeKitDialog
 //---------------------------------------------------------
 
 struct SymbolIcon {
@@ -123,22 +123,22 @@ struct SymbolIcon {
         QPixmap image(w, h);
         image.fill(Qt::transparent);
         muse::draw::Painter painter(&image, "generateicon");
-        const muse::RectF& bbox = EditDrumsetDialog::engravingFonts()->fallbackFont()->bbox(id, 1);
+        const muse::RectF& bbox = CustomizeKitDialog::engravingFonts()->fallbackFont()->bbox(id, 1);
         const qreal actualSymbolScale = std::min(w / bbox.width(), h / bbox.height());
         qreal mag = std::min(defaultScale, actualSymbolScale);
         const qreal& xStShift = (w - mag * bbox.width()) / 2 - mag * bbox.left();
         const qreal& yStShift = (h - mag * bbox.height()) / 2 - mag * bbox.top();
         const muse::PointF& stPtPos = muse::PointF(xStShift, yStShift);
-        EditDrumsetDialog::engravingFonts()->fallbackFont()->draw(id, &painter, mag, stPtPos);
+        CustomizeKitDialog::engravingFonts()->fallbackFont()->draw(id, &painter, mag, stPtPos);
         icon.addPixmap(image);
         return SymbolIcon(id, icon);
     }
 };
 
-EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
+CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
     : QDialog(parent)
 {
-    setObjectName(EDIT_DRUMSET_DIALOG_NAME);
+    setObjectName(CUSTOMIZE_KIT_DIALOG_NAME);
 
     m_notation = globalContext()->currentNotation();
     if (!m_notation) {
@@ -178,16 +178,16 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
         noteHead->addItem(TConv::translatedUserName(g), int(g));
     }
 
-    connect(pitchList, &QTreeWidget::currentItemChanged, this, &EditDrumsetDialog::itemChanged);
-    connect(buttonBox, &QDialogButtonBox::clicked, this, &EditDrumsetDialog::bboxClicked);
-    connect(name, &QLineEdit::textChanged, this, &EditDrumsetDialog::nameChanged);
-    connect(noteHead, &QComboBox::currentIndexChanged, this, &EditDrumsetDialog::valueChanged);
-    connect(staffLine, &QSpinBox::valueChanged, this, &EditDrumsetDialog::valueChanged);
-    connect(voice, &QComboBox::currentIndexChanged, this, &EditDrumsetDialog::valueChanged);
-    connect(stemDirection, &QComboBox::currentIndexChanged, this, &EditDrumsetDialog::valueChanged);
-    connect(shortcut, &QComboBox::currentIndexChanged, this, &EditDrumsetDialog::shortcutChanged);
-    connect(loadButton, &QPushButton::clicked, this, &EditDrumsetDialog::load);
-    connect(saveButton, &QPushButton::clicked, this, &EditDrumsetDialog::save);
+    connect(pitchList, &QTreeWidget::currentItemChanged, this, &CustomizeKitDialog::itemChanged);
+    connect(buttonBox, &QDialogButtonBox::clicked, this, &CustomizeKitDialog::bboxClicked);
+    connect(name, &QLineEdit::textChanged, this, &CustomizeKitDialog::nameChanged);
+    connect(noteHead, &QComboBox::currentIndexChanged, this, &CustomizeKitDialog::valueChanged);
+    connect(staffLine, &QSpinBox::valueChanged, this, &CustomizeKitDialog::valueChanged);
+    connect(voice, &QComboBox::currentIndexChanged, this, &CustomizeKitDialog::valueChanged);
+    connect(stemDirection, &QComboBox::currentIndexChanged, this, &CustomizeKitDialog::valueChanged);
+    connect(shortcut, &QComboBox::currentIndexChanged, this, &CustomizeKitDialog::shortcutChanged);
+    connect(loadButton, &QPushButton::clicked, this, &CustomizeKitDialog::load);
+    connect(saveButton, &QPushButton::clicked, this, &CustomizeKitDialog::save);
     pitchList->setColumnWidth(0, 40);
     pitchList->setColumnWidth(1, 60);
     pitchList->setColumnWidth(2, 30);
@@ -266,8 +266,8 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
     quarterCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(SymId::noteheadBlack).ascii()));
     doubleWholeCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(SymId::noteheadDoubleWhole).ascii()));
 
-    connect(customGbox, &QGroupBox::toggled, this, &EditDrumsetDialog::customGboxToggled);
-    connect(quarterCmb, &QComboBox::currentIndexChanged, this, &EditDrumsetDialog::customQuarterChanged);
+    connect(customGbox, &QGroupBox::toggled, this, &CustomizeKitDialog::customGboxToggled);
+    connect(quarterCmb, &QComboBox::currentIndexChanged, this, &CustomizeKitDialog::customQuarterChanged);
 
     Q_ASSERT(pitchList->topLevelItemCount() > 0);
     pitchList->setCurrentItem(pitchList->topLevelItem(0));
@@ -285,7 +285,7 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
 //   customGboxToggled
 //---------------------------------------------------------
 
-void EditDrumsetDialog::customGboxToggled(bool checked)
+void CustomizeKitDialog::customGboxToggled(bool checked)
 {
     noteHead->setEnabled(!checked);
     if (checked) {
@@ -295,14 +295,14 @@ void EditDrumsetDialog::customGboxToggled(bool checked)
     }
 }
 
-void EditDrumsetDialog::loadPitchesList()
+void CustomizeKitDialog::loadPitchesList()
 {
     pitchList->blockSignals(true);
     pitchList->clear();
     pitchList->blockSignals(false);
 
     for (int i = 0; i < 128; ++i) {
-        QTreeWidgetItem* item = new EditDrumsetTreeWidgetItem(pitchList);
+        QTreeWidgetItem* item = new CustomizeKitTreeWidgetItem(pitchList);
         item->setText(Column::PITCH, QString("%1").arg(i));
         item->setText(Column::NOTE, pitch2string(i));
         if (m_editedDrumset.shortcut(i) == 0) {
@@ -317,7 +317,7 @@ void EditDrumsetDialog::loadPitchesList()
     pitchList->sortItems(3, Qt::SortOrder::DescendingOrder);
 }
 
-void EditDrumsetDialog::setEnabledPitchControls(bool enable)
+void CustomizeKitDialog::setEnabledPitchControls(bool enable)
 {
     customGbox->setEnabled(enable);
     noteHead->setEnabled(enable);
@@ -337,7 +337,7 @@ void EditDrumsetDialog::setEnabledPitchControls(bool enable)
 //   nameChanged
 //---------------------------------------------------------
 
-void EditDrumsetDialog::nameChanged(const QString& n)
+void CustomizeKitDialog::nameChanged(const QString& n)
 {
     QTreeWidgetItem* item = pitchList->currentItem();
     if (item) {
@@ -358,7 +358,7 @@ void EditDrumsetDialog::nameChanged(const QString& n)
 //   shortcutChanged
 //---------------------------------------------------------
 
-void EditDrumsetDialog::shortcutChanged()
+void CustomizeKitDialog::shortcutChanged()
 {
     QTreeWidgetItem* item = pitchList->currentItem();
     if (!item) {
@@ -400,7 +400,7 @@ void EditDrumsetDialog::shortcutChanged()
 //---------------------------------------------------------
 //   bboxClicked
 //---------------------------------------------------------
-void EditDrumsetDialog::bboxClicked(QAbstractButton* button)
+void CustomizeKitDialog::bboxClicked(QAbstractButton* button)
 {
     switch (buttonBox->buttonRole(button)) {
     case QDialogButtonBox::ApplyRole:
@@ -415,7 +415,7 @@ void EditDrumsetDialog::bboxClicked(QAbstractButton* button)
     }
 }
 
-void EditDrumsetDialog::apply()
+void CustomizeKitDialog::apply()
 {
     valueChanged();    //save last changes in name
 
@@ -424,12 +424,12 @@ void EditDrumsetDialog::apply()
     notifyAboutNoteInputStateChanged();
 }
 
-void EditDrumsetDialog::notifyAboutNoteInputStateChanged()
+void CustomizeKitDialog::notifyAboutNoteInputStateChanged()
 {
     m_notation->interaction()->noteInput()->stateChanged().notify();
 }
 
-void EditDrumsetDialog::cancel()
+void CustomizeKitDialog::cancel()
 {
     m_notation->parts()->replaceDrumset(m_instrumentKey, m_originDrumset);
 }
@@ -437,7 +437,7 @@ void EditDrumsetDialog::cancel()
 //---------------------------------------------------------
 //   fillCustomNoteheadsDataFromComboboxes
 //---------------------------------------------------------
-void EditDrumsetDialog::fillCustomNoteheadsDataFromComboboxes(int pitch)
+void CustomizeKitDialog::fillCustomNoteheadsDataFromComboboxes(int pitch)
 {
     m_editedDrumset.drum(pitch).notehead = NoteHeadGroup::HEAD_CUSTOM;
     m_editedDrumset.drum(pitch).noteheads[int(NoteHeadType::HEAD_WHOLE)] = SymNames::symIdByName(wholeCmb->currentData().toString());
@@ -447,7 +447,7 @@ void EditDrumsetDialog::fillCustomNoteheadsDataFromComboboxes(int pitch)
         = SymNames::symIdByName(doubleWholeCmb->currentData().toString());
 }
 
-void EditDrumsetDialog::fillNoteheadsComboboxes(bool customGroup, int pitch)
+void CustomizeKitDialog::fillNoteheadsComboboxes(bool customGroup, int pitch)
 {
     if (customGroup) {
         wholeCmb->setCurrentIndex(quarterCmb->findData(
@@ -480,7 +480,7 @@ void EditDrumsetDialog::fillNoteheadsComboboxes(bool customGroup, int pitch)
 //---------------------------------------------------------
 //   itemChanged
 //---------------------------------------------------------
-void EditDrumsetDialog::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous)
+void CustomizeKitDialog::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous)
 {
     if (previous) {
         int pitch = previous->data(0, Qt::UserRole).toInt();
@@ -546,7 +546,7 @@ void EditDrumsetDialog::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* p
 //---------------------------------------------------------
 //   setCustomNoteheadsGUIEnabled
 //---------------------------------------------------------
-void EditDrumsetDialog::setCustomNoteheadsGUIEnabled(bool enabled)
+void CustomizeKitDialog::setCustomNoteheadsGUIEnabled(bool enabled)
 {
     customGbox->setChecked(enabled);
     noteHead->setEnabled(!enabled);
@@ -558,7 +558,7 @@ void EditDrumsetDialog::setCustomNoteheadsGUIEnabled(bool enabled)
 //---------------------------------------------------------
 //   valueChanged
 //---------------------------------------------------------
-void EditDrumsetDialog::valueChanged()
+void CustomizeKitDialog::valueChanged()
 {
     if (!pitchList->currentItem()) {
         return;
@@ -592,7 +592,7 @@ void EditDrumsetDialog::valueChanged()
 //---------------------------------------------------------
 //   updateExample
 //---------------------------------------------------------
-void EditDrumsetDialog::updateExample()
+void CustomizeKitDialog::updateExample()
 {
     drumNote->clear();
     int pitch = pitchList->currentItem()->data(0, Qt::UserRole).toInt();
@@ -632,7 +632,7 @@ void EditDrumsetDialog::updateExample()
 //   load
 //---------------------------------------------------------
 
-void EditDrumsetDialog::load()
+void CustomizeKitDialog::load()
 {
     std::vector<std::string> filter = { muse::trc("palette", "MuseScore drumset file") + " (*.drm)" };
     muse::io::path_t dir = notationConfiguration()->userStylesPath();
@@ -681,7 +681,7 @@ void EditDrumsetDialog::load()
 //   save
 //---------------------------------------------------------
 
-void EditDrumsetDialog::save()
+void CustomizeKitDialog::save()
 {
     std::vector<std::string> filter = { muse::trc("palette", "MuseScore drumset file") + " (*.drm)" };
     muse::io::path_t dir = notationConfiguration()->userStylesPath();
@@ -712,7 +712,7 @@ void EditDrumsetDialog::save()
 //---------------------------------------------------------
 //   customQuarterChanged
 //---------------------------------------------------------
-void EditDrumsetDialog::customQuarterChanged(int)
+void CustomizeKitDialog::customQuarterChanged(int)
 {
     updateExample();
 }

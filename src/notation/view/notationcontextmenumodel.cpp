@@ -120,7 +120,7 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
     items << makeSeparator();
 
     if (isDrumsetStaff()) {
-        items << makeMenuItem("edit-drumset");
+        items << makeMenuItem("customize-kit");
     }
 
     items << makeMenuItem("staff-properties");
