@@ -3346,7 +3346,7 @@ Shape ChordLayout::chordRestShape(const ChordRest* item)
             if (!l || !l->addToSkyline() || l->xmlText().empty()) {
                 continue;
             }
-            RectF bbox = l->ldata()->bbox().translated(l->ldata()->pos());
+            RectF bbox = l->ldata()->bbox().translated(l->pos());
             shape.addHorizontalSpacing(l, bbox.left(), bbox.right());
         }
     }
