@@ -220,31 +220,31 @@ public:
     void setNoteSpan(Note* startNote, Note* endNote);
 
     EngravingItem* startElement() const { return m_startElement; }
-    virtual EngravingItem* endElement() const { return m_endElement; }
+    EngravingItem* endElement() const { return m_endElement; }
 
     Measure* startMeasure() const;
-    virtual Measure* endMeasure() const;
+    Measure* endMeasure() const;
 
     Measure* findStartMeasure() const;
-    virtual Measure* findEndMeasure() const;
+    Measure* findEndMeasure() const;
 
     void setStartElement(EngravingItem* e);
     virtual void setEndElement(EngravingItem* e);
 
     ChordRest* startCR();
-    virtual ChordRest* endCR();
+    ChordRest* endCR();
 
     Chord* startChord();
-    virtual Chord* endChord();
+    Chord* endChord();
 
     ChordRest* findStartCR() const;
-    virtual ChordRest* findEndCR() const;
+    ChordRest* findEndCR() const;
 
     Chord* findStartChord() const;
-    virtual Chord* findEndChord() const;
+    Chord* findEndChord() const;
 
     Segment* startSegment() const;
-    virtual Segment* endSegment() const;
+    Segment* endSegment() const;
 
     bool elementAppliesToTrack(const track_idx_t refTrack) const override;
 

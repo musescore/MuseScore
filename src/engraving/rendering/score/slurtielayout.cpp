@@ -1386,8 +1386,8 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
         return nullptr;
     }
 
-    item->calculateDirection();
-    item->calculateIsInside();
+    calculateDirection(item);
+    calculateIsInside(item);
 
     SlurTiePos sPos;
     sPos.p1 = computeDefaultStartOrEndPoint(item, Grip::START);
@@ -1630,8 +1630,8 @@ LaissezVibSegment* SlurTieLayout::createLaissezVibSegment(LaissezVib* item)
     Chord* startChord = item->startNote()->chord();
     item->setTick(startChord->tick());
 
-    item->calculateDirection();
-    item->calculateIsInside();
+    calculateDirection(item);
+    calculateIsInside(item);
 
     item->fixupSegments(1);
     LaissezVibSegment* segment = item->segmentAt(0);
@@ -2582,6 +2582,156 @@ void SlurTieLayout::addLineAttachPoints(TieSegment* segment)
     }
     if (endNote) {
         endNote->addLineAttachPoint(segment->ups(Grip::END).pos(), tie);
+    }
+}
+
+void SlurTieLayout::calculateDirection(Tie* item)
+{
+    if (!item->startNote() && !item->endNote()) {
+        return;
+    }
+    const bool tieHasBothNotes = item->startNote() && item->endNote();
+
+    const Note* primaryNote = item->startNote() ? item->startNote() : item->endNote();
+    const Chord* primaryChord = primaryNote->chord();
+    const Measure* primaryMeasure = primaryChord->measure();
+
+    const Note* secondaryNote = tieHasBothNotes ? item->endNote() : nullptr;
+    const Chord* secondaryChord = secondaryNote ? secondaryNote->chord() : nullptr;
+    const Measure* secondaryMeasure = secondaryChord ? secondaryChord->measure() : nullptr;
+
+    if (item->slurDirection() == DirectionV::AUTO) {
+        std::vector<Note*> notes = primaryChord->notes();
+        size_t n = notes.size();
+        StaffType* st = item->staff()->staffType(primaryNote ? primaryNote->tick() : Fraction(0, 1));
+        bool simpleException = st && st->isSimpleTabStaff();
+        // if there are multiple voices, the tie direction goes on stem side
+        if (primaryMeasure->hasVoices(primaryChord->staffIdx(), primaryChord->tick(), primaryChord->actualTicks())) {
+            item->setUp(simpleException ? isUpVoice(primaryChord->voice()) : primaryChord->up());
+        } else if (tieHasBothNotes && secondaryMeasure->hasVoices(secondaryChord->staffIdx(), secondaryChord->tick(),
+                                                                  secondaryChord->actualTicks())) {
+            item->setUp(simpleException ? isUpVoice(secondaryChord->voice()) : secondaryChord->up());
+        } else if (n == 1) {
+            //
+            // single note
+            //
+            if (tieHasBothNotes && primaryChord->up() != secondaryChord->up()) {
+                // if stem direction is mixed, always up
+                item->setUp(true);
+            } else {
+                item->setUp(!primaryChord->up());
+            }
+        } else {
+            //
+            // chords
+            //
+            // first, find pivot point in chord (below which all ties curve down and above which all ties curve up)
+            Note* pivotPoint = nullptr;
+            bool multiplePivots = false;
+            for (size_t i = 0; i < n - 1; ++i) {
+                if (!notes[i]->tieFor()) {
+                    continue; // don't include notes that don't have ties
+                }
+                for (size_t j = i + 1; j < n; ++j) {
+                    if (!notes[j]->tieFor()) {
+                        continue;
+                    }
+                    int noteDiff = compareNotesPos(notes[i], notes[j]);
+                    if (!multiplePivots && std::abs(noteDiff) <= 1) {
+                        // TODO: Fix unison ties somehow--if noteDiff == 0 then we need to determine which of the unison is 'lower'
+                        if (pivotPoint) {
+                            multiplePivots = true;
+                            pivotPoint = nullptr;
+                        } else {
+                            pivotPoint = noteDiff < 0 ? notes[i] : notes[j];
+                        }
+                    }
+                }
+            }
+            if (!pivotPoint) {
+                // if the pivot point was not found (either there are no unisons/seconds or there are more than one),
+                // determine if this note is in the lower or upper half of this chord
+                int notesAbove = 0, tiesAbove = 0;
+                int notesBelow = 0, tiesBelow = 0;
+                int unisonTies = 0;
+                for (size_t i = 0; i < n; ++i) {
+                    if (notes[i] == primaryNote) {
+                        // skip counting if this note is the current note or if this note doesn't have a tie
+                        continue;
+                    }
+                    int noteDiff = compareNotesPos(primaryNote, notes[i]);
+                    if (noteDiff == 0) {  // unison
+                        if (notes[i]->tieFor()) {
+                            unisonTies++;
+                        }
+                    }
+                    if (noteDiff < 0) { // the note is above startNote
+                        notesAbove++;
+                        if (notes[i]->tieFor()) {
+                            tiesAbove++;
+                        }
+                    }
+                    if (noteDiff > 0) { // the note is below startNote
+                        notesBelow++;
+                        if (notes[i]->tieFor()) {
+                            tiesBelow++;
+                        }
+                    }
+                }
+
+                if (tiesAbove == 0 && tiesBelow == 0 && unisonTies == 0) {
+                    // this is the only tie in the chord.
+                    if (notesAbove == notesBelow) {
+                        item->setUp(!primaryChord->up());
+                    } else {
+                        item->setUp(notesAbove < notesBelow);
+                    }
+                } else if (tiesAbove == tiesBelow) {
+                    // this note is dead center, so its tie should go counter to the stem direction
+                    item->setUp(!primaryChord->up());
+                } else {
+                    item->setUp(tiesAbove < tiesBelow);
+                }
+            } else if (pivotPoint == primaryNote) {
+                // the current note is the lower of the only second or unison in the chord; tie goes down.
+                item->setUp(false);
+            } else {
+                // if lower than the pivot, tie goes down, otherwise up
+                int noteDiff = compareNotesPos(primaryNote, pivotPoint);
+                item->setUp(noteDiff >= 0);
+            }
+        }
+    } else {
+        item->setUp(item->slurDirection() == DirectionV::UP ? true : false);
+    }
+}
+
+void SlurTieLayout::calculateIsInside(Tie* item)
+{
+    if (item->tiePlacement() != TiePlacement::AUTO) {
+        item->setIsInside(item->tiePlacement() == TiePlacement::INSIDE);
+        return;
+    }
+
+    const Note* startN = item->startNote();
+    const Chord* startChord = startN ? startN->chord() : nullptr;
+    const Note* endN = item->endNote();
+    const Chord* endChord = endN ? endN->chord() : nullptr;
+
+    if (!startChord && !endChord) {
+        item->setIsInside(false);
+        return;
+    }
+
+    const bool startIsSingleNote = startChord ? startChord->notes().size() <= 1 : false;
+    const bool endIsSingleNote = endChord ? endChord->notes().size() <= 1 : false;
+
+    const bool shouldPlaceInside = startChord && endChord ? startIsSingleNote && endIsSingleNote : startIsSingleNote || endIsSingleNote;
+
+    if (shouldPlaceInside) {
+        item->setIsInside(item->style().styleV(Sid::tiePlacementSingleNote).value<TiePlacement>() == TiePlacement::INSIDE);
+    } else {
+        item->setIsInside(item->style().styleV(Sid::tiePlacementChord).value<TiePlacement>() == TiePlacement::INSIDE);
     }
 }
 

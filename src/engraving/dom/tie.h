@@ -97,11 +97,8 @@ public:
     bool isInside() const { return m_isInside; }
     void setIsInside(bool val) { m_isInside = val; }
     virtual bool isOuterTieOfChord(Grip startOrEnd) const;
-    virtual bool hasTiedSecondInside() const;
+    bool hasTiedSecondInside() const;
     bool isCrossStaff() const;
-
-    virtual void calculateDirection();
-    virtual void calculateIsInside();
 
     PropertyValue getProperty(Pid propertyId) const override;
     PropertyValue propertyDefault(Pid id) const override;

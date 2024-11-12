@@ -79,6 +79,7 @@ extern int relStep(int pitch, int tpc, ClefType clef);
 extern int pitch2step(int pitch);
 extern int step2pitch(int step);
 int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalDiatonicSteps);
+extern int compareNotesPos(const Note* n1, const Note* n2);
 
 extern Segment* skipTuplet(Tuplet* tuplet);
 extern SymIdList timeSigSymIdsFromString(const String&);

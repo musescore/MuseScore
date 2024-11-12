@@ -68,22 +68,8 @@ public:
 
     SymId symId() const;
 
-    void calculateDirection() override;
-    void calculateIsInside() override;
-    bool isOuterTieOfChord(Grip startOrEnd) const override;
-    double scalingFactor() const override;
-
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new LaissezVibSegment(parent); }
 
-    EngravingItem* endElement() const override { return nullptr; }
-    Measure* endMeasure() const override { return nullptr; }
-    Measure* findEndMeasure() const override { return nullptr; }
-    ChordRest* endCR() override { return nullptr; }
-    Chord* endChord() override { return nullptr; }
-    Note* endNote() const override { return nullptr; }
-    Segment* endSegment() const override { return nullptr; }
-    ChordRest* findEndCR() const override { return nullptr; }
-    Chord* findEndChord() const override { return nullptr; }
     void setEndNote(Note* note) override;
     void setEndElement(EngravingItem*) override;
 

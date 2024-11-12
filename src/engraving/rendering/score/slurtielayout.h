@@ -55,6 +55,7 @@ public:
     static void resolveVerticalTieCollisions(const std::vector<TieSegment*>& stackedTies);
 
     static void computeUp(Slur* slur, LayoutContext& ctx);
+    static void calculateDirection(Tie* item);
 
     static void computeBezier(TieSegment* tieSeg, PointF shoulderOffset = PointF());
     static void computeBezier(SlurSegment* slurSeg, PointF shoulderOffset = PointF());
@@ -103,6 +104,8 @@ private:
     static bool shouldHideSlurSegment(SlurSegment* item, LayoutContext& ctx);
 
     static void addLineAttachPoints(TieSegment* segment);
+
+    static void calculateIsInside(Tie* item);
 
     static LaissezVibSegment* createLaissezVibSegment(LaissezVib* item);
     static void calculateLaissezVibX(LaissezVibSegment* segment, SlurTiePos& sPos, bool smufl);

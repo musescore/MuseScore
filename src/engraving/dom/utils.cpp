@@ -1110,6 +1110,17 @@ int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalD
     return halfsteps;
 }
 
+int compareNotesPos(const Note* n1, const Note* n2)
+{
+    if (n1->line() != n2->line() && !(n1->staffType()->isTabStaff())) {
+        return n2->line() - n1->line();
+    } else if (n1->string() != n2->string()) {
+        return n2->string() - n1->string();
+    } else {
+        return n1->pitch() - n2->pitch();
+    }
+}
+
 //---------------------------------------------------------
 //   skipTuplet
 //    return segment of rightmost chord/rest in a
