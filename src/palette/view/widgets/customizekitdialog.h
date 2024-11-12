@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PALETTE_EDITDRUMSETDIALOG_H
-#define MU_PALETTE_EDITDRUMSETDIALOG_H
+#ifndef MU_PALETTE_CUSTOMIZEKITDIALOG_H
+#define MU_PALETTE_CUSTOMIZEKITDIALOG_H
 
-#include "ui_editdrumsetdialog.h"
+#include "ui_customizekitdialog.h"
 
 #include "modularity/ioc.h"
 #include "global/iinteractive.h"
@@ -35,10 +35,10 @@
 
 namespace mu::palette {
 //---------------------------------------------------------
-//   EditDrumsetDialog
+//   CustomizeKitDialog
 //---------------------------------------------------------
 
-class EditDrumsetDialog : public QDialog, private Ui::EditDrumsetDialog
+class CustomizeKitDialog : public QDialog, private Ui::CustomizeKitDialog
 {
     Q_OBJECT
 
@@ -50,7 +50,7 @@ public:
     INJECT_STATIC(engraving::IEngravingFontsProvider, engravingFonts)
 
 public:
-    EditDrumsetDialog(QWidget* parent = nullptr);
+    CustomizeKitDialog(QWidget* parent = nullptr);
 
 private slots:
     void bboxClicked(QAbstractButton* button);
@@ -85,4 +85,4 @@ private:
 };
 }
 
-#endif // MU_PALETTE_EDITDRUMSETDIALOG_H
+#endif // MU_PALETTE_CUSTOMIZEKITDIALOG_H

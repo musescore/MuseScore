@@ -28,6 +28,7 @@
 #include "async/asyncable.h"
 
 #include "context/iglobalcontext.h"
+#include "actions/iactionsdispatcher.h"
 #include "playback/iplaybackcontroller.h"
 
 #include "percussionpanelpadlistmodel.h"
@@ -49,6 +50,7 @@ public:
 class PercussionPanelModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<playback::IPlaybackController> playbackController = { this };
 
     Q_OBJECT
@@ -77,6 +79,8 @@ public:
     Q_INVOKABLE void handleMenuItem(const QString& itemId);
 
     Q_INVOKABLE void finishEditing();
+
+    Q_INVOKABLE void customizeKit();
 
 signals:
     void currentPanelModeChanged(const PanelMode::Mode& panelMode);

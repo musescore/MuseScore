@@ -152,6 +152,11 @@ void PercussionPanelModel::finishEditing()
     setCurrentPanelMode(m_panelModeToRestore);
 }
 
+void PercussionPanelModel::customizeKit()
+{
+    dispatcher()->dispatch("customize-kit");
+}
+
 void PercussionPanelModel::setUpConnections()
 {
     const auto updatePadModels = [this](const mu::engraving::Drumset* drumset) {
