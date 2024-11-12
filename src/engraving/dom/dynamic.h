@@ -64,7 +64,7 @@ public:
     void setDynamicType(DynamicType val) { m_dynamicType = val; }
     void setDynamicType(const String&);
 
-    DynamicType parseDynamicText(const String&);
+    std::pair<DynamicType, String> parseDynamicText(const String&) const;
 
     DynamicType dynamicType() const { return m_dynamicType; }
     int subtype() const override { return static_cast<int>(m_dynamicType); }

@@ -424,32 +424,33 @@ void Dynamic::manageBarlineCollisions()
 
 void Dynamic::setDynamicType(const String& tag)
 {
-    const DynamicType dt = parseDynamicText(tag);
+    const auto dynamicInfo = parseDynamicText(tag);
 
-    if (dt == DynamicType::OTHER) {
+    if (dynamicInfo.first == DynamicType::OTHER) {
         LOGD("setDynamicType: other <%s>", muPrintable(tag));
     }
 
-    setDynamicType(dt);
+    setDynamicType(dynamicInfo.first);
+    setXmlText(dynamicInfo.second);
 }
 
-DynamicType Dynamic::parseDynamicText(const String& tag)
+std::pair<DynamicType, String> Dynamic::parseDynamicText(const String& tag) const
 {
     std::string utf8Tag = tag.toStdString();
-    std::regex dynamicRegex(R"((?:<sym>.*?</sym>)+|(?:\b)[fmnprsz]+(?:\b(?=[^>]|$)))");
-    for (std::sregex_iterator it(utf8Tag.begin(), utf8Tag.end(), dynamicRegex), end; it != end; ++it) {
-        std::smatch match = *it;
-        std::string matchStr = match.str();
+    const std::regex dynamicRegex(R"((?:<sym>.*?</sym>)+|(?:\b)[fmnprsz]+(?:\b(?=[^>]|$)))");
+    auto begin = std::sregex_iterator(utf8Tag.begin(), utf8Tag.end(), dynamicRegex);
+    for (auto it = begin; it != std::sregex_iterator(); ++it) {
+        const std::smatch match = *it;
+        const std::string matchStr = match.str();
         size_t n = DYN_LIST.size();
         for (size_t i = 0; i < n; ++i) {
             if (TConv::toXml(DynamicType(i)).ascii() == matchStr || DYN_LIST[i].text == matchStr) {
                 utf8Tag.replace(match.position(0), match.length(0), DYN_LIST[i].text);
-                setXmlText(String::fromStdString(utf8Tag));
-                return DynamicType(i);
+                return { DynamicType(i), String::fromStdString(utf8Tag) };
             }
         }
     }
-    return DynamicType::OTHER;
+    return { DynamicType::OTHER, tag };
 }
 
 String Dynamic::dynamicText(DynamicType t)

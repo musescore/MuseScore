@@ -145,8 +145,9 @@ void TextBase::endEdit(EditData& ed)
 
     if (isDynamic()) {
         Dynamic* d = toDynamic(this);
-        const DynamicType dt = d->parseDynamicText(xmlText());
-        undoChangeProperty(Pid::DYNAMIC_TYPE, dt);
+        const auto dynamicInfo = d->parseDynamicText(xmlText());
+        undoChangeProperty(Pid::DYNAMIC_TYPE, dynamicInfo.first);
+        setXmlText(dynamicInfo.second);
     }
 
     UndoStack* undo = score()->undoStack();
