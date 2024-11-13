@@ -1289,7 +1289,7 @@ void Note::draw(QPainter* painter) const
                   if (i < in->minPitchP() || i > in->maxPitchP())
                         painter->setPen(selected() ? Qt::darkRed : Qt::red);
                   else if (i < in->minPitchA() || i > in->maxPitchA())
-                        painter->setPen(selected() ? QColor("#565600") : Qt::darkYellow);
+                        painter->setPen(selected() ? QColor(0x565600) : Qt::darkYellow);
                   }
             // draw blank notehead to avoid staff and ledger lines
             if (_cachedSymNull != SymId::noSym) {
@@ -1784,7 +1784,7 @@ Element* Note::drop(EditData& data)
 
                   if (group != _headGroup) {
                         if (links()) {
-                              for (ScoreElement* se : *links()) {
+                              for (ScoreElement*& se : *links()) {
                                     se->undoChangeProperty(Pid::HEAD_GROUP, int(group));
                                     Note* note = toNote(se);
                                     if (note->staff() && note->staff()->isTabStaff(ch->tick()) && group == NoteHead::Group::HEAD_CROSS)
@@ -2834,7 +2834,7 @@ void Note::setNval(const NoteVal& nval, Fraction tick)
 void Note::localSpatiumChanged(qreal oldValue, qreal newValue)
       {
       Element::localSpatiumChanged(oldValue, newValue);
-      for (Element* e : dots())
+      for (Element* e : qAsConst(dots()))
             e->localSpatiumChanged(oldValue, newValue);
       for (Element* e : el())
             e->localSpatiumChanged(oldValue, newValue);
@@ -3161,7 +3161,7 @@ QString Note::screenReaderInfo() const
       else
             pitchName = _headGroup == NoteHead::Group::HEAD_NORMAL
                         ? tpcUserName(true)
-                        : QObject::tr("%1 head %2").arg(subtypeName()).arg(tpcUserName(true));
+                        : QObject::tr("%1 head %2").arg(subtypeName(), tpcUserName(true));
       return QString("%1 %2 %3%4").arg(noteTypeUserName(), pitchName, duration, (chord()->isGrace() ? "" : QString("; %1").arg(voice)));
       }
 
@@ -3618,6 +3618,8 @@ void Note::undoUnlink()
       Element::undoUnlink();
       for (Element* e : _el)
             e->undoUnlink();
+      for (Spanner*& s : _spannerFor)
+            s->undoUnlink();
       }
 
 }
