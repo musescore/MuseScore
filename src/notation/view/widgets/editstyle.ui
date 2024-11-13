@@ -284,8 +284,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>631</width>
-                <height>710</height>
+                <width>591</width>
+                <height>523</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -985,8 +985,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>631</width>
-                <height>710</height>
+                <width>406</width>
+                <height>374</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2050,10 +2050,84 @@
         <item>
          <widget class="QGroupBox" name="groupBox_sizes">
           <property name="title">
-           <string>Sizes</string>
+           <string>Cue sizes</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_27">
-           <item row="1" column="0">
+           <item row="7" column="0" colspan="3">
+            <widget class="QCheckBox" name="reduceRythmicSpacing">
+             <property name="text">
+              <string>Reduce rhythmic spacing for small notes</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QToolButton" name="resetSmallStaffSize">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Small staff size' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="2">
+            <widget class="QToolButton" name="resetSmallNoteSize">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Small note size' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1">
+            <widget class="QSpinBox" name="smallNoteSize">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string notr="true">%</string>
+             </property>
+             <property name="minimum">
+              <number>10</number>
+             </property>
+             <property name="maximum">
+              <number>200</number>
+             </property>
+             <property name="value">
+              <number>70</number>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_38">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Small staff size:</string>
+             </property>
+             <property name="buddy">
+              <cstring>smallStaffSize</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
             <widget class="QLabel" name="label_44">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -2069,24 +2143,34 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="label_45">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+           <item row="0" column="4">
+            <spacer name="horizontalSpacer_24">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="4" column="2">
+            <widget class="QToolButton" name="resetSmallClefSize">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Small clef size' value</string>
              </property>
              <property name="text">
-              <string>Small clef size:</string>
-             </property>
-             <property name="buddy">
-              <cstring>smallClefSize</cstring>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="QSpinBox" name="smallNoteSize">
+           <item row="0" column="1">
+            <widget class="QSpinBox" name="smallStaffSize">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -2135,7 +2219,39 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_45">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Small clef size:</string>
+             </property>
+             <property name="buddy">
+              <cstring>smallClefSize</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_39">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Grace note size:</string>
+             </property>
+             <property name="buddy">
+              <cstring>graceNoteSize</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
             <widget class="QSpinBox" name="graceNoteSize">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -2160,61 +2276,7 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="QSpinBox" name="smallStaffSize">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string notr="true">%</string>
-             </property>
-             <property name="minimum">
-              <number>10</number>
-             </property>
-             <property name="maximum">
-              <number>200</number>
-             </property>
-             <property name="value">
-              <number>70</number>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_39">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Grace note size:</string>
-             </property>
-             <property name="buddy">
-              <cstring>graceNoteSize</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="4">
-            <spacer name="horizontalSpacer_24">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="3" column="2">
+           <item row="5" column="2">
             <widget class="QToolButton" name="resetGraceNoteSize">
              <property name="toolTip">
               <string>Reset to default</string>
@@ -2224,68 +2286,6 @@
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QToolButton" name="resetSmallNoteSize">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Small note size' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="2">
-            <widget class="QToolButton" name="resetSmallClefSize">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Small clef size' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_38">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Small staff size:</string>
-             </property>
-             <property name="buddy">
-              <cstring>smallStaffSize</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QToolButton" name="resetSmallStaffSize">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Small staff size' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0" colspan="3">
-            <widget class="QCheckBox" name="reduceRythmicSpacing">
-             <property name="text">
-              <string>Reduce rythmic spacing for small notes</string>
              </property>
             </widget>
            </item>
@@ -2334,8 +2334,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>737</width>
-             <height>731</height>
+             <width>685</width>
+             <height>298</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -3977,8 +3977,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>635</width>
-             <height>720</height>
+             <width>383</width>
+             <height>294</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_631">
@@ -4197,8 +4197,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>616</width>
-                <height>882</height>
+                <width>239</width>
+                <height>593</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_56">
@@ -5059,8 +5059,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>635</width>
-             <height>720</height>
+             <width>249</width>
+             <height>485</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_38">
@@ -5825,8 +5825,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>620</width>
-             <height>787</height>
+             <width>405</width>
+             <height>597</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_67">
@@ -6694,8 +6694,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>578</width>
-                <height>527</height>
+                <width>363</width>
+                <height>386</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54" rowstretch="0,0,0,2">
@@ -7565,8 +7565,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>642</width>
-             <height>705</height>
+             <width>416</width>
+             <height>315</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_70">
@@ -8197,8 +8197,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>635</width>
-             <height>720</height>
+             <width>471</width>
+             <height>508</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_68">
@@ -11540,8 +11540,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>696</width>
-             <height>731</height>
+             <width>469</width>
+             <height>461</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_64" stretch="0,0,2">
@@ -13005,8 +13005,8 @@ first note of the system</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>631</width>
-                <height>710</height>
+                <width>384</width>
+                <height>422</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55" rowstretch="0,0,0,0,1">
@@ -13641,8 +13641,8 @@ first note of the system</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>659</width>
-             <height>744</height>
+             <width>98</width>
+             <height>28</height>
             </rect>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -13748,8 +13748,8 @@ first note of the system</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>533</width>
-                <height>638</height>
+                <width>363</width>
+                <height>550</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">
@@ -15033,10 +15033,6 @@ first note of the system</string>
   <tabstop>resetLastSystemFillThreshold</tabstop>
   <tabstop>smallStaffSize</tabstop>
   <tabstop>resetSmallStaffSize</tabstop>
-  <tabstop>smallNoteSize</tabstop>
-  <tabstop>resetSmallNoteSize</tabstop>
-  <tabstop>graceNoteSize</tabstop>
-  <tabstop>resetGraceNoteSize</tabstop>
   <tabstop>smallClefSize</tabstop>
   <tabstop>resetSmallClefSize</tabstop>
   <tabstop>scrollArea_headerFooter</tabstop>
