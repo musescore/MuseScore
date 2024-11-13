@@ -561,6 +561,10 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
                 } else if (e->isTempoText()) {
                     TempoText* tt = toTempoText(e);
 
+                    if (!tt->playTempoText()) {
+                        continue;
+                    }
+
                     if (tt->isNormal() && !tt->isRelative() && !tempoPrimo) {
                         tempoPrimo = tt->tempo();
                     } else if (tt->isRelative()) {
@@ -631,7 +635,7 @@ void Score::fixAnacrusisTempo(const std::vector<Measure*>& measures) const
         for (const Segment& s : m->segments()) {
             if (s.isChordRestType()) {
                 for (EngravingItem* e : s.annotations()) {
-                    if (e->isTempoText()) {
+                    if (e->isTempoText() && toTempoText(e)->playTempoText()) {
                         return toTempoText(e);
                     }
                 }

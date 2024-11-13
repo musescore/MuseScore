@@ -2939,6 +2939,7 @@ void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext&)
 void TWrite::write(const TempoText* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
+    writeProperty(item, xml, Pid::PLAY);
     xml.tag("tempo", TConv::toXml(item->tempo()));
     if (item->followText()) {
         xml.tag("followText", item->followText());
