@@ -104,7 +104,7 @@
             <durationType>half</durationType>
             <Note>
               <LaissezVib>
-                <lineType>3</lineType>
+                <lineType>2</lineType>
                 </LaissezVib>
               <pitch>72</pitch>
               <tpc>14</tpc>
