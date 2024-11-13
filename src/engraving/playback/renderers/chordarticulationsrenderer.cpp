@@ -133,7 +133,7 @@ void ChordArticulationsRenderer::doRenderNote(const Chord* chord, const Note* no
         noteCtx.duration = ctx.nominalDuration * swingDurationAdjustment.durationMultiplier + additionalDuration;
     };
 
-    if (note->tieFor()) {
+    if (note->tieFor() && !note->tieFor()->isLaissezVib()) {
         noteCtx.duration = tiedNotesTotalDuration(note->score(), note, noteCtx.duration, ctx.positionTickOffset);
         applySwingToNoteCtx(noteCtx);
         result.emplace_back(buildNoteEvent(std::move(noteCtx)));

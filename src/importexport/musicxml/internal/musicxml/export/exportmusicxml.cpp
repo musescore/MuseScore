@@ -82,6 +82,7 @@
 #include "engraving/dom/jump.h"
 #include "engraving/dom/key.h"
 #include "engraving/dom/keysig.h"
+#include "engraving/dom/laissezvib.h"
 #include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/letring.h"
 #include "engraving/dom/linkedobjects.h"
@@ -4288,7 +4289,7 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
             if (note->tieBack()) {
                 m_xml.tag("tie", { { "type", "stop" } });
             }
-            if (note->tieFor()) {
+            if (note->tieFor() && !note->tieFor()->isLaissezVib()) {
                 m_xml.tag("tie", { { "type", "start" } });
             }
         }
@@ -4357,16 +4358,19 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
             notations.tag(m_xml, tieBack);
             m_xml.tag("tied", { { "type", "stop" } });
         }
+
+        const LaissezVib* laissezVib = note->laissezVib();
+        if (laissezVib && ExportMusicXml::canWrite(laissezVib)) {
+            notations.tag(m_xml, laissezVib);
+            String rest = slurTieLineStyle(laissezVib);
+            m_xml.tagRaw(String(u"tied type=\"let-ring\"%1").arg(rest));
+        }
+
         const Tie* tieFor = note->tieFor();
-        if (tieFor && ExportMusicXml::canWrite(tieFor)) {
+        if (tieFor && !laissezVib && ExportMusicXml::canWrite(tieFor)) {
             notations.tag(m_xml, tieFor);
             String rest = slurTieLineStyle(tieFor);
             m_xml.tagRaw(String(u"tied type=\"start\"%1").arg(rest));
-        }
-        const Articulation* laissezVibrer = findLaissezVibrer(chord);
-        if (laissezVibrer && ExportMusicXml::canWrite(laissezVibrer)) {
-            notations.tag(m_xml, laissezVibrer);
-            m_xml.tag("tied", { { "type", "let-ring" } });
         }
 
         if (note == nl.front()) {

@@ -51,6 +51,7 @@
 #include "key.h"
 #include "keylist.h"
 #include "keysig.h"
+#include "laissezvib.h"
 #include "layoutbreak.h"
 #include "linkedobjects.h"
 #include "lyrics.h"
@@ -628,6 +629,10 @@ Note* Score::addNoteToTiedChord(Chord* chord, const NoteVal& noteVal, bool force
         tie->setTick(newNote->tick());
         tie->setTrack(newNote->track());
         newNote->setTieFor(tie);
+
+        if (!referenceNote->tieFor()->endNote()) {
+            break;
+        }
 
         referenceNote = referenceNote->tieFor()->endNote();
     }
@@ -2061,6 +2066,32 @@ void Score::cmdToggleTie()
     endCmd();
 }
 
+void Score::cmdToggleLaissezVib()
+{
+    const std::vector<Note*> noteList = selection().noteList();
+
+    if (noteList.empty()) {
+        LOGD("no notes selected");
+        return;
+    }
+
+    startCmd(TranslatableString("undoableAction", "Toggle laissez vib"));
+
+    for (Note* note: noteList) {
+        if (LaissezVib* lv = note->laissezVib()) {
+            undoRemoveElement(lv);
+        } else if (note->tieFor()) {
+            continue;
+        } else {
+            LaissezVib* lvTie = Factory::createLaissezVib(note);
+            lvTie->setParent(note);
+            undoAddElement(lvTie);
+        }
+    }
+
+    endCmd();
+}
+
 //---------------------------------------------------------
 //   cmdAddOttava
 //---------------------------------------------------------
@@ -2843,6 +2874,7 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::VOLTA_SEGMENT:
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
+    case ElementType::LAISSEZ_VIB_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
@@ -5930,6 +5962,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         || et == ElementType::NOTELINE
         || et == ElementType::BEND
         || (et == ElementType::CHORD && toChord(element)->isGrace())
+        || et == ElementType::LAISSEZ_VIB
         ) {
         const EngravingItem* parent = element->parentItem();
         const LinkedObjects* links = parent ? parent->links() : nullptr;

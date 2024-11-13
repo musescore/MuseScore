@@ -1726,24 +1726,6 @@ SpannerSet MusicXmlParserPass2::findIncompleteSpannersAtPartEnd()
 }
 
 //---------------------------------------------------------
-//   addArticLaissezVibrer
-//---------------------------------------------------------
-
-static void addArticLaissezVibrer(const Note* const note)
-{
-    IF_ASSERT_FAILED(note) {
-        return;
-    }
-
-    Chord* chord = note->chord();
-    if (!findLaissezVibrer(chord)) {
-        Articulation* na = Factory::createArticulation(chord);
-        na->setSymId(SymId::articLaissezVibrerBelow);
-        chord->add(na);
-    }
-}
-
-//---------------------------------------------------------
 //   cleanupUnterminatedTie
 //---------------------------------------------------------
 /**
@@ -8466,7 +8448,9 @@ static void addTie(const Notation& notation, Note* note, const track_idx_t track
             logger->logError(String(u"Non-started tie terminated. No-op."), xmlreader);
         }
     } else if (type == "let-ring") {
-        addArticLaissezVibrer(note);
+        LaissezVib* lvTie = Factory::createLaissezVib(note);
+        lvTie->setParent(note);
+        note->score()->undoAddElement(lvTie);
     } else {
         logger->logError(String(u"unknown tied type %1").arg(type), xmlreader);
     }

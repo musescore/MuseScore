@@ -221,6 +221,7 @@ void NotationActionController::init()
     registerAction("flip", &Interaction::flipSelection, &Controller::hasSelection);
     registerAction("tie", &Controller::addTie);
     registerAction("chord-tie", &Controller::chordTie);
+    registerAction("lv", &Controller::addLaissezVib);
     registerAction("add-slur", &Controller::addSlur);
 
     registerAction(UNDO_ACTION_CODE, &Interaction::undo, &Controller::canUndo);
@@ -1208,6 +1209,27 @@ void NotationActionController::chordTie()
         playSelectedElement(true);
     } else {
         interaction->addTiedNoteToChord();
+    }
+}
+
+void NotationActionController::addLaissezVib()
+{
+    TRACEFUNC;
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    auto noteInput = interaction->noteInput();
+    if (!noteInput) {
+        return;
+    }
+
+    if (noteInput->isNoteInputMode()) {
+        noteInput->addLaissezVib();
+        playSelectedElement(true);
+    } else {
+        interaction->addLaissezVibToSelection();
     }
 }
 

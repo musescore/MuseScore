@@ -103,6 +103,7 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByTyp
     case mu::engraving::ElementType::NOTELINE:
     case mu::engraving::ElementType::SLUR:
     case mu::engraving::ElementType::TIE:
+    case mu::engraving::ElementType::LAISSEZ_VIB:
     case mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE:
     case mu::engraving::ElementType::PALM_MUTE: return findLines(elementType);
     default:
@@ -320,6 +321,7 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findLines(mu::eng
         { mu::engraving::ElementType::NOTELINE, mu::engraving::ElementType::NOTELINE_SEGMENT },
         { mu::engraving::ElementType::SLUR, mu::engraving::ElementType::SLUR_SEGMENT },
         { mu::engraving::ElementType::TIE, mu::engraving::ElementType::TIE_SEGMENT },
+        { mu::engraving::ElementType::LAISSEZ_VIB, mu::engraving::ElementType::LAISSEZ_VIB_SEGMENT },
         { mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE, mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT }
     };
 

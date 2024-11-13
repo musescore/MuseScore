@@ -89,6 +89,7 @@
 
 #include "dom/keysig.h"
 
+#include "dom/laissezvib.h"
 #include "dom/layoutbreak.h"
 #include "dom/ledgerline.h"
 #include "dom/letring.h"
@@ -244,6 +245,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::JUMP:         write(item_cast<const Jump*>(item), xml, ctx);
         break;
     case ElementType::KEYSIG:       write(item_cast<const KeySig*>(item), xml, ctx);
+        break;
+    case ElementType::LAISSEZ_VIB:  write(item_cast<const LaissezVib*>(item), xml, ctx);
         break;
     case ElementType::LAYOUT_BREAK: write(item_cast<const LayoutBreak*>(item), xml, ctx);
         break;
@@ -2081,6 +2084,15 @@ void TWrite::write(const KeySig* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
+void TWrite::write(const LaissezVib* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::MIN_LENGTH);
+    writeProperty(item, xml, Pid::TIE_PLACEMENT);
+    writeProperties(static_cast<const SlurTie*>(item), xml, ctx);
+    xml.endElement();
+}
+
 void TWrite::write(const LayoutBreak* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
@@ -2223,12 +2235,18 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
         }
     }
 
-    if (item->tieFor()) {
+    if (item->laissezVib()) {
+        write(item->laissezVib(), xml, ctx);
+    }
+
+    if (item->tieFor() && !item->laissezVib()) {
         writeSpannerStart(item->tieFor(), xml, ctx, item, item->track());
     }
+
     if (item->tieBack()) {
         writeSpannerEnd(item->tieBack(), xml, ctx, item, item->track());
     }
+
     if ((item->chord() == 0 || item->chord()->playEventType() != PlayEventType::Auto) && !item->playEvents().empty()) {
         xml.startElement("Events");
         for (const NoteEvent& e : item->playEvents()) {

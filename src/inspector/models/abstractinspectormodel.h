@@ -103,6 +103,7 @@ public:
         TYPE_VIBRATO,
         TYPE_SLUR,
         TYPE_TIE,
+        TYPE_LAISSEZ_VIB,
         TYPE_CRESCENDO,
         TYPE_DIMINUENDO,
         TYPE_STAFF_TYPE_CHANGES,

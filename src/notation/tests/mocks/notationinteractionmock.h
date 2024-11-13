@@ -143,6 +143,7 @@ public:
     MOCK_METHOD(void, deleteSelection, (), (override));
     MOCK_METHOD(void, flipSelection, (), (override));
     MOCK_METHOD(void, addTieToSelection, (), (override));
+    MOCK_METHOD(void, addLaissezVibToSelection, (), (override));
     MOCK_METHOD(void, addTiedNoteToChord, (), (override));
     MOCK_METHOD(void, addSlurToSelection, (), (override));
     MOCK_METHOD(void, addOttavaToSelection, (OttavaType), (override));

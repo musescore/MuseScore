@@ -253,11 +253,10 @@
         <voice>
           <Chord>
             <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articLaissezVibrerAbove</subtype>
-              </Articulation>
             <StemDirection>down</StemDirection>
             <Note>
+              <LaissezVib>
+                </LaissezVib>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -378,11 +377,10 @@
             </Chord>
           <Chord>
             <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>articLaissezVibrerBelow</subtype>
-              </Articulation>
             <StemDirection>up</StemDirection>
             <Note>
+              <LaissezVib>
+                </LaissezVib>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>

@@ -363,6 +363,7 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
     case ElementType::GLISSANDO:
     case ElementType::GUITAR_BEND:
     case ElementType::NOTELINE:
+    case ElementType::LAISSEZ_VIB:
     {
         Spanner* sp = toSpanner(info->connector());
         if (info->isStart()) {

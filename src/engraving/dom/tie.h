@@ -20,18 +20,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TIE_H
-#define MU_ENGRAVING_TIE_H
+#pragma once
 
 #include "slurtie.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------
 //   @@ TieSegment
-///    a single segment of slur; also used for Tie
+///    a single segment of a tie
 //---------------------------------------------------------
 
-class TieSegment final : public SlurTieSegment
+class TieSegment : public SlurTieSegment
 {
     OBJECT_ALLOCATOR(engraving, TieSegment)
     DECLARE_CLASSOF(ElementType::TIE_SEGMENT)
@@ -57,7 +56,14 @@ public:
     void setStaffMove(int val) { m_staffMove = val; }
     staff_idx_t vStaffIdx() const override { return staffIdx() + m_staffMove; }
 
+    virtual double minShoulderHeight() const;
+    virtual double maxShoulderHeight() const;
+    double endWidth() const override;
+    double midWidth() const override;
+    double dottedWidth() const override;
+
 protected:
+    TieSegment(const ElementType& type, System* parent);
     void changeAnchor(EditData&, EngravingItem*) override;
 
 private:
@@ -71,7 +77,7 @@ private:
 //!    a Tie has a Note as startElement/endElement
 //---------------------------------------------------------
 
-class Tie final : public SlurTie
+class Tie : public SlurTie
 {
     OBJECT_ALLOCATOR(engraving, Tie)
     DECLARE_CLASSOF(ElementType::TIE)
@@ -81,19 +87,18 @@ public:
 
     Tie* clone() const override { return new Tie(*this); }
 
-    void setStartNote(Note* note);
-    void setEndNote(Note* note) { setEndElement((EngravingItem*)note); }
+    virtual ~Tie() {}
+
     Note* startNote() const;
-    Note* endNote() const;
+    void setStartNote(Note* note);
+    virtual Note* endNote() const;
+    virtual void setEndNote(Note* note) { setEndElement((EngravingItem*)note); }
 
     bool isInside() const { return m_isInside; }
     void setIsInside(bool val) { m_isInside = val; }
-    bool isOuterTieOfChord(Grip startOrEnd) const;
+    virtual bool isOuterTieOfChord(Grip startOrEnd) const;
     bool hasTiedSecondInside() const;
     bool isCrossStaff() const;
-
-    void calculateDirection();
-    void calculateIsInside();
 
     PropertyValue getProperty(Pid propertyId) const override;
     PropertyValue propertyDefault(Pid id) const override;
@@ -110,13 +115,14 @@ public:
 
     double scalingFactor() const override;
 
+protected:
+    Tie(const ElementType& type, EngravingItem* parent = nullptr);
+
+    bool m_isInside = false;
+    M_PROPERTY2(TiePlacement, tiePlacement, setTiePlacement, TiePlacement::AUTO)
+
 private:
     static Note* editStartNote;
     static Note* editEndNote;
-
-    M_PROPERTY2(TiePlacement, tiePlacement, setTiePlacement, TiePlacement::AUTO)
-
-    bool m_isInside = false;
 };
 } // namespace mu::engraving
-#endif

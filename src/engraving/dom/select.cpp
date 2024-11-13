@@ -43,6 +43,7 @@
 #include "hairpin.h"
 #include "harppedaldiagram.h"
 #include "hook.h"
+#include "laissezvib.h"
 #include "linkedobjects.h"
 #include "lyrics.h"
 #include "measure.h"
@@ -541,6 +542,9 @@ void Selection::appendChord(Chord* chord)
                     m_el.push_back(sp);
                 }
             }
+        }
+        if (note->laissezVib()) {
+            appendFiltered(note->laissezVib()->frontSegment());
         }
     }
 }

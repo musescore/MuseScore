@@ -1513,7 +1513,7 @@ void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick, 
     std::vector<TieSegment*> stackedBackwardTies;
     for (Note* note : ch->notes()) {
         Tie* t = note->tieFor();
-        if (t) {
+        if (t && !t->isLaissezVib()) {
             TieSegment* ts = SlurTieLayout::tieLayoutFor(t, system);
             if (ts && ts->addToSkyline()) {
                 staff->skyline().add(ts->shape().translate(ts->pos()));
@@ -1531,6 +1531,9 @@ void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick, 
             }
         }
     }
+
+    SlurTieLayout::layoutLaissezVibChord(ch, ctx);
+
     if (!ch->staffType()->isTabStaff()) {
         SlurTieLayout::resolveVerticalTieCollisions(stackedForwardTies);
         SlurTieLayout::resolveVerticalTieCollisions(stackedBackwardTies);

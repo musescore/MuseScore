@@ -111,6 +111,9 @@ public:
     static KeySig* copyKeySig(const KeySig& src);
     static std::shared_ptr<KeySig> makeKeySig(Segment* parent);
 
+    static LaissezVib* createLaissezVib(Note* parent, bool isAccessibleEnabled = true);
+    static LaissezVib* copyLaissezVib(const LaissezVib& src);
+
     static LayoutBreak* createLayoutBreak(MeasureBase* parent, bool isAccessibleEnabled = true);
     static LayoutBreak* copyLayoutBreak(const LayoutBreak& src);
     static std::shared_ptr<LayoutBreak> makeLayoutBreak(MeasureBase* parent);

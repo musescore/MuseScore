@@ -76,6 +76,7 @@
 
 #include "dom/keysig.h"
 
+#include "dom/laissezvib.h"
 #include "dom/lasso.h"
 #include "dom/layoutbreak.h"
 #include "dom/ledgerline.h"
@@ -260,7 +261,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
 
     case ElementType::KEYSIG:       draw(item_cast<const KeySig*>(item), painter);
         break;
-
+    case ElementType::LAISSEZ_VIB_SEGMENT:  draw(item_cast<const LaissezVibSegment*>(item), painter);
+        break;
     case ElementType::LASSO:        draw(item_cast<const Lasso*>(item), painter);
         break;
     case ElementType::LAYOUT_BREAK: draw(item_cast<const LayoutBreak*>(item), painter);
@@ -2022,6 +2024,17 @@ void TDraw::draw(const KeySig* item, Painter* painter)
     }
 }
 
+void TDraw::draw(const LaissezVibSegment* item, muse::draw::Painter* painter)
+{
+    const LaissezVibSegment::LayoutData* ldata = item->ldata();
+    if (item->score()->style().styleB(Sid::laissezVibUseSmuflSym)) {
+        painter->setPen(item->curColor());
+        item->drawSymbol(ldata->symbol, painter);
+    } else {
+        draw(static_cast<const TieSegment*>(item), painter);
+    }
+}
+
 void TDraw::draw(const Lasso* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
@@ -2587,23 +2600,23 @@ void TDraw::draw(const SlurSegment* item, Painter* painter)
         painter->setBrush(Brush(pen.color()));
         pen.setCapStyle(PenCapStyle::RoundCap);
         pen.setJoinStyle(PenJoinStyle::RoundJoin);
-        pen.setWidthF(item->style().styleMM(Sid::slurEndWidth) * mag);
+        pen.setWidthF(item->endWidth() * mag);
         break;
     case SlurStyleType::Dotted:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setCapStyle(PenCapStyle::RoundCap);           // round dots
         pen.setDashPattern(dotted);
-        pen.setWidthF(item->style().styleMM(Sid::slurDottedWidth) * mag);
+        pen.setWidthF(item->dottedWidth() * mag);
         break;
     case SlurStyleType::Dashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(dashed);
-        pen.setWidthF(item->style().styleMM(Sid::slurDottedWidth) * mag);
+        pen.setWidthF(item->dottedWidth() * mag);
         break;
     case SlurStyleType::WideDashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(wideDashed);
-        pen.setWidthF(item->style().styleMM(Sid::slurDottedWidth) * mag);
+        pen.setWidthF(item->dottedWidth() * mag);
         break;
     case SlurStyleType::Undefined:
         break;
@@ -3009,23 +3022,23 @@ void TDraw::draw(const TieSegment* item, Painter* painter)
         painter->setBrush(Brush(pen.color()));
         pen.setCapStyle(PenCapStyle::RoundCap);
         pen.setJoinStyle(PenJoinStyle::RoundJoin);
-        pen.setWidthF(item->style().styleMM(Sid::tieEndWidth) * mag);
+        pen.setWidthF(item->endWidth() * mag);
         break;
     case SlurStyleType::Dotted:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setCapStyle(PenCapStyle::RoundCap);           // True dots
         pen.setDashPattern(dotted);
-        pen.setWidthF(item->style().styleMM(Sid::tieDottedWidth) * mag);
+        pen.setWidthF(item->dottedWidth() * mag);
         break;
     case SlurStyleType::Dashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(dashed);
-        pen.setWidthF(item->style().styleMM(Sid::tieDottedWidth) * mag);
+        pen.setWidthF(item->dottedWidth() * mag);
         break;
     case SlurStyleType::WideDashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(wideDashed);
-        pen.setWidthF(item->style().styleMM(Sid::tieDottedWidth) * mag);
+        pen.setWidthF(item->dottedWidth() * mag);
         break;
     case SlurStyleType::Undefined:
         break;

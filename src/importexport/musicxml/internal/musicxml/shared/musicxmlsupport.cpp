@@ -656,20 +656,4 @@ bool isLaissezVibrer(const SymId id)
 {
     return id == SymId::articLaissezVibrerAbove || id == SymId::articLaissezVibrerBelow;
 }
-
-//---------------------------------------------------------
-//   findLaissezVibrer
-//---------------------------------------------------------
-
-// TODO: there should be a lambda hiding somewhere ...
-
-const Articulation* findLaissezVibrer(const Chord* chord)
-{
-    for (const Articulation* a : chord->articulations()) {
-        if (isLaissezVibrer(a->symId())) {
-            return a;
-        }
-    }
-    return nullptr;
-}
 }

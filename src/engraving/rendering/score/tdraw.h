@@ -82,6 +82,7 @@ class Jump;
 
 class KeySig;
 
+class LaissezVib;
 class LayoutBreak;
 class LedgerLine;
 class LetRing;
@@ -236,6 +237,7 @@ private:
 
     static void draw(const KeySig* item, muse::draw::Painter* painter);
 
+    static void draw(const LaissezVibSegment* item, muse::draw::Painter* painter);
     static void draw(const Lasso* item, muse::draw::Painter* painter);
     static void draw(const LayoutBreak* item, muse::draw::Painter* painter);
     static void draw(const LedgerLine* item, muse::draw::Painter* painter);

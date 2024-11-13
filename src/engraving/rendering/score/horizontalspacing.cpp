@@ -26,6 +26,7 @@
 #include "dom/chord.h"
 #include "dom/engravingitem.h"
 #include "dom/glissando.h"
+#include "dom/laissezvib.h"
 #include "dom/lyrics.h"
 #include "dom/note.h"
 #include "dom/rest.h"

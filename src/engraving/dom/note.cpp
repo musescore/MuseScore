@@ -51,6 +51,7 @@
 #include "fingering.h"
 #include "glissando.h"
 #include "guitarbend.h"
+#include "laissezvib.h"
 #include "linkedobjects.h"
 #include "measure.h"
 #include "notedot.h"
@@ -626,7 +627,6 @@ Note::Note(const Note& n, bool link)
     m_userDotPosition   = n.m_userDotPosition;
     m_fixed             = n.m_fixed;
     m_fixedLine         = n.m_fixedLine;
-    m_accidental        = 0;
     m_harmonic          = n.m_harmonic;
 
     if (n.m_accidental) {
@@ -649,15 +649,18 @@ Note::Note(const Note& n, bool link)
 
     m_playEvents = n.m_playEvents;
 
-    if (n.m_tieFor) {
+    if (n.laissezVib()) {
+        m_tieFor = Factory::copyLaissezVib(*toLaissezVib(n.m_tieFor));
+        m_tieFor->setParent(this);
+        m_tieFor->setStartNote(this);
+        m_tieFor->setTick(m_tieFor->startNote()->tick());
+    } else if (n.m_tieFor) {
         m_tieFor = Factory::copyTie(*n.m_tieFor);
         m_tieFor->setStartNote(this);
         m_tieFor->setTick(m_tieFor->startNote()->tick());
         m_tieFor->setEndNote(0);
-    } else {
-        m_tieFor = 0;
     }
-    m_tieBack  = 0;
+
     for (NoteDot* dot : n.m_dots) {
         add(Factory::copyNoteDot(*dot));
     }
@@ -1272,6 +1275,14 @@ void Note::add(EngravingItem* e)
         m_hasHeadParentheses = m_leftParenthesis && m_rightParenthesis;
         m_el.push_back(e);
     } break;
+    case ElementType::LAISSEZ_VIB: {
+        LaissezVib* lv = toLaissezVib(e);
+        lv->setStartNote(this);
+        lv->setTick(lv->startNote()->tick());
+        lv->setTrack(track());
+        setTieFor(lv);
+        break;
+    }
     case ElementType::TIE: {
         Tie* tie = toTie(e);
         tie->setStartNote(this);
@@ -1334,6 +1345,7 @@ void Note::remove(EngravingItem* e)
         }
         break;
 
+    case ElementType::LAISSEZ_VIB:
     case ElementType::TIE: {
         Tie* tie = toTie(e);
         assert(tie->startNote() == this);
@@ -2398,6 +2410,15 @@ GuitarBend* Note::bendBack() const
     return nullptr;
 }
 
+LaissezVib* Note::laissezVib() const
+{
+    if (!m_tieFor || !m_tieFor->isLaissezVib()) {
+        return nullptr;
+    }
+
+    return toLaissezVib(m_tieFor);
+}
+
 //---------------------------------------------------------
 //   line
 //---------------------------------------------------------
@@ -3408,6 +3429,7 @@ EngravingItem* Note::nextElement()
     }
 
     case ElementType::TIE_SEGMENT:
+    case ElementType::LAISSEZ_VIB_SEGMENT:
         if (!m_spannerFor.empty()) {
             for (auto i : m_spannerFor) {
                 if (i->type() == ElementType::GLISSANDO) {
@@ -3497,6 +3519,7 @@ EngravingItem* Note::prevElement()
     }
         return this;
     case ElementType::TIE_SEGMENT:
+    case ElementType::LAISSEZ_VIB_SEGMENT:
         if (!m_el.empty()) {
             return m_el.back();
         }

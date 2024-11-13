@@ -229,7 +229,7 @@ public:
     Measure* findEndMeasure() const;
 
     void setStartElement(EngravingItem* e);
-    void setEndElement(EngravingItem* e);
+    virtual void setEndElement(EngravingItem* e);
 
     ChordRest* startCR();
     ChordRest* endCR();

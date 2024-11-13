@@ -430,6 +430,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::CAPO_GENERATE_TEXT,      true,  "generateText",          P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "automatically generate text") },
 
     { Pid::TIE_PLACEMENT,           true,  "tiePlacement",          P_TYPE::TIE_PLACEMENT,      PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "tie placement") },
+    { Pid::MIN_LENGTH,              true,  "minLength",             P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "minimum length") },
 
     { Pid::POSITION_LINKED_TO_MASTER,   false, "positionLinkedToMaster",   P_TYPE::BOOL,        PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "position linked to master") },
     { Pid::APPEARANCE_LINKED_TO_MASTER, false, "appearanceLinkedToMaster", P_TYPE::BOOL,        PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "appearance linked to master") },

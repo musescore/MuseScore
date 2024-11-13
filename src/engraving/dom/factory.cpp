@@ -59,6 +59,7 @@
 #include "instrumentname.h"
 #include "jump.h"
 #include "keysig.h"
+#include "laissezvib.h"
 #include "layoutbreak.h"
 #include "letring.h"
 #include "lyrics.h"
@@ -233,6 +234,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::FRET_CIRCLE:       return new FretCircle(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::STRING_TUNINGS:      return new StringTunings(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::TIME_TICK_ANCHOR:  return new TimeTickAnchor(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::LAISSEZ_VIB:       return new LaissezVib(parent->isNote() ? toNote(parent) : dummy->note());
 
     case ElementType::LYRICSLINE:
     case ElementType::TEXTLINE_BASE:
@@ -245,6 +247,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::GUITAR_BEND_TEXT:
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
+    case ElementType::LAISSEZ_VIB_SEGMENT:
     case ElementType::STEM_SLASH:
     case ElementType::PAGE:
     case ElementType::BEAM:
@@ -420,6 +423,9 @@ MAKE_ITEM_IMPL(HarpPedalDiagram, Segment);
 CREATE_ITEM_IMPL(KeySig, ElementType::KEYSIG, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(KeySig)
 MAKE_ITEM_IMPL(KeySig, Segment)
+
+CREATE_ITEM_IMPL(LaissezVib, ElementType::LAISSEZ_VIB, Note, isAccessibleEnabled)
+COPY_ITEM_IMPL(LaissezVib);
 
 CREATE_ITEM_IMPL(LayoutBreak, ElementType::LAYOUT_BREAK, MeasureBase, isAccessibleEnabled)
 COPY_ITEM_IMPL(LayoutBreak)
@@ -618,7 +624,13 @@ Text* Factory::createText(EngravingItem * parent, TextStyleType tid, bool isAcce
 COPY_ITEM_IMPL(Text)
 
 CREATE_ITEM_IMPL(Tie, ElementType::TIE, EngravingItem, isAccessibleEnabled)
-COPY_ITEM_IMPL(Tie)
+Tie* Factory::copyTie(const Tie& src)
+{
+    Tie* copy = src.isLaissezVib() ? new LaissezVib(*toLaissezVib(&src)) : new Tie(src);
+    copy->setAccessibleEnabled(src.accessibleEnabled());
+
+    return copy;
+}
 
 CREATE_ITEM_IMPL(TimeSig, ElementType::TIMESIG, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(TimeSig)

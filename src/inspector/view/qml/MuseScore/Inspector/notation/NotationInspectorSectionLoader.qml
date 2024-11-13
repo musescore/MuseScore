@@ -91,7 +91,8 @@ Loader {
             case Inspector.TYPE_GLISSANDO: return glissandoComp
             case Inspector.TYPE_VIBRATO: return vibratoComp
             case Inspector.TYPE_SLUR:
-            case Inspector.TYPE_TIE: return slurAndTieComp
+            case Inspector.TYPE_TIE:
+            case Inspector.TYPE_LAISSEZ_VIB: return slurAndTieComp
             case Inspector.TYPE_TEMPO: return tempoComp
             case Inspector.TYPE_A_TEMPO: return aTempoComp
             case Inspector.TYPE_TEMPO_PRIMO: return tempoPrimoComp

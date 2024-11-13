@@ -38,6 +38,7 @@
 #include "stafftype.h"
 #include "stem.h"
 #include "system.h"
+#include "utils.h"
 
 #include "log.h"
 
@@ -50,6 +51,11 @@ Note* Tie::editEndNote;
 
 TieSegment::TieSegment(System* parent)
     : SlurTieSegment(ElementType::TIE_SEGMENT, parent)
+{
+}
+
+TieSegment::TieSegment(const ElementType& type, System* parent)
+    : SlurTieSegment(type, parent)
 {
 }
 
@@ -172,168 +178,45 @@ bool TieSegment::isEdited() const
     return false;
 }
 
+double TieSegment::minShoulderHeight() const
+{
+    return style().styleMM(Sid::tieMinShoulderHeight);
+}
+
+double TieSegment::maxShoulderHeight() const
+{
+    return style().styleMM(Sid::tieMaxShoulderHeight);
+}
+
+double TieSegment::endWidth() const
+{
+    return style().styleMM(Sid::tieEndWidth);
+}
+
+double TieSegment::midWidth() const
+{
+    return style().styleMM(Sid::tieMidWidth);
+}
+
+double TieSegment::dottedWidth() const
+{
+    return style().styleMM(Sid::tieDottedWidth);
+}
+
 //---------------------------------------------------------
 //   Tie
 //---------------------------------------------------------
+
+Tie::Tie(const ElementType& type, EngravingItem* parent)
+    : SlurTie(type, parent)
+{
+    setAnchor(Anchor::NOTE);
+}
 
 Tie::Tie(EngravingItem* parent)
     : SlurTie(ElementType::TIE, parent)
 {
     setAnchor(Anchor::NOTE);
-}
-
-//---------------------------------------------------------
-//   calculateDirection
-//---------------------------------------------------------
-
-static int compareNotesPos(const Note* n1, const Note* n2)
-{
-    if (n1->line() != n2->line() && !(n1->staffType()->isTabStaff())) {
-        return n2->line() - n1->line();
-    } else if (n1->string() != n2->string()) {
-        return n2->string() - n1->string();
-    } else {
-        return n1->pitch() - n2->pitch();
-    }
-}
-
-void Tie::calculateDirection()
-{
-    Chord* c1   = startNote()->chord();
-    Chord* c2   = endNote()->chord();
-    Measure* m1 = c1->measure();
-    Measure* m2 = c2->measure();
-
-    if (m_slurDirection == DirectionV::AUTO) {
-        std::vector<Note*> notes = c1->notes();
-        size_t n = notes.size();
-        StaffType* st = staff()->staffType(startNote() ? startNote()->tick() : Fraction(0, 1));
-        bool simpleException = st && st->isSimpleTabStaff();
-        // if there are multiple voices, the tie direction goes on stem side
-        if (m1->hasVoices(c1->staffIdx(), c1->tick(), c1->actualTicks())) {
-            m_up = simpleException ? isUpVoice(c1->voice()) : c1->up();
-        } else if (m2->hasVoices(c2->staffIdx(), c2->tick(), c2->actualTicks())) {
-            m_up = simpleException ? isUpVoice(c2->voice()) : c2->up();
-        } else if (n == 1) {
-            //
-            // single note
-            //
-            if (c1->up() != c2->up()) {
-                // if stem direction is mixed, always up
-                m_up = true;
-            } else {
-                m_up = !c1->up();
-            }
-        } else {
-            //
-            // chords
-            //
-            // first, find pivot point in chord (below which all ties curve down and above which all ties curve up)
-            Note* pivotPoint = nullptr;
-            bool multiplePivots = false;
-            for (size_t i = 0; i < n - 1; ++i) {
-                if (!notes[i]->tieFor()) {
-                    continue; // don't include notes that don't have ties
-                }
-                for (size_t j = i + 1; j < n; ++j) {
-                    if (!notes[j]->tieFor()) {
-                        continue;
-                    }
-                    int noteDiff = compareNotesPos(notes[i], notes[j]);
-                    if (!multiplePivots && std::abs(noteDiff) <= 1) {
-                        // TODO: Fix unison ties somehow--if noteDiff == 0 then we need to determine which of the unison is 'lower'
-                        if (pivotPoint) {
-                            multiplePivots = true;
-                            pivotPoint = nullptr;
-                        } else {
-                            pivotPoint = noteDiff < 0 ? notes[i] : notes[j];
-                        }
-                    }
-                }
-            }
-            if (!pivotPoint) {
-                // if the pivot point was not found (either there are no unisons/seconds or there are more than one),
-                // determine if this note is in the lower or upper half of this chord
-                int notesAbove = 0, tiesAbove = 0;
-                int notesBelow = 0, tiesBelow = 0;
-                int unisonTies = 0;
-                for (size_t i = 0; i < n; ++i) {
-                    if (notes[i] == startNote()) {
-                        // skip counting if this note is the current note or if this note doesn't have a tie
-                        continue;
-                    }
-                    int noteDiff = compareNotesPos(startNote(), notes[i]);
-                    if (noteDiff == 0) {  // unison
-                        if (notes[i]->tieFor()) {
-                            unisonTies++;
-                        }
-                    }
-                    if (noteDiff < 0) { // the note is above startNote
-                        notesAbove++;
-                        if (notes[i]->tieFor()) {
-                            tiesAbove++;
-                        }
-                    }
-                    if (noteDiff > 0) { // the note is below startNote
-                        notesBelow++;
-                        if (notes[i]->tieFor()) {
-                            tiesBelow++;
-                        }
-                    }
-                }
-
-                if (tiesAbove == 0 && tiesBelow == 0 && unisonTies == 0) {
-                    // this is the only tie in the chord.
-                    if (notesAbove == notesBelow) {
-                        m_up = !c1->up();
-                    } else {
-                        m_up = (notesAbove < notesBelow);
-                    }
-                } else if (tiesAbove == tiesBelow) {
-                    // this note is dead center, so its tie should go counter to the stem direction
-                    m_up = !c1->up();
-                } else {
-                    m_up = (tiesAbove < tiesBelow);
-                }
-            } else if (pivotPoint == startNote()) {
-                // the current note is the lower of the only second or unison in the chord; tie goes down.
-                m_up = false;
-            } else {
-                // if lower than the pivot, tie goes down, otherwise up
-                int noteDiff = compareNotesPos(startNote(), pivotPoint);
-                m_up = (noteDiff >= 0);
-            }
-        }
-    } else {
-        m_up = m_slurDirection == DirectionV::UP ? true : false;
-    }
-}
-
-void Tie::calculateIsInside()
-{
-    if (_tiePlacement != TiePlacement::AUTO) {
-        setIsInside(_tiePlacement == TiePlacement::INSIDE);
-        return;
-    }
-
-    const Note* startN = startNote();
-    const Chord* startChord = startN ? startN->chord() : nullptr;
-    const Note* endN = endNote();
-    const Chord* endChord = endN ? endN->chord() : nullptr;
-
-    if (!startChord || !endChord) {
-        setIsInside(false);
-        return;
-    }
-
-    const bool startIsSingleNote = startChord->notes().size() <= 1;
-    const bool endIsSingleNote = endChord->notes().size() <= 1;
-
-    if (startIsSingleNote && endIsSingleNote) {
-        setIsInside(style().styleV(Sid::tiePlacementSingleNote).value<TiePlacement>() == TiePlacement::INSIDE);
-    } else {
-        setIsInside(style().styleV(Sid::tiePlacementChord).value<TiePlacement>() == TiePlacement::INSIDE);
-    }
 }
 
 PropertyValue Tie::getProperty(Pid propertyId) const
@@ -371,18 +254,24 @@ bool Tie::setProperty(Pid propertyId, const PropertyValue& v)
 
 double Tie::scalingFactor() const
 {
-    const Note* startN = startNote();
-    const Note* endN = endNote();
+    const bool hasBothNotes = startNote() && endNote();
 
-    if (!startN || !endN) {
+    const Note* primaryNote = startNote() ? startNote() : endNote();
+    const Note* secondaryNote = hasBothNotes ? endNote() : nullptr;
+
+    if (!primaryNote) {
         return 1.0;
     }
 
-    if (startN->isGrace()) {
+    if (primaryNote->isGrace()) {
         return style().styleD(Sid::graceNoteMag);
     }
 
-    return 0.5 * (startN->chord()->intrinsicMag() + endN->chord()->intrinsicMag());
+    if (hasBothNotes) {
+        return 0.5 * (primaryNote->chord()->intrinsicMag() + secondaryNote->chord()->intrinsicMag());
+    }
+
+    return primaryNote->chord()->intrinsicMag();
 }
 
 //---------------------------------------------------------

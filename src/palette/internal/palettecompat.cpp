@@ -205,6 +205,10 @@ void PaletteCompat::removeOldItems(Palette& palette)
         if (element->isBend()) {
             cellsToRemove.emplace_back(cell);
         }
+
+        if (element->isArticulation() && toArticulation(element.get())->isLaissezVib()) {
+            cellsToRemove.emplace_back(cell);
+        }
     }
 
     palette.removeCells(cellsToRemove);
