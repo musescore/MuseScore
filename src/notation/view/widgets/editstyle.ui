@@ -6034,7 +6034,7 @@
                   <item row="0" column="2">
                    <widget class="QCheckBox" name="singleMMRestShowNumber">
                     <property name="text">
-                     <string>Show number &quot;1&quot;</string>
+                     <string>Show number ‘1’</string>
                     </property>
                    </widget>
                   </item>
@@ -6246,7 +6246,7 @@
                <item row="7" column="0" colspan="7">
                 <widget class="QGroupBox" name="groupBox_2">
                  <property name="title">
-                  <string>H-bar:</string>
+                  <string>H-bar</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_36">
                   <item row="0" column="0">
