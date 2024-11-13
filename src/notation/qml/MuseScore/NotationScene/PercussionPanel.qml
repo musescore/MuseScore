@@ -69,8 +69,8 @@ Item {
         width: parent.width
         height: 36
 
-        navigation.section: root.navigationSection
-        navigation.order: root.contentNavigationPanelOrderStart
+        navigationSection: root.navigationSection
+        navigationOrderStart: root.contentNavigationPanelOrderStart
 
         model: percModel
 

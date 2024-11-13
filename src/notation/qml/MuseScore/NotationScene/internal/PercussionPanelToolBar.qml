@@ -32,7 +32,9 @@ Item {
     required property var model
     required property int panelWidth
 
-    property alias navigation: navPanel
+    property NavigationSection navigationSection: null
+    property int navigationOrderStart: 1
+    readonly property int navigationOrderEnd: rightSideNavPanel.order
 
     QtObject {
         id: prv
@@ -44,9 +46,10 @@ Item {
     }
 
     NavigationPanel {
-        id: navPanel
-        name: "PercussionPanelToolBar"
-        enabled: root.enabled && root.visible
+        id: centralNavPanel
+        name: "PercussionPanelToolBarCentral"
+        section: root.navigationSection
+        order: root.navigationOrderStart + 1
     }
 
     Row {
@@ -57,7 +60,8 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         x: prv.centerX - (centralButtonsRow.width / 2)
 
-        // We only want to round the outer corners of the buttons...
+        // Workaround - you can't change the radius of specific corners in this version of Qt Quick (and we
+        // only want to round the "outer corners" of the central buttons)
         layer.enabled: ui.isEffectsAllowed
         layer.effect: EffectOpacityMask {
             maskSource: Rectangle {
@@ -80,8 +84,10 @@ Item {
             accentButton: model.currentPanelMode === PanelMode.WRITE
             backgroundRadius: 0
 
-            navigation.panel: navPanel
+            navigation.panel: centralNavPanel
             navigation.row: 0
+
+            disableFocusBorder: true
 
             onClicked: {
                 root.model.currentPanelMode = PanelMode.WRITE
@@ -106,13 +112,51 @@ Item {
             accentButton: model.currentPanelMode === PanelMode.SOUND_PREVIEW
             backgroundRadius: 0
 
-            navigation.panel: navPanel
-            navigation.row: 0
+            navigation.panel: centralNavPanel
+            navigation.row: 1
+
+            disableFocusBorder: true
 
             onClicked: {
                 root.model.currentPanelMode = PanelMode.SOUND_PREVIEW
             }
         }
+    }
+
+    // These focus borders are necessary due to the above "rounded corners" workaround - the
+    // opacity mask clips-out the buttons' built-in focus borders
+    NavigationFocusBorder {
+        id: writeFocusBorder
+
+        anchors {
+            fill: null
+
+            left: centralButtonsRow.left
+            right: centralButtonsRow.horizontalCenter
+            top: centralButtonsRow.top
+            bottom: centralButtonsRow.bottom
+
+            rightMargin: separator.width
+        }
+
+        navigationCtrl: writeButton.navigation
+    }
+
+    NavigationFocusBorder {
+        id: previewFocusBorder
+
+        anchors {
+            fill: null
+
+            left: centralButtonsRow.horizontalCenter
+            right: centralButtonsRow.right
+            top: centralButtonsRow.top
+            bottom: centralButtonsRow.bottom
+
+            leftMargin: separator.width
+        }
+
+        navigationCtrl: previewButton.navigation
     }
 
     FlatButton {
@@ -126,12 +170,19 @@ Item {
         orientation: Qt.Horizontal
         accentButton: true
 
-        navigation.panel: navPanel
+        navigation.panel: centralNavPanel
         navigation.row: 0
 
         onClicked: {
             root.model.finishEditing()
         }
+    }
+
+    NavigationPanel {
+        id: rightSideNavPanel
+        name: "PercussionPanelToolBarRightSide"
+        section: root.navigationSection
+        order: root.navigationOrderStart + 2
     }
 
     Row {
@@ -148,7 +199,7 @@ Item {
             text: qsTrc("notation", "Layout")
             orientation: Qt.Horizontal
 
-            navigation.panel: navPanel
+            navigation.panel: rightSideNavPanel
             navigation.row: 0
 
             onClicked: {
@@ -169,8 +220,8 @@ Item {
             text: qsTrc("notation", "Customize kit")
             orientation: Qt.Horizontal
 
-            navigation.panel: navPanel
-            navigation.row: 0
+            navigation.panel: rightSideNavPanel
+            navigation.row: 1
 
             onClicked: {
                 api.launcher.open("muse://devtools/interactive/sample")

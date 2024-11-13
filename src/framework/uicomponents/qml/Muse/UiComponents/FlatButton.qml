@@ -60,6 +60,7 @@ FocusScope {
     property real backgroundRadius: 3
 
     property bool drawFocusBorderInsideRect: false
+    property bool disableFocusBorder: false
 
     property int orientation: Qt.Vertical
     readonly property bool isVertical: root.orientation === Qt.Vertical
@@ -149,7 +150,7 @@ FocusScope {
             border.color: ui.theme.strokeColor
 
             NavigationFocusBorder {
-                navigationCtrl: navCtrl
+                navigationCtrl: disableFocusBorder ? null : navCtrl
                 drawOutsideParent: !root.drawFocusBorderInsideRect
             }
 
