@@ -37,6 +37,8 @@ Rectangle {
         id: noteLineSectionModel
     }
 
+    signal goToTextStylePage(string s)
+
     ColumnLayout {
         width: parent.width
         spacing: 12
@@ -48,6 +50,14 @@ Rectangle {
             dashLineLength: noteLineSectionModel ? noteLineSectionModel.noteLineStyleDashSize : null
             dashGapLength: noteLineSectionModel ? noteLineSectionModel.noteLineStyleGapSize : null
             lineWidth: noteLineSectionModel ? noteLineSectionModel.noteLineWidth : null
+        }
+
+        FlatButton {
+            text: qsTrc("notation", "Edit note-anchored line text style")
+
+            onClicked: {
+                root.goToTextStylePage("note-line")
+            }
         }
     }
 }

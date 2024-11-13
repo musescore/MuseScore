@@ -62,5 +62,7 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/NoteLineSection.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/RadioButtonSelectorWithReset.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleControlRowWithReset.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/TextFieldWithReset.qml</file>
     </qresource>
 </RCC>

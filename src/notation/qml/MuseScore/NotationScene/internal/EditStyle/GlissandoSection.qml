@@ -37,10 +37,13 @@ Rectangle {
         id: glissandoSectionModel
     }
 
+    signal goToTextStylePage(string s)
+
     ColumnLayout {
         width: parent.width
         spacing: 12
-        Layout.minimumWidth: 120
+        Layout.fillWidth: true
+        Layout.maximumWidth: 120
 
         RadioButtonSelectorWithReset {
             styleItem: glissandoSectionModel.glissandoLineType
@@ -76,34 +79,18 @@ Rectangle {
                 }
             }
 
-            StyledTextLabel {
-                Layout.minimumWidth: 120 - textRow.spacing - showTextCheckBox.width
-                horizontalAlignment: Text.AlignLeft
-                text: qsTrc("notation", "Show text:")
+            TextFieldWithReset {
+                styleItem: glissandoSectionModel.glissandoText
+                label: qsTrc("notation", "Show text:")
+                labelWidth: labelAreaWidth - showTextCheckBox.width - textRow.spacing
             }
+        }
 
-            TextInputField {
-                id: textField
-                Layout.preferredWidth: 80
-                Layout.fillWidth: false
-                currentText: glissandoSectionModel.glissandoText ? glissandoSectionModel.glissandoText.value : ""
-                enabled: glissandoSectionModel.glissandoShowText
+        FlatButton {
+            text: qsTrc("notation", "Edit glissando text style")
 
-                onTextEditingFinished: function(newTextValue) {
-                    if (glissandoSectionModel.glissandoShowText) {
-                        glissandoSectionModel.glissandoText.value = newTextValue
-                    }
-                }
-            }
-
-            Item {
-                Layout.fillWidth: true
-            }
-
-            FlatButton {
-                icon: IconCode.UNDO
-                enabled: !glissandoSectionModel.glissandoText.isDefault
-                onClicked: glissandoSectionModel.glissandoText.value = glissandoSectionModel.glissandoText.defaultValue
+            onClicked: {
+                root.goToTextStylePage("glissando")
             }
         }
     }

@@ -45,26 +45,28 @@ Rectangle {
         }
 
         ColumnLayout {
-            width: parent.width
-
             spacing: 12
+            width: parent.width
 
             BasicStyleSelectorWithSpinboxAndReset {
                 styleItem: fretboardsPage.fretY
                 label: qsTrc("notation", "Position above:")
                 suffix: qsTrc("global", "sp")
+                controlAreaWidth: 204
             }
 
             BasicStyleSelectorWithSpinboxAndReset {
                 styleItem: fretboardsPage.fretMag
                 label: qsTrc("notation", "Scale:")
                 inPercentage: true
+                controlAreaWidth: 204
             }
 
             RowLayout {
                 StyledTextLabel {
+                    Layout.fillWidth: true
+                    Layout.maximumWidth: 120
                     horizontalAlignment: Qt.AlignLeft
-                    Layout.minimumWidth: 120
                     text: qsTrc("notation", "Orientation:")
                 }
 
@@ -97,16 +99,13 @@ Rectangle {
                         onToggled: fretboardsPage.fretOrientation.value = modelData.value
                     }
                 }
-
-                Item {
-                    Layout.fillWidth: true
-                }
             }
 
             BasicStyleSelectorWithSpinboxAndReset {
                 styleItem: fretboardsPage.fretNutThickness
                 label: qsTrc("notation", "Nut line thickness:")
                 suffix: qsTrc("global", "sp")
+                controlAreaWidth: 204
             }
 
             StyledGroupBox {
@@ -201,6 +200,8 @@ Rectangle {
                 styleItem: fretboardsPage.fretDotSpatiumSize
                 label: qsTrc("notation", "Dot size:")
                 suffix: qsTrc("global", "sp")
+                controlAreaWidth: 204
+
             }
 
             StyledGroupBox {
@@ -214,11 +215,12 @@ Rectangle {
                     height: parent.height
                     RowLayout {
                         Layout.preferredHeight: 70
-                        width: parent.width
 
                         StyledTextLabel {
-                            Layout.minimumWidth: 120
                             horizontalAlignment: Text.AlignLeft
+                            Layout.fillWidth: true
+                            Layout.maximumWidth: 120
+                            wrapMode: Text.WordWrap
                             text: qsTrc("notation", "Appearance:")
                         }
 
@@ -251,15 +253,13 @@ Rectangle {
                                 onToggled: fretboardsPage.barreAppearanceSlur.value = modelData.value
                             }
                         }
-                        Item {
-                            Layout.fillWidth: true
-                        }
                     }
 
                     BasicStyleSelectorWithSpinboxAndReset {
                         styleItem: fretboardsPage.barreLineWidth
                         label: qsTrc("notation", "Line thickness:")
                         inPercentage: true
+                        controlAreaWidth: 204
                     }
                 }
             }
@@ -279,10 +279,9 @@ Rectangle {
             }
 
             RowLayout {
-                width: parent.width
-
                 StyledTextLabel {
-                    Layout.minimumWidth: 120
+                    Layout.fillWidth: true
+                    Layout.maximumWidth: 120
                     horizontalAlignment: Text.AlignLeft
                     text: qsTrc("notation", "Fretboard style:")
                 }
@@ -316,34 +315,34 @@ Rectangle {
                         onToggled: fretboardsPage.fretStyleExtended.value = modelData.value
                     }
                 }
-
-                Item {
-                    Layout.fillWidth: true
-                }
             }
 
             BasicStyleSelectorWithSpinboxAndReset {
                 styleItem: fretboardsPage.fretStringSpacing
                 label: qsTrc("notation", "String spacing:")
                 suffix: qsTrc("global", "sp")
+                controlAreaWidth: 204
             }
 
             BasicStyleSelectorWithSpinboxAndReset {
                 styleItem: fretboardsPage.fretFretSpacing
                 label: qsTrc("notation", "Fret spacing:")
                 suffix: qsTrc("global", "sp")
+                controlAreaWidth: 204
             }
 
             BasicStyleSelectorWithSpinboxAndReset {
                 styleItem: fretboardsPage.maxFretShiftAbove
                 label: qsTrc("notation", "Maximum shift above:")
                 suffix: qsTrc("global", "sp")
+                controlAreaWidth: 204
             }
 
             BasicStyleSelectorWithSpinboxAndReset {
                 styleItem: fretboardsPage.maxFretShiftBelow
                 label: qsTrc("notation", "Maximum shift below:")
                 suffix: qsTrc("global", "sp")
+                controlAreaWidth: 204
             }
         }
     }

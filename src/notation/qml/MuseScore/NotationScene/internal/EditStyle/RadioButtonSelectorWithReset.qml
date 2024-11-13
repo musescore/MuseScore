@@ -27,27 +27,18 @@ import MuseScore.NotationScene 1.0
 import Muse.UiComponents 1.0
 import Muse.Ui 1.0
 
-RowLayout {
-    required property StyleItem styleItem
-    required property string label
-    property alias model: radioButtonGroup.model
 
-    StyledTextLabel {
-        id: optionLabel
-        horizontalAlignment: Text.AlignLeft
-        Layout.minimumWidth: 120
-        text: label
-    }
+StyleControlRowWithReset {
+    id: root
+    property alias model: radioButtonGroup.model
 
     RadioButtonGroup {
         id: radioButtonGroup
-
         height: 30
+        anchors.fill: parent
 
         delegate: FlatRadioButton {
-            width: 106
             height: 30
-
             checked: modelData.value === styleItem.value
             text: modelData.text ? modelData.text : ""
             iconCode: modelData.iconCode ? modelData.iconCode : IconCode.NONE
@@ -57,15 +48,5 @@ RowLayout {
                 styleItem.value = modelData.value
             }
         }
-    }
-
-    Item {
-        Layout.fillWidth: true
-    }
-
-    FlatButton {
-        icon: IconCode.UNDO
-        enabled: !styleItem.isDefault
-        onClicked: styleItem.value = styleItem.defaultValue
     }
 }

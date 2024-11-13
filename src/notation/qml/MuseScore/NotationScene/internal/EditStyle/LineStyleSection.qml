@@ -63,11 +63,13 @@ ColumnLayout {
     BasicStyleSelectorWithSpinboxAndReset {
         styleItem: dashLineLength
         label: qsTrc("notation", "Dash:")
+        step: 0.1
     }
 
     BasicStyleSelectorWithSpinboxAndReset {
         styleItem: dashGapLength
         label: qsTrc("notation", "Gap:")
+        step: 0.1
     }
 }
 

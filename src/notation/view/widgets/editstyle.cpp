@@ -144,10 +144,10 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "harp-pedal-diagram",
     "harp-pedal-text-diagram",
     "text-line",
-    "glissando",
-    "note-line"
+    "note-line",
     "volta",
     "ottava",
+    "glissando",
     "pedal",
     "bend",
     "let-ring",
@@ -924,7 +924,8 @@ EditStyle::EditStyle(QWidget* parent)
     auto glissandoSection = createQmlWidget(
         groupBox_glissando,
         QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml")));
-    glissandoSection.widget->setMinimumSize(224, 260);
+    glissandoSection.widget->setMinimumSize(224, 284);
+    connect(glissandoSection.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
     groupBox_glissando->layout()->addWidget(glissandoSection.widget);
 
     // ====================================================
@@ -934,7 +935,8 @@ EditStyle::EditStyle(QWidget* parent)
     auto noteLineSection = createQmlWidget(
         groupBox_noteline,
         QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/NoteLineSection.qml")));
-    noteLineSection.widget->setMinimumSize(224, 158);
+    noteLineSection.widget->setMinimumSize(224, 200);
+    connect(noteLineSection.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
     groupBox_noteline->layout()->addWidget(noteLineSection.widget);
 
     // ====================================================
