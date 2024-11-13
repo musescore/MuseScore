@@ -29,9 +29,6 @@
 #include "types.h"
 
 namespace mu::engraving {
-// the amount of white space to leave before a system-initial chord with glissando
-static const double GLISS_STARTOFSYSTEM_WIDTH = 4;           // in sp
-
 class Glissando;
 class Note;
 enum class GlissandoType;

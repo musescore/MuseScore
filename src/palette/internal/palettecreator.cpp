@@ -1015,6 +1015,9 @@ PalettePtr PaletteCreator::newArpeggioPalette()
     for (int i = 0; i < 2; ++i) {
         auto a = makeElement<Glissando>(gpaletteScore);
         a->setGlissandoType(GlissandoType(i));
+        if (a->glissandoType() != a->style().styleV(Sid::glissandoType).value<GlissandoType>()) {
+            a->setPropertyFlags(Pid::GLISS_TYPE, PropertyFlags::UNSTYLED);
+        }
         sp->appendElement(a, a->glissandoTypeName());
     }
 

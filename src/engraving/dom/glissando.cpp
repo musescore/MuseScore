@@ -61,8 +61,6 @@ static const ElementStyle glissandoElementStyle {
     { Sid::glissandoShowText,    Pid::GLISS_SHOW_TEXT },
     { Sid::glissandoText,        Pid::GLISS_TEXT },
     { Sid::glissandoStyle,       Pid::GLISS_STYLE },
-    { Sid::glissandoStyleHarp,   Pid::GLISS_STYLE },
-    { Sid::glissandoLineWidth,   Pid::LINE_WIDTH },
     { Sid::glissandoLineStyle,   Pid::LINE_STYLE },
     { Sid::glissandoDashLineLen, Pid::DASH_LINE_LEN },
     { Sid::glissandoDashGapLen,  Pid::DASH_GAP_LEN },
@@ -111,15 +109,10 @@ Glissando::Glissando(EngravingItem* parent)
 {
     initElementStyle(&glissandoElementStyle);
 
-    static const std::array<Pid, 10> propertiesToInitialise {
-        Pid::GLISS_SHOW_TEXT,
-        Pid::GLISS_STYLE,
+    static const std::array<Pid, 5> propertiesToInitialise {
         Pid::GLISS_SHIFT,
-        Pid::GLISS_TYPE,
-        Pid::GLISS_TEXT,
         Pid::GLISS_EASEIN,
         Pid::GLISS_EASEOUT,
-        Pid::GLISS_TEXT,
         Pid::DIAGONAL,
         Pid::ANCHOR
     };
