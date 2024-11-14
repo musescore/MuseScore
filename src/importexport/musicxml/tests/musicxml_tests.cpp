@@ -691,6 +691,9 @@ TEST_F(MusicXml_Tests, harmony7) {
 TEST_F(MusicXml_Tests, harmony8) {
     musicXmlIoTest("testHarmony8");
 }
+TEST_F(MusicXml_Tests, harmony9) {
+    musicXmlIoTest("testHarmony9");
+}                                                                      // chordnames without chordrest
 TEST_F(MusicXml_Tests, hello) {
     musicXmlIoTest("testHello");
 }
@@ -949,6 +952,9 @@ TEST_F(MusicXml_Tests, notesRests2) {
 }
 TEST_F(MusicXml_Tests, numberedLyrics) {
     musicXmlIoTestRef("testNumberedLyrics");
+}
+TEST_F(MusicXml_Tests, numerals) {
+    musicXmlIoTest("testNumerals");
 }
 TEST_F(MusicXml_Tests, overlappingSpanners) {
     musicXmlIoTest("testOverlappingSpanners");

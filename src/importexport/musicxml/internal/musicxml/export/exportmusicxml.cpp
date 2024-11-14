@@ -5950,35 +5950,35 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
     bool isDaCapo = false;
     bool isDalSegno = false;
     if (jtp == JumpType::DC) {
-        if (jp->xmlText() == "") {
+        if (jp->xmlText().empty()) {
             words = u"D.C.";
         } else {
             words = jp->xmlText();
         }
         isDaCapo = true;
     } else if (jtp == JumpType::DC_AL_FINE) {
-        if (jp->xmlText() == "") {
+        if (jp->xmlText().empty()) {
             words = u"D.C. al Fine";
         } else {
             words = jp->xmlText();
         }
         isDaCapo = true;
     } else if (jtp == JumpType::DC_AL_CODA) {
-        if (jp->xmlText() == "") {
+        if (jp->xmlText().empty()) {
             words = u"D.C. al Coda";
         } else {
             words = jp->xmlText();
         }
         isDaCapo = true;
     } else if (jtp == JumpType::DS_AL_CODA) {
-        if (jp->xmlText() == "") {
+        if (jp->xmlText().empty()) {
             words = u"D.S. al Coda";
         } else {
             words = jp->xmlText();
         }
         isDalSegno = true;
     } else if (jtp == JumpType::DS_AL_FINE) {
-        if (jp->xmlText() == "") {
+        if (jp->xmlText().empty()) {
             words = u"D.S. al Fine";
         } else {
             words = jp->xmlText();
@@ -6000,7 +6000,7 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
     if (isDaCapo) {
         sound = u"dacapo=\"yes\"";
     } else if (isDalSegno) {
-        if (jp->jumpTo() == "") {
+        if (jp->xmlText().empty()) {
             sound = u"dalsegno=\"1\"";
         } else {
             sound = u"dalsegno=\"" + jp->jumpTo() + u"\"";
@@ -8687,7 +8687,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         if (!h->xmlKind().isEmpty()) {
             String s = u"kind";
             String kindText = h->musicXmlText();
-            if (h->musicXmlText() != u"") {
+            if (!h->musicXmlText().empty()) {
                 s += u" text=\"" + kindText + u"\"";
             }
             if (h->xmlSymbols() == u"yes") {
@@ -8785,16 +8785,83 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         const String textName = h->hTextName();
         switch (h->harmonyType()) {
         case HarmonyType::NASHVILLE: {
-            m_xml.tag("function", h->hFunction());
-            m_xml.tag("kind", { { "text", textName } }, "none");
+            String alter;
+            String functionText = h->hFunction();
+            if (functionText.empty()) {
+                // we just dump the text as deprecated function
+                m_xml.tag("function", textName);
+                m_xml.tag("kind", "none");
+                break;
+            } else if (!functionText.at(0).isDigit()) {
+                alter = functionText.at(0);
+                functionText = functionText.at(1);
+            }
+            m_xml.startElement("numeral");
+            m_xml.tag("numeral-root", functionText);
+            if (alter == u"b") {
+                m_xml.tag("numeral-alter", "-1");
+            } else if (alter == u"#") {
+                m_xml.tag("numeral-alter", "1");
+            }
+            m_xml.endElement();
+            if (!h->xmlKind().isEmpty()) {
+                String s = u"kind";
+                String kindText = h->musicXmlText();
+                if (!h->musicXmlText().empty()) {
+                    s += u" text=\"" + kindText + u"\"";
+                }
+                if (h->xmlSymbols() == "yes") {
+                    s += u" use-symbols=\"yes\"";
+                }
+                if (h->xmlParens() == "yes") {
+                    s += u" parentheses-degrees=\"yes\"";
+                }
+                m_xml.tagRaw(s, h->xmlKind());
+            } else {
+                // default is major
+                m_xml.tag("kind", "major");
+            }
         }
         break;
         case HarmonyType::ROMAN: {
-            // TODO: parse?
-            m_xml.tag("function", h->hTextName());   // note: HTML escape done by tag()
-            m_xml.tag("kind", { { "text", "" } }, "none");
+            int alter = 0;
+            static const std::wregex roman(L"(b|#)?([ivIV]+)");
+            if (textName.contains(roman)) {
+                StringList matches = textName.search(roman, { 1, 2 });
+                m_xml.startElement("numeral");
+                if (matches.at(0) == u"b") {
+                    alter = -1;
+                } else if (matches.at(0) == u"#") {
+                    alter = 1;
+                }
+                const String numberStr = matches.at(1);
+                size_t harmoy = 1;
+                if (numberStr.contains(u"v", CaseSensitivity::CaseInsensitive)) {
+                    if (numberStr.startsWith(u"i", CaseSensitivity::CaseInsensitive)) {
+                        harmoy = 4;
+                    } else {
+                        harmoy = 4 + numberStr.size();
+                    }
+                } else {
+                    harmoy = numberStr.size();
+                }
+                m_xml.tag("numeral-root", { { "text", numberStr } }, harmoy);
+                if (alter) {
+                    m_xml.tag("numeral-alter", alter);
+                }
+                m_xml.endElement();
+                // simple check for major or minor
+                m_xml.tag("kind", numberStr.at(0).isUpper() ? "major" : "minor");
+                // infer inversion from ending digits
+                if (textName.endsWith(u"64")) {
+                    m_xml.tag("inversion", 2);
+                } else if (textName.endsWith(u"6")) {
+                    m_xml.tag("inversion", 1);
+                }
+                break;
+            }
         }
-        break;
+        // fallthrough
         case HarmonyType::STANDARD:
         default: {
             m_xml.startElement("root");

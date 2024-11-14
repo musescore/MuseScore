@@ -74,8 +74,10 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
       </measure>
     <measure number="2">
       <harmony print-frame="no">
-        <function>i</function>
-        <kind text="">none</kind>
+        <numeral>
+          <numeral-root text="i">1</numeral-root>
+          </numeral>
+        <kind>minor</kind>
         </harmony>
       <note>
         <pitch>
@@ -93,8 +95,10 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
       </measure>
     <measure number="3">
       <harmony print-frame="no">
-        <function>1</function>
-        <kind text="m">none</kind>
+        <numeral>
+          <numeral-root>1</numeral-root>
+          </numeral>
+        <kind text="m">minor</kind>
         </harmony>
       <note>
         <pitch>
@@ -134,8 +138,10 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
       </measure>
     <measure number="5">
       <harmony print-frame="no">
-        <function>xyz</function>
-        <kind text="">none</kind>
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="xyz">none</kind>
         </harmony>
       <note>
         <pitch>
@@ -153,8 +159,8 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
       </measure>
     <measure number="6">
       <harmony print-frame="no">
-        <function></function>
-        <kind text="xyz">none</kind>
+        <function>xyz</function>
+        <kind>none</kind>
         </harmony>
       <note>
         <pitch>
@@ -194,8 +200,10 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
       </measure>
     <measure number="8">
       <harmony print-frame="no">
-        <function>&lt;&gt;&amp;&quot;</function>
-        <kind text="">none</kind>
+        <root>
+          <root-step text="">C</root-step>
+          </root>
+        <kind text="&lt;&gt;&amp;&quot;">none</kind>
         </harmony>
       <note>
         <pitch>
@@ -213,8 +221,8 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
       </measure>
     <measure number="9">
       <harmony print-frame="no">
-        <function></function>
-        <kind text="&lt;&gt;&amp;&quot;">none</kind>
+        <function>&lt;&gt;&amp;&quot;</function>
+        <kind>none</kind>
         </harmony>
       <note>
         <pitch>
