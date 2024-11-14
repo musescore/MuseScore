@@ -131,6 +131,8 @@ private:
 
     void initDocks(DockPageView* page);
 
+    void adjustContentForAvailableSpace();
+
     void notifyAboutDocksOpenStatus();
 
     QList<DockToolBarView*> topLevelToolBars(const DockPageView* page) const;
