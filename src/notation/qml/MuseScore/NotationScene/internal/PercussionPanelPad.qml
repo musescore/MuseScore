@@ -39,6 +39,13 @@ DropArea {
     property alias showOriginBackground: originBackground.visible
     property alias draggableArea: draggableArea
 
+    property int navigationRow: -1
+    property int navigationColumn: -1
+    property alias padNavigationCtrl: padNavCtrl
+    property alias footerNavigationCtrl: footerNavCtrl
+
+    readonly property bool hasActiveControl: padNavCtrl.active || footerNavCtrl.active
+
     property var dragParent: null
     signal dragStarted()
     signal dragCancelled()
@@ -46,6 +53,66 @@ DropArea {
     QtObject {
         id: prv
         readonly property bool isEmptySlot: Boolean(root.padModel) ? root.padModel.isEmptySlot : true
+        readonly property real footerHeight: 24
+        readonly property string accessibleDescription: {
+            //: %1 will be the row number of a percussion panel pad
+            let line1 = qsTrc("notation", "Row: %1").arg(root.navigationRow + 1)
+
+            //: %1 will be the column number of a percussion panel pad
+            let line2 = qsTrc("notation", "Column: %1").arg(root.navigationColumn + 1)
+
+            return line1 + ", " + line2
+        }
+    }
+
+    NavigationControl {
+        id: padNavCtrl
+
+        row: root.navigationRow
+        column: root.navigationColumn
+
+        name: root.objectName !== "" ? root.objectName : "PercussionPanelPad"
+
+        // Only navigate to empty slots when we're in edit mode
+        enabled: !prv.isEmptySlot || root.panelMode === PanelMode.EDIT_LAYOUT
+
+        accessible.role: MUAccessible.Button
+        accessible.name: Boolean(root.padModel) && !prv.isEmptySlot ? root.padModel.instrumentName : qsTrc("notation", "Empty pad")
+
+        accessible.description: prv.accessibleDescription
+
+        accessible.visualItem: padFocusBorder
+        accessible.enabled: padNavCtrl.enabled
+
+        onTriggered: {
+            if (!Boolean(root.padModel)) {
+                return
+            }
+            root.padModel.triggerPad()
+        }
+    }
+
+    NavigationControl {
+        id: footerNavCtrl
+
+        row: root.navigationRow
+        column: root.navigationColumn
+
+        name: root.objectName !== "" ? root.objectName : "PercussionPanelPadFooter"
+
+        enabled: !prv.isEmptySlot
+
+        accessible.role: MUAccessible.Button
+        accessible.name: Boolean(root.padModel) ? root.padModel.instrumentName + " " + qsTrc("notation", "footer") : ""
+
+        accessible.description: prv.accessibleDescription
+
+        accessible.visualItem: footerFocusBorder
+        accessible.enabled: footerNavCtrl.enabled
+
+        onTriggered: {
+            // TODO: trigger context menu (not yet implemented)
+        }
     }
 
     Rectangle {
@@ -112,6 +179,9 @@ DropArea {
                     padModel: root.padModel
                     panelMode: root.panelMode
                     useNotationPreview: root.useNotationPreview
+
+                    footerHeight: prv.footerHeight
+
                     dragActive: dragHandler.active
                 }
             }
@@ -124,6 +194,30 @@ DropArea {
                     color: ui.theme.backgroundSecondaryColor
                 }
             }
+        }
+
+        NavigationFocusBorder {
+            id: padFocusBorder
+
+            padding: root.panelMode === PanelMode.EDIT_LAYOUT ? 0 : root.totalBorderWidth * -1
+            navigationCtrl: padNavCtrl
+        }
+
+        NavigationFocusBorder {
+            id: footerFocusBorder
+
+            anchors {
+                fill: null
+
+                left: padLoader.left
+                right: padLoader.right
+                bottom: padLoader.bottom
+            }
+
+            height: prv.footerHeight + root.totalBorderWidth
+            radius: 0
+
+            navigationCtrl: footerNavCtrl
         }
 
         states: [

@@ -103,6 +103,16 @@ Item {
             height: padGrid.cellHeight * padGrid.numRows
             spacing: padGrid.spacing / 2
 
+            NavigationPanel {
+                id: deleteButtonsPanel
+
+                name: "PercussionPanelDeleteRowButtons"
+                section: root.navigationSection
+                order: toolbar.navigationOrderEnd + 3
+
+                enabled: deleteButtonsColumn.visible
+            }
+
             Column {
                 id: deleteButtonsColumn
 
@@ -135,6 +145,9 @@ Item {
                             icon: IconCode.DELETE_TANK
                             backgroundRadius: deleteButton.width / 2
 
+                            navigation.panel: deleteButtonsPanel
+                            navigation.row: model.index
+
                             onClicked: {
                                 padGrid.model.deleteRow(model.index)
                             }
@@ -163,6 +176,14 @@ Item {
 
                 property Item draggedPad: null
 
+                QtObject {
+                    id: gridPrv
+
+                    // This variable ensures we stay within a given pad when tabbing back-and-forth between
+                    // "main" and "footer" controls
+                    property var currentPadNavigationIndex: [0, 0]
+                }
+
                 Layout.alignment: Qt.AlignTop
                 Layout.fillHeight: true
 
@@ -174,6 +195,36 @@ Item {
                 cellHeight: 100 + padGrid.spacing
 
                 model: percModel.padListModel
+
+                NavigationPanel {
+                    id: padsNavPanel
+
+                    name: "PercussionPanelPads"
+                    section: root.navigationSection
+                    order: toolbar.navigationOrderEnd + 1
+
+                    onNavigationEvent: function(event) {
+                        if (event.type === NavigationEvent.AboutActive) {
+                            event.setData("controlIndex", gridPrv.currentPadNavigationIndex)
+                        }
+                    }
+                }
+
+                NavigationPanel {
+                    id: padFootersNavPanel
+
+                    name: "PercussionPanelFooters"
+                    section: root.navigationSection
+                    order: toolbar.navigationOrderEnd + 2
+
+                    enabled: percModel.currentPanelMode !== PanelMode.EDIT_LAYOUT
+
+                    onNavigationEvent: function(event) {
+                        if (event.type === NavigationEvent.AboutActive) {
+                            event.setData("controlIndex", gridPrv.currentPadNavigationIndex)
+                        }
+                    }
+                }
 
                 delegate: Item {
                     id: padArea
@@ -200,6 +251,11 @@ Item {
 
                         dragParent: root
 
+                        navigationRow: index / padGrid.numColumns
+                        navigationColumn: index % padGrid.numColumns
+                        padNavigationCtrl.panel: padsNavPanel
+                        footerNavigationCtrl.panel: padFootersNavPanel
+
                         onDragStarted: {
                             padGrid.draggedPad = pad
                             padGrid.model.startDrag(index)
@@ -214,6 +270,13 @@ Item {
                         onDragCancelled: {
                             padGrid.draggedPad = null
                             padGrid.model.endDrag(-1)
+                        }
+
+                        onHasActiveControlChanged: {
+                            if (!pad.hasActiveControl) {
+                                return;
+                            }
+                            gridPrv.currentPadNavigationIndex = [pad.navigationRow, pad.navigationColumn]
                         }
                     }
 
@@ -241,6 +304,16 @@ Item {
                 }
             }
 
+            NavigationPanel {
+                id: addRowButtonPanel
+
+                name: "PercussionPanelAddRowButton"
+                section: root.navigationSection
+                order: toolbar.navigationOrderEnd + 4
+
+                enabled: addRowButton.visible
+            }
+
             FlatButton {
                 id: addRowButton
 
@@ -253,6 +326,9 @@ Item {
                 icon: IconCode.PLUS
                 text: qsTrc("notation", "Add row")
                 orientation: Qt.Horizontal
+
+                navigation.panel: addRowButtonPanel
+
                 onClicked: {
                     padGrid.model.addRow()
                     flickable.goToBottom()
