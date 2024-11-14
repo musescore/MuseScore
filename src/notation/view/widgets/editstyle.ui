@@ -6041,7 +6041,7 @@
                   <item row="0" column="2">
                    <widget class="QCheckBox" name="singleMMRestShowNumber">
                     <property name="text">
-                     <string>Show number ‘1’</string>
+                     <string notr="true">Show number '1'</string>
                     </property>
                    </widget>
                   </item>
