@@ -891,6 +891,8 @@ void Chord::updateLedgerLines()
 
     // need ledger lines?
     if (downLine() + stepOffset <= lineBelow + 1 && upLine() + stepOffset >= -1) {
+        muse::DeleteAll(m_ledgerLines);
+        m_ledgerLines.clear();
         return;
     }
 
