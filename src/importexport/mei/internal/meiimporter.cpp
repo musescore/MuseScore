@@ -40,6 +40,7 @@
 #include "engraving/dom/jump.h"
 #include "engraving/dom/key.h"
 #include "engraving/dom/keysig.h"
+#include "engraving/dom/laissezvib.h"
 #include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/marker.h"
@@ -537,7 +538,7 @@ EngravingItem* MeiImporter::addToChordRest(const libmei::Element& meiElement, Me
         if (chordRest->isChord()) {
             item = Factory::createArpeggio(toChord(chordRest));
         }
-    } else if (meiElement.m_name == "artic" || meiElement.m_name == "lv") {
+    } else if (meiElement.m_name == "artic") {
         item = Factory::createArticulation(chordRest);
     } else {
         return nullptr;
@@ -2560,11 +2561,15 @@ bool MeiImporter::readLv(pugi::xml_node lvNode, Measure* measure)
     libmei::Lv meiLv;
     meiLv.Read(lvNode);
 
-    Articulation* lv = static_cast<Articulation*>(this->addToChordRest(meiLv, measure));
-    if (!lv) {
-        // Warning message given in MeiImporter::addToChordRest
+    Note* note = this->findStartNote(meiLv);
+    if (!note) {
         return true;
     }
+
+    LaissezVib* lv = Factory::createLaissezVib(note);
+    lv->setParent(note);
+    note->score()->undoAddElement(lv);
+    m_uids->reg(lv, meiLv.m_xmlId);
 
     Convert::lvFromMEI(lv, meiLv, warning);
 
