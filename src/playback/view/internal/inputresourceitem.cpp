@@ -45,6 +45,7 @@ using namespace muse::audio::synth;
 static const QString VST_MENU_ITEM_ID("VST3");
 static const QString SOUNDFONTS_MENU_ITEM_ID = muse::qtrc("playback", "SoundFonts");
 static const QString MUSE_MENU_ITEM_ID("Muse Sounds");
+static const QString GET_MORE_SOUNDS_ID("getMoreSounds");
 
 static const muse::String MS_BASIC_SOUNDFONT_NAME(u"MS Basic");
 
@@ -90,6 +91,9 @@ void InputResourceItem::requestAvailableResources()
             result << buildSoundFontsMenuItem(sfResourcesSearch->second);
         }
 
+        result << buildSeparator();
+        result << buildExternalLinkMenuItem(GET_MORE_SOUNDS_ID, muse::qtrc("playback", "Get more sounds"));
+
         emit availableResourceListResolved(result);
     })
     .onReject(this, [](const int errCode, const std::string& errText) {
@@ -101,6 +105,13 @@ void InputResourceItem::requestAvailableResources()
 
 void InputResourceItem::handleMenuItem(const QString& menuItemId)
 {
+    if (menuItemId == GET_MORE_SOUNDS_ID) {
+        const QString url = QString::fromStdString(globalConfiguration()->museHubWebUrl());
+        const QString urlParams("muse-sounds?utm_source=mss-mixer&utm_medium=mh&utm_campaign=mss-mixer-ms-mainpage");
+        interactive()->openUrl(url + urlParams);
+        return;
+    }
+
     const AudioResourceId& newSelectedResourceId = menuItemId.toStdString();
 
     for (const auto& pairByType : m_availableResourceMap) {

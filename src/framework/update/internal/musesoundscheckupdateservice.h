@@ -33,6 +33,7 @@
 #include "languages/ilanguagesconfiguration.h"
 #include "iinteractive.h"
 
+#include "../global/iglobalconfiguration.h"
 #include "../iupdateconfiguration.h"
 #include "../imusesoundscheckupdateservice.h"
 
@@ -40,6 +41,7 @@ namespace muse::update {
 class MuseSoundsCheckUpdateService : public IMuseSoundsCheckUpdateService, public async::Asyncable
 {
     Inject<network::INetworkManagerCreator> networkManagerCreator;
+    Inject<IGlobalConfiguration> globalConfiguration;
     Inject<IUpdateConfiguration> configuration;
     Inject<io::IFileSystem> fileSystem;
     Inject<ISystemInfo> systemInfo;
