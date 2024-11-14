@@ -37,12 +37,12 @@
 #include "guitarbend.h"
 #include "hook.h"
 #include "key.h"
-#include "laissezvib.h"
 #include "ledgerline.h"
 #include "measure.h"
 #include "mscore.h"
 #include "navigate.h"
 #include "note.h"
+#include "notedot.h"
 #include "noteevent.h"
 #include "noteline.h"
 #include "ornament.h"
@@ -57,13 +57,11 @@
 #include "stringdata.h"
 #include "system.h"
 #include "tie.h"
-
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
 #include "trill.h"
 #include "tuplet.h"
 #include "undo.h"
-#include "compat/midi/compatmidirender.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -2938,7 +2936,8 @@ EngravingItem* Chord::prevElement()
                 if (next->isChord()) {
                     return toChord(next)->notes().back();
                 }
-                return toRest(next);
+                assert(next->isRestFamily());
+                return next;
             }
         }
 
@@ -2959,7 +2958,8 @@ EngravingItem* Chord::prevElement()
                     if (next->isChord()) {
                         return toChord(next)->notes().back();
                     }
-                    return toRest(next);
+                    assert(next->isRestFamily());
+                    return next;
                 }
             }
         }
