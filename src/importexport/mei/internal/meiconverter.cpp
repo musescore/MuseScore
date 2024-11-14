@@ -1715,7 +1715,6 @@ void Convert::lvFromMEI(engraving::LaissezVib* lv, const libmei::Lv& meiLv, bool
     // @curvedir
     if (meiLv.HasCurvedir()) {
         lv->setSlurDirection(Convert::curvedirFromMEI(meiLv.GetCurvedir(), warning));
-        //slur->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
     }
 
     // @lform
@@ -2640,7 +2639,6 @@ void Convert::slurFromMEI(engraving::SlurTie* slur, const libmei::Slur& meiSlur,
     // @curvedir
     if (meiSlur.HasCurvedir()) {
         slur->setSlurDirection(Convert::curvedirFromMEI(meiSlur.GetCurvedir(), warning));
-        //slur->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
     }
 
     // @lform
