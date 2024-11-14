@@ -33,7 +33,7 @@ namespace Ms {
 #endif
 
 static const qreal subScriptSize     = 0.6;
-static const qreal subScriptOffset   = 0.5;       // of x-height
+static const qreal subScriptOffset   = 0.5;      // of x-height
 static const qreal superScriptOffset = -.9;      // of x-height
 
 //static const qreal tempotextOffset = 0.4; // of x-height // 80% of 50% = 2 spatiums
@@ -188,9 +188,10 @@ QChar TextCursor::currentCharacter() const
 
 QString TextCursor::currentWord() const
       {
+      static QRegularExpression regex (" .*");
       const TextBlock& t = _text->_layout[row()];
       QString s = t.text(column(), -1);
-      return s.remove(QRegularExpression(" .*"));
+      return s.remove(regex);
       }
 
 //---------------------------------------------------------
@@ -2819,6 +2820,11 @@ bool TextBase::setProperty(Pid pid, const QVariant& v)
             genText();
       bool rv = true;
       switch (pid) {
+            case Pid::COLOR:
+                  if (color() == frameColor())
+                        setFrameColor(v.value<QColor>());
+                  Element::setProperty(pid, v);
+                  break;
             case Pid::SUB_STYLE:
                   initTid(Tid(v.toInt()));
                   break;
