@@ -8,6 +8,7 @@
       <pagePrintableWidth>7.4826</pagePrintableWidth>
       <minSystemDistance>6</minSystemDistance>
       <maxSystemDistance>6</maxSystemDistance>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <spatium>1.76389</spatium>

@@ -18,6 +18,7 @@
       <lastSystemFillLimit>0</lastSystemFillLimit>
       <pedalPosBelow x="0" y="0"/>
       <trillPosAbove x="0" y="0"/>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <minMMRestWidth>0</minMMRestWidth>
       <dynamicsFontStyle>0</dynamicsFontStyle>
       <pageNumberFontSize>9</pageNumberFontSize>

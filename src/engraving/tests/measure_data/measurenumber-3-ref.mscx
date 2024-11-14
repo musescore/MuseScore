@@ -4,6 +4,7 @@
     <Division>480</Division>
     <Style>
       <showMeasureNumberOne>1</showMeasureNumberOne>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <measureNumberVPlacement>1</measureNumberVPlacement>
       <measureNumberHPlacement>1</measureNumberHPlacement>
       <pageNumberFontSize>9</pageNumberFontSize>

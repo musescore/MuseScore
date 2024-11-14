@@ -4,6 +4,7 @@
     <Division>480</Division>
     <Style>
       <lastSystemFillLimit>0</lastSystemFillLimit>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <spatium>1.76389</spatium>
@@ -545,6 +546,7 @@
       <Division>480</Division>
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
+        <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <spatium>1.76389</spatium>
         </Style>

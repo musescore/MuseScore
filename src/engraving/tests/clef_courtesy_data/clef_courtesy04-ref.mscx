@@ -11,6 +11,7 @@
       <staffLineWidth>0.15</staffLineWidth>
       <measureNumberInterval>1</measureNumberInterval>
       <measureNumberSystem>0</measureNumberSystem>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <genCourtesyTimesig>0</genCourtesyTimesig>
       <sectionPause>2</sectionPause>
       <evenHeaderR>$:workTitle:</evenHeaderR>

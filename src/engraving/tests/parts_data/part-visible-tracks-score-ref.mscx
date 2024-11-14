@@ -226,6 +226,7 @@
         <pedalFontSize>12</pedalFontSize>
         <fretFretSpacing>0.8</fretFretSpacing>
         <barreLineWidth>1</barreLineWidth>
+        <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <multiMeasureRestMargin>1.2</multiMeasureRestMargin>
         <arpeggioNoteDistance>0.5</arpeggioNoteDistance>

@@ -111,6 +111,11 @@ private:
     static void moveRightAlignedSegments(std::vector<SegmentPosition>& placedSegments, const HorizontalSpacingContext& ctx);
 
     static double chordRestSegmentNaturalWidth(Segment* segment, HorizontalSpacingContext& ctx);
+    static double computeSegmentDurationStretch(const Segment* curSeg, const Segment* prevSeg);
+    static double durationStretchForMMRests(const Segment* segment);
+    static double durationStretchForTicks(double slope, const Fraction& ticks);
+    static bool needsCueSizeSpacing(const Segment* segment);
+
     static void applyCrossBeamSpacingCorrection(Segment* thisSeg, Segment* nextSeg, double& width);
     static CrossBeamType computeCrossBeamType(Segment* thisSeg, Segment* nextSeg);
 

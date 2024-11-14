@@ -3,6 +3,7 @@
   <Score>
     <Division>480</Division>
     <Style>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <spatium>1.764</spatium>

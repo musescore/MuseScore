@@ -5,6 +5,7 @@
     <Style>
       <measureNumberInterval>1</measureNumberInterval>
       <measureNumberSystem>0</measureNumberSystem>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <measureNumberVPlacement>1</measureNumberVPlacement>
       <measureNumberHPlacement>1</measureNumberHPlacement>
       <pageNumberFontSize>9</pageNumberFontSize>
