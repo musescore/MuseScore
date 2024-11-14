@@ -7556,11 +7556,11 @@
       <widget class="QWidget" name="PageSlursTies">
        <layout class="QVBoxLayout" name="verticalLayout_13">
         <item>
-         <widget class="QScrollArea" name="scrollArea_4">
+         <widget class="QScrollArea" name="scrollArea_41">
           <property name="widgetResizable">
            <bool>true</bool>
           </property>
-          <widget class="QWidget" name="scrollAreaWidgetContents_5">
+          <widget class="QWidget" name="scrollAreaWidgetContents_51">
            <property name="geometry">
             <rect>
              <x>0</x>
@@ -7590,7 +7590,7 @@
               <property name="flat">
                <bool>false</bool>
               </property>
-              <layout class="QGridLayout" name="gridLayout_22">
+              <layout class="QGridLayout" name="gridLayout_221">
                <item row="0" column="0">
                 <widget class="QGroupBox" name="groupBox_slurs">
                  <property name="title">
@@ -10938,7 +10938,7 @@
           <property name="title">
            <string>Trill cue note</string>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_69">
+          <layout class="QVBoxLayout" name="verticalLayout_691">
            <item>
             <widget class="QRadioButton" name="ornamentShowCueNoteOnlyNonSeconds">
              <property name="text">
