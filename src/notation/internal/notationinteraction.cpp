@@ -211,6 +211,10 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
     m_notation->scoreInited().onNotify(this, [this]() {
         onScoreInited();
     });
+
+    m_notation->viewModeChanged().onNotify(this, [this]() {
+        onViewModeChanged();
+    });
 }
 
 mu::engraving::Score* NotationInteraction::score() const
@@ -229,6 +233,29 @@ void NotationInteraction::onScoreInited()
     score()->elementDestroyed().onReceive(this, [this](mu::engraving::EngravingItem* element) {
         onElementDestroyed(element);
     });
+}
+
+void NotationInteraction::onViewModeChanged()
+{
+    if (!score()) {
+        return;
+    }
+
+    if (!score()->isLayoutMode(LayoutMode::LINE) && !score()->isLayoutMode(LayoutMode::HORIZONTAL_FIXED)) {
+        return;
+    }
+
+    // VBoxes are not included in horizontal layouts - deselect them (and their contents) when switching to horizontal mode...
+    const std::vector<EngravingItem*> sel = selection()->elements();
+    for (EngravingItem* item : sel) {
+        if (!item->findAncestor(ElementType::VBOX)) {
+            continue;
+        }
+        score()->deselect(item);
+        if (item == m_editData.element) {
+            endEditElement();
+        }
+    }
 }
 
 void NotationInteraction::startEdit()

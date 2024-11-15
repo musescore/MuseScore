@@ -300,6 +300,7 @@ public:
 private:
     mu::engraving::Score* score() const;
     void onScoreInited();
+    void onViewModeChanged();
 
     void startEdit();
     void apply();
