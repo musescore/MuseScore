@@ -6136,7 +6136,7 @@
                      <string>Reset to default</string>
                     </property>
                     <property name="accessibleName">
-                     <string>Reset 'Break H-bar if it collides with number' value</string>
+                     <string>Reset 'Break H-bar if number overlaps' value</string>
                     </property>
                     <property name="text">
                      <string notr="true"/>
@@ -6291,7 +6291,7 @@
                      <string>Reset to default</string>
                     </property>
                     <property name="accessibleName">
-                     <string>Reset 'H-bar horizontal stroke thickness' value</string>
+                     <string>Reset 'Horizontal stroke thickness' value</string>
                     </property>
                     <property name="text">
                      <string notr="true"/>
@@ -6320,7 +6320,7 @@
                      <string>Reset to default</string>
                     </property>
                     <property name="accessibleName">
-                     <string>Reset 'H-bar margin within barlines' value</string>
+                     <string>Reset 'Margin within barlines' value</string>
                     </property>
                     <property name="text">
                      <string notr="true"/>
@@ -6369,7 +6369,7 @@
                      <string>Reset to default</string>
                     </property>
                     <property name="accessibleName">
-                     <string>Reset 'H-bar vertical stroke thickness' value</string>
+                     <string>Reset 'Vertical stroke thickness' value</string>
                     </property>
                     <property name="text">
                      <string notr="true"/>
@@ -6408,7 +6408,7 @@
                      <string>Reset to default</string>
                     </property>
                     <property name="accessibleName">
-                     <string>Reset 'H-bar vertical stroke height' value</string>
+                     <string>Reset 'Vertical stroke height' value</string>
                     </property>
                     <property name="text">
                      <string notr="true"/>
