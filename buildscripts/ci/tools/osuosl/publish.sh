@@ -128,7 +128,7 @@ if [ "$BUILD_MODE" == "nightly" ]; then
     fi  
     num_to_keep=$(((num_days + num_today) * num_branches * num_variants))  
     start_line_num=$((num_to_keep + 1))  
-    ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/$FTP_PATH && ls -t MuseScore{-Studio-,}Nightly-* MuseScore-4.*-x86_64.{7z,paf.exe} | tail -n +${start_line_num} | xargs rm -f"
+    ssh -i $SSH_KEY musescore-nightlies@ftp-osl.osuosl.org "cd ~/ftp/$FTP_PATH && ls -t MuseScore{-Studio-,}Nightly* | tail -n +${start_line_num} | xargs rm -f"
 fi
 
 # Sending index.html
