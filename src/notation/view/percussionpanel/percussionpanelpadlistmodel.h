@@ -55,6 +55,8 @@ public:
     Q_INVOKABLE void startDrag(int startIndex);
     Q_INVOKABLE void endDrag(int endIndex);
 
+    bool hasActivePads() const { return m_drumset; }
+
     int numColumns() const { return NUM_COLUMNS; }
     int numPads() const { return m_padModels.count(); }
 
@@ -63,6 +65,7 @@ public:
 
     void resetLayout();
 
+    muse::async::Notification hasActivePadsChanged() const { return m_hasActivePadsChanged; }
     muse::async::Channel<int /*pitch*/> padTriggered() const { return m_triggeredChannel; }
 
 signals:
@@ -86,6 +89,7 @@ private:
 
     int m_dragStartIndex = -1;
 
+    muse::async::Notification m_hasActivePadsChanged;
     muse::async::Channel<int /*pitch*/> m_triggeredChannel;
 };
 }

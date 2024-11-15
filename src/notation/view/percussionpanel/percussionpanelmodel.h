@@ -55,6 +55,8 @@ class PercussionPanelModel : public QObject, public muse::Injectable, public mus
 
     Q_OBJECT
 
+    Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
+
     Q_PROPERTY(PanelMode::Mode currentPanelMode READ currentPanelMode WRITE setCurrentPanelMode NOTIFY currentPanelModeChanged)
     Q_PROPERTY(bool useNotationPreview READ useNotationPreview WRITE setUseNotationPreview NOTIFY useNotationPreviewChanged)
 
@@ -64,6 +66,9 @@ class PercussionPanelModel : public QObject, public muse::Injectable, public mus
 
 public:
     explicit PercussionPanelModel(QObject* parent = nullptr);
+
+    bool enabled() const;
+    void setEnabled(bool enabled);
 
     PanelMode::Mode currentPanelMode() const;
     void setCurrentPanelMode(const PanelMode::Mode& panelMode);
@@ -83,6 +88,8 @@ public:
     Q_INVOKABLE void customizeKit();
 
 signals:
+    void enabledChanged();
+
     void currentPanelModeChanged(const PanelMode::Mode& panelMode);
     void useNotationPreviewChanged(bool useNotationPreview);
 
@@ -98,6 +105,8 @@ private:
     const mu::notation::INotationInteractionPtr interaction() const;
 
     mu::engraving::Score* score() const;
+
+    bool m_enabled = false;
 
     PanelMode::Mode m_currentPanelMode = PanelMode::Mode::WRITE;
     PanelMode::Mode m_panelModeToRestore = PanelMode::Mode::WRITE;

@@ -43,6 +43,20 @@ PercussionPanelModel::PercussionPanelModel(QObject* parent)
     m_padListModel = new PercussionPanelPadListModel(this);
 }
 
+bool PercussionPanelModel::enabled() const
+{
+    return m_enabled;
+}
+
+void PercussionPanelModel::setEnabled(bool enabled)
+{
+    if (m_enabled == enabled) {
+        return;
+    }
+    m_enabled = enabled;
+    emit enabledChanged();
+}
+
 PanelMode::Mode PercussionPanelModel::currentPanelMode() const
 {
     return m_currentPanelMode;
@@ -187,6 +201,10 @@ void PercussionPanelModel::setUpConnections()
         }
         const INotationNoteInputPtr ni = interaction()->noteInput();
         updatePadModels(ni->state().drumset);
+    });
+
+    m_padListModel->hasActivePadsChanged().onNotify(this, [this]() {
+        setEnabled(m_padListModel->hasActivePads());
     });
 
     m_padListModel->padTriggered().onReceive(this, [this](int pitch) {
