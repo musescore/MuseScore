@@ -163,6 +163,11 @@ void PercussionPanelModel::setUpConnections()
         if (drumset == m_padListModel->drumset()) {
             return;
         }
+
+        if (m_currentPanelMode == PanelMode::Mode::EDIT_LAYOUT) {
+            finishEditing();
+        }
+
         m_padListModel->setDrumset(drumset);
         m_padListModel->resetLayout(); //! NOTE: Placeholder until we implement saving/loading
     };
