@@ -25,12 +25,14 @@
 
 #include <QObject>
 
+#include "async/asyncable.h"
+
 #include "audio/audiotypes.h"
 
 #include "types/uri.h"
 
 namespace mu::playback {
-class AbstractAudioResourceItem : public QObject
+class AbstractAudioResourceItem : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -70,6 +72,8 @@ protected:
                               const QVariantList& subItems = QVariantList()) const;
 
     QVariantMap buildSeparator() const;
+
+    QVariantMap buildExternalLinkMenuItem(const QString& menuId, const QString& title) const;
 
     void sortResourcesList(muse::audio::AudioResourceMetaList& list);
 
