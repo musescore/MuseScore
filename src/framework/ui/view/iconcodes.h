@@ -391,6 +391,8 @@ public:
         WAVEFORM = 0xF43C,
         CROSS_STAFF_BEAMING = 0xF43D,
 
+        MAGNET = 0xF43E,
+
         TEMPO_CHANGE = 0xF43F,
 
         PLUGIN = 0xF440,
