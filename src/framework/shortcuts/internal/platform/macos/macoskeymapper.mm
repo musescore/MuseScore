@@ -19,12 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "macosshortcutsinstancemodel.h"
+#include "macoskeymapper.h"
 
 #import <Carbon/Carbon.h>
 
-#include <QGuiApplication>
-#include <QKeyEvent>
+#include "global/containers.h"
 
 #include "log.h"
 
@@ -106,6 +105,32 @@ static UCKeyboardLayout* keyboardLayout()
 
     TISInputSourceRef currentKeyboard = TISCopyCurrentKeyboardLayoutInputSource();
     CFDataRef uchr = (CFDataRef)TISGetInputSourceProperty(currentKeyboard, CFSTR("TISPropertyUnicodeKeyLayoutData"));
+
+    return (UCKeyboardLayout*)CFDataGetBytePtr(uchr);
+}
+
+static UCKeyboardLayout* englishKeyboardLayout()
+{
+    static CFArrayRef (* TISCreateInputSourceList)(CFDictionaryRef, Boolean);
+    static void*(* TISGetInputSourceProperty)(TISInputSourceRef inputSource, CFStringRef propertyKey);
+
+    CFBundleRef bundle = CFBundleGetBundleWithIdentifier(CFSTR("com.apple.Carbon"));
+
+    if (bundle) {
+        *(void**)& TISGetInputSourceProperty = CFBundleGetFunctionPointerForName(bundle, CFSTR("TISGetInputSourceProperty"));
+        *(void**)& TISCreateInputSourceList
+            = CFBundleGetFunctionPointerForName(bundle, CFSTR("TISCreateInputSourceList"));
+    }
+
+    if (!TISCreateInputSourceList || !TISGetInputSourceProperty) {
+        LOGE() << "Error getting functions from Carbon framework";
+        return 0;
+    }
+
+    CFArrayRef sources = TISCreateInputSourceList(nil, false);
+    //! need to check that English always comes first in the source list
+    TISInputSourceRef keyboard = (TISInputSourceRef)CFArrayGetValueAtIndex(sources, 0);
+    CFDataRef uchr = (CFDataRef)TISGetInputSourceProperty(keyboard, CFSTR("TISPropertyUnicodeKeyLayoutData"));
 
     return (UCKeyboardLayout*)CFDataGetBytePtr(uchr);
 }
@@ -333,7 +358,7 @@ static QString keyModifiersToString(UInt32 keyNativeModifiers)
     return result;
 }
 
-static QString translateToCurrentKeyboardLayout(const QKeySequence& sequence)
+QString MacOSKeyMapper::translateToCurrentKeyboardLayout(const QKeySequence& sequence)
 {
     const QKeyCombination keyCombination = sequence[0];
 
@@ -361,99 +386,34 @@ static QString translateToCurrentKeyboardLayout(const QKeySequence& sequence)
     return (modifStr.isEmpty() ? "" : modifStr + "+") + keyStr;
 }
 
-MacOSShortcutsInstanceModel::MacOSShortcutsInstanceModel(QObject* parent)
-    : ShortcutsInstanceModel(parent)
+QString MacOSKeyMapper::translateToEnglishKeyboardLayout(const QKeySequence& sequence)
 {
-    connect(qApp->inputMethod(), &QInputMethod::localeChanged, this, [this]() {
-        doLoadShortcuts();
-    });
-}
+    const QKeyCombination keyCombination = sequence[0];
 
-void MacOSShortcutsInstanceModel::doLoadShortcuts()
-{
-    m_shortcuts.clear();
+    const Qt::Key qKey = keyCombination.key();
 
-    // RULE: If a sequence is used for several shortcuts but the values for autoRepeat vary depending on
-    // the context, then we should force autoRepeat to false for all shortcuts sharing the sequence in
-    // question. This prevents the creation of ambiguous shortcuts (see QShortcutEvent::isAmbiguous)
-    auto recordAutoRepeat = [this](const QString& sequence, bool autoRepeat) {
-        auto search = m_shortcuts.find(sequence);
-        if (search == m_shortcuts.end()) {
-            // Sequence not found, add it...
-            m_shortcuts.insert(sequence, QVariant(autoRepeat));
-        } else if (search.value().toBool() && !autoRepeat) {
-            // Sequence already exists, but we need to enforce the above rule...
-            search.value() = false;
-        }
-    };
-
-    m_macSequenceMap.clear();
-
-    // Suppose the user uses for example a Cyrillic keyboard layout. When they try to press Cmd+A,
-    // Qt will see Cmd+Ф instead, so the QML `Shortcut` object for Cmd+A will not be triggered.
-    // We will a workaround: we treat the shortcuts from the shortcuts file as "a combination of
-    // physical keys" rather than "a character that would be typed"; i.e. `Shift+,` rather than `<`.
-    // We use native macOS APIs to translate from the combination of keys to the character that would
-    // be typed. We create a QML `Shortcut` object for e.g. `Cmd+Ф`; that will be triggered by Qt.
-    // We store a reverse mapping here, so that we can look up the original sequence when the shortcut
-    // is triggered, and then trigger the corresponding action.
-    //
-    // There is one catch; there are two cases where the untranslated sequence is not a combination of
-    // physical keys:
-    // - When the current keyboard layout is different from what the shortcuts file was designed for;
-    //   for example, the AZERTY layout does not have a `.` key, but instead a `.` is typed as `Shift+;`.
-    // - When the sequence was recorded as a character, e.g. `>` rather than `Shift+.`, which is the case
-    //   for all custom shortcuts.
-    // In these cases, the translation will produce unexpected results. Therefore, in our reverse map,
-    // we also store a mapping from the untranslated sequence to the untranslated sequence itself. This
-    // takes precedence over mapping from translated sequences to untranslated sequences.
-    //
-    // The resulting behaviour when a shortcut is pressed by the user is the following:
-    // - If there is an action that is bound to exactly the sequence as Qt sees it, then that action is
-    //   triggered.
-    // - Otherwise, we look up the received sequence in the reverse map, to see by which combination of
-    //   physical keys it would be produced, and trigger the action that is bound to that combination.
-    auto recordMapping = [this](const QString& translatedSequence, const QString& rawSequence, bool overrideExisting) {
-        auto search = m_macSequenceMap.find(translatedSequence);
-        if (search == m_macSequenceMap.end()) {
-            m_macSequenceMap.insert(translatedSequence, rawSequence);
-        } else if (overrideExisting) {
-            search.value() = rawSequence;
-        }
-    };
-
-    ShortcutList shortcuts = shortcutsRegister()->shortcuts();
-
-    for (const Shortcut& sc : shortcuts) {
-        for (const std::string& seq : sc.sequences) {
-            QString untranslatedSequence = QString::fromStdString(seq);
-
-            // Always record the untranslated sequence
-            recordMapping(untranslatedSequence, untranslatedSequence, true);
-            recordAutoRepeat(untranslatedSequence, sc.autoRepeat);
-
-            // Attempt to translate from combination of keys to character, e.g., `Shift+.` becomes `>`, in the case of a QWERTY layout
-            QString translatedSequence
-                = translateToCurrentKeyboardLayout(QKeySequence::fromString(untranslatedSequence, QKeySequence::PortableText));
-            if (translatedSequence.isEmpty()) {
-                LOGW() << "Failed to translate sequence " << untranslatedSequence;
-                continue;
-            }
-
-            // If it was successful, record the translated sequence too, and map it to the untranslated sequence
-            recordMapping(translatedSequence, untranslatedSequence, false);
-            recordAutoRepeat(translatedSequence, sc.autoRepeat);
-        }
+    UCKeyboardLayout* englishKeyboard = englishKeyboardLayout();
+    UCKeyboardLayout* currentKeyboard = keyboardLayout();
+    if (!englishKeyboard || !currentKeyboard) {
+        LOGE() << "The keyboard layout is not valid";
+        return {};
     }
 
-    assert(m_shortcuts.size() == m_macSequenceMap.size());
+    //! find native key code and modifiers in current keyboard
 
-    emit shortcutsChanged();
-}
+    bool found = false;
+    UInt32 keyNativeCode = nativeKeycode(currentKeyboard, qKey, found);
+    if (!found) {
+        LOGW() << "Key " << qKey << " not found in the keyboard layout";
+        return {};
+    }
 
-void MacOSShortcutsInstanceModel::doActivate(const QString& seq)
-{
-    // `seq` will always be in the map, because it comes from one of the QML `Shortcut` objects
-    // and for every such object, we have also created an entry in the map, in `doLoadShortcuts`.
-    ShortcutsInstanceModel::doActivate(m_macSequenceMap.value(seq));
+    Qt::KeyboardModifiers modifiers = keyCombination.keyboardModifiers();
+    UInt32 keyNativeModifiers = nativeModifiers(modifiers);
+
+    //! map to english keyboard
+    QString keyStr = keyCodeToString(englishKeyboard, keyNativeCode);
+    QString modifStr = keyModifiersToString(keyNativeModifiers);
+
+    return (modifStr.isEmpty() ? "" : modifStr + "+") + keyStr;
 }
