@@ -758,11 +758,11 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
             playParams.staffIdx = static_cast<int>(staff->idx());
             playParams.callAllSoundOff = noteParams.callAllSoundOff;
             playNote(events, note, playParams, pitchWheelRenderer);
-        }
-    }
 
-    if (instr->singleNoteDynamics()) {
-        renderSnd(events, chord, noteChannel, noteParams.tickOffset, context);
+            if (instr->singleNoteDynamics()) {
+                renderSnd(events, chord, noteChannel, noteParams.tickOffset, context);
+            }
+        }
     }
 
     // Bends
