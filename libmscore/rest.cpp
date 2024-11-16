@@ -799,8 +799,8 @@ int Rest::upLine() const
 
 int Rest::downLine() const
       {
-      qreal _spatium = spatium();
-      return (int)lrint((pos().y() + bbox().top() + _spatium) * 2 / _spatium);
+      // for rests, downLine() is the same as upLine()
+      return Rest::upLine();
       }
 
 //---------------------------------------------------------

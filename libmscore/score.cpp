@@ -236,7 +236,7 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
       if (nb->type() == ElementType::HBOX || nb->type() == ElementType::VBOX
          || nb->type() == ElementType::TBOX || nb->type() == ElementType::FBOX)
             nb->setSystem(ob->system());
-      foreach(Element* e, nb->el())
+      for (Element* e : nb->el())
             e->setParent(nb);
       }
 
@@ -307,7 +307,7 @@ Score::~Score()
       {
       Score::validScores.erase(this);
 
-      foreach(MuseScoreView* v, viewer)
+      for (MuseScoreView*& v : viewer)
             v->removeScore();
       // deselectAll();
       qDeleteAll(_systems); // systems are layout-only objects so we delete
@@ -1368,7 +1368,7 @@ void Score::addElement(Element* element)
                   {
                   Ottava* o = toOttava(element);
                   addSpanner(o);
-                  foreach(SpannerSegment* ss, o->spannerSegments()) {
+                  for (SpannerSegment* ss : o->spannerSegments()) {
                         if (ss->system())
                               ss->system()->add(ss);
                         }
@@ -1849,8 +1849,8 @@ void Score::scanElements(void* data, void (*func)(void*, Element*), bool all)
                         mmr->scanElements(data, func, all);
                   }
             }
-      for (Page* page : pages()) {
-            for (System* s :page->systems())
+      for (Page*& page : pages()) {
+            for (System*& s :page->systems())
                   s->scanElements(data, func, all);
             func(data, page);
             }
@@ -1891,7 +1891,7 @@ void Score::setSelection(const Selection& s)
       deselectAll();
       _selection = s;
 
-      foreach(Element* e, _selection.elements())
+      for (Element* e : _selection.elements())
             e->setSelected(true);
       }
 
@@ -1940,7 +1940,7 @@ void MasterScore::addExcerpt(Excerpt* ex)
       Score* score = ex->partScore();
 
       int nstaves { 1 }; // Initialise to 1 to force writing of the first part.
-      for (Staff* s : score->staves()) {
+      for (Staff*& s : score->staves()) {
             const LinkedElements* ls = s->links();
             if (ls == 0)
                   continue;
@@ -1961,7 +1961,7 @@ void MasterScore::addExcerpt(Excerpt* ex)
             }
       if (ex->tracks().isEmpty()) {      // SHOULDN'T HAPPEN, protected in the UI, but it happens during read-in!!!
             QMultiMap<int, int> tracks;
-            for (Staff* s : score->staves()) {
+            for (Staff*& s : score->staves()) {
                   const LinkedElements* ls = s->links();
                   if (ls == 0)
                         continue;
@@ -2588,11 +2588,11 @@ void Score::splitStaff(int staffIdx, int splitPoint)
             Tie* tie;
             Note* nnote;
             };
-      QMap<Note*, OldTie> oldTies;
+      QHash<Note*, OldTie> oldTies;
 
       // Notes under the split point can be part of a tuplet, so keep track
       // of the tuplet mapping too!
-      QMap<Tuplet*, Tuplet*> tupletMapping;
+      QHash<Tuplet*, Tuplet*> tupletMapping;
       Tuplet* tupletSrc[VOICES] = { };
       Tuplet* tupletDst[VOICES] = { };
 
@@ -2677,14 +2677,14 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                                                 continue;
                                           if (slur->startCR() == chord) {
                                                 slur->undoChangeProperty(Pid::TRACK, slur->track()+VOICES);
-                                                for (ScoreElement* ee : slur->linkList()) {
+                                                for (ScoreElement*& ee : slur->linkList()) {
                                                       Slur* lslur = toSlur(ee);
                                                       lslur->setStartElement(0);
                                                       }
                                                 }
                                           if (slur->endCR() == chord) {
                                                 slur->undoChangeProperty(Pid::SPANNER_TRACK2, slur->track2()+VOICES);
-                                                for (ScoreElement* ee : slur->linkList()) {
+                                                for (ScoreElement*& ee : slur->linkList()) {
                                                       Slur* lslur = toSlur(ee);
                                                       lslur->setEndElement(0);
                                                       }
@@ -2843,7 +2843,7 @@ void Score::adjustBracketsDel(int sidx, int eidx)
       {
       for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
             Staff* staff = _staves[staffIdx];
-            for (BracketItem* bi : staff->brackets()) {
+            for (BracketItem*& bi : staff->brackets()) {
                   int span = bi->bracketSpan();
                   if ((span == 0) || ((staffIdx + span) < sidx) || (staffIdx > eidx))
                         continue;
@@ -2870,7 +2870,7 @@ void Score::adjustBracketsIns(int sidx, int eidx)
       {
       for (int staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
             Staff* staff = _staves[staffIdx];
-            for (BracketItem* bi : staff->brackets()) {
+            for (BracketItem*& bi : staff->brackets()) {
                   int span = bi->bracketSpan();
                   if ((span == 0) || ((staffIdx + span) < sidx) || (staffIdx > eidx))
                         continue;
@@ -2936,7 +2936,7 @@ void Score::cmdRemoveStaff(int staffIdx)
       if (s->links()) {
             Staff* sameScoreLinkedStaff = 0;
             auto staves = s->links();
-            for (auto le : *staves) {
+            for (auto& le : *staves) {
                   Staff* staff = toStaff(le);
                   if (staff == s)
                         continue;
@@ -2971,7 +2971,7 @@ void Score::sortStaves(QList<int>& dst)
       QList<Staff*> dl;
       QMap<int, int> trackMap;
       int track = 0;
-      foreach (int idx, dst) {
+      for (int idx : dst) {
             Staff* staff = _staves[idx];
             if (staff->part() != curPart) {
                   curPart = staff->part();
@@ -3012,7 +3012,7 @@ void Score::sortStaves(QList<int>& dst)
 
 void Score::mapExcerptTracks(QList<int> &dst)
       {
-      for (Excerpt* e : excerpts()) {
+      for (Excerpt*& e : excerpts()) {
             QMultiMap<int, int> tr = e->tracks();
             QMultiMap<int, int> tracks;
             for (QMap<int, int>::iterator it = tr.begin(); it != tr.end(); ++it) {
@@ -3059,7 +3059,7 @@ void Score::cmdConcertPitchChanged(bool flag, bool /*useDoubleSharpsFlats*/)
                         Harmony* h  = toHarmony(e);
                         int rootTpc = transposeTpc(h->rootTpc(), interval, true);
                         int baseTpc = transposeTpc(h->baseTpc(), interval, true);
-                        for (ScoreElement* se : h->linkList()) {
+                        for (ScoreElement*& se : h->linkList()) {
                               // don't transpose all links
                               // just ones resulting from mmrests
                               Harmony* he = toHarmony(se);    // toHarmony() does not work as e is an ScoreElement
@@ -3403,7 +3403,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
 
 void Score::selectSingle(Element* e, int staffIdx)
       {
-      SelState selState = _selection.state();
+      SelState selState;
       deselectAll();
       if (e == 0) {
             selState = SelState::NONE;
@@ -3457,7 +3457,7 @@ void Score::selectAdd(Element* e)
             return;
             }
 
-      if (e->isMeasure()) {
+      if (e && e->isMeasure()) {
             Measure* m = toMeasure(e);
             Fraction tick  = m->tick();
             if (_selection.isNone()) {
@@ -3841,7 +3841,7 @@ void Score::lassoSelect(const QRectF& bbox)
       {
       select(0, SelectType::SINGLE, 0);
       QRectF fr(bbox.normalized());
-      foreach(Page* page, pages()) {
+      for (Page*& page : pages()) {
             QRectF pr(page->bbox());
             QRectF frr(fr.translated(-page->pos()));
             if (pr.right() < frr.left())
@@ -3880,7 +3880,7 @@ void Score::lassoSelectEnd()
             }
       _selection.setState(SelState::LIST);
 
-      foreach(const Element* e, _selection.elements()) {
+      for (const Element* e : _selection.elements()) {
             if (e->type() != ElementType::NOTE && e->type() != ElementType::REST)
                   continue;
             ++noteRestCount;
@@ -4125,7 +4125,7 @@ QList<Score*> Score::scoreList()
       QList<Score*> scores;
       Score* root = masterScore();
       scores.append(root);
-      for (const Excerpt* ex : root->excerpts()) {
+      for (Excerpt*& ex : root->excerpts()) {
             if (ex->partScore())
                   scores.append(ex->partScore());
             }
@@ -4139,7 +4139,7 @@ QList<Score*> Score::scoreList()
 bool Score::switchLayer(const QString& s)
       {
       int layerIdx = 0;
-      for (const Layer& l : layer()) {
+      for (Layer& l : layer()) {
             if (s == l.name) {
                   setCurrentLayer(layerIdx);
                   return true;
@@ -4223,9 +4223,9 @@ bool Score::isSpannerStartEnd(const Fraction& tick, int track) const
 
 void Score::insertTime(const Fraction& tick, const Fraction& len)
       {
-      for (Staff* staff : staves())
+      for (Staff*& staff : staves())
             staff->insertTime(tick, len);
-      for (Part* part : parts())
+      for (Part*& part : parts())
             part->insertTime(tick, len);
       }
 
@@ -4264,7 +4264,7 @@ void MasterScore::setPos(POS pos, Fraction tick)
       // even though tick position might not have changed, layout might have
       // so we should update cursor here
       // however, we must be careful not to call setPos() again while handling posChanged, or recursion results
-      for (Score* s : scoreList())
+      for (Score*& s : scoreList())
             emit s->posChanged(pos, unsigned(tick.ticks()));
       }
 
@@ -4385,6 +4385,8 @@ ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
       if (!currentSystem)
             return cr;
       auto destinationMeasure = currentSystem->firstMeasure();
+      if (!destinationMeasure)
+            return cr;
       auto firstSegment = destinationMeasure->first(SegmentType::ChordRest);
 
       // Case: Go to next system
@@ -4419,9 +4421,8 @@ ChordRest* Score::cmdNextPrevSystem(ChordRest* cr, bool next)
             // and not in first measure of entire score
             if ((destinationMeasure != firstMeasure() && destinationMeasure != firstMeasureMM()) &&
                (currentSegment == firstSegment || (currentMeasure->mmRest() && currentMeasure->mmRest()->isFirstInSystem()))) {
-                  if (!(destinationMeasure = destinationMeasure->prevMeasure()))
-                        if (!(destinationMeasure = destinationMeasure->prevMeasureMM()))
-                              return cr;
+                  if (!(destinationMeasure = destinationMeasure->prevMeasureMM()))
+                        return cr;
                   if (!(currentSystem = destinationMeasure->system()
                                         ? destinationMeasure->system()
                                         : destinationMeasure->coveringMMRestOrThis()->system()))
@@ -4623,7 +4624,7 @@ Measure* Score::firstTrailingMeasure(ChordRest** cr)
             }
       else {
             // Active selection: select full measure rest of active staff's empty trailing measure
-            ChordRest* tempCR = *cr;
+            ChordRest* tempCR;
             while (m && (tempCR = m->first()->nextChordRest(trackZeroVoice((*cr)->track()), false))->isFullMeasureRest()) {
                   *cr = tempCR;
                   firstMeasure = m;
@@ -4909,7 +4910,7 @@ QString Score::createRehearsalMarkText(RehearsalMark* current) const
 
 QString Score::nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const
       {
-      QString previousText = previous->xmlText();
+      QString previousText = previous ? previous->xmlText() : "";
       QString fallback = current ? current->xmlText() : previousText + "'";
 
       if (previousText.length() == 1 && previousText[0].isLetter()) {
@@ -5438,7 +5439,7 @@ void MasterScore::setPlaybackScore(Score* score)
 
       for (MidiMapping& mm : _midiMapping)
             mm.articulation()->setSoloMute(true);
-      for (Part* part : score->parts()) {
+      for (Part*& part : score->parts()) {
             for (auto& i : *part->instruments()) {
                   Instrument* instr = i.second;
                   for (Channel* ch : instr->channel()) {
@@ -5497,7 +5498,7 @@ void MasterScore::updateExpressive(Synthesizer* synth, bool expressive, bool for
                   }
             }
 
-      for (Part* p : parts()) {
+      for (Part*& p : parts()) {
             const InstrumentList* il = p->instruments();
             for (auto it = il->begin(); it != il->end(); it++) {
                   Instrument* i = it->second;
