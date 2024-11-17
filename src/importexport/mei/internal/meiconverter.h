@@ -218,6 +218,9 @@ public:
     static void fingFromMEI(engraving::Fingering* fing, const muse::StringList& meiLines, const libmei::Fing& meiFing, bool& warning);
     static libmei::Fing fingToMEI(const engraving::Fingering* fing, muse::StringList& meiLines);
 
+    static void glissFromMEI(engraving::Glissando* gliss, const libmei::Gliss& meiGliss, bool& warning);
+    static libmei::Gliss glissToMEI(const engraving::Glissando* gliss);
+
     static std::pair<bool, engraving::NoteType> gracegrpFromMEI(const libmei::graceGrpLog_ATTACH meiAttach,
                                                                 const libmei::data_GRACE meiGrace, bool& warning);
     static std::pair<libmei::graceGrpLog_ATTACH, libmei::data_GRACE> gracegrpToMEI(bool isAfter, engraving::NoteType noteType);
