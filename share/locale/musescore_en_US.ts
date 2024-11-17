@@ -4872,7 +4872,7 @@ text x-height):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13966"/>
         <source>Frame:</source>
-        <translation>Frame:</translation>
+        <translation>Border:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13857"/>
@@ -4912,7 +4912,7 @@ text x-height):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13998"/>
         <source>Reset &apos;Frame&apos; value</source>
-        <translation>Reset &apos;Frame&apos; value</translation>
+        <translation>Reset &apos;Border&apos; value</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14026"/>
@@ -4943,7 +4943,7 @@ text x-height):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14145"/>
         <source>Highlight:</source>
-        <translation>Highlight:</translation>
+        <translation>Fill color:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14158"/>
@@ -21037,7 +21037,7 @@ pickup measure</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="49"/>
         <source>Frame</source>
-        <translation>Frame</translation>
+        <translation>Border</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="58"/>
@@ -21052,7 +21052,7 @@ pickup measure</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="80"/>
         <source>Border</source>
-        <translation>Border</translation>
+        <translation>Border color</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="97"/>

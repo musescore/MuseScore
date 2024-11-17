@@ -8268,12 +8268,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1774"/>
         <source>Move pitch up diatonically</source>
-        <translation>Hausser la note diatoniquement</translation>
+        <translation>Augmenter la hauteur diatoniquement</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1780"/>
         <source>Move pitch down diatonically</source>
-        <translation>Baisser la note diatoniquement</translation>
+        <translation>Diminuer la hauteur diatoniquement</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1888"/>
@@ -8293,12 +8293,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1942"/>
         <source>Move pitch up diatonically (keep degree alterations)</source>
-        <translation>Monter les hauteurs diatoniquement (garder les altérations)</translation>
+        <translation>Augmenter la hauteur diatoniquement (garder les altérations)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1948"/>
         <source>Move pitch down diatonically (keep degree alterations)</source>
-        <translation>Descendre les hauteurs diatoniquement (garder les altérations)</translation>
+        <translation>Diminuer la hauteur diatoniquement (garder les altérations)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1954"/>

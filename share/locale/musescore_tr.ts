@@ -28328,7 +28328,7 @@ yazılamadı.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="85"/>
         <source>Use our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation>&lt;a href=&quot;%1&quot;&gt;MDL vurmalı&lt;/a&gt;için yeni notasyon ve ses eşlememizi kullanın</translation>
+        <translation>&lt;a href=&quot;%1&quot;&gt;MDL vurmalılar&lt;/a&gt; için yeni notasyon ve ses eşleştirmemizi kullanın</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentFor362.qml" line="100"/>
@@ -28353,7 +28353,7 @@ yazılamadı.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="138"/>
         <source>Our new notation and sound mapping for &lt;a href=&quot;%1&quot;&gt;MDL percussion&lt;/a&gt;</source>
-        <translation>&lt;a href=&quot;%1&quot;&gt;MDL vurmalı&lt;/a&gt; için yeni notasyonumuz ve ses eşleşmemiz</translation>
+        <translation>&lt;a href=&quot;%1&quot;&gt;MDL vurmalıları&lt;/a&gt; için yeni notasyonumuz ve ses eşleştirmemiz</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="157"/>
@@ -29148,7 +29148,7 @@ yazılamadı.</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditMidiMappingDialog.qml" line="92"/>
         <source>MIDI mapping:</source>
-        <translation>MIDI eşlemesi:</translation>
+        <translation>MIDI eşleştirmesi:</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditShortcutDialog.qml" line="32"/>
@@ -29178,12 +29178,12 @@ yazılamadı.</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml" line="43"/>
         <source>MIDI mapping bottom panel</source>
-        <translation>Midi eşlemesi alt paneli</translation>
+        <translation>Midi eşleştirmesi alt paneli</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml" line="55"/>
         <source>Assign MIDI mapping…</source>
-        <translation>MIDI eşlemesi ata...</translation>
+        <translation>MIDI eşleştirmesi ata...</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsBottomPanel.qml" line="45"/>
@@ -29299,7 +29299,7 @@ yazılamadı.</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingTopPanel.qml" line="39"/>
         <source>MIDI mapping top panel</source>
-        <translation>Midi eşlemesi üst paneli</translation>
+        <translation>Midi eşleştirmesi üst paneli</translation>
     </message>
 </context>
 <context>
