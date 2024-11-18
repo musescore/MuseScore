@@ -92,37 +92,29 @@ Rectangle {
             text: qsTrc("notation", "Placement of inner ties with respect to augmentation dots:")
         }
 
-        Row {
-            spacing: 8
-            RoundedRadioButton {
-                checked: tiePlacementSelector.placementDots.value === 0
-                onToggled: tiePlacementSelector.placementDots.value = 0
-            }
-            StyledTextLabel {
-                text: qsTrc("notation", "Auto")
-            }
+
+        RoundedRadioButton {
+            id: autoButton
+            width: parent.width
+            checked: tiePlacementSelector.placementDots.value === 0
+            onToggled: tiePlacementSelector.placementDots.value = 0
+            text: qsTrc("notation", "Auto")
         }
 
-        Row {
-            spacing: 8
-            RoundedRadioButton {
-                checked: tiePlacementSelector.placementDots.value === 1
-                onToggled: tiePlacementSelector.placementDots.value = 1
-            }
-            StyledTextLabel {
-                text: qsTrc("notation", "Always before dots")
-            }
+        RoundedRadioButton {
+            id: beforeButton
+            width: parent.width
+            checked: tiePlacementSelector.placementDots.value === 1
+            onToggled: tiePlacementSelector.placementDots.value = 1
+            text: qsTrc("notation", "Always before dots")
         }
 
-        Row {
-            spacing: 8
-            RoundedRadioButton {
-                checked: tiePlacementSelector.placementDots.value === 2
-                onToggled: tiePlacementSelector.placementDots.value = 2
-            }
-            StyledTextLabel {
-                text: qsTrc("notation", "Always after dots")
-            }
+        RoundedRadioButton {
+            id: afterButton
+            width: parent.width
+            checked: tiePlacementSelector.placementDots.value === 2
+            onToggled: tiePlacementSelector.placementDots.value = 2
+            text: qsTrc("notation", "Always after dots")
         }
     }
 }
