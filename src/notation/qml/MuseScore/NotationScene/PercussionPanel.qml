@@ -190,6 +190,7 @@ Item {
                         height: parent.height + pad.totalBorderWidth - padGrid.spacing
 
                         padModel: model.padModelRole
+                        panelEnabled: percModel.enabled
                         panelMode: percModel.currentPanelMode
                         useNotationPreview: percModel.useNotationPreview
 
@@ -258,6 +259,19 @@ Item {
                     flickable.goToBottom()
                 }
             }
+        }
+
+        StyledTextLabel {
+            id: panelDisabledLabel
+
+            visible: !percModel.enabled
+
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: (padGrid.cellHeight / 2) - (panelDisabledLabel.height / 2)
+
+            font: ui.theme.bodyFont
+            text: qsTrc("notation", "Select an unpitched percussion stave to use available sounds")
         }
     }
 }

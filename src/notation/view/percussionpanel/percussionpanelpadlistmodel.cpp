@@ -104,7 +104,14 @@ void PercussionPanelPadListModel::setDrumset(const mu::engraving::Drumset* drums
     if (drumset == m_drumset) {
         return;
     }
+
+    const bool drumsetWasValid = m_drumset;
+
     m_drumset = drumset;
+
+    if (drumsetWasValid ^ bool(m_drumset)) {
+        m_hasActivePadsChanged.notify();
+    }
 }
 
 void PercussionPanelPadListModel::resetLayout()

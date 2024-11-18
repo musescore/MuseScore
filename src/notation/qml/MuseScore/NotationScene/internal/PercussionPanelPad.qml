@@ -31,6 +31,8 @@ DropArea {
 
     property var padModel: null
 
+    property bool panelEnabled: false
+
     property int panelMode: -1
     property bool useNotationPreview: false
     property bool showEditOutline: false
@@ -46,6 +48,8 @@ DropArea {
     QtObject {
         id: prv
         readonly property bool isEmptySlot: Boolean(root.padModel) ? root.padModel.isEmptySlot : true
+        readonly property color enabledBackgroundColor: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityNormal)
+        readonly property color disabledBackgroundColor: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.itemOpacityDisabled)
     }
 
     Rectangle {
@@ -121,7 +125,7 @@ DropArea {
 
                 Rectangle {
                     id: emptySlotBackground
-                    color: ui.theme.backgroundSecondaryColor
+                    color: root.panelEnabled ? prv.enabledBackgroundColor : prv.disabledBackgroundColor
                 }
             }
         }
@@ -172,7 +176,7 @@ DropArea {
             anchors.margins: padLoader.anchors.margins
             radius: draggableArea.radius - originBackgroundFill.anchors.margins
 
-            color: root.containsDrag ? ui.theme.buttonColor : ui.theme.backgroundSecondaryColor
+            color: root.containsDrag ? ui.theme.buttonColor : prv.enabledBackgroundColor
         }
     }
 }

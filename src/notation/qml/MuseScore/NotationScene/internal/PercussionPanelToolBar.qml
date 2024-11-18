@@ -67,17 +67,19 @@ Item {
             }
         }
 
-        visible: model.currentPanelMode !== PanelMode.EDIT_LAYOUT
+        visible: root.model.currentPanelMode !== PanelMode.EDIT_LAYOUT
 
         FlatButton {
             id: writeButton
 
             width: centralButtonsRow.buttonWidth
 
+            enabled: root.model.enabled
+
             icon: IconCode.EDIT
             text: qsTrc("notation", "Write")
             orientation: Qt.Horizontal
-            accentButton: model.currentPanelMode === PanelMode.WRITE
+            accentButton: root.model.currentPanelMode === PanelMode.WRITE
             backgroundRadius: 0
 
             navigation.panel: navPanel
@@ -100,10 +102,12 @@ Item {
 
             width: centralButtonsRow.buttonWidth
 
+            enabled: root.model.enabled
+
             icon: IconCode.PLAY
             text: qsTrc("notation", "Preview")
             orientation: Qt.Horizontal
-            accentButton: model.currentPanelMode === PanelMode.SOUND_PREVIEW
+            accentButton: root.model.currentPanelMode === PanelMode.SOUND_PREVIEW
             backgroundRadius: 0
 
             navigation.panel: navPanel
@@ -121,7 +125,9 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         x: prv.centerX - (finishEditingButton.width / 2)
 
-        visible: model.currentPanelMode === PanelMode.EDIT_LAYOUT
+        enabled: root.model.enabled
+
+        visible: root.model.currentPanelMode === PanelMode.EDIT_LAYOUT
         text: qsTrc("notation", "Finish editing")
         orientation: Qt.Horizontal
         accentButton: true
@@ -144,6 +150,8 @@ Item {
         spacing: prv.spacing
 
         FlatButton {
+            enabled: root.model.enabled
+
             icon: IconCode.SPLIT_VIEW_HORIZONTAL
             text: qsTrc("notation", "Layout")
             orientation: Qt.Horizontal
@@ -165,7 +173,7 @@ Item {
         }
 
         FlatButton {
-            enabled: model.currentPanelMode !== PanelMode.EDIT_LAYOUT
+            enabled: root.model.enabled && root.model.currentPanelMode !== PanelMode.EDIT_LAYOUT
             text: qsTrc("notation", "Customize kit")
             orientation: Qt.Horizontal
 
