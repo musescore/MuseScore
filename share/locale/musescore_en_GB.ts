@@ -4912,7 +4912,7 @@ text x-height):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13998"/>
         <source>Reset &apos;Frame&apos; value</source>
-        <translation>Reset &apos;Frame&apos; value</translation>
+        <translation>Reset &apos;Border&apos; value</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14026"/>
@@ -4928,7 +4928,7 @@ text x-height):</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14062"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14095"/>
         <source>Reset &apos;Border&apos; value</source>
-        <translation>Reset &apos;Border&apos; value</translation>
+        <translation>Reset &apos;Border colour&apos; value</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14082"/>
@@ -4938,12 +4938,12 @@ text x-height):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14135"/>
         <source>Border:</source>
-        <translation>Border:</translation>
+        <translation>Border colour:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14145"/>
         <source>Highlight:</source>
-        <translation>Highlight:</translation>
+        <translation>Fill colour:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14158"/>
@@ -21037,7 +21037,7 @@ anacrusis</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="49"/>
         <source>Frame</source>
-        <translation>Frame</translation>
+        <translation>Border</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="58"/>
@@ -21052,7 +21052,7 @@ anacrusis</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="80"/>
         <source>Border</source>
-        <translation>Border</translation>
+        <translation>Border colour</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="97"/>

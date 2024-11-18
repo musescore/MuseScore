@@ -10551,7 +10551,7 @@ Opublikowano na licencji &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="32"/>
         <source>Enjoy realistic playback for free by downloading our new Muse Sounds library</source>
-        <translation>Korzystaj z darmowego realistycznego odtwarzania, pobierając naszą nową bibliotekę Muse Sounds</translation>
+        <translation>Korzystaj z darmowego realistycznego odtwarzania, pobierając naszą nową bibliotekę MuseSounds</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="36"/>
@@ -10613,7 +10613,7 @@ Opublikowano na licencji &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="107"/>
         <source>If you choose to cancel, then be sure to check out our free Muse Sounds playback library on musescore.org.</source>
-        <translation>Jeśli zdecydujesz się anulować, sprawdź naszą darmową bibliotekę odtwarzania Muse Sounds na MuseScore.org.</translation>
+        <translation>Jeśli zdecydujesz się anulować, sprawdź naszą darmową bibliotekę odtwarzania MuseSounds na MuseScore.org.</translation>
     </message>
 </context>
 <context>
@@ -29746,7 +29746,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="68"/>
         <source>Take me to Muse Hub</source>
-        <translation>Zabierz mnie do Muse Huba</translation>
+        <translation>Zabierz mnie do MuseHuba</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/appupdateservice.cpp" line="208"/>

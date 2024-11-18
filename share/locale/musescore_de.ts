@@ -4872,7 +4872,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13966"/>
         <source>Frame:</source>
-        <translation>Rahmen:</translation>
+        <translation>Umrandung:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13857"/>
@@ -4912,7 +4912,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13998"/>
         <source>Reset &apos;Frame&apos; value</source>
-        <translation>Wert für ‚Rahmen‘ zurücksetzen</translation>
+        <translation>Wert für ‚Umrandung‘ zurücksetzen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14026"/>
@@ -4928,7 +4928,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14062"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14095"/>
         <source>Reset &apos;Border&apos; value</source>
-        <translation>Wert für ‚Umrandung‘ zurücksetzen</translation>
+        <translation>Wert für ‚Umrandungsfarbe‘ zurücksetzen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14082"/>
@@ -4938,12 +4938,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14135"/>
         <source>Border:</source>
-        <translation>Umrandung:</translation>
+        <translation>Umrandungsfarbe:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14145"/>
         <source>Highlight:</source>
-        <translation>Füllung:</translation>
+        <translation>Füllfarbe:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14158"/>
@@ -21039,7 +21039,7 @@ erkennen</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="49"/>
         <source>Frame</source>
-        <translation>Rahmen</translation>
+        <translation>Umrandung</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="58"/>
@@ -21054,7 +21054,7 @@ erkennen</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="80"/>
         <source>Border</source>
-        <translation>Umrandung</translation>
+        <translation>Umrandungsfarbe</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="97"/>

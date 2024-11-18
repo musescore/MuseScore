@@ -21079,7 +21079,8 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="130"/>
         <source>Line spacing</source>
-        <translation>Расстояние между строками</translation>
+        <translation>Расстояние между
+строками</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="148"/>

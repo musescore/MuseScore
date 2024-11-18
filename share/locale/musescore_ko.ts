@@ -15090,7 +15090,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2397"/>
         <source>Mark Tree</source>
-        <translation type="unfinished"/>
+        <translation>마크 트리</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2398"/>
