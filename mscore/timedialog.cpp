@@ -17,14 +17,12 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "timedialog.h"
-#include "libmscore/timesig.h"
-#include "palette.h"
 #include "musescore.h"
-#include "libmscore/score.h"
+#include "palette.h"
+#include "timedialog.h"
 #include "libmscore/mcursor.h"
-#include "libmscore/chord.h"
-#include "libmscore/part.h"
+#include "libmscore/score.h"
+#include "libmscore/timesig.h"
 
 namespace Ms {
 
@@ -48,13 +46,13 @@ TimeDialog::TimeDialog(QWidget* parent)
       sp->setReadOnly(false);
       sp->setSelectable(true);
 
-      connect(zNominal,  SIGNAL(valueChanged(int)), SLOT(zChanged(int)));
+      connect(zNominal,  SIGNAL(editingFinished()),        SLOT(zChanged()));
       connect(nNominal,  SIGNAL(currentIndexChanged(int)), SLOT(nChanged(int)));
-      connect(sp,        SIGNAL(boxClicked(int)),   SLOT(paletteChanged(int)));
-      connect(sp,        SIGNAL(changed()),         SLOT(setDirty()));
-      connect(addButton, SIGNAL(clicked()),         SLOT(addClicked()));
-      connect(zText,     SIGNAL(textChanged(const QString&)),    SLOT(textChanged()));
-      connect(nText,     SIGNAL(textChanged(const QString&)),    SLOT(textChanged()));
+      connect(sp,        SIGNAL(boxClicked(int)),          SLOT(paletteChanged(int)));
+      connect(sp,        SIGNAL(changed()),                SLOT(setDirty()));
+      connect(addButton, SIGNAL(clicked()),                SLOT(addClicked()));
+      connect(zText,     SIGNAL(textChanged(QString&)),    SLOT(textChanged()));
+      connect(nText,     SIGNAL(textChanged(QString&)),    SLOT(textChanged()));
 
       _timePalette = new PaletteScrollArea(sp);
       QSizePolicy policy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -125,10 +123,14 @@ void TimeDialog::save()
 //   zChanged
 //---------------------------------------------------------
 
-void TimeDialog::zChanged(int val)
+void TimeDialog::zChanged()
       {
-      Q_UNUSED(val);
-      Fraction sig(zNominal->value(), denominator());
+      int numerator = zNominal->value();
+      int denominator = this->denominator();
+
+      Fraction sig(numerator, denominator);
+
+      // Update beam groups view
       groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
       }
 
