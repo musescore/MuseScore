@@ -34,6 +34,7 @@
 #include "view/instrumentsonscorelistmodel.h"
 #include "view/instrumentsettingsmodel.h"
 #include "view/staffsettingsmodel.h"
+#include "view/systemobjectslayersettingsmodel.h"
 #include "view/layoutpaneltreemodel.h"
 #include "view/layoutpanelcontextmenumodel.h"
 #include "ui/iinteractiveuriregister.h"
@@ -87,6 +88,7 @@ void InstrumentsSceneModule::registerUiTypes()
     qmlRegisterType<InstrumentListModel>("MuseScore.InstrumentsScene", 1, 0, "InstrumentListModel");
     qmlRegisterType<InstrumentSettingsModel>("MuseScore.InstrumentsScene", 1, 0, "InstrumentSettingsModel");
     qmlRegisterType<StaffSettingsModel>("MuseScore.InstrumentsScene", 1, 0, "StaffSettingsModel");
+    qmlRegisterType<SystemObjectsLayerSettingsModel>("MuseScore.InstrumentsScene", 1, 0, "SystemObjectsLayerSettingsModel");
     qmlRegisterType<LayoutPanelTreeModel>("MuseScore.InstrumentsScene", 1, 0, "LayoutPanelTreeModel");
     qmlRegisterType<LayoutPanelContextMenuModel>("MuseScore.InstrumentsScene", 1, 0, "LayoutPanelContextMenuModel");
     qmlRegisterType<InstrumentsOnScoreListModel>("MuseScore.InstrumentsScene", 1, 0, "InstrumentsOnScoreListModel");

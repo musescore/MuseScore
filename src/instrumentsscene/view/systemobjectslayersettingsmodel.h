@@ -22,25 +22,36 @@
 
 #pragma once
 
-#include "abstractlayoutpaneltreeitem.h"
+#include <QAbstractListModel>
 
-#include "notation/inotationparts.h"
+#include "modularity/ioc.h"
+#include "notation/inotation.h"
+
+#include "layoutpanelutils.h"
 
 namespace mu::instrumentsscene {
-class SystemObjectsLayerTreeItem : public AbstractLayoutPanelTreeItem
+class SystemObjectsLayerSettingsModel : public QAbstractListModel, public muse::Injectable
 {
     Q_OBJECT
 
+    muse::Inject<context::IGlobalContext> context = { this };
+
 public:
-    SystemObjectsLayerTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
+    explicit SystemObjectsLayerSettingsModel(QObject* parent = nullptr);
 
-    void init(const mu::engraving::Staff* staff, bool isTopLayer = false);
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex& index, int role) const override;
+    QHash<int, QByteArray> roleNames() const override;
 
-    const mu::engraving::Staff* staff() const;
-
-    Q_INVOKABLE QString staffId() const;
+    Q_INVOKABLE void load(const QString& staffId);
+    Q_INVOKABLE void setSystemObjectsGroupVisible(int index, bool visible);
 
 private:
-    const mu::engraving::Staff* m_staff = nullptr;
+    enum Roles {
+        TitleRole = Qt::UserRole + 1,
+        VisibilityRole,
+    };
+
+    std::vector<SystemObjectsGroup> m_systemObjectGroups;
 };
 }
