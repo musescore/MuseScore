@@ -335,6 +335,10 @@ if (OS_IS_WIN)
     foreach (QtLibrary ${QT_LIBRARIES})
         #message(STATUS "Library ${QtLibrary}")
         # always use release libs
+        # TODO: remove this
+        # That's not trivial, because for the libraries that are installed manually
+        # below, we would need to manually specify the correct debug/release names.
+        # The real solution would be to use windeployqt.
         set_target_properties(${QtLibrary} PROPERTIES MAP_IMPORTED_CONFIG_DEBUG "RELEASE")
         get_target_property(QtSharedLibrary ${QtLibrary} LOCATION_RELEASE)
         if (EXISTS ${QtSharedLibrary})
