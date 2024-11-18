@@ -17,8 +17,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#ifndef PREFERENCEKEYS_H
-#define PREFERENCEKEYS_H
+#pragma once
 
 //
 // Defines for all preferences
@@ -154,6 +153,7 @@
 #define PREF_UI_APP_RASTER_VERTICAL                         "ui/application/raster/vertical"
 #define PREF_UI_APP_SHOWSTATUSBAR                           "ui/application/showStatusBar"
 #define PREF_UI_APP_USENATIVEDIALOGS                        "ui/application/useNativeDialogs"
+#define PREF_UI_APP_USENEWWIZARD                            "ui/application/useNewWizard"
 #define PREF_UI_PIANO_HIGHLIGHTCOLOR                        "ui/piano/highlightColor"
 #define PREF_UI_PIANO_SHOWPITCHHELP                         "ui/piano/showPitchHelp"
 #define PREF_UI_SCORE_NOTE_DROPCOLOR                        "ui/score/note/dropColor"
@@ -233,5 +233,3 @@
 #define PREF_UI_AVSOMR_RECOGNITION_COLOR                    "ui/avsomr/recognition/valid/color"
 #define PREF_UI_AVSOMR_NOT_RECOGNITION_COLOR                "ui/avsomr/recognition/notValid/color"
 #endif
-
-#endif // PREFERENCEKEYS_H
