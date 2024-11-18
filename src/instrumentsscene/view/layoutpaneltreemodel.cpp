@@ -417,6 +417,11 @@ void LayoutPanelTreeModel::addInstruments()
     dispatcher()->dispatch(ADD_INSTRUMENTS_ACTIONCODE);
 }
 
+void LayoutPanelTreeModel::addSystemMarkings()
+{
+    LOGDA() << "test";
+}
+
 void LayoutPanelTreeModel::moveSelectedRowsUp()
 {
     if (!m_isMovingUpAvailable) {

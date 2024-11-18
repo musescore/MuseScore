@@ -36,7 +36,8 @@ RowLayout {
 
     property alias navigation: keynavSub
 
-    signal addRequested()
+    signal addInstrumentRequested()
+    signal addSystemMarkingsRequested()
     signal moveUpRequested()
     signal moveDownRequested()
     signal removingRequested()
@@ -57,21 +58,20 @@ RowLayout {
         enabled: root.enabled && root.visible
     }
 
-    FlatButton {
+    LayoutPanelAddButton {
         Layout.fillWidth: true
 
-        navigation.name: "Add"
         navigation.panel: keynavSub
         navigation.order: 1
-        accessible.name: qsTrc("instruments", "Add instruments")
-
-        //: Keep in sync with the message that appears if there are no instruments in the score (LayoutPanel.qml)
-        text: qsTrc("instruments", "Add")
 
         enabled: root.isAddingAvailable
 
-        onClicked: {
-            root.addRequested()
+        onAddInstrumentRequested: {
+            root.addInstrumentRequested()
+        }
+
+        onAddSystemMarkingsRequested: {
+            root.addSystemMarkingsRequested()
         }
     }
 

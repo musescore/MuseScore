@@ -86,6 +86,7 @@ public:
     Q_INVOKABLE void selectRow(const QModelIndex& rowIndex);
     Q_INVOKABLE void clearSelection();
     Q_INVOKABLE void addInstruments();
+    Q_INVOKABLE void addSystemMarkings();
     Q_INVOKABLE void moveSelectedRowsUp();
     Q_INVOKABLE void moveSelectedRowsDown();
     Q_INVOKABLE void removeSelectedRows();
