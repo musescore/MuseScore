@@ -53,6 +53,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/layoutpanelutils.h
     ${CMAKE_CURRENT_LIST_DIR}/view/staffsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/staffsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/systemobjectslayersettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/systemobjectslayersettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/layoutpanelcontextmenumodel.cpp

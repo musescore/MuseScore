@@ -197,6 +197,14 @@ FocusableControl {
         }
     }
 
+    Component {
+        id: systemObjectsLayerSettingsComp
+
+        SystemObjectsLayerSettingsPopup {
+            anchorItem: popupAnchorItem
+        }
+    }
+
     RowLayout {
         anchors.fill: parent
         anchors.leftMargin: root.sideMargin
@@ -321,6 +329,10 @@ FocusableControl {
                     comp = staffSettingsComp
 
                     item["id"] = model.itemRole.id
+                } else if (root.type == LayoutPanelItemType.SYSTEM_OBJECTS_LAYER) {
+                    comp = systemObjectsLayerSettingsComp
+
+                    item["staffId"] = model.itemRole.staffId()
                 }
 
                 popupLoader.openPopup(comp, this, item)

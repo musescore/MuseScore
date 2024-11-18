@@ -84,3 +84,13 @@ void SystemObjectsLayerTreeItem::init(const Staff* staff, bool isTopLayer)
     setIsRemovable(!isTopLayer);
     setIsSelectable(!isTopLayer);
 }
+
+const Staff* SystemObjectsLayerTreeItem::staff() const
+{
+    return m_staff;
+}
+
+QString SystemObjectsLayerTreeItem::staffId() const
+{
+    return m_staff ? m_staff->id().toQString() : QString();
+}
