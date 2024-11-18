@@ -2218,8 +2218,8 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     default: {
         EngravingItem* el = e;
         Segment* seg = this;
-        if (e->type() == ElementType::TIE_SEGMENT
-            || e->type() == ElementType::GLISSANDO_SEGMENT) {
+        if (e->type() == ElementType::TIE_SEGMENT || e->type() == ElementType::LAISSEZ_VIB_SEGMENT
+            || e->type() == ElementType::GLISSANDO_SEGMENT || e->type() == ElementType::NOTELINE_SEGMENT) {
             SpannerSegment* s = toSpannerSegment(e);
             Spanner* sp = s->spanner();
             el = sp->startElement();
@@ -2759,57 +2759,6 @@ bool Segment::hasAccidentals() const
         }
     }
     return false;
-}
-
-double Segment::computeDurationStretch(const Segment* prevSeg)
-{
-    if (isMMRestSegment()) {
-        return durationStretchForMMRests();
-    }
-
-    Fraction shortestCR = shortestChordRest();
-    Fraction prevShortestCR = prevSeg ? prevSeg->shortestChordRest() : Fraction(0, 1);
-    bool hasAdjacent = isChordRestType() && shortestCR == m_ticks;
-    bool prevHasAdjacent = prevSeg && (prevSeg->isChordRestType() && prevShortestCR == prevSeg->ticks());
-
-    double durStretch;
-    if (hasAdjacent || measure()->isMMRest()) {
-        durStretch = durationStretchForTicks(m_ticks);
-    } else {
-        // Polyrythms
-        if (prevSeg && !prevHasAdjacent && prevShortestCR < shortestCR) {
-            durStretch = durationStretchForTicks(prevShortestCR) * (m_ticks / prevShortestCR).toDouble();
-        } else {
-            durStretch = durationStretchForTicks(shortestCR) * (m_ticks / shortestCR).toDouble();
-        }
-    }
-
-    return durStretch;
-}
-
-double Segment::durationStretchForMMRests() const
-{
-    static constexpr int MIN_MMREST_COUNT  = 2;
-    static constexpr int MAX_MMREST_COUNT = 150;
-
-    int count = std::max(measure()->mmRestCount() - MIN_MMREST_COUNT, 0);
-    count = std::min(count, MAX_MMREST_COUNT);
-    Fraction timeSig = measure()->timesig();
-    Fraction ticks = timeSig + Fraction(count, timeSig.denominator());
-
-    return durationStretchForTicks(ticks);
-}
-
-double Segment::durationStretchForTicks(const Fraction& ticks) const
-{
-    static constexpr Fraction REFERENCE_DURATION = Fraction(1, 4);
-    double slope = style().styleD(Sid::measureSpacing);
-
-    Fraction durationRatio = ticks / REFERENCE_DURATION;
-
-    double str = pow(slope, log2(durationRatio.toDouble()));
-
-    return str;
 }
 
 bool Segment::goesBefore(const Segment* nextSegment) const

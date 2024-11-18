@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
@@ -13,6 +13,7 @@
       <pageOddTopMargin>0.393701</pageOddTopMargin>
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
       <lastSystemFillLimit>0</lastSystemFillLimit>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <tupletOutOfStaff>0</tupletOutOfStaff>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>

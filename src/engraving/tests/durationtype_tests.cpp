@@ -58,7 +58,7 @@ TEST_F(Engraving_DurationTypeTests, halfDuration)
     score->inputState().setDuration(DurationType::V_WHOLE);
     score->inputState().setNoteEntryMode(true);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Duration type tests"));
     score->cmdAddPitch(42, false, false);
     Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
     EXPECT_EQ(c->ticks(), Fraction(1, 1));
@@ -66,7 +66,7 @@ TEST_F(Engraving_DurationTypeTests, halfDuration)
 
     // repeatedly half-duration from V_WHOLE to V_128
     for (int i = 128; i > 1; i /= 2) {
-        score->startCmd();
+        score->startCmd(TranslatableString::untranslatable("Duration type tests"));
         score->cmdHalfDuration();
         score->endCmd();
         Chord* c2 = score->firstMeasure()->findChord(Fraction(0, 1), 0);
@@ -89,7 +89,7 @@ TEST_F(Engraving_DurationTypeTests, doubleDuration)
     score->inputState().setDuration(DurationType::V_128TH);
     score->inputState().setNoteEntryMode(true);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Duration type tests"));
     score->cmdAddPitch(42, false, false);
     EXPECT_EQ(score->firstMeasure()->findChord(Fraction(0, 1), 0)->ticks(), Fraction(1, 128));
 
@@ -117,7 +117,7 @@ TEST_F(Engraving_DurationTypeTests, decDurationDotted)
     score->inputState().setDuration(DurationType::V_WHOLE);
     score->inputState().setNoteEntryMode(true);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Duration type tests"));
     score->cmdAddPitch(42, false, false);
     Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
     EXPECT_EQ(c->ticks(), Fraction(1, 1));
@@ -150,7 +150,7 @@ TEST_F(Engraving_DurationTypeTests, incDurationDotted)
     score->inputState().setDuration(DurationType::V_128TH);
     score->inputState().setNoteEntryMode(true);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Duration type tests"));
     score->cmdAddPitch(42, false, false);
     EXPECT_EQ(score->firstMeasure()->findChord(Fraction(0, 1), 0)->ticks(), Fraction(1, 128));
 

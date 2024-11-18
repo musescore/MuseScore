@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
@@ -226,6 +226,7 @@
         <pedalFontSize>12</pedalFontSize>
         <fretFretSpacing>0.8</fretFretSpacing>
         <barreLineWidth>1</barreLineWidth>
+        <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <multiMeasureRestMargin>1.2</multiMeasureRestMargin>
         <arpeggioNoteDistance>0.5</arpeggioNoteDistance>

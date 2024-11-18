@@ -460,7 +460,7 @@ void NotationProject::setCloudAudioInfo(const CloudAudioInfo& audioInfo)
     m_masterNotation->masterScore()->setMetaTag(AUDIO_COM_URL_TAG, audioInfo.url.toString());
 }
 
-Ret NotationProject::save(const muse::io::path_t& path, SaveMode saveMode)
+Ret NotationProject::save(const muse::io::path_t& path, SaveMode saveMode, bool createBackup)
 {
     TRACEFUNC;
 
@@ -481,7 +481,10 @@ Ret NotationProject::save(const muse::io::path_t& path, SaveMode saveMode)
 
         std::string suffix = io::suffix(savePath);
 
-        Ret ret = saveScore(savePath, suffix);
+        // Whether a backup file will be created depends on both the caller's and user's will
+        bool shouldCreateBackup = createBackup && configuration()->createBackupBeforeSaving();
+
+        Ret ret = saveScore(savePath, suffix, shouldCreateBackup);
         if (ret) {
             if (saveMode != SaveMode::SaveCopy) {
                 markAsSaved(savePath);
@@ -625,7 +628,7 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
     // Step 3: create backup if need
     {
         if (generateBackup) {
-            makeCurrentFileAsBackup();
+            makeBackup(targetContainerPath);
         }
     }
 
@@ -691,21 +694,10 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
     return make_ret(Ret::Code::Ok);
 }
 
-Ret NotationProject::makeCurrentFileAsBackup()
+Ret NotationProject::makeBackup(muse::io::path_t filePath)
 {
     TRACEFUNC;
 
-    bool create = configuration()->createBackupBeforeSaving();
-    if (!create) {
-        return make_ret(Ret::Code::Ok);
-    }
-
-    if (isNewlyCreated()) {
-        LOGD() << "project just created";
-        return make_ret(Ret::Code::Ok);
-    }
-
-    muse::io::path_t filePath = m_path;
     if (io::suffix(filePath) != engraving::MSCZ) {
         LOGW() << "backup allowed only for MSCZ, currently: " << filePath;
         return make_ret(Ret::Code::Ok);
@@ -713,8 +705,8 @@ Ret NotationProject::makeCurrentFileAsBackup()
 
     Ret ret = fileSystem()->exists(filePath);
     if (!ret) {
-        LOGE() << "project file does not exist";
-        return ret;
+        LOGI() << "Backup won't be created, file does not exist: " << filePath;
+        return make_ret(Ret::Code::Ok);
     }
 
     muse::io::path_t backupPath = configuration()->projectBackupPath(filePath);
@@ -1089,7 +1081,7 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
     MasterScore* score = m_masterNotation->masterScore();
 
     if (undoable) {
-        m_masterNotation->notation()->undoStack()->prepareChanges();
+        m_masterNotation->notation()->undoStack()->prepareChanges(TranslatableString("undoableAction", "Edit project properties"));
         score->undo(new mu::engraving::ChangeMetaTags(score, tags));
         m_masterNotation->notation()->undoStack()->commitChanges();
         m_masterNotation->notation()->notationChanged().notify();

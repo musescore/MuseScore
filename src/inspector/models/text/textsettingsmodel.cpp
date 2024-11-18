@@ -88,7 +88,10 @@ void TextSettingsModel::createProperties()
     m_frameMargin = buildPropertyItem(mu::engraving::Pid::FRAME_PADDING);
     m_frameCornerRadius = buildPropertyItem(mu::engraving::Pid::FRAME_ROUND);
 
-    m_textType = buildPropertyItem(mu::engraving::Pid::TEXT_STYLE);
+    m_textType = buildPropertyItem(mu::engraving::Pid::TEXT_STYLE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
+        emit requestReloadPropertyItems();
+    });
     m_textPlacement = buildPropertyItem(mu::engraving::Pid::PLACEMENT);
     m_textScriptAlignment = buildPropertyItem(mu::engraving::Pid::TEXT_SCRIPT_ALIGN);
 }
@@ -100,55 +103,108 @@ void TextSettingsModel::requestElements()
 
 void TextSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_fontFamily, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toString() == mu::engraving::TextBase::UNDEFINED_FONT_FAMILY
-               ? QVariant() : elementPropertyValue.toString();
-    });
+    static const PropertyIdSet propertyIdSet {
+        Pid::FONT_FACE,
+        Pid::FONT_STYLE,
+        Pid::FONT_SIZE,
+        Pid::TEXT_LINE_SPACING,
+        Pid::ALIGN,
+        Pid::TEXT_SIZE_SPATIUM_DEPENDENT,
+        Pid::FRAME_TYPE,
+        Pid::FRAME_BG_COLOR,
+        Pid::FRAME_FG_COLOR,
+        Pid::FRAME_WIDTH,
+        Pid::FRAME_PADDING,
+        Pid::FRAME_ROUND,
+        Pid::TEXT_STYLE,
+        Pid::PLACEMENT,
+        Pid::TEXT_SCRIPT_ALIGN
+    };
 
-    m_fontFamily->setIsEnabled(true);
+    loadProperties(propertyIdSet);
+}
 
-    loadPropertyItem(m_fontStyle, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toInt() == static_cast<int>(mu::engraving::FontStyle::Undefined)
-               ? QVariant() : elementPropertyValue.toInt();
-    });
+void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
+{
+    if (muse::contains(propertyIdSet, Pid::FONT_FACE)) {
+        loadPropertyItem(m_fontFamily, [](const QVariant& elementPropertyValue) -> QVariant {
+            return elementPropertyValue.toString() == mu::engraving::TextBase::UNDEFINED_FONT_FAMILY
+                   ? QVariant() : elementPropertyValue.toString();
+        });
 
-    m_fontStyle->setIsEnabled(true);
+        m_fontFamily->setIsEnabled(true);
+    }
 
-    loadPropertyItem(m_fontSize, [](const QVariant& elementPropertyValue) -> QVariant {
-        return muse::RealIsEqual(elementPropertyValue.toDouble(), mu::engraving::TextBase::UNDEFINED_FONT_SIZE)
-               ? QVariant() : elementPropertyValue.toDouble();
-    });
+    if (muse::contains(propertyIdSet, Pid::FONT_STYLE)) {
+        loadPropertyItem(m_fontStyle, [](const QVariant& elementPropertyValue) -> QVariant {
+            return elementPropertyValue.toInt() == static_cast<int>(mu::engraving::FontStyle::Undefined)
+                   ? QVariant() : elementPropertyValue.toInt();
+        });
 
-    m_fontSize->setIsEnabled(true);
+        m_fontStyle->setIsEnabled(true);
+    }
 
-    loadPropertyItem(m_textLineSpacing, formatDoubleFunc);
+    if (muse::contains(propertyIdSet, Pid::FONT_SIZE)) {
+        loadPropertyItem(m_fontSize, [](const QVariant& elementPropertyValue) -> QVariant {
+            return muse::RealIsEqual(elementPropertyValue.toDouble(), mu::engraving::TextBase::UNDEFINED_FONT_SIZE)
+                   ? QVariant() : elementPropertyValue.toDouble();
+        });
 
-    loadPropertyItem(m_horizontalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
-        QVariantList list = elementPropertyValue.toList();
-        return list.size() >= 2 ? list[0] : QVariant();
-    });
+        m_fontSize->setIsEnabled(true);
+    }
 
-    loadPropertyItem(m_verticalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
-        QVariantList list = elementPropertyValue.toList();
-        return list.size() >= 2 ? list[1] : QVariant();
-    });
+    if (muse::contains(propertyIdSet, Pid::TEXT_LINE_SPACING)) {
+        loadPropertyItem(m_textLineSpacing, formatDoubleFunc);
+    }
 
-    loadPropertyItem(m_isSizeSpatiumDependent);
+    if (muse::contains(propertyIdSet, Pid::ALIGN)) {
+        loadPropertyItem(m_horizontalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
+            QVariantList list = elementPropertyValue.toList();
+            return list.size() >= 2 ? list[0] : QVariant();
+        });
 
-    loadPropertyItem(m_frameType);
-    loadPropertyItem(m_frameBorderColor);
-    loadPropertyItem(m_frameFillColor);
+        loadPropertyItem(m_verticalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
+            QVariantList list = elementPropertyValue.toList();
+            return list.size() >= 2 ? list[1] : QVariant();
+        });
+    }
 
-    loadPropertyItem(m_frameThickness, formatDoubleFunc);
-    loadPropertyItem(m_frameMargin, formatDoubleFunc);
-    loadPropertyItem(m_frameCornerRadius, formatDoubleFunc);
+    if (muse::contains(propertyIdSet, Pid::TEXT_SIZE_SPATIUM_DEPENDENT)) {
+        loadPropertyItem(m_isSizeSpatiumDependent);
+    }
 
-    loadPropertyItem(m_textType);
-    loadPropertyItem(m_textPlacement);
-    loadPropertyItem(m_textScriptAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toInt() == static_cast<int>(mu::engraving::VerticalAlignment::AlignUndefined)
-               ? QVariant() : elementPropertyValue.toInt();
-    });
+    if (muse::contains(propertyIdSet, Pid::FRAME_TYPE)) {
+        loadPropertyItem(m_frameType);
+    }
+    if (muse::contains(propertyIdSet, Pid::FRAME_FG_COLOR)) {
+        loadPropertyItem(m_frameBorderColor);
+    }
+    if (muse::contains(propertyIdSet, Pid::FRAME_BG_COLOR)) {
+        loadPropertyItem(m_frameFillColor);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::FRAME_WIDTH)) {
+        loadPropertyItem(m_frameThickness, formatDoubleFunc);
+    }
+    if (muse::contains(propertyIdSet, Pid::FRAME_PADDING)) {
+        loadPropertyItem(m_frameMargin, formatDoubleFunc);
+    }
+    if (muse::contains(propertyIdSet, Pid::FRAME_ROUND)) {
+        loadPropertyItem(m_frameCornerRadius, formatDoubleFunc);
+    }
+
+    if (muse::contains(propertyIdSet, Pid::TEXT_STYLE)) {
+        loadPropertyItem(m_textType);
+    }
+    if (muse::contains(propertyIdSet, Pid::PLACEMENT)) {
+        loadPropertyItem(m_textPlacement);
+    }
+    if (muse::contains(propertyIdSet, Pid::TEXT_SCRIPT_ALIGN)) {
+        loadPropertyItem(m_textScriptAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
+            return elementPropertyValue.toInt() == static_cast<int>(mu::engraving::VerticalAlignment::AlignUndefined)
+                   ? QVariant() : elementPropertyValue.toInt();
+        });
+    }
 
     updateFramePropertiesAvailability();
     updateStaffPropertiesAvailability();
@@ -178,6 +234,8 @@ void TextSettingsModel::resetProperties()
 
 void TextSettingsModel::onNotationChanged(const PropertyIdSet& changedProperyIds, const StyleIdSet& changedStyleIds)
 {
+    loadProperties(changedProperyIds);
+
     for (Sid s : {
         Sid::user1Name,
         Sid::user2Name,
@@ -195,15 +253,9 @@ void TextSettingsModel::onNotationChanged(const PropertyIdSet& changedProperyIds
         if (changedStyleIds.find(s) != changedStyleIds.cend()) {
             m_textStyles.clear();
             emit textStylesChanged();
-            return;
+            break;
         }
     }
-
-    if (muse::contains(changedProperyIds, Pid::PLACEMENT)) {
-        loadPropertyItem(m_textPlacement);
-    }
-
-    updateIsHorizontalAlignmentAvailable();
 }
 
 void TextSettingsModel::insertSpecialCharacters()

@@ -40,7 +40,8 @@ void CorruptScoreDevToolsModel::corruptOpenScore()
 
     mu::notation::INotationPtr notation = project->masterNotation()->notation();
 
-    notation->undoStack()->prepareChanges();
+    //: "Corrupt" is used as a verb here, i.e. "Make the current score corrupted" (for testing purposes).
+    notation->undoStack()->prepareChanges(TranslatableString("undoableAction", "Corrupt score"));
 
     for (engraving::System* system : notation->elements()->msScore()->systems()) {
         for (engraving::MeasureBase* measureBase : system->measures()) {

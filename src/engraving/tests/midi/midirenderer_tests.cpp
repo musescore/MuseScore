@@ -33,9 +33,23 @@ using namespace mu;
 using namespace mu::engraving;
 class MidiRenderer_Tests : public ::testing::Test
 {
+protected:
+    void SetUp() override
+    {
+        m_useRead302 = MScore::useRead302InTestMode;
+        MScore::useRead302InTestMode = false;
+    }
+
+    void TearDown() override
+    {
+        MScore::useRead302InTestMode = m_useRead302;
+    }
+
+private:
+    bool m_useRead302 = false;
 };
 
-static const String MIDIRENDERER_TESTS_DIR = u"midirenderer_data/";
+static const String MIDIRENDERER_TESTS_DIR = u"midi/midirenderer_data/";
 static constexpr int DEFAULT_CHANNEL = 0;
 static constexpr int NOTE_OFF_VOLUME = 0;
 
@@ -134,11 +148,6 @@ static EventsHolder getControllerEvents(const EventsHolder& events)
     return filteredEventMap;
 }
 
-/*****************************************************************************
-
-    ENABLED TESTS BELOW
-
-*****************************************************************************/
 TEST_F(MidiRenderer_Tests, mergePitchWheelEvents)
 {
     PitchWheelSpecs wheelSpec;
@@ -170,7 +179,7 @@ TEST_F(MidiRenderer_Tests, mergePitchWheelEvents)
     noteEvents[DEFAULT_CHANNEL].insert(std::make_pair(200, note2_ON));
     noteEvents[DEFAULT_CHANNEL].insert(std::make_pair(300, note2_OFF));
     noteEvents.mergePitchWheelEvents(pitchWheelEvents);
-    EXPECT_NE(noteEvents[DEFAULT_CHANNEL].find(145), noteEvents[DEFAULT_CHANNEL].end());
+    EXPECT_NE(noteEvents[DEFAULT_CHANNEL].find(190), noteEvents[DEFAULT_CHANNEL].end());
 }
 
 TEST_F(MidiRenderer_Tests, subscriptOperator)
@@ -288,7 +297,7 @@ TEST_F(MidiRenderer_Tests, graceOnBeatAndGlissando)
     checkEventInterval(events, 1380, 1398, 62, defVol, MidiInstrumentEffect::SLIDE);
     checkEventInterval(events, 1400, 1418, 63, defVol, MidiInstrumentEffect::SLIDE);
     checkEventInterval(events, 1419, 1437, 64, defVol, MidiInstrumentEffect::SLIDE);
-    checkEventInterval(events, 1440, 1919, 65, defVol, MidiInstrumentEffect::SLIDE);
+    checkEventInterval(events, 1440, 1919, 65, defVol);
 }
 
 TEST_F(MidiRenderer_Tests, graceBeforeBeatShortNote)
@@ -966,9 +975,3 @@ TEST_F(MidiRenderer_Tests, hairpinTwoInstruments)
     checkEventInterval(events, 960, 1439, 55, 80, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
     checkEventInterval(events, 1440, 1919, 55, 80, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
 }
-
-/*****************************************************************************
-
-    DISABLED TESTS BELOW
-
-*****************************************************************************/

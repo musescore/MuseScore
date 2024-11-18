@@ -32,7 +32,7 @@ FocusableControl {
     required property var originalParent
 
     property var item: null
-    property var treeView: undefined
+    property TreeView treeView: undefined
     property var index: styleData.index
     property string filterKey
 
@@ -147,14 +147,13 @@ FocusableControl {
             openedPopup.load(item)
 
             openedPopup.opened.connect(function() {
-                root.popupOpened(popup.x, popup.y, popup.height)
+                root.popupOpened(openedPopup.x, openedPopup.y, openedPopup.height)
             })
 
             openedPopup.closed.connect(function() {
                 root.popupClosed()
 
                 Qt.callLater(function() {
-                    openedPopup = null
                     popupLoader.sourceComponent = null
                 })
             })

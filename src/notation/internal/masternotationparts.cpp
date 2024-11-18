@@ -48,9 +48,9 @@ void MasterNotationParts::setExcerpts(ExcerptNotationList excerpts)
     m_excerpts = excerpts;
 }
 
-void MasterNotationParts::startGlobalEdit()
+void MasterNotationParts::startGlobalEdit(const muse::TranslatableString& actionName)
 {
-    NotationParts::startEdit();
+    NotationParts::startEdit(actionName);
     undoStack()->lock();
 }
 
@@ -67,7 +67,7 @@ void MasterNotationParts::setParts(const PartInstrumentList& partList, const Sco
     mu::engraving::KeyList keyList = score()->keyList();
 
     endInteractionWithScore();
-    startGlobalEdit();
+    startGlobalEdit(TranslatableString("undoableAction", "Add/remove instruments"));
 
     doSetScoreOrder(order);
     removeMissingParts(partList);
@@ -103,7 +103,7 @@ void MasterNotationParts::removeParts(const IDList& partsIds)
 {
     TRACEFUNC;
 
-    startGlobalEdit();
+    startGlobalEdit(TranslatableString("undoableAction", "Remove instruments"));
 
     NotationParts::removeParts(partsIds);
 
@@ -118,7 +118,7 @@ void MasterNotationParts::removeStaves(const IDList& stavesIds)
 {
     TRACEFUNC;
 
-    startGlobalEdit();
+    startGlobalEdit(TranslatableString("undoableAction", "Remove staves"));
 
     NotationParts::removeStaves(stavesIds);
 
@@ -137,7 +137,7 @@ bool MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
         return false;
     }
 
-    startGlobalEdit();
+    startGlobalEdit(TranslatableString("undoableAction", "Add staff"));
 
     //! NOTE: will be generated later after adding to the score
     staff->setId(mu::engraving::INVALID_ID);
@@ -165,7 +165,7 @@ bool MasterNotationParts::appendLinkedStaff(Staff* staff, const muse::ID& source
         return false;
     }
 
-    startGlobalEdit();
+    startGlobalEdit(TranslatableString("undoableAction", "Add linked staff"));
 
     //! NOTE: will be generated later after adding to the score
     staff->setId(mu::engraving::INVALID_ID);
@@ -188,7 +188,7 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
 {
     TRACEFUNC;
 
-    startGlobalEdit();
+    startGlobalEdit(TranslatableString("undoableAction", "Replace instrument"));
 
     Part* part = partModifiable(instrumentKey.partId);
     bool isMainInstrument = part && isMainInstrumentForPart(instrumentKey, part);
@@ -223,7 +223,7 @@ void MasterNotationParts::replaceDrumset(const InstrumentKey& instrumentKey, con
 {
     TRACEFUNC;
 
-    startGlobalEdit();
+    startGlobalEdit(TranslatableString("undoableAction", "Edit drumset"));
 
     NotationParts::replaceDrumset(instrumentKey, newDrumset, undoable);
 

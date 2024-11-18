@@ -342,7 +342,7 @@
     <chordModifierAdjust>0</chordModifierAdjust>
     <concertPitch>0</concertPitch>
     <createMultiMeasureRests>0</createMultiMeasureRests>
-    <minEmptyMeasures>2</minEmptyMeasures>
+    <minEmptyMeasures>1</minEmptyMeasures>
     <minMMRestWidth>6</minMMRestWidth>
     <mmRestNumberPos>-0.5</mmRestNumberPos>
     <mmRestNumberMaskHBar>1</mmRestNumberMaskHBar>

@@ -29,6 +29,7 @@
 
 #include <assert.h>
 
+#include "dom/noteline.h"
 #include "translation.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
@@ -50,6 +51,7 @@
 #include "fingering.h"
 #include "glissando.h"
 #include "guitarbend.h"
+#include "laissezvib.h"
 #include "linkedobjects.h"
 #include "measure.h"
 #include "notedot.h"
@@ -625,7 +627,6 @@ Note::Note(const Note& n, bool link)
     m_userDotPosition   = n.m_userDotPosition;
     m_fixed             = n.m_fixed;
     m_fixedLine         = n.m_fixedLine;
-    m_accidental        = 0;
     m_harmonic          = n.m_harmonic;
 
     if (n.m_accidental) {
@@ -648,15 +649,18 @@ Note::Note(const Note& n, bool link)
 
     m_playEvents = n.m_playEvents;
 
-    if (n.m_tieFor) {
+    if (n.laissezVib()) {
+        m_tieFor = Factory::copyLaissezVib(*toLaissezVib(n.m_tieFor));
+        m_tieFor->setParent(this);
+        m_tieFor->setStartNote(this);
+        m_tieFor->setTick(m_tieFor->startNote()->tick());
+    } else if (n.m_tieFor) {
         m_tieFor = Factory::copyTie(*n.m_tieFor);
         m_tieFor->setStartNote(this);
         m_tieFor->setTick(m_tieFor->startNote()->tick());
         m_tieFor->setEndNote(0);
-    } else {
-        m_tieFor = 0;
     }
-    m_tieBack  = 0;
+
     for (NoteDot* dot : n.m_dots) {
         add(Factory::copyNoteDot(*dot));
     }
@@ -1204,8 +1208,9 @@ void Note::addSpanner(Spanner* l)
     if (e && e->isNote()) {
         Note* note = toNote(e);
         note->addSpannerBack(l);
-        if (l->isGlissando() || l->isGuitarBend()) {
-            note->chord()->setEndsGlissandoOrGuitarBend(true);
+        bool isNoteAnchoredTextLine = l->isNoteLine() && toNoteLine(l)->enforceMinLength();
+        if (l->isGlissando() || l->isGuitarBend() || isNoteAnchoredTextLine) {
+            note->chord()->setEndsNoteAnchoredLine(true);
         }
     }
     addSpannerFor(l);
@@ -1224,7 +1229,7 @@ void Note::removeSpanner(Spanner* l)
             // abort();
         }
         if (l->isGlissando()) {
-            e->chord()->updateEndsGlissandoOrGuitarBend();
+            e->chord()->updateEndsNoteAnchoredLine();
         }
     }
     if (!removeSpannerFor(l)) {
@@ -1270,6 +1275,14 @@ void Note::add(EngravingItem* e)
         m_hasHeadParentheses = m_leftParenthesis && m_rightParenthesis;
         m_el.push_back(e);
     } break;
+    case ElementType::LAISSEZ_VIB: {
+        LaissezVib* lv = toLaissezVib(e);
+        lv->setStartNote(this);
+        lv->setTick(lv->startNote()->tick());
+        lv->setTrack(track());
+        setTieFor(lv);
+        break;
+    }
     case ElementType::TIE: {
         Tie* tie = toTie(e);
         tie->setStartNote(this);
@@ -1285,6 +1298,7 @@ void Note::add(EngravingItem* e)
         m_accidental = toAccidental(e);
         break;
     case ElementType::TEXTLINE:
+    case ElementType::NOTELINE:
     case ElementType::GLISSANDO:
     case ElementType::GUITAR_BEND:
         addSpanner(toSpanner(e));
@@ -1331,6 +1345,7 @@ void Note::remove(EngravingItem* e)
         }
         break;
 
+    case ElementType::LAISSEZ_VIB:
     case ElementType::TIE: {
         Tie* tie = toTie(e);
         assert(tie->startNote() == this);
@@ -1346,6 +1361,7 @@ void Note::remove(EngravingItem* e)
         break;
 
     case ElementType::TEXTLINE:
+    case ElementType::NOTELINE:
     case ElementType::GLISSANDO:
     case ElementType::GUITAR_BEND:
         removeSpanner(toSpanner(e));
@@ -1707,7 +1723,8 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::STANDARD_BEND)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::PRE_BEND)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE_NOTE_BEND)
-           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::SLIGHT_BEND);
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::SLIGHT_BEND)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::NOTE_ANCHORED_LINE);
 }
 
 //---------------------------------------------------------
@@ -1792,29 +1809,54 @@ EngravingItem* Note::drop(EditData& data)
     {
         switch (toActionIcon(e)->actionType()) {
         case ActionIconType::ACCIACCATURA:
-            score()->setGraceNote(ch, pitch(), NoteType::ACCIACCATURA, Constants::DIVISION / 2);
+        {
+            Note* note = score()->setGraceNote(ch, pitch(), NoteType::ACCIACCATURA, Constants::DIVISION / 2);
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
         case ActionIconType::APPOGGIATURA:
-            score()->setGraceNote(ch, pitch(), NoteType::APPOGGIATURA, Constants::DIVISION / 2);
+        {
+            Note* note = score()->setGraceNote(ch, pitch(), NoteType::APPOGGIATURA, Constants::DIVISION / 2);
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
         case ActionIconType::GRACE4:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE4, Constants::DIVISION);
+        {
+            Note* note = score()->setGraceNote(ch, pitch(), NoteType::GRACE4, Constants::DIVISION);
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
         case ActionIconType::GRACE16:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE16,  Constants::DIVISION / 4);
+        {
+            Note* note = score()->setGraceNote(ch, pitch(), NoteType::GRACE16,  Constants::DIVISION / 4);
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
         case ActionIconType::GRACE32:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE32, Constants::DIVISION / 8);
+        {
+            Note* note = score()->setGraceNote(ch, pitch(), NoteType::GRACE32, Constants::DIVISION / 8);
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
         case ActionIconType::GRACE8_AFTER:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE8_AFTER, Constants::DIVISION / 2);
+        {
+            Note* note = score()->setGraceNote(ch, pitch(), NoteType::GRACE8_AFTER, Constants::DIVISION / 2);
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
         case ActionIconType::GRACE16_AFTER:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE16_AFTER, Constants::DIVISION / 4);
+        {
+            Note* note = score()->setGraceNote(ch, pitch(), NoteType::GRACE16_AFTER, Constants::DIVISION / 4);
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
         case ActionIconType::GRACE32_AFTER:
-            score()->setGraceNote(ch, pitch(), NoteType::GRACE32_AFTER, Constants::DIVISION / 8);
+        {
+            Note* note = score()->setGraceNote(ch, pitch(), NoteType::GRACE32_AFTER, Constants::DIVISION / 8);
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
+
         case ActionIconType::BEAM_AUTO:
         case ActionIconType::BEAM_NONE:
         case ActionIconType::BEAM_BREAK_LEFT:
@@ -1830,14 +1872,25 @@ EngravingItem* Note::drop(EditData& data)
             score()->addGuitarBend(GuitarBendType::BEND, this);
             break;
         case ActionIconType::PRE_BEND:
-            score()->addGuitarBend(GuitarBendType::PRE_BEND, this);
-            break;
         case ActionIconType::GRACE_NOTE_BEND:
-            score()->addGuitarBend(GuitarBendType::GRACE_NOTE_BEND, this);
+        {
+            GuitarBendType type = (toActionIcon(e)->actionType() == ActionIconType::PRE_BEND)
+                                  ? GuitarBendType::PRE_BEND : GuitarBendType::GRACE_NOTE_BEND;
+            GuitarBend* guitarBend = score()->addGuitarBend(type, this);
+            Note* note = guitarBend->startNote();
+            IF_ASSERT_FAILED(note) {
+                LOGE() << "not valid start note of the bend";
+                break;
+            }
+
+            score()->select(note, SelectType::SINGLE, 0);
             break;
+        }
         case ActionIconType::SLIGHT_BEND:
             score()->addGuitarBend(GuitarBendType::SLIGHT_BEND, this);
             break;
+        case mu::engraving::ActionIconType::NOTE_ANCHORED_LINE:
+            score()->addNoteLine();
         default:
             break;
         }
@@ -1908,7 +1961,7 @@ EngravingItem* Note::drop(EditData& data)
 
         Glissando* gliss = toGlissando(e);
         EngravingItem* endEl = gliss->endElement();
-        Note* finalNote = endEl && endEl->isNote() ? toNote(endEl) : Glissando::guessFinalNote(chord(), this);
+        Note* finalNote = endEl && endEl->isNote() ? toNote(endEl) : SLine::guessFinalNote(this);
         if (finalNote) {
             // init glissando data
             gliss->setAnchor(Spanner::Anchor::NOTE);
@@ -2355,6 +2408,15 @@ GuitarBend* Note::bendBack() const
     }
 
     return nullptr;
+}
+
+LaissezVib* Note::laissezVib() const
+{
+    if (!m_tieFor || !m_tieFor->isLaissezVib()) {
+        return nullptr;
+    }
+
+    return toLaissezVib(m_tieFor);
 }
 
 //---------------------------------------------------------
@@ -3367,6 +3429,7 @@ EngravingItem* Note::nextElement()
     }
 
     case ElementType::TIE_SEGMENT:
+    case ElementType::LAISSEZ_VIB_SEGMENT:
         if (!m_spannerFor.empty()) {
             for (auto i : m_spannerFor) {
                 if (i->type() == ElementType::GLISSANDO) {
@@ -3376,6 +3439,7 @@ EngravingItem* Note::nextElement()
         }
         return chord()->nextElement();
 
+    case ElementType::NOTELINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
     case ElementType::GUITAR_BEND_SEGMENT:
         return chord()->nextElement();
@@ -3455,10 +3519,12 @@ EngravingItem* Note::prevElement()
     }
         return this;
     case ElementType::TIE_SEGMENT:
+    case ElementType::LAISSEZ_VIB_SEGMENT:
         if (!m_el.empty()) {
             return m_el.back();
         }
         return this;
+    case ElementType::NOTELINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
     case ElementType::GUITAR_BEND_SEGMENT:
         if (tieValid(m_tieFor)) {
@@ -3482,7 +3548,7 @@ EngravingItem* Note::lastElementBeforeSegment()
 {
     if (!m_spannerFor.empty()) {
         for (auto i : m_spannerFor) {
-            if (i->type() == ElementType::GLISSANDO || i->type() == ElementType::GUITAR_BEND) {
+            if (i->type() == ElementType::GLISSANDO || i->type() == ElementType::GUITAR_BEND || i->type() == ElementType::NOTELINE) {
                 return i->spannerSegments().front();
             }
         }

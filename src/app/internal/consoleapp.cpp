@@ -279,9 +279,11 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
     case ConvertType::Batch:
         ret = converter()->batchConvert(task.inputFile, stylePath, forceMode, soundProfile, extensionUri);
         break;
-    case ConvertType::File:
-        ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode, soundProfile, extensionUri);
-        break;
+    case ConvertType::File: {
+        std::string transposeOptionsJson = task.params[CmdOptions::ParamKey::ScoreTransposeOptions].toString().toStdString();
+        ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode, soundProfile, extensionUri,
+                                       transposeOptionsJson);
+    } break;
     case ConvertType::ConvertScoreParts:
         ret = converter()->convertScoreParts(task.inputFile, task.outputFile, stylePath);
         break;

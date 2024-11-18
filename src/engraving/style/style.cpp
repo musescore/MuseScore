@@ -519,6 +519,11 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
         }
     }
 
+    if (m_version < 450) {
+        // Doesn't exist before 4.5. Default to false for compatibility.
+        set(Sid::scaleRythmicSpacingForSmallNotes, false);
+    }
+
     if (m_version < 420 && !MScore::testMode) {
         // This style didn't exist before version 4.2. For files older than 4.2, defaults
         // to INSIDE for compatibility. For files 4.2 and newer, defaults to OUTSIDE.

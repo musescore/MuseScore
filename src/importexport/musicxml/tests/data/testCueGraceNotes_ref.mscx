@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
@@ -318,7 +318,7 @@
           <Beam>
             <StemDirection>down</StemDirection>
             <l1>38</l1>
-            <l2>32</l2>
+            <l2>36</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>

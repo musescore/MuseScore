@@ -136,7 +136,7 @@ bool Selection::selectRange(int startTick, int endTick, int startStaff, int endS
         return false;
     }
 
-    if (segEnd && _select->score()->undoStack()->active()) {
+    if (segEnd && _select->score()->undoStack()->hasActiveCommand()) {
         _select->setRangeTicks(segStart->tick(), segEnd->tick(), startStaff, endStaff);
     } else {
         _select->setRange(segStart, segEnd, startStaff, endStaff);

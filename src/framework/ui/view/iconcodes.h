@@ -391,6 +391,8 @@ public:
         WAVEFORM = 0xF43C,
         CROSS_STAFF_BEAMING = 0xF43D,
 
+        MAGNET = 0xF43E,
+
         TEMPO_CHANGE = 0xF43F,
 
         PLUGIN = 0xF440,
@@ -445,8 +447,16 @@ public:
         CLOCK = 0xF475,
 
         PLAYHEAD = 0xF478,
-
         PLAYHEAD_FILLED = 0xF47A,
+
+        NOTE_ANCHORED_LINE = 0xF47B,
+
+        NOTE_LV = 0xF47C,
+
+        LV_OUTSIDE = 0xF47D,
+        LV_INSIDE = 0xF47E,
+        LV_CHORD_OUTSIDE = 0xF47F,
+        LV_CHORD_INSIDE = 0xF480,
 
         NONE = 0xFFFF
     };

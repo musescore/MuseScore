@@ -31,8 +31,7 @@
 
 #include "percussionpanelpadmodel.h"
 
-static constexpr int NUM_COLUMNS(8);
-
+namespace mu::notation {
 class PercussionPanelPadListModel : public QAbstractListModel, public muse::async::Asyncable
 {
     Q_OBJECT
@@ -60,6 +59,8 @@ public:
     int numPads() const { return m_padModels.count(); }
 
     void setDrumset(const mu::engraving::Drumset* drumset);
+    const mu::engraving::Drumset* drumset() const { return m_drumset; }
+
     void resetLayout();
 
     muse::async::Channel<int /*pitch*/> padTriggered() const { return m_triggeredChannel; }
@@ -69,6 +70,8 @@ signals:
     void rowIsEmptyChanged(int row, bool empty);
 
 private:
+    static constexpr int NUM_COLUMNS = 8;
+
     enum Roles {
         PadModelRole = Qt::UserRole + 1,
     };
@@ -85,3 +88,4 @@ private:
 
     muse::async::Channel<int /*pitch*/> m_triggeredChannel;
 };
+}

@@ -1110,6 +1110,17 @@ int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalD
     return halfsteps;
 }
 
+int compareNotesPos(const Note* n1, const Note* n2)
+{
+    if (n1->line() != n2->line() && !(n1->staffType()->isTabStaff())) {
+        return n2->line() - n1->line();
+    } else if (n1->string() != n2->string()) {
+        return n2->string() - n1->string();
+    } else {
+        return n1->pitch() - n2->pitch();
+    }
+}
+
 //---------------------------------------------------------
 //   skipTuplet
 //    return segment of rightmost chord/rest in a
@@ -1187,13 +1198,14 @@ Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch)
     return f;
 }
 
-double yStaffDifference(const System* system1, staff_idx_t staffIdx1, const System* system2, staff_idx_t staffIdx2)
+double yStaffDifference(const System* system1, const System* system2, staff_idx_t staffIdx)
 {
     if (!system1 || !system2) {
         return 0.0;
     }
-    const SysStaff* staff1 = system1->staff(staffIdx1);
-    const SysStaff* staff2 = system2->staff(staffIdx2);
+
+    const SysStaff* staff1 = system1->staff(staffIdx);
+    const SysStaff* staff2 = system2->staff(staffIdx);
     if (!staff1 || !staff2) {
         return 0.0;
     }

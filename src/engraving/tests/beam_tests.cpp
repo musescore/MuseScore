@@ -220,7 +220,7 @@ TEST_F(Engraving_BeamTests, flipBeamStemDir)
     Chord* c2 = toChord(cr->beam()->elements()[1]);
 
     score->select(c2);
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving beam tests"));
     score->cmdFlip();
     score->endCmd();
     cr->beam()->setDirection(DirectionV::DOWN);
@@ -253,7 +253,7 @@ TEST_F(Engraving_BeamTests, flipTremoloStemDir)
     EXPECT_TRUE(t->up() && c1->up() && c2->up());
 
     score->select(c1->upNote());
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving beam tests"));
     score->cmdFlip();
     score->endCmd();
 

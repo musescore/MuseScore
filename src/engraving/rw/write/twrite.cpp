@@ -89,6 +89,7 @@
 
 #include "dom/keysig.h"
 
+#include "dom/laissezvib.h"
 #include "dom/layoutbreak.h"
 #include "dom/ledgerline.h"
 #include "dom/letring.h"
@@ -103,6 +104,7 @@
 
 #include "dom/note.h"
 #include "dom/notedot.h"
+#include "dom/noteline.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"
 
@@ -244,6 +246,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
         break;
     case ElementType::KEYSIG:       write(item_cast<const KeySig*>(item), xml, ctx);
         break;
+    case ElementType::LAISSEZ_VIB:  write(item_cast<const LaissezVib*>(item), xml, ctx);
+        break;
     case ElementType::LAYOUT_BREAK: write(item_cast<const LayoutBreak*>(item), xml, ctx);
         break;
     case ElementType::LEDGER_LINE:  write(item_cast<const LedgerLine*>(item), xml, ctx);
@@ -267,6 +271,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::NOTEDOT:      write(item_cast<const NoteDot*>(item), xml, ctx);
         break;
     case ElementType::NOTEHEAD:     write(item_cast<const NoteHead*>(item), xml, ctx);
+        break;
+    case ElementType::NOTELINE:     write(item_cast<const NoteLine*>(item), xml, ctx);
         break;
     case ElementType::ORNAMENT:     write(item_cast<const Ornament*>(item), xml, ctx);
         break;
@@ -633,6 +639,7 @@ void TWrite::write(const Ornament* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::INTERVAL_ABOVE);
     writeProperty(item, xml, Pid::INTERVAL_BELOW);
     writeProperty(item, xml, Pid::ORNAMENT_SHOW_ACCIDENTAL);
+    writeProperty(item, xml, Pid::ORNAMENT_SHOW_CUE_NOTE);
     writeProperty(item, xml, Pid::START_ON_UPPER_NOTE);
     writeProperties(static_cast<const Articulation*>(item), xml, ctx);
     xml.endElement();
@@ -2077,6 +2084,15 @@ void TWrite::write(const KeySig* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
+void TWrite::write(const LaissezVib* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::MIN_LENGTH);
+    writeProperty(item, xml, Pid::TIE_PLACEMENT);
+    writeProperties(static_cast<const SlurTie*>(item), xml, ctx);
+    xml.endElement();
+}
+
 void TWrite::write(const LayoutBreak* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
@@ -2180,7 +2196,7 @@ void TWrite::write(const MMRest* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement("Rest"); // for compatibility, see also Measure::readVoice()
     writeProperties(static_cast<const ChordRest*>(item), xml, ctx);
-    writeProperty(item, xml, Pid::MMREST_NUMBER_POS);
+    writeProperty(item, xml, Pid::MMREST_NUMBER_OFFSET);
     writeProperty(item, xml, Pid::MMREST_NUMBER_VISIBLE);
     writeItems(item->el(), xml, ctx);
     xml.endElement();
@@ -2219,12 +2235,18 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
         }
     }
 
-    if (item->tieFor()) {
+    if (item->laissezVib()) {
+        write(item->laissezVib(), xml, ctx);
+    }
+
+    if (item->tieFor() && !item->laissezVib()) {
         writeSpannerStart(item->tieFor(), xml, ctx, item, item->track());
     }
+
     if (item->tieBack()) {
         writeSpannerEnd(item->tieBack(), xml, ctx, item, item->track());
     }
+
     if ((item->chord() == 0 || item->chord()->playEventType() != PlayEventType::Auto) && !item->playEvents().empty()) {
         xml.startElement("Events");
         for (const NoteEvent& e : item->playEvents()) {
@@ -2273,6 +2295,16 @@ void TWrite::write(const NoteDot* item, XmlWriter& xml, WriteContext& ctx)
 void TWrite::write(const NoteHead* item, XmlWriter& xml, WriteContext& ctx)
 {
     write(static_cast<const Symbol*>(item), xml, ctx);
+}
+
+void TWrite::write(const NoteLine* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
+    xml.endElement();
 }
 
 void TWrite::write(const Ottava* item, XmlWriter& xml, WriteContext& ctx)
@@ -2907,6 +2939,7 @@ void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext&)
 void TWrite::write(const TempoText* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
+    writeProperty(item, xml, Pid::PLAY);
     xml.tag("tempo", TConv::toXml(item->tempo()));
     if (item->followText()) {
         xml.tag("followText", item->followText());

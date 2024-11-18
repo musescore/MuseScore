@@ -20,7 +20,7 @@
 
 cmake_minimum_required(VERSION 3.16)
 
-project(mscore LANGUAGES C CXX)
+project(MuseScore LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -155,7 +155,7 @@ if (MUSE_MODULE_NETWORK_WEBSOCKET)
     set(QT_ADD_WEBSOCKET ON)
 endif()
 
-include(FindQt6)
+include(SetupQt6)
 
 if (MUE_DOWNLOAD_SOUNDFONT)
     include(DownloadSoundFont)

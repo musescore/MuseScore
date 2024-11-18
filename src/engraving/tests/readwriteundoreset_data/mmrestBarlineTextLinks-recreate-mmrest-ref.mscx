@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
       <pageWidth>8.27</pageWidth>
       <pageHeight>11.69</pageHeight>
       <pagePrintableWidth>7.4826</pagePrintableWidth>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <createMultiMeasureRests>1</createMultiMeasureRests>
       <spatium>1.76389</spatium>
       </Style>
@@ -132,6 +133,7 @@
             <text>test1</text>
             </StaffText>
           <Rest>
+            <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>
             </Rest>
@@ -185,6 +187,7 @@
             <text>test2</text>
             </StaffText>
           <Rest>
+            <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>
             </Rest>
@@ -233,6 +236,7 @@
             <text>test3</text>
             </StaffText>
           <Rest>
+            <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>
             </Rest>

@@ -83,7 +83,7 @@ TEST_F(Engraving_ReadWriteUndoResetTests, testMMRestLinksRecreateMMRest)
 
     // Regenerate MM rests from scratch:
     // 1) turn MM rests off
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Read/write/undo/reset tests"));
     score->undoChangeStyleVal(Sid::createMultiMeasureRests, false);
     score->endCmd();
 
@@ -93,7 +93,7 @@ TEST_F(Engraving_ReadWriteUndoResetTests, testMMRestLinksRecreateMMRest)
     score = ScoreRW::readScore(writeFile, true);
 
     // 3) turn MM rests back on
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Read/write/undo/reset tests"));
     score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
     score->endCmd();
 

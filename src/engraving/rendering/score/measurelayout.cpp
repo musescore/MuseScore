@@ -123,7 +123,11 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
             for (Note* note : chord->notes()) {
                 Tie* tieFor = note->tieFor();
                 Tie* tieBack = note->tieBack();
-                if (tieFor && tieFor->isCrossStaff()) {
+                LaissezVib* lv = note->laissezVib();
+                if (lv && lv->isCrossStaff()) {
+                    SlurTieLayout::layoutLaissezVibChord(chord, ctx);
+                }
+                if (tieFor && !lv && tieFor->isCrossStaff()) {
                     SlurTieLayout::tieLayoutFor(tieFor, item->system());
                 }
                 if (tieBack && tieBack->tick() < stick && tieBack->isCrossStaff()) {
@@ -1005,7 +1009,7 @@ void MeasureLayout::updateGraceNotes(Measure* measure, LayoutContext& ctx)
 {
     // Clean everything
     for (Segment& s : measure->segments()) {
-        for (unsigned track = 0; track < ctx.dom().ntracks(); ++track) {
+        for (track_idx_t track = 0; track < ctx.dom().ntracks(); ++track) {
             EngravingItem* e = s.preAppendedItem(track);
             if (e && e->isGraceNotesGroup()) {
                 s.clearPreAppended(track);
@@ -1035,7 +1039,7 @@ void MeasureLayout::updateGraceNotes(Measure* measure, LayoutContext& ctx)
 
     // Layout grace note groups
     for (Segment& s : measure->segments()) {
-        for (unsigned track = 0; track < ctx.dom().ntracks(); ++track) {
+        for (track_idx_t track = 0; track < ctx.dom().ntracks(); ++track) {
             EngravingItem* e = s.preAppendedItem(track);
             if (e && e->isGraceNotesGroup()) {
                 GraceNotesGroup* gng = toGraceNotesGroup(e);
@@ -1293,8 +1297,7 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 continue;
             }
             staff_idx_t staffIdx = e->staffIdx();
-            bool modernMMRest = e->isMMRest() && (!ctx.conf().styleB(Sid::oldStyleMultiMeasureRests)
-                                                  || toMMRest(e)->ldata()->number > ctx.conf().styleI(Sid::mmRestOldStyleMaxMeasures));
+            bool modernMMRest = e->isMMRest() && !toMMRest(e)->isOldStyle();
             if ((e->isRest() && toRest(e)->isFullMeasureRest()) || e->isMMRest() || e->isMeasureRepeat()) {
                 //
                 // element has to be centered in free space

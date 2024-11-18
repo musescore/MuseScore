@@ -98,7 +98,7 @@ TEST_F(Engraving_LinksTests, test3LinkedSameScore_99796)
     EXPECT_TRUE(e->links() == nullptr);
 
     // add a linked staff
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     Staff* oStaff = score->staff(0);
     Staff* staff  = Factory::createStaff(oStaff->part());
     staff->setPart(oStaff->part());
@@ -129,7 +129,7 @@ TEST_F(Engraving_LinksTests, test3LinkedSameScore_99796)
     EXPECT_TRUE(e->links()->size() == 3);
 
     // delete staff
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     score->cmdRemoveStaff(0);
     score->endCmd();
 
@@ -202,7 +202,7 @@ TEST_F(Engraving_LinksTests, test3LinkedParts_99796)
     EXPECT_TRUE(e->links() == nullptr);
 
     // create parts
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     std::vector<Part*> parts;
     parts.push_back(score->parts().at(0));
     Score* nscore = score->createScore();
@@ -216,7 +216,7 @@ TEST_F(Engraving_LinksTests, test3LinkedParts_99796)
     score->endCmd();
 
     // add a linked staff
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     Staff* oStaff = score->staff(0);
     Staff* staff  = Factory::createStaff(oStaff->part());
     staff->setPart(oStaff->part());
@@ -234,7 +234,7 @@ TEST_F(Engraving_LinksTests, test3LinkedParts_99796)
     EXPECT_TRUE(e->links()->size() == 3);
 
     // delete part
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     score->deleteExcerpt(&ex);
     score->undo(new RemoveExcerpt(&ex));
 
@@ -283,7 +283,7 @@ TEST_F(Engraving_LinksTests, DISABLED_test4LinkedParts_94911)
     EXPECT_TRUE(e->links() == nullptr);
 
     // add a linked staff
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     Staff* oStaff = score->staff(0);
     Staff* staff  = Factory::createStaff(oStaff->part());
     staff->setPart(oStaff->part());
@@ -301,7 +301,7 @@ TEST_F(Engraving_LinksTests, DISABLED_test4LinkedParts_94911)
     EXPECT_TRUE(e->links()->size() == 2);
 
     // create parts
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     std::vector<Part*> parts;
     parts.push_back(score->parts().at(0));
     Score* nscore = score->createScore();
@@ -328,7 +328,7 @@ TEST_F(Engraving_LinksTests, DISABLED_test4LinkedParts_94911)
     EXPECT_TRUE(score->excerpts().size() == 1);
 
     // delete second staff
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     score->cmdRemoveStaff(1);
     for (Excerpt* excerpt : score->excerpts()) {
         std::vector<Staff*> sl = nscore->staves();
@@ -406,7 +406,7 @@ TEST_F(Engraving_LinksTests, test5LinkedParts_94911)
     EXPECT_TRUE(e->links() == nullptr);
 
     // create parts//
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     std::vector<Part*> parts;
     parts.push_back(score->parts().at(0));
     Score* nscore = score->createScore();
@@ -426,7 +426,7 @@ TEST_F(Engraving_LinksTests, test5LinkedParts_94911)
     EXPECT_TRUE(e->links()->size() == 2);
 
     // add a linked staff
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
     Staff* oStaff = score->staff(0);
     Staff* staff  = Factory::createStaff(oStaff->part());
     staff->setPart(oStaff->part());

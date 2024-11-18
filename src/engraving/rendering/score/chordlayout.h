@@ -90,6 +90,8 @@ public:
     static void fillShape(const MeasureRepeat* item, MeasureRepeat::LayoutData* ldata, const LayoutConfiguration& conf);
     static void fillShape(const MMRest* item, MMRest::LayoutData* ldata, const LayoutConfiguration& conf);
 
+    static void addLineAttachPoints(Spanner* spanner);
+
 private:
     static void layoutPitched(Chord* item, LayoutContext& ctx);
     static void layoutTablature(Chord* item, LayoutContext& ctx);

@@ -583,6 +583,13 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Redo"),
              IconCode::Code::REDO
              ),
+    UiAction("undo-history",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Undo/redo history…"),
+             TranslatableString("action", "Undo/redo history…"),
+             IconCode::Code::NONE
+             ),
     UiAction("voice-x12",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -1269,6 +1276,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "St&aff text"),
              TranslatableString("action", "Add text: staff text")
              ),
+    UiAction("dynamics",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "&Dynamic"),
+             TranslatableString("action", "Add text: dynamic")
+             ),
     UiAction("expression-text",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
@@ -1302,7 +1315,7 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("chord-text",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
-             TranslatableString("action", "Chor&d symbol"),
+             TranslatableString("action", "C&hord symbol"),
              TranslatableString("action", "Add text: chord symbol")
              ),
     UiAction("roman-numeral-text",
@@ -1722,8 +1735,8 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("add-lyric-verse",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Add lyric verse"),
-             TranslatableString("action", "Add lyric verse")
+             TranslatableString("action", "Add lyrics verse"),
+             TranslatableString("action", "Add lyrics verse")
              ),
     UiAction("text-b",
              mu::context::UiCtxProjectOpened,
@@ -2321,6 +2334,13 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Add tied note"),
              IconCode::Code::NOTE_TIE
              ),
+    UiAction("lv",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Laissez vibrer"),
+             TranslatableString("action", "Add laissez vibrer"),
+             IconCode::Code::NOTE_LV
+             ),
     UiAction("add-slur",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
@@ -2450,6 +2470,13 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Slight bend"),
              TranslatableString("action", "Slight bend"),
              IconCode::Code::GUITAR_SLIGHT_BEND
+             ),
+    UiAction("add-noteline",
+             mu::context::UiCtxProjectFocused,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Note-anchored line"),
+             TranslatableString("action", "Note-anchored line"),
+             IconCode::Code::NOTE_ANCHORED_LINE
              ),
 };
 
@@ -2819,6 +2846,7 @@ const muse::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
             { "", true },
             { "tie", true },
             { "add-slur", true },
+            { "lv", false },
             { "", true },
             { "add-marcato", true },
             { "add-sforzato", true },

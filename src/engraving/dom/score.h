@@ -340,6 +340,7 @@ public:
     void cmdRemovePart(Part*);
     void cmdAddTie(bool addToChord = false);
     void cmdToggleTie();
+    void cmdToggleLaissezVib();
     static std::vector<Note*> cmdTieNoteList(const Selection& selection, bool noteEntryMode);
     void cmdAddOttava(OttavaType);
     std::vector<Hairpin*> addHairpins(HairpinType);
@@ -524,7 +525,7 @@ public:
     muse::Ret repitchNote(const Position& pos, bool replace);
     void regroupNotesAndRests(const Fraction& startTick, const Fraction& endTick, track_idx_t track);
 
-    void startCmd();                    // start undoable command
+    void startCmd(const TranslatableString& actionName);             // start undoable command
     void endCmd(bool rollback = false, bool layoutAllParts = false); // end undoable command
     void update() { update(true); }
     void lockUpdates(bool locked);

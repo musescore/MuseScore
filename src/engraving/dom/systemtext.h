@@ -38,6 +38,8 @@ class SystemText : public StaffTextBase
 public:
     SystemText(Segment* parent, TextStyleType = TextStyleType::SYSTEM, ElementType type = ElementType::SYSTEM_TEXT);
 
+    bool isEditAllowed(EditData&) const override;
+
     SystemText* clone() const override { return new SystemText(*this); }
     Segment* segment() const { return (Segment*)explicitParent(); }
 

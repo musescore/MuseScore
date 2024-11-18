@@ -306,6 +306,7 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
     std::vector<Chord*> graceNotes;
     Beam* startingBeam = nullptr;
     Tuplet* tuplet = nullptr;
+    TremoloTwoChord* prevTremolo = nullptr;
     Fraction dstTick = dst->tick();
     bool pasted = false;
     Fraction tickLen = Fraction(0, 1);
@@ -488,11 +489,21 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             // disallow tie across barline within two-note tremolo
                             // tremolos can potentially still straddle the barline if no tie is required
                             // but these will be removed later
-                            TremoloTwoChord* t = chord->tremoloTwoChord();
-                            if (t) {
+
+                            if (chord->tremoloTwoChord()) {
+                                prevTremolo = chord->tremoloTwoChord();
+                                prevTremolo->setChord1(chord);
+                                chord->setTremoloTwoChord(prevTremolo);
+                            } else if (!chord->tremoloTwoChord() && prevTremolo) {
+                                prevTremolo->setChord2(chord);
+                                chord->setTremoloTwoChord(prevTremolo);
+                                prevTremolo = nullptr;
+                            }
+
+                            if (TremoloTwoChord* tremolo = chord->tremoloTwoChord()) {
                                 if (doScale) {
-                                    Fraction d = t->durationType().ticks();
-                                    t->setDurationType(d * scale);
+                                    Fraction d = tremolo->durationType().ticks();
+                                    tremolo->setDurationType(d * scale);
                                 }
                                 Measure* m = score->tick2measure(tick);
                                 Fraction ticks = cr->actualTicks();
@@ -515,6 +526,9 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             if (cr->isChord()) {
                                 Chord* c = toChord(cr);
                                 for (Note* note: c->notes()) {
+                                    if (note->laissezVib()) {
+                                        continue;
+                                    }
                                     Tie* tie = note->tieFor();
                                     if (tie) {
                                         note->setTieFor(0);

@@ -26,10 +26,6 @@
 #include "types/string.h"
 #include "types.h"
 
-namespace mu {
-class TranslatableString;
-}
-
 namespace mu::engraving {
 class TConv
 {

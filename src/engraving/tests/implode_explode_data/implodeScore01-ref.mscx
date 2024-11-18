@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
@@ -7,6 +7,7 @@
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <lastSystemFillLimit>0</lastSystemFillLimit>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <concertPitch>1</concertPitch>
       <minMMRestWidth>0</minMMRestWidth>
       <spatium>1.76389</spatium>

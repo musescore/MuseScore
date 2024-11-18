@@ -152,9 +152,17 @@ void PercussionPanelModel::finishEditing()
     setCurrentPanelMode(m_panelModeToRestore);
 }
 
+void PercussionPanelModel::customizeKit()
+{
+    dispatcher()->dispatch("customize-kit");
+}
+
 void PercussionPanelModel::setUpConnections()
 {
     const auto updatePadModels = [this](const mu::engraving::Drumset* drumset) {
+        if (drumset == m_padListModel->drumset()) {
+            return;
+        }
         m_padListModel->setDrumset(drumset);
         m_padListModel->resetLayout(); //! NOTE: Placeholder until we implement saving/loading
     };
@@ -196,7 +204,7 @@ void PercussionPanelModel::writePitch(int pitch)
         undoStack->commitChanges();
     };
 
-    undoStack->prepareChanges();
+    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Enter percussion note"));
 
     interaction()->noteInput()->startNoteInput();
 

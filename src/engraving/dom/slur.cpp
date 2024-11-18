@@ -172,7 +172,7 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
     // save current start/end elements
     for (EngravingObject* e : spanner()->linkList()) {
         Spanner* sp = toSpanner(e);
-        score()->undoStack()->push1(new ChangeStartEndSpanner(sp, sp->startElement(), sp->endElement()));
+        score()->undoStack()->pushWithoutPerforming(new ChangeStartEndSpanner(sp, sp->startElement(), sp->endElement()));
     }
 
     if (ed.curGrip == Grip::START) {
@@ -317,6 +317,21 @@ bool SlurSegment::isEdited() const
 bool SlurSegment::isEndPointsEdited() const
 {
     return !(m_ups[int(Grip::START)].off.isNull() && m_ups[int(Grip::END)].off.isNull());
+}
+
+double SlurSegment::endWidth() const
+{
+    return style().styleMM(Sid::slurEndWidth);
+}
+
+double SlurSegment::midWidth() const
+{
+    return style().styleMM(Sid::slurMidWidth);
+}
+
+double SlurSegment::dottedWidth() const
+{
+    return style().styleMM(Sid::slurDottedWidth);
 }
 
 Slur::Slur(const Slur& s)

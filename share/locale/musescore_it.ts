@@ -2876,7 +2876,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4103"/>
         <source>Only for a change to C Maj / A min</source>
-        <translation>Solo per il cambio a Do maggiore / La minore</translation>
+        <translation>Solo per il cambio a DO maggiore / LA minore</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4110"/>
@@ -3191,7 +3191,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9802"/>
         <source>Label for full bends</source>
-        <translation>Etichetta per full bend</translation>
+        <translation>Etichetta per full bending</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9907"/>
@@ -3206,7 +3206,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10038"/>
         <source>Use cue sized numbers for grace note bends</source>
-        <translation>Utilizza numeri di dimensioni minori per i bend delle note di abbellimento</translation>
+        <translation>Utilizza numeri di dimensioni minori per i bending delle note di abbellimento</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11209"/>
@@ -3741,7 +3741,7 @@ prima nota del sistema</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="179"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9810"/>
         <source>Bends</source>
-        <translation>Bend</translation>
+        <translation>Bending</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="184"/>
@@ -5937,7 +5937,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="62"/>
         <source>G♭ major / E♭ minor</source>
-        <translation>Sol♭ maggiore / Mi♭ minore</translation>
+        <translation>SOL♭ maggiore / MI♭ minore</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="67"/>
@@ -6618,12 +6618,12 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="125"/>
         <source>Next measure / Shift text right quickly</source>
-        <translation>Battuta successiva / Spostamento rapido del testo verso destra</translation>
+        <translation>Battuta successiva / Spostamento rapido del testo a destra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="131"/>
         <source>Previous measure / Shift text left quickly</source>
-        <translation>Battuta precedente / Spostamento rapido del testo verso sinistra</translation>
+        <translation>Battuta precedente / Spostamento rapido del testo a sinistra</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="137"/>
@@ -8502,25 +8502,25 @@ altezza x del testo):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2429"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2430"/>
         <source>Standard bend</source>
-        <translation>Bend standard</translation>
+        <translation>Bending standard</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2436"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2437"/>
         <source>Pre-bend</source>
-        <translation>Pre-bend</translation>
+        <translation>Pre-bending</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2443"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2444"/>
         <source>Grace note bend</source>
-        <translation>Bend della nota di abbellimento</translation>
+        <translation>Bending nota di abbellimento</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2450"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2451"/>
         <source>Slight bend</source>
-        <translation>Leggero bend</translation>
+        <translation>Bending leggero</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2461"/>
@@ -9002,12 +9002,12 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="99"/>
         <source>Restore the &amp;default layout</source>
-        <translation>Ripristina l&apos;impaginazione &amp;predefinita</translation>
+        <translation>Ripristina impaginazione &amp;predefinita</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="100"/>
         <source>Restore the default layout</source>
-        <translation>Ripristina l&apos;impaginazione predefinita</translation>
+        <translation>Ripristina impaginazione predefinita</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="114"/>
@@ -11053,7 +11053,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="77"/>
         <source>Color guitar bends outside of playable range</source>
-        <translation>Colora i bend della chitarra fuori dall&apos;estensione suonabile</translation>
+        <translation>Colora bending della chitarra fuori dall&apos;estensione suonabile</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="91"/>
@@ -12519,7 +12519,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="228"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1175"/>
         <source>Bend</source>
-        <translation>Bend</translation>
+        <translation>Bending</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="229"/>
@@ -12837,12 +12837,12 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="298"/>
         <source>Guitar bend</source>
-        <translation>Bend della chitarra</translation>
+        <translation>Bending della chitarra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="299"/>
         <source>Guitar bend segment</source>
-        <translation>Segmento di bend della chitarra</translation>
+        <translation>Segmento di bending della chitarra</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="300"/>
@@ -13579,7 +13579,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="87"/>
         <source>This file was last saved in a development version of 3.0.</source>
-        <translation>Questo file è stato salvato per l&apos;ultima volta con una versione di sviluppo 3.0.</translation>
+        <translation>Questo file è stato salvato l&apos;ultima volta in una versione di sviluppo 3.0.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="90"/>
@@ -19798,7 +19798,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/models/notation/bends/bendsettingsmodel.cpp" line="61"/>
         <source>Bend</source>
-        <translation>Bend</translation>
+        <translation>Bending</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/bends/bendsettingsmodel.cpp" line="167"/>
@@ -19829,7 +19829,7 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="81"/>
         <source>Customize bend</source>
-        <translation>Personalizza bend</translation>
+        <translation>Personalizza bending</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="104"/>
@@ -20616,7 +20616,7 @@ battuta in levare</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="107"/>
         <source>Straight</source>
         <comment>Note flags</comment>
-        <translation>Preciso</translation>
+        <translation>Straight</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="190"/>
@@ -21229,12 +21229,12 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/glissandosettingsmodel.cpp" line="56"/>
         <source>Straight</source>
-        <translation>Preciso</translation>
+        <translation>Dritta</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/glissandosettingsmodel.cpp" line="57"/>
         <source>Wavy</source>
-        <translation>Ondulato</translation>
+        <translation>Ondulata</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/hairpinlinesettingsmodel.cpp" line="40"/>
@@ -22209,7 +22209,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="45"/>
         <source>Muse Sampler library is detected, version %1</source>
-        <translation>Rilevata libreria Muse Sampler, versione %1</translation>
+        <translation>Libreria Muse Sampler rilevata, versione %1</translation>
     </message>
 </context>
 <context>
@@ -22351,7 +22351,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml" line="43"/>
         <source>Straight</source>
-        <translation>Preciso</translation>
+        <translation>Straight</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="100"/>
@@ -24335,7 +24335,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="194"/>
         <source>More</source>
         <extracomment>Caption of a button to reveal more elements</extracomment>
-        <translation>Di più</translation>
+        <translation>Altro</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="618"/>
@@ -24598,7 +24598,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="666"/>
         <source>Noteheads</source>
-        <translation>Testa nota</translation>
+        <translation>Teste della nota</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="691"/>
@@ -24939,7 +24939,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1503"/>
         <source>Straight</source>
         <extracomment>System text to switch from swing rhythm back to straight rhythm</extracomment>
-        <translation>Preciso</translation>
+        <translation>Straight</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1512"/>
@@ -28838,7 +28838,7 @@ non riuscita.</translation>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="188"/>
         <source>Replace the existing &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;</source>
         <extracomment>The text between `&lt;a href=&quot;%1&quot;&gt;` and `&lt;/a&gt;` will be a clickable link to the online score in question</extracomment>
-        <translation>Sostituisci la &lt;a href=&quot;%1&quot;&gt;partitura online&lt;/a&gt; esistente</translation>
+        <translation>Sostituisci &lt;a href=&quot;%1&quot;&gt;partitura online&lt;/a&gt; esistente</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="191"/>
@@ -28849,7 +28849,7 @@ non riuscita.</translation>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="199"/>
         <source>Replace the &lt;a href=&quot;%1&quot;&gt;existing audio&lt;/a&gt;</source>
         <extracomment>The text between `&lt;a href=&quot;%1&quot;&gt;` and `&lt;/a&gt;` will be a clickable link to the online audio in question</extracomment>
-        <translation>Sostituisci l&apos;&lt;a href=&quot;%1&quot;&gt;audio esistente&lt;/a&gt;</translation>
+        <translation>Sostituisci &lt;a href=&quot;%1&quot;&gt;audio esistente&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="202"/>

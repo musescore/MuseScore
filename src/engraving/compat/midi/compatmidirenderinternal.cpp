@@ -41,6 +41,7 @@
 #include "dom/durationtype.h"
 #include "dom/dynamic.h"
 #include "dom/glissando.h"
+#include "dom/guitarbend.h"
 #include "dom/hairpin.h"
 #include "dom/instrument.h"
 #include "dom/letring.h"
@@ -87,6 +88,7 @@ struct CollectNoteParams {
     int graceOffsetOn = 0;
     int graceOffsetOff = 0;
     int endLetRingTick = 0;
+    int previousChordTicks = -1;
     bool letRingNote = false;
     MidiInstrumentEffect effect = MidiInstrumentEffect::NONE;
     bool callAllSoundOff = false;//NoteOn silence channel
@@ -110,6 +112,13 @@ struct VibratoParams {
     int period = 0;
 };
 
+struct BendPlaybackInfo {
+    int startTick = 0;
+    int endTick = 0;
+    float startTimeFactor = 0.f;
+    float endTimeFactor = 1.f;
+};
+
 static uint32_t getChannel(const Instrument* instr, const Note* note, MidiInstrumentEffect effect,
                            const CompatMidiRendererInternal::Context& context);
 
@@ -120,6 +129,7 @@ static void fillVoltaVelocities(const Volta* volta, VelocityMap& veloMap);
 static double chordVelocityMultiplier(const Chord* chord, const CompatMidiRendererInternal::Context& context);
 static double velocityMultiplierByInstrument(const Instrument* instrument, const String& articulationName,
                                              const CompatMidiRendererInternal::Context& context);
+static int graceBendDuration(const Chord* chord);
 
 //---------------------------------------------------------
 //   Converts midi time (noteoff - noteon) to milliseconds
@@ -304,6 +314,162 @@ static void collectVibrato(int channel,
     pitchWheelRenderer.addPitchWheelFunction(func, channel, staffIdx, effect);
 }
 
+static void addConstPitchWheel(int tick, float value, PitchWheelRenderer& pitchWheelRenderer, int channel, staff_idx_t staffIdx,
+                               MidiInstrumentEffect effect)
+{
+    const float scale = (float)wheelSpec.mLimit / wheelSpec.mAmplitude;
+
+    PitchWheelRenderer::PitchWheelFunction pitchWheelConstFunc;
+    auto constFunc = [value, scale] (uint32_t tick) {
+        UNUSED(tick)
+        return value * scale;
+    };
+
+    pitchWheelConstFunc.func = constFunc;
+    pitchWheelConstFunc.mStartTick = tick;
+    pitchWheelConstFunc.mEndTick = tick + wheelSpec.mStep;
+    pitchWheelRenderer.addPitchWheelFunction(pitchWheelConstFunc, channel, staffIdx, effect);
+}
+
+static bool shouldProceedBend(const Note* note)
+{
+    const GuitarBend* bendFor = note->bendFor();
+    const Note* baseNote = bendFor->startNoteOfChain();
+
+    const GuitarBend* firstBend = baseNote->bendFor();
+    if (firstBend && firstBend->type() == GuitarBendType::PRE_BEND) {
+        const Note* nextNote = firstBend->endNote();
+        if (nextNote) {
+            baseNote = nextNote;
+        }
+    }
+
+    return baseNote->lastTiedNote(false) == note;
+}
+
+static BendPlaybackInfo getBendPlaybackInfo(const GuitarBend* bend, int bendStart, int bendDuration)
+{
+    BendPlaybackInfo bendInfo;
+
+    // currently ignoring diagram for grace bends
+    if (bend->type() != GuitarBendType::GRACE_NOTE_BEND) {
+        bendInfo.startTimeFactor = bend->startTimeFactor();
+        bendInfo.endTimeFactor = bend->endTimeFactor();
+    }
+
+    bendInfo.startTick = bendStart + bendDuration * bendInfo.startTimeFactor;
+    bendInfo.endTick = bendStart + bendDuration * bendInfo.endTimeFactor;
+
+    return bendInfo;
+}
+
+/*
+ * All consecutive tie and bend combinations are processed in a single pass, adding pitch bends where needed to ensure continuity between notes.
+ *
+ * When processing the first bend in a series, the duration of any preceding ties is also included,
+ * allowing for an accurate total duration calculation.
+ *
+ * Additional calls (for notes that have already been processed) are filtered out by the function shouldProceedBend(Note*),
+ * preventing redundant processing.
+*/
+static void collectGuitarBend(const Note* note,
+                              int channel,
+                              int onTime, int graceOffset, int previousChordTicks,
+                              PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect)
+{
+    if (!shouldProceedBend(note)) {
+        return;
+    }
+
+    int curPitchBendSegmentStart = onTime;
+    int curPitchBendSegmentEnd = 0;
+
+    int quarterOffsetFromStartNote = 0;
+    int currentQuarterTones = 0;
+
+    if (note->bendFor()->type() == GuitarBendType::GRACE_NOTE_BEND) {
+        curPitchBendSegmentStart -= graceOffset;
+    }
+
+    const float scale = (float)wheelSpec.mLimit / wheelSpec.mAmplitude;
+
+    while (note->bendFor() || note->tieFor()) {
+        const GuitarBend* bendFor = note->bendFor();
+        int duration = 0;
+        if (bendFor && bendFor->type() == GuitarBendType::GRACE_NOTE_BEND) {
+            duration = (previousChordTicks == -1) ? GRACE_BEND_DURATION : std::min(previousChordTicks / 2, GRACE_BEND_DURATION);
+        } else {
+            duration = note->chord()->actualTicks().ticks();
+        }
+        curPitchBendSegmentEnd = curPitchBendSegmentStart + duration;
+
+        if (bendFor) {
+            const Note* endNote = bendFor->endNote();
+
+            if (!endNote) {
+                return;
+            }
+
+            BendPlaybackInfo bendPlaybackInfo = getBendPlaybackInfo(bendFor, curPitchBendSegmentStart, duration);
+            double initialPitchBendValue = quarterOffsetFromStartNote / 2.0;
+
+            if (bendPlaybackInfo.startTick > curPitchBendSegmentStart) {
+                addConstPitchWheel(curPitchBendSegmentStart, initialPitchBendValue, pitchWheelRenderer, channel, note->staffIdx(), effect);
+            }
+
+            currentQuarterTones = bendFor->bendAmountInQuarterTones();
+
+            double tickDelta = duration * (bendPlaybackInfo.endTimeFactor - bendPlaybackInfo.startTimeFactor);
+            double a = currentQuarterTones / 2.0 / (tickDelta * tickDelta);
+            double b = initialPitchBendValue;
+            auto bendFunc = [startTick = bendPlaybackInfo.startTick, scale, a, b] (uint32_t tick) {
+                float x = (float)(tick - startTick);
+                float y = a * x * x + b;
+                return y * scale;
+            };
+
+            PitchWheelRenderer::PitchWheelFunction pitchWheelSquareFunc;
+
+            pitchWheelSquareFunc.func = bendFunc;
+
+            pitchWheelSquareFunc.mStartTick = bendPlaybackInfo.startTick;
+            pitchWheelSquareFunc.mEndTick = bendPlaybackInfo.endTick;
+
+            pitchWheelRenderer.addPitchWheelFunction(pitchWheelSquareFunc, channel, note->staffIdx(), effect);
+            quarterOffsetFromStartNote += currentQuarterTones;
+
+            if (bendPlaybackInfo.endTick < curPitchBendSegmentEnd) {
+                addConstPitchWheel(bendPlaybackInfo.endTick, quarterOffsetFromStartNote / 2.0, pitchWheelRenderer, channel,
+                                   note->staffIdx(),
+                                   effect);
+            }
+
+            if (note == endNote) {
+                break;
+            }
+
+            note = endNote;
+        } else {
+            if (note->bendBack()) {
+                addConstPitchWheel(note->tick().ticks(), quarterOffsetFromStartNote / 2.0, pitchWheelRenderer, channel,
+                                   note->staffIdx(), effect);
+            }
+
+            const Tie* tie = note->tieFor();
+            note = tie->endNote();
+            if (!note) {
+                break;
+            }
+        }
+
+        curPitchBendSegmentStart = curPitchBendSegmentEnd;
+    }
+
+    if (note->bendBack()) {
+        addConstPitchWheel(note->tick().ticks(), quarterOffsetFromStartNote / 2.0, pitchWheelRenderer, channel, note->staffIdx(), effect);
+    }
+}
+
 static void collectBend(const PitchValues& playData, staff_idx_t staffIdx,
                         int channel,
                         int onTime, int offTime,
@@ -448,6 +614,44 @@ static void renderSnd(EventsHolder& events, const Chord* chord, int noteChannel,
     }
 }
 
+int graceBendDuration(const Chord* chord)
+{
+    int graceDuration = GRACE_BEND_DURATION;
+    if (chord) {
+        graceDuration = std::min(chord->ticks().ticks() / 2, graceDuration);
+    }
+
+    return graceDuration;
+}
+
+static int calculateTieLength(const Note* note)
+{
+    int tieLen = 0;
+
+    const Note* n = note;
+    while (n) {
+        // Process ties or bends
+        Tie* tieFor = n->tieFor();
+        GuitarBend* bendFor = n->bendFor();
+
+        if (tieFor && tieFor->endNote() != n) {
+            n = tieFor->endNote();
+        } else if (bendFor && bendFor->endNote() != n) {
+            n = bendFor->endNote();
+        } else {
+            break;
+        }
+
+        NoteEventList nel = n->playEvents();
+
+        if (!nel.empty()) {
+            tieLen += n->playEvents()[0].len() * n->chord()->actualTicks().ticks() / NoteEvent::NOTE_LENGTH;
+        }
+    }
+
+    return tieLen;
+}
+
 //---------------------------------------------------------
 //   collectNote
 //---------------------------------------------------------
@@ -460,12 +664,12 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
     }
 
     Chord* chord = note->chord();
-    Instrument* instr = chord->part()->instrument(chord->tick());
+    const Instrument* instr = chord->part()->instrument(chord->tick());
     MidiInstrumentEffect noteEffect = noteParams.effect;
 
     int noteChannel = getChannel(instr, note, noteEffect, context);
 
-    int tieLen = 0;
+    int tieLen = calculateTieLength(note);
     if (chord->isGrace()) {
         assert(!CompatMidiRendererInternal::graceNotesMerged(chord));      // this function should not be called on a grace note if grace notes are merged
         chord = toChord(chord->explicitParent());
@@ -474,25 +678,10 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
     int ticks = chord->actualTicks().ticks();   // ticks of the actual note
     // calculate additional length due to ties forward
     // taking NoteEvent length adjustments into account
-    if (note->tieFor()) {
-        const Note* n = note->tieFor()->endNote();
-        while (n) {
-            NoteEventList nel = n->playEvents();
-            if (!nel.empty()) {
-                tieLen += (n->chord()->actualTicks().ticks() * (nel[0].len())) / 1000;
-            }
 
-            if (n->tieFor() && n != n->tieFor()->endNote()) {
-                n = n->tieFor()->endNote();
-            } else {
-                break;
-            }
-        }
-    }
-
-    int tick1    = chord->tick().ticks() + noteParams.tickOffset;
-    bool tieFor  = note->tieFor();
-    bool tieBack = note->tieBack();
+    int tick1    = note->tick().ticks() + noteParams.tickOffset;
+    const GuitarBend* bendFor = note->bendFor();
+    const GuitarBend* bendBack = note->bendBack();
 
     NoteEventList nel = note->playEvents();
     size_t nels = nel.size();
@@ -503,8 +692,13 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
         // its length was already added to previous note
         // if we wish to suppress first note of ornament
         // then change "nels == 1" to "i == 0", and change "break" to "continue"
-        if (tieBack && nels == 1 && !isGlissandoFor(note)) {
+        if (note->tieBack() && nels == 1 && !isGlissandoFor(note)) {
             break;
+        }
+
+        // skipping the notes which are connected by bends
+        if (bendBack && bendBack->type() != GuitarBendType::PRE_BEND && i == 0) {
+            continue;
         }
 
         int p = std::clamp(note->ppitch() + e.pitch(), 0, 127);
@@ -519,7 +713,7 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
                 off = on + deadNoteDurationInTicks;
             }
         } else {
-            if (tieFor && i == nels - 1) {
+            if ((note->tieFor() || bendFor) && i == nels - 1) {
                 off += tieLen;
             }
 
@@ -564,31 +758,37 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
             playParams.staffIdx = static_cast<int>(staff->idx());
             playParams.callAllSoundOff = noteParams.callAllSoundOff;
             playNote(events, note, playParams, pitchWheelRenderer);
-        }
-    }
 
-    if (instr->singleNoteDynamics()) {
-        renderSnd(events, chord, noteChannel, noteParams.tickOffset, context);
+            if (instr->singleNoteDynamics()) {
+                renderSnd(events, chord, noteChannel, noteParams.tickOffset, context);
+            }
+        }
     }
 
     // Bends
-    for (EngravingItem* e : note->el()) {
-        if (!e || (e->type() != ElementType::BEND)) {
-            continue;
+    if (note->configuration()->useStretchedBends()) {
+        if (const StretchedBend* stretchedBend = note->stretchedBend()) {
+            collectBend(stretchedBend->pitchValues(), stretchedBend->staffIdx(), noteChannel, tick1, tick1 + getPlayTicksForBend(
+                            note).ticks(), pitchWheelRenderer, noteEffect);
         }
+    } else if (bendFor) {
+        collectGuitarBend(note, noteChannel, tick1, noteParams.graceOffsetOn, noteParams.previousChordTicks, pitchWheelRenderer,
+                          noteEffect);
+    } else {
+        // old bends implementation
+        for (const EngravingItem* e : note->el()) {
+            if (!e || (e->type() != ElementType::BEND)) {
+                continue;
+            }
 
-        Bend* bend = toBend(e);
-        if (!bend->playBend()) {
-            break;
+            const Bend* bend = toBend(e);
+            if (!bend->playBend()) {
+                break;
+            }
+
+            collectBend(bend->points(), bend->staffIdx(), noteChannel, tick1, tick1 + getPlayTicksForBend(
+                            note).ticks(), pitchWheelRenderer, noteEffect);
         }
-
-        collectBend(bend->points(), bend->staffIdx(), noteChannel, tick1, tick1 + getPlayTicksForBend(
-                        note).ticks(), pitchWheelRenderer, noteEffect);
-    }
-
-    if (StretchedBend* stretchedBend = note->stretchedBend()) {
-        collectBend(stretchedBend->pitchValues(), stretchedBend->staffIdx(), noteChannel, tick1, tick1 + getPlayTicksForBend(
-                        note).ticks(), pitchWheelRenderer, noteEffect);
     }
 }
 
@@ -754,20 +954,45 @@ void CompatMidiRendererInternal::collectGraceBeforeChordEvents(Chord* chord, Cho
         }
 
         graceTickOffset = graceTickSum / static_cast<int>(acciacaturaGraceSize);
+    } else {
+        bool hasGraceBend = std::any_of(grChords.begin(), grChords.end(), [](Chord* ch) {
+            return std::any_of(ch->notes().begin(), ch->notes().end(), [](Note* n) {
+                return n->isGraceBendStart();
+            });
+        });
+
+        if (hasGraceBend) {
+            graceTickSum = graceBendDuration(prevChord);
+        }
     }
 
     if (!graceNotesMerged(chord)) {
         int currentBeaforeBeatNote = 0;
         for (Chord* c : grChords) {
             for (const Note* note : c->notes()) {
+                GuitarBend* bendFor = note->bendFor();
+                if (bendFor && bendFor->type() == GuitarBendType::PRE_BEND) {
+                    continue;
+                }
+
                 CollectNoteParams params;
                 params.effect = effect;
                 params.velocityMultiplier = veloMultiplier;
                 params.tickOffset = tickOffset;
 
+                bool isGraceBend = (note->bendFor() && note->bendFor()->type() == GuitarBendType::GRACE_NOTE_BEND);
+                if (prevChord) {
+                    params.previousChordTicks = prevChord->actualTicks().ticks();
+                }
+
                 if (note->noteType() == NoteType::ACCIACCATURA) {
                     params.graceOffsetOn = graceTickSum - graceTickOffset * currentBeaforeBeatNote;
                     params.graceOffsetOff = graceTickSum - graceTickOffset * (currentBeaforeBeatNote + 1);
+
+                    collectNote(events, note, params, st, pitchWheelRenderer, m_context);
+                } else if (isGraceBend) {
+                    params.graceOffsetOn = graceTickSum;
+                    params.graceOffsetOff = 0;
 
                     collectNote(events, note, params, st, pitchWheelRenderer, m_context);
                 } else {

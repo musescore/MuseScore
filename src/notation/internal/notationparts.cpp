@@ -77,11 +77,7 @@ static QString formatInstrumentTitleOnScore(const QString& instrumentName, const
 NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
     : m_getScore(getScore), m_undoStack(undoStack), m_interaction(interaction)
 {
-    m_undoStack->undoNotification().onNotify(this, [this]() {
-        m_partChangedNotifier.changed();
-    });
-
-    m_undoStack->redoNotification().onNotify(this, [this]() {
+    m_undoStack->undoRedoNotification().onNotify(this, [this]() {
         m_partChangedNotifier.changed();
     });
 }
@@ -255,7 +251,7 @@ void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& 
     TRACEFUNC;
 
     endInteractionWithScore();
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Add/remove instruments"));
 
     doSetScoreOrder(order);
     removeMissingParts(parts);
@@ -275,7 +271,7 @@ void NotationParts::setScoreOrder(const ScoreOrder& order)
         return;
     }
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Set score order"));
 
     doSetScoreOrder(order);
     setBracketsAndBarlines();
@@ -296,7 +292,11 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
         return;
     }
 
-    startEdit();
+    const TranslatableString actionName = visible
+                                          ? TranslatableString("undoableAction", "Show instrument")
+                                          : TranslatableString("undoableAction", "Hide instrument");
+
+    startEdit(actionName);
 
     part->undoChangeProperty(mu::engraving::Pid::VISIBLE, visible);
 
@@ -319,7 +319,17 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
         return;
     }
 
-    startEdit();
+    auto calcActionName = [](const SharpFlat& sharpFlat) -> TranslatableString {
+        switch (sharpFlat) {
+        case SharpFlat::NONE: return TranslatableString("undoableAction", "Set sharps/flats no preference");
+        case SharpFlat::FLATS: return TranslatableString("undoableAction", "Set prefer flats");
+        case SharpFlat::SHARPS: return TranslatableString("undoableAction", "Set prefer sharps");
+        case SharpFlat::AUTO: return TranslatableString("undoableAction", "Set sharps/flats automatic");
+        }
+        return TranslatableString("undoableAction", "Set sharps/flats preference");
+    };
+
+    startEdit(calcActionName(sharpFlat));
 
     mu::engraving::Interval oldTransposition = part->staff(0)->transpose(DEFAULT_TICK);
 
@@ -357,7 +367,7 @@ void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const 
         return;
     }
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Set instrument name"));
 
     score()->undo(new mu::engraving::ChangeInstrumentLong(instrumentKey.tick, part, newNames));
 
@@ -384,7 +394,7 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
         return;
     }
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Set abbreviated instrument name"));
 
     score()->undo(new mu::engraving::ChangeInstrumentShort(instrumentKey.tick, part, { StaffName(abbreviature, 0) }));
 
@@ -410,7 +420,11 @@ bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
         return false;
     }
 
-    startEdit();
+    const TranslatableString actionName = visible
+                                          ? TranslatableString("undoableAction", "Show voice %1").arg(voiceIndex + 1)
+                                          : TranslatableString("undoableAction", "Hide voice %1").arg(voiceIndex + 1);
+
+    startEdit(actionName);
 
     score()->excerpt()->setVoiceVisible(staff, voiceIndex, visible);
 
@@ -436,7 +450,11 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
         return;
     }
 
-    startEdit();
+    const TranslatableString actionName = visible
+                                          ? TranslatableString("undoableAction", "Show staff")
+                                          : TranslatableString("undoableAction", "Hide staff");
+
+    startEdit(actionName);
 
     config.visible = visible;
     doSetStaffConfig(staff, config);
@@ -461,7 +479,7 @@ void NotationParts::setStaffType(const ID& staffId, StaffTypeId type)
         return;
     }
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Set staff type"));
 
     score()->undo(new mu::engraving::ChangeStaffType(staff, *staffType));
 
@@ -483,7 +501,7 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
         return;
     }
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Edit staff properties"));
 
     doSetStaffConfig(staff, config);
 
@@ -505,7 +523,7 @@ bool NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
         return false;
     }
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Add staff"));
     doAppendStaff(staff, destinationPart);
     apply();
 
@@ -528,7 +546,7 @@ bool NotationParts::appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffI
         return false;
     }
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Add linked staff"));
 
     doAppendStaff(staff, destinationPart);
 
@@ -551,7 +569,7 @@ void NotationParts::insertPart(Part* part, size_t index)
         return;
     }
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Add instrument"));
 
     doInsertPart(part, index);
 
@@ -569,7 +587,7 @@ void NotationParts::replacePart(const ID& partId, Part* newPart)
         return;
     }
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Reset instrument formatting"));
 
     size_t partIndex = muse::indexOf(score()->parts(), part);
     score()->cmdRemovePart(part);
@@ -589,7 +607,7 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
         return;
     }
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Replace instrument"));
 
     if (isMainInstrumentForPart(instrumentKey, part)) {
         QString newInstrumentPartName = formatInstrumentTitle(newInstrument.trackName(), newInstrument.trait());
@@ -638,7 +656,7 @@ void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Dru
     }
 
     if (undoable) {
-        startEdit();
+        startEdit(TranslatableString("undoableAction", "Edit drumset"));
         score()->undo(new mu::engraving::ChangeDrumset(instrument, &newDrumset, part));
         apply();
     } else {
@@ -670,9 +688,9 @@ INotationUndoStackPtr NotationParts::undoStack() const
     return m_undoStack;
 }
 
-void NotationParts::startEdit()
+void NotationParts::startEdit(const muse::TranslatableString& actionName)
 {
-    undoStack()->prepareChanges();
+    undoStack()->prepareChanges(actionName);
 }
 
 void NotationParts::apply()
@@ -697,7 +715,7 @@ void NotationParts::removeParts(const IDList& partsIds)
     }
 
     endInteractionWithScore();
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Remove instruments"));
 
     doRemoveParts(partsToRemove);
 
@@ -818,7 +836,7 @@ void NotationParts::removeStaves(const IDList& stavesIds)
     std::vector<staff_idx_t> staffIndicesToRemove = staffIndices(stavesIds);
 
     endInteractionWithScore();
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Remove staves"));
 
     for (staff_idx_t staffIdx: staffIndicesToRemove) {
         score()->cmdRemoveStaff(staffIdx);
@@ -873,7 +891,7 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
     }
 
     endInteractionWithScore();
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Move instruments"));
 
     sortParts(parts);
     setBracketsAndBarlines();
@@ -902,7 +920,7 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
     }
 
     endInteractionWithScore();
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Move staves"));
 
     std::vector<Staff*> allStaves = score()->staves();
 

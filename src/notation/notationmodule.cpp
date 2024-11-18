@@ -28,7 +28,6 @@
 #include "ui/iuiactionsregister.h"
 #include "project/inotationwritersregister.h"
 
-#include "internal/notation.h"
 #include "internal/notationactioncontroller.h"
 #include "internal/notationconfiguration.h"
 #include "internal/midiinputoutputcontroller.h"
@@ -45,17 +44,18 @@
 #include "view/noteinputbarmodel.h"
 #include "view/noteinputbarcustomisemodel.h"
 #include "view/noteinputbarcustomiseitem.h"
-#include "view/internal/undoredomodel.h"
+#include "view/internal/undoredotoolbarmodel.h"
+#include "view/internal/undoredohistorymodel.h"
 #include "view/notationtoolbarmodel.h"
 #include "view/notationnavigator.h"
 #include "view/selectionfiltermodel.h"
 #include "view/editgridsizedialogmodel.h"
+#include "view/paintedengravingitem.h"
 
 #include "view/pianokeyboard/pianokeyboardview.h"
 #include "view/pianokeyboard/pianokeyboardpanelcontextmenumodel.h"
 
 #include "ui/iinteractiveuriregister.h"
-#include "ui/uitypes.h"
 #include "view/widgets/editstyle.h"
 #include "view/widgets/measureproperties.h"
 #include "view/widgets/editstaff.h"
@@ -71,7 +71,6 @@
 #include "view/widgets/realizeharmonydialog.h"
 #include "view/notationcontextmenumodel.h"
 #include "view/abstractelementpopupmodel.h"
-#include "view/internal/undoredomodel.h"
 #include "view/internal/harppedalpopupmodel.h"
 #include "view/internal/caposettingsmodel.h"
 #include "view/internal/stringtuningssettingsmodel.h"
@@ -149,6 +148,7 @@ void NotationModule::resolveImports()
         ir->registerWidgetUri<StaffTextPropertiesDialog>(Uri("musescore://notation/stafftextproperties"));
         ir->registerWidgetUri<RealizeHarmonyDialog>(Uri("musescore://notation/realizechordsymbols"));
 
+        ir->registerQmlUri(Uri("musescore://notation/undohistory"), "MuseScore/NotationScene/UndoHistoryDialog.qml");
         ir->registerQmlUri(Uri("musescore://notation/parts"), "MuseScore/NotationScene/PartsDialog.qml");
         ir->registerQmlUri(Uri("musescore://notation/selectmeasurescount"), "MuseScore/NotationScene/SelectMeasuresCountDialog.qml");
         ir->registerQmlUri(Uri("musescore://notation/editgridsize"), "MuseScore/NotationScene/EditGridSizeDialog.qml");
@@ -173,7 +173,8 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<NoteInputBarCustomiseModel>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseModel");
     qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
     qmlRegisterType<NotationNavigator>("MuseScore.NotationScene", 1, 0, "NotationNavigator");
-    qmlRegisterType<UndoRedoModel>("MuseScore.NotationScene", 1, 0, "UndoRedoModel");
+    qmlRegisterType<UndoRedoToolbarModel>("MuseScore.NotationScene", 1, 0, "UndoRedoToolbarModel");
+    qmlRegisterType<UndoRedoHistoryModel>("MuseScore.NotationScene", 1, 0, "UndoRedoHistoryModel");
     qmlRegisterType<TimelineView>("MuseScore.NotationScene", 1, 0, "TimelineView");
     qmlRegisterType<SelectionFilterModel>("MuseScore.NotationScene", 1, 0, "SelectionFilterModel");
     qmlRegisterType<EditGridSizeDialogModel>("MuseScore.NotationScene", 1, 0, "EditGridSizeDialogModel");
@@ -184,6 +185,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<HarpPedalPopupModel>("MuseScore.NotationScene", 1, 0, "HarpPedalPopupModel");
     qmlRegisterType<CapoSettingsModel>("MuseScore.NotationScene", 1, 0, "CapoSettingsModel");
     qmlRegisterType<StringTuningsSettingsModel>("MuseScore.NotationScene", 1, 0, "StringTuningsSettingsModel");
+    qmlRegisterType<PaintedEngravingItem>("MuseScore.NotationScene", 1, 0, "PaintedEngravingItem");
 
     qmlRegisterType<PercussionPanelModel>("MuseScore.NotationScene", 1, 0, "PercussionPanelModel");
     qmlRegisterUncreatableType<PanelMode>("MuseScore.NotationScene", 1, 0, "PanelMode", "Cannot create");

@@ -8907,7 +8907,7 @@ text x-height):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="131"/>
         <source>Open instruments dialog…</source>
-        <translation>Open instruments dialogue…</translation>
+        <translation>Open instruments dialog…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="137"/>
@@ -9064,7 +9064,7 @@ text x-height):</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="76"/>
         <source>Open playback setup dialog</source>
-        <translation>Open playback setup dialogue</translation>
+        <translation>Open playback setup dialog</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="101"/>
@@ -9627,7 +9627,7 @@ text x-height):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1305"/>
         <source>Chor&amp;d symbol</source>
-        <translation>Chor&amp;d symbol</translation>
+        <translation>C&amp;hord symbol</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1311"/>
@@ -10591,7 +10591,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public Licence vers
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="33"/>
         <source>Behind this dialog is the ‘Learn’ section, where you’ll find tutorials to get you started
 (Video tutorials require an internet connection)</source>
-        <translation>Behind this dialogue is the ‘Learn’ section, where you’ll find tutorials to get you started
+        <translation>Behind this dialog is the ‘Learn’ section, where you’ll find tutorials to get you started
 (Video tutorials require an internet connection)</translation>
     </message>
     <message>

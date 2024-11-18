@@ -561,6 +561,10 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
                 } else if (e->isTempoText()) {
                     TempoText* tt = toTempoText(e);
 
+                    if (!tt->playTempoText()) {
+                        continue;
+                    }
+
                     if (tt->isNormal() && !tt->isRelative() && !tempoPrimo) {
                         tempoPrimo = tt->tempo();
                     } else if (tt->isRelative()) {
@@ -631,7 +635,7 @@ void Score::fixAnacrusisTempo(const std::vector<Measure*>& measures) const
         for (const Segment& s : m->segments()) {
             if (s.isChordRestType()) {
                 for (EngravingItem* e : s.annotations()) {
-                    if (e->isTempoText()) {
+                    if (e->isTempoText() && toTempoText(e)->playTempoText()) {
                         return toTempoText(e);
                     }
                 }
@@ -4334,7 +4338,7 @@ void Score::cmdSelectSection()
 
 void Score::undo(UndoCommand* cmd, EditData* ed) const
 {
-    undoStack()->push(cmd, ed);
+    undoStack()->pushAndPerform(cmd, ed);
 }
 
 //---------------------------------------------------------
@@ -5728,6 +5732,9 @@ void Score::connectTies(bool silent)
             }
             Chord* c = toChord(e);
             for (Note* n : c->notes()) {
+                if (n->laissezVib()) {
+                    continue;
+                }
                 // connect a tie without end note
                 Tie* tie = n->tieFor();
                 if (tie && !tie->endNote()) {

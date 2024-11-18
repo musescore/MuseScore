@@ -51,7 +51,7 @@ Item {
         return false
     }
 
-    readonly property var currentPage: pageLoader.item
+    readonly property Item currentPage: pageLoader.item
 
     signal done
 

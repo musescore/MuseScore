@@ -173,7 +173,7 @@ Item {
             navigation.row: 0
 
             onClicked: {
-                api.launcher.open("muse://devtools/interactive/sample")
+                root.model.customizeKit()
             }
         }
     }

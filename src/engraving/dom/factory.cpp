@@ -59,6 +59,7 @@
 #include "instrumentname.h"
 #include "jump.h"
 #include "keysig.h"
+#include "laissezvib.h"
 #include "layoutbreak.h"
 #include "letring.h"
 #include "lyrics.h"
@@ -69,6 +70,7 @@
 #include "mmrest.h"
 #include "mmrestrange.h"
 #include "note.h"
+#include "noteline.h"
 #include "ornament.h"
 #include "ottava.h"
 #include "page.h"
@@ -137,6 +139,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::VOLTA:             return new Volta(parent);
     case ElementType::OTTAVA:            return new Ottava(parent);
     case ElementType::TEXTLINE:          return new TextLine(parent);
+    case ElementType::NOTELINE:          return new NoteLine(parent);
     case ElementType::TRILL:             return new Trill(parent);
     case ElementType::LET_RING:          return new LetRing(parent);
     case ElementType::GRADUAL_TEMPO_CHANGE: return new GradualTempoChange(parent);
@@ -231,17 +234,20 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::FRET_CIRCLE:       return new FretCircle(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::STRING_TUNINGS:      return new StringTunings(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::TIME_TICK_ANCHOR:  return new TimeTickAnchor(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::LAISSEZ_VIB:       return new LaissezVib(parent->isNote() ? toNote(parent) : dummy->note());
 
     case ElementType::LYRICSLINE:
     case ElementType::TEXTLINE_BASE:
     case ElementType::TEXTLINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
+    case ElementType::NOTELINE_SEGMENT:
     case ElementType::GUITAR_BEND_SEGMENT:
     case ElementType::GUITAR_BEND_HOLD:
     case ElementType::GUITAR_BEND_HOLD_SEGMENT:
     case ElementType::GUITAR_BEND_TEXT:
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
+    case ElementType::LAISSEZ_VIB_SEGMENT:
     case ElementType::STEM_SLASH:
     case ElementType::PAGE:
     case ElementType::BEAM:
@@ -418,6 +424,9 @@ CREATE_ITEM_IMPL(KeySig, ElementType::KEYSIG, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(KeySig)
 MAKE_ITEM_IMPL(KeySig, Segment)
 
+CREATE_ITEM_IMPL(LaissezVib, ElementType::LAISSEZ_VIB, Note, isAccessibleEnabled)
+COPY_ITEM_IMPL(LaissezVib);
+
 CREATE_ITEM_IMPL(LayoutBreak, ElementType::LAYOUT_BREAK, MeasureBase, isAccessibleEnabled)
 COPY_ITEM_IMPL(LayoutBreak)
 MAKE_ITEM_IMPL(LayoutBreak, MeasureBase)
@@ -449,7 +458,10 @@ CREATE_ITEM_IMPL(NoteDot, ElementType::NOTEDOT, Note, isAccessibleEnabled)
 CREATE_ITEM_IMPL(NoteDot, ElementType::NOTEDOT, Rest, isAccessibleEnabled)
 COPY_ITEM_IMPL(NoteDot)
 
-Page* Factory::createPage(RootItem * parent, bool isAccessibleEnabled)
+CREATE_ITEM_IMPL(NoteLine, ElementType::NOTELINE, Note, isAccessibleEnabled)
+MAKE_ITEM_IMPL(NoteLine, Note);
+
+Page* Factory::createPage(RootItem* parent, bool isAccessibleEnabled)
 {
     Page* page = new Page(parent);
     page->setAccessibleEnabled(isAccessibleEnabled);
@@ -612,7 +624,13 @@ Text* Factory::createText(EngravingItem * parent, TextStyleType tid, bool isAcce
 COPY_ITEM_IMPL(Text)
 
 CREATE_ITEM_IMPL(Tie, ElementType::TIE, EngravingItem, isAccessibleEnabled)
-COPY_ITEM_IMPL(Tie)
+Tie* Factory::copyTie(const Tie& src)
+{
+    Tie* copy = src.isLaissezVib() ? new LaissezVib(*toLaissezVib(&src)) : new Tie(src);
+    copy->setAccessibleEnabled(src.accessibleEnabled());
+
+    return copy;
+}
 
 CREATE_ITEM_IMPL(TimeSig, ElementType::TIMESIG, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(TimeSig)

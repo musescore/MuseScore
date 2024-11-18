@@ -282,7 +282,7 @@ void UndoCommand::unwind()
     while (!childList.empty()) {
         UndoCommand* c = muse::takeLast(childList);
         LOG_UNDO() << "unwind: " << c->name();
-        c->undo(0);
+        c->undo(nullptr);
         delete c;
     }
 }
@@ -293,11 +293,11 @@ void UndoCommand::unwind()
 
 UndoStack::UndoStack()
 {
-    curCmd   = 0;
-    curIdx   = 0;
-    cleanState = 0;
-    stateList.push_back(cleanState);
-    nextState = 1;
+    m_activeCommand = nullptr;
+    m_currentIndex = 0;
+    m_cleanState = 0;
+    m_stateList.push_back(m_cleanState);
+    m_nextState = 1;
 }
 
 //---------------------------------------------------------
@@ -307,46 +307,46 @@ UndoStack::UndoStack()
 UndoStack::~UndoStack()
 {
     size_t idx = 0;
-    for (auto c : list) {
-        c->cleanup(idx++ < curIdx);
+    for (auto c : m_macroList) {
+        c->cleanup(idx++ < m_currentIndex);
     }
-    muse::DeleteAll(list);
+    muse::DeleteAll(m_macroList);
 }
 
-bool UndoStack::locked() const
+bool UndoStack::isLocked() const
 {
-    return isLocked;
+    return m_isLocked;
 }
 
-void UndoStack::setLocked(bool val)
+void UndoStack::setLocked(bool locked)
 {
-    isLocked = val;
+    m_isLocked = locked;
 }
 
 //---------------------------------------------------------
 //   beginMacro
 //---------------------------------------------------------
 
-void UndoStack::beginMacro(Score* score)
+void UndoStack::beginMacro(Score* score, const TranslatableString& actionName)
 {
-    if (isLocked) {
+    if (m_isLocked) {
         return;
     }
 
-    if (curCmd) {
+    if (m_activeCommand) {
         LOGW("already active");
         return;
     }
-    curCmd = new UndoMacro(score);
+    m_activeCommand = new UndoMacro(score, actionName);
 }
 
 //---------------------------------------------------------
 //   push
 //---------------------------------------------------------
 
-void UndoStack::push(UndoCommand* cmd, EditData* ed)
+void UndoStack::pushAndPerform(UndoCommand* cmd, EditData* ed)
 {
-    if (!curCmd) {
+    if (!m_activeCommand) {
         // this can happen for layout() outside of a command (load)
         if (!ScoreLoad::loading()) {
             LOG_UNDO() << "no active command, UndoStack";
@@ -364,7 +364,7 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
         LOG_UNDO() << cmd->name();
     }
 #endif
-    curCmd->appendChild(cmd);
+    m_activeCommand->appendChild(cmd);
     cmd->redo(ed);
 }
 
@@ -372,15 +372,15 @@ void UndoStack::push(UndoCommand* cmd, EditData* ed)
 //   push1
 //---------------------------------------------------------
 
-void UndoStack::push1(UndoCommand* cmd)
+void UndoStack::pushWithoutPerforming(UndoCommand* cmd)
 {
-    if (!curCmd) {
+    if (!m_activeCommand) {
         if (!ScoreLoad::loading()) {
             LOGW("no active command, UndoStack %p", this);
         }
         return;
     }
-    curCmd->appendChild(cmd);
+    m_activeCommand->appendChild(cmd);
 }
 
 //---------------------------------------------------------
@@ -389,23 +389,23 @@ void UndoStack::push1(UndoCommand* cmd)
 
 void UndoStack::remove(size_t idx)
 {
-    assert(idx <= curIdx);
-    assert(curIdx != muse::nidx);
+    assert(idx <= m_currentIndex);
+    assert(m_currentIndex != muse::nidx);
     // remove redo stack
-    while (list.size() > curIdx) {
-        UndoCommand* cmd = muse::takeLast(list);
-        stateList.pop_back();
+    while (m_macroList.size() > m_currentIndex) {
+        UndoCommand* cmd = muse::takeLast(m_macroList);
+        m_stateList.pop_back();
         cmd->cleanup(false);      // delete elements for which UndoCommand() holds ownership
         delete cmd;
 //            --curIdx;
     }
-    while (list.size() > idx) {
-        UndoCommand* cmd = muse::takeLast(list);
-        stateList.pop_back();
+    while (m_macroList.size() > idx) {
+        UndoCommand* cmd = muse::takeLast(m_macroList);
+        m_stateList.pop_back();
         cmd->cleanup(true);
         delete cmd;
     }
-    curIdx = idx;
+    m_currentIndex = idx;
 }
 
 //---------------------------------------------------------
@@ -414,16 +414,16 @@ void UndoStack::remove(size_t idx)
 
 void UndoStack::mergeCommands(size_t startIdx)
 {
-    assert(startIdx <= curIdx);
+    assert(startIdx <= m_currentIndex);
 
-    if (startIdx >= list.size()) {
+    if (startIdx >= m_macroList.size()) {
         return;
     }
 
-    UndoMacro* startMacro = list[startIdx];
+    UndoMacro* startMacro = m_macroList[startIdx];
 
-    for (size_t idx = startIdx + 1; idx < curIdx; ++idx) {
-        startMacro->append(std::move(*list[idx]));
+    for (size_t idx = startIdx + 1; idx < m_currentIndex; ++idx) {
+        startMacro->append(std::move(*m_macroList[idx]));
     }
     remove(startIdx + 1);   // TODO: remove from startIdx to curIdx only
 }
@@ -434,14 +434,14 @@ void UndoStack::mergeCommands(size_t startIdx)
 
 void UndoStack::pop()
 {
-    if (!curCmd) {
+    if (!m_activeCommand) {
         if (!ScoreLoad::loading()) {
             LOGW("no active command");
         }
         return;
     }
-    UndoCommand* cmd = curCmd->removeChild();
-    cmd->undo(0);
+    UndoCommand* cmd = m_activeCommand->removeChild();
+    cmd->undo(nullptr);
 }
 
 //---------------------------------------------------------
@@ -450,29 +450,29 @@ void UndoStack::pop()
 
 void UndoStack::endMacro(bool rollback)
 {
-    if (isLocked) {
+    if (m_isLocked) {
         return;
     }
 
-    if (curCmd == 0) {
+    if (m_activeCommand == nullptr) {
         LOGW("not active");
         return;
     }
     if (rollback) {
-        delete curCmd;
+        delete m_activeCommand;
     } else {
         // remove redo stack
-        while (list.size() > curIdx) {
-            UndoCommand* cmd = muse::takeLast(list);
-            stateList.pop_back();
+        while (m_macroList.size() > m_currentIndex) {
+            UndoCommand* cmd = muse::takeLast(m_macroList);
+            m_stateList.pop_back();
             cmd->cleanup(false);        // delete elements for which UndoCommand() holds ownership
             delete cmd;
         }
-        list.push_back(curCmd);
-        stateList.push_back(nextState++);
-        ++curIdx;
+        m_macroList.push_back(m_activeCommand);
+        m_stateList.push_back(m_nextState++);
+        ++m_currentIndex;
     }
-    curCmd = 0;
+    m_activeCommand = nullptr;
 }
 
 //---------------------------------------------------------
@@ -481,17 +481,17 @@ void UndoStack::endMacro(bool rollback)
 
 void UndoStack::reopen()
 {
-    if (isLocked) {
+    if (m_isLocked) {
         return;
     }
 
-    LOG_UNDO() << "curIdx: " << curIdx << ", size: " << list.size();
-    assert(curCmd == 0);
-    assert(curIdx > 0);
-    --curIdx;
-    curCmd = muse::takeAt(list, curIdx);
-    stateList.erase(stateList.begin() + curIdx);
-    for (auto i : curCmd->commands()) {
+    LOG_UNDO() << "curIdx: " << m_currentIndex << ", size: " << m_macroList.size();
+    assert(m_activeCommand == nullptr);
+    assert(m_currentIndex > 0);
+    --m_currentIndex;
+    m_activeCommand = muse::takeAt(m_macroList, m_currentIndex);
+    m_stateList.erase(m_stateList.begin() + m_currentIndex);
+    for (auto i : m_activeCommand->commands()) {
         LOG_UNDO() << "   " << i->name();
     }
 }
@@ -506,15 +506,15 @@ void UndoStack::undo(EditData* ed)
     // Are we currently editing text?
     if (ed && ed->editTextualProperties && ed->element && ed->element->isTextBase()) {
         TextEditData* ted = dynamic_cast<TextEditData*>(ed->getData(ed->element).get());
-        if (ted && ted->startUndoIdx == curIdx) {
+        if (ted && ted->startUndoIdx == m_currentIndex) {
             // No edits to undo, so do nothing
             return;
         }
     }
-    if (curIdx) {
-        --curIdx;
-        assert(curIdx < list.size());
-        list[curIdx]->undo(ed);
+    if (m_currentIndex) {
+        --m_currentIndex;
+        assert(m_currentIndex < m_macroList.size());
+        m_macroList[m_currentIndex]->undo(ed);
     }
 }
 
@@ -526,7 +526,7 @@ void UndoStack::redo(EditData* ed)
 {
     LOG_UNDO() << "called";
     if (canRedo()) {
-        list[curIdx++]->redo(ed);
+        m_macroList[m_currentIndex++]->redo(ed);
     }
 }
 
@@ -574,8 +574,8 @@ void UndoMacro::applySelectionInfo(const SelectionInfo& info, Selection& sel)
     }
 }
 
-UndoMacro::UndoMacro(Score* s)
-    : m_undoInputState(s->inputState()), m_score(s)
+UndoMacro::UndoMacro(Score* s, const TranslatableString& actionName)
+    : m_undoInputState(s->inputState()), m_actionName(actionName), m_score(s)
 {
     fillSelectionInfo(m_undoSelectionInfo, s->selection());
 }
@@ -682,6 +682,11 @@ UndoMacro::ChangesInfo UndoMacro::changesInfo() const
     return result;
 }
 
+const TranslatableString& UndoMacro::actionName() const
+{
+    return m_actionName;
+}
+
 //---------------------------------------------------------
 //   CloneVoice
 //---------------------------------------------------------
@@ -712,7 +717,7 @@ void CloneVoice::undo(EditData*)
             EngravingItem* el = seg->element(dTrack);
             if (el && el->isChordRest()) {
                 el->unlink();
-                seg->setElement(dTrack, 0);
+                seg->setElement(dTrack, nullptr);
             }
         }
     }
@@ -751,12 +756,12 @@ void CloneVoice::undo(EditData*)
         }
         // Set rests if first voice in a staff
         if (!(sTrack % VOICES)) {
-            s->setRest(destSeg->tick(), sTrack, ticks, false, 0);
+            s->setRest(destSeg->tick(), sTrack, ticks, false, nullptr);
         }
     } else {
         s->cloneVoice(sTrack, dTrack, sourceSeg, ticks, linked);
         if (!linked && !(dTrack % VOICES)) {
-            s->setRest(destSeg->tick(), dTrack, ticks, false, 0);
+            s->setRest(destSeg->tick(), dTrack, ticks, false, nullptr);
         }
 
         // Remove annotations
@@ -800,7 +805,7 @@ void CloneVoice::redo(EditData*)
             EngravingItem* el = seg->element(dtrack);
             if (el && el->isChordRest()) {
                 el->unlink();
-                seg->setElement(dtrack, 0);
+                seg->setElement(dtrack, nullptr);
             }
         }
     }
@@ -838,7 +843,7 @@ void CloneVoice::redo(EditData*)
         }
         // Set rests if first voice in a staff
         if (!(strack % VOICES)) {
-            s->setRest(destSeg->tick(), strack, ticks, false, 0);
+            s->setRest(destSeg->tick(), strack, ticks, false, nullptr);
         }
     } else {
         s->cloneVoice(strack, dtrack, sourceSeg, ticks, linked, first);
@@ -863,7 +868,7 @@ void AddElement::cleanup(bool undo)
 {
     if (!undo) {
         delete element;
-        element = 0;
+        element = nullptr;
     }
 }
 
@@ -1068,7 +1073,7 @@ void RemoveElement::cleanup(bool undo)
 {
     if (undo) {
         delete element;
-        element = 0;
+        element = nullptr;
     }
 }
 
@@ -1519,7 +1524,7 @@ void ChangeElement::flip(EditData*)
         }
     }
 
-    if (oldElement->explicitParent() == 0) {
+    if (oldElement->explicitParent() == nullptr) {
         newElement->setScore(score);
         score->removeElement(oldElement);
         score->addElement(newElement);
@@ -2279,7 +2284,7 @@ void InsertRemoveMeasures::insertMeasures()
     for (Segment* seg = m->first(); seg; seg = seg->next()) {
         for (track_idx_t track = 0; track < score->ntracks(); ++track) {
             EngravingItem* e = seg->element(track);
-            if (e == 0 || !e->isChord()) {
+            if (!e || !e->isChord()) {
                 continue;
             }
             Chord* chord = toChord(e);
@@ -2817,7 +2822,7 @@ void ChangeSpannerElements::flip(EditData*)
                 newStartNote->addSpannerFor(spanner);
                 newEndNote->addSpannerBack(spanner);
                 if (spanner->isGlissando()) {
-                    oldEndNote->chord()->updateEndsGlissandoOrGuitarBend();
+                    oldEndNote->chord()->updateEndsNoteAnchoredLine();
                 }
             }
         }
@@ -2942,11 +2947,11 @@ void LinkUnlink::unlink()
     assert(le->contains(e));
     le->remove(e);
     if (le->size() == 1) {
-        le->front()->setLinks(0);
+        le->front()->setLinks(nullptr);
         mustDelete = true;
     }
 
-    e->setLinks(0);
+    e->setLinks(nullptr);
 }
 
 //---------------------------------------------------------
@@ -2956,7 +2961,7 @@ void LinkUnlink::unlink()
 
 Link::Link(EngravingObject* e1, EngravingObject* e2)
 {
-    assert(e1->links() == 0);
+    assert(e1->links() == nullptr);
     le = e2->links();
     if (!le) {
         if (e1->isStaff()) {

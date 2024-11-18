@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
@@ -13,6 +13,7 @@
       <pageOddTopMargin>0.393701</pageOddTopMargin>
       <pageOddBottomMargin>0.787403</pageOddBottomMargin>
       <lastSystemFillLimit>0</lastSystemFillLimit>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <createMultiMeasureRests>1</createMultiMeasureRests>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
@@ -98,10 +99,28 @@
       <Measure>
         <voice>
           <TimeSig>
+            <linkedMain/>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <multiMeasureRest>1</multiMeasureRest>
+        <voice>
+          <TimeSig>
+            <linked>
+              <indexDiff>-1</indexDiff>
+              </linked>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <placement>above</placement>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -138,6 +157,7 @@
           </LayoutBreak>
         <voice>
           <Rest>
+            <placement>above</placement>
             <durationType>measure</durationType>
             <duration>12/4</duration>
             </Rest>
@@ -184,6 +204,7 @@
           </LayoutBreak>
         <voice>
           <Rest>
+            <placement>above</placement>
             <durationType>measure</durationType>
             <duration>16/4</duration>
             </Rest>
@@ -243,6 +264,7 @@
           </LayoutBreak>
         <voice>
           <Rest>
+            <placement>above</placement>
             <durationType>measure</durationType>
             <duration>16/4</duration>
             </Rest>
@@ -297,6 +319,7 @@
           </LayoutBreak>
         <voice>
           <Rest>
+            <placement>above</placement>
             <durationType>measure</durationType>
             <duration>16/4</duration>
             </Rest>

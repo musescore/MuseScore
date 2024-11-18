@@ -53,13 +53,8 @@ void NotationUndoStack::undo(mu::engraving::EditData* editData)
     score()->undoRedo(true, editData);
 
     notifyAboutNotationChanged();
-    notifyAboutUndo();
+    notifyAboutUndoRedo();
     notifyAboutStateChanged();
-}
-
-Notification NotationUndoStack::undoNotification() const
-{
-    return m_undoNotification;
 }
 
 bool NotationUndoStack::canRedo() const
@@ -80,16 +75,34 @@ void NotationUndoStack::redo(mu::engraving::EditData* editData)
     score()->undoRedo(false, editData);
 
     notifyAboutNotationChanged();
-    notifyAboutRedo();
+    notifyAboutUndoRedo();
     notifyAboutStateChanged();
 }
 
-Notification NotationUndoStack::redoNotification() const
+void NotationUndoStack::undoRedoToIdx(size_t idx, mu::engraving::EditData* editData)
 {
-    return m_redoNotification;
+    auto stack = undoStack();
+
+    IF_ASSERT_FAILED(stack) {
+        return;
+    }
+
+    if (stack->currentIndex() > idx) {
+        while (stack->currentIndex() > idx && stack->canUndo()) {
+            score()->undoRedo(true, editData);
+        }
+    } else {
+        while (stack->currentIndex() <= idx && stack->canRedo()) {
+            score()->undoRedo(false, editData);
+        }
+    }
+
+    notifyAboutNotationChanged();
+    notifyAboutUndoRedo();
+    notifyAboutStateChanged();
 }
 
-void NotationUndoStack::prepareChanges()
+void NotationUndoStack::prepareChanges(const muse::TranslatableString& actionName)
 {
     IF_ASSERT_FAILED(score()) {
         return;
@@ -99,7 +112,7 @@ void NotationUndoStack::prepareChanges()
         return;
     }
 
-    score()->startCmd();
+    score()->startCmd(actionName);
 }
 
 void NotationUndoStack::rollbackChanges()
@@ -159,7 +172,64 @@ void NotationUndoStack::unlock()
 
 bool NotationUndoStack::isLocked() const
 {
-    return undoStack()->locked();
+    return undoStack()->isLocked();
+}
+
+const muse::TranslatableString NotationUndoStack::topMostUndoActionName() const
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        return {};
+    }
+
+    if (auto action = undoStack()->last()) {
+        return action->actionName();
+    }
+
+    return {};
+}
+
+const muse::TranslatableString NotationUndoStack::topMostRedoActionName() const
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        return {};
+    }
+
+    if (auto action = undoStack()->next()) {
+        return action->actionName();
+    }
+
+    return {};
+}
+
+size_t NotationUndoStack::undoRedoActionCount() const
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        return 0;
+    }
+
+    return undoStack()->size();
+}
+
+size_t NotationUndoStack::undoRedoActionCurrentIdx() const
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        return muse::nidx;
+    }
+
+    return undoStack()->currentIndex();
+}
+
+const muse::TranslatableString NotationUndoStack::undoRedoActionNameAtIdx(size_t idx) const
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        return {};
+    }
+
+    if (auto action = undoStack()->atIndex(idx)) {
+        return action->actionName();
+    }
+
+    return {};
 }
 
 muse::async::Notification NotationUndoStack::stackChanged() const
@@ -174,6 +244,11 @@ muse::async::Channel<ChangesRange> NotationUndoStack::changesChannel() const
     }
 
     return score()->changesChannel();
+}
+
+Notification NotationUndoStack::undoRedoNotification() const
+{
+    return m_undoRedoNotification;
 }
 
 mu::engraving::Score* NotationUndoStack::score() const
@@ -201,12 +276,7 @@ void NotationUndoStack::notifyAboutStateChanged()
     m_stackStateChanged.notify();
 }
 
-void NotationUndoStack::notifyAboutUndo()
+void NotationUndoStack::notifyAboutUndoRedo()
 {
-    m_undoNotification.notify();
-}
-
-void NotationUndoStack::notifyAboutRedo()
-{
-    m_redoNotification.notify();
+    m_undoRedoNotification.notify();
 }

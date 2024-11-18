@@ -144,10 +144,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomiseitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/continuouspanel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/continuouspanel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/paintedengravingitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/paintedengravingitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractelementpopupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractelementpopupmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredomodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredomodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredotoolbarmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredotoolbarmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredohistorymodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredohistorymodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/harppedalpopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/harppedalpopupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/caposettingsmodel.cpp
@@ -173,6 +177,11 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/utilities/engravingitempreviewpainter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/utilities/engravingitempreviewpainter.h
+    ${CMAKE_CURRENT_LIST_DIR}/utilities/percussionutilities.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/utilities/percussionutilities.h
 
     ${WIDGETS_SRC}
     ${STYLEDIALOG_SRC}

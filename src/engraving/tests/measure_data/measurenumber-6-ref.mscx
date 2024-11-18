@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
       <measureNumberInterval>1</measureNumberInterval>
       <measureNumberSystem>0</measureNumberSystem>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <measureNumberVPlacement>1</measureNumberVPlacement>
       <measureNumberHPlacement>1</measureNumberHPlacement>
       <pageNumberFontSize>9</pageNumberFontSize>
