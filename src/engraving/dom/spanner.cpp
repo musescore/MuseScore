@@ -1146,6 +1146,7 @@ Measure* Spanner::startMeasure() const
 
 Measure* Spanner::endMeasure() const
 {
+    assert(anchor() == Spanner::Anchor::MEASURE);
     return toMeasure(m_endElement);
 }
 

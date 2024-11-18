@@ -309,7 +309,7 @@ private:
     bool needStartEditGrip(QKeyEvent* event) const;
     bool handleKeyPress(QKeyEvent* event);
 
-    void doEndEditElement(bool clearEditData = true);
+    void doEndEditElement();
     void doEndDrag();
 
     bool doDropStandard();
