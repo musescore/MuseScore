@@ -240,13 +240,17 @@ void Seq::setScoreView(ScoreView* v)
 
 void Seq::CachedPreferences::update()
       {
+#ifdef USE_PORTMIDI
       portMidiOutputLatencyMilliseconds = preferences.getInt(PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS);
+#endif
       jackTimeBaseMaster = preferences.getBool(PREF_IO_JACK_TIMEBASEMASTER);
       useJackTransport = preferences.getBool(PREF_IO_JACK_USEJACKTRANSPORT);
       useJackMidi = preferences.getBool(PREF_IO_JACK_USEJACKMIDI);
       useJackAudio = preferences.getBool(PREF_IO_JACK_USEJACKAUDIO);
       useAlsaAudio = preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO);
+#ifdef USE_PORTAUDIO
       usePortAudio = preferences.getBool(PREF_IO_PORTAUDIO_USEPORTAUDIO);
+#endif
       usePulseAudio = preferences.getBool(PREF_IO_PULSEAUDIO_USEPULSEAUDIO);
       }
 

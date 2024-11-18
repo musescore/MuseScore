@@ -78,15 +78,16 @@ ExportDialog::ExportDialog(Score* s, QWidget* parent)
       // Source: https://stackoverflow.com/a/38915478
       QStandardItemModel* fileTypeComboBoxModel = qobject_cast<QStandardItemModel*>(fileTypeComboBox->model());
       Q_ASSERT(fileTypeComboBoxModel != nullptr);
+      QStandardItem* audioItem;
 # ifndef USE_LAME
       // Disable .mp3 option if unavailable
-      QStandardItem* mp3Item = fileTypeComboBoxModel->item(3);
+      audioItem = fileTypeComboBoxModel->item(3);
       mp3Item->setFlags(audioItem->flags() & ~Qt::ItemIsEnabled);
 # endif
 # ifndef HAS_AUDIOFILE
       // Disable .wav, .flac and .ogg options if unavailable
       for (int i = 4; i < 7; i++) {
-            QStandardItem* audioItem = fileTypeComboBoxModel->item(i);
+            audioItem = fileTypeComboBoxModel->item(i);
             audioItem->setFlags(audioItem->flags() & ~Qt::ItemIsEnabled);
             }
 # endif
@@ -221,7 +222,7 @@ void ExportDialog::loadScoreAndPartsList()
       ExportScoreItem* scoreItem = new ExportScoreItem(cs->masterScore()->score());
       listWidget->addItem(scoreItem);
       
-      for (Excerpt* e : cs->masterScore()->excerpts()) {
+      for (Excerpt*& e : cs->masterScore()->excerpts()) {
             Score* s = e->partScore();
             ExportScoreItem* item = new ExportScoreItem(s);
             item->setChecked(s == cs);
@@ -527,13 +528,13 @@ void ExportDialog::accept()
             // Export the selected scores as separate files, appending the part names to the filename
             SaveReplacePolicy replacePolicy = SaveReplacePolicy::NO_CHOICE;
 
-            for (Score* score : scores) {
+            for (Score*& score : scores) {
                   QString definitiveFilename = QString("%1/%2%3.%4")
                         .arg(fileinfo.absolutePath(),
                              fileinfo.completeBaseName(),
                              score->isMaster() ? "" : "-" + mscore->saveFilename(score->title()),
                              suffix);
-                  if (saveFormat != "png" && saveFormat != "svg" && QFileInfo(definitiveFilename).exists()) {
+                  if (saveFormat != "png" && saveFormat != "svg" && QFileInfo::exists(definitiveFilename)) {
                         // Png and Svg export functions change the filename, so they
                         // are responsible for asking the user about overwriting.
                         switch (replacePolicy) {

@@ -18,22 +18,21 @@
 //=============================================================================
 
 #include "musescore.h"
-#include "timeline.h"
+#include "pathlistdialog.h"
 #include "preferences.h"
 #include "prefsdialog.h"
+#include "resourceManager.h"
 #include "seq.h"
-#include "shortcutcapturedialog.h"
 #include "scoreview.h"
 #include "shortcut.h"
+#include "shortcutcapturedialog.h"
+#include "timeline.h"
 #include "workspace.h"
 
 #include "audio/drivers/pa.h"
 #ifdef USE_PORTMIDI
 #include "audio/drivers/pm.h"
 #endif
-
-#include "pathlistdialog.h"
-#include "resourceManager.h"
 
 #ifdef AVSOMR
 #include "avsomr/avsomrlocal.h"
@@ -246,7 +245,11 @@ PreferenceDialog::PreferenceDialog(QWidget* parent)
       recordButtons->addButton(recordEditMode, RMIDI_NOTE_EDIT_MODE);
       recordButtons->addButton(recordRealtimeAdvance, RMIDI_REALTIME_ADVANCE);
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+      connect(recordButtons,              QOverload<int>::of(&QButtonGroup::idClicked), this, &PreferenceDialog::recordButtonClicked);
+#else
       connect(recordButtons,              QOverload<int>::of(&QButtonGroup::buttonClicked), this, &PreferenceDialog::recordButtonClicked);
+#endif
       connect(midiRemoteControlClear,     &QToolButton::clicked, this, &PreferenceDialog::midiRemoteControlClearClicked);
       connect(portaudioDriver,            &QGroupBox::toggled, this, &PreferenceDialog::exclusiveAudioDriver);
       connect(pulseaudioDriver,           &QGroupBox::toggled, this, &PreferenceDialog::exclusiveAudioDriver);
@@ -501,23 +504,25 @@ void PreferenceDialog::start()
       audioRelatedWidgets = std::vector<PreferenceItem*>{
                   new BoolPreferenceItem(PREF_IO_ALSA_USEALSAAUDIO, alsaDriver, doNothing),
                   new BoolPreferenceItem(PREF_IO_JACK_USEJACKAUDIO, useJackAudio, doNothing),
+#ifdef USE_PORTAUDIO
                   new BoolPreferenceItem(PREF_IO_PORTAUDIO_USEPORTAUDIO, portaudioDriver, doNothing),
+#endif
                   new BoolPreferenceItem(PREF_IO_PULSEAUDIO_USEPULSEAUDIO, pulseaudioDriver, doNothing),
                   new BoolPreferenceItem(PREF_IO_JACK_USEJACKMIDI, useJackMidi, doNothing),
                   new BoolPreferenceItem(PREF_IO_JACK_USEJACKTRANSPORT, useJackTransport, doNothing),
                   new BoolPreferenceItem(PREF_IO_JACK_TIMEBASEMASTER, becomeTimebaseMaster, doNothing),
                   new BoolPreferenceItem(PREF_IO_JACK_REMEMBERLASTCONNECTIONS, rememberLastMidiConnections, doNothing),
-            #ifdef USE_ALSA
+#ifdef USE_ALSA
                   new StringPreferenceItem(PREF_IO_ALSA_DEVICE, alsaDevice, doNothing),
                   new IntPreferenceItem(PREF_IO_ALSA_SAMPLERATE, alsaSampleRate, doNothing),
                   new IntPreferenceItem(PREF_IO_ALSA_PERIODSIZE, alsaPeriodSize, doNothing),
                   new IntPreferenceItem(PREF_IO_ALSA_FRAGMENTS, alsaFragments, doNothing),
-            #endif
-            #ifdef USE_PORTAUDIO
+#endif
+#ifdef USE_PORTAUDIO
                   new IntPreferenceItem(PREF_IO_PORTAUDIO_DEVICE, portaudioApi, doNothing, doNothing),
                   new IntPreferenceItem(PREF_IO_PORTAUDIO_DEVICE, portaudioDevice, doNothing, doNothing),
-            #endif
-            #ifdef USE_PORTMIDI
+#endif
+#ifdef USE_PORTMIDI
                   new StringPreferenceItem(PREF_IO_PORTMIDI_INPUTDEVICE, portMidiInput, doNothing, doNothing),
                   new StringPreferenceItem(PREF_IO_PORTMIDI_OUTPUTDEVICE, portMidiOutput, doNothing, doNothing),
                   new IntPreferenceItem(PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS, portMidiOutputLatencyMilliseconds),
@@ -593,7 +598,7 @@ void PreferenceDialog::hideEvent(QHideEvent* ev)
 
 void PreferenceDialog::recordButtonClicked(int val)
       {
-      for (QAbstractButton* b : recordButtons->buttons()) {
+      for (QAbstractButton*& b : recordButtons->buttons()) {
             b->setChecked(recordButtons->id(b) == val);
             }
       mscore->setMidiRecordId(val);
@@ -795,7 +800,7 @@ bool ShortcutItem::operator<(const QTreeWidgetItem& item) const
 void PreferenceDialog::updateSCListView()
       {
       shortcutList->clear();
-      for (Shortcut* s : localShortcuts) {
+      for (Shortcut*& s : localShortcuts) {
             if (!s)
                   continue;
             ShortcutItem* newItem = new ShortcutItem;
@@ -805,7 +810,7 @@ void PreferenceDialog::updateSCListView()
             newItem->setText(1, s->keysToString());
             newItem->setData(0, Qt::UserRole, s->key());
             QString accessibleInfo = tr("Action: %1; Shortcut: %2")
-               .arg(newItem->text(0)).arg(newItem->text(1).isEmpty()
+               .arg(newItem->text(0), newItem->text(1).isEmpty()
                   ? tr("No shortcut defined") : newItem->text(1));
             newItem->setData(0, Qt::AccessibleTextRole, accessibleInfo);
             newItem->setData(1, Qt::AccessibleTextRole, accessibleInfo);
@@ -925,7 +930,7 @@ void PreferenceDialog::filterAdvancedPreferences(const QString& query)
 void PreferenceDialog::resetAdvancedPreferenceToDefault()
       {
       preferences.setReturnDefaultValuesMode(true);
-      for (QTreeWidgetItem* item : advancedWidget->selectedItems()) {
+      for (QTreeWidgetItem*& item : advancedWidget->selectedItems()) {
             PreferenceItem* pref = static_cast<PreferenceItem*>(item);
             pref->setDefaultValue();
             }
@@ -1170,7 +1175,7 @@ void PreferenceDialog::updateCharsetListGP()
       std::sort(charsets.begin(), charsets.end());
       int idx = 0;
       importCharsetListGP->clear();
-      for (QByteArray charset : charsets) {
+      for (QByteArray& charset : charsets) {
             importCharsetListGP->addItem(charset);
             if (charset == preferences.getString(PREF_IMPORT_GUITARPRO_CHARSET))
                   importCharsetListGP->setCurrentIndex(idx);
@@ -1188,7 +1193,7 @@ void PreferenceDialog::updateCharsetListOve()
       std::sort(charsets.begin(), charsets.end());
       int idx = 0;
       importCharsetListOve->clear();
-      for (QByteArray charset : charsets) {
+      for (QByteArray& charset : charsets) {
             importCharsetListOve->addItem(charset);
             if (charset == preferences.getString(PREF_IMPORT_OVERTURE_CHARSET))
                   importCharsetListOve->setCurrentIndex(idx);
@@ -1230,9 +1235,9 @@ void PreferenceDialog::applyPageVertical()
       const auto cv = mscore->currentScoreView();
       preferences.setPreference(PREF_UI_CANVAS_SCROLL_VERTICALORIENTATION, pageVertical->isChecked());
       MScore::setVerticalOrientation(pageVertical->isChecked());
-      for (Score* s : mscore->scores()) {
+      for (Score* s : qAsConst(mscore->scores())) {
             s->doLayout();
-            for (Score* ss : s->scoreList())
+            for (Score*& ss : s->scoreList())
                   ss->doLayout();
             }
       if (cv)
@@ -1375,7 +1380,7 @@ void PreferenceDialog::apply()
       buttonBox->repaint();
 
       std::vector<QString> changedAdvancedProperties = advancedWidget->save();
-      for (auto x : changedAdvancedProperties)
+      for (auto& x : changedAdvancedProperties)
             if (x.startsWith("ui"))
                   uiStyleThemeChanged = true;
 
@@ -1426,35 +1431,39 @@ void PreferenceDialog::apply()
             else if (
                (wasJack != nowJack)
                || (preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO) != alsaDriver->isChecked())
+#ifdef USE_PORTAUDIO
                || (preferences.getBool(PREF_IO_PORTAUDIO_USEPORTAUDIO) != portaudioDriver->isChecked())
+#endif
                || (preferences.getBool(PREF_IO_PULSEAUDIO_USEPULSEAUDIO) != pulseaudioDriver->isChecked())
-      #ifdef USE_ALSA
+#ifdef USE_ALSA
                || (preferences.getString(PREF_IO_ALSA_DEVICE) != alsaDevice->text())
                || (preferences.getInt(PREF_IO_ALSA_SAMPLERATE) != alsaSampleRate->currentData().toInt())
                || (preferences.getInt(PREF_IO_ALSA_PERIODSIZE) != alsaPeriodSize->currentData().toInt())
                || (preferences.getInt(PREF_IO_ALSA_FRAGMENTS) != alsaFragments->value())
-      #endif
+#endif
                   ) {
                   preferences.setPreference(PREF_IO_ALSA_USEALSAAUDIO, alsaDriver->isChecked());
+#ifdef USE_PORTAUDIO
                   preferences.setPreference(PREF_IO_PORTAUDIO_USEPORTAUDIO, portaudioDriver->isChecked());
+#endif
                   preferences.setPreference(PREF_IO_PULSEAUDIO_USEPULSEAUDIO, pulseaudioDriver->isChecked());
-      #ifdef USE_ALSA
+#ifdef USE_ALSA
                   preferences.setPreference(PREF_IO_ALSA_DEVICE, alsaDevice->text());
                   preferences.setPreference(PREF_IO_ALSA_SAMPLERATE, alsaSampleRate->currentData().toInt());
                   preferences.setPreference(PREF_IO_ALSA_PERIODSIZE, alsaPeriodSize->currentData().toInt());
                   preferences.setPreference(PREF_IO_ALSA_FRAGMENTS, alsaFragments->value());
-      #endif
+#endif
 
                   restartAudioEngine();
                   }
-      #ifdef USE_PORTAUDIO
+#ifdef USE_PORTAUDIO
             if (portAudioIsUsed && !noSeq) {
                   Portaudio* audio = static_cast<Portaudio*>(seq->driver());
                   preferences.setPreference(PREF_IO_PORTAUDIO_DEVICE, audio->deviceIndex(portaudioApi->currentIndex(), portaudioDevice->currentIndex()));
                   }
-      #endif
+#endif
 
-      #ifdef USE_PORTMIDI
+#ifdef USE_PORTMIDI
             preferences.setPreference(PREF_IO_PORTMIDI_INPUTDEVICE, portMidiInput->currentText());
             preferences.setPreference(PREF_IO_PORTMIDI_OUTPUTDEVICE, portMidiOutput->currentText());
             preferences.setPreference(PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS, portMidiOutputLatencyMilliseconds->value());
@@ -1465,12 +1474,12 @@ void PreferenceDialog::apply()
                   msgBox.setText(tr("Warning: You used the same CoreMIDI IAC bus for input and output. This will cause problematic loopback, whereby MuseScore's output MIDI messages will be sent back to MuseScore as input, causing confusion. To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore's MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore's MIDI output. Other programs may then use that dedicated virtual port to receive MuseScore's MIDI output."));
                   msgBox.exec();
                   }
-      #endif
+#endif
             }
 
       if (shortcutsChanged) {
             shortcutsChanged = false;
-            for(const Shortcut* s : localShortcuts) {
+            for(Shortcut*& s : localShortcuts) {
                   Shortcut* os = Shortcut::getShortcut(s->key());
                   if (os) {
                         if (!os->compareKeys(*s))
@@ -1488,7 +1497,7 @@ void PreferenceDialog::apply()
             }
 
       emit preferencesChanged(false, uiStyleThemeChanged);
-      uiStyleThemeChanged = false;
+      //uiStyleThemeChanged = false;
       preferences.save();
       mscore->startAutoSave();
 
@@ -1890,7 +1899,7 @@ void PreferenceDialog::updateShortestNote()
 
 void PreferenceDialog::applyShortestNote()
       {
-      int ticks = MScore::division / 4;
+      int ticks;
       switch (shortestNote->currentIndex()) {
             case 0: ticks = MScore::division;       break;
             case 1: ticks = MScore::division / 2;   break;
