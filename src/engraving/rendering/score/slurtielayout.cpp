@@ -1930,7 +1930,7 @@ void SlurTieLayout::adjustXforLedgerLines(TieSegment* tieSegment, bool start, Ch
 
     Shape noteShape = note->shape();
     noteShape.remove_if([&](ShapeElement& s) {
-        return !s.item()->addToSkyline() || (tieSegment->isLaissezVibSegment() && s.item()->isLaissezVibSegment());
+        return !s.item()->addToSkyline() || s.item()->isNoteDot() || (tieSegment->isLaissezVibSegment() && s.item()->isLaissezVibSegment());
     });
     noteShape.translate(note->pos() + chordSystemPos);
     double xNoteEdge = (start ? noteShape.right() : -noteShape.left()) + padding;
