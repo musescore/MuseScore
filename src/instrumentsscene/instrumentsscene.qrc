@@ -5,6 +5,7 @@
         <file>qml/MuseScore/InstrumentsScene/LayoutPanel.qml</file>
         <file>qml/MuseScore/InstrumentsScene/InstrumentsDialog.qml</file>
         <file>qml/MuseScore/InstrumentsScene/internal/LayoutControlPanel.qml</file>
+        <file>qml/MuseScore/InstrumentsScene/internal/LayoutPanelAddButton.qml</file>
         <file>qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemDelegate.qml</file>
         <file>qml/MuseScore/InstrumentsScene/internal/LayoutPanelItemControl.qml</file>
         <file>qml/MuseScore/InstrumentsScene/internal/FamilyView.qml</file>
