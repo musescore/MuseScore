@@ -211,6 +211,10 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
     m_notation->scoreInited().onNotify(this, [this]() {
         onScoreInited();
     });
+
+    m_notation->viewModeChanged().onNotify(this, [this]() {
+        onViewModeChanged();
+    });
 }
 
 mu::engraving::Score* NotationInteraction::score() const
@@ -229,6 +233,29 @@ void NotationInteraction::onScoreInited()
     score()->elementDestroyed().onReceive(this, [this](mu::engraving::EngravingItem* element) {
         onElementDestroyed(element);
     });
+}
+
+void NotationInteraction::onViewModeChanged()
+{
+    if (!score()) {
+        return;
+    }
+
+    if (!score()->isLayoutMode(LayoutMode::LINE) && !score()->isLayoutMode(LayoutMode::HORIZONTAL_FIXED)) {
+        return;
+    }
+
+    // VBoxes are not included in horizontal layouts - deselect them (and their contents) when switching to horizontal mode...
+    const std::vector<EngravingItem*> sel = selection()->elements();
+    for (EngravingItem* item : sel) {
+        if (!item->findAncestor(ElementType::VBOX)) {
+            continue;
+        }
+        score()->deselect(item);
+        if (item == m_editData.element) {
+            endEditElement();
+        }
+    }
 }
 
 void NotationInteraction::startEdit()
@@ -2980,30 +3007,50 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
         el = score()->selection().elements().back();
     }
 
-    bool isLeftDirection = MoveDirection::Left == d;
+    const bool isLeftDirection = MoveDirection::Left == d;
 
-    if (!el) {
-        ChordRest* cr = score()->selection().currentCR();
-        if (cr) {
-            if (cr->isChord()) {
-                if (isLeftDirection) {
-                    el = toChord(cr)->upNote();
-                } else {
-                    el = toChord(cr)->downNote();
-                }
-            } else if (cr->isRest()) {
-                el = cr;
-            }
-            score()->select(el);
-        }
+    if (isTextEditingStarted() && el && el->isTextBase()) {
+        navigateToNearText(d);
+        return;
     }
+
+    const bool isHorizontalLayout = score()->isLayoutMode(LayoutMode::LINE) || score()->isLayoutMode(LayoutMode::HORIZONTAL_FIXED);
+
+    // VBoxes are not included in horizontal layouts - skip over them (and their contents) when moving selections...
+    const auto nextNonVBox = [this, isLeftDirection](EngravingItem* currElem) -> EngravingItem* {
+        while (const EngravingItem* vBox = currElem->findAncestor(ElementType::VBOX)) {
+            currElem = isLeftDirection ? toVBox(vBox)->prevMM() : toVBox(vBox)->nextMM();
+            if (currElem && currElem->isMeasure()) {
+                const ChordRest* cr = score()->selection().currentCR();
+                const staff_idx_t si = cr ? cr->staffIdx() : 0;
+                Measure* mb = toMeasure(currElem);
+                currElem = isLeftDirection ? mb->prevElementStaff(si, currElem) : mb->nextElementStaff(si, currElem);
+            }
+        }
+        return currElem;
+    };
 
     EngravingItem* toEl = nullptr;
 
     if (el) {
         toEl = isLeftDirection ? score()->prevElement() : score()->nextElement();
+        if (isHorizontalLayout) {
+            toEl = nextNonVBox(toEl);
+        }
     } else {
-        toEl = isLeftDirection ? score()->lastElement() : score()->firstElement();
+        // Nothing currently selected (e.g. because user pressed Esc or clicked on
+        // an empty region of the page). Try to restore previous selection.
+        if (ChordRest* cr = score()->selection().currentCR()) {
+            el = cr->isChord() ? toChord(cr)->upNote() : toEngravingItem(cr);
+        }
+        if (el) {
+            toEl = el; // Restoring previous selection.
+        } else {
+            toEl = isLeftDirection ? score()->lastElement() : score()->firstElement();
+            if (isHorizontalLayout) {
+                toEl = nextNonVBox(toEl);
+            }
+        }
     }
 
     if (!toEl) {
