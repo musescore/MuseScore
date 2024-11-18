@@ -1183,7 +1183,7 @@ bool MeiExporter::writeChord(const Chord* chord, const Staff* staff)
             meiChord.SetDots(chord->dots());
         }
         this->writeBeamTypeAtt(chord, meiChord);
-        this->writeStaffIdenAtt(chord, staff, meiChord);
+        this->writeStaffIdentAtt(chord, staff, meiChord);
         this->writeStemAtt(chord, meiChord);
         this->writeArtics(chord);
         this->writeVerses(chord);
@@ -1273,7 +1273,7 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
             meiNote.SetDots(chord->dots());
         }
         this->writeBeamTypeAtt(chord, meiNote);
-        this->writeStaffIdenAtt(chord, staff, meiNote);
+        this->writeStaffIdentAtt(chord, staff, meiNote);
         this->writeStemAtt(chord, meiNote);
         this->writeArtics(chord);
         this->writeVerses(chord);
@@ -1345,7 +1345,7 @@ bool MeiExporter::writeRest(const Rest* rest, const Staff* staff)
             Convert::colorToMEI(rest, meiRest);
         }
         this->writeBeamTypeAtt(rest, meiRest);
-        this->writeStaffIdenAtt(rest, staff, meiRest);
+        this->writeStaffIdentAtt(rest, staff, meiRest);
         // this->writeVerses(rest);
         const char prefix = (rest->visible()) ? 'r' : 's';
         std::string xmlId = this->getXmlIdFor(rest, prefix);
@@ -2055,7 +2055,7 @@ bool MeiExporter::writeBeamTypeAtt(const ChordRest* chordRest, libmei::AttTyped&
  * Write the cross-staff attribute (@staff) for a ChordRest (i.e., chord, note, rest or space).
  */
 
-bool MeiExporter::writeStaffIdenAtt(const ChordRest* chordRest, const Staff* staff, libmei::AttStaffIdent& staffIdentAtt)
+bool MeiExporter::writeStaffIdentAtt(const ChordRest* chordRest, const Staff* staff, libmei::AttStaffIdent& staffIdentAtt)
 {
     if (chordRest->staffMove() != 0) {
         staff_idx_t staffN = staff->idx() + chordRest->staffMove() + 1;
