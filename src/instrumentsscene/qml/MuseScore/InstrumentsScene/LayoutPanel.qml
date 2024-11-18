@@ -101,8 +101,12 @@ Item {
             isRemovingAvailable: treeModel.isRemovingAvailable
             isInstrumentSelected: treeModel.isInstrumentSelected
 
-            onAddRequested: {
+            onAddInstrumentRequested: {
                 treeModel.addInstruments()
+            }
+
+            onAddSystemMarkingsRequested: {
+                treeModel.addSystemMarkings()
             }
 
             onMoveUpRequested: {
