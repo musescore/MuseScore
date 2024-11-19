@@ -22,6 +22,8 @@
 #include "abstractinspectormodel.h"
 #include "engraving/dom/dynamic.h"
 
+#include "shortcuts/shortcutstypes.h"
+
 #include "types/texttypes.h"
 
 #include "dom/tempotext.h"
@@ -129,6 +131,12 @@ static const QMap<mu::engraving::TempoTextType, InspectorModelType> TEMPO_TEXT_E
     { mu::engraving::TempoTextType::A_TEMPO, InspectorModelType::TYPE_A_TEMPO },
     { mu::engraving::TempoTextType::TEMPO_PRIMO, InspectorModelType::TYPE_TEMPO_PRIMO },
 };
+
+QString AbstractInspectorModel::shortcutsForActionCode(std::string code) const
+{
+    const muse::ui::UiAction& action = uiActionsRegister()->action(code);
+    return muse::shortcuts::sequencesToNativeText(action.shortcuts);
+}
 
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository,
                                                mu::engraving::ElementType elementType)

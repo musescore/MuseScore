@@ -21,6 +21,8 @@
  */
 #include "measuressettingsmodel.h"
 
+#include "dom/score.h"
+
 #include "translation.h"
 
 using namespace mu::inspector;
@@ -32,6 +34,40 @@ MeasuresSettingsModel::MeasuresSettingsModel(QObject* parent, IElementRepository
 {
     setSectionType(InspectorSectionType::SECTION_MEASURES);
     setTitle(muse::qtrc("inspector", "Measure"));
+}
+
+void MeasuresSettingsModel::loadProperties()
+{
+    updateAllSystemsAreLocked();
+}
+
+void MeasuresSettingsModel::onCurrentNotationChanged()
+{
+    INotationPtr notation = currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    notation->undoStack()->changesChannel().onReceive(this, [this](const ChangesRange& range) {
+        bool changedMeasures = false;
+        for (const EngravingItem* item : range.changedItems) {
+            if (item->isMeasureBase()) {
+                changedMeasures = true;
+                break;
+            }
+        }
+
+        if (changedMeasures) {
+            onNotationChanged({}, {});
+        }
+    });
+
+    AbstractInspectorModel::onCurrentNotationChanged();
+}
+
+void MeasuresSettingsModel::onNotationChanged(const engraving::PropertyIdSet&, const engraving::StyleIdSet&)
+{
+    loadProperties();
 }
 
 bool MeasuresSettingsModel::isEmpty() const
@@ -67,4 +103,84 @@ void MeasuresSettingsModel::deleteSelectedMeasures()
     }
 
     currentNotation()->interaction()->removeSelectedMeasures();
+}
+
+void MeasuresSettingsModel::moveMeasureUp()
+{
+    if (!currentNotation()) {
+        return;
+    }
+
+    currentNotation()->interaction()->moveMeasureToPrevSystem();
+}
+
+QString MeasuresSettingsModel::shortcutMoveMeasureUp() const
+{
+    return shortcutsForActionCode("move-measure-to-prev-system");
+}
+
+void MeasuresSettingsModel::moveMeasureDown()
+{
+    if (!currentNotation()) {
+        return;
+    }
+
+    currentNotation()->interaction()->moveMeasureToNextSystem();
+}
+
+QString MeasuresSettingsModel::shortcutMoveMeasureDown() const
+{
+    return shortcutsForActionCode("move-measure-to-next-system");
+}
+
+void MeasuresSettingsModel::toggleSystemLock()
+{
+    if (!currentNotation()) {
+        return;
+    }
+
+    currentNotation()->interaction()->toggleSystemLock();
+    updateAllSystemsAreLocked();
+}
+
+QString MeasuresSettingsModel::shortcutToggleSystemLock() const
+{
+    return shortcutsForActionCode("toggle-system-lock");
+}
+
+bool MeasuresSettingsModel::allSystemsAreLocked() const
+{
+    return m_allSystemsAreLocked;
+}
+
+void MeasuresSettingsModel::updateAllSystemsAreLocked()
+{
+    std::vector<System*> systems = currentNotation()->elements()->msScore()->selection().selectedSystems();
+
+    bool allLocked = true;
+    for (System* system : systems) {
+        if (!system->isLocked()) {
+            allLocked = false;
+            break;
+        }
+    }
+
+    if (m_allSystemsAreLocked != allLocked) {
+        m_allSystemsAreLocked = allLocked;
+        emit allSystemsAreLockedChanged(m_allSystemsAreLocked);
+    }
+}
+
+void MeasuresSettingsModel::makeIntoSystem()
+{
+    if (!currentNotation()) {
+        return;
+    }
+
+    currentNotation()->interaction()->makeIntoSystem();
+}
+
+QString MeasuresSettingsModel::shortcutMakeIntoSystem() const
+{
+    return shortcutsForActionCode("make-into-system");
 }

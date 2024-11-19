@@ -66,6 +66,8 @@ public:
 
     static void updateSkylineForElement(EngravingItem* element, const System* system, double yMove);
 
+    static void layoutSystemLockIndicators(System* system, LayoutContext& ctx);
+
 private:
     struct MeasureState
     {

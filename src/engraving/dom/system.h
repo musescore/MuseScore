@@ -140,6 +140,8 @@ public:
     std::vector<MeasureBase*>& measures() { return m_ml; }
 
     MeasureBase* measure(int idx) { return m_ml[idx]; }
+    MeasureBase* first() const { return m_ml.front(); }
+    MeasureBase* last() const { return m_ml.back(); }
     Measure* firstMeasure() const;
     Measure* lastMeasure() const;
     Fraction endTick() const;
@@ -202,6 +204,11 @@ public:
 
     void resetShortestLongestChordRest();
 
+    bool isLocked() const;
+
+    SystemLockIndicator* lockIndicator() const { return m_lockIndicator; }
+    void setLockIndicator(SystemLockIndicator* lock) { m_lockIndicator = lock; }
+
 private:
     friend class Factory;
 
@@ -219,6 +226,8 @@ private:
     std::vector<SysStaff*> m_staves;
     std::vector<Bracket*> m_brackets;
     std::list<SpannerSegment*> m_spannerSegments;
+
+    SystemLockIndicator* m_lockIndicator = nullptr;
 
     double m_leftMargin = 0.0;      // left margin for instrument name, brackets etc.
     mutable bool m_fixedDownDistance = false;

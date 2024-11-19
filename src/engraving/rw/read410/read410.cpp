@@ -87,7 +87,7 @@ Err Read410::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
         } else if (tag == "LastEID") {
             int val = e.readInt(nullptr);
             if (score->isMaster()) {
-                score->masterScore()->getEID()->init(val);
+                score->masterScore()->eidRegister()->init(val);
             }
         } else if (tag == "Score") {
             if (!readScore410(score, e, ctx)) {
@@ -202,6 +202,8 @@ bool Read410::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
                     e.skipCurrentElement();
                 }
             }
+        } else if (tag == "SystemLocks") {
+            TRead::readSystemLocks(score, e);
         } else if (tag == "Part") {
             Part* part = new Part(score);
             TRead::read(part, e, ctx);

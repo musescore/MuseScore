@@ -85,5 +85,94 @@ InspectorSectionView {
                 onClicked: model.deleteSelectedMeasures()
             }
         }
+
+        StyledTextLabel {
+            text: qsTrc("inspector", "Move to system")
+        }
+
+        RowLayout {
+            width: parent.width
+            spacing: 4
+
+            FlatButton {
+                id: upSystem
+
+                Layout.preferredWidth: 0.5 * parent.width
+
+                navigation.panel: root.navigationPanel
+                navigation.name: "SystemUp"
+                navigation.row: deleteButton.navigation.row + 1
+
+                orientation: Qt.Horizontal
+                icon: IconCode.ARROW_UP
+                text: qsTrc("inspector", "Previous")
+
+                toolTipTitle: qsTrc("inspector", "Move measure(s) to previous system")
+                toolTipShortcut: model.shortcutMoveMeasureUp
+
+                onClicked: model.moveMeasureUp()
+            }
+
+            FlatButton {
+                id: downSystem
+
+                Layout.preferredWidth: 0.5 * parent.width
+
+                navigation.panel: root.navigationPanel
+                navigation.name: "SystemDown"
+                navigation.row: upSystem.navigation.row + 1
+
+                orientation: Qt.Horizontal
+                icon: IconCode.ARROW_DOWN
+                text: qsTrc("inspector", "Next")
+
+                toolTipTitle: qsTrc("inspector", "Move measure(s) to next system")
+                toolTipShortcut: model.shortcutMoveMeasureDown
+
+                onClicked: model.moveMeasureDown()
+            }
+        }
+
+        FlatButton {
+            id: toggleSystemLock
+
+            width: parent.width
+
+            navigation.panel: root.navigationPanel
+            navigation.name: "SystemLock"
+            navigation.row: downSystem.navigation.row + 1
+
+            orientation: Qt.Horizontal
+            icon: IconCode.LOCK_CLOSED
+            text: qsTrc("inspector", "Lock current system")
+
+            toolTipTitle: qsTrc("inspector", "Lock current system(s)")
+            toolTipDescription: qsTrc("inspector", "Keep these measures together and prevent them from reflowing to the next system")
+            toolTipShortcut: model.shortcutToggleSystemLock
+
+            accentButton: Boolean(model.allSystemsAreLocked)
+
+            onClicked: model.toggleSystemLock()
+        }
+
+        FlatButton {
+            id: makeIntoOneSystem
+
+            width: parent.width
+
+            navigation.panel: root.navigationPanel
+            navigation.name: "MakeSystem"
+            navigation.row: toggleSystemLock.navigation.row + 1
+
+            orientation: Qt.Horizontal
+            //icon: TODO
+            text: qsTrc("inspector", "Make into one system")
+
+            toolTipTitle: qsTrc("inspector", "Make measure(s) into one system")
+            toolTipDescription: qsTrc("inspector", "Create a system containing only the selected measure(s)")
+            toolTipShortcut: model.shortcutMakeIntoSystem
+
+            onClicked: model.makeIntoSystem()
+        }
     }
 }

@@ -126,6 +126,7 @@
 #include "dom/symbol.h"
 #include "dom/systemdivider.h"
 #include "dom/systemtext.h"
+#include "dom/systemlock.h"
 #include "dom/soundflag.h"
 
 #include "dom/tempotext.h"
@@ -348,6 +349,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::SYSTEM_DIVIDER:       draw(item_cast<const SystemDivider*>(item), painter);
         break;
     case ElementType::SYSTEM_TEXT:          draw(item_cast<const SystemText*>(item), painter);
+        break;
+    case ElementType::SYSTEM_LOCK_INDICATOR: draw(item_cast<const SystemLockIndicator*>(item), painter);
         break;
     case ElementType::SOUND_FLAG:           draw(item_cast<const SoundFlag*>(item), painter);
         break;
@@ -2055,24 +2058,13 @@ void TDraw::draw(const LayoutBreak* item, Painter* painter)
     }
 
     Pen pen(item->selected() ? item->configuration()->selectionColor() : item->configuration()->formattingColor());
-
-    if (item->score()->isPaletteScore()) {
-        pen.setColor(item->configuration()->fontPrimaryColor());
-    }
-    pen.setWidthF(item->lineWidth() / 2);
-    pen.setJoinStyle(PenJoinStyle::MiterJoin);
-    pen.setCapStyle(PenCapStyle::SquareCap);
-    pen.setDashPattern({ 1, 3 });
-
     painter->setPen(pen);
-    painter->setBrush(BrushStyle::NoBrush);
-    painter->drawRect(item->iconBorderRect());
 
-    pen.setWidthF(item->lineWidth());
-    pen.setStyle(PenStyle::SolidLine);
+    Font f(item->font());
+    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    painter->setFont(f);
 
-    painter->setPen(pen);
-    painter->drawPath(item->iconPath());
+    painter->drawSymbol(PointF(), item->iconCode());
 }
 
 void TDraw::draw(const LedgerLine* item, Painter* painter)
@@ -2900,6 +2892,34 @@ void TDraw::draw(const SystemText* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
+}
+
+void TDraw::draw(const SystemLockIndicator* item, muse::draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    if (item->score()->printing() || !item->score()->showUnprintable()) {
+        return;
+    }
+
+    Pen pen(item->selected() ? item->configuration()->selectionColor() : item->configuration()->formattingColor());
+    painter->setPen(pen);
+
+    Font f(item->font());
+    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    painter->setFont(f);
+
+    painter->drawSymbol(PointF(), item->iconCode());
+
+    if (item->selected()) {
+        Color lockedAreaColor = item->configuration()->selectionColor();
+        lockedAreaColor.setAlpha(25);
+        Brush brush(lockedAreaColor);
+        painter->setBrush(brush);
+        painter->setNoPen();
+
+        painter->drawRect(item->ldata()->rangeRect);
+    }
 }
 
 void TDraw::draw(const SoundFlag* item, Painter* painter)

@@ -23,25 +23,32 @@
 #define MU_ENGRAVING_GETEID_H
 
 #include <cstdint>
+#include <map>
 
 #include "eid.h"
 #include "../types/types.h"
 
 namespace mu::engraving {
-class GetEID
+class EngravingObject;
+
+class EIDRegister
 {
 public:
-    GetEID() = default;
+    EIDRegister() = default;
 
     void init(uint32_t val);
     uint32_t lastID() const { return m_lastID; }
 
     EID newEID(ElementType type);
 
+    void registerItemEID(EID eid, EngravingObject* item);
+    EngravingObject* itemFromEID(EID eid);
+
 private:
-    GetEID(const GetEID&) = delete;
+    EIDRegister(const EIDRegister&) = delete;
 
     uint32_t m_lastID = 0;
+    std::map<uint64_t, EngravingObject*> m_register;
 };
 }
 

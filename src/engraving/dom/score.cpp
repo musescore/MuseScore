@@ -5894,6 +5894,22 @@ void Score::autoUpdateSpatium()
     createPaddingTable();
 }
 
+void Score::addSystemLock(const SystemLock* lock)
+{
+    m_systemLocks.add(lock);
+
+    lock->startMB()->triggerLayout();
+    lock->endMB()->triggerLayout();
+}
+
+void Score::removeSystemLock(const SystemLock* lock)
+{
+    m_systemLocks.remove(lock);
+
+    lock->startMB()->triggerLayout();
+    lock->endMB()->triggerLayout();
+}
+
 //---------------------------------------------------------
 //   updateSwing
 //---------------------------------------------------------

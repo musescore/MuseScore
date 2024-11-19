@@ -161,6 +161,10 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
     //! NotationOpened
     //!     NotationFocused
     //!         NotationStaffTab
+    //!
+    //! UPDATE I'm now adding one more context for list VS range selection, but this is
+    //! quite clearly not an optimal solution. In future, we need a general system to
+    //! allow/disallow shortcuts based on any property of the currentNotation. [M.S.]
 
     if (CTX_NOTATION_OPENED == scContext) {
         return matchWithCurrent(context::UiCtxProjectOpened);
@@ -197,6 +201,15 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
             return false;
         }
         return notation->interaction()->isTextEditingStarted();
+    } else if (CTX_NOTATION_LIST_SELECTION == scContext) {
+        if (!matchWithCurrent(context::UiCtxProjectFocused)) {
+            return false;
+        }
+        auto notation = globalContext()->currentNotation();
+        if (!notation) {
+            return false;
+        }
+        return !notation->interaction()->selection()->isRange();
     }
 
     IF_ASSERT_FAILED(CTX_ANY == scContext) {

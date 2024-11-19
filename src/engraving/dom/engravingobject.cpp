@@ -74,7 +74,7 @@ EngravingObject::EngravingObject(const ElementType& type, EngravingObject* paren
         if (s) {
             MasterScore* ms = s->masterScore();
             if (ms) {
-                m_eid = ms->getEID()->newEID(m_type);
+                m_eid = ms->eidRegister()->newEID(m_type);
             }
         }
     }
@@ -109,7 +109,7 @@ EngravingObject::EngravingObject(const EngravingObject& se)
         if (s) {
             MasterScore* ms = s->masterScore();
             if (ms) {
-                m_eid = ms->getEID()->newEID(m_type);
+                m_eid = ms->eidRegister()->newEID(m_type);
             }
         }
     }
@@ -725,6 +725,14 @@ TranslatableString EngravingObject::typeUserName() const
 String EngravingObject::translatedTypeUserName() const
 {
     return typeUserName().translated();
+}
+
+void EngravingObject::setEID(EID id)
+{
+    m_eid = id;
+    if (registerId()) {
+        masterScore()->eidRegister()->registerItemEID(id, this);
+    }
 }
 
 //---------------------------------------------------------

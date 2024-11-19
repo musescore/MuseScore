@@ -29,6 +29,7 @@
 
 #include "style/style.h"
 
+#include "actionicon.h"
 #include "beam.h"
 #include "box.h"
 #include "bracket.h"
@@ -268,6 +269,11 @@ size_t System::getBracketsColumnsCount()
         }
     }
     return columns;
+}
+
+bool System::isLocked() const
+{
+    return m_ml.front()->isStartOfSystemLock();
 }
 
 void System::setBracketsXPosition(const double xPosition)
@@ -652,6 +658,10 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
     }
     if (m_systemDividerRight) {
         func(data, m_systemDividerRight);
+    }
+
+    if (m_lockIndicator) {
+        func(data, m_lockIndicator);
     }
 
     for (const SysStaff* st : m_staves) {

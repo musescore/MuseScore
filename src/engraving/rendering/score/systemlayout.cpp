@@ -133,6 +133,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     prevMeasureState.curHeader = ctx.state().curMeasure()->header();
     prevMeasureState.curTrailer = ctx.state().curMeasure()->trailer();
 
+    const SystemLock* systemLock = ctx.dom().systemLocks()->lockStartingAt(ctx.state().curMeasure());
+
     while (ctx.state().curMeasure()) {      // collect measure for system
         oldSystem = ctx.mutState().curMeasure()->system();
         system->appendMeasure(ctx.mutState().curMeasure());
@@ -180,7 +182,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             return system;
         }
 
-        bool doBreak = system->measures().size() > 1 && curSysWidth > targetSystemWidth && !ctx.state().prevMeasure()->noBreak();
+        bool doBreak = !systemLock && system->measures().size() > 1 && curSysWidth > targetSystemWidth
+                       && !ctx.state().prevMeasure()->noBreak();
         if (doBreak) {
             breakMeasure = ctx.mutState().curMeasure();
             system->removeLastMeasure();
@@ -223,7 +226,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         switch (ctx.conf().viewMode()) {
         case LayoutMode::PAGE:
         case LayoutMode::SYSTEM:
-            lineBreak = mb->pageBreak() || mb->lineBreak() || mb->sectionBreak();
+            lineBreak = mb->pageBreak() || mb->lineBreak() || mb->sectionBreak() || mb->isEndOfSystemLock()
+                        || (ctx.state().nextMeasure() && ctx.state().nextMeasure()->isStartOfSystemLock());
             break;
         case LayoutMode::FLOAT:
         case LayoutMode::LINE:
@@ -423,6 +427,42 @@ bool SystemLayout::shouldBeJustified(System* system, double curSysWidth, double 
     }
 
     return shouldJustify && !MScore::noHorizontalStretch;
+}
+
+void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx)
+{
+    UNUSED(ctx);
+
+    bool isLocked = system->isLocked();
+    SystemLockIndicator* lockIndicator = system->lockIndicator();
+
+    if (!isLocked) {
+        if (lockIndicator) {
+            delete lockIndicator;
+            system->setLockIndicator(nullptr);
+        }
+        return;
+    }
+
+    if (!lockIndicator) {
+        lockIndicator = new SystemLockIndicator(system);
+        lockIndicator->setParent(system);
+        system->setLockIndicator(lockIndicator);
+    }
+
+    TLayout::layoutSystemLockIndicator(lockIndicator, lockIndicator->mutldata());
+
+    double spatium = system->spatium();
+    double x = system->width();
+    MeasureBase* lastMeas = system->last();
+    for (EngravingItem* item : lastMeas->el()) {
+        if (item->isLayoutBreak()) {
+            x = std::min(x, lastMeas->x() + item->x() + item->ldata()->bbox().left() - 0.5 * spatium);
+        }
+    }
+
+    x -= lockIndicator->ldata()->bbox().right();
+    lockIndicator->mutldata()->setPos(PointF(x, -2.5 * system->spatium()));
 }
 
 //---------------------------------------------------------

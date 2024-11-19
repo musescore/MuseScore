@@ -262,6 +262,7 @@ public:
 
     static void layoutLaissezVib(LaissezVib* item);
     static void layoutLayoutBreak(const LayoutBreak* item, LayoutBreak::LayoutData* ldata);
+    static void layoutSystemLockIndicator(const SystemLockIndicator* item, SystemLockIndicator::LayoutData *ldata);
     static void layoutLedgerLine(LedgerLine* item, LayoutContext& ctx);
     static void layoutLetRing(LetRing* item, LayoutContext& ctx);
     static void layoutLetRingSegment(LetRingSegment* item, LayoutContext& ctx);
