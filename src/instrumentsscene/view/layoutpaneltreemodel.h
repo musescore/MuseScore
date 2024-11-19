@@ -155,6 +155,15 @@ private:
     AbstractLayoutPanelTreeItem* buildAddStaffControlItem(const muse::ID& partId, QObject* parent);
     AbstractLayoutPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
 
+    struct SystemObjectsLayerInsertPosition {
+        int row = -1;
+        const notation::Staff* staff = nullptr;
+
+        bool isValid() const { return row != -1 && staff; }
+    };
+
+    SystemObjectsLayerInsertPosition resolveSystemObjectsLayerInsertPosition() const;
+
     bool m_isMovingUpAvailable = false;
     bool m_isMovingDownAvailable = false;
     bool m_isRemovingAvailable = false;

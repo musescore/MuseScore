@@ -33,6 +33,7 @@
 #include <optional>
 
 #include "global/async/channel.h"
+#include "global/async/notification.h"
 #include "global/types/ret.h"
 
 #include "modularity/ioc.h"
@@ -414,6 +415,7 @@ public:
 
     void clearSystemObjectStaves();
     void addSystemObjectStaff(Staff* staff);
+    void removeSystemObjectStaff(Staff* staff);
     const std::vector<Staff*>& systemObjectStaves() const { return m_systemObjectStaves; }
     bool isSystemObjectStaff(Staff* staff) const;
 

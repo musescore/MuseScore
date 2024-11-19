@@ -43,6 +43,8 @@ public:
 
     Q_INVOKABLE QString instrumentId() const;
 
+    const notation::Part* part() const;
+
     MoveParams buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,
                                int destinationRow) const override;
 
@@ -61,7 +63,7 @@ private:
 
     size_t resolveNewPartIndex(const muse::ID& partId) const;
 
-    QString m_instrumentId;
+    const notation::Part* m_part = nullptr;
     bool m_isInited = false;
 };
 }

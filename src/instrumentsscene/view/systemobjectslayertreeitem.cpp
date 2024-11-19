@@ -23,7 +23,7 @@
 #include "systemobjectslayertreeitem.h"
 
 #include "layoutpanelutils.h"
-
+#include "translation.h"
 #include "log.h"
 
 using namespace mu::instrumentsscene;
@@ -32,8 +32,8 @@ using namespace mu::engraving;
 
 static QString formatLayerTitle(const std::vector<SystemObjectsGroup>& groups)
 {
-    IF_ASSERT_FAILED(!groups.empty()) {
-        return QString();
+    if (groups.empty()) {
+        return muse::qtrc("instruments", "System objects");
     }
 
     QString title;
@@ -76,6 +76,7 @@ SystemObjectsLayerTreeItem::SystemObjectsLayerTreeItem(IMasterNotationPtr master
 
 void SystemObjectsLayerTreeItem::init(const Staff* staff, bool isTopLayer)
 {
+    m_staff = staff;
     std::vector<SystemObjectsGroup> groups = collectSystemObjectGroups(staff);
 
     setId(staff->id());

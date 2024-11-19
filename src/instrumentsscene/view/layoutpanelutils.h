@@ -21,9 +21,8 @@
  */
 #pragma once
 
-#include "engraving/dom/score.h"
-#include "engraving/dom/measure.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/utils.h"
 
 namespace mu::instrumentsscene {
 struct SystemObjectsGroup {
@@ -34,34 +33,19 @@ struct SystemObjectsGroup {
 
 inline std::vector<SystemObjectsGroup> collectSystemObjectGroups(const mu::engraving::Staff* systemObjectsStaff)
 {
-    if (!systemObjectsStaff) {
-        return {};
-    }
-
-    const mu::engraving::Score* score = systemObjectsStaff->score();
-    const mu::engraving::Measure* fm = score->firstMeasure();
-    if (!fm) {
-        return {};
-    }
-
+    std::vector<engraving::EngravingItem*> systemObjects = engraving::collectSystemObjects(systemObjectsStaff->score(),
+                                                                                           { systemObjectsStaff->idx() });
     std::vector<SystemObjectsGroup> result;
 
-    for (const mu::engraving::Segment* seg = fm->first(mu::engraving::SegmentType::ChordRest); seg;
-         seg = seg->next1(mu::engraving::SegmentType::ChordRest)) {
-        for (mu::engraving::EngravingItem* annotation : seg->annotations()) {
-            if (!annotation || annotation->staffIdx() != systemObjectsStaff->idx()) {
-                continue;
-            }
+    for (engraving::EngravingItem* obj : systemObjects) {
+        auto it = std::find_if(result.begin(), result.end(), [obj](const SystemObjectsGroup& group) {
+            return group.type == obj->type();
+        });
 
-            auto it = std::find_if(result.begin(), result.end(), [annotation](const SystemObjectsGroup& group) {
-                return group.type == annotation->type();
-            });
-
-            if (it != result.end()) {
-                it->items.push_back(annotation);
-            } else {
-                result.emplace_back(SystemObjectsGroup { annotation->type(), annotation->typeUserName(), { annotation } });
-            }
+        if (it != result.end()) {
+            it->items.push_back(obj);
+        } else {
+            result.emplace_back(SystemObjectsGroup { obj->type(), obj->typeUserName(), { obj } });
         }
     }
 
