@@ -22,96 +22,98 @@
 
 #include "docktoolbarview.h"
 
-#include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
-#include "thirdparty/KDDockWidgets/src/private/TitleBar_p.h"
-#include "thirdparty/KDDockWidgets/src/private/DragController_p.h"
+#include "thirdparty/KDDockWidgets/src/core/View.h"
+// #include "thirdparty/KDDockWidgets/src/core/TitleBar_p.h"
+// #include "thirdparty/KDDockWidgets/src/core/DragController_p.h"
 
 #include "log.h"
 #include "docktypes.h"
 
 using namespace muse::dock;
 
-class DockToolBarView::DraggableArea : public KDDockWidgets::QWidgetAdapter, public KDDockWidgets::Draggable
-{
-public:
-    DraggableArea()
-        : KDDockWidgets::QWidgetAdapter(),
-        KDDockWidgets::Draggable(this)
-    {
-    }
+// class DockToolBarView::DraggableArea : public KDDockWidgets::Core::View, public KDDockWidgets::Core::Draggable
+// {
+// public:
+//     DraggableArea()
+//         : KDDockWidgets::Core::View(),
+//         KDDockWidgets::Core::Draggable(this)
+//     {
+//     }
 
-    std::unique_ptr<KDDockWidgets::WindowBeingDragged> makeWindow() override
-    {
-        if (!m_dockWidget) {
-            return {};
-        }
+//     std::unique_ptr<KDDockWidgets::Core::WindowBeingDragged> makeWindow() override
+//     {
+//         if (!m_dockWidget) {
+//             return {};
+//         }
 
-        KDDockWidgets::FloatingWindow* floatingWindow = m_dockWidget->floatingWindow();
-        if (floatingWindow) {
-            return std::unique_ptr<KDDockWidgets::WindowBeingDragged>(new KDDockWidgets::WindowBeingDragged(floatingWindow, this));
-        }
+//         KDDockWidgets::Core::FloatingWindow* floatingWindow = m_dockWidget->floatingWindow();
+//         if (floatingWindow) {
+//             return std::unique_ptr<KDDockWidgets::Core::WindowBeingDragged>(new KDDockWidgets::Core::WindowBeingDragged(floatingWindow,
+//                                                                                                                         this));
+//         }
 
-        m_dockWidget->setFloating(true);
-        floatingWindow = m_dockWidget->floatingWindow();
+//         m_dockWidget->setFloating(true);
+//         floatingWindow = m_dockWidget->floatingWindow();
 
-        auto draggable = static_cast<KDDockWidgets::Draggable*>(this);
-        return std::unique_ptr<KDDockWidgets::WindowBeingDragged>(new KDDockWidgets::WindowBeingDragged(floatingWindow, draggable));
-    }
+//         auto draggable = static_cast<KDDockWidgets::Core::Draggable*>(this);
+//         return std::unique_ptr<KDDockWidgets::Core::WindowBeingDragged>(new KDDockWidgets::Core::WindowBeingDragged(floatingWindow,
+//                                                                                                                     draggable));
+//     }
 
-    KDDockWidgets::DockWidgetBase* singleDockWidget() const override
-    {
-        return m_dockWidget;
-    }
+//     KDDockWidgets::Core::DockWidget* singleDockWidget() const override
+//     {
+//         return m_dockWidget;
+//     }
 
-    bool isMDI() const override
-    {
-        return false;
-    }
+//     bool isMDI() const override
+//     {
+//         return false;
+//     }
 
-    bool isWindow() const override
-    {
-        return false;
-    }
+//     bool isWindow() const override
+//     {
+//         return false;
+//     }
 
-    QPoint mapToWindow(QPoint pos) const override
-    {
-        if (!m_mouseArea) {
-            return pos;
-        }
+//     QPoint mapToWindow(QPoint pos) const override
+//     {
+//         if (!m_mouseArea) {
+//             return pos;
+//         }
 
-        QPointF result = m_mouseArea->mapToItem(m_dockWidget, QPointF(pos));
+//         QPointF result = m_mouseArea->mapToItem(m_dockWidget, QPointF(pos));
 
-        result.setX(result.x() + DOCK_WINDOW_SHADOW);
-        result.setY(result.y() + DOCK_WINDOW_SHADOW);
+//         result.setX(result.x() + DOCK_WINDOW_SHADOW);
+//         result.setY(result.y() + DOCK_WINDOW_SHADOW);
 
-        return QPoint(result.x(), result.y());
-    }
+//         return QPoint(result.x(), result.y());
+//     }
 
-    void setDockWidget(KDDockWidgets::DockWidgetBase* dockWidget)
-    {
-        IF_ASSERT_FAILED(dockWidget) {
-            return;
-        }
+//     void setDockWidget(KDDockWidgets::Core::DockWidget* dockWidget)
+//     {
+//         IF_ASSERT_FAILED(dockWidget) {
+//             return;
+//         }
 
-        m_dockWidget = dockWidget;
-        setObjectName(dockWidget->objectName() + "_draggableArea");
-    }
+//         m_dockWidget = dockWidget;
+//         // setObjectName(dockWidget->objectName() + "_draggableArea");
+//     }
 
-    void setMouseArea(QQuickItem* mouseArea)
-    {
-        m_mouseArea = mouseArea;
-        redirectMouseEvents(mouseArea);
-    }
+//     void setMouseArea(QQuickItem* mouseArea)
+//     {
+//         m_mouseArea = mouseArea;
+//         redirectMouseEvents(mouseArea);
+//     }
 
-private:
-    KDDockWidgets::DockWidgetBase* m_dockWidget = nullptr;
-    QQuickItem* m_mouseArea = nullptr;
-};
+// private:
+//     KDDockWidgets::Core::DockWidget* m_dockWidget = nullptr;
+//     QQuickItem* m_mouseArea = nullptr;
+// };
 
 DockToolBarView::DockToolBarView(QQuickItem* parent)
-    : DockBase(DockType::ToolBar, parent),
+    : DockBase(DockType::ToolBar, parent)/*,*/
     //! NOTE: parent (MouseArea) will be set later
-    m_draggableArea(new DraggableArea())
+    // m_draggableArea(new DraggableArea())
 {
     setLocation(Location::Top);
 }
@@ -133,7 +135,7 @@ void DockToolBarView::setOrientation(Qt::Orientation orientation)
     }
 
     m_orientation = orientation;
-    emit orientationChanged(orientation);
+    Q_EMIT orientationChanged(orientation);
 }
 
 void DockToolBarView::setAlignment(int alignment)
@@ -143,24 +145,24 @@ void DockToolBarView::setAlignment(int alignment)
     }
 
     m_alignment = alignment;
-    emit alignmentChanged(alignment);
+    Q_EMIT alignmentChanged(alignment);
 }
 
 void DockToolBarView::setDraggableMouseArea(QQuickItem* mouseArea)
 {
-    IF_ASSERT_FAILED(m_draggableArea) {
-        return;
-    }
+    // IF_ASSERT_FAILED(m_draggableArea) {
+    //     return;
+    // }
 
-    m_draggableArea->setParent(mouseArea);
-    m_draggableArea->setMouseArea(mouseArea);
+    // m_draggableArea->setParent(mouseArea);
+    // m_draggableArea->setMouseArea(mouseArea);
 }
 
 void DockToolBarView::componentComplete()
 {
     DockBase::componentComplete();
 
-    m_draggableArea->setDockWidget(dockWidget());
+    // m_draggableArea->setDockWidget(dockWidget());
 
     connect(this, &DockBase::floatingChanged, this, [this]() {
         setResizable(!floating());

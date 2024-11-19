@@ -1,0 +1,80 @@
+# SPDX-FileCopyrightText: 2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+#
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
+
+name: Examples and installed headers
+
+on:
+  push:
+    branches:
+      - 2.1
+      - 2.0
+      - main
+  pull_request:
+    branches:
+      - 2.1
+      - 2.0
+      - main
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - ubuntu-22.04
+          - windows-2022
+          - macos-12
+    steps:
+      - name: Install Qt 5.15 with options and default aqtversion
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: 5.15
+          cache: true
+
+      - name: Make sure MSVC is found when Ninja generator is in use
+        if: ${{ runner.os == 'Windows' }}
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Install lld linker
+        if: ${{ runner.os == 'Linux' }}
+        run: |
+          sudo apt update -qq
+          sudo apt install lld -y
+
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Install ninja
+        uses: turtlesec-no/get-ninja@main
+
+      - name: Configure
+        run: cmake --preset=release -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/installed/ -DKDDockWidgets_EXAMPLES=OFF -DCMAKE_BUILD_TYPE=Debug
+
+      - name: Build
+        run: cmake --build build-release --parallel
+
+      - name: Install
+        run: cmake --install build-release
+
+      - name: Build examples
+        run: |
+          cd examples
+          cmake -G Ninja -S dockwidgets/ -B dockwidgets/b -DCMAKE_PREFIX_PATH=${{ github.workspace }}/installed/
+          cmake -G Ninja -S mdi/ -B mdi/b -DCMAKE_PREFIX_PATH=${{ github.workspace }}/installed/
+          cmake -G Ninja -S minimal/ -B minimal/b -DCMAKE_PREFIX_PATH=${{ github.workspace }}/installed/
+          cmake -G Ninja -S mdi_with_docking/ -B mdi_with_docking/b -DCMAKE_PREFIX_PATH=${{ github.workspace }}/installed/
+          cmake -G Ninja -S qtquick/dockwidgets/ -B qtquick/dockwidgets/b -DCMAKE_PREFIX_PATH=${{ github.workspace }}/installed/
+          cmake -G Ninja -S qtquick/customseparator/ -B qtquick/customseparator/b -DCMAKE_PREFIX_PATH=${{ github.workspace }}/installed/
+          cmake -G Ninja -S qtquick/customtabbar/ -B qtquick/customtabbar/b -DCMAKE_PREFIX_PATH=${{ github.workspace }}/installed/
+          cmake -G Ninja -S qtquick/customtitlebar/ -B qtquick/customtitlebar/b -DCMAKE_PREFIX_PATH=${{ github.workspace }}/installed/
+          cmake -G Ninja -S qtquick/mdi/ -B qtquick/mdi/b -DCMAKE_PREFIX_PATH=${{ github.workspace }}/installed/
+          cmake --build dockwidgets/b
+          cmake --build mdi/b
+          cmake --build minimal/b
+          cmake --build mdi_with_docking/b
+          cmake --build qtquick/dockwidgets/b
+          cmake --build qtquick/customseparator/b
+          cmake --build qtquick/customtabbar/b
+          cmake --build qtquick/mdi/b

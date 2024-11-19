@@ -1,8 +1,11 @@
 People who have signed the CLA:
 
 Christian Riggenbach <criggenbach@magahugu.ch>
+Daniel Price <danielp@nvidia.com>
+Elnur Ismailzada <eismailzada@gmail.com>
+Frank Dana <ferdnyc@gmail.com>
 Jacob Young <amazingjacob@gmail.com>
 Matthew Waltz <matthewwaltzis@gmail.com>
+Olaf Mandel <o.mandel@menlosystems.com> on behalf of Menlo Systems GmbH
 Roman Pudashkin <r.pudashkin@gmail.com>
-Elnur Ismailzada <eismailzada@gmail.com>
-Daniel Price <danielp@nvidia.com>
+Sebastian Koslowski <s.koslowski@procitec.de>

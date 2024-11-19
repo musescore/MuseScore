@@ -1,0 +1,6 @@
+[codespell]
+skip = ./build-*,.git,./src/3rdparty,*.svg,rc_assets.py,./src/flutter/generated*
+interactive = 3
+ignore-words-list = overlayed
+#ignore camelCase, regardless. also mixed case words with correct spelling
+ignore-regex = \b([a-z]+[A-Z0-9][a-z0-9]*|nam|NAM|LOD|lod|NumberT|NNeeded|AccessorT|LIGHTYEAR|.*_L1)\b

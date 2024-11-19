@@ -7,17 +7,23 @@ EXTRA kdabcopyright-reuse,kdabcontactus,fosslicense-reuse
 #EXTRA defines,null
 
 #exclude checks now being done by clazy or clang-tools
-EXCLUDE strings,explicit,normalize,passbyvalue,operators,nullstrcompare,nullstrassign,doublequote_chars,qobject,sigsandslots,staticobjects,dpointer,inline,postfixop
+EXCLUDE strings,explicit,normalize,passbyvalue,operators,nullstrcompare,nullstrassign,doublequote_chars,qobject,sigsandslots,staticobjects,dpointer,inline,postfixop,cpp
+#exclude spelling as codespell is much, much better tool
+EXCLUDE spelling
 #exclude more checks
 EXCLUDE style
 
 SKIP /fwd_headers/
+SKIP /flutter/generated/
 SKIP Doxyfile.cmake
+SKIP .markdownlint.json
+SKIP book/searchindex.json
 
+SKIP /src/3rdparty/|/examples/qtquick/CMakeFiles/
 #skip CMake files
 SKIP /KDDockWidgetsConfig.cmake.in
 #skip more files
 SKIP CMakePresets.json
+SKIP \.cmake-format\.py
 #skip the borrowed code in the cmake subdir
-SKIP /cmake/InstallLocation.cmake|/cmake/ECM/|/cmake/KDAB/
-
+SKIP /cmake/ECM/|/cmake/KDAB/

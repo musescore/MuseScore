@@ -30,8 +30,8 @@
 #include "uicomponents/view/qmllistproperty.h"
 #include "ui/view/navigationpanel.h"
 
-namespace KDDockWidgets {
-class DockWidgetQuick;
+namespace KDDockWidgets::QtQuick {
+class DockWidget;
 }
 
 namespace muse::dock {
@@ -179,7 +179,7 @@ protected:
     void componentComplete() override;
 
     DockType type() const;
-    KDDockWidgets::DockWidgetQuick* dockWidget() const;
+    KDDockWidgets::QtQuick::DockWidget* dockWidget() const;
 
 protected slots:
     void applySizeConstraints();
@@ -217,7 +217,7 @@ private:
     bool m_floating = false;
 
     bool m_inited = false;
-    KDDockWidgets::DockWidgetQuick* m_dockWidget = nullptr;
+    KDDockWidgets::QtQuick::DockWidget* m_dockWidget = nullptr;
     ui::NavigationPanel* m_contentNavigationPanel = nullptr;
 };
 

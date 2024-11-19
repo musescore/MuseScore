@@ -22,8 +22,8 @@
 
 #include "dockpanelview.h"
 
-#include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
-#include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
+#include "thirdparty/KDDockWidgets/src/core/DockWidget.h"
+// #include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
 
 #include "types/translatablestring.h"
 
@@ -157,7 +157,7 @@ DockPanelView::DockPanelView(QQuickItem* parent)
 
 DockPanelView::~DockPanelView()
 {
-    KDDockWidgets::DockWidgetQuick* dockWidget = this->dockWidget();
+    KDDockWidgets::Core::DockWidget* dockWidget = this->dockWidget();
     IF_ASSERT_FAILED(dockWidget) {
         return;
     }
@@ -186,7 +186,7 @@ void DockPanelView::componentComplete()
 {
     DockBase::componentComplete();
 
-    KDDockWidgets::DockWidgetQuick* dockWidget = this->dockWidget();
+    KDDockWidgets::Core::DockWidget* dockWidget = this->dockWidget();
     IF_ASSERT_FAILED(dockWidget) {
         return;
     }
@@ -295,8 +295,8 @@ void DockPanelView::setCurrentTabIndex(int index)
         return;
     }
 
-    KDDockWidgets::Frame* frame = dockWidget()->frame();
-    if (frame) {
-        frame->setCurrentTabIndex(index);
-    }
+    // KDDockWidgets::Core::Group* frame = dockWidget()->frame();
+    // if (frame) {
+    // frame->setCurrentTabIndex(index);
+    // }
 }

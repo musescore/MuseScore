@@ -1,0 +1,54 @@
+{
+    "createCMakeLists": false,
+    "supportsQtSignals": false,
+    "exportsHeaderName": "kddockwidgets_export.h",
+    "exportsMacroName": "DOCKS_EXPORT",
+    "bindingsLibrary": "kddockwidgets",
+    "QStringToDartCode": "return data();",
+    "pureVirtualClassOverrides": [
+        "KDDockWidgets::Core::View"
+    ],
+    "namespaces": [
+        {
+            "name": "KDDWBindingsCore",
+            "types": [
+                "KDDockWidgets::Core::Object",
+                "KDDockWidgets::Core::Controller",
+                "KDDockWidgets::Core::TitleBar",
+                "KDDockWidgets::Core::TabBar",
+                "KDDockWidgets::Core::Group",
+                "KDDockWidgets::Core::Stack",
+                "KDDockWidgets::Core::DockWidget",
+                "KDDockWidgets::Core::Platform",
+                "KDDockWidgets::Core::View",
+                "KDDockWidgets::Core::ViewFactory",
+                "KDDockWidgets::Core::Layout",
+                "KDDockWidgets::Core::DropArea",
+                "KDDockWidgets::Core::Separator",
+                "KDDockWidgets::Core::SideBar",
+                "KDDockWidgets::Core::FloatingWindow",
+                "KDDockWidgets::Core::MainWindow",
+                "KDDockWidgets::Core::DelayedCall",
+                "KDDockWidgets::Core::ClassicDropIndicatorOverlay",
+                "KDDockWidgets::Core::ClassicIndicatorWindowViewInterface"
+            ]
+        },
+        {
+            "name": "KDDWBindingsFlutter",
+            "types": [
+                "KDDockWidgets::flutter::TitleBar",
+                "KDDockWidgets::flutter::Platform",
+                "KDDockWidgets::flutter::View",
+                "KDDockWidgets::flutter::Window",
+                "KDDockWidgets::flutter::TabBar",
+                "KDDockWidgets::flutter::Stack",
+                "KDDockWidgets::flutter::Group",
+                "KDDockWidgets::flutter::DockWidget",
+                "KDDockWidgets::flutter::ViewFactory",
+                "KDDockWidgets::flutter::DropArea",
+                "KDDockWidgets::flutter::MainWindow",
+                "KDDockWidgets::flutter::IndicatorWindow"
+            ]
+        }
+    ]
+}

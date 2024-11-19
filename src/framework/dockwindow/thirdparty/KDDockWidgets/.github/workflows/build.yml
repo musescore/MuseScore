@@ -1,0 +1,121 @@
+# SPDX-FileCopyrightText: 2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+#
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
+
+name: CI
+
+on:
+  push:
+    branches:
+      - 2.1
+      - 2.0
+      - main
+  pull_request:
+    branches:
+      - 2.1
+      - 2.0
+      - main
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-13
+
+        preset:
+          - name: ci-dev-qt5
+            qt_version: "5.15"
+          - name: ci-release-qt5
+            qt_version: "5.15"
+          - name: ci-qtwidgets-qt5
+            qt_version: "5.15"
+          - name: ci-qtquick-qt5
+            qt_version: "5.15"
+          - name: ci-dev-qt6
+            qt_version: "6.3.*"
+          - name: ci-release-qt6
+            qt_version: "6.3.*"
+          - name: ci-qtwidgets-qt6
+            qt_version: "6.3.*"
+          - name: ci-qtquick-qt6
+            qt_version: "6.3.*"
+
+        include:
+          - os: ubuntu-latest
+            preset:
+              name: ci-python-qt6
+              qt_version: "6.6.0"
+              detect_leaks: 0
+              apt_pgks:
+                - llvm
+              pip_pgks:
+                - shiboken6-generator==6.6.0 pyside6==6.6.0
+
+    steps:
+      - name: Install Qt ${{ matrix.preset.qt_version }} with options and default aqtversion
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ matrix.preset.qt_version }}
+          cache: true
+
+      - name: Install dependencies on Ubuntu (${{ join(matrix.preset.apt_pgks, ' ') }})
+        if: ${{ runner.os == 'Linux' && matrix.preset.apt_pgks }}
+        run: |
+          sudo apt update -qq
+          echo ${{ join(matrix.preset.apt_pgks, ' ') }} | xargs sudo apt install -y
+
+      # Not using apt_pgks, since spdlog is needed for all configurations:
+      - name: Install spdlog on Ubuntu
+        if: ${{ runner.os == 'Linux' }}
+        run: |
+          sudo apt install libspdlog-dev -y
+
+      - name: Install Python dependencies (${{ join(matrix.preset.pip_pgks, ' ') }})
+        if: ${{ matrix.preset.pip_pgks }}
+        run: echo ${{ join(matrix.preset.pip_pgks, ' ') }} | xargs pip install
+
+      - name: Hackery due Shiboken hardcoded paths
+        if: ${{ matrix.preset.pip_pgks }}
+        run: |
+          sudo mkdir -p /opt/rh/gcc-toolset-10/root/usr/bin/
+          sudo cp /usr/bin/g++-10 /opt/rh/gcc-toolset-10/root/usr/bin/c++
+          sudo mkdir -p /opt/rh/gcc-toolset-10/root/usr/lib/gcc/x86_64-linux-gnu/10/
+          sudo cp /usr/lib/gcc/x86_64-linux-gnu/10/cc1plus /opt/rh/gcc-toolset-10/root/usr/lib/gcc/x86_64-linux-gnu/10/
+
+      - name: Install ninja-build tool (must be after Qt due PATH changes)
+        uses: turtlesec-no/get-ninja@main
+
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Make sure MSVC is found when Ninja generator is in use
+        if: ${{ runner.os == 'Windows' }}
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Configure project
+        run: cmake -S . -B ./build-${{ matrix.preset.name }} --preset ${{ matrix.preset.name }}
+
+      - name: Build Project ${{ matrix.preset.build_preset_arg }}
+        run: cmake --build ./build-${{ matrix.preset.name }} ${{ matrix.preset.build_preset_arg }}
+
+      - name: Run tests on Linux
+        if: ${{ startsWith(matrix.preset.name, 'ci-dev-') && runner.os == 'Linux' }}
+        run: ctest --test-dir ./build-${{ matrix.preset.name }} --verbose
+        env:
+          QT_QUICK_BACKEND: software
+          LSAN_OPTIONS: detect_leaks=${{ matrix.preset.detect_leaks }}
+
+      - name: Run tests on Window/macOS
+        if: ${{ startsWith(matrix.preset.name, 'ci-dev-') && runner.os != 'Linux' }}
+        run: ctest --test-dir ./build-${{ matrix.preset.name }} --verbose
+
+      - name: Read tests log when it fails
+        uses: andstor/file-reader-action@v1
+        if: ${{ failure() && startsWith(matrix.preset.name, 'ci-dev-') }}
+        with:
+          path: "./build-${{ matrix.preset.name }}/Testing/Temporary/LastTest.log"

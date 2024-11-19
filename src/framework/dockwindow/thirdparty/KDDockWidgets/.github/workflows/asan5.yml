@@ -1,0 +1,59 @@
+# SPDX-FileCopyrightText: 2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+#
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
+
+name: Nightly ASAN Qt5
+
+on:
+  schedule:
+  - cron: '0 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: true
+      matrix:
+        preset:
+          - name: ci-dev-asan-qt5
+            qt_version: "5.15"
+
+    steps:
+      - name: Install Qt ${{ matrix.preset.qt_version }}
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ matrix.preset.qt_version }}
+          cache: true
+
+      - name: Install dependencies on Ubuntu
+        run: |
+          sudo apt update -qq
+          sudo apt install lld libspdlog-dev ninja-build -y
+
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Configure project
+        run: cmake -S . -B ./build-${{ matrix.preset.name }} --preset ${{ matrix.preset.name }}
+
+      - name: Build Project ${{ matrix.preset.build_preset_arg }}
+        run: cmake --build ./build-${{ matrix.preset.name }} ${{ matrix.preset.build_preset_arg }}
+
+      - name: Fix ASAN on ubuntu 22.04
+        run: |
+             sudo sysctl vm.mmap_rnd_bits=28
+             sudo sysctl vm.mmap_rnd_compat_bits=8
+
+      - name: Run tests on Linux (offscreen)
+        run: ctest --test-dir ./build-${{ matrix.preset.name }} --output-on-failure
+        env:
+          QT_QPA_PLATFORM: offscreen
+          QT_QUICK_BACKEND: software
+          LSAN_OPTIONS: detect_leaks=0
+
+      - name: Read tests log when it fails
+        uses: andstor/file-reader-action@v1
+        if: ${{ failure() && startsWith(matrix.preset.name, 'ci-dev-') }}
+        with:
+          path: "./build-${{ matrix.preset.name }}/Testing/Temporary/LastTest.log"

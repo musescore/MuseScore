@@ -52,26 +52,24 @@ echo "echo 'Setup MuseScore build environment'" >> $ENV_FILE
 
 # DISTRIBUTION PACKAGES
 
-# These are installed by default on Travis CI, but not on Docker
 apt_packages_basic=(
   # Alphabetical order please!
   desktop-file-utils
   file
   git
+  p7zip-full
   pkg-config
   software-properties-common # installs `add-apt-repository`
   unzip
-  p7zip-full
   )
 
-# These are the same as on Travis CI
 apt_packages_standard=(
   # Alphabetical order please!
   curl
-  libasound2-dev 
+  libasound2-dev
+  libcups2-dev
   libfontconfig1-dev
   libfreetype6-dev
-  libfreetype6
   libgl1-mesa-dev
   libjack-dev
   libnss3-dev
@@ -85,7 +83,6 @@ apt_packages_standard=(
 # MuseScore compiles without these but won't run without them
 apt_packages_runtime=(
   # Alphabetical order please!
-  libcups2
   libdbus-1-3
   libegl1-mesa-dev
   libodbc1
@@ -112,40 +109,17 @@ apt_packages_runtime=(
 
 apt_packages_ffmpeg=(
   ffmpeg
-  libavcodec-dev 
-  libavformat-dev 
+  libavcodec-dev
+  libavformat-dev
   libswscale-dev
   )
 
-sudo apt-get update 
+sudo apt-get update
 sudo apt-get install -y --no-install-recommends \
   "${apt_packages_basic[@]}" \
   "${apt_packages_standard[@]}" \
   "${apt_packages_runtime[@]}" \
   "${apt_packages_ffmpeg[@]}"
-
-##########################################################################
-# GET QT
-##########################################################################
-
-# Get newer Qt (only used cached version if it is the same)
-qt_version="624"
-qt_revision="r2" # added websocket module
-qt_dir="$BUILD_TOOLS/Qt/${qt_version}"
-if [[ ! -d "${qt_dir}" ]]; then
-  mkdir -p "${qt_dir}"
-  qt_url="https://s3.amazonaws.com/utils.musescore.org/Qt${qt_version}_gcc64_${qt_revision}.7z"
-  wget -q --show-progress -O qt.7z "${qt_url}"
-  7z x -y qt.7z -o"${qt_dir}"
-  rm qt.7z
-fi
-
-echo export PATH="${qt_dir}/bin:\${PATH}" >> ${ENV_FILE}
-echo export LD_LIBRARY_PATH="${qt_dir}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
-echo export QT_PATH="${qt_dir}" >> ${ENV_FILE}
-echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >> ${ENV_FILE}
-echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
-
 
 ##########################################################################
 # GET TOOLS
@@ -175,7 +149,7 @@ elif [ "$COMPILER" == "clang" ]; then
   clang --version
   clang++ --version
 
-else 
+else
   echo "Unknown compiler: $COMPILER"
 fi
 
@@ -185,7 +159,7 @@ cmake_version="3.24.0"
 cmake_dir="$BUILD_TOOLS/cmake/${cmake_version}"
 if [[ ! -d "$cmake_dir" ]]; then
   mkdir -p "$cmake_dir"
-  cmake_url="https://cmake.org/files/v${cmake_version%.*}/cmake-${cmake_version}-linux-x86_64.tar.gz" 
+  cmake_url="https://cmake.org/files/v${cmake_version%.*}/cmake-${cmake_version}-linux-x86_64.tar.gz"
   wget -q --show-progress --no-check-certificate -O - "${cmake_url}" | tar --strip-components=1 -xz -C "${cmake_dir}"
 fi
 echo export PATH="$cmake_dir/bin:\${PATH}" >> ${ENV_FILE}

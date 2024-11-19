@@ -1,0 +1,35 @@
+{
+    "name": "kddw-tests",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "runArgs": [
+        "--cap-add=SYS_PTRACE",
+        "--security-opt",
+        "seccomp=unconfined",
+        "--ulimit",
+        "nofile=1024:4096"
+    ],
+    "workspaceMount": "source=${localWorkspaceFolder}/,target=/kddockwidgets/,type=bind",
+    "workspaceFolder": "/kddockwidgets",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "vadimcn.vscode-lldb",
+                "llvm-vs-code-extensions.vscode-clangd",
+                "mhutchie.git-graph",
+                "Gruntfuggly.todo-tree",
+                "ms-vscode.cmake-tools"
+            ],
+            "settings": {
+                "terminal.integrated.shell.linux": "/bin/bash",
+                "workbench.colorTheme": "Visual Studio Light"
+            }
+        }
+    },
+    "mounts": [
+        "source=${localEnv:HOME}/Qt/5.15.2/gcc_64/,target=/Qt5/,type=bind",
+        "source=${localEnv:HOME}/Qt/6.6.0/gcc_64/,target=/Qt6/,type=bind"
+    ],
+    "remoteUser": "user"
+}

@@ -25,11 +25,11 @@
 
 #include <QQuickItem>
 
-#include "thirdparty/KDDockWidgets/src/private/multisplitter/Separator_p.h"
-#include "thirdparty/KDDockWidgets/src/private/multisplitter/Widget_quick.h"
+#include "thirdparty/KDDockWidgets/src/core/layouting/LayoutingSeparator_p.h"
+#include "thirdparty/KDDockWidgets/src/core/ViewFactory.h"
 
 namespace muse::dock {
-class DockSeparator : public QQuickItem, public Layouting::Separator, public Layouting::Widget_quick
+class DockSeparator : public QQuickItem, public KDDockWidgets::Core::LayoutingSeparator, public KDDockWidgets::Core::ViewFactory
 {
     Q_OBJECT
 
@@ -38,7 +38,7 @@ class DockSeparator : public QQuickItem, public Layouting::Separator, public Lay
     Q_PROPERTY(bool showResizeCursor READ showResizeCursor NOTIFY showResizeCursorChanged)
 
 public:
-    explicit DockSeparator(Layouting::Widget* parent = nullptr);
+    explicit DockSeparator(KDDockWidgets::Core::LayoutingHost* parent = nullptr);
 
     bool isVertical() const;
     bool isSeparatorVisible() const;
@@ -57,8 +57,7 @@ signals:
 private:
     void initAvailability();
 
-    Widget* createRubberBand(Widget* parent) override;
-    Widget* asWidget() override;
+    KDDockWidgets::Core::View* createRubberBand(KDDockWidgets::Core::View* parent) const override;
 
     bool m_isSeparatorVisible = false;
 };

@@ -25,8 +25,10 @@
 #include "log.h"
 #include "../docktypes.h"
 
-#include "thirdparty/KDDockWidgets/src/private/multisplitter/Rubberband_quick.h"
-#include "thirdparty/KDDockWidgets/src/DockWidgetBase.h"
+#include "thirdparty/KDDockWidgets/src/core/Frame_p.h"
+#include "thirdparty/KDDockWidgets/src/qtquick/views/Rubberband.h"
+#include "thirdparty/KDDockWidgets/src/core/DockWidget.h"
+#include "thirdparty/KDDockWidgets/src/core/layouting/Item_p.h"
 #include "thirdparty/KDDockWidgets/src/private/DockRegistry_p.h"
 
 #include <QTimer>
@@ -34,21 +36,21 @@
 using namespace muse::dock;
 
 namespace muse::dock {
-static const KDDockWidgets::DockWidgetBase* findNearestDock(const DockSeparator* separator)
+static const KDDockWidgets::Core::DockWidget* findNearestDock(const DockSeparator* separator)
 {
-    const Layouting::ItemBoxContainer* container = separator->parentContainer();
+    const KDDockWidgets::Core::ItemBoxContainer* container = separator->parentContainer();
     if (!container) {
         return nullptr;
     }
 
-    int separatorPos = separator->Layouting::Separator::position();
+    int separatorPos = separator->KDDockWidgets::Core::LayoutingSeparator::position();
     Qt::Orientation orientation = separator->orientation();
-    Layouting::Item::List children = container->visibleChildren();
+    KDDockWidgets::Core::Item::List children = container->visibleChildren();
 
-    const Layouting::Item* nearestItem = nullptr;
+    const KDDockWidgets::Core::Item* nearestItem = nullptr;
     int minPosDiff = std::numeric_limits<int>::max();
 
-    for (const Layouting::Item* child : children) {
+    for (const KDDockWidgets::Core::Item* child : children) {
         int childPos = child->pos(orientation);
         int diff = std::abs(childPos - separatorPos);
 
@@ -67,24 +69,22 @@ static const KDDockWidgets::DockWidgetBase* findNearestDock(const DockSeparator*
 }
 }
 
-DockSeparator::DockSeparator(Layouting::Widget* parent)
-    : QQuickItem(qobject_cast<QQuickItem*>(parent->asQObject())),
-    Layouting::Separator(parent),
-    Layouting::Widget_quick(this), m_isSeparatorVisible(true)
+DockSeparator::DockSeparator(KDDockWidgets::Core::LayoutingHost* parent)
+    : QQuickItem(qobject_cast<QQuickItem*>(parent->m_rootItem())),
+    KDDockWidgets::Core::LayoutingSeparator(parent, isVertical() ? Qt::Vertical : Qt::Horizontal, m_parentContainer),
+    KDDockWidgets::Core::ViewFactory(), m_isSeparatorVisible(true)
 {
     createQQuickItem("qrc:/qml/Muse/Dock/DockSeparator.qml", this);
 
     // Only set on Separator::init(), so single-shot
     QTimer::singleShot(0, this, &DockSeparator::isVerticalChanged);
     QTimer::singleShot(0, this, &DockSeparator::showResizeCursorChanged);
-    QTimer::singleShot(0, this, [this]() {
-        initAvailability();
-    });
+    QTimer::singleShot(0, this, &DockSeparator::initAvailability);
 }
 
 void DockSeparator::initAvailability()
 {
-    const QObject* dock = findNearestDock(this);
+    const KDDockWidgets::Core::DockWidget* dock = findNearestDock(this);
     DockProperties properties = readPropertiesFromObject(dock);
 
     if (properties.isValid()) {
@@ -96,7 +96,7 @@ void DockSeparator::initAvailability()
 
 bool DockSeparator::isVertical() const
 {
-    return Layouting::Separator::isVertical();
+    return KDDockWidgets::Core::LayoutingSeparator::isVertical();
 }
 
 bool DockSeparator::isSeparatorVisible() const
@@ -111,38 +111,33 @@ bool DockSeparator::showResizeCursor() const
                != parentContainer()->maxPosForSeparator_global(const_cast<DockSeparator*>(this)));
 }
 
-Layouting::Widget* DockSeparator::createRubberBand(Layouting::Widget* parent)
+KDDockWidgets::Core::View* DockSeparator::createRubberBand(KDDockWidgets::Core::View* parent) const
 {
     if (!parent) {
         LOGE() << "Parent is required";
         return nullptr;
     }
 
-    return new Layouting::Widget_quick(new Layouting::RubberBand(parent));
-}
-
-Layouting::Widget* DockSeparator::asWidget()
-{
-    return this;
+    return new KDDockWidgets::Core::View(new KDDockWidgets::QtQuick::RubberBand(parent));
 }
 
 void DockSeparator::onMousePressed()
 {
-    Layouting::Separator::onMousePress();
+    KDDockWidgets::Core::LayoutingSeparator::onMousePress();
 }
 
 void DockSeparator::onMouseMoved(QPointF localPos)
 {
     const QPointF pos = QQuickItem::mapToItem(parentItem(), localPos);
-    Layouting::Separator::onMouseMove(pos.toPoint());
+    KDDockWidgets::Core::LayoutingSeparator::onMouseMove(pos.toPoint());
 }
 
 void DockSeparator::onMouseReleased()
 {
-    Layouting::Separator::onMouseReleased();
+    KDDockWidgets::Core::LayoutingSeparator::onMouseRelease();
 }
 
 void DockSeparator::onMouseDoubleClicked()
 {
-    Layouting::Separator::onMouseDoubleClick();
+    // KDDockWidgets::Core::LayoutingSeparator::onMouseDoubleClick();
 }

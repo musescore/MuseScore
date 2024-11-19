@@ -4,32 +4,46 @@
     <!-- Pre-defined typesystem that contains types used by our class
         PySide has one typesystem for each module, here we use only the widgets
         typesystem because it already include gui and core typesystem -->
-    <load-typesystem name="typesystem_widgets.xml" generate="no"/>
+    <load-typesystem name="typesystem_widgets.xml" generate="no" />
 
-    <rejection class="KDDockWidgets" function-name="qt_getEnumName"/>
-    <rejection class="KDDockWidgets" function-name="qt_getEnumMetaObject"/>
+    <rejection class="KDDockWidgets" function-name="qt_getEnumName" />
+    <rejection class="KDDockWidgets" function-name="qt_getEnumMetaObject" />
+    <rejection class="KDDockWidgets" function-name="qt_getEnumName" />
 
     <!-- Our classes are declared in a namespace, so we should define this -->
-
     <namespace-type name="KDDockWidgets" visible="no">
+
         <!-- this is used in a public virtual pure function we need to declare it
             otherwise shiboken will ignore the function and will fail to create a wrapper -->
-        <primitive-type name="DropAreaWithCentralFrame"/>
-        <primitive-type name="SideBar"/>
+        <primitive-type name="DropArea" />
+        <primitive-type name="SideBar" />
 
         <!-- Some plublic enum and flags -->
         <enum-type name="Location"/>
-        <enum-type name="MainWindowOption" flags="MainWindowOptions"/>
-        <enum-type name="InitialVisibilityOption"/>
-        <enum-type name="RestoreOption" flags="RestoreOptions"/>
-        <enum-type name="DefaultSizeMode"/>
-        <enum-type name="FrameOption" flags="FrameOptions"/>
-        <enum-type name="DropIndicatorType"/>
-        <enum-type name="SideBarLocation"/>
-        <enum-type name="TitleBarButtonType"/>
+        <enum-type name="MainWindowOption" flags="MainWindowOptions" />
+        <enum-type name="DockWidgetOption" flags="DockWidgetOptions" />
+        <enum-type name="LayoutSaverOption" flags="LayoutSaverOptions" />
+        <enum-type name="IconPlace" flags="IconPlaces" />
+        <enum-type name="FrontendType" />
+        <enum-type name="InitialVisibilityOption" />
+        <enum-type name="RestoreOption" flags="RestoreOptions" />
+        <enum-type name="DropIndicatorType" />
+        <enum-type name="SizePolicy" />
+        <enum-type name="SideBarLocation" />
+        <enum-type name="TitleBarButtonType" />
+        <enum-type name="DropLocation" />
+        <enum-type name="DropIndicatorType" />
+        <enum-type name="AddingOption" />
+        <enum-type name="WindowState" flags="WindowStates" />
+
+        <!-- Internal - just to avoid generation warning -->
         <enum-type name="SuggestedGeometryHint" flags="SuggestedGeometryHints" />
         <enum-type name="CursorPosition" flags="CursorPositions" />
-        <enum-type name="AddingOption" />
+        <enum-type name="FrameOption" flags="FrameOptions" />
+        <enum-type name="StackOption" flags="StackOptions" />
+        <enum-type name="FloatingWindowFlag" flags="FloatingWindowFlags" />
+        <enum-type name="FloatingWindowFlag" flags="FloatingWindowFlags" />
+        <enum-type name="DefaultSizeMode" />
 
         <!-- our classes
              For class we can use two types:
@@ -37,18 +51,38 @@
                 value-type: class that can be passed as value for functions
              Here we only use 'object-type' since all our classes are derived from QWidget
          -->
-        <value-type name="InitialOption"/>
-        <object-type name="MainWindowBase" />
-        <object-type name="MainWindow" />
-        <object-type name="DockWidgetBase" >
-            <!-- this class contains a internal enum, so it should be declared
-                 inside of the object-type -->
-            <enum-type name="Option" flags="Options" />
-            <enum-type name="IconPlace" flags="IconPlaces" />
-            <enum-type name="LayoutSaverOption" flags="LayoutSaverOptions" />
+        <value-type name="InitialOption">
+            <include file-name="kddockwidgets/KDDockWidgets.h" location="global"/>
+        </value-type>
+        <object-type name="LayoutSaver">
+            <include file-name="kddockwidgets/LayoutSaver.h" location="global"/>
+        </object-type>
+        <object-type name="Config">
+            <include file-name="kddockwidgets/Config.h" location="global"/>
+
+            <enum-type name="Flag" flags="Flags" />
+            <enum-type name="CustomizableWidget" flags="CustomizableWidgets" />
+            <enum-type name="InternalFlag" flags="InternalFlags" />
         </object-type>
 
-        <object-type name="DockWidget" />
-        <object-type name="LayoutSaver" />
+        <namespace-type name="Core" visible="no">
+            <enum-type name="ViewType" />
+            <object-type name="DockWidgetViewInterface" >
+              <include file-name="kddockwidgets/core/views/DockWidgetViewInterface.h" location="global"/>
+            </object-type>
+            <object-type name="MainWindowViewInterface">
+              <include file-name="kddockwidgets/core/views/MainWindowViewInterface.h" location="global"/>
+              <modify-function signature="addDockWidget(KDDockWidgets::Core::DockWidgetViewInterface*,KDDockWidgets::Location,KDDockWidgets::Core::DockWidgetViewInterface*,KDDockWidgets::InitialOption)" rename="addKDockWidget" />
+            </object-type>
+        </namespace-type>
+
+        <namespace-type name="QtWidgets" visible="no">
+            <object-type name="MainWindow">
+                <include file-name="kddockwidgets/qtwidgets/views/MainWindow.h" location="global"/>
+            </object-type>
+            <object-type name="DockWidget">
+                <include file-name="kddockwidgets/qtwidgets/views/DockWidget.h" location="global"/>
+            </object-type>
+        </namespace-type>
     </namespace-type>
 </typesystem>

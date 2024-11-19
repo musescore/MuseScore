@@ -73,8 +73,8 @@ private:
 
     bool canChangeOrientation() const;
 
-    class DraggableArea;
-    DraggableArea* m_draggableArea = nullptr;
+    // class DraggableArea;
+    // DraggableArea* m_draggableArea = nullptr;
 
     Qt::Orientation m_orientation = Qt::Horizontal;
     int m_alignment = static_cast<int>(DockToolBarAlignment::Left);

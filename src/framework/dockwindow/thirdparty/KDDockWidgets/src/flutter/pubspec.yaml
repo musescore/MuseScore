@@ -1,0 +1,21 @@
+name: DartagnanTests
+description: The test runner app
+# version: 1.0.0
+# homepage: https://www.kdab.com
+environment:
+  sdk: '>=3.0.0'
+
+dev_dependencies:
+  pedantic: ^1.9.0
+  flutter_test:
+    sdk: flutter
+
+dependencies:
+  path: ^1.7.0
+  flutter:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+
+flutter:
+  uses-material-design: true

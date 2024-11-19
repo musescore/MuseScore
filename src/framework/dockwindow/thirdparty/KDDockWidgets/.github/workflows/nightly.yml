@@ -1,0 +1,113 @@
+# SPDX-FileCopyrightText: 2023 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+#
+# SPDX-License-Identifier: GPL-2.0-only OR GPL-3.0-only
+
+name: Nightly Misc
+
+on:
+  schedule:
+  - cron: '0 3 * * *'
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - ubuntu-22.04
+          - windows-2022
+          - windows-2019
+          - macos-13
+          - macos-12
+
+        preset:
+          - name: ci-release-static-qt5
+            qt_version: "5.15"
+          - name: ci-dev-static-qt5
+            qt_version: "5.15"
+          - name: ci-python-qt6
+            qt_version: "6.6.0"
+          - name: ci-release-static-qt6
+            qt_version: "6.3.*"
+          - name: ci-dev-static-qt6
+            qt_version: "6.3.*"
+
+        include:
+          - os: ubuntu-22.04
+            preset:
+              name: ci-clang-tidy-qt5
+              qt_version: "5.15"
+
+          - os: ubuntu-22.04
+            preset:
+              name: clazy
+              build_preset_arg: '--preset=clazy'
+              qt_version: "5.15"
+
+          - os: ubuntu-22.04
+            preset:
+              name: ci-dev-valgrind-qt5
+              qt_version: "5.15"
+
+          - os: ubuntu-22.04
+            preset:
+              name: ci-dev-valgrind-qt6
+              qt_version: "6.5.*"
+
+    steps:
+      - name: Install Qt ${{ matrix.preset.qt_version }} with options and default aqtversion
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: ${{ matrix.preset.qt_version }}
+          cache: true
+
+      - name: Install ninja-build tool (must be after Qt due PATH changes)
+        uses: turtlesec-no/get-ninja@main
+
+      - name: Install dependencies on Ubuntu
+        if: ${{ runner.os == 'Linux' }}
+        run: |
+          sudo apt update -qq
+          sudo apt install libspdlog-dev lld valgrind clazy llvm -y
+
+      - uses: actions/checkout@v4
+        #with:
+          #ref: '2.0' # schedule.cron do not allow branch setting
+
+      - uses: actions/setup-python@v5
+        with:
+          cache: 'pip'
+          cache-dependency-path: '.github/workflows/pip-requirements.txt'
+          python-version: '3.9'
+
+      - run: pip3.9 install -r .github/workflows/pip-requirements.txt
+
+      - name: Make sure MSVC is found when Ninja generator is in use
+        if: ${{ runner.os == 'Windows' }}
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Hackery due Shiboken hardcoded paths
+        if: ${{ runner.os == 'Linux' }}
+        run: |
+          sudo mkdir -p /opt/rh/gcc-toolset-10/root/usr/bin/
+          sudo cp /usr/bin/g++-10 /opt/rh/gcc-toolset-10/root/usr/bin/c++
+          sudo mkdir -p /opt/rh/gcc-toolset-10/root/usr/lib/gcc/x86_64-linux-gnu/10/
+          sudo cp /usr/lib/gcc/x86_64-linux-gnu/10/cc1plus /opt/rh/gcc-toolset-10/root/usr/lib/gcc/x86_64-linux-gnu/10/
+
+      - name: Configure project
+        run: cmake -S . -B ./build-${{ matrix.preset.name }} --preset ${{ matrix.preset.name }}
+
+      # python on windows-2022 has a msvc problem
+      - name: Build Project ${{ matrix.preset.build_preset_arg }}
+        if: ${{ matrix.os != 'windows-2022' || matrix.preset.name != 'ci-python-qt6' }}
+        run: cmake --build ./build-${{ matrix.preset.name }} ${{ matrix.preset.build_preset_arg }}
+
+      - name: Run tests on Linux (offscreen)
+        if: ${{ startsWith(matrix.preset.name, 'ci-dev-') && runner.os == 'Linux' }}
+        run: ctest --test-dir ./build-${{ matrix.preset.name }} --output-on-failure
+        env:
+          QT_QPA_PLATFORM: offscreen
+          QT_QUICK_BACKEND: software

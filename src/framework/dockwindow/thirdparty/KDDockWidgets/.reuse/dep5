@@ -1,0 +1,49 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: KDDockWidgets
+Upstream-Contact: <info@kdab.com>
+Source: https://www.github.com/KDAB/KDDockWidgets
+
+#misc source code
+Files: *.qrc *.json *.xml *.ui
+Copyright: Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+License: GPL-2.0-only OR GPL-3.0-only
+
+#misc documentation
+Files: CONTRIBUTORS.txt Changelog README.md README-porting.md README-QtQuick.md README-Flutter.md README-WASM.md README-Wayland.md README-troubleshooting conan/README.txt python/examples/README.txt python/examples-qt6/README.txt docs_devel/*.md docs/KDDockWidgets-CopyrightAssignmentForm.pdf *.html src/3rdparty/qcoro/README examples/qtquick/customseparator/README.md docs/book/** docs/developer/*.md book.toml .github/actions/qt6-asan/README.md .github/actions/qt6-lsan/README.md
+Copyright: Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+License: GPL-2.0-only OR GPL-3.0-only
+
+#misc config files
+Files: .pre-commit-config.yaml .codespellrc .krazy .cmake-format .clang-format .clangd .clazy .clang-tidy .gitignore .markdownlint.json .pep8 .pylintrc .editorconfig .shellcheckrc mkdocs.yml .github/workflows/mdbook.yml code.dev-*.code-workspace code.dev*.code-workspace vscode.code-workspace docs/api/Doxyfile.cmake distro/* *.yaml  .github/workflows/pip-requirements.txt valgrind.sup
+Copyright: Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+License: BSD-3-Clause
+
+#artwork
+Files: screencap.gif images/* src/img/* docs/api/*.png examples/dockwidgets/assets/*.png src/img/classic_indicators/*.png examples/flutter/assets/*.png src/flutter/dart/assets/classic_indicators/*.png
+Copyright: Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
+License: GPL-2.0-only OR GPL-3.0-only
+
+#3rdparty ECM (a few are missing reuse headers)
+Files: cmake/ECM/modules/ECMVersionHeader.h.in cmake/ECM/modules/ecm_uninstall.cmake.in cmake/ECM/modules/BSD-3-Clause.txt
+Copyright: The KDE Project
+License: BSD-3-Clause
+
+#3rdparty C++
+Files: src/3rdparty/kdbindings/genindex_array.h
+Copyright: 2021 Jeremy Burns
+License: MIT
+
+# doxygen awesome
+Files: docs/api/doxygen-awesome.css
+Copyright: 2021 - 2023 jothepro
+License: MIT
+
+# Flutter
+Files: tests/flutter_tests_embedder/tests_embedder.* examples/flutter/assets/* examples/flutter/macos/Runner/Configs/AppInfo.xcconfig examples/flutter/.metadata examples/flutter/macos/Runner/Assets.xcassets/* examples/flutter/macos/Runner.xcodeproj/* examples/flutter/macos/Flutter/* examples/flutter/macos/Runner.xcworkspace/* examples/flutter/macos/.gitignore examples/flutter/macos/Runner/Configs/*.xcconfig examples/flutter/macos/Runner/Base.lproj/MainMenu.xib examples/flutter/macos/Runner/DebugProfile.entitlements examples/flutter/macos/Runner/Info.plist examples/flutter/macos/Runner/Release.entitlements examples/flutter/windows/runner/resources/app_icon.ico examples/flutter/windows/runner/runner.exe.manifest
+Copyright: Copyright 2013-2014 The Flutter Authors
+License: LicenseRef-FlutterBSD
+
+# Slint
+Files: src/core/layouting/examples/slint/slint-logo-full-dark-large.png
+Copyright: Copyright SixtyFPS GmbH <info@slint.dev>
+License: GPL-3.0-only
