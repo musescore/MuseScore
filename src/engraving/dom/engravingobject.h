@@ -158,6 +158,7 @@ class StringTunings;
 class Symbol;
 class System;
 class SystemDivider;
+class SystemLockIndicator;
 class SystemText;
 class SoundFlag;
 class TBox;
@@ -214,7 +215,8 @@ public:
     virtual String translatedTypeUserName() const;
 
     inline EID eid() const { return m_eid; }
-    inline void setEID(EID id) { m_eid = id; }
+    void setEID(EID id);
+    virtual bool registerId() const { return false; }
 
     EngravingObject* parent() const;
     void setParent(EngravingObject* p);
@@ -355,6 +357,7 @@ public:
     CONVERT(Jump,          JUMP)
     CONVERT(Ottava,        OTTAVA)
     CONVERT(LayoutBreak,   LAYOUT_BREAK)
+    CONVERT(SystemLockIndicator, SYSTEM_LOCK_INDICATOR)
     CONVERT(Segment,       SEGMENT)
     CONVERT(System,        SYSTEM)
     CONVERT(Lyrics,        LYRICS)
@@ -757,6 +760,7 @@ CONVERT(PlayTechAnnotation)
 CONVERT(Capo)
 CONVERT(Ottava)
 CONVERT(LayoutBreak)
+CONVERT(SystemLockIndicator)
 CONVERT(Segment)
 CONVERT(System)
 CONVERT(Lyrics)

@@ -363,6 +363,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
             }
             MeasureLayout::layout2(m, ctx);
         }
+        SystemLayout::layoutSystemLockIndicators(s, ctx);
     }
 
     // If this is the last page we layout, we must also relayout the first barlines of the

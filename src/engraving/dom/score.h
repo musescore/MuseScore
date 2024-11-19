@@ -58,6 +58,7 @@
 #include "scoreorder.h"
 #include "select.h"
 #include "spannermap.h"
+#include "systemlock.h"
 #include "synthesizerstate.h"
 #include "rootitem.h"
 #include "cmd.h"
@@ -357,6 +358,11 @@ public:
     void cmdDecDurationDotted() { cmdIncDecDuration(1, true); }
     void cmdIncDecDuration(int nSteps, bool stepDotted = false);
     void cmdToggleLayoutBreak(LayoutBreakType);
+    void cmdMoveMeasureToPrevSystem();
+    void cmdMoveMeasureToNextSystem();
+    void cmdToggleSystemLock();
+    void cmdToggleScoreLock();
+    void cmdMakeIntoSystem();
     void cmdAddStaffTypeChange(Measure* measure, staff_idx_t staffIdx, StaffTypeChange* stc);
     void cmdAddMeasureRepeat(Measure*, int numMeasures, staff_idx_t staffIdx);
     bool makeMeasureRepeatGroup(Measure*, int numMeasures, staff_idx_t staffIdx);
@@ -385,7 +391,8 @@ public:
 
     void realtimeAdvance(bool allowTransposition);
 
-    void addRemoveBreaks(int interval, bool lock);
+    void addRemoveBreaks(int interval, bool lock); // DEPRECATED
+    void addRemoveSystemLocks(int interval, bool lock);
 
     bool transpose(Note* n, Interval, bool useSharpsFlats);
     void transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fraction& tickStart, const Fraction& tickEnd, bool flip = false);
@@ -1003,6 +1010,18 @@ public:
 
     void autoUpdateSpatium();
 
+    const SystemLocks* systemLocks() const { return &m_systemLocks; }
+    void addSystemLock(const SystemLock* lock);
+    void removeSystemLock(const SystemLock* lock);
+    void clearSystemLocks() { m_systemLocks.clear(); }
+
+    void undoAddSystemLock(const SystemLock* lock);
+    void undoRemoveSystemLock(const SystemLock* lock);
+    void undoRemoveAllLocks();
+    void toggleSystemLock(const std::vector<System*>& systems);
+    void checkSystemLocksOnAddLayoutBreak(LayoutBreakType breakType, const MeasureBase* measure);
+    void checkLayoutBreaksOnAddSystemLock(const SystemLock* lock);
+
     friend class Chord;
 
 protected:
@@ -1099,6 +1118,7 @@ private:
     std::vector<Part*> m_parts;
     std::vector<Staff*> m_staves;
     std::vector<Staff*> m_systemObjectStaves;
+    SystemLocks m_systemLocks;
 
     SpannerMap m_spanner;
     std::set<Spanner*> m_unmanagedSpanner;

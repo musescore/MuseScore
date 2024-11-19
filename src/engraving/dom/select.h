@@ -37,6 +37,7 @@ class EngravingItem;
 class Segment;
 class Note;
 class Measure;
+class MeasureBase;
 class Chord;
 class Tuplet;
 class GuitarBend;
@@ -185,6 +186,9 @@ public:
     ChordRest* firstChordRest(track_idx_t track = muse::nidx) const;
     ChordRest* lastChordRest(track_idx_t track = muse::nidx) const;
     Measure* findMeasure() const;
+    MeasureBase* startMeasureBase() const;
+    MeasureBase* endMeasureBase() const;
+    std::vector<System*> selectedSystems() const;
     void update();
     void updateState();
     void dump();

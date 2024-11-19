@@ -29,6 +29,7 @@
 
 #include "style/style.h"
 
+#include "actionicon.h"
 #include "beam.h"
 #include "box.h"
 #include "bracket.h"
@@ -127,6 +128,7 @@ System::~System()
     }
     muse::DeleteAll(m_staves);
     muse::DeleteAll(m_brackets);
+    muse::DeleteAll(m_lockIndicators);
     delete m_systemDividerLeft;
     delete m_systemDividerRight;
 }
@@ -268,6 +270,28 @@ size_t System::getBracketsColumnsCount()
         }
     }
     return columns;
+}
+
+bool System::isLocked() const
+{
+    return m_ml.front()->isStartOfSystemLock();
+}
+
+const SystemLock* System::systemLock() const
+{
+    return m_ml.front()->systemLock();
+}
+
+void System::addLockIndicator(SystemLockIndicator* sli)
+{
+    assert(sli);
+    m_lockIndicators.push_back(sli);
+}
+
+void System::deleteLockIndicators()
+{
+    muse::DeleteAll(m_lockIndicators);
+    m_lockIndicators.clear();
 }
 
 void System::setBracketsXPosition(const double xPosition)
@@ -652,6 +676,10 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
     }
     if (m_systemDividerRight) {
         func(data, m_systemDividerRight);
+    }
+
+    for (auto i : m_lockIndicators) {
+        func(data, i);
     }
 
     for (const SysStaff* st : m_staves) {

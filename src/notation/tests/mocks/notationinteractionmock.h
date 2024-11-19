@@ -162,8 +162,13 @@ public:
 
     MOCK_METHOD(bool, toggleLayoutBreakAvailable, (), (const, override));
     MOCK_METHOD(void, toggleLayoutBreak, (LayoutBreakType), (override));
+    MOCK_METHOD(void, moveMeasureToPrevSystem, (), (override));
+    MOCK_METHOD(void, moveMeasureToNextSystem, (), (override));
+    MOCK_METHOD(void, toggleSystemLock, (), (override));
+    MOCK_METHOD(void, toggleScoreLock, (), (override));
+    MOCK_METHOD(void, makeIntoSystem, (), (override));
 
-    MOCK_METHOD(void, setBreaksSpawnInterval, (BreaksSpawnIntervalType, int), (override));
+    MOCK_METHOD(void, setLocksSpawnInterval, (LocksSpawnIntervalType, int), (override));
     MOCK_METHOD(bool, transpose, (const TransposeOptions&), (override));
     MOCK_METHOD(void, swapVoices, (voice_idx_t, voice_idx_t), (override));
     MOCK_METHOD(void, addIntervalToSelectedNotes, (int), (override));

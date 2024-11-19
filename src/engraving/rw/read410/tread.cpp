@@ -1987,7 +1987,9 @@ static void setActionIconTypeFromAction(ActionIcon* i, const std::string& action
         { "grace-note-bend", ActionIconType::GRACE_NOTE_BEND },
         { "slight-bend", ActionIconType::SLIGHT_BEND },
 
-        { "add-noteline", ActionIconType::NOTE_ANCHORED_LINE }
+        { "add-noteline", ActionIconType::NOTE_ANCHORED_LINE },
+
+        { "toggle-system-lock", ActionIconType::SYSTEM_LOCK }
     };
 
     auto it = map.find(actionCode);
@@ -3292,7 +3294,6 @@ void TRead::read(LayoutBreak* b, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-    b->init();
 }
 
 void TRead::read(LedgerLine* l, XmlReader& e, ReadContext& ctx)
@@ -4819,4 +4820,38 @@ void TRead::readSpanner(XmlReader& e, ReadContext& ctx, Score* current, track_id
 {
     std::shared_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, &ctx, current, static_cast<int>(track)));
     ConnectorInfoReader::readConnector(info, e, ctx);
+}
+
+void TRead::readSystemLocks(Score* score, XmlReader& e)
+{
+    while (e.readNextStartElement()) {
+        if (e.name() == "systemLock") {
+            readSystemLock(score, e);
+        } else {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::readSystemLock(Score* score, XmlReader& e)
+{
+    EID startMeasId;
+    EID endMeasId;
+
+    while (e.readNextStartElement()) {
+        AsciiStringView tag(e.name());
+        if (tag == "startMeasure") {
+            startMeasId = EID::fromStdString(e.readAsciiText());
+        } else if (tag == "endMeasure") {
+            endMeasId = EID::fromStdString(e.readAsciiText());
+        } else {
+            e.unknown();
+        }
+    }
+
+    EIDRegister* eidRegister = score->masterScore()->eidRegister();
+    MeasureBase* startMeas = toMeasureBase(eidRegister->itemFromEID(startMeasId));
+    MeasureBase* endMeas = toMeasureBase(eidRegister->itemFromEID(endMeasId));
+
+    score->addSystemLock(new SystemLock(startMeas, endMeas));
 }

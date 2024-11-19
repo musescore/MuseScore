@@ -305,6 +305,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::LAYOUT_BREAK:
         layoutLayoutBreak(item_cast<const LayoutBreak*>(item), static_cast<LayoutBreak::LayoutData*>(ldata));
         break;
+    case ElementType::SYSTEM_LOCK_INDICATOR:
+        layoutSystemLockIndicator(item_cast<const SystemLockIndicator*>(item), static_cast<SystemLockIndicator::LayoutData*>(ldata));
+        break;
     case ElementType::LET_RING:         layoutLetRing(item_cast<LetRing*>(item), ctx);
         break;
     case ElementType::LET_RING_SEGMENT: layoutLetRingSegment(item_cast<LetRingSegment*>(item), ctx);
@@ -3762,12 +3765,56 @@ void TLayout::layoutLayoutBreak(const LayoutBreak* item, LayoutBreak::LayoutData
     LAYOUT_CALL_ITEM(item);
     LD_INDEPENDENT;
 
-    if (ldata->isValid()) {
+    if (ldata->isValid() || MScore::testMode) {
         return;
     }
 
-    double lw = item->lineWidth();
-    ldata->setBbox(item->iconBorderRect().adjusted(-lw, -lw, lw, lw));
+    FontMetrics metrics(item->font());
+    RectF bbox = metrics.boundingRect(item->iconCode());
+    ldata->setShape(Shape(bbox, item));
+}
+
+void TLayout::layoutSystemLockIndicator(const SystemLockIndicator* item, SystemLockIndicator::LayoutData* ldata)
+{
+    if (MScore::testMode) {
+        return;
+    }
+
+    Shape shape;
+
+    FontMetrics metrics(item->font());
+    RectF lockBox = metrics.boundingRect(item->iconCode());
+    shape.add(lockBox, item);
+
+    if (item->selected()) {
+        const SystemLock* lock = item->systemLock();
+        double xStart = lock->startMB()->x();
+        double xEnd = lock->endMB()->x() + lock->endMB()->width();
+        double width = xEnd - xStart;
+        double y = lockBox.top() - 0.5 * item->spatium();
+        double height = lockBox.height() + item->spatium();
+        ldata->rangeRect = RectF(xStart, y, width, height).translated(-item->x(), 0.0);
+        shape.add(ldata->rangeRect);
+    }
+
+    ldata->setShape(shape);
+
+    double spatium = item->spatium();
+
+    const MeasureBase* endMB = item->systemLock()->endMB();
+    double x = endMB->x() + endMB->width();
+    x -= lockBox.right() + 0.5 * spatium;
+
+    double xLayoutBreaks = endMB->x() + endMB->width();
+    for (EngravingItem* el : endMB->el()) {
+        if (el->isLayoutBreak()) {
+            xLayoutBreaks = std::min(xLayoutBreaks, endMB->x() + el->x() + el->ldata()->bbox().left() - spatium);
+        }
+    }
+
+    x = std::min(x, xLayoutBreaks - lockBox.right());
+
+    ldata->setPos(PointF(x, -2.5 * spatium));
 }
 
 static void _layoutLedgerLine(const LedgerLine* item, const LayoutContext& ctx, LedgerLine::LayoutData* ldata)
@@ -3879,26 +3926,21 @@ void TLayout::layoutBaseMeasureBase(const MeasureBase* item, MeasureBase::Layout
 {
     LD_CONDITION(ldata->isSetBbox());
 
-    int breakCount = 0;
-
+    double x = ldata->bbox().width();
     for (EngravingItem* e : item->el()) {
         if (e->isLayoutBreak()) {
             TLayout::layoutItem(e, const_cast<LayoutContext&>(ctx));
             EngravingItem::LayoutData* eldata = e->mutldata();
             double spatium = item->spatium();
-            double x = 0.0;
             double y = 0.0;
             if (toLayoutBreak(e)->isNoBreak()) {
-                x = /*mb*/ ldata->bbox().width() + ctx.conf().styleMM(Sid::barWidth) - eldata->bbox().width() * .5;
+                x -= eldata->bbox().right() * .5;
             } else {
-                x = /*mb*/ ldata->bbox().width()
-                    + ctx.conf().styleMM(Sid::barWidth)
-                    - eldata->bbox().width()
-                    - breakCount * (eldata->bbox().width() + spatium * .5);
-                breakCount++;
+                x -= eldata->bbox().right() + 0.5 * spatium;
             }
-            y = -2.5 * spatium - eldata->bbox().height();
+            y = -2.5 * spatium;
             eldata->setPos(x, y);
+            x += eldata->bbox().left() - 0.5 * spatium;
         } else if (e->isMarker() || e->isJump()) {
         } else {
             layoutItem(e, const_cast<LayoutContext&>(ctx));

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Add/remove system breaks</string>
+   <string>Measures per system</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -69,7 +69,7 @@
         <string>Add system break at end of each system</string>
        </property>
        <property name="text">
-        <string>Add system break at end of each system</string>
+        <string>Add system locks to each system</string>
        </property>
       </widget>
      </item>
@@ -79,7 +79,7 @@
         <string>Remove current system breaks</string>
        </property>
        <property name="text">
-        <string>Remove current system breaks</string>
+        <string>Remove current system locks</string>
        </property>
       </widget>
      </item>

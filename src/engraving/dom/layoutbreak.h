@@ -71,12 +71,9 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
-    void init();
+    char16_t iconCode() const;
 
-    double lineWidth() const { return m_lw; }
-    const RectF& iconBorderRect() const { return m_iconBorderRect; }
-    const muse::draw::PainterPath& iconPath() const { return m_iconPath; }
-
+    muse::draw::Font font() const;
 protected:
     void added() override;
     void removed() override;
@@ -87,11 +84,6 @@ private:
     LayoutBreak(MeasureBase* parent = 0);
     LayoutBreak(const LayoutBreak&);
 
-    void spatiumChanged(double oldValue, double newValue) override;
-
-    double m_lw = 0.0;
-    RectF m_iconBorderRect;
-    muse::draw::PainterPath m_iconPath;
     double m_pause = 0.0;
     bool m_startWithLongNames = false;
     bool m_startWithMeasureOne = false;

@@ -37,6 +37,7 @@ class InstrumentName;
 class MeasureBase;
 class Page;
 class SpannerSegment;
+class SystemLock;
 
 //---------------------------------------------------------
 //   SysStaff
@@ -140,6 +141,8 @@ public:
     std::vector<MeasureBase*>& measures() { return m_ml; }
 
     MeasureBase* measure(int idx) { return m_ml[idx]; }
+    MeasureBase* first() const { return m_ml.front(); }
+    MeasureBase* last() const { return m_ml.back(); }
     Measure* firstMeasure() const;
     Measure* lastMeasure() const;
     Fraction endTick() const;
@@ -202,6 +205,13 @@ public:
 
     void resetShortestLongestChordRest();
 
+    bool isLocked() const;
+    const SystemLock* systemLock() const;
+
+    const std::vector<SystemLockIndicator*> lockIndicators() const { return m_lockIndicators; }
+    void addLockIndicator(SystemLockIndicator* sli);
+    void deleteLockIndicators();
+
 private:
     friend class Factory;
 
@@ -219,6 +229,7 @@ private:
     std::vector<SysStaff*> m_staves;
     std::vector<Bracket*> m_brackets;
     std::list<SpannerSegment*> m_spannerSegments;
+    std::vector<SystemLockIndicator*> m_lockIndicators;
 
     double m_leftMargin = 0.0;      // left margin for instrument name, brackets etc.
     mutable bool m_fixedDownDistance = false;

@@ -33,13 +33,13 @@ InspectorSectionView {
 
     implicitHeight: contentColumn.height
 
-    Column {
+    ColumnLayout {
         id: contentColumn
 
         height: implicitHeight
         width: parent.width
 
-        spacing: 12
+        spacing: 0
 
         RowLayout {
             width: parent.width
@@ -84,6 +84,108 @@ InspectorSectionView {
 
                 onClicked: model.deleteSelectedMeasures()
             }
+        }
+
+        StyledTextLabel {
+            Layout.alignment: Qt.AlignLeft
+            Layout.topMargin: 12
+            visible: model.scoreIsInPageView
+            text: qsTrc("inspector", "Move to system")
+        }
+
+        RowLayout {
+            Layout.topMargin: 8
+            visible: model.scoreIsInPageView
+
+            width: parent.width
+            spacing: 4
+
+            FlatButton {
+                id: upSystem
+
+                Layout.fillWidth: true
+
+                navigation.panel: root.navigationPanel
+                navigation.name: "SystemUp"
+                navigation.row: deleteButton.navigation.row + 1
+
+                orientation: Qt.Horizontal
+                icon: IconCode.ARROW_UP
+                text: qsTrc("inspector", "Previous")
+
+                toolTipTitle: qsTrc("inspector", "Move measure(s) to previous system")
+                toolTipShortcut: model.shortcutMoveMeasureUp
+
+                onClicked: model.moveMeasureUp()
+            }
+
+            FlatButton {
+                id: downSystem
+
+                Layout.fillWidth: true
+
+                navigation.panel: root.navigationPanel
+                navigation.name: "SystemDown"
+                navigation.row: upSystem.navigation.row + 1
+
+                orientation: Qt.Horizontal
+                icon: IconCode.ARROW_DOWN
+                text: qsTrc("inspector", "Next")
+
+                toolTipTitle: qsTrc("inspector", "Move measure(s) to next system")
+                toolTipShortcut: model.shortcutMoveMeasureDown
+
+                onClicked: model.moveMeasureDown()
+            }
+        }
+
+
+        FlatButton {
+            Layout.topMargin: 12
+            Layout.fillWidth: true
+            visible: model.scoreIsInPageView
+
+            id: toggleSystemLock
+
+            width: parent.width
+
+            navigation.panel: root.navigationPanel
+            navigation.name: "SystemLock"
+            navigation.row: downSystem.navigation.row + 1
+
+            orientation: Qt.Horizontal
+            icon: Boolean(model.allSystemsAreLocked) ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
+            text: qsTrc("inspector", "Lock current system")
+
+            toolTipTitle: qsTrc("inspector", "Lock current system(s)")
+            toolTipDescription: qsTrc("inspector", "Keep these measures together and prevent them from reflowing to the next system")
+            toolTipShortcut: model.shortcutToggleSystemLock
+
+            accentButton: Boolean(model.allSystemsAreLocked)
+
+            onClicked: model.toggleSystemLock()
+        }
+
+        FlatButton {
+            id: makeIntoOneSystem
+            enabled: model.isMakeIntoSystemAvailable
+
+            Layout.topMargin: 4
+            Layout.fillWidth: true
+
+            navigation.panel: root.navigationPanel
+            navigation.name: "MakeSystem"
+            navigation.row: toggleSystemLock.navigation.row + 1
+
+            orientation: Qt.Horizontal
+            //icon: TODO maybe
+            text: qsTrc("inspector", "Make into one system")
+
+            toolTipTitle: qsTrc("inspector", "Make measure(s) into one system")
+            toolTipDescription: qsTrc("inspector", "Create a system containing only the selected measure(s)")
+            toolTipShortcut: model.shortcutMakeIntoSystem
+
+            onClicked: model.makeIntoSystem()
         }
     }
 }

@@ -458,6 +458,15 @@ public:
         LV_CHORD_OUTSIDE = 0xF47F,
         LV_CHORD_INSIDE = 0xF480,
 
+        SYSTEM_LOCK_START = 0xF481,
+        SYSTEM_LOCK_END = 0xF482,
+
+        LINE_BREAK = 0xF483,
+        PAGE_BREAK = 0xF484,
+        SECTION_BREAK2 = 0xF485,
+        NO_BREAK = 0xF486,
+        SYSTEM_LOCK = 0xF487,
+
         NONE = 0xFFFF
     };
 

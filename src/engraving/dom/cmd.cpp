@@ -2667,6 +2667,7 @@ void Score::cmdResetToDefaultLayout()
     cmdResetMeasuresLayout();
     scanElements(nullptr, resetPositionAndTextProperties);
     cmdResetAllStyles(dontResetTheseStyles);
+    undoRemoveAllLocks();
 }
 
 //---------------------------------------------------------
@@ -4332,7 +4333,7 @@ void Score::cmdResequenceRehearsalMarks()
 //    d.c.     true     add linebreak at every system end
 //---------------------------------------------------------
 
-void Score::addRemoveBreaks(int interval, bool lock)
+void Score::addRemoveBreaks(int interval, bool lock) // DEPRECATED
 {
     Segment* startSegment = selection().startSegment();
     if (!startSegment) { // empty score?
@@ -4390,6 +4391,62 @@ void Score::addRemoveBreaks(int interval, bool lock)
         }
 
         if (mm == endMeasure) {
+            break;
+        }
+    }
+}
+
+void Score::addRemoveSystemLocks(int interval, bool lock)
+{
+    bool mmrests = style().styleB(Sid::createMultiMeasureRests);
+
+    MeasureBase* startMeasure = selection().startMeasureBase();
+    MeasureBase* endMeasure = selection().endMeasureBase();
+    if (!endMeasure) {
+        endMeasure = mmrests ? lastMeasureMM() : lastMeasure();
+    }
+
+    if (!startMeasure || !endMeasure) {
+        return;
+    }
+
+    if (lock) {
+        for (const System* system : m_systems) {
+            if (system->last()->isBefore(startMeasure)) {
+                continue;
+            }
+            if (system->first()->isAfter(endMeasure)) {
+                break;
+            }
+            if (!system->isLocked()) {
+                undoAddSystemLock(new SystemLock(system->first(), system->last()));
+            }
+        }
+        return;
+    }
+
+    std::vector<const SystemLock*> currentLocks = m_systemLocks.locksContainedInRange(startMeasure, endMeasure);
+    for (const SystemLock* l : currentLocks) {
+        undoRemoveSystemLock(l);
+    }
+
+    if (interval == 0) {
+        return;
+    }
+
+    int count = 0;
+    MeasureBase* lockStart = nullptr;
+    for (MeasureBase* mb = startMeasure; mb; mb = mmrests ? mb->nextMM() : mb->next()) {
+        if (count == 0) {
+            lockStart = mb;
+        }
+        count++;
+        if (count == interval || mb == endMeasure) {
+            undoAddSystemLock(new SystemLock(lockStart, mb));
+            lockStart = nullptr;
+            count = 0;
+        }
+        if (mb == endMeasure) {
             break;
         }
     }
@@ -4649,49 +4706,220 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             mbl.push_back(mb);
         }
     }
-    // toggle the breaks
-    for (MeasureBase* mb: mbl) {
-        if (mb) {
-            bool val = false;
-            switch (type) {
-            case LayoutBreakType::LINE:
-                val = !mb->lineBreak();
-                mb->undoSetBreak(val, type);
-                // remove page break if appropriate
-                if (val && mb->pageBreak()) {
-                    mb->undoSetBreak(false, LayoutBreakType::PAGE);
-                }
-                break;
-            case LayoutBreakType::PAGE:
-                val = !mb->pageBreak();
-                mb->undoSetBreak(val, type);
-                // remove line break if appropriate
-                if (val && mb->lineBreak()) {
-                    mb->undoSetBreak(false, LayoutBreakType::LINE);
-                }
-                break;
-            case LayoutBreakType::SECTION:
-                val = !mb->sectionBreak();
-                mb->undoSetBreak(val, type);
-                break;
-            case LayoutBreakType::NOBREAK:
-                mb->undoSetBreak(!allNoBreaks, type);
-                // remove other breaks if appropriate
-                if (!mb->noBreak()) {
-                    if (mb->pageBreak()) {
-                        mb->undoSetBreak(false, LayoutBreakType::PAGE);
-                    } else if (mb->lineBreak()) {
-                        mb->undoSetBreak(false, LayoutBreakType::LINE);
-                    } else if (mb->sectionBreak()) {
-                        mb->undoSetBreak(false, LayoutBreakType::SECTION);
-                    }
-                }
-                break;
-            default:
-                break;
+
+    if (type == LayoutBreakType::NOBREAK && !allNoBreaks) {
+        for (MeasureBase* mb : mbl) {
+            if (mb->systemLock()) {
+                return;
             }
         }
     }
+
+    // toggle the breaks
+    for (MeasureBase* mb: mbl) {
+        bool val = false;
+        switch (type) {
+        case LayoutBreakType::LINE:
+            val = !mb->lineBreak();
+            if (val) {
+                checkSystemLocksOnAddLayoutBreak(type, mb);
+            }
+            mb->undoSetBreak(val, type);
+            // remove page break if appropriate
+            if (val && mb->pageBreak()) {
+                mb->undoSetBreak(false, LayoutBreakType::PAGE);
+            }
+            break;
+        case LayoutBreakType::PAGE:
+            val = !mb->pageBreak();
+            if (val) {
+                checkSystemLocksOnAddLayoutBreak(type, mb);
+            }
+            mb->undoSetBreak(val, type);
+            // remove line break if appropriate
+            if (val && mb->lineBreak()) {
+                mb->undoSetBreak(false, LayoutBreakType::LINE);
+            }
+            break;
+        case LayoutBreakType::SECTION:
+            val = !mb->sectionBreak();
+            if (val) {
+                checkSystemLocksOnAddLayoutBreak(type, mb);
+            }
+            mb->undoSetBreak(val, type);
+            break;
+        case LayoutBreakType::NOBREAK:
+            mb->undoSetBreak(!allNoBreaks, type);
+            // remove other breaks if appropriate
+            if (!mb->noBreak()) {
+                if (mb->pageBreak()) {
+                    mb->undoSetBreak(false, LayoutBreakType::PAGE);
+                } else if (mb->lineBreak()) {
+                    mb->undoSetBreak(false, LayoutBreakType::LINE);
+                } else if (mb->sectionBreak()) {
+                    mb->undoSetBreak(false, LayoutBreakType::SECTION);
+                }
+            }
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+void Score::cmdMoveMeasureToPrevSystem()
+{
+    bool mmrests = style().styleB(Sid::createMultiMeasureRests);
+
+    MeasureBase* refMeasure = m_selection.endMeasureBase();
+    if (!refMeasure) {
+        return;
+    }
+
+    const System* prevSystem = refMeasure->prevNonVBoxSystem();
+    if (!prevSystem) {
+        return;
+    }
+
+    MeasureBase* prevSystemFirstMeas = prevSystem->first();
+
+    const SystemLock* prevSystemLock = m_systemLocks.lockStartingAt(prevSystemFirstMeas);
+    if (prevSystemLock) {
+        undoRemoveSystemLock(prevSystemLock);
+    }
+
+    const System* curSystem = refMeasure->system();
+    const SystemLock* curSystemLock = m_systemLocks.lockStartingAt(curSystem->first());
+    if (curSystemLock) {
+        undoRemoveSystemLock(curSystemLock);
+        if (curSystemLock->endMB() != refMeasure) {
+            MeasureBase* nextMB = mmrests ? refMeasure->nextMM() : refMeasure->next();
+            SystemLock* newLockOnCurSystem = new SystemLock(nextMB, curSystemLock->endMB());
+            undoAddSystemLock(newLockOnCurSystem);
+        }
+    }
+
+    SystemLock* sysLock = new SystemLock(prevSystemFirstMeas, refMeasure);
+    undoAddSystemLock(sysLock);
+}
+
+void Score::cmdMoveMeasureToNextSystem()
+{
+    bool mmrests = style().styleB(Sid::createMultiMeasureRests);
+
+    MeasureBase* refMeasure = m_selection.startMeasureBase();
+    if (!refMeasure) {
+        return;
+    }
+
+    const System* curSystem = refMeasure->system();
+    MeasureBase* startMeas = curSystem->first();
+    bool refMeasureIsStartOfSystem = refMeasure == startMeas;
+
+    const SystemLock* curLock = m_systemLocks.lockStartingAt(startMeas);
+    if (curLock) {
+        undoRemoveSystemLock(curLock);
+    }
+
+    if (!refMeasureIsStartOfSystem) {
+        MeasureBase* prevMeas = mmrests ? refMeasure->prevMM() : refMeasure->prev();
+        SystemLock* sysLock = new SystemLock(startMeas, prevMeas);
+        undoAddSystemLock(sysLock);
+    }
+
+    const System* nextSystem = refMeasure->nextNonVBoxSystem();
+    if (!nextSystem) {
+        return;
+    }
+
+    const SystemLock* nextSysLock = m_systemLocks.lockStartingAt(nextSystem->first());
+    if (nextSysLock) {
+        undoRemoveSystemLock(nextSysLock);
+    }
+
+    if (nextSysLock || refMeasureIsStartOfSystem) {
+        SystemLock* newNextSysLock = new SystemLock(refMeasure, nextSystem->last());
+        undoAddSystemLock(newNextSysLock);
+    }
+}
+
+void Score::cmdToggleSystemLock()
+{
+    toggleSystemLock(m_selection.selectedSystems());
+}
+
+void Score::cmdToggleScoreLock()
+{
+    bool unlockAll = true;
+    for (const System* system : m_systems) {
+        const MeasureBase* first = system->first();
+        if (!(first->isMeasure() || first->isHBox())) {
+            continue;
+        }
+        if (!system->isLocked()) {
+            unlockAll = false;
+            break;
+        }
+    }
+
+    for (System* system : m_systems) {
+        MeasureBase* startMeas = system->first();
+        if (!(startMeas->isMeasure() || startMeas->isHBox())) {
+            continue;
+        }
+        const SystemLock* currentLock = m_systemLocks.lockStartingAt(startMeas);
+        if (currentLock && unlockAll) {
+            undoRemoveSystemLock(currentLock);
+            continue;
+        } else if (!currentLock && !unlockAll) {
+            SystemLock* newSystemLock = new SystemLock(startMeas, system->last());
+            undoAddSystemLock(newSystemLock);
+        }
+    }
+}
+
+void Score::cmdMakeIntoSystem()
+{
+    MeasureBase* firstSelected = m_selection.startMeasureBase();
+    MeasureBase* lastSelected = m_selection.endMeasureBase();
+    if (!(firstSelected && lastSelected)) {
+        return;
+    }
+
+    bool mmrests = style().styleB(Sid::createMultiMeasureRests);
+
+    const SystemLock* lockContainingFirstSelected = m_systemLocks.lockContaining(firstSelected);
+    const SystemLock* lockContainingLastSelected = m_systemLocks.lockContaining(lastSelected);
+
+    if (lockContainingFirstSelected) {
+        undoRemoveSystemLock(lockContainingFirstSelected);
+        if (lockContainingFirstSelected->startMB()->isBefore(firstSelected)) {
+            MeasureBase* oneBeforeFirst = mmrests ? firstSelected->prevMM() : firstSelected->prev();
+            SystemLock* newLockBefore = new SystemLock(lockContainingFirstSelected->startMB(), oneBeforeFirst);
+            undoAddSystemLock(newLockBefore);
+        }
+    }
+
+    if (lockContainingLastSelected) {
+        if (lockContainingLastSelected != lockContainingFirstSelected) {
+            undoRemoveSystemLock(lockContainingLastSelected);
+        }
+        if (lastSelected->isBefore(lockContainingLastSelected->endMB())) {
+            MeasureBase* oneAfterLast = mmrests ? lastSelected->nextMM() : lastSelected->next();
+            SystemLock* newLockAfter = new SystemLock(oneAfterLast, lockContainingLastSelected->endMB());
+            undoAddSystemLock(newLockAfter);
+        }
+    }
+
+    std::vector<const SystemLock*> locksContainedInRange = m_systemLocks.locksContainedInRange(firstSelected, lastSelected);
+    for (const SystemLock* lock : locksContainedInRange) {
+        if (lock != lockContainingFirstSelected && lock != lockContainingLastSelected) {
+            undoRemoveSystemLock(lock);
+        }
+    }
+
+    SystemLock* newLock = new SystemLock(firstSelected, lastSelected);
+    undoAddSystemLock(newLock);
 }
 
 void Score::cmdAddStaffTypeChange(Measure* measure, staff_idx_t staffIdx, StaffTypeChange* stc)

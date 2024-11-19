@@ -2446,6 +2446,7 @@ void Score::deleteItem(EngravingItem* el)
         case ElementType::INSTRUMENT_NAME:
         case ElementType::KEYSIG:
         case ElementType::MEASURE_NUMBER:
+        case ElementType::SYSTEM_LOCK_INDICATOR:
             break;
         // All other types cannot be removed if generated
         default:
@@ -2977,6 +2978,13 @@ void Score::deleteItem(EngravingItem* el)
         }
         // whether m is an mmrest or not, we still need to remove el
         undoRemoveElement(el);
+    }
+    break;
+
+    case ElementType::SYSTEM_LOCK_INDICATOR:
+    {
+        const SystemLock* systemLock = toSystemLockIndicator(el)->systemLock();
+        undoRemoveSystemLock(systemLock);
     }
     break;
 
@@ -6501,6 +6509,76 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 elementToRelink->setLinks(links);
                 links->push_back(elementToRelink);
             }
+        }
+    }
+}
+
+void Score::undoAddSystemLock(const SystemLock* lock)
+{
+    checkLayoutBreaksOnAddSystemLock(lock);
+    undo(new AddSystemLock(lock));
+}
+
+void Score::undoRemoveSystemLock(const SystemLock* lock)
+{
+    undo(new RemoveSystemLock(lock));
+}
+
+void Score::undoRemoveAllLocks()
+{
+    std::vector<const SystemLock*> allLocks = m_systemLocks.allLocks();
+    for (const SystemLock* lock : allLocks) {
+        undoRemoveSystemLock(lock);
+    }
+}
+
+void Score::toggleSystemLock(const std::vector<System*>& systems)
+{
+    bool unlockAll = true;
+    for (System* system : systems) {
+        if (!system->isLocked()) {
+            unlockAll = false;
+            break;
+        }
+    }
+
+    for (System* system : systems) {
+        MeasureBase* startMeas = system->first();
+        const SystemLock* currentLock = m_systemLocks.lockStartingAt(startMeas);
+        if (currentLock && unlockAll) {
+            undoRemoveSystemLock(currentLock);
+            continue;
+        } else if (!currentLock && !unlockAll) {
+            SystemLock* newSystemLock = new SystemLock(startMeas, system->last());
+            undoAddSystemLock(newSystemLock);
+        }
+    }
+}
+
+void Score::checkSystemLocksOnAddLayoutBreak(LayoutBreakType breakType, const MeasureBase* measure)
+{
+    if (breakType == LayoutBreakType::NOBREAK) {
+        return; // NOBREAK not allowed on locked measures
+    }
+
+    const SystemLock* lock = m_systemLocks.lockContaining(measure);
+    if (lock && (breakType == LayoutBreakType::LINE || measure != lock->endMB())) {
+        undoRemoveSystemLock(lock);
+    }
+}
+
+void Score::checkLayoutBreaksOnAddSystemLock(const SystemLock* lock)
+{
+    bool mmrests = style().styleB(Sid::createMultiMeasureRests);
+    for (MeasureBase* mb = lock->startMB();; mb = mmrests ? mb->nextMM() : mb->next()) {
+        mb->undoSetBreak(false, LayoutBreakType::LINE);
+        mb->undoSetBreak(false, LayoutBreakType::NOBREAK);
+        if (mb != lock->endMB()) {
+            mb->undoSetBreak(false, LayoutBreakType::SECTION);
+            mb->undoSetBreak(false, LayoutBreakType::PAGE);
+        }
+        if (mb == lock->endMB()) {
+            break;
         }
     }
 }

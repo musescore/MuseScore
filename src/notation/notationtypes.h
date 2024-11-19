@@ -188,7 +188,7 @@ enum class ExpandSelectionMode
     EndScore,
 };
 
-enum class BreaksSpawnIntervalType
+enum class LocksSpawnIntervalType
 {
     AfterEachSystem = -1,
     None = 0,

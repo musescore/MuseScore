@@ -55,6 +55,9 @@ void MeasureWrite::writeMeasure(const Measure* measure, XmlWriter& xml, WriteCon
         xml.tag("multiMeasureRest", measure->m_mmRestCount);
     }
     if (writeSystemElements) {
+        if (!MScore::testMode && !measure->score()->isPaletteScore()) {
+            xml.tag("eid", measure->eid().toUint64());
+        }
         if (measure->repeatStart()) {
             xml.tag("startRepeat");
         }
