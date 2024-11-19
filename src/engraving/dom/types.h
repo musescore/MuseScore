@@ -47,6 +47,8 @@ enum class CommandType {
     // Staves
     InsertStaff,
     RemoveStaff,
+    AddSystemObjectStaff,
+    RemoveSystemObjectStaff,
     SortStaves,
     ChangeStaff,
     ChangeStaffType,

@@ -21,6 +21,8 @@
  */
 #include "roottreeitem.h"
 
+#include "systemobjectslayertreeitem.h"
+
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace muse;
@@ -101,13 +103,21 @@ void RootTreeItem::moveChildren(int sourceRow, int count, AbstractLayoutPanelTre
 void RootTreeItem::removeChildren(int row, int count, bool deleteChild)
 {
     IDList partIds;
+    IDList stavesIds;
 
     for (int i = row; i < row + count; ++i) {
-        partIds.push_back(childAtRow(i)->id());
+        const AbstractLayoutPanelTreeItem* child = childAtRow(i);
+
+        if (child->type() == LayoutPanelItemType::ItemType::PART) {
+            partIds.push_back(child->id());
+        } else if (child->type() == LayoutPanelItemType::ItemType::SYSTEM_OBJECTS_LAYER) {
+            stavesIds.push_back(child->id());
+        }
     }
 
     if (deleteChild) {
         masterNotation()->notation()->parts()->removeParts(partIds);
+        masterNotation()->notation()->parts()->removeSystemObjects(stavesIds);
     }
 
     AbstractLayoutPanelTreeItem::removeChildren(row, count, deleteChild);

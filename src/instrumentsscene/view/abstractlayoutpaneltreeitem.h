@@ -44,7 +44,7 @@ class AbstractLayoutPanelTreeItem : public QObject
 
     Q_PROPERTY(QString id READ idStr CONSTANT)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
-    Q_PROPERTY(int type READ type NOTIFY typeChanged)
+    Q_PROPERTY(int type READ typeInt NOTIFY typeChanged)
     Q_PROPERTY(bool isVisible READ isVisible WRITE setIsVisible NOTIFY isVisibleChanged)
     Q_PROPERTY(bool isExpandable READ isExpandable NOTIFY isExpandableChanged)
     Q_PROPERTY(bool isEditable READ isEditable NOTIFY isEditableChanged)
@@ -60,7 +60,8 @@ public:
     muse::ID id() const;
     QString idStr() const;
     QString title() const;
-    int type() const;
+    int typeInt() const;
+    LayoutPanelItemType::ItemType type() const;
     bool isVisible() const;
     bool isExpandable() const;
     bool isEditable() const;

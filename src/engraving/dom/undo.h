@@ -368,6 +368,38 @@ public:
     UNDO_CHANGED_OBJECTS({ staff })
 };
 
+class AddSystemObjectStaff : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, AddSystemObjectStaff)
+
+    Staff* staff = nullptr;
+
+public:
+    AddSystemObjectStaff(Staff*);
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+    UNDO_TYPE(CommandType::AddSystemObjectStaff)
+    UNDO_NAME("AddSystemObjectStaff")
+    UNDO_CHANGED_OBJECTS({ staff })
+};
+
+class RemoveSystemObjectStaff : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, RemoveSystemObjectStaff)
+
+    Staff* staff = nullptr;
+
+public:
+    RemoveSystemObjectStaff(Staff*);
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+    UNDO_TYPE(CommandType::RemoveSystemObjectStaff)
+    UNDO_NAME("RemoveSystemObjectStaff")
+    UNDO_CHANGED_OBJECTS({ staff })
+};
+
 class InsertMStaff : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, InsertMStaff)

@@ -91,6 +91,10 @@ Part* Part::clone() const
 
 Staff* Part::staff(staff_idx_t idx) const
 {
+    if (idx >= m_staves.size()) {
+        return nullptr;
+    }
+
     return m_staves[idx];
 }
 

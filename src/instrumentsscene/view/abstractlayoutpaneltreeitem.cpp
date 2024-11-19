@@ -59,9 +59,14 @@ QString AbstractLayoutPanelTreeItem::title() const
     return m_title;
 }
 
-int AbstractLayoutPanelTreeItem::type() const
+int AbstractLayoutPanelTreeItem::typeInt() const
 {
     return static_cast<int>(m_type);
+}
+
+LayoutPanelItemType::ItemType AbstractLayoutPanelTreeItem::type() const
+{
+    return m_type;
 }
 
 bool AbstractLayoutPanelTreeItem::isVisible() const

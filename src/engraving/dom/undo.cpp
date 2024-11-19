@@ -1350,6 +1350,9 @@ void RemoveStaff::undo(EditData*)
 void RemoveStaff::redo(EditData*)
 {
     staff->score()->removeStaff(staff);
+    if (wasSystemObjectStaff) {
+        staff->score()->removeSystemObjectStaff(staff);
+    }
 }
 
 void RemoveStaff::cleanup(bool undo)
@@ -1358,6 +1361,36 @@ void RemoveStaff::cleanup(bool undo)
         delete staff;
         staff = nullptr;
     }
+}
+
+AddSystemObjectStaff::AddSystemObjectStaff(Staff* s)
+    : staff(s)
+{
+}
+
+void AddSystemObjectStaff::undo(EditData*)
+{
+    staff->score()->removeSystemObjectStaff(staff);
+}
+
+void AddSystemObjectStaff::redo(EditData*)
+{
+    staff->score()->addSystemObjectStaff(staff);
+}
+
+RemoveSystemObjectStaff::RemoveSystemObjectStaff(Staff* s)
+    : staff(s)
+{
+}
+
+void RemoveSystemObjectStaff::undo(EditData*)
+{
+    staff->score()->addSystemObjectStaff(staff);
+}
+
+void RemoveSystemObjectStaff::redo(EditData*)
+{
+    staff->score()->removeSystemObjectStaff(staff);
 }
 
 //---------------------------------------------------------
