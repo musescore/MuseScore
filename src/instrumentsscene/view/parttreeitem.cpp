@@ -57,7 +57,7 @@ void PartTreeItem::init(const notation::Part* masterPart)
     setIsRemovable(partExists);
     setIsSelectable(partExists);
 
-    m_instrumentId = part->instrumentId();
+    m_part = part;
     m_isInited = true;
 }
 
@@ -131,7 +131,12 @@ size_t PartTreeItem::resolveNewPartIndex(const ID& partId) const
 
 QString PartTreeItem::instrumentId() const
 {
-    return m_instrumentId;
+    return m_part ? m_part->instrumentId().toQString() : QString();
+}
+
+const Part* PartTreeItem::part() const
+{
+    return m_part;
 }
 
 MoveParams PartTreeItem::buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,

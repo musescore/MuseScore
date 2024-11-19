@@ -27,6 +27,7 @@
 #include "engraving/dom/undo.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/page.h"
+#include "engraving/dom/utils.h"
 
 #include "igetscore.h"
 
@@ -77,8 +78,8 @@ static QString formatInstrumentTitleOnScore(const QString& instrumentName, const
 NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
     : m_getScore(getScore), m_undoStack(undoStack), m_interaction(interaction)
 {
-    m_undoStack->undoRedoNotification().onNotify(this, [this]() {
-        m_partChangedNotifier.changed();
+    m_getScore->scoreInited().onNotify(this, [this]() {
+        listenUndoStackChanges();
     });
 }
 
@@ -243,8 +244,6 @@ void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& 
     setBracketsAndBarlines();
 
     apply();
-
-    m_partChangedNotifier.changed();
 }
 
 void NotationParts::setScoreOrder(const ScoreOrder& order)
@@ -321,6 +320,46 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
     apply();
 
     notifyAboutPartChanged(part);
+}
+
+void NotationParts::listenUndoStackChanges()
+{
+    if (!score()) {
+        return;
+    }
+
+    m_parts = score()->parts();
+    m_systemObjectStaves = score()->systemObjectStaves();
+
+    m_undoStack->changesChannel().onReceive(this, [this](const ChangesRange& range) {
+        if (range.changedTypes.empty()) {
+            return;
+        }
+
+        static const ElementTypeSet TYPES_TO_CHECK {
+            ElementType::SCORE,
+            ElementType::STAFF,
+            ElementType::PART,
+        };
+
+        for (ElementType type : TYPES_TO_CHECK) {
+            if (!muse::contains(range.changedTypes, type)) {
+                continue;
+            }
+
+            if (m_parts != score()->parts()) {
+                m_parts = score()->parts();
+                m_partChangedNotifier.changed();
+            }
+
+            if (m_systemObjectStaves != score()->systemObjectStaves()) {
+                m_systemObjectStaves = score()->systemObjectStaves();
+                m_systemObjectStavesChanged.notify();
+            }
+
+            return;
+        }
+    });
 }
 
 void NotationParts::doSetScoreOrder(const ScoreOrder& order)
@@ -649,6 +688,71 @@ void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Dru
     notifyAboutPartChanged(part);
 
     m_interaction->noteInput()->stateChanged().notify();
+}
+
+const std::vector<Staff*>& NotationParts::systemObjectStaves() const
+{
+    return score()->systemObjectStaves();
+}
+
+muse::async::Notification NotationParts::systemObjectStavesChanged() const
+{
+    return m_systemObjectStavesChanged;
+}
+
+void NotationParts::addSystemObjects(const muse::IDList& stavesIds)
+{
+    std::vector<Staff*> staves = this->staves(stavesIds);
+    if (staves.empty()) {
+        return;
+    }
+
+    Score* score = this->score();
+    std::vector<EngravingItem*> topSystemObjects = engraving::collectSystemObjects(score);
+
+    startEdit(TranslatableString("undoableAction", "Add system objects"));
+
+    for (Staff* staff : staves) {
+        if (score->isSystemObjectStaff(staff)) {
+            continue;
+        }
+
+        score->undo(new mu::engraving::AddSystemObjectStaff(staff));
+
+        const staff_idx_t staffIdx = staff->idx();
+        for (EngravingItem* obj : topSystemObjects) {
+            EngravingItem* copy = obj->linkedClone();
+            copy->setStaffIdx(staffIdx);
+            score->undoAddElement(copy, false /*addToLinkedStaves*/);
+        }
+    }
+
+    apply();
+}
+
+void NotationParts::removeSystemObjects(const IDList& stavesIds)
+{
+    std::vector<Staff*> staves = this->staves(stavesIds);
+    if (staves.empty()) {
+        return;
+    }
+
+    Score* score = this->score();
+    std::vector<EngravingItem*> systemObjects = engraving::collectSystemObjects(score, staffIndices(stavesIds));
+
+    startEdit(TranslatableString("undoableAction", "Remove system objects"));
+
+    for (Staff* staff : staves) {
+        if (score->isSystemObjectStaff(staff)) {
+            score->undo(new mu::engraving::RemoveSystemObjectStaff(staff));
+        }
+    }
+
+    for (EngravingItem* obj : systemObjects) {
+        score->undoRemoveElement(obj, false /*removeLinked*/);
+    }
+
+    apply();
 }
 
 Notification NotationParts::partsChanged() const

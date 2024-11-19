@@ -33,6 +33,7 @@
 
 #include "uicomponents/view/itemmultiselectionmodel.h"
 
+#include "defer.h"
 #include "log.h"
 
 using namespace mu::instrumentsscene;
@@ -221,6 +222,10 @@ void LayoutPanelTreeModel::setupPartsConnections()
     notationParts.onItemChanged(m_partsNotifyReceiver.get(), [updateMasterPartItem](const Part* part) {
         updateMasterPartItem(part->id());
     });
+
+    m_notation->parts()->systemObjectStavesChanged().onNotify(this, [this]() {
+        load();
+    });
 }
 
 void LayoutPanelTreeModel::setupStavesConnections(const muse::ID& stavesPartId)
@@ -331,8 +336,8 @@ void LayoutPanelTreeModel::load()
     async::NotifyList<const Part*> masterParts = m_masterNotation->parts()->partList();
     sortParts(masterParts);
 
-    const mu::engraving::Score* score = m_masterNotation->notation()->elements()->msScore();
-    const bool scoreHasSystemObjectStaves = !score->systemObjectStaves().empty();
+    const std::vector<Staff*>& systemObjectStaves = m_masterNotation->notation()->parts()->systemObjectStaves();
+    const bool scoreHasSystemObjectStaves = !systemObjectStaves.empty();
 
     for (size_t i = 0; i < masterParts.size(); ++i) {
         const Part* part = masterParts.at(i);
@@ -345,7 +350,7 @@ void LayoutPanelTreeModel::load()
 
         if (scoreHasSystemObjectStaves) {
             for (Staff* staff : part->staves()) {
-                if (score->isSystemObjectStaff(staff)) {
+                if (muse::contains(systemObjectStaves, staff)) {
                     m_rootItem->appendChild(buildSystemObjectsLayerItem(staff, false /*isTopLayer*/));
                 }
             }
@@ -419,7 +424,22 @@ void LayoutPanelTreeModel::addInstruments()
 
 void LayoutPanelTreeModel::addSystemMarkings()
 {
-    LOGDA() << "test";
+    SystemObjectsLayerInsertPosition pos = resolveSystemObjectsLayerInsertPosition();
+    if (!pos.isValid()) {
+        return;
+    }
+
+    setLoadingBlocked(true);
+    m_masterNotation->parts()->addSystemObjects({ pos.staff->id() });
+    setLoadingBlocked(false);
+
+    AbstractLayoutPanelTreeItem* newSystemObjectsLayerItem = buildSystemObjectsLayerItem(pos.staff, false);
+
+    beginInsertRows(QModelIndex(), pos.row, pos.row);
+    m_rootItem->insertChild(newSystemObjectsLayerItem, pos.row);
+    endInsertRows();
+
+    m_selectionModel->select(createIndex(pos.row, 0, newSystemObjectsLayerItem));
 }
 
 void LayoutPanelTreeModel::moveSelectedRowsUp()
@@ -907,4 +927,40 @@ AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::buildAddStaffControlItem(cons
 AbstractLayoutPanelTreeItem* LayoutPanelTreeModel::modelIndexToItem(const QModelIndex& index) const
 {
     return static_cast<AbstractLayoutPanelTreeItem*>(index.internalPointer());
+}
+
+LayoutPanelTreeModel::SystemObjectsLayerInsertPosition LayoutPanelTreeModel::resolveSystemObjectsLayerInsertPosition() const
+{
+    auto findStaff = [this](const AbstractLayoutPanelTreeItem* item) -> const Staff* {
+        if (item->type() != LayoutPanelItemType::ItemType::PART) {
+            return nullptr;
+        }
+
+        const std::vector<Staff*>& systemObjectStaves = m_notation->parts()->systemObjectStaves();
+        const Part* part = static_cast<const PartTreeItem*>(item)->part();
+
+        for (Staff* staff : part->staves()) {
+            if (!muse::contains(systemObjectStaves, staff)) {
+                return staff;
+            }
+        }
+
+        return nullptr;
+    };
+
+    for (const QModelIndex& index : m_selectionModel->selectedIndexes()) {
+        const AbstractLayoutPanelTreeItem* item = modelIndexToItem(index);
+        if (const Staff* staff = findStaff(item)) {
+            return { index.row(), staff };
+        }
+    }
+
+    for (int row = 2; row < m_rootItem->childCount(); ++row) {
+        const AbstractLayoutPanelTreeItem* item = m_rootItem->childAtRow(row);
+        if (const Staff* staff = findStaff(item)) {
+            return { row, staff };
+        }
+    }
+
+    return {};
 }

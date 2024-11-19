@@ -419,6 +419,7 @@ public:
 
     void clearSystemObjectStaves();
     void addSystemObjectStaff(Staff* staff);
+    void removeSystemObjectStaff(Staff* staff);
     const std::vector<Staff*>& systemObjectStaves() const { return m_systemObjectStaves; }
     bool isSystemObjectStaff(Staff* staff) const;
 

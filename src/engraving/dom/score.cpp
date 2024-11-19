@@ -5642,6 +5642,11 @@ void Score::addSystemObjectStaff(Staff* staff)
     m_systemObjectStaves.push_back(staff);
 }
 
+void Score::removeSystemObjectStaff(Staff* staff)
+{
+    muse::remove(m_systemObjectStaves, staff);
+}
+
 bool Score::isSystemObjectStaff(Staff* staff) const
 {
     return muse::contains(m_systemObjectStaves, staff);
