@@ -174,7 +174,7 @@ Item {
                 readonly property int numColumns: model.numColumns
                 readonly property int spacing: 12
 
-                property Item draggedPad: null
+                property Item swapOriginPad: null
 
                 QtObject {
                     id: gridPrv
@@ -244,10 +244,10 @@ Item {
                         panelMode: percModel.currentPanelMode
                         useNotationPreview: percModel.useNotationPreview
 
-                        // When dragging, only show the outline for the dragged pad and the drag target...
+                        // When swapping, only show the outline for the swap origin  and the swap target...
                         showEditOutline: percModel.currentPanelMode === PanelMode.EDIT_LAYOUT
-                                         && (!Boolean(padGrid.draggedPad) || padGrid.draggedPad === pad || pad.containsDrag)
-                        showOriginBackground: pad.containsDrag || pad === padGrid.draggedPad
+                                         && (!Boolean(padGrid.swapOriginPad) || padGrid.swapOriginPad === pad || pad.containsDrag)
+                        showOriginBackground: pad.containsDrag || pad === padGrid.swapOriginPad
 
                         dragParent: root
 
@@ -256,20 +256,20 @@ Item {
                         padNavigationCtrl.panel: padsNavPanel
                         footerNavigationCtrl.panel: padFootersNavPanel
 
-                        onDragStarted: {
-                            padGrid.draggedPad = pad
-                            padGrid.model.startDrag(index)
+                        onStartPadSwapRequested: {
+                            padGrid.swapOriginPad = pad
+                            padGrid.model.startPadSwap(index)
                         }
 
                         onDropped: function(dropEvent) {
-                            padGrid.draggedPad = null
-                            padGrid.model.endDrag(index)
+                            padGrid.swapOriginPad = null
+                            padGrid.model.endPadSwap(index)
                             dropEvent.accepted = true
                         }
 
-                        onDragCancelled: {
-                            padGrid.draggedPad = null
-                            padGrid.model.endDrag(-1)
+                        onCancelPadSwapRequested: {
+                            padGrid.swapOriginPad = null
+                            padGrid.model.endPadSwap(-1)
                         }
 
                         onHasActiveControlChanged: {
@@ -281,22 +281,22 @@ Item {
                     }
 
                     states: [
-                        // If this is the drop target - move the draggable area to the origin of the dragged pad (preview the drop)
+                        // If this is the swap target - move the swappable area to the swap origin (preview the swap)
                         State {
-                            name: "DROP_TARGET"
-                            when: Boolean(padGrid.draggedPad) && pad.containsDrag && padGrid.draggedPad !== pad
+                            name: "SWAP_TARGET"
+                            when: Boolean(padGrid.swapOriginPad) && pad.containsDrag && padGrid.swapOriginPad !== pad
                             ParentChange {
-                                target: pad.draggableArea
-                                parent: padGrid.draggedPad
+                                target: pad.swappableArea
+                                parent: padGrid.swapOriginPad
                             }
                             AnchorChanges {
-                                target: pad.draggableArea
-                                anchors.verticalCenter: padGrid.draggedPad.verticalCenter
-                                anchors.horizontalCenter: padGrid.draggedPad.horizontalCenter
+                                target: pad.swappableArea
+                                anchors.verticalCenter: padGrid.swapOriginPad.verticalCenter
+                                anchors.horizontalCenter: padGrid.swapOriginPad.horizontalCenter
                             }
                             // Origin background not needed for the dragged pad when a preview is taking place...
                             PropertyChanges {
-                                target: padGrid.draggedPad
+                                target: padGrid.swapOriginPad
                                 showOriginBackground: false
                             }
                         }

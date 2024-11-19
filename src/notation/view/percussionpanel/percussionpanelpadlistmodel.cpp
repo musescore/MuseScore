@@ -79,19 +79,19 @@ bool PercussionPanelPadListModel::rowIsEmpty(int row) const
     return numEmptySlotsAtRow(row) == NUM_COLUMNS;
 }
 
-void PercussionPanelPadListModel::startDrag(int startIndex)
+void PercussionPanelPadListModel::startPadSwap(int startIndex)
 {
-    m_dragStartIndex = startIndex;
+    m_padSwapStartIndex = startIndex;
 }
 
-void PercussionPanelPadListModel::endDrag(int endIndex)
+void PercussionPanelPadListModel::endPadSwap(int endIndex)
 {
-    if (indexIsValid(m_dragStartIndex) && indexIsValid(endIndex)) {
-        movePad(m_dragStartIndex, endIndex);
+    if (indexIsValid(m_padSwapStartIndex) && indexIsValid(endIndex)) {
+        movePad(m_padSwapStartIndex, endIndex);
     } else {
         emit layoutChanged();
     }
-    m_dragStartIndex = -1;
+    m_padSwapStartIndex = -1;
 }
 
 void PercussionPanelPadListModel::setDrumset(const mu::engraving::Drumset* drumset)

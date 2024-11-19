@@ -53,8 +53,8 @@ public:
     Q_INVOKABLE void deleteRow(int row);
     Q_INVOKABLE bool rowIsEmpty(int row) const;
 
-    Q_INVOKABLE void startDrag(int startIndex);
-    Q_INVOKABLE void endDrag(int endIndex);
+    Q_INVOKABLE void startPadSwap(int startIndex);
+    Q_INVOKABLE void endPadSwap(int endIndex);
 
     int numColumns() const { return NUM_COLUMNS; }
     int numPads() const { return m_padModels.count(); }
@@ -83,7 +83,7 @@ private:
     const mu::engraving::Drumset* m_drumset = nullptr;
     QList<PercussionPanelPadModel*> m_padModels;
 
-    int m_dragStartIndex = -1;
+    int m_padSwapStartIndex = -1;
 
     muse::async::Channel<int /*pitch*/> m_triggeredChannel;
 };
