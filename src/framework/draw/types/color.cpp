@@ -114,6 +114,13 @@ int Color::alpha() const
     return getAlpha(m_rgba);
 }
 
+double Color::luminance() const
+{
+    // Calculated based on percieved brightness of colors to the human eye.
+    double luminance = 0.2126 * red() + 0.7152 * green() + 0.0722 * blue();
+    return luminance;
+}
+
 #ifndef NO_QT_SUPPORT
 Color Color::fromQColor(const QColor& color)
 {
@@ -179,7 +186,12 @@ void Color::setAlpha(int value)
 
 void Color::applyTint(double tint)
 {
-    setRgba(red() + (255 - red()) * tint, green() + (255 - green()) * tint, blue() + (255 - blue()) * tint, alpha());
+    if (tint >= 0) {
+        setRgba(red() + (255 - red()) * tint, green() + (255 - green()) * tint, blue() + (255 - blue()) * tint, alpha());
+    } else {
+        double shade = 1 + tint;
+        setRgba(red() * shade, green() * shade, blue() * shade, alpha());
+    }
 }
 
 void Color::setRgba(int r, int g, int b, int a)
