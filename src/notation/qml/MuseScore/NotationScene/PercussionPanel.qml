@@ -58,6 +58,15 @@ Item {
         Component.onCompleted: {
             percModel.init()
         }
+
+        onCurrentPanelModeChanged: {
+            // TODO: This is a placeholder, changing the panel mode shouldn't cancel a keyboard swap
+            if (padGrid.isKeyboardSwapActive) {
+                padGrid.swapOriginPad = null
+                padGrid.isKeyboardSwapActive = false
+                padGrid.model.endPadSwap(-1)
+            }
+        }
     }
 
     // TODO: Will live inside percussion panel until #22050 is implemented
@@ -122,6 +131,7 @@ Item {
                 width: rowLayout.sideColumnsWidth
 
                 visible: percModel.currentPanelMode === PanelMode.EDIT_LAYOUT
+                enabled: !padGrid.isKeyboardSwapActive
 
                 Repeater {
                     id: deleteRepeater
@@ -175,6 +185,7 @@ Item {
                 readonly property int spacing: 12
 
                 property Item swapOriginPad: null
+                property bool isKeyboardSwapActive: false
 
                 QtObject {
                     id: gridPrv
@@ -246,9 +257,10 @@ Item {
 
                         // When swapping, only show the outline for the swap origin  and the swap target...
                         showEditOutline: percModel.currentPanelMode === PanelMode.EDIT_LAYOUT
-                                         && (!Boolean(padGrid.swapOriginPad) || padGrid.swapOriginPad === pad || pad.containsDrag)
-                        showOriginBackground: pad.containsDrag || pad === padGrid.swapOriginPad
+                                         && (!Boolean(padGrid.swapOriginPad) || padGrid.swapOriginPad === pad)
+                        showOriginBackground: pad.containsDrag || (pad === padGrid.swapOriginPad && !padGrid.isKeyboardSwapActive)
 
+                        panelHasActiveKeyboardSwap: padGrid.isKeyboardSwapActive
                         dragParent: root
 
                         navigationRow: index / padGrid.numColumns
@@ -256,19 +268,21 @@ Item {
                         padNavigationCtrl.panel: padsNavPanel
                         footerNavigationCtrl.panel: padFootersNavPanel
 
-                        onStartPadSwapRequested: {
+                        onStartPadSwapRequested: function(isKeyboardSwap) {
                             padGrid.swapOriginPad = pad
+                            padGrid.isKeyboardSwapActive = isKeyboardSwap
                             padGrid.model.startPadSwap(index)
                         }
 
-                        onDropped: function(dropEvent) {
+                        onEndPadSwapRequested: {
                             padGrid.swapOriginPad = null
+                            padGrid.isKeyboardSwapActive = false
                             padGrid.model.endPadSwap(index)
-                            dropEvent.accepted = true
                         }
 
                         onCancelPadSwapRequested: {
                             padGrid.swapOriginPad = null
+                            padGrid.isKeyboardSwapActive = false
                             padGrid.model.endPadSwap(-1)
                         }
 
@@ -284,7 +298,8 @@ Item {
                         // If this is the swap target - move the swappable area to the swap origin (preview the swap)
                         State {
                             name: "SWAP_TARGET"
-                            when: Boolean(padGrid.swapOriginPad) && pad.containsDrag && padGrid.swapOriginPad !== pad
+                            when: Boolean(padGrid.swapOriginPad) && (pad.containsDrag || pad.padNavigationCtrl.active) && padGrid.swapOriginPad !== pad
+
                             ParentChange {
                                 target: pad.swappableArea
                                 parent: padGrid.swapOriginPad
@@ -294,10 +309,28 @@ Item {
                                 anchors.verticalCenter: padGrid.swapOriginPad.verticalCenter
                                 anchors.horizontalCenter: padGrid.swapOriginPad.horizontalCenter
                             }
+                            PropertyChanges {
+                                target: pad
+                                showEditOutline: true
+                            }
+
                             // Origin background not needed for the dragged pad when a preview is taking place...
                             PropertyChanges {
                                 target: padGrid.swapOriginPad
                                 showOriginBackground: false
+                            }
+
+                            // In the case of a keyboard swap, we also need to move the origin pad
+                            ParentChange {
+                                // TODO: not a nice solution to use null here (works, but throws an error)
+                                target: padGrid.isKeyboardSwapActive ? padGrid.swapOriginPad.swappableArea : null
+                                parent: pad
+                            }
+                            AnchorChanges {
+                                // TODO: not a nice solution to use null here (works, but throws an error)
+                                target: padGrid.isKeyboardSwapActive ? padGrid.swapOriginPad.swappableArea : null
+                                anchors.verticalCenter: pad.verticalCenter
+                                anchors.horizontalCenter: pad.horizontalCenter
                             }
                         }
                     ]
@@ -322,6 +355,7 @@ Item {
                 Layout.bottomMargin: (padGrid.cellHeight / 2) - (height / 2)
 
                 visible: percModel.currentPanelMode === PanelMode.EDIT_LAYOUT
+                enabled: !padGrid.isKeyboardSwapActive
 
                 icon: IconCode.PLUS
                 text: qsTrc("notation", "Add row")

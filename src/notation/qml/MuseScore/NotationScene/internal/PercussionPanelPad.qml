@@ -46,9 +46,17 @@ DropArea {
 
     readonly property bool hasActiveControl: padNavCtrl.active || footerNavCtrl.active
 
+    property bool panelHasActiveKeyboardSwap: false
+
     property var dragParent: null
-    signal startPadSwapRequested()
+    signal startPadSwapRequested(var isKeyboardSwap)
+    signal endPadSwapRequested()
     signal cancelPadSwapRequested()
+
+    onDropped: function(dropEvent)  {
+        root.endPadSwapRequested()
+        dropEvent.accepted = true
+    }
 
     QtObject {
         id: prv
@@ -88,7 +96,11 @@ DropArea {
             if (!Boolean(root.padModel)) {
                 return
             }
-            root.padModel.triggerPad()
+            if (root.panelMode !== PanelMode.EDIT_LAYOUT) {
+                root.padModel.triggerPad()
+                return
+            }
+            root.panelHasActiveKeyboardSwap ? root.endPadSwapRequested() : root.startPadSwapRequested(true)
         }
     }
 
@@ -133,13 +145,13 @@ DropArea {
             id: dragHandler
 
             target: swappableArea
-            enabled: root.panelMode === PanelMode.EDIT_LAYOUT && !prv.isEmptySlot
+            enabled: root.panelMode === PanelMode.EDIT_LAYOUT && !prv.isEmptySlot && !root.panelHasActiveKeyboardSwap
 
             dragThreshold: 0 // prevents the flickable from stealing drag events
 
             onActiveChanged: {
                 if (dragHandler.active) {
-                    root.startPadSwapRequested()
+                    root.startPadSwapRequested(false)
                     return
                 }
                 if (!swappableArea.Drag.drop()) {
@@ -197,13 +209,6 @@ DropArea {
         }
 
         NavigationFocusBorder {
-            id: padFocusBorder
-
-            padding: root.panelMode === PanelMode.EDIT_LAYOUT ? 0 : root.totalBorderWidth * -1
-            navigationCtrl: padNavCtrl
-        }
-
-        NavigationFocusBorder {
             id: footerFocusBorder
 
             anchors {
@@ -245,6 +250,27 @@ DropArea {
                 }
             }
         ]
+    }
+
+    //! NOTE: Ideally this would be swappableArea's child, but we don't want it to move when "previewing" a drop
+    NavigationFocusBorder {
+        id: padFocusBorder
+
+        property real extraSize: root.showEditOutline ? padFocusBorder.border.width * 2 : 0
+        property real extraRadius: root.showEditOutline ? root.totalBorderWidth + padFocusBorder.anchors.margins : 0
+
+        anchors {
+            fill: null
+            centerIn: parent
+        }
+
+        width: swappableArea.width + padFocusBorder.extraSize
+        height: swappableArea.height + padFocusBorder.extraSize
+
+        radius: swappableArea.radius + padFocusBorder.extraRadius
+
+        padding: root.showEditOutline ? 0 : root.totalBorderWidth * -1
+        navigationCtrl: padNavCtrl
     }
 
     Rectangle {
