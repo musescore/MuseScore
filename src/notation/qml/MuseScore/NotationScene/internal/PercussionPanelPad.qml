@@ -39,7 +39,7 @@ DropArea {
 
     property alias totalBorderWidth: padLoader.anchors.margins
     property alias showOriginBackground: originBackground.visible
-    property alias draggableArea: draggableArea
+    property alias swappableArea: swappableArea
 
     property int navigationRow: -1
     property int navigationColumn: -1
@@ -49,8 +49,8 @@ DropArea {
     readonly property bool hasActiveControl: padNavCtrl.active || footerNavCtrl.active
 
     property var dragParent: null
-    signal dragStarted()
-    signal dragCancelled()
+    signal startPadSwapRequested()
+    signal cancelPadSwapRequested()
 
     QtObject {
         id: prv
@@ -119,7 +119,7 @@ DropArea {
     }
 
     Rectangle {
-        id: draggableArea
+        id: swappableArea
 
         // Protrudes slightly from behind the components in the loader to produce the edit mode "border with gap" effect
         width: root.width
@@ -135,18 +135,18 @@ DropArea {
         DragHandler {
             id: dragHandler
 
-            target: draggableArea
+            target: swappableArea
             enabled: Boolean(root.padModel) && root.panelMode === PanelMode.EDIT_LAYOUT
 
             dragThreshold: 0 // prevents the flickable from stealing drag events
 
             onActiveChanged: {
                 if (dragHandler.active) {
-                    root.dragStarted()
+                    root.startPadSwapRequested()
                     return
                 }
-                if (!draggableArea.Drag.drop()) {
-                    root.dragCancelled()
+                if (!swappableArea.Drag.drop()) {
+                    root.cancelPadSwapRequested()
                 }
             }
         }
@@ -161,7 +161,7 @@ DropArea {
 
             anchors.fill: parent
             // Defined as 1 in the spec, but causes some aliasing in practice...
-            anchors.margins: 2 + draggableArea.border.width
+            anchors.margins: 2 + swappableArea.border.width
 
             // Can't simply use clip as this won't take into account radius...
             layer.enabled: ui.isEffectsAllowed
@@ -169,7 +169,7 @@ DropArea {
                 maskSource: Rectangle {
                     width: padLoader.width
                     height: padLoader.height
-                    radius: draggableArea.radius - padLoader.anchors.margins
+                    radius: swappableArea.radius - padLoader.anchors.margins
                 }
             }
 
@@ -185,7 +185,7 @@ DropArea {
 
                     footerHeight: prv.footerHeight
 
-                    dragActive: dragHandler.active
+                    padSwapActive: dragHandler.active
                 }
             }
 
@@ -228,11 +228,11 @@ DropArea {
                 name: "DRAGGED"
                 when: dragHandler.active
                 ParentChange {
-                    target: draggableArea
+                    target: swappableArea
                     parent: root.dragParent
                 }
                 AnchorChanges {
-                    target: draggableArea
+                    target: swappableArea
                     anchors.horizontalCenter: undefined
                     anchors.verticalCenter: undefined
                 }
@@ -243,7 +243,7 @@ DropArea {
                 name: "DROPPED"
                 when: !dragHandler.active
                 ParentChange {
-                    target: draggableArea
+                    target: swappableArea
                     parent: root
                 }
             }
@@ -255,19 +255,19 @@ DropArea {
 
         anchors.fill: parent
 
-        radius: draggableArea.radius
+        radius: swappableArea.radius
 
-        border.color: draggableArea.border.color
-        border.width: draggableArea.border.width
+        border.color: swappableArea.border.color
+        border.width: swappableArea.border.width
 
-        color: draggableArea.color
+        color: swappableArea.color
 
         Rectangle {
             id: originBackgroundFill
 
             anchors.fill: parent
             anchors.margins: padLoader.anchors.margins
-            radius: draggableArea.radius - originBackgroundFill.anchors.margins
+            radius: swappableArea.radius - originBackgroundFill.anchors.margins
 
             color: root.containsDrag ? ui.theme.buttonColor : prv.enabledBackgroundColor
         }

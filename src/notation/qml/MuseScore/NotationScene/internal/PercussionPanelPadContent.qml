@@ -35,7 +35,7 @@ Column {
 
     property alias footerHeight: footerArea.height
 
-    property bool dragActive: false
+    property bool padSwapActive: false
 
     Rectangle {
         id: mainContentArea
@@ -87,7 +87,7 @@ Column {
         states: [
             State {
                 name: "MOUSE_HOVERED"
-                when: mouseArea.containsMouse && !mouseArea.pressed && !root.dragActive
+                when: mouseArea.containsMouse && !mouseArea.pressed && !root.padSwapActive
                 PropertyChanges {
                     target: mainContentArea
                     color: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.buttonOpacityHover)
@@ -95,7 +95,7 @@ Column {
             },
             State {
                 name: "MOUSE_HIT"
-                when: mouseArea.pressed || root.dragActive
+                when: mouseArea.pressed || root.padSwapActive
                 PropertyChanges {
                     target: mainContentArea
                     color: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.buttonOpacityHit)

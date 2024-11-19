@@ -56,8 +56,8 @@ public:
 
     Q_INVOKABLE bool rowIsEmpty(int row) const;
 
-    Q_INVOKABLE void startDrag(int startIndex);
-    Q_INVOKABLE void endDrag(int endIndex);
+    Q_INVOKABLE void startPadSwap(int startIndex);
+    Q_INVOKABLE void endPadSwap(int endIndex);
 
     bool hasActivePads() const { return m_drumset; }
 
@@ -97,7 +97,7 @@ private:
     engraving::Drumset* m_drumset = nullptr; //! NOTE: Pointer may be invalid, see PercussionPanelModel::setUpConnections
     QList<PercussionPanelPadModel*> m_padModels;
 
-    int m_dragStartIndex = -1;
+    int m_padSwapStartIndex = -1;
 
     muse::async::Notification m_hasActivePadsChanged;
     muse::async::Channel<int /*pitch*/> m_triggeredChannel;
