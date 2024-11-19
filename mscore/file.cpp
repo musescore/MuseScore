@@ -636,8 +636,9 @@ MasterScore* MuseScore::getNewFile()
             newWizard->updateValues();
             newWizard->restart();
             }
-      if (newWizard->exec() != QDialog::Accepted)
-            return 0;
+      if(preferences.getBool(PREF_UI_APP_USENEWWIZARD))
+          if (newWizard->exec() != QDialog::Accepted)
+                return 0;
       int measures            = newWizard->measures();
       Fraction timesig        = newWizard->timesig();
       TimeSigType timesigType = newWizard->timesigType();
@@ -654,7 +655,7 @@ MasterScore* MuseScore::getNewFile()
       QString tp         = newWizard->templatePath();
 
       QList<Excerpt*> excerpts;
-      if (!newWizard->emptyScore()) {
+      if (!preferences.getBool(PREF_UI_APP_USENEWWIZARD) || !newWizard->emptyScore()) {
             MasterScore* tscore = new MasterScore(MScore::defaultStyle());
             tscore->setCreated(true);
             Score::FileError rv = Ms::readScore(tscore, tp, false);
