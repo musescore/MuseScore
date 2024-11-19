@@ -3709,7 +3709,7 @@
         <source>*(B♭)</source>
         <comment>bb-bass-clarinet traitName</comment>
         <extracomment>traitName for Bass Clarinet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>*(Си ♭)</translation>
+        <translation>*Си ♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1397"/>
@@ -3744,7 +3744,7 @@
         <source>*(B♭)</source>
         <comment>bb-bass-clarinet-bass-clef traitName</comment>
         <extracomment>traitName for Bass Clarinet (bass clef); transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>*(Си ♭)</translation>
+        <translation>*Си ♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1408"/>
