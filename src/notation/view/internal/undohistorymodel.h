@@ -21,31 +21,47 @@
  */
 #pragma once
 
-#include <QObject>
+#include <QAbstractListModel>
+#include <QQmlParserStatus>
 
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "modularity/ioc.h"
 
-namespace muse::uicomponents {
-class MenuItem;
-}
-
 namespace mu::notation {
-class UndoRedoHistoryModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class UndoHistoryModel : public QAbstractListModel, public QQmlParserStatus, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
+
+    Q_PROPERTY(int currentIndex READ currentIndex NOTIFY currentIndexChanged)
 
     muse::Inject<context::IGlobalContext> context = { this };
 
 public:
-    explicit UndoRedoHistoryModel(QObject* parent = nullptr);
+    explicit UndoHistoryModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE size_t undoRedoActionCount() const;
-    Q_INVOKABLE size_t undoRedoActionCurrentIdx() const;
-    Q_INVOKABLE const QString undoRedoActionNameAtIdx(size_t idx) const;
+    QVariant data(const QModelIndex& index, int role) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QHash<int, QByteArray> roleNames() const override;
+
+    int currentIndex() const;
+
+    Q_INVOKABLE void undoRedoToIndex(int index);
+
+signals:
+    void currentIndexChanged();
 
 private:
+    void classBegin() override;
+    void componentComplete() override {}
+
+    void onCurrentNotationChanged();
+    void onUndoRedo();
+    void updateCurrentIndex();
+
     INotationUndoStackPtr undoStack() const;
+
+    int m_rowCount = 0;
 };
 }

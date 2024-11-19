@@ -82,7 +82,7 @@ public:
     MOCK_METHOD(bool, applyPaletteElement, (mu::engraving::EngravingItem*, Qt::KeyboardModifiers), (override));
     MOCK_METHOD(void, undo, (), (override));
     MOCK_METHOD(void, redo, (), (override));
-    MOCK_METHOD(void, undoRedoToIdx, (size_t idx), (override));
+    MOCK_METHOD(void, undoRedoToIndex, (size_t idx), (override));
 
     MOCK_METHOD(bool, moveSelectionAvailable, (MoveSelectionType), (const, override));
     MOCK_METHOD(void, moveSelection, (MoveDirection, MoveSelectionType), (override));
