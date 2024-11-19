@@ -331,7 +331,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="172"/>
         <source>»C</source>
-        <translation>»C</translation>
+        <translation>»До</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="177"/>
@@ -1131,132 +1131,132 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="694"/>
         <source>0 - Perfect unison</source>
-        <translation>0 - Чиста прима</translation>
+        <translation>0 — Чиста прима</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="699"/>
         <source>1 - Augmented unison</source>
-        <translation>1 - Збільшена прима</translation>
+        <translation>1 — Збільшена прима</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="704"/>
         <source>0 - Diminished second</source>
-        <translation>0 - Зменшена секунда</translation>
+        <translation>0 — Зменшена секунда</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="709"/>
         <source>1 - Minor second</source>
-        <translation>1 - Мала секунда</translation>
+        <translation>1 — Мала секунда</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="714"/>
         <source>2 - Major second</source>
-        <translation>2 - Велика секунда</translation>
+        <translation>2 — Велика секунда</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="719"/>
         <source>3 - Augmented second</source>
-        <translation>3 - Збільшена секунда</translation>
+        <translation>3 — Збільшена секунда</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="724"/>
         <source>2 - Diminished third</source>
-        <translation>2 - Зменшена терція</translation>
+        <translation>2 — Зменшена терція</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="729"/>
         <source>3 - Minor third</source>
-        <translation>3 - Мала терція</translation>
+        <translation>3 — Мала терція</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="734"/>
         <source>4 - Major third</source>
-        <translation>4 - Велика терція</translation>
+        <translation>4 — Велика терція</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="739"/>
         <source>5 - Augmented third</source>
-        <translation>5 - Збільшена терція</translation>
+        <translation>5 — Збільшена терція</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="744"/>
         <source>4 - Diminished fourth</source>
-        <translation>4 - Зменшена кварта</translation>
+        <translation>4 — Зменшена кварта</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="749"/>
         <source>5 - Perfect fourth</source>
-        <translation>5 - Чиста кварта</translation>
+        <translation>5 — Чиста кварта</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="754"/>
         <source>6 - Augmented fourth</source>
-        <translation>6 - Збільшена кварта</translation>
+        <translation>6 — Збільшена кварта</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="759"/>
         <source>6 - Diminished fifth</source>
-        <translation>6 - Зменшена квінта</translation>
+        <translation>6 — Зменшена квінта</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="764"/>
         <source>7 - Perfect fifth</source>
-        <translation>7 - Чиста квінта</translation>
+        <translation>7 — Чиста квінта</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="769"/>
         <source>8 - Augmented fifth</source>
-        <translation>8 - Збільшена квінта</translation>
+        <translation>8 — Збільшена квінта</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="774"/>
         <source>7 - Diminished sixth</source>
-        <translation>7 - Зменшена секста</translation>
+        <translation>7 — Зменшена секста</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="779"/>
         <source>8 - Minor sixth</source>
-        <translation>8 - Мала секста</translation>
+        <translation>8 — Мала секста</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="784"/>
         <source>9 - Major sixth</source>
-        <translation>9 - Велика секста</translation>
+        <translation>9 — Велика секста</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="789"/>
         <source>10 - Augmented sixth</source>
-        <translation>10 - Збільшена секста</translation>
+        <translation>10 — Збільшена секста</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="794"/>
         <source>9 - Diminished seventh</source>
-        <translation>9 - Зменшена септима</translation>
+        <translation>9 — Зменшена септима</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="799"/>
         <source>10 - Minor seventh</source>
-        <translation>10 - Мала септима</translation>
+        <translation>10 — Мала септима</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="804"/>
         <source>11 - Major seventh</source>
-        <translation>11 - Велика септима</translation>
+        <translation>11 — Велика септима</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="809"/>
         <source>12 - Augmented seventh</source>
-        <translation>12 - Збільшена септима</translation>
+        <translation>12 — Збільшена септима</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="814"/>
         <source>11 - Diminished octave</source>
-        <translation>11 - Зменшена октава</translation>
+        <translation>11 — Зменшена октава</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="819"/>
         <source>12 - Perfect octave</source>
-        <translation>12 - Чиста октава</translation>
+        <translation>12 — Чиста октава</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="961"/>
@@ -2788,12 +2788,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="149"/>
         <source>Dynamics &amp; hairpins</source>
-        <translation type="unfinished"/>
+        <translation>Динаміка і поступова зміна гучності</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="587"/>
         <source>Instrument names</source>
-        <translation type="unfinished"/>
+        <translation>Назви інструмента</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="593"/>
@@ -2804,7 +2804,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="602"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="622"/>
         <source>Long name</source>
-        <translation type="unfinished"/>
+        <translation>Довга назва</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="612"/>
@@ -2820,7 +2820,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="642"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="677"/>
         <source>Hide</source>
-        <translation type="unfinished"/>
+        <translation>Приховати</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="649"/>
@@ -2896,7 +2896,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4337"/>
         <source>Padding</source>
-        <translation type="unfinished"/>
+        <translation>Відступ</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4343"/>
@@ -6383,7 +6383,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="132"/>
         <source>Chord/rest duration</source>
-        <translation type="unfinished"/>
+        <translation>Тривалість акорду/паузи</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="93"/>
@@ -6793,7 +6793,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="504"/>
         <source>Parts</source>
-        <translation type="unfinished"/>
+        <translation>Партії</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="511"/>
@@ -9098,7 +9098,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="75"/>
         <source>Playback setup</source>
-        <translation type="unfinished"/>
+        <translation>Налаштування відтворення</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="128"/>
@@ -11446,7 +11446,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/appshell/qml/Preferences/internal/MeiSection.qml" line="30"/>
         <source>MEI</source>
         <extracomment>MEI refers to a file format that can be imported and exported in MuseScore. It stands for Music Encoding Initiative.</extracomment>
-        <translation type="unfinished"/>
+        <translation>MEI</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MeiSection.qml" line="40"/>
@@ -13685,7 +13685,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/stringtunings.cpp" line="180"/>
         <source>String %1</source>
-        <translation type="unfinished"/>
+        <translation>Струна %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stringtunings.cpp" line="181"/>
@@ -18253,13 +18253,13 @@ Fret %1 on strings %2</source>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/FirstLaunchSetupDialog.qml" line="136"/>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="155"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Назад</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/FirstLaunchSetupDialog.qml" line="192"/>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="166"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>Далі</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="71"/>
@@ -18667,7 +18667,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="178"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>Готово</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="237"/>
@@ -18733,7 +18733,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="99"/>
         <source>Don’t save</source>
-        <translation type="unfinished"/>
+        <translation>Не зберігати</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="100"/>
@@ -18748,7 +18748,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="102"/>
         <source>Yes to all</source>
-        <translation type="unfinished"/>
+        <translation>Так для всіх</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="103"/>
@@ -18758,12 +18758,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="104"/>
         <source>No to all</source>
-        <translation type="unfinished"/>
+        <translation>Ні для всіх</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="105"/>
         <source>Abort</source>
-        <translation type="unfinished"/>
+        <translation>Перервати</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="106"/>
@@ -18773,12 +18773,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="107"/>
         <source>Ignore</source>
-        <translation type="unfinished"/>
+        <translation>Ігнорувати</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="110"/>
         <source>Discard</source>
-        <translation type="unfinished"/>
+        <translation>Відкинути</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="111"/>
@@ -18881,7 +18881,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="213"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="164"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Невідомо</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="126"/>
@@ -19625,7 +19625,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="57"/>
         <source>Parentheses</source>
-        <translation type="unfinished"/>
+        <translation>Дужки</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="58"/>
@@ -19816,7 +19816,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="75"/>
         <source>Hide</source>
-        <translation type="unfinished"/>
+        <translation>Приховати</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="81"/>
@@ -20174,7 +20174,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="66"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Невідомо</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="69"/>
@@ -21034,7 +21034,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="58"/>
         <source>Rectangle</source>
-        <translation type="unfinished"/>
+        <translation>Прямокутник</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="59"/>
@@ -21054,7 +21054,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="140"/>
         <source>Padding</source>
-        <translation type="unfinished"/>
+        <translation>Відступ</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="162"/>
@@ -21100,7 +21100,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/breathplaybackmodel.cpp" line="33"/>
         <source>Breaths &amp; pauses</source>
-        <translation type="unfinished"/>
+        <translation>Дихання та паузи</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/fermataplaybackmodel.cpp" line="33"/>
@@ -21206,7 +21206,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/instrumentname/instrumentnamesettingsmodel.cpp" line="33"/>
         <source>Instrument names</source>
-        <translation type="unfinished"/>
+        <translation>Назви інструментів</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/jumps/jumpsettingsmodel.cpp" line="32"/>
@@ -21452,7 +21452,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/tremolos/tremolosettingsmodel.cpp" line="37"/>
         <source>Tremolos</source>
-        <translation type="unfinished"/>
+        <translation>Тремоло</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="37"/>
@@ -22387,7 +22387,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="55"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PartsDialog.qml" line="34"/>
         <source>Parts</source>
-        <translation type="unfinished"/>
+        <translation>Партії</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="60"/>
@@ -22930,7 +22930,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="175"/>
         <source>Fingerings</source>
-        <translation type="unfinished"/>
+        <translation>Аплікатура</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="177"/>
@@ -23151,7 +23151,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="185"/>
         <source>Ornaments</source>
-        <translation type="unfinished"/>
+        <translation>Орнаментика</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="187"/>
@@ -23171,7 +23171,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="205"/>
         <source>Tremolos</source>
-        <translation type="unfinished"/>
+        <translation>Тремоло</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NoteInputBarCustomisePopup.qml" line="60"/>
@@ -23568,7 +23568,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml" line="40"/>
         <source>2 spaces</source>
-        <translation type="unfinished"/>
+        <translation>2 пробіли</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="76"/>
@@ -23583,18 +23583,18 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="114"/>
         <source>Fret</source>
-        <translation type="unfinished"/>
+        <translation>Лад</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="146"/>
         <source>Apply to</source>
-        <translation type="unfinished"/>
+        <translation>Застосувати до</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="203"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="181"/>
         <source>String %1</source>
-        <translation type="unfinished"/>
+        <translation>Струна %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="217"/>
@@ -23609,7 +23609,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="256"/>
         <source>Capo position</source>
-        <translation type="unfinished"/>
+        <translation>Позиція каподастру</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/internal/caposettingsmodel.cpp" line="131"/>
@@ -23639,7 +23639,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="80"/>
         <source>Presets</source>
-        <translation type="unfinished"/>
+        <translation>Шаблони</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="116"/>
@@ -23711,7 +23711,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.cpp" line="209"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>Невідомо</translation>
     </message>
 </context>
 <context>
@@ -23758,7 +23758,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="766"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1261"/>
         <source>Center</source>
-        <translation type="unfinished"/>
+        <translation>По центру</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="767"/>
@@ -23782,7 +23782,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="773"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1267"/>
         <source>Parentheses</source>
-        <translation type="unfinished"/>
+        <translation>Дужки</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="776"/>
@@ -23950,7 +23950,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="926"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1294"/>
         <source>Chord/rest duration</source>
-        <translation type="unfinished"/>
+        <translation>Тривалість акорду/паузи</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1035"/>
@@ -23963,7 +23963,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1036"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1307"/>
         <source>Rectangle</source>
-        <translation type="unfinished"/>
+        <translation>Прямокутник</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1037"/>
@@ -23979,47 +23979,47 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1324"/>
         <source>Page number, except on first page</source>
-        <translation type="unfinished"/>
+        <translation>Номер сторінки, окрім першої</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1326"/>
         <source>Page number, if there is more than one page</source>
-        <translation type="unfinished"/>
+        <translation>Номер сторінки, якщо їх більше одної</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1328"/>
         <source>Page number, on all pages</source>
-        <translation type="unfinished"/>
+        <translation>Номер сторінки, на всіх сторінках</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1330"/>
         <source>Number of pages</source>
-        <translation type="unfinished"/>
+        <translation>Кількість сторінок</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1332"/>
         <source>File name</source>
-        <translation type="unfinished"/>
+        <translation>Назва файлу</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1334"/>
         <source>File path+name</source>
-        <translation type="unfinished"/>
+        <translation>Шлях та назва файлу</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1336"/>
         <source>Part name, except on first page</source>
-        <translation type="unfinished"/>
+        <translation>Назва партії, окрім першої сторінки</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1338"/>
         <source>Part name, on all pages</source>
-        <translation type="unfinished"/>
+        <translation>Назва партії, на всіх сторінках</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1340"/>
         <source>Current date</source>
-        <translation type="unfinished"/>
+        <translation>Поточна дата</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1342"/>
@@ -24323,7 +24323,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="194"/>
         <source>More</source>
         <extracomment>Caption of a button to reveal more elements</extracomment>
-        <translation type="unfinished"/>
+        <translation>Більше</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="618"/>
@@ -24414,17 +24414,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="84"/>
         <source>X</source>
-        <translation type="unfinished"/>
+        <translation>X</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="93"/>
         <source>Y</source>
-        <translation type="unfinished"/>
+        <translation>Y</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="101"/>
         <source>Content scale</source>
-        <translation type="unfinished"/>
+        <translation>Масштабування вмісту</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="145"/>
@@ -24440,7 +24440,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="68"/>
         <source>Cell size</source>
-        <translation type="unfinished"/>
+        <translation>Розмір комірки</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="84"/>
@@ -24455,7 +24455,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="98"/>
         <source>Element offset</source>
-        <translation type="unfinished"/>
+        <translation>Зміщення елемента</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="106"/>
@@ -24475,7 +24475,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="214"/>
         <source>Beam properties</source>
-        <translation type="unfinished"/>
+        <translation>Властивості в&apos;язки</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="235"/>
@@ -24581,7 +24581,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="631"/>
         <source>Tremolos</source>
-        <translation type="unfinished"/>
+        <translation>Тремоло</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="666"/>
@@ -24608,7 +24608,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="783"/>
         <source>Ornaments</source>
-        <translation type="unfinished"/>
+        <translation>Орнаментика</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="847"/>
@@ -24645,7 +24645,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="957"/>
         <source>Breaths &amp; pauses</source>
-        <translation type="unfinished"/>
+        <translation>Дихання та паузи</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1056"/>
@@ -24660,7 +24660,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1109"/>
         <source>Bagpipe embellishments</source>
-        <translation type="unfinished"/>
+        <translation>Мелізми волинки</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1129"/>
@@ -24711,7 +24711,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1789"/>
         <source>Barré line</source>
-        <translation type="unfinished"/>
+        <translation>Лінія баре</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecompat.cpp" line="146"/>
@@ -24746,7 +24746,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="575"/>
         <source>Fingerings</source>
-        <translation type="unfinished"/>
+        <translation>Аплікатура</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1004"/>
@@ -24954,7 +24954,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1545"/>
         <source>Change instr.</source>
-        <translation type="unfinished"/>
+        <translation>Змінити інстр.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1546"/>
@@ -25259,7 +25259,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1648"/>
         <source>vibrato</source>
-        <translation type="unfinished"/>
+        <translation>вібрато</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1650"/>
@@ -25286,7 +25286,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1891"/>
         <source>Keyboard</source>
-        <translation type="unfinished"/>
+        <translation>Клавішні</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1956"/>
@@ -25312,7 +25312,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="337"/>
         <source>Hide</source>
-        <translation type="unfinished"/>
+        <translation>Приховати</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="338"/>
@@ -25500,7 +25500,9 @@ failed: %2</source>
         <source>Writing palette file
 %1
 failed.</source>
-        <translation type="unfinished"/>
+        <translation>Запис файлу палітри
+%1
+не вдався.</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="130"/>
@@ -27056,7 +27058,7 @@ failed.</source>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="46"/>
         <source>Audio FX</source>
         <extracomment>FX is an abbreviation of &quot;effects&quot;.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Аудіоефект</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerMuteAndSoloSection.qml" line="60"/>
@@ -27110,7 +27112,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="898"/>
         <source>Chords</source>
-        <translation type="unfinished"/>
+        <translation>Акорди</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1220"/>
@@ -27181,7 +27183,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="675"/>
         <source>Change sound</source>
-        <translation type="unfinished"/>
+        <translation>Змінити звук</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="678"/>
@@ -27201,7 +27203,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="33"/>
         <source>Playback setup</source>
-        <translation type="unfinished"/>
+        <translation>Налаштування відтворення</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="80"/>
@@ -27216,7 +27218,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="101"/>
         <source>Inactive</source>
-        <translation type="unfinished"/>
+        <translation>Неактивний</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="193"/>
@@ -27246,7 +27248,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="78"/>
         <source>Playing techniques</source>
-        <translation type="unfinished"/>
+        <translation>Техніки гри</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml" line="98"/>
@@ -27291,7 +27293,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="154"/>
         <source>Change sounds</source>
-        <translation type="unfinished"/>
+        <translation>Змінити звуки</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="157"/>
@@ -27377,7 +27379,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="177"/>
         <source>View buttons</source>
-        <translation type="unfinished"/>
+        <translation>Кнопки вигляду</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="189"/>
@@ -27387,23 +27389,23 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="201"/>
         <source>Grid view</source>
-        <translation type="unfinished"/>
+        <translation>Вигляд сітки</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="202"/>
         <source>List view</source>
-        <translation type="unfinished"/>
+        <translation>Вигляд списку</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="322"/>
         <source>Scores actions</source>
         <extracomment>accessibility name for the panel at the bottom of the &quot;Scores&quot; page</extracomment>
-        <translation type="unfinished"/>
+        <translation>Дії з партитурами</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="335"/>
         <source>Score manager (online)</source>
-        <translation type="unfinished"/>
+        <translation>Керування партитурами (онлайн)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="354"/>
@@ -27429,7 +27431,7 @@ failed.</source>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1664"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1686"/>
         <source>Open anyway</source>
-        <translation type="unfinished"/>
+        <translation>Відкрити в будь-якому разі</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1677"/>
@@ -27449,7 +27451,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1699"/>
         <source>Get help for this issue on musescore.org.</source>
-        <translation type="unfinished"/>
+        <translation>Отримати допомогу з цієї проблеми на musescore.org</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1554"/>
@@ -27461,7 +27463,7 @@ failed.</source>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1469"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1551"/>
         <source>Your score cannot be uploaded to the cloud</source>
-        <translation type="unfinished"/>
+        <translation>Неможливо зберегти вашу партитуру у хмарі</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1470"/>
@@ -27482,7 +27484,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1503"/>
         <source>This score has become corrupted and contains errors</source>
-        <translation type="unfinished"/>
+        <translation>Ця партитура стала пошкодженою та містить помилки</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1504"/>
@@ -27507,7 +27509,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1552"/>
         <source>This score is corrupted. You can get help for this issue on musescore.org.</source>
-        <translation type="unfinished"/>
+        <translation>Ця партитура є пошкодженою. Ви можете отримати допомогу з цієї проблеми на musescore.org.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1585"/>
@@ -27517,23 +27519,23 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1586"/>
         <source>Your changes will be lost. This action cannot be undone.</source>
-        <translation type="unfinished"/>
+        <translation>Ваші зміни буде втрачено. Цю дію неможливо скасувати.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="476"/>
         <source>Your score could not be opened</source>
-        <translation type="unfinished"/>
+        <translation>Вашу партитуру не вдалось відкрити</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="481"/>
         <source>This score is invalid.</source>
-        <translation type="unfinished"/>
+        <translation>Ця партитура є недійсною.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1676"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1715"/>
         <source>Cannot read file %1</source>
-        <translation type="unfinished"/>
+        <translation>Неможливо прочитати файл %1</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1720"/>
@@ -27613,22 +27615,22 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1794"/>
         <source>MEI files</source>
-        <translation type="unfinished"/>
+        <translation>MEI файли</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1795"/>
         <source>Uncompressed MuseScore folders (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>Не стиснуті папки MuseScore (експериментально)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1796"/>
         <source>MuseScore developer files</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore файли розробника</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1797"/>
         <source>MuseScore backup files</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore файли резервних копій</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1809"/>
@@ -27643,7 +27645,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="48"/>
         <source>Work title</source>
-        <translation type="unfinished"/>
+        <translation>Назва твору</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="51"/>
@@ -27663,22 +27665,22 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="55"/>
         <source>Work number</source>
-        <translation type="unfinished"/>
+        <translation>Номер твору</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="56"/>
         <source>Movement title</source>
-        <translation type="unfinished"/>
+        <translation>Назва частини</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="57"/>
         <source>Movement number</source>
-        <translation type="unfinished"/>
+        <translation>Номер частини</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="59"/>
         <source>Platform</source>
-        <translation type="unfinished"/>
+        <translation>Платформа</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="60"/>
@@ -27688,12 +27690,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="61"/>
         <source>Audio.com URL</source>
-        <translation type="unfinished"/>
+        <translation>Посилання Audio.com</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="79"/>
         <source>Scores list</source>
-        <translation type="unfinished"/>
+        <translation>Список партитур</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="34"/>
@@ -27715,17 +27717,17 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="107"/>
         <source>Uncompressed MuseScore folder (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>Не стиснута папка MuseScore (експериментально)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/templatesrepository.cpp" line="62"/>
         <source>My templates</source>
-        <translation type="unfinished"/>
+        <translation>Мої шаблони</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="120"/>
         <source>All saved changes will now update to the cloud</source>
-        <translation type="unfinished"/>
+        <translation>Зараз всі збережені зміни буде оновлено в хмарі</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="162"/>
@@ -27735,7 +27737,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="187"/>
         <source>Create a portfolio to showcase your music</source>
-        <translation type="unfinished"/>
+        <translation>Створити портфоліо, щоб представити свою музику</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="188"/>
@@ -27765,12 +27767,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoreIndicatorButton.qml" line="43"/>
         <source>Stop download</source>
-        <translation type="unfinished"/>
+        <translation>Зупинити завантаження</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoreIndicatorButton.qml" line="43"/>
         <source>Download score</source>
-        <translation type="unfinished"/>
+        <translation>Завантажити партитуру</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="130"/>
@@ -27827,14 +27829,14 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="104"/>
         <source>Modified</source>
         <extracomment>Stands for &quot;Last time that this score was modified&quot;. Used as the header of this column in the scores list.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Змінено</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="234"/>
         <source>Views</source>
         <comment>number of views</comment>
         <extracomment>Stands for &quot;The number of times this score was viewed on MuseScore.com&quot;. Used as the header of this column in the scores list.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Перегляди</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresGridView.qml" line="83"/>
@@ -27844,7 +27846,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectPropertiesDialog.qml" line="112"/>
         <source>New property</source>
-        <translation type="unfinished"/>
+        <translation>Нова властивість</translation>
     </message>
 </context>
 <context>
@@ -27865,7 +27867,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="99"/>
         <source>Unlisted</source>
-        <translation type="unfinished"/>
+        <translation>Прихований</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="101"/>
@@ -27949,7 +27951,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="165"/>
         <source>Remember my choice</source>
-        <translation type="unfinished"/>
+        <translation>Запам&apos;ятайте мій вибір</translation>
     </message>
 </context>
 <context>
@@ -27963,7 +27965,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="67"/>
         <source>Select parts to export</source>
-        <translation type="unfinished"/>
+        <translation>Виберіть партії для експорту</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="95"/>
@@ -27978,7 +27980,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="128"/>
         <source>Export settings</source>
-        <translation type="unfinished"/>
+        <translation>Налаштування експорту</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="154"/>
@@ -27998,22 +28000,22 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="49"/>
         <source>%1 Hz</source>
-        <translation type="unfinished"/>
+        <translation>%1 Гц</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="63"/>
         <source>Bitrate:</source>
-        <translation type="unfinished"/>
+        <translation>Бітрейт:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="74"/>
         <source>%1 kBit/s</source>
-        <translation type="unfinished"/>
+        <translation>%1 кБіт/с</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="87"/>
         <source>Each selected part will be exported as a separate audio file.</source>
-        <translation type="unfinished"/>
+        <translation>Кожну вибрану партію буде експортовано в окремий аудіо файл.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="52"/>
@@ -28043,7 +28045,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MidiSettingsPage.qml" line="59"/>
         <source>Each selected part will be exported as a separate MIDI file.</source>
-        <translation type="unfinished"/>
+        <translation>Кожну вибрану партію буде експортовано в окремий MIDI файл.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PdfSettingsPage.qml" line="33"/>
@@ -28061,7 +28063,7 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/PngSettingsPage.qml" line="74"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/SvgSettingsPage.qml" line="45"/>
         <source>Each page of the selected parts will be exported as a separate %1 file.</source>
-        <translation type="unfinished"/>
+        <translation>Кожну сторінку вибраної партії буде експортовано в окремий %1 файл.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="71"/>
@@ -28073,7 +28075,7 @@ failed.</source>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="74"/>
         <source>Parts</source>
         <extracomment>Used in export filename suggestion. Please use only characters that are valid for filenames.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Партії</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="363"/>
@@ -28083,7 +28085,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
         <source>A file already exists with the filename %1. Do you want to replace it?</source>
-        <translation type="unfinished"/>
+        <translation>Файл із назвою %1 вже існує. Бажаєте замінити його?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="366"/>
@@ -28113,7 +28115,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="393"/>
         <source>An error occurred while writing the file %1. Do you want to retry?</source>
-        <translation type="unfinished"/>
+        <translation>При записі у файл %1 сталася помилка. Бажаєте спробувати знову?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="445"/>
@@ -28128,7 +28130,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="53"/>
         <source>Uncompressed</source>
-        <translation type="unfinished"/>
+        <translation>Без стиснення</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="57"/>
@@ -28149,12 +28151,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="64"/>
         <source>PDF file</source>
-        <translation type="unfinished"/>
+        <translation>PDF файл</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="65"/>
         <source>PDF files</source>
-        <translation type="unfinished"/>
+        <translation>PDF файли</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="68"/>
@@ -28171,42 +28173,42 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="76"/>
         <source>MP3 audio</source>
-        <translation type="unfinished"/>
+        <translation>MP3 аудіо</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="77"/>
         <source>MP3 audio files</source>
-        <translation type="unfinished"/>
+        <translation>MP3 аудіофайли</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="80"/>
         <source>WAV audio</source>
-        <translation type="unfinished"/>
+        <translation>WAV аудіо</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="81"/>
         <source>WAV audio files</source>
-        <translation type="unfinished"/>
+        <translation>WAV аудіофайли</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="84"/>
         <source>OGG audio</source>
-        <translation type="unfinished"/>
+        <translation>OGG аудіо</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="85"/>
         <source>OGG audio files</source>
-        <translation type="unfinished"/>
+        <translation>OGG аудіофайли</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="88"/>
         <source>FLAC audio</source>
-        <translation type="unfinished"/>
+        <translation>FLAC аудіо</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="89"/>
         <source>FLAC audio files</source>
-        <translation type="unfinished"/>
+        <translation>FLAC аудіофайли</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="92"/>
@@ -28237,12 +28239,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="104"/>
         <source>MEI</source>
-        <translation type="unfinished"/>
+        <translation>MEI</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="105"/>
         <source>MEI files</source>
-        <translation type="unfinished"/>
+        <translation>MEI файли</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="304"/>
@@ -28252,18 +28254,18 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="305"/>
         <source>Each part to a separate file</source>
-        <translation type="unfinished"/>
+        <translation>Кожну партію в окремий файл</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="306"/>
         <source>All parts combined in one file</source>
-        <translation type="unfinished"/>
+        <translation>Всі партії, поєднані в один файл</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="546"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
-        <translation type="unfinished"/>
+        <translation>Весь макет</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="548"/>
@@ -28325,12 +28327,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="112"/>
         <source>Our new notation font, Leland</source>
-        <translation type="unfinished"/>
+        <translation>Наш новий нотний шрифт, Leland</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="125"/>
         <source>Our new text font, Edwin</source>
-        <translation type="unfinished"/>
+        <translation>Наш новий текстовий шрифт, Edwin</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="138"/>
@@ -28383,7 +28385,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ChooseInstrumentsAndTemplatesPage.qml" line="122"/>
         <source>Create from template</source>
-        <translation type="unfinished"/>
+        <translation>Створити за шаблоном</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="69"/>
@@ -28408,32 +28410,32 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="49"/>
         <source>pickup:</source>
-        <translation type="unfinished"/>
+        <translation>затакт:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="53"/>
         <source>no pickup</source>
-        <translation type="unfinished"/>
+        <translation>без затакту</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="57"/>
         <source>%n measure(s),</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>%n такт.</numerusform><numerusform>%n такт(и).</numerusform><numerusform>%n такт(ів).</numerusform><numerusform>%n такт(ів).</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="100"/>
         <source>Create pickup measure</source>
-        <translation type="unfinished"/>
+        <translation>Створити затакт</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="146"/>
         <source>Initial number of measures</source>
-        <translation type="unfinished"/>
+        <translation>Початкова кількість тактів</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="187"/>
         <source>Hint: You can also add &amp; delete measures after you have created your score</source>
-        <translation type="unfinished"/>
+        <translation>Підказка: Ви можете додавати та вилучати такти вже після створення партитури.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TemplatePreview.qml" line="49"/>
@@ -28443,7 +28445,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TempoSettings.qml" line="95"/>
         <source>Show tempo marking on my score</source>
-        <translation type="unfinished"/>
+        <translation>Показати позначення темпу в моїй партитурі</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="48"/>
@@ -28679,7 +28681,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/KeySignatureListView.qml" line="83"/>
         <source>Not selected</source>
-        <translation type="unfinished"/>
+        <translation>Не вибрано</translation>
     </message>
 </context>
 <context>
@@ -28692,7 +28694,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="81"/>
         <source>MuseScore Studio version:</source>
-        <translation type="unfinished"/>
+        <translation>Версія MuseScore Studio:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="90"/>
@@ -28707,7 +28709,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/PropertyItem.qml" line="73"/>
         <source>Property</source>
-        <translation type="unfinished"/>
+        <translation>Властивість</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/PropertyItem.qml" line="103"/>
@@ -28718,7 +28720,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectPropertiesDialog.qml" line="34"/>
         <source>Project properties</source>
-        <translation type="unfinished"/>
+        <translation>Властивості проєкту</translation>
     </message>
 </context>
 <context>
@@ -28731,7 +28733,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="78"/>
         <source>To the Cloud (free)</source>
-        <translation type="unfinished"/>
+        <translation>У Хмарі (безкоштовно)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="79"/>
@@ -28756,7 +28758,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AskSaveLocationTypeDialog.qml" line="97"/>
         <source>If you prefer to save your files on your computer, you can do that here.</source>
-        <translation type="unfinished"/>
+        <translation>Якщо ви віддаєте перевагу збереженню файлів на комп&apos;ютері, можете зробити це тут.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="74"/>
@@ -28791,12 +28793,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="213"/>
         <source>Replace existing</source>
-        <translation type="unfinished"/>
+        <translation>Замінити існуючу</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="215"/>
         <source>Create new</source>
-        <translation type="unfinished"/>
+        <translation>Створити нову</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="162"/>
@@ -28806,7 +28808,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="167"/>
         <source>Unlisted</source>
-        <translation type="unfinished"/>
+        <translation>Прихований</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="173"/>
@@ -28822,18 +28824,18 @@ failed.</source>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="188"/>
         <source>Replace the existing &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;</source>
         <extracomment>The text between `&lt;a href=&quot;%1&quot;&gt;` and `&lt;/a&gt;` will be a clickable link to the online score in question</extracomment>
-        <translation type="unfinished"/>
+        <translation>Замінити існуючу &lt;a href=&quot;%1&quot;&gt;онлайн-партитуру&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="191"/>
         <source>Publish as new online score</source>
-        <translation type="unfinished"/>
+        <translation>Опублікувати нову онлайн-партитуру</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="199"/>
         <source>Replace the &lt;a href=&quot;%1&quot;&gt;existing audio&lt;/a&gt;</source>
         <extracomment>The text between `&lt;a href=&quot;%1&quot;&gt;` and `&lt;/a&gt;` will be a clickable link to the online audio in question</extracomment>
-        <translation type="unfinished"/>
+        <translation>Замінити &lt;a href=&quot;%1&quot;&gt;існуюче аудіо&lt;/a&gt;</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="202"/>
@@ -28843,7 +28845,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="203"/>
         <source>Share</source>
-        <translation type="unfinished"/>
+        <translation>Поділитись</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="256"/>
@@ -28867,7 +28869,7 @@ failed.</source>
         <source>copy</source>
         <comment>a copy of a file</comment>
         <extracomment>used to form a filename suggestion, like &quot;originalFile - copy&quot;</extracomment>
-        <translation>Копіювати</translation>
+        <translation>копію</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="100"/>
@@ -28917,7 +28919,7 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="185"/>
         <source>Every N saves</source>
         <extracomment>Accessibility name for &quot;Every N saves&quot; radio button in MP3 generation settings dialog</extracomment>
-        <translation type="unfinished"/>
+        <translation>Кожне N збереження</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="77"/>
@@ -28974,7 +28976,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="415"/>
         <source>Unable to connect to Audio.com</source>
-        <translation type="unfinished"/>
+        <translation>Не вдалось з&apos;єднатися з Audio.com</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="525"/>
@@ -29009,12 +29011,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="560"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or publish this as a new score to avoid losing changes in the current online version.</source>
-        <translation type="unfinished"/>
+        <translation>Ви можете замінити &lt;a href=&quot;%1&quot;&gt;партитуру онлайн&lt;/a&gt; або опублікувати у якості нової партитури, щоб не втрачати змін у поточній онлайн-версії.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="566"/>
         <source>Publish as new score</source>
-        <translation type="unfinished"/>
+        <translation>Опублікувати нову партитуру</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="567"/>
@@ -29025,7 +29027,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="571"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or save this as a new file to avoid losing changes in the current online version.</source>
-        <translation type="unfinished"/>
+        <translation>Ви можете замінити &lt;a href=&quot;%1&quot;&gt;партитуру онлайн&lt;/a&gt; або зберегти її в новий файл, щоб не втрачати змін у поточній онлайн-версії.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="577"/>
@@ -29036,7 +29038,7 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="401"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1419"/>
         <source>Unable to connect to the cloud</source>
-        <translation type="unfinished"/>
+        <translation>Не вдалось з&apos;єднатися з хмарою</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1420"/>
@@ -29046,7 +29048,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="391"/>
         <source>Unable to connect to MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>Не вдалось з&apos;єднатися з MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="392"/>
@@ -29191,7 +29193,7 @@ failed.</source>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsList.qml" line="31"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/MidiDeviceMappingPage.qml" line="93"/>
         <source>action</source>
-        <translation type="unfinished"/>
+        <translation>дія</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsList.qml" line="33"/>
@@ -29211,7 +29213,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="97"/>
         <source>Search shortcut</source>
-        <translation type="unfinished"/>
+        <translation>Шукати скорочення</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/MidiDeviceMappingPage.qml" line="95"/>
@@ -29235,7 +29237,7 @@ failed.</source>
         <location filename="../../src/framework/shortcuts/shortcutstypes.h" line="111"/>
         <source>CC %1</source>
         <extracomment>A MIDI remote event, namely a MIDI controller event</extracomment>
-        <translation type="unfinished"/>
+        <translation>CC %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/shortcutstypes.h" line="115"/>
@@ -29246,12 +29248,12 @@ failed.</source>
     <message>
         <location filename="../../src/framework/shortcuts/view/mididevicemappingmodel.cpp" line="101"/>
         <source>Inactive</source>
-        <translation type="unfinished"/>
+        <translation>Неактивний</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="37"/>
         <source>MuseScore Studio shortcuts file</source>
-        <translation type="unfinished"/>
+        <translation>Файл клавіатурних скорочень MuseScoreStudio</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="186"/>
@@ -29266,17 +29268,17 @@ failed.</source>
     <message>
         <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="151"/>
         <source>This shortcut is already assigned to: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Це клавіатурне скорочення вже призначено для дії: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="171"/>
         <source>Are you sure you want to assign it to &lt;b&gt;%1&lt;/b&gt; instead?</source>
-        <translation type="unfinished"/>
+        <translation>Ви впевнені, що хочете перепризначити його для &lt;b&gt;%1&lt;/b&gt;?</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="176"/>
         <source>Reassign shortcut</source>
-        <translation type="unfinished"/>
+        <translation>Перепризначити скорочення</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingTopPanel.qml" line="39"/>
@@ -29366,17 +29368,17 @@ failed.</source>
     <message>
         <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="135"/>
         <source>direction is horizontal</source>
-        <translation type="unfinished"/>
+        <translation>напрям — горизонтальний</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="136"/>
         <source>direction is vertical</source>
-        <translation type="unfinished"/>
+        <translation>напрям — вертикальний</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="137"/>
         <source>direction is both</source>
-        <translation type="unfinished"/>
+        <translation>напрям — обидва</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="75"/>
@@ -29551,7 +29553,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="138"/>
         <source>Don’t save</source>
-        <translation type="unfinished"/>
+        <translation>Не зберігати</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="139"/>
@@ -29566,7 +29568,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="141"/>
         <source>Yes to all</source>
-        <translation type="unfinished"/>
+        <translation>Так для всіх</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="142"/>
@@ -29576,12 +29578,12 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="143"/>
         <source>No to all</source>
-        <translation type="unfinished"/>
+        <translation>Ні для всіх</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="144"/>
         <source>Abort</source>
-        <translation type="unfinished"/>
+        <translation>Перервати</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="145"/>
@@ -29591,7 +29593,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="146"/>
         <source>Ignore</source>
-        <translation type="unfinished"/>
+        <translation>Ігнорувати</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="147"/>
@@ -29606,7 +29608,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="149"/>
         <source>Discard</source>
-        <translation type="unfinished"/>
+        <translation>Відкинути</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="150"/>
@@ -29636,12 +29638,12 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="155"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>Далі</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="156"/>
         <source>Back</source>
-        <translation type="unfinished"/>
+        <translation>Назад</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="157"/>
@@ -29656,7 +29658,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="159"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>Готово</translation>
     </message>
 </context>
 <context>
@@ -29689,7 +29691,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="140"/>
         <source>You already have the latest version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; for news on what’s coming next.</source>
-        <translation type="unfinished"/>
+        <translation>Ви вже володієте останньою версією MuseScore Studio. Будь ласка, відвідайте &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt;, щоб дізнатися про майбутні зміни.</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="147"/>
@@ -29719,7 +29721,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/ReleaseNotesView.qml" line="80"/>
         <source>Read the %1 release notes</source>
-        <translation type="unfinished"/>
+        <translation>Читати примітки до випуску %1</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="51"/>
@@ -29729,7 +29731,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="68"/>
         <source>Take me to Muse Hub</source>
-        <translation type="unfinished"/>
+        <translation>Проведіть мене в Muse Hub</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/appupdateservice.cpp" line="208"/>

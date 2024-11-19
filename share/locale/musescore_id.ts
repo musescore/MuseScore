@@ -1299,7 +1299,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="651"/>
         <source>Interval from written to sounding pitch</source>
-        <translation type="unfinished"/>
+        <translation>Jarak nada dari yang tertulis ke titinada yang berbunyi</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="654"/>
@@ -1474,7 +1474,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="532"/>
         <source>Marks are drawn:</source>
-        <translation type="unfinished"/>
+        <translation>Tanda-tandanya tertulis:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="548"/>
@@ -1704,7 +1704,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13954"/>
         <source>Edit text style</source>
-        <translation type="unfinished"/>
+        <translation>Edit gaya teks</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14072"/>
@@ -1791,7 +1791,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8174"/>
         <source>Hairpins</source>
-        <translation type="unfinished"/>
+        <translation>Penjepit rambut</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="199"/>
@@ -2248,7 +2248,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="884"/>
         <source>Reset &apos;Min. vertical distance&apos; value</source>
-        <translation>Reset nilai &apos;Jarak vertikal min.&apos;</translation>
+        <translation>Atur ulang nilai &apos;Jarak vertikal min.&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="894"/>
@@ -2417,7 +2417,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="94"/>
         <source>Clefs, key &amp; time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Klef, tanda kunci, dan tanda birama</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="357"/>
@@ -2713,7 +2713,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3832"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3899"/>
         <source>Visibility</source>
-        <translation type="unfinished"/>
+        <translation>Visibilitas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3839"/>
@@ -2748,7 +2748,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3893"/>
         <source>Key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Tanda kunci</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3906"/>
@@ -2763,7 +2763,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3920"/>
         <source>Show courtesy key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Tampilkan tanda kunci bantu</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3930"/>
@@ -2773,7 +2773,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3936"/>
         <source>Show courtesy time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Tampilkan tanda birama bantu</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4006"/>
@@ -2788,23 +2788,23 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="149"/>
         <source>Dynamics &amp; hairpins</source>
-        <translation type="unfinished"/>
+        <translation>Dinamika dan jepitan rambut</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="587"/>
         <source>Instrument names</source>
-        <translation type="unfinished"/>
+        <translation>Nama-nama instrumen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="593"/>
         <source>Hide if there is only 1 instrument</source>
-        <translation type="unfinished"/>
+        <translation>Sembunyikan jika hanya ada 1 instrumen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="602"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="622"/>
         <source>Long name</source>
-        <translation type="unfinished"/>
+        <translation>Nama lengkap</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="612"/>
@@ -2820,7 +2820,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="642"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="677"/>
         <source>Hide</source>
-        <translation type="unfinished"/>
+        <translation>Sembunyikan</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="649"/>
@@ -2836,7 +2836,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="663"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="670"/>
         <source>Short name</source>
-        <translation type="unfinished"/>
+        <translation>Nama singkat</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3990"/>
@@ -2856,7 +2856,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4066"/>
         <source>Tuning</source>
-        <translation type="unfinished"/>
+        <translation>Penyetelan</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4076"/>
@@ -2866,17 +2866,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4081"/>
         <source>Semitones offset</source>
-        <translation type="unfinished"/>
+        <translation>Offset semiton</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4086"/>
         <source>Cents offset</source>
-        <translation type="unfinished"/>
+        <translation>Offset sen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4103"/>
         <source>Only for a change to C Maj / A min</source>
-        <translation type="unfinished"/>
+        <translation>Hanya untuk perubahan ke C mayor / A minor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4110"/>
@@ -4375,7 +4375,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12461"/>
         <source>of font height</source>
-        <translation type="unfinished"/>
+        <translation>dari tinggi teks</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8138"/>
@@ -4458,12 +4458,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12566"/>
         <source>Top</source>
-        <translation type="unfinished"/>
+        <translation>Atas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12573"/>
         <source>Bottom</source>
-        <translation type="unfinished"/>
+        <translation>Bawah</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12589"/>
@@ -4473,7 +4473,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12596"/>
         <source>Historic</source>
-        <translation type="unfinished"/>
+        <translation>Bersejarah</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12662"/>
@@ -4550,7 +4550,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12890"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12962"/>
         <source>Standard</source>
-        <translation type="unfinished"/>
+        <translation>Standar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12903"/>
@@ -4560,12 +4560,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12913"/>
         <source>Full German</source>
-        <translation type="unfinished"/>
+        <translation>Jerman Penuh</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12923"/>
         <source>Solfeggio</source>
-        <translation type="unfinished"/>
+        <translation>Solmisasi</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12933"/>
@@ -4677,12 +4677,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="718"/>
         <source>Swing settings</source>
-        <translation type="unfinished"/>
+        <translation>Pengaturan ayunan</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="743"/>
         <source>Eighth note</source>
-        <translation>Not 1/8</translation>
+        <translation>Not seperdelapan</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="750"/>
@@ -4702,7 +4702,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4097"/>
         <source>♮ in key signatures</source>
-        <translation type="unfinished"/>
+        <translation>♮ dalam tanda kunci</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5108"/>
@@ -4774,7 +4774,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13592"/>
         <source>Palm mute (P.M.)</source>
-        <translation type="unfinished"/>
+        <translation>Peredaman telapak tangan (P.M.)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13754"/>
@@ -5267,7 +5267,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="306"/>
         <source>Play count:</source>
-        <translation type="unfinished"/>
+        <translation>Hitung putar:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="351"/>
@@ -5437,12 +5437,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="180"/>
         <source>Width:</source>
-        <translation type="unfinished"/>
+        <translation>Lebar:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="193"/>
         <source>Scaling</source>
-        <translation type="unfinished"/>
+        <translation>Penskalaan</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="199"/>
@@ -5463,12 +5463,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="252"/>
         <source>Inch (in)</source>
-        <translation type="unfinished"/>
+        <translation>Inci (in)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="259"/>
         <source>Millimeter (mm)</source>
-        <translation type="unfinished"/>
+        <translation>Milimeter (mm)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="288"/>
@@ -5496,13 +5496,13 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="338"/>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="420"/>
         <source>Bottom</source>
-        <translation type="unfinished"/>
+        <translation>Bawah</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="373"/>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="474"/>
         <source>Top</source>
-        <translation type="unfinished"/>
+        <translation>Atas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="492"/>
@@ -5525,7 +5525,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.ui" line="41"/>
         <source>Chord symbols to be realized:</source>
-        <translation type="unfinished"/>
+        <translation>Simbol akor untuk diwujudkan:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.ui" line="95"/>
@@ -5734,7 +5734,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="27"/>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="33"/>
         <source>Swing settings</source>
-        <translation type="unfinished"/>
+        <translation>Pengaturan ayunan</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="54"/>
@@ -8840,7 +8840,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="58"/>
         <source>&amp;Full screen</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Layar penuh</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="65"/>
@@ -10950,7 +10950,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="92"/>
         <source>Restart required</source>
-        <translation type="unfinished"/>
+        <translation>Perlu mulai ulang</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiDevicesSection.qml" line="42"/>
@@ -12053,7 +12053,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1205"/>
         <source>Standard</source>
-        <translation type="unfinished"/>
+        <translation>Standar</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1206"/>
@@ -16046,7 +16046,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2522"/>
         <source>Standard</source>
-        <translation type="unfinished"/>
+        <translation>Standar</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2523"/>
@@ -19809,7 +19809,7 @@ Ruas birama jemputan</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="75"/>
         <source>Hide</source>
-        <translation type="unfinished"/>
+        <translation>Sembunyikan</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="81"/>
@@ -21199,7 +21199,7 @@ Ruas birama jemputan</translation>
     <message>
         <location filename="../../src/inspector/models/notation/instrumentname/instrumentnamesettingsmodel.cpp" line="33"/>
         <source>Instrument names</source>
-        <translation type="unfinished"/>
+        <translation>Nama-nama instrumen</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/jumps/jumpsettingsmodel.cpp" line="32"/>
@@ -22241,7 +22241,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="86"/>
         <source>At end of score</source>
-        <translation type="unfinished"/>
+        <translation>Pada akhir skor</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/EditGridSizeDialog.qml" line="54"/>
@@ -22918,7 +22918,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="173"/>
         <source>Hairpins</source>
-        <translation type="unfinished"/>
+        <translation>Penjepit rambut</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="175"/>
@@ -23014,7 +23014,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="128"/>
         <source>Bottom</source>
-        <translation type="unfinished"/>
+        <translation>Bawah</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="139"/>
@@ -23024,7 +23024,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="139"/>
         <source>Top</source>
-        <translation type="unfinished"/>
+        <translation>Atas</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="145"/>
@@ -23885,7 +23885,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="791"/>
         <source>Standard</source>
-        <translation type="unfinished"/>
+        <translation>Standar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="792"/>
@@ -24501,7 +24501,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/view/widgets/keyedit.cpp" line="309"/>
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="168"/>
         <source>Key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Tanda kunci</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="319"/>
@@ -25305,7 +25305,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="337"/>
         <source>Hide</source>
-        <translation type="unfinished"/>
+        <translation>Sembunyikan</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="338"/>
@@ -27848,7 +27848,7 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="195"/>
         <source>Visibility</source>
         <extracomment>visibility of a score on MuseScore.com: private, public or unlisted</extracomment>
-        <translation type="unfinished"/>
+        <translation>Visibilitas</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="97"/>

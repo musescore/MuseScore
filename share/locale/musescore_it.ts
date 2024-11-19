@@ -13579,7 +13579,7 @@ Pubblicato sotto la &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="87"/>
         <source>This file was last saved in a development version of 3.0.</source>
-        <translation>Questo file è stato salvato per l&apos;ultima volta con una versione di sviluppo 3.0.</translation>
+        <translation>Questo file è stato salvato l&apos;ultima volta in una versione di sviluppo 3.0.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="90"/>
@@ -21229,12 +21229,12 @@ battuta in levare</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/glissandosettingsmodel.cpp" line="56"/>
         <source>Straight</source>
-        <translation>Straight</translation>
+        <translation>Dritta</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/glissandosettingsmodel.cpp" line="57"/>
         <source>Wavy</source>
-        <translation>Ondulato</translation>
+        <translation>Ondulata</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/hairpinlinesettingsmodel.cpp" line="40"/>
@@ -22209,7 +22209,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="45"/>
         <source>Muse Sampler library is detected, version %1</source>
-        <translation>Rilevata libreria Muse Sampler, versione %1</translation>
+        <translation>Libreria Muse Sampler rilevata, versione %1</translation>
     </message>
 </context>
 <context>
@@ -24335,7 +24335,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="194"/>
         <source>More</source>
         <extracomment>Caption of a button to reveal more elements</extracomment>
-        <translation>Di più</translation>
+        <translation>Altro</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteGridView.qml" line="618"/>
