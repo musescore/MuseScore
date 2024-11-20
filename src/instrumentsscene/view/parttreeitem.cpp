@@ -30,7 +30,7 @@ using namespace muse;
 using ItemType = InstrumentsTreeItemType::ItemType;
 
 PartTreeItem::PartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
-    : AbstractInstrumentsPanelTreeItem(ItemType::PART, masterNotation, notation, parent)
+    : AbstractInstrumentsPanelTreeItem(ItemType::PART, masterNotation, notation, parent), Injectable(iocCtxForQmlObject(this))
 {
     listenVisibilityChanged();
 }
@@ -133,11 +133,6 @@ size_t PartTreeItem::resolveNewPartIndex(const ID& partId) const
     return parts.size();
 }
 
-QString PartTreeItem::instrumentId() const
-{
-    return m_instrumentId;
-}
-
 MoveParams PartTreeItem::buildMoveParams(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent,
                                          int destinationRow) const
 {
@@ -191,4 +186,44 @@ void PartTreeItem::removeChildren(int row, int count, bool deleteChild)
     }
 
     AbstractInstrumentsPanelTreeItem::removeChildren(row, count, deleteChild);
+}
+
+QString PartTreeItem::instrumentId() const
+{
+    return m_instrumentId;
+}
+
+void PartTreeItem::replaceInstrument()
+{
+    InstrumentKey instrumentKey;
+    instrumentKey.partId = id();
+    instrumentKey.instrumentId = m_instrumentId;
+    instrumentKey.tick = Part::MAIN_INSTRUMENT_TICK;
+
+    RetVal<Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument(instrumentKey);
+    if (!selectedInstrument.ret) {
+        LOGE() << selectedInstrument.ret.toString();
+        return;
+    }
+
+    const Instrument& newInstrument = selectedInstrument.val;
+    masterNotation()->parts()->replaceInstrument(instrumentKey, newInstrument);
+}
+
+void PartTreeItem::resetAllFormatting()
+{
+    std::string title = muse::trc("instruments", "Are you sure you want to reset all formatting?");
+    std::string body = muse::trc("instruments", "This action can not be undone");
+
+    IInteractive::Button button = interactive()->question(title, body, {
+        IInteractive::Button::No,
+        IInteractive::Button::Yes
+    }).standardButton();
+
+    if (button != IInteractive::Button::Yes) {
+        return;
+    }
+
+    const Part* masterPart = masterNotation()->parts()->part(id());
+    notation()->parts()->replacePart(id(), masterPart->clone());
 }
