@@ -114,6 +114,12 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
 
     xml.startElement(score);
 
+    if (!MScore::testMode && !score->isPaletteScore()) {
+        if (score->eid().isValid()) {
+            xml.tag("eid", score->eid().toUint64());
+        }
+    }
+
     if (Excerpt* e = score->excerpt()) {
         if (!e->name().empty()) {
             xml.tag("name", e->name());

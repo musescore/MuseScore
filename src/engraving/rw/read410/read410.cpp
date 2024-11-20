@@ -123,7 +123,10 @@ bool Read410::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         ctx.setTrack(muse::nidx);
         const AsciiStringView tag(e.name());
-        if (tag == "Staff") {
+        if (tag == "eid") {
+            AsciiStringView s = e.readAsciiText();
+            score->setEID(EID::fromStdString(s));
+        } else if (tag == "Staff") {
             StaffRead::readStaff(score, e, ctx);
         } else if (tag == "Omr") {
             e.skipCurrentElement();

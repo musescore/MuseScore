@@ -156,7 +156,7 @@ Score::Score(const modularity::ContextPtr& iocCtx)
     }
 
     Score::validScores.insert(this);
-    m_masterScore = 0;
+    m_masterScore = nullptr;
 
     m_engravingFont = engravingFonts()->fontByName("Leland");
 
@@ -180,6 +180,11 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
 {
     Score::validScores.insert(this);
     m_masterScore = parent;
+
+    if (m_masterScore) {
+        setEID(m_masterScore->getEID()->newEID(type()));
+    }
+
     if (DefaultStyle::defaultStyleForParts()) {
         m_style = *DefaultStyle::defaultStyleForParts();
     } else {
