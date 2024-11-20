@@ -3498,6 +3498,81 @@ static void keySigAddLayout(const KeySig* item, const LayoutConfiguration& conf,
     ldata->keySymbols.push_back(ks);
 }
 
+static std::vector<KeySym> collectCustomKeySymbols(const KeySig* item, const LayoutConfiguration& conf, const KeySigEvent& keySigEvent, ClefType clef) {
+    std::vector<KeySym> keySyms;
+
+    double spatium = item->spatium();
+    int key = int(keySigEvent.key());
+    double accidentalGap = conf.styleS(Sid::keysigAccidentalDistance).val();
+
+    // add standard key accidentals first, if necessary
+    for (int i = 1; i <= std::abs(key) && std::abs(key) <= 7; ++i) {
+        bool drop = false;
+        for (const CustDef& cd: keySigEvent.customKeyDefs()) {
+            int degree = keySigEvent.degInKey(cd.degree);
+            // if custom keysig accidental takes place, don't create tonal accidental
+            if ((degree * 2 + 2) % 7 == (key < 0 ? 8 - i : i) % 7) {
+                drop = true;
+                break;
+            }
+        }
+        if (!drop) {
+            KeySym ks;
+            int lineIndexOffset = key > 0 ? -1 : 6;
+            ks.sym = key > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
+            ks.line = ClefInfo::lines(clef)[lineIndexOffset + i];
+            if (keySyms.size() > 0) {
+                const KeySym& previous = keySyms.back();
+                double previousWidth = item->symWidth(previous.sym) / spatium;
+                ks.xPos = previous.xPos + previousWidth + accidentalGap;
+            } else {
+                ks.xPos = 0;
+            }
+            // TODO octave metters?
+            keySyms.push_back(ks);
+        }
+    }
+    for (const CustDef& cd : keySigEvent.customKeyDefs()) {
+        SymId sym = keySigEvent.symInKey(cd.sym, cd.degree);
+        int degree = keySigEvent.degInKey(cd.degree);
+        bool flat = std::string(SymNames::nameForSymId(sym).ascii()).find("Flat") != std::string::npos;
+        int accIdx = (degree * 2 + 1) % 7; // C D E F ... index to F C G D index
+        accIdx = flat ? 13 - accIdx : accIdx;
+        int line = ClefInfo::lines(clef)[accIdx] + cd.octAlt * 7;
+        double xpos = cd.xAlt;
+        if (keySyms.size() > 0) {
+            const KeySym& previous = keySyms.back();
+            double previousWidth = item->symWidth(previous.sym) / spatium;
+            xpos += previous.xPos + previousWidth + accidentalGap;
+        }
+        // if translated symbol if out of range, add key accidental followed by untranslated symbol
+        if (sym == SymId::noSym) {
+            KeySym ks;
+            ks.line = line;
+            ks.xPos = xpos;
+            // for quadruple sharp use two double sharps
+            if (cd.sym == SymId::accidentalTripleSharp) {
+                ks.sym = SymId::accidentalDoubleSharp;
+                sym = SymId::accidentalDoubleSharp;
+            } else {
+                ks.sym = key > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
+                sym = cd.sym;
+            }
+            keySyms.push_back(ks);
+            xpos += key < 0 ? 0.7 : 1; // flats closer
+        }
+        // create symbol; natural only if is user defined
+        if (sym != SymId::accidentalNatural || sym == cd.sym) {
+            KeySym ks;
+            ks.sym = sym;
+            ks.line = line;
+            ks.xPos = xpos;
+            keySyms.push_back(ks);
+        }
+    }
+    return keySyms;
+}
+
 void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const LayoutConfiguration& conf)
 {
     LAYOUT_CALL_ITEM(item);
@@ -3541,72 +3616,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
     int t1 = int(item->key());
 
     if (item->isCustom() && !item->isAtonal()) {
-        double accidentalGap = conf.styleS(Sid::keysigAccidentalDistance).val();
-        // add standard key accidentals first, if necessary
-        for (int i = 1; i <= std::abs(t1) && std::abs(t1) <= 7; ++i) {
-            bool drop = false;
-            for (const CustDef& cd: item->customKeyDefs()) {
-                int degree = item->degInKey(cd.degree);
-                // if custom keysig accidental takes place, don't create tonal accidental
-                if ((degree * 2 + 2) % 7 == (t1 < 0 ? 8 - i : i) % 7) {
-                    drop = true;
-                    break;
-                }
-            }
-            if (!drop) {
-                KeySym ks;
-                int lineIndexOffset = t1 > 0 ? -1 : 6;
-                ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
-                ks.line = ClefInfo::lines(clef)[lineIndexOffset + i];
-                if (ldata->keySymbols.size() > 0) {
-                    const KeySym& previous = ldata->keySymbols.back();
-                    double previousWidth = item->symWidth(previous.sym) / spatium;
-                    ks.xPos = previous.xPos + previousWidth + accidentalGap;
-                } else {
-                    ks.xPos = 0;
-                }
-                // TODO octave metters?
-                ldata->keySymbols.push_back(ks);
-            }
-        }
-        for (const CustDef& cd : item->customKeyDefs()) {
-            SymId sym = item->symInKey(cd.sym, cd.degree);
-            int degree = item->degInKey(cd.degree);
-            bool flat = std::string(SymNames::nameForSymId(sym).ascii()).find("Flat") != std::string::npos;
-            int accIdx = (degree * 2 + 1) % 7; // C D E F ... index to F C G D index
-            accIdx = flat ? 13 - accIdx : accIdx;
-            int line = ClefInfo::lines(clef)[accIdx] + cd.octAlt * 7;
-            double xpos = cd.xAlt;
-            if (ldata->keySymbols.size() > 0) {
-                const KeySym& previous = ldata->keySymbols.back();
-                double previousWidth = item->symWidth(previous.sym) / spatium;
-                xpos += previous.xPos + previousWidth + accidentalGap;
-            }
-            // if translated symbol if out of range, add key accidental followed by untranslated symbol
-            if (sym == SymId::noSym) {
-                KeySym ks;
-                ks.line = line;
-                ks.xPos = xpos;
-                // for quadruple sharp use two double sharps
-                if (cd.sym == SymId::accidentalTripleSharp) {
-                    ks.sym = SymId::accidentalDoubleSharp;
-                    sym = SymId::accidentalDoubleSharp;
-                } else {
-                    ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
-                    sym = cd.sym;
-                }
-                ldata->keySymbols.push_back(ks);
-                xpos += t1 < 0 ? 0.7 : 1; // flats closer
-            }
-            // create symbol; natural only if is user defined
-            if (sym != SymId::accidentalNatural || sym == cd.sym) {
-                KeySym ks;
-                ks.sym = sym;
-                ks.line = line;
-                ks.xPos = xpos;
-                ldata->keySymbols.push_back(ks);
-            }
-        }
+        ldata->keySymbols = collectCustomKeySymbols(item, conf, item->keySigEvent(), clef);
     } else {
         int accidentals = 0, naturals = 0;
         switch (std::abs(t1)) {
@@ -3637,6 +3647,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
         // OR key sig is CMaj/Amin (in which case they are always shown)
 
         bool naturalsOn = false;
+        bool naturalsCustom = false;
         Measure* prevMeasure = item->measure() ? item->measure()->prevMeasure() : 0;
 
         // If we're not force hiding naturals (Continuous panel), use score style settings
@@ -3658,41 +3669,48 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
         }
 
         int coffset = 0;
+        KeySigEvent prevKs;
         Key t2      = Key::C;
         if (naturalsOn) {
             if (item->staff()) {
-                t2 = item->staff()->key(item->tick() - Fraction(1, 480 * 4));
+                prevKs = item->staff()->keySigEvent(item->tick() - Fraction::eps());
+                t2 = prevKs.key();
             }
-            if (t2 == Key::C) {
+            if (prevKs.custom() && !prevKs.isAtonal()) {
                 naturalsOn = false;
+                naturalsCustom = (t1 == 0);
             } else {
-                switch (std::abs(int(t2))) {
-                case 7: naturals = 0x7f;
-                    break;
-                case 6: naturals = 0x3f;
-                    break;
-                case 5: naturals = 0x1f;
-                    break;
-                case 4: naturals = 0xf;
-                    break;
-                case 3: naturals = 0x7;
-                    break;
-                case 2: naturals = 0x3;
-                    break;
-                case 1: naturals = 0x1;
-                    break;
-                case 0: naturals = 0;
-                    break;
-                default:
-                    LOGD("illegal t2 key %d", int(t2));
-                    break;
-                }
-                // remove redundant naturals
-                if (!((t1 > 0) ^ (t2 > 0))) {
-                    naturals &= ~accidentals;
-                }
-                if (t2 < 0) {
-                    coffset = 7;
+                if (t2 == Key::C) {
+                    naturalsOn = false;
+                } else {
+                    switch (std::abs(int(t2))) {
+                    case 7: naturals = 0x7f;
+                        break;
+                    case 6: naturals = 0x3f;
+                        break;
+                    case 5: naturals = 0x1f;
+                        break;
+                    case 4: naturals = 0xf;
+                        break;
+                    case 3: naturals = 0x7;
+                        break;
+                    case 2: naturals = 0x3;
+                        break;
+                    case 1: naturals = 0x1;
+                        break;
+                    case 0: naturals = 0;
+                        break;
+                    default:
+                        LOGD("illegal t2 key %d", int(t2));
+                        break;
+                    }
+                    // remove redundant naturals
+                    if (!((t1 > 0) ^ (t2 > 0))) {
+                        naturals &= ~accidentals;
+                    }
+                    if (t2 < 0) {
+                        coffset = 7;
+                    }
                 }
             }
         }
@@ -3708,6 +3726,15 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
         bool suffixNaturals = naturalsOn && !prefixNaturals;
 
         const signed char* lines = ClefInfo::lines(clef);
+
+        if (naturalsCustom) {
+            std::vector<KeySym> keySyms = collectCustomKeySymbols(item, conf, prevKs, clef);
+            for (KeySym ks : keySyms) {
+                if (ks.sym != SymId::accidentalNatural) {
+                    keySigAddLayout(item, conf, SymId::accidentalNatural, ks.line, ldata);
+                }
+            }
+        }
 
         if (prefixNaturals) {
             for (int i = 0; i < 7; ++i) {
