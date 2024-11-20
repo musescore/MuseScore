@@ -120,23 +120,33 @@ Rectangle {
                         RowLayout {
                             spacing: 8
                             RoundedRadioButton {
+                                id: positionBtn1
                                 checked: fretboardsPage.fretNumPos.value === 0
                                 onToggled: fretboardsPage.fretNumPos.value = 0
                             }
                             StyledTextLabel {
                                 horizontalAlignment: Text.AlignLeft
                                 text: fretboardsPage.fretOrientation.value === 0 ? qsTrc("notation", "Left") : qsTrc("notation", "Bottom")
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: positionBtn1.toggled()
+                                }
                             }
                         }
                         RowLayout {
                             spacing: 8
                             RoundedRadioButton {
+                                id: positionBtn2
                                 checked: fretboardsPage.fretNumPos.value === 1
                                 onToggled: fretboardsPage.fretNumPos.value = 1
                             }
                             StyledTextLabel {
                                 horizontalAlignment: Text.AlignLeft
                                 text: fretboardsPage.fretOrientation.value === 0 ? qsTrc("notation", "Right") : qsTrc("notation", "Top")
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: positionBtn2.toggled()
+                                }
                             }
                         }
                     }
@@ -148,23 +158,33 @@ Rectangle {
                             RowLayout {
                                 spacing: 8
                                 RoundedRadioButton {
+                                    id: numberOnlyBtn
                                     checked: fretboardsPage.fretUseCustomSuffix.value === false
                                     onToggled: fretboardsPage.fretUseCustomSuffix.value = false
                                 }
                                 StyledTextLabel {
                                     horizontalAlignment: Text.AlignLeft
                                     text: qsTrc("notation", "Number only")
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: numberOnlyBtn.toggled()
+                                    }
                                 }
                             }
                             RowLayout {
                                 spacing: 8
                                 RoundedRadioButton {
+                                    id:  customSuffixBtn
                                     checked: fretboardsPage.fretUseCustomSuffix.value === true
                                     onToggled: fretboardsPage.fretUseCustomSuffix.value = true
                                 }
                                 StyledTextLabel {
                                     horizontalAlignment: Text.AlignLeft
                                     text: qsTrc("notation", "Custom suffix:")
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: customSuffixBtn.toggled()
+                                    }
                                 }
                                 TextInputField {
                                     enabled: fretboardsPage.fretUseCustomSuffix.value === true
