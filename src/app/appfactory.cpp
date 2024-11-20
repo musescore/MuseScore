@@ -153,6 +153,10 @@
 #include "stubs/instrumentsscene/instrumentsscenestubmodule.h"
 #endif
 
+#ifdef MUE_BUILD_MUSESOUNDS_MODULE
+#include "musesounds/musesoundsmodule.h"
+#endif
+
 #ifdef MUE_BUILD_NOTATION_MODULE
 #include "notation/notationmodule.h"
 #else
@@ -299,6 +303,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new muse::languages::LanguagesModule());
     app->addModule(new muse::learn::LearnModule());
     app->addModule(new muse::mi::MultiInstancesModule());
+#ifdef MUE_BUILD_MUSESOUNDS_MODULE
+    app->addModule(new mu::musesounds::MuseSoundsModule());
+#endif
     app->addModule(new mu::notation::NotationModule());
     app->addModule(new mu::palette::PaletteModule());
     app->addModule(new mu::playback::PlaybackModule());

@@ -412,6 +412,11 @@ void JsonArray::resize(size_t i)
     array_mut(m_data).resize(i);
 }
 
+bool JsonArray::empty() const
+{
+    return array_const(m_data).size() == 0;
+}
+
 JsonValue JsonArray::at(size_t i) const
 {
     std::shared_ptr<JsonData> d = std::make_shared<JsonData>();

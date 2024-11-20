@@ -35,6 +35,7 @@ class Uri
 public:
     Uri() = default;
     explicit Uri(const std::string& str);
+    explicit Uri(const muse::String& str);
 
     using Scheme = std::string;
     static const Scheme MuseScore;
@@ -72,6 +73,7 @@ public:
 
     UriQuery() = default;
     explicit UriQuery(const std::string& str);
+    explicit UriQuery(const String& str);
     explicit UriQuery(const Uri& uri);
 
     const Uri& uri() const;

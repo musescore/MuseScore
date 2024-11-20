@@ -25,9 +25,10 @@ import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import Muse.Dock 1.0
 
-import MuseScore.Project 1.0
 import Muse.Cloud 1.0
 import Muse.Learn 1.0
+import MuseScore.Project 1.0
+import MuseScore.MuseSounds 1.0
 
 DockPage {
     id: root
@@ -65,7 +66,7 @@ DockPage {
         case "scores": root.central = scoresComp; break
         case "plugins": root.central = extensionsComp; break // backward compatibility
         case "extensions": root.central = extensionsComp; break
-        case "audio": root.central = audioComp; break
+        case "musesounds": root.central = museSoundsComp; break
         case "learn": root.central = learnComp; break
         case "account": root.central = accountComp; break
         }
@@ -125,12 +126,9 @@ DockPage {
     }
 
     Component {
-        id: audioComp
+        id: museSoundsComp
 
-        StyledTextLabel {
-            anchors.centerIn: parent
-            text: "Audio & VST"
-        }
+        MuseSoundsPage {}
     }
 
     Component {

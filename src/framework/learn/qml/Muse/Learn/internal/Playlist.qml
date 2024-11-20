@@ -139,7 +139,7 @@ FocusScope {
 
         StyledTextLabel {
             width: parent.width
-            text: qsTrc("learn", "Please check your internet connection or try again later.")
+            text: qsTrc("global", "Please check your internet connection or try again later.")
         }
     }
 }
