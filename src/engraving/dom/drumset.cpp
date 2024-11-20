@@ -51,7 +51,7 @@ String Drumset::translatedName(int pitch) const
 
 void Drumset::save(XmlWriter& xml) const
 {
-    for (int i = 0; i < 128; ++i) {
+    for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
         if (!isValid(i)) {
             continue;
         }
@@ -174,7 +174,7 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
 void Drumset::load(XmlReader& e)
 {
     int pitch = e.intAttribute("pitch", -1);
-    if (pitch < 0 || pitch > 127) {
+    if (pitch < 0 || pitch > DRUM_INSTRUMENTS - 1) {
         LOGD("load drumset: invalid pitch %d", pitch);
         return;
     }
@@ -192,7 +192,7 @@ void Drumset::load(XmlReader& e)
 
 void Drumset::clear()
 {
-    for (int i = 0; i < 128; ++i) {
+    for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
         m_drum[i].name = u"";
         m_drum[i].notehead = NoteHeadGroup::HEAD_INVALID;
         m_drum[i].shortcut = 0;
@@ -206,7 +206,7 @@ void Drumset::clear()
 
 int Drumset::nextPitch(int ii) const
 {
-    for (int i = ii + 1; i < 127; ++i) {
+    for (int i = ii + 1; i < DRUM_INSTRUMENTS - 1; ++i) {
         if (isValid(i)) {
             return i;
         }
@@ -230,7 +230,7 @@ int Drumset::prevPitch(int ii) const
             return i;
         }
     }
-    for (int i = 127; i >= ii; --i) {
+    for (int i = DRUM_INSTRUMENTS - 1; i >= ii; --i) {
         if (isValid(i)) {
             return i;
         }
@@ -273,7 +273,7 @@ DrumInstrumentVariant Drumset::findVariant(int p, const std::vector<Articulation
 void Drumset::initDrumset()
 {
     smDrumset = new Drumset;
-    for (int i = 0; i < 128; ++i) {
+    for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
         smDrumset->drum(i).notehead = NoteHeadGroup::HEAD_INVALID;
         smDrumset->drum(i).line     = 0;
         smDrumset->drum(i).shortcut = 0;
