@@ -25,7 +25,6 @@
 
 #include "pitchspelling.h"
 #include "textbase.h"
-#include "pitchspelling.h"
 
 using namespace mu;
 
@@ -39,7 +38,7 @@ enum class PedalPosition : char {
 };
 
 // Use for indexes of _pedalState
-enum HarpStringType : char {
+enum class HarpStringType : char {
     D, C, B, E, F, G, A
 };
 

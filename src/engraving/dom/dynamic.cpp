@@ -23,6 +23,7 @@
 
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
+#include "types/symnames.h"
 
 #include "anchors.h"
 #include "dynamichairpingroup.h"
@@ -48,58 +49,85 @@ namespace mu::engraving {
 //-----------------------------------------------------------------------------
 
 // variant with ligatures, works for both emmentaler and bravura:
+constexpr DynamicType P = DynamicType::P;
+constexpr DynamicType M = DynamicType::M;
+constexpr DynamicType F = DynamicType::F;
+constexpr DynamicType S = DynamicType::S;
+constexpr DynamicType Z = DynamicType::Z;
+constexpr DynamicType R = DynamicType::R;
+constexpr DynamicType N = DynamicType::N;
 const std::vector<Dyn> Dynamic::DYN_LIST = {
-    // dynamic:
-    { DynamicType::OTHER,  -1, 0,   true, "" },
-    { DynamicType::PPPPPP,  1, 0,   false,
+    { DynamicType::OTHER,  -1, 0,   true, {}, "", "" },
+    { DynamicType::PPPPPP,  1, 0,   false, { P, P, P, P, P, P }, "pppppp",
       "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
-    { DynamicType::PPPPP,   5, 0,   false,
+    { DynamicType::PPPPP,   5, 0,   false, { P, P, P, P, P }, "ppppp",
       "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
-    { DynamicType::PPPP,    10, 0,  false,
+    { DynamicType::PPPP,    10, 0,  false, { P, P, P, P }, "pppp",
       "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
-    { DynamicType::PPP,     16, 0,  false,
+    { DynamicType::PPP,     16, 0,  false, { P, P, P }, "ppp",
       "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
-    { DynamicType::PP,      33, 0,  false,  "<sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
-    { DynamicType::P,       49, 0,  false,  "<sym>dynamicPiano</sym>" },
+    { DynamicType::PP,      33, 0,  false, { P, P }, "pp",
+      "<sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
+    { DynamicType::P,       49, 0,  false, { P }, "p",
+      "<sym>dynamicPiano</sym>" },
 
-    { DynamicType::MP,      64, 0,   false, "<sym>dynamicMezzo</sym><sym>dynamicPiano</sym>" },
-    { DynamicType::MF,      80, 0,   false, "<sym>dynamicMezzo</sym><sym>dynamicForte</sym>" },
+    { DynamicType::MP,      64, 0,   false, { M, P }, "mp",
+      "<sym>dynamicMezzo</sym><sym>dynamicPiano</sym>" },
+    { DynamicType::MF,      80, 0,   false, { M, F }, "mf",
+      "<sym>dynamicMezzo</sym><sym>dynamicForte</sym>" },
 
-    { DynamicType::F,       96, 0,   false, "<sym>dynamicForte</sym>" },
-    { DynamicType::FF,      112, 0,  false, "<sym>dynamicForte</sym><sym>dynamicForte</sym>" },
-    { DynamicType::FFF,     126, 0,  false, "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
-    { DynamicType::FFFF,    127, 0,  false,
+    { DynamicType::F,       96, 0,   false, { F }, "f",
+      "<sym>dynamicForte</sym>" },
+    { DynamicType::FF,      112, 0,  false, { F, F }, "ff",
+      "<sym>dynamicForte</sym><sym>dynamicForte</sym>" },
+    { DynamicType::FFF,     126, 0,  false, { F, F, F }, "fff",
+      "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
+    { DynamicType::FFFF,    127, 0,  false, { F, F, F, F }, "ffff",
       "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
-    { DynamicType::FFFFF,   127, 0,  false,
+    { DynamicType::FFFFF,   127, 0,  false, { F, F, F, F, F }, "fffff",
       "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
-    { DynamicType::FFFFFF,  127, 0,  false,
+    { DynamicType::FFFFFF,  127, 0,  false, { F, F, F, F, F, F }, "ffffff",
       "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
 
-    { DynamicType::FP,      96, -47,  true, "<sym>dynamicForte</sym><sym>dynamicPiano</sym>" },
-    { DynamicType::PF,      49, 47,   true, "<sym>dynamicPiano</sym><sym>dynamicForte</sym>" },
+    { DynamicType::FP,      96, -47,  true, { F, P }, "fp",
+      "<sym>dynamicForte</sym><sym>dynamicPiano</sym>" },
+    { DynamicType::PF,      49, 47,   true, { P, F }, "pf",
+      "<sym>dynamicPiano</sym><sym>dynamicForte</sym>" },
 
-    { DynamicType::SF,      112, -18, true, "<sym>dynamicSforzando</sym><sym>dynamicForte</sym>" },
-    { DynamicType::SFZ,     112, -18, true, "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>" },
-    { DynamicType::SFF,     126, -18, true, "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
-    { DynamicType::SFFZ,    126, -18, true,
+    { DynamicType::SF,      112, -18, true, { S, F }, "sf",
+      "<sym>dynamicSforzando</sym><sym>dynamicForte</sym>" },
+    { DynamicType::SFZ,     112, -18, true, { S, F, Z }, "sfz",
+      "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>" },
+    { DynamicType::SFF,     126, -18, true, { S, F, F }, "sff",
+      "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
+    { DynamicType::SFFZ,    126, -18, true, { S, F, F, Z }, "sffz",
       "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>" },
-    { DynamicType::SFFF,    127, -18, true,
+    { DynamicType::SFFF,    127, -18, true, { S, F, F, F }, "sfff",
       "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
-    { DynamicType::SFFFZ,   127, -18, true,
+    { DynamicType::SFFFZ,   127, -18, true, { S, F, F, F, Z }, "sfffz",
       "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>" },
-    { DynamicType::SFP,     112, -47, true, "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym>" },
-    { DynamicType::SFPP,    112, -79, true,
+    { DynamicType::SFP,     112, -47, true, { S, F, P }, "sfp",
+      "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym>" },
+    { DynamicType::SFPP,    112, -79, true, { S, F, P, P }, "sfpp",
       "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
 
-    { DynamicType::RFZ,     112, -18, true, "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>" },
-    { DynamicType::RF,      112, -18, true, "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym>" },
-    { DynamicType::FZ,      112, -18, true, "<sym>dynamicForte</sym><sym>dynamicZ</sym>" },
+    { DynamicType::RFZ,     112, -18, true, { R, F, Z }, "rfz",
+      "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>" },
+    { DynamicType::RF,      112, -18, true, { R, F }, "rf",
+      "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym>" },
+    { DynamicType::FZ,      112, -18, true, { F, Z }, "fz",
+      "<sym>dynamicForte</sym><sym>dynamicZ</sym>" },
 
-    { DynamicType::M,       96, -16,  true, "<sym>dynamicMezzo</sym>" },
-    { DynamicType::R,       112, -18, true, "<sym>dynamicRinforzando</sym>" },
-    { DynamicType::S,       112, -18, true, "<sym>dynamicSforzando</sym>" },
-    { DynamicType::Z,       80, 0,    true, "<sym>dynamicZ</sym>" },
-    { DynamicType::N,       49, -48,  true, "<sym>dynamicNiente</sym>" }
+    { DynamicType::M,       96, -16,  true, { M }, "m",
+      "<sym>dynamicMezzo</sym>" },
+    { DynamicType::R,       112, -18, true, { R }, "r",
+      "<sym>dynamicRinforzando</sym>" },
+    { DynamicType::S,       112, -18, true, { S }, "s",
+      "<sym>dynamicSforzando</sym>" },
+    { DynamicType::Z,       80, 0,    true, { Z }, "z",
+      "<sym>dynamicZ</sym>" },
+    { DynamicType::N,       49, -48,  true, { N }, "n",
+      "<sym>dynamicNiente</sym>" }
 };
 
 //---------------------------------------------------------
@@ -112,6 +140,107 @@ static const ElementStyle dynamicsStyle {
     { Sid::dynamicsSize, Pid::DYNAMICS_SIZE },
     { Sid::centerOnNotehead, Pid::CENTER_ON_NOTEHEAD },
 };
+
+//---------------------------------------------------------
+//   DynamicFragment
+//---------------------------------------------------------
+
+DynamicFragment::DynamicFragment(CharFormat charFormat, String dynamicText, bool displayAsExpression)
+{
+    format = charFormat;
+    m_dynamicText = dynamicText;
+    calculatePlainText(getDynamics(dynamicText));
+    setDisplayAsExpressionText(displayAsExpression);
+}
+
+DynamicFragment::DynamicFragment(const DynamicFragment& dynamicFragment)
+    : TextFragment(dynamicFragment)
+{
+    m_displayAsExpressionText = dynamicFragment.m_displayAsExpressionText;
+    m_dynamicText = dynamicFragment.m_dynamicText;
+    m_plainText = dynamicFragment.m_plainText;
+}
+
+DynamicFragment& DynamicFragment::operator =(const DynamicFragment& dynamicFragment)
+{
+    TextFragment::operator =(dynamicFragment);
+    m_dynamicText = dynamicFragment.m_dynamicText;
+    m_plainText = dynamicFragment.m_plainText;
+
+    return *this;
+}
+
+void DynamicFragment::setText(String newText)
+{
+    std::vector<DynamicType> dynamics = getDynamics(newText);
+    calculateDynamicText(dynamics);
+    calculatePlainText(dynamics);
+    setDisplayAsExpressionText(m_displayAsExpressionText);
+}
+
+std::vector<DynamicType> DynamicFragment::getDynamics(String text)
+{
+    static std::shared_ptr<IEngravingFontsProvider> provider = muse::modularity::globalIoc()->resolve<IEngravingFontsProvider>("engraving");
+
+    std::vector<DynamicType> dynamics;
+    for (char32_t i = 0; i < text.size(); i++) {
+        SymId symId = provider->fallbackFont()->fromCode(text[i]);
+        DynamicType dt = TConv::dynamicType(symId);
+        if (dt == DynamicType::OTHER) {
+            return dynamics;
+        }
+        dynamics.push_back(dt);
+    }
+
+    return dynamics;
+}
+
+void DynamicFragment::setDisplayAsExpressionText(bool asExpression)
+{
+    m_displayAsExpressionText = asExpression;
+    if (asExpression) {
+        TextFragment::setText(m_plainText);
+    } else {
+        format.setFontFamily(u"ScoreText");
+        TextFragment::setText(m_dynamicText);
+    }
+}
+
+void DynamicFragment::calculateDynamicText(std::vector<DynamicType> dynamics)
+{
+    static std::shared_ptr<IEngravingFontsProvider> provider = muse::modularity::globalIoc()->resolve<IEngravingFontsProvider>("engraving");
+
+    m_dynamicText.clear();
+    for (DynamicType dynamic : dynamics) {
+        m_dynamicText += provider->fallbackFont()->symCode(TConv::symId(dynamic));
+    }
+}
+
+void DynamicFragment::calculatePlainText(std::vector<DynamicType> dynamics)
+{
+    m_plainText.clear();
+    for (DynamicType dynamic : dynamics) {
+        for (const Dyn& dyn : Dynamic::dynamicList()) {
+            if (dyn.type == dynamic) {
+                m_plainText += *dyn.plainText;
+                break;
+            }
+        }
+    }
+}
+
+String DynamicFragment::toSymbolXml()
+{
+    static std::shared_ptr<IEngravingFontsProvider> provider = muse::modularity::globalIoc()->resolve<IEngravingFontsProvider>("engraving");
+
+    String xmlText;
+    for (size_t i = 0; i < m_dynamicText.size(); i++) {
+        SymId symId = provider->fallbackFont()->fromCode(m_dynamicText.at(i).unicode());
+        xmlText += u"<sym>" + String::fromAscii(SymNames::nameForSymId(symId).ascii()) + u"</sym>";
+    }
+
+    return xmlText;
+}
 
 //---------------------------------------------------------
 //   Dynamic
@@ -438,9 +567,23 @@ void Dynamic::setDynamicType(const String& tag)
     setXmlText(tag);
 }
 
+bool Dynamic::isDynamicType(String s)
+{
+    static std::shared_ptr<IEngravingFontsProvider> provider = muse::modularity::globalIoc()->resolve<IEngravingFontsProvider>("engraving");
+
+    for (char32_t i = 0; i < s.size(); i++) {
+        SymId symId = provider->fallbackFont()->fromCode(s[i]);
+        if (TConv::dynamicType(symId) == DynamicType::OTHER) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 String Dynamic::dynamicText(DynamicType t)
 {
-    return String::fromUtf8(DYN_LIST[int(t)].text);
+    return String::fromStdString(DYN_LIST[int(t)].text);
 }
 
 Expression* Dynamic::snappedExpression() const
@@ -537,6 +680,16 @@ TranslatableString Dynamic::subtypeUserName() const
 void Dynamic::startEdit(EditData& ed)
 {
     if (ed.editTextualProperties) {
+        if (useExpressionFontFace()) {
+            for (TextBlock block : ldata()->blocks) {
+                for (std::shared_ptr<TextFragment> fragment : block.fragments()) {
+                    if (DynamicFragment* dynamicFragment = dynamic_cast<DynamicFragment*>(fragment.get())) {
+                        dynamicFragment->setDisplayAsExpressionText(false);
+                    }
+                }
+            }
+        }
+
         TextBase::startEdit(ed);
     } else {
         startEditNonTextual(ed);
@@ -768,8 +921,17 @@ void Dynamic::editDrag(EditData& ed)
 void Dynamic::endEdit(EditData& ed)
 {
     if (ed.editTextualProperties) {
+        if (useExpressionFontFace()) {
+            for (TextBlock block : ldata()->blocks) {
+                for (std::shared_ptr<TextFragment> fragment : block.fragments()) {
+                    if (DynamicFragment* dynamicFragment = dynamic_cast<DynamicFragment*>(fragment.get())) {
+                        dynamicFragment->setDisplayAsExpressionText(true);
+                    }
+                }
+            }
+        }
         TextBase::endEdit(ed);
-        if (!xmlText().contains(String::fromUtf8(DYN_LIST[int(m_dynamicType)].text))) {
+        if (!xmlText().contains(String::fromStdString(DYN_LIST[int(m_dynamicType)].text))) {
             m_dynamicType = DynamicType::OTHER;
         }
     } else {
@@ -933,6 +1095,20 @@ Sid Dynamic::getPropertyStyle(Pid pid) const
     }
 }
 
+void Dynamic::styleChanged()
+{
+    for (const TextBlock& block : ldata()->blocks) {
+        for (const std::shared_ptr<TextFragment>& fragment : block.fragments()) {
+            DynamicFragment* dynamicFragment = dynamic_cast<DynamicFragment*>(fragment.get());
+            if (dynamicFragment) {
+                dynamicFragment->setDisplayAsExpressionText(useExpressionFontFace());
+            }
+        }
+    }
+
+    TextBase::styleChanged();
+}
+
 //---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
@@ -956,5 +1132,10 @@ String Dynamic::screenReaderInfo() const
         s = TConv::translatedUserName(dynamicType());
     }
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), s);
+}
+
+bool Dynamic::useExpressionFontFace() const
+{
+    return style().styleB(Sid::dynamicsOverrideFont) && style().styleB(Sid::dynamicsUseExpressionFont);
 }
 }

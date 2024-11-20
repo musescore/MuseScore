@@ -140,7 +140,7 @@ void HarpPedalDiagram::setIsDiagram(bool diagram)
 
 void HarpPedalDiagram::setPedal(HarpStringType harpString, PedalPosition pedal)
 {
-    m_pedalState.at(harpString) = pedal;
+    m_pedalState.at(static_cast<size_t>(harpString)) = pedal;
     setPlayableTpcs();
 }
 

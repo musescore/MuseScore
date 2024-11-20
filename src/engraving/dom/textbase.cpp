@@ -776,7 +776,12 @@ std::shared_ptr<TextFragment> TextFragment::split(int column)
 {
     size_t idx = 0;
     int col = 0;
-    std::shared_ptr<TextFragment> f = std::make_shared<TextFragment>();
+    std::shared_ptr<TextFragment> f;
+    if (dynamic_cast<DynamicFragment*>(this)) {
+        f = std::make_shared<DynamicFragment>();
+    } else {
+        f = std::make_shared<TextFragment>();
+    }
     f->format = format;
 
     for (size_t i = 0; i < m_text.size(); ++i) {
@@ -785,7 +790,7 @@ std::shared_ptr<TextFragment> TextFragment::split(int column)
             if (idx) {
                 if (idx < m_text.size()) {
                     f->setText(m_text.mid(idx));
-                    m_text   = m_text.left(idx);
+                    setText(m_text.left(idx));
                 }
             }
             return f;
@@ -892,20 +897,30 @@ Font TextFragment::font(const TextBase* t) const
             std::string fontName = engravingFonts()->fontByName(t->style().styleSt(Sid::musicalSymbolFont).toStdString())->family();
             family = String::fromStdString(fontName);
             fontType = Font::Type::MusicSymbol;
+
+            double m2 = -1;
             if (!t->isStringTunings()) {
-                m = MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE;
+                m2 = MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE;
                 if (t->isDynamic()) {
-                    m *= t->getProperty(Pid::DYNAMICS_SIZE).toDouble() * spatiumScaling;
+                    m2 *= t->getProperty(Pid::DYNAMICS_SIZE).toDouble() * spatiumScaling;
                     if (t->style().styleB(Sid::dynamicsOverrideFont)) {
-                        std::string fontName2 = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
-                        family = String::fromStdString(fontName2);
+                        if (!t->style().styleB(Sid::dynamicsUseExpressionFont)) {
+                            std::string fontName2
+                                = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
+                            family = String::fromStdString(fontName2);
+                        } else if (!t->cursor()->editing()) {
+                            family = t->style().styleSt(Sid::expressionFontFace);
+                            fontType = Font::Type::Unknown;
+                            font.setItalic(format.italic());
+                            m2 = -1;
+                        }
                     }
                 } else {
                     for (const auto& a : *textStyle(t->textStyleType())) {
                         if (a.type == TextStylePropertyType::MusicalSymbolsScale) {
-                            m *= t->style().styleD(a.sid);
+                            m2 *= t->style().styleD(a.sid);
                             if (t->sizeIsSpatiumDependent()) {
-                                m *= spatiumScaling;
+                                m2 *= spatiumScaling;
                             }
                             break;
                         }
@@ -914,7 +929,7 @@ Font TextFragment::font(const TextBase* t) const
             }
             // We use a default font size of 10pt for historical reasons,
             // but Smufl standard is 20pt so multiply x2 here.
-            m *= 2;
+            m = m2 >= 0 ? m2 * 2 : m;
         } else if (t->isTempoText()) {
             family = t->style().styleSt(Sid::musicalTextFont);
             fontType = Font::Type::MusicSymbolText;
@@ -1132,9 +1147,9 @@ void TextBlock::layout(const TextBase* t)
 //   fragmentsWithoutEmpty
 //---------------------------------------------------------
 
-std::list<std::shared_ptr<TextFragment>> TextBlock::fragmentsWithoutEmpty()
+std::list<std::shared_ptr<TextFragment> > TextBlock::fragmentsWithoutEmpty()
 {
-    std::list<std::shared_ptr<TextFragment>> list;
+    std::list<std::shared_ptr<TextFragment> > list;
     for (const auto& x : m_fragments) {
         if (!x->text().isEmpty()) {
             list.push_back(x);
@@ -1298,6 +1313,12 @@ void TextBlock::insert(TextCursor* cursor, const String& s)
         if (!m_fragments.empty() && m_fragments.back()->format == *cursor->format()) {
             m_fragments.back()->appendText(s);
         } else {
+            if (Dynamic::isDynamicType(s) && cursor->text()->isDynamic()) {
+                Dynamic* d = toDynamic(cursor->text());
+                m_fragments.push_back(std::make_shared<DynamicFragment>(DynamicFragment(*cursor->format(), s,
+                                                                                        d->useExpressionFontFace())));
+                return;
+            }
             m_fragments.push_back(std::make_shared<TextFragment>(TextFragment(cursor, s)));
         }
     }
@@ -1339,7 +1360,7 @@ void TextBlock::removeEmptyFragment()
 //
 //---------------------------------------------------------
 
-std::list<std::shared_ptr<TextFragment>>::iterator TextBlock::fragment(int column, int* rcol, int* ridx)
+std::list<std::shared_ptr<TextFragment> >::iterator TextBlock::fragment(int column, int* rcol, int* ridx)
 {
     int col = 0;
     for (auto it = m_fragments.begin(); it != m_fragments.end(); ++it) {
@@ -1654,7 +1675,8 @@ String TextBlock::text(int col1, int len, bool withFormat) const
             continue;
         }
         if (withFormat) {
-            s += TextBase::getHtmlStartTag(f->format.fontSize(), size, f->format.fontFamily(), family, f->format.style(), f->format.valign());
+            s += TextBase::getHtmlStartTag(f->format.fontSize(), size, f->format.fontFamily(), family, f->format.style(),
+                                           f->format.valign());
         }
 
         for (size_t i = 0; i < f->text().size(); ++i) {
@@ -2261,7 +2283,10 @@ String TextBase::genText(const LayoutData* ldata) const
                     break;
                 }
             }
-            if (format.fontFamily() == u"ScoreText") {
+
+            if (DynamicFragment* df = dynamic_cast<DynamicFragment*>(f.get())) {
+                text += df->toSymbolXml();
+            } else if (format.fontFamily() == u"ScoreText") {
                 for (size_t i = 0; i < f->text().size(); ++i) {
                     text += toSymbolXml(f->text().at(i));
                 }
@@ -2471,9 +2496,9 @@ void TextBase::resetFormatting()
  Used by the MusicXML formatted export to avoid parsing the xml text format
  */
 
-std::list<std::shared_ptr<TextFragment>> TextBase::fragmentList() const
+std::list<std::shared_ptr<TextFragment> > TextBase::fragmentList() const
 {
-    std::list<std::shared_ptr<TextFragment>> res;
+    std::list<std::shared_ptr<TextFragment> > res;
 
     const TextBase* text = this;
     std::unique_ptr<TextBase> tmpText;
