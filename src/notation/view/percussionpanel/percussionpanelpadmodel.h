@@ -41,8 +41,6 @@ class PercussionPanelPadModel : public QObject, public muse::async::Asyncable
 
     Q_PROPERTY(QVariant notationPreviewItem READ notationPreviewItemVariant NOTIFY notationPreviewItemChanged)
 
-    Q_PROPERTY(bool isEmptySlot READ isEmptySlot NOTIFY isEmptySlotChanged)
-
 public:
     explicit PercussionPanelPadModel(QObject* parent = nullptr);
 
@@ -60,9 +58,6 @@ public:
 
     const QVariant notationPreviewItemVariant() const;
 
-    bool isEmptySlot() const { return m_isEmptySlot; }
-    void setIsEmptySlot(bool isEmptySlot);
-
     Q_INVOKABLE void triggerPad();
     muse::async::Notification padTriggered() const { return m_triggeredNotification; }
 
@@ -74,8 +69,6 @@ signals:
 
     void notationPreviewItemChanged();
 
-    void isEmptySlotChanged();
-
 private:
     QString m_instrumentName;
 
@@ -83,8 +76,6 @@ private:
     QString m_midiNote;
 
     mu::engraving::ElementPtr m_notationPreviewItem;
-
-    bool m_isEmptySlot = true;
 
     muse::async::Notification m_triggeredNotification;
 };

@@ -47,7 +47,6 @@ DropArea {
 
     QtObject {
         id: prv
-        readonly property bool isEmptySlot: Boolean(root.padModel) ? root.padModel.isEmptySlot : true
         readonly property color enabledBackgroundColor: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityNormal)
         readonly property color disabledBackgroundColor: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.itemOpacityDisabled)
     }
@@ -70,7 +69,7 @@ DropArea {
             id: dragHandler
 
             target: draggableArea
-            enabled: root.panelMode === PanelMode.EDIT_LAYOUT && !prv.isEmptySlot
+            enabled: Boolean(root.padModel) && root.panelMode === PanelMode.EDIT_LAYOUT
 
             dragThreshold: 0 // prevents the flickable from stealing drag events
 
@@ -107,7 +106,7 @@ DropArea {
                 }
             }
 
-            sourceComponent: prv.isEmptySlot ? emptySlotComponent : padContentComponent
+            sourceComponent: Boolean(root.padModel) ? padContentComponent : emptySlotComponent
 
             Component {
                 id: padContentComponent

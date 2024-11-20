@@ -74,16 +74,6 @@ const QVariant PercussionPanelPadModel::notationPreviewItemVariant() const
     return QVariant::fromValue(m_notationPreviewItem);
 }
 
-void PercussionPanelPadModel::setIsEmptySlot(bool isEmptySlot)
-{
-    if (m_isEmptySlot == isEmptySlot) {
-        return;
-    }
-
-    m_isEmptySlot = isEmptySlot;
-    emit isEmptySlotChanged();
-}
-
 void PercussionPanelPadModel::triggerPad()
 {
     m_triggeredNotification.notify();

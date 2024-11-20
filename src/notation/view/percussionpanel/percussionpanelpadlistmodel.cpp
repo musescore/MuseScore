@@ -66,7 +66,7 @@ void PercussionPanelPadListModel::init()
 void PercussionPanelPadListModel::addRow()
 {
     for (size_t i = 0; i < NUM_COLUMNS; ++i) {
-        m_padModels.append(new PercussionPanelPadModel(this));
+        m_padModels.append(nullptr);
     }
     emit layoutChanged();
     emit numPadsChanged();
@@ -146,14 +146,12 @@ void PercussionPanelPadListModel::resetLayout()
 
         model->setNotationPreviewItem(PercussionUtilities::getDrumNoteForPreview(m_drumset, pitch));
 
-        model->setIsEmptySlot(false);
-
         m_padModels.append(model);
     }
 
     // Fill the remainder of the column with empty pads...
     while (m_padModels.size() % NUM_COLUMNS > 0) {
-        m_padModels.append(new PercussionPanelPadModel(this));
+        m_padModels.append(nullptr);
     }
 
     endResetModel();
@@ -192,8 +190,7 @@ int PercussionPanelPadListModel::numEmptySlotsAtRow(int row) const
     int count = 0;
     const size_t rowStartIdx = row * NUM_COLUMNS;
     for (size_t i = rowStartIdx; i < rowStartIdx + NUM_COLUMNS; ++i) {
-        const PercussionPanelPadModel* model = m_padModels.at(i);
-        if (model && model->isEmptySlot()) {
+        if (!m_padModels.at(i)) {
             ++count;
         }
     }
