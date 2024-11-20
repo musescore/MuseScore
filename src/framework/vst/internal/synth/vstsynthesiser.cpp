@@ -217,6 +217,10 @@ samples_t VstSynthesiser::process(float* buffer, samples_t samplesPerChannel)
             durationInSamples = microSecsToSamples(duration, m_sampleRate);
         }
 
+        if (durationInSamples == 0) {
+            continue;
+        }
+
         IF_ASSERT_FAILED(sampleOffset + durationInSamples <= samplesPerChannel) {
             break;
         }
