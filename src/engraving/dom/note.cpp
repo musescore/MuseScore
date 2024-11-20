@@ -3742,6 +3742,9 @@ void Note::undoUnlink()
     for (EngravingItem* e : m_el) {
         e->undoUnlink();
     }
+    for (Spanner* s : m_spannerFor) {
+        s->undoUnlink();
+    }
 }
 
 //---------------------------------------------------------
