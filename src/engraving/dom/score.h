@@ -609,6 +609,7 @@ public:
     const Selection& selection() const { return m_selection; }
     Selection& selection() { return m_selection; }
     SelectionFilter& selectionFilter() { return m_selectionFilter; }
+    void selectElementsWithSameTypeOnSegment(mu::engraving::ElementType elementType, mu::engraving::Segment* segment);
     void setSelection(const Selection& s);
 
     Fraction pos();

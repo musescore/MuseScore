@@ -1344,6 +1344,11 @@ void Score::cmdAddTimeSig(Measure* targetMeasure, staff_idx_t staffIdx, TimeSig*
         //  ignore if there is already a timesig
         //  with same values
         //
+        if (local) {
+            select(originalTimeSig, SelectType::SINGLE, staffIdx);
+        } else {
+            selectElementsWithSameTypeOnSegment(ElementType::TIMESIG, targetSegment);
+        }
         delete targetTimeSignature;
         return;
     }
@@ -1405,6 +1410,11 @@ void Score::cmdAddTimeSig(Measure* targetMeasure, staff_idx_t staffIdx, TimeSig*
                 timeSigOfCurrentStaffIndex->undoChangeProperty(Pid::GROUP_NODES, targetTimeSignature->groups().nodes());
                 timeSigOfCurrentStaffIndex->setSelected(false);
                 timeSigOfCurrentStaffIndex->setDropTarget(false);
+            }
+            if (local) {
+                select(originalTimeSig, SelectType::SINGLE, staffIdx);
+            } else {
+                selectElementsWithSameTypeOnSegment(ElementType::TIMESIG, targetSegment);
             }
         }
     }
@@ -1497,6 +1507,11 @@ void Score::cmdAddTimeSig(Measure* targetMeasure, staff_idx_t staffIdx, TimeSig*
             }
         }
     }
+    if (local) {
+            select(originalTimeSig, SelectType::SINGLE, staffIdx);
+        } else {
+            selectElementsWithSameTypeOnSegment(ElementType::TIMESIG, targetSegment);
+        }
     delete targetTimeSignature;
 }
 
