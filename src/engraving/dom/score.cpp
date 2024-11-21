@@ -2084,7 +2084,6 @@ void Score::selectElementsWithSameTypeOnSegment(mu::engraving::ElementType eleme
     score()->select(elementsToSelect, SelectType::ADD);
 }
 
-
 //---------------------------------------------------------
 //   getText
 //---------------------------------------------------------
