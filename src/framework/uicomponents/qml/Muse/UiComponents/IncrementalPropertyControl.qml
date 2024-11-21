@@ -67,7 +67,7 @@ Item {
         if (Boolean(onIncrement)) {
             newValue = onIncrement()
         } else {
-            var value = root.isIndeterminate ? 0.0 : currentValue
+            var value = root.isIndeterminate ? 0.0 : Number(currentValue)
             if (value + step >= root.maxValue) {
                 newValue = wrap ? root.minValue + (value + step - root.maxValue) : root.maxValue
             } else {
@@ -90,7 +90,7 @@ Item {
         if (Boolean(onDecrement)) {
             newValue = onDecrement()
         } else {
-            var value = root.isIndeterminate ? 0.0 : currentValue
+            var value = root.isIndeterminate ? 0.0 : Number(currentValue)
             if (value - step < root.minValue) {
                 newValue = wrap ? root.maxValue + (value - step + root.minValue) : root.minValue
             } else {
