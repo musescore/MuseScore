@@ -722,7 +722,7 @@ const InstrumentTemplate* searchTemplate(const String& name)
 const InstrumentTemplate* combinedTemplateSearch(const String& mxmlId, const String& name, const int transposition, int bank,
                                                  int program)
 {
-    int minLevenshteinDistance = std::numeric_limits<int>::max();
+    size_t minLevenshteinDistance = std::numeric_limits<size_t>::max();
     const InstrumentTemplate* templateWithMinLevenshteinDistance = nullptr;
 
     if (mxmlId.empty() && name.empty() && bank == 0 && program == -1) {
@@ -810,7 +810,7 @@ const InstrumentTemplate* combinedTemplateSearch(const String& mxmlId, const Str
                 // if the name has some meaning we calculate the distance
                 if ((!name.isEmpty()) && (name != u"MusicXML Part") && (name != u"Staff")) {
                     // We keep the lowest distance with trackName ...
-                    int levenshteinDistance = muse::strings::levenshteinDistance(
+                    size_t levenshteinDistance = muse::strings::levenshteinDistance(
                         StaffName(name).toString().toStdString(), it->trackName.toStdString());
 
                     // ... and longNames

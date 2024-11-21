@@ -146,12 +146,12 @@ bool muse::strings::lessThanCaseInsensitive(const String& lhs, const String& rhs
     return lhsLower < rhsLower;
 }
 
-int muse::strings::levenshteinDistance(const std::string& s1, const std::string& s2)
+size_t muse::strings::levenshteinDistance(const std::string& s1, const std::string& s2)
 {
     size_t N1 = s1.length();
     size_t N2 = s2.length();
-    int i, j;
-    std::vector<int> T(N2 + 1);
+    size_t i, j;
+    std::vector<size_t> T(N2 + 1);
 
     for (i = 0; i <= N2; i++) {
         T[i] = i;
@@ -159,9 +159,9 @@ int muse::strings::levenshteinDistance(const std::string& s1, const std::string&
 
     for (i = 0; i < N1; i++) {
         T[0] = i + 1;
-        int corner = i;
+        size_t corner = i;
         for (j = 0; j < N2; j++) {
-            int upper = T[j + 1];
+            size_t upper = T[j + 1];
             if (s1[i] == s2[j]) {
                 T[j + 1] = corner;
             } else {
