@@ -46,12 +46,12 @@ TEST_F(Engraving_ExchangevoicesTests, slurs)
     score->doLayout();
 
     // select all
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Exchange select all"));
     score->cmdSelectAll();
     score->endCmd();
 
     // do
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Exchange voices tests"));
     score->cmdExchangeVoice(0, 1);
     score->endCmd();
 
@@ -66,12 +66,12 @@ TEST_F(Engraving_ExchangevoicesTests, glissandi)
     score->doLayout();
 
     // select all
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Exchange voices select all"));
     score->cmdSelectAll();
     score->endCmd();
 
     // do
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Exchange voices tests"));
     score->cmdExchangeVoice(0, 1);
     score->endCmd();
 
@@ -102,7 +102,7 @@ TEST_F(Engraving_ExchangevoicesTests, undoChangeVoice)
         }
     }
     // change voice
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Exchange voices tests"));
     score->changeSelectedElementsVoice(1);
     score->endCmd(false, /*layoutAllParts = */ true);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));

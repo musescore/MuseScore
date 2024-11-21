@@ -24,6 +24,7 @@
 #include "chordlayout.h"
 #include "accidentalslayout.h"
 #include "horizontalspacing.h"
+#include "beamtremololayout.h"
 
 #include "containers.h"
 
@@ -385,7 +386,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         Tie* tie;
         tie = note->tieBack();
         if (tie && tie->addToSkyline()) {
-            tie->calculateDirection();
+            SlurTieLayout::calculateDirection(tie);
             double overlap = 0.0;                // how much tie can overlap start and end notes
             bool shortStart = false;            // whether tie should clear start note or not
             Note* startNote = tie->startNote();
@@ -567,7 +568,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     }
 
     // allocate enough room for glissandi
-    if (item->endsGlissandoOrGuitarBend()) {
+    if (item->endsNoteAnchoredLine()) {
         if (!item->rtick().isZero()) {                          // if not at beginning of measure
             lll += _spatium * 0.5 + minTieLength;
         }
@@ -1297,6 +1298,18 @@ bool ChordLayout::isChordPosBelowBeam(Chord* item, Beam* beam)
     return noteY > desiredY;
 }
 
+bool ChordLayout::isChordPosBelowTrem(const Chord* item, TremoloTwoChord* trem)
+{
+    if (!item || !trem || !trem->ldata()->isValid()) {
+        return true;
+    }
+    Note* baseNote = item->up() ? item->downNote() : item->upNote();
+    double noteY = baseNote->pagePos().y();
+    double tremY = trem->chordBeamAnchor(item, ChordBeamAnchorType::Middle).y();
+
+    return noteY > tremY;
+}
+
 static bool computeUp_TremoloTwoNotesCase(const Chord* item, TremoloTwoChord* tremolo, const LayoutContext& ctx)
 {
     const Chord* c1 = tremolo->chord1();
@@ -1324,10 +1337,7 @@ static bool computeUp_TremoloTwoNotesCase(const Chord* item, TremoloTwoChord* tr
     }
 
     if (tremolo->userModified()) {
-        Note* baseNote = item->up() ? item->downNote() : item->upNote();
-        double tremY = tremolo->chordBeamAnchor(item, ChordBeamAnchorType::Middle).y();
-        double noteY = baseNote->pagePos().y();
-        return noteY > tremY;
+        return ChordLayout::isChordPosBelowTrem(item, tremolo);
     } else if (cross) {
         // unmodified cross-staff trem, should be one note per staff
         if (item->staffMove() != 0) {
@@ -2652,54 +2662,6 @@ void ChordLayout::getNoteListForDots(Chord* c, std::vector<Note*>& topDownNotes,
               [](Note* n1, Note* n2) { return n1->line() > n2->line(); });
 }
 
-/* updateGraceNotes()
- * Processes a full measure, making sure that all grace notes are
- * attacched to the correct segment. Has to be performed after
- * all the segments are known.
- * */
-void ChordLayout::updateGraceNotes(Measure* measure, LayoutContext& ctx)
-{
-    // Clean everything
-    for (Segment& s : measure->segments()) {
-        for (unsigned track = 0; track < ctx.dom().ntracks(); ++track) {
-            EngravingItem* e = s.preAppendedItem(track);
-            if (e && e->isGraceNotesGroup()) {
-                s.clearPreAppended(track);
-                std::set<staff_idx_t> stavesToReShape;
-                for (Chord* grace : *toGraceNotesGroup(e)) {
-                    stavesToReShape.insert(grace->staffIdx());
-                    stavesToReShape.insert(grace->vStaffIdx());
-                }
-                for (staff_idx_t staffToReshape : stavesToReShape) {
-                    s.createShape(staffToReshape);
-                }
-            }
-        }
-    }
-    // Append grace notes to appropriate segment
-    for (Segment& s : measure->segments()) {
-        if (!s.isChordRestType()) {
-            continue;
-        }
-        for (auto el : s.elist()) {
-            if (el && el->isChord() && !toChord(el)->graceNotes().empty()) {
-                appendGraceNotes(toChord(el));
-            }
-        }
-    }
-    // Layout grace note groups
-    for (Segment& s : measure->segments()) {
-        for (unsigned track = 0; track < ctx.dom().ntracks(); ++track) {
-            EngravingItem* e = s.preAppendedItem(track);
-            if (e && e->isGraceNotesGroup()) {
-                GraceNotesGroup* gng = toGraceNotesGroup(e);
-                TLayout::layoutGraceNotesGroup(gng, ctx);
-                gng->addToShape();
-            }
-        }
-    }
-}
-
 void ChordLayout::appendGraceNotes(Chord* chord)
 {
     Segment* segment = chord->segment();
@@ -2713,13 +2675,13 @@ void ChordLayout::appendGraceNotes(Chord* chord)
     if (!gnb.empty()) {
         // If this segment already contains grace notes in the same voice (could happen if a
         // previous chord has appended grace-notes-after here) put them in the same vector.
-        EngravingItem* item = segment->preAppendedItem(static_cast<int>(track));
+        EngravingItem* item = segment->preAppendedItem(track);
         if (item && item->isGraceNotesGroup()) {
             GraceNotesGroup* gng = toGraceNotesGroup(item);
             gng->insert(gng->end(), gnb.begin(), gnb.end());
         } else {
             gnb.setAppendedSegment(segment);
-            segment->preAppend(&gnb, static_cast<int>(track));
+            segment->preAppend(&gnb, track);
         }
     }
 
@@ -2733,7 +2695,7 @@ void ChordLayout::appendGraceNotes(Chord* chord)
         }
         if (followingSeg) {
             gna.setAppendedSegment(followingSeg);
-            followingSeg->preAppend(&gna, static_cast<int>(track));
+            followingSeg->preAppend(&gna, track);
         }
     }
 }
@@ -2743,8 +2705,8 @@ void ChordLayout::appendGraceNotes(Chord* chord)
 *  is needed and must be called AFTER horizontal spacing is calculated. */
 void ChordLayout::repositionGraceNotesAfter(Segment* segment, size_t tracks)
 {
-    for (size_t track = 0; track < tracks; track++) {
-        EngravingItem* item = segment->preAppendedItem(static_cast<int>(track));
+    for (track_idx_t track = 0; track < tracks; track++) {
+        EngravingItem* item = segment->preAppendedItem(track);
         if (!item || !item->isGraceNotesGroup()) {
             continue;
         }
@@ -2785,13 +2747,15 @@ void ChordLayout::clearLineAttachPoints(Measure* measure)
  * enforce minTieLength. The true layout of ties and glissandi is done much later. */
 void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, LayoutContext& ctx)
 {
-    if (chord->endsGlissandoOrGuitarBend()) {
+    if (chord->endsNoteAnchoredLine()) {
         for (Note* note : chord->notes()) {
             for (Spanner* sp : note->spannerBack()) {
                 if (sp->isGlissando()) {
                     TLayout::layoutGlissando(toGlissando(sp), ctx);
                 } else if (sp->isGuitarBend()) {
                     TLayout::layoutGuitarBend(toGuitarBend(sp), ctx);
+                } else if (sp->isNoteLine()) {
+                    TLayout::layoutNoteLine(toNoteLine(sp), ctx);
                 }
             }
         }
@@ -2813,6 +2777,8 @@ void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, La
             }
         }
     }
+
+    SlurTieLayout::layoutLaissezVibChord(chord, ctx);
 }
 
 void ChordLayout::resolveVerticalRestConflicts(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx)
@@ -3382,7 +3348,7 @@ Shape ChordLayout::chordRestShape(const ChordRest* item)
             if (!l || !l->addToSkyline() || l->xmlText().empty()) {
                 continue;
             }
-            RectF bbox = l->ldata()->bbox().translated(l->ldata()->pos());
+            RectF bbox = l->ldata()->bbox().translated(l->pos());
             shape.addHorizontalSpacing(l, bbox.left(), bbox.right());
         }
     }
@@ -3536,8 +3502,8 @@ void ChordLayout::fillShape(const MeasureRepeat* item, MeasureRepeat::LayoutData
 {
     Shape shape(Shape::Type::Composite);
 
-    shape.add(item->numberRect());
-    shape.add(item->symBbox(ldata->symId));
+    shape.add(item->numberRect(), item);
+    shape.add(item->symBbox(ldata->symId), item);
 
     ldata->setShape(shape);
 }
@@ -3547,10 +3513,38 @@ void ChordLayout::fillShape(const MMRest* item, MMRest::LayoutData* ldata, const
     Shape shape(Shape::Type::Composite);
 
     double vStrokeHeight = conf.styleMM(Sid::mmRestHBarVStrokeHeight);
-    shape.add(RectF(0.0, -(vStrokeHeight * .5), ldata->restWidth, vStrokeHeight));
+    shape.add(RectF(0.0, -(vStrokeHeight * .5), ldata->restWidth, vStrokeHeight), item);
     if (item->numberVisible()) {
-        shape.add(item->numberRect());
+        shape.add(item->numberRect().translated(item->numberPos()), item);
     }
 
     ldata->setShape(shape);
+}
+
+void ChordLayout::addLineAttachPoints(Spanner* spanner)
+{
+    assert(spanner->anchor() == Spanner::Anchor::NOTE);
+
+    const SpannerSegment* frontSeg = toSpannerSegment(spanner->frontSegment());
+    const SpannerSegment* backSeg = toSpannerSegment(spanner->backSegment());
+    Note* startNote = nullptr;
+    Note* endNote = nullptr;
+
+    EngravingItem* startElement = spanner->startElement();
+    EngravingItem* endElement = spanner->endElement();
+    if (startElement && startElement->isNote()) {
+        startNote = toNote(startElement);
+    }
+    if (endElement && endElement->isNote()) {
+        endNote = toNote(endElement);
+    }
+    if (!frontSeg || !backSeg || !startNote || !endNote) {
+        return;
+    }
+    double startX = frontSeg->ldata()->pos().x();
+    double endX = backSeg->pos2().x() + backSeg->ldata()->pos().x(); // because pos2 is relative to ipos
+    // Here we don't pass y() because its value is unreliable during the first stages of layout.
+    // The y() is irrelevant anyway for horizontal spacing.
+    startNote->addLineAttachPoint(PointF(startX, 0.0), spanner);
+    endNote->addLineAttachPoint(PointF(endX, 0.0), spanner);
 }

@@ -21,7 +21,6 @@
  */
 #include "exportdialogmodel.h"
 
-#include <QApplication>
 #include <QItemSelectionModel>
 
 #include "async/async.h"
@@ -384,10 +383,10 @@ bool ExportDialogModel::exportScores()
 
     m_exportPath = exportPath.val;
 
-    QMetaObject::invokeMethod(qApp, [this, notations]() {
+    async::Async::call(this, [this, notations]() {
         exportProjectScenario()->exportScores(notations, m_exportPath, m_selectedUnitType,
                                               shouldDestinationFolderBeOpenedOnExport());
-    }, Qt::QueuedConnection);
+    });
 
     return true;
 }
@@ -566,15 +565,15 @@ QVariantList ExportDialogModel::musicXmlLayoutTypes() const
 
 ExportDialogModel::MusicXmlLayoutType ExportDialogModel::musicXmlLayoutType() const
 {
-    if (musicXmlConfiguration()->musicxmlExportLayout()) {
+    if (musicXmlConfiguration()->exportLayout()) {
         return MusicXmlLayoutType::AllLayout;
     }
-    switch (musicXmlConfiguration()->musicxmlExportBreaksType()) {
-    case IMusicXmlConfiguration::MusicxmlExportBreaksType::All:
+    switch (musicXmlConfiguration()->exportBreaksType()) {
+    case IMusicXmlConfiguration::MusicXmlExportBreaksType::All:
         return MusicXmlLayoutType::AllBreaks;
-    case IMusicXmlConfiguration::MusicxmlExportBreaksType::Manual:
+    case IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual:
         return MusicXmlLayoutType::ManualBreaks;
-    case IMusicXmlConfiguration::MusicxmlExportBreaksType::No:
+    case IMusicXmlConfiguration::MusicXmlExportBreaksType::No:
         return MusicXmlLayoutType::None;
     }
 
@@ -588,19 +587,19 @@ void ExportDialogModel::setMusicXmlLayoutType(MusicXmlLayoutType layoutType)
     }
     switch (layoutType) {
     case MusicXmlLayoutType::AllLayout:
-        musicXmlConfiguration()->setMusicxmlExportLayout(true);
+        musicXmlConfiguration()->setExportLayout(true);
         break;
     case MusicXmlLayoutType::AllBreaks:
-        musicXmlConfiguration()->setMusicxmlExportLayout(false);
-        musicXmlConfiguration()->setMusicxmlExportBreaksType(IMusicXmlConfiguration::MusicxmlExportBreaksType::All);
+        musicXmlConfiguration()->setExportLayout(false);
+        musicXmlConfiguration()->setExportBreaksType(IMusicXmlConfiguration::MusicXmlExportBreaksType::All);
         break;
     case MusicXmlLayoutType::ManualBreaks:
-        musicXmlConfiguration()->setMusicxmlExportLayout(false);
-        musicXmlConfiguration()->setMusicxmlExportBreaksType(IMusicXmlConfiguration::MusicxmlExportBreaksType::Manual);
+        musicXmlConfiguration()->setExportLayout(false);
+        musicXmlConfiguration()->setExportBreaksType(IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual);
         break;
     case MusicXmlLayoutType::None:
-        musicXmlConfiguration()->setMusicxmlExportLayout(false);
-        musicXmlConfiguration()->setMusicxmlExportBreaksType(IMusicXmlConfiguration::MusicxmlExportBreaksType::No);
+        musicXmlConfiguration()->setExportLayout(false);
+        musicXmlConfiguration()->setExportBreaksType(IMusicXmlConfiguration::MusicXmlExportBreaksType::No);
         break;
     }
     emit musicXmlLayoutTypeChanged(layoutType);

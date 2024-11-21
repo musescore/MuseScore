@@ -254,6 +254,7 @@ enum class Sid {
     articulationAnchorOther,
     articulationStemHAlign,
     articulationKeepTogether,
+    trillAlwaysShowCueNote,
     lastSystemFillLimit,
 
     hairpinPlacement,
@@ -442,6 +443,7 @@ enum class Sid {
     measureNumberAllStaves,
 
     smallNoteMag,
+    scaleRythmicSpacingForSmallNotes,
     graceNoteMag,
     graceToMainNoteDist,
     graceToGraceNoteDist,
@@ -478,10 +480,17 @@ enum class Sid {
     chordModifierAdjust,
     concertPitch,
     multiVoiceRestTwoSpaceOffset,
+    mergeMatchingRests,
     createMultiMeasureRests,
     minEmptyMeasures,
+    singleMeasureMMRestUseNormalRest,
+    singleMeasureMMRestShowNumber,
     minMMRestWidth,
+    mmRestConstantWidth,
+    mmRestReferenceWidth,
+    mmRestMaxWidthIncrease,
     mmRestNumberPos,
+    mmRestBetweenStaves,
     mmRestNumberMaskHBar,
     multiMeasureRestMargin,
     mmRestHBarThickness,
@@ -522,12 +531,16 @@ enum class Sid {
     minWigglyGlissandoLength,
     slurMinDistance,
     tieMinDistance,
+    laissezVibMinDistance,
     headerToLineStartDistance, // determines start point of "dangling" lines (ties, gliss, lyrics...) at start of system
 
     tiePlacementSingleNote,
     tiePlacementChord,
     tieMinShoulderHeight,
     tieMaxShoulderHeight,
+
+    minLaissezVibLength,
+    laissezVibUseSmuflSym,
 
     sectionPause,
     musicalSymbolFont,
@@ -1206,8 +1219,6 @@ enum class Sid {
     repeatLeftFrameFgColor,
     repeatLeftFrameBgColor,
 
-    repeatsMusicalSymbolsScale,
-
     repeatRightFontFace,
     repeatRightFontSize,
     repeatRightLineSpacing,
@@ -1254,6 +1265,22 @@ enum class Sid {
     systemTextLineColor,
     systemTextLineTextAlign,
     systemTextLineSystemFlag,
+
+    noteLinePlacement,
+    noteLineFontFace,
+    noteLineFontSize,
+    noteLineLineSpacing,
+    noteLineFontSpatiumDependent,
+    noteLineFontStyle,
+    noteLineColor,
+    noteLineAlign,
+    noteLineOffset,
+    noteLineFrameType,
+    noteLineFramePadding,
+    noteLineFrameWidth,
+    noteLineFrameRound,
+    noteLineFrameFgColor,
+    noteLineFrameBgColor,
 
     glissandoFontFace,
     glissandoFontSize,

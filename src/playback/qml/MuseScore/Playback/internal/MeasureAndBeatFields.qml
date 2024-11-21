@@ -34,7 +34,7 @@ Item {
     property alias beatNumber: beatNumberField.value
     property alias maxBeatNumber: beatNumberField.maxValue
 
-    property var font: ui.theme.largeBodyFont
+    property font font: ui.theme.largeBodyFont
 
     signal measureNumberEdited(var newValue)
     signal beatNumberEdited(var newValue)

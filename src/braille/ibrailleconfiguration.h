@@ -22,6 +22,8 @@
 #ifndef MU_BRAILLE_IBRAILLECONFIGURATION_H
 #define MU_BRAILLE_IBRAILLECONFIGURATION_H
 
+#include <QString>
+
 #include "modularity/imoduleinterface.h"
 #include "async/notification.h"
 
@@ -45,7 +47,7 @@ public:
 
     virtual muse::async::Notification brailleTableChanged() const = 0;
     virtual QString brailleTable() const = 0;
-    virtual void setBrailleTable(const QString table) = 0;
+    virtual void setBrailleTable(const QString& table) = 0;
     virtual QStringList brailleTableList() const = 0;
 };
 }

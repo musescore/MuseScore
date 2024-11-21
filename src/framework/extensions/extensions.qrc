@@ -12,5 +12,6 @@
         <file>api/MuseApi/Extensions/qmldir</file>
         <file>qml/Muse/Extensions/ExtensionsApiDumpDialog.qml</file>
         <file>qml/Muse/Extensions/ExtensionsApiDump.qml</file>
+        <file>qml/Muse/Extensions/ExtensionsToolBar.qml</file>
     </qresource>
 </RCC>

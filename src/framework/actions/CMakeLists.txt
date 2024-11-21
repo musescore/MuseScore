@@ -36,3 +36,7 @@ set(MODULE_SRC
     )
 
 setup_module()
+
+if (MUSE_MODULE_ACTIONS_TESTS)
+    add_subdirectory(tests)
+endif()

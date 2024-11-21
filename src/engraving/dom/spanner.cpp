@@ -1150,7 +1150,26 @@ Measure* Spanner::startMeasure() const
 
 Measure* Spanner::endMeasure() const
 {
+    assert(anchor() == Spanner::Anchor::MEASURE);
     return toMeasure(m_endElement);
+}
+
+Measure* Spanner::findStartMeasure() const
+{
+    if (!m_startElement) {
+        return nullptr;
+    }
+
+    return toMeasure(m_startElement->findAncestor(ElementType::MEASURE));
+}
+
+Measure* Spanner::findEndMeasure() const
+{
+    if (!m_endElement) {
+        return nullptr;
+    }
+
+    return toMeasure(m_endElement->findAncestor(ElementType::MEASURE));
 }
 
 //---------------------------------------------------------

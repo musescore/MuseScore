@@ -159,29 +159,6 @@ Sid Glissando::getPropertyStyle(Pid id) const
     return SLine::getPropertyStyle(id);
 }
 
-void Glissando::addLineAttachPoints()
-{
-    GlissandoSegment* frontSeg = toGlissandoSegment(frontSegment());
-    GlissandoSegment* backSeg = toGlissandoSegment(backSegment());
-    Note* startNote = nullptr;
-    Note* endNote = nullptr;
-    if (startElement() && startElement()->isNote()) {
-        startNote = toNote(startElement());
-    }
-    if (endElement() && endElement()->isNote()) {
-        endNote = toNote(endElement());
-    }
-    if (!frontSeg || !backSeg || !startNote || !endNote) {
-        return;
-    }
-    double startX = frontSeg->ldata()->pos().x();
-    double endX = backSeg->pos2().x() + backSeg->ldata()->pos().x(); // because pos2 is relative to ipos
-    // Here we don't pass y() because its value is unreliable during the first stages of layout.
-    // The y() is irrelevant anyway for horizontal spacing.
-    startNote->addLineAttachPoint(PointF(startX, 0.0), this);
-    endNote->addLineAttachPoint(PointF(endX, 0.0), this);
-}
-
 bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffsets)
 {
     if (!spanner->endElement()->isNote()) {
@@ -365,81 +342,6 @@ Note* Glissando::guessInitialNote(Chord* chord)
     }
     LOGD("no first note for glissando found");
     return 0;
-}
-
-Note* Glissando::guessFinalNote(Chord* chord, Note* startNote)
-{
-    if (chord->isGraceBefore()) {
-        Chord* parentChord = toChord(chord->parent());
-        GraceNotesGroup& gracesBefore = parentChord->graceNotesBefore();
-        auto positionOfThis = std::find(gracesBefore.begin(), gracesBefore.end(), chord);
-        if (positionOfThis != gracesBefore.end()) {
-            auto nextPosition = ++positionOfThis;
-            if (nextPosition != gracesBefore.end()) {
-                return (*nextPosition)->upNote();
-            }
-        }
-        return parentChord->upNote();
-    } else if (chord->isGraceAfter()) {
-        Chord* parentChord = toChord(chord->parent());
-        GraceNotesGroup& gracesAfter = parentChord->graceNotesAfter();
-        auto positionOfThis = std::find(gracesAfter.begin(), gracesAfter.end(), chord);
-        if (positionOfThis != gracesAfter.end()) {
-            auto nextPosition = ++positionOfThis;
-            if (nextPosition != gracesAfter.end()) {
-                return (*nextPosition)->upNote();
-            }
-        }
-        chord = toChord(chord->parent());
-    } else {
-        std::vector<Chord*> graces = chord->graceNotesAfter();
-        if (graces.size() > 0) {
-            return graces.front()->upNote();
-        }
-    }
-
-    if (!chord->explicitParent()->isSegment()) {
-        return 0;
-    }
-
-    Segment* segm = chord->score()->tick2rightSegment(chord->tick() + chord->actualTicks());
-    while (segm && !segm->isChordRestType()) {
-        segm = segm->next1();
-    }
-
-    if (!segm) {
-        return nullptr;
-    }
-
-    track_idx_t chordTrack = chord->track();
-    Part* part = chord->part();
-
-    Chord* target = nullptr;
-    if (segm->element(chordTrack) && segm->element(chordTrack)->isChord()) {
-        target = toChord(segm->element(chordTrack));
-    } else {
-        for (EngravingItem* currChord : segm->elist()) {
-            if (currChord && currChord->isChord() && toChord(currChord)->part() == part) {
-                target = toChord(currChord);
-                break;
-            }
-        }
-    }
-
-    if (target && target->notes().size() > 0) {
-        const std::vector<Chord*>& graces = target->graceNotesBefore();
-        if (graces.size() > 0) {
-            return graces.front()->upNote();
-        }
-        // normal case: try to return the note in the next chord that is in the
-        // same position as the start note relative to the end chord
-        size_t startNoteIdx = muse::indexOf(chord->notes(), startNote);
-        size_t endNoteIdx = std::min(startNoteIdx, target->notes().size() - 1);
-        return target->notes().at(endNoteIdx);
-    }
-
-    LOGD("no second note for glissando found");
-    return nullptr;
 }
 
 //---------------------------------------------------------

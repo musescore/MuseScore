@@ -26,6 +26,7 @@
         <file>qml/MuseScore/NotationScene/internal/NoteInputBarActionDelegate.qml</file>
         <file>qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml</file>
         <file>qml/MuseScore/NotationScene/UndoRedoToolBar.qml</file>
+        <file>qml/MuseScore/NotationScene/UndoHistoryPanel.qml</file>
         <file>qml/MuseScore/NotationScene/Timeline.qml</file>
         <file>qml/MuseScore/NotationScene/SelectionFilterPanel.qml</file>
         <file>qml/MuseScore/NotationScene/EditGridSizeDialog.qml</file>
@@ -56,5 +57,6 @@
         <file>qml/MuseScore/NotationScene/PercussionPanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/PercussionPanelPadContent.qml</file>
     </qresource>
 </RCC>

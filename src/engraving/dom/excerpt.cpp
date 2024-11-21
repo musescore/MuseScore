@@ -35,6 +35,7 @@
 #include "factory.h"
 #include "guitarbend.h"
 #include "harmony.h"
+#include "laissezvib.h"
 #include "layoutbreak.h"
 #include "linkedobjects.h"
 #include "lyrics.h"
@@ -769,7 +770,7 @@ static void processLinkedClone(EngravingItem* ne, Score* score, track_idx_t stra
 
 static void addTies(Note* originalNote, Note* newNote, TieMap& tieMap, Score* score)
 {
-    if (originalNote->tieFor()) {
+    if (originalNote->tieFor() && !originalNote->tieFor()->isLaissezVib()) {
         Tie* tie = toTie(originalNote->tieFor()->linkedClone());
         tie->setScore(score);
         newNote->setTieFor(tie);
@@ -803,6 +804,26 @@ static void addGraceNoteTies(GraceNotesGroup& originalGraceNotes, Chord* newChor
 
             addTies(originalNote, newNote, tieMap, score);
         }
+    }
+}
+
+static void addTremoloTwoChord(Chord* oldChord, Chord* newChord, TremoloTwoChord*& prevTremolo)
+{
+    if (!newChord || !oldChord || !newChord->tremoloTwoChord()) {
+        return;
+    }
+
+    if (oldChord == oldChord->tremoloTwoChord()->chord1()) {
+        prevTremolo = newChord->tremoloTwoChord();
+    } else if (oldChord == oldChord->tremoloTwoChord()->chord2()) {
+        if (!prevTremolo) {
+            LOGD("first note for two note tremolo missing");
+        } else {
+            prevTremolo->setChords(prevTremolo->chord1(), newChord);
+            newChord->setTremoloTwoChord(prevTremolo);
+        }
+    } else {
+        LOGD("inconsistent two note tremolo");
     }
 }
 
@@ -858,7 +879,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
 
             track_idx_t strack = muse::value(trackList, srcTrack, muse::nidx);
 
-            TremoloTwoChord* tremolo = 0;
+            TremoloTwoChord* prevTremolo = nullptr;
             for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                 Segment* ns = nullptr;           //create segment later, on demand
                 for (EngravingItem* e : oseg->annotations()) {
@@ -1017,29 +1038,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                     }
                                 }
                                 addGraceNoteTies(och->graceNotesAfter(), nch, tieMap, score);
-                                // two note tremolo
-                                if (och->tremoloTwoChord()) {
-                                    if (och == och->tremoloTwoChord()->chord1()) {
-                                        if (tremolo) {
-                                            LOGD("unconnected two note tremolo");
-                                        }
-                                        tremolo = item_cast<TremoloTwoChord*>(och->tremoloTwoChord()->linkedClone());
-                                        tremolo->setScore(nch->score());
-                                        tremolo->setParent(nch);
-                                        tremolo->setTrack(nch->track());
-                                        tremolo->setChords(nch, 0);
-                                        nch->setTremoloTwoChord(tremolo);
-                                    } else if (och == och->tremoloTwoChord()->chord2()) {
-                                        if (!tremolo) {
-                                            LOGD("first note for two note tremolo missing");
-                                        } else {
-                                            tremolo->setChords(tremolo->chord1(), nch);
-                                            nch->setTremoloTwoChord(tremolo);
-                                        }
-                                    } else {
-                                        LOGD("inconsistent two note tremolo");
-                                    }
-                                }
+                                addTremoloTwoChord(och, nch, prevTremolo);
                             }
                         }
                         if (!ns) {
@@ -1220,7 +1219,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
         for (track_idx_t srcTrack = sTrack; srcTrack < eTrack; ++srcTrack) {
             TupletMap tupletMap;          // tuplets cannot cross measure boundaries
             track_idx_t dstTrack = dstStaffIdx * VOICES + (srcTrack - sTrack);
-            TremoloTwoChord* tremolo = 0;
+            TremoloTwoChord* prevTremolo = nullptr;
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                 EngravingItem* oe = seg->element(srcTrack);
                 if (oe == 0 || oe->generated()) {
@@ -1348,29 +1347,8 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                             }
                         }
                         addGraceNoteTies(och->graceNotesAfter(), nch, tieMap, score);
-                        // two note tremolo
-                        if (och->tremoloTwoChord()) {
-                            if (och == och->tremoloTwoChord()->chord1()) {
-                                if (tremolo) {
-                                    LOGD("unconnected two note tremolo");
-                                }
-                                tremolo = item_cast<TremoloTwoChord*>(och->tremoloTwoChord()->linkedClone());
-                                tremolo->setScore(nch->score());
-                                tremolo->setParent(nch);
-                                tremolo->setTrack(nch->track());
-                                tremolo->setChords(nch, 0);
-                                nch->setTremoloTwoChord(tremolo);
-                            } else if (och == och->tremoloTwoChord()->chord2()) {
-                                if (!tremolo) {
-                                    LOGD("first note for two note tremolo missing");
-                                } else {
-                                    tremolo->setChords(tremolo->chord1(), nch);
-                                    nch->setTremoloTwoChord(tremolo);
-                                }
-                            } else {
-                                LOGD("inconsistent two note tremolo");
-                            }
-                        }
+                        addTremoloTwoChord(och, nch, prevTremolo);
+
                         // Check grace note staff move validity
                         for (Chord* gn : nch->graceNotes()) {
                             gn->checkStaffMoveValidity();
@@ -1508,7 +1486,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             addElement(newEl);
         }
 
-        TremoloTwoChord* tremolo = nullptr;
+        TremoloTwoChord* prevTremolo = nullptr;
         for (track_idx_t srcTrack : muse::keys(map)) {
             TupletMap tupletMap;          // tuplets cannot cross measure boundaries
             track_idx_t dstTrack = map.at(srcTrack);
@@ -1630,29 +1608,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                             }
                         }
                         addGraceNoteTies(och->graceNotesAfter(), nch, tieMap, score);
-                        // two note tremolo
-                        if (och->tremoloTwoChord()) {
-                            if (och == och->tremoloTwoChord()->chord1()) {
-                                if (tremolo) {
-                                    LOGD("cloneStaff2: unconnected two note tremolo");
-                                }
-                                tremolo = item_cast<TremoloTwoChord*>(och->tremoloTwoChord()->linkedClone());
-                                tremolo->setScore(nch->score());
-                                tremolo->setParent(nch);
-                                tremolo->setTrack(nch->track());
-                                tremolo->setChords(nch, 0);
-                                nch->setTremoloTwoChord(tremolo);
-                            } else if (och == och->tremoloTwoChord()->chord2()) {
-                                if (!tremolo) {
-                                    LOGD("cloneStaff2: first note for two note tremolo missing");
-                                } else {
-                                    tremolo->setChords(tremolo->chord1(), nch);
-                                    nch->setTremoloTwoChord(tremolo);
-                                }
-                            } else {
-                                LOGD("cloneStaff2: inconsistent two note tremolo");
-                            }
-                        }
+                        addTremoloTwoChord(och, nch, prevTremolo);
                     }
                 }
             }
@@ -1660,7 +1616,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         for (Segment& seg : nm->segments()) {
             seg.checkEmpty();
             if (seg.empty()) {
-                score->removeElement(&seg);
+                score->doUndoRemoveElement(&seg);
             }
         }
         if (!nm->hasVoices(dstStaffIdx, nm->tick(), nm->ticks())) {

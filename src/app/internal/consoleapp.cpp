@@ -249,8 +249,8 @@ void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication
     midiImportExportConfiguration()->setMidiImportOperationsFile(options.importMidi.operationsFile);
     guitarProConfiguration()->setLinkedTabStaffCreated(options.guitarPro.linkedTabStaffCreated);
     guitarProConfiguration()->setExperimental(options.guitarPro.experimental);
-    musicXmlConfiguration()->setNeedUseDefaultFontOverride(options.importMusicXML.useDefaultFont);
-    musicXmlConfiguration()->setInferTextTypeOverride(options.importMusicXML.inferTextType);
+    musicXmlConfiguration()->setNeedUseDefaultFontOverride(options.importMusicXml.useDefaultFont);
+    musicXmlConfiguration()->setInferTextTypeOverride(options.importMusicXml.inferTextType);
 #endif
 
     if (options.app.revertToFactorySettings) {
@@ -279,9 +279,11 @@ int ConsoleApp::processConverter(const CmdOptions::ConverterTask& task)
     case ConvertType::Batch:
         ret = converter()->batchConvert(task.inputFile, stylePath, forceMode, soundProfile, extensionUri);
         break;
-    case ConvertType::File:
-        ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode, soundProfile, extensionUri);
-        break;
+    case ConvertType::File: {
+        std::string transposeOptionsJson = task.params[CmdOptions::ParamKey::ScoreTransposeOptions].toString().toStdString();
+        ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode, soundProfile, extensionUri,
+                                       transposeOptionsJson);
+    } break;
     case ConvertType::ConvertScoreParts:
         ret = converter()->convertScoreParts(task.inputFile, task.outputFile, stylePath);
         break;

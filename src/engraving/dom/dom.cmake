@@ -160,6 +160,9 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/keylist.h
     ${CMAKE_CURRENT_LIST_DIR}/keysig.cpp
     ${CMAKE_CURRENT_LIST_DIR}/keysig.h
+    ${CMAKE_CURRENT_LIST_DIR}/laissezvib.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/laissezvib.h
+    ${CMAKE_CURRENT_LIST_DIR}/lasso.cpp
     ${CMAKE_CURRENT_LIST_DIR}/lasso.cpp
     ${CMAKE_CURRENT_LIST_DIR}/lasso.h
     ${CMAKE_CURRENT_LIST_DIR}/layoutbreak.cpp

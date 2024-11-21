@@ -51,4 +51,7 @@ inline db_t linear_to_db(ratio_t v)
 {
     return muse::linear_to_db(v.raw());
 }
+
+//! NOTE Percent
+using percent_t = number_t<float>;
 }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
       <defaultsVersion>410</defaultsVersion>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -194,6 +194,7 @@
         </Measure>
       </Staff>
     <Score>
+      <eid>115964116996</eid>
       <name>Klarinet in B♭</name>
       <Tracklist sTrack="0" dstTrack="0"/>
       <Tracklist sTrack="2" dstTrack="1"/>
@@ -226,6 +227,7 @@
         <pedalFontSize>12</pedalFontSize>
         <fretFretSpacing>0.8</fretFretSpacing>
         <barreLineWidth>1</barreLineWidth>
+        <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <multiMeasureRestMargin>1.2</multiMeasureRestMargin>
         <arpeggioNoteDistance>0.5</arpeggioNoteDistance>
@@ -234,10 +236,9 @@
         <dynamicsPosAbove x="0" y="-1.5"/>
         <dynamicsPosBelow x="0" y="2.5"/>
         <measureNumberPosBelow x="0" y="1"/>
-        <repeatLeftFontSize>18</repeatLeftFontSize>
         <systemTextLineFontSize>12</systemTextLineFontSize>
         <defaultsVersion>410</defaultsVersion>
-        <Spatium>1.74978</Spatium>
+        <spatium>1.74978</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>

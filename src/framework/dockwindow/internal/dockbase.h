@@ -57,6 +57,9 @@ class DockBase : public QQuickItem
     Q_PROPERTY(bool resizable READ resizable WRITE setResizable NOTIFY resizableChanged)
     Q_PROPERTY(bool separatorsVisible READ separatorsVisible WRITE setSeparatorsVisible NOTIFY separatorsVisibleChanged)
 
+    Q_PROPERTY(bool isCompact READ isCompact WRITE setIsCompact NOTIFY isCompactChanged FINAL)
+    Q_PROPERTY(int compactPriorityOrder READ compactPriorityOrder WRITE setCompactPriorityOrder NOTIFY compactPriorityOrderChanged FINAL)
+
     Q_PROPERTY(bool floating READ floating NOTIFY floatingChanged)
 
     Q_PROPERTY(bool inited READ inited NOTIFY initedChanged)
@@ -90,6 +93,10 @@ public:
     bool resizable() const;
     bool separatorsVisible() const;
 
+    bool isCompact() const;
+    int compactPriorityOrder() const;
+    int nonCompactWidth() const;
+
     bool floating() const;
 
     bool inited() const;
@@ -99,10 +106,6 @@ public:
 
     void deinit();
 
-    bool isOpen() const;
-    void open();
-    void close();
-
     void showHighlighting(const QRect& highlightingRect);
     void hideHighlighting();
 
@@ -111,6 +114,9 @@ public:
     bool isInSameFrame(const DockBase* other) const;
     void setFramePanelOrder(int order);
 
+    Q_INVOKABLE bool isOpen() const;
+    Q_INVOKABLE void open();
+    Q_INVOKABLE void close();
     Q_INVOKABLE void resize(int width, int height);
 
     ui::NavigationPanel* contentNavigationPanel() const;
@@ -133,6 +139,9 @@ public slots:
     void setResizable(bool resizable);
     void setSeparatorsVisible(bool visible);
 
+    void setIsCompact(bool compact);
+    void setCompactPriorityOrder(int order);
+
     void setFloating(bool floating);
 
     void setContentNavigationPanel(ui::NavigationPanel* panel);
@@ -151,6 +160,9 @@ signals:
     void closableChanged();
     void resizableChanged();
     void separatorsVisibleChanged();
+
+    void isCompactChanged();
+    void compactPriorityOrderChanged();
 
     void floatingChanged();
 
@@ -197,6 +209,10 @@ private:
     QVariantList m_dropDestinations;
 
     bool m_defaultVisibility = false;
+
+    bool m_isCompact = false;
+    int m_compactPriorityOrder = -1;
+    int m_nonCompactWidth = 0;
 
     bool m_floating = false;
 

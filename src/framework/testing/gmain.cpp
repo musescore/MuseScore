@@ -20,12 +20,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QGuiApplication>
+#include <string>
+#include <vector>
+
 #include <gmock/gmock.h>
+#include <gtest/gtest.h>
+
+#include <QGuiApplication>
 
 #include "global/stringutils.h"
 #include "global/runtime.h"
+
 #include "environment.h"
+
 #include "log.h"
 
 GTEST_API_ int main(int argc, char** argv)

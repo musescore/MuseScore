@@ -21,6 +21,10 @@
  */
 #include <gtest/gtest.h>
 
+#include <string>
+
+#include <QColor>
+
 #include "types/val.h"
 
 using namespace muse;

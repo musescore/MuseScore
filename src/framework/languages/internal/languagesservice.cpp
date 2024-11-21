@@ -21,10 +21,10 @@
  */
 #include "languagesservice.h"
 
-#include <QApplication>
 #include <QBuffer>
 #include <QCryptographicHash>
 #include <QDir>
+#include <QGuiApplication>
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QQmlEngine>

@@ -425,7 +425,7 @@ struct StaffConfig
     bool cutaway = false;
     bool showIfEmpty = false;
     bool hideSystemBarline = false;
-    bool mergeMatchingRests = false;
+    engraving::AutoOnOff mergeMatchingRests = engraving::AutoOnOff::AUTO;
     bool reflectTranspositionInLinkedTab = false;
     Staff::HideMode hideMode = Staff::HideMode::AUTO;
     ClefTypeList clefTypeList;

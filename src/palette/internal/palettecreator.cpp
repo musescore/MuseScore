@@ -726,7 +726,6 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
         SymId::articTenutoStaccatoAbove,
         SymId::articMarcatoAbove,
         SymId::articAccentStaccatoAbove,
-        SymId::articLaissezVibrerAbove,
         SymId::articMarcatoStaccatoAbove,
         SymId::articMarcatoTenutoAbove,
         SymId::articStaccatissimoStrokeAbove,
@@ -1315,6 +1314,8 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     line->setDiagonal(true);
     sp->appendElement(line, QT_TRANSLATE_NOOP("palette", "Line"));
 
+    sp->appendActionIcon(ActionIconType::NOTE_ANCHORED_LINE, "add-noteline", 2);
+
     auto a = Factory::makeAmbitus(gpaletteScore->dummy()->segment());
     sp->appendElement(a, QT_TRANSLATE_NOOP("palette", "Ambitus"));
 
@@ -1442,23 +1443,23 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
 
     static const std::map<GradualTempoChangeType, const char*> DEFAULT_TEMPO_CHANGE = {
         { GradualTempoChangeType::Accelerando, QT_TRANSLATE_NOOP("palette", "accel.") },
-        { GradualTempoChangeType::Allargando, QT_TRANSLATE_NOOP("palette", "allarg.") },
+        { GradualTempoChangeType::Allargando,  QT_TRANSLATE_NOOP("palette", "allarg.") },
         { GradualTempoChangeType::Rallentando, QT_TRANSLATE_NOOP("palette", "rall.") },
-        { GradualTempoChangeType::Ritardando, QT_TRANSLATE_NOOP("palette", "rit.") },
+        { GradualTempoChangeType::Ritardando,  QT_TRANSLATE_NOOP("palette", "rit.") },
     };
 
     static const std::map<GradualTempoChangeType, const char*> MASTER_TEMPO_CHANGE = {
-        { GradualTempoChangeType::Accelerando, QT_TRANSLATE_NOOP("palette", "accel.") },
-        { GradualTempoChangeType::Allargando, QT_TRANSLATE_NOOP("palette", "allarg.") },
-        { GradualTempoChangeType::Calando, QT_TRANSLATE_NOOP("palette", "calando") },
-        { GradualTempoChangeType::Lentando, QT_TRANSLATE_NOOP("palette", "lentando") },
-        { GradualTempoChangeType::Morendo, QT_TRANSLATE_NOOP("palette", "morendo") },
+        { GradualTempoChangeType::Accelerando,  QT_TRANSLATE_NOOP("palette", "accel.") },
+        { GradualTempoChangeType::Allargando,   QT_TRANSLATE_NOOP("palette", "allarg.") },
+        { GradualTempoChangeType::Calando,      QT_TRANSLATE_NOOP("palette", "calando") },
+        { GradualTempoChangeType::Lentando,     QT_TRANSLATE_NOOP("palette", "lentando") },
+        { GradualTempoChangeType::Morendo,      QT_TRANSLATE_NOOP("palette", "morendo") },
         { GradualTempoChangeType::Precipitando, QT_TRANSLATE_NOOP("palette", "precipitando") },
-        { GradualTempoChangeType::Rallentando, QT_TRANSLATE_NOOP("palette", "rall.") },
-        { GradualTempoChangeType::Ritardando, QT_TRANSLATE_NOOP("palette", "rit.") },
-        { GradualTempoChangeType::Smorzando, QT_TRANSLATE_NOOP("palette", "smorz.") },
-        { GradualTempoChangeType::Sostenuto, QT_TRANSLATE_NOOP("palette", "sost.") },
-        { GradualTempoChangeType::Stringendo, QT_TRANSLATE_NOOP("palette", "string.") }
+        { GradualTempoChangeType::Rallentando,  QT_TRANSLATE_NOOP("palette", "rall.") },
+        { GradualTempoChangeType::Ritardando,   QT_TRANSLATE_NOOP("palette", "rit.") },
+        { GradualTempoChangeType::Smorzando,    QT_TRANSLATE_NOOP("palette", "smorz.") },
+        { GradualTempoChangeType::Sostenuto,    QT_TRANSLATE_NOOP("palette", "sost.") },
+        { GradualTempoChangeType::Stringendo,   QT_TRANSLATE_NOOP("palette", "string.") }
     };
 
     for (const auto& pair : defaultPalette ? DEFAULT_TEMPO_CHANGE : MASTER_TEMPO_CHANGE) {
@@ -1550,65 +1551,38 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     rhm->setXmlText("B1");
     sp->appendElement(rhm, QT_TRANSLATE_NOOP("palette", "Rehearsal mark"));
 
-    auto legato = makeElement<PlayTechAnnotation>(gpaletteScore);
-    legato->setXmlText(QT_TRANSLATE_NOOP("palette", "legato"));
-    legato->setTechniqueType(PlayingTechniqueType::Legato);
-    sp->appendElement(legato, QT_TRANSLATE_NOOP("palette", "Legato"))->setElementTranslated(true);
+    struct PlayTechAnnotationInfo {
+        const char* xmlText;
+        PlayingTechniqueType playTechType;
+        bool expressionType = false;
+        muse::TranslatableString userName = TConv::userName(playTechType);
+    };
 
-    auto pz = makeElement<PlayTechAnnotation>(gpaletteScore);
-    pz->setXmlText(QT_TRANSLATE_NOOP("palette", "pizz."));
-    pz->setTechniqueType(PlayingTechniqueType::Pizzicato);
-    sp->appendElement(pz, QT_TRANSLATE_NOOP("palette", "Pizzicato"))->setElementTranslated(true);
+    static const std::vector<PlayTechAnnotationInfo> playTechAnnotations = {
+        { QT_TRANSLATE_NOOP("palette", "legato"),    PlayingTechniqueType::Legato },
+        { QT_TRANSLATE_NOOP("palette", "pizz."),     PlayingTechniqueType::Pizzicato },
+        { QT_TRANSLATE_NOOP("palette", "arco"),      PlayingTechniqueType::Natural, false, muse::TranslatableString("palette", "Arco") },
+        { QT_TRANSLATE_NOOP("palette", "tremolo"),   PlayingTechniqueType::Tremolo, true },
+        //: For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)
+        { QT_TRANSLATE_NOOP("palette", "mute"),      PlayingTechniqueType::Mute },
+        //: For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)
+        { QT_TRANSLATE_NOOP("palette", "open"),      PlayingTechniqueType::Open },
+        { QT_TRANSLATE_NOOP("palette", "distort"),   PlayingTechniqueType::Distortion },
+        { QT_TRANSLATE_NOOP("palette", "overdrive"), PlayingTechniqueType::Overdrive },
+        { QT_TRANSLATE_NOOP("palette", "harmonics"), PlayingTechniqueType::Harmonics },
+        { QT_TRANSLATE_NOOP("palette", "jazz tone"), PlayingTechniqueType::JazzTone },
+        { QT_TRANSLATE_NOOP("palette", "normal"),    PlayingTechniqueType::Natural },
+    };
 
-    auto ar = makeElement<PlayTechAnnotation>(gpaletteScore);
-    ar->setXmlText(QT_TRANSLATE_NOOP("palette", "arco"));
-    ar->setTechniqueType(PlayingTechniqueType::Natural);
-    sp->appendElement(ar, QT_TRANSLATE_NOOP("palette", "Arco"))->setElementTranslated(true);
-
-    auto tm = makeElement<PlayTechAnnotation>(gpaletteScore);
-    tm->setTextStyleType(TextStyleType::EXPRESSION);
-    tm->setXmlText(QT_TRANSLATE_NOOP("palette", "tremolo"));
-    tm->setTechniqueType(PlayingTechniqueType::Tremolo);
-    sp->appendElement(tm, QT_TRANSLATE_NOOP("palette", "Tremolo"))->setElementTranslated(true);
-
-    auto mu = makeElement<PlayTechAnnotation>(gpaletteScore);
-    //: For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)
-    mu->setXmlText(QT_TRANSLATE_NOOP("palette", "mute"));
-    mu->setTechniqueType(PlayingTechniqueType::Mute);
-    //: For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)
-    sp->appendElement(mu, QT_TRANSLATE_NOOP("palette", "Mute"))->setElementTranslated(true);
-
-    auto no = makeElement<PlayTechAnnotation>(gpaletteScore);
-    //: For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)
-    no->setXmlText(QT_TRANSLATE_NOOP("palette", "open"));
-    no->setTechniqueType(PlayingTechniqueType::Open);
-    //: For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)
-    sp->appendElement(no, QT_TRANSLATE_NOOP("palette", "Open"))->setElementTranslated(true);
-
-    auto distort = makeElement<PlayTechAnnotation>(gpaletteScore);
-    distort->setXmlText(QT_TRANSLATE_NOOP("palette", "distort"));
-    distort->setTechniqueType(PlayingTechniqueType::Distortion);
-    sp->appendElement(distort, QT_TRANSLATE_NOOP("palette", "Distortion"))->setElementTranslated(true);
-
-    auto overdrive = makeElement<PlayTechAnnotation>(gpaletteScore);
-    overdrive->setXmlText(QT_TRANSLATE_NOOP("palette", "overdrive"));
-    overdrive->setTechniqueType(PlayingTechniqueType::Overdrive);
-    sp->appendElement(overdrive, QT_TRANSLATE_NOOP("palette", "Overdrive"))->setElementTranslated(true);
-
-    auto harmonics = makeElement<PlayTechAnnotation>(gpaletteScore);
-    harmonics->setXmlText(QT_TRANSLATE_NOOP("palette", "harmonics"));
-    harmonics->setTechniqueType(PlayingTechniqueType::Harmonics);
-    sp->appendElement(harmonics, QT_TRANSLATE_NOOP("palette", "Harmonics"))->setElementTranslated(true);
-
-    auto jazzTone = makeElement<PlayTechAnnotation>(gpaletteScore);
-    jazzTone->setXmlText(QT_TRANSLATE_NOOP("palette", "jazz tone"));
-    jazzTone->setTechniqueType(PlayingTechniqueType::JazzTone);
-    sp->appendElement(jazzTone, QT_TRANSLATE_NOOP("palette", "Jazz tone"))->setElementTranslated(true);
-
-    auto normal = makeElement<PlayTechAnnotation>(gpaletteScore);
-    normal->setXmlText(QT_TRANSLATE_NOOP("palette", "normal"));
-    normal->setTechniqueType(PlayingTechniqueType::Natural);
-    sp->appendElement(normal, QT_TRANSLATE_NOOP("palette", "Normal"))->setElementTranslated(true);
+    for (PlayTechAnnotationInfo playTechAnnotation : playTechAnnotations) {
+        auto pta = makeElement<PlayTechAnnotation>(gpaletteScore);
+        if (playTechAnnotation.expressionType) {
+            pta->setTextStyleType(TextStyleType::EXPRESSION);
+        }
+        pta->setXmlText(playTechAnnotation.xmlText);
+        pta->setTechniqueType(playTechAnnotation.playTechType);
+        sp->appendElement(pta, playTechAnnotation.userName)->setElementTranslated(true);
+    }
 
     if (!defaultPalette) {
         // Measure numbers, unlike other elements (but like most text elements),
@@ -1620,35 +1594,21 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
         meaNum->setXmlText(QT_TRANSLATE_NOOP("palette", "Measure number"));
         sp->appendElement(meaNum, QT_TRANSLATE_NOOP("palette", "Measure number"))->setElementTranslated(true);
 
-        auto detache = makeElement<PlayTechAnnotation>(gpaletteScore);
-        detache->setXmlText(QT_TRANSLATE_NOOP("palette", "détaché"));
-        detache->setTechniqueType(PlayingTechniqueType::Detache);
-        sp->appendElement(detache, QT_TRANSLATE_NOOP("palette", "Détaché"))->setElementTranslated(true);
+        static const std::vector<PlayTechAnnotationInfo> playTechAnnotationsMaster = {
+            { QT_TRANSLATE_NOOP("palette", "détaché"),   PlayingTechniqueType::Detache },
+            { QT_TRANSLATE_NOOP("palette", "martelé"),   PlayingTechniqueType::Martele },
+            { QT_TRANSLATE_NOOP("palette", "col legno"), PlayingTechniqueType::ColLegno },
+            { QT_TRANSLATE_NOOP("palette", "sul pont."), PlayingTechniqueType::SulPonticello },
+            { QT_TRANSLATE_NOOP("palette", "sul tasto"), PlayingTechniqueType::SulTasto },
+            { QT_TRANSLATE_NOOP("palette", "vibrato"),   PlayingTechniqueType::Vibrato },
+        };
 
-        auto martele = makeElement<PlayTechAnnotation>(gpaletteScore);
-        martele->setXmlText(QT_TRANSLATE_NOOP("palette", "martelé"));
-        martele->setTechniqueType(PlayingTechniqueType::Martele);
-        sp->appendElement(martele, QT_TRANSLATE_NOOP("palette", "Martelé"))->setElementTranslated(true);
-
-        auto colLegno = makeElement<PlayTechAnnotation>(gpaletteScore);
-        colLegno->setXmlText(QT_TRANSLATE_NOOP("palette", "col legno"));
-        colLegno->setTechniqueType(PlayingTechniqueType::ColLegno);
-        sp->appendElement(colLegno, QT_TRANSLATE_NOOP("palette", "Col legno"))->setElementTranslated(true);
-
-        auto sulPont = makeElement<PlayTechAnnotation>(gpaletteScore);
-        sulPont->setXmlText(QT_TRANSLATE_NOOP("palette", "sul pont."));
-        sulPont->setTechniqueType(PlayingTechniqueType::SulPonticello);
-        sp->appendElement(sulPont, QT_TRANSLATE_NOOP("palette", "Sul ponticello"))->setElementTranslated(true);
-
-        auto sulTasto = makeElement<PlayTechAnnotation>(gpaletteScore);
-        sulTasto->setXmlText(QT_TRANSLATE_NOOP("palette", "sul tasto"));
-        sulTasto->setTechniqueType(PlayingTechniqueType::SulTasto);
-        sp->appendElement(sulTasto, QT_TRANSLATE_NOOP("palette", "Sul tasto"))->setElementTranslated(true);
-
-        auto vibrato = makeElement<PlayTechAnnotation>(gpaletteScore);
-        vibrato->setXmlText(QT_TRANSLATE_NOOP("palette", "vibrato"));
-        vibrato->setTechniqueType(PlayingTechniqueType::Vibrato);
-        sp->appendElement(vibrato, QT_TRANSLATE_NOOP("palette", "Vibrato"))->setElementTranslated(true);
+        for (PlayTechAnnotationInfo playTechAnnotation : playTechAnnotationsMaster) {
+            auto pta = makeElement<PlayTechAnnotation>(gpaletteScore);
+            pta->setXmlText(playTechAnnotation.xmlText);
+            pta->setTechniqueType(playTechAnnotation.playTechType);
+            sp->appendElement(pta, TConv::userName(playTechAnnotation.playTechType))->setElementTranslated(true);
+        }
     }
 
     return sp;
@@ -1706,7 +1666,7 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
         { 2,  2, TimeSigType::NORMAL, "2/2" },
         { 3,  2, TimeSigType::NORMAL, "3/2" },
         { 4,  2, TimeSigType::NORMAL, "4/2" },
-        { 2,  2, TimeSigType::CUT_BACH, QT_TRANSLATE_NOOP("engraving/timesig", "Cut time (Bach)") },
+        { 2,  2, TimeSigType::CUT_BACH,   QT_TRANSLATE_NOOP("engraving/timesig", "Cut time (Bach)") },
         { 9,  8, TimeSigType::CUT_TRIPLE, QT_TRANSLATE_NOOP("engraving/timesig", "Cut triple time (9/8)") }
     };
 
@@ -1864,21 +1824,21 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     }
 
     struct PlayTechAnnotationInfo {
-        muse::TranslatableString xmlText;
+        const char* xmlText;
         PlayingTechniqueType playTechType;
     };
 
     static const std::vector<PlayTechAnnotationInfo> playTechAnnotations = {
-        { muse::TranslatableString("palette", "distort"),   PlayingTechniqueType::Distortion, },
-        { muse::TranslatableString("palette", "overdrive"), PlayingTechniqueType::Overdrive, },
-        { muse::TranslatableString("palette", "harmonics"), PlayingTechniqueType::Harmonics, },
-        { muse::TranslatableString("palette", "jazz tone"), PlayingTechniqueType::JazzTone, },
-        { muse::TranslatableString("palette", "normal"),    PlayingTechniqueType::Natural },
+        { QT_TRANSLATE_NOOP("palette", "distort"),   PlayingTechniqueType::Distortion, },
+        { QT_TRANSLATE_NOOP("palette", "overdrive"), PlayingTechniqueType::Overdrive, },
+        { QT_TRANSLATE_NOOP("palette", "harmonics"), PlayingTechniqueType::Harmonics, },
+        { QT_TRANSLATE_NOOP("palette", "jazz tone"), PlayingTechniqueType::JazzTone, },
+        { QT_TRANSLATE_NOOP("palette", "normal"),    PlayingTechniqueType::Natural },
     };
 
     for (const PlayTechAnnotationInfo& playTechAnnotation : playTechAnnotations) {
         auto pta = makeElement<PlayTechAnnotation>(gpaletteScore);
-        pta->setXmlText(playTechAnnotation.xmlText.translated());
+        pta->setXmlText(playTechAnnotation.xmlText);
         pta->setTechniqueType(playTechAnnotation.playTechType);
         sp->appendElement(pta, TConv::userName(playTechAnnotation.playTechType), 0.8)->setElementTranslated(true);
     }

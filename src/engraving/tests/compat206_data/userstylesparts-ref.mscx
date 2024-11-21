@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
@@ -59,7 +59,7 @@
       <user7FramePadding>0</user7FramePadding>
       <user7FrameWidth>0</user7FrameWidth>
       <defaultsVersion>206</defaultsVersion>
-      <Spatium>1.76389</Spatium>
+      <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -379,6 +379,7 @@
         </Measure>
       </Staff>
     <Score>
+      <eid>219043332100</eid>
       <name>Piano</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
@@ -440,7 +441,7 @@
         <user7FramePadding>0</user7FramePadding>
         <user7FrameWidth>0</user7FrameWidth>
         <defaultsVersion>206</defaultsVersion>
-        <Spatium>1.76389</Spatium>
+        <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -576,6 +577,7 @@
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
+              <placement>above</placement>
               <durationType>measure</durationType>
               <duration>12/4</duration>
               </Rest>
@@ -614,6 +616,7 @@
         </Staff>
       </Score>
     <Score>
+      <eid>373662154756</eid>
       <name>Flute 1</name>
       <initialPartId>2</initialPartId>
       <Division>480</Division>
@@ -675,7 +678,7 @@
         <user7FramePadding>0</user7FramePadding>
         <user7FrameWidth>0</user7FrameWidth>
         <defaultsVersion>206</defaultsVersion>
-        <Spatium>1.76389</Spatium>
+        <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -834,6 +837,7 @@
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
+              <placement>above</placement>
               <durationType>measure</durationType>
               <duration>12/4</duration>
               </Rest>
@@ -872,6 +876,7 @@
         </Staff>
       </Score>
     <Score>
+      <eid>536870912004</eid>
       <name>Flute 2</name>
       <initialPartId>3</initialPartId>
       <Division>480</Division>
@@ -933,7 +938,7 @@
         <user7FramePadding>0</user7FramePadding>
         <user7FrameWidth>0</user7FrameWidth>
         <defaultsVersion>206</defaultsVersion>
-        <Spatium>1.76389</Spatium>
+        <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -1092,6 +1097,7 @@
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
+              <placement>above</placement>
               <durationType>measure</durationType>
               <duration>12/4</duration>
               </Rest>

@@ -163,7 +163,7 @@ public:
         bool isValid() const { return !elements.empty() || staffStart != muse::nidx; }
     };
 
-    UndoMacro(Score* s);
+    UndoMacro(Score* s, const TranslatableString& actionName);
     void undo(EditData*) override;
     void redo(EditData*) override;
     bool empty() const;
@@ -182,6 +182,7 @@ public:
     };
 
     ChangesInfo changesInfo() const;
+    const TranslatableString& actionName() const;
 
     static bool canRecordSelectedElement(const EngravingItem* e);
 
@@ -192,6 +193,7 @@ private:
     InputState m_redoInputState;
     SelectionInfo m_undoSelectionInfo;
     SelectionInfo m_redoSelectionInfo;
+    TranslatableString m_actionName;
 
     Score* m_score = nullptr;
 
@@ -201,41 +203,60 @@ private:
 
 class UndoStack
 {
-    UndoMacro* curCmd = nullptr;
-    std::vector<UndoMacro*> list;
-    std::vector<int> stateList;
-    int nextState = 0;
-    int cleanState = 0;
-    size_t curIdx = 0;
-    bool isLocked = false;
-
-    void remove(size_t idx);
-
 public:
     UndoStack();
     ~UndoStack();
 
-    bool locked() const;
-    void setLocked(bool val);
-    bool active() const { return curCmd != 0; }
-    void beginMacro(Score*);
+    bool isLocked() const;
+    void setLocked(bool locked);
+
+    bool hasActiveCommand() const { return m_activeCommand != nullptr; }
+
+    void beginMacro(Score*, const TranslatableString& actionName);
     void endMacro(bool rollback);
-    void push(UndoCommand*, EditData*);        // push & execute
-    void push1(UndoCommand*);
+
+    void pushAndPerform(UndoCommand*, EditData*);
+    void pushWithoutPerforming(UndoCommand*);
     void pop();
-    bool canUndo() const { return curIdx > 0; }
-    bool canRedo() const { return curIdx < list.size(); }
-    bool isClean() const { return cleanState == stateList[curIdx]; }
-    size_t getCurIdx() const { return curIdx; }
-    UndoMacro* current() const { return curCmd; }
-    UndoMacro* last() const { return curIdx > 0 ? list[curIdx - 1] : 0; }
-    UndoMacro* prev() const { return curIdx > 1 ? list[curIdx - 2] : 0; }
+
+    bool canUndo() const { return m_currentIndex > 0; }
+    bool canRedo() const { return m_currentIndex < m_macroList.size(); }
+    bool isClean() const { return m_cleanState == m_stateList[m_currentIndex]; }
+
+    size_t size() const { return m_macroList.size(); }
+    size_t currentIndex() const { return m_currentIndex; }
+
+    UndoMacro* activeCommand() const { return m_activeCommand; }
+
+    UndoMacro* last() const { return m_currentIndex > 0 ? m_macroList[m_currentIndex - 1] : nullptr; }
+    UndoMacro* prev() const { return m_currentIndex > 1 ? m_macroList[m_currentIndex - 2] : nullptr; }
+    UndoMacro* next() const { return canRedo() ? m_macroList[m_currentIndex] : nullptr; }
+
+    /// Returns the command that led to the state with the given `idx`.
+    /// For further discussion of the indices involved in UndoStack, see:
+    /// https://github.com/musescore/MuseScore/pull/25389#discussion_r1825782176
+    UndoMacro* lastAtIndex(size_t idx) const
+    {
+        return idx > 0 && idx - 1 < m_macroList.size() ? m_macroList[idx - 1] : nullptr;
+    }
+
     void undo(EditData*);
     void redo(EditData*);
     void reopen();
 
     void mergeCommands(size_t startIdx);
-    void cleanRedoStack() { remove(curIdx); }
+    void cleanRedoStack() { remove(m_currentIndex); }
+
+private:
+    void remove(size_t idx);
+
+    UndoMacro* m_activeCommand = nullptr;
+    std::vector<UndoMacro*> m_macroList;
+    std::vector<int> m_stateList;
+    int m_nextState = 0;
+    int m_cleanState = 0;
+    size_t m_currentIndex = 0;
+    bool m_isLocked = false;
 };
 
 class InsertPart : public UndoCommand
@@ -718,7 +739,7 @@ class ChangeStaff : public UndoCommand
     bool showIfEmpty = false;
     bool cutaway = false;
     bool hideSystemBarLine = false;
-    bool mergeMatchingRests = false;
+    AutoOnOff mergeMatchingRests = AutoOnOff::AUTO;
     bool reflectTranspositionInLinkedTab = false;
 
     void flip(EditData*) override;
@@ -727,7 +748,7 @@ public:
     ChangeStaff(Staff*);
 
     ChangeStaff(Staff*, bool _visible, ClefTypeList _clefType, double userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
-                bool _hideSystemBarLine, bool _mergeRests, bool _reflectTranspositionInLinkedTab);
+                bool _hideSystemBarLine, AutoOnOff _mergeRests, bool _reflectTranspositionInLinkedTab);
 
     UNDO_TYPE(CommandType::ChangeStaff)
     UNDO_NAME("ChangeStaff")

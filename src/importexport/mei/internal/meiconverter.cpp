@@ -39,6 +39,7 @@
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/jump.h"
+#include "engraving/dom/laissezvib.h"
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/marker.h"
 #include "engraving/dom/measure.h"
@@ -1707,50 +1708,24 @@ libmei::Harm Convert::harmToMEI(const engraving::Harmony* harmony, StringList& m
     return meiHarm;
 }
 
-void Convert::lvFromMEI(engraving::Articulation* lv, const libmei::Lv& meiLv, bool& warning)
+void Convert::lvFromMEI(engraving::LaissezVib* lv, const libmei::Lv& meiLv, bool& warning)
 {
     warning = false;
 
-    lv->setSymId(engraving::SymId::articLaissezVibrerAbove);
-
     // @curvedir
-    switch (meiLv.GetCurvedir()) {
-    case (libmei::curvature_CURVEDIR_above):
-        lv->setAnchor(engraving::ArticulationAnchor::TOP);
-        break;
-    case (libmei::curvature_CURVEDIR_below):
-        lv->setAnchor(engraving::ArticulationAnchor::BOTTOM);
-        break;
-    default:
-        lv->setAnchor(engraving::ArticulationAnchor::AUTO);
-        break;
+    if (meiLv.HasCurvedir()) {
+        lv->setSlurDirection(Convert::curvedirFromMEI(meiLv.GetCurvedir(), warning));
     }
-    lv->setPropertyFlags(engraving::Pid::ARTICULATION_ANCHOR, engraving::PropertyFlags::UNSTYLED);
+
+    // @lform
+    if (meiLv.HasLform()) {
+        bool typeWarning = false;
+        lv->setStyleType(Convert::slurstyleFromMEI(meiLv.GetLform(), typeWarning));
+        warning = (warning || typeWarning);
+    }
 
     // @color
     Convert::colorFromMEI(lv, meiLv);
-}
-
-libmei::Lv Convert::lvToMEI(const engraving::Articulation* lv)
-{
-    libmei::Lv meiLv;
-
-    // @curvedir
-    switch (lv->anchor()) {
-    case (engraving::ArticulationAnchor::TOP):
-        meiLv.SetCurvedir(libmei::curvature_CURVEDIR_above);
-        break;
-    case (engraving::ArticulationAnchor::BOTTOM):
-        meiLv.SetCurvedir(libmei::curvature_CURVEDIR_below);
-        break;
-    default:
-        break;
-    }
-
-    // @color
-    Convert::colorToMEI(lv, meiLv);
-
-    return meiLv;
 }
 
 void Convert::jumpFromMEI(engraving::Jump* jump, const libmei::RepeatMark& meiRepeatMark, bool& warning)
@@ -2664,7 +2639,6 @@ void Convert::slurFromMEI(engraving::SlurTie* slur, const libmei::Slur& meiSlur,
     // @curvedir
     if (meiSlur.HasCurvedir()) {
         slur->setSlurDirection(Convert::curvedirFromMEI(meiSlur.GetCurvedir(), warning));
-        //slur->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
     }
 
     // @lform
@@ -3386,7 +3360,7 @@ void Convert::layerIdentToMEI(const engraving::EngravingItem* item, libmei::Elem
     if (item->hasVoiceAssignmentProperties()
         && (item->getProperty(engraving::Pid::VOICE_ASSIGNMENT).value<engraving::VoiceAssignment>()
             == engraving::VoiceAssignment::CURRENT_VOICE_ONLY)) {
-        layerAtt->SetLayer(item->voice() + 1);
+        layerAtt->SetLayer(static_cast<int>(item->voice()) + 1);
     }
 }
 
@@ -3399,7 +3373,7 @@ void Convert::staffIdentToMEI(const engraving::EngravingItem* item, libmei::Elem
     }
 
     libmei::xsdPositiveInteger_List staffList;
-    staffList.push_back(item->staff()->idx() + 1);
+    staffList.push_back(static_cast<int>(item->staff()->idx()) + 1);
     // TODO: add staff number if centered between staves
     staffAtt->SetStaff(staffList);
 }

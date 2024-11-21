@@ -21,7 +21,10 @@
  */
 #include <gtest/gtest.h>
 
+#include <locale>
+
 #include "types/datetime.h"
+#include "types/string.h"
 
 using namespace muse;
 

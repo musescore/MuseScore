@@ -22,8 +22,9 @@
 #ifndef MUSE_GLOBAL_RUNTIME_H
 #define MUSE_GLOBAL_RUNTIME_H
 
-#include <thread>
 #include <sstream>
+#include <string>
+#include <thread>
 
 namespace muse::runtime {
 inline constexpr bool isDebug()

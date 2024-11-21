@@ -54,7 +54,7 @@
           <words>Swing!</words>
           </direction-type>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>half</beat-unit>

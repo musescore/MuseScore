@@ -21,8 +21,6 @@
  */
 #include "audiomodule.h"
 
-#include <QQmlEngine>
-
 #include "ui/iuiengine.h"
 #include "global/modularity/ioc.h"
 

@@ -171,7 +171,7 @@ public:
     void setNoBreak(bool v) { setFlag(ElementFlag::NO_BREAK, v); }
 
     bool hasCourtesyKeySig() const { return flag(ElementFlag::KEYSIG); }
-    void setHasCourtesyKeySig(int v) { setFlag(ElementFlag::KEYSIG, v); }
+    void setHasCourtesyKeySig(bool v) { setFlag(ElementFlag::KEYSIG, v); }
 
     virtual void computeMinWidth() { }
 

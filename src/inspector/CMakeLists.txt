@@ -154,6 +154,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/textlinesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/gradualtempochangesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/gradualtempochangesettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/notelinesettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/notelinesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/images/imagesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/images/imagesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/jumps/jumpsettingsmodel.cpp
@@ -236,11 +238,4 @@ set(MODULE_LINK
     engraving
     )
 
-set(MODULE_USE_UNITBUILD ON)
 setup_module()
-
-target_sources(inspector
-  PRIVATE
-    types/voicetypes.h
-    models/inspectormodelwithvoiceandpositionoptions.h models/inspectormodelwithvoiceandpositionoptions.cpp
-)

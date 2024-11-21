@@ -22,7 +22,7 @@
 
 #include "registeraudiopluginsscenario.h"
 
-#include <QApplication>
+#include <QCoreApplication>
 
 #include "global/translation.h"
 

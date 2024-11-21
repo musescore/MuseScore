@@ -21,7 +21,11 @@
  */
 #include "version.h"
 
+#include <algorithm>
 #include <array>
+#include <utility>
+#include <vector>
+
 #include "log.h"
 
 static const muse::Char SUFFIX_DELIMITER = '-';

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
@@ -62,7 +62,7 @@
       <oddFooterR>$P</oddFooterR>
       <voltaPosAbove x="0" y="-2"/>
       <defaultsVersion>114</defaultsVersion>
-      <Spatium>1.764</Spatium>
+      <spatium>1.764</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -151,6 +151,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <placement>above</placement>
             <durationType>measure</durationType>
             <duration>128/4</duration>
             </Rest>

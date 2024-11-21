@@ -22,8 +22,7 @@
 #include "graphicsinfomodel.h"
 
 #include <QClipboard>
-
-#include "ui/graphicsapiprovider.h"
+#include <QGuiApplication>
 
 using namespace muse::diagnostics;
 
@@ -47,7 +46,7 @@ void GraphicsInfoModel::init()
 
 void GraphicsInfoModel::copyToClipboard()
 {
-    QApplication::clipboard()->setText(m_info);
+    QGuiApplication::clipboard()->setText(m_info);
 }
 
 QString GraphicsInfoModel::info() const

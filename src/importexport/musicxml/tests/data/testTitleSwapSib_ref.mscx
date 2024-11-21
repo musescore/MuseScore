@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
@@ -78,6 +78,8 @@
       <repeatRightFontSize>11.9365</repeatRightFontSize>
       <frameFontFace>Plantin MT Std</frameFontFace>
       <frameFontSize>11.9365</frameFontSize>
+      <noteLineFontFace>Plantin MT Std</noteLineFontFace>
+      <noteLineFontSize>11.9365</noteLineFontSize>
       <glissandoFontFace>Plantin MT Std</glissandoFontFace>
       <glissandoFontSize>11.9365</glissandoFontSize>
       <bendFontFace>Plantin MT Std</bendFontFace>
@@ -118,7 +120,7 @@
       <user11FontSize>11.9365</user11FontSize>
       <user12FontFace>Plantin MT Std</user12FontFace>
       <user12FontSize>11.9365</user12FontSize>
-      <Spatium>1.2192</Spatium>
+      <spatium>1.2192</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

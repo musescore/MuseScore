@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -685,10 +685,11 @@
         </Measure>
       </Staff>
     <Score>
+      <eid>936302870532</eid>
       <name>Flute</name>
       <Division>480</Division>
       <Style>
-        <Spatium>1.74978</Spatium>
+        <spatium>1.74978</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -1058,10 +1059,11 @@
         </Staff>
       </Score>
     <Score>
+      <eid>1494648619012</eid>
       <name>Oboe</name>
       <Division>480</Division>
       <Style>
-        <Spatium>1.74978</Spatium>
+        <spatium>1.74978</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>

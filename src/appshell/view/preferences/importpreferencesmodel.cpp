@@ -97,12 +97,12 @@ QString ImportPreferencesModel::currentOvertureCharset() const
 
 bool ImportPreferencesModel::importLayout() const
 {
-    return musicXmlConfiguration()->musicxmlImportLayout();
+    return musicXmlConfiguration()->importLayout();
 }
 
 bool ImportPreferencesModel::importBreaks() const
 {
-    return musicXmlConfiguration()->musicxmlImportBreaks();
+    return musicXmlConfiguration()->importBreaks();
 }
 
 bool ImportPreferencesModel::needUseDefaultFont() const
@@ -156,7 +156,7 @@ void ImportPreferencesModel::setImportLayout(bool import)
         return;
     }
 
-    musicXmlConfiguration()->setMusicxmlImportLayout(import);
+    musicXmlConfiguration()->setImportLayout(import);
     emit importLayoutChanged(import);
 }
 
@@ -166,7 +166,7 @@ void ImportPreferencesModel::setImportBreaks(bool import)
         return;
     }
 
-    musicXmlConfiguration()->setMusicxmlImportBreaks(import);
+    musicXmlConfiguration()->setImportBreaks(import);
     emit importBreaksChanged(import);
 }
 

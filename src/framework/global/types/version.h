@@ -22,6 +22,8 @@
 #ifndef MUSE_GLOBAL_VERSION_H
 #define MUSE_GLOBAL_VERSION_H
 
+#include <string>
+
 #include "types/string.h"
 
 namespace muse {

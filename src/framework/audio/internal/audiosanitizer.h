@@ -25,6 +25,7 @@
 //! NOTE This is dev tools
 
 #include <cassert>
+#include <set>
 #include <thread>
 
 namespace muse::audio {

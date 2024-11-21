@@ -61,13 +61,13 @@ public:
     static void computeUp(ChordRest* item, const LayoutContext& ctx);
     static int computeAutoStemDirection(const std::vector<int>& noteDistances);
     static bool isChordPosBelowBeam(Chord* item, Beam* beam);
+    static bool isChordPosBelowTrem(const Chord* item, TremoloTwoChord* trem);
 
     static void layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx);
     static double layoutChords2(std::vector<Note*>& notes, bool up, LayoutContext& ctx);
     static void layoutChords3(const std::vector<Chord*>&, const std::vector<Note*>&, const Staff*, LayoutContext& ctx);
     static void layoutLedgerLines(const std::vector<Chord*>& chords);
     static void getNoteListForDots(Chord* c, std::vector<Note*>&, std::vector<Note*>&, std::vector<int>&);
-    static void updateGraceNotes(Measure* measure, LayoutContext& ctx);
     static void repositionGraceNotesAfter(Segment* segment, size_t tracks);
     static void appendGraceNotes(Chord* chord);
     static void clearLineAttachPoints(Measure* measure);
@@ -89,6 +89,8 @@ public:
     static void fillShape(const Rest* item, Rest::LayoutData* ldata);
     static void fillShape(const MeasureRepeat* item, MeasureRepeat::LayoutData* ldata, const LayoutConfiguration& conf);
     static void fillShape(const MMRest* item, MMRest::LayoutData* ldata, const LayoutConfiguration& conf);
+
+    static void addLineAttachPoints(Spanner* spanner);
 
 private:
     static void layoutPitched(Chord* item, LayoutContext& ctx);

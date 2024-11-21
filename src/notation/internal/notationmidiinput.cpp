@@ -177,7 +177,7 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
         m_undoStack->commitChanges();
     };
 
-    m_undoStack->prepareChanges();
+    m_undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Enter note"));
 
     if (e.opcode() == muse::midi::Event::Opcode::NoteOff) {
         if (isRealtime()) {
@@ -305,7 +305,7 @@ void NotationMidiInput::doRealtimeAdvance()
     playbackController()->playMetronome(is.tick().ticks());
 
     QTimer::singleShot(100, Qt::PreciseTimer, [this]() {
-        m_undoStack->prepareChanges();
+        m_undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Realtime advance"));
         m_getScore->score()->realtimeAdvance(configuration()->midiUseWrittenPitch().val);
         m_undoStack->commitChanges();
     });

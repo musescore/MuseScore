@@ -123,7 +123,11 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
             for (Note* note : chord->notes()) {
                 Tie* tieFor = note->tieFor();
                 Tie* tieBack = note->tieBack();
-                if (tieFor && tieFor->isCrossStaff()) {
+                LaissezVib* lv = note->laissezVib();
+                if (lv && lv->isCrossStaff()) {
+                    SlurTieLayout::layoutLaissezVibChord(chord, ctx);
+                }
+                if (tieFor && !lv && tieFor->isCrossStaff()) {
                     SlurTieLayout::tieLayoutFor(tieFor, item->system());
                 }
                 if (tieBack && tieBack->tick() < stick && tieBack->isCrossStaff()) {
@@ -210,7 +214,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                 cs->setRtick(len);
             }
         }
-        MeasureLayout::removeSystemTrailer(mmrMeasure, ctx);
+        MeasureLayout::removeSystemTrailer(mmrMeasure);
     } else {
         mmrMeasure = Factory::createMeasure(ctx.mutDom().dummyParent()->system());
         mmrMeasure->setTicks(len);
@@ -466,7 +470,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
         // clone elements from underlying measure to mmr
         for (EngravingItem* e : underlyingSeg->annotations()) {
             // look at elements in underlying measure
-            if (!muse::contains(BREAK_TYPES, e->type())) {
+            if (!muse::contains(BREAK_TYPES, e->type()) || !e->visible()) {
                 continue;
             }
             // try to find a match in mmr
@@ -534,7 +538,7 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
     int n = 0;
     for (const Segment* s = m->first(); s; s = s->next()) {
         for (const EngravingItem* e : s->annotations()) {
-            if (!e->staff()->show()) {
+            if (!e->staff()->show() || !e->visible()) {
                 continue;
             }
             if (!muse::contains(BREAK_TYPES, e->type())) {
@@ -602,6 +606,9 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     auto sl = ctx.dom().spannerMap().findOverlapping(m->tick().ticks(), m->endTick().ticks());
     for (auto i : sl) {
         Spanner* s = i.value;
+        if (!s->visible()) {
+            continue;
+        }
         Fraction spannerStart = s->tick();
         Fraction spannerEnd = s->tick2();
         Fraction measureStart = m->tick();
@@ -618,6 +625,9 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
         auto prevMeasSpanners = ctx.dom().spannerMap().findOverlapping(prevMeas->tick().ticks(), prevMeas->endTick().ticks());
         for (auto i : prevMeasSpanners) {
             Spanner* s = i.value;
+            if (!s->visible()) {
+                continue;
+            }
             Fraction spannerStart = s->tick();
             Fraction spannerEnd = s->tick2();
             Fraction measureStart = prevMeas->tick();
@@ -989,12 +999,55 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
         s.createShapes();
     }
 
-    ChordLayout::updateGraceNotes(measure, ctx);
-
     measure->computeTicks(); // Must be called *after* Segment::createShapes() because it relies on the
     // Segment::visible() property, which is determined by Segment::createShapes().
 
     ctx.mutState().setTick(ctx.state().tick() + measure->ticks());
+}
+
+void MeasureLayout::updateGraceNotes(Measure* measure, LayoutContext& ctx)
+{
+    // Clean everything
+    for (Segment& s : measure->segments()) {
+        for (track_idx_t track = 0; track < ctx.dom().ntracks(); ++track) {
+            EngravingItem* e = s.preAppendedItem(track);
+            if (e && e->isGraceNotesGroup()) {
+                s.clearPreAppended(track);
+                std::set<staff_idx_t> stavesToReShape;
+                for (Chord* grace : *toGraceNotesGroup(e)) {
+                    stavesToReShape.insert(grace->staffIdx());
+                    stavesToReShape.insert(grace->vStaffIdx());
+                }
+                for (staff_idx_t staffToReshape : stavesToReShape) {
+                    s.createShape(staffToReshape);
+                }
+            }
+        }
+    }
+
+    // Append grace notes to appropriate segment
+    for (Segment& s : measure->segments()) {
+        if (!s.isChordRestType()) {
+            continue;
+        }
+        for (auto el : s.elist()) {
+            if (el && el->isChord() && !toChord(el)->graceNotes().empty()) {
+                ChordLayout::appendGraceNotes(toChord(el));
+            }
+        }
+    }
+
+    // Layout grace note groups
+    for (Segment& s : measure->segments()) {
+        for (track_idx_t track = 0; track < ctx.dom().ntracks(); ++track) {
+            EngravingItem* e = s.preAppendedItem(track);
+            if (e && e->isGraceNotesGroup()) {
+                GraceNotesGroup* gng = toGraceNotesGroup(e);
+                TLayout::layoutGraceNotesGroup(gng, ctx);
+                gng->addToShape();
+            }
+        }
+    }
 }
 
 void MeasureLayout::getNextMeasure(LayoutContext& ctx)
@@ -1244,8 +1297,7 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 continue;
             }
             staff_idx_t staffIdx = e->staffIdx();
-            bool modernMMRest = e->isMMRest() && (!ctx.conf().styleB(Sid::oldStyleMultiMeasureRests)
-                                                  || toMMRest(e)->ldata()->number > ctx.conf().styleI(Sid::mmRestOldStyleMaxMeasures));
+            bool modernMMRest = e->isMMRest() && !toMMRest(e)->isOldStyle();
             if ((e->isRest() && toRest(e)->isFullMeasureRest()) || e->isMMRest() || e->isMeasureRepeat()) {
                 //
                 // element has to be centered in free space
@@ -1361,21 +1413,19 @@ void MeasureLayout::barLinesSetSpan(Segment* seg, LayoutContext& ctx)
 //    return the width change for measure
 //---------------------------------------------------------
 
-double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx)
+void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx)
 {
     size_t nstaves  = ctx.dom().nstaves();
     Segment* seg = m->findSegmentR(SegmentType::EndBarLine, m->ticks());
     Measure* nm  = m->nextMeasure();
     double blw    = 0.0;
 
-    double oldWidth = m->width(LD_ACCESS::BAD);
-
     if (nm && nm->repeatStart() && !m->repeatEnd() && !isLastMeasureInSystem && m->next() == nm) {
         // we may skip barline at end of a measure immediately before a start repeat:
         // next measure is repeat start, this measure is not a repeat end,
         // this is not last measure of system, no intervening frame
         if (!seg) {
-            return 0.0;
+            return;
         }
         seg->setEnabled(false);
     } else {
@@ -1518,7 +1568,6 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
     Segment* clefSeg = m->findSegmentR(SegmentType::Clef, m->ticks());
     ClefToBarlinePosition clefToBarlinePosition = ClefToBarlinePosition::AUTO;
     if (clefSeg) {
-        bool wasVisible = clefSeg->visible();
         int visibleInt = 0;
         for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             if (!ctx.dom().staff(staffIdx)->show()) {
@@ -1554,9 +1603,6 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
         } else { // should never happen
             LOGD("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(), clefSeg->tick().denominator());
         }
-        if ((wasVisible != clefSeg->visible()) && m->system()) {   // recompute the width only if necessary
-            computeWidth(m, ctx, m->system()->minSysTicks(), m->system()->maxSysTicks(), m->layoutStretch());
-        }
         if (seg) {
             Segment* s1 = nullptr;
             Segment* s2 = nullptr;
@@ -1573,15 +1619,6 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
             }
         }
     }
-
-    // fix segment layout
-    Segment* s = seg->prevActive();
-    if (s) {
-        double x = s->ldata()->pos().x();
-        computeWidth(m, ctx, s, x, false, m->system()->minSysTicks(), m->system()->maxSysTicks(), m->layoutStretch());
-    }
-
-    return m->width() - oldWidth;
 }
 
 Segment* MeasureLayout::addHeaderClef(Measure* m, bool isFirstClef, const Staff* staff, LayoutContext& ctx)
@@ -1944,9 +1981,8 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
     m->checkTrailer();
 }
 
-void MeasureLayout::removeSystemTrailer(Measure* m, LayoutContext& ctx)
+void MeasureLayout::removeSystemTrailer(Measure* m)
 {
-    bool changed = false;
     for (Segment* seg = m->last(); seg != m->first(); seg = seg->prev()) {
         if (seg->isTimeTickType()) {
             continue;
@@ -1957,12 +1993,8 @@ void MeasureLayout::removeSystemTrailer(Measure* m, LayoutContext& ctx)
         if (seg->enabled()) {
             seg->setEnabled(false);
         }
-        changed = true;
     }
     m->setTrailer(false);
-    if (m->system() && changed) {
-        MeasureLayout::computeWidth(m, ctx, m->system()->minSysTicks(), m->system()->maxSysTicks(), m->layoutStretch());
-    }
 }
 
 void MeasureLayout::createSystemBeginBarLine(Measure* m, LayoutContext& ctx)
@@ -2160,30 +2192,6 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
     }
 }
 
-void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTicks, Fraction maxTicks, double stretchCoeff,
-                                 bool overrideMinMeasureWidth)
-{
-    Segment* s = nullptr;
-
-    // skip disabled segment
-    for (s = m->first(); s && (!s->enabled() || !s->isActive() || s->allElementsInvisible()); s = s->next()) {
-        s->mutldata()->setPosX(HorizontalSpacing::computeFirstSegmentXPosition(m, s, ctx.state().segmentShapeSqueezeFactor()));  // this is where placement of hidden key/time sigs is set
-        s->setWidth(0);                                // it shouldn't affect the width of the bar no matter what it is
-    }
-    if (!s) {
-        m->setWidth(0.0);
-        return;
-    }
-    double x = 0.0;
-
-    ChordLayout::updateGraceNotes(m, ctx);
-
-    x = HorizontalSpacing::computeFirstSegmentXPosition(m, s, ctx.state().segmentShapeSqueezeFactor());
-    bool isSystemHeader = s->header();
-
-    computeWidth(m, ctx, s, x, isSystemHeader, minTicks, maxTicks, stretchCoeff, overrideMinMeasureWidth);
-}
-
 void MeasureLayout::layoutTimeTickAnchors(Measure* m, LayoutContext& ctx)
 {
     bool darker = true;
@@ -2225,225 +2233,6 @@ void MeasureLayout::layoutTimeTickAnchors(Measure* m, LayoutContext& ctx)
         }
         darker = !darker;
     }
-}
-
-//---------------------------------------------------------
-//   computeWidth
-//   Computes the width of a measure depending on note durations
-//   (and given the shortest note of the system minTicks) and
-//   depending on the stretch coefficient
-//   LEGACY: this method used to be called computeMinWidth and was only used
-//   to compute the minimum non-collision distance between elements.
-//---------------------------------------------------------
-
-void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, double x, bool isSystemHeader, Fraction minTicks,
-                                 Fraction maxTicks,
-                                 double stretchCoeff,
-                                 bool overrideMinMeasureWidth)
-{
-    Segment* fs = m->firstEnabled();
-    if (!fs->visible()) {           // first enabled could be a clef change on invisible staff
-        fs = fs->nextActive();
-    }
-    bool first  = m->isFirstInSystem();
-    const Shape ls(first ? RectF(0.0, -DBL_MAX, 0.0, DBL_MAX) : RectF(0.0, 0.0, 0.0, m->spatium() * 4));
-
-    static constexpr double spacingMultiplier = 1.2;
-    double minNoteSpace = ctx.conf().noteHeadWidth() + spacingMultiplier * ctx.conf().styleMM(Sid::minNoteDistance);
-    double usrStretch = std::max(m->userStretch(), double(0.1)); // Avoids stretch going to zero
-    usrStretch = std::min(usrStretch, double(10)); // Higher values may cause the spacing to break (10 is already ridiculously high and no user should even use that)
-
-    if (s->rtick().isZero()) {
-        m->setSqueezableSpace(0.0); // TODO: store squeezableSpace segment by segment
-    }
-    // PASS 1: compute the spacing of all left-aligned segments by stacking them one after the other
-    while (s) {
-        if (s->isTimeTickType()) {
-            s = s->next();
-            continue;
-        }
-
-        s->setWidthOffset(0.0);
-        s->mutldata()->setPosX(x);
-        // skip disabled / invisible segments
-        // segments with all elements invisible are skipped, though these are already
-        // skipped in computeMinWidth() -- the only way this would be an issue here is
-        // if this method was called specifically with the invisible segment specified
-        // which I'm pretty sure doesn't happen at this point. still...
-        if (!s->enabled() || !s->visible() || s->allElementsInvisible() || (s->isRightAligned() && s != m->firstEnabled())) {
-            s->setWidth(0);
-            s = s->next();
-            continue;
-        }
-
-        Segment* ns = s->nextActive();
-        while (ns && (ns->allElementsInvisible() || ns->isRightAligned())) {
-            ns = ns->nextActive();
-        }
-        // end barline might be disabled
-        // but still consider it for spacing of previous segment
-        if (!ns) {
-            ns = s->next(SegmentType::BarLineType);
-        }
-
-        double w = 0.0;
-
-        if (ns) {
-            if (isSystemHeader && (ns->isStartRepeatBarLineType() || ns->isChordRestType() || (ns->isClefType() && !ns->header()))) {
-                // this is the system header gap
-                w = HorizontalSpacing::minHorizontalDistance(s, ns, true, ctx.state().segmentShapeSqueezeFactor());
-                isSystemHeader = false;
-            } else {
-                w = HorizontalSpacing::minHorizontalDistance(s, ns, false, ctx.state().segmentShapeSqueezeFactor());
-                if (s->isChordRestType()) {
-                    Segment* ps = s->prevActive();
-                    double durStretch = s->computeDurationStretch(ps, minTicks, maxTicks);
-                    s->setStretch(durStretch * usrStretch);
-                    // durStretch := spacing factor purely determined by the duration of the note.
-                    // usrStretch := spacing factor determined by user settings.
-                    // stretchCoeff := spacing factor used internally for computations
-                    double minStretchedWidth = minNoteSpace * durStretch * usrStretch * stretchCoeff;
-                    double squeezableSpace = m->squeezableSpace();
-                    squeezableSpace += s->shortestChordRest() == s->ticks() ? minStretchedWidth - w : 0.0;
-                    m->setSqueezableSpace(squeezableSpace);
-                    w = std::max(w, minStretchedWidth);
-                }
-            }
-
-            // Adjust spacing for cross-beam situations
-            s->computeCrossBeamType(ns);
-            CrossBeamType crossBeamType = s->crossBeamType();
-            double displacement = ctx.conf().noteHeadWidth() - ctx.conf().styleMM(Sid::stemWidth);
-            if (crossBeamType.upDown && crossBeamType.canBeAdjusted) {
-                s->setWidthOffset(s->widthOffset() + displacement);
-                w += displacement;
-                m->setSqueezableSpace(m->squeezableSpace() - displacement);
-            } else if (crossBeamType.downUp && crossBeamType.canBeAdjusted) {
-                s->setWidthOffset(s->widthOffset() - displacement);
-                w -= displacement;
-                m->setSqueezableSpace(m->squeezableSpace() - displacement);
-            }
-            if (crossBeamType.upDown) {
-                // Even if it can't be adjusted, the up-down case needs enforced
-                // this minimum width to avoid stems overlapping weirdly
-                w = std::max(w, 2 * displacement);
-                m->setSqueezableSpace(m->squeezableSpace() - 2 * displacement);
-            }
-
-            // look back for collisions with previous segments
-            // this is time consuming (ca. +5%) and probably requires more optimization
-            if (s == fs) {     // don't let the second segment cross measure start (not covered by the loop below)
-                w = std::max(w, HorizontalSpacing::minLeft(ns, ls) - s->x());
-            }
-
-            int n = 1;
-            for (Segment* ps = s; ps; ps=ps->prevActive()) {
-                assert(ps); // ps should never be nullptr but better be safe.
-                if (!ps) {
-                    break;
-                }
-                if (ps->isRightAligned()) {
-                    continue;
-                }
-
-                double minHorColDistance = HorizontalSpacing::minHorizontalCollidingDistance(ps,
-                                                                                             ns,
-                                                                                             ctx.state().segmentShapeSqueezeFactor());
-                double ww = minHorColDistance - (s->x() - ps->x());
-                if (ps == fs) {
-                    ww = std::max(ww, HorizontalSpacing::minLeft(ns, ls) - s->x());
-                }
-
-                if (ww > w) {
-                    // overlap !
-                    // distribute extra space between segments ps - ss;
-                    // only ChordRest segments get more space
-                    // TODO: is there a special case n == 0 ?
-                    m->setSqueezableSpace(m->squeezableSpace() - (ww - w));
-                    double d = (ww - w) / n;
-                    double xx = ps->x();
-                    bool foundAtLeastOneCrSegment = false;
-                    for (Segment* ss = ps; ss != s;) {
-                        Segment* ns1 = ss->nextActive();
-                        double ww1 = ss->width(LD_ACCESS::BAD);
-                        if (ss->isChordRestType()) {
-                            foundAtLeastOneCrSegment = true;
-                            ww1 += d;
-                            ss->setWidth(ww1);
-                        }
-                        xx += ww1;
-                        ns1->mutldata()->setPosX(xx);
-                        ss = ns1;
-                    }
-                    if (s->isChordRestType() || ps == s || !foundAtLeastOneCrSegment) {
-                        w += d;
-                    }
-                    x = xx;
-                    break;
-                }
-                if (ps->isChordRestType()) {
-                    ++n;
-                }
-            }
-            double extraLeadingSpace = ns->extraLeadingSpace().val() * m->spatium();
-            s->setWidthOffset(s->widthOffset() + extraLeadingSpace);
-            extraLeadingSpace = std::max(extraLeadingSpace, -w);
-            w += extraLeadingSpace;
-        } else {
-            w = s->minRight();
-        }
-        s->setWidth(w);
-        x += w;
-        s = s->next();
-    }
-    m->setSqueezableSpace(std::max(0.0, std::min(m->squeezableSpace(), x - ctx.conf().styleMM(Sid::minMeasureWidth))));
-    m->setLayoutStretch(stretchCoeff);
-    m->setWidth(x);
-
-    // PASS 2: now put in the right-aligned segments
-    HorizontalSpacing::spaceRightAlignedSegments(m, ctx.state().segmentShapeSqueezeFactor());
-
-    // Check against minimum width and increase if needed (MMRest minWidth is guaranteed elsewhere)
-    double minWidth = computeMinMeasureWidth(m, ctx);
-    if (m->width() < minWidth && !overrideMinMeasureWidth) {
-        m->stretchToTargetWidth(minWidth);
-        m->setWidthLocked(true);
-    } else {
-        m->setWidthLocked(false);
-    }
-}
-
-double MeasureLayout::computeMinMeasureWidth(Measure* m, LayoutContext& ctx)
-{
-    double minWidth = ctx.conf().styleMM(Sid::minMeasureWidth);
-    double maxWidth = m->system()->width() - m->system()->leftMargin(); // maximum available system width (left margin accounts for possible indentation)
-    if (maxWidth <= 0) {
-        // System width may not yet be available for the linear mode (e.g. continuous view)
-        // Will use the minimum width from the style in this case
-        maxWidth = minWidth;
-    }
-    minWidth = std::min(minWidth, maxWidth); // Accounts for a case where the user may set the minMeasureWidth to a value larger than the available system width
-    if (m->ticks() < m->timesig()) { // Accounts for shortened measure (e.g. anacrusis)
-        minWidth *= (m->ticks() / m->timesig()).toDouble();
-    }
-    Segment* firstCRSegment = m->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
-    if (!firstCRSegment) {
-        return minWidth;
-    }
-    if (firstCRSegment == m->firstEnabled()) {
-        return minWidth;
-    }
-    // If there is a header, don't count the width of the header.
-    // Start counting from the "virtual" position of the preceding barline if there wasn't the header.
-    double startPosition = firstCRSegment->x() - firstCRSegment->minLeft();
-    if (firstCRSegment->hasAccidentals()) {
-        startPosition -= ctx.conf().styleMM(Sid::barAccidentalDistance);
-    } else {
-        startPosition -= ctx.conf().styleMM(Sid::barNoteDistance);
-    }
-    minWidth += startPosition;
-    minWidth = std::min(minWidth, maxWidth);
-    return minWidth;
 }
 
 //---------------------------------------------------------

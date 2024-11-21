@@ -24,11 +24,15 @@
 
 #include <QAbstractListModel>
 
+#include "async/asyncable.h"
+#include "async/channel.h"
+
+#include "engraving/dom/drumset.h"
+
 #include "percussionpanelpadmodel.h"
 
-static constexpr int NUM_COLUMNS(8);
-
-class PercussionPanelPadListModel : public QAbstractListModel
+namespace mu::notation {
+class PercussionPanelPadListModel : public QAbstractListModel, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -42,47 +46,50 @@ public:
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void load();
+    Q_INVOKABLE void init();
 
     Q_INVOKABLE void addRow();
     Q_INVOKABLE void deleteRow(int row);
+    Q_INVOKABLE bool rowIsEmpty(int row) const;
 
     Q_INVOKABLE void startDrag(int startIndex);
     Q_INVOKABLE void endDrag(int endIndex);
-    Q_INVOKABLE bool isDragActive() const;
+
+    bool hasActivePads() const { return m_drumset; }
 
     int numColumns() const { return NUM_COLUMNS; }
     int numPads() const { return m_padModels.count(); }
 
+    void setDrumset(const mu::engraving::Drumset* drumset);
+    const mu::engraving::Drumset* drumset() const { return m_drumset; }
+
     void resetLayout();
+
+    muse::async::Notification hasActivePadsChanged() const { return m_hasActivePadsChanged; }
+    muse::async::Channel<int /*pitch*/> padTriggered() const { return m_triggeredChannel; }
 
 signals:
     void numPadsChanged();
+    void rowIsEmptyChanged(int row, bool empty);
 
 private:
+    static constexpr int NUM_COLUMNS = 8;
+
     enum Roles {
         PadModelRole = Qt::UserRole + 1,
     };
 
-    //! NOTE: Probably a placeholder struct...
-    struct PadInfo {
-        QString instrumentName;
-
-        QString keyboardShortcut;
-        QString midiNote;
-
-        bool isEmptySlot = true;
-
-        bool isValid() const
-        {
-            return !instrumentName.isEmpty() && !keyboardShortcut.isEmpty() && !midiNote.isEmpty();
-        }
-    };
-
+    bool indexIsValid(int index) const;
     void movePad(int fromIndex, int toIndex);
 
-    QList<PercussionPanelPadModel*> createDefaultItems();
+    int numEmptySlotsAtRow(int row) const;
+
+    const mu::engraving::Drumset* m_drumset = nullptr;
     QList<PercussionPanelPadModel*> m_padModels;
 
     int m_dragStartIndex = -1;
+
+    muse::async::Notification m_hasActivePadsChanged;
+    muse::async::Channel<int /*pitch*/> m_triggeredChannel;
 };
+}

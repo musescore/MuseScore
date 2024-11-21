@@ -34,6 +34,9 @@ using namespace muse::workspace;
 using namespace muse::actions;
 using namespace muse::extensions;
 
+static const ActionCode TOGGLE_UNDO_HISTORY_PANEL_CODE = "toggle-undo-history-panel";
+static const QString VIEW_TOGGLE_UNDO_HISTORY_PANEL_ITEM_ID = "view/toggle-undo-history-panel";
+
 static QString makeId(const ActionCode& actionCode, int itemIndex)
 {
     return QString::fromStdString(actionCode) + QString::number(itemIndex);
@@ -58,9 +61,14 @@ void AppMenuModel::load()
         makeFormatMenu(),
         makeToolsMenu(),
         makePluginsMenu(),
-        makeHelpMenu(),
-        makeDiagnosticMenu()
     };
+
+    if (globalConfiguration()->devModeEnabled()) {
+        items << makeHelpMenu(false);
+        items << makeDiagnosticsMenu();
+    } else {
+        items << makeHelpMenu(true);
+    }
 
     setItems(items);
 
@@ -114,6 +122,31 @@ void AppMenuModel::setupConnections()
         MenuItem& pluginsItem = findMenu("menu-plugins");
         pluginsItem.setSubitems(makePluginsMenuSubitems());
     });
+
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        auto stack = undoStack();
+        if (stack) {
+            stack->stackChanged().onNotify(this, [this]() {
+                updateUndoRedoItems();
+            });
+        }
+
+        updateUndoRedoItems();
+    });
+}
+
+void AppMenuModel::onActionsStateChanges(const muse::actions::ActionCodeList& codes)
+{
+    AbstractMenuModel::onActionsStateChanges(codes);
+
+    if (muse::contains(codes, TOGGLE_UNDO_HISTORY_PANEL_CODE)) {
+        // Appears both in Edit and View menus; AbstractMenuModel::onActionsStateChanges()
+        // handles only one occurrence per action code
+        MenuItem& item = findItem(VIEW_TOGGLE_UNDO_HISTORY_PANEL_ITEM_ID);
+        if (item.isValid()) {
+            item.setState(uiActionsRegister()->actionState(TOGGLE_UNDO_HISTORY_PANEL_CODE));
+        }
+    }
 }
 
 MenuItem* AppMenuModel::makeMenuItem(const ActionCode& actionCode, MenuItemRole menuRole)
@@ -164,6 +197,7 @@ MenuItem* AppMenuModel::makeEditMenu()
     MenuItemList editItems {
         makeMenuItem("undo"),
         makeMenuItem("redo"),
+        makeMenuItem(TOGGLE_UNDO_HISTORY_PANEL_CODE),
         makeSeparator(),
         makeMenuItem("notation-cut"),
         makeMenuItem("notation-copy"),
@@ -183,8 +217,34 @@ MenuItem* AppMenuModel::makeEditMenu()
     return makeMenu(TranslatableString("appshell/menu/edit", "&Edit"), editItems, "menu-edit");
 }
 
+mu::notation::INotationUndoStackPtr AppMenuModel::undoStack() const
+{
+    mu::notation::INotationPtr notation = globalContext()->currentNotation();
+    return notation ? notation->undoStack() : nullptr;
+}
+
+void AppMenuModel::updateUndoRedoItems()
+{
+    auto stack = undoStack();
+
+    MenuItem& undoItem = findItem(ActionCode("undo"));
+    const TranslatableString undoActionName = stack ? stack->topMostUndoActionName() : TranslatableString();
+    undoItem.setTitle(undoActionName.isEmpty()
+                      ? TranslatableString("action", "Undo")
+                      : TranslatableString("action", "Undo ‘%1’").arg(undoActionName));
+
+    MenuItem& redoItem = findItem(ActionCode("redo"));
+    const TranslatableString redoActionName = stack ? stack->topMostRedoActionName() : TranslatableString();
+    redoItem.setTitle(redoActionName.isEmpty()
+                      ? TranslatableString("action", "Redo")
+                      : TranslatableString("action", "Redo ‘%1’").arg(redoActionName));
+}
+
 MenuItem* AppMenuModel::makeViewMenu()
 {
+    MenuItem* historyItem = makeMenuItem(TOGGLE_UNDO_HISTORY_PANEL_CODE);
+    historyItem->setId(VIEW_TOGGLE_UNDO_HISTORY_PANEL_ITEM_ID);
+
     MenuItemList viewItems {
 #ifndef Q_OS_MAC
         makeMenuItem("fullscreen"),
@@ -194,6 +254,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-instruments"),
         makeMenuItem("inspector"),
         makeMenuItem("toggle-selection-filter"),
+        historyItem,
         makeMenuItem("toggle-navigator"),
         makeMenuItem("toggle-braille-panel"),
         makeMenuItem("toggle-timeline"),
@@ -323,30 +384,35 @@ MenuItemList AppMenuModel::makePluginsMenuSubitems()
     return subitems;
 }
 
-MenuItem* AppMenuModel::makeHelpMenu()
+MenuItem* AppMenuModel::makeHelpMenu(bool addDiagnosticsSubMenu)
 {
-    MenuItemList helpItems {
-        makeMenuItem("online-handbook"),
-        makeSeparator(),
-        makeMenuItem("ask-help"),
-        makeSeparator(),
-        makeMenuItem("about-musescore", MenuItemRole::AboutRole),
-        makeMenuItem("about-qt", MenuItemRole::AboutQtRole),
-        makeMenuItem("about-musicxml"),
-        makeSeparator(),
-        makeMenuItem("revert-factory")
-    };
+    MenuItemList helpItems;
 
-    // put on top
     if (updateConfiguration()->isAppUpdatable()) {
-        helpItems.push_front(makeSeparator());
-        helpItems.push_front(makeMenuItem("check-update"));
+        helpItems << makeMenuItem("check-update");
+        helpItems << makeSeparator();
     }
+
+    helpItems << makeMenuItem("online-handbook");
+    helpItems << makeMenuItem("ask-help");
+    helpItems << makeSeparator();
+
+    if (addDiagnosticsSubMenu) {
+        helpItems << makeDiagnosticsMenu();
+        helpItems << makeSeparator();
+    }
+
+    helpItems << makeMenuItem("about-musescore", MenuItemRole::AboutRole);
+    helpItems << makeMenuItem("about-qt", MenuItemRole::AboutQtRole);
+    helpItems << makeMenuItem("about-musicxml");
+
+    helpItems << makeSeparator();
+    helpItems << makeMenuItem("revert-factory");
 
     return makeMenu(TranslatableString("appshell/menu/help", "&Help"), helpItems, "menu-help");
 }
 
-MenuItem* AppMenuModel::makeDiagnosticMenu()
+MenuItem* AppMenuModel::makeDiagnosticsMenu()
 {
     MenuItemList systemItems {
         makeMenuItem("diagnostic-show-paths"),
@@ -356,7 +422,7 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
 
     MenuItemList items {
         makeMenuItem("diagnostic-save-diagnostic-files"),
-        makeMenu(TranslatableString("appshell/menu/diagnostic", "&System"), systemItems, "menu-system")
+        makeMenu(TranslatableString("appshell/menu/diagnostics", "&System"), systemItems, "menu-system")
     };
 
 #ifdef MUSE_MODULE_MUSESAMPLER
@@ -368,10 +434,14 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
         museSamplerItems << makeMenuItem("musesampler-reload");
     }
 
-    items << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Muse Sampler"), museSamplerItems, "menu-musesampler");
+    items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Muse Sampler"), museSamplerItems, "menu-musesampler");
 #endif
 
     if (globalConfiguration()->devModeEnabled()) {
+        MenuItemList actionsItems {
+            makeMenuItem("diagnostic-show-actions")
+        };
+
         MenuItemList accessibilityItems {
             makeMenuItem("diagnostic-show-navigation-tree"),
             makeMenuItem("diagnostic-show-accessible-tree"),
@@ -398,14 +468,15 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
             makeMenuItem("autobot-show-scripts"),
         };
 
-        items << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Accessibility"), accessibilityItems, "menu-accessibility")
-              << makeMenu(TranslatableString("appshell/menu/diagnostic", "&Engraving"), engravingItems, "menu-engraving")
-              << makeMenu(TranslatableString("appshell/menu/diagnostic", "E&xtensions"), extensionsItems, "menu-extensions")
-              << makeMenu(TranslatableString("appshell/menu/diagnostic", "Auto&bot"), autobotItems, "menu-autobot")
+        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "A&ctions"), actionsItems, "menu-actions")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Accessibility"), accessibilityItems, "menu-accessibility")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Engraving"), engravingItems, "menu-engraving")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics", "E&xtensions"), extensionsItems, "menu-extensions")
+              << makeMenu(TranslatableString("appshell/menu/diagnostics", "Auto&bot"), autobotItems, "menu-autobot")
               << makeMenuItem("multiinstances-dev-show-info");
     }
 
-    return makeMenu(TranslatableString("appshell/menu/diagnostic", "&Diagnostic"), items, "menu-diagnostic");
+    return makeMenu(TranslatableString("appshell/menu/diagnostics", "&Diagnostics"), items, "menu-diagnostic");
 }
 
 MenuItemList AppMenuModel::makeRecentScoresItems()
@@ -559,6 +630,7 @@ MenuItemList AppMenuModel::makeTextItems()
         makeSeparator(),
         makeMenuItem("system-text"),
         makeMenuItem("staff-text"),
+        makeMenuItem("dynamics"),
         makeMenuItem("expression-text"),
         makeMenuItem("rehearsalmark-text"),
         makeMenuItem("instrument-change-text"),
@@ -663,16 +735,22 @@ MenuItemList AppMenuModel::makePluginsItems()
     auto addMenuItems = [this](MenuItemList& items, const Manifest& m) {
         if (m.actions.size() == 1) {
             const muse::extensions::Action& a = m.actions.at(0);
+            if (!a.showOnAppmenu) {
+                return;
+            }
             items << makeMenuItem(makeUriQuery(m.uri, a.code).toString(), TranslatableString::untranslatable(a.title));
         } else {
             MenuItemList sub;
             for (const muse::extensions::Action& a : m.actions) {
-                if (a.hidden) {
+                if (!a.showOnAppmenu) {
                     continue;
                 }
                 sub << makeMenuItem(makeUriQuery(m.uri, a.code).toString(), TranslatableString::untranslatable(a.title));
             }
-            items << makeMenu(TranslatableString::untranslatable(m.title), sub);
+
+            if (!sub.empty()) {
+                items << makeMenu(TranslatableString::untranslatable(m.title), sub);
+            }
         }
     };
 

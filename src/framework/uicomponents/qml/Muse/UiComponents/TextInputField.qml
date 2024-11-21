@@ -103,7 +103,8 @@ FocusScope {
         enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.EditableText
-        accessible.name: Boolean(valueInput.text) ? valueInput.text + " " + measureUnitsLabel.text : valueInput.placeholderText
+        accessible.name: Boolean(valueInput.text) ? valueInput.text + (measureUnitsLabel.text !== "" ? " " + measureUnitsLabel.text : "")
+                                                  : valueInput.placeholderText
         accessible.visualItem: root
         accessible.text: valueInput.text
         accessible.selectedText: valueInput.selectedText
@@ -204,7 +205,6 @@ FocusScope {
                 var isAcceptKey = event.key === Qt.Key_Enter || event.key === Qt.Key_Return
                 var isEscapeKey = event.key === Qt.Key_Escape
                 if (isAcceptKey || isEscapeKey) {
-                    root.focus = false
                     root.textEditingFinished(valueInput.text)
                 }
 
@@ -214,6 +214,10 @@ FocusScope {
 
                 if (isEscapeKey) {
                     root.escaped()
+                }
+
+                if (isAcceptKey || isEscapeKey) {
+                    root.focus = false
                 }
             }
 

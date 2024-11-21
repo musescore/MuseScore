@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
@@ -16,7 +16,7 @@
       <staffDistance>5.5</staffDistance>
       <minSystemDistance>9.25</minSystemDistance>
       <romanNumeralFontFace>Edwin</romanNumeralFontFace>
-      <Spatium>2.11667</Spatium>
+      <spatium>2.11667</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -370,14 +370,16 @@
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <Rest>
-            <durationType>whole</durationType>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>

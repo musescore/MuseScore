@@ -224,4 +224,16 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::ARTICULATION][ElementType::NOTE] = 0.25 * spatium;
     table[ElementType::ARTICULATION][ElementType::REST] = 0.25 * spatium;
     table[ElementType::ARTICULATION][ElementType::ACCIDENTAL] = 0.25 * spatium;
+
+    table[ElementType::LAISSEZ_VIB_SEGMENT][ElementType::NOTE] = 0.5 * spatium;
+    table[ElementType::LAISSEZ_VIB_SEGMENT][ElementType::REST] = 0.5 * spatium;
+    table[ElementType::LAISSEZ_VIB_SEGMENT][ElementType::ACCIDENTAL] = 0.35 * spatium;
+    table[ElementType::LAISSEZ_VIB_SEGMENT][ElementType::BAR_LINE] = 0.35 * spatium;
+    table[ElementType::LAISSEZ_VIB_SEGMENT][ElementType::STEM] = 0.35 * spatium;
+
+    // Measure repeat set same values as note
+    table[ElementType::MEASURE_REPEAT] = table[ElementType::NOTE];
+    for (auto& elem : table) {
+        elem[ElementType::MEASURE_REPEAT] = elem[ElementType::NOTE];
+    }
 }

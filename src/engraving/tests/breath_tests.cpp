@@ -53,7 +53,7 @@ TEST_F(Engraving_BreathTests, breath)
     score->doLayout();
 
     // do
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving breath tests"));
     score->cmdSelectAll();
     for (EngravingItem* e : score->selection().elements()) {
         EditData dd(0);

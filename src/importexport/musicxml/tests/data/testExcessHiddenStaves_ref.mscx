@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
@@ -36,7 +36,7 @@
       <footerFontSize>10</footerFontSize>
       <copyrightFontSize>10</copyrightFontSize>
       <pageNumberFontSize>10</pageNumberFontSize>
-      <Spatium>1.75</Spatium>
+      <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -745,7 +745,7 @@
           <Beam>
             <StemDirection>down</StemDirection>
             <l1>80</l1>
-            <l2>76</l2>
+            <l2>74</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -810,7 +810,7 @@
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>32</l1>
+            <l1>30</l1>
             <l2>34</l2>
             </Beam>
           <Chord>
@@ -1155,7 +1155,7 @@
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>38</l1>
+            <l1>40</l1>
             <l2>42</l2>
             </Beam>
           <Chord>
@@ -1228,7 +1228,7 @@
         <voice>
           <Beam>
             <StemDirection>up</StemDirection>
-            <l1>-6</l1>
+            <l1>-8</l1>
             <l2>-12</l2>
             </Beam>
           <Chord>
@@ -1659,7 +1659,7 @@
         <voice>
           <Beam>
             <StemDirection>up</StemDirection>
-            <l1>-14</l1>
+            <l1>-16</l1>
             <l2>-20</l2>
             </Beam>
           <Chord>

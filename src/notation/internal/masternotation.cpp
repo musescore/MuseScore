@@ -265,7 +265,7 @@ static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions
                     if (!dList.empty()) {
                         mu::engraving::Fraction ltick = tick;
                         int k = 0;
-                        foreach (mu::engraving::TDuration d, dList) {
+                        for (mu::engraving::TDuration d : dList) {
                             mu::engraving::Segment* seg = measure->getSegment(mu::engraving::SegmentType::ChordRest, ltick);
                             if (k < puRests.count()) {
                                 rest = static_cast<mu::engraving::Rest*>(puRests[k]->linkedClone());
@@ -477,7 +477,9 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
 
     {
         mu::engraving::ScoreLoad sl;
-        score->doLayout();
+        for (mu::engraving::Score* s : score->scoreList()) {
+            s->doLayout();
+        }
     }
 }
 
@@ -521,7 +523,7 @@ void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
         return;
     }
 
-    undoStack()->prepareChanges();
+    undoStack()->prepareChanges(TranslatableString("undoableAction", "Add/remove parts"));
 
     // Delete old excerpts (that are not included in the new list)
     for (IExcerptNotationPtr excerptNotation : m_excerpts) {
@@ -564,7 +566,7 @@ void MasterNotation::resetExcerpt(IExcerptNotationPtr excerptNotation)
 
     TRACEFUNC;
 
-    undoStack()->prepareChanges();
+    undoStack()->prepareChanges(TranslatableString("undoableAction", "Reset part"));
 
     mu::engraving::Excerpt* oldExcerpt = get_impl(excerptNotation)->excerpt();
     masterScore()->deleteExcerpt(oldExcerpt);

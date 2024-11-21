@@ -23,11 +23,7 @@
 
 #include "io/path.h"
 #include "engraving/engravingerrors.h"
-
-namespace mu::engraving {
-extern Err importMusicXml(MasterScore*, const muse::String&, bool forceMode);
-extern Err importCompressedMusicXml(MasterScore*, const muse::String&, bool forceMode);
-}
+#include "musicxml/import/importmusicxml.h"
 
 using namespace mu::iex::musicxml;
 using namespace mu::engraving;

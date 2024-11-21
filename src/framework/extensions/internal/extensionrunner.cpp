@@ -37,17 +37,17 @@ ExtensionRunner::ExtensionRunner(const modularity::ContextPtr& iocCtx)
 Ret ExtensionRunner::run(const Action& action)
 {
     ScriptEngine engine(m_iocContext, action.apiversion);
-    engine.setScriptPath(action.main);
+    engine.setScriptPath(action.path);
     Ret ret = engine.evaluate();
     if (!ret) {
-        LOGE() << "failed evaluate js script: " << action.main
+        LOGE() << "failed evaluate js script: " << action.path
                << ", err: " << ret.toString();
         return make_ret(Err::ExtLoadError);
     }
 
-    ret = engine.call("main");
+    ret = engine.call(action.func);
     if (!ret) {
-        LOGE() << "failed call main function of script: " << action.main
+        LOGE() << "failed call main function of script: " << action.path
                << ", err: " << ret.toString();
         return make_ret(Err::ExtBadFormat);
     }

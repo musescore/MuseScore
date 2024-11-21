@@ -51,7 +51,7 @@ Item {
         return false
     }
 
-    readonly property var currentPage: pageLoader.item
+    readonly property Item currentPage: pageLoader.item
 
     signal done
 
@@ -73,6 +73,14 @@ Item {
 
     function focusOnSelected() {
         pageLoader.item.navigation.requestActive()
+    }
+
+    Component.onCompleted: {
+        theInstrumentsOnScoreModel.load()
+    }
+
+    InstrumentsOnScoreListModel {
+        id: theInstrumentsOnScoreModel
     }
 
     StyledTabBar {
@@ -168,6 +176,7 @@ Item {
 
         ChooseInstrumentsPage {
             navigationSection: root.navigationSection
+            instrumentsOnScoreModel: theInstrumentsOnScoreModel
         }
     }
 

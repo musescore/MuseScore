@@ -1086,6 +1086,16 @@ void Segment::checkEmpty() const
     }
 }
 
+double Segment::xPosInSystemCoords() const
+{
+    return ldata()->pos().x() + measure()->x();
+}
+
+void Segment::setXPosInSystemCoords(double x)
+{
+    mutldata()->setPosX(x - measure()->x());
+}
+
 //---------------------------------------------------------
 //   swapElements
 //---------------------------------------------------------
@@ -2208,8 +2218,8 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     default: {
         EngravingItem* el = e;
         Segment* seg = this;
-        if (e->type() == ElementType::TIE_SEGMENT
-            || e->type() == ElementType::GLISSANDO_SEGMENT) {
+        if (e->type() == ElementType::TIE_SEGMENT || e->type() == ElementType::LAISSEZ_VIB_SEGMENT
+            || e->type() == ElementType::GLISSANDO_SEGMENT || e->type() == ElementType::NOTELINE_SEGMENT) {
             SpannerSegment* s = toSpannerSegment(e);
             Spanner* sp = s->spanner();
             el = sp->startElement();
@@ -2485,7 +2495,6 @@ void Segment::createShape(staff_idx_t staffIdx)
             RectF r = rendering::score::TLayout::layoutRect(bl, lctx);
             s.add(r.translated(bl->pos() + bl->staffOffset()), bl);
         }
-        s.addHorizontalSpacing(bl, 0, 0);
         return;
     }
 
@@ -2506,7 +2515,7 @@ void Segment::createShape(staff_idx_t staffIdx)
                 // A full measure rest in a measure with multiple voices must be ignored
                 continue;
             }
-            if (e->isMMRest()) {
+            if (e->isMMRest() || (e->isMeasureRepeat() && toMeasureRepeat(e)->numMeasures() > 1)) {
                 continue;
             }
             if (e->addToSkyline()) {
@@ -2750,169 +2759,6 @@ bool Segment::hasAccidentals() const
         }
     }
     return false;
-}
-
-/************************************************************************
- * computeCrossBeamType
- * Looks at the chords of this segment and next segment to detect beams
- * with alternating stem directions (upDown: this chord is up, next chord
- * is down; downUp: this chord is down, next chord is up). Needed for
- * correct horizontal spacing of cross-beam situations.
- * **********************************************************************/
-
-void Segment::computeCrossBeamType(Segment* nextSeg)
-{
-    m_crossBeamType.reset();
-    if (!isChordRestType() || !nextSeg || !nextSeg->isChordRestType()) {
-        return;
-    }
-    bool upDown = false;
-    bool downUp = false;
-    bool canBeAdjusted = true;
-    // Spacing can be adjusted for cross-beam cases only if there aren't
-    // chords in other voices in this or next segment.
-    for (EngravingItem* e : elist()) {
-        if (!e || !e->isChordRest() || !e->staff()->visible()) {
-            continue;
-        }
-        ChordRest* thisCR = toChordRest(e);
-        if (!thisCR->visible() || thisCR->isFullMeasureRest()) {
-            continue;
-        }
-        if (!thisCR->beam()) {
-            canBeAdjusted = false;
-            continue;
-        }
-        Beam* beam = thisCR->beam();
-        for (EngravingItem* ee : nextSeg->elist()) {
-            if (!ee || !ee->isChordRest() || !ee->staff()->visible()) {
-                continue;
-            }
-            ChordRest* nextCR = toChordRest(ee);
-            if (!nextCR->visible() || nextCR->isFullMeasureRest()) {
-                continue;
-            }
-            if (!nextCR->beam()) {
-                canBeAdjusted = false;
-                continue;
-            }
-            if (nextCR->beam() != beam) {
-                continue;
-            }
-            if (thisCR->up() == nextCR->up()) {
-                return;
-            }
-            if (thisCR->up() && !nextCR->up()) {
-                upDown = true;
-            }
-            if (!thisCR->up() && nextCR->up()) {
-                downUp = true;
-            }
-            if (upDown && downUp) {
-                return;
-            }
-        }
-    }
-    m_crossBeamType.upDown = upDown;
-    m_crossBeamType.downUp = downUp;
-    m_crossBeamType.canBeAdjusted = canBeAdjusted;
-}
-
-/***********************************************
- * stretchSegmentsToWidth
- * Stretch a group of (chordRestType) segments
- * by the specified amount. Uses the spring-rod
- * method.
- * *********************************************/
-
-void Segment::stretchSegmentsToWidth(std::vector<Spring>& springs, double width)
-{
-    if (springs.empty() || muse::RealIsEqualOrLess(width, 0.0)) {
-        return;
-    }
-
-    std::sort(springs.begin(), springs.end(), [](const Spring& a, const Spring& b) { return a.preTension < b.preTension; });
-    double inverseSpringConst = 0.0;
-    double force = 0.0;
-
-    //! NOTE springs.cbegin() != springs.cend() because of the emptiness check at the top
-    auto spring = springs.cbegin();
-    do {
-        inverseSpringConst += 1 / spring->springConst;
-        width += spring->width;
-        force = width / inverseSpringConst;
-        ++spring;
-    } while (spring != springs.cend() && !(force < spring->preTension));
-
-    for (const Spring& spring2 : springs) {
-        if (force > spring2.preTension) {
-            double newWidth = force / spring2.springConst;
-            spring2.segment->setWidth(newWidth + spring2.segment->widthOffset());
-        }
-    }
-}
-
-double Segment::computeDurationStretch(const Segment* prevSeg, Fraction minTicks, Fraction maxTicks)
-{
-    auto doComputeDurationStretch = [&] (Fraction curTicks) -> double
-    {
-        double slope = style().styleD(Sid::measureSpacing);
-
-        static constexpr double longNoteThreshold = Fraction(1, 16).toDouble();
-
-        if (measure()->isMMRest() && isChordRestType()) { // This is an MM rest segment
-            static constexpr int minMMRestCount  = 2; // MMRests with less bars than this don't receive additional spacing
-            int count =std::max(measure()->mmRestCount() - minMMRestCount, 0);
-            Fraction timeSig = measure()->timesig();
-            curTicks = timeSig + Fraction(count, timeSig.denominator());
-        }
-
-        // Prevent long notes from being too wide
-        static constexpr double maxRatio = 32.0;
-        double dMinTicks = minTicks.toDouble();
-        double dMaxTicks = maxTicks.toDouble();
-        if (muse::RealIsEqualOrMore(dMaxTicks / dMinTicks, 2.0) && dMinTicks < longNoteThreshold) {
-            /* HACK: we trick the system to ignore the shortest note and use the "next"
-             * shortest. For example, if the shortest is a 32nd, we make it a 16th. */
-            dMinTicks *= 2.0;
-        }
-        double maxSysRatio = dMaxTicks / dMinTicks;
-        double ratio = curTicks.toDouble() / dMinTicks;
-        if (maxSysRatio > maxRatio) {
-            double A = (dMinTicks * (maxRatio - 1)) / (dMaxTicks - dMinTicks);
-            double B = (dMaxTicks - (maxRatio * dMinTicks)) / (dMaxTicks - dMinTicks);
-            ratio = A * ratio + B;
-        }
-
-        double str = pow(slope, log2(ratio));
-
-        // Prevents long notes from being too narrow.
-        if (dMinTicks > longNoteThreshold) {
-            double empFactor = 0.6;
-            str = str * (1 - empFactor + empFactor * sqrt(dMinTicks / longNoteThreshold));
-        }
-
-        return str;
-    };
-
-    bool hasAdjacent = isChordRestType() && shortestChordRest() == ticks();
-    bool prevHasAdjacent = prevSeg && (prevSeg->isChordRestType() && prevSeg->shortestChordRest() == prevSeg->ticks());
-    // The actual duration of a segment, i.e. ticks(), can be shorter than its shortest note if
-    // another voice comes in. In such case, hasAdjacent = false. This info is key to correct spacing.
-    double durStretch;
-    if (hasAdjacent || measure()->isMMRest()) { // Normal segments
-        durStretch = doComputeDurationStretch(ticks());
-    } else { // The following calculations are key to correct spacing of polyrythms
-        Fraction curShortest = shortestChordRest();
-        Fraction prevShortest = prevSeg ? prevSeg->shortestChordRest() : Fraction(0, 1);
-        if (prevSeg && !prevHasAdjacent && prevShortest < curShortest) {
-            durStretch = doComputeDurationStretch(prevShortest) * (ticks() / prevShortest).toDouble();
-        } else {
-            durStretch = doComputeDurationStretch(curShortest) * (ticks() / curShortest).toDouble();
-        }
-    }
-
-    return durStretch;
 }
 
 bool Segment::goesBefore(const Segment* nextSegment) const

@@ -26,105 +26,157 @@ import Muse.UiComponents 1.0
 import Muse.GraphicalEffects 1.0
 import MuseScore.NotationScene 1.0
 
-Rectangle {
+DropArea {
     id: root
 
     property var padModel: null
 
-    property bool isEmptySlot: Boolean(root.padModel) ? root.padModel.isEmptySlot : true
+    property bool panelEnabled: false
 
     property int panelMode: -1
     property bool useNotationPreview: false
+    property bool showEditOutline: false
 
-    property alias totalBorderWidth: contentColumn.anchors.margins
+    property alias totalBorderWidth: padLoader.anchors.margins
+    property alias showOriginBackground: originBackground.visible
+    property alias draggableArea: draggableArea
 
-    radius: root.width / 6
+    property var dragParent: null
+    signal dragStarted()
+    signal dragCancelled()
 
-    color: ui.theme.backgroundPrimaryColor
+    QtObject {
+        id: prv
+        readonly property bool isEmptySlot: Boolean(root.padModel) ? root.padModel.isEmptySlot : true
+        readonly property color enabledBackgroundColor: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityNormal)
+        readonly property color disabledBackgroundColor: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.itemOpacityDisabled)
+    }
 
-    border.color: root.panelMode === PanelMode.EDIT_LAYOUT ? ui.theme.accentColor : "transparent"
-    border.width: 2
+    Rectangle {
+        id: draggableArea
 
-    Column {
-        id: contentColumn
+        // Protrudes slightly from behind the components in the loader to produce the edit mode "border with gap" effect
+        width: root.width
+        height: root.height
+
+        radius: root.width / 6
+
+        color: ui.theme.backgroundPrimaryColor
+
+        border.color: root.showEditOutline ? ui.theme.accentColor : "transparent"
+        border.width: 2
+
+        DragHandler {
+            id: dragHandler
+
+            target: draggableArea
+            enabled: root.panelMode === PanelMode.EDIT_LAYOUT && !prv.isEmptySlot
+
+            dragThreshold: 0 // prevents the flickable from stealing drag events
+
+            onActiveChanged: {
+                if (dragHandler.active) {
+                    root.dragStarted()
+                    return
+                }
+                if (!draggableArea.Drag.drop()) {
+                    root.dragCancelled()
+                }
+            }
+        }
+
+        Drag.active: dragHandler.active
+        Drag.hotSpot.x: root.width / 2
+        Drag.hotSpot.y: root.height / 2
+
+        Loader {
+            // Loads either an empty slot or the pad content
+            id: padLoader
+
+            anchors.fill: parent
+            // Defined as 1 in the spec, but causes some aliasing in practice...
+            anchors.margins: 2 + draggableArea.border.width
+
+            // Can't simply use clip as this won't take into account radius...
+            layer.enabled: ui.isEffectsAllowed
+            layer.effect: EffectOpacityMask {
+                maskSource: Rectangle {
+                    width: padLoader.width
+                    height: padLoader.height
+                    radius: draggableArea.radius - padLoader.anchors.margins
+                }
+            }
+
+            sourceComponent: prv.isEmptySlot ? emptySlotComponent : padContentComponent
+
+            Component {
+                id: padContentComponent
+
+                PercussionPanelPadContent {
+                    padModel: root.padModel
+                    panelMode: root.panelMode
+                    useNotationPreview: root.useNotationPreview
+                    dragActive: dragHandler.active
+                }
+            }
+
+            Component {
+                id: emptySlotComponent
+
+                Rectangle {
+                    id: emptySlotBackground
+                    color: root.panelEnabled ? prv.enabledBackgroundColor : prv.disabledBackgroundColor
+                }
+            }
+        }
+
+        states: [
+            State {
+                name: "DRAGGED"
+                when: dragHandler.active
+                ParentChange {
+                    target: draggableArea
+                    parent: root.dragParent
+                }
+                AnchorChanges {
+                    target: draggableArea
+                    anchors.horizontalCenter: undefined
+                    anchors.verticalCenter: undefined
+                }
+            },
+            //! NOTE: Workaround for a bug in Qt 6.2.4 - see PR #24106 comment
+            // https://bugreports.qt.io/browse/QTBUG-99436
+            State {
+                name: "DROPPED"
+                when: !dragHandler.active
+                ParentChange {
+                    target: draggableArea
+                    parent: root
+                }
+            }
+        ]
+    }
+
+    Rectangle {
+        id: originBackground
 
         anchors.fill: parent
-        anchors.margins: 2 + root.border.width // Defined as 1 in the spec, but causes some aliasing in practice...
 
-        // Can't simply use clip as this won't take into account radius...
-        layer.enabled: ui.isEffectsAllowed
-        layer.effect: EffectOpacityMask {
-            maskSource: Rectangle {
-                width: contentColumn.width
-                height: contentColumn.height
-                radius: root.radius - contentColumn.anchors.margins
-            }
-        }
+        radius: draggableArea.radius
+
+        border.color: draggableArea.border.color
+        border.width: draggableArea.border.width
+
+        color: draggableArea.color
 
         Rectangle {
-            id: mainContentArea
+            id: originBackgroundFill
 
-            width: parent.width
-            height: parent.height - separator.height - footerArea.height
+            anchors.fill: parent
+            anchors.margins: padLoader.anchors.margins
+            radius: draggableArea.radius - originBackgroundFill.anchors.margins
 
-            color: root.isEmptySlot ? ui.theme.backgroundSecondaryColor : Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.buttonOpacityNormal)
-
-            StyledTextLabel {
-                id: instrumentNameLabel
-
-                visible: !root.useNotationPreview
-
-                anchors.centerIn: parent
-                width: parent.width - root.radius
-
-                wrapMode: Text.WordWrap
-                maximumLineCount: 4
-                font: ui.theme.bodyBoldFont
-
-                text: Boolean(root.padModel) ? root.padModel.instrumentName : ""
-            }
-        }
-
-        Rectangle {
-            id: separator
-
-            width: parent.width
-            height: 1
-
-            color: root.isEmptySlot ? ui.theme.backgroundSecondaryColor : ui.theme.accentColor
-        }
-
-        Rectangle {
-            id: footerArea
-
-            width: parent.width
-            height: 24
-
-            color: ui.theme.backgroundSecondaryColor
-
-            StyledTextLabel {
-                id: shortcutLabel
-
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.margins: 6
-
-                font: ui.theme.bodyFont
-
-                text: Boolean(root.padModel) ? root.padModel.keyboardShortcut : ""
-            }
-
-            StyledTextLabel {
-                id: midiNoteLabel
-
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                anchors.margins: 6
-
-                font: ui.theme.bodyFont
-
-                text: Boolean(root.padModel) ? root.padModel.midiNote : ""
-            }
+            color: root.containsDrag ? ui.theme.buttonColor : prv.enabledBackgroundColor
         }
     }
 }

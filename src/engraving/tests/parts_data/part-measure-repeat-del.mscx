@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
       <defaultsVersion>301</defaultsVersion>
-      <Spatium>1.764</Spatium>
+      <spatium>1.764</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -804,12 +804,13 @@
         </Measure>
       </Staff>
     <Score>
+      <eid>1039382085636</eid>
       <name>Alto</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
         <defaultsVersion>301</defaultsVersion>
-        <Spatium>1.74978</Spatium>
+        <spatium>1.74978</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -1252,12 +1253,13 @@
         </Staff>
       </Score>
     <Score>
+      <eid>1700807049220</eid>
       <name>Tenor</name>
       <initialPartId>2</initialPartId>
       <Division>480</Division>
       <Style>
         <defaultsVersion>301</defaultsVersion>
-        <Spatium>1.74978</Spatium>
+        <spatium>1.74978</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>

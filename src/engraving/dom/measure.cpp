@@ -763,7 +763,6 @@ void Measure::add(EngravingItem* e)
         while (s && s->rtick() == t) {
             if (!seg->isChordRestType() && (seg->segmentType() == s->segmentType())) {
                 LOGD("there is already a <%s> segment", seg->subTypeName());
-                return;
             }
             if (seg->goesBefore(s)) {
                 break;
@@ -1970,6 +1969,14 @@ bool Measure::isFirstInSystem() const
     return system()->firstMeasure() == this;
 }
 
+bool Measure::isLastInSystem() const
+{
+    IF_ASSERT_FAILED(system()) {
+        return false;
+    }
+    return system()->lastMeasure() == this;
+}
+
 //---------------------------------------------------------
 //   isFirstInSection
 //---------------------------------------------------------
@@ -3042,9 +3049,9 @@ double Measure::userStretch() const
 //   nextElementStaff
 //---------------------------------------------------------
 
-EngravingItem* Measure::nextElementStaff(staff_idx_t staff)
+EngravingItem* Measure::nextElementStaff(staff_idx_t staff, EngravingItem* fromItem)
 {
-    EngravingItem* e = score()->selection().element();
+    EngravingItem* e = fromItem ? fromItem : score()->selection().element();
     if (!e && !score()->selection().elements().empty()) {
         e = score()->selection().elements().front();
     }
@@ -3078,9 +3085,9 @@ EngravingItem* Measure::nextElementStaff(staff_idx_t staff)
 //   prevElementStaff
 //---------------------------------------------------------
 
-EngravingItem* Measure::prevElementStaff(staff_idx_t staff)
+EngravingItem* Measure::prevElementStaff(staff_idx_t staff, EngravingItem* fromItem)
 {
-    EngravingItem* e = score()->selection().element();
+    EngravingItem* e = fromItem ? fromItem : score()->selection().element();
     if (!e && !score()->selection().elements().empty()) {
         e = score()->selection().elements().front();
     }
@@ -3141,6 +3148,9 @@ void Measure::computeTicks()
                 break;
             }
             nextSegment = nextSegment->next();
+        }
+        if (segment->ticks().isZero()) {
+            segment->setTicks(ticks() - segment->rtick());
         }
     }
 }
@@ -3245,34 +3255,6 @@ void Measure::setEndBarLineType(BarLineType val, track_idx_t track, bool visible
 }
 
 //---------------------------------------------------------
-//   basicStretch
-//---------------------------------------------------------
-
-double Measure::basicStretch() const
-{
-    double stretch = userStretch() * style().styleD(Sid::measureSpacing);
-    if (stretch < 1.0) {
-        stretch = 1.0;
-    }
-    return stretch;
-}
-
-//---------------------------------------------------------
-//   basicWidth
-//---------------------------------------------------------
-
-double Measure::basicWidth() const
-{
-    Segment* ls = last();
-    double w = (ls->x() + ls->width()) * basicStretch();
-    double minMeasureWidth = style().styleMM(Sid::minMeasureWidth);
-    if (w < minMeasureWidth) {
-        w = minMeasureWidth;
-    }
-    return w;
-}
-
-//---------------------------------------------------------
 //   checkHeader
 //---------------------------------------------------------
 
@@ -3335,24 +3317,6 @@ bool Measure::canAddStringTunings(staff_idx_t staffIdx) const
     return !alreadyHasStringTunings;
 }
 
-void Measure::stretchToTargetWidth(double targetWidth)
-{
-    if (targetWidth < width()) {
-        return;
-    }
-    std::vector<Spring> springs;
-    for (Segment& s : m_segments) {
-        if (s.isChordRestType() && s.visible() && s.enabled() && !s.allElementsInvisible()) {
-            double springConst = 1 / s.stretch();
-            double width = s.width(LD_ACCESS::BAD) - s.widthOffset();
-            double preTension = width * springConst;
-            springs.emplace_back(springConst, width, preTension, &s);
-        }
-    }
-    Segment::stretchSegmentsToWidth(springs, targetWidth - width());
-    respaceSegments();
-}
-
 Fraction Measure::maxTicks() const
 {
     Segment* s = first();
@@ -3367,23 +3331,6 @@ Fraction Measure::maxTicks() const
         s = s->next();
     }
     return maxticks;
-}
-
-Fraction Measure::shortestChordRest() const
-{
-    Fraction shortest = Fraction::max(); // Initializing at arbitrary high value
-    Fraction cur = Fraction::max();
-    Segment* s = first();
-    while (s) {
-        if (s->isChordRestType() && !s->allElementsInvisible()) {
-            cur = s->shortestChordRest();
-            if (cur < shortest) {
-                shortest = cur;
-            }
-        }
-        s = s->next();
-    }
-    return shortest;
 }
 
 void Measure::respaceSegments()

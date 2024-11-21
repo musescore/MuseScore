@@ -39,6 +39,8 @@ public:
     virtual io::path_t fallbackLibraryPath() const = 0;
 
     virtual bool shouldShowBuildNumber() const = 0;
+
+    virtual bool useLegacyAudition() const = 0;
 };
 }
 

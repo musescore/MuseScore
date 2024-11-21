@@ -231,7 +231,7 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
     longNames = t.longNames;
     shortNames = t.shortNames;
     description = t.description;
-    musicXMLid = t.musicXMLid;
+    musicXmlId = t.musicXmlId;
     staffCount = t.staffCount;
     extended = t.extended;
     minPitchA = t.minPitchA;
@@ -299,7 +299,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
         xml.tag("trackName", trackName);
     }
     xml.tag("description", description);
-    xml.tag("musicXMLid", musicXMLid);
+    xml.tag("musicXMLid", musicXmlId);
     if (extended) {
         xml.tag("extended", extended);
     }
@@ -570,7 +570,7 @@ void InstrumentTemplate::read(XmlReader& e)
                 LOGD("InstrumentTemplate:: init instrument <%s> not found", muPrintable(val));
             }
         } else if (tag == "musicXMLid") {
-            musicXMLid = e.readText();
+            musicXmlId = e.readText();
         } else if (tag == "family") {
             family = searchInstrumentFamily(e.readText());
         } else if (tag == "genre") {
@@ -762,7 +762,7 @@ const InstrumentTemplate* combinedTemplateSearch(const String& mxmlId, const Str
             int nameWeight = 0;
 
             // MusicXML ID
-            if (!it->musicXMLid.empty() && it->musicXMLid == id) {
+            if (!it->musicXmlId.empty() && it->musicXmlId == id) {
                 matchStrength += MXML_ID_WEIGHT;
             }
 
@@ -804,7 +804,7 @@ const InstrumentTemplate* searchTemplateForMusicXmlId(const String& mxmlId)
 {
     for (const InstrumentGroup* g : instrumentGroups) {
         for (const InstrumentTemplate* it : g->instrumentTemplates) {
-            if (it->musicXMLid == mxmlId) {
+            if (it->musicXmlId == mxmlId) {
                 return it;
             }
         }

@@ -33,7 +33,7 @@ Item {
 
     property var item
 
-    property var navigationPanel: null
+    property NavigationPanel navigationPanel: null
     property int navigationRow: 0
 
     RowLayout {

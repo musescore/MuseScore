@@ -49,11 +49,15 @@ Item {
     */
 
     Component.onCompleted: {
-        padGrid.model.load()
+        padGrid.model.init()
     }
 
     PercussionPanelModel {
         id: percModel
+
+        Component.onCompleted: {
+            percModel.init()
+        }
     }
 
     // TODO: Will live inside percussion panel until #22050 is implemented
@@ -85,6 +89,11 @@ Item {
         contentWidth: rowLayout.width
         contentHeight: rowLayout.height
 
+        function goToBottom() {
+            var endY = flickable.contentHeight * (1.0 - flickable.visibleArea.heightRatio)
+            flickable.contentY = endY
+        }
+
         RowLayout {
             id: rowLayout
 
@@ -105,6 +114,8 @@ Item {
                 visible: percModel.currentPanelMode === PanelMode.EDIT_LAYOUT
 
                 Repeater {
+                    id: deleteRepeater
+
                     model: padGrid.numRows
 
                     delegate: Item {
@@ -119,13 +130,24 @@ Item {
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.right: parent.right
 
-                            visible: model.index > 0
+                            visible: padGrid.numRows > 1 && padGrid.model.rowIsEmpty(model.index)
 
                             icon: IconCode.DELETE_TANK
                             backgroundRadius: deleteButton.width / 2
 
                             onClicked: {
                                 padGrid.model.deleteRow(model.index)
+                            }
+
+                            Connections {
+                                target: padGrid.model
+
+                                function onRowIsEmptyChanged(row, isEmpty) {
+                                    if (row !== model.index) {
+                                        return
+                                    }
+                                    deleteButton.visible = padGrid.numRows > 1 && isEmpty
+                                }
                             }
                         }
                     }
@@ -137,7 +159,9 @@ Item {
 
                 readonly property int numRows: Math.floor(model.numPads / numColumns)
                 readonly property int numColumns: model.numColumns
-                readonly property int spacing: 20
+                readonly property int spacing: 12
+
+                property Item draggedPad: null
 
                 Layout.alignment: Qt.AlignTop
                 Layout.fillHeight: true
@@ -166,9 +190,55 @@ Item {
                         height: parent.height + pad.totalBorderWidth - padGrid.spacing
 
                         padModel: model.padModelRole
+                        panelEnabled: percModel.enabled
                         panelMode: percModel.currentPanelMode
                         useNotationPreview: percModel.useNotationPreview
+
+                        // When dragging, only show the outline for the dragged pad and the drag target...
+                        showEditOutline: percModel.currentPanelMode === PanelMode.EDIT_LAYOUT
+                                         && (!Boolean(padGrid.draggedPad) || padGrid.draggedPad === pad || pad.containsDrag)
+                        showOriginBackground: pad.containsDrag || pad === padGrid.draggedPad
+
+                        dragParent: root
+
+                        onDragStarted: {
+                            padGrid.draggedPad = pad
+                            padGrid.model.startDrag(index)
+                        }
+
+                        onDropped: function(dropEvent) {
+                            padGrid.draggedPad = null
+                            padGrid.model.endDrag(index)
+                            dropEvent.accepted = true
+                        }
+
+                        onDragCancelled: {
+                            padGrid.draggedPad = null
+                            padGrid.model.endDrag(-1)
+                        }
                     }
+
+                    states: [
+                        // If this is the drop target - move the draggable area to the origin of the dragged pad (preview the drop)
+                        State {
+                            name: "DROP_TARGET"
+                            when: Boolean(padGrid.draggedPad) && pad.containsDrag && padGrid.draggedPad !== pad
+                            ParentChange {
+                                target: pad.draggableArea
+                                parent: padGrid.draggedPad
+                            }
+                            AnchorChanges {
+                                target: pad.draggableArea
+                                anchors.verticalCenter: padGrid.draggedPad.verticalCenter
+                                anchors.horizontalCenter: padGrid.draggedPad.horizontalCenter
+                            }
+                            // Origin background not needed for the dragged pad when a preview is taking place...
+                            PropertyChanges {
+                                target: padGrid.draggedPad
+                                showOriginBackground: false
+                            }
+                        }
+                    ]
                 }
             }
 
@@ -186,9 +256,22 @@ Item {
                 orientation: Qt.Horizontal
                 onClicked: {
                     padGrid.model.addRow()
+                    flickable.goToBottom()
                 }
             }
         }
+
+        StyledTextLabel {
+            id: panelDisabledLabel
+
+            visible: !percModel.enabled
+
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: (padGrid.cellHeight / 2) - (panelDisabledLabel.height / 2)
+
+            font: ui.theme.bodyFont
+            text: qsTrc("notation", "Select an unpitched percussion stave to use available sounds")
+        }
     }
 }
-

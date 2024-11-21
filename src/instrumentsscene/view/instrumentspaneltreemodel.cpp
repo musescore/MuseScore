@@ -324,7 +324,7 @@ void InstrumentsPanelTreeModel::load()
     beginResetModel();
     deleteItems();
 
-    m_rootItem = new RootTreeItem(m_masterNotation, m_notation);
+    m_rootItem = new RootTreeItem(m_masterNotation, m_notation, this);
 
     async::NotifyList<const Part*> masterParts = m_masterNotation->parts()->partList();
     sortParts(masterParts);

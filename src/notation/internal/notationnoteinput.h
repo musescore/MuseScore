@@ -66,6 +66,7 @@ public:
     void addSlur(mu::engraving::Slur* slur) override;
     void resetSlur() override;
     void addTie() override;
+    void addLaissezVib() override;
 
     void doubleNoteInputDuration() override;
     void halveNoteInputDuration() override;
@@ -88,7 +89,7 @@ private:
 
     EngravingItem* resolveNoteInputStartPosition() const;
 
-    void startEdit();
+    void startEdit(const muse::TranslatableString& actionName);
     void apply();
 
     void updateInputState();

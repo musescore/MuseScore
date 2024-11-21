@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
@@ -84,6 +84,8 @@
       <repeatRightFontSize>10.25</repeatRightFontSize>
       <frameFontFace>Times New Roman</frameFontFace>
       <frameFontSize>10.25</frameFontSize>
+      <noteLineFontFace>Times New Roman</noteLineFontFace>
+      <noteLineFontSize>10.25</noteLineFontSize>
       <glissandoFontFace>Times New Roman</glissandoFontFace>
       <glissandoFontSize>10.25</glissandoFontSize>
       <bendFontFace>Times New Roman</bendFontFace>
@@ -124,7 +126,7 @@
       <user11FontSize>10.25</user11FontSize>
       <user12FontFace>Times New Roman</user12FontFace>
       <user12FontSize>10.25</user12FontSize>
-      <Spatium>1.80798</Spatium>
+      <spatium>1.80798</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

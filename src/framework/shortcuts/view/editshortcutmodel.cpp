@@ -86,8 +86,8 @@ void EditShortcutModel::inputKey(Qt::Key key, Qt::KeyboardModifiers modifiers)
         return;
     }
 
-    // remove shift-modifier for keys that don't need it: letters and special keys
-    if ((modifiers & Qt::ShiftModifier) && ((key < Qt::Key_A) || (key > Qt::Key_Z) || (key >= Qt::Key_Escape))) {
+    // remove shift-modifier for non-letter keys, except a few keys
+    if ((modifiers & Qt::ShiftModifier) && !isShiftAllowed(key)) {
         modifiers &= ~Qt::ShiftModifier;
     }
 
@@ -108,6 +108,67 @@ void EditShortcutModel::inputKey(Qt::Key key, Qt::KeyboardModifiers modifiers)
     checkNewSequenceForConflicts();
 
     emit newSequenceChanged();
+}
+
+bool EditShortcutModel::isShiftAllowed(Qt::Key key)
+{
+    if (key >= Qt::Key_A && key <= Qt::Key_Z) {
+        return true;
+    }
+
+    // keys where Shift should not be removed
+    switch (key) {
+    case Qt::Key_Up:
+    case Qt::Key_Down:
+    case Qt::Key_Left:
+    case Qt::Key_Right:
+    case Qt::Key_Insert:
+    case Qt::Key_Delete:
+    case Qt::Key_Home:
+    case Qt::Key_End:
+    case Qt::Key_PageUp:
+    case Qt::Key_PageDown:
+    case Qt::Key_Space:
+    case Qt::Key_Escape:
+    case Qt::Key_F1:
+    case Qt::Key_F2:
+    case Qt::Key_F3:
+    case Qt::Key_F4:
+    case Qt::Key_F5:
+    case Qt::Key_F6:
+    case Qt::Key_F7:
+    case Qt::Key_F8:
+    case Qt::Key_F9:
+    case Qt::Key_F10:
+    case Qt::Key_F11:
+    case Qt::Key_F12:
+    case Qt::Key_F13:
+    case Qt::Key_F14:
+    case Qt::Key_F15:
+    case Qt::Key_F16:
+    case Qt::Key_F17:
+    case Qt::Key_F18:
+    case Qt::Key_F19:
+    case Qt::Key_F20:
+    case Qt::Key_F21:
+    case Qt::Key_F22:
+    case Qt::Key_F23:
+    case Qt::Key_F24:
+    case Qt::Key_F25:
+    case Qt::Key_F26:
+    case Qt::Key_F27:
+    case Qt::Key_F28:
+    case Qt::Key_F29:
+    case Qt::Key_F30:
+    case Qt::Key_F31:
+    case Qt::Key_F32:
+    case Qt::Key_F33:
+    case Qt::Key_F34:
+    case Qt::Key_F35:
+        return true;
+    default:
+        return false;
+    }
 }
 
 void EditShortcutModel::checkNewSequenceForConflicts()

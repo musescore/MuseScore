@@ -105,7 +105,7 @@ bool FirstLaunchSetupModel::askAboutClosingEarly()
     IInteractive::Result result
         = interactive()->warning(muse::trc("appshell/gettingstarted", "Are you sure you want to cancel?"),
                                  muse::trc("appshell/gettingstarted", "If you choose to cancel, then be sure to check out "
-                                                                      "our free Muse Sounds playback library on musescore.org."),
+                                                                      "our free MuseSounds playback library on musescore.org."),
                                  buttons,
                                  int(IInteractive::Button::Cancel));
 

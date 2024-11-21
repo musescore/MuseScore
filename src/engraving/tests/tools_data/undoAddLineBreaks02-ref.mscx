@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
       <lastSystemFillLimit>0</lastSystemFillLimit>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <createMultiMeasureRests>1</createMultiMeasureRests>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
-      <Spatium>1.76389</Spatium>
+      <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -602,6 +603,7 @@
         <multiMeasureRest>4</multiMeasureRest>
         <voice>
           <Rest>
+            <placement>above</placement>
             <durationType>measure</durationType>
             <duration>16/4</duration>
             </Rest>
@@ -966,6 +968,7 @@
         <multiMeasureRest>2</multiMeasureRest>
         <voice>
           <Rest>
+            <placement>above</placement>
             <durationType>measure</durationType>
             <duration>8/4</duration>
             </Rest>

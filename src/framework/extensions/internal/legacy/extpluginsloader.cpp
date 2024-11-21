@@ -92,6 +92,9 @@ ManifestList ExtPluginsLoader::manifestList(const io::path_t& rootPath) const
     io::paths_t paths = qmlsPaths(rootPath);
     for (const io::path_t& path : paths) {
         Manifest manifest = parseManifest(rootPath, path);
+        if (!manifest.isValid()) {
+            continue;
+        }
         resolvePaths(manifest, io::FileInfo(path).dirPath());
         manifests.push_back(manifest);
     }
@@ -106,6 +109,7 @@ io::paths_t ExtPluginsLoader::qmlsPaths(const io::path_t& rootPath) const
         LOGE() << "failed scan files, err: " << paths.ret.toString()
                << ", path: " << rootPath;
     }
+
     return paths.val;
 }
 
@@ -116,6 +120,30 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& rootPath, const io::p
     if (!ret) {
         LOGE() << "failed read file: " << path << ", err: " << ret.toString();
         return Manifest();
+    }
+
+    String content = String::fromUtf8(data);
+
+    //! NOTE Check is MuseScore plugin
+    {
+        size_t bracketPos = 0;
+        for (size_t i = 0; i < content.size(); ++i) {
+            if (content.at(i) == Char(u'{')) {
+                bracketPos = i;
+                break;
+            }
+        }
+
+        if (bracketPos == 0) {
+            LOGD() << "Not MuseScore plugin, path: " << path;
+            return Manifest();
+        }
+
+        String header = content.left(bracketPos);
+        if (!content.contains(u"MuseScore")) {
+            LOGD() << "Not MuseScore plugin, path: " << path;
+            return Manifest();
+        }
     }
 
     io::FileInfo fi(path);
@@ -148,7 +176,6 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& rootPath, const io::p
     int needProperties = 6; // title, description, pluginType, category, thumbnail, requiresScore
     int propertiesFound = 0;
     bool insideMuseScoreItem = false;
-    String content = String::fromUtf8(data);
     size_t current, previous = 0;
     current = content.indexOf(u"\n");
 
@@ -200,7 +227,7 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& rootPath, const io::p
             ++propertiesFound;
         } else if (line.startsWith(u"pluginType:")) {
             String pluginType = dropQuotes(line.mid(11).trimmed());
-            if (pluginType == "dialog") {
+            if (pluginType == "dialog" || pluginType == "dock") {
                 m.type = Type::Form;
             }
             ++propertiesFound;
@@ -226,6 +253,10 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& rootPath, const io::p
         current = content.indexOf(u"\n", previous);
     }
 
+    if (m.title.isEmpty()) {
+        m.title = fi.baseName();
+    }
+
     Action a;
     a.code = "main";
     a.type = m.type;
@@ -233,7 +264,7 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& rootPath, const io::p
     a.uiCtx = uiCtx;
     a.apiversion = m.apiversion;
     a.legacyPlugin = m.legacyPlugin;
-    a.main = fi.fileName();
+    a.path = fi.fileName();
     m.actions.push_back(std::move(a));
 
     return m;
@@ -246,6 +277,6 @@ void ExtPluginsLoader::resolvePaths(Manifest& m, const io::path_t& rootDirPath) 
     }
 
     for (Action& a : m.actions) {
-        a.main = rootDirPath + "/" + a.main;
+        a.path = rootDirPath + "/" + a.path;
     }
 }

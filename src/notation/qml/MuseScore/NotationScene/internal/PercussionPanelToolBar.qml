@@ -23,7 +23,7 @@ import QtQuick 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
-
+import Muse.GraphicalEffects 1.0
 import MuseScore.NotationScene 1.0
 
 Item {
@@ -52,16 +52,35 @@ Item {
     Row {
         id: centralButtonsRow
 
+        readonly property int buttonWidth: Math.max(writeButton.implicitWidth, previewButton.implicitWidth)
+
         anchors.verticalCenter: parent.verticalCenter
         x: prv.centerX - (centralButtonsRow.width / 2)
 
-        visible: model.currentPanelMode !== PanelMode.EDIT_LAYOUT
+        // We only want to round the outer corners of the buttons...
+        layer.enabled: ui.isEffectsAllowed
+        layer.effect: EffectOpacityMask {
+            maskSource: Rectangle {
+                width: centralButtonsRow.width
+                height: centralButtonsRow.height
+                radius: 3
+            }
+        }
+
+        visible: root.model.currentPanelMode !== PanelMode.EDIT_LAYOUT
 
         FlatButton {
+            id: writeButton
+
+            width: centralButtonsRow.buttonWidth
+
+            enabled: root.model.enabled
+
             icon: IconCode.EDIT
             text: qsTrc("notation", "Write")
             orientation: Qt.Horizontal
-            accentButton: model.currentPanelMode === PanelMode.WRITE
+            accentButton: root.model.currentPanelMode === PanelMode.WRITE
+            backgroundRadius: 0
 
             navigation.panel: navPanel
             navigation.row: 0
@@ -71,11 +90,25 @@ Item {
             }
         }
 
+        Rectangle {
+            id: separator
+            height: parent.height
+            width: 1
+            color: ui.theme.strokeColor
+        }
+
         FlatButton {
+            id: previewButton
+
+            width: centralButtonsRow.buttonWidth
+
+            enabled: root.model.enabled
+
             icon: IconCode.PLAY
             text: qsTrc("notation", "Preview")
             orientation: Qt.Horizontal
-            accentButton: model.currentPanelMode === PanelMode.SOUND_PREVIEW
+            accentButton: root.model.currentPanelMode === PanelMode.SOUND_PREVIEW
+            backgroundRadius: 0
 
             navigation.panel: navPanel
             navigation.row: 0
@@ -92,7 +125,9 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         x: prv.centerX - (finishEditingButton.width / 2)
 
-        visible: model.currentPanelMode === PanelMode.EDIT_LAYOUT
+        enabled: root.model.enabled
+
+        visible: root.model.currentPanelMode === PanelMode.EDIT_LAYOUT
         text: qsTrc("notation", "Finish editing")
         orientation: Qt.Horizontal
         accentButton: true
@@ -115,6 +150,8 @@ Item {
         spacing: prv.spacing
 
         FlatButton {
+            enabled: root.model.enabled
+
             icon: IconCode.SPLIT_VIEW_HORIZONTAL
             text: qsTrc("notation", "Layout")
             orientation: Qt.Horizontal
@@ -136,7 +173,7 @@ Item {
         }
 
         FlatButton {
-            enabled: model.currentPanelMode !== PanelMode.EDIT_LAYOUT
+            enabled: root.model.enabled && root.model.currentPanelMode !== PanelMode.EDIT_LAYOUT
             text: qsTrc("notation", "Customize kit")
             orientation: Qt.Horizontal
 
@@ -144,7 +181,7 @@ Item {
             navigation.row: 0
 
             onClicked: {
-                api.launcher.open("muse://devtools/interactive/sample")
+                root.model.customizeKit()
             }
         }
     }

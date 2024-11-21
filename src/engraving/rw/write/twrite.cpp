@@ -89,6 +89,7 @@
 
 #include "dom/keysig.h"
 
+#include "dom/laissezvib.h"
 #include "dom/layoutbreak.h"
 #include "dom/ledgerline.h"
 #include "dom/letring.h"
@@ -244,6 +245,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::JUMP:         write(item_cast<const Jump*>(item), xml, ctx);
         break;
     case ElementType::KEYSIG:       write(item_cast<const KeySig*>(item), xml, ctx);
+        break;
+    case ElementType::LAISSEZ_VIB:  write(item_cast<const LaissezVib*>(item), xml, ctx);
         break;
     case ElementType::LAYOUT_BREAK: write(item_cast<const LayoutBreak*>(item), xml, ctx);
         break;
@@ -636,6 +639,7 @@ void TWrite::write(const Ornament* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::INTERVAL_ABOVE);
     writeProperty(item, xml, Pid::INTERVAL_BELOW);
     writeProperty(item, xml, Pid::ORNAMENT_SHOW_ACCIDENTAL);
+    writeProperty(item, xml, Pid::ORNAMENT_SHOW_CUE_NOTE);
     writeProperty(item, xml, Pid::START_ON_UPPER_NOTE);
     writeProperties(static_cast<const Articulation*>(item), xml, ctx);
     xml.endElement();
@@ -877,7 +881,7 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
 
     if (item->noStem()) {
         xml.tag("noStem", item->noStem());
-    } else if (item->stem() && (item->stem()->isUserModified() || !RealIsNull(item->stem()->userLength()))) {
+    } else if (item->stem() && (item->stem()->isUserModified() || !item->stem()->userLength().isZero())) {
         write(item->stem(), xml, ctx);
     }
     if (item->hook() && item->hook()->isUserModified()) {
@@ -2080,6 +2084,15 @@ void TWrite::write(const KeySig* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
+void TWrite::write(const LaissezVib* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::MIN_LENGTH);
+    writeProperty(item, xml, Pid::TIE_PLACEMENT);
+    writeProperties(static_cast<const SlurTie*>(item), xml, ctx);
+    xml.endElement();
+}
+
 void TWrite::write(const LayoutBreak* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
@@ -2183,7 +2196,7 @@ void TWrite::write(const MMRest* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement("Rest"); // for compatibility, see also Measure::readVoice()
     writeProperties(static_cast<const ChordRest*>(item), xml, ctx);
-    writeProperty(item, xml, Pid::MMREST_NUMBER_POS);
+    writeProperty(item, xml, Pid::MMREST_NUMBER_OFFSET);
     writeProperty(item, xml, Pid::MMREST_NUMBER_VISIBLE);
     writeItems(item->el(), xml, ctx);
     xml.endElement();
@@ -2222,12 +2235,18 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
         }
     }
 
-    if (item->tieFor()) {
+    if (item->laissezVib()) {
+        write(item->laissezVib(), xml, ctx);
+    }
+
+    if (item->tieFor() && !item->laissezVib()) {
         writeSpannerStart(item->tieFor(), xml, ctx, item, item->track());
     }
+
     if (item->tieBack()) {
         writeSpannerEnd(item->tieBack(), xml, ctx, item, item->track());
     }
+
     if ((item->chord() == 0 || item->chord()->playEventType() != PlayEventType::Auto) && !item->playEvents().empty()) {
         xml.startElement("Events");
         for (const NoteEvent& e : item->playEvents()) {
@@ -2590,8 +2609,8 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
     if (item->hideSystemBarLine()) {
         xml.tag("hideSystemBarLine", item->hideSystemBarLine());
     }
-    if (item->mergeMatchingRests()) {
-        xml.tag("mergeMatchingRests", item->mergeMatchingRests());
+    if (item->mergeMatchingRests() != AutoOnOff::AUTO) {
+        xml.tag("mergeMatchingRests", TConv::toXml(item->mergeMatchingRests()));
     }
     if (!item->visible()) {
         xml.tag("isStaffVisible", item->visible());
@@ -2920,6 +2939,7 @@ void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext&)
 void TWrite::write(const TempoText* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
+    writeProperty(item, xml, Pid::PLAY);
     xml.tag("tempo", TConv::toXml(item->tempo()));
     if (item->followText()) {
         xml.tag("followText", item->followText());

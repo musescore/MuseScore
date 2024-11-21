@@ -13334,7 +13334,7 @@
         <source>Tenor voice.</source>
         <comment>tenor description</comment>
         <extracomment>description for Tenor; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>男调音声部。</translation>
+        <translation>男高音声部。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4498"/>
@@ -13362,7 +13362,7 @@
         <source>Tenor voice (notated in C clef).</source>
         <comment>tenor-c-clef description</comment>
         <extracomment>description for Tenor (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>男高音（C谱号）。</translation>
+        <translation>男高音（以C谱号记谱）。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4507"/>

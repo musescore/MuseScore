@@ -54,20 +54,18 @@
           </clef>
         </attributes>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>36</duration>
         <voice>1</voice>
-        <type>whole</type>
         <staff>1</staff>
         </note>
       <backup>
         <duration>36</duration>
         </backup>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>36</duration>
         <voice>5</voice>
-        <type>whole</type>
         <staff>2</staff>
         </note>
       </measure>
@@ -243,10 +241,9 @@
         <duration>36</duration>
         </backup>
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>36</duration>
         <voice>5</voice>
-        <type>whole</type>
         <staff>2</staff>
         </note>
       <barline location="right">

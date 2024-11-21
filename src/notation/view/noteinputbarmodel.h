@@ -74,6 +74,7 @@ private:
     void updateNoteDurationState();
     void updateNoteAccidentalState();
     void updateTieState();
+    void updateLvState();
     void updateSlurState();
     void updateVoicesState();
     void updateArticulationsState();

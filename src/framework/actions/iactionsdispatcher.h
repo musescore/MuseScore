@@ -46,6 +46,7 @@ public:
     virtual void unReg(Actionable* client) = 0;
     virtual void reg(Actionable* client, const ActionCode& actionCode, const ActionCallBackWithNameAndData& call) = 0;
     virtual bool isReg(Actionable* client) const = 0;
+    virtual ActionCodeList actionList() const = 0;
 
     void reg(Actionable* client, const ActionCode& action, const ActionCallBack& call)
     {

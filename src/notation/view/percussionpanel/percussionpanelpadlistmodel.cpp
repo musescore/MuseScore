@@ -20,7 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "global/utils.h"
 #include "percussionpanelpadlistmodel.h"
+
+#include "notation/utilities/engravingitempreviewpainter.h"
+#include "notation/utilities/percussionutilities.h"
+
+using namespace mu::notation;
 
 PercussionPanelPadListModel::PercussionPanelPadListModel(QObject* parent)
     : QAbstractListModel(parent)
@@ -29,7 +35,7 @@ PercussionPanelPadListModel::PercussionPanelPadListModel(QObject* parent)
 
 QVariant PercussionPanelPadListModel::data(const QModelIndex& index, int role) const
 {
-    if (index.row() < 0 || index.row() >= m_padModels.count()) {
+    if (!indexIsValid(index.row())) {
         return QVariant();
     }
 
@@ -51,17 +57,16 @@ QHash<int, QByteArray> PercussionPanelPadListModel::roleNames() const
     return roles;
 }
 
-void PercussionPanelPadListModel::load()
+void PercussionPanelPadListModel::init()
 {
-    m_padModels = createDefaultItems();
-    emit layoutChanged();
-    emit numPadsChanged();
+    m_padModels.clear();
+    addRow();
 }
 
 void PercussionPanelPadListModel::addRow()
 {
     for (size_t i = 0; i < NUM_COLUMNS; ++i) {
-        m_padModels.append(new PercussionPanelPadModel(QObject::parent()));
+        m_padModels.append(new PercussionPanelPadModel(this));
     }
     emit layoutChanged();
     emit numPadsChanged();
@@ -74,6 +79,11 @@ void PercussionPanelPadListModel::deleteRow(int row)
     emit numPadsChanged();
 }
 
+bool PercussionPanelPadListModel::rowIsEmpty(int row) const
+{
+    return numEmptySlotsAtRow(row) == NUM_COLUMNS;
+}
+
 void PercussionPanelPadListModel::startDrag(int startIndex)
 {
     m_dragStartIndex = startIndex;
@@ -81,63 +91,111 @@ void PercussionPanelPadListModel::startDrag(int startIndex)
 
 void PercussionPanelPadListModel::endDrag(int endIndex)
 {
-    movePad(m_dragStartIndex, endIndex);
+    if (indexIsValid(m_dragStartIndex) && indexIsValid(endIndex)) {
+        movePad(m_dragStartIndex, endIndex);
+    } else {
+        emit layoutChanged();
+    }
     m_dragStartIndex = -1;
 }
 
-bool PercussionPanelPadListModel::isDragActive() const
+void PercussionPanelPadListModel::setDrumset(const mu::engraving::Drumset* drumset)
 {
-    return m_dragStartIndex > -1;
+    if (drumset == m_drumset) {
+        return;
+    }
+
+    const bool drumsetWasValid = m_drumset;
+
+    m_drumset = drumset;
+
+    if (drumsetWasValid ^ bool(m_drumset)) {
+        m_hasActivePadsChanged.notify();
+    }
 }
 
 void PercussionPanelPadListModel::resetLayout()
 {
     beginResetModel();
-    m_padModels = createDefaultItems();
+
+    m_padModels.clear();
+
+    if (!m_drumset) {
+        endResetModel();
+        addRow();
+        return;
+    }
+
+    for (int pitch = 0; pitch < mu::engraving::DRUM_INSTRUMENTS; ++pitch) {
+        if (!m_drumset->isValid(pitch)) {
+            continue;
+        }
+
+        PercussionPanelPadModel* model = new PercussionPanelPadModel(this);
+        model->setInstrumentName(m_drumset->name(pitch));
+
+        const QString shortcut = m_drumset->shortcut(pitch) ? QChar(m_drumset->shortcut(pitch)) : QString("-");
+        model->setKeyboardShortcut(shortcut);
+
+        const QString midiNote = QString::fromStdString(muse::pitchToString(pitch));
+        model->setMidiNote(midiNote);
+
+        model->padTriggered().onNotify(this, [this, pitch]() {
+            m_triggeredChannel.send(pitch);
+        });
+
+        model->setNotationPreviewItem(PercussionUtilities::getDrumNoteForPreview(m_drumset, pitch));
+
+        model->setIsEmptySlot(false);
+
+        m_padModels.append(model);
+    }
+
+    // Fill the remainder of the column with empty pads...
+    while (m_padModels.size() % NUM_COLUMNS > 0) {
+        m_padModels.append(new PercussionPanelPadModel(this));
+    }
+
     endResetModel();
 
     emit numPadsChanged();
 }
 
-QList<PercussionPanelPadModel*> PercussionPanelPadListModel::createDefaultItems()
+bool PercussionPanelPadListModel::indexIsValid(int index) const
 {
-    QMap<size_t, PadInfo> dummyPads;
-    dummyPads.insert(2, { "Bass Drum (Kit): Mid", "S", "B2" });
-    dummyPads.insert(0, { "This is a pad with a really long text label that truncates.", "A", "F2" });
-    dummyPads.insert(8, { "Hi-hat (Kit)", "J", "G#2" });
-    dummyPads.insert(17, { "Splash (Kit)", "X", "F3" });
-    dummyPads.insert(11, { "Tom (Kit): High", "L", "A#2" });
-    dummyPads.insert(9, { "Tom (Kit): Mid", "K", "F#2" });
-    dummyPads.insert(12, { "Crash (Kit)", ";", "D#3" });
-    dummyPads.insert(3, { "Snare (Kit)", "D", "D3" });
-    dummyPads.insert(15, { "Ride (Kit)", "Z", "E3" });
-    dummyPads.insert(5, { "Floor Tom (Kit)", "F", "D2" });
-
-    // Get the largest key and round up to the nearest multiple of 8
-    size_t maxIndex = dummyPads.lastKey();
-    maxIndex = std::ceil(maxIndex / (double)NUM_COLUMNS) * NUM_COLUMNS;
-
-    QList<PercussionPanelPadModel*> padModels;
-
-    for (size_t i = 0; i < maxIndex; ++i) {
-        PercussionPanelPadModel* model = new PercussionPanelPadModel(this);
-        const PadInfo info = dummyPads.value(i);
-        if (info.isValid()) {
-            model->setInstrumentName(info.instrumentName);
-
-            model->setKeyboardShortcut(info.keyboardShortcut);
-            model->setMidiNote(info.midiNote);
-
-            model->setIsEmptySlot(false);
-        }
-        padModels.append(model);
-    }
-
-    return padModels;
+    return index > -1 && index < m_padModels.count();
 }
 
 void PercussionPanelPadListModel::movePad(int fromIndex, int toIndex)
 {
+    const int fromRow = fromIndex / NUM_COLUMNS;
+    const int toRow = toIndex / NUM_COLUMNS;
+
+    // fromRow will become empty if there's only 1 "occupied" slot, toRow will no longer be empty if it was previously...
+    const bool fromRowEmptyChanged = numEmptySlotsAtRow(fromRow) == NUM_COLUMNS - 1;
+    const bool toRowEmptyChanged = rowIsEmpty(toRow);
+
     m_padModels.swapItemsAt(fromIndex, toIndex);
     emit layoutChanged();
+
+    if (fromRowEmptyChanged) {
+        emit rowIsEmptyChanged(fromRow, /*isEmpty*/ true);
+    }
+
+    if (toRowEmptyChanged) {
+        emit rowIsEmptyChanged(toRow, /*isEmpty*/ false);
+    }
+}
+
+int PercussionPanelPadListModel::numEmptySlotsAtRow(int row) const
+{
+    int count = 0;
+    const size_t rowStartIdx = row * NUM_COLUMNS;
+    for (size_t i = rowStartIdx; i < rowStartIdx + NUM_COLUMNS; ++i) {
+        const PercussionPanelPadModel* model = m_padModels.at(i);
+        if (model && model->isEmptySlot()) {
+            ++count;
+        }
+    }
+    return count;
 }

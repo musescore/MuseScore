@@ -51,6 +51,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/diagnosticspathsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/diagnosticaccessiblemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/diagnosticaccessiblemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/actionsviewmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/actionsviewmodel.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/system/profilerviewmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/system/profilerviewmodel.h

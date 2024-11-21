@@ -238,8 +238,6 @@ public:
 
     double totalBracketsWidth() const { return m_totalBracketsWidth; }
 
-    double segmentShapeSqueezeFactor() const { return m_segmentShapeSqueezeFactor; }
-
     // Mutable
     void setFirstSystem(bool val) { m_firstSystem = val; }
     void setFirstSystemIndent(bool val) { m_firstSystemIndent = val; }
@@ -277,8 +275,6 @@ public:
 
     void setTotalBracketsWidth(double val) { m_totalBracketsWidth = val; }
 
-    void setSegmentShapeSqueezeFactor(double val) { m_segmentShapeSqueezeFactor = val; }
-
 private:
 
     bool m_firstSystem = true;
@@ -307,8 +303,6 @@ private:
     std::set<Spanner*> m_processedSpanners;
 
     bool m_rangeDone = false;
-
-    double m_segmentShapeSqueezeFactor = 1.0;
 
     // cache
     double m_totalBracketsWidth = -1.0;

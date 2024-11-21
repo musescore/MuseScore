@@ -65,7 +65,7 @@ ListItemBlank {
 
     isSelected: subMenuShowed || (itemPrv.isSelectable && itemPrv.isSelected) || navigation.highlight
 
-    navigation.name: Boolean(itemPrv.id) ? itemPrv.id : titleLabel.text
+    navigation.name: itemPrv.id ?? titleLabel.text
     navigation.accessible.role: MUAccessible.MenuItem
     navigation.accessible.name: {
         var text = itemPrv.title
@@ -114,10 +114,10 @@ ListItemBlank {
     QtObject {
         id: itemPrv
 
-        property string id: Boolean(modelData) && Boolean(modelData.id) ? modelData.id : ""
+        property string id: root.modelData?.id ?? ""
 
-        property string title: Boolean(modelData) && Boolean(modelData.title) ? modelData.title : ""
-        property string titleWithMnemonicUnderline: Boolean(modelData) && Boolean(modelData.titleWithMnemonicUnderline) ? modelData.titleWithMnemonicUnderline : title
+        property string title: root.modelData?.title ?? ""
+        property string titleWithMnemonicUnderline: modelData?.titleWithMnemonicUnderline ?? title
 
         property bool hasShortcuts: Boolean(modelData) && Boolean(modelData.shortcuts)
         property string shortcuts: hasShortcuts ? modelData.shortcuts : ""
@@ -125,8 +125,8 @@ ListItemBlank {
         property bool isCheckable: Boolean(modelData) && Boolean(modelData.checkable)
         property bool isChecked: isCheckable && Boolean(modelData.checked)
 
-        property bool isSelectable: Boolean(modelData) && Boolean(modelData.selectable)
-        property bool isSelected: isSelectable && Boolean(modelData.selected)
+        property bool isSelectable: Boolean(root.modelData?.selectable)
+        property bool isSelected: isSelectable && Boolean(root.modelData?.selected)
 
         property bool hasIcon: Boolean(modelData) && Boolean(modelData.icon) && modelData.icon !== IconCode.NONE
     }
@@ -136,12 +136,12 @@ ListItemBlank {
 
         result += rowLayout.anchors.leftMargin
         if (primaryIconLabel.visible) {
-            result += Math.ceil(primaryIconLabel.width)
+            result += Math.ceil(primaryIconLabel.Layout.preferredWidth)
             result += rowLayout.spacing
         }
 
         if (secondaryIconLabel.visible) {
-            result += Math.ceil(secondaryIconLabel.width)
+            result += Math.ceil(secondaryIconLabel.Layout.preferredWidth)
             result += rowLayout.spacing
         }
 
@@ -183,10 +183,10 @@ ListItemBlank {
         StyledIconLabel {
             id: primaryIconLabel
             Layout.alignment: Qt.AlignLeft
-            width: 16
+            Layout.preferredWidth: 16
             iconCode: {
                 if (root.iconAndCheckMarkMode !== StyledMenuItem.ShowBoth && itemPrv.hasIcon) {
-                    return itemPrv.hasIcon ? modelData.icon : IconCode.NONE
+                    return root.modelData?.icon ?? IconCode.NONE
                 } else if (itemPrv.isCheckable) {
                     return itemPrv.isChecked ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
                 } else  if (itemPrv.isSelectable) {
@@ -201,8 +201,8 @@ ListItemBlank {
         StyledIconLabel {
             id: secondaryIconLabel
             Layout.alignment: Qt.AlignLeft
-            width: 16
-            iconCode: itemPrv.hasIcon ? modelData.icon : IconCode.NONE
+            Layout.preferredWidth: 16
+            iconCode: root.modelData?.icon ?? IconCode.NONE
             visible: root.iconAndCheckMarkMode === StyledMenuItem.ShowBoth
         }
 

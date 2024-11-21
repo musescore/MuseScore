@@ -97,6 +97,9 @@ public:
     virtual void spatiumChanged(double, double) override;
     SlurTie* slurTie() const { return (SlurTie*)spanner(); }
 
+    bool isEditAllowed(EditData&) const override;
+    bool edit(EditData&) override;
+
     void startEditDrag(EditData& ed) override;
     void endEditDrag(EditData& ed) override;
 
@@ -122,6 +125,10 @@ public:
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
     virtual void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
+
+    virtual double endWidth() const = 0;
+    virtual double midWidth() const = 0;
+    virtual double dottedWidth() const = 0;
 
     struct LayoutData : public SpannerSegment::LayoutData
     {

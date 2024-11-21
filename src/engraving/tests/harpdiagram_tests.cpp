@@ -107,7 +107,7 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams)
             PedalPosition::NATURAL, PedalPosition::NATURAL };
     diagram1->setIsDiagram(false);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Harp diagram tests"));
     EditData dd1(0);
     dd1.dropElement = diagram1;
     EngravingItem* e1 = s1->firstElementForNavigation(0);
@@ -125,7 +125,7 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams)
     HarpPedalDiagram* diagram2 = Factory::createHarpPedalDiagram(s2);
     diagram2->setIsDiagram(false);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Harp diagram tests"));
     EditData dd2(0);
     dd2.dropElement = diagram2;
     EngravingItem* e2 = s2->firstElementForNavigation(0);
@@ -142,7 +142,7 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams)
     HarpPedalDiagram* diagram3 = Factory::createHarpPedalDiagram(s3);
     diagram3->setIsDiagram(false);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Harp diagram tests"));
     EditData dd3(0);
     dd3.dropElement = diagram3;
     EngravingItem* e3 = s3->firstElementForNavigation(0);
@@ -157,7 +157,7 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams)
     HarpPedalDiagram* diagram4 = Factory::createHarpPedalDiagram(s4);
     diagram4->setIsDiagram(false);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Harp diagram tests"));
     EditData dd4(0);
     dd4.dropElement = diagram4;
     EngravingItem* e4 = s4->firstElementForNavigation(0);
@@ -197,7 +197,7 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams2)
     HarpPedalDiagram* diagram2 = Factory::createHarpPedalDiagram(s2);
     diagram2->setIsDiagram(false);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Harp diagram tests"));
     EditData dd(0);
     dd.dropElement = diagram2;
     EngravingItem* e = s2->firstElementForNavigation(0);
@@ -215,7 +215,7 @@ TEST_F(Engraving_HarpDiagramTests, textdiagrams2)
     EXPECT_EQ(diagram1->xmlText(), expText);
 
     // Test undo
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Harp diagram tests"));
     score->undoRedo(true, &dd);
     score->endCmd();
 

@@ -24,8 +24,16 @@
 
 #include <QObject>
 
+#include "modularity/ioc.h"
+#include "async/asyncable.h"
+
+#include "context/iglobalcontext.h"
+#include "actions/iactionsdispatcher.h"
+#include "playback/iplaybackcontroller.h"
+
 #include "percussionpanelpadlistmodel.h"
 
+namespace mu::notation {
 class PanelMode
 {
     Q_GADGET
@@ -39,9 +47,15 @@ public:
     Q_ENUM(Mode)
 };
 
-class PercussionPanelModel : public QObject
+class PercussionPanelModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<playback::IPlaybackController> playbackController = { this };
+
     Q_OBJECT
+
+    Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
 
     Q_PROPERTY(PanelMode::Mode currentPanelMode READ currentPanelMode WRITE setCurrentPanelMode NOTIFY currentPanelModeChanged)
     Q_PROPERTY(bool useNotationPreview READ useNotationPreview WRITE setUseNotationPreview NOTIFY useNotationPreviewChanged)
@@ -53,6 +67,9 @@ class PercussionPanelModel : public QObject
 public:
     explicit PercussionPanelModel(QObject* parent = nullptr);
 
+    bool enabled() const;
+    void setEnabled(bool enabled);
+
     PanelMode::Mode currentPanelMode() const;
     void setCurrentPanelMode(const PanelMode::Mode& panelMode);
 
@@ -61,21 +78,40 @@ public:
 
     PercussionPanelPadListModel* padListModel() const;
 
+    Q_INVOKABLE void init();
+
     QList<QVariantMap> layoutMenuItems() const;
     Q_INVOKABLE void handleMenuItem(const QString& itemId);
 
     Q_INVOKABLE void finishEditing();
 
+    Q_INVOKABLE void customizeKit();
+
 signals:
+    void enabledChanged();
+
     void currentPanelModeChanged(const PanelMode::Mode& panelMode);
     void useNotationPreviewChanged(bool useNotationPreview);
 
     void padListModelChanged();
 
 private:
+    void setUpConnections();
+
+    void writePitch(int pitch);
+    void playPitch(int pitch);
+
+    const mu::notation::INotationPtr notation() const;
+    const mu::notation::INotationInteractionPtr interaction() const;
+
+    mu::engraving::Score* score() const;
+
+    bool m_enabled = false;
+
     PanelMode::Mode m_currentPanelMode = PanelMode::Mode::WRITE;
     PanelMode::Mode m_panelModeToRestore = PanelMode::Mode::WRITE;
     bool m_useNotationPreview = false;
 
     PercussionPanelPadListModel* m_padListModel = nullptr;
 };
+}

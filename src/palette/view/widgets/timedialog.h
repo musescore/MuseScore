@@ -53,7 +53,7 @@ public:
 
 private slots:
     void addClicked();
-    void zChanged(int);
+    void zChanged();
     void nChanged(int);
     void paletteChanged(int idx);
     void textChanged();

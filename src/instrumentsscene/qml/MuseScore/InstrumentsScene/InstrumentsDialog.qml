@@ -52,6 +52,14 @@ StyledDialogView {
         root.hide()
     }
 
+    Component.onCompleted: {
+        theInstrumentsOnScoreModel.load()
+    }
+
+    InstrumentsOnScoreListModel {
+        id: theInstrumentsOnScoreModel
+    }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 20
@@ -70,6 +78,8 @@ StyledDialogView {
             onSubmitRequested: {
                 root.submit()
             }
+
+            instrumentsOnScoreModel: theInstrumentsOnScoreModel
         }
 
         RowLayout {

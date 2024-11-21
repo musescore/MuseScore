@@ -1,11 +1,32 @@
 {
     "uri": "musescore://extensions/dev/example_3",
     "type": "composite",
-    "title": "Example Composite (default)",
+    "title": "Example 3 (default)",
 
     "actions": [
-        {"code": "configure", "type": "form", "title": "Configure", "main": "configure.qml"},
-        {"code": "add", "type": "macros", "title": "Add", "main": "add.js"},
-        {"code": "remove", "type": "macros", "title": "Remove", "main": "remove.js"}
+        {
+            "code": "configure",
+            "type": "form",
+            "title": "Configure",
+            "icon": "CONFIGURE",
+            "show_on_toolbar": true,
+            "path": "configure.qml"
+        },
+        {
+            "code": "add",
+            "type": "macros",
+            "title": "Add",
+            "icon": "PLUS",
+            "show_on_toolbar": true,
+            "path": "add.js"
+        },
+        {
+            "code": "remove",
+            "type": "macros",
+            "title": "Remove",
+            "icon": "MINUS",
+            "show_on_toolbar": true,
+            "path": "remove.js"
+        }
     ]
 }

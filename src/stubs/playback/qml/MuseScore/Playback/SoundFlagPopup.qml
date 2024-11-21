@@ -29,7 +29,7 @@ import MuseScore.Playback 1.0
 StyledPopupView {
     id: root
 
-    property var notationViewNavigationSection
+    property NavigationSection notationViewNavigationSection
     property int navigationOrderStart
     property int navigationOrderEnd
 

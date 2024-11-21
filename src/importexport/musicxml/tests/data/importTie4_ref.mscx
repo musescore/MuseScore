@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
@@ -85,6 +85,8 @@
       <repeatRightFontSize>22</repeatRightFontSize>
       <frameFontFace>Palatino,serif</frameFontFace>
       <frameFontSize>22</frameFontSize>
+      <noteLineFontFace>Palatino,serif</noteLineFontFace>
+      <noteLineFontSize>22</noteLineFontSize>
       <glissandoFontFace>Palatino,serif</glissandoFontFace>
       <glissandoFontSize>22</glissandoFontSize>
       <bendFontFace>Palatino,serif</bendFontFace>
@@ -125,7 +127,7 @@
       <user11FontSize>22</user11FontSize>
       <user12FontFace>Palatino,serif</user12FontFace>
       <user12FontSize>22</user12FontSize>
-      <Spatium>1.75</Spatium>
+      <spatium>1.75</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>

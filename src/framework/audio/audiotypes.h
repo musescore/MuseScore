@@ -28,9 +28,10 @@
 #include <string>
 
 #include "global/types/number.h"
+#include "global/types/secs.h"
 #include "global/types/ratio.h"
-#include "global/realfn.h"
 #include "global/types/string.h"
+#include "global/realfn.h"
 #include "global/async/channel.h"
 #include "global/io/iodevice.h"
 
@@ -38,7 +39,7 @@
 
 namespace muse::audio {
 using msecs_t = int64_t;
-using secs_t = number_t<double>;
+using secs_t = muse::secs_t;
 
 inline secs_t milisecsToSecs(msecs_t ms) { return secs_t(ms / 1000.0); }
 inline secs_t microsecsToSecs(msecs_t us) { return secs_t(us / 1000000.0); }

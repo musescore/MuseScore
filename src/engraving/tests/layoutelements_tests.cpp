@@ -22,6 +22,7 @@
 
 #include <gtest/gtest.h>
 
+#include "dom/lyrics.h"
 #include "dom/masterscore.h"
 #include "dom/measure.h"
 #include "dom/page.h"
@@ -79,6 +80,10 @@ static void isLayoutDone(void* data, EngravingItem* e)
     }
     if (e->isTimeTickAnchor()) {
         // not expected to be laid out
+        return;
+    }
+    if (e->isLyricsLineSegment() && toLyricsLineSegment(e)->lyricsLine()->isEndMelisma()) {
+        // Melisma line may be omitted if too short
         return;
     }
 

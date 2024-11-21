@@ -156,7 +156,7 @@ Score::Score(const modularity::ContextPtr& iocCtx)
     }
 
     Score::validScores.insert(this);
-    m_masterScore = 0;
+    m_masterScore = nullptr;
 
     m_engravingFont = engravingFonts()->fontByName("Leland");
 
@@ -180,6 +180,11 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
 {
     Score::validScores.insert(this);
     m_masterScore = parent;
+
+    if (m_masterScore) {
+        setEID(m_masterScore->getEID()->newEID(type()));
+    }
+
     if (DefaultStyle::defaultStyleForParts()) {
         m_style = *DefaultStyle::defaultStyleForParts();
     } else {
@@ -561,6 +566,10 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
                 } else if (e->isTempoText()) {
                     TempoText* tt = toTempoText(e);
 
+                    if (!tt->playTempoText()) {
+                        continue;
+                    }
+
                     if (tt->isNormal() && !tt->isRelative() && !tempoPrimo) {
                         tempoPrimo = tt->tempo();
                     } else if (tt->isRelative()) {
@@ -631,7 +640,7 @@ void Score::fixAnacrusisTempo(const std::vector<Measure*>& measures) const
         for (const Segment& s : m->segments()) {
             if (s.isChordRestType()) {
                 for (EngravingItem* e : s.annotations()) {
-                    if (e->isTempoText()) {
+                    if (e->isTempoText() && toTempoText(e)->playTempoText()) {
                         return toTempoText(e);
                     }
                 }
@@ -2052,6 +2061,29 @@ void Score::setSelection(const Selection& s)
         e->setSelected(true);
     }
 }
+
+void Score::selectElementsWithSameTypeOnSegment(mu::engraving::ElementType elementType, mu::engraving::Segment* segment)
+{
+    TRACEFUNC;
+
+    IF_ASSERT_FAILED(segment) {
+        return;
+    }
+
+    score()->deselectAll();
+
+    std::vector<EngravingItem*> elementsToSelect;
+
+    for (size_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+        EngravingItem* element = segment->element(staffIdx * mu::engraving::VOICES);
+        if (element && element->type() == elementType) {
+            elementsToSelect.push_back(element);
+        }
+    }
+
+    score()->select(elementsToSelect, SelectType::ADD);
+}
+
 
 //---------------------------------------------------------
 //   getText
@@ -4334,7 +4366,7 @@ void Score::cmdSelectSection()
 
 void Score::undo(UndoCommand* cmd, EditData* ed) const
 {
-    undoStack()->push(cmd, ed);
+    undoStack()->pushAndPerform(cmd, ed);
 }
 
 //---------------------------------------------------------
@@ -5728,6 +5760,9 @@ void Score::connectTies(bool silent)
             }
             Chord* c = toChord(e);
             for (Note* n : c->notes()) {
+                if (n->laissezVib()) {
+                    continue;
+                }
                 // connect a tie without end note
                 Tie* tie = n->tieFor();
                 if (tie && !tie->endNote()) {

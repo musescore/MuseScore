@@ -121,6 +121,7 @@ public:
     bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) override;
     void undo() override;
     void redo() override;
+    void undoRedoToIndex(size_t idx) override;
 
     // Change selection
     bool moveSelectionAvailable(MoveSelectionType type) const override;
@@ -166,7 +167,6 @@ public:
     bool isEditAllowed(QKeyEvent* event) override;
     void editElement(QKeyEvent* event) override;
     void endEditElement() override;
-    const EngravingItem* editedItem() const override;
 
     // Measure
     void splitSelectedMeasure() override;
@@ -184,6 +184,7 @@ public:
     void deleteSelection() override;
     void flipSelection() override;
     void addTieToSelection() override;
+    void addLaissezVibToSelection() override;
     void addTiedNoteToChord() override;
     void addSlurToSelection() override;
     void addOttavaToSelection(OttavaType type) override;
@@ -225,6 +226,7 @@ public:
 
     void addStretch(qreal value) override;
 
+    Measure* selectedMeasure() const override;
     void addTimeSignature(Measure* measure, engraving::staff_idx_t staffIndex, TimeSignature* timeSignature) override;
 
     void explodeSelectedStaff() override;
@@ -290,7 +292,7 @@ public:
     void transposeSemitone(int) override;
     void transposeDiatonicAlterations(mu::engraving::TransposeDirection) override;
     void getLocation() override;
-    void execute(void (mu::engraving::Score::*)()) override;
+    void execute(void (mu::engraving::Score::*)(), const muse::TranslatableString& actionName) override;
 
     void showItem(const mu::engraving::EngravingItem* item, int staffIndex = -1) override;
     muse::async::Channel<ShowItemRequest> showItemRequested() const override;
@@ -300,15 +302,16 @@ public:
 private:
     mu::engraving::Score* score() const;
     void onScoreInited();
+    void onViewModeChanged();
 
-    void startEdit();
+    void startEdit(const muse::TranslatableString& actionName);
     void apply();
     void rollback();
 
     bool needStartEditGrip(QKeyEvent* event) const;
     bool handleKeyPress(QKeyEvent* event);
 
-    void doEndEditElement(bool clearEditData = true);
+    void doEndEditElement();
     void doEndDrag();
 
     bool doDropStandard();
@@ -317,7 +320,6 @@ private:
     void onElementDestroyed(EngravingItem* element);
 
     void doSelect(const std::vector<EngravingItem*>& elements, SelectType type, engraving::staff_idx_t staffIndex = 0);
-    void selectElementsWithSameTypeOnSegment(mu::engraving::ElementType elementType, mu::engraving::Segment* segment);
     void selectAndStartEditIfNeeded(EngravingItem* element);
 
     void notifyAboutDragChanged();
@@ -394,7 +396,7 @@ private:
     bool elementsSelected(const std::set<ElementType>& elementsTypes) const;
 
     template<typename P>
-    void execute(void (mu::engraving::Score::* function)(P), P param);
+    void execute(void (mu::engraving::Score::* function)(P), P param, const muse::TranslatableString& actionName);
 
     struct HitMeasureData
     {

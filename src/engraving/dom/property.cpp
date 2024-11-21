@@ -137,14 +137,14 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SCALE,                   false, "scale",                 P_TYPE::SCALE,              PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "scale") },
     { Pid::LOCK_ASPECT_RATIO,       false, "lockAspectRatio",       P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "aspect ratio locked") },
     { Pid::SIZE_IS_SPATIUM,         false, "sizeIsSpatium",         P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "size is spatium") },
-    { Pid::TEXT,                    false,  "text",                  P_TYPE::STRING,            PropertyGroup::TEXT,            DUMMY_QT_TR_NOOP("propertyName", "text") },
+    { Pid::TEXT,                    false,  "text",                 P_TYPE::STRING,             PropertyGroup::TEXT,            DUMMY_QT_TR_NOOP("propertyName", "text") },
     { Pid::HTML_TEXT,               false, 0,                       P_TYPE::STRING,             PropertyGroup::TEXT,            "" },
     { Pid::USER_MODIFIED,           false, 0,                       P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      "" },
     { Pid::BEAM_POS,                false, 0,                       P_TYPE::PAIR_REAL,          PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "beam position") },
     { Pid::BEAM_MODE,               true, "BeamMode",               P_TYPE::BEAM_MODE,          PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "beam mode") },
     { Pid::BEAM_NO_SLOPE,           true, "noSlope",                P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "without slope") },
-    { Pid::BEAM_CROSS_STAFF_MOVE,         true, "crossStaffMove",          P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "beam staff move") },
-    { Pid::USER_LEN,                false, "userLen",               P_TYPE::MILLIMETRE,         PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "length") },
+    { Pid::BEAM_CROSS_STAFF_MOVE,   true, "crossStaffMove",         P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "beam staff move") },
+    { Pid::USER_LEN,                false, "userLen",               P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "length") },
     { Pid::SHOW_STEM_SLASH,         true,  "showStemSlash",         P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "show stem slash") },
 
     { Pid::SPACE,                   false, "space",                 P_TYPE::MILLIMETRE,         PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "space") },
@@ -214,6 +214,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::INTERVAL_ABOVE,          true,  "intervalAbove",         P_TYPE::ORNAMENT_INTERVAL,  PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "interval above") },
     { Pid::INTERVAL_BELOW,          true,  "intervalBelow",         P_TYPE::ORNAMENT_INTERVAL,  PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "interval below") },
     { Pid::ORNAMENT_SHOW_ACCIDENTAL,true,  "ornamentShowAccidental",P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "ornament show accidental") },
+    { Pid::ORNAMENT_SHOW_CUE_NOTE,  true,  "ornamentShowCueNote",   P_TYPE::AUTO_ON_OFF,        PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "ornament show cue note") },
     { Pid::START_ON_UPPER_NOTE,     true,  "startOnUpperNote",      P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "start on upper note") },
 
     { Pid::TIMESIG,                 false, "timesig",               P_TYPE::FRACTION,           PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "time signature") },
@@ -225,7 +226,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SPANNER_TRACK2,          false, "track2",                P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "track2") },
     { Pid::OFFSET2,                 false, "userOff2",              P_TYPE::POINT,              PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "offset2") },
     { Pid::BREAK_MMR,               false, "breakMultiMeasureRest", P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "breaking multimeasure rest") },
-    { Pid::MMREST_NUMBER_POS,       false, "mmRestNumberPos",       P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "vertical position of multimeasure rest number") },
+    { Pid::MMREST_NUMBER_POS,       false, "mmRestNumberPos",       P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "vertical position of multimeasure rest number") }, // Deprecated
+    { Pid::MMREST_NUMBER_OFFSET,    false, "mmRestNumberOffset",    P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "vertical offset of multimeasure rest number") },
     { Pid::MMREST_NUMBER_VISIBLE,   false, "mmRestNumberVisible",   P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "visibility of multimeasure rest number") },
 
     { Pid::MEASURE_REPEAT_NUMBER_POS, false, "measureRepeatNumberPos", P_TYPE::SPATIUM,         PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "vertical position of measure repeat number") },
@@ -350,6 +352,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::END_FONT_STYLE,          false, "endFontStyle",          P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "end font style") },
     { Pid::END_TEXT_OFFSET,         false, "endTextOffset",         P_TYPE::POINT,              PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "end text offset") },
 
+    { Pid::NOTELINE_PLACEMENT,      false, "noteLinePlacement",     P_TYPE::NOTELINE_PLACEMENT_TYPE,    PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "note-anchored line placement") },
+
     { Pid::AVOID_BARLINES,          false, "avoidBarLines",         P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "avoid barlines") },
     { Pid::DYNAMICS_SIZE,           false, "dynamicsSize",          P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "dynamic size") },
     { Pid::CENTER_ON_NOTEHEAD,      false, "centerOnNotehead",      P_TYPE::BOOL,               PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "use text alignment") },
@@ -426,6 +430,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::CAPO_GENERATE_TEXT,      true,  "generateText",          P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "automatically generate text") },
 
     { Pid::TIE_PLACEMENT,           true,  "tiePlacement",          P_TYPE::TIE_PLACEMENT,      PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "tie placement") },
+    { Pid::MIN_LENGTH,              true,  "minLength",             P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "minimum length") },
 
     { Pid::POSITION_LINKED_TO_MASTER,   false, "positionLinkedToMaster",   P_TYPE::BOOL,        PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "position linked to master") },
     { Pid::APPEARANCE_LINKED_TO_MASTER, false, "appearanceLinkedToMaster", P_TYPE::BOOL,        PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "appearance linked to master") },

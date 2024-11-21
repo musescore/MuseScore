@@ -85,6 +85,7 @@
 #include "../../dom/bend.h"
 #include "../../dom/stretchedbend.h"
 #include "../../dom/box.h"
+#include "../../dom/laissezvib.h"
 #include "../../dom/layoutbreak.h"
 #include "../../dom/stafftypechange.h"
 #include "../../dom/bracket.h"
@@ -228,6 +229,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::JUMP: read(item_cast<Jump*>(item), xml, ctx);
         break;
     case ElementType::KEYSIG: read(item_cast<KeySig*>(item), xml, ctx);
+        break;
+    case ElementType::LAISSEZ_VIB: read(item_cast<LaissezVib*>(item), xml, ctx);
         break;
     case ElementType::LAYOUT_BREAK: read(item_cast<LayoutBreak*>(item), xml, ctx);
         break;
@@ -646,7 +649,8 @@ void TRead::read(TempoText* t, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
-        if (tag == "tempo") {
+        if (readProperty(t, tag, e, ctx, Pid::PLAY)) {
+        } else if (tag == "tempo") {
             t->setTempo(TConv::fromXml(e.readAsciiText(), Constants::DEFAULT_TEMPO));
         } else if (tag == "followText") {
             t->setFollowText(e.readInt());
@@ -1489,6 +1493,18 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
     s->setKeySigEvent(sig);
 }
 
+void TRead::read(LaissezVib* lv, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+        if (TRead::readProperty(lv, tag, xml, ctx, Pid::TIE_PLACEMENT)) {
+        } else if (TRead::readProperty(lv, tag, xml, ctx, Pid::MIN_LENGTH)) {
+        } else if (!readProperties(static_cast<SlurTie*>(lv), xml, ctx)) {
+            xml.unknown();
+        }
+    }
+}
+
 void TRead::read(StaffState* s, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
@@ -1970,6 +1986,8 @@ static void setActionIconTypeFromAction(ActionIcon* i, const std::string& action
         { "pre-bend", ActionIconType::PRE_BEND },
         { "grace-note-bend", ActionIconType::GRACE_NOTE_BEND },
         { "slight-bend", ActionIconType::SLIGHT_BEND },
+
+        { "add-noteline", ActionIconType::NOTE_ANCHORED_LINE }
     };
 
     auto it = map.find(actionCode);
@@ -2039,6 +2057,7 @@ bool TRead::readProperties(Ornament* o, XmlReader& xml, ReadContext& ctx)
     if (readProperty(o, tag, xml, ctx, Pid::INTERVAL_ABOVE)) {
     } else if (readProperty(o, tag, xml, ctx, Pid::INTERVAL_BELOW)) {
     } else if (readProperty(o, tag, xml, ctx, Pid::ORNAMENT_SHOW_ACCIDENTAL)) {
+    } else if (readProperty(o, tag, xml, ctx, Pid::ORNAMENT_SHOW_CUE_NOTE)) {
     } else if (readProperty(o, tag, xml, ctx, Pid::START_ON_UPPER_NOTE)) {
     } else if (readProperties(static_cast<Articulation*>(o), xml, ctx)) {
     } else if (tag == "Accidental") {
@@ -3439,6 +3458,10 @@ void TRead::read(MMRest* r, XmlReader& e, ReadContext& ctx)
             NoteDot* dot = Factory::createNoteDot(r);
             TRead::read(dot, e, ctx);
             r->add(dot);
+        } else if (tag == "mmRestNumberPos") {
+            // Old property, deprecated in 4.5
+            r->setNumberOffset(e.readDouble() - ctx.style().styleS(Sid::mmRestNumberPos).val());
+        } else if (TRead::readProperty(r, tag, e, ctx, Pid::MMREST_NUMBER_OFFSET)) {
         } else if (TRead::readStyledProperty(r, tag, e, ctx)) {
         } else if (readProperties(r, e, ctx)) {
         } else {
@@ -3580,6 +3603,11 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         TRead::read(cl, e, ctx);
         cl->setNote(n);
         n->chord()->add(cl);
+    } else if (tag == "LaissezVib") {
+        LaissezVib* lv = Factory::createLaissezVib(n);
+        TRead::read(lv, e, ctx);
+        lv->setParent(n);
+        n->add(lv);
     } else if (readItemProperties(n, e, ctx)) {
     } else {
         return false;
@@ -3619,6 +3647,11 @@ void TRead::read(NoteDot* d, XmlReader& e, ReadContext& ctx)
 void TRead::read(NoteHead* h, XmlReader& xml, ReadContext& ctx)
 {
     read(static_cast<Symbol*>(h), xml, ctx);
+}
+
+void TRead::read(NoteLine* nl, XmlReader& xml, ReadContext& ctx)
+{
+    TRead::read(static_cast<TextLineBase*>(nl), xml, ctx);
 }
 
 void TRead::read(Ottava* o, XmlReader& e, ReadContext& ctx)
@@ -4158,7 +4191,11 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "hideSystemBarLine") {
         s->setHideSystemBarLine(e.readInt());
     } else if (tag == "mergeMatchingRests") {
-        s->setMergeMatchingRests(e.readInt());
+        if (ctx.score()->mscVersion() < 450) {
+            s->setMergeMatchingRests(e.readInt() ? AutoOnOff::ON : AutoOnOff::AUTO);
+        } else {
+            s->setMergeMatchingRests(TConv::fromXml(e.readAsciiText(), AutoOnOff::AUTO));
+        }
     } else if (tag == "isStaffVisible") {
         s->setVisible(e.readBool());
     } else if (tag == "keylist") {

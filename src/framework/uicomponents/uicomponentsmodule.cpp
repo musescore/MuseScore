@@ -21,7 +21,7 @@
  */
 #include "uicomponentsmodule.h"
 
-#include <QtQml>
+#include <QQmlEngine>
 #include "view/sampleobject.h"
 #include "view/validators/doubleinputvalidator.h"
 #include "view/validators/intinputvalidator.h"

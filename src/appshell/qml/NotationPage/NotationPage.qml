@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,6 +25,7 @@ import QtQuick.Controls 2.15
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 import Muse.Dock 1.0
+import Muse.Extensions 1.0
 import MuseScore.AppShell 1.0
 
 import MuseScore.NotationScene 1.0
@@ -39,7 +40,7 @@ DockPage {
     objectName: "Notation"
     uri: "musescore://notation"
 
-    property var topToolKeyNavSec
+    required property NavigationSection topToolbarKeyNavSec
 
     property NotationPageModel pageModel: NotationPageModel {}
 
@@ -124,7 +125,7 @@ DockPage {
             contentBottomPadding: 2
 
             NotationToolBar {
-                navigationPanel.section: root.topToolKeyNavSec
+                navigationPanel.section: root.topToolbarKeyNavSec
                 navigationPanel.order: 2
             }
         },
@@ -132,7 +133,7 @@ DockPage {
         DockToolBar {
             id: playbackToolBar
 
-            objectName: pageModel.playbackToolBarName()
+            objectName: root.pageModel.playbackToolBarName()
             title: qsTrc("appshell", "Playback controls")
 
             separatorsVisible: false
@@ -146,7 +147,7 @@ DockPage {
             ]
 
             PlaybackToolBar {
-                navigationPanelSection: root.topToolKeyNavSec
+                navigationPanelSection: root.topToolbarKeyNavSec
                 navigationPanelOrder: 3
 
                 floating: playbackToolBar.floating
@@ -154,7 +155,59 @@ DockPage {
         },
 
         DockToolBar {
-            objectName: pageModel.undoRedoToolBarName()
+            id: extDockToolBar
+
+            objectName: "extensionsToolBar"
+            title: qsTrc("appshell", "Extensions toolbar")
+
+            separatorsVisible: false
+            orientation: Qt.Horizontal
+            alignment: DockToolBarAlignment.Right
+
+            contentBottomPadding: floating ? 8 : 2
+            contentTopPadding: floating ? 8 : 0
+
+            dropDestinations: [
+                { "dock": notationToolBar, "dropLocation": Location.Right },
+                { "dock": playbackToolBar, "dropLocation": Location.Right }
+            ]
+
+            ExtensionsToolBar {
+                id: extToolBar
+
+
+                function updateVisible() {
+                    if (!extDockToolBar.inited) {
+                        return;
+                    }
+
+                    if (!root.visible) {
+                        return;
+                    }
+
+                    if (extToolBar.isEmpty) {
+                        extDockToolBar.close()
+                    } else {
+                        extDockToolBar.open()
+                    }
+                }
+
+                onIsEmptyChanged: extToolBar.updateVisible()
+
+                Connections {
+                    target: extDockToolBar
+                    function onInitedChanged() { extToolBar.updateVisible() }
+                }
+
+                Connections {
+                    target: root
+                    function onVisibleChanged() { extToolBar.updateVisible() }
+                }
+            }
+        },
+
+        DockToolBar {
+            objectName: root.pageModel.undoRedoToolBarName()
             title: qsTrc("appshell", "Undo/redo")
 
             floatable: false
@@ -166,17 +219,18 @@ DockPage {
             contentBottomPadding: 2
 
             UndoRedoToolBar {
-                navigationPanel.section: root.topToolKeyNavSec
+                navigationPanel.section: root.topToolbarKeyNavSec
                 navigationPanel.order: 4
             }
         }
     ]
 
     toolBars: [
+
         DockToolBar {
             id: noteInputBar
 
-            objectName: pageModel.noteInputBarName()
+            objectName: root.pageModel.noteInputBarName()
             title: qsTrc("appshell", "Note input")
 
             dropDestinations: [
@@ -205,7 +259,7 @@ DockPage {
         DockPanel {
             id: palettesPanel
 
-            objectName: pageModel.palettesPanelName()
+            objectName: root.pageModel.palettesPanelName()
             title: qsTrc("appshell", "Palettes")
 
             navigationSection: root.navigationPanelSec(palettesPanel.location)
@@ -230,7 +284,7 @@ DockPage {
         DockPanel {
             id: instrumentsPanel
 
-            objectName: pageModel.instrumentsPanelName()
+            objectName: root.pageModel.instrumentsPanelName()
             title: qsTrc("appshell", "Instruments")
 
             navigationSection: root.navigationPanelSec(instrumentsPanel.location)
@@ -255,7 +309,7 @@ DockPage {
         DockPanel {
             id: inspectorPanel
 
-            objectName: pageModel.inspectorPanelName()
+            objectName: root.pageModel.inspectorPanelName()
             title: qsTrc("appshell", "Properties")
 
             navigationSection: root.navigationPanelSec(inspectorPanel.location)
@@ -277,7 +331,7 @@ DockPage {
         DockPanel {
             id: selectionFilterPanel
 
-            objectName: pageModel.selectionFiltersPanelName()
+            objectName: root.pageModel.selectionFiltersPanelName()
             title: qsTrc("appshell", "Selection filter")
 
             navigationSection: root.navigationPanelSec(selectionFilterPanel.location)
@@ -297,6 +351,30 @@ DockPage {
                 navigationSection: selectionFilterPanel.navigationSection
             }
         },
+
+        DockPanel {
+            id: undoHistoryPanel
+
+            objectName: root.pageModel.undoHistoryPanelName()
+            title: qsTrc("notation", "History")
+
+            navigationSection: root.navigationPanelSec(undoHistoryPanel.location)
+
+            width: root.verticalPanelDefaultWidth
+            minimumWidth: root.verticalPanelDefaultWidth
+            maximumWidth: root.verticalPanelDefaultWidth
+
+            groupName: root.verticalPanelsGroup
+
+            //! NOTE: hidden by default
+            visible: false
+
+            dropDestinations: root.verticalPanelDropDestinations
+
+            UndoHistoryPanel {
+                navigationSection: undoHistoryPanel.navigationSection
+            }
+        },
         
         // =============================================
         // Horizontal Panels
@@ -305,7 +383,7 @@ DockPage {
         DockPanel {
             id: mixerPanel
 
-            objectName: pageModel.mixerPanelName()
+            objectName: root.pageModel.mixerPanelName()
             title: qsTrc("appshell", "Mixer")
 
             height: 368
@@ -339,7 +417,7 @@ DockPage {
         DockPanel {
             id: pianoKeyboardPanel
 
-            objectName: pageModel.pianoKeyboardPanelName()
+            objectName: root.pageModel.pianoKeyboardPanelName()
             title: qsTrc("appshell", "Piano keyboard")
 
             height: 200
@@ -369,7 +447,7 @@ DockPage {
         DockPanel {
             id: timelinePanel
 
-            objectName: pageModel.timelinePanelName()
+            objectName: root.pageModel.timelinePanelName()
             title: qsTrc("appshell", "Timeline")
 
             height: 200
@@ -395,7 +473,7 @@ DockPage {
         DockPanel {
             id: drumsetPanel
 
-            objectName: pageModel.drumsetPanelName()
+            objectName: root.pageModel.drumsetPanelName()
             title: qsTrc("appshell", "Drumset tools")
 
             height: 64
@@ -420,7 +498,7 @@ DockPage {
         DockPanel {
             id: percussionPanel
 
-            objectName: pageModel.percussionPanelName()
+            objectName: root.pageModel.percussionPanelName()
             title: qsTrc("appshell", "Percussion")
 
             height: 200
@@ -463,14 +541,14 @@ DockPage {
         id: notationView
         name: "MainNotationView"
 
-        isNavigatorVisible: pageModel.isNavigatorVisible
-        isBraillePanelVisible: pageModel.isBraillePanelVisible
+        isNavigatorVisible: root.pageModel.isNavigatorVisible
+        isBraillePanelVisible: root.pageModel.isBraillePanelVisible
         isMainView: true
 
         Component.onCompleted: {
             root.notationView = notationView.paintView
 
-            root.setDefaultNavigationControl(defaultNavigationControl)
+            root.setDefaultNavigationControl(root.defaultNavigationControl)
         }
 
         Component.onDestruction: {
@@ -479,7 +557,7 @@ DockPage {
     }
 
     statusBar: DockStatusBar {
-        objectName: pageModel.statusBarName()
+        objectName: root.pageModel.statusBarName()
 
         contentNavigationPanel: content.navigationPanel
 

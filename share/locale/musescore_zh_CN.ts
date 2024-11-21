@@ -2278,17 +2278,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1381"/>
         <source>Reset &apos;Vertical frame bottom margin&apos; value</source>
-        <translation>重置“垂直占位框底边距”值</translation>
+        <translation>重置“垂直框体底边距”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1291"/>
         <source>Reset &apos;Vertical frame top margin&apos; value</source>
-        <translation>重置“垂直占位框上边距”值</translation>
+        <translation>重置“垂直框体上边距”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1368"/>
         <source>Vertical frame top margin:</source>
-        <translation>垂直占位框上边距：</translation>
+        <translation>垂直框体上边距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1404"/>
@@ -2303,7 +2303,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1391"/>
         <source>Vertical frame bottom margin:</source>
-        <translation>垂直占位框下边距：</translation>
+        <translation>垂直框体下边距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1265"/>
@@ -4872,7 +4872,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13966"/>
         <source>Frame:</source>
-        <translation>占位框：</translation>
+        <translation>框体：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13857"/>
@@ -4912,7 +4912,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13998"/>
         <source>Reset &apos;Frame&apos; value</source>
-        <translation>重置“占位框”值</translation>
+        <translation>重置“框体”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14026"/>
@@ -5068,7 +5068,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/DockWidgetBase.cpp" line="612"/>
         <source>Detach</source>
-        <translation type="unfinished"/>
+        <translation>分弓</translation>
     </message>
 </context>
 <context>
@@ -6678,12 +6678,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="197"/>
         <source>Next frame</source>
-        <translation>后一占位框</translation>
+        <translation>后一框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="203"/>
         <source>Previous frame</source>
-        <translation>前一占位框</translation>
+        <translation>前一框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="209"/>
@@ -7325,12 +7325,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="198"/>
         <source>Go to next frame</source>
-        <translation>前往后一占位框</translation>
+        <translation>前往后一框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="204"/>
         <source>Go to previous frame</source>
-        <translation>前往前一占位框</translation>
+        <translation>前往前一框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="210"/>
@@ -7620,12 +7620,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="693"/>
         <source>Insert horizontal frame</source>
-        <translation>插入水平占位框</translation>
+        <translation>插入水平框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="700"/>
         <source>Insert vertical frame</source>
-        <translation>插入垂直占位框</translation>
+        <translation>插入垂直框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="707"/>
@@ -7635,12 +7635,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="714"/>
         <source>Append horizontal frame</source>
-        <translation>后加水平占位框</translation>
+        <translation>后加水平框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="720"/>
         <source>Append vertical frame</source>
-        <translation>后加垂直占位框</translation>
+        <translation>后加垂直框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="726"/>
@@ -7840,7 +7840,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1258"/>
         <source>Add frame text</source>
-        <translation>添加占位框文本</translation>
+        <translation>添加框体文本</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1264"/>
@@ -8530,7 +8530,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2475"/>
         <source>Show/hide frames</source>
-        <translation>显示/隐藏占位框</translation>
+        <translation>显示/隐藏框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2482"/>
@@ -9207,7 +9207,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2474"/>
         <source>Show &amp;frames</source>
-        <translation>显示占位框(&amp;F)</translation>
+        <translation>显示框体(&amp;F)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2481"/>
@@ -9417,32 +9417,32 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="692"/>
         <source>Insert &amp;horizontal frame</source>
-        <translation>插入水平框(&amp;h)</translation>
+        <translation>插入水平框(&amp;s)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="699"/>
         <source>Insert &amp;vertical frame</source>
-        <translation>插入垂直框(&amp;v)</translation>
+        <translation>插入垂直框(&amp;c)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="706"/>
         <source>Insert &amp;text frame</source>
-        <translation>插入文本框(&amp;t)</translation>
+        <translation>插入文本框(&amp;w)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="713"/>
         <source>Append h&amp;orizontal frame</source>
-        <translation>后加水平占位框(&amp;o)</translation>
+        <translation>后加水平框体(&amp;p)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="719"/>
         <source>Append v&amp;ertical frame</source>
-        <translation>后加垂直占位框(&amp;e)</translation>
+        <translation>后加垂直框体(&amp;z)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="725"/>
         <source>Append te&amp;xt frame</source>
-        <translation>后加文本框(&amp;x)</translation>
+        <translation>后加文本框(&amp;b)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="870"/>
@@ -9772,22 +9772,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1803"/>
         <source>Toggle turn</source>
-        <translation type="unfinished"/>
+        <translation>切换回旋音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1804"/>
         <source>Add ornament: turn</source>
-        <translation type="unfinished"/>
+        <translation>添加装饰音：回旋音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1809"/>
         <source>Toggle inverted turn</source>
-        <translation type="unfinished"/>
+        <translation>切换逆回旋音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1810"/>
         <source>Add ornament: inverted turn</source>
-        <translation type="unfinished"/>
+        <translation>添加装饰音：逆回旋音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1815"/>
@@ -9817,32 +9817,32 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1833"/>
         <source>Toggle mordent</source>
-        <translation type="unfinished"/>
+        <translation>切换波音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1834"/>
         <source>Add ornament: mordent</source>
-        <translation type="unfinished"/>
+        <translation>添加装饰音：波音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1839"/>
         <source>Toggle tremblement</source>
-        <translation type="unfinished"/>
+        <translation>切换弹簧音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1840"/>
         <source>Add ornament: tremblement</source>
-        <translation type="unfinished"/>
+        <translation>添加装饰音：弹簧音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1845"/>
         <source>Toggle prall mordent</source>
-        <translation type="unfinished"/>
+        <translation>切换逆波音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1846"/>
         <source>Add ornament: prall mordent</source>
-        <translation type="unfinished"/>
+        <translation>添加装饰音： 回旋逆波音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1851"/>
@@ -10188,12 +10188,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="67"/>
         <source>&amp;Dump accessibility tree to console</source>
-        <translation>将可访问性树转储到控制台 (&amp;D)</translation>
+        <translation>将无障碍树转储到控制台 (&amp;D)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="72"/>
         <source>Show engraving &amp;elements</source>
-        <translation>显示j排版元素 (&amp;e)</translation>
+        <translation>显示排版元素 (&amp;e)</translation>
     </message>
     <message>
         <location filename="../../src/framework/multiinstances/internal/multiinstancesuiactions.cpp" line="37"/>
@@ -10640,7 +10640,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="224"/>
         <source>&amp;Frames</source>
-        <translation>占位框(&amp;K)</translation>
+        <translation>框体(&amp;K)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="225"/>
@@ -11505,7 +11505,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="106"/>
         <source>When entered, dynamics and hairpins should affect:</source>
-        <translation type="unfinished"/>
+        <translation>当进入时，力度与力度图形记号应影响：</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="113"/>
@@ -11515,7 +11515,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="124"/>
         <source>Only the voice they are applied to</source>
-        <translation type="unfinished"/>
+        <translation>加了相关记号的声部</translation>
     </message>
 </context>
 <context>
@@ -12362,7 +12362,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/ornament.cpp" line="95"/>
         <source>Ornament text</source>
-        <translation type="unfinished"/>
+        <translation>装饰音文本</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/ornament.cpp" line="98"/>
@@ -12806,7 +12806,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="289"/>
         <source>Vertical frame</source>
-        <translation>垂直占位框</translation>
+        <translation>垂直框体</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="290"/>
@@ -12816,7 +12816,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="291"/>
         <source>Fretboard diagram frame</source>
-        <translation>品格图占位框</translation>
+        <translation>品格图框体</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="293"/>
@@ -12956,7 +12956,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1124"/>
         <source>Frame</source>
-        <translation>占位框</translation>
+        <translation>框体</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1129"/>
@@ -16211,22 +16211,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3340"/>
         <source>Combining left hand, 2 ranks, empty</source>
-        <translation>左手组合，2 排，空</translation>
+        <translation>左手组合，2排，空</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3341"/>
         <source>Combining left hand, 3 ranks, empty (square)</source>
-        <translation>左手组合，3 排，空 （方形）</translation>
+        <translation>左手组合，3排，空 （方形）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3342"/>
         <source>Combining right hand, 3 ranks, empty</source>
-        <translation>右手组合，3 排，空</translation>
+        <translation>右手组合，3排，空</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3343"/>
         <source>Combining right hand, 4 ranks, empty</source>
-        <translation>右手组合，4 排，空</translation>
+        <translation>右手组合，4排，空</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3344"/>
@@ -16236,57 +16236,57 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3345"/>
         <source>Left hand, 2 ranks, 16&apos; stop (round)</source>
-        <translation>左手，2 排，16&apos; stop （圆形）</translation>
+        <translation>左手，2排，16&apos; stop （圆形）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3346"/>
         <source>Left hand, 2 ranks, 8&apos; stop + 16&apos; stop (round)</source>
-        <translation>左手，2 排，8&apos; stop + 16&apos; stop （圆形）</translation>
+        <translation>左手，2排，8&apos; stop + 16&apos; stop （圆形）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3347"/>
         <source>Left hand, 2 ranks, 8&apos; stop (round)</source>
-        <translation>左手，2 排，8&apos; stop （圆形）</translation>
+        <translation>左手，2排，8&apos; stop （圆形）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3348"/>
         <source>Left hand, 2 ranks, full master (round)</source>
-        <translation>左手，2 排，full master （圆形）</translation>
+        <translation>左手，2排，full master （圆形）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3349"/>
         <source>Left hand, 2 ranks, master + 16&apos; stop (round)</source>
-        <translation>左手，2 排，master + 16&apos; stop （圆形）</translation>
+        <translation>左手，2排，master + 16&apos; stop （圆形）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3350"/>
         <source>Left hand, 2 ranks, master (round)</source>
-        <translation>左手，2 排，master （圆形）</translation>
+        <translation>左手，2排，master （圆形）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3351"/>
         <source>Left hand, 3 ranks, 2&apos; stop + 8&apos; stop (square)</source>
-        <translation>左手，3 排，2&apos; stop + 8&apos; stop （方形）</translation>
+        <translation>左手，3排，2&apos; stop + 8&apos; stop （方形）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3352"/>
         <source>Left hand, 3 ranks, 2&apos; stop (square)</source>
-        <translation>左手，3 排，2&apos; stop （方形）</translation>
+        <translation>左手，3排，2&apos; stop （方形）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3353"/>
         <source>Left hand, 3 ranks, 8&apos; stop (square)</source>
-        <translation>左手，3 排，8&apos; stop （方形）</translation>
+        <translation>左手，3排，8&apos; stop （方形）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3354"/>
         <source>Left hand, 3 ranks, double 8&apos; stop (square)</source>
-        <translation>左手，3 排，双 8&apos; stop （方形）</translation>
+        <translation>左手，3排，双 8&apos; stop （方形）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3355"/>
         <source>Left hand, 3 ranks, 2&apos; stop + double 8&apos; stop (tutti) (square)</source>
-        <translation>左手，3 排，2&apos; stop + 双 8&apos; stop （合奏） （方形）</translation>
+        <translation>左手，3排，2&apos; stop + 双 8&apos; stop （合奏） （方形）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3356"/>
@@ -16301,137 +16301,137 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3358"/>
         <source>Right hand, 3 ranks, 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop (accordion)</source>
-        <translation>右手，3 排，8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop （手风琴）</translation>
+        <translation>右手，3排，8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop （手风琴）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3359"/>
         <source>Right hand, 3 ranks, lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop (authentic musette)</source>
-        <translation>右手，3 排，lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop （authentic musette）</translation>
+        <translation>右手，3排，lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop （authentic musette）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3361"/>
         <source>Right hand, 3 ranks, 8&apos; stop + 16&apos; stop (bandoneón)</source>
-        <translation>右手，3 排，8&apos; stop + 16&apos; stop （班多钮）</translation>
+        <translation>右手，3排，8&apos; stop + 16&apos; stop （班多钮）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3362"/>
         <source>Right hand, 3 ranks, 16&apos; stop (bassoon)</source>
-        <translation>右手，3 排，16&apos; stop （巴松管）</translation>
+        <translation>右手，3排，16&apos; stop （巴松管）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3363"/>
         <source>Right hand, 3 ranks, 8&apos; stop (clarinet)</source>
-        <translation>右手，3 排，8&apos; stop （单簧管）</translation>
+        <translation>右手，3排，8&apos; stop （单簧管）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3364"/>
         <source>Right hand, 3 ranks, lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop</source>
-        <translation>右手，3 排，lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop</translation>
+        <translation>右手，3排，lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3365"/>
         <source>Right hand, 3 ranks, 4&apos; stop + lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop</source>
-        <translation>右手，3 排，4&apos; stop + lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop</translation>
+        <translation>右手，3排，4&apos; stop + lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3366"/>
         <source>Right hand, 3 ranks, 4&apos; stop + lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop</source>
-        <translation>右手，3 排，4&apos; stop + lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop</translation>
+        <translation>右手，3排，4&apos; stop + lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3368"/>
         <source>Right hand, 3 ranks, 4&apos; stop + 8&apos; stop + 16&apos; stop (harmonium)</source>
-        <translation>右手，3 排，4&apos; stop + 8&apos; stop + 16&apos; stop （簧风琴）</translation>
+        <translation>右手，3排，4&apos; stop + 8&apos; stop + 16&apos; stop （簧风琴）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3369"/>
         <source>Right hand, 3 ranks, 4&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop (imitation musette)</source>
-        <translation>右手，3 排，4&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop （imitation musette）</translation>
+        <translation>右手，3排，4&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop （imitation musette）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3370"/>
         <source>Right hand, 3 ranks, lower tremolo 8&apos; stop</source>
-        <translation>右手，3 排，lower tremolo 8&apos; stop</translation>
+        <translation>右手，3排，lower tremolo 8&apos; stop</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3371"/>
         <source>Right hand, 3 ranks, 4&apos; stop + lower tremolo 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop (master)</source>
-        <translation>右手，3 排，4&apos; stop + lower tremolo 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop （master）</translation>
+        <translation>右手，3排，4&apos; stop + lower tremolo 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop （master）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3373"/>
         <source>Right hand, 3 ranks, 4&apos; stop + 8&apos; stop (oboe)</source>
-        <translation>右手，3 排，4&apos; stop + 8&apos; stop （双簧管）</translation>
+        <translation>右手，3排，4&apos; stop + 8&apos; stop （双簧管）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3374"/>
         <source>Right hand, 3 ranks, 4&apos; stop + 16&apos; stop (organ)</source>
-        <translation>右手，3 排，4&apos; stop + 16&apos; stop （管风琴）</translation>
+        <translation>右手，3排，4&apos; stop + 16&apos; stop （管风琴）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3375"/>
         <source>Right hand, 3 ranks, 4&apos; stop (piccolo)</source>
-        <translation>右手，3 排，4&apos; stop （短笛）</translation>
+        <translation>右手，3排，4&apos; stop （短笛）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3376"/>
         <source>Right hand, 3 ranks, lower tremolo 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop</source>
-        <translation>右手，3 排，lower tremolo 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop</translation>
+        <translation>右手，3排，lower tremolo 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3377"/>
         <source>Right hand, 3 ranks, 4&apos; stop + lower tremolo 8&apos; stop + upper tremolo 8&apos; stop</source>
-        <translation>右手，3 排，4&apos; stop + lower tremolo 8&apos; stop + upper tremolo 8&apos; stop</translation>
+        <translation>右手，3排，4&apos; stop + lower tremolo 8&apos; stop + upper tremolo 8&apos; stop</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3378"/>
         <source>Right hand, 3 ranks, lower tremolo 8&apos; stop + upper tremolo 8&apos; stop</source>
-        <translation>右手，3 排，lower tremolo 8&apos; stop + upper tremolo 8&apos; stop</translation>
+        <translation>右手，3排，lower tremolo 8&apos; stop + upper tremolo 8&apos; stop</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3379"/>
         <source>Right hand, 3 ranks, upper tremolo 8&apos; stop</source>
-        <translation>右手，3 排，upper tremolo 8&apos; stop</translation>
+        <translation>右手，3排，upper tremolo 8&apos; stop</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3380"/>
         <source>Right hand, 3 ranks, 8&apos; stop + upper tremolo 8&apos; stop (violin)</source>
-        <translation>右手，3 排，8&apos; stop + upper tremolo 8&apos; stop （小提琴）</translation>
+        <translation>右手，3排，8&apos; stop + upper tremolo 8&apos; stop （小提琴）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3381"/>
         <source>Right hand, 4 ranks, alto</source>
-        <translation>右手，4 排，中音</translation>
+        <translation>右手，4排，中音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3382"/>
         <source>Right hand, 4 ranks, bass/alto</source>
-        <translation>右手，4 排，低音/中音</translation>
+        <translation>右手，4排，低音/中音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3383"/>
         <source>Right hand, 4 ranks, master</source>
-        <translation>右手，4 排，master</translation>
+        <translation>右手，4排，master</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3384"/>
         <source>Right hand, 4 ranks, soft bass</source>
-        <translation>右手，4 排，soft bass</translation>
+        <translation>右手，4排，柔低音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3385"/>
         <source>Right hand, 4 ranks, soft tenor</source>
-        <translation>右手，4 排，柔次中音</translation>
+        <translation>右手，4排，柔次中音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3386"/>
         <source>Right hand, 4 ranks, soprano</source>
-        <translation>右手，4 排，高音</translation>
+        <translation>右手，4排，高音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3387"/>
         <source>Right hand, 4 ranks, tenor</source>
-        <translation>右手，4 排，次中音</translation>
+        <translation>右手，4排，次中音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3388"/>
@@ -20130,7 +20130,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="111"/>
         <source>Scale to frame size</source>
-        <translation>缩放到占位框尺寸</translation>
+        <translation>缩放到框体尺寸</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="121"/>
@@ -20896,7 +20896,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="80"/>
         <source>Frames</source>
-        <translation>占位框</translation>
+        <translation>框体</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="93"/>
@@ -21037,7 +21037,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="49"/>
         <source>Frame</source>
-        <translation>占位框</translation>
+        <translation>框体</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="58"/>
@@ -22688,7 +22688,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="646"/>
         <source>Frames</source>
-        <translation>占位框</translation>
+        <translation>框体</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="89"/>

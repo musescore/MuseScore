@@ -49,6 +49,7 @@ Ornament::Ornament(const Ornament& o)
     _intervalBelow = o._intervalBelow;
     _showAccidental = o._showAccidental;
     _startOnUpperNote = o._startOnUpperNote;
+    m_showCueNote = o.m_showCueNote;
 
     if (o.m_cueNoteChord) {
         m_cueNoteChord = o.m_cueNoteChord->clone();
@@ -133,6 +134,8 @@ PropertyValue Ornament::getProperty(Pid propertyId) const
         return _intervalBelow;
     case Pid::ORNAMENT_SHOW_ACCIDENTAL:
         return _showAccidental;
+    case Pid::ORNAMENT_SHOW_CUE_NOTE:
+        return m_showCueNote;
     case Pid::START_ON_UPPER_NOTE:
         return _startOnUpperNote;
     default:
@@ -158,6 +161,8 @@ PropertyValue Ornament::propertyDefault(Pid id) const
         return DEFAULT_ORNAMENT_INTERVAL;
     case Pid::ORNAMENT_SHOW_ACCIDENTAL:
         return OrnamentShowAccidental::DEFAULT;
+    case Pid::ORNAMENT_SHOW_CUE_NOTE:
+        return AutoOnOff::AUTO;
     case Pid::START_ON_UPPER_NOTE:
         return false;
     case Pid::ARTICULATION_ANCHOR:
@@ -179,6 +184,8 @@ bool Ornament::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::ORNAMENT_SHOW_ACCIDENTAL:
         setShowAccidental(v.value<OrnamentShowAccidental>());
         break;
+    case Pid::ORNAMENT_SHOW_CUE_NOTE:
+        setShowCueNote(v.value<AutoOnOff>());
     case Pid::START_ON_UPPER_NOTE:
         setStartOnUpperNote(v.toBool());
         break;
@@ -224,6 +231,15 @@ bool Ornament::hasFullIntervalChoice() const
 {
     SymId id = symId();
     return id == SymId::ornamentTrill;
+}
+
+bool Ornament::showCueNote()
+{
+    if (m_showCueNote == AutoOnOff::AUTO) {
+        return style().styleB(Sid::trillAlwaysShowCueNote) || _intervalAbove.step != IntervalStep::SECOND;
+    }
+
+    return m_showCueNote == AutoOnOff::ON;
 }
 
 void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)

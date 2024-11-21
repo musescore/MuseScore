@@ -449,9 +449,11 @@ void System::add(EngravingItem* el)
     case ElementType::VOLTA_SEGMENT:
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
+    case ElementType::LAISSEZ_VIB_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
+    case ElementType::NOTELINE_SEGMENT:
     case ElementType::LET_RING_SEGMENT:
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
     case ElementType::PALM_MUTE_SEGMENT:
@@ -528,10 +530,12 @@ void System::remove(EngravingItem* el)
     case ElementType::VOLTA_SEGMENT:
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
+    case ElementType::LAISSEZ_VIB_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
+    case ElementType::NOTELINE_SEGMENT:
     case ElementType::GUITAR_BEND_SEGMENT:
     case ElementType::GUITAR_BEND_HOLD_SEGMENT:
         if (!muse::remove(m_spannerSegments, toSpannerSegment(el))) {
@@ -1155,93 +1159,5 @@ staff_idx_t System::lastVisibleSysStaffOfPart(const Part* part) const
         }
     }
     return muse::nidx;    // No visible staves on this part.
-}
-
-//---------------------------------------------------------
-//      minSysTicks
-//      returns the shortest note/rest in the system
-//---------------------------------------------------------
-
-Fraction System::minSysTicks() const
-{
-    Fraction minTicks = Fraction::max(); // Initializing the variable at an arbitrary high value.
-    // In principle, it just needs to be longer than any possible note, such that the following loop
-    // always correctly returns the shortest note/rest of the system.
-    for (MeasureBase* mb : measures()) {
-        if (mb->isMeasure()) {
-            Measure* m = toMeasure(mb);
-            minTicks = std::min(m->shortestChordRest(), minTicks);
-        }
-    }
-    return minTicks;
-}
-
-//---------------------------------------------------------
-//    squeezableSpace
-//    Collects the squeezable space of a system. This allows
-//    for some systems to be justified by squeezing rather
-//    than stretching.
-//---------------------------------------------------------
-
-double System::squeezableSpace() const
-{
-    double squeezableSpace = 0;
-    for (auto mb : measures()) {
-        if (mb->isMeasure()) {
-            const Measure* m = toMeasure(mb);
-            squeezableSpace += (m->isWidthLocked() ? 0.0 : m->squeezableSpace());
-        }
-    }
-    return squeezableSpace;
-}
-
-Fraction System::maxSysTicks() const
-{
-    Fraction maxTicks = Fraction(0, 1);
-    for (auto mb : measures()) {
-        if (mb->isMeasure()) {
-            maxTicks = std::max(maxTicks, toMeasure(mb)->maxTicks());
-        }
-    }
-    return maxTicks;
-}
-
-bool System::hasCrossStaffOrModifiedBeams()
-{
-    for (MeasureBase* mb : measures()) {
-        if (!mb->isMeasure()) {
-            continue;
-        }
-        for (Segment& seg : toMeasure(mb)->segments()) {
-            if (!seg.isChordRestType()) {
-                continue;
-            }
-            for (EngravingItem* e : seg.elist()) {
-                if (!e || !e->isChordRest()) {
-                    continue;
-                }
-                if (toChordRest(e)->beam() && (toChordRest(e)->beam()->cross() || toChordRest(e)->beam()->userModified())) {
-                    return true;
-                }
-                Chord* c = e->isChord() ? toChord(e) : nullptr;
-                if (c && c->tremoloTwoChord()) {
-                    TremoloTwoChord* trem = c->tremoloTwoChord();
-                    Chord* c1 = trem->chord1();
-                    Chord* c2 = trem->chord2();
-                    if (trem->userModified() || c1->staffMove() != c2->staffMove()) {
-                        return true;
-                    }
-                }
-                if (e->isChord() && !toChord(e)->graceNotes().empty()) {
-                    for (Chord* grace : toChord(e)->graceNotes()) {
-                        if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return false;
 }
 }

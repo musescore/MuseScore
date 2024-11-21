@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -784,6 +784,7 @@
               </Note>
             <TremoloTwoChord>
               <subtype>c32</subtype>
+              <linkedMain/>
               <l1>22</l1>
               <l2>22</l2>
               </TremoloTwoChord>
@@ -840,10 +841,11 @@
         </Measure>
       </Staff>
     <Score>
+      <eid>867583393796</eid>
       <name>Flute</name>
       <Division>480</Division>
       <Style>
-        <Spatium>1.74978</Spatium>
+        <spatium>1.74978</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -1658,6 +1660,13 @@
                 <pitch>71</pitch>
                 <tpc>19</tpc>
                 </Note>
+              <TremoloTwoChord>
+                <subtype>c32</subtype>
+                <linked>
+                  </linked>
+                <l1>0</l1>
+                <l2>0</l2>
+                </TremoloTwoChord>
               </Chord>
             <Chord>
               <linked>

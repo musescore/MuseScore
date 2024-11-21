@@ -62,7 +62,7 @@ QString BrailleConfigurationStub::brailleTable() const
     return {};
 }
 
-void BrailleConfigurationStub::setBrailleTable(const QString)
+void BrailleConfigurationStub::setBrailleTable(const QString&)
 {
 }
 

@@ -739,6 +739,10 @@
     <seq>Ctrl+T</seq>
     </SC>
   <SC>
+    <key>dynamics</key>
+    <seq>Ctrl+D</seq>
+    </SC>
+  <SC>
     <key>expression-text</key>
     <seq>Ctrl+E</seq>
     </SC>

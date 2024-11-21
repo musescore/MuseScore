@@ -85,15 +85,7 @@ void MeasurePropertiesDialog::initMeasure()
         return;
     }
 
-    INotationInteraction::HitElementContext ctx = m_notation->interaction()->hitElementContext();
-    mu::engraving::Measure* measure = mu::engraving::toMeasure(ctx.element);
-
-    if (!measure) {
-        INotationSelectionPtr selection = m_notation->interaction()->selection();
-        if (selection->isRange()) {
-            measure = selection->range()->measureRange().endMeasure;
-        }
-    }
+    mu::engraving::Measure* measure = m_notation->interaction()->selectedMeasure();
 
     IF_ASSERT_FAILED(measure) {
         return;
@@ -321,7 +313,7 @@ void MeasurePropertiesDialog::apply()
 
     mu::engraving::Score* score = m_measure->score();
 
-    m_notation->undoStack()->prepareChanges();
+    m_notation->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Edit measure properties"));
     bool propertiesChanged = false;
     for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         bool v = visible(static_cast<int>(staffIdx));

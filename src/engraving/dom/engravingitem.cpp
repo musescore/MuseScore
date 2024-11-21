@@ -247,7 +247,7 @@ double EngravingItem::spatium() const
 
 bool EngravingItem::isInteractionAvailable() const
 {
-    if (!visible() && (score()->printing() || !score()->isShowInvisible())) {
+    if (!getProperty(Pid::VISIBLE).toBool() && (score()->printing() || !score()->isShowInvisible())) {
         return false;
     }
 
@@ -622,7 +622,7 @@ Color EngravingItem::color() const
 
 Color EngravingItem::curColor() const
 {
-    return curColor(visible());
+    return curColor(getProperty(Pid::VISIBLE).toBool());
 }
 
 //---------------------------------------------------------
@@ -1462,6 +1462,13 @@ PropertyPropagation EngravingItem::propertyPropagation(const EngravingItem* dest
     const Score* sourceScore = score();
     const Score* destinationScore = destinationItem->score();
     const bool isTextProperty = propertyGroup(propertyId) == PropertyGroup::TEXT;
+    const Staff* sourceStaff = staff();
+    const Staff* destinationStaff = destinationItem->staff();
+
+    // Properties must be propagated to items cloned for MMRests
+    if (sourceScore == destinationScore && sourceStaff == destinationStaff) {
+        return PropertyPropagation::PROPAGATE;
+    }
 
     if (propertyGroup(propertyId) != PropertyGroup::TEXT && sourceScore == destinationScore) {
         return PropertyPropagation::NONE;
@@ -2719,6 +2726,7 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
         case ElementType::WHAMMY_BAR_SEGMENT:
         case ElementType::SLUR_SEGMENT:
         case ElementType::TIE_SEGMENT:
+        case ElementType::LAISSEZ_VIB_SEGMENT:
             return sh;
         case ElementType::CHORD:
         case ElementType::REST:

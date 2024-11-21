@@ -79,12 +79,13 @@ extern int relStep(int pitch, int tpc, ClefType clef);
 extern int pitch2step(int pitch);
 extern int step2pitch(int step);
 int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalDiatonicSteps);
+extern int compareNotesPos(const Note* n1, const Note* n2);
 
 extern Segment* skipTuplet(Tuplet* tuplet);
 extern SymIdList timeSigSymIdsFromString(const String&);
 extern Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch);
 
-extern double yStaffDifference(const System* system1, staff_idx_t staffIdx1, const System* system2, staff_idx_t staffIdx2);
+extern double yStaffDifference(const System* system1, const System* system2, staff_idx_t staffIdx1);
 
 extern bool allowRemoveWhenRemovingStaves(EngravingItem* item, staff_idx_t startStaff, staff_idx_t endStaff = 0);
 extern bool moveDownWhenAddingStaves(EngravingItem* item, staff_idx_t startStaff, staff_idx_t endStaff = 0);

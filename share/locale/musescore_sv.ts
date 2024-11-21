@@ -10173,7 +10173,7 @@ textens x-höjd):</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="52"/>
         <source>Show g&amp;raphics info…</source>
-        <translation type="unfinished"/>
+        <translation>Visa g&amp;rafikinfo…</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="57"/>
@@ -25480,7 +25480,7 @@ misslyckades: %2</translation>
     <message>
         <location filename="../../src/palette/internal/paletteconfiguration.cpp" line="43"/>
         <source>Palette scale</source>
-        <translation>Palett-skala</translation>
+        <translation>Palettskala</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="98"/>
@@ -28368,7 +28368,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="71"/>
         <source>Score options</source>
-        <translation>Partitur-alternativ</translation>
+        <translation>Partituralternativ</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="91"/>
