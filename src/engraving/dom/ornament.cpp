@@ -186,6 +186,7 @@ bool Ornament::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::ORNAMENT_SHOW_CUE_NOTE:
         setShowCueNote(v.value<AutoOnOff>());
+        break;
     case Pid::START_ON_UPPER_NOTE:
         setStartOnUpperNote(v.toBool());
         break;
