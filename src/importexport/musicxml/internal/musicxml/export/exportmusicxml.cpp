@@ -4127,7 +4127,6 @@ static void writePitch(XmlWriter& xml, const Note* const note, const bool useDru
     String step;
     int alter = 0;
     int octave = 0;
-    const Chord* chord = note->chord();
     if (!useDrumset) {
         pitch2xml(note, step, alter, octave);
     } else {
