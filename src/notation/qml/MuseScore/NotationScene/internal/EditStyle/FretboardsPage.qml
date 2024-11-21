@@ -62,43 +62,16 @@ Rectangle {
                 controlAreaWidth: 204
             }
 
-            RowLayout {
-                StyledTextLabel {
-                    Layout.fillWidth: true
-                    Layout.maximumWidth: 120
-                    horizontalAlignment: Qt.AlignLeft
-                    text: qsTrc("notation", "Orientation:")
-                }
+            IconAndTextButtonSelector {
+                styleItem: fretboardsPage.fretOrientation
+                label: qsTrc("notation", "Orientation:")
 
-                RadioButtonGroup {
-                    Layout.preferredHeight: 70
+                Layout.preferredHeight: 70
 
-                    model: [
-                        { iconCode: IconCode.FRETBOARD_VERTICAL, text: qsTrc("notation", "Vertical"), value: 0 },
-                        { iconCode: IconCode.FRETBOARD_HORIZONTAL, text: qsTrc("notation", "Horizontal"), value: 1 }
-                    ]
-
-                    delegate: FlatRadioButton {
-                        width: 100
-                        height: 70
-                        Column {
-                            anchors.centerIn: parent
-                            height: childrenRect.height
-                            spacing: 8
-                            StyledIconLabel {
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                iconCode: modelData.iconCode
-                                font.pixelSize: 28
-                            }
-                            StyledTextLabel {
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                text: modelData.text
-                            }
-                        }
-                        checked: fretboardsPage.fretOrientation.value === modelData.value
-                        onToggled: fretboardsPage.fretOrientation.value = modelData.value
-                    }
-                }
+                model: [
+                    { iconCode: IconCode.FRETBOARD_VERTICAL, text: qsTrc("notation", "Vertical"), value: 0 },
+                    { iconCode: IconCode.FRETBOARD_HORIZONTAL, text: qsTrc("notation", "Horizontal"), value: 1 }
+                ]
             }
 
             BasicStyleSelectorWithSpinboxAndReset {
@@ -210,49 +183,19 @@ Rectangle {
                 title: qsTrc("notation", "Barré")
 
                 ColumnLayout {
-                    spacing : 12
                     width: parent.width
-                    height: parent.height
-                    RowLayout {
+                    spacing : 12
+
+                    IconAndTextButtonSelector {
+                        styleItem: fretboardsPage.barreAppearanceSlur
+                        label: qsTrc("notation", "Appearance:")
+
                         Layout.preferredHeight: 70
 
-                        StyledTextLabel {
-                            horizontalAlignment: Text.AlignLeft
-                            Layout.fillWidth: true
-                            Layout.maximumWidth: 120
-                            wrapMode: Text.WordWrap
-                            text: qsTrc("notation", "Appearance:")
-                        }
-
-                        RadioButtonGroup {
-                            Layout.preferredHeight: 70
-
-                            model: [
-                                { iconCode: IconCode.FRETBOARD_BARRE_LINE, text: qsTrc("notation", "Line"), value: false },
-                                { iconCode: IconCode.FRETBOARD_BARRE_SLUR, text: qsTrc("notation", "Slur"), value: true }
-                            ]
-
-                            delegate: FlatRadioButton {
-                                width: 100
-                                height: 70
-                                Column {
-                                    anchors.centerIn: parent
-                                    height: childrenRect.height
-                                    spacing: 8
-                                    StyledIconLabel {
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                        iconCode: modelData.iconCode
-                                        font.pixelSize: 28
-                                    }
-                                    StyledTextLabel {
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                        text: modelData.text
-                                    }
-                                }
-                                checked: fretboardsPage.barreAppearanceSlur.value === modelData.value
-                                onToggled: fretboardsPage.barreAppearanceSlur.value = modelData.value
-                            }
-                        }
+                        model: [
+                            { iconCode: IconCode.FRETBOARD_BARRE_LINE, text: qsTrc("notation", "Line"), value: false },
+                            { iconCode: IconCode.FRETBOARD_BARRE_SLUR, text: qsTrc("notation", "Slur"), value: true }
+                        ]
                     }
 
                     BasicStyleSelectorWithSpinboxAndReset {
@@ -278,43 +221,16 @@ Rectangle {
                 }
             }
 
-            RowLayout {
-                StyledTextLabel {
-                    Layout.fillWidth: true
-                    Layout.maximumWidth: 120
-                    horizontalAlignment: Text.AlignLeft
-                    text: qsTrc("notation", "Fretboard style:")
-                }
+            IconAndTextButtonSelector {
+                styleItem: fretboardsPage.fretStyleExtended
+                label: qsTrc("notation", "Fretboard style:")
 
-                RadioButtonGroup {
-                    Layout.preferredHeight: 70
+                Layout.preferredHeight: 70
 
-                    model: [
-                        { iconCode: IconCode.FRETBOARD_VERTICAL, text: qsTrc("notation", "Trimmed"), value: false },
-                        { iconCode: IconCode.FRETBOARD_EXTENDED, text: qsTrc("notation", "Extended"), value: true }
-                    ]
-
-                    delegate: FlatRadioButton {
-                        width: 100
-                        height: 70
-                        Column {
-                            anchors.centerIn: parent
-                            height: childrenRect.height
-                            spacing: 8
-                            StyledIconLabel {
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                iconCode: modelData.iconCode
-                                font.pixelSize: 28
-                            }
-                            StyledTextLabel {
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                text: modelData.text
-                            }
-                        }
-                        checked: fretboardsPage.fretStyleExtended.value === modelData.value
-                        onToggled: fretboardsPage.fretStyleExtended.value = modelData.value
-                    }
-                }
+                model: [
+                    { iconCode: IconCode.FRETBOARD_VERTICAL, text: qsTrc("notation", "Trimmed"), value: false },
+                    { iconCode: IconCode.FRETBOARD_EXTENDED, text: qsTrc("notation", "Extended"), value: true }
+                ]
             }
 
             BasicStyleSelectorWithSpinboxAndReset {

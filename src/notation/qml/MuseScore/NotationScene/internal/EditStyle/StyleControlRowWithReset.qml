@@ -41,6 +41,10 @@ RowLayout {
 
     property bool hasReset: true
 
+    height: control.height
+
+    spacing: 8
+
     StyledTextLabel {
         id: optionLabel
         horizontalAlignment: Text.AlignLeft
