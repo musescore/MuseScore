@@ -3585,6 +3585,9 @@
           <layout class="QVBoxLayout" name="verticalLayout_41">
            <item>
             <widget class="QGroupBox" name="dividerLeft">
+             <property name="accessibleName">
+              <string>Left</string>
+             </property>
              <property name="title">
               <string>Left</string>
              </property>
@@ -3697,6 +3700,9 @@
            </item>
            <item>
             <widget class="QGroupBox" name="dividerRight">
+             <property name="accessibleName">
+              <string>Right</string>
+             </property>
              <property name="title">
               <string>Right</string>
              </property>
@@ -3870,6 +3876,9 @@
            </item>
            <item>
             <widget class="QGroupBox" name="groupBox_TABClef">
+             <property name="accessibleName">
+              <string>Default TAB Clef</string>
+             </property>
              <property name="title">
               <string>Default TAB clef</string>
              </property>
@@ -5889,6 +5898,9 @@
                </item>
                <item row="5" column="0" colspan="7">
                 <widget class="QGroupBox" name="groupBox_mmRestsWidth">
+                 <property name="accessibleName">
+                  <string>Width</string>
+                 </property>
                  <property name="title">
                   <string>Width</string>
                  </property>
@@ -6014,6 +6026,9 @@
                </item>
                <item row="1" column="0" colspan="7">
                 <widget class="QGroupBox" name="singleMeasureMMRestOption">
+                 <property name="accessibleName">
+                  <string>On single empty measure</string>
+                 </property>
                  <property name="title">
                   <string>On single empty measure</string>
                  </property>
@@ -6057,6 +6072,9 @@
                </item>
                <item row="6" column="0" colspan="7">
                 <widget class="QGroupBox" name="groupBox_1">
+                 <property name="accessibleName">
+                  <string>Number Layout</string>
+                 </property>
                  <property name="title">
                   <string>Number layout</string>
                  </property>
@@ -6161,6 +6179,9 @@
                </item>
                <item row="13" column="0" colspan="7">
                 <widget class="QGroupBox" name="oldStyleMultiMeasureRests">
+                 <property name="accessibleName">
+                  <string>Old-style multimeasure rests</string>
+                 </property>
                  <property name="title">
                   <string>Old-style multimeasure rests</string>
                  </property>
@@ -6252,6 +6273,9 @@
                </item>
                <item row="7" column="0" colspan="7">
                 <widget class="QGroupBox" name="groupBox_2">
+                 <property name="accessibleName">
+                  <string>H-Bar</string>
+                 </property>
                  <property name="title">
                   <string>H-bar</string>
                  </property>
@@ -6470,6 +6494,9 @@
            </item>
            <item row="4" column="0" colspan="3">
             <widget class="QGroupBox" name="mrNumberSeries">
+             <property name="accessibleName">
+              <string>Number consecutive measure repeats</string>
+             </property>
              <property name="title">
               <string>Number consecutive measure repeats</string>
              </property>
@@ -7593,6 +7620,9 @@
               <layout class="QGridLayout" name="gridLayout_221">
                <item row="0" column="0">
                 <widget class="QGroupBox" name="groupBox_slurs">
+                 <property name="accessibleName">
+                  <string>Slurs</string>
+                 </property>
                  <property name="title">
                   <string>Slurs</string>
                  </property>
@@ -7792,6 +7822,9 @@
                </item>
                <item row="0" column="1">
                 <widget class="QGroupBox" name="groupBox_ties_2">
+                 <property name="accessibleName">
+                  <string>Ties</string>
+                 </property>
                  <property name="title">
                   <string>Ties</string>
                  </property>
@@ -8440,6 +8473,9 @@
                </item>
                <item row="0" column="0" colspan="4">
                 <widget class="QGroupBox" name="dynamicsOverrideFont">
+                 <property name="accessibleName">
+                  <string>Override score font</string>
+                 </property>
                  <property name="title">
                   <string>Override score font</string>
                  </property>
@@ -10127,6 +10163,9 @@
           <layout class="QVBoxLayout" name="verticalLayout_58">
            <item>
             <widget class="QGroupBox" name="groupBox_bendsStandardStaff">
+             <property name="accessibleName">
+              <string>Standard staff</string>
+             </property>
              <property name="title">
               <string>Standard staff</string>
              </property>
@@ -10182,6 +10221,9 @@
            </item>
            <item>
             <widget class="QGroupBox" name="groupBox_bendsTablature">
+             <property name="accessibleName">
+              <string>Tablature</string>
+             </property>
              <property name="title">
               <string>Tablature</string>
              </property>
@@ -12910,6 +12952,9 @@ first note of the system</string>
            </item>
            <item>
             <widget class="QGroupBox" name="groupFBAlign">
+             <property name="accessibleName">
+              <string>Aligment</string>
+             </property>
              <property name="title">
               <string>Alignment</string>
              </property>
@@ -12933,6 +12978,9 @@ first note of the system</string>
            </item>
            <item>
             <widget class="QGroupBox" name="groupFBStyle">
+             <property name="accessibleName">
+              <string>Style</string>
+             </property>
              <property name="title">
               <string>Style</string>
              </property>
@@ -13185,6 +13233,9 @@ first note of the system</string>
                   </item>
                   <item row="4" column="0" colspan="6">
                    <widget class="QGroupBox" name="automaticCapitalization">
+                    <property name="accessibleName">
+                     <string>Automatic capitalization</string>
+                    </property>
                     <property name="title">
                      <string>Automatic capitalization</string>
                     </property>
@@ -13231,6 +13282,9 @@ first note of the system</string>
                   </item>
                   <item row="3" column="0" colspan="6">
                    <widget class="QGroupBox" name="harmonySpelling">
+                    <property name="accessibleName">
+                     <string>Spelling</string>
+                    </property>
                     <property name="title">
                      <string>Spelling</string>
                     </property>
@@ -13306,6 +13360,9 @@ first note of the system</string>
                   </item>
                   <item row="0" column="0" colspan="6">
                    <widget class="QGroupBox" name="harmonyStyle">
+                    <property name="accessibleName">
+                     <string>Style</string>
+                    </property>
                     <property name="title">
                      <string>Style</string>
                     </property>
