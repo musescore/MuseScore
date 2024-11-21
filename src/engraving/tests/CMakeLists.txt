@@ -48,6 +48,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/durationtype_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dynamic_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/earlymusic_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/eid_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/element_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/exchangevoices_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/expression_tests.cpp
@@ -81,6 +82,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/split_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/splitstaff_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/staffmove_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/system_locks_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tempomap_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/textbase_tests.cpp
     #${CMAKE_CURRENT_LIST_DIR}/textedit_tests.cpp doesn't compile and needs actualization
