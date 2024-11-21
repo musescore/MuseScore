@@ -269,6 +269,7 @@ void EditStaff::updateNextPreviousButtons()
 
 void EditStaff::gotoNextStaff()
 {
+    apply();
     staff_idx_t nextStaffIndex = m_orgStaff->idx() + 1;
     Staff* nextStaff = m_orgStaff->score()->staff(nextStaffIndex);
 
@@ -279,6 +280,7 @@ void EditStaff::gotoNextStaff()
 
 void EditStaff::gotoPreviousStaff()
 {
+    apply();
     staff_idx_t previousStaffIndex = m_orgStaff->idx() - 1;
     Staff* prevStaff = m_orgStaff->score()->staff(previousStaffIndex);
 
