@@ -147,6 +147,11 @@ bool BaseApplication::notify(QObject* object, QEvent* event)
     return qApp->notify(object, event);
 }
 
+Qt::KeyboardModifiers BaseApplication::keyboardModifiers() const
+{
+    return QApplication::keyboardModifiers();
+}
+
 #endif
 
 void BaseApplication::restart()
