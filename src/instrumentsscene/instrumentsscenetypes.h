@@ -30,7 +30,7 @@ class LayoutPanelItemType
     Q_GADGET
 
 public:
-    enum class ItemType {
+    enum ItemType {
         UNDEFINED = -1,
         ROOT,
         PART,

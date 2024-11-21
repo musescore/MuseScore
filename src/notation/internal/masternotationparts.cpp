@@ -94,6 +94,8 @@ void MasterNotationParts::setParts(const PartInstrumentList& partList, const Sco
         impl->setBracketsAndBarlines();
     }
 
+    updatePartList();
+    updateSystemObjectStaves();
     endGlobalEdit();
 }
 
@@ -283,6 +285,19 @@ void MasterNotationParts::removeSystemObjects(const muse::IDList& stavesIds)
 
     for (INotationPartsPtr parts : excerptsParts()) {
         parts->removeSystemObjects(stavesIds);
+    }
+
+    endGlobalEdit();
+}
+
+void MasterNotationParts::moveSystemObjects(const muse::ID& sourceStaffId, const muse::ID& destinationStaffId)
+{
+    startGlobalEdit(TranslatableString("undoableAction", "Move system objects"));
+
+    NotationParts::moveSystemObjects(sourceStaffId, destinationStaffId);
+
+    for (INotationPartsPtr parts : excerptsParts()) {
+        parts->moveSystemObjects(sourceStaffId, destinationStaffId);
     }
 
     endGlobalEdit();

@@ -1425,27 +1425,28 @@ void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::
     }
 }
 
-std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::set<staff_idx_t>& staffIdxSet)
+std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::vector<Staff*>& staves)
 {
-    const Measure* fm = score->firstMeasure();
-    if (!fm) {
-        return {};
-    }
-
     std::vector<EngravingItem*> result;
 
-    for (const Segment* seg = fm->first(SegmentType::ChordRest); seg; seg = seg->next1(SegmentType::ChordRest)) {
-        for (EngravingItem* annotation : seg->annotations()) {
-            if (!annotation || !annotation->systemFlag()) {
+    for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (const Segment& seg : measure->segments()) {
+            if (!seg.isChordRestType()) {
                 continue;
             }
 
-            if (!staffIdxSet.empty()) {
-                if (muse::contains(staffIdxSet, annotation->staffIdx())) {
+            for (EngravingItem* annotation : seg.annotations()) {
+                if (!annotation || !annotation->systemFlag()) {
+                    continue;
+                }
+
+                if (!staves.empty()) {
+                    if (muse::contains(staves, annotation->staff())) {
+                        result.push_back(annotation);
+                    }
+                } else if (annotation->isTopSystemObject()) {
                     result.push_back(annotation);
                 }
-            } else if (annotation->isTopSystemObject()) {
-                result.push_back(annotation);
             }
         }
     }
@@ -1456,8 +1457,8 @@ std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::
             continue;
         }
 
-        if (!staffIdxSet.empty()) {
-            if (muse::contains(staffIdxSet, spanner->staffIdx())) {
+        if (!staves.empty()) {
+            if (muse::contains(staves, spanner->staff())) {
                 result.push_back(spanner);
             }
         } else if (spanner->isTopSystemObject()) {

@@ -28,7 +28,7 @@ using namespace mu::notation;
 using namespace mu::engraving;
 
 StaffControlTreeItem::StaffControlTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
-    : AbstractLayoutPanelTreeItem(LayoutPanelItemType::ItemType::CONTROL_ADD_STAFF, masterNotation, notation, parent)
+    : AbstractLayoutPanelTreeItem(LayoutPanelItemType::CONTROL_ADD_STAFF, masterNotation, notation, parent)
 {
     setTitle(muse::qtrc("instruments", "Add staff"));
 }

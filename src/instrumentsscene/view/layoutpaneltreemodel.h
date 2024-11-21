@@ -34,6 +34,7 @@
 #include "actions/actionable.h"
 #include "shortcuts/ishortcutsregister.h"
 #include "iinteractive.h"
+#include "layoutpanelutils.h"
 
 Q_MOC_INCLUDE(< QItemSelectionModel >)
 
@@ -44,6 +45,7 @@ class ItemMultiSelectionModel;
 class QItemSelectionModel;
 
 namespace mu::instrumentsscene {
+class PartTreeItem;
 class LayoutPanelTreeModel : public QAbstractItemModel, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
@@ -151,18 +153,15 @@ private:
 
     AbstractLayoutPanelTreeItem* buildMasterPartItem(const notation::Part* masterPart);
     AbstractLayoutPanelTreeItem* buildMasterStaffItem(const mu::notation::Staff* masterStaff, QObject* parent);
-    AbstractLayoutPanelTreeItem* buildSystemObjectsLayerItem(const mu::notation::Staff* masterStaff, bool isTopLayer);
+    AbstractLayoutPanelTreeItem* buildSystemObjectsLayerItem(const mu::notation::Staff* masterStaff,
+                                                             const SystemObjectGroups& systemObjects);
     AbstractLayoutPanelTreeItem* buildAddStaffControlItem(const muse::ID& partId, QObject* parent);
     AbstractLayoutPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
 
-    struct SystemObjectsLayerInsertPosition {
-        int row = -1;
-        const notation::Staff* staff = nullptr;
+    void updateSystemObjectLayers();
 
-        bool isValid() const { return row != -1 && staff; }
-    };
-
-    SystemObjectsLayerInsertPosition resolveSystemObjectsLayerInsertPosition() const;
+    const PartTreeItem* findPartItemByStaff(const notation::Staff* staff) const;
+    const notation::Staff* resolveNewSystemObjectStaff() const;
 
     bool m_isMovingUpAvailable = false;
     bool m_isMovingDownAvailable = false;
@@ -183,7 +182,7 @@ private:
     bool m_layoutPanelVisible = true;
 
     bool m_dragInProgress = false;
-    bool m_activeDragIsStave = false;
+    AbstractLayoutPanelTreeItem* m_dragSourceParentItem = nullptr;
     MoveParams m_activeDragMoveParams;
 };
 }

@@ -31,25 +31,43 @@ struct SystemObjectsGroup {
     std::vector<mu::engraving::EngravingItem*> items;
 };
 
-inline std::vector<SystemObjectsGroup> collectSystemObjectGroups(const mu::engraving::Staff* systemObjectsStaff)
+using SystemObjectGroups = std::vector<SystemObjectsGroup>;
+using SystemObjectGroupsByStaff = std::map<const mu::engraving::Staff*, SystemObjectGroups>;
+
+inline SystemObjectGroupsByStaff collectSystemObjectGroups(const std::vector<mu::engraving::Staff*>& staves)
 {
-    std::vector<engraving::EngravingItem*> systemObjects = engraving::collectSystemObjects(systemObjectsStaff->score(),
-                                                                                           { systemObjectsStaff->idx() });
-    std::vector<SystemObjectsGroup> result;
+    if (staves.empty()) {
+        return {};
+    }
+
+    const std::vector<engraving::EngravingItem*> systemObjects = engraving::collectSystemObjects(staves.front()->score(), staves);
+    SystemObjectGroupsByStaff result;
 
     for (engraving::EngravingItem* obj : systemObjects) {
-        auto it = std::find_if(result.begin(), result.end(), [obj](const SystemObjectsGroup& group) {
+        SystemObjectGroups& groups = result[obj->staff()];
+
+        auto it = std::find_if(groups.begin(), groups.end(), [obj](const SystemObjectsGroup& group) {
             return group.type == obj->type();
         });
 
-        if (it != result.end()) {
+        if (it != groups.end()) {
             it->items.push_back(obj);
         } else {
-            result.emplace_back(SystemObjectsGroup { obj->type(), obj->typeUserName(), { obj } });
+            groups.emplace_back(SystemObjectsGroup { obj->type(), obj->typeUserName(), { obj } });
         }
     }
 
     return result;
+}
+
+inline SystemObjectGroups collectSystemObjectGroups(const mu::engraving::Staff* systemObjectsStaff)
+{
+    const std::vector<mu::engraving::Staff*> staves {
+        const_cast<mu::engraving::Staff*>(systemObjectsStaff)
+    };
+
+    SystemObjectGroupsByStaff systemObjects = collectSystemObjectGroups(staves);
+    return systemObjects[systemObjectsStaff];
 }
 
 inline bool isSystemObjectsGroupVisible(const SystemObjectsGroup& group)
@@ -61,5 +79,11 @@ inline bool isSystemObjectsGroupVisible(const SystemObjectsGroup& group)
     }
 
     return false;
+}
+
+inline muse::String translatedSystemObjectsGroupName(const SystemObjectsGroup& group)
+{
+    const bool plural = group.items.size() > 1;
+    return mu::engraving::TConv::userName(group.type, plural).translated();
 }
 }

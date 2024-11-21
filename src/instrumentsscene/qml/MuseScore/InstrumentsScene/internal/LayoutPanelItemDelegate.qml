@@ -105,6 +105,7 @@ FocusableControl {
 
     mouseArea.onClicked: function(mouse) { root.clicked(mouse) }
     mouseArea.onDoubleClicked: function(mouse) { root.doubleClicked(mouse) }
+    mouseArea.enabled: root.isSelectable
 
     mouseArea.drag.target: root
     mouseArea.drag.axis: Drag.YAxis

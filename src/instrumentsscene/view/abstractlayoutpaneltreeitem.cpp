@@ -32,9 +32,8 @@ AbstractLayoutPanelTreeItem::AbstractLayoutPanelTreeItem(LayoutPanelItemType::It
                                                          IMasterNotationPtr masterNotation,
                                                          INotationPtr notation,
                                                          QObject* parent)
-    : QObject(parent), m_masterNotation(masterNotation), m_notation(notation)
+    : QObject(parent), m_type(type), m_masterNotation(masterNotation), m_notation(notation)
 {
-    setType(type);
 }
 
 AbstractLayoutPanelTreeItem::~AbstractLayoutPanelTreeItem()
@@ -143,6 +142,10 @@ void AbstractLayoutPanelTreeItem::moveChildren(int sourceRow, int count,
     AbstractLayoutPanelTreeItem::removeChildren(childToRemoveIndex, count);
 }
 
+void AbstractLayoutPanelTreeItem::moveChildrenOnScore(const MoveParams&)
+{
+}
+
 void AbstractLayoutPanelTreeItem::removeChildren(int row, int count, bool deleteChild)
 {
     for (int i = row + count - 1; i >= row; --i) {
@@ -166,10 +169,10 @@ void AbstractLayoutPanelTreeItem::setParentItem(AbstractLayoutPanelTreeItem* par
     m_parent = parent;
 }
 
-AbstractLayoutPanelTreeItem* AbstractLayoutPanelTreeItem::childAtId(const ID& id) const
+AbstractLayoutPanelTreeItem* AbstractLayoutPanelTreeItem::childAtId(const ID& id, LayoutPanelItemType::ItemType type) const
 {
     for (AbstractLayoutPanelTreeItem* item: m_children) {
-        if (item->id() == id) {
+        if (item->m_id == id && item->m_type == type) {
             return item;
         }
     }
@@ -189,6 +192,12 @@ AbstractLayoutPanelTreeItem* AbstractLayoutPanelTreeItem::childAtRow(int row) co
 const QList<AbstractLayoutPanelTreeItem*>& AbstractLayoutPanelTreeItem::childItems() const
 {
     return m_children;
+}
+
+LayoutPanelItemType::ItemType AbstractLayoutPanelTreeItem::childType(int row) const
+{
+    const AbstractLayoutPanelTreeItem* child = childAtRow(row);
+    return child ? child->type() : LayoutPanelItemType::UNDEFINED;
 }
 
 int AbstractLayoutPanelTreeItem::indexOf(const AbstractLayoutPanelTreeItem* item) const
@@ -243,16 +252,6 @@ int AbstractLayoutPanelTreeItem::childCount() const
 int AbstractLayoutPanelTreeItem::row() const
 {
     return m_parent ? m_parent->indexOf(this) : 0;
-}
-
-void AbstractLayoutPanelTreeItem::setType(LayoutPanelItemType::ItemType type)
-{
-    if (m_type == type) {
-        return;
-    }
-
-    m_type = type;
-    emit typeChanged(m_type);
 }
 
 void AbstractLayoutPanelTreeItem::setTitle(QString title)
