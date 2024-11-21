@@ -1528,10 +1528,10 @@ void Score::cmdAddTimeSig(Measure* targetMeasure, staff_idx_t staffIdx, TimeSig*
         }
     }
     if (local) {
-            select(originalTimeSig, SelectType::SINGLE, staffIdx);
-        } else {
-            selectElementsWithSameTypeOnSegment(ElementType::TIMESIG, targetSegment);
-        }
+        select(originalTimeSig, SelectType::SINGLE, staffIdx);
+    } else {
+        selectElementsWithSameTypeOnSegment(ElementType::TIMESIG, targetSegment);
+    }
     delete targetTimeSignature;
 }
 

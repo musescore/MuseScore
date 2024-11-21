@@ -2062,6 +2062,10 @@ void Score::setSelection(const Selection& s)
     }
 }
 
+//---------------------------------------------------------
+//   selectElementsWithSameTypeOnSegment
+//---------------------------------------------------------
+
 void Score::selectElementsWithSameTypeOnSegment(mu::engraving::ElementType elementType, mu::engraving::Segment* segment)
 {
     TRACEFUNC;
