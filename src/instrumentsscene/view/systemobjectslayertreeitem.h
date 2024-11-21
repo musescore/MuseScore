@@ -23,24 +23,34 @@
 #pragma once
 
 #include "abstractlayoutpaneltreeitem.h"
+#include "async/asyncable.h"
 
 #include "notation/inotationparts.h"
 
+#include "layoutpanelutils.h"
+
 namespace mu::instrumentsscene {
-class SystemObjectsLayerTreeItem : public AbstractLayoutPanelTreeItem
+class SystemObjectsLayerTreeItem : public AbstractLayoutPanelTreeItem, public muse::async::Asyncable
 {
     Q_OBJECT
 
 public:
     SystemObjectsLayerTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
 
-    void init(const mu::engraving::Staff* staff, bool isTopLayer = false);
+    void init(const mu::engraving::Staff* staff, const SystemObjectGroups& systemObjects);
 
     const mu::engraving::Staff* staff() const;
+    void setStaff(const mu::engraving::Staff* staff);
 
     Q_INVOKABLE QString staffId() const;
+    Q_INVOKABLE bool canAcceptDrop(const QVariant& item) const override;
 
 private:
+    void listenUndoStackChanged();
+    void updateStaff();
+
     const mu::engraving::Staff* m_staff = nullptr;
+    mu::engraving::staff_idx_t m_staffIdx = muse::nidx;
+    SystemObjectGroups m_systemObjectGroups;
 };
 }

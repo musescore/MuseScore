@@ -41,17 +41,18 @@ public:
 
     void init(const notation::Part* masterPart);
 
-    Q_INVOKABLE QString instrumentId() const;
-
     const notation::Part* part() const;
 
-    MoveParams buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent,
-                               int destinationRow) const override;
+    MoveParams buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow) const override;
 
     void moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow,
                       bool updateNotation) override;
 
+    void moveChildrenOnScore(const MoveParams& params) override;
+
     void removeChildren(int row, int count, bool deleteChild) override;
+
+    Q_INVOKABLE bool canAcceptDrop(const QVariant& item) const override;
 
     Q_INVOKABLE QString instrumentId() const;
     Q_INVOKABLE void replaceInstrument();

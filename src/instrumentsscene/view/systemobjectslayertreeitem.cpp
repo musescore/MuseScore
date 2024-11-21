@@ -30,7 +30,7 @@ using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace mu::engraving;
 
-static QString formatLayerTitle(const std::vector<SystemObjectsGroup>& groups)
+static QString formatLayerTitle(const SystemObjectGroups& groups)
 {
     if (groups.empty()) {
         return muse::qtrc("instruments", "System objects");
@@ -40,8 +40,13 @@ static QString formatLayerTitle(const std::vector<SystemObjectsGroup>& groups)
 
     const size_t lastIdx = groups.size() - 1;
     for (size_t i = 0; i <= lastIdx; ++i) {
-        if (i == 0) {
-            title = groups.at(i).name.translated();
+        const SystemObjectsGroup& group = groups.at(i);
+        if (!isSystemObjectsGroupVisible(group)) {
+            continue;
+        }
+
+        if (title.isEmpty()) {
+            title = group.name.translated();
         } else {
             if (i == lastIdx) {
                 title += " & ";
@@ -49,14 +54,18 @@ static QString formatLayerTitle(const std::vector<SystemObjectsGroup>& groups)
                 title += ", ";
             }
 
-            title += groups.at(i).name.translated().toLower();
+            title += group.name.translated().toLower();
         }
+    }
+
+    if (title.isEmpty()) {
+        title = muse::qtrc("instruments", "System objects hidden");
     }
 
     return title;
 }
 
-static bool isLayerVisible(const std::vector<SystemObjectsGroup>& groups)
+static bool isLayerVisible(const SystemObjectGroups& groups)
 {
     for (const SystemObjectsGroup& group : groups) {
         if (isSystemObjectsGroupVisible(group)) {
@@ -68,30 +77,90 @@ static bool isLayerVisible(const std::vector<SystemObjectsGroup>& groups)
 }
 
 SystemObjectsLayerTreeItem::SystemObjectsLayerTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
-    : AbstractLayoutPanelTreeItem(LayoutPanelItemType::ItemType::SYSTEM_OBJECTS_LAYER, masterNotation, notation, parent)
+    : AbstractLayoutPanelTreeItem(LayoutPanelItemType::SYSTEM_OBJECTS_LAYER, masterNotation, notation, parent)
 {
     setIsEditable(true);
     setIsExpandable(false);
 }
 
-void SystemObjectsLayerTreeItem::init(const Staff* staff, bool isTopLayer)
+void SystemObjectsLayerTreeItem::init(const Staff* staff, const SystemObjectGroups& systemObjects)
 {
-    m_staff = staff;
-    std::vector<SystemObjectsGroup> groups = collectSystemObjectGroups(staff);
+    m_systemObjectGroups = systemObjects;
 
-    setId(staff->id());
-    setTitle(formatLayerTitle(groups));
-    setIsVisible(isLayerVisible(groups));
+    setStaff(staff);
+    setTitle(formatLayerTitle(systemObjects));
+    setIsVisible(isLayerVisible(systemObjects));
+
+    bool isTopLayer = staff->score()->staff(0) == staff;
     setIsRemovable(!isTopLayer);
     setIsSelectable(!isTopLayer);
+
+    listenUndoStackChanged();
 }
 
 const Staff* SystemObjectsLayerTreeItem::staff() const
 {
+    const_cast<SystemObjectsLayerTreeItem*>(this)->updateStaff();
+
     return m_staff;
+}
+
+void SystemObjectsLayerTreeItem::setStaff(const Staff* staff)
+{
+    m_staff = staff;
+
+    if (staff) {
+        setId(staff->id());
+        m_staffIdx = staff->idx(); // optimization
+    } else {
+        setId(ID());
+        m_staffIdx = muse::nidx;
+    }
 }
 
 QString SystemObjectsLayerTreeItem::staffId() const
 {
-    return m_staff ? m_staff->id().toQString() : QString();
+    const Staff* s = staff();
+    return s ? s->id().toQString() : QString();
+}
+
+bool SystemObjectsLayerTreeItem::canAcceptDrop(const QVariant&) const
+{
+    return false;
+}
+
+void SystemObjectsLayerTreeItem::listenUndoStackChanged()
+{
+    notation()->undoStack()->changesChannel().onReceive(this, [this](const ChangesRange& changes) {
+        if (muse::contains(changes.changedPropertyIdSet, Pid::TRACK)) {
+            updateStaff();
+        }
+
+        if (changes.staffIdxFrom > m_staffIdx || changes.staffIdxTo < m_staffIdx) {
+            return;
+        }
+
+        for (const EngravingItem* item : changes.changedItems) {
+            if (!item->systemFlag() || item->staffIdx() != m_staffIdx) {
+                continue;
+            }
+
+            // TODO: optimize
+            m_systemObjectGroups = collectSystemObjectGroups(m_staff);
+            setTitle(formatLayerTitle(m_systemObjectGroups));
+            setIsVisible(isLayerVisible(m_systemObjectGroups));
+
+            return;
+        }
+    });
+}
+
+void SystemObjectsLayerTreeItem::updateStaff()
+{
+    if (!m_systemObjectGroups.empty()) {
+        const SystemObjectsGroup& firstGroup = m_systemObjectGroups.front();
+        if (!firstGroup.items.empty()) {
+            setStaff(firstGroup.items.front()->staff());
+        }
+    }
 }
