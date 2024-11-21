@@ -80,6 +80,7 @@ public:
 
     void addSystemObjects(const muse::IDList& stavesIds) override;
     void removeSystemObjects(const muse::IDList& stavesIds) override;
+    void moveSystemObjects(const muse::ID& sourceStaffId, const muse::ID& destinationStaffId) override;
 
     muse::async::Notification partsChanged() const override;
     muse::async::Notification scoreOrderChanged() const override;

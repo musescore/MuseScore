@@ -346,10 +346,21 @@ void NotationParts::listenUndoStackChanges()
         return;
     }
 
-    m_parts = score()->parts();
-    m_systemObjectStaves = score()->systemObjectStaves();
+    auto systemObjectStavesWithTopStaff = [this]() {
+        std::vector<Staff*> result;
+        if (Staff* topStaff = score()->staff(0)) {
+            result.push_back(topStaff);
+        }
 
-    m_undoStack->changesChannel().onReceive(this, [this](const ChangesRange& range) {
+        muse::join(result, score()->systemObjectStaves());
+
+        return result;
+    };
+
+    m_parts = score()->parts();
+    m_systemObjectStaves = systemObjectStavesWithTopStaff();
+
+    m_undoStack->changesChannel().onReceive(this, [this, systemObjectStavesWithTopStaff](const ChangesRange& range) {
         if (range.changedTypes.empty()) {
             return;
         }
@@ -370,8 +381,9 @@ void NotationParts::listenUndoStackChanges()
                 m_partChangedNotifier.changed();
             }
 
-            if (m_systemObjectStaves != score()->systemObjectStaves()) {
-                m_systemObjectStaves = score()->systemObjectStaves();
+            std::vector<Staff*> newSystemObjectStaves = systemObjectStavesWithTopStaff();
+            if (m_systemObjectStaves != newSystemObjectStaves) {
+                m_systemObjectStaves = std::move(newSystemObjectStaves);
                 m_systemObjectStavesChanged.notify();
             }
 
@@ -710,7 +722,7 @@ void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Dru
 
 const std::vector<Staff*>& NotationParts::systemObjectStaves() const
 {
-    return score()->systemObjectStaves();
+    return m_systemObjectStaves;
 }
 
 muse::async::Notification NotationParts::systemObjectStavesChanged() const
@@ -756,7 +768,7 @@ void NotationParts::removeSystemObjects(const IDList& stavesIds)
     }
 
     Score* score = this->score();
-    std::vector<EngravingItem*> systemObjects = engraving::collectSystemObjects(score, staffIndices(stavesIds));
+    std::vector<EngravingItem*> systemObjects = engraving::collectSystemObjects(score, staves);
 
     startEdit(TranslatableString("undoableAction", "Remove system objects"));
 
@@ -768,6 +780,39 @@ void NotationParts::removeSystemObjects(const IDList& stavesIds)
 
     for (EngravingItem* obj : systemObjects) {
         score->undoRemoveElement(obj, false /*removeLinked*/);
+    }
+
+    apply();
+}
+
+void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destinationStaffId)
+{
+    Staff* srcStaff = staffModifiable(sourceStaffId);
+    if (!srcStaff || !score()->isSystemObjectStaff(srcStaff)) {
+        return;
+    }
+
+    Staff* dstStaff = staffModifiable(destinationStaffId);
+    if (!dstStaff) {
+        return;
+    }
+
+    const std::vector<EngravingItem*> systemObjects = engraving::collectSystemObjects(score(), { srcStaff, dstStaff });
+    const staff_idx_t dstStaffIdx = dstStaff->idx();
+
+    startEdit(TranslatableString("undoableAction", "Move system objects"));
+
+    score()->undo(new mu::engraving::RemoveSystemObjectStaff(srcStaff));
+    if (!score()->isSystemObjectStaff(dstStaff)) {
+        score()->undo(new mu::engraving::AddSystemObjectStaff(dstStaff));
+    }
+
+    for (EngravingItem* item : systemObjects) {
+        if (item->staff() == srcStaff) {
+            item->undoChangeProperty(Pid::TRACK, staff2track(dstStaffIdx, item->voice()));
+        } else {
+            score()->undoRemoveElement(item, false /*removeLinked*/);
+        }
     }
 
     apply();

@@ -27,7 +27,7 @@ using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
 StaffTreeItem::StaffTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
-    : AbstractLayoutPanelTreeItem(LayoutPanelItemType::ItemType::STAFF, masterNotation, notation, parent)
+    : AbstractLayoutPanelTreeItem(LayoutPanelItemType::STAFF, masterNotation, notation, parent)
 {
     connect(this, &AbstractLayoutPanelTreeItem::isVisibleChanged, [this](bool isVisible) {
         if (!m_isInited) {

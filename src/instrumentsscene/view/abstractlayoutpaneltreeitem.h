@@ -33,9 +33,15 @@
 
 namespace mu::instrumentsscene {
 struct MoveParams {
-    muse::IDList childIdListToMove;
-    muse::ID destinationParentId;
+    muse::IDList objectIdListToMove;
+    muse::ID destinationObjectId;
+    LayoutPanelItemType::ItemType objectsType = LayoutPanelItemType::UNDEFINED;
     notation::INotationParts::InsertMode insertMode = notation::INotationParts::InsertMode::Before;
+
+    bool isValid() const
+    {
+        return !objectIdListToMove.empty() && destinationObjectId.isValid() && objectsType != LayoutPanelItemType::UNDEFINED;
+    }
 };
 
 class AbstractLayoutPanelTreeItem : public QObject
@@ -44,7 +50,7 @@ class AbstractLayoutPanelTreeItem : public QObject
 
     Q_PROPERTY(QString id READ idStr CONSTANT)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
-    Q_PROPERTY(int type READ typeInt NOTIFY typeChanged)
+    Q_PROPERTY(int type READ typeInt CONSTANT)
     Q_PROPERTY(bool isVisible READ isVisible WRITE setIsVisible NOTIFY isVisibleChanged)
     Q_PROPERTY(bool isExpandable READ isExpandable NOTIFY isExpandableChanged)
     Q_PROPERTY(bool isEditable READ isEditable NOTIFY isEditableChanged)
@@ -78,14 +84,18 @@ public:
     virtual void moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow,
                               bool updateNotation);
 
+    virtual void moveChildrenOnScore(const MoveParams& params);
+
     virtual void removeChildren(int row, int count = 1, bool deleteChild = false);
 
     AbstractLayoutPanelTreeItem* parentItem() const;
     void setParentItem(AbstractLayoutPanelTreeItem* parent);
 
-    AbstractLayoutPanelTreeItem* childAtId(const muse::ID& id) const;
+    AbstractLayoutPanelTreeItem* childAtId(const muse::ID& id, LayoutPanelItemType::ItemType type) const;
     AbstractLayoutPanelTreeItem* childAtRow(int row) const;
     const QList<AbstractLayoutPanelTreeItem*>& childItems() const;
+
+    LayoutPanelItemType::ItemType childType(int row) const;
 
     void appendChild(AbstractLayoutPanelTreeItem* child);
     void insertChild(AbstractLayoutPanelTreeItem* child, int beforeRow);
@@ -95,7 +105,6 @@ public:
     int row() const;
 
 public slots:
-    void setType(LayoutPanelItemType::ItemType type);
     void setTitle(QString title);
     void setIsVisible(bool isVisible, bool setChildren = true);
     void setId(const muse::ID& id);
@@ -106,7 +115,6 @@ public slots:
     void setIsSelected(bool selected);
 
 signals:
-    void typeChanged(LayoutPanelItemType::ItemType type);
     void titleChanged(QString title);
     void isVisibleChanged(bool isVisible);
     void isExpandableChanged(bool isExpandable);
@@ -127,7 +135,7 @@ private:
 
     muse::ID m_id;
     QString m_title;
-    LayoutPanelItemType::ItemType m_type = LayoutPanelItemType::ItemType::UNDEFINED;
+    LayoutPanelItemType::ItemType m_type = LayoutPanelItemType::UNDEFINED;
     bool m_isVisible = false;
     bool m_isExpandable = false;
     bool m_isEditable = false;
