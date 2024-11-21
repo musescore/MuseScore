@@ -40,7 +40,7 @@ using namespace mu::engraving;
 
 static const mu::engraving::Fraction DEFAULT_TICK = mu::engraving::Fraction(0, 1);
 
-static QString formatInstrumentTitleOnScore(const QString& instrumentName, const Trait& trait)
+static String formatInstrumentTitleOnScore(const String& instrumentName, const Trait& trait)
 {
     // Comments for translators start with //:
 
@@ -53,25 +53,25 @@ static QString formatInstrumentTitleOnScore(const QString& instrumentName, const
     return instrumentName; // Example: "Flute"
 }
 
-static QString formatInstrumentTitleOnScore(const QString& instrumentName, const Trait& trait, int instrumentNumber)
+static String formatInstrumentTitleOnScore(const String& instrumentName, const Trait& trait, int instrumentNumber)
 {
     if (instrumentNumber == 0) {
         // Only one instance of this instrument in the score
         return formatInstrumentTitleOnScore(instrumentName, trait);
     }
 
-    QString number = QString::number(instrumentNumber);
+    String number = String::number(instrumentNumber);
 
     // Comments for translators start with //:
 
     if (trait.type == TraitType::Transposition && !trait.isHiddenOnScore) {
         //: %1=name ("Horn"), %2=transposition ("C alto"), %3=number ("2"). Example: "Horn in C alto 2"
-        return muse::qtrc("notation", "%1 in %2 %3", "One of several transposing instruments displayed in the score")
+        return muse::mtrc("notation", "%1 in %2 %3", "One of several transposing instruments displayed in the score")
                .arg(instrumentName, trait.name, number);
     }
 
     //: %1=name ("Flute"), %2=number ("2"). Example: "Flute 2"
-    return muse::qtrc("notation", "%1 %2", "One of several instruments displayed in the score")
+    return muse::mtrc("notation", "%1 %2", "One of several instruments displayed in the score")
            .arg(instrumentName, number);
 }
 
@@ -1143,10 +1143,10 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::en
 
         int instrumentNumber = resolveNewInstrumentNumber(pi.instrumentTemplate, parts);
 
-        QString longName = !longNames.empty() ? longNames.front().name().toQString() : QString();
-        QString formattedLongName = formatInstrumentTitleOnScore(longName, instrument.trait(), instrumentNumber);
-        QString shortName = !shortNames.empty() ? shortNames.front().name().toQString() : QString();
-        QString formattedShortName = formatInstrumentTitleOnScore(shortName, instrument.trait(), instrumentNumber);
+        String longName = !longNames.empty() ? longNames.front().name() : String();
+        String formattedLongName = formatInstrumentTitleOnScore(longName, instrument.trait(), instrumentNumber);
+        String shortName = !shortNames.empty() ? shortNames.front().name() : String();
+        String formattedShortName = formatInstrumentTitleOnScore(shortName, instrument.trait(), instrumentNumber);
 
         part->setPartName(formattedLongName);
         part->setLongName(formattedLongName);
