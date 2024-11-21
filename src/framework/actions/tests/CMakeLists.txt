@@ -18,25 +18,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(muse_actions)
-set(MODULE_ALIAS muse::actions)
+set(MODULE_TEST muse_actions_tests)
 
-set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/actionsmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/actionsmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/iactionsdispatcher.h
-    ${CMAKE_CURRENT_LIST_DIR}/actionable.h
-    ${CMAKE_CURRENT_LIST_DIR}/actiontypes.h
+set(MODULE_TEST_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/actionsdispatchermock.h
+)
 
-    ${CMAKE_CURRENT_LIST_DIR}/api/dispatcherapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/dispatcherapi.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/internal/actionsdispatcher.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/actionsdispatcher.h
+set(MODULE_TEST_LINK
+    muse::actions
     )
 
-setup_module()
+set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
-if (MUSE_MODULE_ACTIONS_TESTS)
-    add_subdirectory(tests)
-endif()
+include(SetupGTest)
