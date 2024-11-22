@@ -439,6 +439,22 @@ TiePlacement TConv::fromXml(const AsciiStringView& str, TiePlacement def)
     return findTypeByXmlTag<TiePlacement>(TIE_PLACEMENT, str, def);
 }
 
+static const std::vector<Item<TieDotsPlacement> > TIE_DOTS_PLACEMENT = {
+    { TieDotsPlacement::AUTO, "auto" },
+    { TieDotsPlacement::BEFORE_DOTS, "before" },
+    { TieDotsPlacement::AFTER_DOTS, "after" },
+};
+
+AsciiStringView TConv::toXml(TieDotsPlacement placement)
+{
+    return findXmlTagByType<TieDotsPlacement>(TIE_DOTS_PLACEMENT, placement);
+}
+
+TieDotsPlacement TConv::fromXml(const AsciiStringView& str, TieDotsPlacement def)
+{
+    return findTypeByXmlTag<TieDotsPlacement>(TIE_DOTS_PLACEMENT, str, def);
+}
+
 static const std::vector<Item<VoiceAssignment> > VOICE_ASSIGNMENT = {
     { VoiceAssignment::ALL_VOICE_IN_INSTRUMENT, "allInInstrument" },
     { VoiceAssignment::ALL_VOICE_IN_STAFF,      "allInStaff" },

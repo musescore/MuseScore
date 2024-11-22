@@ -26,7 +26,8 @@ using namespace mu::notation;
 TiePlacementSelectorModel::TiePlacementSelectorModel(QObject* parent)
     : AbstractStyleDialogModel(parent, {
     StyleId::tiePlacementSingleNote,
-    StyleId::tiePlacementChord })
+    StyleId::tiePlacementChord,
+    StyleId::tieDotsPlacement })
 {
 }
 
@@ -38,4 +39,9 @@ StyleItem* TiePlacementSelectorModel::placementSingleNotes() const
 StyleItem* TiePlacementSelectorModel::placementChords() const
 {
     return styleItem(StyleId::tiePlacementChord);
+}
+
+StyleItem* TiePlacementSelectorModel::placementDots() const
+{
+    return styleItem(StyleId::tieDotsPlacement);
 }

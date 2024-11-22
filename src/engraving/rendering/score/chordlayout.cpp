@@ -2213,7 +2213,7 @@ double ChordLayout::layoutChords2(std::vector<Note*>& notes, bool up, LayoutCont
     return maxWidth;
 }
 
-static inline bool chordHasDotsAllInvisible(Chord* chord)
+bool ChordLayout::chordHasDotsAllInvisible(Chord* chord)
 {
     if (!chord->dots()) {
         return false;

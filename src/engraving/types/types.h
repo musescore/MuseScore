@@ -1072,6 +1072,12 @@ enum class TiePlacement {
     OUTSIDE,
 };
 
+enum class TieDotsPlacement {
+    AUTO,
+    BEFORE_DOTS,
+    AFTER_DOTS
+};
+
 //---------------------------------------------------------
 //   Key
 //---------------------------------------------------------

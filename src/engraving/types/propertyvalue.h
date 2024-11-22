@@ -77,6 +77,7 @@ enum class P_TYPE {
     BEAM_MODE,
     ACCIDENTAL_ROLE,
     TIE_PLACEMENT,
+    TIE_DOTS_PLACEMENT,
 
     // Sound
     FRACTION,
@@ -208,6 +209,9 @@ public:
 
     PropertyValue(TiePlacement v)
         : m_type(P_TYPE::TIE_PLACEMENT), m_data(make_data<TiePlacement>(v)) {}
+
+    PropertyValue(TieDotsPlacement v)
+        : m_type(P_TYPE::TIE_DOTS_PLACEMENT), m_data(make_data<TieDotsPlacement>(v)) {}
 
     // Sound
     PropertyValue(const Fraction& v)

@@ -189,6 +189,9 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::TIE_PLACEMENT:
                 set(idx, TConv::fromXml(e.readAsciiText(), TiePlacement::AUTO));
                 break;
+            case P_TYPE::TIE_DOTS_PLACEMENT:
+                set(idx, TConv::fromXml(e.readAsciiText(), TieDotsPlacement::AUTO));
+                break;
             case P_TYPE::GLISS_STYLE:
                 set(idx, GlissandoStyle(e.readText().toInt()));
                 break;
@@ -573,6 +576,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tagProperty(st.name(), value(idx));
         } else if (P_TYPE::TIE_PLACEMENT == type) {
             xml.tag(st.name(), TConv::toXml(value(idx).value<TiePlacement>()));
+        } else if (P_TYPE::TIE_DOTS_PLACEMENT == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<TieDotsPlacement>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility
