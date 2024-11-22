@@ -51,7 +51,6 @@
 #include "key.h"
 #include "keylist.h"
 #include "keysig.h"
-#include "laissezvib.h"
 #include "layoutbreak.h"
 #include "linkedobjects.h"
 #include "lyrics.h"
@@ -61,7 +60,6 @@
 #include "mscoreview.h"
 #include "navigate.h"
 #include "note.h"
-#include "noteline.h"
 #include "ornament.h"
 #include "ottava.h"
 #include "part.h"
@@ -630,10 +628,6 @@ Note* Score::addNoteToTiedChord(Chord* chord, const NoteVal& noteVal, bool force
         tie->setTrack(newNote->track());
         newNote->setTieFor(tie);
 
-        if (!referenceNote->tieFor()->endNote()) {
-            break;
-        }
-
         referenceNote = referenceNote->tieFor()->endNote();
     }
 
@@ -741,11 +735,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         if (!chordRest) {
             break;
         }
-        textBox = Factory::createRehearsalMark(chordRest->segment());
-        textBox->setParent(chordRest->segment());
-        textBox->setTrack(0);
-        RehearsalMark* r = toRehearsalMark(textBox);
-        textBox->setXmlText(score()->createRehearsalMarkText(r));
+        textBox = Factory::createRehearsalMark(dummy()->segment());
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -946,15 +936,6 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
 
         textBox = tempoText;
         undoAddElement(textBox);
-        break;
-    }
-    case TextStyleType::DYNAMICS: {
-        ChordRest* chordRest = chordOrRest(destinationElement);
-        if (!chordRest) {
-            break;
-        }
-        textBox = Factory::createDynamic(dummy()->segment());
-        chordRest->undoAddAnnotation(textBox);
         break;
     }
     case TextStyleType::HARP_PEDAL_DIAGRAM:
@@ -1328,42 +1309,42 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffId
 //    to gui command (drop timesig on measure or timesig)
 //---------------------------------------------------------
 
-void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool local)
+void Score::cmdAddTimeSig(Measure* firstMeasure, staff_idx_t staffIdx, TimeSig* targetTimeSignature, bool local)
 {
     deselectAll();
 
-    if (fm->isMMRest()) {
-        fm = fm->mmRestFirst();
+    if (firstMeasure->isMMRest()) {
+        firstMeasure = firstMeasure->mmRestFirst();
     }
 
-    Fraction ns   = ts->sig();
-    Fraction tick = fm->tick();
-    TimeSig* lts  = staff(staffIdx)->timeSig(tick);
+    Fraction newTimeSig   = targetTimeSignature->sig();
+    Fraction fraction = firstMeasure->tick();
+    TimeSig* localTimeSig  = staff(staffIdx)->timeSig(fraction);
     if (local) {
-        Fraction stretch = (ns / fm->timesig()).reduced();
-        ts->setStretch(stretch);
+        Fraction stretch = (newTimeSig / firstMeasure->timesig()).reduced();
+        targetTimeSignature->setStretch(stretch);
     }
 
-    Fraction stretch;
-    Fraction lsig;                  // last signature
-    if (lts) {
-        stretch = lts->stretch();
-        lsig    = lts->sig();
+    Fraction stretchFraction;
+    Fraction lastSignatureFraction;                  // last signature
+    if (localTimeSig) {
+        stretchFraction = localTimeSig->stretch();
+        lastSignatureFraction    = localTimeSig->sig();
     } else {
-        stretch.set(1, 1);
-        lsig.set(4, 4);              // set to default
+        stretchFraction.set(1, 1);
+        lastSignatureFraction.set(4, 4);              // set to default
     }
 
     track_idx_t track = staffIdx * VOICES;
-    Segment* seg = fm->undoGetSegment(SegmentType::TimeSig, tick);
-    TimeSig* ots = toTimeSig(seg->element(track));
+    Segment* segment = firstMeasure->undoGetSegment(SegmentType::TimeSig, fraction);
+    TimeSig* originalTimeSig = toTimeSig(segment->element(track));
 
-    if (ots && (*ots == *ts)) {
+    if (originalTimeSig && (*originalTimeSig == *targetTimeSignature)) {
         //
         //  ignore if there is already a timesig
         //  with same values
         //
-        delete ts;
+        delete targetTimeSignature;
         return;
     }
 
@@ -1386,124 +1367,130 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
         return std::make_pair(startStaffIdx, endStaffIdx);
     };
 
-    if (ots && ots->sig() == ns && ots->stretch() == ts->stretch()) {
+    if (originalTimeSig
+        && originalTimeSig->sig() == newTimeSig
+        && originalTimeSig->stretch() == targetTimeSignature->stretch()) {
         //
         // the measure duration does not change,
         // so its ok to just update the time signatures
         //
-        TimeSig* nts = staff(staffIdx)->nextTimeSig(tick + Fraction::fromTicks(1));
-        const Fraction lmTick = nts ? nts->segment()->tick() : Fraction(-1, 1);
+        TimeSig* timeSigForFindingLastMeasure = staff(staffIdx)->nextTimeSig(fraction + Fraction::fromTicks(1));
+        const Fraction lastMeasureFraction
+            = timeSigForFindingLastMeasure ? timeSigForFindingLastMeasure->segment()->tick() : Fraction(-1, 1);
         for (Score* score : scoreList()) {
-            Measure* mf = score->tick2measure(tick);
-            Measure* lm = (lmTick != Fraction(-1, 1)) ? score->tick2measure(lmTick) : nullptr;
-            for (Measure* m = mf; m != lm; m = m->nextMeasure()) {
-                bool changeActual = m->ticks() == m->timesig();
-                m->undoChangeProperty(Pid::TIMESIG_NOMINAL, ns);
+            Measure* firstMeasureInCurrentScore = score->tick2measure(fraction);
+            Measure* lastMeasureInCurrentScore
+                = (lastMeasureFraction != Fraction(-1, 1)) ? score->tick2measure(lastMeasureFraction) : nullptr;
+            for (Measure* measure = firstMeasureInCurrentScore; measure != lastMeasureInCurrentScore; measure = measure->nextMeasure()) {
+                bool changeActual = measure->ticks() == measure->timesig();
+                measure->undoChangeProperty(Pid::TIMESIG_NOMINAL, newTimeSig);
                 if (changeActual) {
-                    m->undoChangeProperty(Pid::TIMESIG_ACTUAL, ns);
+                    measure->undoChangeProperty(Pid::TIMESIG_ACTUAL, newTimeSig);
                 }
             }
             std::pair<staff_idx_t, staff_idx_t> staffIdxRange = getStaffIdxRange(score);
             for (staff_idx_t si = staffIdxRange.first; si < staffIdxRange.second; ++si) {
-                TimeSig* nsig = toTimeSig(seg->element(si * VOICES));
-                if (!nsig) {
+                TimeSig* timeSigOfCurrentStaffIndex = toTimeSig(segment->element(si * VOICES));
+                if (!timeSigOfCurrentStaffIndex) {
                     continue;
                 }
-                nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
-                nsig->undoChangeProperty(Pid::TIMESIG, ts->sig());
-                nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
-                nsig->undoChangeProperty(Pid::NUMERATOR_STRING, ts->numeratorString());
-                nsig->undoChangeProperty(Pid::DENOMINATOR_STRING, ts->denominatorString());
-                nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, ts->stretch());
-                nsig->undoChangeProperty(Pid::GROUP_NODES, ts->groups().nodes());
-                nsig->setSelected(false);
-                nsig->setDropTarget(false);
+                timeSigOfCurrentStaffIndex->undoChangeProperty(Pid::SHOW_COURTESY, targetTimeSignature->showCourtesySig());
+                timeSigOfCurrentStaffIndex->undoChangeProperty(Pid::TIMESIG, targetTimeSignature->sig());
+                timeSigOfCurrentStaffIndex->undoChangeProperty(Pid::TIMESIG_TYPE, int(targetTimeSignature->timeSigType()));
+                timeSigOfCurrentStaffIndex->undoChangeProperty(Pid::NUMERATOR_STRING, targetTimeSignature->numeratorString());
+                timeSigOfCurrentStaffIndex->undoChangeProperty(Pid::DENOMINATOR_STRING, targetTimeSignature->denominatorString());
+                timeSigOfCurrentStaffIndex->undoChangeProperty(Pid::TIMESIG_STRETCH, targetTimeSignature->stretch());
+                timeSigOfCurrentStaffIndex->undoChangeProperty(Pid::GROUP_NODES, targetTimeSignature->groups().nodes());
+                timeSigOfCurrentStaffIndex->setSelected(false);
+                timeSigOfCurrentStaffIndex->setDropTarget(false);
             }
         }
     } else {
         Score* mScore = masterScore();
-        Measure* mf  = mScore->tick2measure(tick);
+        Measure* firstMeasureOfMasterScore  = mScore->tick2measure(fraction);
 
         //
         // rewrite all measures up to the next time signature
         //
-        if (mf == mScore->firstMeasure() && mf->nextMeasure() && (mf->ticks() != mf->timesig())) {
+        if (firstMeasureOfMasterScore == mScore->firstMeasure()
+            && firstMeasureOfMasterScore->nextMeasure()
+            && (firstMeasureOfMasterScore->ticks() != firstMeasureOfMasterScore->timesig())) {
             // handle upbeat
-            mf->undoChangeProperty(Pid::TIMESIG_NOMINAL, ns);
-            Measure* m = mf->nextMeasure();
-            Segment* s = m->findSegment(SegmentType::TimeSig, m->tick());
-            mf = s ? 0 : mf->nextMeasure();
+            firstMeasureOfMasterScore->undoChangeProperty(Pid::TIMESIG_NOMINAL, newTimeSig);
+            Measure* upbeatMeasure = firstMeasureOfMasterScore->nextMeasure();
+            Segment* upbeatSegment = upbeatMeasure->findSegment(SegmentType::TimeSig, upbeatMeasure->tick());
+            firstMeasureOfMasterScore = upbeatSegment ? 0 : firstMeasureOfMasterScore->nextMeasure();
         } else {
-            if (sigmap()->timesig(seg->tick().ticks()).nominal().identical(ns)) {
+            if (sigmap()->timesig(segment->tick().ticks()).nominal().identical(newTimeSig)) {
                 // no change to global time signature,
                 // but we need to rewrite any staves with local time signatures
                 for (size_t i = 0; i < nstaves(); ++i) {
-                    if (staff(i)->timeSig(tick) && staff(i)->timeSig(tick)->isLocal()) {
-                        if (!mScore->rewriteMeasures(mf, ns, i)) {
-                            undoStack()->activeCommand()->unwind();
+                    if (staff(i)->timeSig(fraction) && staff(i)->timeSig(fraction)->isLocal()) {
+                        if (!mScore->rewriteMeasures(firstMeasureOfMasterScore, newTimeSig, i)) {
+                            undoStack()->current()->unwind();
                             return;
                         }
                     }
                 }
-                mf = 0;
+                firstMeasureOfMasterScore = 0;
             }
         }
 
         // try to rewrite the measures first
         // we will only add time signatures if this succeeds
         // this means, however, that the rewrite cannot depend on the time signatures being in place
-        if (mf) {
-            if (!mScore->rewriteMeasures(mf, ns, local ? staffIdx : muse::nidx)) {
-                undoStack()->activeCommand()->unwind();
+        if (firstMeasureOfMasterScore) {
+            if (!mScore->rewriteMeasures(firstMeasureOfMasterScore, newTimeSig, local ? staffIdx : muse::nidx)) {
+                undoStack()->current()->unwind();
                 return;
             }
         }
         // add the time signatures
         std::map<track_idx_t, TimeSig*> masterTimeSigs;
         for (Score* score : scoreList()) {
-            Measure* nfm = score->tick2measure(tick);
-            seg = nfm->undoGetSegment(SegmentType::TimeSig, nfm->tick());
+            Measure* firstMeasureOfCurrentScore = score->tick2measure(fraction);
+            segment = firstMeasureOfCurrentScore->undoGetSegment(SegmentType::TimeSig, firstMeasureOfCurrentScore->tick());
             std::pair<staff_idx_t, staff_idx_t> staffIdxRange = getStaffIdxRange(score);
             for (staff_idx_t si = staffIdxRange.first; si < staffIdxRange.second; ++si) {
-                if (fm->isMeasureRepeatGroup(si)) {
-                    deleteItem(fm->measureRepeatElement(si));
+                if (firstMeasure->isMeasureRepeatGroup(si)) {
+                    deleteItem(firstMeasure->measureRepeatElement(si));
                 }
-                TimeSig* nsig = toTimeSig(seg->element(si * VOICES));
-                if (nsig == 0) {
-                    nsig = Factory::copyTimeSig(*ts);
-                    nsig->setScore(score);
-                    nsig->setTrack(si * VOICES);
-                    nsig->setParent(seg);
-                    undoAddElement(nsig);
+                TimeSig* timeSigOfCurrentStaffIndex = toTimeSig(segment->element(si * VOICES));
+                if (timeSigOfCurrentStaffIndex == 0) {
+                    timeSigOfCurrentStaffIndex = Factory::copyTimeSig(*targetTimeSignature);
+                    timeSigOfCurrentStaffIndex->setScore(score);
+                    timeSigOfCurrentStaffIndex->setTrack(si * VOICES);
+                    timeSigOfCurrentStaffIndex->setParent(segment);
+                    undoAddElement(timeSigOfCurrentStaffIndex);
                     if (score->excerpt()) {
-                        const track_idx_t masterTrack = muse::key(score->excerpt()->tracksMapping(), nsig->track());
+                        const track_idx_t masterTrack = muse::key(score->excerpt()->tracksMapping(), timeSigOfCurrentStaffIndex->track());
                         TimeSig* masterTimeSig = masterTimeSigs[masterTrack];
                         if (masterTimeSig) {
-                            undo(new Link(masterTimeSig, nsig));
+                            undo(new Link(masterTimeSig, timeSigOfCurrentStaffIndex));
                         }
                     }
                 } else {
-                    nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
-                    nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
-                    nsig->undoChangeProperty(Pid::TIMESIG, ts->sig());
-                    nsig->undoChangeProperty(Pid::NUMERATOR_STRING, ts->numeratorString());
-                    nsig->undoChangeProperty(Pid::DENOMINATOR_STRING, ts->denominatorString());
+                    timeSigOfCurrentStaffIndex->undoChangeProperty(Pid::SHOW_COURTESY, targetTimeSignature->showCourtesySig());
+                    timeSigOfCurrentStaffIndex->undoChangeProperty(Pid::TIMESIG_TYPE, int(targetTimeSignature->timeSigType()));
+                    timeSigOfCurrentStaffIndex->undoChangeProperty(Pid::TIMESIG, targetTimeSignature->sig());
+                    timeSigOfCurrentStaffIndex->undoChangeProperty(Pid::NUMERATOR_STRING, targetTimeSignature->numeratorString());
+                    timeSigOfCurrentStaffIndex->undoChangeProperty(Pid::DENOMINATOR_STRING, targetTimeSignature->denominatorString());
 
                     // HACK do it twice to accommodate undo
-                    nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
-                    nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, ts->stretch());
-                    nsig->undoChangeProperty(Pid::GROUP_NODES, ts->groups().nodes());
-                    nsig->setSelected(false);
-                    nsig->setDropTarget(false);                 // DEBUG
+                    timeSigOfCurrentStaffIndex->undoChangeProperty(Pid::TIMESIG_TYPE, int(targetTimeSignature->timeSigType()));
+                    timeSigOfCurrentStaffIndex->undoChangeProperty(Pid::TIMESIG_STRETCH, targetTimeSignature->stretch());
+                    timeSigOfCurrentStaffIndex->undoChangeProperty(Pid::GROUP_NODES, targetTimeSignature->groups().nodes());
+                    timeSigOfCurrentStaffIndex->setSelected(false);
+                    timeSigOfCurrentStaffIndex->setDropTarget(false);                 // DEBUG
                 }
 
                 if (score->isMaster()) {
-                    masterTimeSigs[nsig->track()] = nsig;
+                    masterTimeSigs[timeSigOfCurrentStaffIndex->track()] = timeSigOfCurrentStaffIndex;
                 }
             }
         }
     }
-    delete ts;
+    delete targetTimeSignature;
 }
 
 //---------------------------------------------------------
@@ -1546,7 +1533,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
     Fraction ns(pm ? pm->timesig() : Fraction(4, 4));
 
     if (!rScore->rewriteMeasures(rm, ns, muse::nidx)) {
-        undoStack()->activeCommand()->unwind();
+        undoStack()->current()->unwind();
     } else {
         m = tick2measure(tick);           // old m may have been replaced
         // hack: fix measure rest durations for staves with local time signatures
@@ -1731,7 +1718,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                     Fraction tick = seg->tick();
                     track_idx_t tr = chord->track();
                     Fraction sd   = noteTicks;
-                    std::vector<Tie*> ties;
+                    Tie* tie      = 0;
                     Segment* segment = seg;
                     ChordRest* cr = toChordRest(segment->element(tr));
                     Chord* nchord = toChord(chord->clone());
@@ -1774,7 +1761,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             std::vector<Note*> nl2 = nchord2->notes();
                             if (!firstpart) {
                                 for (size_t j = 0; j < nl1.size(); ++j) {
-                                    Tie* tie = Factory::createTie(this->dummy());
+                                    tie = Factory::createTie(this->dummy());
                                     tie->setStartNote(nl1[j]);
                                     tie->setEndNote(nl2[j]);
                                     tie->setTick(tie->startNote()->tick());
@@ -1782,7 +1769,6 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                                     tie->setTrack(tr);
                                     nl1[j]->setTieFor(tie);
                                     nl2[j]->setTieBack(tie);
-                                    ties.push_back(tie);
                                 }
                             }
                             undoAddCR(nchord2, measure, tick);
@@ -1828,7 +1814,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                         Note* n = startChord->notes()[i];
                         Note* nn = nchord->notes()[i];
                         if (tieBack[i]) {
-                            Tie* tie = Factory::createTie(this->dummy());
+                            tie = Factory::createTie(this->dummy());
                             tie->setStartNote(tieBack[i]);
                             tie->setEndNote(n);
                             tie->setTick(tie->startNote()->tick());
@@ -1836,10 +1822,10 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             tie->setTrack(track);
                             n->setTieBack(tie);
                             tieBack[i]->setTieFor(tie);
-                            ties.push_back(tie);
+                            undoAddElement(tie);
                         }
                         if (tieFor[i]) {
-                            Tie* tie = Factory::createTie(this->dummy());
+                            tie = Factory::createTie(this->dummy());
                             tie->setStartNote(nn);
                             tie->setEndNote(tieFor[i]);
                             tie->setTick(tie->startNote()->tick());
@@ -1847,13 +1833,10 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                             tie->setTrack(track);
                             nn->setTieFor(tie);
                             tieFor[i]->setTieBack(tie);
-                            ties.push_back(tie);
-                        }
-                    }
-                    if (!ties.empty()) {         // at least one tie was created
-                        for (Tie* tie : ties) {
                             undoAddElement(tie);
                         }
+                    }
+                    if (tie) {         // at least one tie was created
                         connectTies();
                     }
                 }
@@ -1899,7 +1882,7 @@ void Score::cmdAddTie(bool addToChord)
         return;
     }
 
-    startCmd(TranslatableString("undoableAction", "Add tie"));
+    startCmd();
     Chord* lastAddedChord = 0;
     for (Note* note : noteList) {
         if (note->tieFor()) {
@@ -2033,11 +2016,7 @@ void Score::cmdToggleTie()
         }
     }
 
-    const TranslatableString actionName = canAddTies
-                                          ? TranslatableString("undoableAction", "Add tie")
-                                          : TranslatableString("undoableAction", "Remove tie");
-
-    startCmd(actionName);
+    startCmd();
 
     if (canAddTies) {
         for (size_t i = 0; i < notes; ++i) {
@@ -2060,32 +2039,6 @@ void Score::cmdToggleTie()
             if (tie) {
                 undoRemoveElement(tie);
             }
-        }
-    }
-
-    endCmd();
-}
-
-void Score::cmdToggleLaissezVib()
-{
-    const std::vector<Note*> noteList = selection().noteList();
-
-    if (noteList.empty()) {
-        LOGD("no notes selected");
-        return;
-    }
-
-    startCmd(TranslatableString("undoableAction", "Toggle laissez vib"));
-
-    for (Note* note: noteList) {
-        if (LaissezVib* lv = note->laissezVib()) {
-            undoRemoveElement(lv);
-        } else if (note->tieFor()) {
-            continue;
-        } else {
-            LaissezVib* lvTie = Factory::createLaissezVib(note);
-            lvTie->setParent(note);
-            undoAddElement(lvTie);
         }
     }
 
@@ -2171,37 +2124,35 @@ void Score::addNoteLine()
         selectedNotes.insert(selectedNotes.end(), notes.begin(), notes.end());
     }
 
-    Note* startNote = nullptr;
-    Note* endNote  = nullptr;
+    Note* firstNote = nullptr;
+    Note* lastNote  = nullptr;
 
     for (Note* note : selectedNotes) {
-        if (startNote == nullptr || startNote->chord()->tick() > note->chord()->tick()) {
-            startNote = note;
+        if (firstNote == nullptr || firstNote->chord()->tick() > note->chord()->tick()) {
+            firstNote = note;
         }
-        if (endNote == nullptr || endNote->chord()->tick() < note->chord()->tick()) {
-            endNote = note;
+        if (lastNote == nullptr || lastNote->chord()->tick() < note->chord()->tick()) {
+            lastNote = note;
         }
     }
 
-    if (!startNote) {
-        LOGD("addNoteLine: no first note %p", startNote);
+    if (!firstNote || !lastNote) {
+        LOGD("addNoteLine: no note %p %p", firstNote, lastNote);
         return;
     }
 
-    if (startNote == endNote) {
-        endNote = SLine::guessFinalNote(startNote);
-    }
-
-    if (!endNote) {
-        LOGD("addNoteLine: no last note note %p", endNote);
+    if (firstNote == lastNote) {
+        LOGD("addNoteLine: no support for note to same note line %p", firstNote);
         return;
     }
 
-    NoteLine* line = Factory::createNoteLine(startNote);
-    line->setParent(startNote);
-    line->setStartElement(startNote);
-    line->setTick(startNote->chord()->tick());
-    line->setEndElement(endNote);
+    TextLine* line = new TextLine(firstNote);
+    line->setParent(firstNote);
+    line->setStartElement(firstNote);
+    line->setDiagonal(true);
+    line->setAnchor(Spanner::Anchor::NOTE);
+    line->setTick(firstNote->chord()->tick());
+    line->setEndElement(lastNote);
 
     undoAddElement(line);
 }
@@ -2874,11 +2825,9 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::VOLTA_SEGMENT:
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
-    case ElementType::LAISSEZ_VIB_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
-    case ElementType::NOTELINE_SEGMENT:
     case ElementType::LET_RING_SEGMENT:
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
     case ElementType::PALM_MUTE_SEGMENT:
@@ -4055,7 +4004,7 @@ void Score::cmdEnterRest(const TDuration& d)
         LOGD("cmdEnterRest: track invalid");
         return;
     }
-    startCmd(TranslatableString("undoableAction", "Enter rest"));
+    startCmd();
     enterRest(d);
     endCmd();
 }
@@ -4985,7 +4934,7 @@ bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyV
 
     if ((currentPropValue != propValue) || (currentPropFlags != propFlags)) {
         item->setPropertyFlags(propId, propFlags);
-        undoStack()->pushWithoutPerforming(new ChangeProperty(item, propId, propValue, propFlags));
+        undoStack()->push1(new ChangeProperty(item, propId, propValue, propFlags));
         changed = true;
     }
 
@@ -4999,7 +4948,7 @@ bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyV
         switch (propertyPropagate) {
         case PropertyPropagation::PROPAGATE:
             if (linkedItem->getProperty(propId) != currentPropValue) {
-                undoStack()->pushAndPerform(new ChangeProperty(linkedItem, propId, currentPropValue, propFlags), nullptr);
+                undoStack()->push(new ChangeProperty(linkedItem, propId, currentPropValue, propFlags), nullptr);
                 changed = true;
             }
             break;
@@ -5017,7 +4966,7 @@ bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyV
 void Score::undoPropertyChanged(EngravingObject* e, Pid t, const PropertyValue& st, PropertyFlags ps)
 {
     if (e->getProperty(t) != st) {
-        undoStack()->pushWithoutPerforming(new ChangeProperty(e, t, st, ps));
+        undoStack()->push1(new ChangeProperty(e, t, st, ps));
     }
 }
 
@@ -5155,7 +5104,7 @@ void Score::undoChangePitch(Note* note, int pitch, int tpc1, int tpc2)
 {
     for (EngravingObject* e : note->linkList()) {
         Note* n = toNote(e);
-        undoStack()->pushAndPerform(new ChangePitch(n, pitch, tpc1, tpc2), 0);
+        undoStack()->push(new ChangePitch(n, pitch, tpc1, tpc2), 0);
     }
 }
 
@@ -5959,10 +5908,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         || et == ElementType::TEXT
         || et == ElementType::GLISSANDO
         || et == ElementType::GUITAR_BEND
-        || et == ElementType::NOTELINE
         || et == ElementType::BEND
         || (et == ElementType::CHORD && toChord(element)->isGrace())
-        || et == ElementType::LAISSEZ_VIB
         ) {
         const EngravingItem* parent = element->parentItem();
         const LinkedObjects* links = parent ? parent->links() : nullptr;
@@ -5984,7 +5931,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             if (e == parent) {
                 ne = element;
             } else {
-                if (element->isGlissando() || element->isGuitarBend() || element->isNoteLine()) {            // and other spanners with Anchor::NOTE
+                if (element->isGlissando() || element->isGuitarBend()) {            // and other spanners with Anchor::NOTE
                     Note* newEnd = Spanner::endElementFromSpanner(toSpanner(element), e);
                     if (newEnd) {
                         ne = element->linkedClone();
@@ -6385,7 +6332,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             }
 
             doUndoAddElement(nsp);
-        } else if (et == ElementType::GLISSANDO || et == ElementType::GUITAR_BEND || et == ElementType::NOTELINE) {
+        } else if (et == ElementType::GLISSANDO || et == ElementType::GUITAR_BEND) {
             doUndoAddElement(toSpanner(ne));
         } else if (element->isType(ElementType::TREMOLO_TWOCHORD)) {
             TremoloTwoChord* tremolo = item_cast<TremoloTwoChord*>(element);
