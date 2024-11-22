@@ -10,12 +10,12 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "score.h"
 #include "iname.h"
 #include "measure.h"
+#include "part.h"
+#include "score.h"
 #include "staff.h"
 #include "system.h"
-#include "part.h"
 #include "undo.h"
 
 namespace Ms {
@@ -79,7 +79,7 @@ qreal InstrumentName::spatium() const
       if (!part())
             return Element::spatium();
       qreal largestSpatium = 0;
-      for (Staff* s: *p->staves()) {
+      for (Staff*& s: *p->staves()) {
             double sp = s->spatium(tick());
             if (sp > largestSpatium)
                 largestSpatium = sp;
@@ -147,7 +147,6 @@ bool InstrumentName::setProperty(Pid id, const QVariant& v)
                   _layoutPos = v.toInt();
                   break;
             case Pid::VISIBLE:
-            case Pid::COLOR:
                   // not supported
                   break;
             default:

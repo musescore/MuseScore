@@ -98,7 +98,7 @@ System::System(Score* s)
 
 System::~System()
       {
-      for (SpannerSegment* ss : spannerSegments()) {
+      for (SpannerSegment*& ss : spannerSegments()) {
             if (ss->system() == this)
                   ss->setParent(nullptr);
             }
@@ -238,7 +238,7 @@ void System::layoutSystem(qreal xo1, const bool isFirstSystem, bool firstSystemI
       //---------------------------------------------------
       qreal xoff2 = 0.0; // x offset for instrument name
 
-      for (const Part* p : score()->parts()) {
+      for (Part*& p : score()->parts()) {
             if (firstVisibleSysStaffOfPart(p) < 0)
                   continue;
             for (int staffIdx = firstSysStaffOfPart(p); staffIdx <= lastSysStaffOfPart(p); ++staffIdx) {
@@ -276,7 +276,7 @@ void System::layoutSystem(qreal xo1, const bool isFirstSystem, bool firstSystemI
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* s = score()->staff(staffIdx);
             for (int i = 0; i < columns; ++i) {
-                  for (auto bi : s->brackets()) {
+                  for (auto& bi : s->brackets()) {
                         if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET)
                               continue;
                         Bracket* b = createBracket(bi, i, staffIdx, bl, this->firstMeasure());
@@ -417,7 +417,7 @@ void System::layoutInstrumentNames()
       {
       int staffIdx = 0;
 
-      for (Part* p : score()->parts()) {
+      for (Part*& p : score()->parts()) {
             SysStaff* s = staff(staffIdx);
             SysStaff* s2;
             int nstaves = p->nstaves();
@@ -509,7 +509,7 @@ void System::addBrackets(Measure* measure)
       for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
             Staff* s = score()->staff(staffIdx);
             for (int i = 0; i < columns; ++i) {
-                  for (auto bi : s->brackets()) {
+                  for (auto& bi : s->brackets()) {
                         if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET)
                               continue;
                         createBracket(bi, i, staffIdx, bl, measure);
@@ -590,7 +590,7 @@ int System::getBracketsColumnsCount()
       int columns = 0;
       int nstaves = _staves.size();
       for (int idx = 0; idx < nstaves; ++idx) {
-            for (auto bi : score()->staff(idx)->brackets())
+            for (auto& bi : score()->staff(idx)->brackets())
                   columns = qMax(columns, bi->column() + 1);
             }
       return columns;
@@ -872,7 +872,7 @@ void System::restoreLayout2()
       if (vbox())
             return;
 
-      for (SysStaff* s : _staves)
+      for (SysStaff*& s : _staves)
             s->restoreLayout();
 
       setHeight(_systemHeight);
@@ -923,7 +923,9 @@ void System::setInstrumentNames(bool longName, Fraction tick)
                         iname->setTrack(staffIdx * VOICES);
                         iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
                         iname->setLayoutPos(sn.pos());
-                        iname->setColor(part->namesColor(tick));
+                        QColor partColor = part->namesColor(tick);
+                        if (partColor != MScore::defaultColor)
+                              iname->setColor(part->namesColor(tick));
                         score()->addElement(iname); // Add the instrument name to the score.
                         }
                   iname->setXmlText(sn.name());
@@ -1750,7 +1752,7 @@ Fraction System::endTick() const
 int System::firstSysStaffOfPart(const Part* part) const
       {
       int staffIdx { 0 };
-      for (const Part* p : score()->parts()) {
+      for (Part*& p : score()->parts()) {
             if (p == part)
                   return staffIdx;
             staffIdx += p->nstaves();
