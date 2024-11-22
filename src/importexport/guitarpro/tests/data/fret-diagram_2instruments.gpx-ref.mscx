@@ -78,6 +78,10 @@
           <program value="24"/>
           <controller ctrl="7" value="95"/>
           </Channel>
+        <Channel name="harmony">
+          <program value="0"/>
+          <controller ctrl="7" value="95"/>
+          </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
@@ -160,6 +164,10 @@
             <subtype>mf</subtype>
             <velocity>80</velocity>
             </Dynamic>
+          <Harmony>
+            <root>18</root>
+            <name>m</name>
+            </Harmony>
           <Chord>
             <durationType>whole</durationType>
             <Note>
@@ -175,6 +183,10 @@
         </Measure>
       <Measure>
         <voice>
+          <Harmony>
+            <root>17</root>
+            <name>m</name>
+            </Harmony>
           <Chord>
             <durationType>whole</durationType>
             <Note>
@@ -190,6 +202,10 @@
         </Measure>
       <Measure>
         <voice>
+          <Harmony>
+            <root>18</root>
+            <name>m</name>
+            </Harmony>
           <Chord>
             <durationType>whole</durationType>
             <Note>
