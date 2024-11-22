@@ -368,35 +368,35 @@
          </layout>
         </item>
         <item row="3" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
-          <widget class="QLabel" name="label_PartName">
-           <property name="text">
-            <string>Part name:</string>
-           </property>
-           <property name="buddy">
-            <cstring>partName</cstring>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="partName"/>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_InstrumentNameColor">
-           <property name="text">
-            <string>Instrument Name Color:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="Awl::ColorLabel" name="color_2">
-           <property name="focusPolicy">
-            <enum>Qt::TabFocus</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLabel" name="label_PartName">
+            <property name="text">
+             <string>Part name:</string>
+            </property>
+            <property name="buddy">
+             <cstring>partName</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="partName"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_InstrumentNameColor">
+            <property name="text">
+             <string>Instrument Name Color:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Awl::ColorLabel" name="color_2">
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>
@@ -948,7 +948,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Go to previous staff</string>
+        <string>Apply and go to previous staff</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -968,7 +968,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Go to next staff</string>
+        <string>Apply and go to next staff</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -1054,7 +1054,6 @@
   <tabstop>nextButton</tabstop>
  </tabstops>
  <resources>
-  <include location="musescore.qrc"/>
   <include location="musescore.qrc"/>
  </resources>
  <connections>

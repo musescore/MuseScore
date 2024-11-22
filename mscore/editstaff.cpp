@@ -17,13 +17,15 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "editstaff.h"
-
-#include "editdrumset.h"
 #include "editpitch.h"
+#include "editstaff.h"
 #include "editstafftype.h"
 #include "editstringdata.h"
 #include "icons.h"
+#include "musescore.h"
+#include "seq.h"
+#include "selinstrument.h"
+
 #include "libmscore/instrtemplate.h"
 #include "libmscore/measure.h"
 #include "libmscore/part.h"
@@ -33,9 +35,6 @@
 #include "libmscore/text.h"
 #include "libmscore/undo.h"
 #include "libmscore/utils.h"
-#include "musescore.h"
-#include "seq.h"
-#include "selinstrument.h"
 
 namespace Ms {
 
@@ -262,11 +261,10 @@ void EditStaff::updateNextPreviousButtons()
 
 void EditStaff::gotoNextStaff()
       {
+      apply();
       Staff* nextStaff = orgStaff->score()->staff(orgStaff->idx() + 1);
       if (nextStaff)
-            {
             setStaff(nextStaff, _tickStart);
-            }
       }
 
 //---------------------------------------------------------
@@ -275,11 +273,10 @@ void EditStaff::gotoNextStaff()
 
 void EditStaff::gotoPreviousStaff()
       {
+      apply();
       Staff* prevStaff = orgStaff->score()->staff(orgStaff->idx() - 1);
       if (prevStaff)
-            {
             setStaff(prevStaff, _tickStart);
-            }
       }
 
 //---------------------------------------------------------
@@ -561,7 +558,7 @@ void EditStaff::editStringDataClicked()
                   int oldHighestStringPitch     = INT16_MIN;
                   int highestStringPitch        = INT16_MIN;
                   int lowestStringPitch         = INT16_MAX;
-                  for (const instrString& str : stringList) {
+                  for (instrString& str : stringList) {
                         if (str.pitch > highestStringPitch) highestStringPitch = str.pitch;
                         if (str.pitch < lowestStringPitch)  lowestStringPitch  = str.pitch;
                         }
