@@ -3498,7 +3498,9 @@ static void keySigAddLayout(const KeySig* item, const LayoutConfiguration& conf,
     ldata->keySymbols.push_back(ks);
 }
 
-static std::vector<KeySym> collectCustomKeySymbols(const KeySig* item, const LayoutConfiguration& conf, const KeySigEvent& keySigEvent, ClefType clef) {
+static std::vector<KeySym> collectCustomKeySymbols(const KeySig* item, const LayoutConfiguration& conf, const KeySigEvent& keySigEvent,
+                                                   ClefType clef)
+{
     std::vector<KeySym> keySyms;
 
     double spatium = item->spatium();
