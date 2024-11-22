@@ -90,18 +90,18 @@
         <source>Select a duration by clicking one of these icons or pressing the shortcuts &quot;1&quot; - &quot;9&quot;.
     To include an augmentation dot, click the appropriate icon or press the shortcut &quot;.&quot;.</source>
         <comment>note-input</comment>
-        <translation>Wybierz długość, klikając jedną z tych ikon lub naciskając klawisze &quot;1&quot; - &quot;9&quot;.
+        <translation>Wybierz wartość rytmiczną, klikając jedną z tych ikon lub naciskając klawisze &quot;1&quot; - &quot;9&quot;.
     Aby dodać kropkę do nuty, kliknij odpowiednią ikonę lub naciśnij &quot;.&quot;.</translation>
     </message>
     <message>
         <source>To enter a rest of the selected duration, press the shortcut &quot;0&quot;, or select this icon then click on the staff.</source>
         <comment>note-input</comment>
-        <translation>Aby wprowadzić pauzę, wybierz jej długość, naciśnij klawisz &quot;0&quot; lub wybierz tę ikonę, a następnie kliknij na pięciolinię.</translation>
+        <translation>Aby wprowadzić pauzę, wybierz jej wartość rytmiczną, naciśnij klawisz &quot;0&quot; lub wybierz tę ikonę, a następnie kliknij na pięciolinię.</translation>
     </message>
     <message>
         <source>To extend a note by adding a tied note, select the duration to extend by, then press &quot;+&quot; or click this button.</source>
         <comment>note-input</comment>
-        <translation>Aby wydłużyć nutę, dodając nutę z ligaturą, wybierz jej długość, a następnie naciśnij &quot;+&quot; lub kliknij ten przycisk.</translation>
+        <translation>Aby wydłużyć nutę, dodając nutę z ligaturą, wybierz jej wartość rytmiczną, a następnie naciśnij &quot;+&quot; lub kliknij ten przycisk.</translation>
     </message>
     <message>
         <source>MuseScore provides many ways to navigate through your score.
@@ -245,7 +245,7 @@
         <source>To enter a note of the selected duration, type its letter name or click on the staff.
     Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
         <comment>note-input</comment>
-        <translation>Aby wprowadzić nutę, wybierz jej długość, wprowadź jej nazwę klawiszem litery lub kliknij na pięciolinię.
+        <translation>Aby wprowadzić nutę, wybierz jej wartość rytmiczną, wprowadź jej nazwę klawiszem litery lub kliknij na pięciolinię.
     Naciśnij &quot;Ctrl+Góra/Dół&quot; (macOS: &quot;Cmd+Góra/Dół&quot;), aby zmienić oktawę.</translation>
     </message>
     <message>
@@ -262,7 +262,7 @@
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
         <comment>note-input</comment>
-        <translation>Aby utworzyć triolę lub inną grupę niemiarową, wybierz jej długość, a następnie naciśnij &quot;Ctrl+numer&quot; lub użyj: Dodaj &gt; Grupy niemiarowe.</translation>
+        <translation>Aby utworzyć triolę lub inną grupę niemiarową, wybierz jej wartość rytmiczną, a następnie naciśnij &quot;Ctrl+numer&quot; lub użyj: Dodaj &gt; Grupy niemiarowe.</translation>
     </message>
     <message>
         <source>To make a single selection, click the element you want to select.

@@ -12847,7 +12847,7 @@ zakończone niepowodzeniem: %2.</translation>
         <location filename="../../mscore/editstyle.cpp" line="492"/>
         <location filename="../../mscore/editstyle.cpp" line="827"/>
         <source>Chord/Rest Duration</source>
-        <translation>długość akordu/pauzy</translation>
+        <translation>wartość rytmiczna akordu/pauzy</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.cpp" line="855"/>
@@ -14922,7 +14922,7 @@ Przywrócić sesję?</translation>
     <message>
         <location filename="../../mscore/tupletdialog.cpp" line="154"/>
         <source>Cannot create tuplet with ratio %1 for duration %2</source>
-        <translation>Nie można utworzyć grupy niemiarowej z %1 dla %2.</translation>
+        <translation>Nie można utworzyć grupy niemiarowej z proporcją %1 dla wartości rytmicznej %2.</translation>
     </message>
     <message>
         <location filename="../../mscore/workspace.cpp" line="141"/>
@@ -18833,22 +18833,22 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="14"/>
         <source>Move the selected note(s) forward or backward by thousandths of the full note duration</source>
-        <translation>Przesuń zaznaczone nuty do przodu lub do tyłu o tysięczne wartości pełnego czasu trwania nuty</translation>
+        <translation>Przesuń zaznaczone nuty do przodu lub do tyłu o tysięczne pełnej wartości rytmicznej nuty</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="16"/>
         <source>Duration (multiplier)</source>
-        <translation>Długość (mnożnik)</translation>
+        <translation>Wartość rytmiczna (mnożnik)</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="17"/>
         <source>Multiply the duration by thousandths of the full note duration</source>
-        <translation>Pomnóż długość przez tysięczne wartości pełnego czasu trwania nuty</translation>
+        <translation>Pomnóż wartość rytmiczną przez tysięczne pełnej wartości rytmicznej nuty</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="19"/>
         <source>Duration</source>
-        <translation>Długość</translation>
+        <translation>Wartość rytmiczna</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianolevelsfilter.cpp" line="20"/>
@@ -21498,7 +21498,7 @@ Odwiedź %1stronę internetową MuseScore&apos;a%2, aby pozyskać najnowszą wer
     <message>
         <location filename="../../libmscore/note.cpp" line="3140"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
-        <translation>%1; Wysokość: %2; Długość: %3%4%5</translation>
+        <translation>%1; Wysokość: %2; Wartość rytmiczna: %3%4%5</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="3156"/>
@@ -21524,7 +21524,7 @@ Odwiedź %1stronę internetową MuseScore&apos;a%2, aby pozyskać najnowszą wer
     <message>
         <location filename="../../libmscore/rest.cpp" line="900"/>
         <source>%1; Duration: %2; %3</source>
-        <translation>%1; Długość: %2; %3</translation>
+        <translation>%1; Wartość rytmiczna: %2; %3</translation>
     </message>
     <message>
         <location filename="../../libmscore/scorediff.cpp" line="1372"/>
@@ -22627,7 +22627,7 @@ Chcesz go zastąpić?</translation>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="68"/>
         <source>Same duration</source>
-        <translation>Ta sama długość</translation>
+        <translation>Ta sama wartość</translation>
     </message>
     <message>
         <location filename="../../mscore/selectdialog.ui" line="40"/>
@@ -22738,7 +22738,7 @@ Chcesz go zastąpić?</translation>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="40"/>
         <source>Same duration:</source>
-        <translation>Ta sama długość:</translation>
+        <translation>Ta sama wartość:</translation>
     </message>
     <message>
         <location filename="../../mscore/selectnotedialog.ui" line="159"/>
@@ -24111,7 +24111,7 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="232"/>
         <source>Duration:</source>
-        <translation>Długość:</translation>
+        <translation>Wartość rytmiczna:</translation>
     </message>
     <message>
         <location filename="../../mscore/timesigwizard.ui" line="239"/>
@@ -24800,7 +24800,7 @@ Uwaga: &quot;Ctrl+Shift+1&quot; to jedna kombinacja klawiszy.</translation>
     <message>
         <location filename="../../mscore/inspector/voicing_select.ui" line="132"/>
         <source>Chord/Rest Duration</source>
-        <translation>długość akordu/pauzy</translation>
+        <translation>wartość rytmiczna akordu/pauzy</translation>
     </message>
 </context>
 <context>
@@ -26390,22 +26390,22 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1625"/>
         <source>Increase Active Duration</source>
-        <translation>Zwiększ aktywny czas</translation>
+        <translation>Zwiększ aktywną wartość rytmiczną</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1626"/>
         <source>Increase active duration</source>
-        <translation>Zwiększ aktywny czas</translation>
+        <translation>Zwiększ aktywną wartość rytmiczną</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1632"/>
         <source>Decrease Active Duration</source>
-        <translation>Zmniejsz aktywny czas</translation>
+        <translation>Zmniejsz aktywną wartość rytmiczną</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1633"/>
         <source>Decrease active duration</source>
-        <translation>Zmniejsz aktywny czas</translation>
+        <translation>Zmniejsz aktywną wartość rytmiczną</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1639"/>
@@ -27422,7 +27422,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1332"/>
         <source>Remove element and duration</source>
-        <translation>Usuń element i wartość</translation>
+        <translation>Usuń element i wartość rytmiczną</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="1592"/>
@@ -29102,22 +29102,22 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3497"/>
         <source>Increase Active Duration (TAB)</source>
-        <translation>Zwiększ aktywny czas (tabulatura)</translation>
+        <translation>Zwiększ aktywną wartość rytmiczną (tabulatura)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3498"/>
         <source>Increase active duration (TAB)</source>
-        <translation>Zwiększ aktywny czas (tabulatura)</translation>
+        <translation>Zwiększ aktywną wartość rytmiczną (tabulatura)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3504"/>
         <source>Decrease Active Duration (TAB)</source>
-        <translation>Zmniejsz aktywny czas (tabulatura)</translation>
+        <translation>Zmniejsz aktywną wartość rytmiczną (tabulatura)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3505"/>
         <source>Decrease active duration (TAB)</source>
-        <translation>Zmniejsz aktywny czas (tabulatura)</translation>
+        <translation>Zmniejsz aktywną wartość rytmiczną (tabulatura)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3511"/>
@@ -31692,7 +31692,7 @@ zakończone niepowodzeniem.</translation>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="105"/>
         <source>Tab Duration Symbol</source>
-        <translation>Symbol trwania tabulatury</translation>
+        <translation>Symbol wartości rytmicznej tabulatury</translation>
     </message>
     <message>
         <location filename="../../libmscore/scoreElement.cpp" line="106"/>
