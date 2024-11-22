@@ -611,7 +611,7 @@ public:
     Selection& selection() { return m_selection; }
     SelectionFilter& selectionFilter() { return m_selectionFilter; }
     void setSelection(const Selection& s);
-
+    void selectElementsWithSameTypeOnSegment(mu::engraving::ElementType elementType, mu::engraving::Segment* segment);
     Fraction pos();
     Measure* tick2measure(const Fraction& tick) const;
     Measure* tick2measureMM(const Fraction& tick) const;

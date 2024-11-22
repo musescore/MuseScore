@@ -2063,6 +2063,32 @@ void Score::setSelection(const Selection& s)
 }
 
 //---------------------------------------------------------
+//   selectElementsWithSameTypeOnSegment
+//---------------------------------------------------------
+
+void Score::selectElementsWithSameTypeOnSegment(mu::engraving::ElementType elementType, mu::engraving::Segment* segment)
+{
+    TRACEFUNC;
+
+    IF_ASSERT_FAILED(segment) {
+        return;
+    }
+
+    score()->deselectAll();
+
+    std::vector<EngravingItem*> elementsToSelect;
+
+    for (size_t staffIdx = 0; staffIdx < score()->nstaves(); ++staffIdx) {
+        EngravingItem* element = segment->element(staffIdx * mu::engraving::VOICES);
+        if (element && element->type() == elementType) {
+            elementsToSelect.push_back(element);
+        }
+    }
+
+    score()->select(elementsToSelect, SelectType::ADD);
+}
+
+//---------------------------------------------------------
 //   getText
 //---------------------------------------------------------
 

@@ -1424,6 +1424,11 @@ void Score::cmdAddTimeSig(Measure* targetMeasure, staff_idx_t staffIdx, TimeSig*
                 timeSigOfCurrentStaffIndex->setSelected(false);
                 timeSigOfCurrentStaffIndex->setDropTarget(false);
             }
+            if (local) {
+                select(originalTimeSig, SelectType::SINGLE, staffIdx);
+            } else {
+                selectElementsWithSameTypeOnSegment(ElementType::TIMESIG, targetSegment);
+            }
         }
     }
     if (!measureDurationUnchanged) {
