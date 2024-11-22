@@ -147,7 +147,7 @@ private:
      * Methods for writing specific MEI attribute classes within elements
      */
     bool writeBeamTypeAtt(const engraving::ChordRest* chordRest, libmei::AttTyped& typeAtt);
-    bool writeStaffIdenAtt(const engraving::ChordRest* chordRest, const engraving::Staff* staff, libmei::AttStaffIdent& staffIdentAtt);
+    bool writeStaffIdentAtt(const engraving::ChordRest* chordRest, const engraving::Staff* staff, libmei::AttStaffIdent& staffIdentAtt);
     bool writeStemAtt(const engraving::Chord* chord, libmei::AttStems& stemsAtt);
 
     /**

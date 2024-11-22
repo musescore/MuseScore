@@ -281,6 +281,8 @@ public:
     static StaffStruct staffFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
     static libmei::StaffDef staffToMEI(const engraving::Staff* staff);
 
+    static void staffIdentToMEI(const engraving::EngravingItem* item, libmei::Element& meiElement);
+
     static std::pair<engraving::DirectionV, bool> stemFromMEI(const libmei::AttStems& meiStemsAtt, bool& warning);
     static std::pair<libmei::data_STEMDIRECTION, double> stemToMEI(const engraving::DirectionV direction, bool noStem);
 

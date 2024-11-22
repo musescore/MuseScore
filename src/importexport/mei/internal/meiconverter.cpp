@@ -1307,6 +1307,9 @@ libmei::Dynam Convert::dynamToMEI(const engraving::Dynamic* dynamic, StringList&
         meiDynam.SetPlace(Convert::directionToMEI(dynamic->direction()));
     }
 
+    // @staff
+    Convert::staffIdentToMEI(dynamic, meiDynam);
+
     // @label
     if (dynamic->dynamicType() != engraving::DynamicType::OTHER) {
         meiDynam.SetLabel(engraving::TConv::toXml(dynamic->dynamicType()).ascii());
@@ -1630,6 +1633,9 @@ libmei::Hairpin Convert::hairpinToMEI(const engraving::Hairpin* hairpin)
 
     // @color
     Convert::colorlineToMEI(hairpin, meiHairpin);
+
+    // @staff
+    Convert::staffIdentToMEI(hairpin, meiHairpin);
 
     return meiHairpin;
 }
@@ -2296,6 +2302,9 @@ libmei::Octave Convert::octaveToMEI(const engraving::Ottava* ottava)
     // @color
     Convert::colorlineToMEI(ottava, meiOctave);
 
+    // @staff
+    Convert::staffIdentToMEI(ottava, meiOctave);
+
     return meiOctave;
 }
 
@@ -2643,7 +2652,6 @@ void Convert::slurFromMEI(engraving::SlurTie* slur, const libmei::Slur& meiSlur,
     // @curvedir
     if (meiSlur.HasCurvedir()) {
         slur->setSlurDirection(Convert::curvedirFromMEI(meiSlur.GetCurvedir(), warning));
-        //slur->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
     }
 
     // @lform
@@ -2945,6 +2953,9 @@ libmei::Tempo Convert::tempoToMEI(const engraving::TempoText* tempoText, StringL
 
     // text content - only split lines
     meiLines = String(tempoText->plainText()).split(u"\n");
+
+    // @staff
+    Convert::staffIdentToMEI(tempoText, meiTempo);
 
     return meiTempo;
 }
@@ -3331,6 +3342,20 @@ std::list<std::string> Convert::getTypeValuesWithPrefix(const std::string& typeS
     }
 
     return values;
+}
+
+void Convert::staffIdentToMEI(const engraving::EngravingItem* item, libmei::Element& meiElement)
+{
+    libmei::AttStaffIdent* staffAtt = dynamic_cast<libmei::AttStaffIdent*>(&meiElement);
+
+    IF_ASSERT_FAILED(staffAtt) {
+        return;
+    }
+
+    libmei::xsdPositiveInteger_List staffList;
+    staffList.push_back(static_cast<int>(item->staff()->idx()) + 1);
+    // TODO: add staff number if centered between staves
+    staffAtt->SetStaff(staffList);
 }
 
 double Convert::tstampFromFraction(const engraving::Fraction& fraction, const engraving::Fraction& timesig)
