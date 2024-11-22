@@ -2421,7 +2421,7 @@ void GPConverter::addHarmonicMark(const GPBeat* gpbeat, ChordRest* cr)
 
 void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Context& ctx, bool asHarmony)
 {
-    int GPTrackIdx = static_cast<int>(ctx.curTrack / VOICES);
+    int GPTrackIdx = mu::indexOf(_score->parts(), cr->part());
     int diaId = gpnote->diagramIdx(GPTrackIdx, ctx.masterBarIndex);
 
     if (_lastDiagramIdx == diaId) {
