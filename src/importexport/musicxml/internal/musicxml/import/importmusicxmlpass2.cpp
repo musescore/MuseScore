@@ -6875,9 +6875,13 @@ Note* MusicXmlParserPass2::note(const String& partId,
     isSingleDrumset = instrument->drumset() && instruments.size() == 1;
     // begin allocation
     if (rest) {
-        const int track = msTrack + msVoice;
-        cr = addRest(m_score, measure, noteStartTime, track, msMove,
-                     duration, dura);
+        if (!grace) {
+            const int track = msTrack + msVoice;
+            cr = addRest(m_score, measure, noteStartTime, track, msMove,
+                         duration, dura);
+        } else {
+            LOGD("ignoring grace rest");
+        }
     } else {
         if (!grace) {
             // regular note
