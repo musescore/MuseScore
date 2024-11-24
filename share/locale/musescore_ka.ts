@@ -42,12 +42,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="14"/>
         <source>Add/remove system breaks</source>
-        <translation>დაამატე/წაშალე სისტემური წყვეტები</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="24"/>
         <source>Break systems every X measures</source>
-        <translation>გაწყვიტე სისტემა ყოველ X ტაქტში</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="34"/>
@@ -88,7 +88,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="60"/>
         <source>Shortcut</source>
-        <translation>იარლიყი</translation>
+        <translation>მალსახმობი</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="65"/>
@@ -103,7 +103,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="102"/>
         <source>Enter a name to enable pitch editing</source>
-        <translation type="unfinished"/>
+        <translation>შეიყვანე სახელი, რათა ჩაირთოს ტონის რედაქტირება</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="109"/>
@@ -1009,7 +1009,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="66"/>
         <source>Show time signature</source>
-        <translation>ტემპის ნიშნულის ჩვენება</translation>
+        <translation>ზომის ჩვენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="73"/>
@@ -1065,7 +1065,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="186"/>
         <source>Merge matching rests</source>
-        <translation type="unfinished"/>
+        <translation>მსგავსი პაუზების შეერთება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="193"/>
@@ -1121,7 +1121,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="387"/>
         <source>Replace instrument…</source>
-        <translation type="unfinished"/>
+        <translation>ინსტრუმენტის ჩანაცვლება...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="409"/>
@@ -1146,7 +1146,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="709"/>
         <source>1 - Minor second</source>
-        <translation>1 - მცირე სეკუნდა</translation>
+        <translation>1 - პატარა სეკუნდა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="714"/>
@@ -1166,7 +1166,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="729"/>
         <source>3 - Minor third</source>
-        <translation>3 - მცირე ტერცია</translation>
+        <translation>3 - პატარა ტერცია</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="734"/>
@@ -1216,7 +1216,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="779"/>
         <source>8 - Minor sixth</source>
-        <translation>8 - მცირე სექსტა</translation>
+        <translation>8 - პატარა სექსტა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="784"/>
@@ -1236,7 +1236,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="799"/>
         <source>10 - Minor seventh</source>
-        <translation>10 - მცირე სეპტიმა</translation>
+        <translation>10 - პატარა სეპტიმა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="804"/>
@@ -1314,7 +1314,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="674"/>
         <source>Octave(s) +</source>
-        <translation>ოქტავები +</translation>
+        <translation>ოქტავა(ები) +</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="690"/>
@@ -1406,7 +1406,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="195"/>
         <source>Show time signature</source>
-        <translation>ტემპის ნიშნულის ჩვენება</translation>
+        <translation>ზომის ჩვენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="202"/>
@@ -1740,7 +1740,7 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="89"/>
         <source>System</source>
         <extracomment>a music system, a line of music</extracomment>
-        <translation>სისტემა</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3826"/>
@@ -1768,7 +1768,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="119"/>
         <source>Rests</source>
-        <translation type="unfinished"/>
+        <translation>პაუზები</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="129"/>
@@ -2417,7 +2417,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="94"/>
         <source>Clefs, key &amp; time signatures</source>
-        <translation>გასაღებები, ტონალობა და ტაქტის ზომა</translation>
+        <translation>გასაღებები, ტონალობა და ზომა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="357"/>
@@ -2467,7 +2467,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2186"/>
         <source>Grace note size:</source>
-        <translation>ორნამენტიკის ზომა:</translation>
+        <translation>ფორშლაგის ზომა:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2224"/>
@@ -2482,7 +2482,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2278"/>
         <source>Reset &apos;Small clef size&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;მცირე გასაღების ზომის&apos; მნიშვნელობის საწყისზე დაყენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2349"/>
@@ -2620,7 +2620,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3050"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3208"/>
         <source>Vertical placement:</source>
-        <translation type="unfinished"/>
+        <translation>ვერტიკალური განთავსება:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3063"/>
@@ -2646,7 +2646,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3073"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3263"/>
         <source>Horizontal placement:</source>
-        <translation type="unfinished"/>
+        <translation>ჰორიზონტალური განთავსება:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3107"/>
@@ -2661,7 +2661,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3166"/>
         <source>Show measure number range at multimeasure rests</source>
-        <translation type="unfinished"/>
+        <translation>მრავალტაქტიან პაუზაზე ტაქტის ნომრის დიაპაზონის ჩვენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3383"/>
@@ -2677,7 +2677,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3501"/>
         <source>Brace distance:</source>
-        <translation>ბრეკეტის დაშორება:</translation>
+        <translation>ფრჩხილის დაშორება:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3524"/>
@@ -2733,7 +2733,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3860"/>
         <source>Show courtesy clefs</source>
-        <translation type="unfinished"/>
+        <translation>Courtesy გასაღებების ჩვენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3873"/>
@@ -2763,17 +2763,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3920"/>
         <source>Show courtesy key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Courtesy საგასაღებო ნიშნების ჩვენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3930"/>
         <source>Time signatures</source>
-        <translation type="unfinished"/>
+        <translation>ზომა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3936"/>
         <source>Show courtesy time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Courtesy ზომის ჩვენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4006"/>
@@ -2836,7 +2836,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="663"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="670"/>
         <source>Short name</source>
-        <translation type="unfinished"/>
+        <translation>მოკლე სახელი</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3990"/>
@@ -2891,7 +2891,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4127"/>
         <source>Multiple accidentals in chords</source>
-        <translation type="unfinished"/>
+        <translation>მრავალი ალტერაციის ნიშნები აკორდებში</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4337"/>
@@ -2901,12 +2901,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4343"/>
         <source>Barline to time signature:</source>
-        <translation type="unfinished"/>
+        <translation>ტაქტის ხაზიდან ზომამდე:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4366"/>
         <source>Key signature to time signature:</source>
-        <translation>საგასაღებო ნიშნიდან ტაქტის ზომის ნიშნამდე:</translation>
+        <translation>საგასაღებო ნიშნიდან ზომამდე:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4386"/>
@@ -2927,27 +2927,27 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4462"/>
         <source>Barline to clef:</source>
-        <translation type="unfinished"/>
+        <translation>ტაქტის ხაზიდან გასაღებამდე:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4472"/>
         <source>Time signature to barline:</source>
-        <translation type="unfinished"/>
+        <translation>ზომიდან ტაქტის ხაზამდე:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4485"/>
         <source>Reset &apos;Clef to time signature distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;გასაღებსა და ზომას შორის მანძილის&apos; მნიშვნელობის საწყისზე დაბრუნება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4498"/>
         <source>Reset &apos;Clef to key distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;გასაღებიდან საგასაღებო ნიშნამდე მანძილის&apos; მნიშვნელობის საწყისზე დაყენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4537"/>
         <source>Reset &apos;Clef to barline distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;გასაღებიდან ტაქტის ხაზამდე მანძილის&apos; მნიშვნელობის საწყისზე დაყენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4547"/>
@@ -2957,22 +2957,22 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4570"/>
         <source>Barline to grace note:</source>
-        <translation type="unfinished"/>
+        <translation>ტაქტის ხაზიდან ფორშლაგამდე:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4580"/>
         <source>Clef to barline:</source>
-        <translation type="unfinished"/>
+        <translation>გასაღებიდან ტაქტის ხაზამდე:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4593"/>
         <source>Reset &apos;Clef left margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;გასაღების მარცხენა დაშორების&apos; მნიშვნელობის საწყისზე დაყენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4616"/>
         <source>Note to barline:</source>
-        <translation type="unfinished"/>
+        <translation>ნოტიდან ტაქტის ხაზამდე:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4629"/>
@@ -2982,7 +2982,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4639"/>
         <source>Barline to note:</source>
-        <translation type="unfinished"/>
+        <translation>ტაქტის ხაზიდან ნოტამდე:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4652"/>
@@ -2992,7 +2992,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4678"/>
         <source>Reset &apos;Clef/Key right margin&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;გასაღების/საგასაღებო ნიშნის მარჯვენა დაშორების&apos; მნიშვნელობის საწყისზე დაყენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4704"/>
@@ -3002,7 +3002,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4747"/>
         <source>Clef to note:</source>
-        <translation type="unfinished"/>
+        <translation>გასაღებიდან ნოტამდე:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4760"/>
@@ -3017,17 +3017,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4796"/>
         <source>Reset &apos;Barline to accidental distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;ტაქტის ხაზსა და ალტერაციის ნიშანს შორის მანძილის&apos; მნიშვნელობის საწყისზე დაბრუნება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4806"/>
         <source>Barline to accidental:</source>
-        <translation type="unfinished"/>
+        <translation>ტაქტის ხაზიდან ალტერაციის ნიშნამდე:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4819"/>
         <source>Reset &apos;Key to time signature distance&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>&apos;საგასაღებო ნიშანსა და ზომას შორის მანძილის&apos; მნიშვნელობის საწყისზე დაბრუნება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4845"/>
@@ -3037,7 +3037,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4881"/>
         <source>Clef to time signature:</source>
-        <translation type="unfinished"/>
+        <translation>გასაღებიდან ზომამდე:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4327"/>
@@ -3084,22 +3084,22 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5404"/>
         <source>Only before courtesy key signatures</source>
-        <translation type="unfinished"/>
+        <translation>მხოლოდ courtesy საგასაღებო ნიშნებამდე</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5414"/>
         <source>Use double barlines before time signatures</source>
-        <translation type="unfinished"/>
+        <translation>ორმაგი ტაქტის ხაზის გამოყენება ზომამდე</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5434"/>
         <source>Only before courtesy time signatures</source>
-        <translation type="unfinished"/>
+        <translation>მხოლოდ courtesy ზომამდე</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5688"/>
         <source>Accidental to accidental distance:</source>
-        <translation type="unfinished"/>
+        <translation>ალტერაციის ნიშანსა და ალტერაციის ნიშანს შორის მანძილი:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5768"/>
@@ -3114,12 +3114,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5814"/>
         <source>Rests (multiple voices)</source>
-        <translation type="unfinished"/>
+        <translation>პაუზები (მრავალი ხმა)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5820"/>
         <source>Default vertical offset:</source>
-        <translation type="unfinished"/>
+        <translation>ნაგულისხმევი ვერტიკალური წანაცვლება:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5961"/>
@@ -3267,7 +3267,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8129"/>
         <source>Override score font</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურის ფონტის გადაფარვა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8096"/>
@@ -3292,7 +3292,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4223"/>
         <source>Minimum note distance:</source>
-        <translation>უმცირესი ნოტებს შორის მანძილი:</translation>
+        <translation>უმცირესი მანძილი ნოტებს შორის:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3424"/>
@@ -3317,12 +3317,12 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4949"/>
         <source>Time signature to first note:</source>
-        <translation type="unfinished"/>
+        <translation>ზომიდან პირველ ნოტამდე:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4972"/>
         <source>Clef/key signature to first note:</source>
-        <translation>გასაღებიდან/გასაღების ნიშნიდან პირველ ნოტამდე:</translation>
+        <translation>გასაღებიდან/საგასაღებო ნიშნიდან პირველ ნოტამდე:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4985"/>
@@ -3412,7 +3412,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5351"/>
         <source>Double barline distance:</source>
-        <translation>ორმაგი ტაქტის საზღვრის დაშორება:</translation>
+        <translation>ორმაგი ტაქტის ხაზის დაშორება:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5364"/>
@@ -3875,7 +3875,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7314"/>
         <source>Distance to note:</source>
-        <translation>მანძილი ნოტებამდე:</translation>
+        <translation>მანძილი ნოტამდე:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7364"/>
@@ -4697,12 +4697,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3576"/>
         <source>System dividers</source>
-        <translation>სისტემური გამყოფები</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4097"/>
         <source>♮ in key signatures</source>
-        <translation>♮ გასაღების ნიშნებში</translation>
+        <translation>♮ საგასაღებო ნიშნებში</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5108"/>
@@ -4717,12 +4717,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5830"/>
         <source>Multimeasure rests</source>
-        <translation type="unfinished"/>
+        <translation>მრავალტაქტიანი პაუზები</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6140"/>
         <source>Old-style multimeasure rests</source>
-        <translation type="unfinished"/>
+        <translation>ძველი სტილის მრავალტაქტიანი პაუზა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6508"/>
@@ -5007,7 +5007,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14347"/>
         <source>Reset &apos;Offset&apos; values</source>
-        <translation type="unfinished"/>
+        <translation>&apos;წანაცვლების&apos; მნიშვნელობის საწყისზე დაბრუნება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14367"/>
@@ -5074,12 +5074,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/TitleBar.cpp" line="469"/>
         <source>Dock window</source>
-        <translation type="unfinished"/>
+        <translation>ფანჯრის მიმაგრება</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/TitleBar.cpp" line="469"/>
         <source>Undock window</source>
-        <translation type="unfinished"/>
+        <translation>ფანჯრის განცალკევება</translation>
     </message>
 </context>
 <context>
@@ -5107,7 +5107,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="285"/>
         <source>Restore</source>
-        <translation type="unfinished"/>
+        <translation>Restore</translation>
     </message>
     <message>
         <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="285"/>
@@ -5120,7 +5120,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/palette/view/widgets/keyedit.ui" line="38"/>
         <source>Create key signature</source>
-        <translation>გასაღების ნიშნის შექმნა</translation>
+        <translation>საგასაღებო ნიშნის შექმნა</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/keyedit.ui" line="111"/>
@@ -5130,7 +5130,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/palette/view/widgets/keyedit.ui" line="131"/>
         <source>Add time signature to master palette</source>
-        <translation>ტემპის ნიშნულის დამატება მთავარ პალიტრაში</translation>
+        <translation>ზომის დამატება მთავარ პალიტრაში</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/keyedit.ui" line="134"/>
@@ -5262,7 +5262,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="293"/>
         <source>Break multimeasure rest</source>
-        <translation type="unfinished"/>
+        <translation>მრავალტაქტიანი პაუზის დაშლა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="306"/>
@@ -5373,7 +5373,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="37"/>
         <source>Horizontal offset</source>
-        <translation type="unfinished"/>
+        <translation>ჰორიზონტალური წანაცვლება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="40"/>
@@ -5384,7 +5384,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="62"/>
         <source>Vertical offset</source>
-        <translation type="unfinished"/>
+        <translation>ვერტიკალური წანაცვლება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="81"/>
@@ -5402,12 +5402,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="55"/>
         <source>Reset all page settings to default</source>
-        <translation type="unfinished"/>
+        <translation> გვერდის პარამეტრების გადატვირთვა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="75"/>
         <source>Apply to all parts</source>
-        <translation type="unfinished"/>
+        <translation>ყველა პარტიაზე გამოყენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="108"/>
@@ -5422,12 +5422,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="124"/>
         <source>Two sided</source>
-        <translation type="unfinished"/>
+        <translation>ორმხრივი განლაგება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="131"/>
         <source>Landscape</source>
-        <translation>ლანდშაფტური</translation>
+        <translation>ლანდშაფტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="170"/>
@@ -5458,27 +5458,27 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="246"/>
         <source>Unit</source>
-        <translation>მოწყობილობა</translation>
+        <translation>საზომი ერთეული</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="252"/>
         <source>Inch (in)</source>
-        <translation type="unfinished"/>
+        <translation>ინჩი (ინ)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="259"/>
         <source>Millimeter (mm)</source>
-        <translation type="unfinished"/>
+        <translation>მილიმეტრი (მმ)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="288"/>
         <source>Odd page margins</source>
-        <translation type="unfinished"/>
+        <translation>კენტი გვერდის მინდვრები</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="389"/>
         <source>Even page margins</source>
-        <translation type="unfinished"/>
+        <translation>ლუწი გვერდის მინდვრები</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="300"/>
@@ -5507,7 +5507,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="492"/>
         <source>First page number:</source>
-        <translation type="unfinished"/>
+        <translation>პირველი გვერდის რიცხვი:</translation>
     </message>
 </context>
 <context>
@@ -5535,7 +5535,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.ui" line="172"/>
         <source>Show more…</source>
-        <translation type="unfinished"/>
+        <translation>მეტის ჩვენება…</translation>
     </message>
 </context>
 <context>
@@ -5564,7 +5564,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="75"/>
         <source>Same duration</source>
-        <translation type="unfinished"/>
+        <translation>იგივე ხანგრძლივობა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="40"/>
@@ -5652,7 +5652,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="103"/>
         <source>Same duration:</source>
-        <translation type="unfinished"/>
+        <translation>იგივე ხანგრძლივობა:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="61"/>
@@ -5749,7 +5749,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="80"/>
         <source>Eighth note</source>
-        <translation>მერვედი ნოტა</translation>
+        <translation>მერვედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="93"/>
@@ -5800,7 +5800,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="41"/>
         <source>Create time signature</source>
-        <translation type="unfinished"/>
+        <translation>ზომის შექმნა</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="57"/>
@@ -5863,7 +5863,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="293"/>
         <source>Add time signature to master palette</source>
-        <translation>ტემპის ნიშნულის დამატება მთავარ პალიტრაში</translation>
+        <translation>ზომის დამატება მთავარ პალიტრაში</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="296"/>
@@ -5877,7 +5877,7 @@ text x-height):</source>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="14"/>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="34"/>
         <source>Time Signature Properties</source>
-        <translation>ტემპის ნიშნულის პარამეტრები</translation>
+        <translation>ზომის პარამეტრები</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="49"/>
@@ -5925,7 +5925,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="35"/>
         <source>To Key</source>
-        <translation>გასაღებში</translation>
+        <translation>ტონალობით</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="57"/>
@@ -6041,7 +6041,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="212"/>
         <source>Perfect unison</source>
-        <translation>სუფთა პრიმა</translation>
+        <translation>წმინდა პრიმა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="217"/>
@@ -6191,7 +6191,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="358"/>
         <source>Transpose key signatures</source>
-        <translation>ტონალობების ტრანსპოზიცია</translation>
+        <translation>საგასაღებო ნიშნის ტრანსპოზიცია</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="405"/>
@@ -6201,32 +6201,32 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="409"/>
         <source>Second</source>
-        <translation>მეორე</translation>
+        <translation>სეკუნდა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="414"/>
         <source>Third</source>
-        <translation>მესამე</translation>
+        <translation>ტერცია</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="419"/>
         <source>Fourth</source>
-        <translation>მეოთხე</translation>
+        <translation>კვარტა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="424"/>
         <source>Fifth</source>
-        <translation>მეხუთე</translation>
+        <translation>კვინტა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="429"/>
         <source>Sixth</source>
-        <translation>მეექვსე</translation>
+        <translation>სექსტა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="434"/>
         <source>Seventh</source>
-        <translation>მეშვიდე</translation>
+        <translation>სეპტიმა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="452"/>
@@ -6383,7 +6383,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="132"/>
         <source>Chord/rest duration</source>
-        <translation type="unfinished"/>
+        <translation>აკორდის/პაუზის ხანგრძლივობა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="93"/>
@@ -6480,7 +6480,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="82"/>
         <source>Save to cloud…</source>
-        <translation type="unfinished"/>
+        <translation>ღრუბელში შენახვა...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="88"/>
@@ -6506,7 +6506,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="103"/>
         <source>Export…</source>
-        <translation>გატანა…</translation>
+        <translation>ექსპორტი…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="109"/>
@@ -6541,7 +6541,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="130"/>
         <source>Clear recent files</source>
-        <translation type="unfinished"/>
+        <translation>ბოლო გახსნილი ფაილების გასუფთავება</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="123"/>
@@ -6651,17 +6651,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="162"/>
         <source>Go to first element in score</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურაში პირველ ელემენტზე გადასვლა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="167"/>
         <source>Last element</source>
-        <translation type="unfinished"/>
+        <translation>ბოლო ელემენტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="168"/>
         <source>Go to last element in score</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურაში ბოლო ელემენტზე გადასვლა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="173"/>
@@ -6696,17 +6696,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="271"/>
         <source>Down octave</source>
-        <translation type="unfinished"/>
+        <translation>ოქტავით დაბლა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="277"/>
         <source>Up octave</source>
-        <translation type="unfinished"/>
+        <translation>ოქტავით მაღლა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="289"/>
         <source>Halve duration</source>
-        <translation type="unfinished"/>
+        <translation>ხანგრძლივობის განახევრება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="295"/>
@@ -6752,7 +6752,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="352"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="353"/>
         <source>Toggle visibility of elements</source>
-        <translation type="unfinished"/>
+        <translation>ელემენტების ხილვადობის ჩართვა/გამორთვა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="358"/>
@@ -6777,7 +6777,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="382"/>
         <source>Similar in this range</source>
-        <translation type="unfinished"/>
+        <translation>მსგავსები მონიშნულში</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="388"/>
@@ -6793,7 +6793,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="504"/>
         <source>Parts</source>
-        <translation>პარტიტურები</translation>
+        <translation>პარტიები</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="511"/>
@@ -6850,19 +6850,19 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="674"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="675"/>
         <source>Insert measures at start of score…</source>
-        <translation type="unfinished"/>
+        <translation>ტაქტების ჩასმა პარტიტურის დასაწყისში...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="680"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="681"/>
         <source>Insert one measure at end of score</source>
-        <translation type="unfinished"/>
+        <translation>ერთი ტაქტის ჩასმა პარტიტურის ბოლოს</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="686"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="687"/>
         <source>Insert measures at end of score…</source>
-        <translation type="unfinished"/>
+        <translation>ტაქტების ჩასმა პარტიტურის ბოლოს...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="766"/>
@@ -6953,7 +6953,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1086"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1092"/>
         <source>Enter rest</source>
-        <translation type="unfinished"/>
+        <translation>პაუზის შეყვანა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2355"/>
@@ -6973,12 +6973,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="67"/>
         <source>Add %1 to chord</source>
-        <translation type="unfinished"/>
+        <translation>%1ს აკორდში დამატება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="68"/>
         <source>Add note %1 to chord</source>
-        <translation type="unfinished"/>
+        <translation>%1 ნოტის აკორდში დამატება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="69"/>
@@ -7093,19 +7093,19 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2140"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2217"/>
         <source>256th note</source>
-        <translation type="unfinished"/>
+        <translation>ორასორმოცდამეთექვსმეტედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2147"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2224"/>
         <source>512th note</source>
-        <translation type="unfinished"/>
+        <translation>ხუთასმეთორმეტედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2154"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2231"/>
         <source>1024th note</source>
-        <translation type="unfinished"/>
+        <translation>ათასოცდამეოთხედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1821"/>
@@ -7166,28 +7166,28 @@ text x-height):</source>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="40"/>
         <source>&amp;Master palette</source>
-        <translation>მასტერი პა&amp;ლიტრა</translation>
+        <translation>მთავარი პა&amp;ლიტრა</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="41"/>
         <source>Open master palette…</source>
-        <translation type="unfinished"/>
+        <translation>მთავარი პალიტრის გახსნა...</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="47"/>
         <source>Palette search</source>
-        <translation type="unfinished"/>
+        <translation>პალიტრის ძებნა</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="48"/>
         <source>Search palettes</source>
-        <translation type="unfinished"/>
+        <translation>პალიტრების ძებნა</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="53"/>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="54"/>
         <source>Time signature properties…</source>
-        <translation type="unfinished"/>
+        <translation>ზომის პარამეტრები...</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="59"/>
@@ -7199,7 +7199,7 @@ text x-height):</source>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="65"/>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="66"/>
         <source>Apply current palette element</source>
-        <translation type="unfinished"/>
+        <translation>მიმდინარე პალიტრის ელემენტის ხმარება</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="72"/>
@@ -7236,13 +7236,13 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="239"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="240"/>
         <source>Move chord/rest right</source>
-        <translation type="unfinished"/>
+        <translation>აკორდის/პაუზის გადატანა მარჯვნივ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="233"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="234"/>
         <source>Move chord/rest left</source>
-        <translation type="unfinished"/>
+        <translation>აკორდის/პაუზის გადატანა მარცხნივ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="71"/>
@@ -7263,7 +7263,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="102"/>
         <source>Select next element in score</source>
-        <translation type="unfinished"/>
+        <translation>შემდეგი ელემენტის არჩევა პარტიტურაში</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="114"/>
@@ -7283,12 +7283,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="138"/>
         <source>Select note/rest above</source>
-        <translation type="unfinished"/>
+        <translation>აკორდის/პაუზის მონიშვნა ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="144"/>
         <source>Select note/rest below</source>
-        <translation type="unfinished"/>
+        <translation>აკორდის/პაუზის მონიშვნა ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="150"/>
@@ -7358,47 +7358,47 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="246"/>
         <source>Snap to previous</source>
-        <translation type="unfinished"/>
+        <translation>წინა პოზიციაზე მიკრობა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="252"/>
         <source>Snap to &amp;next</source>
-        <translation>შემდეგ პოზიციაზე მ&amp;იკრობა</translation>
+        <translation>მომდევნო პოზიციაზე მ&amp;იკრობა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="253"/>
         <source>Snap to next</source>
-        <translation type="unfinished"/>
+        <translation>მომდევნო პოზიციაზე მიკრობა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="260"/>
         <source>Move pitch/selection up</source>
-        <translation type="unfinished"/>
+        <translation>ტონალობის/მონიშნულის ზევით ატანა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="266"/>
         <source>Move pitch/selection down</source>
-        <translation type="unfinished"/>
+        <translation>ტონალობის/მონიშნულის ქვევით ჩატანა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="272"/>
         <source>Move pitch down an octave</source>
-        <translation type="unfinished"/>
+        <translation>ტონალობის ოქტავით ქვევით ჩატანა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="278"/>
         <source>Move pitch up an octave</source>
-        <translation type="unfinished"/>
+        <translation>ტონალობის ოქტავით ზევით ატანა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="284"/>
         <source>Double selected duration</source>
-        <translation type="unfinished"/>
+        <translation>მონიშნული ხანგრძლივობის გაორმაგება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="290"/>
         <source>Halve selected duration</source>
-        <translation type="unfinished"/>
+        <translation>მონიშნული ხანგრძლივობის განახევრება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="296"/>
@@ -7418,7 +7418,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="315"/>
         <source>Copy</source>
-        <translation type="unfinished"/>
+        <translation>კოპირება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="322"/>
@@ -7428,32 +7428,32 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="329"/>
         <source>Paste half duration</source>
-        <translation type="unfinished"/>
+        <translation>ნახევარი ხანგრძლივობით ჩასმა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="335"/>
         <source>Paste double duration</source>
-        <translation type="unfinished"/>
+        <translation>ორმაგი ხანგრძლივობით ჩასმა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="347"/>
         <source>Copy/paste: swap with clipboard</source>
-        <translation type="unfinished"/>
+        <translation>კოპირება/ჩასმა: გაცვლის ბუფერთან გაცვლა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="359"/>
         <source>Select all</source>
-        <translation type="unfinished"/>
+        <translation>ყველას მონიშვნა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="365"/>
         <source>Select section</source>
-        <translation type="unfinished"/>
+        <translation>მონიშნულის მონიშვნა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="371"/>
         <source>Select similar elements</source>
-        <translation type="unfinished"/>
+        <translation>მსგავსი ელემენტების მონიშვნა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="377"/>
@@ -7463,12 +7463,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="383"/>
         <source>Select similar elements in the selected range</source>
-        <translation type="unfinished"/>
+        <translation>მონიშნულ დიაპაზონში მსგავსი ელემენტების მონიშვნა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="389"/>
         <source>Select similar elements with more options…</source>
-        <translation type="unfinished"/>
+        <translation>მსგავსი ელემენტების მონიშვნა მეტი ოფციებით...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="395"/>
@@ -7478,22 +7478,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="402"/>
         <source>Format style…</source>
-        <translation type="unfinished"/>
+        <translation>სტილის დაფორმატება...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="408"/>
         <source>Page settings…</source>
-        <translation type="unfinished"/>
+        <translation>გვერდის პარამეტრები...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="414"/>
         <source>Load style…</source>
-        <translation type="unfinished"/>
+        <translation>სტილის ჩატვირთვა...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="420"/>
         <source>Save style…</source>
-        <translation type="unfinished"/>
+        <translation>სტილის შენახვა...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="426"/>
@@ -7569,12 +7569,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="539"/>
         <source>&amp;Find / Go to</source>
-        <translation type="unfinished"/>
+        <translation>&amp;ძიება / გადასვლა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="540"/>
         <source>Find / Go to</source>
-        <translation type="unfinished"/>
+        <translation>ძიება / გადასვლა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="545"/>
@@ -7613,37 +7613,37 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="650"/>
         <source>Join selected measures</source>
-        <translation type="unfinished"/>
+        <translation>მონიშნული ტაქტების შეერთება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="693"/>
         <source>Insert horizontal frame</source>
-        <translation type="unfinished"/>
+        <translation>ჰორიზონტალური ჩარჩოს ჩასმა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="700"/>
         <source>Insert vertical frame</source>
-        <translation type="unfinished"/>
+        <translation>ვერტიკალური ჩარჩოს ჩასმა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="707"/>
         <source>Insert text frame</source>
-        <translation type="unfinished"/>
+        <translation>ტექსტური ჩარჩოს ჩასმა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="714"/>
         <source>Append horizontal frame</source>
-        <translation type="unfinished"/>
+        <translation>ჰორიზონტალური ჩარჩოს დამატება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="720"/>
         <source>Append vertical frame</source>
-        <translation type="unfinished"/>
+        <translation>ვერტიკალური ჩარჩოს დამატება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="726"/>
         <source>Append text frame</source>
-        <translation type="unfinished"/>
+        <translation>ტექსტური ჩარჩოს დამატება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="732"/>
@@ -7703,92 +7703,92 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="864"/>
         <source>&amp;Unison</source>
-        <translation type="unfinished"/>
+        <translation>&amp;პრიმა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="865"/>
         <source>Enter interval: unison</source>
-        <translation type="unfinished"/>
+        <translation>ინტერვალის შეყვანა: პრიმა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="871"/>
         <source>Enter interval: second above</source>
-        <translation type="unfinished"/>
+        <translation>ინტერვალის შეყვანა: სეკუნდა ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="877"/>
         <source>Enter interval: third above</source>
-        <translation type="unfinished"/>
+        <translation>ინტერვალის შეყვანა: ტერცია ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="883"/>
         <source>Enter interval: fourth above</source>
-        <translation type="unfinished"/>
+        <translation>ინტერვალის შეყვანა: კვარტა ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="889"/>
         <source>Enter interval: fifth above</source>
-        <translation type="unfinished"/>
+        <translation>ინტერვალის შეყვანა: კვინტა ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="895"/>
         <source>Enter interval: sixth above</source>
-        <translation type="unfinished"/>
+        <translation>ინტერვალის შეყვანა: სექსტა ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="901"/>
         <source>Enter interval: seventh above</source>
-        <translation type="unfinished"/>
+        <translation>ინტერვალის შეყვანა: სეპტიმა ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="907"/>
         <source>Enter interval: octave above</source>
-        <translation type="unfinished"/>
+        <translation>ინტერვალის შეყვანა: ოქტავა ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="913"/>
         <source>Enter interval: ninth above</source>
-        <translation type="unfinished"/>
+        <translation>ინტერვალის შეყვანა: ნონა ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="919"/>
         <source>Enter interval: second below</source>
-        <translation type="unfinished"/>
+        <translation>ინტერვალის შეყვანა: სეკუნდა ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="925"/>
         <source>Enter interval: third below</source>
-        <translation type="unfinished"/>
+        <translation>ინტერვალის შეყვანა: ტერცია ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="931"/>
         <source>Enter interval: fourth below</source>
-        <translation type="unfinished"/>
+        <translation>ინტერვალის შეყვანა: კვარტა ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="937"/>
         <source>Enter interval: fifth below</source>
-        <translation type="unfinished"/>
+        <translation>ინტერვალის შეყვანა: კვინტა ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="943"/>
         <source>Enter interval: sixth below</source>
-        <translation type="unfinished"/>
+        <translation>ინტერვალის შეყვანა: სექსტა ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="949"/>
         <source>Enter interval: seventh below</source>
-        <translation type="unfinished"/>
+        <translation>ინტერვალის შეყვანა: სეპტიმა ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="955"/>
         <source>Enter interval: octave below</source>
-        <translation type="unfinished"/>
+        <translation>ინტერვალის შეყვანა: ოქტავა ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="961"/>
         <source>Enter interval: ninth below</source>
-        <translation type="unfinished"/>
+        <translation>ინტერვალის შეყვანა: ნონა ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1200"/>
@@ -7808,27 +7808,27 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1228"/>
         <source>Add text: title</source>
-        <translation type="unfinished"/>
+        <translation>დაამატე ტექსტი: სათაური</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1234"/>
         <source>Add text: subtitle</source>
-        <translation type="unfinished"/>
+        <translation>დაამატე ტექსტი: ქვესათაური</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1240"/>
         <source>Add text: composer</source>
-        <translation type="unfinished"/>
+        <translation>დაამატე ტექსტი: კომპოზიტორი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1246"/>
         <source>Add text: lyricist</source>
-        <translation type="unfinished"/>
+        <translation>დაამატე ტექსტი: ლირიკოსი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1252"/>
         <source>Add text: part name</source>
-        <translation type="unfinished"/>
+        <translation>დაამატე ტექსტი: პარტიის სახელი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1257"/>
@@ -7838,7 +7838,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1258"/>
         <source>Add frame text</source>
-        <translation type="unfinished"/>
+        <translation>ჩარჩოს ტექსტის დამატება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1264"/>
@@ -8276,17 +8276,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1888"/>
         <source>Add clef: treble</source>
-        <translation type="unfinished"/>
+        <translation>დაამატე გასაღები: ვიოლინოს</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1894"/>
         <source>Add clef: bass</source>
-        <translation type="unfinished"/>
+        <translation>დაამატე გასაღები: ბანის</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1906"/>
         <source>Add accidental: sharp</source>
-        <translation type="unfinished"/>
+        <translation>დაამატე ალტერაციის ნიშანი: დიეზი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1942"/>
@@ -8301,7 +8301,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1954"/>
         <source>Insert full measure rest</source>
-        <translation type="unfinished"/>
+        <translation>სრული ტაქტის პაუზის ჩასმა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1966"/>
@@ -8347,84 +8347,84 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2071"/>
         <source>Set duration: longa</source>
-        <translation type="unfinished"/>
+        <translation>დააყენეთ ხანგრძლივობა: ლონგა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2078"/>
         <source>Set duration: double whole note</source>
-        <translation type="unfinished"/>
+        <translation>დააყენეთ ხანგრძლივობა: ორმაგი მთელი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2085"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2162"/>
         <source>Set duration: whole note</source>
-        <translation type="unfinished"/>
+        <translation>დააყენეთ ხანგრძლივობა: მთელი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2092"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2169"/>
         <source>Set duration: half note</source>
-        <translation type="unfinished"/>
+        <translation>დააყენეთ ხანგრძლივობა: ნახევარი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2099"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2176"/>
         <source>Set duration: quarter note</source>
-        <translation type="unfinished"/>
+        <translation>დააყენეთ ხანგრძლივობა: მეოთხედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2105"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2182"/>
         <source>Eighth note</source>
-        <translation>მერვედი ნოტა</translation>
+        <translation>მერვედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2106"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2183"/>
         <source>Set duration: eighth note</source>
-        <translation type="unfinished"/>
+        <translation>დააყენეთ ხანგრძლივობა: მერვედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2113"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2190"/>
         <source>Set duration: 16th note</source>
-        <translation type="unfinished"/>
+        <translation>დააყენეთ ხანგრძლივობა: მეთექვსმეტედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2120"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2197"/>
         <source>Set duration: 32nd note</source>
-        <translation type="unfinished"/>
+        <translation>დააყენეთ ხანგრძლივობა: ოცდამეთორმეტედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2127"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2204"/>
         <source>Set duration: 64th note</source>
-        <translation type="unfinished"/>
+        <translation>დააყენეთ ხანგრძლივობა: სამოცდამეოთხედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2134"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2211"/>
         <source>Set duration: 128th note</source>
-        <translation type="unfinished"/>
+        <translation>დააყენეთ ხანგრძლივობა: ასოცდამერვედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2141"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2218"/>
         <source>Set duration: 256th note</source>
-        <translation type="unfinished"/>
+        <translation>დააყენეთ ხანგრძლივობა: ორასორმოცდამეთექვსმეტედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2148"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2225"/>
         <source>Set duration: 512th note</source>
-        <translation type="unfinished"/>
+        <translation>დააყენეთ ხანგრძლივობა: ხუთასმეთორმეტედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2155"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2232"/>
         <source>Set duration: 1024th note</source>
-        <translation type="unfinished"/>
+        <translation>დააყენეთ ხანგრძლივობა: ათასოცდამეოთხედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2239"/>
@@ -8449,7 +8449,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2267"/>
         <source>Toggle rest</source>
-        <translation type="unfinished"/>
+        <translation>პაუზის ჩართვა/გამორთვა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2274"/>
@@ -8464,17 +8464,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2286"/>
         <source>Toggle accidental: flat</source>
-        <translation type="unfinished"/>
+        <translation>ჩართე/გამორთე ალტერაციის ნიშანი: ბემოლი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2300"/>
         <source>Toggle accidental: natural</source>
-        <translation type="unfinished"/>
+        <translation>ჩართე/გამორთე ალტერაციის ნიშანი: ბეკარი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2307"/>
         <source>Toggle accidental: sharp</source>
-        <translation type="unfinished"/>
+        <translation>ჩართე/გამორთე ალტერაციის ნიშანი: დიეზი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2321"/>
@@ -8533,7 +8533,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2482"/>
         <source>Show/hide page margins</source>
-        <translation type="unfinished"/>
+        <translation>გვერდის მინდვრების ჩვენება/დამალვა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2505"/>
@@ -8573,7 +8573,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1953"/>
         <source>Full measure rest</source>
-        <translation type="unfinished"/>
+        <translation>სრული ტაქტის პაუზა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2070"/>
@@ -8607,7 +8607,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2112"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2189"/>
         <source>16th note</source>
-        <translation type="unfinished"/>
+        <translation>მეთექვსმეტედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2119"/>
@@ -8619,13 +8619,13 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2126"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2203"/>
         <source>64th note</source>
-        <translation type="unfinished"/>
+        <translation>სამოცდამეოთხედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2133"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2210"/>
         <source>128th note</source>
-        <translation type="unfinished"/>
+        <translation>ასოცდამერვედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2238"/>
@@ -8715,7 +8715,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2375"/>
         <source>Use voice 1</source>
-        <translation type="unfinished"/>
+        <translation>ხმა 1-ის გამოყენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2381"/>
@@ -8725,7 +8725,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2382"/>
         <source>Use voice 2</source>
-        <translation type="unfinished"/>
+        <translation>ხმა 2-ის გამოყენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2388"/>
@@ -8735,7 +8735,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2389"/>
         <source>Use voice 3</source>
-        <translation type="unfinished"/>
+        <translation>ხმა 3-ის გამოყენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2395"/>
@@ -8766,7 +8766,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="843"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="844"/>
         <source>Add brackets to accidental</source>
-        <translation type="unfinished"/>
+        <translation>ალტერაციის ნიშანზე ბრეკეტების დამატება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="857"/>
@@ -8778,7 +8778,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="340"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="341"/>
         <source>Paste special</source>
-        <translation type="unfinished"/>
+        <translation>სპეციალურად ჩასმა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2056"/>
@@ -8895,7 +8895,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="124"/>
         <source>Show/hide palettes</source>
-        <translation type="unfinished"/>
+        <translation>პალიტრების ჩვენება/დამალვა</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="130"/>
@@ -8910,12 +8910,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="137"/>
         <source>Propert&amp;ies</source>
-        <translation type="unfinished"/>
+        <translation>თვისე&amp;ბები</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="138"/>
         <source>Show/hide properties</source>
-        <translation type="unfinished"/>
+        <translation>თვისებების ჩვენება/დამალვა</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="144"/>
@@ -8965,7 +8965,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="187"/>
         <source>Show/hide piano keyboard</source>
-        <translation type="unfinished"/>
+        <translation>პიანინოს კლავიატურის ჩვენება/დამალვა</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="201"/>
@@ -9000,12 +9000,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="99"/>
         <source>Restore the &amp;default layout</source>
-        <translation type="unfinished"/>
+        <translation>ნაგულისხმევი &amp;განლაგების აღდგენა</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="100"/>
         <source>Restore the default layout</source>
-        <translation type="unfinished"/>
+        <translation>ნაგულისხმევი განლაგების აღდგენა</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="114"/>
@@ -9020,12 +9020,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="209"/>
         <source>&amp;Preferences</source>
-        <translation>&amp;გამართვა</translation>
+        <translation>&amp;პარამეტრები</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updateuiactions.cpp" line="36"/>
         <source>Check for &amp;update</source>
-        <translation type="unfinished"/>
+        <translation>გა&amp;ნახლების შემოწმება</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="178"/>
@@ -9137,12 +9137,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1887"/>
         <source>Add treble clef</source>
-        <translation type="unfinished"/>
+        <translation>ვიოლინოს გასაღების დამატება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1893"/>
         <source>Add bass clef</source>
-        <translation type="unfinished"/>
+        <translation>ბანის გასაღების დამატება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="590"/>
@@ -9190,12 +9190,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2460"/>
         <source>Show &amp;invisible</source>
-        <translation type="unfinished"/>
+        <translation>&amp;დაფარულის ჩვენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2467"/>
         <source>Show f&amp;ormatting</source>
-        <translation type="unfinished"/>
+        <translation>&amp;ფორმატირების ჩვენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2468"/>
@@ -9205,12 +9205,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2474"/>
         <source>Show &amp;frames</source>
-        <translation type="unfinished"/>
+        <translation>&amp;ჩარჩოების ჩვენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2481"/>
         <source>Show page &amp;margins</source>
-        <translation type="unfinished"/>
+        <translation>გვერდის მინდვრების &amp;ჩვენება</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="71"/>
@@ -9244,7 +9244,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="283"/>
         <source>Double duration</source>
-        <translation type="unfinished"/>
+        <translation>ორმაგი ხანგრძლივობა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1576"/>
@@ -9335,7 +9335,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="449"/>
         <source>Remove selected ran&amp;ge</source>
-        <translation type="unfinished"/>
+        <translation>მონიშნული დიაპაზონის &amp;წაშლა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="462"/>
@@ -9405,122 +9405,122 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="643"/>
         <source>&amp;Split measure before selected note/rest</source>
-        <translation type="unfinished"/>
+        <translation>ტაქტის გაყოფა არჩეულ ნოტამდე/პაუზამდე</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="649"/>
         <source>&amp;Join selected measures</source>
-        <translation type="unfinished"/>
+        <translation>მ&amp;ონიშნული ტაქტების შეერთება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="692"/>
         <source>Insert &amp;horizontal frame</source>
-        <translation type="unfinished"/>
+        <translation>&amp;ჰორიზონტალური ჩარჩოს ჩასმა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="699"/>
         <source>Insert &amp;vertical frame</source>
-        <translation type="unfinished"/>
+        <translation>&amp;ვერტიკალური ჩარჩოს ჩასმა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="706"/>
         <source>Insert &amp;text frame</source>
-        <translation type="unfinished"/>
+        <translation>&amp;ტექსტური ჩარჩოს ჩასმა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="713"/>
         <source>Append h&amp;orizontal frame</source>
-        <translation type="unfinished"/>
+        <translation>&amp;ჰორიზონტალური ჩარჩოს დამატება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="719"/>
         <source>Append v&amp;ertical frame</source>
-        <translation type="unfinished"/>
+        <translation>&amp;ვერტიკალური ჩარჩოს დამატება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="725"/>
         <source>Append te&amp;xt frame</source>
-        <translation type="unfinished"/>
+        <translation>&amp;ტექსტური ჩარჩოს დამატება</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="870"/>
         <source>Se&amp;cond above</source>
-        <translation type="unfinished"/>
+        <translation>სე&amp;კუნდა ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="876"/>
         <source>Thir&amp;d above</source>
-        <translation type="unfinished"/>
+        <translation>ტერ&amp;ცია ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="882"/>
         <source>Fou&amp;rth above</source>
-        <translation type="unfinished"/>
+        <translation>კვა&amp;რტა ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="888"/>
         <source>Fift&amp;h above</source>
-        <translation type="unfinished"/>
+        <translation>კვი&amp;ნტა ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="894"/>
         <source>Si&amp;xth above</source>
-        <translation type="unfinished"/>
+        <translation> სე&amp;ქსტა ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="900"/>
         <source>Seve&amp;nth above</source>
-        <translation type="unfinished"/>
+        <translation>&amp;სეპტიმა ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="906"/>
         <source>Octave &amp;above</source>
-        <translation type="unfinished"/>
+        <translation>ოქტავა &amp;ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="912"/>
         <source>Ninth abov&amp;e</source>
-        <translation type="unfinished"/>
+        <translation>ნონა ზე&amp;მოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="918"/>
         <source>&amp;Second below</source>
-        <translation type="unfinished"/>
+        <translation>&amp;სეკუნდა ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="924"/>
         <source>&amp;Third below</source>
-        <translation type="unfinished"/>
+        <translation>&amp;ტერცია ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="930"/>
         <source>F&amp;ourth below</source>
-        <translation type="unfinished"/>
+        <translation>&amp;კვარტა ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="936"/>
         <source>&amp;Fifth below</source>
-        <translation type="unfinished"/>
+        <translation>კ&amp;ვინტა ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="942"/>
         <source>S&amp;ixth below</source>
-        <translation type="unfinished"/>
+        <translation>სე&amp;ქსტა ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="948"/>
         <source>Se&amp;venth below</source>
-        <translation type="unfinished"/>
+        <translation>სეპ&amp;ტიმა ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="954"/>
         <source>Octave &amp;below</source>
-        <translation type="unfinished"/>
+        <translation>ოქტავა &amp;ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="960"/>
         <source>Ninth belo&amp;w</source>
-        <translation type="unfinished"/>
+        <translation>ნონა ქ&amp;ვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1187"/>
@@ -9565,27 +9565,27 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1227"/>
         <source>&amp;Title</source>
-        <translation type="unfinished"/>
+        <translation>&amp;სათაური</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1233"/>
         <source>&amp;Subtitle</source>
-        <translation type="unfinished"/>
+        <translation>&amp;ქვესათაური</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1239"/>
         <source>&amp;Composer</source>
-        <translation type="unfinished"/>
+        <translation>&amp;კომპოზიტორი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1245"/>
         <source>&amp;Lyricist</source>
-        <translation type="unfinished"/>
+        <translation>&amp;ლირიკოსი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1251"/>
         <source>&amp;Part name</source>
-        <translation type="unfinished"/>
+        <translation>&amp;პარტიის სახელი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1263"/>
@@ -9890,7 +9890,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1900"/>
         <source>Add accidental: double-sharp</source>
-        <translation type="unfinished"/>
+        <translation>დაამატე ალტერაციის ნიშანი: დუბლდიეზი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1905"/>
@@ -9905,7 +9905,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1912"/>
         <source>Add accidental: natural</source>
-        <translation type="unfinished"/>
+        <translation>დაამატე ალტერაციის ნიშანი: ბეკარი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1917"/>
@@ -9915,7 +9915,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1918"/>
         <source>Add accidental: flat</source>
-        <translation type="unfinished"/>
+        <translation>დაამატე ალტერაციის ნიშანი: ბემოლი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1923"/>
@@ -9925,7 +9925,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1924"/>
         <source>Add accidental: double-flat</source>
-        <translation type="unfinished"/>
+        <translation>დაამატე ალტერაციის ნიშანი: დუბლბემოლი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1930"/>
@@ -9941,7 +9941,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1959"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1960"/>
         <source>Toggle multimeasure rests</source>
-        <translation type="unfinished"/>
+        <translation>მრავალტაქტიანი პაუზების ჩართვა/გამორთვა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1965"/>
@@ -9952,12 +9952,12 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1989"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1990"/>
         <source>Toggle automatic placement for entire score</source>
-        <translation type="unfinished"/>
+        <translation>ავტომატური განთავსების ჩართვა/გამორთვა მთელი პარტიტურისთვის</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2008"/>
         <source>Toggle note input mode</source>
-        <translation type="unfinished"/>
+        <translation>ნოტის შეყვანის რეჟიმის ჩართვა/გამორთვა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2015"/>
@@ -9967,7 +9967,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2016"/>
         <source>Toggle note input mode: insert/overwrite</source>
-        <translation type="unfinished"/>
+        <translation>ჩართე/გამორთე ნოტის შეყვანის რეჟიმი: ჩასმა/გადაწერა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2022"/>
@@ -10008,37 +10008,37 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2285"/>
         <source>Toggle flat</source>
-        <translation type="unfinished"/>
+        <translation>ბემოლის ჩართვა/გამორთვა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2292"/>
         <source>Toggle double-flat</source>
-        <translation type="unfinished"/>
+        <translation>დუბლბემოლი ჩართვა/გამორთვა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2293"/>
         <source>Toggle accidental: double-flat</source>
-        <translation type="unfinished"/>
+        <translation>ჩართე/გამორთე ალტერაციის ნიშანი: დუბლბემოლი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2299"/>
         <source>Toggle natural</source>
-        <translation type="unfinished"/>
+        <translation>ბეკარის ჩართვა/გამორთვა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2306"/>
         <source>Toggle sharp</source>
-        <translation type="unfinished"/>
+        <translation>დიეზის ჩართვა/გამორთვა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2313"/>
         <source>Toggle double-sharp</source>
-        <translation type="unfinished"/>
+        <translation>დუბლდიეზის ჩართვა/გამორთვა</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2314"/>
         <source>Toggle accidental: double-sharp</source>
-        <translation type="unfinished"/>
+        <translation>ჩართე/გამორთე ალტერაციის ნიშანი: დუბლდიეზი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2328"/>
@@ -10229,14 +10229,14 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="88"/>
         <source>Scores</source>
-        <translation>ქულები</translation>
+        <translation>პარტიტურები</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="89"/>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="73"/>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="97"/>
         <source>Plugins</source>
-        <translation>დამატებები</translation>
+        <translation>მოდულები</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="92"/>
@@ -10309,7 +10309,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="343"/>
         <source>Piano keyboard</source>
-        <translation type="unfinished"/>
+        <translation>პიანინოს კლავიატურა</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="373"/>
@@ -10342,7 +10342,9 @@ text x-height):</source>
         <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
 
 This action will not delete any of your scores.</source>
-        <translation type="unfinished"/>
+        <translation>ეს ქმედება გადატვირთვას ყველა თქვენი აპლიკაციის პარამეტრებს და წაშლის ყველა მორგებულ პალიტრებს და მორგებულ მალსახმობებს. ბოლოს გახსნილი პარტიტურების სიაც გასუფთავდება.
+
+ეს ქმედება არ წაშლის არცერთ თქვენს პარტიტურას.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="329"/>
@@ -10352,17 +10354,17 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="340"/>
         <source>Would you like to restart MuseScore Studio now?</source>
-        <translation type="unfinished"/>
+        <translation>გსურთ MuseScore Studio-ს გადატვირთვა?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="341"/>
         <source>MuseScore Studio needs to be restarted for these changes to take effect.</source>
-        <translation type="unfinished"/>
+        <translation>ამ ცვლილებების შეტანისთვის საჭიროა MuseScore Studio-ს„1 გადატვირთვა.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="346"/>
         <source>Restart</source>
-        <translation>რესტარტ</translation>
+        <translation>გადატვირთვა</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="190"/>
@@ -10372,7 +10374,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="191"/>
         <source>Do you want to restore the session?</source>
-        <translation type="unfinished"/>
+        <translation>გსურთ სესიის აღდგენა</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="90"/>
@@ -10407,7 +10409,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/loadingscreenview.cpp" line="54"/>
         <source>Loading…‎</source>
-        <translation type="unfinished"/>
+        <translation>იტვირთება...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/loadingscreenview.cpp" line="99"/>
@@ -10417,29 +10419,29 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/AccountPage.qml" line="75"/>
         <source>Accounts</source>
-        <translation type="unfinished"/>
+        <translation>ანგარიშები</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/newinstanceloadingscreenview.cpp" line="40"/>
         <source>Loading new score…‎</source>
-        <translation type="unfinished"/>
+        <translation>ახალი პარტიტურა იტვირთება...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/newinstanceloadingscreenview.cpp" line="44"/>
         <source>Loading “%1”…‎</source>
-        <translation type="unfinished"/>
+        <translation>&quot;%1&quot; იტვირთება...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/newinstanceloadingscreenview.cpp" line="50"/>
         <source>Loading score…‎</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურა იტვირთება...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Main.wasm.qml" line="36"/>
         <location filename="../../src/appshell/qml/platform/win/AppTitleBar.qml" line="93"/>
         <location filename="../../src/appshell/view/mainwindowtitleprovider.cpp" line="104"/>
         <source>MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio</translation>
     </message>
 </context>
 <context>
@@ -10447,7 +10449,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="33"/>
         <source>About MuseScore Studio</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio-ს შესახებ</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="85"/>
@@ -10522,7 +10524,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/framework/dockwindow/view/dockpanelview.cpp" line="117"/>
         <source>Undock</source>
-        <translation type="unfinished"/>
+        <translation>განცალკევება</translation>
     </message>
 </context>
 <context>
@@ -10565,7 +10567,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="56"/>
         <source>Follow system theme</source>
-        <translation type="unfinished"/>
+        <translation>მიყევი სისტმის ფონს</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="117"/>
@@ -10657,7 +10659,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="358"/>
         <source>&amp;System</source>
-        <translation>&amp;სისტემა</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="370"/>
@@ -10672,7 +10674,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="397"/>
         <source>&amp;Engraving</source>
-        <translation type="unfinished"/>
+        <translation>&amp;გრავიურა</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="398"/>
@@ -10732,7 +10734,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="305"/>
         <source>&amp;Plugins</source>
-        <translation>&amp;დამატებები</translation>
+        <translation>&amp;მოდულები</translation>
     </message>
 </context>
 <context>
@@ -10773,7 +10775,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="213"/>
         <source>&amp;View</source>
-        <translation>ხედი</translation>
+        <translation>&amp;ხედი</translation>
     </message>
 </context>
 <context>
@@ -10786,7 +10788,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/AdvancedPreferencesPage.qml" line="69"/>
         <source>Value</source>
-        <translation type="unfinished"/>
+        <translation>მნიშვნელობა</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/AppearancePreferencesPage.qml" line="144"/>
@@ -10812,7 +10814,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/appshell/qml/Preferences/internal/AccentColorsSection.qml" line="63"/>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="47"/>
         <source>Accent color:</source>
-        <translation type="unfinished"/>
+        <translation>აქცენტის ფერი:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AdvancedTopSection.qml" line="44"/>
@@ -10839,7 +10841,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioEngineSection.qml" line="34"/>
         <source>Restart audio and MIDI devices</source>
-        <translation type="unfinished"/>
+        <translation>აუდიო და MIDI მოწყობილობების გადატვირთვა</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="30"/>
@@ -10945,12 +10947,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="79"/>
         <source>Check for language updates</source>
-        <translation type="unfinished"/>
+        <translation>ენის განახლებების შემოწმება</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="92"/>
         <source>Restart required</source>
-        <translation type="unfinished"/>
+        <translation>საჭიროა გადატვირთვა</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiDevicesSection.qml" line="42"/>
@@ -11112,12 +11114,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemesSection.qml" line="78"/>
         <source>Follow system theme</source>
-        <translation type="unfinished"/>
+        <translation>მიყევი სისტმის ფონს</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemesSection.qml" line="93"/>
         <source>Enable high-contrast</source>
-        <translation type="unfinished"/>
+        <translation>მაღალკონტრასტულობის ჩართვა</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="32"/>
@@ -11148,12 +11150,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiFontSection.qml" line="42"/>
         <source>Font face:</source>
-        <translation type="unfinished"/>
+        <translation>ფონტის ტიპი:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiFontSection.qml" line="57"/>
         <source>Body text size:</source>
-        <translation type="unfinished"/>
+        <translation>ტექსტის ზომა:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ZoomSection.qml" line="30"/>
@@ -11189,7 +11191,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="91"/>
         <source>Scores</source>
-        <translation>ქულები</translation>
+        <translation>პარტიტურები</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="95"/>
@@ -11204,7 +11206,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="103"/>
         <source>Plugins</source>
-        <translation>დამატებები</translation>
+        <translation>მოდულები</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="107"/>
@@ -11224,7 +11226,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="95"/>
         <source>System default</source>
-        <translation>სისტემის ნაგულისხმები</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="59"/>
@@ -11285,12 +11287,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ProgramStartSection.qml" line="30"/>
         <source>Program start</source>
-        <translation type="unfinished"/>
+        <translation>პროგრამის დაწყება</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="151"/>
         <source>General</source>
-        <translation type="unfinished"/>
+        <translation>ძირითადი</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="157"/>
@@ -11345,22 +11347,22 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="193"/>
         <source>Start empty</source>
-        <translation type="unfinished"/>
+        <translation>ცარიელით დაიწყოს</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="194"/>
         <source>Continue last session</source>
-        <translation type="unfinished"/>
+        <translation>წინა სესია გააგრძელოს</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="195"/>
         <source>Start with new score</source>
-        <translation type="unfinished"/>
+        <translation>ახალი პარტიტურის შექმნით დაიწყოს</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="196"/>
         <source>Start with score:</source>
-        <translation type="unfinished"/>
+        <translation>დაიწყოს პარტიტურით:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="219"/>
@@ -11456,7 +11458,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PublishMuseScoreComSection.qml" line="30"/>
         <source>Publish to MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore.com-ზე გამოქვეყნება</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PublishMuseScoreComSection.qml" line="41"/>
@@ -11541,12 +11543,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/framework/audio/internal/platform/jack/jackaudiodriver.cpp" line="240"/>
-        <location filename="../../src/framework/audio/internal/platform/lin/linuxaudiodriver.cpp" line="255"/>
+        <location filename="../../src/framework/audio/internal/platform/lin/linuxaudiodriver.cpp" line="265"/>
         <location filename="../../src/framework/audio/internal/platform/osx/osxaudiodriver.mm" line="196"/>
         <location filename="../../src/framework/audio/internal/platform/win/wasapiaudiodriver.cpp" line="218"/>
         <location filename="../../src/framework/audio/internal/platform/win/wincoreaudiodriver.cpp" line="457"/>
         <source>System default</source>
-        <translation>სისტემის ნაგულისხმები</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/framework/audioplugins/internal/registeraudiopluginsscenario.cpp" line="80"/>
@@ -11594,12 +11596,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudItem.qml" line="189"/>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="74"/>
         <source>Create account</source>
-        <translation type="unfinished"/>
+        <translation>ანგარიშის შექმნა</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/AccountInfoButton.qml" line="42"/>
         <source>My accounts</source>
-        <translation type="unfinished"/>
+        <translation>ჩემი ანგარიშები</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="178"/>
@@ -11975,12 +11977,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/noteentry.cpp" line="411"/>
+        <location filename="../../src/engraving/dom/noteentry.cpp" line="415"/>
         <source>Note input will remove measure repeat</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/noteentry.cpp" line="412"/>
+        <location filename="../../src/engraving/dom/noteentry.cpp" line="416"/>
         <source>This measure contains a measure repeat. If you enter notes here, it will be deleted. Do you want to continue?</source>
         <translation type="unfinished"/>
     </message>
@@ -12026,7 +12028,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2393"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2401"/>
         <source>Annotations:</source>
         <translation>ანოტაციები:</translation>
     </message>
@@ -12036,7 +12038,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1108"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3229"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3241"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2419"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2427"/>
         <source>Start of %1</source>
         <translation type="unfinished"/>
     </message>
@@ -12046,7 +12048,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1110"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3233"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3249"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2434"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2442"/>
         <source>End of %1</source>
         <translation type="unfinished"/>
     </message>
@@ -12234,7 +12236,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="174"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1135"/>
         <source>Multimeasure rest range</source>
-        <translation type="unfinished"/>
+        <translation>მრავალტაქტიანი პაუზის დიაპაზონი</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="175"/>
@@ -12300,7 +12302,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="189"/>
         <source>Key signature</source>
-        <translation>გასაღების ნიშანი</translation>
+        <translation>საგასაღებო ნიშანი</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="190"/>
@@ -12310,7 +12312,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="191"/>
         <source>Time signature</source>
-        <translation>ტემპის ნიშნული</translation>
+        <translation>ზომა</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="192"/>
@@ -12320,7 +12322,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="193"/>
         <source>Multimeasure rest</source>
-        <translation type="unfinished"/>
+        <translation>მრავალტაქტიანი პაუზა</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="194"/>
@@ -12765,7 +12767,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="280"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1143"/>
         <source>System</source>
-        <translation>სისტემა</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="281"/>
@@ -12795,17 +12797,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="288"/>
         <source>Horizontal frame</source>
-        <translation type="unfinished"/>
+        <translation>ჰორიზონტალური ჩარჩო</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="289"/>
         <source>Vertical frame</source>
-        <translation type="unfinished"/>
+        <translation>ვერტიკალური ჩარჩო</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="290"/>
         <source>Text frame</source>
-        <translation type="unfinished"/>
+        <translation>ტექსტური ჩარჩო</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="291"/>
@@ -13408,7 +13410,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2722"/>
         <source>G major, E minor</source>
-        <translation type="unfinished"/>
+        <translation>სოლ მაჟორი, მი მინორი</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2714"/>
@@ -13620,13 +13622,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="146"/>
         <source>Full score</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურა</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="150"/>
         <source>Part score: %1</source>
         <extracomment>%1 is the name of a part score.</extracomment>
-        <translation type="unfinished"/>
+        <translation>პარტია: %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/check.cpp" line="191"/>
@@ -13693,37 +13695,37 @@ Fret %1 on strings %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1540"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1541"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="170"/>
         <source>Start measure: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1543"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1544"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="172"/>
         <source>Start displayed measure: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1546"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1547"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="174"/>
         <source>Start beat: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1553"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1554"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="177"/>
         <source>End measure: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1556"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1557"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="179"/>
         <source>End displayed measure: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1559"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1560"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="181"/>
         <source>End beat: %1</source>
         <translation type="unfinished"/>
@@ -13981,28 +13983,28 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2064"/>
         <source>G grace note on B</source>
-        <translation type="unfinished"/>
+        <translation>სოლ ფორშლაგი სიზე</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2065"/>
         <source>G grace note on C</source>
-        <translation type="unfinished"/>
+        <translation>სოლ ფორშლაგი დოზე</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2066"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2067"/>
         <source>G grace note on D</source>
-        <translation type="unfinished"/>
+        <translation>სოლ ფორშლაგი რეზე</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2068"/>
         <source>G grace note on E</source>
-        <translation type="unfinished"/>
+        <translation>სოლ ფორშლაგი მიზე</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2069"/>
         <source>G grace note on F</source>
-        <translation type="unfinished"/>
+        <translation>სოლ ფორშლაგი ფაზე</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2072"/>
@@ -14596,7 +14598,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1894"/>
         <source>Brace</source>
-        <translation type="unfinished"/>
+        <translation>ფრჩხილი</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1895"/>
@@ -14619,132 +14621,132 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="688"/>
         <source>Treble clef</source>
-        <translation type="unfinished"/>
+        <translation>ვიოლინოს გასაღები</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="689"/>
         <source>Treble clef 15ma bassa</source>
-        <translation type="unfinished"/>
+        <translation>ვიოლინოს გასაღები ორი ოქტავით ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="690"/>
         <source>Treble clef 8va bassa</source>
-        <translation type="unfinished"/>
+        <translation>ვიოლინოს გასაღები ოქტავით ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="691"/>
         <source>Treble clef 8va alta</source>
-        <translation type="unfinished"/>
+        <translation>ვიოლინოს გასაღები ოქტავით ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="692"/>
         <source>Treble clef 15ma alta</source>
-        <translation type="unfinished"/>
+        <translation>ვიოლინოს გასაღები ორი ოქტავით ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="693"/>
         <source>Double treble clef 8va bassa on 2nd line</source>
-        <translation type="unfinished"/>
+        <translation>ორმაგი ვიოლინოს გასაღები ოქტავით ქვემოთ მე-2 ხაზზე</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="694"/>
         <source>Treble clef optional 8va bassa</source>
-        <translation type="unfinished"/>
+        <translation>ვიოლინოს გასაღები ნებაყოფლობით ოქტავით ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="695"/>
         <source>French violin clef</source>
-        <translation type="unfinished"/>
+        <translation>ფრანგული ვიოლინოს გასაღები</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="696"/>
         <source>Soprano clef</source>
-        <translation type="unfinished"/>
+        <translation>სოპრანოს გასაღები</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="697"/>
         <source>Mezzo-soprano clef</source>
-        <translation type="unfinished"/>
+        <translation>მეცო-სოპრანოს გასაღები</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="698"/>
         <source>Alto clef</source>
-        <translation type="unfinished"/>
+        <translation>ალტის გასაღები</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="699"/>
         <source>Tenor clef</source>
-        <translation type="unfinished"/>
+        <translation>ტენორის გასაღები</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="700"/>
         <source>Baritone clef (C clef)</source>
-        <translation type="unfinished"/>
+        <translation>ბარიტონის გასაღები (ვიოლას გასაღები)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="701"/>
         <source>C clef, H shape (19th century)</source>
-        <translation type="unfinished"/>
+        <translation>დოს გასაღები, H ფორმა (მე-19 საუკუნე)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="702"/>
         <source>Soprano clef (French, 18th century)</source>
-        <translation type="unfinished"/>
+        <translation>სოპრანოს გასაღები (ფრანგული, მე-18 საუკუნე)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="703"/>
         <source>Alto clef (French, 18th century)</source>
-        <translation type="unfinished"/>
+        <translation>ალტის გასაღები (ფრანგული, მე-18 საუკუნე)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="704"/>
         <source>Tenor clef (French, 18th century)</source>
-        <translation type="unfinished"/>
+        <translation>ტენორის გასაღები (ფრანგული, მე-18 საუკუნე)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="705"/>
         <source>Soprano clef (French, 20th century)</source>
-        <translation type="unfinished"/>
+        <translation>სოპრანოს გასაღები (ფრანგული, მე-20 საუკუნე)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="706"/>
         <source>Alto clef (French, 20th century)</source>
-        <translation type="unfinished"/>
+        <translation>ალტის გასაღები (ფრანგული, მე-20 საუკუნე)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="707"/>
         <source>Tenor clef (French, 20th century)</source>
-        <translation type="unfinished"/>
+        <translation>ტენორის გასაღები (ფრანგული, მე-20 საუკუნე)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="708"/>
         <source>Bass clef</source>
-        <translation type="unfinished"/>
+        <translation>ბანის გასაღები</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="709"/>
         <source>Bass clef 15ma bassa</source>
-        <translation type="unfinished"/>
+        <translation>ბანის გასაღები ორი ოქტავით ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="710"/>
         <source>Bass clef 8va bassa</source>
-        <translation type="unfinished"/>
+        <translation>ბანის გასაღები ოქტავით ქვემოთ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="711"/>
         <source>Bass clef 8va alta</source>
-        <translation type="unfinished"/>
+        <translation>ბანის გასაღები ოქტავით ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="712"/>
         <source>Bass clef 15ma alta</source>
-        <translation type="unfinished"/>
+        <translation>ბანის გასაღები ორი ოქტავით ზემოთ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="713"/>
         <source>Baritone clef (F clef)</source>
-        <translation type="unfinished"/>
+        <translation>ბარიტონის გასაღები (ბანის გასაღები)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="714"/>
@@ -14754,12 +14756,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="715"/>
         <source>F clef (French, 18th century)</source>
-        <translation type="unfinished"/>
+        <translation>ბანის გასაღები (ფრანგული, მე-18 საუკუნე)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="716"/>
         <source>F clef (19th century)</source>
-        <translation type="unfinished"/>
+        <translation>ბანის გასაღები (მე-19 საუკუნე)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="718"/>
@@ -14794,7 +14796,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="726"/>
         <source>Tenor clef 8va bassa</source>
-        <translation type="unfinished"/>
+        <translation>ტენორის გასაღები ოქტავით ქვემოთ</translation>
     </message>
 </context>
 <context>
@@ -15354,27 +15356,27 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/hairpintype</name>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="771"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="779"/>
         <source>Crescendo hairpin</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="773"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="781"/>
         <source>Decrescendo hairpin</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="775"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="783"/>
         <source>Crescendo line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="777"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="785"/>
         <source>Decrescendo line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="779"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="787"/>
         <source>Custom</source>
         <translation>ხელით მითითებული</translation>
     </message>
@@ -16224,7 +16226,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3344"/>
         <source>Diatonic accordion clef</source>
-        <translation type="unfinished"/>
+        <translation>დიატონური აკორდიონის გასაღები</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3345"/>
@@ -17338,7 +17340,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3804"/>
         <source>C clef ottava bassa</source>
-        <translation type="unfinished"/>
+        <translation>ვიოლას გასაღები 8va bassa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3811"/>
@@ -17679,17 +17681,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5621"/>
         <source>Repeat last bar</source>
-        <translation>გაიმეორე წინა ტაქტი</translation>
+        <translation>გაიმეორე ბოლო ტაქტი</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5622"/>
         <source>Repeat last two bars</source>
-        <translation>გაიმეორე წინა ორი ტაქტი</translation>
+        <translation>გაიმეორე ბოლო ორი ტაქტი</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5623"/>
         <source>Repeat last four bars</source>
-        <translation>გაიმეორე წინა ოთხი ტაქტი</translation>
+        <translation>გაიმეორე ბოლო ოთხი ტაქტი</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5629"/>
@@ -17709,7 +17711,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5632"/>
         <source>1024th rest</source>
-        <translation type="unfinished"/>
+        <translation>ათასოცდამეოთხედი პაუზა</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5633"/>
@@ -17724,7 +17726,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5635"/>
         <source>256th rest</source>
-        <translation type="unfinished"/>
+        <translation>ორასორმოცდამეთექვსმეტედი პაუზა</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5636"/>
@@ -17734,7 +17736,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5637"/>
         <source>512th rest</source>
-        <translation type="unfinished"/>
+        <translation>ხუთასმეთორმეტედი პაუზა</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5638"/>
@@ -17749,22 +17751,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5640"/>
         <source>Double whole (breve) rest</source>
-        <translation type="unfinished"/>
+        <translation>ორმაგი მთელი პაუზა</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5641"/>
         <source>Double whole rest on leger lines</source>
-        <translation type="unfinished"/>
+        <translation>ორმაგი მთელი პაუზა დამატებით ხაზებზე</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5646"/>
         <source>Half (minim) rest</source>
-        <translation type="unfinished"/>
+        <translation>ნახევარი პაუზა</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5647"/>
         <source>Half rest on leger line</source>
-        <translation type="unfinished"/>
+        <translation>ნახევარი პაუზა დამატებით ხაზზე</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5648"/>
@@ -17784,12 +17786,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5653"/>
         <source>Whole (semibreve) rest</source>
-        <translation type="unfinished"/>
+        <translation>მთელი პაუზა</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5654"/>
         <source>Whole rest on leger line</source>
-        <translation type="unfinished"/>
+        <translation>მთელი პაუზა დამატებით ხაზზე</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5672"/>
@@ -18135,7 +18137,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="162"/>
         <source>Reload plugins</source>
-        <translation>დამატებების თავიდან ჩატვირთვა</translation>
+        <translation>მოდულების თავიდან ჩატვირთვა</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="116"/>
@@ -18178,12 +18180,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="46"/>
         <source>Plugin not found</source>
-        <translation>დამატება ვერ ვიპოვე</translation>
+        <translation>მოდული ვერ მოიძებნა</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="47"/>
         <source>Could not load plugin</source>
-        <translation type="unfinished"/>
+        <translation>მოდული ვერ ჩაიტვირთა</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/extensionserrors.h" line="48"/>
@@ -18282,7 +18284,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml" line="69"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="79"/>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="263"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="264"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="181"/>
         <source>Clear</source>
         <translation>გასუფთავება</translation>
@@ -18306,7 +18308,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/StandardDialogPanel.qml" line="94"/>
         <source>Warning</source>
-        <translation type="unfinished"/>
+        <translation>გაფრთხილება</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/StandardDialogPanel.qml" line="95"/>
@@ -18343,7 +18345,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml" line="78"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PartsDialog.qml" line="123"/>
         <source>Open selected</source>
-        <translation type="unfinished"/>
+        <translation>არჩეულის გახსნა</translation>
     </message>
     <message>
         <location filename="../../src/workspacescene/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="204"/>
@@ -18364,17 +18366,17 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="52"/>
         <source>%n day(s) ago</source>
-        <translation><numerusform>%n დღის წინ</numerusform><numerusform>%n დღის წინ</numerusform></translation>
+        <translation><numerusform>გუშინ</numerusform><numerusform>%n დღის წინ</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="58"/>
         <source>Last week</source>
-        <translation>წინა კვირა</translation>
+        <translation>წინა კვირას</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="62"/>
         <source>%n week(s) ago</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>წინა კვირას</numerusform><numerusform>%n კვირის უკან</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="70"/>
@@ -18384,39 +18386,39 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="74"/>
         <source>%n month(s) ago</source>
-        <translation><numerusform>%n თვის წინ</numerusform><numerusform>%n თვის წინ</numerusform></translation>
+        <translation><numerusform>წინა თვეს</numerusform><numerusform>%n თვის წინ</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="79"/>
         <source>%n year(s) ago</source>
-        <translation><numerusform>%n წლის წინ</numerusform><numerusform>%n წლის წინ</numerusform></translation>
+        <translation><numerusform>წინა წელს</numerusform><numerusform>%n წლის წინ</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="87"/>
         <source>%1 GB</source>
         <comment>gigabyte</comment>
         <extracomment>Abbreviation of &quot;gigabyte&quot;, used to indicate file size</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1 GB</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="93"/>
         <source>%1 MB</source>
         <comment>megabyte</comment>
         <extracomment>Abbreviation of &quot;megabyte&quot;, used to indicate file size</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1 MB</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="99"/>
         <source>%1 KB</source>
         <comment>kilobyte</comment>
         <extracomment>Abbreviation of &quot;kilobyte&quot;, used to indicate file size</extracomment>
-        <translation type="unfinished"/>
+        <translation>%1 KB</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="103"/>
         <source>%n byte(s)</source>
         <extracomment>Used to indicate file size. Ideally, keep the translation short; feel free to use an abbreviation.</extracomment>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>1 ბაიტი</numerusform><numerusform>%n ბაიტი</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="45"/>
@@ -18620,12 +18622,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.cpp" line="91"/>
         <source>Show less…</source>
-        <translation type="unfinished"/>
+        <translation>ნაკლების ჩვენება…</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.cpp" line="91"/>
         <source>Show more…</source>
-        <translation type="unfinished"/>
+        <translation>მეტის ჩვენება…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutoSaveSection.qml" line="73"/>
@@ -18638,7 +18640,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="96"/>
         <source>ms</source>
         <extracomment>Abbreviation of &quot;milliseconds&quot;</extracomment>
-        <translation>მილიწამი</translation>
+        <translation>მწ</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiFontSection.qml" line="65"/>
@@ -18667,7 +18669,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="178"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>დასრულება</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="237"/>
@@ -18728,12 +18730,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="98"/>
         <source>Save all</source>
-        <translation type="unfinished"/>
+        <translation>ყველას შენახვა</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="99"/>
         <source>Don’t save</source>
-        <translation type="unfinished"/>
+        <translation>არ შეინახო</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="100"/>
@@ -18743,22 +18745,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="101"/>
         <source>Yes</source>
-        <translation type="unfinished"/>
+        <translation>კი</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="102"/>
         <source>Yes to all</source>
-        <translation type="unfinished"/>
+        <translation>ყველაზე კი</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="103"/>
         <source>No</source>
-        <translation type="unfinished"/>
+        <translation>არა</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="104"/>
         <source>No to all</source>
-        <translation type="unfinished"/>
+        <translation>ყველაზე არა</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="105"/>
@@ -18793,7 +18795,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="113"/>
         <source>Reset</source>
-        <translation>საწყისი მნიშვნელობებზე დაბრუნება</translation>
+        <translation>საწყისზე დაბრუნება</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="114"/>
@@ -18807,14 +18809,14 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="108"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1348"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1370"/>
         <source>Success!</source>
         <translation>წარმატება!</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/internal/ErrorDetailsView.qml" line="129"/>
         <source>Copy</source>
-        <translation type="unfinished"/>
+        <translation>კოპირება</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/qml/Muse/Ui/internal/ErrorDetailsView.qml" line="173"/>
@@ -18850,7 +18852,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="120"/>
         <source>On</source>
         <extracomment>as opposed to Off</extracomment>
-        <translation type="unfinished"/>
+        <translation>ჩართული</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
@@ -18881,7 +18883,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="213"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="164"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>უცნობი</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/MigrationDialog.qml" line="126"/>
@@ -18891,7 +18893,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml" line="83"/>
         <source>°</source>
-        <translation type="unfinished"/>
+        <translation>°</translation>
     </message>
 </context>
 <context>
@@ -18913,7 +18915,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="482"/>
         <source>Free time</source>
         <comment>time signature</comment>
-        <translation type="unfinished"/>
+        <translation>თავისუფალი დრო</translation>
     </message>
     <message>
         <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1057"/>
@@ -18939,7 +18941,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi.cpp" line="1276"/>
         <source>Import MIDI</source>
-        <translation>MIDI შემოტანა</translation>
+        <translation>MIDI-ს შემოტანა</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi.cpp" line="1277"/>
@@ -19054,7 +19056,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="556"/>
         <source>Time signature</source>
-        <translation>ტემპის ნიშნული</translation>
+        <translation>ზომა</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="616"/>
@@ -19167,22 +19169,22 @@ pickup measure</source>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="100"/>
         <source>Critical error:</source>
-        <translation type="unfinished"/>
+        <translation>კრიტიკული შეცდომა:</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="102"/>
         <source>Fatal error:</source>
-        <translation type="unfinished"/>
+        <translation>ფატალური შეცდომა:</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlvalidation.cpp" line="104"/>
         <source>Unknown error:</source>
-        <translation type="unfinished"/>
+        <translation>ამუცნობი შეცდომა:</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="228"/>
         <source>line %1, column %2:</source>
-        <translation type="unfinished"/>
+        <translation>ხაზი %1, სვეტი %2:</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="241"/>
@@ -19405,7 +19407,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/VerticalSpacingSection.qml" line="40"/>
         <source>Minimum distance</source>
-        <translation type="unfinished"/>
+        <translation>მინიმალური დაშორება</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="61"/>
@@ -19514,12 +19516,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="61"/>
         <source>White keys</source>
-        <translation type="unfinished"/>
+        <translation>თეთრი კლავიშები</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="62"/>
         <source>Black keys</source>
-        <translation type="unfinished"/>
+        <translation>შავი კლავიშები</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="63"/>
@@ -19575,7 +19577,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretDiagramTabPanel.qml" line="52"/>
         <location filename="../../src/inspector/models/general/generalsettingsmodel.cpp" line="34"/>
         <source>General</source>
-        <translation type="unfinished"/>
+        <translation>ძირითადი</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="58"/>
@@ -19617,7 +19619,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="57"/>
         <source>Parentheses</source>
-        <translation type="unfinished"/>
+        <translation>მრგვალი ფრჩხილები</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="58"/>
@@ -19627,7 +19629,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="66"/>
         <source>Small accidental</source>
-        <translation type="unfinished"/>
+        <translation>პატარა ალტერაციის ნიშანი</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="83"/>
@@ -19913,7 +19915,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="53"/>
         <source>Show courtesy clef on previous system</source>
-        <translation type="unfinished"/>
+        <translation>Courtesy გასაღების ჩვენება წინა სისტემაზე</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="61"/>
@@ -19946,7 +19948,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="86"/>
         <source>Display brackets, clefs and key signatures in the next measure</source>
-        <translation type="unfinished"/>
+        <translation>კვადრატული ფრჩხილი, გასაღებების და საგასაღებო ნიშნების ჩვენება შემდეგ ტაქტში</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/HorizontalGapsSection.qml" line="49"/>
@@ -20125,7 +20127,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/instrumentname/InstrumentNameSettings.qml" line="53"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="123"/>
         <source>Style settings</source>
-        <translation type="unfinished"/>
+        <translation>სტილის პარამეტრები</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/instrumentname/InstrumentNameSettings.qml" line="66"/>
@@ -20155,7 +20157,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="48"/>
         <source>Show courtesy key signature on previous system</source>
-        <translation type="unfinished"/>
+        <translation>Courtesy საგასაღებო ნიშნის ჩვენება წინა სისტემაზე</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="58"/>
@@ -20166,21 +20168,21 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="66"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>უცნობი</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="69"/>
         <source>Major</source>
         <comment>key signature mode</comment>
         <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation>ძირითადი</translation>
+        <translation>მაჟორი</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="71"/>
         <source>Minor</source>
         <comment>key signature mode</comment>
         <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation>მცირე</translation>
+        <translation>მინორი</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="72"/>
@@ -20645,7 +20647,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="129"/>
         <source>Line distance</source>
-        <translation type="unfinished"/>
+        <translation>ხაზის დაშორება</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="148"/>
@@ -20733,17 +20735,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="236"/>
         <source>Generate clefs</source>
-        <translation type="unfinished"/>
+        <translation>გასაღებების დაგენერირება</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="245"/>
         <source>Generate time signatures</source>
-        <translation>ტემპის ნიშნულის გენერირება</translation>
+        <translation>ზომის დაგენერირება</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="254"/>
         <source>Generate key signatures</source>
-        <translation>გასაღების ნიშნის გენერირება</translation>
+        <translation>საგასაღებო ნიშნის დაგენერირება</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoSettings.qml" line="48"/>
@@ -20769,12 +20771,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="135"/>
         <source>Show courtesy time signature on previous system</source>
-        <translation type="unfinished"/>
+        <translation>Courtesy ზომის ჩვენება წინა სისტემაზე</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="146"/>
         <source>Time signature properties</source>
-        <translation type="unfinished"/>
+        <translation>ზომის პარამეტრები</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="57"/>
@@ -20865,7 +20867,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="53"/>
         <source>Invisible</source>
         <extracomment>Invisible elements</extracomment>
-        <translation>უხილავია</translation>
+        <translation>უხილავი</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="54"/>
@@ -20880,12 +20882,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="80"/>
         <source>Frames</source>
-        <translation>კადრები</translation>
+        <translation>ჩარჩოები</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="93"/>
         <source>Page margins</source>
-        <translation type="unfinished"/>
+        <translation>გვერდის მინდვრები</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="106"/>
@@ -21173,17 +21175,17 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/frames/horizontalframesettingsmodel.cpp" line="34"/>
         <source>Horizontal frame</source>
-        <translation type="unfinished"/>
+        <translation>ჰორიზონტალური ჩარჩო</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/frames/textframesettingsmodel.cpp" line="33"/>
         <source>Text frame</source>
-        <translation type="unfinished"/>
+        <translation>ტექსტური ჩარჩო</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/frames/verticalframesettingsmodel.cpp" line="35"/>
         <source>Vertical frame</source>
-        <translation type="unfinished"/>
+        <translation>ვერტიკალური ჩარჩო</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/fretdiagrams/fretdiagramsettingsmodel.cpp" line="35"/>
@@ -21208,7 +21210,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/keysignatures/keysignaturesettingsmodel.cpp" line="32"/>
         <source>Key signature</source>
-        <translation>გასაღების ნიშანი</translation>
+        <translation>საგასაღებო ნიშანი</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/glissandosettingsmodel.cpp" line="56"/>
@@ -21368,7 +21370,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/mmrests/mmrestsettingsmodel.cpp" line="32"/>
         <source>Multimeasure rest</source>
-        <translation type="unfinished"/>
+        <translation>მრავალტაქტიანი პაუზა</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notationsettingsproxymodel.cpp" line="38"/>
@@ -21434,7 +21436,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/timesignatures/timesignaturesettingsmodel.cpp" line="34"/>
         <source>Time signature</source>
-        <translation>ტემპის ნიშნული</translation>
+        <translation>ზომა</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/tremolobars/tremolobarsettingsmodel.cpp" line="35"/>
@@ -21464,7 +21466,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/score/scoreappearancesettingsmodel.cpp" line="33"/>
         <source>Score appearance</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურის გარეგნობა</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="74"/>
@@ -21532,67 +21534,67 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="123"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="128"/>
         <source>Augmented</source>
-        <translation type="unfinished"/>
+        <translation>გადიდებული</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="124"/>
         <source>Perfect</source>
-        <translation type="unfinished"/>
+        <translation>წმინდა</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="125"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="133"/>
         <source>Diminished</source>
-        <translation type="unfinished"/>
+        <translation>შემცირებული</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="130"/>
         <source>Major</source>
         <comment>interval quality</comment>
         <extracomment>Interval, not the mode of a key signature</extracomment>
-        <translation>ძირითადი</translation>
+        <translation>დიდი</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="132"/>
         <source>Minor</source>
         <comment>interval quality</comment>
         <extracomment>Interval, not the mode of a key signature</extracomment>
-        <translation>მცირე</translation>
+        <translation>პატარა</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="158"/>
         <source>Unison</source>
-        <translation type="unfinished"/>
+        <translation>პრიმა</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="159"/>
         <source>Second</source>
-        <translation>წამი</translation>
+        <translation>სეკუნდა</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="160"/>
         <source>Third</source>
-        <translation>მესამე</translation>
+        <translation>ტერცია</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="161"/>
         <source>Fourth</source>
-        <translation>მეოთხე</translation>
+        <translation>კვარტა</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="162"/>
         <source>Fifth</source>
-        <translation>მეხუთე</translation>
+        <translation>კვინტა</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="163"/>
         <source>Sixth</source>
-        <translation>მეექვსე</translation>
+        <translation>სექსტა</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="164"/>
         <source>Seventh</source>
-        <translation>მეშვიდე</translation>
+        <translation>სეპტიმა</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="165"/>
@@ -21602,7 +21604,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="181"/>
         <source>Accidental visibility</source>
-        <translation type="unfinished"/>
+        <translation>ალტერაციის ნიშნის ხილვადობა</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="189"/>
@@ -21612,7 +21614,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="190"/>
         <source>Always display an accidental</source>
-        <translation type="unfinished"/>
+        <translation>ალტერაციის ნიშნის ყოველთვის ჩვენება</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="202"/>
@@ -21666,7 +21668,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="56"/>
         <source>Synchronize with main score</source>
-        <translation type="unfinished"/>
+        <translation>მთავარ პარტიტურასთან სინქრონიზაცია</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="79"/>
@@ -21711,7 +21713,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/parts/partssettingsmodel.cpp" line="33"/>
         <source>Score and part synchronization</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურის და პარტიის სინქრონიზაცია</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/symbols/symbolsettingsmodel.cpp" line="34"/>
@@ -21747,7 +21749,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="196"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="201"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>ჩართული</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="197"/>
@@ -21769,7 +21771,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangePositionSettingsTab.qml" line="68"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml" line="77"/>
         <source>Snap to next</source>
-        <translation type="unfinished"/>
+        <translation>მომდევნო პოზიციაზე მიკრობა</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml" line="63"/>
@@ -21779,7 +21781,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml" line="68"/>
         <source>Snap to previous</source>
-        <translation type="unfinished"/>
+        <translation>წინა პოზიციაზე მიკრობა</translation>
     </message>
 </context>
 <context>
@@ -21842,7 +21844,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="174"/>
         <source>Add selected instruments to score</source>
-        <translation type="unfinished"/>
+        <translation>არჩეული ინსტრუმენტების პარტიტურაში დამატება</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="236"/>
@@ -21889,7 +21891,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="78"/>
         <source>Your score</source>
-        <translation type="unfinished"/>
+        <translation>თქვენი პარტიტურა</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="119"/>
@@ -21919,7 +21921,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml" line="212"/>
         <source>Choose your instruments by adding them to this list</source>
-        <translation type="unfinished"/>
+        <translation>სიაში დამატებით აირჩიეთ თქვენი ინსტრუმენტები</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsTreeItemDelegate.qml" line="289"/>
@@ -22030,7 +22032,7 @@ pickup measure</source>
         <location filename="../../src/instrumentsscene/view/instrumentspaneltreemodel.cpp" line="831"/>
         <source>This will remove the %n instrument(s) from the full score and all part scores.</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation><numerusform>ეს ქმედება ამოიღებს ინსტრუმენტს სრული პარტიტურიდან და ყველა პარტიიდან.</numerusform><numerusform>ეს ქმედება ამოიღებს %n ინსტრუმენტს სრული პარტიტურიდან და ყველა პარტიიდან.</numerusform></translation>
+        <translation><numerusform>ეს ქმედება ამოიღებს ინსტრუმენტს სრული პარტიტურიდან და ყველა პარტიიდან.</numerusform><numerusform>ეს ქმედება ამოიღებს %n ინსტრუმენტს პარტიტურიდან და ყველა პარტიიდან.</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/instrumentsrepository.cpp" line="42"/>
@@ -22158,7 +22160,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/framework/learn/view/learnpagemodel.cpp" line="96"/>
         <source>Mastering MuseScore</source>
-        <translation>MuseScore-ს დაუფლება</translation>
+        <translation>MuseScore-ის დაუფლება</translation>
     </message>
     <message>
         <location filename="../../src/framework/learn/learnerrors.h" line="45"/>
@@ -22235,12 +22237,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="85"/>
         <source>At start of score</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურის დასაწყისში</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="86"/>
         <source>At end of score</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურის ბოლოს</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/EditGridSizeDialog.qml" line="54"/>
@@ -22498,83 +22500,83 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1299"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1300"/>
         <source>All Supported Files</source>
         <translation>ყველა მხარდაჭერილი ფაილი</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1300"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1301"/>
         <source>Scalable Vector Graphics</source>
         <translation>გადიდებადი ვექტორული გრაფიკა</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1301"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1302"/>
         <source>JPEG</source>
         <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1302"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1303"/>
         <source>PNG Bitmap Graphic</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1303"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1304"/>
         <source>Bitmap</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1304"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1305"/>
         <source>TIFF</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1307"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1308"/>
         <source>Insert Image</source>
         <translation>გამოსახულების დამატება</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1657"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1658"/>
         <source>MuseScore style files</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1658"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1659"/>
         <source>MuseScore style file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1661"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1662"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2344"/>
         <source>Load style</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1662"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1663"/>
         <source>Save style</source>
         <translation>დამახსოვრების ფორმა</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1672"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1673"/>
         <source>The style file could not be loaded.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1677"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1678"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1679"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1680"/>
         <source>Click OK to load anyway.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1693"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1694"/>
         <source>The style file could not be saved.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1694"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1695"/>
         <source>An error occurred.</source>
         <translation>შეცდომა.</translation>
     </message>
@@ -22621,12 +22623,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="242"/>
         <source>At start of score…</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურის დასაწყისში…</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="243"/>
         <source>At end of score…</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურის ბოლოს…</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationswitchlistmodel.cpp" line="294"/>
@@ -22668,7 +22670,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="646"/>
         <source>Frames</source>
-        <translation>კადრები</translation>
+        <translation>ჩარჩოები</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="89"/>
@@ -22876,35 +22878,35 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="101"/>
         <source>128 keys (full)</source>
-        <translation type="unfinished"/>
+        <translation>128 კლავიში (სრული)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="102"/>
         <source>88 keys (piano)</source>
-        <translation type="unfinished"/>
+        <translation>88 კლავიში (პიანინო)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="103"/>
         <source>61 keys</source>
-        <translation type="unfinished"/>
+        <translation>61 კლავიში</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="104"/>
         <source>49 keys</source>
-        <translation type="unfinished"/>
+        <translation>49 კლავიში</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="105"/>
         <source>25 keys</source>
-        <translation type="unfinished"/>
+        <translation>25 კლავიში</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="124"/>
         <source>View</source>
-        <translation type="unfinished"/>
+        <translation>ხედი</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1305"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1306"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="161"/>
         <source>All</source>
         <translation>ყველა</translation>
@@ -23028,7 +23030,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="145"/>
         <source>Format:</source>
-        <translation type="unfinished"/>
+        <translation>ფორმატი:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="156"/>
@@ -23133,7 +23135,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="207"/>
         <source>Grace notes</source>
-        <translation type="unfinished"/>
+        <translation>ფორშლაგი</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="183"/>
@@ -23175,22 +23177,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="520"/>
         <source>Insert &amp;after selection…</source>
-        <translation type="unfinished"/>
+        <translation>მონიშნულის &amp;შემდეგ ჩასმა...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="521"/>
         <source>Insert &amp;before selection…</source>
-        <translation type="unfinished"/>
+        <translation>მონიშნულის &amp;წინ ჩასმა...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="523"/>
         <source>Insert at &amp;start of score…</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურის &amp;დასაწყისში ჩასმა…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="524"/>
         <source>Insert at &amp;end of score…</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურის ბ&amp;ოლოს ჩასმა...</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="49"/>
@@ -23212,12 +23214,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="61"/>
         <source>No chord/rest selected</source>
-        <translation type="unfinished"/>
+        <translation>აკორდი/პაუზა არ არის არჩეული</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="62"/>
         <source>Please select a chord or rest and retry</source>
-        <translation type="unfinished"/>
+        <translation>გთხოვთ აირჩიოთ აკორდი ან პაუზა და ხელახლა სცადოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="65"/>
@@ -23233,14 +23235,14 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="69"/>
         <location filename="../../src/notation/notationerrors.h" line="56"/>
         <source>No note or rest selected</source>
-        <translation type="unfinished"/>
+        <translation>ნოტი ან პაუზა არ არის არჩეული</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="70"/>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="103"/>
         <location filename="../../src/notation/notationerrors.h" line="57"/>
         <source>Please select a note or rest and retry</source>
-        <translation type="unfinished"/>
+        <translation>გთხოვთ აირჩიოთ ნოტი ან პაუზა და ხელახლა სცადოთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="73"/>
@@ -23379,12 +23381,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="139"/>
         <source>Measure is not empty</source>
-        <translation type="unfinished"/>
+        <translation>ტაქტი არ არის ცარიელი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="143"/>
         <source>This score already has part scores. Changing local time signatures while part scores are present is not yet supported.</source>
-        <translation type="unfinished"/>
+        <translation>ამ პარტიტურას უკვე აქვს პარტიები. ადგილობრივი ზომის შეცვლა პარტიების არსებობის დროს არ არის ხელმისაწვდომი.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="147"/>
@@ -23394,12 +23396,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="150"/>
         <source>This key signature cannot be deleted</source>
-        <translation>ამ გასაღების ნიშნის წაშლა შეუძლებელია</translation>
+        <translation>ამ საგასაღებო ნიშნის წაშლა შეუძლებელია</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="151"/>
         <source>Please replace it with a key signature from the palettes instead.</source>
-        <translation type="unfinished"/>
+        <translation>გთხოვთ საგასაღებო ნიშნით შეცვალოთ იგი პალიტრებიდან</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="154"/>
@@ -23444,7 +23446,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/notationtypes.h" line="275"/>
         <source>Whole page</source>
-        <translation type="unfinished"/>
+        <translation>მთელი გვერდი</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationtypes.h" line="276"/>
@@ -23519,7 +23521,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/selectnotedialog.cpp" line="82"/>
         <source>%1 note</source>
         <extracomment>%1 is a note duration. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate this string with &quot;%1&quot;, so that just the duration will be shown.</extracomment>
-        <translation>%1 შენიშვნა</translation>
+        <translation>%1 ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationparts.cpp" line="48"/>
@@ -23555,12 +23557,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml" line="39"/>
         <source>1 space</source>
-        <translation type="unfinished"/>
+        <translation>1 დაშორება</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml" line="40"/>
         <source>2 spaces</source>
-        <translation type="unfinished"/>
+        <translation>2 დაშორება</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="76"/>
@@ -23636,7 +23638,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="116"/>
         <source>Number of strings:</source>
-        <translation>სიმების რიცხვი:</translation>
+        <translation>სიმების რაოდენობა:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="134"/>
@@ -23651,7 +23653,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="36"/>
         <source>Custom</source>
-        <translation>ხელით მითითებული</translation>
+        <translation>მორგებული</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="265"/>
@@ -23703,7 +23705,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.cpp" line="209"/>
         <source>Unknown</source>
-        <translation type="unfinished"/>
+        <translation>უცნობი</translation>
     </message>
 </context>
 <context>
@@ -23762,19 +23764,19 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="771"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1265"/>
         <source>None</source>
-        <translation>არაფერი</translation>
+        <translation>არცერთი</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="772"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1266"/>
         <source>Brackets</source>
-        <translation>ბრეკეტები</translation>
+        <translation>კვადრატული ფრჩხილები</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="773"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1267"/>
         <source>Parentheses</source>
-        <translation type="unfinished"/>
+        <translation>მრგვალი ფრჩხილები</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="776"/>
@@ -23792,7 +23794,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="778"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1271"/>
         <source>System</source>
-        <translation>სისტემა</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="781"/>
@@ -23811,7 +23813,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1275"/>
         <source>None</source>
         <comment>no tuplet number type</comment>
-        <translation>არაფერი</translation>
+        <translation>არცერთი</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="786"/>
@@ -23825,14 +23827,14 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="787"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1278"/>
         <source>Bracket</source>
-        <translation>ბრეკეტი</translation>
+        <translation>კვადრატული ფრჩხილი</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="788"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1279"/>
         <source>None</source>
         <comment>no tuplet bracket type</comment>
-        <translation>არაფერი</translation>
+        <translation>არცერთ</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="909"/>
@@ -23879,7 +23881,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="232"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1244"/>
         <source>Apply to all parts</source>
-        <translation type="unfinished"/>
+        <translation>ყველა პარტიაზე გამოყენება</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="791"/>
@@ -23942,14 +23944,14 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="926"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1294"/>
         <source>Chord/rest duration</source>
-        <translation type="unfinished"/>
+        <translation>აკორდის/პაუზის ხანგრძლივობა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1035"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1306"/>
         <source>None</source>
         <comment>no frame for text</comment>
-        <translation>არაფერი</translation>
+        <translation>არცერთი</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1036"/>
@@ -23996,22 +23998,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1334"/>
         <source>File path+name</source>
-        <translation type="unfinished"/>
+        <translation>ფაილის მდებარეობა+სახელი</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1336"/>
         <source>Part name, except on first page</source>
-        <translation type="unfinished"/>
+        <translation>პარტიის სახელი, გარდა პირველი გვერდისა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1338"/>
         <source>Part name, on all pages</source>
-        <translation type="unfinished"/>
+        <translation>პარტიის სახელი, ყველა გვერდზე</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1340"/>
         <source>Current date</source>
-        <translation>ახლანდელი თარიღი</translation>
+        <translation>მიმდინარე თარიღი</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1342"/>
@@ -24072,17 +24074,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
 <context>
     <name>notation/measureproperties</name>
     <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="186"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="178"/>
         <source>Measure properties for measure %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="232"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="224"/>
         <source>Visible</source>
         <translation>ხილული</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="239"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="231"/>
         <source>Stemless</source>
         <translation>შტილის გარეშე</translation>
     </message>
@@ -24143,12 +24145,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="603"/>
         <source>Hide instrument in score</source>
-        <translation type="unfinished"/>
+        <translation>ინსტრუმენტების დამალვა პარტიტურაში</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="606"/>
         <source>Show instrument in score</source>
-        <translation type="unfinished"/>
+        <translation>ინსტრუმენტების ჩვენება პარტიტურაში</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="768"/>
@@ -24162,7 +24164,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1205"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="2536"/>
         <source>Time signature</source>
-        <translation>ტემპის ნიშნული</translation>
+        <translation>ზომა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="770"/>
@@ -24178,7 +24180,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1275"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="2538"/>
         <source>Key signature</source>
-        <translation>გასაღების ნიშანი</translation>
+        <translation>საგასაღებო ნიშანი</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="773"/>
@@ -24191,7 +24193,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1345"/>
         <source>Custom key signature</source>
-        <translation>მორგებული გასაღების ნიშანი</translation>
+        <translation>მორგებული საგასაღებო ნიშანი</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3053"/>
@@ -24230,7 +24232,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3070"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3093"/>
         <source>Hide all</source>
-        <translation type="unfinished"/>
+        <translation>ყველას დამალვა</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3073"/>
@@ -24249,22 +24251,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="63"/>
         <source>More palettes</source>
-        <translation type="unfinished"/>
+        <translation>მეტი პალიტრები</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="70"/>
         <source>Create custom palette</source>
-        <translation type="unfinished"/>
+        <translation>მორგებული პალიტრის შექმნა</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="85"/>
         <source>All palettes were added</source>
-        <translation type="unfinished"/>
+        <translation>ყველა პალიტრა დაემატა</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="134"/>
         <source>Add %1 palette</source>
-        <translation type="unfinished"/>
+        <translation>%1ს პალიტრის დამატება</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="160"/>
@@ -24279,7 +24281,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="56"/>
         <source>Name your custom palette</source>
-        <translation type="unfinished"/>
+        <translation>თქვენი მორგებული პალიტრის სახელი</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="99"/>
@@ -24289,7 +24291,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/MoreElementsPopup.qml" line="87"/>
         <source>Add to %1</source>
-        <translation type="unfinished"/>
+        <translation>%1ს პალიტრაში დამატება</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/MoreElementsPopup.qml" line="246"/>
@@ -24344,53 +24346,53 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="549"/>
         <location filename="../../src/palette/view/palettemodel.cpp" line="836"/>
         <source>Untitled palette</source>
-        <translation type="unfinished"/>
+        <translation>უსათაურო პალიტრა</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="158"/>
         <source>Hide palette</source>
-        <translation type="unfinished"/>
+        <translation>პალიტრის დამალვა</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="158"/>
         <source>Hide/Delete palette</source>
-        <translation type="unfinished"/>
+        <translation>პალიტრის დამალვა/წაშლა</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="159"/>
         <source>Insert new palette</source>
-        <translation type="unfinished"/>
+        <translation>ახალი პალიტრის ჩასმა</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="161"/>
         <source>Enable editing</source>
-        <translation>ჩასწორების ჩართვა</translation>
+        <translation>რედაქტირების ჩართვა</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="163"/>
         <source>Reset palette</source>
-        <translation type="unfinished"/>
+        <translation>პალიტრის საწყისზე დაბრუნება</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="164"/>
         <source>Save palette…</source>
-        <translation type="unfinished"/>
+        <translation>პალიტრის შენახვა...</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="165"/>
         <source>Load palette…</source>
-        <translation type="unfinished"/>
+        <translation>პალიტრის ჩატვირთვა...</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="167"/>
         <source>Palette properties…</source>
-        <translation type="unfinished"/>
+        <translation>პალიტრის თვისებები...</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="31"/>
         <location filename="../../src/stubs/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="31"/>
         <source>Palette cell properties</source>
-        <translation type="unfinished"/>
+        <translation>პალიტრის უჯრების თვისებები</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="53"/>
@@ -24427,12 +24429,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="31"/>
         <location filename="../../src/stubs/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="31"/>
         <source>Palette properties</source>
-        <translation type="unfinished"/>
+        <translation>პალიტრის თვისებები</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="68"/>
         <source>Cell size</source>
-        <translation type="unfinished"/>
+        <translation>უჯრის ზომა</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="84"/>
@@ -24447,7 +24449,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="98"/>
         <source>Element offset</source>
-        <translation type="unfinished"/>
+        <translation>ელემენტის განსტოება</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="106"/>
@@ -24462,7 +24464,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="111"/>
         <source>Start typing to search all palettes</source>
-        <translation type="unfinished"/>
+        <translation>დაიწყეთ წერა პალიტრების მოსაძებნად</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="214"/>
@@ -24500,7 +24502,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/view/widgets/keyedit.cpp" line="309"/>
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="168"/>
         <source>Key signatures</source>
-        <translation>გასაღების ნიშნები</translation>
+        <translation>საგასაღებო ნიშნები</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="319"/>
@@ -24510,7 +24512,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="349"/>
         <source>Barlines</source>
-        <translation>ტაქტის საზღვრები</translation>
+        <translation>ტაქტის ხაზები</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="386"/>
@@ -24621,7 +24623,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="934"/>
         <source>Brace</source>
-        <translation type="unfinished"/>
+        <translation>ფრჩხილი</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="935"/>
@@ -24647,7 +24649,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1089"/>
         <source>Grace notes</source>
-        <translation type="unfinished"/>
+        <translation>ფორშლაგი</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1109"/>
@@ -25263,7 +25265,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="169"/>
         <location filename="../../src/palette/view/widgets/timedialog.cpp" line="44"/>
         <source>Time signatures</source>
-        <translation type="unfinished"/>
+        <translation>ზომა</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1724"/>
@@ -25289,17 +25291,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="71"/>
         <source>Create key signature</source>
-        <translation>გასაღების ნიშნის შექმნა</translation>
+        <translation>საგასაღებო ნიშნის შექმნა</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="73"/>
         <source>Create time signature</source>
-        <translation type="unfinished"/>
+        <translation>ზომის შემქნა</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="99"/>
         <source>The palette was hidden or changed</source>
-        <translation type="unfinished"/>
+        <translation>პალიტრა დამალული ან შეცვლილი იყო</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="337"/>
@@ -25334,38 +25336,38 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="399"/>
         <source>Do you want to hide this custom palette or permanently delete it?</source>
-        <translation type="unfinished"/>
+        <translation>გსურთ ამ მორგებული პალიტრის დამალვა ან სამუდამოდ წაშლა?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="400"/>
         <source>Do you want to hide these custom palettes or permanently delete them?</source>
-        <translation type="unfinished"/>
+        <translation>გსურთ ამ მორგებული პალიტრების დამალვა ან სამუდამოდ წაშლა?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="818"/>
         <source>Do you want to permanently delete this custom palette?</source>
-        <translation type="unfinished"/>
+        <translation>გსურთ ამ მორგებული პალიტრის სამუდამოდ წაშლა?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="839"/>
         <source>Do you want to restore this palette to its default state? All changes to this palette will be lost.</source>
-        <translation type="unfinished"/>
+        <translation>გსურთ ამ პალიტრის დაბრუნება მის ნაგულისხმევ მდგომარეობაზე? ყველა ცვლილება ამ პალიტრაში დაიკარგება.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="901"/>
         <source>Load palette</source>
-        <translation type="unfinished"/>
+        <translation>პალიტრის ჩატვირთვა</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="902"/>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="905"/>
         <source>MuseScore Studio palette</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore Studio-ს პალიტრა</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="904"/>
         <source>Save palette</source>
-        <translation type="unfinished"/>
+        <translation>პალიტრის შენახვა</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/drumsetpalette.cpp" line="68"/>
@@ -25475,12 +25477,12 @@ failed: %2</source>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PalettesPanelHeader.qml" line="120"/>
         <source>Add palettes</source>
-        <translation type="unfinished"/>
+        <translation>პალიტრების დამატება</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PalettesPanelHeader.qml" line="160"/>
         <source>Search palettes</source>
-        <translation type="unfinished"/>
+        <translation>პალიტრების ძიება</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palette.cpp" line="545"/>
@@ -25497,12 +25499,12 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="130"/>
         <source>Expand all palettes</source>
-        <translation type="unfinished"/>
+        <translation>ყველა პალიტრის გახსნა</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="131"/>
         <source>Collapse all palettes</source>
-        <translation type="unfinished"/>
+        <translation>ყველა პალიტრის დახურვა</translation>
     </message>
 </context>
 <context>
@@ -26346,7 +26348,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="268"/>
         <source>Ancient Symbols</source>
-        <translation type="unfinished"/>
+        <translation>არქაული სიმბოლოები</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="269"/>
@@ -26371,7 +26373,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="273"/>
         <source>Old Italic</source>
-        <translation>ძველი დახრილი</translation>
+        <translation>ძველი იტალიური</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="274"/>
@@ -27105,13 +27107,18 @@ failed.</source>
         <translation>აკორდი</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1220"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1238"/>
         <source>Loading audio samples</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/outputresourceitem.cpp" line="15"/>
         <source>No effect</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/outputresourceitem.cpp" line="73"/>
+        <source>Get more effects</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -27132,7 +27139,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="170"/>
         <source>View</source>
-        <translation type="unfinished"/>
+        <translation>ხედი</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelmodel.cpp" line="552"/>
@@ -27145,23 +27152,28 @@ failed.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="349"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="95"/>
+        <source>Get more sounds</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="360"/>
         <source>Bank %1, preset %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="403"/>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="462"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="414"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="473"/>
         <source>Choose automatically</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="445"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="456"/>
         <source>Preset %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="454"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="465"/>
         <source>Bank %1</source>
         <translation type="unfinished"/>
     </message>
@@ -27305,9 +27317,9 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="70"/>
-        <location filename="../../src/project/internal/notationproject.cpp" line="84"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="85"/>
         <source>Untitled score</source>
-        <translation type="unfinished"/>
+        <translation>უსატაურო პარტიტურა</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="82"/>
@@ -27343,18 +27355,18 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="154"/>
         <source>New &amp; recent</source>
-        <translation type="unfinished"/>
+        <translation>ახალი და ბოლოს გახსნილები</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="88"/>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="95"/>
         <source>Scores</source>
-        <translation>ქულები</translation>
+        <translation>პარტიტურები</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="108"/>
         <source>Search recent scores</source>
-        <translation type="unfinished"/>
+        <translation>ბოლოს გახსნილი პარტიტურების ძებნა</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="143"/>
@@ -27364,7 +27376,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="162"/>
         <source>My online scores</source>
-        <translation type="unfinished"/>
+        <translation>ჩემი ონლაინ პარტიტურები</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="177"/>
@@ -27374,28 +27386,28 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="189"/>
         <source>Refresh</source>
-        <translation type="unfinished"/>
+        <translation>განახლება</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="201"/>
         <source>Grid view</source>
-        <translation type="unfinished"/>
+        <translation>ბადის ხედი</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="202"/>
         <source>List view</source>
-        <translation type="unfinished"/>
+        <translation>სიის ხედი</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="322"/>
         <source>Scores actions</source>
         <extracomment>accessibility name for the panel at the bottom of the &quot;Scores&quot; page</extracomment>
-        <translation type="unfinished"/>
+        <translation>პარტიტურების ქმედებები</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="335"/>
         <source>Score manager (online)</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურის მმართველი (ონლაინი)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="354"/>
@@ -27405,109 +27417,109 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="366"/>
         <source>Open other…</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="720"/>
-        <source>Do you want to save changes to the score “%1” before closing?</source>
-        <translation type="unfinished"/>
+        <translation>გახსენი სხვა...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="723"/>
+        <source>Do you want to save changes to the score “%1” before closing?</source>
+        <translation>გსურთ შეინახოთ ცვლილებები &quot;%1&quot; პარტიტურაში მის დახურვამდე?</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="726"/>
         <source>Your changes will be lost if you don’t save them.</source>
         <translation>ცვლილებები დაიკარგება, თუ არ დაიმახსოვრებთ.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1664"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1686"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1720"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1742"/>
         <source>Open anyway</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1677"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1733"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1683"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1739"/>
         <source>File “%1” is corrupted</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1698"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1754"/>
         <source>File “%1” is corrupted and cannot be opened</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1699"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1755"/>
         <source>Get help for this issue on musescore.org.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1554"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1701"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1576"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1757"/>
         <source>Get help</source>
         <translation>დახმარების მიღება</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1469"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1551"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1491"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1573"/>
         <source>Your score cannot be uploaded to the cloud</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1470"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1492"/>
         <source>This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on musescore.org.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1477"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1499"/>
         <source>Save as…</source>
         <translation>შენახვა როგორც…</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1482"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1518"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1504"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1540"/>
         <source>Revert to last saved</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1503"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1525"/>
         <source>This score has become corrupted and contains errors</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1504"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1526"/>
         <source>You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on musescore.org.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1506"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1528"/>
         <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on musescore.org.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1513"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1535"/>
         <source>Save anyway</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1550"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1572"/>
         <source>Your score cannot be saved</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1552"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1574"/>
         <source>This score is corrupted. You can get help for this issue on musescore.org.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1585"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1641"/>
         <source>Revert to last saved?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1586"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1642"/>
         <source>Your changes will be lost. This action cannot be undone.</source>
         <translation type="unfinished"/>
     </message>
@@ -27519,123 +27531,133 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="481"/>
         <source>This score is invalid.</source>
-        <translation type="unfinished"/>
+        <translation>ეს პარტიტურა არასწორია. </translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1676"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1715"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1732"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1771"/>
         <source>Cannot read file %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1720"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1776"/>
         <source>This file does not exist or cannot be accessed at the moment.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1684"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1740"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1723"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1626"/>
+        <source>Try again</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1779"/>
         <source>This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1730"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1786"/>
         <source>An error occurred while reading this file.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1783"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1839"/>
         <source>All supported files</source>
         <translation>ყველა მხარდაჭერილი ფაილი</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1784"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1840"/>
         <source>MuseScore files</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1785"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1841"/>
         <source>MusicXML files</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1786"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1842"/>
         <source>MIDI files</source>
         <translation>MIDI ფაილები</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1787"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1843"/>
         <source>MuseData files</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1788"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1844"/>
         <source>Capella files</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1789"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1845"/>
         <source>BB files (experimental)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1790"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1846"/>
         <source>Overture / Score Writer files (experimental)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1791"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1847"/>
         <source>Bagpipe Music Writer files (experimental)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1792"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1848"/>
         <source>Guitar Pro files</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1793"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1849"/>
         <source>Power Tab Editor files (experimental)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1794"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1850"/>
         <source>MEI files</source>
-        <translation type="unfinished"/>
+        <translation>MEI ფაილები</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1795"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1851"/>
         <source>Uncompressed MuseScore folders (experimental)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1796"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1852"/>
         <source>MuseScore developer files</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1797"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1853"/>
         <source>MuseScore backup files</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1809"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1865"/>
         <source>Open</source>
         <translation>გახსნა</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectconfiguration.cpp" line="334"/>
+        <location filename="../../src/project/internal/projectconfiguration.cpp" line="123"/>
+        <source>Create backup of file on disk before saving new changes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectconfiguration.cpp" line="340"/>
         <source>Untitled</source>
         <translation>უსახელო</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="48"/>
         <source>Work title</source>
-        <translation type="unfinished"/>
+        <translation>სათაური</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="51"/>
@@ -27685,14 +27707,14 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="79"/>
         <source>Scores list</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურების სია</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/NewScoreDialog.qml" line="34"/>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="105"/>
         <location filename="../../src/project/view/recentscoresmodel.cpp" line="68"/>
         <source>New score</source>
-        <translation type="unfinished"/>
+        <translation>ახალი პარტიტურა</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresListView.qml" line="150"/>
@@ -27747,7 +27769,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="251"/>
         <source>View score online</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურის ონლაინ ნახვა</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/UploadProgressDialog.qml" line="48"/>
@@ -27762,12 +27784,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoreIndicatorButton.qml" line="43"/>
         <source>Download score</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურის გადმოწერა</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="130"/>
         <source>You don’t have any online scores yet</source>
-        <translation type="unfinished"/>
+        <translation>თქვენ ჯერ არ გაქვთ ონლაინ პარტიტურები</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="131"/>
@@ -27787,7 +27809,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="219"/>
         <source>Unable to load online scores</source>
-        <translation type="unfinished"/>
+        <translation>ონლაინ პარტიტურების ჩატვირთვა ვერ მოხერხდა</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="220"/>
@@ -27797,29 +27819,29 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="57"/>
         <source>Recent scores grid</source>
-        <translation type="unfinished"/>
+        <translation>ბოლოს გახსნილი პარტიტურების ბადე</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="88"/>
         <source>Recent scores list</source>
-        <translation type="unfinished"/>
+        <translation>ბოლოს გახსნილი პარტიტურების სია</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresGridView.qml" line="32"/>
         <source>Online scores grid</source>
-        <translation type="unfinished"/>
+        <translation>ონლაინ პარტიტურების ბადე</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="35"/>
         <source>Online scores list</source>
-        <translation type="unfinished"/>
+        <translation>ონლაინ პარტიტურების სია</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="153"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="104"/>
         <source>Modified</source>
         <extracomment>Stands for &quot;Last time that this score was modified&quot;. Used as the header of this column in the scores list.</extracomment>
-        <translation type="unfinished"/>
+        <translation>ბოლოს შეცვლილია</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/internal/CloudScoresListView.qml" line="234"/>
@@ -27831,7 +27853,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresGridView.qml" line="83"/>
         <source>Scores grid</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურების ბადე</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectPropertiesDialog.qml" line="112"/>
@@ -27955,17 +27977,17 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="67"/>
         <source>Select parts to export</source>
-        <translation type="unfinished"/>
+        <translation>აირჩიეთ პარტიები ექსპორტისთვის</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="95"/>
         <source>Select all</source>
-        <translation type="unfinished"/>
+        <translation>ყველას მონიშვნა</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="109"/>
         <source>Clear selection</source>
-        <translation>მონიშნულის გასუფთავება</translation>
+        <translation>მონიშნულების გაუქმება</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="128"/>
@@ -27975,12 +27997,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ExportDialog.qml" line="154"/>
         <source>Export…</source>
-        <translation>გატანა…</translation>
+        <translation>ექსპორტი…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="445"/>
         <source>Exporting…</source>
-        <translation>გატანა…</translation>
+        <translation>ექსპორტირდება…</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml" line="38"/>
@@ -28010,7 +28032,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="52"/>
         <source>Format:</source>
-        <translation type="unfinished"/>
+        <translation>ფორმატი:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="95"/>
@@ -28020,7 +28042,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportOptionsView.qml" line="184"/>
         <source>Open destination folder on export</source>
-        <translation type="unfinished"/>
+        <translation>ექსპორტისას დანიშნულების საქაღალდის გახსნა</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MidiSettingsPage.qml" line="31"/>
@@ -28141,18 +28163,18 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="64"/>
         <source>PDF file</source>
-        <translation type="unfinished"/>
+        <translation>PDF ფაილი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="65"/>
         <source>PDF files</source>
-        <translation type="unfinished"/>
+        <translation>PDF ფაილები</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="68"/>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="69"/>
         <source>PNG images</source>
-        <translation type="unfinished"/>
+        <translation>PNG სურათები</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="72"/>
@@ -28168,27 +28190,27 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="77"/>
         <source>MP3 audio files</source>
-        <translation type="unfinished"/>
+        <translation>MP3 აუდიო ფაილები</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="80"/>
         <source>WAV audio</source>
-        <translation type="unfinished"/>
+        <translation>WAV აუდიო</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="81"/>
         <source>WAV audio files</source>
-        <translation type="unfinished"/>
+        <translation>WAV აუდიო ფაილები</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="84"/>
         <source>OGG audio</source>
-        <translation type="unfinished"/>
+        <translation>OGG აუდიო</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="85"/>
         <source>OGG audio files</source>
-        <translation type="unfinished"/>
+        <translation>OGG აუდიო ფაილები</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="88"/>
@@ -28198,7 +28220,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="89"/>
         <source>FLAC audio files</source>
-        <translation type="unfinished"/>
+        <translation>FLAC აუდიო ფაილები</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="92"/>
@@ -28234,7 +28256,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="105"/>
         <source>MEI files</source>
-        <translation type="unfinished"/>
+        <translation>MEI ფაილები</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="304"/>
@@ -28244,12 +28266,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="305"/>
         <source>Each part to a separate file</source>
-        <translation type="unfinished"/>
+        <translation>თითოეული პარტია ცალ-ცალკე ფაილებში</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="306"/>
         <source>All parts combined in one file</source>
-        <translation type="unfinished"/>
+        <translation>ყველა პარტია გაერთიანებული ერთ ფაილში</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="546"/>
@@ -28278,7 +28300,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportScoresListView.qml" line="72"/>
         <source>Main score</source>
-        <translation type="unfinished"/>
+        <translation>მთავარი პარტიტურა</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MeiSettingsPage.qml" line="31"/>
@@ -28345,17 +28367,17 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="71"/>
         <source>Score options</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურის პარამეტრები</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="91"/>
         <source>Key signature</source>
-        <translation>გასაღების ნიშანი</translation>
+        <translation>საგასაღებო ნიშანი</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="129"/>
         <source>Time signature</source>
-        <translation>ტემპის ნიშნული</translation>
+        <translation>ზომა</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="164"/>
@@ -28370,12 +28392,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ChooseInstrumentsAndTemplatesPage.qml" line="112"/>
         <source>Choose instruments</source>
-        <translation type="unfinished"/>
+        <translation>აირჩიეთ ინსტრუმენტები</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ChooseInstrumentsAndTemplatesPage.qml" line="122"/>
         <source>Create from template</source>
-        <translation type="unfinished"/>
+        <translation>შექმენი შაბლონიდან</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="69"/>
@@ -28440,94 +28462,94 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="48"/>
         <source>General score info</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურის ზოგადი ინფო</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ScoreInfoPage.qml" line="71"/>
         <source>Additional score information</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურის დამატებითი ინფორმაცია</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="97"/>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="118"/>
         <source>C major</source>
-        <translation type="unfinished"/>
+        <translation>დო მაჟორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="97"/>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="118"/>
         <source>A minor</source>
-        <translation type="unfinished"/>
+        <translation>ლა მინორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="120"/>
         <source>G major</source>
-        <translation type="unfinished"/>
+        <translation>სოლ მაჟორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="120"/>
         <source>E minor</source>
-        <translation type="unfinished"/>
+        <translation>მი მინორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="122"/>
         <source>D major</source>
-        <translation type="unfinished"/>
+        <translation>რე მაჟორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="122"/>
         <source>B minor</source>
-        <translation type="unfinished"/>
+        <translation>სი მინორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="124"/>
         <source>A major</source>
-        <translation type="unfinished"/>
+        <translation>ლა მაჟორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="124"/>
         <source>F♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>ფა♯ მინორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="126"/>
         <source>E major</source>
-        <translation type="unfinished"/>
+        <translation>მი მაჟორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="126"/>
         <source>C♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>დო♯ მინორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="128"/>
         <source>B major</source>
-        <translation type="unfinished"/>
+        <translation>სი მაჟორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="128"/>
         <source>G♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>სოლ♯ მინორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="130"/>
         <source>F♯ major</source>
-        <translation type="unfinished"/>
+        <translation>ფა♯ მაჟორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="130"/>
         <source>D♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>რე♯ მინორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="132"/>
         <source>C♯ major</source>
-        <translation type="unfinished"/>
+        <translation>დო♯ მაჟორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="132"/>
         <source>A♯ minor</source>
-        <translation type="unfinished"/>
+        <translation>ლა♯ მინორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="134"/>
@@ -28537,72 +28559,72 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="136"/>
         <source>F major</source>
-        <translation type="unfinished"/>
+        <translation>ფა მაჟორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="136"/>
         <source>D minor</source>
-        <translation type="unfinished"/>
+        <translation>რე მინორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="138"/>
         <source>B♭ major</source>
-        <translation type="unfinished"/>
+        <translation>სი♭ მაჟორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="138"/>
         <source>G minor</source>
-        <translation type="unfinished"/>
+        <translation>სოლ მინორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="140"/>
         <source>E♭ major</source>
-        <translation type="unfinished"/>
+        <translation>მი♭ მაჟორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="140"/>
         <source>C minor</source>
-        <translation type="unfinished"/>
+        <translation>დო მინორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="142"/>
         <source>A♭ major</source>
-        <translation type="unfinished"/>
+        <translation>ლა♭ მაჟორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="142"/>
         <source>F minor</source>
-        <translation type="unfinished"/>
+        <translation>ფა მინორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="144"/>
         <source>D♭ major</source>
-        <translation type="unfinished"/>
+        <translation>რე♭ მაჟორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="144"/>
         <source>B♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>სი♭ მინორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="146"/>
         <source>G♭ major</source>
-        <translation type="unfinished"/>
+        <translation>სოლ♭ მაჟორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="146"/>
         <source>E♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>მი♭ მინორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="148"/>
         <source>C♭ major</source>
-        <translation type="unfinished"/>
+        <translation>დო♭ მაჟორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="148"/>
         <source>A♭ minor</source>
-        <translation type="unfinished"/>
+        <translation>ლა♭ მინორი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="330"/>
@@ -28612,7 +28634,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="330"/>
         <source>16th note</source>
-        <translation type="unfinished"/>
+        <translation>მეთექვსმეტედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="332"/>
@@ -28622,7 +28644,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="332"/>
         <source>Eighth note</source>
-        <translation>მერვედი ნოტა</translation>
+        <translation>მერვედი ნოტი</translation>
     </message>
     <message>
         <location filename="../../src/project/view/additionalinfomodel.cpp" line="334"/>
@@ -28659,14 +28681,14 @@ failed.</source>
         <source>Major</source>
         <comment>key signature mode</comment>
         <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation>ძირითადი</translation>
+        <translation>მაჟორი</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/KeySignatureSettings.qml" line="110"/>
         <source>Minor</source>
         <comment>key signature mode</comment>
         <extracomment>mode of a key signature, not an interval</extracomment>
-        <translation>მცირე</translation>
+        <translation>მინორი</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/KeySignatureListView.qml" line="83"/>
@@ -28679,7 +28701,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="51"/>
         <source>File path:</source>
-        <translation type="unfinished"/>
+        <translation>ფაილის მდებარეობა:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="81"/>
@@ -28705,7 +28727,7 @@ failed.</source>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/PropertyItem.qml" line="103"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/PropertyItem.qml" line="126"/>
         <source>Value</source>
-        <translation type="unfinished"/>
+        <translation>მნიშვნელობა</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectPropertiesDialog.qml" line="34"/>
@@ -28788,7 +28810,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/SaveToCloudDialog.qml" line="215"/>
         <source>Create new</source>
-        <translation type="unfinished"/>
+        <translation>ახლის შექმნა</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="162"/>
@@ -28808,18 +28830,18 @@ failed.</source>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="185"/>
         <source>Publish to MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>MuseScore.com-ზე გამოქვეყნება</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="188"/>
         <source>Replace the existing &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;</source>
         <extracomment>The text between `&lt;a href=&quot;%1&quot;&gt;` and `&lt;/a&gt;` will be a clickable link to the online score in question</extracomment>
-        <translation type="unfinished"/>
+        <translation>არსებული &lt;a href=&quot;%1&quot;&gt;ონლაინ პარტიტურის&lt;/a&gt; ჩანაცვლება</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="191"/>
         <source>Publish as new online score</source>
-        <translation type="unfinished"/>
+        <translation>გამოაქვეყნე, როგორც ახალი ონლაინ პარტიტურა</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="199"/>
@@ -28852,7 +28874,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="92"/>
         <source>Save score</source>
-        <translation type="unfinished"/>
+        <translation>პარტიტურის შენახვა</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="97"/>
@@ -28871,7 +28893,7 @@ failed.</source>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="347"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="380"/>
         <source>Publish changes online?</source>
-        <translation type="unfinished"/>
+        <translation>გსურთ ცვლილებების ონლაინ გამოქვეყნება</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="348"/>
@@ -28886,7 +28908,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="350"/>
         <source>Publish this score online?</source>
-        <translation type="unfinished"/>
+        <translation>გსურთ ამ პარტიტურის ონლაინ გამოქვეყნება?</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="59"/>
@@ -28922,24 +28944,34 @@ failed.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="424"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="521"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="427"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="524"/>
         <source>Log in or create a free account on musescore.com to open this score.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1342"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1364"/>
         <source>View online</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1345"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1367"/>
         <source>All saved changes will now update to the cloud. You can manage this file in the score manager on musescore.com.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1570"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1592"/>
         <source>An unknown error occurred while saving this file.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1610"/>
+        <source>An error occurred while saving your score</source>
+        <translation> თქვენი პარტიტურის შენახვის დროს დაფიქსირდა შეცდომა</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1612"/>
+        <source>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -28949,7 +28981,7 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="234"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="964"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="986"/>
         <source>Log in to musescore.com to save this score to the cloud.</source>
         <translation type="unfinished"/>
     </message>
@@ -28971,22 +29003,22 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="525"/>
         <source>Your score could not be published</source>
-        <translation type="unfinished"/>
+        <translation>თქვენი პარტიტურა ვერ გამოქვეყნდება</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="526"/>
         <source>Your score could not be saved to the cloud</source>
-        <translation type="unfinished"/>
+        <translation>თქვენი პარტიტურა ვერ შეინახება ღრუბელში</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="529"/>
         <source>Your score cannot be published</source>
-        <translation type="unfinished"/>
+        <translation>თქვენი პარტიტურა ვერ გამოქვეყნდება</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="530"/>
         <source>Your score cannot be saved to the cloud</source>
-        <translation type="unfinished"/>
+        <translation>თქვენი პარტიტურა ვერ შეინახება ღრუბელში</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="543"/>
@@ -29006,7 +29038,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="566"/>
         <source>Publish as new score</source>
-        <translation type="unfinished"/>
+        <translation>გამოაქვეყნე, როგორც ახალი პარტიტურა</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="567"/>
@@ -29021,17 +29053,18 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="577"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1622"/>
         <source>Save as…</source>
         <translation>შენახვა როგორც…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="401"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1419"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1441"/>
         <source>Unable to connect to the cloud</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1420"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1442"/>
         <source>Your changes will be saved to a local file until the connection resumes.</source>
         <translation type="unfinished"/>
     </message>
@@ -29048,18 +29081,28 @@ failed.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1578"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1600"/>
         <source>Your score could not be saved</source>
-        <translation type="unfinished"/>
+        <translation>თქვენი პარტიტურა ვერ შეინახება</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1433"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1455"/>
         <source>Please add at least one instrument to enable saving.</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="196"/>
         <source>Share on Audio.com</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/notationproject.cpp" line="834"/>
+        <source>File “%1” could not be opened for validation. %2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/notationproject.cpp" line="845"/>
+        <source>“%1” is corrupted or damaged.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -29188,7 +29231,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsList.qml" line="33"/>
         <source>shortcut</source>
-        <translation type="unfinished"/>
+        <translation>მალსახმობი</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="45"/>
@@ -29203,12 +29246,12 @@ failed.</source>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="97"/>
         <source>Search shortcut</source>
-        <translation type="unfinished"/>
+        <translation>მალსახმობის ძიება</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/MidiDeviceMappingPage.qml" line="95"/>
         <source>status</source>
-        <translation>მდგომარეობა</translation>
+        <translation>სტატუსი</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/EditMidiMappingDialog.qml" line="107"/>
@@ -29358,23 +29401,23 @@ failed.</source>
     <message>
         <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="135"/>
         <source>direction is horizontal</source>
-        <translation type="unfinished"/>
+        <translation>მიმართულება ჰორიზონტალურია</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="136"/>
         <source>direction is vertical</source>
-        <translation type="unfinished"/>
+        <translation>მიმართულება ვერტიკალურია</translation>
     </message>
     <message>
         <location filename="../../src/framework/ui/view/navigationpanel.cpp" line="137"/>
         <source>direction is both</source>
-        <translation type="unfinished"/>
+        <translation>მიმართულება ორივეა</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="75"/>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/ValueListItem.qml" line="247"/>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="113"/>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="218"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="210"/>
         <source>checked</source>
         <comment>checkstate</comment>
         <extracomment>Describes the 'on' state of a toggle-able ui item.</extracomment>
@@ -29384,7 +29427,7 @@ failed.</source>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="77"/>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/ValueListItem.qml" line="247"/>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="113"/>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="218"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="210"/>
         <source>unchecked</source>
         <comment>checkstate</comment>
         <extracomment>Describes the 'off' state of a toggle-able ui item.</extracomment>
@@ -29471,7 +29514,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/SearchField.qml" line="37"/>
         <source>Search</source>
-        <translation>ძებნა</translation>
+        <translation>ძიება</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/Utils.js" line="40"/>
@@ -29498,7 +29541,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/ValueList.qml" line="43"/>
         <source>Value</source>
-        <translation type="unfinished"/>
+        <translation>მნიშვნელობა</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/ValueList.qml" line="128"/>
@@ -29538,12 +29581,12 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="137"/>
         <source>Save all</source>
-        <translation type="unfinished"/>
+        <translation>ყველას შენახვა</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="138"/>
         <source>Don’t save</source>
-        <translation type="unfinished"/>
+        <translation>არ შეინახოს</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="139"/>
@@ -29553,22 +29596,22 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="140"/>
         <source>Yes</source>
-        <translation type="unfinished"/>
+        <translation>კი</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="141"/>
         <source>Yes to all</source>
-        <translation type="unfinished"/>
+        <translation>ყველაზე კი</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="142"/>
         <source>No</source>
-        <translation type="unfinished"/>
+        <translation>არა</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="143"/>
         <source>No to all</source>
-        <translation type="unfinished"/>
+        <translation>ყველაზე არა</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="144"/>
@@ -29618,7 +29661,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="153"/>
         <source>Restore defaults</source>
-        <translation type="unfinished"/>
+        <translation>ნაგულისხმევის აღდგენა</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="154"/>
@@ -29648,7 +29691,7 @@ failed.</source>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="159"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>დასრულება</translation>
     </message>
 </context>
 <context>
@@ -29656,22 +29699,22 @@ failed.</source>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/AppReleaseInfoBottomPanel.qml" line="51"/>
         <source>Skip this version</source>
-        <translation type="unfinished"/>
+        <translation>ამ ვერსიის გამოტოვება</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/AppReleaseInfoBottomPanel.qml" line="70"/>
         <source>Remind me later</source>
-        <translation type="unfinished"/>
+        <translation>მოგვიანებით შეხსენაბა</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/internal/AppReleaseInfoBottomPanel.qml" line="86"/>
         <source>Install update</source>
-        <translation type="unfinished"/>
+        <translation>განახლების დაყენება</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/AppReleaseInfoDialog.qml" line="82"/>
         <source>A new version of MuseScore Studio is available!</source>
-        <translation type="unfinished"/>
+        <translation>ახალი MuseScore Studios-ს ვერსია ხელმისაწვდომია!</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/qml/Muse/Update/AppReleaseInfoDialog.qml" line="89"/>
@@ -29714,12 +29757,10 @@ failed.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/framework/update/qml/Muse/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="51"/>
         <source>No thanks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/framework/update/qml/Muse/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="68"/>
         <source>Take me to Muse Hub</source>
         <translation type="unfinished"/>
     </message>
@@ -29806,7 +29847,7 @@ failed.</source>
     <message>
         <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="95"/>
         <source>Workspace:</source>
-        <translation type="unfinished"/>
+        <translation>სამუშაო სივრცე:</translation>
     </message>
 </context>
 </TS>

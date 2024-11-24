@@ -11547,7 +11547,7 @@ Publiceret i henhold til &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     </message>
     <message>
         <location filename="../../src/framework/audio/internal/platform/jack/jackaudiodriver.cpp" line="240"/>
-        <location filename="../../src/framework/audio/internal/platform/lin/linuxaudiodriver.cpp" line="255"/>
+        <location filename="../../src/framework/audio/internal/platform/lin/linuxaudiodriver.cpp" line="265"/>
         <location filename="../../src/framework/audio/internal/platform/osx/osxaudiodriver.mm" line="196"/>
         <location filename="../../src/framework/audio/internal/platform/win/wasapiaudiodriver.cpp" line="218"/>
         <location filename="../../src/framework/audio/internal/platform/win/wincoreaudiodriver.cpp" line="457"/>
@@ -11981,12 +11981,12 @@ Publiceret i henhold til &lt;a href=&quot;%1&quot;&gt;GNU General Public License
         <translation>for høj for amatører</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/noteentry.cpp" line="411"/>
+        <location filename="../../src/engraving/dom/noteentry.cpp" line="415"/>
         <source>Note input will remove measure repeat</source>
         <translation>Nodeindtastning vil fjerne taktgentagelse</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/noteentry.cpp" line="412"/>
+        <location filename="../../src/engraving/dom/noteentry.cpp" line="416"/>
         <source>This measure contains a measure repeat. If you enter notes here, it will be deleted. Do you want to continue?</source>
         <translation>Denne takt indeholder en taktgentagelse. Hvis du indtaster noder her, vil taktgentagelsen blive slettet. Vil du fortsætte?</translation>
     </message>
@@ -12032,7 +12032,7 @@ Publiceret i henhold til &lt;a href=&quot;%1&quot;&gt;GNU General Public License
         <translation>%1; Varighed: %2; %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2393"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2401"/>
         <source>Annotations:</source>
         <translation>Annotationer:</translation>
     </message>
@@ -12042,7 +12042,7 @@ Publiceret i henhold til &lt;a href=&quot;%1&quot;&gt;GNU General Public License
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1108"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3229"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3241"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2419"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2427"/>
         <source>Start of %1</source>
         <translation>Start på %1</translation>
     </message>
@@ -12052,7 +12052,7 @@ Publiceret i henhold til &lt;a href=&quot;%1&quot;&gt;GNU General Public License
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1110"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3233"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3249"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2434"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2442"/>
         <source>End of %1</source>
         <translation>Slut på %1</translation>
     </message>
@@ -13700,37 +13700,37 @@ Bånd %1 på strenge %2</translation>
         <translation>Værdi %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1540"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1541"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="170"/>
         <source>Start measure: %1</source>
         <translation>Starttakt: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1543"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1544"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="172"/>
         <source>Start displayed measure: %1</source>
         <translation>Start vist takt: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1546"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1547"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="174"/>
         <source>Start beat: %1</source>
         <translation>Startslag: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1553"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1554"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="177"/>
         <source>End measure: %1</source>
         <translation>Sluttakt: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1556"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1557"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="179"/>
         <source>End displayed measure: %1</source>
         <translation>Slut vist takt: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1559"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1560"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="181"/>
         <source>End beat: %1</source>
         <translation>Slutslag: %1</translation>
@@ -15361,27 +15361,27 @@ Bånd %1 på strenge %2</translation>
 <context>
     <name>engraving/hairpintype</name>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="771"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="779"/>
         <source>Crescendo hairpin</source>
         <translation>Crescendo kile</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="773"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="781"/>
         <source>Decrescendo hairpin</source>
         <translation>Decrescendo kile</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="775"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="783"/>
         <source>Crescendo line</source>
         <translation>Crescendo linje</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="777"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="785"/>
         <source>Decrescendo line</source>
         <translation>Decrescendo linje</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="779"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="787"/>
         <source>Custom</source>
         <translation>Brugerdefineret</translation>
     </message>
@@ -18289,7 +18289,7 @@ Bånd %1 på strenge %2</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml" line="69"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="79"/>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="263"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="264"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="181"/>
         <source>Clear</source>
         <translation>Nulstil</translation>
@@ -18814,7 +18814,7 @@ Bånd %1 på strenge %2</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="108"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1348"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1370"/>
         <source>Success!</source>
         <translation>Succes!</translation>
     </message>
@@ -22516,83 +22516,83 @@ Uanset om du lige er begyndt med notationssoftware, eller er en superbruger, der
         <translation>Nodeværdien er for kort</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1299"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1300"/>
         <source>All Supported Files</source>
         <translation>Alle understøttede filer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1300"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1301"/>
         <source>Scalable Vector Graphics</source>
         <translation>Skalerbar vektorgrafik</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1301"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1302"/>
         <source>JPEG</source>
         <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1302"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1303"/>
         <source>PNG Bitmap Graphic</source>
         <translation>PNG bitmap grafik</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1303"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1304"/>
         <source>Bitmap</source>
         <translation>Bitmap</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1304"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1305"/>
         <source>TIFF</source>
         <translation>TIFF</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1307"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1308"/>
         <source>Insert Image</source>
         <translation>Indsæt billede</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1657"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1658"/>
         <source>MuseScore style files</source>
         <translation>MuseScore layoutfiler</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1658"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1659"/>
         <source>MuseScore style file</source>
         <translation>MuseScore layoutstandard</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1661"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1662"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2344"/>
         <source>Load style</source>
         <translation>Indlæs layoutstandard</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1662"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1663"/>
         <source>Save style</source>
         <translation>Gem layoutstandard</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1672"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1673"/>
         <source>The style file could not be loaded.</source>
         <translation>Layoutfil kunne ikke indlæses.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1677"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1678"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
         <translation>Denne layoutfil er fra en anden version af MuseScore Studio. Det er derfor ikke sikkert af dit nodeark vil blive formateret korrekt.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1679"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1680"/>
         <source>Click OK to load anyway.</source>
         <translation>Klik &apos;OK&apos; for at hente alligevel.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1693"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1694"/>
         <source>The style file could not be saved.</source>
         <translation>Layoutfil kunne ikke gemmes.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1694"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1695"/>
         <source>An error occurred.</source>
         <translation>En fejl opstod.</translation>
     </message>
@@ -22922,7 +22922,7 @@ Uanset om du lige er begyndt med notationssoftware, eller er en superbruger, der
         <translation>Vis</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1305"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1306"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="161"/>
         <source>All</source>
         <translation>Alle</translation>
@@ -24090,17 +24090,17 @@ Uanset om du lige er begyndt med notationssoftware, eller er en superbruger, der
 <context>
     <name>notation/measureproperties</name>
     <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="186"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="178"/>
         <source>Measure properties for measure %1</source>
         <translation>Taktegenskaber for takt %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="232"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="224"/>
         <source>Visible</source>
         <translation>Synlig</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="239"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="231"/>
         <source>Stemless</source>
         <translation>Ingen nodehals</translation>
     </message>
@@ -27127,7 +27127,7 @@ fejlede.</translation>
         <translation>Akkorder</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1220"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1238"/>
         <source>Loading audio samples</source>
         <translation>Henter audio prøver</translation>
     </message>
@@ -27135,6 +27135,11 @@ fejlede.</translation>
         <location filename="../../src/playback/view/internal/outputresourceitem.cpp" line="15"/>
         <source>No effect</source>
         <translation>Ingen effekt</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/outputresourceitem.cpp" line="73"/>
+        <source>Get more effects</source>
+        <translation>Hent flere effekter</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="44"/>
@@ -27167,23 +27172,28 @@ fejlede.</translation>
         <translation>SoundFont&apos;e</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="349"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="95"/>
+        <source>Get more sounds</source>
+        <translation>Hent flere lyde</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="360"/>
         <source>Bank %1, preset %2</source>
         <translation>Bank %1, preset %2</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="403"/>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="462"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="414"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="473"/>
         <source>Choose automatically</source>
         <translation>Vælg automatisk</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="445"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="456"/>
         <source>Preset %1</source>
         <translation>Forudinstillinger %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="454"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="465"/>
         <source>Bank %1</source>
         <translation>Bank %1</translation>
     </message>
@@ -27327,7 +27337,7 @@ fejlede.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="70"/>
-        <location filename="../../src/project/internal/notationproject.cpp" line="84"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="85"/>
         <source>Untitled score</source>
         <translation>Unavngivet nodeark</translation>
     </message>
@@ -27430,106 +27440,106 @@ fejlede.</translation>
         <translation>Åbn eksisterende...</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="720"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="723"/>
         <source>Do you want to save changes to the score “%1” before closing?</source>
         <translation>Gem ændringer til nodeark &quot;%1&quot; før lukning?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="723"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="726"/>
         <source>Your changes will be lost if you don’t save them.</source>
         <translation>Dine ændringer går tabt, hvis du ikke gemmer.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1664"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1686"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1720"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1742"/>
         <source>Open anyway</source>
         <translation>Åbn alligevel</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1677"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1733"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
         <translation>Dette nodeark er senest gemt med en nyere version af MuseScore Studio. Besøg &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; for at hente seneste version.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1683"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1739"/>
         <source>File “%1” is corrupted</source>
         <translation>Fil &quot;%1&quot; er defekt</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1698"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1754"/>
         <source>File “%1” is corrupted and cannot be opened</source>
         <translation>Filen &quot;%1&quot; er ødelagt og kan ikke åbnes</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1699"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1755"/>
         <source>Get help for this issue on musescore.org.</source>
         <translation>Få hjælp til dette på musescore.org.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1554"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1701"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1576"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1757"/>
         <source>Get help</source>
         <translation>Få hjælp</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1469"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1551"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1491"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1573"/>
         <source>Your score cannot be uploaded to the cloud</source>
         <translation>Din node kan ikke gemmes i skyen</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1470"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1492"/>
         <source>This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on musescore.org.</source>
         <translation>Dette nodeark er beskadiget og indeholder fejl. Du kan rette fejlene manuelt eller gemme nodearket på din computer og søge hjælp på musescore.org.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1477"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1499"/>
         <source>Save as…</source>
         <translation>Gem som…</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1482"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1518"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1504"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1540"/>
         <source>Revert to last saved</source>
         <translation>Gendan til senest gemte</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1503"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1525"/>
         <source>This score has become corrupted and contains errors</source>
         <translation>Dette nodeark er beskadiget og indeholder fejl</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1504"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1526"/>
         <source>You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on musescore.org.</source>
         <translation>Du kan fortsætte med at gemme lokalt, men filen kan vise sig ubrugelig. Du kan rette fejlene manuelt eller gemme nodearket på din computer og søge hjælp på musescore.org.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1506"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1528"/>
         <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on musescore.org.</source>
         <translation>Du kan fortsætte med at gemme lokalt, men filen kan vise sig ubrugelig. Du kan rette fejlene manuelt eller gemme nodearket på din computer og søge hjælp på musescore.org.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1513"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1535"/>
         <source>Save anyway</source>
         <translation>Gem alligevel</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1550"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1572"/>
         <source>Your score cannot be saved</source>
         <translation>Dit nodeark kan ikke gemmes</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1552"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1574"/>
         <source>This score is corrupted. You can get help for this issue on musescore.org.</source>
         <translation>Dette nodeark er beskadiget. Du kan få hjælp til at løse problemet på musescore.org.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1585"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1641"/>
         <source>Revert to last saved?</source>
         <translation>Gendan til senest gemte?</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1586"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1642"/>
         <source>Your changes will be lost. This action cannot be undone.</source>
         <translation>Dine ændringer vil gå tabt. Denne handling kan ikke omgøres.</translation>
     </message>
@@ -27544,113 +27554,123 @@ fejlede.</translation>
         <translation>Nodearket er ikke brugbart</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1676"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1715"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1732"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1771"/>
         <source>Cannot read file %1</source>
         <translation>Kan ikke læse filen %1:</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1720"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1776"/>
         <source>This file does not exist or cannot be accessed at the moment.</source>
         <translation>Denne fil findes ikke eller kan i øjeblikket ikke tilgås.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1684"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1740"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction.</source>
         <translation>Denne fil indeholder fejl som kan få MuseScore Studio til ikke at fungere.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1723"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1626"/>
+        <source>Try again</source>
+        <translation>Prøv igen</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1779"/>
         <source>This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</source>
         <translation>Denne fil kunne ikke åbnes. Tjek at MuseScore Studio har tilladelse til at læse filen.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1730"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1786"/>
         <source>An error occurred while reading this file.</source>
         <translation>Fejl under læsning af filen.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1783"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1839"/>
         <source>All supported files</source>
         <translation>Alle understøttede filer</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1784"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1840"/>
         <source>MuseScore files</source>
         <translation>MuseScore filer</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1785"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1841"/>
         <source>MusicXML files</source>
         <translation>MusicXML filer</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1786"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1842"/>
         <source>MIDI files</source>
         <translation>MIDI filer</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1787"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1843"/>
         <source>MuseData files</source>
         <translation>MuseData filer</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1788"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1844"/>
         <source>Capella files</source>
         <translation>Capella filer</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1789"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1845"/>
         <source>BB files (experimental)</source>
         <translation>BB filer (eksperimentel)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1790"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1846"/>
         <source>Overture / Score Writer files (experimental)</source>
         <translation>Overture / Score Writer filer (experimentel)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1791"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1847"/>
         <source>Bagpipe Music Writer files (experimental)</source>
         <translation>Bagpipe Music Writer filer (eksperimentel)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1792"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1848"/>
         <source>Guitar Pro files</source>
         <translation>Guitar Pro filer</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1793"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1849"/>
         <source>Power Tab Editor files (experimental)</source>
         <translation>Power Tab Editor filer (eksperimentell)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1794"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1850"/>
         <source>MEI files</source>
         <translation>MEI filer</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1795"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1851"/>
         <source>Uncompressed MuseScore folders (experimental)</source>
         <translation>Ukomprimeret MuseScore mapper (eksperimental)</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1796"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1852"/>
         <source>MuseScore developer files</source>
         <translation>MuseScore udviklerfiler</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1797"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1853"/>
         <source>MuseScore backup files</source>
         <translation>MuseScore backupfiler</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1809"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1865"/>
         <source>Open</source>
         <translation>Åbn</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectconfiguration.cpp" line="334"/>
+        <location filename="../../src/project/internal/projectconfiguration.cpp" line="123"/>
+        <source>Create backup of file on disk before saving new changes</source>
+        <translation>Tag en backup af filen på harddisk før nye ændringer gemmes</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectconfiguration.cpp" line="340"/>
         <source>Untitled</source>
         <translation>Uden titel</translation>
     </message>
@@ -28944,25 +28964,35 @@ fejlede.</translation>
         <translation>Det kan tage et par minutter, hver gang du gemmer, afhængig af størrelsen på dit nodeark. Indstillingerne kan altid ændres i Indstillinger.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="424"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="521"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="427"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="524"/>
         <source>Log in or create a free account on musescore.com to open this score.</source>
         <translation>Login eller opret en gratis konto på musescore.com for at åbne dette nodeark.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1342"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1364"/>
         <source>View online</source>
         <translation>Se online</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1345"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1367"/>
         <source>All saved changes will now update to the cloud. You can manage this file in the score manager on musescore.com.</source>
         <translation>Alle gemte ændringer vil nu blive opdateret i skyen. Du kan administrere denne fil i nodearkshåndtering på musescore.com.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1570"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1592"/>
         <source>An unknown error occurred while saving this file.</source>
         <translation>Fejl ved skrivning af denne fil.</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1610"/>
+        <source>An error occurred while saving your score</source>
+        <translation>Fejl under skrivning af dit nodeark</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1612"/>
+        <source>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</source>
+        <translation>Prøv at gemme dit nodeark igen. Hvis denne meddelelse stadig vises: Prøv at gemme dit nodeark som en ny kopi. Du kan også få hjælp til dette problem på %1..&lt;br/&gt;&lt;br/&gt;Detaljer om fejlen (Giv denne besked til support): %2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="182"/>
@@ -28971,7 +29001,7 @@ fejlede.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="234"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="964"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="986"/>
         <source>Log in to musescore.com to save this score to the cloud.</source>
         <translation>Log på eller opret gratis konto på musescore.com for at kunne gemme nodearket i skyen.</translation>
     </message>
@@ -29043,17 +29073,18 @@ fejlede.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="577"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1622"/>
         <source>Save as…</source>
         <translation>Gem som…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="401"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1419"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1441"/>
         <source>Unable to connect to the cloud</source>
         <translation>Kan ikke forbinde til skyen</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1420"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1442"/>
         <source>Your changes will be saved to a local file until the connection resumes.</source>
         <translation>Dine ændringer vil blive gemt i en lokal fil, indtil der kommer forbindelse igen.</translation>
     </message>
@@ -29070,12 +29101,12 @@ fejlede.</translation>
         <translation>Venligst tjek din Internet forbindelse eller prøv igen senere.</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1578"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1600"/>
         <source>Your score could not be saved</source>
         <translation>Din node kunne ikke gemmes</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1433"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1455"/>
         <source>Please add at least one instrument to enable saving.</source>
         <translation>Tilføj mindst et instrument for at kunne gemme.</translation>
     </message>
@@ -29083,6 +29114,16 @@ fejlede.</translation>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="196"/>
         <source>Share on Audio.com</source>
         <translation>Del på Audio.com</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/notationproject.cpp" line="834"/>
+        <source>File “%1” could not be opened for validation. %2</source>
+        <translation>Filen “%1” kunne ikke åbnes for validering. %2</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/notationproject.cpp" line="845"/>
+        <source>“%1” is corrupted or damaged.</source>
+        <translation>“%1” beskadiget eller ødelagt..</translation>
     </message>
 </context>
 <context>
@@ -29396,7 +29437,7 @@ fejlede.</translation>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="75"/>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/ValueListItem.qml" line="247"/>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="113"/>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="218"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="210"/>
         <source>checked</source>
         <comment>checkstate</comment>
         <extracomment>Describes the 'on' state of a toggle-able ui item.</extracomment>
@@ -29406,7 +29447,7 @@ fejlede.</translation>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="77"/>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/ValueListItem.qml" line="247"/>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="113"/>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="218"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="210"/>
         <source>unchecked</source>
         <comment>checkstate</comment>
         <extracomment>Describes the 'off' state of a toggle-able ui item.</extracomment>
@@ -29736,12 +29777,10 @@ fejlede.</translation>
         <translation>Læs %1 udgivelsesnoter</translation>
     </message>
     <message>
-        <location filename="../../src/framework/update/qml/Muse/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="51"/>
         <source>No thanks</source>
         <translation>Nej tak</translation>
     </message>
     <message>
-        <location filename="../../src/framework/update/qml/Muse/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="68"/>
         <source>Take me to Muse Hub</source>
         <translation>Før mig til Muse Hub</translation>
     </message>

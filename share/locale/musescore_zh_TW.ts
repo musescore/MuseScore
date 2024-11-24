@@ -11544,7 +11544,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/framework/audio/internal/platform/jack/jackaudiodriver.cpp" line="240"/>
-        <location filename="../../src/framework/audio/internal/platform/lin/linuxaudiodriver.cpp" line="255"/>
+        <location filename="../../src/framework/audio/internal/platform/lin/linuxaudiodriver.cpp" line="265"/>
         <location filename="../../src/framework/audio/internal/platform/osx/osxaudiodriver.mm" line="196"/>
         <location filename="../../src/framework/audio/internal/platform/win/wasapiaudiodriver.cpp" line="218"/>
         <location filename="../../src/framework/audio/internal/platform/win/wincoreaudiodriver.cpp" line="457"/>
@@ -11978,12 +11978,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>對業餘人士過高</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/noteentry.cpp" line="411"/>
+        <location filename="../../src/engraving/dom/noteentry.cpp" line="415"/>
         <source>Note input will remove measure repeat</source>
         <translation>音符輸入將移除小節反覆記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/noteentry.cpp" line="412"/>
+        <location filename="../../src/engraving/dom/noteentry.cpp" line="416"/>
         <source>This measure contains a measure repeat. If you enter notes here, it will be deleted. Do you want to continue?</source>
         <translation>該小節包含一個小節反覆記號。若您在這裡輸入音符，它將被刪除。您想繼續嗎？</translation>
     </message>
@@ -12029,7 +12029,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>%1；時值：%2；%3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2393"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2401"/>
         <source>Annotations:</source>
         <translation>註釋：</translation>
     </message>
@@ -12039,7 +12039,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1108"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3229"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3241"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2419"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2427"/>
         <source>Start of %1</source>
         <translation>%1之始</translation>
     </message>
@@ -12049,7 +12049,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1110"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3233"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3249"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2434"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2442"/>
         <source>End of %1</source>
         <translation>%1之終</translation>
     </message>
@@ -13697,37 +13697,37 @@ Fret %1 on strings %2</source>
         <translation>值 %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1540"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1541"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="170"/>
         <source>Start measure: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1543"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1544"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="172"/>
         <source>Start displayed measure: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1546"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1547"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="174"/>
         <source>Start beat: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1553"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1554"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="177"/>
         <source>End measure: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1556"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1557"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="179"/>
         <source>End displayed measure: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1559"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1560"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="181"/>
         <source>End beat: %1</source>
         <translation type="unfinished"/>
@@ -15358,27 +15358,27 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/hairpintype</name>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="771"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="779"/>
         <source>Crescendo hairpin</source>
         <translation>漸強線記號</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="773"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="781"/>
         <source>Decrescendo hairpin</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="775"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="783"/>
         <source>Crescendo line</source>
         <translation>漸強線</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="777"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="785"/>
         <source>Decrescendo line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/hairpin.cpp" line="779"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="787"/>
         <source>Custom</source>
         <translation>自訂</translation>
     </message>
@@ -18286,7 +18286,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/MidiMappingBottomPanel.qml" line="69"/>
         <location filename="../../src/framework/shortcuts/qml/Muse/Shortcuts/internal/ShortcutsTopPanel.qml" line="79"/>
-        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="263"/>
+        <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/TextInputField.qml" line="264"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="181"/>
         <source>Clear</source>
         <translation>清除</translation>
@@ -18811,7 +18811,7 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="108"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1348"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1370"/>
         <source>Success!</source>
         <translation>成功！</translation>
     </message>
@@ -22515,83 +22515,83 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>音符時值過短</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1299"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1300"/>
         <source>All Supported Files</source>
         <translation>所有可支援的檔案</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1300"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1301"/>
         <source>Scalable Vector Graphics</source>
         <translation>可縮放向量圖形</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1301"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1302"/>
         <source>JPEG</source>
         <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1302"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1303"/>
         <source>PNG Bitmap Graphic</source>
         <translation>PNG 點陣圖</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1303"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1304"/>
         <source>Bitmap</source>
         <translation>點陣圖</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1304"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1305"/>
         <source>TIFF</source>
         <translation>TIFF</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1307"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1308"/>
         <source>Insert Image</source>
         <translation>插入圖片</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1657"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1658"/>
         <source>MuseScore style files</source>
         <translation>MuseScore 樣式檔案</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1658"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1659"/>
         <source>MuseScore style file</source>
         <translation>MuseScore 樣式檔案</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1661"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1662"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2344"/>
         <source>Load style</source>
         <translation>載入樣式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1662"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1663"/>
         <source>Save style</source>
         <translation>儲存樣式</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1672"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1673"/>
         <source>The style file could not be loaded.</source>
         <translation>無法載入樣式檔案。</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1677"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1678"/>
         <source>Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1679"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1680"/>
         <source>Click OK to load anyway.</source>
         <translation>單擊確定以繼續載入。</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1693"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1694"/>
         <source>The style file could not be saved.</source>
         <translation>無法儲存樣式檔案。</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1694"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1695"/>
         <source>An error occurred.</source>
         <translation>發生錯誤。</translation>
     </message>
@@ -22921,7 +22921,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation>檢視</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1305"/>
+        <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1306"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="161"/>
         <source>All</source>
         <translation>所有</translation>
@@ -24089,17 +24089,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
 <context>
     <name>notation/measureproperties</name>
     <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="186"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="178"/>
         <source>Measure properties for measure %1</source>
         <translation>小節%1的屬性</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="232"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="224"/>
         <source>Visible</source>
         <translation>可見的</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="239"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="231"/>
         <source>Stemless</source>
         <translation>無符桿</translation>
     </message>
@@ -27126,7 +27126,7 @@ failed.</source>
         <translation>和弦</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1220"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1238"/>
         <source>Loading audio samples</source>
         <translation>正在載入取樣</translation>
     </message>
@@ -27134,6 +27134,11 @@ failed.</source>
         <location filename="../../src/playback/view/internal/outputresourceitem.cpp" line="15"/>
         <source>No effect</source>
         <translation>無效果</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/outputresourceitem.cpp" line="73"/>
+        <source>Get more effects</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="44"/>
@@ -27166,23 +27171,28 @@ failed.</source>
         <translation>音色庫</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="349"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="95"/>
+        <source>Get more sounds</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="360"/>
         <source>Bank %1, preset %2</source>
         <translation>銀行 %1，預設 %2</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="403"/>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="462"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="414"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="473"/>
         <source>Choose automatically</source>
         <translation>自動選擇</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="445"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="456"/>
         <source>Preset %1</source>
         <translation>預設 %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="454"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="465"/>
         <source>Bank %1</source>
         <translation>銀行 %1</translation>
     </message>
@@ -27326,7 +27336,7 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="70"/>
-        <location filename="../../src/project/internal/notationproject.cpp" line="84"/>
+        <location filename="../../src/project/internal/notationproject.cpp" line="85"/>
         <source>Untitled score</source>
         <translation>未命名樂譜</translation>
     </message>
@@ -27429,106 +27439,106 @@ failed.</source>
         <translation>開啟其他檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="720"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="723"/>
         <source>Do you want to save changes to the score “%1” before closing?</source>
         <translation>您想在關閉前儲存樂譜「%1」的變更嗎？</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="723"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="726"/>
         <source>Your changes will be lost if you don’t save them.</source>
         <translation>若不進行儲存，您所有的變更都將遺失。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1664"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1686"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1720"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1742"/>
         <source>Open anyway</source>
         <translation>仍然開啟</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1677"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1733"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1683"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1739"/>
         <source>File “%1” is corrupted</source>
         <translation>檔案「%1」錯亂</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1698"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1754"/>
         <source>File “%1” is corrupted and cannot be opened</source>
         <translation>檔案「%1」因損壞無法開啟。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1699"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1755"/>
         <source>Get help for this issue on musescore.org.</source>
         <translation>在musescore.org上獲取有關此問題的幫助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1554"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1701"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1576"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1757"/>
         <source>Get help</source>
         <translation>獲取幫助</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1469"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1551"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1491"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1573"/>
         <source>Your score cannot be uploaded to the cloud</source>
         <translation>你的樂譜無法上傳到雲端</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1470"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1492"/>
         <source>This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on musescore.org.</source>
         <translation>此樂譜已損壞。您可以手動修復這些錯誤，或是將它儲存到您的電腦，並到 musescore.org 上尋求幫助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1477"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1499"/>
         <source>Save as…</source>
         <translation>另存為…</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1482"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1518"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1504"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1540"/>
         <source>Revert to last saved</source>
         <translation>恢復到上次存檔</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1503"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1525"/>
         <source>This score has become corrupted and contains errors</source>
         <translation>此樂譜已損壞</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1504"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1526"/>
         <source>You can continue saving it locally, although the file may become unusable. You can try to fix the errors manually, or get help for this issue on musescore.org.</source>
         <translation>儘管該檔案或將無法使用，您仍可以繼續將其存儲於本地。您可以嘗試手動修復這些錯誤，或者到musescore.org上尋求幫助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1506"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1528"/>
         <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on musescore.org.</source>
         <translation>儘管該存檔或將無法使用，您仍可以將其繼續存儲於本地。若您想要妥善地存儲樂譜，請恢復它到上次存儲的版本，或手動修復錯誤。您也可以到musescore.org上尋求幫助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1513"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1535"/>
         <source>Save anyway</source>
         <translation>仍要儲存</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1550"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1572"/>
         <source>Your score cannot be saved</source>
         <translation>無法儲存您的樂譜</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1552"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1574"/>
         <source>This score is corrupted. You can get help for this issue on musescore.org.</source>
         <translation>該樂譜已損壞。您可以到musescore.org上尋求幫助。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1585"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1641"/>
         <source>Revert to last saved?</source>
         <translation>是否恢復上次的存檔？</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1586"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1642"/>
         <source>Your changes will be lost. This action cannot be undone.</source>
         <translation>您所做的修改將會丟失。此操作無法撤消。</translation>
     </message>
@@ -27543,113 +27553,123 @@ failed.</source>
         <translation>該樂譜無效。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1676"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1715"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1732"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1771"/>
         <source>Cannot read file %1</source>
         <translation>無法讀取文件 %1</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1720"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1776"/>
         <source>This file does not exist or cannot be accessed at the moment.</source>
         <translation>該檔案不存在，或暫時無法存取。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1684"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1740"/>
         <source>This file contains errors that could cause MuseScore Studio to malfunction.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1723"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1626"/>
+        <source>Try again</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1779"/>
         <source>This file could not be opened. Please make sure that MuseScore Studio has permission to read this file.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1730"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1786"/>
         <source>An error occurred while reading this file.</source>
         <translation>讀取本檔案時發生錯誤。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1783"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1839"/>
         <source>All supported files</source>
         <translation>所有支援的檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1784"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1840"/>
         <source>MuseScore files</source>
         <translation>MuseScore檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1785"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1841"/>
         <source>MusicXML files</source>
         <translation>MusicXML 檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1786"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1842"/>
         <source>MIDI files</source>
         <translation>MIDI 檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1787"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1843"/>
         <source>MuseData files</source>
         <translation>MuseData 檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1788"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1844"/>
         <source>Capella files</source>
         <translation>Capella 檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1789"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1845"/>
         <source>BB files (experimental)</source>
         <translation>BB 檔案（實驗性）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1790"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1846"/>
         <source>Overture / Score Writer files (experimental)</source>
         <translation>Overture / Score Writer 檔案（實驗性）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1791"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1847"/>
         <source>Bagpipe Music Writer files (experimental)</source>
         <translation>Bagpipe Music Writer 檔案（實驗性）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1792"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1848"/>
         <source>Guitar Pro files</source>
         <translation>Guitar Pro 檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1793"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1849"/>
         <source>Power Tab Editor files (experimental)</source>
         <translation>Power Tab Editor 檔案（實驗性）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1794"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1850"/>
         <source>MEI files</source>
         <translation>MEI 檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1795"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1851"/>
         <source>Uncompressed MuseScore folders (experimental)</source>
         <translation>未壓縮的 MuseScore 資料夾（實驗性）</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1796"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1852"/>
         <source>MuseScore developer files</source>
         <translation>MuseScore開發檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1797"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1853"/>
         <source>MuseScore backup files</source>
         <translation>MuseScore 備份檔案</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1809"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1865"/>
         <source>Open</source>
         <translation>開啟</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectconfiguration.cpp" line="334"/>
+        <location filename="../../src/project/internal/projectconfiguration.cpp" line="123"/>
+        <source>Create backup of file on disk before saving new changes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectconfiguration.cpp" line="340"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
@@ -28943,25 +28963,35 @@ failed.</source>
         <translation>每次保存可能需要幾分鐘，具體取決於您的樂譜大小。這些設置始終可以在偏好設定中更改。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="424"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="521"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="427"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="524"/>
         <source>Log in or create a free account on musescore.com to open this score.</source>
         <translation>登入或在 musescore.com 上建立免費帳號以開啟此樂譜。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1342"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1364"/>
         <source>View online</source>
         <translation>線上檢視</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1345"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1367"/>
         <source>All saved changes will now update to the cloud. You can manage this file in the score manager on musescore.com.</source>
         <translation>所有既存更改現在都將更新到雲端。您可以在musescore.com上的樂譜管理器中管理此檔案。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1570"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1592"/>
         <source>An unknown error occurred while saving this file.</source>
         <translation>存儲本檔案時發生未知錯誤。</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1610"/>
+        <source>An error occurred while saving your score</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1612"/>
+        <source>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="182"/>
@@ -28970,7 +29000,7 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="234"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="964"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="986"/>
         <source>Log in to musescore.com to save this score to the cloud.</source>
         <translation>登入 musescore.com 以將此樂譜儲存到雲端。</translation>
     </message>
@@ -29042,17 +29072,18 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="577"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1622"/>
         <source>Save as…</source>
         <translation>另存為...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="401"/>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1419"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1441"/>
         <source>Unable to connect to the cloud</source>
         <translation>無法連接到雲端</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1420"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1442"/>
         <source>Your changes will be saved to a local file until the connection resumes.</source>
         <translation>您的更改在連接恢復前將保存到一個本地檔案。</translation>
     </message>
@@ -29069,12 +29100,12 @@ failed.</source>
         <translation>請檢查您的互聯網連接或稍後再試。</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1578"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1600"/>
         <source>Your score could not be saved</source>
         <translation>無法保存您的樂譜</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1433"/>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1455"/>
         <source>Please add at least one instrument to enable saving.</source>
         <translation>儲存前請至少新增一個樂器。</translation>
     </message>
@@ -29082,6 +29113,16 @@ failed.</source>
         <location filename="../../src/framework/cloud/view/cloudsmodel.cpp" line="196"/>
         <source>Share on Audio.com</source>
         <translation>分享到Audio.com</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/notationproject.cpp" line="834"/>
+        <source>File “%1” could not be opened for validation. %2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../src/project/internal/notationproject.cpp" line="845"/>
+        <source>“%1” is corrupted or damaged.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -29395,7 +29436,7 @@ failed.</source>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="75"/>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/ValueListItem.qml" line="247"/>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="113"/>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="218"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="210"/>
         <source>checked</source>
         <comment>checkstate</comment>
         <extracomment>Describes the 'on' state of a toggle-able ui item.</extracomment>
@@ -29405,7 +29446,7 @@ failed.</source>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/StyledMenuItem.qml" line="77"/>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/internal/ValueListItem.qml" line="247"/>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="113"/>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="218"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="210"/>
         <source>unchecked</source>
         <comment>checkstate</comment>
         <extracomment>Describes the 'off' state of a toggle-able ui item.</extracomment>
@@ -29735,12 +29776,10 @@ failed.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/framework/update/qml/Muse/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="51"/>
         <source>No thanks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/framework/update/qml/Muse/Update/internal/MuseSoundsReleaseInfoBottomPanel.qml" line="68"/>
         <source>Take me to Muse Hub</source>
         <translation type="unfinished"/>
     </message>
