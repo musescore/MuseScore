@@ -926,6 +926,7 @@ EditStylePage EditStyle::pageForElement(Element* e)
             case ElementType::PAGE:
                   return &EditStyle::PagePage;
             case ElementType::INSTRUMENT_NAME:
+                  return &EditStyle::PageTextStyles;
             case ElementType::TEXT:
                   if (toText(e)->tid() == Tid::FOOTER || toText(e)->tid() == Tid::HEADER)
                         return &EditStyle::PageHeaderFooter;
