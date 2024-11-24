@@ -3495,6 +3495,11 @@ first note of the system</translation>
         <translation type="unfinished">Reset &apos;Vertical position of number&apos; value</translation>
     </message>
     <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6090"/>
+        <source>Center between staves on multi-staff instruments</source>
+        <translation type="unfinished">Center between staves on multi-staff instruments</translation>
+    </message>
+    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6139"/>
         <source>Reset &apos;Break H-bar if number overlaps&apos; value</source>
         <translation type="unfinished">Reset &apos;Break H-bar if number overlaps&apos; value</translation>
@@ -3852,11 +3857,6 @@ first note of the system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6061"/>
         <source>Number layout</source>
         <translation type="unfinished">Number layout</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6090"/>
-        <source>Center between staves on multi-stave instruments</source>
-        <translation type="unfinished">Center between staves on multi-stave instruments</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6129"/>
@@ -22738,6 +22738,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Find / Go to:</translation>
     </message>
     <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
+        <source>Voices visible on this staff</source>
+        <translation type="unfinished">Voices visible on this staff</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="55"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="163"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="165"/>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="167"/>
@@ -24073,8 +24079,8 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="274"/>
-        <source>Select an unpitched percussion stave to use available sounds</source>
-        <translation type="unfinished">Select an unpitched percussion stave to use available sounds</translation>
+        <source>Select an unpitched percussion staff to use available sounds</source>
+        <translation type="unfinished">Select an unpitched percussion staff to use available sounds</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/playbacktoolbarmodel.cpp" line="149"/>
