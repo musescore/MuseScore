@@ -6352,9 +6352,13 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
       // begin allocation
       if (rest) {
+            if (!grace) {
             const int track = msTrack + msVoice;
             cr = addRest(_score, measure, noteStartTime, track, msMove,
                          duration, dura);
+                  }
+            else
+                  qDebug("ignoring grace rest");
             }
       else {
             if (!grace) {
