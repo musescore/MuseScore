@@ -8062,7 +8062,7 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
             }
 
             EngravingItem* ic = seg->findAnnotation(ElementType::INSTRUMENT_CHANGE, strack, etrack - 1);
-            if (ic) {
+            if (ic && (etrack == strack)) {
                 const InstrumentChange* instrChange = toInstrumentChange(ic);
                 writeInstrumentChange(instrChange);
             }
