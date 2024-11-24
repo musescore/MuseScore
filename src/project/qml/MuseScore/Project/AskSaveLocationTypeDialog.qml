@@ -75,10 +75,11 @@ StyledDialogView {
             }
 
             SaveLocationOption {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 title: qsTrc("project/save", "To the Cloud (free)")
                 description: qsTrc("project/save", "Files are saved privately on your own personal account. \
 You can share drafts with others and publish your finished scores publicly too.")
-                buttonText: qsTrc("project/save", "Save to the cloud")
 
                 imageSource: "qrc:/SaveToCloud/images/Cloud.png"
 
@@ -87,15 +88,16 @@ You can share drafts with others and publish your finished scores publicly too."
                 navigation.accessible.name: qsTrc("project/save", "Save to the cloud (free)")
                 navigation.accessible.description: description
 
-                onButtonClicked: {
+                onClicked: {
                     root.done(SaveLocationType.Cloud)
                 }
             }
 
             SaveLocationOption {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 title: qsTrc("project/save", "On your computer")
                 description: qsTrc("project/save", "If you prefer to save your files on your computer, you can do that here.")
-                buttonText: qsTrc("project/save", "Save to computer")
 
                 imageSource: "qrc:/SaveToCloud/images/Laptop.png"
 
@@ -104,7 +106,7 @@ You can share drafts with others and publish your finished scores publicly too."
                 navigation.accessible.name: qsTrc("project/save", "Save on your computer")
                 navigation.accessible.description: description
 
-                onButtonClicked: {
+                onClicked: {
                     root.done(SaveLocationType.Local)
                 }
             }
