@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <limits>
 #include "instrtemplate.h"
 
 #include "io/file.h"
@@ -37,6 +38,7 @@
 #include "scoreorder.h"
 #include "stafftype.h"
 #include "stringdata.h"
+#include "stringutils.h"
 #include "utils.h"
 
 #include "log.h"
@@ -720,6 +722,9 @@ const InstrumentTemplate* searchTemplate(const String& name)
 const InstrumentTemplate* combinedTemplateSearch(const String& mxmlId, const String& name, const int transposition, int bank,
                                                  int program)
 {
+    int minLevenshteinDistance = std::numeric_limits<int>::max();
+    const InstrumentTemplate* templateWithMinLevenshteinDistance = nullptr;
+
     if (mxmlId.empty() && name.empty() && bank == 0 && program == -1) {
         // No instrument information provided
         return nullptr;
@@ -790,11 +795,43 @@ const InstrumentTemplate* combinedTemplateSearch(const String& mxmlId, const Str
             if (matchStrength > bestMatchStrength) {
                 bestMatch = it;
                 bestMatchStrength = matchStrength;
+
                 if (bestMatchStrength - nameWeight == perfectMatchStrength && nameWeight > 0) {
                     return bestMatch; // stop looking for matches
+                } else {
+                    // We reset the distance
+                    minLevenshteinDistance = std::numeric_limits<int>::max();
+                    templateWithMinLevenshteinDistance = nullptr;
+                }
+            }
+
+            // We look for the shortest distance
+            if ((matchStrength == bestMatchStrength) && (matchStrength > 0)) {
+                // if the name has some meaning we calculate the distance
+                if ((!name.isEmpty()) && (name != u"MusicXML Part") && (name != u"Staff")) {
+                    // We keep the lowest distance with trackName ...
+                    int levenshteinDistance = muse::strings::levenshteinDistance(
+                        StaffName(name).toString().toStdString(), it->trackName.toStdString());
+
+                    // ... and longNames
+                    for (const muse::String& instLongName : it->longNames.toStringList()) {
+                        levenshteinDistance = std::min(levenshteinDistance,
+                                                       muse::strings::levenshteinDistance(
+                                                           StaffName(name).toString().toStdString(), instLongName.toStdString()));
+                    }
+                    // If we have a shortest distance we keep this element
+                    if (levenshteinDistance < minLevenshteinDistance) {
+                        minLevenshteinDistance = levenshteinDistance;
+                        templateWithMinLevenshteinDistance = it;
+                    }
                 }
             }
         }
+    }
+
+    // If we have improved the Levenshtein distance we change the best match
+    if (minLevenshteinDistance < std::numeric_limits<int>::max()) {
+        bestMatch = templateWithMinLevenshteinDistance;
     }
 
     return bestMatch;
