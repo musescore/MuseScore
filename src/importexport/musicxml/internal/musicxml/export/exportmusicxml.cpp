@@ -8061,14 +8061,14 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
                 continue;
             }
 
+            // generate backup or forward to the start time of the element
+            moveToTickIfNeed(seg->tick());
+
             EngravingItem* ic = seg->findAnnotation(ElementType::INSTRUMENT_CHANGE, strack, etrack - 1);
             if (ic && (track == strack)) {
                 const InstrumentChange* instrChange = toInstrumentChange(ic);
                 writeInstrumentChange(instrChange);
             }
-
-            // generate backup or forward to the start time of the element
-            moveToTickIfNeed(seg->tick());
 
             // handle annotations and spanners (directions attached to this note or rest)
             if (el->isChordRest()) {
