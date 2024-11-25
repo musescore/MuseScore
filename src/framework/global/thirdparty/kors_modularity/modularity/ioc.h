@@ -37,7 +37,7 @@ void removeIoC(const ContextPtr& ctx = nullptr);
 
 struct StaticMutex
 {
-    static std::mutex mutex;
+    static std::recursive_mutex mutex;
 };
 
 template<class I>
@@ -74,7 +74,7 @@ public:
     const std::shared_ptr<I>& get() const
     {
         if (!m_i) {
-            const std::lock_guard<std::mutex> lock(StaticMutex::mutex);
+            const std::lock_guard<std::recursive_mutex> lock(StaticMutex::mutex);
             if (!m_i) {
                 static std::string_view module = "";
                 m_i = _ioc(iocContext())->template resolve<I>(module);
