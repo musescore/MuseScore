@@ -1629,26 +1629,6 @@ static void midipitch2xml(int pitch, char16_t& c, int& alter, int& octave)
 }
 
 //---------------------------------------------------------
-//   tabpitch2xml
-//---------------------------------------------------------
-
-static void tabpitch2xml(const int pitch, const int tpc, String& s, int& alter, int& octave)
-{
-    s      = tpc2stepName(tpc);
-    alter  = tpc2alterByKey(tpc, Key::C);
-    octave = (pitch - alter) / 12 - 1;
-    if (alter < -2 || 2 < alter) {
-        LOGD("tabpitch2xml(pitch %d, tpc %d) problem:  step %s, alter %d, octave %d",
-             pitch, tpc, muPrintable(s), alter, octave);
-    }
-    /*
-    else
-          LOGD("tabpitch2xml(pitch %d, tpc %d) step %s, alter %d, octave %d",
-                 pitch, tpc, muPrintable(s), alter, octave);
-     */
-}
-
-//---------------------------------------------------------
 //   pitch2xml
 //---------------------------------------------------------
 
@@ -4147,15 +4127,10 @@ static void writePitch(XmlWriter& xml, const Note* const note, const bool useDru
     String step;
     int alter = 0;
     int octave = 0;
-    const Chord* chord = note->chord();
-    if (chord->staff() && chord->staff()->isTabStaff(Fraction(0, 1))) {
-        tabpitch2xml(note->pitch(), note->tpc(), step, alter, octave);
+    if (!useDrumset) {
+        pitch2xml(note, step, alter, octave);
     } else {
-        if (!useDrumset) {
-            pitch2xml(note, step, alter, octave);
-        } else {
-            unpitch2xml(note, step, octave);
-        }
+        unpitch2xml(note, step, octave);
     }
     xml.startElement(useDrumset ? "unpitched" : "pitch");
     xml.tag(useDrumset ? "display-step" : "step", step);
