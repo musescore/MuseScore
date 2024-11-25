@@ -151,24 +151,24 @@ size_t muse::strings::levenshteinDistance(const std::string& s1, const std::stri
     size_t N1 = s1.length();
     size_t N2 = s2.length();
     size_t i, j;
-    std::vector<size_t> T(N2 + 1);
+    std::vector<size_t> V(N2 + 1);
 
     for (i = 0; i <= N2; i++) {
-        T[i] = i;
+        V[i] = i;
     }
 
     for (i = 0; i < N1; i++) {
-        T[0] = i + 1;
+        V[0] = i + 1;
         size_t corner = i;
         for (j = 0; j < N2; j++) {
-            size_t upper = T[j + 1];
+            size_t upper = V[j + 1];
             if (s1[i] == s2[j]) {
-                T[j + 1] = corner;
+                V[j + 1] = corner;
             } else {
-                T[j + 1] = std::min(T[j], std::min(upper, corner)) + 1;
+                V[j + 1] = std::min(V[j], std::min(upper, corner)) + 1;
             }
             corner = upper;
         }
     }
-    return T[N2];
+    return V[N2];
 }
