@@ -1838,9 +1838,7 @@ bool ChordList::read(const muse::io::path_t& appDataPath, const String& name)
     }
     File f(path);
     if (!f.open(IODevice::ReadOnly)) {
-        if (!MScore::testMode) {
-            LOGE() << "Cannot open chord description: " << f.filePath();
-        }
+        LOGE() << "Cannot open chord description: " << f.filePath();
         return false;
     }
 

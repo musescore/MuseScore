@@ -57,9 +57,6 @@ void NotationPainting::setViewMode(const ViewMode& viewMode)
 
     score()->setLayoutMode(viewMode);
     score()->doLayout();
-    // Can't use endCmd() because changing view mode isn't an edit command, but still
-    // need to send this signal to notify the Inspector.
-    score()->changesChannel().send(ScoreChangesRange());
 
     m_viewModeChanged.notify();
     m_notation->notifyAboutNotationChanged();

@@ -46,7 +46,7 @@ static void itemShouldBeRegistered(void*, EngravingItem* item)
     }
 }
 
-TEST_F(Engraving_EIDTests, testRegisteredItems) //TODO: verify program change, 72 is wrong surely?
+TEST_F(Engraving_EIDTests, testRegisteredItems)
 {
     bool useRead302 = MScore::useRead302InTestMode;
     MScore::useRead302InTestMode = false;

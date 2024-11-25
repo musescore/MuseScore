@@ -93,7 +93,6 @@ class Selection;
 class Spanner;
 class Staff;
 class SystemLock;
-class SystemLocks;
 class Text;
 class TremoloBar;
 
@@ -709,7 +708,7 @@ public:
 
 class RemoveSystemLock : public UndoCommand
 {
-    OBJECT_ALLOCATOR(engraving, AddSystemLock)
+    OBJECT_ALLOCATOR(engraving, RemoveSystemLock)
 
     const SystemLock* m_systemLock;
 public:

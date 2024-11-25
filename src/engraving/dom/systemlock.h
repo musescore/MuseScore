@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SYSTEM_LOCK_H
-#define MU_ENGRAVING_SYSTEM_LOCK_H
+#pragma once
 
 #include <map>
 
@@ -107,5 +106,3 @@ private:
     const SystemLock* m_systemLock = nullptr;
 };
 } // namespace mu::engraving
-
-#endif // MU_ENGRAVING_SYSTEM_LOCK_H

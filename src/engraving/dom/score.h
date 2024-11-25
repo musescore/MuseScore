@@ -391,7 +391,6 @@ public:
 
     void realtimeAdvance(bool allowTransposition);
 
-    void addRemoveBreaks(int interval, bool lock); // DEPRECATED
     void addRemoveSystemLocks(int interval, bool lock);
 
     bool transpose(Note* n, Interval, bool useSharpsFlats);

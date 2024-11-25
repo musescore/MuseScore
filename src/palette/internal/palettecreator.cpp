@@ -531,14 +531,6 @@ PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
     sp->setGridSize(42, 36);
     sp->setDrawGrid(true);
 
-    if (!defaultPalette) {
-        auto lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
-        lb->setLayoutBreakType(LayoutBreakType::NOBREAK);
-        PaletteCellPtr cell = sp->appendElement(lb, TConv::userName(LayoutBreakType::NOBREAK));
-        cell->mag = 1.0;
-        return sp;
-    }
-
     static const std::vector<LayoutBreakType> layoutBreaks  {
         LayoutBreakType::LINE,
         LayoutBreakType::PAGE,
@@ -547,12 +539,16 @@ PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
     for (LayoutBreakType layoutBreakType : layoutBreaks) {
         auto lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
         lb->setLayoutBreakType(layoutBreakType);
-        PaletteCellPtr cell = sp->appendElement(lb, TConv::userName(layoutBreakType));
-        cell->mag = 1.0;
+        sp->appendElement(lb, TConv::userName(layoutBreakType));
+    }
+
+    if (!defaultPalette) {
+        auto lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
+        lb->setLayoutBreakType(LayoutBreakType::NOBREAK);
+        sp->appendElement(lb, TConv::userName(LayoutBreakType::NOBREAK));
     }
 
     sp->appendActionIcon(ActionIconType::SYSTEM_LOCK, "toggle-system-lock");
-    sp->cells().back()->mag = 1.0;
 
     static const std::vector<SpacerType> spacers  {
         SpacerType::DOWN,

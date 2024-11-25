@@ -3766,17 +3766,24 @@ void TLayout::layoutLayoutBreak(const LayoutBreak* item, LayoutBreak::LayoutData
     LD_INDEPENDENT;
 
     if (ldata->isValid() || MScore::testMode) {
+        // Don't layout in test mode because these are essentially UI elements,
+        // and they need to know about the Icon font, which isn't available in test mode.
         return;
     }
 
     FontMetrics metrics(item->font());
     RectF bbox = metrics.boundingRect(item->iconCode());
     ldata->setShape(Shape(bbox, item));
+
+    // Ensure it goes behind nation
+    const_cast<LayoutBreak*>(item)->setZ(-10);
 }
 
 void TLayout::layoutSystemLockIndicator(const SystemLockIndicator* item, SystemLockIndicator::LayoutData* ldata)
 {
     if (MScore::testMode) {
+        // Don't layout in test mode because these are essentially UI elements,
+        // and they need to know about the Icon font, which isn't available in test mode.
         return;
     }
 
@@ -3815,6 +3822,9 @@ void TLayout::layoutSystemLockIndicator(const SystemLockIndicator* item, SystemL
     x = std::min(x, xLayoutBreaks - lockBox.right());
 
     ldata->setPos(PointF(x, -2.5 * spatium));
+
+    // Ensure it goes behind nation and LayoutBreak
+    const_cast<SystemLockIndicator*>(item)->setZ(-100);
 }
 
 static void _layoutLedgerLine(const LedgerLine* item, const LayoutContext& ctx, LedgerLine::LayoutData* ldata)

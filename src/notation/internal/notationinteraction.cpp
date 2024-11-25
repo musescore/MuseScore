@@ -4496,43 +4496,43 @@ void NotationInteraction::toggleLayoutBreak(LayoutBreakType breakType)
 
 void NotationInteraction::moveMeasureToPrevSystem()
 {
-    startEdit(TranslatableString("action", "Move measure to previous system"));
+    startEdit(TranslatableString("undoableAction", "Move measure to previous system"));
     score()->cmdMoveMeasureToPrevSystem();
     apply();
 }
 
 void NotationInteraction::moveMeasureToNextSystem()
 {
-    startEdit(TranslatableString("action", "Move measure to next system"));
+    startEdit(TranslatableString("undoableAction", "Move measure to next system"));
     score()->cmdMoveMeasureToNextSystem();
     apply();
 }
 
 void NotationInteraction::toggleSystemLock()
 {
-    startEdit(TranslatableString("action", "Toggle system lock"));
+    startEdit(TranslatableString("undoableAction", "Toggle system lock"));
     score()->cmdToggleSystemLock();
     apply();
 }
 
 void NotationInteraction::toggleScoreLock()
 {
-    startEdit(TranslatableString("action", "Toggle score lock"));
+    startEdit(TranslatableString("undoableAction", "Toggle score lock"));
     score()->cmdToggleScoreLock();
     apply();
 }
 
 void NotationInteraction::makeIntoSystem()
 {
-    startEdit(TranslatableString("action", "Make measure(s) into one system"));
+    startEdit(TranslatableString("undoableAction", "Make measure(s) into one system"));
     score()->cmdMakeIntoSystem();
     apply();
 }
 
-void NotationInteraction::setLocksSpawnInterval(LocksSpawnIntervalType intervalType, int interval)
+void NotationInteraction::addRemoveSystemLocks(AddRemoveSystemLockType intervalType, int interval)
 {
-    interval = intervalType == LocksSpawnIntervalType::MeasuresInterval ? interval : 0;
-    bool afterEachSystem = intervalType == LocksSpawnIntervalType::AfterEachSystem;
+    interval = intervalType == AddRemoveSystemLockType::MeasuresInterval ? interval : 0;
+    bool afterEachSystem = intervalType == AddRemoveSystemLockType::AfterEachSystem;
 
     startEdit(TranslatableString("undoableAction", "Measures per system"));
     score()->addRemoveSystemLocks(interval, afterEachSystem);

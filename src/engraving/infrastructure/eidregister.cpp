@@ -14,8 +14,8 @@ EID EIDRegister::newEID(ElementType type)
 
 void EIDRegister::registerItemEID(EID eid, EngravingObject* item)
 {
-    assert(m_register.find(eid.toUint64()) == m_register.end());
-    m_register.emplace(eid.toUint64(), item);
+    bool inserted = m_register.emplace(eid.toUint64(), item).second;
+    assert(inserted);
 }
 
 EngravingObject* EIDRegister::itemFromEID(EID eid)

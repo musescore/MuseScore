@@ -67,15 +67,15 @@ void BreaksDialog::accept()
     INotationInteractionPtr interaction = notation->interaction();
 
     int interval = intervalButton->isChecked() ? intervalBox->value() : 0;
-    LocksSpawnIntervalType intervalType = LocksSpawnIntervalType::MeasuresInterval;
+    AddRemoveSystemLockType intervalType = AddRemoveSystemLockType::MeasuresInterval;
 
     if (removeButton->isChecked()) {
-        intervalType = LocksSpawnIntervalType::None;
+        intervalType = AddRemoveSystemLockType::None;
     } else if (lockButton->isChecked()) {
-        intervalType = LocksSpawnIntervalType::AfterEachSystem;
+        intervalType = AddRemoveSystemLockType::AfterEachSystem;
     }
 
-    interaction->setLocksSpawnInterval(intervalType, interval);
+    interaction->addRemoveSystemLocks(intervalType, interval);
 
     if (_allSelected) {
         interaction->clearSelection();

@@ -243,7 +243,7 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
     const double rm = ctx.state().page()->rm();
     const double bm = ctx.state().page()->bm() + ctx.conf().styleMM(Sid::staffLowerBorder);
 
-    layoutSystemLockIndicators(system, ctx);
+    layoutSystemLockIndicators(system);
 
     ctx.mutState().page()->setPos(0, 0);
     system->setPos(lm, tm);
@@ -252,15 +252,13 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
     ctx.mutState().page()->invalidateBspTree();
 }
 
-void ScoreHorizontalViewLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx)
+void ScoreHorizontalViewLayout::layoutSystemLockIndicators(System* system)
 {
-    UNUSED(ctx);
-
     system->deleteLockIndicators();
 
     std::vector<const SystemLock*> systemLocks = system->score()->systemLocks()->allLocks();
     for (const SystemLock* lock : systemLocks) {
-        SystemLockIndicator* lockIndicator = new SystemLockIndicator(system, lock);
+        SystemLockIndicator* lockIndicator = Factory::createSystemLockIndicator(system, lock);
         lockIndicator->setParent(system);
         system->addLockIndicator(lockIndicator);
         TLayout::layoutSystemLockIndicator(lockIndicator, lockIndicator->mutldata());

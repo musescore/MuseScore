@@ -57,7 +57,7 @@ void SystemLocks::remove(const SystemLock* lock)
 const SystemLock* SystemLocks::lockStartingAt(const MeasureBase* mb) const
 {
     auto iter = m_systemLocks.find(mb);
-    return iter != m_systemLocks.end() ? (*iter).second : nullptr;
+    return iter != m_systemLocks.end() ? iter->second : nullptr;
 }
 
 const SystemLock* SystemLocks::lockContaining(const MeasureBase* mb) const
@@ -67,11 +67,12 @@ const SystemLock* SystemLocks::lockContaining(const MeasureBase* mb) const
     }
 
     auto iter = m_systemLocks.lower_bound(mb);
-    if (iter != m_systemLocks.begin() && (iter == m_systemLocks.end() || mb->isBefore((*iter).second->startMB()))) {
+    if (iter != m_systemLocks.begin()
+        && (iter == m_systemLocks.end() || mb->isBefore(iter->second->startMB()))) {
         --iter;
     }
 
-    const SystemLock* lock = (*iter).second;
+    const SystemLock* lock = iter->second;
 
     return lock->contains(mb) ? lock : nullptr;
 }
@@ -113,13 +114,13 @@ void SystemLocks::sanityCheck()
             break;
         }
 
-        const MeasureBase* curMB = (*curIter).first;
-        const SystemLock* curSysLock = (*curIter).second;
+        const MeasureBase* curMB = curIter->first;
+        const SystemLock* curSysLock = curIter->second;
 
         DO_ASSERT(curSysLock->startMB() == curMB);
 
-        const MeasureBase* nextMB = (*nextIter).first;
-        const SystemLock* nextSysLock = (*nextIter).second;
+        const MeasureBase* nextMB = nextIter->first;
+        const SystemLock* nextSysLock = nextIter->second;
 
         DO_ASSERT(nextSysLock->startMB() == nextMB);
         DO_ASSERT(curMB->isBefore(nextMB));
@@ -138,10 +139,7 @@ void SystemLocks::dump()
 #endif
 
 SystemLockIndicator::SystemLockIndicator(System* parent, const SystemLock* lock)
-    : m_systemLock(lock), EngravingItem(ElementType::SYSTEM_LOCK_INDICATOR, parent, ElementFlag::SYSTEM | ElementFlag::GENERATED)
-{
-    m_z = -100; // Ensure behind notation and layout breaks
-}
+    : m_systemLock(lock), EngravingItem(ElementType::SYSTEM_LOCK_INDICATOR, parent, ElementFlag::SYSTEM | ElementFlag::GENERATED) {}
 
 Font SystemLockIndicator::font() const
 {

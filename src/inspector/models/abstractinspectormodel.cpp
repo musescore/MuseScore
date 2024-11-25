@@ -165,6 +165,10 @@ void AbstractInspectorModel::onCurrentNotationChanged()
         return;
     }
 
+    notation->viewModeChanged().onNotify(this, [this]() {
+        onNotationChanged({}, {});
+    });
+
     notation->undoStack()->changesChannel().onReceive(this, [this](const ChangesRange& range) {
         if (range.changedPropertyIdSet.empty() && range.changedStyleIdSet.empty()) {
             return;

@@ -53,7 +53,6 @@ LayoutBreak::LayoutBreak(MeasureBase* parent)
     m_startWithMeasureOne = false;
     m_firstSystemIndentation = false;
     m_layoutBreakType = LayoutBreakType(propertyDefault(Pid::LAYOUT_BREAK).toInt());
-    m_z = -10; // Ensure behind notation
 
     initElementStyle(&sectionBreakStyle);
 
