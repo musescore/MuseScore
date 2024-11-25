@@ -11788,12 +11788,12 @@ Wil jy %2 nou uitwys?</translation>
 <context>
     <name>MeasureProperties</name>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="278"/>
+        <location filename="../../mscore/measureproperties.cpp" line="280"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="279"/>
+        <location filename="../../mscore/measureproperties.cpp" line="281"/>
         <source>Cannot change measure length:
 tuplet would cross measure</source>
         <translation>Kan nie maatlenge verander nie:
@@ -11970,13 +11970,21 @@ onreëlmatige nootgroep sou maat oorsteek</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="462"/>
-        <source>Go to previous measure</source>
-        <translation>Gaan na vorige maat</translation>
+        <source>Apply and go to previous measure</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="482"/>
+        <source>Apply and go to next measure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous measure</source>
+        <translation type="vanished">Gaan na vorige maat</translation>
+    </message>
+    <message>
         <source>Go to next measure</source>
-        <translation>Gaan na volgende maat</translation>
+        <translation type="vanished">Gaan na volgende maat</translation>
     </message>
 </context>
 <context>
@@ -13729,17 +13737,17 @@ oop te maak, het misluk: %2</translation>
 <context>
     <name>Ms::MeasureProperties</name>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="124"/>
+        <location filename="../../mscore/measureproperties.cpp" line="126"/>
         <source>Measure Properties for Measure %1</source>
         <translation>Maateienskappe vir maat %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="157"/>
+        <location filename="../../mscore/measureproperties.cpp" line="159"/>
         <source>visible</source>
         <translation>sigbaar</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="164"/>
+        <location filename="../../mscore/measureproperties.cpp" line="166"/>
         <source>stemless</source>
         <translation>steelloos</translation>
     </message>

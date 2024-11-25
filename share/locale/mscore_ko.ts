@@ -11760,12 +11760,12 @@ Would you like to locate %2 now?</source>
 <context>
     <name>MeasureProperties</name>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="278"/>
+        <location filename="../../mscore/measureproperties.cpp" line="280"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="279"/>
+        <location filename="../../mscore/measureproperties.cpp" line="281"/>
         <source>Cannot change measure length:
 tuplet would cross measure</source>
         <translation>마디 길이를 변경할 수 없습니다. 잇단음표가 마디를 교차할 것입니다.</translation>
@@ -11941,13 +11941,21 @@ tuplet would cross measure</source>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="462"/>
-        <source>Go to previous measure</source>
-        <translation>직전 마디로 이동 </translation>
+        <source>Apply and go to previous measure</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="482"/>
+        <source>Apply and go to next measure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous measure</source>
+        <translation type="vanished">직전 마디로 이동 </translation>
+    </message>
+    <message>
         <source>Go to next measure</source>
-        <translation>다음 마디로 이동 </translation>
+        <translation type="vanished">다음 마디로 이동 </translation>
     </message>
 </context>
 <context>
@@ -13704,17 +13712,17 @@ failed: %2</source>
 <context>
     <name>Ms::MeasureProperties</name>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="124"/>
+        <location filename="../../mscore/measureproperties.cpp" line="126"/>
         <source>Measure Properties for Measure %1</source>
         <translation>마디 %1 의 마디 속성</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="157"/>
+        <location filename="../../mscore/measureproperties.cpp" line="159"/>
         <source>visible</source>
         <translation>표시</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="164"/>
+        <location filename="../../mscore/measureproperties.cpp" line="166"/>
         <source>stemless</source>
         <translation>음표 기둥 없음</translation>
     </message>

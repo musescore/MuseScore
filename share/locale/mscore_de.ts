@@ -11799,12 +11799,12 @@ Möchten Sie %2 nun lokalisieren?</translation>
 <context>
     <name>MeasureProperties</name>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="278"/>
+        <location filename="../../mscore/measureproperties.cpp" line="280"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="279"/>
+        <location filename="../../mscore/measureproperties.cpp" line="281"/>
         <source>Cannot change measure length:
 tuplet would cross measure</source>
         <translation>Kann Taktdauer nicht ändern:
@@ -11981,13 +11981,21 @@ N-Tole würde Taktgrenze überschreiten</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="462"/>
-        <source>Go to previous measure</source>
-        <translation>Zu vorigem Takt gehen</translation>
+        <source>Apply and go to previous measure</source>
+        <translation>Anwenden und zu vorigem Takt gehen</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="482"/>
+        <source>Apply and go to next measure</source>
+        <translation>Anwenden und zu nächstem Takt gehen</translation>
+    </message>
+    <message>
+        <source>Go to previous measure</source>
+        <translation type="vanished">Zu vorigem Takt gehen</translation>
+    </message>
+    <message>
         <source>Go to next measure</source>
-        <translation>Zu nächstem Takt gehen</translation>
+        <translation type="vanished">Zu nächstem Takt gehen</translation>
     </message>
 </context>
 <context>
@@ -13757,17 +13765,17 @@ fehlgeschlagen: %2</translation>
 <context>
     <name>Ms::MeasureProperties</name>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="124"/>
+        <location filename="../../mscore/measureproperties.cpp" line="126"/>
         <source>Measure Properties for Measure %1</source>
         <translation>Eigenschaften für Takt %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="157"/>
+        <location filename="../../mscore/measureproperties.cpp" line="159"/>
         <source>visible</source>
         <translation>sichtbar</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="164"/>
+        <location filename="../../mscore/measureproperties.cpp" line="166"/>
         <source>stemless</source>
         <translation>halslos</translation>
     </message>

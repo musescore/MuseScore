@@ -11742,12 +11742,12 @@ A bheil thu airson %2 a lorg an-dràsta?</translation>
 <context>
     <name>MeasureProperties</name>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="278"/>
+        <location filename="../../mscore/measureproperties.cpp" line="280"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="279"/>
+        <location filename="../../mscore/measureproperties.cpp" line="281"/>
         <source>Cannot change measure length:
 tuplet would cross measure</source>
         <translation type="unfinished"></translation>
@@ -11923,13 +11923,21 @@ tuplet would cross measure</source>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="462"/>
-        <source>Go to previous measure</source>
-        <translation>Rach dhan leagadh roimhe</translation>
+        <source>Apply and go to previous measure</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="482"/>
+        <source>Apply and go to next measure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous measure</source>
+        <translation type="vanished">Rach dhan leagadh roimhe</translation>
+    </message>
+    <message>
         <source>Go to next measure</source>
-        <translation>Rach dhan ath-leagadh</translation>
+        <translation type="vanished">Rach dhan ath-leagadh</translation>
     </message>
 </context>
 <context>
@@ -13678,17 +13686,17 @@ fhosgladh: %2</translation>
 <context>
     <name>Ms::MeasureProperties</name>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="124"/>
+        <location filename="../../mscore/measureproperties.cpp" line="126"/>
         <source>Measure Properties for Measure %1</source>
         <translation>Roghainnean an leagaidh %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="157"/>
+        <location filename="../../mscore/measureproperties.cpp" line="159"/>
         <source>visible</source>
         <translation>seall</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="164"/>
+        <location filename="../../mscore/measureproperties.cpp" line="166"/>
         <source>stemless</source>
         <translation>gun earball</translation>
     </message>

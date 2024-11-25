@@ -18,16 +18,16 @@
 //=============================================================================
 
 #include "measureproperties.h"
+#include "musescore.h"
+#include "icons.h"
+#include "timeline.h"
+
 #include "libmscore/measure.h"
 #include "libmscore/measurebase.h"
-#include "libmscore/sig.h"
-#include "libmscore/score.h"
-#include "libmscore/repeat.h"
-#include "libmscore/undo.h"
 #include "libmscore/range.h"
-#include "musescore.h"
-#include "timeline.h"
-#include "icons.h"
+#include "libmscore/repeat.h"
+#include "libmscore/score.h"
+#include "libmscore/undo.h"
 
 namespace Ms {
 
@@ -94,6 +94,7 @@ Measure* getPrevMeasure(Measure* m)
 
 void MeasureProperties::gotoNextMeasure()
       {
+      apply();
       if (getNextMeasure(m))
             setMeasure(getNextMeasure(m));
       nextButton->setEnabled(getNextMeasure(m));
@@ -107,6 +108,7 @@ void MeasureProperties::gotoNextMeasure()
 
 void MeasureProperties::gotoPreviousMeasure()
       {
+      apply();
       if (getPrevMeasure(m))
             setMeasure(getPrevMeasure(m));
       nextButton->setEnabled(getNextMeasure(m));

@@ -11763,12 +11763,12 @@ Would you like to locate %2 now?</source>
 <context>
     <name>MeasureProperties</name>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="278"/>
+        <location filename="../../mscore/measureproperties.cpp" line="280"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="279"/>
+        <location filename="../../mscore/measureproperties.cpp" line="281"/>
         <source>Cannot change measure length:
 tuplet would cross measure</source>
         <translation>無法改變小節長度：
@@ -11945,13 +11945,21 @@ tuplet would cross measure</source>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="462"/>
-        <source>Go to previous measure</source>
-        <translation>前往上一個小節</translation>
+        <source>Apply and go to previous measure</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="482"/>
+        <source>Apply and go to next measure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous measure</source>
+        <translation type="vanished">前往上一個小節</translation>
+    </message>
+    <message>
         <source>Go to next measure</source>
-        <translation>前往下一個小節</translation>
+        <translation type="vanished">前往下一個小節</translation>
     </message>
 </context>
 <context>
@@ -13715,17 +13723,17 @@ failed: %2</source>
 <context>
     <name>Ms::MeasureProperties</name>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="124"/>
+        <location filename="../../mscore/measureproperties.cpp" line="126"/>
         <source>Measure Properties for Measure %1</source>
         <translation>第 %1 小節的屬性</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="157"/>
+        <location filename="../../mscore/measureproperties.cpp" line="159"/>
         <source>visible</source>
         <translation>可見的</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="164"/>
+        <location filename="../../mscore/measureproperties.cpp" line="166"/>
         <source>stemless</source>
         <translation>無符桿</translation>
     </message>

@@ -11746,12 +11746,12 @@ Kas soovid praegu %2 asukoha määrata?</translation>
 <context>
     <name>MeasureProperties</name>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="278"/>
+        <location filename="../../mscore/measureproperties.cpp" line="280"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="279"/>
+        <location filename="../../mscore/measureproperties.cpp" line="281"/>
         <source>Cannot change measure length:
 tuplet would cross measure</source>
         <translation>Takti pikkust ei saa muuta:
@@ -11928,13 +11928,21 @@ rütmikujund ulatuks üle takti</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="462"/>
-        <source>Go to previous measure</source>
-        <translation>Mine eelmisesse takti</translation>
+        <source>Apply and go to previous measure</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="482"/>
+        <source>Apply and go to next measure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to previous measure</source>
+        <translation type="vanished">Mine eelmisesse takti</translation>
+    </message>
+    <message>
         <source>Go to next measure</source>
-        <translation>Mine järgmisesse takti</translation>
+        <translation type="vanished">Mine järgmisesse takti</translation>
     </message>
 </context>
 <context>
@@ -13672,17 +13680,17 @@ avamine ebaõnnestus: %2</translation>
 <context>
     <name>Ms::MeasureProperties</name>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="124"/>
+        <location filename="../../mscore/measureproperties.cpp" line="126"/>
         <source>Measure Properties for Measure %1</source>
         <translation>Takti %1 taktiomadused</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="157"/>
+        <location filename="../../mscore/measureproperties.cpp" line="159"/>
         <source>visible</source>
         <translation>nähtav</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="164"/>
+        <location filename="../../mscore/measureproperties.cpp" line="166"/>
         <source>stemless</source>
         <translation>noodivarreta</translation>
     </message>

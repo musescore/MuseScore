@@ -11799,12 +11799,12 @@ Would you like to locate %2 now?</translation>
 <context>
     <name>MeasureProperties</name>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="278"/>
+        <location filename="../../mscore/measureproperties.cpp" line="280"/>
         <source>MuseScore</source>
         <translation>MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="279"/>
+        <location filename="../../mscore/measureproperties.cpp" line="281"/>
         <source>Cannot change measure length:
 tuplet would cross measure</source>
         <translation>Cannot change bar length:
@@ -11981,13 +11981,21 @@ tuplet would cross bar</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="462"/>
-        <source>Go to previous measure</source>
-        <translation>Go to previous bar</translation>
+        <source>Apply and go to previous measure</source>
+        <translation>Apply and go to previous bar</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="482"/>
+        <source>Apply and go to next measure</source>
+        <translation>Apply and go to next bar</translation>
+    </message>
+    <message>
+        <source>Go to previous measure</source>
+        <translation type="vanished">Go to previous bar</translation>
+    </message>
+    <message>
         <source>Go to next measure</source>
-        <translation>Go to next bar</translation>
+        <translation type="vanished">Go to next bar</translation>
     </message>
 </context>
 <context>
@@ -13757,17 +13765,17 @@ failed: %2</translation>
 <context>
     <name>Ms::MeasureProperties</name>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="124"/>
+        <location filename="../../mscore/measureproperties.cpp" line="126"/>
         <source>Measure Properties for Measure %1</source>
         <translation>Bar Properties for Bar %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="157"/>
+        <location filename="../../mscore/measureproperties.cpp" line="159"/>
         <source>visible</source>
         <translation>visible</translation>
     </message>
     <message>
-        <location filename="../../mscore/measureproperties.cpp" line="164"/>
+        <location filename="../../mscore/measureproperties.cpp" line="166"/>
         <source>stemless</source>
         <translation>stemless</translation>
     </message>
