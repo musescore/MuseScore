@@ -634,6 +634,11 @@ INotationMidiInputPtr NotationActionController::currentNotationMidiInput() const
     return notation->midiInput();
 }
 
+mu::engraving::Score* NotationActionController::currentNotationScore() const
+{
+    return currentNotationElements() ? currentNotationElements()->msScore() : nullptr;
+}
+
 INotationStylePtr NotationActionController::currentNotationStyle() const
 {
     auto notation = currentNotation();
@@ -768,7 +773,7 @@ void NotationActionController::padNote(const Pad& pad)
     startNoteInputIfNeed();
 
     noteInput->padNote(pad);
-    if (currentNotationElements()->msScore()->inputState().usingNoteEntryMethod(engraving::NoteEntryMethod::RHYTHM)) {
+    if (currentNotationScore()->inputState().usingNoteEntryMethod(engraving::NoteEntryMethod::RHYTHM)) {
         playSelectedElement();
     }
 }
@@ -985,7 +990,9 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         return;
     }
 
-    if (interaction->selection()->isNone()) {
+    const bool previousSelectionExists = currentNotationScore() && currentNotationScore()->selection().currentCR();
+    if (interaction->selection()->isNone() && previousSelectionExists) {
+        // Try to restore the previous selection...
         interaction->moveSelection(direction, MoveSelectionType::EngravingItem);
         playSelectedElement(true);
         return;
@@ -1008,6 +1015,8 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             }
             interaction->moveSelection(direction, MoveSelectionType::String);
             return;
+        } else if (interaction->selection()->isNone()) {
+            interaction->selectFirstElement(false);
         } else {
             interaction->movePitch(direction, quickly ? PitchMode::OCTAVE : PitchMode::CHROMATIC);
         }
@@ -1055,6 +1064,9 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         if (selectedElement && selectedElement->isTextBase()) {
             interaction->nudge(direction, quickly);
         } else {
+            if (interaction->selection()->isNone()) {
+                interaction->selectFirstElement(false);
+            }
             interaction->moveSelection(direction, quickly ? MoveSelectionType::Measure : MoveSelectionType::Chord);
             playChord = true;
         }
@@ -1269,7 +1281,7 @@ void NotationActionController::addFret(int num)
     }
 
     interaction->addFret(num);
-    playSelectedElement(currentNotationElements()->msScore()->playChord());
+    playSelectedElement(currentNotationScore()->playChord());
 }
 
 void NotationActionController::insertClef(mu::engraving::ClefType type)
@@ -2034,9 +2046,8 @@ void NotationActionController::playSelectedElement(bool playChord)
 
     playbackController()->playElements({ element });
 
-    mu::engraving::Score* score = currentNotationElements()->msScore();
-    score->setPlayChord(false);
-    score->setPlayNote(false);
+    currentNotationScore()->setPlayChord(false);
+    currentNotationScore()->setPlayNote(false);
 }
 
 void NotationActionController::startNoteInputIfNeed()
@@ -2135,7 +2146,7 @@ bool NotationActionController::isStandardStaff() const
 
 bool NotationActionController::isTablatureStaff() const
 {
-    return isNotEditingElement() && currentNotationElements()->msScore()->inputState().staffGroup() == mu::engraving::StaffGroup::TAB;
+    return isNotEditingElement() && currentNotationScore()->inputState().staffGroup() == mu::engraving::StaffGroup::TAB;
 }
 
 bool NotationActionController::isEditingElement() const
