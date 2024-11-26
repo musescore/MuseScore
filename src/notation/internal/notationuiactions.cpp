@@ -842,7 +842,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Add brackets to accidental"),
              TranslatableString("action", "Add brackets to accidental"),
-             IconCode::Code::BRACKET
+             IconCode::Code::BRACKET_PARENTHESES_SQUARE
              ),
     UiAction("add-braces",
              mu::context::UiCtxProjectOpened,
