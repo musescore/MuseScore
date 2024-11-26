@@ -68,6 +68,7 @@ option(MUSE_COMPILE_STRING_DEBUG_HACK "Enable string debug hack (only clang)" ON
 
 # === Tests ===
 option(MUSE_ENABLE_UNIT_TESTS "Build framework unit tests" ON)
+option(MUSE_ENABLE_UNIT_TESTS_CODE_COVERAGE "Enable code coverage for unit tests" OFF)
 
 # === Tools ===
 option(MUSE_ENABLE_CUSTOM_ALLOCATOR "Enable custom allocator" OFF)
