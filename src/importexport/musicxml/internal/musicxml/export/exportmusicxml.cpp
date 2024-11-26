@@ -6379,14 +6379,8 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
 
     bool instrChangeHandled = false;
 
-    // note: write the changed instrument details (transposition) here,
+    // note: the instrument change details are handled in ExportMusicXml::writeMeasureTracks,
     // optionally writing the associated staff text is done below
-    if (e->isInstrumentChange()) {
-        const InstrumentChange* instrChange = toInstrumentChange(e);
-        exp->writeInstrumentChange(instrChange);
-        instrChangeHandled = true;
-    }
-
     if (e->isSymbol()) {
         exp->symbol(toSymbol(e), sstaff);
     } else if (e->isTempoText()) {
@@ -7766,6 +7760,8 @@ void ExportMusicXml::writeInstrumentChange(const InstrumentChange* instrChange)
     const String longName = instr->nameAsPlainText();
     const String shortName = instr->abbreviatureAsPlainText();
 
+    // Instrument changes could happen anywhere in the measure, so we close the initial attributes in any case
+    m_attr.stop(m_xml);
     m_xml.startElement("print");
     if (!longName.isEmpty()) {
         m_xml.startElement("part-name-display");
@@ -7808,8 +7804,8 @@ void ExportMusicXml::writeInstrumentDetails(const Instrument* instrument, const 
         }
         m_xml.tag("diatonic",  instrument->transpose().diatonic % 7);
         m_xml.tag("chromatic", instrument->transpose().chromatic % 12);
-        int octaveChange = instrument->transpose().chromatic / 12;
-        if (octaveChange != 0) {
+        const int octaveChange = instrument->transpose().chromatic / 12;
+        if (octaveChange) {
             m_xml.tag("octave-change", octaveChange);
         }
         m_xml.endElement();
@@ -8067,6 +8063,12 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
 
             // generate backup or forward to the start time of the element
             moveToTickIfNeed(seg->tick());
+
+            EngravingItem* ic = seg->findAnnotation(ElementType::INSTRUMENT_CHANGE, strack, etrack - 1);
+            if (ic && (track == strack)) {
+                const InstrumentChange* instrChange = toInstrumentChange(ic);
+                writeInstrumentChange(instrChange);
+            }
 
             // handle annotations and spanners (directions attached to this note or rest)
             if (el->isChordRest()) {
