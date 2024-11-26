@@ -38,6 +38,7 @@
 # set(MODULE_QMLEXT_IMPORT ...)               - set Qml extensions import for QtCreator (so that there is code highlighting, jump, etc.)
 # set(MODULE_USE_PCH ON/OFF)                  - set whether to use precompiled headers for this module (default ON)
 # set(MODULE_USE_UNITY ON/OFF)                - set whether to use unity build for this module (default ON)
+# set(MODULE_USE_COVERAGE ON)                 - set whether to use coverage for this module (default ON)
 # set(MODULE_OVERRIDDEN_PCH ...)              - set additional precompiled headers required for module
 # set(MODULE_IS_STUB ON)                      - set a mark that the module is stub
 
@@ -63,6 +64,7 @@ macro(declare_module name)
     set(MODULE_USE_UNITY ON)
     unset(MODULE_OVERRIDDEN_PCH)
     unset(MODULE_IS_STUB)
+    set(MODULE_USE_COVERAGE ON)
 endmacro()
 
 
@@ -178,6 +180,11 @@ macro(setup_module)
         ${MODULE_DEF}
         ${MODULE}_QML_IMPORT="${MODULE_QML_IMPORT}"
     )
+
+    if (MUSE_ENABLE_UNIT_TESTS_CODE_COVERAGE AND MODULE_USE_COVERAGE)
+        target_compile_options(${MODULE} PRIVATE --coverage)
+        target_link_options(${MODULE} PRIVATE --coverage)
+    endif()
 
     if (NOT ${MODULE} MATCHES muse_global AND MODULE_LINK_GLOBAL)
         set(MODULE_LINK muse_global ${MODULE_LINK})
