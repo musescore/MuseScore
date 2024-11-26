@@ -67,6 +67,7 @@
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/dom/trill.h"
 #include "engraving/dom/utils.h"
 
 #include "thirdparty/libmei/cmn.h"

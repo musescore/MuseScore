@@ -215,7 +215,7 @@ public:
     static libmei::Fermata fermataToMEI(const engraving::Fermata* fermata);
 
     static void fingFromMEI(engraving::Fingering* fing, const muse::StringList& meiLines, const libmei::Fing& meiFing, bool& warning);
-    static libmei::Fing fingToMEI(const engraving::Fingering* fing, StringList& meiLines);
+    static libmei::Fing fingToMEI(const engraving::Fingering* fing, muse::StringList& meiLines);
 
     static std::pair<bool, engraving::NoteType> gracegrpFromMEI(const libmei::graceGrpLog_ATTACH meiAttach,
                                                                 const libmei::data_GRACE meiGrace, bool& warning);
