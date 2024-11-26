@@ -4137,8 +4137,8 @@ space unit</extracomment>
         <location filename="../../mscore/editstyle.ui" line="3917"/>
         <source>When a chord has accidentals octave apart, these will be placed in the same columns. However, sometimes one of these accidentals can be larger than another, causing thus moving the others. 
 By default, they will be placed such as that their right end are at the same level. Use this checkbox to override this behaviour.</source>
-        <translation>Gdy w akordzie występują znaki chromatyczne oddalone o oktawę, są one umieszczane w jednej kolumnie. Czasami jednak jeden ze znaków może być większy od drugiego, co wymusza jego przesunięcie.
-W takim wypadku domyślnie znaki chromatyczne są wyrównywane względem swojej prawej krawędzi. Zaznacz tę opcję, aby zmienić to zachowanie.</translation>
+        <translation>Gdy akord ma znaki chromatyczne oddalone o oktawę, zostaną one umieszczone w tych samych kolumnach. Jednak czasami jeden z tych znaków może być większy od drugiego, powodując w ten sposób przesunięcie pozostałych.
+Domyślnie zostaną one umieszczone tak, aby ich prawy koniec znajdował się na tym samym poziomie. Użyj tego pola wyboru, aby zastąpić to zachowanie.</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="3921"/>
@@ -11971,12 +11971,12 @@ Grupa niemiarowa przekracza takt.</translation>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="462"/>
         <source>Apply and go to previous measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Zastosuj i idź do poprzedniego taktu</translation>
     </message>
     <message>
         <location filename="../../mscore/measureproperties.ui" line="482"/>
         <source>Apply and go to next measure</source>
-        <translation type="unfinished"></translation>
+        <translation>Zastosuj i idź do następnego taktu</translation>
     </message>
     <message>
         <source>Go to previous measure</source>
