@@ -21,6 +21,7 @@
  */
 
 #include "eidregister.h"
+#include "log.h"
 
 using namespace mu::engraving;
 
@@ -37,7 +38,11 @@ EID EIDRegister::newEID(ElementType type)
 void EIDRegister::registerItemEID(EID eid, EngravingObject* item)
 {
     bool inserted = m_register.emplace(eid.toUint64(), item).second;
+#ifdef NDEBUG
+    UNUSED(inserted);
+#else
     assert(inserted);
+#endif
 }
 
 EngravingObject* EIDRegister::itemFromEID(EID eid)
