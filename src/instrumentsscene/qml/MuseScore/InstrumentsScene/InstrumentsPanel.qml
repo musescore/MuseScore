@@ -148,6 +148,8 @@ Item {
             TreeView {
                 id: instrumentsTreeView
 
+                readonly property real delegateHeight: 38
+
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -181,6 +183,17 @@ Item {
                         }
                     }
                     flickable.returnToBounds();
+                }
+
+                function scrollToFocusedItem(focusedIndex) {
+                    let targetScrollPosition = focusedIndex * instrumentsTreeView.delegateHeight
+                    let visibleAreaEnd = flickable.contentY + flickable.height
+
+                    if (targetScrollPosition + instrumentsTreeView.delegateHeight > visibleAreaEnd) {
+                        flickable.contentY = Math.min(targetScrollPosition + instrumentsTreeView.delegateHeight - flickable.height, flickable.contentHeight - flickable.height)
+                    } else if (targetScrollPosition < flickable.contentY) {
+                        flickable.contentY = Math.max(targetScrollPosition, 0)
+                    }
                 }
 
                 property NavigationPanel navigationTreePanel : NavigationPanel {
@@ -219,7 +232,7 @@ Item {
                     backgroundColor: "transparent"
 
                     rowDelegate: Item {
-                        height: 38
+                        height: instrumentsTreeView.delegateHeight
                         width: parent.width
                     }
                 }
@@ -255,6 +268,7 @@ Item {
                                 navigation.onActiveChanged: {
                                     if (navigation.active) {
                                         prv.currentItemNavigationName = navigation.name
+                                        instrumentsTreeView.scrollToFocusedItem(model.index)
                                     }
                                 }
 
