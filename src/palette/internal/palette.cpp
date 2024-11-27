@@ -264,9 +264,9 @@ int Palette::indexOfCell(const PaletteCell& cell, bool matchName) const
         }
 
         if (localCell.drawStaff != cell.drawStaff
-            || localCell.xoffset != cell.xoffset
-            || localCell.yoffset != cell.yoffset
-            || localCell.mag != cell.mag
+            || !RealIsEqual(localCell.xoffset, cell.xoffset)
+            || !RealIsEqual(localCell.yoffset, cell.yoffset)
+            || !RealIsEqual(localCell.mag, cell.mag)
             || localCell.readOnly != cell.readOnly
             || localCell.visible != cell.visible
             || localCell.custom != cell.custom

@@ -64,6 +64,7 @@
 #include "utils.h"
 
 #include "log.h"
+#include "realfn.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -478,7 +479,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     }
 
     // update style values if spatium different for part
-    if (masterScore->style().spatium() != score->style().spatium()) {
+    if (!muse::RealIsEqual(masterScore->style().spatium(), score->style().spatium())) {
         score->spatiumChanged(masterScore->style().spatium(), score->style().spatium());
         score->styleChanged();
     }

@@ -57,7 +57,7 @@ qreal PianoKeyboardPanelContextMenuModel::keyWidthScaling() const
 
 void PianoKeyboardPanelContextMenuModel::setKeyWidthScaling(qreal scaling)
 {
-    if (qFuzzyCompare(m_currentKeyWidthScaling, scaling)) {
+    if (RealIsEqual(m_currentKeyWidthScaling, scaling)) {
         return;
     }
 
@@ -185,7 +185,7 @@ void PianoKeyboardPanelContextMenuModel::updateKeyWidthScalingItems()
             continue;
         }
 
-        bool checked = qFuzzyCompare(item->args().arg<qreal>(0), roundedCurrentScaling);
+        bool checked = RealIsEqual(item->args().arg<qreal>(0), roundedCurrentScaling);
         item->setState(UiActionState::make_enabled(checked));
     }
 }

@@ -569,7 +569,11 @@ RectX<T> RectX<T>::intersected(const RectX<T>& r) const
     } else {
         r1 += m_w;
     }
-    if (l1 == r1) {   // null rect
+    if constexpr (std::is_floating_point_v<T>) {
+        if (RealIsEqual(l1, r1)) {   // null rect
+            return RectX<T>();
+        }
+    } else if (l1 == r1) {   // null rect
         return RectX<T>();
     }
     T l2 = r.m_x;
@@ -579,7 +583,11 @@ RectX<T> RectX<T>::intersected(const RectX<T>& r) const
     } else {
         r2 += r.m_w;
     }
-    if (l2 == r2) {   // null rect
+    if constexpr (std::is_floating_point_v<T>) {
+        if (RealIsEqual(l1, r1)) {   // null rect
+            return RectX<T>();
+        }
+    } else if (l2 == r2) {   // null rect
         return RectX<T>();
     }
     if (l1 >= r2 || l2 >= r1) {
@@ -592,7 +600,11 @@ RectX<T> RectX<T>::intersected(const RectX<T>& r) const
     } else {
         b1 += m_h;
     }
-    if (t1 == b1) {   // null rect
+    if constexpr (std::is_floating_point_v<T>) {
+        if (RealIsEqual(l1, r1)) {   // null rect
+            return RectX<T>();
+        }
+    } else if (t1 == b1) {   // null rect
         return RectX<T>();
     }
     T t2 = r.m_y;
@@ -602,7 +614,11 @@ RectX<T> RectX<T>::intersected(const RectX<T>& r) const
     } else {
         b2 += r.m_h;
     }
-    if (t2 == b2) {   // null rect
+    if constexpr (std::is_floating_point_v<T>) {
+        if (RealIsEqual(l1, r1)) {   // null rect
+            return RectX<T>();
+        }
+    } else if (t2 == b2) {   // null rect
         return RectX<T>();
     }
     if (t1 >= b2 || t2 >= b1) {

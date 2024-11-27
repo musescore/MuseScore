@@ -273,11 +273,11 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx)
         newWidth = lineWidthName;
         oldWidth = 0;
     }
-    if (oldWidth == 0) {
+    if (RealIsNull(oldWidth)) {
         oldWidth = newWidth;
         m_width = newWidth;
     } else if (newWidth > 0) {
-        if (newWidth == m_width) {
+        if (RealIsEqual(newWidth, m_width)) {
             oldWidth = m_width;
             m_width = newWidth;
         } else if (((xPosMeasure <= newWidth) && (xPosMeasure >= oldWidth))
