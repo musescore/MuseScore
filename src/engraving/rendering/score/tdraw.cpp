@@ -1470,6 +1470,31 @@ void TDraw::draw(const FretCircle* item, Painter* painter)
     painter->restore();
 }
 
+static void setDashAndGapLen(const SLine* line, double& dash, double& gap, Pen& pen)
+{
+    static constexpr double DOTTED_DASH_LEN = 0.01;
+    static constexpr double DOTTED_GAP_LEN = 1.99;
+    switch (line->lineStyle()) {
+    case LineType::SOLID:
+        break;
+    case LineType::DASHED:
+        dash = line->dashLineLen(), gap = line->dashGapLen();
+        break;
+    case LineType::DOTTED:
+        dash = DOTTED_DASH_LEN, gap = DOTTED_GAP_LEN;
+        pen.setCapStyle(PenCapStyle::RoundCap); // round dots
+        break;
+    }
+}
+
+static std::vector<double> distributedDashPattern(double dash, double gap, double lineLength)
+{
+    int numPairs = std::max(1.0, lineLength / (dash + gap));
+    double newGap = (lineLength - dash * (numPairs + 1)) / numPairs;
+
+    return { dash, newGap };
+}
+
 void TDraw::draw(const GlissandoSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
@@ -1495,6 +1520,16 @@ void TDraw::draw(const GlissandoSegment* item, Painter* painter)
     painter->rotate(-wi);
 
     if (glissando->glissandoType() == GlissandoType::STRAIGHT) {
+        const bool isNonSolid = glissando->lineStyle() != LineType::SOLID;
+        if (isNonSolid) {
+            double lineWidth = glissando->absoluteFromSpatium(glissando->lineWidth());
+            double dash = 0;
+            double gap = 0;
+            setDashAndGapLen(glissando, dash, gap, pen);
+            pen.setDashPattern(distributedDashPattern(dash, gap, l / lineWidth));
+            painter->setPen(pen);
+        }
+
         painter->drawLine(LineF(0.0, 0.0, l, 0.0));
     } else if (glissando->glissandoType() == GlissandoType::WAVY) {
         RectF b = item->symBbox(SymId::wiggleTrill);
@@ -1725,17 +1760,7 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
     double dash = 0;
     double gap = 0;
 
-    switch (tl->lineStyle()) {
-    case LineType::SOLID:
-        break;
-    case LineType::DASHED:
-        dash = tl->dashLineLen(), gap = tl->dashGapLen();
-        break;
-    case LineType::DOTTED:
-        dash = 0.01, gap = 1.99;
-        pen.setCapStyle(PenCapStyle::RoundCap); // round dots
-        break;
-    }
+    setDashAndGapLen(tl, dash, gap, pen);
 
     const bool isNonSolid = tl->lineStyle() != LineType::SOLID;
 
@@ -1754,14 +1779,6 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
         }
         return;
     }
-
-    auto distributedDashPattern = [](double dash, double gap, double lineLength) -> std::vector<double>
-    {
-        int numPairs = std::max(1.0, lineLength / (dash + gap));
-        double newGap = (lineLength - dash * (numPairs + 1)) / numPairs;
-
-        return { dash, newGap };
-    };
 
     int start = 0, end = item->npoints();
 

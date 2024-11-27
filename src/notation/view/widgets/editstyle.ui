@@ -176,6 +176,11 @@
       </item>
       <item>
        <property name="text">
+        <string>Glissandos &amp; note-anchored lines</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>Bends</string>
        </property>
       </item>
@@ -8936,6 +8941,9 @@
              <property name="suffix">
               <string>sp</string>
              </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
             </widget>
            </item>
            <item row="4" column="2">
@@ -9452,6 +9460,9 @@
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
+             <property name="singleStep">
+              <double>0.010000000000000</double>
+             </property>
             </widget>
            </item>
            <item row="2" column="1">
@@ -9580,7 +9591,7 @@
               <string>sp</string>
              </property>
              <property name="singleStep">
-              <double>0.100000000000000</double>
+              <double>0.010000000000000</double>
              </property>
             </widget>
            </item>
@@ -10139,6 +10150,39 @@
            <size>
             <width>0</width>
             <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="PageGlissNoteLines">
+       <layout class="QVBoxLayout" name="verticalLayout_69">
+        <item>
+         <widget class="QGroupBox" name="groupBox_glissando">
+          <property name="title">
+           <string>Glissandos</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout0_2"/>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_noteline">
+          <property name="title">
+           <string>Note-anchored lines</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout0_3"/>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_39">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
            </size>
           </property>
          </spacer>
@@ -13698,8 +13742,8 @@ first note of the system</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>28</height>
+             <width>701</width>
+             <height>744</height>
             </rect>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">

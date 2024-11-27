@@ -94,10 +94,8 @@
               <tpc>14</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <text>gliss.</text>
                   <linkedMain/>
                   <diagonal>1</diagonal>
-                  <anchor>3</anchor>
                   </Glissando>
                 <next>
                   <location>
@@ -153,11 +151,9 @@
               <tpc>14</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <text>gliss.</text>
                   <linked>
                     </linked>
                   <diagonal>1</diagonal>
-                  <anchor>3</anchor>
                   </Glissando>
                 <next>
                   <location>

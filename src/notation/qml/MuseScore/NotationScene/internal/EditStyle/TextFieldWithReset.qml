@@ -34,22 +34,18 @@ StyleControlRowWithReset {
     property bool inPercentage: false
     property double step: 0.01
 
-    controlWidth: 80
+    controlWidth: 138
 
-    IncrementalPropertyControl {
-        id: spinBox
+    TextInputField {
+        id: textField
         Layout.fillWidth: false
+        currentText: styleItem ? styleItem.value : ""
+        enabled: glissandoSectionModel.glissandoShowText
 
-        currentValue: inPercentage ? Math.round(styleItem.value * 100) : styleItem.value
-        minValue: 0
-        maxValue: inPercentage ? 999 : 99
-        step: inPercentage ? 1 : root.step
-        decimals: inPercentage ? 0 : 2
-
-        measureUnitsSymbol: inPercentage ? '%' : suffix
-
-        onValueEdited: function(newValue) {
-            styleItem.value = inPercentage ? newValue / 100 : newValue
+        onTextEditingFinished: function(newTextValue) {
+            if (styleItem) {
+                styleItem.value = newTextValue
+            }
         }
     }
 

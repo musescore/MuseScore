@@ -763,6 +763,9 @@ void Measure::add(EngravingItem* e)
         while (s && s->rtick() == t) {
             if (!seg->isChordRestType() && (seg->segmentType() == s->segmentType())) {
                 LOGD("there is already a <%s> segment", seg->subTypeName());
+                /// HACK: REMOVED to prevent crash in 4.4.3.
+                /// Adding multiple identical segments may cause problems, so we should resolve this properly
+                // return;
             }
             if (seg->goesBefore(s)) {
                 break;

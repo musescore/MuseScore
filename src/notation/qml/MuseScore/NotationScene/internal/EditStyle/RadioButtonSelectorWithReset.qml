@@ -30,27 +30,23 @@ import Muse.Ui 1.0
 
 StyleControlRowWithReset {
     id: root
-    property string suffix: ''
-    property bool inPercentage: false
-    property double step: 0.01
+    property alias model: radioButtonGroup.model
 
-    controlWidth: 80
+    RadioButtonGroup {
+        id: radioButtonGroup
+        height: 30
+        anchors.fill: parent
 
-    IncrementalPropertyControl {
-        id: spinBox
-        Layout.fillWidth: false
+        delegate: FlatRadioButton {
+            height: 30
+            checked: modelData.value === styleItem.value
+            text: modelData.text ? modelData.text : ""
+            iconCode: modelData.iconCode ? modelData.iconCode : IconCode.NONE
+            navigation.accessible.name: modelData.title ? modelData.title : (modelData.text ? modelData.text : "")
 
-        currentValue: inPercentage ? Math.round(styleItem.value * 100) : styleItem.value
-        minValue: 0
-        maxValue: inPercentage ? 999 : 99
-        step: inPercentage ? 1 : root.step
-        decimals: inPercentage ? 0 : 2
-
-        measureUnitsSymbol: inPercentage ? '%' : suffix
-
-        onValueEdited: function(newValue) {
-            styleItem.value = inPercentage ? newValue / 100 : newValue
+            onToggled: {
+                styleItem.value = modelData.value
+            }
         }
     }
-
 }

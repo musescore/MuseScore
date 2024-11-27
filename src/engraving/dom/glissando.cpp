@@ -54,13 +54,17 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 static const ElementStyle glissandoElementStyle {
-    { Sid::glissandoFontFace,  Pid::FONT_FACE },
-    { Sid::glissandoFontSize,  Pid::FONT_SIZE },
-    { Sid::glissandoFontStyle, Pid::FONT_STYLE },
-    { Sid::glissandoLineWidth, Pid::LINE_WIDTH },
-    { Sid::glissandoText,      Pid::GLISS_TEXT },
-    { Sid::glissandoStyle,     Pid::GLISS_STYLE },
-    { Sid::glissandoStyleHarp, Pid::GLISS_STYLE }
+    { Sid::glissandoFontFace,    Pid::FONT_FACE },
+    { Sid::glissandoFontSize,    Pid::FONT_SIZE },
+    { Sid::glissandoFontStyle,   Pid::FONT_STYLE },
+    { Sid::glissandoLineWidth,   Pid::LINE_WIDTH },
+    { Sid::glissandoShowText,    Pid::GLISS_SHOW_TEXT },
+    { Sid::glissandoText,        Pid::GLISS_TEXT },
+    { Sid::glissandoStyle,       Pid::GLISS_STYLE },
+    { Sid::glissandoLineStyle,   Pid::LINE_STYLE },
+    { Sid::glissandoDashLineLen, Pid::DASH_LINE_LEN },
+    { Sid::glissandoDashGapLen,  Pid::DASH_GAP_LEN },
+    { Sid::glissandoType,        Pid::GLISS_TYPE }
 };
 
 //=========================================================
@@ -103,18 +107,19 @@ EngravingItem* GlissandoSegment::propertyDelegate(Pid pid)
 Glissando::Glissando(EngravingItem* parent)
     : SLine(ElementType::GLISSANDO, parent, ElementFlag::MOVABLE)
 {
-    setAnchor(Spanner::Anchor::NOTE);
-    setDiagonal(true);
-
     initElementStyle(&glissandoElementStyle);
 
-    resetProperty(Pid::GLISS_SHOW_TEXT);
-    resetProperty(Pid::GLISS_STYLE);
-    resetProperty(Pid::GLISS_SHIFT);
-    resetProperty(Pid::GLISS_TYPE);
-    resetProperty(Pid::GLISS_TEXT);
-    resetProperty(Pid::GLISS_EASEIN);
-    resetProperty(Pid::GLISS_EASEOUT);
+    static const std::array<Pid, 5> propertiesToInitialise {
+        Pid::GLISS_SHIFT,
+        Pid::GLISS_EASEIN,
+        Pid::GLISS_EASEOUT,
+        Pid::DIAGONAL,
+        Pid::ANCHOR
+    };
+
+    for (const Pid& pid : propertiesToInitialise) {
+        resetProperty(pid);
+    }
 }
 
 Glissando::Glissando(const Glissando& g)
@@ -439,7 +444,7 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::GLISS_TYPE:
-        return int(GlissandoType::STRAIGHT);
+        return style().styleV(Sid::glissandoType);
     case Pid::GLISS_SHOW_TEXT:
         return true;
     case Pid::GLISS_STYLE:
@@ -449,6 +454,12 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
     case Pid::GLISS_EASEIN:
     case Pid::GLISS_EASEOUT:
         return 0;
+    case Pid::GLISS_TEXT:
+        return style().styleV(Sid::glissandoText);
+    case Pid::DIAGONAL:
+        return true;
+    case Pid::ANCHOR:
+        return int(Spanner::Anchor::NOTE);
     default:
         break;
     }

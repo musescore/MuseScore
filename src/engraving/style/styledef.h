@@ -1283,6 +1283,11 @@ enum class Sid {
     noteLineFrameFgColor,
     noteLineFrameBgColor,
 
+    noteLineWidth,
+    noteLineStyle,
+    noteLineDashLineLen,
+    noteLineDashGapLen,
+
     glissandoFontFace,
     glissandoFontSize,
     glissandoLineSpacing,
@@ -1301,6 +1306,12 @@ enum class Sid {
     glissandoText,
     glissandoStyle,
     glissandoStyleHarp,
+
+    glissandoType,
+    glissandoLineStyle,
+    glissandoDashLineLen,
+    glissandoDashGapLen,
+    glissandoShowText,
 
     bendFontFace,
     bendFontSize,

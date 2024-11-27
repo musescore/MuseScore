@@ -41,8 +41,4 @@ void NoteLineSettingsModel::createProperties()
     isLineVisible()->setIsVisible(true);
     allowDiagonal()->setIsVisible(false);
     placement()->setIsVisible(false);
-    // startHookType()->setIsVisible(false);
-    // endHookType()->setIsVisible(false);
-    // startHookHeight()->setIsVisible(false);
-    // endHookHeight()->setIsVisible(false);
 }

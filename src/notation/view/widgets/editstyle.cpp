@@ -81,6 +81,7 @@ static const QStringList ALL_PAGE_CODES {
     "pedal",
     "trill",
     "vibrato",
+    "glissando-note-line",
     "bend",
     "text-line",
     "system-text-line",
@@ -143,7 +144,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "harp-pedal-diagram",
     "harp-pedal-text-diagram",
     "text-line",
-    "note-line"
+    "note-line",
     "volta",
     "ottava",
     "glissando",
@@ -917,6 +918,28 @@ EditStyle::EditStyle(QWidget* parent)
     fretboardsWidget->layout()->addWidget(fretboardsPage.widget);
 
     // ====================================================
+    // GLISSANDO STYLE SECTION (QML)
+    // ====================================================
+
+    auto glissandoSection = createQmlWidget(
+        groupBox_glissando,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml")));
+    glissandoSection.widget->setMinimumSize(224, 284);
+    connect(glissandoSection.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
+    groupBox_glissando->layout()->addWidget(glissandoSection.widget);
+
+    // ====================================================
+    // NOTE LINE STYLE SECTION (QML)
+    // ====================================================
+
+    auto noteLineSection = createQmlWidget(
+        groupBox_noteline,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/NoteLineSection.qml")));
+    noteLineSection.widget->setMinimumSize(224, 200);
+    connect(noteLineSection.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
+    groupBox_noteline->layout()->addWidget(noteLineSection.widget);
+
+    // ====================================================
     // Figured Bass
     // ====================================================
 
@@ -1591,6 +1614,12 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
     case ElementType::TEXTLINE:
     case ElementType::TEXTLINE_SEGMENT:
         return "text-line";
+
+    case ElementType::GLISSANDO:
+    case ElementType::GLISSANDO_SEGMENT:
+    case ElementType::NOTELINE:
+    case ElementType::NOTELINE_SEGMENT:
+        return "glissando-note-line";
 
     case ElementType::ARTICULATION:
         return "articulations-and-ornaments";

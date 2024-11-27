@@ -97,9 +97,7 @@
               <tpc>14</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <text>gliss.</text>
                   <diagonal>1</diagonal>
-                  <anchor>3</anchor>
                   </Glissando>
                 <next>
                   <location>
@@ -137,9 +135,7 @@
               <tpc>14</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <text>gliss.</text>
                   <diagonal>1</diagonal>
-                  <anchor>3</anchor>
                   </Glissando>
                 <next>
                   <location>
@@ -193,9 +189,7 @@ in other voice</text>
               <tpc>14</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <text>gliss.</text>
                   <diagonal>1</diagonal>
-                  <anchor>3</anchor>
                   </Glissando>
                 <next>
                   <location>
@@ -269,9 +263,7 @@ in other staff</text>
               <tpc>14</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <text>gliss.</text>
                   <diagonal>1</diagonal>
-                  <anchor>3</anchor>
                   </Glissando>
                 <next>
                   <location>
@@ -357,9 +349,7 @@ in other staff</text>
               <tpc>14</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <text>gliss.</text>
                   <diagonal>1</diagonal>
-                  <anchor>3</anchor>
                   </Glissando>
                 <next>
                   <location>
