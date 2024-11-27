@@ -2801,7 +2801,7 @@ void EngravingItem::LayoutData::setWidthDebugHook(double w)
 void EngravingItem::LayoutData::dump(std::stringstream& ss) const
 {
     ss << "\n";
-    ss << m_item->typeName() << " id: " << m_item->eid().id() << "\n";
+    ss << m_item->typeName() << " id: " << m_item->eid().toStdString() << "\n";
 
     ss << "skip: " << (m_isSkipDraw ? "yes" : "no") << "\n";
     ss << "mag: " << m_mag << "\n";

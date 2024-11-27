@@ -85,10 +85,7 @@ Err Read410::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
         } else if (tag == "Revision") {
             e.skipCurrentElement();
         } else if (tag == "LastEID") {
-            int val = e.readInt(nullptr);
-            if (score->isMaster()) {
-                score->masterScore()->eidRegister()->init(val);
-            }
+            e.skipCurrentElement();
         } else if (tag == "Score") {
             if (!readScore410(score, e, ctx)) {
                 if (e.error() == muse::XmlStreamReader::CustomError) {
@@ -126,7 +123,10 @@ bool Read410::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
         const AsciiStringView tag(e.name());
         if (tag == "eid") {
             AsciiStringView s = e.readAsciiText();
-            score->setEID(EID::fromStdString(s));
+            EID eid = EID::fromStdString(s);
+            if (eid.isValid()) {
+                score->setEID(eid);
+            }
         } else if (tag == "Staff") {
             StaffRead::readStaff(score, e, ctx);
         } else if (tag == "Omr") {

@@ -39,7 +39,8 @@ class Engraving_EIDTests : public ::testing::Test
 
 static void itemShouldBeRegistered(void*, EngravingItem* item)
 {
-    if (item->registerId()) {
+    EID eid = item->eid();
+    if (eid.isValid()) {
         EngravingObject* registeredItem = item->masterScore()->eidRegister()->itemFromEID(item->eid());
         EXPECT_TRUE(registeredItem);
         EXPECT_EQ(registeredItem, item);

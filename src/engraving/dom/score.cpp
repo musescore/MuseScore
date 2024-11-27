@@ -181,10 +181,6 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
     Score::validScores.insert(this);
     m_masterScore = parent;
 
-    if (m_masterScore) {
-        setEID(m_masterScore->eidRegister()->newEID(type()));
-    }
-
     if (DefaultStyle::defaultStyleForParts()) {
         m_style = *DefaultStyle::defaultStyleForParts();
     } else {

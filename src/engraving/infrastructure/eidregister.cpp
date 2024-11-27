@@ -20,34 +20,41 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "logger.h"
 #include "eidregister.h"
 #include "log.h"
 
 using namespace mu::engraving;
 
-void EIDRegister::init(uint32_t val)
+EID EIDRegister::newEIDForItem(const EngravingObject* item)
 {
-    m_lastID = val;
+    EID eid = EID::newUnique();
+    registerItemEID(eid, const_cast<EngravingObject*>(item));
+    return eid;
 }
 
-EID EIDRegister::newEID(ElementType type)
+void EIDRegister::registerItemEID(const EID& eid, const EngravingObject* item)
 {
-    return EID(type, ++m_lastID);
-}
+    IF_ASSERT_FAILED(eid.isValid() && item) {
+        return;
+    }
 
-void EIDRegister::registerItemEID(EID eid, EngravingObject* item)
-{
-    bool inserted = m_register.emplace(eid.toUint64(), item).second;
-#ifdef NDEBUG
-    UNUSED(inserted);
-#else
+    bool inserted = m_eidToItem.emplace(eid, const_cast<EngravingObject*>(item)).second;
     assert(inserted);
-#endif
+
+    inserted = m_itemToEid.emplace(const_cast<EngravingObject*>(item), eid).second;
+    assert(inserted);
 }
 
-EngravingObject* EIDRegister::itemFromEID(EID eid)
+EngravingObject* EIDRegister::itemFromEID(const EID& eid) const
 {
-    auto iter = m_register.find(eid.toUint64());
-    assert(iter != m_register.end());
-    return (*iter).second;
+    auto iter = m_eidToItem.find(eid);
+    assert(iter != m_eidToItem.end());
+    return iter->second;
+}
+
+EID EIDRegister::EIDFromItem(const EngravingObject* item) const
+{
+    auto iter = m_itemToEid.find(const_cast<EngravingObject*>(item));
+    return iter == m_itemToEid.end() ? EID::invalid() : iter->second;
 }

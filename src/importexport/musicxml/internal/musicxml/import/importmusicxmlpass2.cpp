@@ -5093,7 +5093,7 @@ void MusicXmlParserDirection::wedge(const String& type, const int number,
 
 String MusicXmlExtendedSpannerDesc::toString() const
 {
-    String spStr = sp ? String::number(size_t(sp->eid().id())) : u"null";
+    String spStr = sp ? String::fromStdString(sp->eid().toStdString()) : u"null";
     return String(u"sp %1 tp %2 tick2 %3 track2 %4 %5 %6")
            .arg(spStr, tick2.toString())
            .arg(static_cast<int>(track2))

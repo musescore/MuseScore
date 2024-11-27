@@ -22,7 +22,7 @@
 #pragma once
 
 #include <cstdint>
-#include <map>
+#include <unordered_map>
 
 #include "eid.h"
 #include "../types/types.h"
@@ -35,18 +35,16 @@ class EIDRegister
 public:
     EIDRegister() = default;
 
-    void init(uint32_t val);
-    uint32_t lastID() const { return m_lastID; }
+    EID newEIDForItem(const EngravingObject* item);
+    void registerItemEID(const EID& eid, const EngravingObject* item);
 
-    EID newEID(ElementType type);
-
-    void registerItemEID(EID eid, EngravingObject* item);
-    EngravingObject* itemFromEID(EID eid);
+    EngravingObject* itemFromEID(const EID& eid) const;
+    EID EIDFromItem(const EngravingObject* item) const;
 
 private:
     EIDRegister(const EIDRegister&) = delete;
 
-    uint32_t m_lastID = 0;
-    std::map<uint64_t, EngravingObject*> m_register;
+    std::unordered_map<EID, EngravingObject*> m_eidToItem;
+    std::unordered_map<EngravingObject*, EID> m_itemToEid;
 };
 }
