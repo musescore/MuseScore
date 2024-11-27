@@ -90,8 +90,8 @@ public:
     Color formattingColor() const override;
     muse::async::Channel<Color> formattingColorChanged() const override;
 
-    Color frameColor() const;
-    muse::async::Channel<Color> frameColorChanged() const;
+    Color frameColor() const override;
+    muse::async::Channel<Color> frameColorChanged() const override;
 
     Color unlinkedColor() const override;
     muse::async::Channel<Color> unlinkedColorChanged() const override;
