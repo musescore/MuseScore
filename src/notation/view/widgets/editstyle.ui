@@ -10157,7 +10157,7 @@
        </layout>
       </widget>
       <widget class="QWidget" name="PageGlissNoteLines">
-       <layout class="QVBoxLayout" name="verticalLayout_69">
+       <layout class="QVBoxLayout" name="verticalLayout_691">
         <item>
          <widget class="QGroupBox" name="groupBox_glissando">
           <property name="title">
@@ -11004,7 +11004,7 @@
          </widget>
         </item>
         <item>
-         <spacer name="verticalSpacer_39">
+         <spacer name="verticalSpacer_391">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
@@ -11024,7 +11024,7 @@
           <property name="title">
            <string>Trill cue note</string>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_691">
+          <layout class="QVBoxLayout" name="verticalLayout_692">
            <item>
             <widget class="QRadioButton" name="ornamentShowCueNoteOnlyNonSeconds">
              <property name="text">
