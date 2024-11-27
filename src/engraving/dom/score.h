@@ -1018,8 +1018,8 @@ public:
     void undoRemoveSystemLock(const SystemLock* lock);
     void undoRemoveAllLocks();
     void toggleSystemLock(const std::vector<System*>& systems);
-    void checkSystemLocksOnAddLayoutBreak(LayoutBreakType breakType, const MeasureBase* measure);
-    void checkLayoutBreaksOnAddSystemLock(const SystemLock* lock);
+    void removeSystemLocksOnAddLayoutBreak(LayoutBreakType breakType, const MeasureBase* measure);
+    void removeLayoutBreaksOnAddSystemLock(const SystemLock* lock);
 
     friend class Chord;
 

@@ -563,12 +563,6 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Measure properties…"),
              TranslatableString("action", "Measure properties…")
              ),
-    UiAction("add-remove-breaks", // DEPRECATED
-             mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Add/remove s&ystem breaks…"),
-             TranslatableString("action", "Add/remove system breaks…")
-             ),
     UiAction("measures-per-system",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

@@ -3318,7 +3318,7 @@ void AddSystemLock::cleanup(bool undo)
 {
     if (!undo) {
         delete m_systemLock;
-        m_systemLock = 0;
+        m_systemLock = nullptr;
     }
 }
 
@@ -3346,7 +3346,7 @@ void RemoveSystemLock::cleanup(bool undo)
 {
     if (undo) {
         delete m_systemLock;
-        m_systemLock = 0;
+        m_systemLock = nullptr;
     }
 }
 

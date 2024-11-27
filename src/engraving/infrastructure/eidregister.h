@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_GETEID_H
-#define MU_ENGRAVING_GETEID_H
+#pragma once
 
 #include <cstdint>
 #include <map>
@@ -51,5 +50,3 @@ private:
     std::map<uint64_t, EngravingObject*> m_register;
 };
 }
-
-#endif // MU_ENGRAVING_GETEID_H

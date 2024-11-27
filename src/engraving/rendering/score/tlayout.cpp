@@ -3775,7 +3775,7 @@ void TLayout::layoutLayoutBreak(const LayoutBreak* item, LayoutBreak::LayoutData
     RectF bbox = metrics.boundingRect(item->iconCode());
     ldata->setShape(Shape(bbox, item));
 
-    // Ensure it goes behind nation
+    // Ensure it goes behind notation
     const_cast<LayoutBreak*>(item)->setZ(-10);
 }
 
@@ -3823,7 +3823,7 @@ void TLayout::layoutSystemLockIndicator(const SystemLockIndicator* item, SystemL
 
     ldata->setPos(PointF(x, -2.5 * spatium));
 
-    // Ensure it goes behind nation and LayoutBreak
+    // Ensure it goes behind notation and LayoutBreak
     const_cast<SystemLockIndicator*>(item)->setZ(-100);
 }
 

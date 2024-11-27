@@ -6515,7 +6515,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
 
 void Score::undoAddSystemLock(const SystemLock* lock)
 {
-    checkLayoutBreaksOnAddSystemLock(lock);
+    removeLayoutBreaksOnAddSystemLock(lock);
     undo(new AddSystemLock(lock));
 }
 
@@ -6555,9 +6555,9 @@ void Score::toggleSystemLock(const std::vector<System*>& systems)
     }
 }
 
-void Score::checkSystemLocksOnAddLayoutBreak(LayoutBreakType breakType, const MeasureBase* measure)
+void Score::removeSystemLocksOnAddLayoutBreak(LayoutBreakType breakType, const MeasureBase* measure)
 {
-    if (breakType == LayoutBreakType::NOBREAK) {
+    IF_ASSERT_FAILED(breakType != LayoutBreakType::NOBREAK) {
         return; // NOBREAK not allowed on locked measures
     }
 
@@ -6567,18 +6567,15 @@ void Score::checkSystemLocksOnAddLayoutBreak(LayoutBreakType breakType, const Me
     }
 }
 
-void Score::checkLayoutBreaksOnAddSystemLock(const SystemLock* lock)
+void Score::removeLayoutBreaksOnAddSystemLock(const SystemLock* lock)
 {
     bool mmrests = style().styleB(Sid::createMultiMeasureRests);
-    for (MeasureBase* mb = lock->startMB();; mb = mmrests ? mb->nextMM() : mb->next()) {
+    for (MeasureBase* mb = lock->startMB(); mb && mb->isBeforeOrEqual(lock->endMB()); mb = mmrests ? mb->nextMM() : mb->next()) {
         mb->undoSetBreak(false, LayoutBreakType::LINE);
         mb->undoSetBreak(false, LayoutBreakType::NOBREAK);
         if (mb != lock->endMB()) {
             mb->undoSetBreak(false, LayoutBreakType::SECTION);
             mb->undoSetBreak(false, LayoutBreakType::PAGE);
-        }
-        if (mb == lock->endMB()) {
-            break;
         }
     }
 }

@@ -4651,7 +4651,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
         case LayoutBreakType::LINE:
             val = !mb->lineBreak();
             if (val) {
-                checkSystemLocksOnAddLayoutBreak(type, mb);
+                removeSystemLocksOnAddLayoutBreak(type, mb);
             }
             mb->undoSetBreak(val, type);
             // remove page break if appropriate
@@ -4662,7 +4662,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
         case LayoutBreakType::PAGE:
             val = !mb->pageBreak();
             if (val) {
-                checkSystemLocksOnAddLayoutBreak(type, mb);
+                removeSystemLocksOnAddLayoutBreak(type, mb);
             }
             mb->undoSetBreak(val, type);
             // remove line break if appropriate
@@ -4673,7 +4673,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
         case LayoutBreakType::SECTION:
             val = !mb->sectionBreak();
             if (val) {
-                checkSystemLocksOnAddLayoutBreak(type, mb);
+                removeSystemLocksOnAddLayoutBreak(type, mb);
             }
             mb->undoSetBreak(val, type);
             break;

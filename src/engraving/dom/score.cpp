@@ -257,6 +257,9 @@ Score::~Score()
 
     m_spanner.clear();
 
+    muse::DeleteAll(m_systemLocks.allLocks());
+    m_systemLocks.clear();
+
     muse::DeleteAll(m_parts);
     m_parts.clear();
 

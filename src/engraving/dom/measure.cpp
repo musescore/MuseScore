@@ -1378,7 +1378,8 @@ bool Measure::acceptDrop(EditData& data) const
             return true;
         case ActionIconType::SYSTEM_LOCK:
         {
-            if (score()->layoutMode() == LayoutMode::PAGE) {
+            LayoutMode layoutMode = score()->layoutMode();
+            if (layoutMode == LayoutMode::PAGE || layoutMode == LayoutMode::SYSTEM) {
                 const System* sys = system();
                 viewer->setDropRectangle(sys->canvasBoundingRect().adjusted(sys->leftMargin(), 0.0, 0.0, 0.0));
                 return true;
