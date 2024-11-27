@@ -228,9 +228,21 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new muse::draw::DrawModule());
     app->addModule(new muse::midi::MidiModule());
     app->addModule(new muse::mpe::MpeModule());
+
 #ifdef MUSE_MODULE_MUSESAMPLER
-    app->addModule(new muse::musesampler::MuseSamplerModule());
+    bool needAdd = true;
+    if (runtime::isDebug()) {
+#ifndef MUSE_MODULE_MUSESAMPLER_ENABLE_DEBUG
+        needAdd = false;
+        LOGI() << "Muse Sampler is not a debuggable binary. Skipping adding.";
 #endif
+    }
+
+    if (needAdd) {
+        app->addModule(new muse::musesampler::MuseSamplerModule());
+    }
+#endif
+
     app->addModule(new muse::network::NetworkModule());
     app->addModule(new muse::shortcuts::ShortcutsModule());
 #ifdef MUSE_MODULE_UI
