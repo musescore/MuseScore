@@ -139,7 +139,7 @@ void SystemLocks::dump()
 #endif
 
 SystemLockIndicator::SystemLockIndicator(System* parent, const SystemLock* lock)
-    : m_systemLock(lock), EngravingItem(ElementType::SYSTEM_LOCK_INDICATOR, parent, ElementFlag::SYSTEM | ElementFlag::GENERATED) {}
+    : EngravingItem(ElementType::SYSTEM_LOCK_INDICATOR, parent, ElementFlag::SYSTEM | ElementFlag::GENERATED), m_systemLock(lock) {}
 
 Font SystemLockIndicator::font() const
 {
