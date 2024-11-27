@@ -287,13 +287,6 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
     ctx.mutState().setTick(Fraction(0, 1));
     MeasureLayout::getNextMeasure(ctx);
 
-    static constexpr Fraction minTicks = Fraction(1, 16);
-    static constexpr Fraction maxTicks = Fraction(4, 4);
-    // CAUTION: In continuous view, we cannot look fot the shortest (or longest) note
-    // of the system (as we do in page view), because the whole music is a single big system. Therefore,
-    // we simply assume a shortest note of 1/16 and longest of 4/4. This ensures perfect spacing consistency,
-    // even if the actual values may be be different.
-
     while (ctx.state().curMeasure()) {
         double ww = 0.0;
         if (ctx.state().curMeasure()->isVBox() || ctx.state().curMeasure()->isTBox()) {
