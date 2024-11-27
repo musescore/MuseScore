@@ -291,6 +291,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::ROOT_ITEM:
     case ElementType::FIGURED_BASS_ITEM:
     case ElementType::DUMMY:
+    case ElementType::SYSTEM_LOCK_INDICATOR:
         break;
     }
 
