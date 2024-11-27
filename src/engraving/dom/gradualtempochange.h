@@ -46,6 +46,10 @@ public:
     ChangeMethod easingMethod() const;
     void setTempoChangeType(const GradualTempoChangeType type);
 
+    int subtype() const override { return int(m_tempoChangeType); }
+    TranslatableString subtypeUserName() const override;
+    String accessibleInfo() const override;
+
     double tempoChangeFactor() const;
 
     PropertyValue getProperty(Pid id) const override;
@@ -91,6 +95,9 @@ public:
 
     GradualTempoChangeSegment* findElementToSnapBefore() const;
     TempoText* findElementToSnapAfter() const;
+
+    int subtype() const override;
+    TranslatableString subtypeUserName() const override;
 
     friend class GradualTempoChange;
 };

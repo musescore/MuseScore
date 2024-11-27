@@ -93,6 +93,8 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
 
+    String accessibleInfo() const override;
+
     // TODO: add a grip for moving the entire arpeggio
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 2; }
