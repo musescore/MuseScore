@@ -133,13 +133,13 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("up-chord",
              mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_FOCUSED,
+             mu::context::CTX_NOTATION_LIST_SELECTION,
              TranslatableString("action", "Up note in chord"),
              TranslatableString("action", "Select note/rest above")
              ),
     UiAction("down-chord",
              mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_FOCUSED,
+             mu::context::CTX_NOTATION_LIST_SELECTION,
              TranslatableString("action", "Down note in chord"),
              TranslatableString("action", "Select note/rest below")
              ),
@@ -563,11 +563,11 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Measure properties…"),
              TranslatableString("action", "Measure properties…")
              ),
-    UiAction("add-remove-breaks",
+    UiAction("measures-per-system",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Add/remove s&ystem breaks…"),
-             TranslatableString("action", "Add/remove system breaks…")
+             TranslatableString("action", "Measures per s&ystem…"),
+             TranslatableString("action", "Measures per system…")
              ),
     UiAction("undo",
              mu::context::UiCtxProjectOpened,
@@ -630,6 +630,26 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_ANY,
              TranslatableString("action", "Add/remove page break"),
              TranslatableString("action", "Add/remove page break")
+             ),
+    UiAction("move-measure-to-prev-system",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Move measure to previous system"),
+             TranslatableString("action", "Move measure to previous system"),
+             IconCode::Code::ARROW_UP
+             ),
+    UiAction("move-measure-to-next-system",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Move measure to next system"),
+             TranslatableString("action", "Move measure to next system"),
+             IconCode::Code::ARROW_DOWN
+             ),
+    UiAction("make-into-system",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Make measure(s) into one system"),
+             TranslatableString("action", "Make measure(s) into one system")
              ),
     UiAction("section-break",
              mu::context::UiCtxProjectOpened,
@@ -1582,11 +1602,18 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Repeat selection"),
              TranslatableString("action", "Repeat selection")
              ),
-    UiAction("lock",
+    UiAction("toggle-score-lock",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Toggle score lock"),
              TranslatableString("action", "Toggle score lock")
+             ),
+    UiAction("toggle-system-lock",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Toggle system lock"),
+             TranslatableString("action", "Toggle system lock"),
+             IconCode::Code::SYSTEM_LOCK
              ),
     UiAction("enh-both",
              mu::context::UiCtxProjectOpened,

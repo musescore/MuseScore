@@ -1259,7 +1259,9 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
 
 void SingleLayout::layout(LayoutBreak* item, const Context&)
 {
-    UNUSED(item);
+    FontMetrics metrics(item->font());
+    RectF bbox = metrics.boundingRect(item->iconCode());
+    item->mutldata()->setShape(Shape(bbox, item));
 }
 
 void SingleLayout::layout(LetRing* item, const Context& ctx)

@@ -98,8 +98,6 @@ static const Settings::Key STYLE_FILE_IMPORT_PATH_KEY(module_name, "import/style
 
 static constexpr int DEFAULT_GRID_SIZE_SPATIUM = 2;
 
-static const Settings::Key ANCHOR_COLOR(module_name, "ui/colors/anchorColor");
-
 void NotationConfiguration::init()
 {
     settings()->setDefaultValue(BACKGROUND_USE_COLOR, Val(true));
@@ -230,17 +228,6 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(USE_NEW_PERCUSSION_PANEL_KEY, Val(false));
     settings()->setDefaultValue(AUTO_SHOW_PERCUSSION_PANEL_KEY, Val(true));
 
-    settings()->setDefaultValue(ANCHOR_COLOR, Val(QColor("#C31989")));
-    settings()->setDescription(ANCHOR_COLOR, muse::qtrc("notation", "Anchor color").toStdString());
-    settings()->setCanBeManuallyEdited(ANCHOR_COLOR, true);
-    settings()->valueChanged(ANCHOR_COLOR).onReceive(nullptr, [this](const Val& val) {
-        m_anchorColorChanged.send(val.toQColor());
-    });
-
-    anchorColorChanged().onReceive(this, [this](const QColor&) {
-        m_foregroundChanged.notify();
-    });
-
     engravingConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
         m_foregroundChanged.notify();
     });
@@ -263,16 +250,6 @@ void NotationConfiguration::init()
     context()->currentProjectChanged().onNotify(this, [this]() {
         resetStyleDialogPageIndices();
     });
-}
-
-QColor NotationConfiguration::anchorColor() const
-{
-    return settings()->value(ANCHOR_COLOR).toQColor();
-}
-
-muse::async::Channel<QColor> NotationConfiguration::anchorColorChanged() const
-{
-    return m_anchorColorChanged;
 }
 
 QColor NotationConfiguration::backgroundColor() const

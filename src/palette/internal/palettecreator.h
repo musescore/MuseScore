@@ -40,7 +40,7 @@ public:
     static PalettePtr newRepeatsPalette(bool defaultPalette = false);
     static PalettePtr newBeamPalette();
     static PalettePtr newDynamicsPalette(bool defaultPalette = false);
-    static PalettePtr newLayoutPalette();
+    static PalettePtr newLayoutPalette(bool defaultPalette = false);
     static PalettePtr newFingeringPalette(bool defaultPalette = false);
     static PalettePtr newTremoloPalette();
     static PalettePtr newNoteHeadsPalette();

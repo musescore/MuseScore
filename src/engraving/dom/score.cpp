@@ -182,7 +182,7 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
     m_masterScore = parent;
 
     if (m_masterScore) {
-        setEID(m_masterScore->getEID()->newEID(type()));
+        setEID(m_masterScore->eidRegister()->newEID(type()));
     }
 
     if (DefaultStyle::defaultStyleForParts()) {
@@ -256,6 +256,9 @@ Score::~Score()
     }
 
     m_spanner.clear();
+
+    muse::DeleteAll(m_systemLocks.allLocks());
+    m_systemLocks.clear();
 
     muse::DeleteAll(m_parts);
     m_parts.clear();
@@ -5897,6 +5900,22 @@ void Score::autoUpdateSpatium()
 
     style().setSpatium(targetSpatium);
     createPaddingTable();
+}
+
+void Score::addSystemLock(const SystemLock* lock)
+{
+    m_systemLocks.add(lock);
+
+    lock->startMB()->triggerLayout();
+    lock->endMB()->triggerLayout();
+}
+
+void Score::removeSystemLock(const SystemLock* lock)
+{
+    m_systemLocks.remove(lock);
+
+    lock->startMB()->triggerLayout();
+    lock->endMB()->triggerLayout();
 }
 
 //---------------------------------------------------------

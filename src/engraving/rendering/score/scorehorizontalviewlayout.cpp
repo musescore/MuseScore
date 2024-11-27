@@ -243,11 +243,26 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
     const double rm = ctx.state().page()->rm();
     const double bm = ctx.state().page()->bm() + ctx.conf().styleMM(Sid::staffLowerBorder);
 
+    layoutSystemLockIndicators(system);
+
     ctx.mutState().page()->setPos(0, 0);
     system->setPos(lm, tm);
     ctx.mutState().page()->setWidth(lm + system->width() + rm);
     ctx.mutState().page()->setHeight(tm + system->height() + bm);
     ctx.mutState().page()->invalidateBspTree();
+}
+
+void ScoreHorizontalViewLayout::layoutSystemLockIndicators(System* system)
+{
+    system->deleteLockIndicators();
+
+    std::vector<const SystemLock*> systemLocks = system->score()->systemLocks()->allLocks();
+    for (const SystemLock* lock : systemLocks) {
+        SystemLockIndicator* lockIndicator = Factory::createSystemLockIndicator(system, lock);
+        lockIndicator->setParent(system);
+        system->addLockIndicator(lockIndicator);
+        TLayout::layoutSystemLockIndicator(lockIndicator, lockIndicator->mutldata());
+    }
 }
 
 // Append all measures to System. VBox is not included to System

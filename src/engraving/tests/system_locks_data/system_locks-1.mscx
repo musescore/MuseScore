@@ -1,403 +1,471 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.50">
+  <programVersion>4.5.0</programVersion>
+  <programRevision></programRevision>
+  <LastEID>1434</LastEID>
   <Score>
     <Division>480</Division>
-    <Style>
-      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
-      <spatium>1.76389</spatium>
-      </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <open>1</open>
     <metaTag name="arranger"></metaTag>
-    <metaTag name="composer"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2024-11-20</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Linux</metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
+    <metaTag name="subtitle">Subtitle</metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">testpart1</metaTag>
+    <metaTag name="workTitle">Untitled score</metaTag>
+    <Order id="orchestral">
+      <name>Orchestral</name>
+      <instrument id="piano">
+        <family id="keyboards">Keyboards</family>
+        </instrument>
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+        </section>
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        </section>
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+        </section>
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <soloists/>
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+        </section>
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+        </section>
+      <unsorted/>
+      </Order>
     <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
+        <bracket type="1" span="3" col="2" visible="1"/>
+        <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Alto</trackName>
-      <Instrument id="alto">
-        <longName>Alto</longName>
-        <shortName>A.</shortName>
-        <trackName>Alto</trackName>
-        <minPitchP>55</minPitchP>
-        <maxPitchP>77</maxPitchP>
-        <minPitchA>55</minPitchA>
-        <maxPitchA>74</maxPitchA>
-        <instrumentId>voice.alto</instrumentId>
-        <Articulation>
-          <velocity>100</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="staccato">
-          <velocity>100</velocity>
-          <gateTime>85</gateTime>
-          </Articulation>
-        <Articulation name="tenuto">
-          <velocity>100</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="sforzato">
-          <velocity>120</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Channel>
-          <program value="52"/>
-          </Channel>
-        </Instrument>
-      </Part>
-    <Part id="2">
       <Staff id="2">
         <StaffType group="pitched">
-          <name>Standard</name>
+          <name>stdNormal</name>
           </StaffType>
+        <defaultClef>F</defaultClef>
         </Staff>
-      <trackName>Tenor</trackName>
-      <Instrument id="tenor">
-        <longName>Tenor</longName>
-        <shortName>T.</shortName>
-        <trackName>Tenor</trackName>
-        <minPitchP>48</minPitchP>
-        <maxPitchP>72</maxPitchP>
-        <minPitchA>48</minPitchA>
-        <maxPitchA>69</maxPitchA>
-        <instrumentId>voice.tenor</instrumentId>
+      <trackName>Piano</trackName>
+      <Instrument id="piano">
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
         <Articulation>
           <velocity>100</velocity>
-          <gateTime>100</gateTime>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
           </Articulation>
         <Articulation name="staccato">
           <velocity>100</velocity>
-          <gateTime>85</gateTime>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
           </Articulation>
         <Articulation name="tenuto">
           <velocity>100</velocity>
           <gateTime>100</gateTime>
           </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
         <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <program value="52"/>
+          <program value="0"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
-      <VBox>
-        <height>10</height>
-        <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <Text>
-          <style>title</style>
-          <text>testpart1</text>
-          </Text>
-        <Image>
-          <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-          <linkPath>schnee.png</linkPath>
-          <size w="38.52" h="38.64"/>
-          </Image>
-        </VBox>
       <Measure>
+        <eid>1533303324763</eid>
         <voice>
-          <Clef>
-            <concertClefType>G</concertClefType>
-            <transposingClefType>G</transposingClefType>
-            <isHeader>1</isHeader>
-            </Clef>
+          <KeySig>
+            <eid>1554778161177</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
           <TimeSig>
+            <eid>1546188226587</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <Image>
-                <Image>
-                  <z>8999</z>
-                  <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-                  <linkPath>schnee.png</linkPath>
-                  </Image>
-                <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
-                <linkPath>schnee.png</linkPath>
-                <size w="38.52" h="38.64"/>
-                </Image>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>74</pitch>
-              <tpc>16</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
           <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
+            <eid>1563368095772</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1567663063131</eid>
         <voice>
           <Rest>
+            <eid>1580547964956</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1584842932315</eid>
         <voice>
           <Rest>
+            <eid>1597727834140</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1602022801499</eid>
         <voice>
           <Rest>
+            <eid>1614907703324</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1619202670683</eid>
         <voice>
           <Rest>
+            <eid>1632087572508</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1636382539867</eid>
         <voice>
           <Rest>
+            <eid>1649267441692</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1653562409051</eid>
         <voice>
           <Rest>
+            <eid>1666447310876</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1670742278235</eid>
         <voice>
           <Rest>
+            <eid>1683627180060</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1687922147419</eid>
         <voice>
           <Rest>
+            <eid>1700807049244</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1705102016603</eid>
         <voice>
           <Rest>
+            <eid>1717986918428</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1722281885787</eid>
         <voice>
           <Rest>
+            <eid>1735166787612</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1739461754971</eid>
         <voice>
           <Rest>
+            <eid>1752346656796</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1756641624155</eid>
         <voice>
           <Rest>
+            <eid>1769526525980</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1773821493339</eid>
         <voice>
           <Rest>
+            <eid>1786706395164</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1791001362523</eid>
         <voice>
           <Rest>
+            <eid>1803886264348</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1808181231707</eid>
         <voice>
           <Rest>
+            <eid>1821066133532</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1825361100891</eid>
         <voice>
           <Rest>
+            <eid>1838246002716</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1842540970075</eid>
         <voice>
           <Rest>
+            <eid>1855425871900</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1859720839259</eid>
         <voice>
           <Rest>
+            <eid>1872605741084</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1876900708443</eid>
         <voice>
           <Rest>
+            <eid>1889785610268</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1894080577627</eid>
         <voice>
           <Rest>
+            <eid>1906965479452</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1911260446811</eid>
         <voice>
           <Rest>
+            <eid>1924145348636</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1928440315995</eid>
         <voice>
           <Rest>
+            <eid>1941325217820</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1945620185179</eid>
         <voice>
           <Rest>
+            <eid>1958505087004</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1962800054363</eid>
         <voice>
           <Rest>
+            <eid>1975684956188</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1979979923547</eid>
         <voice>
           <Rest>
+            <eid>1992864825372</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>1997159792731</eid>
         <voice>
           <Rest>
+            <eid>2010044694556</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>2014339661915</eid>
         <voice>
           <Rest>
+            <eid>2027224563740</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>2031519531099</eid>
         <voice>
           <Rest>
+            <eid>2044404432924</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>2048699400283</eid>
         <voice>
           <Rest>
+            <eid>2061584302108</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>2065879269467</eid>
         <voice>
           <Rest>
+            <eid>2078764171292</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>2083059138651</eid>
+        <voice>
+          <Rest>
+            <eid>2095944040476</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -407,48 +475,17 @@
     <Staff id="2">
       <Measure>
         <voice>
-          <Clef>
-            <concertClefType>G8vb</concertClefType>
-            <transposingClefType>G8vb</transposingClefType>
-            <isHeader>1</isHeader>
-            </Clef>
+          <KeySig>
+            <eid>5398773891097</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
           <TimeSig>
+            <eid>5128190951451</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>55</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>57</pitch>
-              <tpc>17</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>59</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
           <Rest>
+            <eid>5123895984156</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -457,6 +494,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5136780886044</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -465,6 +503,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5145370820636</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -473,6 +512,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5153960755228</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -481,6 +521,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5162550689820</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -489,6 +530,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5171140624412</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -497,6 +539,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5179730559004</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -505,6 +548,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5188320493596</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -513,6 +557,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5196910428188</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -521,6 +566,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5205500362780</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -529,6 +575,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5214090297372</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -537,6 +584,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5222680231964</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -545,6 +593,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5231270166556</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -553,6 +602,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5239860101148</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -561,6 +611,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5248450035740</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -569,6 +620,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5257039970332</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -577,6 +629,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5265629904924</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -585,6 +638,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5274219839516</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -593,6 +647,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5282809774108</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -601,6 +656,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5291399708700</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -609,6 +665,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5299989643292</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -617,6 +674,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5308579577884</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -625,6 +683,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5317169512476</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -633,6 +692,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5325759447068</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -641,6 +701,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5334349381660</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -649,6 +710,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5342939316252</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -657,6 +719,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5351529250844</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -665,6 +728,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5360119185436</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -673,6 +737,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5368709120028</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -681,6 +746,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5377299054620</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -689,11 +755,55 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>5385888989212</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>5394478923804</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       </Staff>
+    <SystemLocks>
+      <systemLock>
+        <startMeasure>1533303324763</startMeasure>
+        <endMeasure>1602022801499</endMeasure>
+        </systemLock>
+      <systemLock>
+        <startMeasure>1619202670683</startMeasure>
+        <endMeasure>1670742278235</endMeasure>
+        </systemLock>
+      <systemLock>
+        <startMeasure>1687922147419</startMeasure>
+        <endMeasure>1739461754971</endMeasure>
+        </systemLock>
+      <systemLock>
+        <startMeasure>1756641624155</startMeasure>
+        <endMeasure>1808181231707</endMeasure>
+        </systemLock>
+      <systemLock>
+        <startMeasure>1825361100891</startMeasure>
+        <endMeasure>1876900708443</endMeasure>
+        </systemLock>
+      <systemLock>
+        <startMeasure>1894080577627</startMeasure>
+        <endMeasure>1945620185179</endMeasure>
+        </systemLock>
+      <systemLock>
+        <startMeasure>1962800054363</startMeasure>
+        <endMeasure>2014339661915</endMeasure>
+        </systemLock>
+      <systemLock>
+        <startMeasure>2031519531099</startMeasure>
+        <endMeasure>2083059138651</endMeasure>
+        </systemLock>
+      </SystemLocks>
     </Score>
   </museScore>

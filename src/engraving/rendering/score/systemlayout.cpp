@@ -133,6 +133,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     prevMeasureState.curHeader = ctx.state().curMeasure()->header();
     prevMeasureState.curTrailer = ctx.state().curMeasure()->trailer();
 
+    const SystemLock* systemLock = ctx.dom().systemLocks()->lockStartingAt(ctx.state().curMeasure());
+
     while (ctx.state().curMeasure()) {      // collect measure for system
         oldSystem = ctx.mutState().curMeasure()->system();
         system->appendMeasure(ctx.mutState().curMeasure());
@@ -180,7 +182,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             return system;
         }
 
-        bool doBreak = system->measures().size() > 1 && curSysWidth > targetSystemWidth && !ctx.state().prevMeasure()->noBreak();
+        bool doBreak = !systemLock && system->measures().size() > 1 && curSysWidth > targetSystemWidth
+                       && !ctx.state().prevMeasure()->noBreak();
         if (doBreak) {
             breakMeasure = ctx.mutState().curMeasure();
             system->removeLastMeasure();
@@ -223,7 +226,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         switch (ctx.conf().viewMode()) {
         case LayoutMode::PAGE:
         case LayoutMode::SYSTEM:
-            lineBreak = mb->pageBreak() || mb->lineBreak() || mb->sectionBreak();
+            lineBreak = mb->pageBreak() || mb->lineBreak() || mb->sectionBreak() || mb->isEndOfSystemLock()
+                        || (ctx.state().nextMeasure() && ctx.state().nextMeasure()->isStartOfSystemLock());
             break;
         case LayoutMode::FLOAT:
         case LayoutMode::LINE:
@@ -423,6 +427,27 @@ bool SystemLayout::shouldBeJustified(System* system, double curSysWidth, double 
     }
 
     return shouldJustify && !MScore::noHorizontalStretch;
+}
+
+void SystemLayout::layoutSystemLockIndicators(System* system, LayoutContext& ctx)
+{
+    UNUSED(ctx);
+
+    const std::vector<SystemLockIndicator*> lockIndicators = system->lockIndicators();
+    // In PAGE view, at most ONE lock indicator can exist per system.
+    assert(lockIndicators.size() <= 1);
+    system->deleteLockIndicators();
+
+    const SystemLock* lock = system->systemLock();
+    if (!lock) {
+        return;
+    }
+
+    SystemLockIndicator* lockIndicator = new SystemLockIndicator(system, lock);
+    lockIndicator->setParent(system);
+    system->addLockIndicator(lockIndicator);
+
+    TLayout::layoutSystemLockIndicator(lockIndicator, lockIndicator->mutldata());
 }
 
 //---------------------------------------------------------

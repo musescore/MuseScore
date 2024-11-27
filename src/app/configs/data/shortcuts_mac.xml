@@ -798,6 +798,14 @@
     <seq>Ctrl+Enter</seq>
     </SC>
   <SC>
+    <key>move-measure-to-prev-system</key>
+    <seq>Alt+Up</seq>
+    </SC>
+  <SC>
+    <key>move-measure-to-next-system</key>
+    <seq>Alt+Down</seq>
+    </SC>
+  <SC>
     <key>edit-element</key>
     <seq>F2</seq>
     <seq>Alt+Shift+E</seq>
@@ -959,8 +967,16 @@
     <seq>V</seq>
     </SC>
   <SC>
-    <key>lock</key>
-    <seq>Shift+Ctrl+L</seq>
+    <key>toggle-score-lock</key>
+    <seq>Ctrl+Alt+L</seq>
+    </SC>
+  <SC>
+    <key>toggle-system-lock</key>
+    <seq>Alt+L</seq>
+    </SC>
+  <SC>
+    <key>make-into-system</key>
+    <seq>Alt+S</seq>
     </SC>
 <!-- TAB specific shortcuts -->
   <SC>

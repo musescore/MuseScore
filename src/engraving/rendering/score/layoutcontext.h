@@ -63,6 +63,7 @@ class Score;
 class Spanner;
 class SpannerMap;
 class System;
+class SystemLocks;
 class Staff;
 class Measure;
 class ChordRest;
@@ -174,6 +175,8 @@ public:
     const Segment* lastSegment() const;
 
     const ChordRest* findCR(Fraction tick, track_idx_t track) const;
+
+    const SystemLocks* systemLocks() const;
 
     // Mutable access
     std::vector<Page*>& pages();

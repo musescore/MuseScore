@@ -1379,6 +1379,16 @@ bool Measure::acceptDrop(EditData& data) const
         case ActionIconType::STAFF_TYPE_CHANGE:
             viewer->setDropRectangle(staffRect);
             return true;
+        case ActionIconType::SYSTEM_LOCK:
+        {
+            LayoutMode layoutMode = score()->layoutMode();
+            if (layoutMode == LayoutMode::PAGE || layoutMode == LayoutMode::SYSTEM) {
+                const System* sys = system();
+                viewer->setDropRectangle(sys->canvasBoundingRect().adjusted(sys->leftMargin(), 0.0, 0.0, 0.0));
+                return true;
+            }
+            return false;
+        }
         default:
             break;
         }
@@ -1715,6 +1725,9 @@ EngravingItem* Measure::drop(EditData& data)
             score()->undoAddElement(stc);
             break;
         }
+        case ActionIconType::SYSTEM_LOCK:
+            score()->toggleSystemLock({ system() });
+            break;
         default:
             break;
         }

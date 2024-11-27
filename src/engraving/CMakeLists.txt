@@ -83,8 +83,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/skyline.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/eid.cpp
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/eid.h
-    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/geteid.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/geteid.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/eidregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/eidregister.h
 
     ${DOM_SRC}
 

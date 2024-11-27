@@ -37,6 +37,7 @@ class TremoloTwoChord;
 class TremoloSingleChord;
 
 class SoundFlag;
+class SystemLock;
 
 class Factory
 {
@@ -117,6 +118,9 @@ public:
     static LayoutBreak* createLayoutBreak(MeasureBase* parent, bool isAccessibleEnabled = true);
     static LayoutBreak* copyLayoutBreak(const LayoutBreak& src);
     static std::shared_ptr<LayoutBreak> makeLayoutBreak(MeasureBase* parent);
+
+    static SystemLockIndicator* createSystemLockIndicator(System* parent, const SystemLock* lock, bool isAccessibleEnabled = true);
+    static SystemLockIndicator* copySystemLockIndicator(const SystemLockIndicator& src);
 
     static Lyrics* createLyrics(ChordRest* parent, bool isAccessibleEnabled = true);
     static Lyrics* copyLyrics(const Lyrics& src);

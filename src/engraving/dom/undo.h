@@ -92,6 +92,7 @@ class Segment;
 class Selection;
 class Spanner;
 class Staff;
+class SystemLock;
 class Text;
 class TremoloBar;
 
@@ -688,6 +689,36 @@ public:
 
     UNDO_TYPE(CommandType::RemoveElement)
     UNDO_CHANGED_OBJECTS({ element })
+};
+
+class AddSystemLock : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, AddSystemLock)
+
+    const SystemLock* m_systemLock;
+public:
+    AddSystemLock(const SystemLock* systemLock);
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+    void cleanup(bool undo) override;
+
+    UNDO_NAME("AddSystemLock")
+    std::vector<const EngravingObject*> objectItems() const override;
+};
+
+class RemoveSystemLock : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, RemoveSystemLock)
+
+    const SystemLock* m_systemLock;
+public:
+    RemoveSystemLock(const SystemLock* systemLock);
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+    void cleanup(bool undo) override;
+
+    UNDO_NAME("RemoveSystemLock")
+    std::vector<const EngravingObject*> objectItems() const override;
 };
 
 class ChangePatch : public UndoCommand

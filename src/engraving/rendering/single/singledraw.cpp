@@ -1936,22 +1936,14 @@ void SingleDraw::draw(const LayoutBreak* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    Pen pen;
-    pen.setColor(item->configuration()->fontPrimaryColor());
-    pen.setWidthF(item->lineWidth() / 2);
-    pen.setJoinStyle(PenJoinStyle::MiterJoin);
-    pen.setCapStyle(PenCapStyle::SquareCap);
-    pen.setDashPattern({ 1, 3 });
-
+    Pen pen(item->configuration()->fontPrimaryColor());
     painter->setPen(pen);
-    painter->setBrush(BrushStyle::NoBrush);
-    painter->drawRect(item->iconBorderRect());
 
-    pen.setWidthF(item->lineWidth());
-    pen.setStyle(PenStyle::SolidLine);
+    Font f(item->font());
+    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    painter->setFont(f);
 
-    painter->setPen(pen);
-    painter->drawPath(item->iconPath());
+    painter->drawSymbol(PointF(0.0, 0.0), item->iconCode());
 }
 
 void SingleDraw::draw(const LedgerLine* item, Painter* painter)
