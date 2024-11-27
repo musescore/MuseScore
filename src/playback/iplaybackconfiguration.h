@@ -43,6 +43,8 @@ public:
     virtual bool playHarmonyWhenEditing() const = 0;
     virtual void setPlayHarmonyWhenEditing(bool value) = 0;
 
+    virtual muse::async::Notification playNotesWhenEditingChanged() const = 0;
+
     virtual PlaybackCursorType cursorType() const = 0;
 
     virtual bool isMixerSectionVisible(MixerSectionType sectionType) const = 0;

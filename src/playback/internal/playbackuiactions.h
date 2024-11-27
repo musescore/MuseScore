@@ -50,6 +50,7 @@ public:
     static const muse::ui::UiActionList& midiInputActions();
     static const muse::ui::UiActionList& midiInputPitchActions();
     static const muse::ui::UiActionList& settingsActions();
+    static const muse::ui::UiActionList& hearPlaybackWhenEditingActions();
     static const muse::ui::UiActionList& loopBoundaryActions();
 
     static const muse::ui::ToolConfig& defaultPlaybackToolConfig();
@@ -60,6 +61,7 @@ private:
     static const muse::ui::UiActionList m_midiInputPitchActions;
     static const muse::ui::UiActionList m_settingsActions;
     static const muse::ui::UiActionList m_loopBoundaryActions;
+    static const muse::ui::UiActionList m_hearPlaybackWhenEditingActions;
 
     std::shared_ptr<PlaybackController> m_controller;
     muse::async::Channel<muse::actions::ActionCodeList> m_actionEnabledChanged;

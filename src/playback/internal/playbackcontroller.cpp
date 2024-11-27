@@ -59,6 +59,7 @@ static const ActionCode PAN_CODE("pan");
 static const ActionCode REPEAT_CODE("repeat");
 static const ActionCode PLAY_CHORD_SYMBOLS_CODE("play-chord-symbols");
 static const ActionCode PLAYBACK_SETUP("playback-setup");
+static const ActionCode TOGGLE_HEAR_PLAYBACK_WHEN_EDITING("toggle-hear-playback-when-editing");
 
 static AudioOutputParams makeReverbOutputParams()
 {
@@ -113,6 +114,7 @@ void PlaybackController::init()
     dispatcher()->reg(this, INPUT_SOUNDING_PITCH, [this]() { PlaybackController::setMidiUseWrittenPitch(false); });
     dispatcher()->reg(this, COUNT_IN_CODE, this, &PlaybackController::toggleCountIn);
     dispatcher()->reg(this, PLAYBACK_SETUP, this, &PlaybackController::openPlaybackSetupDialog);
+    dispatcher()->reg(this, TOGGLE_HEAR_PLAYBACK_WHEN_EDITING, this, &PlaybackController::toggleHearPlaybackWhenEditing);
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
@@ -138,6 +140,10 @@ void PlaybackController::init()
         updateCurrentTempo();
 
         updateLoop();
+    });
+
+    configuration()->playNotesWhenEditingChanged().onNotify(this, [this]() {
+        notifyActionCheckedChanged(TOGGLE_HEAR_PLAYBACK_WHEN_EDITING);
     });
 
     m_measureInputLag = configuration()->shouldMeasureInputLag();
@@ -1436,7 +1442,8 @@ bool PlaybackController::actionChecked(const ActionCode& actionCode) const
         { PLAY_CHORD_SYMBOLS_CODE, notationConfiguration()->isPlayChordSymbolsEnabled() },
         { PAN_CODE, notationConfiguration()->isAutomaticallyPanEnabled() },
         { METRONOME_CODE, notationConfiguration()->isMetronomeEnabled() },
-        { COUNT_IN_CODE, notationConfiguration()->isCountInEnabled() }
+        { COUNT_IN_CODE, notationConfiguration()->isCountInEnabled() },
+        { TOGGLE_HEAR_PLAYBACK_WHEN_EDITING, configuration()->playNotesWhenEditing() }
     };
 
     return isChecked[actionCode];
@@ -1630,4 +1637,10 @@ bool PlaybackController::canReceiveAction(const ActionCode&) const
 muse::audio::secs_t PlaybackController::playedTickToSecs(int tick) const
 {
     return secs_t(notationPlayback()->playedTickToSec(tick));
+}
+
+void PlaybackController::toggleHearPlaybackWhenEditing()
+{
+    bool wasPlayNotesWhenEditing = configuration()->playNotesWhenEditing();
+    configuration()->setPlayNotesWhenEditing(!wasPlayNotesWhenEditing);
 }

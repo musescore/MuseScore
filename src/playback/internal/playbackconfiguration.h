@@ -38,6 +38,7 @@ class PlaybackConfiguration : public IPlaybackConfiguration, public muse::async:
 public:
     void init();
 
+    muse::async::Notification playNotesWhenEditingChanged() const override;
     bool playNotesWhenEditing() const override;
     void setPlayNotesWhenEditing(bool value) override;
 
@@ -92,6 +93,8 @@ private:
     muse::async::Channel<MixerSectionType, bool> m_isMixerSectionVisibleChanged;
 
     muse::async::Channel<bool> m_muteHiddenInstrumentsChanged;
+
+    muse::async::Notification m_isPlayNotesWhenEditingChanged;
 };
 }
 

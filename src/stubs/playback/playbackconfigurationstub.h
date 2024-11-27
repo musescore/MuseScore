@@ -37,6 +37,8 @@ public:
     bool playHarmonyWhenEditing() const override;
     void setPlayHarmonyWhenEditing(bool value) override;
 
+    muse::async::Notification playNotesWhenEditingChanged() const override;
+
     PlaybackCursorType cursorType() const override;
 
     bool isMixerSectionVisible(MixerSectionType sectionType) const override;

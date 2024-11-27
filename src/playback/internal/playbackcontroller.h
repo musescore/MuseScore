@@ -112,6 +112,7 @@ public:
     void setIsExportingAudio(bool exporting) override;
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
+
 private:
     muse::audio::IPlayerPtr currentPlayer() const;
 
@@ -166,6 +167,7 @@ private:
     void setMidiUseWrittenPitch(bool useWrittenPitch);
     void toggleCountIn();
     void toggleLoopPlayback();
+    void toggleHearPlaybackWhenEditing();
 
     void openPlaybackSetupDialog();
 

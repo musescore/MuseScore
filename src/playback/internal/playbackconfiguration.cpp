@@ -129,6 +129,10 @@ void PlaybackConfiguration::init()
             m_isAuxChannelVisibleChanged.send(idx, val.toBool());
         });
     }
+
+    settings()->valueChanged(PLAY_NOTES_WHEN_EDITING).onReceive(this, [this](const Val&) {
+        m_isPlayNotesWhenEditingChanged.notify();
+    });
 }
 
 bool PlaybackConfiguration::playNotesWhenEditing() const
@@ -159,6 +163,11 @@ bool PlaybackConfiguration::playHarmonyWhenEditing() const
 void PlaybackConfiguration::setPlayHarmonyWhenEditing(bool value)
 {
     settings()->setSharedValue(PLAY_HARMONY_WHEN_EDITING, Val(value));
+}
+
+muse::async::Notification PlaybackConfiguration::playNotesWhenEditingChanged() const
+{
+    return m_isPlayNotesWhenEditingChanged;
 }
 
 PlaybackCursorType PlaybackConfiguration::cursorType() const
