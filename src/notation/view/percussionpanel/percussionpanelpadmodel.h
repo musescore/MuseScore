@@ -24,6 +24,8 @@
 
 #include <QObject>
 
+#include "global/utils.h"
+
 #include "async/asyncable.h"
 #include "async/notification.h"
 
@@ -50,8 +52,10 @@ public:
     QString keyboardShortcut() const { return m_keyboardShortcut; }
     void setKeyboardShortcut(const QString& keyboardShortcut);
 
-    QString midiNote() const { return m_midiNote; }
-    void setMidiNote(const QString& midiNote);
+    int pitch() const { return m_pitch; }
+    void setPitch(int pitch);
+
+    QString midiNote() const { return QString::fromStdString(muse::pitchToString(m_pitch)); }
 
     void setNotationPreviewItem(mu::engraving::ElementPtr item);
     mu::engraving::ElementPtr notationPreviewItem() const { return m_notationPreviewItem; }
@@ -73,7 +77,7 @@ private:
     QString m_instrumentName;
 
     QString m_keyboardShortcut;
-    QString m_midiNote;
+    int m_pitch = -1;
 
     mu::engraving::ElementPtr m_notationPreviewItem;
 

@@ -49,13 +49,13 @@ void PercussionPanelPadModel::setKeyboardShortcut(const QString& keyboardShortcu
     emit keyboardShortcutChanged();
 }
 
-void PercussionPanelPadModel::setMidiNote(const QString& midiNote)
+void PercussionPanelPadModel::setPitch(int pitch)
 {
-    if (m_midiNote == midiNote) {
+    if (m_pitch == pitch) {
         return;
     }
 
-    m_midiNote = midiNote;
+    m_pitch = pitch;
     emit midiNoteChanged();
 }
 

@@ -42,6 +42,8 @@ void initGuitarProDrumset()
             gpDrumset->drum(i).shortcut = 0;
             gpDrumset->drum(i).voice    = 0;
             gpDrumset->drum(i).stemDirection = DirectionV::UP;
+            gpDrumset->drum(i).panelRow = -1;
+            gpDrumset->drum(i).panelColumn = -1;
         }
         // new drumset determined via guitar pro (third argument specifies position on staff, 10 = C3, 9 = D3, 8 = E3,...)
 

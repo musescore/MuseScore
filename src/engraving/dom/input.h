@@ -77,7 +77,7 @@ public:
     Segment* lastSegment() const { return m_lastSegment; }
     void setLastSegment(Segment* s) { m_lastSegment = s; }
 
-    const Drumset* drumset() const;
+    Drumset* drumset() const;
 
     int drumNote() const { return m_drumNote; }
     void setDrumNote(int v) { m_drumNote = v; }

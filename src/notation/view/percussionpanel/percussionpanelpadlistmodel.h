@@ -41,6 +41,7 @@ class PercussionPanelPadListModel : public QAbstractListModel, public muse::asyn
 
 public:
     explicit PercussionPanelPadListModel(QObject* parent = nullptr);
+    ~PercussionPanelPadListModel();
 
     int rowCount(const QModelIndex&) const override { return m_padModels.count(); }
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
@@ -48,8 +49,11 @@ public:
 
     Q_INVOKABLE void init();
 
-    Q_INVOKABLE void addRow();
+    Q_INVOKABLE void addEmptyRow();
     Q_INVOKABLE void deleteRow(int row);
+
+    void removeEmptyRows();
+
     Q_INVOKABLE bool rowIsEmpty(int row) const;
 
     Q_INVOKABLE void startDrag(int startIndex);
@@ -60,10 +64,10 @@ public:
     int numColumns() const { return NUM_COLUMNS; }
     int numPads() const { return m_padModels.count(); }
 
-    void setDrumset(const mu::engraving::Drumset* drumset);
-    const mu::engraving::Drumset* drumset() const { return m_drumset; }
+    void setDrumset(const engraving::Drumset* drumset);
+    engraving::Drumset* drumset() const { return m_drumset; }
 
-    void resetLayout();
+    QList<PercussionPanelPadModel*> padList() const { return m_padModels; }
 
     muse::async::Notification hasActivePadsChanged() const { return m_hasActivePadsChanged; }
     muse::async::Channel<int /*pitch*/> padTriggered() const { return m_triggeredChannel; }
@@ -79,12 +83,18 @@ private:
         PadModelRole = Qt::UserRole + 1,
     };
 
+    void load();
+
     bool indexIsValid(int index) const;
+
+    PercussionPanelPadModel* createPadModelForPitch(int pitch);
+    int createModelIndexForPitch(int pitch) const;
+
     void movePad(int fromIndex, int toIndex);
 
     int numEmptySlotsAtRow(int row) const;
 
-    const mu::engraving::Drumset* m_drumset = nullptr;
+    engraving::Drumset* m_drumset = nullptr; //! NOTE: Pointer may be invalid, see PercussionPanelModel::setUpConnections
     QList<PercussionPanelPadModel*> m_padModels;
 
     int m_dragStartIndex = -1;

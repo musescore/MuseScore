@@ -36,6 +36,13 @@ struct DrumInstrumentVariant {
     int pitch = INVALID_PITCH;
     TremoloType tremolo = TremoloType::INVALID_TREMOLO;
     String articulationName;
+
+    bool operator==(const DrumInstrumentVariant& other) const
+    {
+        return pitch == other.pitch
+               && tremolo == other.tremolo
+               && articulationName == other.articulationName;
+    }
 };
 
 //---------------------------------------------------------
@@ -56,12 +63,28 @@ struct DrumInstrument {
     char shortcut = '\0';      ///< accelerator key (CDEFGAB)
     std::list<DrumInstrumentVariant> variants;
 
+    int panelRow = -1;
+    int panelColumn = -1;
+
     DrumInstrument() {}
     DrumInstrument(const char* s, NoteHeadGroup nh, int l, DirectionV d,
                    int v = 0, char sc = 0)
         : name(String::fromUtf8(s)), notehead(nh), line(l), stemDirection(d), voice(v), shortcut(sc) {}
 
     void addVariant(DrumInstrumentVariant v) { variants.push_back(v); }
+
+    bool operator==(const DrumInstrument& other) const
+    {
+        return notehead == other.notehead
+               && noteheads == other.noteheads
+               && line == other.line
+               && stemDirection == other.stemDirection
+               && voice == other.voice
+               && shortcut == other.shortcut
+               && variants == other.variants
+               && panelRow == other.panelRow
+               && panelColumn == other.panelColumn;
+    }
 };
 
 static const int DRUM_INSTRUMENTS = 128;
@@ -75,17 +98,18 @@ static const int DRUM_INSTRUMENTS = 128;
 class Drumset
 {
 public:
-
-    bool isValid(int pitch) const { return !m_drum[pitch].name.empty(); }
-    NoteHeadGroup noteHead(int pitch) const { return m_drum[pitch].notehead; }
-    SymId noteHeads(int pitch, NoteHeadType t) const { return m_drum[pitch].noteheads[int(t)]; }
-    int line(int pitch) const { return m_drum[pitch].line; }
-    int voice(int pitch) const { return m_drum[pitch].voice; }
-    DirectionV stemDirection(int pitch) const { return m_drum[pitch].stemDirection; }
-    const String& name(int pitch) const { return m_drum[pitch].name; }
+    bool isValid(int pitch) const { return !m_drums[pitch].name.empty(); }
+    NoteHeadGroup noteHead(int pitch) const { return m_drums[pitch].notehead; }
+    SymId noteHeads(int pitch, NoteHeadType t) const { return m_drums[pitch].noteheads[int(t)]; }
+    int line(int pitch) const { return m_drums[pitch].line; }
+    int voice(int pitch) const { return m_drums[pitch].voice; }
+    DirectionV stemDirection(int pitch) const { return m_drums[pitch].stemDirection; }
+    const String& name(int pitch) const { return m_drums[pitch].name; }
     String translatedName(int pitch) const;
-    int shortcut(int pitch) const { return m_drum[pitch].shortcut; }
-    std::list<DrumInstrumentVariant> variants(int pitch) const { return m_drum[pitch].variants; }
+    int shortcut(int pitch) const { return m_drums[pitch].shortcut; }
+    std::list<DrumInstrumentVariant> variants(int pitch) const { return m_drums[pitch].variants; }
+    int panelRow(int pitch) const { return m_drums[pitch].panelRow; }
+    int panelColumn(int pitch) const { return m_drums[pitch].panelColumn; }
 
     void save(XmlWriter&) const;
     void load(XmlReader&);
@@ -93,15 +117,26 @@ public:
     void clear();
     int nextPitch(int) const;
     int prevPitch(int) const;
-    DrumInstrument& drum(int i) { return m_drum[i]; }
-    const DrumInstrument& drum(int i) const { return m_drum[i]; }
-    void setDrum(int pitch, const DrumInstrument& di) { m_drum[pitch] = di; }
+    DrumInstrument& drum(int i) { return m_drums[i]; }
+    const DrumInstrument& drum(int i) const { return m_drums[i]; }
+    void setDrum(int pitch, const DrumInstrument& di) { m_drums[pitch] = di; }
     DrumInstrumentVariant findVariant(int pitch, const std::vector<Articulation*>& articulations, TremoloType tremType) const;
 
     static void initDrumset();
-private:
 
-    DrumInstrument m_drum[DRUM_INSTRUMENTS];
+    bool operator==(const Drumset& other) const
+    {
+        for (int pitch = 0; pitch < DRUM_INSTRUMENTS; ++pitch) {
+            if (m_drums[pitch] == other.m_drums[pitch]) {
+                continue;
+            }
+            return false;
+        }
+        return true;
+    }
+
+private:
+    DrumInstrument m_drums[DRUM_INSTRUMENTS];
 };
 
 extern Drumset* smDrumset;

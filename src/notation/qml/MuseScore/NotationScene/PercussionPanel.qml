@@ -255,7 +255,7 @@ Item {
                 text: qsTrc("notation", "Add row")
                 orientation: Qt.Horizontal
                 onClicked: {
-                    padGrid.model.addRow()
+                    padGrid.model.addEmptyRow()
                     flickable.goToBottom()
                 }
             }
