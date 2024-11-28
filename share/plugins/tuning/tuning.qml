@@ -180,7 +180,7 @@ MuseScore {
         var selection = new scoreSelection()
         curScore.startCmd()
         selection.map(filterNotes, reTune(getFinalTuning()))
-        if (annotateValue.checkedState == Qt.Checked) {
+        if (annotateValue.checked == true) {
             selection.map(filterNotes, annotate)
         }
         curScore.endCmd()
