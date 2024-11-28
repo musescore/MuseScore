@@ -446,6 +446,11 @@ struct StaffConfig
 
         return equal;
     }
+
+    bool operator!=(const StaffConfig& conf) const
+    {
+        return !(*this == conf);
+    }
 };
 
 struct TransposeOptions

@@ -598,7 +598,7 @@ void NotationParts::replacePart(const ID& partId, Part* newPart)
     notifyAboutPartReplaced(part, newPart);
 }
 
-void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument)
+void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument, const StaffType* newStaffType)
 {
     TRACEFUNC;
 
@@ -617,15 +617,16 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
         for (staff_idx_t staffIdx = 0; staffIdx < part->nstaves(); ++staffIdx) {
             Staff* staff = part->staves().at(staffIdx);
             StaffConfig config = staffConfig(staff->id());
+            StaffConfig newConfig = config;
 
-            mu::engraving::ClefTypeList newClefTypeList = newInstrument.clefType(staffIdx);
-
-            if (config.clefTypeList == newClefTypeList) {
-                continue;
+            newConfig.clefTypeList = newInstrument.clefType(staffIdx);
+            if (newStaffType) {
+                newConfig.staffType = *newStaffType;
             }
 
-            config.clefTypeList = newClefTypeList;
-            doSetStaffConfig(staff, config);
+            if (config != newConfig) {
+                doSetStaffConfig(staff, newConfig);
+            }
         }
     } else {
         mu::engraving::InstrumentChange* instrumentChange = findInstrumentChange(part, instrumentKey.tick);

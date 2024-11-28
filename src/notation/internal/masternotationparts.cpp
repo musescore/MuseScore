@@ -184,7 +184,8 @@ bool MasterNotationParts::appendLinkedStaff(Staff* staff, const muse::ID& source
     return true;
 }
 
-void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument)
+void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument,
+                                            const StaffType* newStaffType)
 {
     TRACEFUNC;
 
@@ -195,10 +196,10 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
 
     mu::engraving::Interval oldTranspose = part ? part->instrument()->transpose() : mu::engraving::Interval(0, 0);
 
-    NotationParts::replaceInstrument(instrumentKey, newInstrument);
+    NotationParts::replaceInstrument(instrumentKey, newInstrument, newStaffType);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        parts->replaceInstrument(instrumentKey, newInstrument);
+        parts->replaceInstrument(instrumentKey, newInstrument, newStaffType);
     }
 
     // this also transposes all linked parts

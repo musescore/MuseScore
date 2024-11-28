@@ -200,14 +200,20 @@ void PartTreeItem::replaceInstrument()
     instrumentKey.instrumentId = m_instrumentId;
     instrumentKey.tick = Part::MAIN_INSTRUMENT_TICK;
 
-    RetVal<Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument(instrumentKey);
-    if (!selectedInstrument.ret) {
-        LOGE() << selectedInstrument.ret.toString();
+    RetVal<InstrumentTemplate> templ = selectInstrumentsScenario()->selectInstrument(instrumentKey);
+    if (!templ.ret) {
+        LOGE() << templ.ret.toString();
         return;
     }
 
-    const Instrument& newInstrument = selectedInstrument.val;
-    masterNotation()->parts()->replaceInstrument(instrumentKey, newInstrument);
+    Instrument instrument = Instrument::fromTemplate(&templ.val);
+
+    const StaffType* staffType = templ.val.staffTypePreset;
+    if (!staffType) {
+        staffType = StaffType::getDefaultPreset(templ.val.staffGroup);
+    }
+
+    masterNotation()->parts()->replaceInstrument(instrumentKey, instrument, staffType);
 }
 
 void PartTreeItem::resetAllFormatting()
