@@ -1939,7 +1939,11 @@ EngravingItem* Note::drop(EditData& data)
         DirectionV stemDirection = DirectionV::AUTO;
         if (staffGroup == StaffGroup::PERCUSSION) {
             const Drumset* ds = st->part()->instrument(segment->tick())->drumset();
-            stemDirection = ds->stemDirection(n->noteVal().pitch);
+            DO_ASSERT(ds);
+
+            if (ds) {
+                stemDirection = ds->stemDirection(n->noteVal().pitch);
+            }
         }
         ch->setStemDirection(stemDirection);
 
