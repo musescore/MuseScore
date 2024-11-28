@@ -12595,6 +12595,29 @@ Aeolus organ synthesizer, currently disabled -->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
+            <Instrument id="fiddle">
+                  <longName>Fiddle</longName>
+                  <shortName>Fdl.</shortName>
+                  <description>Fiddle</description>
+                  <musicXMLid>strings.fiddle</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>55-88</aPitchRange>
+                  <pPitchRange>55-103</pPitchRange>
+                  <Channel name="arco">
+                        <!--MIDI: Bank 0, Prog 110; MS General: Fiddle-->
+                        <program value="110"/> <!--Fiddle-->
+                  </Channel>
+                  <Channel name="pizzicato">
+                        <!--MIDI: Bank 0, Prog 45; MS General: Strings Pizzicato-->
+                        <program value="45"/> <!--Pizzicato Strings-->
+                  </Channel>
+                  <Channel name="tremolo">
+                        <!--MIDI: Bank 0, Prog 44; MS General: Strings Tremolo-->
+                        <program value="44"/> <!--Tremolo Strings-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
             <Instrument id="nyckelharpa">
                   <longName>Nyckelharpa</longName>
                   <shortName>Nyh.</shortName>
