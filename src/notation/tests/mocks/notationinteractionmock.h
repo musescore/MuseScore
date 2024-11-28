@@ -167,6 +167,7 @@ public:
     MOCK_METHOD(void, toggleSystemLock, (), (override));
     MOCK_METHOD(void, toggleScoreLock, (), (override));
     MOCK_METHOD(void, makeIntoSystem, (), (override));
+    MOCK_METHOD(void, applySystemLock, (), (override));
 
     MOCK_METHOD(void, addRemoveSystemLocks, (AddRemoveSystemLockType, int), (override));
     MOCK_METHOD(bool, transpose, (const TransposeOptions&), (override));

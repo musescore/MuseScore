@@ -6555,6 +6555,44 @@ void Score::toggleSystemLock(const std::vector<System*>& systems)
     }
 }
 
+void Score::makeIntoSystem(MeasureBase* first, MeasureBase* last)
+{
+    bool mmrests = style().styleB(Sid::createMultiMeasureRests);
+
+    const SystemLock* lockContainingfirst = m_systemLocks.lockContaining(first);
+    const SystemLock* lockContaininglast = m_systemLocks.lockContaining(last);
+
+    if (lockContainingfirst) {
+        undoRemoveSystemLock(lockContainingfirst);
+        if (lockContainingfirst->startMB()->isBefore(first)) {
+            MeasureBase* oneBeforeFirst = mmrests ? first->prevMM() : first->prev();
+            SystemLock* newLockBefore = new SystemLock(lockContainingfirst->startMB(), oneBeforeFirst);
+            undoAddSystemLock(newLockBefore);
+        }
+    }
+
+    if (lockContaininglast) {
+        if (lockContaininglast != lockContainingfirst) {
+            undoRemoveSystemLock(lockContaininglast);
+        }
+        if (last->isBefore(lockContaininglast->endMB())) {
+            MeasureBase* oneAfterLast = mmrests ? last->nextMM() : last->next();
+            SystemLock* newLockAfter = new SystemLock(oneAfterLast, lockContaininglast->endMB());
+            undoAddSystemLock(newLockAfter);
+        }
+    }
+
+    std::vector<const SystemLock*> locksContainedInRange = m_systemLocks.locksContainedInRange(first, last);
+    for (const SystemLock* lock : locksContainedInRange) {
+        if (lock != lockContainingfirst && lock != lockContaininglast) {
+            undoRemoveSystemLock(lock);
+        }
+    }
+
+    SystemLock* newLock = new SystemLock(first, last);
+    undoAddSystemLock(newLock);
+}
+
 void Score::removeSystemLocksOnAddLayoutBreak(LayoutBreakType breakType, const MeasureBase* measure)
 {
     IF_ASSERT_FAILED(breakType != LayoutBreakType::NOBREAK) {

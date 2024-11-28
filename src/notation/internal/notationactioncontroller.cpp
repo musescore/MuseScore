@@ -256,6 +256,7 @@ void NotationActionController::init()
     registerAction("section-break", &Interaction::toggleLayoutBreak, LayoutBreakType::SECTION, PlayMode::NoPlay,
                    &Controller::toggleLayoutBreakAvailable);
 
+    registerAction("apply-system-lock", &Interaction::applySystemLock);
     registerAction("move-measure-to-prev-system", &Interaction::moveMeasureToPrevSystem);
     registerAction("move-measure-to-next-system", &Interaction::moveMeasureToNextSystem);
     registerAction("toggle-system-lock", &Interaction::toggleSystemLock);

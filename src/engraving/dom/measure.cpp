@@ -1383,8 +1383,7 @@ bool Measure::acceptDrop(EditData& data) const
         {
             LayoutMode layoutMode = score()->layoutMode();
             if (layoutMode == LayoutMode::PAGE || layoutMode == LayoutMode::SYSTEM) {
-                const System* sys = system();
-                viewer->setDropRectangle(sys->canvasBoundingRect().adjusted(sys->leftMargin(), 0.0, 0.0, 0.0));
+                viewer->setDropRectangle(canvasBoundingRect().adjusted(-x(), 0.0, 0.0, 0.0));
                 return true;
             }
             return false;
@@ -1726,7 +1725,7 @@ EngravingItem* Measure::drop(EditData& data)
             break;
         }
         case ActionIconType::SYSTEM_LOCK:
-            score()->toggleSystemLock({ system() });
+            score()->makeIntoSystem(system()->first(), this);
             break;
         default:
             break;
