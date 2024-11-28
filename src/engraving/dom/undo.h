@@ -92,6 +92,7 @@ class Segment;
 class Selection;
 class Spanner;
 class Staff;
+class SystemLock;
 class Text;
 class TremoloBar;
 
@@ -231,7 +232,14 @@ public:
     UndoMacro* last() const { return m_currentIndex > 0 ? m_macroList[m_currentIndex - 1] : nullptr; }
     UndoMacro* prev() const { return m_currentIndex > 1 ? m_macroList[m_currentIndex - 2] : nullptr; }
     UndoMacro* next() const { return canRedo() ? m_macroList[m_currentIndex] : nullptr; }
-    UndoMacro* atIndex(size_t idx) const { return idx >= 0 && idx < m_macroList.size() ? m_macroList[idx] : nullptr; }
+
+    /// Returns the command that led to the state with the given `idx`.
+    /// For further discussion of the indices involved in UndoStack, see:
+    /// https://github.com/musescore/MuseScore/pull/25389#discussion_r1825782176
+    UndoMacro* lastAtIndex(size_t idx) const
+    {
+        return idx > 0 && idx - 1 < m_macroList.size() ? m_macroList[idx - 1] : nullptr;
+    }
 
     void undo(EditData*);
     void redo(EditData*);
@@ -681,6 +689,36 @@ public:
 
     UNDO_TYPE(CommandType::RemoveElement)
     UNDO_CHANGED_OBJECTS({ element })
+};
+
+class AddSystemLock : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, AddSystemLock)
+
+    const SystemLock* m_systemLock;
+public:
+    AddSystemLock(const SystemLock* systemLock);
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+    void cleanup(bool undo) override;
+
+    UNDO_NAME("AddSystemLock")
+    std::vector<const EngravingObject*> objectItems() const override;
+};
+
+class RemoveSystemLock : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, RemoveSystemLock)
+
+    const SystemLock* m_systemLock;
+public:
+    RemoveSystemLock(const SystemLock* systemLock);
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+    void cleanup(bool undo) override;
+
+    UNDO_NAME("RemoveSystemLock")
+    std::vector<const EngravingObject*> objectItems() const override;
 };
 
 class ChangePatch : public UndoCommand

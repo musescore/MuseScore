@@ -34,6 +34,9 @@ using namespace muse::workspace;
 using namespace muse::actions;
 using namespace muse::extensions;
 
+static const ActionCode TOGGLE_UNDO_HISTORY_PANEL_CODE = "toggle-undo-history-panel";
+static const QString VIEW_TOGGLE_UNDO_HISTORY_PANEL_ITEM_ID = "view/toggle-undo-history-panel";
+
 static QString makeId(const ActionCode& actionCode, int itemIndex)
 {
     return QString::fromStdString(actionCode) + QString::number(itemIndex);
@@ -132,6 +135,20 @@ void AppMenuModel::setupConnections()
     });
 }
 
+void AppMenuModel::onActionsStateChanges(const muse::actions::ActionCodeList& codes)
+{
+    AbstractMenuModel::onActionsStateChanges(codes);
+
+    if (muse::contains(codes, TOGGLE_UNDO_HISTORY_PANEL_CODE)) {
+        // Appears both in Edit and View menus; AbstractMenuModel::onActionsStateChanges()
+        // handles only one occurrence per action code
+        MenuItem& item = findItem(VIEW_TOGGLE_UNDO_HISTORY_PANEL_ITEM_ID);
+        if (item.isValid()) {
+            item.setState(uiActionsRegister()->actionState(TOGGLE_UNDO_HISTORY_PANEL_CODE));
+        }
+    }
+}
+
 MenuItem* AppMenuModel::makeMenuItem(const ActionCode& actionCode, MenuItemRole menuRole)
 {
     MenuItem* item = makeMenuItem(actionCode);
@@ -180,7 +197,7 @@ MenuItem* AppMenuModel::makeEditMenu()
     MenuItemList editItems {
         makeMenuItem("undo"),
         makeMenuItem("redo"),
-        makeMenuItem("undo-history"),
+        makeMenuItem(TOGGLE_UNDO_HISTORY_PANEL_CODE),
         makeSeparator(),
         makeMenuItem("notation-cut"),
         makeMenuItem("notation-copy"),
@@ -225,6 +242,9 @@ void AppMenuModel::updateUndoRedoItems()
 
 MenuItem* AppMenuModel::makeViewMenu()
 {
+    MenuItem* historyItem = makeMenuItem(TOGGLE_UNDO_HISTORY_PANEL_CODE);
+    historyItem->setId(VIEW_TOGGLE_UNDO_HISTORY_PANEL_ITEM_ID);
+
     MenuItemList viewItems {
 #ifndef Q_OS_MAC
         makeMenuItem("fullscreen"),
@@ -234,6 +254,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-instruments"),
         makeMenuItem("inspector"),
         makeMenuItem("toggle-selection-filter"),
+        historyItem,
         makeMenuItem("toggle-navigator"),
         makeMenuItem("toggle-braille-panel"),
         makeMenuItem("toggle-timeline"),
@@ -282,7 +303,7 @@ MenuItem* AppMenuModel::makeFormatMenu()
         makeMenuItem("edit-style"),
         makeMenuItem("page-settings"),
         makeSeparator(),
-        makeMenuItem("add-remove-breaks"),
+        makeMenuItem("measures-per-system"),
         makeMenu(TranslatableString("appshell/menu/format", "Str&etch"), stretchItems, "menu-stretch"),
         makeSeparator(),
         makeMenuItem("reset-text-style-overrides"),

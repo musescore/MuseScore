@@ -114,7 +114,7 @@ public:
     virtual bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) = 0;
     virtual void undo() = 0;
     virtual void redo() = 0;
-    virtual void undoRedoToIdx(size_t idx) = 0;
+    virtual void undoRedoToIndex(size_t idx) = 0;
 
     // Change selection
     virtual bool moveSelectionAvailable(MoveSelectionType type) const = 0;
@@ -200,8 +200,13 @@ public:
 
     virtual bool toggleLayoutBreakAvailable() const = 0;
     virtual void toggleLayoutBreak(LayoutBreakType breakType) = 0;
+    virtual void moveMeasureToPrevSystem() = 0;
+    virtual void moveMeasureToNextSystem() = 0;
+    virtual void toggleSystemLock() = 0;
+    virtual void toggleScoreLock() = 0;
+    virtual void makeIntoSystem() = 0;
 
-    virtual void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) = 0;
+    virtual void addRemoveSystemLocks(AddRemoveSystemLockType intervalType, int interval = 0) = 0;
     virtual bool transpose(const TransposeOptions& options) = 0;
     virtual void swapVoices(voice_idx_t voiceIndex1, voice_idx_t voiceIndex2) = 0;
     virtual void addIntervalToSelectedNotes(int interval) = 0;

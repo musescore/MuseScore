@@ -524,6 +524,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(tiePlacementSingleNote,                     TiePlacement::OUTSIDE),
     styleDef(tiePlacementChord,                          TiePlacement::OUTSIDE),
+    styleDef(tieDotsPlacement,                           TieDotsPlacement::AUTO),
     styleDef(tieMinShoulderHeight,                       Spatium(0.3)),
     styleDef(tieMaxShoulderHeight,                       Spatium(2.0)),
 
@@ -1269,6 +1270,10 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(noteLineFrameRound,                        0),
     styleDef(noteLineFrameFgColor,                      PropertyValue::fromValue(Color::BLACK)),
     styleDef(noteLineFrameBgColor,                      PropertyValue::fromValue(Color::transparent)),
+    styleDef(noteLineWidth,                             Spatium(0.15)),
+    styleDef(noteLineStyle,                             PropertyValue(LineType::SOLID)),
+    styleDef(noteLineDashLineLen,                       5.0),
+    styleDef(noteLineDashGapLen,                        5.0),
 
     styleDef(glissandoFontFace,                          "Edwin"),
     styleDef(glissandoFontSize,                          PropertyValue(8.0)),
@@ -1288,6 +1293,11 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(glissandoText,                              String(u"gliss.")),
     styleDef(glissandoStyle,                             GlissandoStyle::CHROMATIC),
     styleDef(glissandoStyleHarp,                         GlissandoStyle::DIATONIC),
+    styleDef(glissandoType,                              GlissandoType::STRAIGHT),
+    styleDef(glissandoLineStyle,                         PropertyValue(LineType::SOLID)),
+    styleDef(glissandoDashLineLen,                       5.0),
+    styleDef(glissandoDashGapLen,                        5.0),
+    styleDef(glissandoShowText,                          true),
 
     styleDef(bendFontFace,                               "Edwin"),
     styleDef(bendFontSize,                               8.0),

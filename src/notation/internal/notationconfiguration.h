@@ -45,9 +45,6 @@ class NotationConfiguration : public INotationConfiguration, public muse::async:
 public:
     void init();
 
-    QColor anchorColor() const override;
-    muse::async::Channel<QColor> anchorColorChanged() const override;
-
     QColor backgroundColor() const override;
     void setBackgroundColor(const QColor& color) override;
 

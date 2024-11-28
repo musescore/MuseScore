@@ -126,6 +126,7 @@
 #include "dom/symbol.h"
 #include "dom/systemdivider.h"
 #include "dom/systemtext.h"
+#include "dom/systemlock.h"
 #include "dom/soundflag.h"
 
 #include "dom/tempotext.h"
@@ -348,6 +349,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::SYSTEM_DIVIDER:       draw(item_cast<const SystemDivider*>(item), painter);
         break;
     case ElementType::SYSTEM_TEXT:          draw(item_cast<const SystemText*>(item), painter);
+        break;
+    case ElementType::SYSTEM_LOCK_INDICATOR: draw(item_cast<const SystemLockIndicator*>(item), painter);
         break;
     case ElementType::SOUND_FLAG:           draw(item_cast<const SoundFlag*>(item), painter);
         break;
@@ -996,7 +999,7 @@ void TDraw::draw(const Box* item, Painter* painter)
         pen.setCapStyle(PenCapStyle::SquareCap);
         pen.setColor(showHighlightedFrame
                      ? item->configuration()->selectionColor()
-                     : item->configuration()->formattingColor());
+                     : item->configuration()->frameColor());
         pen.setDashPattern({ 1, 3 });
 
         painter->setBrush(BrushStyle::NoBrush);
@@ -1470,6 +1473,31 @@ void TDraw::draw(const FretCircle* item, Painter* painter)
     painter->restore();
 }
 
+static void setDashAndGapLen(const SLine* line, double& dash, double& gap, Pen& pen)
+{
+    static constexpr double DOTTED_DASH_LEN = 0.01;
+    static constexpr double DOTTED_GAP_LEN = 1.99;
+    switch (line->lineStyle()) {
+    case LineType::SOLID:
+        break;
+    case LineType::DASHED:
+        dash = line->dashLineLen(), gap = line->dashGapLen();
+        break;
+    case LineType::DOTTED:
+        dash = DOTTED_DASH_LEN, gap = DOTTED_GAP_LEN;
+        pen.setCapStyle(PenCapStyle::RoundCap); // round dots
+        break;
+    }
+}
+
+static std::vector<double> distributedDashPattern(double dash, double gap, double lineLength)
+{
+    int numPairs = std::max(1.0, lineLength / (dash + gap));
+    double newGap = (lineLength - dash * (numPairs + 1)) / numPairs;
+
+    return { dash, newGap };
+}
+
 void TDraw::draw(const GlissandoSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
@@ -1495,6 +1523,16 @@ void TDraw::draw(const GlissandoSegment* item, Painter* painter)
     painter->rotate(-wi);
 
     if (glissando->glissandoType() == GlissandoType::STRAIGHT) {
+        const bool isNonSolid = glissando->lineStyle() != LineType::SOLID;
+        if (isNonSolid) {
+            double lineWidth = glissando->absoluteFromSpatium(glissando->lineWidth());
+            double dash = 0;
+            double gap = 0;
+            setDashAndGapLen(glissando, dash, gap, pen);
+            pen.setDashPattern(distributedDashPattern(dash, gap, l / lineWidth));
+            painter->setPen(pen);
+        }
+
         painter->drawLine(LineF(0.0, 0.0, l, 0.0));
     } else if (glissando->glissandoType() == GlissandoType::WAVY) {
         RectF b = item->symBbox(SymId::wiggleTrill);
@@ -1725,17 +1763,7 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
     double dash = 0;
     double gap = 0;
 
-    switch (tl->lineStyle()) {
-    case LineType::SOLID:
-        break;
-    case LineType::DASHED:
-        dash = tl->dashLineLen(), gap = tl->dashGapLen();
-        break;
-    case LineType::DOTTED:
-        dash = 0.01, gap = 1.99;
-        pen.setCapStyle(PenCapStyle::RoundCap); // round dots
-        break;
-    }
+    setDashAndGapLen(tl, dash, gap, pen);
 
     const bool isNonSolid = tl->lineStyle() != LineType::SOLID;
 
@@ -1754,14 +1782,6 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
         }
         return;
     }
-
-    auto distributedDashPattern = [](double dash, double gap, double lineLength) -> std::vector<double>
-    {
-        int numPairs = std::max(1.0, lineLength / (dash + gap));
-        double newGap = (lineLength - dash * (numPairs + 1)) / numPairs;
-
-        return { dash, newGap };
-    };
 
     int start = 0, end = item->npoints();
 
@@ -2055,24 +2075,13 @@ void TDraw::draw(const LayoutBreak* item, Painter* painter)
     }
 
     Pen pen(item->selected() ? item->configuration()->selectionColor() : item->configuration()->formattingColor());
-
-    if (item->score()->isPaletteScore()) {
-        pen.setColor(item->configuration()->fontPrimaryColor());
-    }
-    pen.setWidthF(item->lineWidth() / 2);
-    pen.setJoinStyle(PenJoinStyle::MiterJoin);
-    pen.setCapStyle(PenCapStyle::SquareCap);
-    pen.setDashPattern({ 1, 3 });
-
     painter->setPen(pen);
-    painter->setBrush(BrushStyle::NoBrush);
-    painter->drawRect(item->iconBorderRect());
 
-    pen.setWidthF(item->lineWidth());
-    pen.setStyle(PenStyle::SolidLine);
+    Font f(item->font());
+    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    painter->setFont(f);
 
-    painter->setPen(pen);
-    painter->drawPath(item->iconPath());
+    painter->drawSymbol(PointF(), item->iconCode());
 }
 
 void TDraw::draw(const LedgerLine* item, Painter* painter)
@@ -2900,6 +2909,35 @@ void TDraw::draw(const SystemText* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
+}
+
+void TDraw::draw(const SystemLockIndicator* item, muse::draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    if (item->score()->printing() || !item->score()->showUnprintable()) {
+        return;
+    }
+
+    Pen pen(item->selected() ? item->configuration()->selectionColor() : item->configuration()->formattingColor());
+    painter->setPen(pen);
+
+    Font f(item->font());
+    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    painter->setFont(f);
+
+    painter->drawSymbol(PointF(), item->iconCode());
+
+    if (item->selected()) {
+        Color lockedAreaColor = item->configuration()->selectionColor();
+        lockedAreaColor.setAlpha(38);
+        Brush brush(lockedAreaColor);
+        painter->setBrush(brush);
+        painter->setNoPen();
+        double radius = 0.5 * item->spatium();
+
+        painter->drawRoundedRect(item->ldata()->rangeRect, radius, radius);
+    }
 }
 
 void TDraw::draw(const SoundFlag* item, Painter* painter)

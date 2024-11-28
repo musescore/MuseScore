@@ -79,7 +79,7 @@ Rectangle {
 
         spacing: 12
 
-        cacheBuffer: contentHeight
+        cacheBuffer: Math.max(0, contentHeight)
 
         function ensureContentVisible(invisibleContentHeight) {
             if (sectionList.contentY + invisibleContentHeight > 0) {

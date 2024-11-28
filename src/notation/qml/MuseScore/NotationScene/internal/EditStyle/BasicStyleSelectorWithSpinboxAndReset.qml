@@ -27,27 +27,23 @@ import MuseScore.NotationScene 1.0
 import Muse.UiComponents 1.0
 import Muse.Ui 1.0
 
-RowLayout {
-    required property StyleItem styleItem
-    required property string label
+
+StyleControlRowWithReset {
+    id: root
     property string suffix: ''
     property bool inPercentage: false
+    property double step: 0.01
 
-    StyledTextLabel {
-        Layout.fillWidth: true
-        id: optionLabel
-        horizontalAlignment: Text.AlignLeft
-        text: label
-    }
+    controlWidth: 80
 
     IncrementalPropertyControl {
-        Layout.preferredWidth: 80
+        id: spinBox
         Layout.fillWidth: false
 
         currentValue: inPercentage ? Math.round(styleItem.value * 100) : styleItem.value
         minValue: 0
         maxValue: inPercentage ? 999 : 99
-        step: inPercentage ? 1 : 0.01
+        step: inPercentage ? 1 : root.step
         decimals: inPercentage ? 0 : 2
 
         measureUnitsSymbol: inPercentage ? '%' : suffix
@@ -57,9 +53,4 @@ RowLayout {
         }
     }
 
-    FlatButton {
-        icon: IconCode.UNDO
-        enabled: !styleItem.isDefault
-        onClicked: styleItem.value = styleItem.defaultValue
-    }
 }

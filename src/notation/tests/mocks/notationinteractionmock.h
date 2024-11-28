@@ -82,7 +82,7 @@ public:
     MOCK_METHOD(bool, applyPaletteElement, (mu::engraving::EngravingItem*, Qt::KeyboardModifiers), (override));
     MOCK_METHOD(void, undo, (), (override));
     MOCK_METHOD(void, redo, (), (override));
-    MOCK_METHOD(void, undoRedoToIdx, (size_t idx), (override));
+    MOCK_METHOD(void, undoRedoToIndex, (size_t idx), (override));
 
     MOCK_METHOD(bool, moveSelectionAvailable, (MoveSelectionType), (const, override));
     MOCK_METHOD(void, moveSelection, (MoveDirection, MoveSelectionType), (override));
@@ -162,8 +162,13 @@ public:
 
     MOCK_METHOD(bool, toggleLayoutBreakAvailable, (), (const, override));
     MOCK_METHOD(void, toggleLayoutBreak, (LayoutBreakType), (override));
+    MOCK_METHOD(void, moveMeasureToPrevSystem, (), (override));
+    MOCK_METHOD(void, moveMeasureToNextSystem, (), (override));
+    MOCK_METHOD(void, toggleSystemLock, (), (override));
+    MOCK_METHOD(void, toggleScoreLock, (), (override));
+    MOCK_METHOD(void, makeIntoSystem, (), (override));
 
-    MOCK_METHOD(void, setBreaksSpawnInterval, (BreaksSpawnIntervalType, int), (override));
+    MOCK_METHOD(void, addRemoveSystemLocks, (AddRemoveSystemLockType, int), (override));
     MOCK_METHOD(bool, transpose, (const TransposeOptions&), (override));
     MOCK_METHOD(void, swapVoices, (voice_idx_t, voice_idx_t), (override));
     MOCK_METHOD(void, addIntervalToSelectedNotes, (int), (override));

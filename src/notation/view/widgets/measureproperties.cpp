@@ -128,6 +128,7 @@ mu::engraving::Measure* getPrevMeasure(mu::engraving::Measure* m)
 
 void MeasurePropertiesDialog::gotoNextMeasure()
 {
+    apply();
     if (getNextMeasure(m_measure)) {
         setMeasure(getNextMeasure(m_measure));
     }
@@ -142,6 +143,7 @@ void MeasurePropertiesDialog::gotoNextMeasure()
 
 void MeasurePropertiesDialog::gotoPreviousMeasure()
 {
+    apply();
     if (getPrevMeasure(m_measure)) {
         setMeasure(getPrevMeasure(m_measure));
     }

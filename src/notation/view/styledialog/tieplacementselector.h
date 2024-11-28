@@ -31,12 +31,14 @@ class TiePlacementSelectorModel : public AbstractStyleDialogModel
 
     Q_PROPERTY(StyleItem * placementSingleNotes READ placementSingleNotes CONSTANT)
     Q_PROPERTY(StyleItem * placementChords READ placementChords CONSTANT)
+    Q_PROPERTY(StyleItem * placementDots READ placementDots CONSTANT)
 
 public:
     explicit TiePlacementSelectorModel(QObject* parent = nullptr);
 
     StyleItem* placementSingleNotes() const;
     StyleItem* placementChords() const;
+    StyleItem* placementDots() const;
 };
 }
 

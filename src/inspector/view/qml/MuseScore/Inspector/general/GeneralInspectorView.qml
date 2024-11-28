@@ -35,6 +35,8 @@ InspectorSectionView {
 
     implicitHeight: contentColumn.height
 
+    enabled: model ? model.areGeneralPropertiesAvailable : true
+
     ColumnLayout {
         id: contentColumn
 

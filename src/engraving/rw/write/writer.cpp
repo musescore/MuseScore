@@ -61,7 +61,7 @@ bool Writer::writeScore(Score* score, io::IODevice* device, bool onlySelection, 
     if (!MScore::testMode) {
         xml.tag("programVersion", application()->version().toString());
         xml.tag("programRevision", application()->revision());
-        xml.tag("LastEID", score->masterScore()->getEID()->lastID());
+        xml.tag("LastEID", score->masterScore()->eidRegister()->lastID());
     }
 
     compat::WriteScoreHook hook;
@@ -113,6 +113,10 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
     }
 
     xml.startElement(score);
+
+    if (score->eid().isValid()) {
+        xml.tag("eid", score->eid().toUint64());
+    }
 
     if (Excerpt* e = score->excerpt()) {
         if (!e->name().empty()) {
@@ -260,7 +264,9 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
 
     hook.onWriteExcerpts302(score, xml, ctx, selectionOnly);
 
-    xml.endElement();
+    TWrite::writeSystemLocks(score, xml);
+
+    xml.endElement(); // score
 
     if (unhide) {
         score->endCmd(true);

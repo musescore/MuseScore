@@ -45,7 +45,7 @@ public:
     bool canRedo() const override;
     void redo(mu::engraving::EditData*) override;
 
-    void undoRedoToIdx(size_t idx, mu::engraving::EditData* editData) override;
+    void undoRedoToIndex(size_t idx, mu::engraving::EditData* editData) override;
 
     void prepareChanges(const muse::TranslatableString& actionName) override;
     void rollbackChanges() override;
@@ -60,8 +60,8 @@ public:
     const muse::TranslatableString topMostUndoActionName() const override;
     const muse::TranslatableString topMostRedoActionName() const override;
     size_t undoRedoActionCount() const override;
-    size_t undoRedoActionCurrentIdx() const override;
-    const muse::TranslatableString undoRedoActionNameAtIdx(size_t idx) const override;
+    size_t currentStateIndex() const override;
+    const muse::TranslatableString lastActionNameAtIdx(size_t idx) const override;
 
     muse::async::Notification stackChanged() const override;
     muse::async::Channel<ChangesRange> changesChannel() const override;

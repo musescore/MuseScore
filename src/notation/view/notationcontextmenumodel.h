@@ -52,6 +52,7 @@ private:
     muse::uicomponents::MenuItemList makeSelectItems();
     muse::uicomponents::MenuItemList makeElementItems();
     muse::uicomponents::MenuItemList makeInsertMeasuresItems();
+    muse::uicomponents::MenuItemList makeMoveMeasureItems();
     muse::uicomponents::MenuItemList makeChangeInstrumentItems();
     muse::uicomponents::MenuItemList makeVerticalBoxItems();
     muse::uicomponents::MenuItemList makeHorizontalBoxItems();

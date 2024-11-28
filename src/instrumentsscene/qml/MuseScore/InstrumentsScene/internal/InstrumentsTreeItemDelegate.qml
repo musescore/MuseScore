@@ -132,10 +132,10 @@ FocusableControl {
     Loader {
         id: popupLoader
 
-        property alias openedPopup: popupLoader.item
-        property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
+        readonly property StyledPopupView openedPopup: popupLoader.item as StyledPopupView
+        readonly property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
 
-        function openPopup(comp, btn, item) {
+        function openPopup(comp: Component, btn: Item, item) {
             popupLoader.sourceComponent = comp
             if (!openedPopup) {
                 return
@@ -152,10 +152,7 @@ FocusableControl {
 
             openedPopup.closed.connect(function() {
                 root.popupClosed()
-
-                Qt.callLater(function() {
-                    popupLoader.sourceComponent = null
-                })
+                sourceComponent = null
             })
 
             openedPopup.open()
@@ -173,6 +170,22 @@ FocusableControl {
 
         InstrumentSettingsPopup {
             anchorItem: popupAnchorItem
+
+            onReplaceInstrumentRequested: {
+                // The popup would close when the dialog to select the new
+                // instrument is shown; when it closes, it is unloaded, i.e.
+                // deleted, which means that it is deleted while a signal
+                // handler inside it is being executed. This causes a crash.
+                // To prevent that, let the popup close itself, and perform the
+                // actual operation "later", i.e. not (directly or indirectly)
+                // inside the signal handler in the popup.
+                Qt.callLater(model.itemRole.replaceInstrument)
+            }
+
+            onResetAllFormattingRequested: {
+                // Same as above
+                Qt.callLater(model.itemRole.resetAllFormatting)
+            }
         }
     }
 

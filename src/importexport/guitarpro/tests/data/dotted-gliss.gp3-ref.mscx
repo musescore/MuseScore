@@ -108,9 +108,7 @@ Innuendo</text>
               <string>1</string>
               <Spanner type="Glissando">
                 <Glissando>
-                  <text>gliss.</text>
                   <diagonal>1</diagonal>
-                  <anchor>3</anchor>
                   </Glissando>
                 <next>
                   <location>

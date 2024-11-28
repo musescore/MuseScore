@@ -456,10 +456,8 @@
               <tpc>19</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <text>gliss.</text>
                   <linkedMain/>
                   <diagonal>1</diagonal>
-                  <anchor>3</anchor>
                   </Glissando>
                 <next>
                   <location>
@@ -799,10 +797,8 @@
               <tpc>19</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <text>gliss.</text>
                   <linkedMain/>
                   <diagonal>1</diagonal>
-                  <anchor>3</anchor>
                   </Glissando>
                 <next>
                   <location>
@@ -841,6 +837,7 @@
         </Measure>
       </Staff>
     <Score>
+      <eid>867583393796</eid>
       <name>Flute</name>
       <Division>480</Division>
       <Style>
@@ -1293,11 +1290,9 @@
                 <tpc>19</tpc>
                 <Spanner type="Glissando">
                   <Glissando>
-                    <text>gliss.</text>
                     <linked>
                       </linked>
                     <diagonal>1</diagonal>
-                    <anchor>3</anchor>
                     </Glissando>
                   <next>
                     <location>
@@ -1679,11 +1674,9 @@
                 <tpc>19</tpc>
                 <Spanner type="Glissando">
                   <Glissando>
-                    <text>gliss.</text>
                     <linked>
                       </linked>
                     <diagonal>1</diagonal>
-                    <anchor>3</anchor>
                     </Glissando>
                   <next>
                     <location>

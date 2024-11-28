@@ -395,6 +395,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
         return PropertyValue(TConv::fromXml(e.readAsciiText(), VeloType::OFFSET_VAL));
     case P_TYPE::GLISS_STYLE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), GlissandoStyle::CHROMATIC));
+    case P_TYPE::GLISS_TYPE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), GlissandoType::STRAIGHT));
     case P_TYPE::BARLINE_TYPE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), BarLineType::NORMAL));
 
@@ -1987,7 +1989,9 @@ static void setActionIconTypeFromAction(ActionIcon* i, const std::string& action
         { "grace-note-bend", ActionIconType::GRACE_NOTE_BEND },
         { "slight-bend", ActionIconType::SLIGHT_BEND },
 
-        { "add-noteline", ActionIconType::NOTE_ANCHORED_LINE }
+        { "add-noteline", ActionIconType::NOTE_ANCHORED_LINE },
+
+        { "toggle-system-lock", ActionIconType::SYSTEM_LOCK }
     };
 
     auto it = map.find(actionCode);
@@ -2994,7 +2998,6 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
         ctx.addSpanner(e.intAttribute("id", -1), g);
     }
 
-    g->setShowText(false);
     staff_idx_t staffIdx = track2staff(ctx.track());
     Staff* staff = ctx.score()->staff(staffIdx);
     if (staff) {
@@ -3003,18 +3006,17 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
     }
     g->resetProperty(Pid::GLISS_STYLE);
 
+    bool textRead = false;
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
         if (tag == "text") {
             g->setShowText(true);
+            textRead = true;
             TRead::readProperty(g, e, ctx, Pid::GLISS_TEXT);
         } else if (tag == "isHarpGliss" && ctx.pasteMode()) {
             g->setIsHarpGliss(e.readBool());
             g->resetProperty(Pid::GLISS_STYLE);
-        } else if (tag == "subtype") {
-            g->setGlissandoType(TConv::fromXml(e.readAsciiText(), GlissandoType::STRAIGHT));
-        } else if (tag == "glissandoStyle") {
-            TRead::readProperty(g, e, ctx, Pid::GLISS_STYLE);
         } else if (tag == "easeInSpin") {
             g->setEaseIn(e.readInt());
         } else if (tag == "easeOutSpin") {
@@ -3025,6 +3027,10 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
         } else if (!TRead::readProperties(static_cast<SLine*>(g), e, ctx)) {
             e.unknown();
         }
+    }
+
+    if (g->score()->mscVersion() < 450 && !textRead) {
+        g->setShowText(false);
     }
 }
 
@@ -3292,7 +3298,6 @@ void TRead::read(LayoutBreak* b, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-    b->init();
 }
 
 void TRead::read(LedgerLine* l, XmlReader& e, ReadContext& ctx)
@@ -4819,4 +4824,38 @@ void TRead::readSpanner(XmlReader& e, ReadContext& ctx, Score* current, track_id
 {
     std::shared_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, &ctx, current, static_cast<int>(track)));
     ConnectorInfoReader::readConnector(info, e, ctx);
+}
+
+void TRead::readSystemLocks(Score* score, XmlReader& e)
+{
+    while (e.readNextStartElement()) {
+        if (e.name() == "systemLock") {
+            readSystemLock(score, e);
+        } else {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::readSystemLock(Score* score, XmlReader& e)
+{
+    EID startMeasId;
+    EID endMeasId;
+
+    while (e.readNextStartElement()) {
+        AsciiStringView tag(e.name());
+        if (tag == "startMeasure") {
+            startMeasId = EID::fromStdString(e.readAsciiText());
+        } else if (tag == "endMeasure") {
+            endMeasId = EID::fromStdString(e.readAsciiText());
+        } else {
+            e.unknown();
+        }
+    }
+
+    EIDRegister* eidRegister = score->masterScore()->eidRegister();
+    MeasureBase* startMeas = toMeasureBase(eidRegister->itemFromEID(startMeasId));
+    MeasureBase* endMeas = toMeasureBase(eidRegister->itemFromEID(endMeasId));
+
+    score->addSystemLock(new SystemLock(startMeas, endMeas));
 }

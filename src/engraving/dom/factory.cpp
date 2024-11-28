@@ -97,6 +97,7 @@
 #include "stringtunings.h"
 #include "system.h"
 #include "systemdivider.h"
+#include "systemlock.h"
 #include "systemtext.h"
 #include "soundflag.h"
 #include "tempotext.h"
@@ -290,6 +291,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::ROOT_ITEM:
     case ElementType::FIGURED_BASS_ITEM:
     case ElementType::DUMMY:
+    case ElementType::SYSTEM_LOCK_INDICATOR:
         break;
     }
 
@@ -763,3 +765,12 @@ PlayTechAnnotation* Factory::createPlayTechAnnotation(Segment * parent, PlayingT
 CREATE_ITEM_IMPL(Capo, ElementType::CAPO, Segment, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(TimeTickAnchor, ElementType::TIME_TICK_ANCHOR, Segment, isAccessibleEnabled)
+
+SystemLockIndicator* Factory::createSystemLockIndicator(System * parent, const SystemLock * lock, bool isAccessibleEnabled)
+{
+    SystemLockIndicator* sli = new SystemLockIndicator(parent, lock);
+    sli->setAccessibleEnabled(isAccessibleEnabled);
+    return sli;
+}
+
+COPY_ITEM_IMPL(SystemLockIndicator)

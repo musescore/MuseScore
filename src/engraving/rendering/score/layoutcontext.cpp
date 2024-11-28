@@ -293,6 +293,14 @@ const ChordRest* DomAccessor::findCR(Fraction tick, track_idx_t track) const
     return score()->findCR(tick, track);
 }
 
+const SystemLocks* DomAccessor::systemLocks() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->systemLocks();
+}
+
 ChordRest* DomAccessor::findCR(Fraction tick, track_idx_t track)
 {
     IF_ASSERT_FAILED(score()) {

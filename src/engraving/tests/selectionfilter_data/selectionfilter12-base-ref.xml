@@ -11,11 +11,9 @@
         <tpc>14</tpc>
         <Spanner type="Glissando">
           <Glissando>
-            <text>gliss.</text>
             <isHarpGliss>0</isHarpGliss>
             <ticks_f>1/4</ticks_f>
             <diagonal>1</diagonal>
-            <anchor>3</anchor>
             </Glissando>
           <next>
             <location>
@@ -46,12 +44,9 @@
         <tpc>15</tpc>
         <Spanner type="Glissando">
           <Glissando>
-            <text>gliss.</text>
             <isHarpGliss>0</isHarpGliss>
-            <subtype>1</subtype>
             <ticks_f>1/4</ticks_f>
             <diagonal>1</diagonal>
-            <anchor>3</anchor>
             </Glissando>
           <next>
             <location>

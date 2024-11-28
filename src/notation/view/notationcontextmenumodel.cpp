@@ -126,6 +126,11 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
     items << makeMenuItem("staff-properties");
     items << makeSeparator();
     items << makeMenu(TranslatableString("notation", "Insert measures"), makeInsertMeasuresItems());
+    if (globalContext()->currentNotation()->viewMode() == mu::notation::ViewMode::PAGE) {
+        items << makeMenu(TranslatableString("notation", "Move measures"), makeMoveMeasureItems());
+    }
+    items << makeMenuItem("make-into-system", TranslatableString("notation", "Create system from selection"));
+    items << makeSeparator();
     items << makeMenuItem("measure-properties");
 
     return items;
@@ -241,6 +246,16 @@ MenuItemList NotationContextMenuModel::makeInsertMeasuresItems()
         makeSeparator(),
         makeMenuItem("insert-measures-at-start-of-score", TranslatableString("notation", "At start of score…")),
         makeMenuItem("append-measures", TranslatableString("notation", "At end of score…"))
+    };
+
+    return items;
+}
+
+MenuItemList NotationContextMenuModel::makeMoveMeasureItems()
+{
+    MenuItemList items {
+        makeMenuItem("move-measure-to-prev-system", TranslatableString("notation", "To previous system")),
+        makeMenuItem("move-measure-to-next-system", TranslatableString("notation", "To next system"))
     };
 
     return items;

@@ -40,6 +40,7 @@
 #include "models/propertyitem.h"
 #include "models/pointfpropertyitem.h"
 #include "ui/view/iconcodes.h"
+#include "ui/iuiactionsregister.h"
 #include "types/commontypes.h"
 
 namespace mu::inspector {
@@ -56,6 +57,8 @@ class AbstractInspectorModel : public QObject, public muse::async::Asyncable
 public:
     INJECT(context::IGlobalContext, context)
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::ui::IUiActionsRegister, uiActionsRegister)
+
 public:
     enum class InspectorSectionType {
         SECTION_UNDEFINED = -1,
@@ -222,6 +225,8 @@ protected:
     IElementRepositoryService* m_repository = nullptr;
 
     QList<mu::engraving::EngravingItem*> m_elementList;
+
+    QString shortcutsForActionCode(std::string code) const;
 
 protected slots:
     void onPropertyValueChanged(const mu::engraving::Pid pid, const QVariant& newValue);

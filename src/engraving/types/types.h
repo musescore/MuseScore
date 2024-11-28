@@ -151,6 +151,7 @@ enum class ElementType {
     GLISSANDO_SEGMENT,
     NOTELINE_SEGMENT,
     LAYOUT_BREAK,
+    SYSTEM_LOCK_INDICATOR,
     SPACER,
     STAFF_STATE,
     NOTEHEAD,
@@ -1070,6 +1071,12 @@ enum class TiePlacement {
     AUTO,
     INSIDE,
     OUTSIDE,
+};
+
+enum class TieDotsPlacement {
+    AUTO,
+    BEFORE_DOTS,
+    AFTER_DOTS
 };
 
 //---------------------------------------------------------

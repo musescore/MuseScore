@@ -69,6 +69,8 @@ public:
 #ifndef NO_QT_SUPPORT
     virtual QWindow* focusWindow() const = 0;
     virtual bool notify(QObject* object, QEvent* event) = 0;
+
+    virtual Qt::KeyboardModifiers keyboardModifiers() const = 0;
 #endif
 };
 }

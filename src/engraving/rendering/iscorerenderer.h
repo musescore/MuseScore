@@ -79,6 +79,7 @@ class SlurSegment;
 class SlurTie;
 class StaffText;
 class Stem;
+class SystemLockIndicator;
 
 class TextBase;
 class Text;
@@ -147,6 +148,7 @@ public:
                                    SlurTie*,
                                    StaffText*,
                                    Stem*,
+                                   SystemLockIndicator*,
                                    TextBase*,
                                    Text*,
                                    TimeSig*

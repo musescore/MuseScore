@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,31 +21,32 @@
  */
 #pragma once
 
-#include <QObject>
+#include <cstdint>
+#include <map>
 
-#include "async/asyncable.h"
-#include "context/iglobalcontext.h"
-#include "modularity/ioc.h"
+#include "eid.h"
+#include "../types/types.h"
 
-namespace muse::uicomponents {
-class MenuItem;
-}
+namespace mu::engraving {
+class EngravingObject;
 
-namespace mu::notation {
-class UndoRedoHistoryModel : public QObject, public muse::Injectable, public muse::async::Asyncable
+class EIDRegister
 {
-    Q_OBJECT
-
-    muse::Inject<context::IGlobalContext> context = { this };
-
 public:
-    explicit UndoRedoHistoryModel(QObject* parent = nullptr);
+    EIDRegister() = default;
 
-    Q_INVOKABLE size_t undoRedoActionCount() const;
-    Q_INVOKABLE size_t undoRedoActionCurrentIdx() const;
-    Q_INVOKABLE const QString undoRedoActionNameAtIdx(size_t idx) const;
+    void init(uint32_t val);
+    uint32_t lastID() const { return m_lastID; }
+
+    EID newEID(ElementType type);
+
+    void registerItemEID(EID eid, EngravingObject* item);
+    EngravingObject* itemFromEID(EID eid);
 
 private:
-    INotationUndoStackPtr undoStack() const;
+    EIDRegister(const EIDRegister&) = delete;
+
+    uint32_t m_lastID = 0;
+    std::map<uint64_t, EngravingObject*> m_register;
 };
 }

@@ -372,12 +372,16 @@ public:
     static void readSpanner(XmlReader& e, ReadContext& ctx, EngravingItem* current, track_idx_t track);
     static void readSpanner(XmlReader& e, ReadContext& ctx, Score* current, track_idx_t track);
 
+    static void readSystemLocks(Score* score, XmlReader& e);
+
 private:
     static bool readProperties(Box* b, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(HBox* b, XmlReader& xml, ReadContext& ctx);
 
     static bool readProperties(TextBase* t, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
+
+    static void readSystemLock(Score* score, XmlReader& e);
 };
 }
 

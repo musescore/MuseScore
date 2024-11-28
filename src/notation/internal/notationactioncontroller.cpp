@@ -47,7 +47,6 @@ static constexpr bool DONT_PLAY_CHORD = false;
 
 static const ActionCode UNDO_ACTION_CODE = "undo";
 static const ActionCode REDO_ACTION_CODE = "redo";
-static const ActionCode UNDO_HISTORY_CODE = "undo-history";
 
 static const QMap<ActionCode, Fraction> DURATIONS_FOR_TEXT_NAVIGATION {
     { "advance-longa", Fraction(4, 1) },
@@ -226,7 +225,6 @@ void NotationActionController::init()
 
     registerAction(UNDO_ACTION_CODE, &Interaction::undo, &Controller::canUndo);
     registerAction(REDO_ACTION_CODE, &Interaction::redo, &Controller::canRedo);
-    registerAction(UNDO_HISTORY_CODE, &Controller::openUndoRedoHistory, &Controller::canUndoOrRedo);
 
     registerAction("select-next-chord", &Interaction::addToSelection, MoveDirection::Right, MoveSelectionType::Chord, PlayMode::NoPlay,
                    &Controller::isNotNoteInputMode);
@@ -257,6 +255,12 @@ void NotationActionController::init()
                    &Controller::toggleLayoutBreakAvailable);
     registerAction("section-break", &Interaction::toggleLayoutBreak, LayoutBreakType::SECTION, PlayMode::NoPlay,
                    &Controller::toggleLayoutBreakAvailable);
+
+    registerAction("move-measure-to-prev-system", &Interaction::moveMeasureToPrevSystem);
+    registerAction("move-measure-to-next-system", &Interaction::moveMeasureToNextSystem);
+    registerAction("toggle-system-lock", &Interaction::toggleSystemLock);
+    registerAction("toggle-score-lock", &Interaction::toggleScoreLock);
+    registerAction("make-into-system", &Interaction::makeIntoSystem);
 
     registerAction("split-measure", &Interaction::splitSelectedMeasure);
     registerAction("join-measures", &Interaction::joinSelectedMeasures);
@@ -291,7 +295,7 @@ void NotationActionController::init()
     registerAction("page-settings", &Controller::openPageSettingsDialog);
     registerAction("staff-properties", &Controller::openStaffProperties);
     registerAction("edit-strings", &Controller::openEditStringsDialog);
-    registerAction("add-remove-breaks", &Controller::openBreaksDialog);
+    registerAction("measures-per-system", &Controller::openBreaksDialog);
     registerAction("transpose", &Controller::openTransposeDialog);
     registerAction("parts", &Controller::openPartsDialog);
     registerAction("staff-text-properties", &Controller::openStaffTextPropertiesDialog);
@@ -542,14 +546,24 @@ bool NotationActionController::canReceiveAction(const ActionCode& code) const
 {
     TRACEFUNC;
 
-    //! NOTE If the notation is not loaded, we cannot process anything.
+    // If no notation is loaded, we cannot handle any action.
     auto masterNotation = currentMasterNotation();
     if (!masterNotation) {
         return false;
     }
 
+    if (code == UNDO_ACTION_CODE) {
+        return canUndo();
+    }
+
+    if (code == REDO_ACTION_CODE) {
+        return canRedo();
+    }
+
+    // Actions other than undo and redo can only be handled when the current
+    // notation contains at least one part.
     if (!masterNotation->hasParts()) {
-        return code == UNDO_ACTION_CODE || code == REDO_ACTION_CODE || code == UNDO_HISTORY_CODE;
+        return false;
     }
 
     auto iter = m_isEnabledMap.find(code);
@@ -624,6 +638,11 @@ INotationMidiInputPtr NotationActionController::currentNotationMidiInput() const
     }
 
     return notation->midiInput();
+}
+
+mu::engraving::Score* NotationActionController::currentNotationScore() const
+{
+    return currentNotationElements() ? currentNotationElements()->msScore() : nullptr;
 }
 
 INotationStylePtr NotationActionController::currentNotationStyle() const
@@ -760,7 +779,7 @@ void NotationActionController::padNote(const Pad& pad)
     startNoteInputIfNeed();
 
     noteInput->padNote(pad);
-    if (currentNotationElements()->msScore()->inputState().usingNoteEntryMethod(engraving::NoteEntryMethod::RHYTHM)) {
+    if (currentNotationScore()->inputState().usingNoteEntryMethod(engraving::NoteEntryMethod::RHYTHM)) {
         playSelectedElement();
     }
 }
@@ -977,7 +996,9 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         return;
     }
 
-    if (interaction->selection()->isNone()) {
+    const bool previousSelectionExists = currentNotationScore() && currentNotationScore()->selection().currentCR();
+    if (interaction->selection()->isNone() && previousSelectionExists) {
+        // Try to restore the previous selection...
         interaction->moveSelection(direction, MoveSelectionType::EngravingItem);
         playSelectedElement(true);
         return;
@@ -1000,6 +1021,8 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             }
             interaction->moveSelection(direction, MoveSelectionType::String);
             return;
+        } else if (interaction->selection()->isNone()) {
+            interaction->selectFirstElement(false);
         } else {
             interaction->movePitch(direction, quickly ? PitchMode::OCTAVE : PitchMode::CHROMATIC);
         }
@@ -1047,6 +1070,9 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         if (selectedElement && selectedElement->isTextBase()) {
             interaction->nudge(direction, quickly);
         } else {
+            if (interaction->selection()->isNone()) {
+                interaction->selectFirstElement(false);
+            }
             interaction->moveSelection(direction, quickly ? MoveSelectionType::Measure : MoveSelectionType::Chord);
             playChord = true;
         }
@@ -1261,7 +1287,7 @@ void NotationActionController::addFret(int num)
     }
 
     interaction->addFret(num);
-    playSelectedElement(currentNotationElements()->msScore()->playChord());
+    playSelectedElement(currentNotationScore()->playChord());
 }
 
 void NotationActionController::insertClef(mu::engraving::ClefType type)
@@ -2026,9 +2052,8 @@ void NotationActionController::playSelectedElement(bool playChord)
 
     playbackController()->playElements({ element });
 
-    mu::engraving::Score* score = currentNotationElements()->msScore();
-    score->setPlayChord(false);
-    score->setPlayNote(false);
+    currentNotationScore()->setPlayChord(false);
+    currentNotationScore()->setPlayNote(false);
 }
 
 void NotationActionController::startNoteInputIfNeed()
@@ -2115,25 +2140,6 @@ bool NotationActionController::canRedo() const
     return currentNotationUndoStack() ? currentNotationUndoStack()->canRedo() : false;
 }
 
-bool NotationActionController::canUndoOrRedo() const
-{
-    return canUndo() || canRedo();
-}
-
-void NotationActionController::openUndoRedoHistory()
-{
-    TRACEFUNC;
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
-    RetVal<Val> result = interactive()->open("musescore://notation/undohistory");
-    if (result.ret) {
-        interaction->undoRedoToIdx(static_cast<size_t>(result.val.toInt()));
-    }
-}
-
 bool NotationActionController::isNotationPage() const
 {
     return uiContextResolver()->matchWithCurrent(context::UiCtxProjectOpened);
@@ -2146,7 +2152,7 @@ bool NotationActionController::isStandardStaff() const
 
 bool NotationActionController::isTablatureStaff() const
 {
-    return isNotEditingElement() && currentNotationElements()->msScore()->inputState().staffGroup() == mu::engraving::StaffGroup::TAB;
+    return isNotEditingElement() && currentNotationScore()->inputState().staffGroup() == mu::engraving::StaffGroup::TAB;
 }
 
 bool NotationActionController::isEditingElement() const

@@ -19,30 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_GETEID_H
-#define MU_ENGRAVING_GETEID_H
 
-#include <cstdint>
+#include "eidregister.h"
+#include "log.h"
 
-#include "eid.h"
-#include "../types/types.h"
+using namespace mu::engraving;
 
-namespace mu::engraving {
-class GetEID
+void EIDRegister::init(uint32_t val)
 {
-public:
-    GetEID() = default;
-
-    void init(uint32_t val);
-    uint32_t lastID() const { return m_lastID; }
-
-    EID newEID(ElementType type);
-
-private:
-    GetEID(const GetEID&) = delete;
-
-    uint32_t m_lastID = 0;
-};
+    m_lastID = val;
 }
 
-#endif // MU_ENGRAVING_GETEID_H
+EID EIDRegister::newEID(ElementType type)
+{
+    return EID(type, ++m_lastID);
+}
+
+void EIDRegister::registerItemEID(EID eid, EngravingObject* item)
+{
+    bool inserted = m_register.emplace(eid.toUint64(), item).second;
+#ifdef NDEBUG
+    UNUSED(inserted);
+#else
+    assert(inserted);
+#endif
+}
+
+EngravingObject* EIDRegister::itemFromEID(EID eid)
+{
+    auto iter = m_register.find(eid.toUint64());
+    assert(iter != m_register.end());
+    return (*iter).second;
+}

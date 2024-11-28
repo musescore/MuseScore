@@ -242,14 +242,14 @@ std::vector<HorizontalSpacing::SegmentPosition> HorizontalSpacing::spaceSegments
     std::vector<SegmentPosition> placedSegments;
     placedSegments.reserve(segList.size());
 
-    for (int i = 0; i < segList.size(); ++i) {
+    for (size_t i = 0; i < segList.size(); ++i) {
         Segment* curSeg = segList[i];
         if (ignoreSegmentForSpacing(curSeg)) {
             placedSegments.emplace_back(curSeg, ctx.xCur);
             continue;
         }
 
-        if (i < startSegIdx) {
+        if (static_cast<int>(i) < startSegIdx) {
             placedSegments.emplace_back(curSeg, curSeg->xPosInSystemCoords());
             ctx.xCur = curSeg->xPosInSystemCoords() + curSeg->width();
             continue;
@@ -320,8 +320,8 @@ void HorizontalSpacing::spaceAgainstPreviousSegments(Segment* segment, std::vect
         checkLyricsAgainstLeftMargin(segment, x, ctx);
     }
 
-    for (int i = static_cast<int>(prevSegPositions.size()) - 1; i >= 0; --i) {
-        const SegmentPosition& prevSegPos = prevSegPositions[i];
+    for (size_t i = prevSegPositions.size(); i > 0; --i) {
+        const SegmentPosition& prevSegPos = prevSegPositions[i - 1];
         Segment* prevSeg = prevSegPos.segment;
         double xPrevSeg = prevSegPos.xPosInSystemCoords;
 
@@ -340,7 +340,7 @@ void HorizontalSpacing::spaceAgainstPreviousSegments(Segment* segment, std::vect
             if (prevCRSegmentsCount > 0) {
                 double spaceIncrease = (x - ctx.xCur) / prevCRSegmentsCount;
                 double xMovement = spaceIncrease;
-                for (int j = i + 1; j < prevSegPositions.size(); ++j) {
+                for (size_t j = i; j < prevSegPositions.size(); ++j) {
                     SegmentPosition& segPos = prevSegPositions[j];
                     segPos.xPosInSystemCoords += xMovement;
                     if (segPos.segment->isChordRestType()) {
@@ -434,9 +434,9 @@ void HorizontalSpacing::checkLyricsAgainstRightMargin(std::vector<SegmentPositio
 {
     int chordRestSegmentsCount = 0;
 
-    for (int i = int(segPositions.size()) - 1; i > 0; --i) {
+    for (size_t i = segPositions.size(); i > 1; --i) {
         double systemEdge = segPositions.back().xPosInSystemCoords + segPositions.back().segment->minRight();
-        SegmentPosition& segPos = segPositions[i];
+        SegmentPosition& segPos = segPositions[i - 1];
         double x = segPos.xPosInSystemCoords;
         Segment* seg = segPos.segment;
         if (!seg->measure()->isLastInSystem()) {
@@ -459,7 +459,7 @@ void HorizontalSpacing::checkLyricsAgainstRightMargin(std::vector<SegmentPositio
             double lyricsOvershoot = xMaxLyrics - systemEdge;
             double spaceIncrease = lyricsOvershoot / chordRestSegmentsCount;
             double xMovement = spaceIncrease;
-            for (int j = i + 1; j < segPositions.size(); ++j) {
+            for (size_t j = i; j < segPositions.size(); ++j) {
                 SegmentPosition& sp = segPositions[j];
                 sp.xPosInSystemCoords += xMovement;
                 if (sp.segment->isChordRestType()) {
@@ -745,7 +745,7 @@ double HorizontalSpacing::computeMinMeasureWidth(Measure* m)
 
 void HorizontalSpacing::enforceMinimumMeasureWidths(const std::vector<Measure*> measureGroup)
 {
-    for (int i = 0; i < measureGroup.size(); ++i) {
+    for (size_t i = 0; i < measureGroup.size(); ++i) {
         Measure* measure = measureGroup[i];
         if (measure->isMMRest()) {
             continue; // minimum mmRest width is already enforced during spacing
@@ -754,7 +754,7 @@ void HorizontalSpacing::enforceMinimumMeasureWidths(const std::vector<Measure*> 
         double diff = minWidth - measure->width();
         if (diff > 0) {
             stretchMeasureToTargetWidth(measure, minWidth);
-            for (int j = i + 1; j < measureGroup.size(); ++j) {
+            for (size_t j = i + 1; j < measureGroup.size(); ++j) {
                 measureGroup[j]->mutldata()->moveX(diff);
             }
         }

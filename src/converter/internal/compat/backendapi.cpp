@@ -538,10 +538,10 @@ Ret BackendApi::doExportScoreParts(const IMasterNotationPtr masterNotation, QIOD
     ExcerptNotationList excerpts = allExcerpts(masterNotation);
 
     for (IExcerptNotationPtr excerpt : excerpts) {
-        mu::engraving::Score* part = excerpt->notation()->elements()->msScore();
-        std::map<String, String> partMetaTags = part->metaTags();
+        mu::engraving::Score* partScore = excerpt->notation()->elements()->msScore();
+        std::map<String, String> partMetaTags = partScore->metaTags();
 
-        QJsonValue partTitle(part->name());
+        QJsonValue partTitle(partScore->name());
         partsTitles << partTitle;
 
         QVariantMap meta;
@@ -549,14 +549,14 @@ Ret BackendApi::doExportScoreParts(const IMasterNotationPtr masterNotation, QIOD
             meta[key] = partMetaTags[key].toQString();
         }
 
-        meta["open"] = part->isOpen();
-        meta["id"] = QString::fromStdString(part->eid().toStdString());
+        meta["open"] = partScore->isOpen();
+        meta["id"] = QString::fromStdString(partScore->eid().toStdString());
 
         QJsonValue partMetaObj = QJsonObject::fromVariantMap(meta);
         partsMetaList << partMetaObj;
 
-        std::string fileName = io::escapeFileName(part->name().toStdString()).toStdString() + ".mscz";
-        QJsonValue partObj(QString::fromLatin1(scorePartJson(part, fileName).val));
+        std::string fileName = io::escapeFileName(partScore->name().toStdString()).toStdString() + ".mscz";
+        QJsonValue partObj(QString::fromLatin1(scorePartJson(partScore, fileName).val));
         partsObjList << partObj;
     }
 

@@ -26,7 +26,7 @@ SOFTWARE.
 #include <map>
 #include <utility>
 
-std::mutex kors::modularity::StaticMutex::mutex;
+std::recursive_mutex kors::modularity::StaticMutex::mutex;
 
 static std::map<kors::modularity::IoCID, kors::modularity::ModulesIoC*> s_map;
 

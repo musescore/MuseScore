@@ -92,6 +92,8 @@ public:
 
     static void addLineAttachPoints(Spanner* spanner);
 
+    static bool chordHasDotsAllInvisible(Chord* chord);
+
 private:
     static void layoutPitched(Chord* item, LayoutContext& ctx);
     static void layoutTablature(Chord* item, LayoutContext& ctx);

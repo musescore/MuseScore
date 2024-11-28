@@ -130,7 +130,7 @@
               <linkedMain/>
               <Image>
                 <Image>
-                  <z>8899</z>
+                  <z>8999</z>
                   <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
                   <linkPath>schnee.png</linkPath>
                   </Image>
@@ -780,6 +780,7 @@
         </Measure>
       </Staff>
     <Score>
+      <eid>1022202216452</eid>
       <name>Alto</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
@@ -876,7 +877,7 @@
                   </linked>
                 <Image>
                   <Image>
-                    <z>8899</z>
+                    <z>8999</z>
                     <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
                     <linkPath>schnee.png</linkPath>
                     </Image>
@@ -1232,6 +1233,7 @@
         </Staff>
       </Score>
     <Score>
+      <eid>1692217114628</eid>
       <name>Tenor</name>
       <initialPartId>2</initialPartId>
       <Division>480</Division>

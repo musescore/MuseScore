@@ -78,6 +78,8 @@ private:
     INotationUndoStackPtr currentNotationUndoStack() const;
     INotationMidiInputPtr currentNotationMidiInput() const;
 
+    mu::engraving::Score* currentNotationScore() const;
+
     void toggleNoteInput();
     void toggleNoteInputMethod(NoteInputMethod method);
     void toggleNoteInputInsert();
@@ -212,8 +214,6 @@ private:
 
     bool canUndo() const;
     bool canRedo() const;
-    bool canUndoOrRedo() const;
-    void openUndoRedoHistory();
 
     bool isNotationPage() const;
     bool isStandardStaff() const;

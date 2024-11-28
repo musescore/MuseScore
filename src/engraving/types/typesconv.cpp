@@ -249,6 +249,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::NOTELINE_SEGMENT,     "NoteLineSegment",      muse::TranslatableString("engraving", "Note-anchored line segment") },
     { ElementType::LAISSEZ_VIB,          "LaissezVib",           muse::TranslatableString("engraving", "Laissez vibrer") },
     { ElementType::LAYOUT_BREAK,         "LayoutBreak",          muse::TranslatableString("engraving", "Layout break") },
+    { ElementType::SYSTEM_LOCK_INDICATOR, "systemLockIndicator", muse::TranslatableString("engraving", "System lock") },
     { ElementType::SPACER,               "Spacer",               muse::TranslatableString("engraving", "Spacer") },
     { ElementType::STAFF_STATE,          "StaffState",           muse::TranslatableString("engraving", "Staff state") },
     { ElementType::NOTEHEAD,             "NoteHead",             muse::TranslatableString("engraving", "Notehead") },
@@ -437,6 +438,22 @@ AsciiStringView TConv::toXml(TiePlacement tiePlacement)
 TiePlacement TConv::fromXml(const AsciiStringView& str, TiePlacement def)
 {
     return findTypeByXmlTag<TiePlacement>(TIE_PLACEMENT, str, def);
+}
+
+static const std::vector<Item<TieDotsPlacement> > TIE_DOTS_PLACEMENT = {
+    { TieDotsPlacement::AUTO, "auto" },
+    { TieDotsPlacement::BEFORE_DOTS, "before" },
+    { TieDotsPlacement::AFTER_DOTS, "after" },
+};
+
+AsciiStringView TConv::toXml(TieDotsPlacement placement)
+{
+    return findXmlTagByType<TieDotsPlacement>(TIE_DOTS_PLACEMENT, placement);
+}
+
+TieDotsPlacement TConv::fromXml(const AsciiStringView& str, TieDotsPlacement def)
+{
+    return findTypeByXmlTag<TieDotsPlacement>(TIE_DOTS_PLACEMENT, str, def);
 }
 
 static const std::vector<Item<VoiceAssignment> > VOICE_ASSIGNMENT = {

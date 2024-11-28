@@ -188,7 +188,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newKeyboardPalette());
     defaultPalette->append(newRepeatsPalette(true));
     defaultPalette->append(newBarLinePalette(true));
-    defaultPalette->append(newLayoutPalette());
+    defaultPalette->append(newLayoutPalette(true));
     defaultPalette->append(newBracketsPalette());
     defaultPalette->append(newOrnamentsPalette(true));
     defaultPalette->append(newBreathPalette(true));
@@ -523,7 +523,7 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
     return sp;
 }
 
-PalettePtr PaletteCreator::newLayoutPalette()
+PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Layout);
     //: The name of a palette
@@ -535,14 +535,20 @@ PalettePtr PaletteCreator::newLayoutPalette()
         LayoutBreakType::LINE,
         LayoutBreakType::PAGE,
         LayoutBreakType::SECTION,
-        LayoutBreakType::NOBREAK
     };
     for (LayoutBreakType layoutBreakType : layoutBreaks) {
         auto lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
         lb->setLayoutBreakType(layoutBreakType);
-        PaletteCellPtr cell = sp->appendElement(lb, TConv::userName(layoutBreakType));
-        cell->mag = 1.2;
+        sp->appendElement(lb, TConv::userName(layoutBreakType));
     }
+
+    if (!defaultPalette) {
+        auto lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
+        lb->setLayoutBreakType(LayoutBreakType::NOBREAK);
+        sp->appendElement(lb, TConv::userName(LayoutBreakType::NOBREAK));
+    }
+
+    sp->appendActionIcon(ActionIconType::SYSTEM_LOCK, "toggle-system-lock");
 
     static const std::vector<SpacerType> spacers  {
         SpacerType::DOWN,
@@ -1015,6 +1021,9 @@ PalettePtr PaletteCreator::newArpeggioPalette()
     for (int i = 0; i < 2; ++i) {
         auto a = makeElement<Glissando>(gpaletteScore);
         a->setGlissandoType(GlissandoType(i));
+        if (a->glissandoType() != a->style().styleV(Sid::glissandoType).value<GlissandoType>()) {
+            a->setPropertyFlags(Pid::GLISS_TYPE, PropertyFlags::UNSTYLED);
+        }
         sp->appendElement(a, a->glissandoTypeName());
     }
 

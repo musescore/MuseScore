@@ -243,11 +243,26 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
     const double rm = ctx.state().page()->rm();
     const double bm = ctx.state().page()->bm() + ctx.conf().styleMM(Sid::staffLowerBorder);
 
+    layoutSystemLockIndicators(system);
+
     ctx.mutState().page()->setPos(0, 0);
     system->setPos(lm, tm);
     ctx.mutState().page()->setWidth(lm + system->width() + rm);
     ctx.mutState().page()->setHeight(tm + system->height() + bm);
     ctx.mutState().page()->invalidateBspTree();
+}
+
+void ScoreHorizontalViewLayout::layoutSystemLockIndicators(System* system)
+{
+    system->deleteLockIndicators();
+
+    std::vector<const SystemLock*> systemLocks = system->score()->systemLocks()->allLocks();
+    for (const SystemLock* lock : systemLocks) {
+        SystemLockIndicator* lockIndicator = Factory::createSystemLockIndicator(system, lock);
+        lockIndicator->setParent(system);
+        system->addLockIndicator(lockIndicator);
+        TLayout::layoutSystemLockIndicator(lockIndicator, lockIndicator->mutldata());
+    }
 }
 
 // Append all measures to System. VBox is not included to System
@@ -271,13 +286,6 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
     ctx.mutState().setNextMeasure(ctx.mutDom().first());
     ctx.mutState().setTick(Fraction(0, 1));
     MeasureLayout::getNextMeasure(ctx);
-
-    static constexpr Fraction minTicks = Fraction(1, 16);
-    static constexpr Fraction maxTicks = Fraction(4, 4);
-    // CAUTION: In continuous view, we cannot look fot the shortest (or longest) note
-    // of the system (as we do in page view), because the whole music is a single big system. Therefore,
-    // we simply assume a shortest note of 1/16 and longest of 4/4. This ensures perfect spacing consistency,
-    // even if the actual values may be be different.
 
     while (ctx.state().curMeasure()) {
         double ww = 0.0;

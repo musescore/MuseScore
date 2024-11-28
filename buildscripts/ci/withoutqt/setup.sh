@@ -48,7 +48,6 @@ apt_packages_basic=(
   # Alphabetical order please!
   file
   git
-  pkg-config
   software-properties-common # installs `add-apt-repository`
   unzip
   p7zip-full

@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -349,6 +349,30 @@ DockPage {
 
             SelectionFilterPanel {
                 navigationSection: selectionFilterPanel.navigationSection
+            }
+        },
+
+        DockPanel {
+            id: undoHistoryPanel
+
+            objectName: root.pageModel.undoHistoryPanelName()
+            title: qsTrc("notation", "History")
+
+            navigationSection: root.navigationPanelSec(undoHistoryPanel.location)
+
+            width: root.verticalPanelDefaultWidth
+            minimumWidth: root.verticalPanelDefaultWidth
+            maximumWidth: root.verticalPanelDefaultWidth
+
+            groupName: root.verticalPanelsGroup
+
+            //! NOTE: hidden by default
+            visible: false
+
+            dropDestinations: root.verticalPanelDropDestinations
+
+            UndoHistoryPanel {
+                navigationSection: undoHistoryPanel.navigationSection
             }
         },
         

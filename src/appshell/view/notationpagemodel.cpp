@@ -108,6 +108,11 @@ QString NotationPageModel::selectionFiltersPanelName() const
     return SELECTION_FILTERS_PANEL_NAME;
 }
 
+QString NotationPageModel::undoHistoryPanelName() const
+{
+    return UNDO_HISTORY_PANEL_NAME;
+}
+
 QString NotationPageModel::mixerPanelName() const
 {
     return MIXER_PANEL_NAME;

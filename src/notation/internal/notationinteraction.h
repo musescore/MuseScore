@@ -121,7 +121,7 @@ public:
     bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) override;
     void undo() override;
     void redo() override;
-    void undoRedoToIdx(size_t idx) override;
+    void undoRedoToIndex(size_t idx) override;
 
     // Change selection
     bool moveSelectionAvailable(MoveSelectionType type) const override;
@@ -203,8 +203,13 @@ public:
 
     bool toggleLayoutBreakAvailable() const override;
     void toggleLayoutBreak(LayoutBreakType breakType) override;
+    void moveMeasureToPrevSystem() override;
+    void moveMeasureToNextSystem() override;
+    void toggleSystemLock() override;
+    void toggleScoreLock() override;
+    void makeIntoSystem() override;
 
-    void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) override;
+    void addRemoveSystemLocks(AddRemoveSystemLockType intervalType, int interval = 0) override;
     bool transpose(const TransposeOptions& options) override;
     void swapVoices(voice_idx_t voiceIndex1, voice_idx_t voiceIndex2) override;
     void addIntervalToSelectedNotes(int interval) override;

@@ -67,7 +67,6 @@ apt_packages=(
   libtool
   libssl-dev
   patchelf
-  pkg-config
   software-properties-common # installs `add-apt-repository`
   unzip
   wget

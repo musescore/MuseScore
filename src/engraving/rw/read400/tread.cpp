@@ -2662,7 +2662,6 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
         ctx.addSpanner(e.intAttribute("id", -1), g);
     }
 
-    g->setShowText(false);
     staff_idx_t staffIdx = track2staff(ctx.track());
     Staff* staff = ctx.score()->staff(staffIdx);
     if (staff) {
@@ -2670,7 +2669,6 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
         g->setIsHarpGliss(instrId == "harp");
     }
     g->resetProperty(Pid::GLISS_STYLE);
-
     g->setShowText(false);
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
@@ -2890,7 +2888,6 @@ void TRead::read(LayoutBreak* b, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-    b->init();
 }
 
 void TRead::read(LedgerLine* l, XmlReader& e, ReadContext& ctx)

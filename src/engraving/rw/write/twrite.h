@@ -308,6 +308,8 @@ public:
 
     static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, bool force = false);
 
+    static void writeSystemLocks(const Score* score, XmlWriter& xml);
+
 private:
 
     static void writeStyledProperties(const EngravingItem* item, XmlWriter& xml);
@@ -342,6 +344,8 @@ private:
 
     static void writeTupletStart(DurationElement* item, XmlWriter& xml, WriteContext& ctx);
     static void writeTupletEnd(DurationElement* item, XmlWriter& xml, WriteContext& ctx);
+
+    static void writeSystemLock(const SystemLock* systemLock, XmlWriter& xml);
 };
 }
 

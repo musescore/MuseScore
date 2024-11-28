@@ -45,7 +45,7 @@
 #include "view/noteinputbarcustomisemodel.h"
 #include "view/noteinputbarcustomiseitem.h"
 #include "view/internal/undoredotoolbarmodel.h"
-#include "view/internal/undoredohistorymodel.h"
+#include "view/internal/undohistorymodel.h"
 #include "view/notationtoolbarmodel.h"
 #include "view/notationnavigator.h"
 #include "view/selectionfiltermodel.h"
@@ -85,6 +85,8 @@
 #include "view/styledialog/tieplacementselector.h"
 #include "view/styledialog/accidentalgrouppagemodel.h"
 #include "view/styledialog/fretboardspagemodel.h"
+#include "view/styledialog/glissandosectionmodel.h"
+#include "view/styledialog/notelinesectionmodel.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -148,7 +150,6 @@ void NotationModule::resolveImports()
         ir->registerWidgetUri<StaffTextPropertiesDialog>(Uri("musescore://notation/stafftextproperties"));
         ir->registerWidgetUri<RealizeHarmonyDialog>(Uri("musescore://notation/realizechordsymbols"));
 
-        ir->registerQmlUri(Uri("musescore://notation/undohistory"), "MuseScore/NotationScene/UndoHistoryDialog.qml");
         ir->registerQmlUri(Uri("musescore://notation/parts"), "MuseScore/NotationScene/PartsDialog.qml");
         ir->registerQmlUri(Uri("musescore://notation/selectmeasurescount"), "MuseScore/NotationScene/SelectMeasuresCountDialog.qml");
         ir->registerQmlUri(Uri("musescore://notation/editgridsize"), "MuseScore/NotationScene/EditGridSizeDialog.qml");
@@ -174,7 +175,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
     qmlRegisterType<NotationNavigator>("MuseScore.NotationScene", 1, 0, "NotationNavigator");
     qmlRegisterType<UndoRedoToolbarModel>("MuseScore.NotationScene", 1, 0, "UndoRedoToolbarModel");
-    qmlRegisterType<UndoRedoHistoryModel>("MuseScore.NotationScene", 1, 0, "UndoRedoHistoryModel");
+    qmlRegisterType<UndoHistoryModel>("MuseScore.NotationScene", 1, 0, "UndoHistoryModel");
     qmlRegisterType<TimelineView>("MuseScore.NotationScene", 1, 0, "TimelineView");
     qmlRegisterType<SelectionFilterModel>("MuseScore.NotationScene", 1, 0, "SelectionFilterModel");
     qmlRegisterType<EditGridSizeDialogModel>("MuseScore.NotationScene", 1, 0, "EditGridSizeDialogModel");
@@ -198,6 +199,8 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<TiePlacementSelectorModel>("MuseScore.NotationScene", 1, 0, "TiePlacementSelectorModel");
     qmlRegisterType<AccidentalGroupPageModel>("MuseScore.NotationScene", 1, 0, "AccidentalGroupPageModel");
     qmlRegisterType<FretboardsPageModel>("MuseScore.NotationScene", 1, 0, "FretboardsPageModel");
+    qmlRegisterType<GlissandoSectionModel>("MuseScore.NotationScene", 1, 0, "GlissandoSectionModel");
+    qmlRegisterType<NoteLineSectionModel>("MuseScore.NotationScene", 1, 0, "NoteLineSectionModel");
 
     qmlRegisterUncreatableType<NoteInputBarCustomiseItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseItem", "Cannot create");
 
