@@ -25,6 +25,7 @@
 #include "ui/view/iconcodes.h"
 
 #include "engraving/dom/factory.h"
+#include "engraving/dom/undo.h"
 
 #include "defer.h"
 
@@ -62,7 +63,7 @@ PanelMode::Mode PercussionPanelModel::currentPanelMode() const
     return m_currentPanelMode;
 }
 
-void PercussionPanelModel::setCurrentPanelMode(const PanelMode::Mode& panelMode)
+void PercussionPanelModel::setCurrentPanelMode(const PanelMode::Mode& panelMode, bool updateNoteInput)
 {
     if (m_currentPanelMode == panelMode) {
         return;
@@ -76,7 +77,7 @@ void PercussionPanelModel::setCurrentPanelMode(const PanelMode::Mode& panelMode)
     m_currentPanelMode = panelMode;
     emit currentPanelModeChanged(m_currentPanelMode);
 
-    if (!interaction() || !interaction()->noteInput()) {
+    if (!updateNoteInput || !interaction() || !interaction()->noteInput()) {
         return;
     }
 
@@ -155,15 +156,59 @@ void PercussionPanelModel::handleMenuItem(const QString& itemId)
     } else if (itemId == NOTATION_PREVIEW_CODE) {
         setUseNotationPreview(true);
     } else if (itemId == EDIT_LAYOUT_CODE) {
-        setCurrentPanelMode(PanelMode::Mode::EDIT_LAYOUT);
+        setCurrentPanelMode(PanelMode::Mode::EDIT_LAYOUT, false);
     } else if (itemId == RESET_LAYOUT_CODE) {
-        m_padListModel->resetLayout();
+        // TODO: Need a mechanism for "default" layouts...
+        // m_padListModel->resetLayout();
     }
 }
 
 void PercussionPanelModel::finishEditing()
 {
-    setCurrentPanelMode(m_panelModeToRestore);
+    Drumset* updatedDrumset = m_padListModel->drumset();
+    m_padListModel->removeEmptyRows();
+
+    NoteInputState inputState = interaction()->noteInput()->state();
+    const Staff* staff = inputState.staff;
+
+    IF_ASSERT_FAILED(staff && staff->part()) {
+        return;
+    }
+
+    Instrument* inst = staff->part()->instrument(inputState.segment->tick());
+
+    IF_ASSERT_FAILED(inst) {
+        return;
+    }
+
+    // Return if nothing changed after edit...
+    if (inst->drumset() && updatedDrumset
+        && *inst->drumset() == *updatedDrumset) {
+        return;
+    }
+
+    for (int i = 0; i < m_padListModel->padList().size(); ++i) {
+        const PercussionPanelPadModel* model = m_padListModel->padList().at(i);
+        if (!model) {
+            continue;
+        }
+        const int row = i / m_padListModel->numColumns();
+        const int column = i % m_padListModel->numColumns();
+        engraving::DrumInstrument& drum = updatedDrumset->drum(model->pitch());
+        drum.panelRow = row;
+        drum.panelColumn = column;
+    }
+
+    INotationUndoStackPtr undoStack = notation()->undoStack();
+
+    DEFER {
+        undoStack->commitChanges();
+    };
+
+    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Edit percussion panel layout"));
+    score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, staff->part()));
+
+    setCurrentPanelMode(m_panelModeToRestore, false);
 }
 
 void PercussionPanelModel::customizeKit()
@@ -173,8 +218,8 @@ void PercussionPanelModel::customizeKit()
 
 void PercussionPanelModel::setUpConnections()
 {
-    const auto updatePadModels = [this](const mu::engraving::Drumset* drumset) {
-        if (drumset == m_padListModel->drumset()) {
+    const auto updatePadModels = [this](Drumset* drumset) {
+        if (drumset && m_padListModel->drumset() && *drumset == *m_padListModel->drumset()) {
             return;
         }
 
@@ -183,7 +228,6 @@ void PercussionPanelModel::setUpConnections()
         }
 
         m_padListModel->setDrumset(drumset);
-        m_padListModel->resetLayout(); //! NOTE: Placeholder until we implement saving/loading
     };
 
     if (!notation()) {
@@ -193,6 +237,7 @@ void PercussionPanelModel::setUpConnections()
 
     const INotationNoteInputPtr noteInput = interaction()->noteInput();
     updatePadModels(noteInput->state().drumset);
+    setEnabled(m_padListModel->hasActivePads());
 
     noteInput->stateChanged().onNotify(this, [this, updatePadModels]() {
         if (!notation()) {
