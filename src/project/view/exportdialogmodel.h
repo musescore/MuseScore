@@ -86,7 +86,8 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
 
     Q_PROPERTY(bool shouldDestinationFolderBeOpenedOnExport READ shouldDestinationFolderBeOpenedOnExport
                WRITE setShouldDestinationFolderBeOpenedOnExport NOTIFY shouldDestinationFolderBeOpenedOnExportChanged)
-
+    Q_PROPERTY(bool pdfTransparentBackground READ pdfTransparentBackground
+               WRITE setPdfTransparentBackground NOTIFY pdfTransparentBackgroundChanged)
 public:
     explicit ExportDialogModel(QObject* parent = nullptr);
     ~ExportDialogModel();
@@ -116,6 +117,9 @@ public:
 
     int pdfResolution() const;
     void setPdfResolution(const int& resolution);
+
+    bool pdfTransparentBackground() const;
+    void setPdfTransparentBackground(const bool& transparent);
 
     int pngResolution() const;
     void setPngResolution(const int& resolution);
@@ -168,8 +172,9 @@ signals:
 
     void pdfResolutionChanged(int resolution);
     void pngResolutionChanged(int resolution);
-    void pngTransparentBackgroundChanged(bool transparent);
 
+    void pdfTransparentBackgroundChanged(bool transparent);
+    void pngTransparentBackgroundChanged(bool transparent);
     void svgTransparentBackgroundChanged(bool transparent);
 
     void availableSampleRatesChanged();
