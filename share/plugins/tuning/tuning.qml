@@ -443,98 +443,11 @@ MuseScore {
     }
 
     function checkCurrentTemperament() {
-        switch (currentTemperament.name) {
-            case "equal":
-                equal_button.checked = true
-                return
-            case "pythagorean":
-                pythagorean_button.checked = true
-                return
-            case "aaron":
-                aaron_button.checked = true
-                return
-            case "silberman":
-                silberman_button.checked = true
-                return
-            case "salinas":
-                salinas_button.checked = true
-                return
-            case "kirnberger":
-                kirnberger_button.checked = true
-                return
-            case "vallotti":
-                vallotti_button.checked = true
-                return
-            case "werkmeister":
-                werkmeister_button.checked = true
-                return
-            case "marpurg":
-                marpurg_button.checked = true
-                return
-            case "just":
-                just_button.checked = true
-                return
-            case "meanSemitone":
-                meanSemitone_button.checked = true
-                return
-            case "grammateus":
-                grammateus_button.checked = true
-                return
-            case "french":
-                french_button.checked = true
-                return
-            case "french2":
-                french2_button.checked = true
-                return
-            case "rameau":
-                rameau_button.checked = true
-                return
-            case "irrFr17e":
-                irrFr17e_button.checked = true
-                return
-            case "bachLehman":
-                bachLehman_button.checked = true
-                return
-        }
+        eval(currentTemperament.name+"_button").checked = true        
     }
 
     function lookupTemperament(temperamentName) {
-        switch (temperamentName) {
-            case "equal":
-                return equal
-            case "pythagorean":
-                return pythagorean
-            case "aaron":
-                return aaron
-            case "silberman":
-                return silberman
-            case "salinas":
-                return salinas
-            case "kirnberger":
-                return kirnberger
-            case "vallotti":
-                return vallotti
-            case "werkmeister":
-                return werkmeister
-            case "marpurg":
-                return marpurg
-            case "just":
-                return just
-            case "meanSemitone":
-                return meanSemitone
-            case "grammateus":
-                return grammateus
-            case "french":
-                return french
-            case "french2":
-                return french2
-            case "rameau":
-                return rameau
-            case "irrFr17e":
-                return irrFr17e
-            case "bachLehman":
-                return bachLehman
-        }
+        return eval(temperamentName)        
     }
 
     function setCurrentRoot(root) {
