@@ -37,6 +37,7 @@
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/fermata.h"
 #include "engraving/dom/figuredbass.h"
+#include "engraving/dom/fingering.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/jump.h"
@@ -68,6 +69,7 @@
 #include "engraving/dom/volta.h"
 
 #include "thirdparty/libmei/cmn.h"
+#include "thirdparty/libmei/fingering.h"
 #include "thirdparty/libmei/harmony.h"
 #include "thirdparty/libmei/lyrics.h"
 #include "thirdparty/libmei/shared.h"
@@ -815,6 +817,8 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
             success = success && this->writeFermata(dynamic_cast<const Fermata*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isFiguredBass()) {
             success = success && this->writeFb(dynamic_cast<const FiguredBass*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isFingering()) {
+            success = success && this->writeFing(dynamic_cast<const Fingering*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isHairpin()) {
             success = success && this->writeHairpin(dynamic_cast<const Hairpin*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isHarmony()) {
@@ -1289,6 +1293,12 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
         m_endingControlEventMap[note->tieBack()] = "#" + xmlId;
     }
 
+    for (const EngravingItem* element : note->el()) {
+        if (element->isFingering()) {
+            m_startingControlEventList.push_back(std::make_pair(element, "#" + xmlId));
+        }
+    }
+
     if (meiAccid.HasAccid() || meiAccid.HasAccidGes()) {
         pugi::xml_node accidNode = m_currentNode.append_child();
         Accidental* acc = note->accidental();
@@ -1713,6 +1723,28 @@ bool MeiExporter::writeFermata(const Fermata* fermata, const libmei::xsdPositive
     meiFermata.SetTstamp(tstamp);
 
     meiFermata.Write(fermataNode, this->getXmlIdFor(fermata, 'f'));
+
+    return true;
+}
+
+/**
+ * Write a fing and its text content.
+ */
+
+bool MeiExporter::writeFing(const Fingering* fing, const std::string& startid)
+{
+    IF_ASSERT_FAILED(fing) {
+        return false;
+    }
+
+    StringList meiLines;
+
+    pugi::xml_node fingNode = m_currentNode.append_child();
+    libmei::Fing meiFing = Convert::fingToMEI(fing, meiLines);
+    meiFing.SetStartid(startid);
+    meiFing.Write(fingNode, this->getXmlIdFor(fing, 'f'));
+
+    this->writeLines(fingNode, meiLines);
 
     return true;
 }

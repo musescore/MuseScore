@@ -36,6 +36,7 @@
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/fermata.h"
 #include "engraving/dom/figuredbass.h"
+#include "engraving/dom/fingering.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/jump.h"
@@ -1556,6 +1557,40 @@ libmei::Fermata Convert::fermataToMEI(const engraving::Fermata* fermata)
     Convert::colorToMEI(fermata, meiFermata);
 
     return meiFermata;
+}
+
+void Convert::fingFromMEI(engraving::Fingering* fing, const StringList& meiLines, const libmei::Fing& meiFing, bool& warning)
+{
+    IF_ASSERT_FAILED(fing) {
+        return;
+    }
+
+    warning = false;
+
+    // text content
+    fing->setPlainText(meiLines.join(u"\n"));
+
+    // @place
+    if (meiFing.HasPlace()) {
+        fing->setPlacement(meiFing.GetPlace() == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
+        fing->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
+    }
+}
+
+libmei::Fing Convert::fingToMEI(const engraving::Fingering* fing, StringList& meiLines)
+{
+    libmei::Fing meiFing;
+
+    // content
+    String plainText = fing->plainText();
+    meiLines = plainText.split(u"\n");
+
+    // @place
+    if (fing->propertyFlags(engraving::Pid::PLACEMENT) == engraving::PropertyFlags::UNSTYLED) {
+        meiFing.SetPlace(Convert::placeToMEI(fing->placement()));
+    }
+
+    return meiFing;
 }
 
 std::pair<bool, engraving::NoteType> Convert::gracegrpFromMEI(const libmei::graceGrpLog_ATTACH meiAttach, const libmei::data_GRACE meiGrace,
