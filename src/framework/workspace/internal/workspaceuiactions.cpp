@@ -36,6 +36,16 @@ const UiActionList WorkspaceUiActions::m_actions = {
              muse::shortcuts::CTX_ANY,
              TranslatableString("action", "Select workspace")
              ),
+    UiAction("req-search",
+             muse::ui::UiCtxHomeOpened,
+             muse::shortcuts::CTX_ANY,
+             TranslatableString("action", "Search field requested")
+             ),
+    UiAction("req-dialog-search",
+             muse::ui::UiCtxUnknown,
+             muse::shortcuts::CTX_ANY,
+             TranslatableString("action", "Dialog search field requested")
+             ),
     UiAction("configure-workspaces",
              muse::ui::UiCtxAny,
              muse::shortcuts::CTX_ANY,
