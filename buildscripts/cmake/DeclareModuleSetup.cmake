@@ -111,15 +111,9 @@ macro(setup_module)
         if (MODULE_BIG_QRC AND NOT NO_QT_SUPPORT)
             qt_add_big_resources(RCC_BIG_SOURCES ${MODULE_BIG_QRC})
         endif()
-
-        if (MODULE_UI)
-            find_package(Qt6Widgets)
-            qt_wrap_ui(ui_headers ${MODULE_UI})
-        endif()
     else()
         set(RCC_SOURCES)
         set(RCC_BIG_SOURCES)
-        set(ui_headers)
 
         set_target_properties(${MODULE} PROPERTIES
             AUTOMOC OFF
