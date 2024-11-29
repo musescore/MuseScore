@@ -266,7 +266,7 @@ double Dynamic::customTextOffset() const
     }
     for (const TextBlock& block : ldata->blocks) {
         for (const std::shared_ptr<TextFragment>& fragment : block.fragments()) {
-            if (fragment->text == referenceFragment->text) {
+            if (fragment->text() == referenceFragment->text()) {
                 return fragment->pos.x() - referenceFragment->pos.x();
             }
         }

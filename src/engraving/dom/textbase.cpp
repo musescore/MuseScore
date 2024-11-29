@@ -744,7 +744,7 @@ int TextCursor::position(int row, int column) const
 //---------------------------------------------------------
 TextFragment::TextFragment(const String& s)
 {
-    text = s;
+    m_text = s;
 }
 
 TextFragment::TextFragment(TextCursor* cursor, const String& s)
@@ -755,14 +755,14 @@ TextFragment::TextFragment(TextCursor* cursor, const String& s)
 
 TextFragment::TextFragment(const TextFragment& f)
 {
-    text = f.text;
+    m_text = f.m_text;
     format = f.format;
     pos = f.pos;
 }
 
 TextFragment& TextFragment::operator =(const TextFragment& f)
 {
-    text = f.text;
+    m_text = f.m_text;
     format = f.format;
     pos = f.pos;
     return *this;
@@ -779,13 +779,13 @@ std::shared_ptr<TextFragment> TextFragment::split(int column)
     std::shared_ptr<TextFragment> f = std::make_shared<TextFragment>();
     f->format = format;
 
-    for (size_t i = 0; i < text.size(); ++i) {
-        const Char& c = text.at(i);
+    for (size_t i = 0; i < m_text.size(); ++i) {
+        const Char& c = m_text.at(i);
         if (col == column) {
             if (idx) {
-                if (idx < text.size()) {
-                    f->text = text.mid(idx);
-                    text   = text.left(idx);
+                if (idx < m_text.size()) {
+                    f->setText(m_text.mid(idx));
+                    m_text   = m_text.left(idx);
                 }
             }
             return f;
@@ -806,8 +806,8 @@ std::shared_ptr<TextFragment> TextFragment::split(int column)
 int TextFragment::columns() const
 {
     int col = 0;
-    for (size_t i = 0; i < text.size(); ++i) {
-        if (text.at(i).isHighSurrogate()) {
+    for (size_t i = 0; i < m_text.size(); ++i) {
+        if (m_text.at(i).isHighSurrogate()) {
             continue;
         }
         ++col;
@@ -821,7 +821,7 @@ int TextFragment::columns() const
 
 bool TextFragment::operator ==(const TextFragment& f) const
 {
-    return format == f.format && text == f.text;
+    return format == f.format && m_text == f.m_text;
 }
 
 //---------------------------------------------------------
@@ -833,10 +833,10 @@ void TextFragment::draw(Painter* p, const TextBase* t) const
     Font f(font(t));
     f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
 #ifndef Q_OS_MACOS
-    TextBase::drawTextWorkaround(p, f, pos, text);
+    TextBase::drawTextWorkaround(p, f, pos, m_text);
 #else
     p->setFont(f);
-    p->drawText(pos, text);
+    p->drawText(pos, m_text);
 #endif
 }
 
@@ -930,13 +930,13 @@ Font TextFragment::font(const TextBase* t) const
         FontMetrics fm(font);
 
         bool fail = false;
-        for (size_t i = 0; i < text.size(); ++i) {
-            const Char& c = text.at(i);
+        for (size_t i = 0; i < m_text.size(); ++i) {
+            const Char& c = m_text.at(i);
             if (c.isHighSurrogate()) {
-                if (i + 1 == text.size()) {
+                if (i + 1 == m_text.size()) {
                     ASSERT_X("bad string");
                 }
-                const Char& c2 = text.at(i + 1);
+                const Char& c2 = m_text.at(i + 1);
                 ++i;
                 char32_t v = Char::surrogateToUcs4(c, c2);
                 if (!fm.inFontUcs4(v)) {
@@ -1032,7 +1032,7 @@ void TextBlock::layout(const TextBase* t)
         FontMetrics fm = t->fontMetrics();
         m_shape.add(RectF(0.0, -fm.ascent(), 1.0, fm.descent()), t);
         m_lineSpacing = fm.lineSpacing();
-    } else if (m_fragments.size() == 1 && m_fragments.front()->text.isEmpty()) {
+    } else if (m_fragments.size() == 1 && m_fragments.front()->text().isEmpty()) {
         std::shared_ptr<TextFragment>& f = m_fragments.front();
         f->pos.setX(x);
         FontMetrics fm(f->font(t));
@@ -1074,11 +1074,11 @@ void TextBlock::layout(const TextBase* t)
             // Optimization: don't calculate character position
             // for the next fragment if there is no next fragment
             if (fi != fiLast) {
-                const double w  = fm.width(f->text);
+                const double w  = fm.width(f->text());
                 x += w;
             }
 
-            RectF textBRect = fm.tightBoundingRect(f->text).translated(f->pos);
+            RectF textBRect = fm.tightBoundingRect(f->text()).translated(f->pos);
             bool useDynamicSymShape = fragmentFont.type() == Font::Type::MusicSymbol && t->isDynamic();
             if (useDynamicSymShape) {
                 const Dynamic* dyn = toDynamic(t);
@@ -1136,7 +1136,7 @@ std::list<std::shared_ptr<TextFragment>> TextBlock::fragmentsWithoutEmpty()
 {
     std::list<std::shared_ptr<TextFragment>> list;
     for (const auto& x : m_fragments) {
-        if (!x->text.isEmpty()) {
+        if (!x->text().isEmpty()) {
             list.push_back(x);
         }
     }
@@ -1157,14 +1157,14 @@ double TextBlock::xpos(size_t column, const TextBase* t) const
         }
         FontMetrics fm(f->font(t));
         size_t idx = 0;
-        for (size_t i = 0; i < f->text.size(); ++i) {
+        for (size_t i = 0; i < f->text().size(); ++i) {
             ++idx;
-            if (f->text.at(i).isHighSurrogate()) {
+            if (f->text().at(i).isHighSurrogate()) {
                 continue;
             }
             ++col;
             if (column == col) {
-                return f->pos.x() + fm.width(f->text.left(idx));
+                return f->pos.x() + fm.width(f->text().left(idx));
             }
         }
     }
@@ -1183,8 +1183,8 @@ const std::shared_ptr<TextFragment> TextBlock::fragment(int column) const
     int col = 0;
     auto f = m_fragments.begin();
     for (; f != m_fragments.end(); ++f) {
-        for (size_t i = 0; i < (*f)->text.size(); ++i) {
-            if ((*f)->text.at(i).isHighSurrogate()) {
+        for (size_t i = 0; i < (*f)->text().size(); ++i) {
+            if ((*f)->text().at(i).isHighSurrogate()) {
                 continue;
             }
             if (column == col) {
@@ -1232,8 +1232,8 @@ size_t TextBlock::columns() const
 {
     size_t col = 0;
     for (const std::shared_ptr<TextFragment>& f : m_fragments) {
-        for (size_t i = 0; i < f->text.size(); ++i) {
-            if (!f->text.at(i).isHighSurrogate()) {
+        for (size_t i = 0; i < f->text().size(); ++i) {
+            if (!f->text().at(i).isHighSurrogate()) {
                 ++col;
             }
         }
@@ -1256,13 +1256,13 @@ int TextBlock::column(double x, TextBase* t) const
             return col;
         }
         double px = 0.0;
-        for (size_t i = 0; i < f->text.size(); ++i) {
+        for (size_t i = 0; i < f->text().size(); ++i) {
             ++idx;
-            if (f->text.at(i).isHighSurrogate()) {
+            if (f->text().at(i).isHighSurrogate()) {
                 continue;
             }
             FontMetrics fm(f->font(t));
-            double xo = fm.width(f->text.left(idx));
+            double xo = fm.width(f->text().left(idx));
             if (x <= f->pos.x() + px + (xo - px) * .5) {
                 return col;
             }
@@ -1292,11 +1292,11 @@ void TextBlock::insert(TextCursor* cursor, const String& s)
                 m_fragments.insert(std::next(i), f2);
             }
         } else {
-            (*i)->text.insert(ridx, s);
+            (*i)->setText((*i)->text().insert(ridx, s));
         }
     } else {
         if (!m_fragments.empty() && m_fragments.back()->format == *cursor->format()) {
-            m_fragments.back()->text.append(s);
+            m_fragments.back()->appendText(s);
         } else {
             m_fragments.push_back(std::make_shared<TextFragment>(TextFragment(cursor, s)));
         }
@@ -1313,7 +1313,7 @@ void TextBlock::insert(TextCursor* cursor, const String& s)
 
 void TextBlock::insertEmptyFragmentIfNeeded(TextCursor* cursor)
 {
-    if (m_fragments.size() == 0 || m_fragments.front()->text.isEmpty()) {
+    if (m_fragments.size() == 0 || m_fragments.front()->text().isEmpty()) {
         m_fragments.insert(m_fragments.begin(), std::make_shared<TextFragment>(TextFragment(cursor, u"")));
     }
 }
@@ -1324,7 +1324,7 @@ void TextBlock::insertEmptyFragmentIfNeeded(TextCursor* cursor)
 
 void TextBlock::removeEmptyFragment()
 {
-    if (m_fragments.size() > 0 && m_fragments.front()->text.isEmpty()) {
+    if (m_fragments.size() > 0 && m_fragments.front()->text().isEmpty()) {
         m_fragments.pop_back();
     }
 }
@@ -1345,12 +1345,12 @@ std::list<std::shared_ptr<TextFragment>>::iterator TextBlock::fragment(int colum
     for (auto it = m_fragments.begin(); it != m_fragments.end(); ++it) {
         *rcol = 0;
         *ridx = 0;
-        for (size_t i = 0; i < (*it)->text.size(); ++i) {
+        for (size_t i = 0; i < (*it)->text().size(); ++i) {
             if (col == column) {
                 return it;
             }
             ++*ridx;
-            if ((*it)->text.at(i).isHighSurrogate()) {
+            if ((*it)->text().at(i).isHighSurrogate()) {
                 continue;
             }
             ++col;
@@ -1372,16 +1372,16 @@ String TextBlock::remove(int column, TextCursor* cursor)
         size_t idx = 0;
         auto fragment = *it;
 
-        for (size_t i = 0; i < fragment->text.size(); ++i) {
+        for (size_t i = 0; i < fragment->text().size(); ++i) {
             if (col == column) {
-                if (fragment->text.at(i).isSurrogate()) {
-                    s = fragment->text.mid(idx, 2);
-                    fragment->text.remove(idx, 2);
+                if (fragment->text().at(i).isSurrogate()) {
+                    s = fragment->text().mid(idx, 2);
+                    fragment->setText(fragment->text().remove(idx, 2));
                 } else {
-                    s = fragment->text.mid(idx, 1);
-                    fragment->text.remove(idx, 1);
+                    s = fragment->text().mid(idx, 1);
+                    fragment->setText(fragment->text().remove(idx, 1));
                 }
-                if (fragment->text.isEmpty()) {
+                if (fragment->text().isEmpty()) {
                     m_fragments.erase(it);
                 }
                 simplify();
@@ -1389,7 +1389,7 @@ String TextBlock::remove(int column, TextCursor* cursor)
                 return s;
             }
             ++idx;
-            if (fragment->text.at(i).isHighSurrogate()) {
+            if (fragment->text().at(i).isHighSurrogate()) {
                 continue;
             }
             ++col;
@@ -1414,7 +1414,7 @@ void TextBlock::simplify()
     ++i;
     for (; i != m_fragments.end(); ++i) {
         while (i != m_fragments.end() && ((*i)->format == f->format)) {
-            f->text.append((*i)->text);
+            f->appendText((*i)->text());
             i = m_fragments.erase(i);
         }
         if (i == m_fragments.end()) {
@@ -1438,17 +1438,17 @@ String TextBlock::remove(int start, int n, TextCursor* cursor)
     for (auto i = m_fragments.begin(); i != m_fragments.end();) {
         bool inc = true;
         std::shared_ptr<TextFragment> fragment = *i;
-        for (size_t idx = 0; idx < fragment->text.size();) {
-            Char c = fragment->text.at(idx);
+        for (size_t idx = 0; idx < fragment->text().size();) {
+            Char c = fragment->text().at(idx);
             if (col == start) {
                 if (c.isHighSurrogate()) {
                     s += c;
-                    fragment->text.remove(idx, 1);
-                    c = fragment->text.at(idx);
+                    fragment->setText(fragment->text().remove(idx, 1));
+                    c = fragment->text().at(idx);
                 }
                 s += c;
-                fragment->text.remove(idx, 1);
-                if (fragment->text.isEmpty() && (m_fragments.size() > 1)) {
+                fragment->setText(fragment->text().remove(idx, 1));
+                if (fragment->text().isEmpty() && (m_fragments.size() > 1)) {
                     i = m_fragments.erase(i);
                     inc = false;
                 }
@@ -1591,14 +1591,14 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
     for (auto it = m_fragments.begin(); it != m_fragments.end(); ++it) {
         size_t idx = 0;
         std::shared_ptr<TextFragment> fragment = *it;
-        for (size_t i = 0; i < fragment->text.size(); ++i) {
+        for (size_t i = 0; i < fragment->text().size(); ++i) {
             if (col == column) {
                 if (idx) {
-                    if (idx < fragment->text.size()) {
-                        std::shared_ptr<TextFragment> tf = std::make_shared<TextFragment>(fragment->text.mid(idx));
+                    if (idx < fragment->text().size()) {
+                        std::shared_ptr<TextFragment> tf = std::make_shared<TextFragment>(fragment->text().mid(idx));
                         tf->format = fragment->format;
                         tl.m_fragments.push_back(tf);
-                        fragment->text = fragment->text.left(idx);
+                        fragment->setText(fragment->text().left(idx));
                         ++it;
                     }
                 }
@@ -1612,7 +1612,7 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
                 return tl;
             }
             ++idx;
-            if (fragment->text.at(i).isHighSurrogate()) {
+            if (fragment->text().at(i).isHighSurrogate()) {
                 continue;
             }
             ++col;
@@ -1650,15 +1650,15 @@ String TextBlock::text(int col1, int len, bool withFormat) const
     double size;
     String family;
     for (const auto& f : m_fragments) {
-        if (f->text.isEmpty()) {
+        if (f->text().isEmpty()) {
             continue;
         }
         if (withFormat) {
             s += TextBase::getHtmlStartTag(f->format.fontSize(), size, f->format.fontFamily(), family, f->format.style(), f->format.valign());
         }
 
-        for (size_t i = 0; i < f->text.size(); ++i) {
-            Char c = f->text.at(i);
+        for (size_t i = 0; i < f->text().size(); ++i) {
+            Char c = f->text().at(i);
             if (col >= col1 && (len < 0 || ((col - col1) < len))) {
                 if (f->format.fontFamily() == "ScoreText" && withFormat) {
                     s += toSymbolXml(c);
@@ -2262,11 +2262,11 @@ String TextBase::genText(const LayoutData* ldata) const
                 }
             }
             if (format.fontFamily() == u"ScoreText") {
-                for (size_t i = 0; i < f->text.size(); ++i) {
-                    text += toSymbolXml(f->text.at(i));
+                for (size_t i = 0; i < f->text().size(); ++i) {
+                    text += toSymbolXml(f->text().at(i));
                 }
             } else {
-                text += XmlWriter::xmlString(f->text);
+                text += XmlWriter::xmlString(f->text());
             }
             fmt = format;
         }
@@ -2357,10 +2357,10 @@ void TextBase::computeHighResShape(const FontMetrics& fontMetrics)
         double x = 0;
         for (const std::shared_ptr<TextFragment>& fragment : block.fragments()) {
             x += fragment->pos.x();
-            size_t textSize = fragment->text.size();
+            size_t textSize = fragment->text().size();
             for (size_t i = 0; i < textSize; ++i) {
-                Char character = fragment->text.at(i);
-                RectF characterBoundingRect = fontMetrics.tightBoundingRect(fragment->text.at(i));
+                Char character = fragment->text().at(i);
+                RectF characterBoundingRect = fontMetrics.tightBoundingRect(fragment->text().at(i));
                 characterBoundingRect.translate(x, 0.0);
                 highResShape.add(characterBoundingRect);
                 if (i + 1 < textSize) {
@@ -2496,7 +2496,7 @@ std::list<std::shared_ptr<TextFragment>> TextBase::fragmentList() const
             res.push_back(f->clone());
             if (block.eol()) {
                 // simply append a newline
-                res.back()->text += u"\n";
+                res.back()->appendText(u"\n");
             }
         }
     }
@@ -2526,7 +2526,7 @@ String TextBase::plainText() const
     const LayoutData* tmlldata = text->ldata();
     for (const TextBlock& block : tmlldata->blocks) {
         for (const std::shared_ptr<TextFragment>& f : block.fragments()) {
-            s += f->text;
+            s += f->text();
         }
         if (block.eol()) {
             s += Char::LineFeed;
@@ -3352,7 +3352,7 @@ bool TextBase::hasCustomFormatting() const
 
     for (const TextBlock& block : ldata->blocks) {
         for (const std::shared_ptr<TextFragment>& f : block.fragments()) {
-            if (f->text.isEmpty()) {                         // skip empty fragments, not to
+            if (f->text().isEmpty()) {                         // skip empty fragments, not to
                 continue;                                   // insert extra HTML formatting
             }
             const CharFormat& format = f->format;
@@ -3435,7 +3435,7 @@ String TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) c
 
     for (const TextBlock& block : ldata->blocks) {
         for (const std::shared_ptr<TextFragment>& f : block.fragments()) {
-            if (f->text.isEmpty()) {                         // skip empty fragments, not to
+            if (f->text().isEmpty()) {                         // skip empty fragments, not to
                 continue;                                   // insert extra HTML formatting
             }
             const CharFormat& format = f->format;
@@ -3494,7 +3494,7 @@ String TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) c
                     break;
                 }
             }
-            _txt += XmlWriter::xmlString(f->text);
+            _txt += XmlWriter::xmlString(f->text());
             fmt = format;
         }
         if (block.eol()) {
