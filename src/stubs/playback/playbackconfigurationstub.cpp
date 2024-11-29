@@ -51,6 +51,15 @@ void PlaybackConfigurationStub::setPlayHarmonyWhenEditing(bool)
 {
 }
 
+bool PlaybackConfigurationStub::playNotesOnMutedTracksWhenEditing() const
+{
+    return false;
+}
+
+void PlaybackConfigurationStub::setPlayNotesOnMutedTracksWhenEditing(bool)
+{
+}
+
 PlaybackCursorType PlaybackConfigurationStub::cursorType() const
 {
     return PlaybackCursorType::SMOOTH;

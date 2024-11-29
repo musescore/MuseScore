@@ -25,6 +25,8 @@
 #include "global/modularity/ioc.h"
 #include "global/async/asyncable.h"
 #include "global/async/notification.h"
+#include "playback/iplaybackcontroller.h"
+#include "playback/iplaybackconfiguration.h"
 
 #include "../../ifxresolver.h"
 #include "../../ifxprocessor.h"
@@ -35,6 +37,8 @@ namespace muse::audio {
 class MixerChannel : public ITrackAudioOutput, public Injectable, public async::Asyncable
 {
     Inject<fx::IFxResolver> fxResolver = { this };
+    muse::Inject<mu::playback::IPlaybackController> playbackController = { };
+    muse::Inject<mu::playback::IPlaybackConfiguration> playbackConfiguration = { this };
 
 public:
     explicit MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate,
@@ -66,6 +70,7 @@ public:
 
 private:
     void completeOutput(float* buffer, unsigned int samplesCount) const;
+    bool playNotesOnMutedTracksWhenEditing() const;
 
     TrackId m_trackId = -1;
 

@@ -65,7 +65,12 @@ IAudioSourcePtr MixerChannel::source() const
 
 bool MixerChannel::muted() const
 {
-    return m_params.muted;
+    // We are not muted if we are editing notes and this setting is true
+    if (playNotesOnMutedTracksWhenEditing()) {
+        return false;
+    } else {
+        return m_params.muted;
+    }
 }
 
 async::Notification MixerChannel::mutedChanged() const
@@ -192,11 +197,11 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
 
     samples_t processedSamplesCount = samplesPerChannel;
 
-    if (m_audioSource && !m_params.muted) {
+    if (m_audioSource && (!m_params.muted || playNotesOnMutedTracksWhenEditing())) {
         processedSamplesCount = m_audioSource->process(buffer, samplesPerChannel);
     }
 
-    if (processedSamplesCount == 0 || m_params.muted) {
+    if (processedSamplesCount == 0 || (m_params.muted && !playNotesOnMutedTracksWhenEditing())) {
         std::fill(buffer, buffer + samplesPerChannel * audioChannelsCount(), 0.f);
         notifyNoAudioSignal();
 
@@ -260,4 +265,11 @@ void MixerChannel::notifyNoAudioSignal()
     }
 
     m_audioSignalNotifier.notifyAboutChanges();
+}
+
+bool MixerChannel::playNotesOnMutedTracksWhenEditing() const
+{
+    // We are not muted if we are Editing and we want to play notes even if mixer sound is off
+    return !playbackController()->isPlaying()
+           && playbackConfiguration()->playNotesWhenEditing() && playbackConfiguration()->playNotesOnMutedTracksWhenEditing();
 }

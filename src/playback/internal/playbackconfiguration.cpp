@@ -39,6 +39,7 @@ static const Settings::Key PLAYBACK_CURSOR_TYPE_KEY(moduleName, "application/pla
 static const Settings::Key PLAY_NOTES_WHEN_EDITING(moduleName, "score/note/playOnClick");
 static const Settings::Key PLAY_CHORD_WHEN_EDITING(moduleName, "score/chord/playOnAddNote");
 static const Settings::Key PLAY_HARMONY_WHEN_EDITING(moduleName, "score/harmony/play/onedit");
+static const Settings::Key PLAY_NOTES_ON_MUTED_TRACKS_WHEN_EDITING(moduleName, "score/note/playOnMutedTracks");
 
 static const Settings::Key SOUND_PRESETS_MULTI_SELECTION_KEY(moduleName, "application/playback/soundPresetsMultiSelectionEnabled");
 
@@ -94,6 +95,8 @@ void PlaybackConfiguration::init()
     settings()->setDefaultValue(PLAY_NOTES_WHEN_EDITING, Val(true));
     settings()->setDefaultValue(PLAY_CHORD_WHEN_EDITING, Val(true));
     settings()->setDefaultValue(PLAY_HARMONY_WHEN_EDITING, Val(true));
+    settings()->setDefaultValue(PLAY_NOTES_ON_MUTED_TRACKS_WHEN_EDITING, Val(false));
+
     settings()->setDefaultValue(PLAYBACK_CURSOR_TYPE_KEY, Val(PlaybackCursorType::STEPPED));
     settings()->setDefaultValue(SOUND_PRESETS_MULTI_SELECTION_KEY, Val(false));
     settings()->setDefaultValue(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_SOUND_WARNING, Val(true));
@@ -159,6 +162,16 @@ bool PlaybackConfiguration::playHarmonyWhenEditing() const
 void PlaybackConfiguration::setPlayHarmonyWhenEditing(bool value)
 {
     settings()->setSharedValue(PLAY_HARMONY_WHEN_EDITING, Val(value));
+}
+
+bool PlaybackConfiguration::playNotesOnMutedTracksWhenEditing() const
+{
+    return settings()->value(PLAY_NOTES_ON_MUTED_TRACKS_WHEN_EDITING).toBool();
+}
+
+void PlaybackConfiguration::setPlayNotesOnMutedTracksWhenEditing(bool value)
+{
+    settings()->setSharedValue(PLAY_NOTES_ON_MUTED_TRACKS_WHEN_EDITING, Val(value));
 }
 
 PlaybackCursorType PlaybackConfiguration::cursorType() const

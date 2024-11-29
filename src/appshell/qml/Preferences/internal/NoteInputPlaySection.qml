@@ -30,11 +30,13 @@ BaseSection {
     property alias playNotesWhenEditing: playNotesBox.checked
     property alias playChordWhenEditing: playChordBox.checked
     property alias playChordSymbolWhenEditing: playChordSymbolBox.checked
+    property alias playNotesOnMutedTracksWhenEditing: playNotesOnMutedTracksBox.checked
     property alias notePlayDurationMilliseconds: notePlayDurationControl.currentValue
 
     signal playNotesWhenEditingChangeRequested(bool play)
     signal playChordWhenEditingChangeRequested(bool play)
     signal playChordSymbolWhenEditingChangeRequested(bool play)
+    signal playNotesOnMutedTracksWhenEditingChangeRequested(bool play)
     signal notePlayDurationChangeRequested(int duration)
 
     CheckBox {
@@ -106,6 +108,22 @@ BaseSection {
 
         onClicked: {
             root.playChordSymbolWhenEditingChangeRequested(!checked)
+        }
+    }
+    CheckBox {
+        id: playNotesOnMutedTracksBox
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Play notes on muted tracks")
+
+        enabled: root.playNotesWhenEditing
+
+        navigation.name: "playNotesOnMutedTracksBox"
+        navigation.panel: root.navigation
+        navigation.row: 4
+
+        onClicked: {
+            root.playNotesOnMutedTracksWhenEditingChangeRequested(!checked)
         }
     }
 }

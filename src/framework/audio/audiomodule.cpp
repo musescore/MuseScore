@@ -48,12 +48,6 @@
 
 #include "log.h"
 
-using namespace muse;
-using namespace muse::modularity;
-using namespace muse::audio;
-using namespace muse::audio::synth;
-using namespace muse::audio::fx;
-
 #ifdef MUSE_MODULE_AUDIO_JACK
 #include "internal/platform/jack/jackaudiodriver.h"
 #endif
@@ -78,6 +72,12 @@ using namespace muse::audio::fx;
 #ifdef Q_OS_WASM
 #include "internal/platform/web/webaudiodriver.h"
 #endif
+
+using namespace muse;
+using namespace muse::modularity;
+using namespace muse::audio;
+using namespace muse::audio::synth;
+using namespace muse::audio::fx;
 
 static void measureInputLag(const float* buf, const size_t size)
 {

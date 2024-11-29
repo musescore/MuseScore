@@ -40,6 +40,9 @@ public:
     virtual bool playChordWhenEditing() const = 0;
     virtual void setPlayChordWhenEditing(bool value) = 0;
 
+    virtual bool playNotesOnMutedTracksWhenEditing() const = 0;
+    virtual void setPlayNotesOnMutedTracksWhenEditing(bool value) = 0;
+
     virtual bool playHarmonyWhenEditing() const = 0;
     virtual void setPlayHarmonyWhenEditing(bool value) = 0;
 

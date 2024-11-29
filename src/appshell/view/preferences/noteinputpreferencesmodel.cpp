@@ -71,6 +71,11 @@ bool NoteInputPreferencesModel::playChordSymbolWhenEditing() const
     return playbackConfiguration()->playHarmonyWhenEditing();
 }
 
+bool NoteInputPreferencesModel::playNotesOnMutedTracksWhenEditing() const
+{
+    return playbackConfiguration()->playNotesOnMutedTracksWhenEditing();
+}
+
 bool NoteInputPreferencesModel::dynamicsApplyToAllVoices() const
 {
     return engravingConfiguration()->dynamicsApplyToAllVoices();
@@ -154,6 +159,16 @@ void NoteInputPreferencesModel::setPlayChordSymbolWhenEditing(bool value)
 
     playbackConfiguration()->setPlayHarmonyWhenEditing(value);
     emit playChordSymbolWhenEditingChanged(value);
+}
+
+void NoteInputPreferencesModel::setPlayNotesOnMutedTracksWhenEditing(bool value)
+{
+    if (value == playNotesOnMutedTracksWhenEditing()) {
+        return;
+    }
+
+    playbackConfiguration()->setPlayNotesOnMutedTracksWhenEditing(value);
+    emit playNotesOnMutedTracksWhenEditingChanged(value);
 }
 
 void NoteInputPreferencesModel::setDynamicsApplyToAllVoices(bool value)

@@ -47,6 +47,9 @@ public:
     bool playHarmonyWhenEditing() const override;
     void setPlayHarmonyWhenEditing(bool value) override;
 
+    bool playNotesOnMutedTracksWhenEditing() const override;
+    void setPlayNotesOnMutedTracksWhenEditing(bool value) override;
+
     PlaybackCursorType cursorType() const override;
 
     bool isMixerSectionVisible(MixerSectionType sectionType) const override;

@@ -51,6 +51,8 @@ class NoteInputPreferencesModel : public QObject, public muse::Injectable
     Q_PROPERTY(
         bool playChordSymbolWhenEditing READ playChordSymbolWhenEditing WRITE setPlayChordSymbolWhenEditing NOTIFY playChordSymbolWhenEditingChanged)
     Q_PROPERTY(
+        bool playNotesOnMutedTracksWhenEditing READ playNotesOnMutedTracksWhenEditing WRITE setPlayNotesOnMutedTracksWhenEditing NOTIFY playNotesOnMutedTracksWhenEditingChanged)
+    Q_PROPERTY(
         bool dynamicsApplyToAllVoices READ dynamicsApplyToAllVoices WRITE setDynamicsApplyToAllVoices NOTIFY dynamicsApplyToAllVoicesChanged FINAL)
 
     muse::Inject<muse::shortcuts::IShortcutsConfiguration> shortcutsConfiguration = { this };
@@ -70,6 +72,7 @@ public:
     int notePlayDurationMilliseconds() const;
     bool playChordWhenEditing() const;
     bool playChordSymbolWhenEditing() const;
+    bool playNotesOnMutedTracksWhenEditing() const;
 
     bool dynamicsApplyToAllVoices() const;
 
@@ -82,6 +85,7 @@ public slots:
     void setNotePlayDurationMilliseconds(int duration);
     void setPlayChordWhenEditing(bool value);
     void setPlayChordSymbolWhenEditing(bool value);
+    void setPlayNotesOnMutedTracksWhenEditing(bool value);
     void setDynamicsApplyToAllVoices(bool value);
 
 signals:
@@ -93,6 +97,7 @@ signals:
     void notePlayDurationMillisecondsChanged(int duration);
     void playChordWhenEditingChanged(bool value);
     void playChordSymbolWhenEditingChanged(bool value);
+    void playNotesOnMutedTracksWhenEditingChanged(bool value);
     void dynamicsApplyToAllVoicesChanged(bool value);
 };
 }
