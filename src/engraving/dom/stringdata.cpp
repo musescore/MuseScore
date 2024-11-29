@@ -472,6 +472,14 @@ void StringData::sortChordNotesUseSameString(const Chord* chord, int pitchOffset
                         Note* n = usedStrings[indx];
                         int pitch = n->pitch() - capoFret;
                         int newString = n->string() + 1;
+                        int checkString = newString;
+                        while (checkString < fretTable[pitch].size()) {
+                            if (fretTable[pitch].at(checkString) > -1) {
+                                newString = checkString;
+                                break;
+                            }
+                            ++checkString;
+                        }
                         if (fretTable[pitch].size() <= static_cast<size_t>(newString)) {
                             return;
                         }
