@@ -62,6 +62,7 @@
 #include "libmscore/score.h"
 #include "libmscore/segment.h"
 #include "libmscore/shadownote.h"
+#include "libmscore/shape.h"
 #include "libmscore/slur.h"
 #include "libmscore/spanner.h"
 #include "libmscore/staff.h"
@@ -75,14 +76,13 @@
 #include "libmscore/systemtext.h"
 #include "libmscore/textframe.h"
 #include "libmscore/text.h"
+#include "libmscore/textline.h"
 #include "libmscore/timesig.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/undo.h"
 #include "libmscore/utils.h"
 #include "libmscore/volta.h"
 #include "libmscore/xml.h"
-#include "libmscore/textline.h"
-#include "libmscore/shape.h"
 
 #ifdef AVSOMR
 #include "avsomr/avsomr.h"
@@ -1934,7 +1934,7 @@ void ScoreView::normalCopy()
             QMimeData* mimeData = new QMimeData;
             mimeData->setData(mimeType, _score->selection().mimeData());
             if (MScore::debugMode)
-                  qDebug("cmd copy: <%s>", mimeData->data(mimeType).data());
+                  qDebug("cmd copy: <%s>", mimeData->data(mimeType).constData());
             QApplication::clipboard()->setMimeData(mimeData);
             }
       }
@@ -5056,18 +5056,18 @@ void ScoreView::cmdRepeatSelection()
 
       if (noteEntryMode() && selection.isSingle()) {
             Element* el = _score->selection().element();
-            if (el && el->type() == ElementType::NOTE) {
-                  if (!_score->inputState().endOfScore()) {
-                        _score->startCmd();
-                        bool addTo = false;
-                        Chord* c = static_cast<Note*>(el)->chord();
-                        for (Note* note : c->notes()) {
-                              NoteVal nval = note->noteVal();
-                              _score->addPitch(nval, addTo);
-                              addTo = true;
-                              }
-                        _score->endCmd();
+            while (el && el->type() != ElementType::NOTE)
+                   el = el->prevSegmentElement();
+            if (el && el->type() == ElementType::NOTE && !_score->inputState().endOfScore()) {
+                  _score->startCmd();
+                  bool addTo = false;
+                  Chord* c = toNote(el)->chord();
+                  for (Note* note : c->notes()) {
+                        NoteVal nval = note->noteVal();
+                        _score->addPitch(nval, addTo);
+                        addTo = true;
                         }
+                  _score->endCmd();
                   }
             return;
             }
@@ -5089,7 +5089,7 @@ void ScoreView::cmdRepeatSelection()
       QMimeData* mimeData = new QMimeData;
       mimeData->setData(mimeType, selection.mimeData());
       if (MScore::debugMode)
-            qDebug("cmdRepeatSelection: <%s>", mimeData->data(mimeType).data());
+            qDebug("cmdRepeatSelection: <%s>", mimeData->data(mimeType).constData());
       QApplication::clipboard()->setMimeData(mimeData);
 
       QByteArray d(mimeData->data(mimeType));
@@ -5631,7 +5631,7 @@ static const Element* visibleElementInScore(const Element* orig, const Score* s)
       if (orig->score() == s && orig->bbox().isValid())
             return orig;
 
-      for (const ScoreElement* se : orig->linkList()) {
+      for (ScoreElement*& se : orig->linkList()) {
             const Element* e = toElement(se);
             if (e->score() == s && e->bbox().isValid()) // bbox check to ensure the element is indeed visible
                   return e;
