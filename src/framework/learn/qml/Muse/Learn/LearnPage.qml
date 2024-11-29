@@ -63,6 +63,10 @@ FocusScope {
 
     LearnPageModel {
         id: pageModel
+
+        onSearchRequested: {
+            searchField.forceActiveFocus()
+        }
     }
 
     Component.onCompleted: {
