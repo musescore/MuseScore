@@ -141,6 +141,10 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
         const InstrumentTemplate& templ = repository()->instrumentTemplate(currentInstrumentId);
         init(COMMON_GENRE_ID, templ.groupId);
     }
+
+    dispatcher()->reg(this, "req-dialog-search", [this]() {
+        emit searchRequested();
+    });
 }
 
 QStringList InstrumentListModel::genres() const

@@ -76,6 +76,10 @@ Rectangle {
             familyView.scrollToGroup(groupIndex)
             instrumentsView.focusInstrument(instrumentIndex)
         }
+
+        onSearchRequested: {
+            instrumentsView.activateSearchField()
+        }
     }
 
     QtObject {
