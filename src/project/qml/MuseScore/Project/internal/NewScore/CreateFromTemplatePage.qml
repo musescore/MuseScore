@@ -45,6 +45,10 @@ Item {
         onCurrentTemplateChanged: {
             templatePreview.load(model.currentTemplatePath)
         }
+
+        onSearchRequested: {
+            templatesView.activateSearchField()
+        }
     }
 
     Component.onCompleted: {

@@ -23,14 +23,17 @@
 #define MU_PROJECT_TEMPLATESMODEL_H
 
 #include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+#include "actions/actionable.h"
 #include "internal/itemplatesrepository.h"
 
 namespace mu::project {
-class TemplatesModel : public QObject
+class TemplatesModel : public QObject, public muse::actions::Actionable
 {
     Q_OBJECT
 
     INJECT(ITemplatesRepository, repository)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(QStringList categoriesTitles READ categoriesTitles NOTIFY categoriesChanged)
     Q_PROPERTY(QStringList templatesTitles READ templatesTitles NOTIFY templatesChanged)
@@ -65,6 +68,7 @@ signals:
     void templatesChanged();
     void currentCategoryChanged();
     void currentTemplateChanged();
+    void searchRequested();
 
 private:
     void loadAllCategories();
