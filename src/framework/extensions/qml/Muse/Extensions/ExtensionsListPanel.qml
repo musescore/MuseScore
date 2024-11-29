@@ -54,6 +54,10 @@ Item {
             prv.lastNavigatedExtension = null
             panel.close()
         }
+
+        onSearchRequested: {
+            searchField.forceActiveFocus()
+        }
     }
 
     onSearchChanged: {
