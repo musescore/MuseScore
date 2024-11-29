@@ -33,7 +33,6 @@
 # set(MODULE_LINK_GLOBAL ON/OFF)              - set whether to link with `global` module (default ON)
 # set(MODULE_QRC somename.qrc)                - set resource (qrc) file
 # set(MODULE_BIG_QRC somename.qrc)            - set big resource (qrc) file
-# set(MODULE_UI ...)                          - set ui headers
 # set(MODULE_QML_IMPORT ...)                  - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
 # set(MODULE_QMLEXT_IMPORT ...)               - set Qml extensions import for QtCreator (so that there is code highlighting, jump, etc.)
 # set(MODULE_USE_PCH ON/OFF)                  - set whether to use precompiled headers for this module (default ON)
@@ -58,7 +57,6 @@ macro(declare_module name)
     set(MODULE_USE_QT ON)
     unset(MODULE_QRC)
     unset(MODULE_BIG_QRC)
-    unset(MODULE_UI)
     unset(MODULE_QML_IMPORT)
     unset(MODULE_QMLEXT_IMPORT)
     set(MODULE_USE_PCH ON)
@@ -114,15 +112,9 @@ macro(setup_module)
         if (MODULE_BIG_QRC AND NOT NO_QT_SUPPORT)
             qt_add_big_resources(RCC_BIG_SOURCES ${MODULE_BIG_QRC})
         endif()
-
-        if (MODULE_UI)
-            find_package(Qt6Widgets)
-            qt_wrap_ui(ui_headers ${MODULE_UI})
-        endif()
     else()
         set(RCC_SOURCES)
         set(RCC_BIG_SOURCES)
-        set(ui_headers)
 
         set_target_properties(${MODULE} PROPERTIES
             AUTOMOC OFF
@@ -166,7 +158,6 @@ macro(setup_module)
     endif()
 
     target_sources(${MODULE} PRIVATE
-        ${ui_headers}
         ${RCC_SOURCES}
         ${RCC_BIG_SOURCES}
         ${MODULE_SRC}
