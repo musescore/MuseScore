@@ -722,6 +722,23 @@ Segment* Measure::getChordRestOrTimeTickSegment(const Fraction& f)
     return seg;
 }
 
+Segment* Measure::undoGetChordRestOrTimeTickSegment(const Fraction& f)
+{
+    Segment* seg = findSegment(SegmentType::ChordRest, f);
+    if (!seg) {
+        seg = findSegment(SegmentType::TimeTick, f);
+    }
+    if (!seg) {
+        if (f - tick() == ticks()) { // end of measure
+            seg = undoGetSegment(SegmentType::TimeTick, f);
+        } else {
+            seg = undoGetSegment(SegmentType::ChordRest, f);
+        }
+    }
+
+    return seg;
+}
+
 //---------------------------------------------------------
 //   getSegmentR
 ///   Get a segment of type st at relative tick position t.
