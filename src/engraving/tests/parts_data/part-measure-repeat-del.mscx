@@ -804,7 +804,6 @@
         </Measure>
       </Staff>
     <Score>
-      <eid>1039382085636</eid>
       <name>Alto</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
@@ -1253,7 +1252,6 @@
         </Staff>
       </Score>
     <Score>
-      <eid>1700807049220</eid>
       <name>Tenor</name>
       <initialPartId>2</initialPartId>
       <Division>480</Division>

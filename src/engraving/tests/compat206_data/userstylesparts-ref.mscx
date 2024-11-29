@@ -379,7 +379,6 @@
         </Measure>
       </Staff>
     <Score>
-      <eid>219043332100</eid>
       <name>Piano</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
@@ -616,7 +615,6 @@
         </Staff>
       </Score>
     <Score>
-      <eid>373662154756</eid>
       <name>Flute 1</name>
       <initialPartId>2</initialPartId>
       <Division>480</Division>
@@ -876,7 +874,6 @@
         </Staff>
       </Score>
     <Score>
-      <eid>536870912004</eid>
       <name>Flute 2</name>
       <initialPartId>3</initialPartId>
       <Division>480</Division>
