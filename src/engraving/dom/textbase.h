@@ -219,7 +219,6 @@ public:
 public:
     mutable CharFormat format;
     PointF pos;                    // y is relative to TextBlock->y()
-    mutable String text;
 
     TextFragment() = default;
     TextFragment(const String& s);
@@ -227,16 +226,22 @@ public:
     TextFragment(const TextFragment& f);
 
     TextFragment& operator =(const TextFragment& f);
-
     bool operator ==(const TextFragment& f) const;
 
     virtual std::shared_ptr<TextFragment> clone() { return std::make_shared<TextFragment>(*this); }
+
+    String text() const { return m_text; }
+    virtual void setText(String text) { m_text = text; }
+    virtual void appendText(String text) { m_text += text; }
 
     std::shared_ptr<TextFragment> split(int column);
     void draw(muse::draw::Painter*, const TextBase*) const;
     muse::draw::Font font(const TextBase*) const;
     int columns() const;
     void changeFormat(FormatId id, const FormatValue& data);
+
+private:
+    String m_text;
 };
 
 //---------------------------------------------------------
