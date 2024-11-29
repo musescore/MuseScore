@@ -36,6 +36,13 @@ ScoresPageModel::ScoresPageModel(QObject* parent)
 {
 }
 
+void ScoresPageModel::load()
+{
+    dispatcher()->reg(this, "req-search", [this]() {
+        emit searchRequested();
+    });
+}
+
 void ScoresPageModel::createNewScore()
 {
     dispatcher()->dispatch("file-new");

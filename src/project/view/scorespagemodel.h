@@ -27,13 +27,14 @@
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
 #include "actions/iactionsdispatcher.h"
+#include "actions/actionable.h"
 #include "iinteractive.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
 
 class QString;
 
 namespace mu::project {
-class ScoresPageModel : public QObject
+class ScoresPageModel : public QObject, public muse::actions::Actionable
 {
     Q_OBJECT
 
@@ -64,10 +65,12 @@ public:
     Q_INVOKABLE void openOther();
     Q_INVOKABLE void openScore(const QString& scorePath, const QString& displayNameOverride);
     Q_INVOKABLE void openScoreManager();
+    Q_INVOKABLE void load();
 
 signals:
     void tabIndexChanged();
     void viewTypeChanged();
+    void searchRequested();
 };
 }
 
