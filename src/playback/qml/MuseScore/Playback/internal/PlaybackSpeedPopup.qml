@@ -42,7 +42,7 @@ StyledPopupView {
 
         StyledTextLabel {
             Layout.fillWidth: true
-            text: qsTrc("playback", "Override tempo")
+            text: qsTrc("playback", "Speed")
             font: ui.theme.bodyBoldFont
             horizontalAlignment: Text.AlignLeft
         }

@@ -169,7 +169,7 @@ Item {
         width: 48
         height: parent.height
 
-        accentButton: tempoOverridePopup.isOpened
+        accentButton: playbackSpeedPopup.isOpened
         transparent: !accentButton
 
         contentItem: TempoView {
@@ -183,11 +183,11 @@ Item {
         }
 
         onClicked: {
-            tempoOverridePopup.toggleOpened()
+            playbackSpeedPopup.toggleOpened()
         }
 
-        TempoOverridePopup {
-            id: tempoOverridePopup
+        PlaybackSpeedPopup {
+            id: playbackSpeedPopup
 
             playbackModel: root.playbackModel
         }
