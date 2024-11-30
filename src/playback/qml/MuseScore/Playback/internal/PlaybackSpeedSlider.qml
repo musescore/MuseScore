@@ -19,73 +19,59 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Layouts
 
-import Muse.UiComponents 1.0
-import Muse.Ui 1.0
+import Muse.UiComponents
+import Muse.Ui
+
+import MuseScore.Playback
 
 RowLayout {
     id: root
 
-    property real value: 0
-    property real from: 0.1
-    property real to: 3
-    property real stepSize: 0.05
+    property PlaybackToolBarModel playbackModel: null
 
-    signal moved(real newValue)
-
-    height: 30
-    spacing: 0
+    spacing: 12
 
     StyledTextLabel {
-        Layout.fillHeight: true
-        Layout.alignment: Qt.AlignVCenter
-
-        text: qsTrc("playback", "Tempo")
-        font: ui.theme.largeBodyFont
-    }
-
-    Item {
         Layout.fillWidth: true
         Layout.fillHeight: true
+
+        text: qsTrc("playback", "Speed")
+        font: ui.theme.largeBodyFont
+        horizontalAlignment: Text.AlignLeft
     }
 
-    NumberInputField {
-        value: Math.round(root.value * 100)
-        minValue: root.from * 100
-        maxValue: root.to * 100
+    IncrementalPropertyControl {
+        Layout.preferredWidth: 76
+        currentValue: (root.playbackModel.tempoMultiplier * 100).toFixed(decimals)
 
-        live: false
-
-        addLeadingZeros: false
-        font: ui.theme.largeBodyFont
+        maxValue: 300
+        minValue: 10
+        step: 5
+        measureUnitsSymbol: "%"
+        decimals: 0
 
         onValueEdited: function(newValue) {
-            root.moved(newValue / 100)
+            root.playbackModel.tempoMultiplier = newValue / 100
         }
-    }
-
-    StyledTextLabel {
-        text: "%"
-        font: ui.theme.largeBodyFont
     }
 
     StyledSlider {
         id: slider
 
         Layout.preferredWidth: root.width / 2
-        Layout.leftMargin: 12
 
-        value: root.value
-        from: root.from
-        to: root.to
-        stepSize: root.stepSize
+        value: root.playbackModel.tempoMultiplier
+        from: 0.1
+        to: 3.0
+        stepSize: 0.05
 
         fillBackground: false
 
         onMoved: {
-            root.moved(slider.value)
+            root.playbackModel.tempoMultiplier = value
         }
     }
 }
