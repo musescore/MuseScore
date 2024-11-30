@@ -2512,8 +2512,7 @@ bool MeiImporter::readFing(pugi::xml_node fingNode, Measure* measure)
 
     Note* note = this->findStartNote(meiFing);
     if (!note) {
-        // Here we could detect if it's a tied chord (for files not exported from MuseScore)
-        // We would need a dedicated list and tie each note once the second chord has been found.
+        // Warning message given in MeiImporter::findStartNote
         return true;
     }
 
