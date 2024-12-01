@@ -3882,7 +3882,7 @@
            <item>
             <widget class="QGroupBox" name="groupBox_TABClef">
              <property name="accessibleName">
-              <string>Default TAB Clef</string>
+              <string>Default TAB clef</string>
              </property>
              <property name="title">
               <string>Default TAB clef</string>
@@ -6078,7 +6078,7 @@
                <item row="6" column="0" colspan="7">
                 <widget class="QGroupBox" name="groupBox_1">
                  <property name="accessibleName">
-                  <string>Number Layout</string>
+                  <string>Number layout</string>
                  </property>
                  <property name="title">
                   <string>Number layout</string>
@@ -6279,7 +6279,7 @@
                <item row="7" column="0" colspan="7">
                 <widget class="QGroupBox" name="groupBox_2">
                  <property name="accessibleName">
-                  <string>H-Bar</string>
+                  <string>H-bar</string>
                  </property>
                  <property name="title">
                   <string>H-bar</string>
@@ -10160,6 +10160,9 @@
        <layout class="QVBoxLayout" name="verticalLayout_691">
         <item>
          <widget class="QGroupBox" name="groupBox_glissando">
+          <property name="accessibleName">
+           <string>Glissandos</string>
+          </property>
           <property name="title">
            <string>Glissandos</string>
           </property>
@@ -10168,6 +10171,9 @@
         </item>
         <item>
          <widget class="QGroupBox" name="groupBox_noteline">
+          <property name="accessibleName">
+           <string>Note-anchored lines</string>
+          </property>
           <property name="title">
            <string>Note-anchored lines</string>
           </property>
@@ -12997,7 +13003,7 @@ first note of the system</string>
            <item>
             <widget class="QGroupBox" name="groupFBAlign">
              <property name="accessibleName">
-              <string>Aligment</string>
+              <string>Alignment</string>
              </property>
              <property name="title">
               <string>Alignment</string>
