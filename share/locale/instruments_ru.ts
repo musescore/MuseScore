@@ -15644,7 +15644,7 @@
         <source>Acoustic Guitar (treble clef)</source>
         <comment>guitar-steel-treble-clef trackName</comment>
         <extracomment>trackName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Акустическая гитара (скрипичный ключ)</translation>
+        <translation>Фолк-гитара (скрипичный ключ)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5156"/>
@@ -16757,7 +16757,7 @@
         <source>Mdn.</source>
         <comment>mandolin shortName</comment>
         <extracomment>shortName for Mandolin; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Мдл.</translation>
+        <translation>Манд-на</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5514"/>
