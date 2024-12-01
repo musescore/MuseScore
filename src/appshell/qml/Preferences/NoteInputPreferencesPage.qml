@@ -30,6 +30,10 @@ import "internal"
 PreferencesPage {
     id: root
 
+    Component.onCompleted: {
+        noteInputModel.load()
+    }
+
     NoteInputPreferencesModel {
         id: noteInputModel
     }

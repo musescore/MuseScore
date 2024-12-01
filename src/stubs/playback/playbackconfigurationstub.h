@@ -30,14 +30,13 @@ class PlaybackConfigurationStub : public IPlaybackConfiguration
 public:
     bool playNotesWhenEditing() const override;
     void setPlayNotesWhenEditing(bool value) override;
+    muse::async::Notification playNotesWhenEditingChanged() const override;
 
     bool playChordWhenEditing() const override;
     void setPlayChordWhenEditing(bool value) override;
 
     bool playHarmonyWhenEditing() const override;
     void setPlayHarmonyWhenEditing(bool value) override;
-
-    muse::async::Notification playNotesWhenEditingChanged() const override;
 
     PlaybackCursorType cursorType() const override;
 

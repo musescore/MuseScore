@@ -106,14 +106,6 @@ void PlaybackToolBarModel::updateActions()
         settingsItems << makeMenuItem(action.code);
     }
 
-    settingsItems << makeSeparator();
-
-    for (const UiAction& action : PlaybackUiActions::hearPlaybackWhenEditingActions()) {
-        settingsItems << makeMenuItem(action.code);
-    }
-
-    settingsItems << makeSeparator();
-
     if (!m_isToolbarFloating) {
         settingsItems << makeSeparator();
     }

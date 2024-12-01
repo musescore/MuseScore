@@ -33,6 +33,11 @@ void PlaybackConfigurationStub::setPlayNotesWhenEditing(bool)
 {
 }
 
+muse::async::Notification PlaybackConfigurationStub::playNotesWhenEditingChanged() const
+{
+    return muse::async::Notification();
+}
+
 bool PlaybackConfigurationStub::playChordWhenEditing() const
 {
     return false;
@@ -49,11 +54,6 @@ bool PlaybackConfigurationStub::playHarmonyWhenEditing() const
 
 void PlaybackConfigurationStub::setPlayHarmonyWhenEditing(bool)
 {
-}
-
-muse::async::Notification PlaybackConfigurationStub::playNotesWhenEditingChanged() const
-{
-    return muse::async::Notification();
 }
 
 PlaybackCursorType PlaybackConfigurationStub::cursorType() const

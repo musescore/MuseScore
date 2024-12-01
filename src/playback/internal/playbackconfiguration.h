@@ -38,9 +38,9 @@ class PlaybackConfiguration : public IPlaybackConfiguration, public muse::async:
 public:
     void init();
 
-    muse::async::Notification playNotesWhenEditingChanged() const override;
     bool playNotesWhenEditing() const override;
     void setPlayNotesWhenEditing(bool value) override;
+    muse::async::Notification playNotesWhenEditingChanged() const override;
 
     bool playChordWhenEditing() const override;
     void setPlayChordWhenEditing(bool value) override;
@@ -88,13 +88,13 @@ public:
 private:
     const SoundProfileName& fallbackSoundProfileStr() const;
 
+    muse::async::Notification m_playNotesWhenEditingChanged;
+
     muse::async::Channel<muse::audio::aux_channel_idx_t, bool> m_isAuxSendVisibleChanged;
     muse::async::Channel<muse::audio::aux_channel_idx_t, bool> m_isAuxChannelVisibleChanged;
     muse::async::Channel<MixerSectionType, bool> m_isMixerSectionVisibleChanged;
 
     muse::async::Channel<bool> m_muteHiddenInstrumentsChanged;
-
-    muse::async::Notification m_isPlayNotesWhenEditingChanged;
 };
 }
 

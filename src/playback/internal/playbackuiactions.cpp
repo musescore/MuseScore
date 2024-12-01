@@ -125,6 +125,14 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
              IconCode::Code::CHORD_SYMBOL,
              Checkable::Yes
              ),
+    UiAction("toggle-hear-playback-when-editing",
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Hear playback when editing"),
+             TranslatableString("action", "Toggle hear playback when editing"),
+             IconCode::Code::AUDIO,
+             Checkable::Yes
+             ),
     UiAction("pan",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
@@ -141,17 +149,6 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
 //             IconCode::Code::COUNT_IN,
 //             Checkable::Yes
 //             ),
-};
-
-const UiActionList PlaybackUiActions::m_hearPlaybackWhenEditingActions = {
-    UiAction("toggle-hear-playback-when-editing",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Toggle hear playback when editing"),
-             TranslatableString("action", "Toggle hear playback when editing"),
-             IconCode::Code::EDIT,
-             Checkable::Yes
-             ),
 };
 
 const UiActionList PlaybackUiActions::m_loopBoundaryActions = {
@@ -201,7 +198,6 @@ const UiActionList& PlaybackUiActions::actionsList() const
         alist.insert(alist.end(), m_midiInputActions.cbegin(), m_midiInputActions.cend());
         alist.insert(alist.end(), m_midiInputPitchActions.cbegin(), m_midiInputPitchActions.cend());
         alist.insert(alist.end(), m_settingsActions.cbegin(), m_settingsActions.cend());
-        alist.insert(alist.end(), m_hearPlaybackWhenEditingActions.cbegin(), m_hearPlaybackWhenEditingActions.cend());
         alist.insert(alist.end(), m_loopBoundaryActions.cbegin(), m_loopBoundaryActions.cend());
     }
     return alist;
@@ -253,11 +249,6 @@ const UiActionList& PlaybackUiActions::settingsActions()
 const UiActionList& PlaybackUiActions::loopBoundaryActions()
 {
     return m_loopBoundaryActions;
-}
-
-const UiActionList& PlaybackUiActions::hearPlaybackWhenEditingActions()
-{
-    return m_hearPlaybackWhenEditingActions;
 }
 
 const muse::ui::ToolConfig& PlaybackUiActions::defaultPlaybackToolConfig()
