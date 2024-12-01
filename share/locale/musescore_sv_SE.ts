@@ -27140,7 +27140,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/playback/view/internal/outputresourceitem.cpp" line="73"/>
         <source>Get more effects</source>
-        <translation type="unfinished"/>
+        <translation>Skaffa fler effekter</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="44"/>
@@ -27175,7 +27175,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="95"/>
         <source>Get more sounds</source>
-        <translation type="unfinished"/>
+        <translation>Skaffa fler ljud</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="360"/>
@@ -27573,7 +27573,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1626"/>
         <source>Try again</source>
-        <translation type="unfinished"/>
+        <translation>Försök igen</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1779"/>
@@ -27668,7 +27668,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/project/internal/projectconfiguration.cpp" line="123"/>
         <source>Create backup of file on disk before saving new changes</source>
-        <translation type="unfinished"/>
+        <translation>Skapa reservkopia på filen på hårddisk före sparande av nya ändringar</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectconfiguration.cpp" line="340"/>
@@ -28988,12 +28988,12 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1610"/>
         <source>An error occurred while saving your score</source>
-        <translation type="unfinished"/>
+        <translation>Ett fel uppstod vid sparande av ditt dokument</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1612"/>
         <source>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</source>
-        <translation type="unfinished"/>
+        <translation>För att bevara ditt dokument kan du försöka att spara det igen. Om detta meddelande visas igen, var vänlig och spara ditt dokument som en ny kopia. Du kan också få hjälp med detta problem på %1.&lt;br/&gt;&lt;br/&gt;Feldetaljer (var vänlig och citera när du ber om hjälp): %2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="182"/>
@@ -29119,12 +29119,12 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/project/internal/notationproject.cpp" line="834"/>
         <source>File “%1” could not be opened for validation. %2</source>
-        <translation type="unfinished"/>
+        <translation>Fil “%1” kunde inte öppnas för validering. %2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/notationproject.cpp" line="845"/>
         <source>“%1” is corrupted or damaged.</source>
-        <translation type="unfinished"/>
+        <translation>“%1” är korrupt eller skadad.</translation>
     </message>
 </context>
 <context>
