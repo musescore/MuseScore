@@ -131,6 +131,7 @@ private:
     bool readF(pugi::xml_node fNode, engraving::FiguredBass* figuredBass);
     bool readFb(pugi::xml_node harmNode, engraving::Measure* measure);
     bool readFermata(pugi::xml_node fermataNode, engraving::Measure* measure);
+    bool readFing(pugi::xml_node fingNode, Measure* measure);
     bool readHairpin(pugi::xml_node hairpinNode, engraving::Measure* measure);
     bool readHarm(pugi::xml_node harmNode, engraving::Measure* measure);
     bool readLv(pugi::xml_node lvNode, engraving::Measure* measure);

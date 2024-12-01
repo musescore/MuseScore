@@ -35,6 +35,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fermata.h"
 #include "engraving/dom/figuredbass.h"
+#include "engraving/dom/fingering.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/jump.h"
@@ -69,6 +70,7 @@
 #include "engraving/dom/utils.h"
 
 #include "thirdparty/libmei/cmn.h"
+#include "thirdparty/libmei/fingering.h"
 #include "thirdparty/libmei/lyrics.h"
 #include "thirdparty/libmei/shared.h"
 
@@ -2195,6 +2197,8 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
             success = success && this->readDynam(xpathNode.node(), measure);
         } else if (elementName == "fermata") {
             success = success && this->readFermata(xpathNode.node(), measure);
+        } else if (elementName == "fing") {
+            success = success && this->readFing(xpathNode.node(), measure);
         } else if (elementName == "hairpin") {
             success = success && this->readHairpin(xpathNode.node(), measure);
         } else if (elementName == "harm") {
@@ -2488,6 +2492,40 @@ bool MeiImporter::readFermata(pugi::xml_node fermataNode, Measure* measure)
     }
 
     Convert::fermataFromMEI(fermata, meiFermata, warning);
+
+    return true;
+}
+
+/**
+ * Read a fing.
+ */
+
+bool MeiImporter::readFing(pugi::xml_node fingNode, Measure* measure)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    bool warning;
+    libmei::Fing meiFing;
+    meiFing.Read(fingNode);
+
+    Note* note = this->findStartNote(meiFing);
+    if (!note) {
+        // Warning message given in MeiImporter::findStartNote
+        return true;
+    }
+
+    Fingering* fing = Factory::createFingering(note);
+    m_uids->reg(fing, meiFing.m_xmlId);
+
+    StringList meiLines;
+    size_t meiLine = 0;
+    this->readLines(fingNode, meiLines, meiLine);
+
+    Convert::fingFromMEI(fing, meiLines, meiFing, warning);
+
+    note->add(fing);
 
     return true;
 }
