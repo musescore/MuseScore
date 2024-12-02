@@ -22,8 +22,6 @@
 #ifndef MU_NOTATION_NOTATIONTYPES_H
 #define MU_NOTATION_NOTATIONTYPES_H
 
-#include <QPixmap>
-#include <QDate>
 #include <unordered_set>
 
 #include "translation.h"
@@ -150,7 +148,7 @@ using engraving::LoopBoundaryType;
 using Pid = mu::engraving::Pid;
 using VoiceAssignment = mu::engraving::VoiceAssignment;
 
-static const muse::String COMMON_GENRE_ID("common");
+static const muse::String COMMON_GENRE_ID(u"common");
 
 enum class DragMode
 {
@@ -305,57 +303,57 @@ inline bool isMainInstrumentForPart(const InstrumentKey& instrumentKey, const Pa
     return instrumentKey.instrumentId == part->instrumentId() && instrumentKey.tick == Part::MAIN_INSTRUMENT_TICK;
 }
 
-inline QString formatInstrumentTitle(const QString& instrumentName, const InstrumentTrait& trait)
+inline muse::String formatInstrumentTitle(const muse::String& instrumentName, const InstrumentTrait& trait)
 {
     // Comments for translators start with //:
     switch (trait.type) {
     case TraitType::Tuning:
         //: %1=tuning ("D"), %2=name ("Tin Whistle"). Example: "D Tin Whistle"
-        return muse::qtrc("notation", "%1 %2", "Tuned instrument displayed in the UI")
+        return muse::mtrc("notation", "%1 %2", "Tuned instrument displayed in the UI")
                .arg(trait.name, instrumentName);
     case TraitType::Transposition:
         //: %1=name ("Horn"), %2=transposition ("C alto"). Example: "Horn in C alto"
-        return muse::qtrc("notation", "%1 in %2", "Transposing instrument displayed in the UI")
+        return muse::mtrc("notation", "%1 in %2", "Transposing instrument displayed in the UI")
                .arg(instrumentName, trait.name);
     case TraitType::Course:
         //: %1=name ("Tenor Lute"), %2=course/strings ("7-course"). Example: "Tenor Lute (7-course)"
-        return muse::qtrc("notation", "%1 (%2)", "String instrument displayed in the UI")
+        return muse::mtrc("notation", "%1 (%2)", "String instrument displayed in the UI")
                .arg(instrumentName, trait.name);
     case TraitType::Unknown:
+    default:
         return instrumentName; // Example: "Flute"
     }
-    Q_UNREACHABLE();
 }
 
-inline QString formatInstrumentTitle(const QString& instrumentName, const InstrumentTrait& trait, int instrumentNumber)
+inline muse::String formatInstrumentTitle(const muse::String& instrumentName, const InstrumentTrait& trait, int instrumentNumber)
 {
     if (instrumentNumber == 0) {
         // Only one instance of this instrument in the score
         return formatInstrumentTitle(instrumentName, trait);
     }
 
-    QString number = QString::number(instrumentNumber);
+    muse::String number = muse::String::number(instrumentNumber);
 
     // Comments for translators start with //:
     switch (trait.type) {
     case TraitType::Tuning:
         //: %1=tuning ("D"), %2=name ("Tin Whistle"), %3=number ("2"). Example: "D Tin Whistle 2"
-        return muse::qtrc("notation", "%1 %2 %3", "One of several tuned instruments displayed in the UI")
+        return muse::mtrc("notation", "%1 %2 %3", "One of several tuned instruments displayed in the UI")
                .arg(trait.name, instrumentName, number);
     case TraitType::Transposition:
         //: %1=name ("Horn"), %2=transposition ("C alto"), %3=number ("2"). Example: "Horn in C alto 2"
-        return muse::qtrc("notation", "%1 in %2 %3", "One of several transposing instruments displayed in the UI")
+        return muse::mtrc("notation", "%1 in %2 %3", "One of several transposing instruments displayed in the UI")
                .arg(instrumentName, trait.name, number);
     case TraitType::Course:
         //: %1=name ("Tenor Lute"), %2=course/strings ("7-course"), %3=number ("2"). Example: "Tenor Lute (7-course) 2"
-        return muse::qtrc("notation", "%1 (%2) %3", "One of several string instruments displayed in the UI")
+        return muse::mtrc("notation", "%1 (%2) %3", "One of several string instruments displayed in the UI")
                .arg(instrumentName, trait.name, number);
     case TraitType::Unknown:
+    default:
         //: %1=name ("Flute"), %2=number ("2"). Example: "Flute 2"
-        return muse::qtrc("notation", "%1 %2", "One of several instruments displayed in the UI")
+        return muse::mtrc("notation", "%1 %2", "One of several instruments displayed in the UI")
                .arg(instrumentName, number);
     }
-    Q_UNREACHABLE();
 }
 
 struct PartInstrument
@@ -367,7 +365,7 @@ struct PartInstrument
     bool isSoloist = false;
 };
 
-using PartInstrumentList = QList<PartInstrument>;
+using PartInstrumentList = std::list<PartInstrument>;
 
 struct PartInstrumentListScoreOrder
 {
@@ -384,7 +382,7 @@ struct SearchCommand
     SearchCommand(const ElementType& searchElementType, const std::string& code, const std::string& description)
         : searchElementType(searchElementType), code(code), description(description) {}
 };
-using SearchCommands = QList<SearchCommand>;
+using SearchCommands = std::list<SearchCommand>;
 
 struct FilterElementsOptions
 {
@@ -421,7 +419,7 @@ struct FilterNotesOptions : FilterElementsOptions
 struct StaffConfig
 {
     bool visible = false;
-    qreal userDistance = 0.0;
+    double userDistance = 0.0;
     bool cutaway = false;
     bool showIfEmpty = false;
     bool hideSystemBarline = false;
@@ -527,10 +525,10 @@ struct ScoreConfig
     }
 };
 
-inline QString staffTypeToString(StaffTypeId type)
+inline muse::String staffTypeToString(StaffTypeId type)
 {
     const StaffType* preset = StaffType::preset(type);
-    return preset ? preset->name().toQString() : QString();
+    return preset ? preset->name() : muse::String();
 }
 
 struct MeasureBeat
@@ -571,7 +569,7 @@ struct ScoreCreateOptions
 inline const ScoreOrder& customOrder()
 {
     static ScoreOrder order;
-    order.id = "custom";
+    order.id = u"custom";
     order.name = muse::TranslatableString("engraving/scoreorder", "Custom");
 
     return order;

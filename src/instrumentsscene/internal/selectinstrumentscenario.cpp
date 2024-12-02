@@ -48,7 +48,7 @@ RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const InstrumentK
         return selectedInstruments.ret;
     }
 
-    const InstrumentTemplate& templ = selectedInstruments.val.instruments.first().instrumentTemplate;
+    const InstrumentTemplate& templ = selectedInstruments.val.instruments.front().instrumentTemplate;
 
     return RetVal<Instrument>::make_ok(Instrument::fromTemplate(&templ));
 }
@@ -82,7 +82,7 @@ RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstrument
         String instrumentId = String::fromStdString(map["instrumentId"].toString());
         pi.instrumentTemplate = instrumentsRepository()->instrumentTemplate(instrumentId);
 
-        result.instruments << pi;
+        result.instruments.push_back(pi);
     }
 
     ValMap order = content["scoreOrder"].toMap();
