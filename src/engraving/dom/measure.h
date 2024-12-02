@@ -260,6 +260,7 @@ public:
     Segment* findSegment(SegmentType st,    const Fraction& f) const { return findSegmentR(st, f - tick()); }
     Segment* undoGetSegment(SegmentType st, const Fraction& f) { return undoGetSegmentR(st, f - tick()); }
     Segment* getSegment(SegmentType st,     const Fraction& f) { return getSegmentR(st, f - tick()); }
+    Segment* undoGetChordRestOrTimeTickSegment(const Fraction& f);
     Segment* getChordRestOrTimeTickSegment(const Fraction& f);
 
     void connectTremolo();
