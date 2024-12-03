@@ -89,6 +89,8 @@ Item {
         contentWidth: rowLayout.width
         contentHeight: rowLayout.height
 
+        StyledScrollBar.vertical: verticalScrollBar
+
         function goToBottom() {
             var endY = flickable.contentHeight * (1.0 - flickable.visibleArea.heightRatio)
             flickable.contentY = endY
@@ -273,5 +275,11 @@ Item {
             font: ui.theme.bodyFont
             text: qsTrc("notation", "Select an unpitched percussion staff to see available sounds")
         }
+    }
+
+    StyledScrollBar {
+        id: verticalScrollBar
+        height: root.height
+        anchors.right: root.right
     }
 }
