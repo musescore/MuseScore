@@ -579,14 +579,22 @@ void EditStaff::applyPartProperties()
 
 void EditStaff::showReplaceInstrumentDialog()
 {
-    RetVal<Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument(m_instrumentKey);
-    if (!selectedInstrument.ret) {
-        LOGE() << selectedInstrument.ret.toString();
+    RetVal<InstrumentTemplate> templ = selectInstrumentsScenario()->selectInstrument(m_instrumentKey);
+    if (!templ.ret) {
+        LOGE() << templ.ret.toString();
         return;
     }
 
-    m_instrument = selectedInstrument.val;
+    const StaffType* staffType = templ.val.staffTypePreset;
+    if (!staffType) {
+        staffType = StaffType::getDefaultPreset(StaffGroup::STANDARD);
+    }
+
+    m_instrument = Instrument::fromTemplate(&templ.val);
+    m_staff->setStaffType(Fraction(0, 1), *staffType);
+
     updateInstrument();
+    updateStaffType(*staffType);
 }
 
 void EditStaff::editStringDataClicked()

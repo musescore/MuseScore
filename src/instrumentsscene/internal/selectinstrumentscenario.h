@@ -35,9 +35,8 @@ class SelectInstrumentsScenario : public notation::ISelectInstrumentsScenario
 
 public:
     muse::RetVal<notation::PartInstrumentListScoreOrder> selectInstruments() const override;
-    muse::RetVal<notation::Instrument> selectInstrument(const notation::InstrumentKey& currentInstrumentId = notation::InstrumentKey())
-    const
-    override;
+    muse::RetVal<notation::InstrumentTemplate> selectInstrument(
+        const notation::InstrumentKey& currentInstrumentId = notation::InstrumentKey()) const override;
 
 private:
     muse::RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(const muse::StringList& params) const;

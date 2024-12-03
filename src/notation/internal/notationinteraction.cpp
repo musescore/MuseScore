@@ -1640,13 +1640,14 @@ bool NotationInteraction::selectInstrument(mu::engraving::InstrumentChange* inst
         return false;
     }
 
-    RetVal<Instrument> selectedInstrument = selectInstrumentScenario()->selectInstrument();
-    if (!selectedInstrument.ret) {
+    RetVal<InstrumentTemplate> templ = selectInstrumentScenario()->selectInstrument();
+    if (!templ.ret) {
         return false;
     }
 
+    Instrument newInstrument = Instrument::fromTemplate(&templ.val);
     instrumentChange->setInit(true);
-    instrumentChange->setupInstrument(&selectedInstrument.val);
+    instrumentChange->setupInstrument(&newInstrument);
 
     return true;
 }
