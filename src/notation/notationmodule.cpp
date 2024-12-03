@@ -74,6 +74,7 @@
 #include "view/internal/harppedalpopupmodel.h"
 #include "view/internal/caposettingsmodel.h"
 #include "view/internal/stringtuningssettingsmodel.h"
+#include "view/internal/partialtiepopupmodel.h"
 
 #include "view/percussionpanel/percussionpanelmodel.h"
 
@@ -187,6 +188,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<HarpPedalPopupModel>("MuseScore.NotationScene", 1, 0, "HarpPedalPopupModel");
     qmlRegisterType<CapoSettingsModel>("MuseScore.NotationScene", 1, 0, "CapoSettingsModel");
     qmlRegisterType<StringTuningsSettingsModel>("MuseScore.NotationScene", 1, 0, "StringTuningsSettingsModel");
+    qmlRegisterType<PartialTiePopupModel>("MuseScore.NotationScene", 1, 0, "PartialTiePopupModel");
     qmlRegisterType<PaintedEngravingItem>("MuseScore.NotationScene", 1, 0, "PaintedEngravingItem");
 
     qmlRegisterType<PercussionPanelModel>("MuseScore.NotationScene", 1, 0, "PercussionPanelModel");

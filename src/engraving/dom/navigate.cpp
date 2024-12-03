@@ -801,6 +801,7 @@ EngravingItem* Score::nextElement()
         case ElementType::GLISSANDO_SEGMENT:
         case ElementType::NOTELINE_SEGMENT:
         case ElementType::LAISSEZ_VIB_SEGMENT:
+        case ElementType::PARTIAL_TIE_SEGMENT:
         case ElementType::TIE_SEGMENT: {
             EngravingItem* next = nextElementForSpannerSegment(toSpannerSegment(e));
             if (next) {
@@ -993,6 +994,7 @@ EngravingItem* Score::prevElement()
         case ElementType::GLISSANDO_SEGMENT:
         case ElementType::NOTELINE_SEGMENT:
         case ElementType::LAISSEZ_VIB_SEGMENT:
+        case ElementType::PARTIAL_TIE_SEGMENT:
         case ElementType::TIE_SEGMENT: {
             EngravingItem* prev = prevElementForSpannerSegment(toSpannerSegment(e));
             if (prev) {

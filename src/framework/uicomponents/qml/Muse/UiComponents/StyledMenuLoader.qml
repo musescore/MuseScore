@@ -37,6 +37,9 @@ Loader {
     property StyledMenu menu: loader.item as StyledMenu
     property Item menuAnchorItem: null
     property bool hasSiblingMenus: false
+    property bool closeMenuOnSelection: true
+
+    property bool opensUpward: false
 
     property alias isMenuOpened: loader.active
 
@@ -65,7 +68,9 @@ Loader {
         accessibleName: loader.accessibleName
 
         onHandleMenuItem: function(itemId) {
-            itemMenu.close()
+            if (loader.closeMenuOnSelections) {
+                itemMenu.close()
+            }
             Qt.callLater(loader.handleMenuItem, itemId)
         }
 
@@ -132,6 +137,8 @@ Loader {
         }
 
         menu.closeSubMenu()
+
+        menu.setOpensUpward(loader.opensUpward)
 
         if (x !== -1) {
             menu.x = x

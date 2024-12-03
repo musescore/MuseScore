@@ -103,9 +103,9 @@ void NotationViewInputController::init()
             m_view->showContextMenu(selectionType(), m_view->fromLogical(selectionElementPos()).toQPointF());
         });
 
-        dispatcher()->reg(this, "notation-popup-menu", [this]() {
-            if (auto selection = viewInteraction()->selection()) {
-                togglePopupForItemIfSupports(selection->element());
+        dispatcher()->reg(this, "notation-popup-menu", [this](const ActionData& args) {
+            if (EngravingItem* el = args.arg<EngravingItem*>()) {
+                togglePopupForItemIfSupports(el);
             }
         });
 

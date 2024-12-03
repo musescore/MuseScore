@@ -474,6 +474,7 @@ void System::add(EngravingItem* el)
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
     case ElementType::LAISSEZ_VIB_SEGMENT:
+    case ElementType::PARTIAL_TIE_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
@@ -555,6 +556,7 @@ void System::remove(EngravingItem* el)
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
     case ElementType::LAISSEZ_VIB_SEGMENT:
+    case ElementType::PARTIAL_TIE_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
@@ -989,7 +991,7 @@ Spacer* System::downSpacer(staff_idx_t staffIdx) const
 //    or the position just after the last non-chordrest segment
 //---------------------------------------------------------
 
-double System::firstNoteRestSegmentX(bool leading)
+double System::firstNoteRestSegmentX(bool leading) const
 {
     double margin = style().styleMM(Sid::headerToLineStartDistance);
     for (const MeasureBase* mb : measures()) {

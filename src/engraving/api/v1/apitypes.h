@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_APIV1_APITYPES_H
-#define MU_ENGRAVING_APIV1_APITYPES_H
+#pragma once
 
 #include <QObject>
 
@@ -227,6 +226,8 @@ enum class ElementType {
     TIE_SEGMENT           = int(mu::engraving::ElementType::TIE_SEGMENT),
     LAISSEZ_VIB_SEGMENT   = int(mu::engraving::ElementType::LAISSEZ_VIB_SEGMENT),
     LAISSEZ_VIB           = int(mu::engraving::ElementType::LAISSEZ_VIB),
+    PARTIAL_TIE_SEGMENT   = int(mu::engraving::ElementType::PARTIAL_TIE_SEGMENT),
+    PARTIAL_TIE           = int(mu::engraving::ElementType::PARTIAL_TIE),
     BAR_LINE              = int(mu::engraving::ElementType::BAR_LINE),
     STAFF_LINES           = int(mu::engraving::ElementType::STAFF_LINES),
     SYSTEM_DIVIDER        = int(mu::engraving::ElementType::SYSTEM_DIVIDER),
@@ -3599,5 +3600,3 @@ Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Tid);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Syllabic);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Anchor);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::SymId);
-
-#endif // MU_ENGRAVING_APIV1_APITYPES_H

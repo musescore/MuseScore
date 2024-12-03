@@ -2727,6 +2727,7 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
         case ElementType::SLUR_SEGMENT:
         case ElementType::TIE_SEGMENT:
         case ElementType::LAISSEZ_VIB_SEGMENT:
+        case ElementType::PARTIAL_TIE_SEGMENT:
             return sh;
         case ElementType::CHORD:
         case ElementType::REST:

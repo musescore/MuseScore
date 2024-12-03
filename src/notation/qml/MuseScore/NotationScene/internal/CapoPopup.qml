@@ -33,6 +33,9 @@ StyledPopupView {
     property int navigationOrderStart: 0
     property int navigationOrderEnd: capoSettingsNavPanel.order
 
+    property QtObject model: capoModel
+
+
     contentWidth: content.width
     contentHeight: content.height
 

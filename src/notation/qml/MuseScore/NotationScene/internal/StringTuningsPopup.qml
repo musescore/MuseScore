@@ -33,6 +33,9 @@ StyledPopupView {
     property int navigationOrderStart: 0
     property int navigationOrderEnd: navPanel.order
 
+    property QtObject model: stringTuningsModel
+
+
     contentWidth: content.width
     contentHeight: content.height
 

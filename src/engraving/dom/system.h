@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SYSTEM_H
-#define MU_ENGRAVING_SYSTEM_H
+#pragma once
 
 /**
  \file
@@ -177,7 +176,7 @@ public:
     Spacer* upSpacer(staff_idx_t staffIdx, Spacer* prevDownSpacer) const;
     Spacer* downSpacer(staff_idx_t staffIdx) const;
 
-    double firstNoteRestSegmentX(bool leading = false);
+    double firstNoteRestSegmentX(bool leading = false) const;
     double endingXForOpenEndedLines() const;
     ChordRest* lastChordRest(track_idx_t track);
     ChordRest* firstChordRest(track_idx_t track);
@@ -240,4 +239,3 @@ private:
 typedef std::vector<System*>::iterator iSystem;
 typedef std::vector<System*>::const_iterator ciSystem;
 } // namespace mu::engraving
-#endif

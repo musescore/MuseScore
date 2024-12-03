@@ -176,6 +176,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::SLUR_SEGMENT,         "SlurSegment",          muse::TranslatableString("engraving", "Slur segment") },
     { ElementType::TIE_SEGMENT,          "TieSegment",           muse::TranslatableString("engraving", "Tie segment") },
     { ElementType::LAISSEZ_VIB_SEGMENT,  "LaissezVibSegment",    muse::TranslatableString("engraving", "Laissez vibrer segment") },
+    { ElementType::PARTIAL_TIE_SEGMENT,  "PartialTieSegment",    muse::TranslatableString("engraving", "Partial tie segment") },
     { ElementType::BAR_LINE,             "BarLine",              muse::TranslatableString("engraving", "Barline") },
     { ElementType::STAFF_LINES,          "StaffLines",           muse::TranslatableString("engraving", "Staff lines") },
     { ElementType::SYSTEM_DIVIDER,       "SystemDivider",        muse::TranslatableString("engraving", "System divider") },
@@ -196,6 +197,8 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::BREATH,               "Breath",               muse::TranslatableString("engraving", "Breath") },
     { ElementType::MEASURE_REPEAT,       "MeasureRepeat",        muse::TranslatableString("engraving", "Measure repeat") },
     { ElementType::TIE,                  "Tie",                  muse::TranslatableString("engraving", "Tie") },
+    { ElementType::LAISSEZ_VIB,          "LaissezVib",           muse::TranslatableString("engraving", "Laissez vibrer") },
+    { ElementType::PARTIAL_TIE,          "PartialTie",           muse::TranslatableString("engraving", "Partial tie") },
     { ElementType::ARTICULATION,         "Articulation",         muse::TranslatableString("engraving", "Articulation") },
     { ElementType::ORNAMENT,             "Ornament",             muse::TranslatableString("engraving", "Ornament") },
     { ElementType::FERMATA,              "Fermata",              muse::TranslatableString("engraving", "Fermata") },
@@ -247,7 +250,6 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::LYRICSLINE_SEGMENT,   "LyricsLineSegment",    muse::TranslatableString("engraving", "Extension line segment") },
     { ElementType::GLISSANDO_SEGMENT,    "GlissandoSegment",     muse::TranslatableString("engraving", "Glissando segment") },
     { ElementType::NOTELINE_SEGMENT,     "NoteLineSegment",      muse::TranslatableString("engraving", "Note-anchored line segment") },
-    { ElementType::LAISSEZ_VIB,          "LaissezVib",           muse::TranslatableString("engraving", "Laissez vibrer") },
     { ElementType::LAYOUT_BREAK,         "LayoutBreak",          muse::TranslatableString("engraving", "Layout break") },
     { ElementType::SYSTEM_LOCK_INDICATOR, "systemLockIndicator", muse::TranslatableString("engraving", "System lock") },
     { ElementType::SPACER,               "Spacer",               muse::TranslatableString("engraving", "Spacer") },
@@ -486,6 +488,22 @@ AsciiStringView TConv::toXml(AutoOnOff autoOnOff)
 AutoOnOff TConv::fromXml(const AsciiStringView& str, AutoOnOff def)
 {
     return findTypeByXmlTag<AutoOnOff>(AUTO_ON_OFF, str, def);
+}
+
+static const std::vector<Item<PartialSpannerDirection> > PARTIAL_SPANNER_DIRECTION = {
+    { PartialSpannerDirection::NONE,     "none" },
+    { PartialSpannerDirection::OUTGOING, "outgoing" },
+    { PartialSpannerDirection::INCOMING, "incoming" }
+};
+
+AsciiStringView TConv::toXml(PartialSpannerDirection v)
+{
+    return findXmlTagByType<PartialSpannerDirection>(PARTIAL_SPANNER_DIRECTION, v);
+}
+
+PartialSpannerDirection TConv::fromXml(const AsciiStringView& str, PartialSpannerDirection def)
+{
+    return findTypeByXmlTag<PartialSpannerDirection>(PARTIAL_SPANNER_DIRECTION, str, def);
 }
 
 String TConv::translatedUserName(SymId v)

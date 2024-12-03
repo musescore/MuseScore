@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TYPESCONV_H
-#define MU_ENGRAVING_TYPESCONV_H
+#pragma once
 
 #include "types/string.h"
 #include "types.h"
@@ -244,7 +243,8 @@ public:
 
     static AsciiStringView toXml(AutoOnOff autoOnOff);
     static AutoOnOff fromXml(const AsciiStringView& str, AutoOnOff def);
+
+    static AsciiStringView toXml(PartialSpannerDirection v);
+    static PartialSpannerDirection fromXml(const AsciiStringView& str, PartialSpannerDirection def);
 };
 }
-
-#endif // MU_ENGRAVING_TYPESCONV_H

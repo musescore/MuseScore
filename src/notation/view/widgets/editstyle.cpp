@@ -1577,6 +1577,8 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
     case ElementType::TIE_SEGMENT:
     case ElementType::LAISSEZ_VIB:
     case ElementType::LAISSEZ_VIB_SEGMENT:
+    case ElementType::PARTIAL_TIE:
+    case ElementType::PARTIAL_TIE_SEGMENT:
         return "slurs-and-ties";
 
     case ElementType::HAIRPIN:

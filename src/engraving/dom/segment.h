@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SEGMENT_H
-#define MU_ENGRAVING_SEGMENT_H
+#pragma once
 
 #include "engravingitem.h"
 
@@ -191,7 +190,7 @@ public:
     Fraction ticks() const { return m_ticks; }
     void setTicks(const Fraction& v) { m_ticks = v; }
 
-    double widthInStaff(staff_idx_t staffIdx, SegmentType t = SegmentType::ChordRest) const;
+    double widthInStaff(staff_idx_t staffIdx, SegmentType nextSegType = SegmentType::ChordRest) const;
     Fraction ticksInStaff(staff_idx_t staffIdx) const;
 
     bool splitsTuplet() const;
@@ -339,6 +338,4 @@ private:
 
 #ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::SegmentType)
-#endif
-
 #endif

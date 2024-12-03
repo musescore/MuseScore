@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SLURTIE_H
-#define MU_ENGRAVING_SLURTIE_H
+#pragma once
 
 #include "spanner.h"
 
@@ -201,5 +200,3 @@ private:
     SlurStyleType m_styleType = SlurStyleType::Undefined;
 };
 }
-
-#endif

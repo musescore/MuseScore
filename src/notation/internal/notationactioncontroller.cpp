@@ -1525,7 +1525,7 @@ void NotationActionController::startEditSelectedElement(const ActionData& args)
     }
 
     if (elementHasPopup(element)) {
-        dispatcher()->dispatch("notation-popup-menu");
+        dispatcher()->dispatch("notation-popup-menu", ActionData::make_arg1<EngravingItem*>(element));
         return;
     }
 

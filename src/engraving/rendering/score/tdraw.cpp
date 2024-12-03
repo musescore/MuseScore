@@ -98,6 +98,7 @@
 #include "dom/ottava.h"
 
 #include "dom/page.h"
+#include "dom/partialtie.h"
 #include "dom/palmmute.h"
 #include "dom/part.h"
 #include "dom/pedal.h"
@@ -303,6 +304,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
         break;
 
     case ElementType::PAGE:                 draw(item_cast<const Page*>(item), painter);
+        break;
+    case ElementType::PARTIAL_TIE_SEGMENT:  draw(item_cast<const PartialTieSegment*>(item), painter);
         break;
     case ElementType::PALM_MUTE_SEGMENT:    draw(item_cast<const PalmMuteSegment*>(item), painter);
         break;
@@ -2444,6 +2447,11 @@ void TDraw::draw(const Page* item, Painter* painter)
     }
 }
 
+void TDraw::draw(const PartialTieSegment* item, muse::draw::Painter* painter)
+{
+    draw(static_cast<const TieSegment*>(item), painter);
+}
+
 void TDraw::draw(const PalmMuteSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
@@ -3047,9 +3055,13 @@ void TDraw::draw(const TieSegment* item, Painter* painter)
         return;
     }
 
-    Pen pen(item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>()));
-    double mag = item->staff() ? item->staff()->staffMag(item->tie()->tick()) : 1.0;
+    Color penColor = item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>());
+    if (!item->score()->printing() && item->ldata()->allEndPointsInactive) {
+        penColor.setAlpha(std::min(penColor.alpha(), 85));
+    }
 
+    Pen pen(penColor);
+    double mag = item->staff() ? item->staff()->staffMag(item->tie()->tick()) : 1.0;
     //Replace generic Qt dash patterns with improved equivalents to show true dots (keep in sync with slur.cpp)
     std::vector<double> dotted     = { 0.01, 1.99 };   // tighter than Qt PenStyle::DotLine equivalent - would be { 0.01, 2.99 }
     std::vector<double> dashed     = { 3.00, 3.00 };   // Compensating for caps. Qt default PenStyle::DashLine is { 4.0, 2.0 }

@@ -25,6 +25,62 @@
 #include "slurtie.h"
 
 namespace mu::engraving {
+class TieEndPointList;
+class TieEndPoint
+{
+public:
+    TieEndPoint(Note* note, String jumpName, bool active, int idx, bool followingNote);
+    TieEndPoint() {}
+
+    Note* note() const { return m_note; }
+    Tie* endTie() const;
+    bool followingNote() const;
+    const String& id() const { return m_id; }
+    bool active() const { return m_active; }
+    void setActive(bool v) { m_active = v; }
+    void undoSetActive(bool v);
+    void setEndPointList(TieEndPointList* endPointList) { m_endPointList = endPointList; }
+    TieEndPointList* endPointList() { return m_endPointList; }
+
+    const String menuTitle() const;
+
+private:
+    Note* m_note = nullptr;
+    String m_jumpName;
+    bool m_active = false;
+    String m_id;
+    TieEndPointList* m_endPointList = nullptr;
+    bool m_followingNote = false;
+};
+
+class TieEndPointList
+{
+public:
+    TieEndPointList() = default;
+
+    void add(TieEndPoint& item);
+    void clear() { m_endPoints.clear(); }
+    size_t size() const { return m_endPoints.size(); }
+    bool empty() const { return m_endPoints.empty(); }
+
+    void setStartTie(Tie* startTie);
+    Tie* startTie() const { return m_startTie; }
+
+    void toggleEndPoint(const String& id);
+
+    void addTie(TieEndPoint* endPoint);
+    void removeTie(TieEndPoint* endPoint);
+
+    std::vector<TieEndPoint>::iterator begin() { return m_endPoints.begin(); }
+    std::vector<TieEndPoint>::const_iterator begin() const { return m_endPoints.begin(); }
+    std::vector<TieEndPoint>::iterator end() { return m_endPoints.end(); }
+    std::vector<TieEndPoint>::const_iterator end() const { return m_endPoints.end(); }
+
+private:
+    std::vector<TieEndPoint> m_endPoints;
+    Tie* m_startTie = nullptr;
+};
+
 //---------------------------------------------------------
 //   @@ TieSegment
 ///    a single segment of a tie
@@ -62,12 +118,16 @@ public:
     double midWidth() const override;
     double dottedWidth() const override;
 
+    struct LayoutData : public SlurTieSegment::LayoutData {
+        bool allEndPointsInactive = false;
+    };
+    DECLARE_LAYOUTDATA_METHODS(TieSegment)
+
 protected:
     TieSegment(const ElementType& type, System* parent);
     void changeAnchor(EditData&, EngravingItem*) override;
 
 private:
-
     int m_staffMove = 0;
     std::array<PointF, static_cast<size_t>(Grip::GRIPS)> m_adjustmentOffsets;
 };
@@ -89,8 +149,8 @@ public:
 
     virtual ~Tie() {}
 
-    Note* startNote() const;
-    void setStartNote(Note* note);
+    virtual Note* startNote() const;
+    virtual void setStartNote(Note* note);
     virtual Note* endNote() const;
     virtual void setEndNote(Note* note) { setEndElement((EngravingItem*)note); }
 
@@ -115,14 +175,30 @@ public:
 
     double scalingFactor() const override;
 
+    // Outgoing ties before repeats
+    void collectPossibleEndPoints();
+    void addTiesToEndPoints();
+    void removeTiesFromEndPoints();
+    virtual bool allEndPointsInactive() const;
+    virtual TieEndPointList* tieEndPoints();
+    virtual const TieEndPointList* tieEndPoints() const;
+
+    // Incoming ties after repeats
+    void setEndPoint(TieEndPoint* endPoint);
+    void updateStartTieOnRemoval();
+    TieEndPoint* endPoint() const;
+    Tie* startTie() const;
+
+    static Tie* changeTieType(Tie* oldTie, Note* endNote = nullptr);
+
 protected:
     Tie(const ElementType& type, EngravingItem* parent = nullptr);
 
     bool m_isInside = false;
     M_PROPERTY2(TiePlacement, tiePlacement, setTiePlacement, TiePlacement::AUTO)
 
-private:
-    static Note* editStartNote;
-    static Note* editEndNote;
+    // Endpoint information for incoming ties after repeats
+    TieEndPoint* m_endPoint = nullptr;
+    TieEndPointList* startTieEndPoints() const;
 };
 } // namespace mu::engraving

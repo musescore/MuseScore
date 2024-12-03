@@ -51,6 +51,7 @@
 #include "note.h"
 #include "notedot.h"
 #include "part.h"
+#include "partialtie.h"
 #include "rest.h"
 #include "score.h"
 #include "segment.h"
@@ -603,6 +604,14 @@ void Selection::appendChord(Chord* chord)
         }
         if (note->laissezVib()) {
             appendFiltered(note->laissezVib()->frontSegment());
+        }
+
+        if (note->incomingPartialTie()) {
+            appendFiltered(note->incomingPartialTie()->frontSegment());
+        }
+
+        if (note->outgoingPartialTie()) {
+            appendFiltered(note->outgoingPartialTie()->frontSegment());
         }
     }
 }

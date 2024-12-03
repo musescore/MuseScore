@@ -36,6 +36,8 @@ StyledPopupView {
     property int navigationOrderStart: 0
     property int navigationOrderEnd: museSoundsParams.navigationPanelOrderEnd
 
+    property QtObject model: soundFlagModel
+
     contentWidth: content.width
     contentHeight: content.childrenRect.height
     onContentHeightChanged: {

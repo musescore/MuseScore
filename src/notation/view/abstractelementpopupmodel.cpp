@@ -30,6 +30,8 @@ static const QMap<mu::engraving::ElementType, PopupModelType> ELEMENT_POPUP_TYPE
     { mu::engraving::ElementType::CAPO, PopupModelType::TYPE_CAPO },
     { mu::engraving::ElementType::STRING_TUNINGS, PopupModelType::TYPE_STRING_TUNINGS },
     { mu::engraving::ElementType::SOUND_FLAG, PopupModelType::TYPE_SOUND_FLAG },
+    { mu::engraving::ElementType::TIE_SEGMENT, PopupModelType::TYPE_PARTIAL_TIE },
+    { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, PopupModelType::TYPE_PARTIAL_TIE }
 };
 
 static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDENT_ELEMENT_TYPES = {
@@ -37,6 +39,7 @@ static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDEN
     { PopupModelType::TYPE_CAPO, { mu::engraving::ElementType::CAPO } },
     { PopupModelType::TYPE_STRING_TUNINGS, { mu::engraving::ElementType::STRING_TUNINGS } },
     { PopupModelType::TYPE_SOUND_FLAG, { mu::engraving::ElementType::SOUND_FLAG, mu::engraving::ElementType::STAFF_TEXT } },
+    { PopupModelType::TYPE_PARTIAL_TIE, { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, mu::engraving::ElementType::TIE_SEGMENT } },
 };
 
 AbstractElementPopupModel::AbstractElementPopupModel(PopupModelType modelType, QObject* parent)
@@ -181,6 +184,10 @@ void AbstractElementPopupModel::init()
     }
 
     m_item = selection->element();
+
+    if (!canOpen()) {
+        return;
+    }
 
     undoStack->changesChannel().onReceive(this, [this] (const ChangesRange& range) {
         for (ElementType type : dependentElementTypes()) {

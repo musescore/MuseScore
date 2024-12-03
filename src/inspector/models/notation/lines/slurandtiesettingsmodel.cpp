@@ -47,12 +47,17 @@ SlurAndTieSettingsModel::SlurAndTieSettingsModel(QObject* parent, IElementReposi
         setElementType(mu::engraving::ElementType::TIE);
         setTitle(muse::qtrc("inspector", "Tie"));
         setIcon(IconCode::NOTE_TIE);
-    } else {
+    } else if (elementType == ElementType::LaissezVib) {
         setModelType(InspectorModelType::TYPE_LAISSEZ_VIB);
         setElementType(mu::engraving::ElementType::LAISSEZ_VIB);
         setTitle(muse::qtrc("inspector", "Laissez vibrer"));
         setIcon(IconCode::NOTE_LV);
         m_isLaissezVib = true;
+    } else if (elementType == ElementType::PartialTie) {
+        setModelType(InspectorModelType::TYPE_PARTIAL_TIE);
+        setElementType(mu::engraving::ElementType::PARTIAL_TIE);
+        setTitle(muse::qtrc("inspector", "Tie (partial)"));
+        setIcon(IconCode::NOTE_TIE);
     }
 
     createProperties();
@@ -144,7 +149,7 @@ void SlurAndTieSettingsModel::updateIsTiePlacementAvailable()
 {
     bool available = false;
     for (EngravingItem* item : m_elementList) {
-        if (item->isTie() || item->isLaissezVib()) {
+        if (item->isTie()) {
             available = true;
             break;
         }

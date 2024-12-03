@@ -4220,9 +4220,13 @@ void NotationInteraction::flipSelection()
 void NotationInteraction::addTieToSelection()
 {
     // Calls `startEdit` internally
-    score()->cmdToggleTie();
+    Tie* newTie = score()->cmdToggleTie();
 
     notifyAboutNotationChanged();
+
+    if (newTie && newTie->tieEndPoints() && newTie->tieEndPoints()->size() > 1) {
+        selectAndStartEditIfNeeded(newTie);
+    }
 }
 
 void NotationInteraction::addLaissezVibToSelection()

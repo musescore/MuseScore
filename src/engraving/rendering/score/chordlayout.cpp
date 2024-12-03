@@ -2762,8 +2762,8 @@ void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, La
     if (isFirstInMeasure) {
         for (Note* note : chord->notes()) {
             Tie* tieBack = note->tieBack();
-            if (tieBack && tieBack->startNote()->findMeasure() != note->findMeasure()) {
-                SlurTieLayout::tieLayoutBack(tieBack, note->findMeasure()->system(), ctx);
+            if (tieBack && (note->incomingPartialTie() || tieBack->startNote()->findMeasure() != note->findMeasure())) {
+                SlurTieLayout::layoutTieBack(tieBack, note->findMeasure()->system(), ctx);
             }
         }
     }
@@ -2772,7 +2772,7 @@ void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, La
         if (tie) {
             Note* endNote = tie->endNote();
             if (endNote && endNote->findMeasure() == note->findMeasure()) {
-                SlurTieLayout::tieLayoutFor(tie, note->findMeasure()->system());  // line attach points are updated here
+                SlurTieLayout::layoutTieFor(tie, note->findMeasure()->system());  // line attach points are updated here
             }
         }
     }

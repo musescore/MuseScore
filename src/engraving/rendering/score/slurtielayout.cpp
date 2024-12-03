@@ -42,6 +42,7 @@
 #include "dom/measure.h"
 #include "dom/guitarbend.h"
 #include "dom/laissezvib.h"
+#include "dom/partialtie.h"
 
 #include "tlayout.h"
 #include "chordlayout.h"
@@ -1368,7 +1369,7 @@ static bool tieSegmentShouldBeSkipped(Tie* item)
     return showTiedFret == ShowTiedFret::NONE;
 }
 
-TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
+TieSegment* SlurTieLayout::layoutTieFor(Tie* item, System* system)
 {
     item->setPos(0, 0);
 
@@ -1384,6 +1385,10 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
         }
 
         return nullptr;
+    }
+
+    if (item->isPartialTie()) {
+        return layoutPartialTie(toPartialTie(item));
     }
 
     calculateDirection(item);
@@ -1410,6 +1415,7 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
     segment->setSpannerSegmentType(sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
     segment->setSystem(system);   // Needed to populate System.spannerSegments
     segment->resetAdjustmentOffset();
+    segment->mutldata()->allEndPointsInactive = item->allEndPointsInactive();
 
     const Chord* startChord = item->startNote()->chord();
     item->setTick(startChord->tick()); // Why is this here?? (M.S.)
@@ -1436,7 +1442,7 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
     return segment;
 }
 
-TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system, LayoutContext& ctx)
+TieSegment* SlurTieLayout::layoutTieBack(Tie* item, System* system, LayoutContext& ctx)
 {
     Chord* chord = item->endNote() ? item->endNote()->chord() : nullptr;
 
@@ -1451,6 +1457,10 @@ TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system, LayoutContex
         }
 
         return nullptr;
+    }
+
+    if (item->isPartialTie()) {
+        return layoutPartialTie(toPartialTie(item));
     }
 
     SlurTiePos sPos;
@@ -1495,17 +1505,21 @@ TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system, LayoutContex
 
 void SlurTieLayout::computeStartAndEndSystem(Tie* item, SlurTiePos& slurTiePos)
 {
-    Chord* startChord = item->startNote()->chord();
+    Chord* startChord = item->startNote() ? item->startNote()->chord() : nullptr;
     Chord* endChord = item->endNote() ? item->endNote()->chord() : nullptr;
 
-    System* startSystem = startChord->measure()->system();
-
-    if (!startSystem) {
-        Measure* m = startChord->measure();
-        LOGD("No system: measure is %d has %d count %d", m->isMMRest(), m->hasMMRest(), m->mmRestCount());
-    }
+    System* startSystem = startChord ? startChord->measure()->system() : nullptr;
 
     System* endSystem = endChord ? endChord->measure()->system() : startSystem;
+
+    if (!startSystem && !endSystem) {
+        if (startChord) {
+            Measure* m = startChord->measure();
+            LOGD("No system: measure is %d has %d count %d", m->isMMRest(), m->hasMMRest(), m->mmRestCount());
+        } else {
+            LOGD("No start or end system for tie at ") << item->tick().toString();
+        }
+    }
 
     slurTiePos.system1 = startSystem;
     slurTiePos.system2 = endSystem;
@@ -1682,6 +1696,97 @@ void SlurTieLayout::calculateLaissezVibY(LaissezVibSegment* segment, SlurTiePos&
         adjustY(segment);
     } else {
         computeBezier(segment);
+    }
+}
+
+PartialTieSegment* SlurTieLayout::createPartialTieSegment(PartialTie* item)
+{
+    Chord* chord = item->partialSpannerDirection()
+                   == PartialSpannerDirection::OUTGOING ? item->startNote()->chord() : item->endNote()->chord();
+    item->setTick(chord->tick());
+
+    calculateDirection(item);
+    calculateIsInside(item);
+
+    item->fixupSegments(1);
+    PartialTieSegment* segment = item->segmentAt(0);
+    segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
+    segment->setSystem(chord->segment()->measure()->system());
+    segment->resetAdjustmentOffset();
+    segment->mutldata()->allEndPointsInactive = item->allEndPointsInactive();
+
+    return segment;
+}
+
+PartialTieSegment* SlurTieLayout::layoutPartialTie(PartialTie* item)
+{
+    const bool outgoing = item->isOutgoing();
+    PartialTieSegment* segment = createPartialTieSegment(item);
+    SlurTiePos sPos;
+
+    computeStartAndEndSystem(item, sPos);
+    if (outgoing) {
+        sPos.p1 = computeDefaultStartOrEndPoint(item, Grip::START);
+    } else {
+        sPos.p2 = computeDefaultStartOrEndPoint(item, Grip::END);
+    }
+
+    if (segment->autoplace() && !segment->isEdited()) {
+        adjustX(segment, sPos, outgoing ? Grip::START : Grip::END);
+    }
+
+    setPartialTieEndRelativeToBarline(item, sPos);
+
+    correctForCrossStaff(item, sPos, SpannerSegmentType::SINGLE);
+
+    adjustYforLedgerLines(segment, sPos);
+
+    segment->ups(Grip::START).p = sPos.p1;
+    segment->ups(Grip::END).p = sPos.p2;
+
+    if (segment->autoplace() && !segment->isEdited()) {
+        adjustY(segment);
+    } else {
+        computeBezier(segment);
+    }
+
+    return segment;
+}
+
+void SlurTieLayout::setPartialTieEndRelativeToBarline(PartialTie* item, SlurTiePos& sPos)
+{
+    const bool outgoing = item->isOutgoing();
+
+    const Chord* chord = item->parentNote()->chord();
+    const Segment* seg = chord->segment();
+    const Measure* measure = seg->measure();
+    const System* system = measure->system();
+    double width = item->style().styleS(Sid::minTieLength).val() * item->spatium();
+
+    if (seg->measure()->isFirstInSystem() && !outgoing) {
+        sPos.p1 = PointF((system ? system->firstNoteRestSegmentX(true) : 0), sPos.p2.y());
+        return;
+    }
+
+    const Measure* barlineMeasure = measure;
+    const BarLine* bl = outgoing ? barlineMeasure->endBarLine() : barlineMeasure->startBarLine();
+    if (!bl && !outgoing) {
+        barlineMeasure = barlineMeasure->prevMeasure();
+        bl = barlineMeasure ? barlineMeasure->endBarLine() : nullptr;
+    }
+
+    if (bl) {
+        const Segment* barlineSeg = bl->segment();
+        double widthToBarline = outgoing ? barlineSeg->xPosInSystemCoords() - sPos.p1.x()
+                                : sPos.p2.x() - (barlineSeg->xPosInSystemCoords() + bl->width());
+        widthToBarline -= 0.25 * item->spatium();
+        width = std::max(widthToBarline, width);
+    }
+
+    if (outgoing) {
+        sPos.p2 = PointF(sPos.p1.x() + width, sPos.p1.y());
+    } else {
+        sPos.p1 = PointF(sPos.p2.x() - width, sPos.p2.y());
     }
 }
 

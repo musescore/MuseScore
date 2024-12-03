@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SCORE_H
-#define MU_ENGRAVING_SCORE_H
+#pragma once
 
 /**
  \file
@@ -340,7 +339,7 @@ public:
     void cmdSetBeamMode(BeamMode);
     void cmdRemovePart(Part*);
     void cmdAddTie(bool addToChord = false);
-    void cmdToggleTie();
+    Tie* cmdToggleTie();
     void cmdToggleLaissezVib();
     static std::vector<Note*> cmdTieNoteList(const Selection& selection, bool noteEntryMode);
     void cmdAddOttava(OttavaType);
@@ -1206,5 +1205,3 @@ public:
 
 DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags)
 } // namespace mu::engraving
-
-#endif
