@@ -5741,7 +5741,7 @@ void Score::connectTies(bool silent)
                 }
                 // connect a tie without end note
                 Tie* tie = n->tieFor();
-                if (tie && !tie->endNote()) {
+                if (tie && !tie->isPartialTie() && !tie->endNote()) {
                     Note* nnote;
                     if (m_mscVersion <= 114) {
                         nnote = searchTieNote114(n);

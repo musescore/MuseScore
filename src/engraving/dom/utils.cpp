@@ -774,18 +774,30 @@ int diatonicUpDown(Key k, int pitch, int steps)
 //    search Note to tie to "note"
 //---------------------------------------------------------
 
-Note* searchTieNote(Note* note)
+Note* searchTieNote(const Note* note, const Segment* nextSegment)
 {
     if (!note) {
         return nullptr;
     }
 
-    Note* note2  = 0;
+    Note* note2  = nullptr;
     Chord* chord = note->chord();
     Segment* seg = chord->segment();
     Part* part   = chord->part();
     track_idx_t strack = part->staves().front()->idx() * VOICES;
     track_idx_t etrack = strack + part->staves().size() * VOICES;
+
+    if (!nextSegment) {
+        const Fraction nextTick = chord->tick() + chord->actualTicks();
+        nextSegment = seg->next1(SegmentType::ChordRest);
+        while (nextSegment && nextSegment->tick() < nextTick) {
+            nextSegment = nextSegment->next1(SegmentType::ChordRest);
+        }
+    }
+
+    if (!nextSegment) {
+        return nullptr;
+    }
 
     if (chord->isGraceBefore()) {
         chord = toChord(chord->explicitParent());
@@ -797,7 +809,6 @@ Note* searchTieNote(Note* note)
             if (c->graceIndex() == index + 1) {
                 note2 = c->findNote(note->pitch());
                 if (note2) {
-//printf("found grace-grace tie\n");
                     return note2;
                 }
             }
@@ -828,53 +839,48 @@ Note* searchTieNote(Note* note)
     // at this point, chord is a regular chord, not a grace chord
     // and we are looking for a note in the *next* chord (grace or regular)
 
-    // calculate end of current note duration
-    // but err on the safe side in case there is roundoff in tick count
-    Fraction endTick = chord->tick() + chord->actualTicks() - Fraction(1, 4 * 480);
+    // // calculate end of current note duration
+    // // but err on the safe side in case there is roundoff in tick count
+    // Fraction endTick = chord->tick() + chord->actualTicks() - Fraction(1, 4 * 480);
 
     int idx1 = note->unisonIndex();
-    while ((seg = seg->next1(SegmentType::ChordRest))) {
-        // skip ahead to end of current note duration as calculated above
-        // but just in case, stop if we find element in current track
-        if (seg->tick() < endTick && !seg->element(chord->track())) {
+    // // skip ahead to end of current note duration as calculated above
+    // // but just in case, stop if we find element in current track
+    // if (nextSegment->tick() < endTick && !nextSegment->element(chord->track())) {
+    //     // continue;
+    // }
+    for (track_idx_t track = strack; track < etrack; ++track) {
+        EngravingItem* e = nextSegment->element(track);
+        if (!e || !e->isChord()) {
             continue;
         }
-        for (track_idx_t track = strack; track < etrack; ++track) {
-            EngravingItem* e = seg->element(track);
-            if (e == 0 || !e->isChord()) {
-                continue;
-            }
-            Chord* c = toChord(e);
-            const staff_idx_t staffIdx = c->staffIdx() + c->staffMove();
-            if (staffIdx != chord->staffIdx() + chord->staffMove()) {
-                // this check is needed as we are iterating over all staves to capture cross-staff chords
-                continue;
-            }
-            // if there are grace notes before, try to tie to first one
-            std::vector<Chord*> gnb = c->graceNotesBefore();
-            if (!gnb.empty()) {
-                Chord* gc = gnb[0];
-                Note* gn2 = gc->findNote(note->pitch());
-                if (gn2) {
-                    return gn2;
-                }
-            }
-            int idx2 = 0;
-            for (Note* n : c->notes()) {
-                if (n->pitch() == note->pitch()) {
-                    if (idx1 == idx2) {
-                        if (note2 == 0 || c->track() == chord->track()) {
-                            note2 = n;
-                            break;
-                        }
-                    } else {
-                        ++idx2;
-                    }
-                }
+        Chord* c = toChord(e);
+        const staff_idx_t staffIdx = c->staffIdx() + c->staffMove();
+        if (staffIdx != chord->staffIdx() + chord->staffMove()) {
+            // this check is needed as we are iterating over all staves to capture cross-staff chords
+            continue;
+        }
+        // if there are grace notes before, try to tie to first one
+        std::vector<Chord*> gnb = c->graceNotesBefore();
+        if (!gnb.empty()) {
+            Chord* gc = gnb[0];
+            Note* gn2 = gc->findNote(note->pitch());
+            if (gn2) {
+                return gn2;
             }
         }
-        if (note2) {
-            break;
+        int idx2 = 0;
+        for (Note* n : c->notes()) {
+            if (n->pitch() == note->pitch()) {
+                if (idx1 == idx2) {
+                    if (!note2 || c->track() == chord->track()) {
+                        note2 = n;
+                        break;
+                    }
+                } else {
+                    ++idx2;
+                }
+            }
         }
     }
     return note2;

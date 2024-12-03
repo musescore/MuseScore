@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_MARKER_H
-#define MU_ENGRAVING_MARKER_H
+#pragma once
 
 #include "textbase.h"
 
@@ -70,10 +69,15 @@ public:
 
     void setLayoutToParentWidth(bool v) { m_layoutToParentWidth = v; }
 
+    static constexpr std::array<MarkerType, 4> RIGHT_MARKERS {
+        MarkerType::TOCODA,
+        MarkerType::TOCODASYM,
+        MarkerType::DA_CODA,
+        MarkerType::DA_DBLCODA,
+    };
+
 private:
     MarkerType m_markerType = MarkerType::SEGNO;
     String m_label;                 ///< referenced from Jump() element
 };
 } // namespace mu::engraving
-
-#endif
