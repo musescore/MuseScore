@@ -124,7 +124,9 @@ QList<QVariantMap> PercussionPanelModel::layoutMenuItems() const
     // Using IconCode for this instead of "checked" because we want the tick to display on the left
     const int notationPreviewIcon = static_cast<int>(m_useNotationPreview ? IconCode::Code::TICK_RIGHT_ANGLE : IconCode::Code::NONE);
 
-    const TranslatableString editLayoutTitle("notation", "Edit layout");
+    const TranslatableString editLayoutTitle = m_currentPanelMode == PanelMode::Mode::EDIT_LAYOUT
+                                               ? TranslatableString("notation", "Finish editing")
+                                               : TranslatableString("notation", "Edit layout");
     const int editLayoutIcon = static_cast<int>(IconCode::Code::CONFIGURE);
 
     const TranslatableString resetLayoutTitle("notation", "Reset layout");
@@ -156,7 +158,8 @@ void PercussionPanelModel::handleMenuItem(const QString& itemId)
     } else if (itemId == NOTATION_PREVIEW_CODE) {
         setUseNotationPreview(true);
     } else if (itemId == EDIT_LAYOUT_CODE) {
-        setCurrentPanelMode(PanelMode::Mode::EDIT_LAYOUT, false);
+        const bool currentlyEditing = m_currentPanelMode == PanelMode::Mode::EDIT_LAYOUT;
+        currentlyEditing ? finishEditing() : setCurrentPanelMode(PanelMode::Mode::EDIT_LAYOUT, false);
     } else if (itemId == RESET_LAYOUT_CODE) {
         // TODO: Need a mechanism for "default" layouts...
         // m_padListModel->resetLayout();
