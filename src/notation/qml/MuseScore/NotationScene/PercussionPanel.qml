@@ -271,7 +271,7 @@ Item {
             anchors.topMargin: (padGrid.cellHeight / 2) - (panelDisabledLabel.height / 2)
 
             font: ui.theme.bodyFont
-            text: qsTrc("notation", "Select an unpitched percussion staff to use available sounds")
+            text: qsTrc("notation", "Select an unpitched percussion staff to see available sounds")
         }
     }
 }
