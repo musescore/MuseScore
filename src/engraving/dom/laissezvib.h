@@ -47,6 +47,8 @@ public:
         ld_field<PointF> posRelativeToNote = { "[LaissezVibSegment] posRelativeToNote", PointF() };
     };
     DECLARE_LAYOUTDATA_METHODS(LaissezVibSegment)
+private:
+    String formatBarsAndBeats() const override;
 };
 
 class LaissezVib : public Tie

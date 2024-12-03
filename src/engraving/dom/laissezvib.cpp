@@ -106,4 +106,16 @@ void LaissezVibSegment::editDrag(EditData& ed)
     ups(Grip::DRAG).off = PointF();
     roffset() += ed.delta;
 }
+
+String LaissezVibSegment::formatBarsAndBeats() const
+{
+    const Spanner* spanner = this->spanner();
+    const Segment* startSeg = spanner ? spanner->startSegment() : nullptr;
+
+    if (!startSeg) {
+        return EngravingItem::formatBarsAndBeats();
+    }
+
+    return startSeg->formatBarsAndBeats();
+}
 }
