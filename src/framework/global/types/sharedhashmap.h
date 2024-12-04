@@ -162,6 +162,12 @@ public:
         m_dataPtr->insert(std::forward<PairType>(pair));
     }
 
+    void insert(iterator first, iterator last)
+    {
+        ensureDetach();
+        m_dataPtr->insert(first, last);
+    }
+
     void insert_or_assign(const KeyType& key, ValType&& val)
     {
         ensureDetach();

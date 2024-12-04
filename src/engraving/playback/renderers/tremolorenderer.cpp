@@ -27,6 +27,7 @@
 #include "dom/tremolotwochord.h"
 
 #include "playback/metaparsers/notearticulationsparser.h"
+#include "playback/utils/expressionutils.h"
 
 using namespace mu::engraving;
 using namespace muse;
@@ -103,7 +104,7 @@ const ArticulationTypeSet& TremoloRenderer::supportedTypes()
 }
 
 void TremoloRenderer::doRender(const EngravingItem* item, const mpe::ArticulationType preferredType,
-                               const RenderingContext& context,
+                               const RenderingContext& ctx,
                                mpe::PlaybackEventList& result)
 {
     const Chord* chord = item_cast<const Chord*>(item);
@@ -131,7 +132,7 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
     // TODO: We need a member like articulationData.overallDurationTicks (ticks rather than duration),
     // so that we are not duplicating this calculation (see TremoloTwoMetaParser::doParse)
     //const ArticulationAppliedData& articulationData = context.commonArticulations.at(preferredType);
-    int overallDurationTicks = context.nominalDurationTicks;
+    int overallDurationTicks = ctx.nominalDurationTicks;
     if (tremolo.two && tremolo.two->chord1() && tremolo.two->chord2()) {
         overallDurationTicks = tremolo.two->chord1()->actualTicks().ticks() + tremolo.two->chord2()->actualTicks().ticks();
     }
@@ -173,16 +174,16 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
                 currentChord = secondTremoloChord;
             }
 
-            buildAndAppendEvents(currentChord, preferredType, stepDurationTicks, context.nominalPositionStartTick + i * stepDurationTicks,
-                                 context, tremoloTimeCache, result);
+            buildAndAppendEvents(currentChord, preferredType, stepDurationTicks, ctx.nominalPositionStartTick + i * stepDurationTicks,
+                                 ctx, tremoloTimeCache, result);
         }
 
         return;
     }
 
     for (int i = 0; i < stepsCount; ++i) {
-        buildAndAppendEvents(chord, preferredType, stepDurationTicks, context.nominalPositionStartTick + i * stepDurationTicks,
-                             context, tremoloTimeCache, result);
+        buildAndAppendEvents(chord, preferredType, stepDurationTicks, ctx.nominalPositionStartTick + i * stepDurationTicks,
+                             ctx, tremoloTimeCache, result);
     }
 }
 
@@ -197,38 +198,33 @@ int TremoloRenderer::stepDurationTicks(const Chord* chord, int tremoloLines)
 
 void TremoloRenderer::buildAndAppendEvents(const Chord* chord, const ArticulationType type,
                                            const int stepDurationTicks,
-                                           const int startTick, const RenderingContext& context,
+                                           const int startTick, const RenderingContext& ctx,
                                            TremoloTimeCache& tremoloCache,
                                            mpe::PlaybackEventList& result)
 {
-    const Score* score = chord->score();
-    IF_ASSERT_FAILED(score) {
-        return;
-    }
-
     for (const Note* note : chord->notes()) {
-        if (!isNotePlayable(note, context.commonArticulations)) {
+        if (!isNotePlayable(note, ctx.commonArticulations)) {
             continue;
         }
 
         auto noteTnD = timestampAndDurationFromStartAndDurationTicks(
-            score, startTick, stepDurationTicks, context.positionTickOffset);
+            ctx.score, startTick, stepDurationTicks, ctx.positionTickOffset);
 
-        NominalNoteCtx noteCtx(note, context);
+        NominalNoteCtx noteCtx(note, ctx);
         noteCtx.duration = noteTnD.duration;
         noteCtx.timestamp = noteTnD.timestamp;
 
-        int utick = timestampToTick(score, noteCtx.timestamp);
-        noteCtx.dynamicLevel = context.playbackCtx->appliableDynamicLevel(note->track(), utick);
+        int utick = timestampToTick(ctx.score, noteCtx.timestamp);
+        noteCtx.dynamicLevel = ctx.playbackCtx->appliableDynamicLevel(note->track(), utick);
 
-        NoteArticulationsParser::buildNoteArticulationMap(note, context, noteCtx.chordCtx.commonArticulations);
+        NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.articulations);
 
-        const TimestampAndDuration& tremoloTnD = tremoloTimeAndDuration(note, context, tremoloCache);
-        muse::mpe::ArticulationAppliedData& articulationData = noteCtx.chordCtx.commonArticulations.at(type);
+        const TimestampAndDuration& tremoloTnD = tremoloTimeAndDuration(note, ctx, tremoloCache);
+        muse::mpe::ArticulationAppliedData& articulationData = noteCtx.articulations.at(type);
         articulationData.meta.timestamp = tremoloTnD.timestamp;
         articulationData.meta.overallDuration = tremoloTnD.duration;
 
-        updateArticulationBoundaries(type, noteCtx.timestamp, noteCtx.duration, noteCtx.chordCtx.commonArticulations);
+        updateArticulationBoundaries(type, noteCtx.timestamp, noteCtx.duration, noteCtx.articulations);
 
         result.emplace_back(buildNoteEvent(std::move(noteCtx)));
     }

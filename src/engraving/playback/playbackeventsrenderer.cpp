@@ -250,31 +250,7 @@ void PlaybackEventsRenderer::renderNoteEvents(const Chord* chord, const int tick
         return;
     }
 
-    int chordPosTick = chord->tick().ticks();
-    int chordDurationTicks = chord->actualTicks().ticks();
-    int chordPosTickWithOffset = chordPosTick + tickPositionOffset;
-
-    const Score* score = chord->score();
-
-    auto chordTnD = timestampAndDurationFromStartAndDurationTicks(score, chordPosTick, chordDurationTicks, tickPositionOffset);
-
-    BeatsPerSecond bps = score->tempomap()->tempo(chordPosTick);
-    TimeSigFrac timeSignatureFraction = score->sigmap()->timesig(chordPosTick).timesig();
-
-    static ArticulationMap articulations;
-
-    RenderingContext ctx(chordTnD.timestamp,
-                         chordTnD.duration,
-                         playbackCtx->appliableDynamicLevel(chord->track(), chordPosTickWithOffset),
-                         chordPosTick,
-                         tickPositionOffset,
-                         chordDurationTicks,
-                         bps,
-                         timeSignatureFraction,
-                         playbackCtx->persistentArticulationType(chordPosTickWithOffset),
-                         articulations,
-                         profile,
-                         playbackCtx);
+    RenderingContext ctx = engraving::buildRenderingCtx(chord, tickPositionOffset, profile, playbackCtx);
 
     if (!ChordFilter::isItemPlayable(chord, ctx)) {
         return;
@@ -304,6 +280,7 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::t
                          TimeSigMap::DEFAULT_TIME_SIGNATURE,
                          persistentArticulationApplied,
                          articulations,
+                         note->score(),
                          profile,
                          dummyCtx);
 

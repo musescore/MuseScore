@@ -171,27 +171,29 @@ void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::Not
         return;
     }
 
-    mpe::ArticulationType currentType = mpe::ArticulationType::Undefined;
+    mpe::timestamp_t pitchBendTimestampFrom = 0;
+    mpe::duration_t pitchBendDuration = 0;
 
-    for (const mpe::ArticulationType type : appliableTypes) {
-        if (noteEvent.expressionCtx().articulations.contains(type)) {
-            currentType = type;
+    for (const auto& art : noteEvent.expressionCtx().articulations) {
+        if (muse::contains(appliableTypes, art.first)) {
+            const mpe::ArticulationMeta& articulationMeta = art.second.meta;
+            pitchBendTimestampFrom = articulationMeta.timestamp;
+            pitchBendDuration = articulationMeta.overallDuration;
             break;
         }
     }
 
-    if (currentType == mpe::ArticulationType::Undefined) {
+    if (pitchBendDuration == 0) {
         return;
     }
 
-    mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
-    mpe::duration_t duration = noteEvent.arrangementCtx().actualDuration;
-    mpe::timestamp_t timestampTo = timestampFrom + duration;
+    const mpe::timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+    const mpe::timestamp_t pitchBendTimestampTo = std::min(pitchBendTimestampFrom + pitchBendDuration, noteTimestampTo);
 
     ParamChangeEvent event;
     event.paramId = pitchBendIt->second;
     event.value = 0.5f;
-    destination[timestampTo].insert(event);
+    destination[pitchBendTimestampTo].insert(event);
 
     auto currIt = noteEvent.pitchCtx().pitchCurve.cbegin();
     auto nextIt = std::next(currIt);
@@ -205,8 +207,8 @@ void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::Not
         float currBendValue = pitchBendLevel(currIt->second);
         float nextBendValue = pitchBendLevel(nextIt->second);
 
-        mpe::timestamp_t currTime = timestampFrom + duration * mpe::percentageToFactor(currIt->first);
-        mpe::timestamp_t nextTime = timestampFrom + duration * mpe::percentageToFactor(nextIt->first);
+        mpe::timestamp_t currTime = pitchBendTimestampFrom + pitchBendDuration * mpe::percentageToFactor(currIt->first);
+        mpe::timestamp_t nextTime = pitchBendTimestampFrom + pitchBendDuration * mpe::percentageToFactor(nextIt->first);
 
         Interpolation::Point p0 = makePoint(currTime, currBendValue);
         Interpolation::Point p1 = makePoint(nextTime, currBendValue);
@@ -221,7 +223,7 @@ void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::Not
 
         for (const Interpolation::Point& point : points) {
             mpe::timestamp_t time = static_cast<mpe::timestamp_t>(std::round(point.x));
-            if (time < timestampTo) {
+            if (time < pitchBendTimestampTo) {
                 float bendValue = static_cast<float>(point.y);
                 event.value = bendValue;
                 destination[time].insert(event);

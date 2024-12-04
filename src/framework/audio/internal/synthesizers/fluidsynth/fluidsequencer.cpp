@@ -188,27 +188,29 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
         return;
     }
 
-    mpe::ArticulationType currentType = mpe::ArticulationType::Undefined;
+    timestamp_t pitchBendTimestampFrom = 0;
+    duration_t pitchBendDuration = 0;
 
-    for (const mpe::ArticulationType type : appliableTypes) {
-        if (noteEvent.expressionCtx().articulations.contains(type)) {
-            currentType = type;
+    for (const auto& art : noteEvent.expressionCtx().articulations) {
+        if (muse::contains(appliableTypes, art.first)) {
+            const ArticulationMeta& articulationMeta = art.second.meta;
+            pitchBendTimestampFrom = articulationMeta.timestamp;
+            pitchBendDuration = articulationMeta.overallDuration;
             break;
         }
     }
 
-    if (currentType == mpe::ArticulationType::Undefined) {
+    if (pitchBendDuration == 0) {
         return;
     }
 
-    timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
-    duration_t duration = noteEvent.arrangementCtx().actualDuration;
-    timestamp_t timestampTo = timestampFrom + duration;
+    const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+    const timestamp_t pitchBendTimestampTo = std::min(pitchBendTimestampFrom + pitchBendDuration, noteTimestampTo);
 
     midi::Event event(Event::Opcode::PitchBend, Event::MessageType::ChannelVoice10);
     event.setChannel(channelIdx);
     event.setData(8192);
-    destination[timestampTo].insert(event);
+    destination[pitchBendTimestampTo].insert(event);
 
     auto currIt = noteEvent.pitchCtx().pitchCurve.cbegin();
     auto nextIt = std::next(currIt);
@@ -218,22 +220,19 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
         return Interpolation::Point { static_cast<double>(time), static_cast<double>(value) };
     };
 
-    //! NOTE: Increasing this number results in fewer points being interpolated
-    const mpe::pitch_level_t POINT_WEIGHT = currentType == mpe::ArticulationType::Multibend
-                                            ? mpe::PITCH_LEVEL_STEP / 5
-                                            : mpe::PITCH_LEVEL_STEP / 2;
-
     for (; nextIt != endIt; currIt = nextIt, nextIt = std::next(currIt)) {
         int currBendValue = pitchBendLevel(currIt->second);
         int nextBendValue = pitchBendLevel(nextIt->second);
 
-        timestamp_t currTime = timestampFrom + duration * percentageToFactor(currIt->first);
-        timestamp_t nextTime = timestampFrom + duration * percentageToFactor(nextIt->first);
+        timestamp_t currTime = pitchBendTimestampFrom + pitchBendDuration * percentageToFactor(currIt->first);
+        timestamp_t nextTime = pitchBendTimestampFrom + pitchBendDuration * percentageToFactor(nextIt->first);
 
         Interpolation::Point p0 = makePoint(currTime, currBendValue);
         Interpolation::Point p1 = makePoint(nextTime, currBendValue);
         Interpolation::Point p2 = makePoint(nextTime, nextBendValue);
 
+        //! NOTE: Increasing this number results in fewer points being interpolated
+        constexpr mpe::pitch_level_t POINT_WEIGHT = mpe::PITCH_LEVEL_STEP / 5;
         size_t pointCount = std::abs(nextIt->second - currIt->second) / POINT_WEIGHT;
         pointCount = std::max(pointCount, size_t(1));
 
@@ -243,7 +242,7 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
             timestamp_t time = static_cast<timestamp_t>(std::round(point.x));
             int bendValue = static_cast<int>(std::round(point.y));
 
-            if (time < timestampTo) {
+            if (time < pitchBendTimestampTo) {
                 event.setData(bendValue);
                 destination[time].insert(event);
             }
