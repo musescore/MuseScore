@@ -93,6 +93,7 @@ enum class CommandType {
     AddBracket,
 
     // Fret
+    FretDataChange,
     FretDot,
     FretMarker,
     FretBarre,

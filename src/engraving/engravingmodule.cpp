@@ -45,6 +45,7 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/figuredbass.h"
+#include "engraving/dom/fret.h"
 
 #include "rendering/score/scorerenderer.h"
 #include "rendering/single/singlerenderer.h"
