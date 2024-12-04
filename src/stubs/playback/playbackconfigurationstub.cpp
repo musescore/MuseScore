@@ -33,6 +33,11 @@ void PlaybackConfigurationStub::setPlayNotesWhenEditing(bool)
 {
 }
 
+muse::async::Notification PlaybackConfigurationStub::playNotesWhenEditingChanged() const
+{
+    return muse::async::Notification();
+}
+
 bool PlaybackConfigurationStub::playChordWhenEditing() const
 {
     return false;

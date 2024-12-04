@@ -40,6 +40,7 @@ public:
 
     bool playNotesWhenEditing() const override;
     void setPlayNotesWhenEditing(bool value) override;
+    muse::async::Notification playNotesWhenEditingChanged() const override;
 
     bool playChordWhenEditing() const override;
     void setPlayChordWhenEditing(bool value) override;
@@ -86,6 +87,8 @@ public:
 
 private:
     const SoundProfileName& fallbackSoundProfileStr() const;
+
+    muse::async::Notification m_playNotesWhenEditingChanged;
 
     muse::async::Channel<muse::audio::aux_channel_idx_t, bool> m_isAuxSendVisibleChanged;
     muse::async::Channel<muse::audio::aux_channel_idx_t, bool> m_isAuxChannelVisibleChanged;

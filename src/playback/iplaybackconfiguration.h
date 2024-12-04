@@ -36,6 +36,7 @@ public:
 
     virtual bool playNotesWhenEditing() const = 0;
     virtual void setPlayNotesWhenEditing(bool value) = 0;
+    virtual muse::async::Notification playNotesWhenEditingChanged() const = 0;
 
     virtual bool playChordWhenEditing() const = 0;
     virtual void setPlayChordWhenEditing(bool value) = 0;

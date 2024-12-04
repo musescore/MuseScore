@@ -31,6 +31,13 @@ NoteInputPreferencesModel::NoteInputPreferencesModel(QObject* parent)
 {
 }
 
+void NoteInputPreferencesModel::load()
+{
+    playbackConfiguration()->playNotesWhenEditingChanged().onNotify(this, [this]() {
+        emit playNotesWhenEditingChanged(playNotesWhenEditing());
+    });
+}
+
 bool NoteInputPreferencesModel::advanceToNextNoteOnKeyRelease() const
 {
     return shortcutsConfiguration()->advanceToNextNoteOnKeyRelease();

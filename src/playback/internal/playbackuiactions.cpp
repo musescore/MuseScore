@@ -125,6 +125,14 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
              IconCode::Code::CHORD_SYMBOL,
              Checkable::Yes
              ),
+    UiAction("toggle-hear-playback-when-editing",
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Hear playback when editing"),
+             TranslatableString("action", "Toggle hear playback when editing"),
+             IconCode::Code::AUDIO,
+             Checkable::Yes
+             ),
     UiAction("pan",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
