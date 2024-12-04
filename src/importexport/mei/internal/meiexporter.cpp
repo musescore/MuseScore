@@ -746,7 +746,7 @@ bool MeiExporter::writeInstrDef(pugi::xml_node node, const Part* part)
         return false;
     }
 
-    const int midiProgram = part->instrument()->program();
+    const int midiProgram = part->instrument()->channel(0)->program();
 
     if (midiProgram < 0) {
         return false;

@@ -34,6 +34,7 @@
                      <staffGrp bar.thru="true" symbol="brace">
                         <label>Piano</label>
                         <labelAbbr>Pno.</labelAbbr>
+                        <instrDef midi.instrnum="0" />
                         <staffDef n="1" lines="5" meter.count="2" meter.unit="4">
                            <clef shape="G" line="2" />
                         </staffDef>

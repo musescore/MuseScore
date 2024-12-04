@@ -33,6 +33,7 @@
         <trackName></trackName>
         <instrumentId>wind.reed.oboe</instrumentId>
         <Channel>
+          <program value="68"/>
           </Channel>
         </Instrument>
       </Part>

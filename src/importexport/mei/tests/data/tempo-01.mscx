@@ -35,6 +35,7 @@
         <trackName></trackName>
         <instrumentId>strings.violin</instrumentId>
         <Channel>
+          <program value="40"/>
           </Channel>
         </Instrument>
       </Part>
@@ -51,6 +52,7 @@
         <trackName></trackName>
         <instrumentId>strings.viola</instrumentId>
         <Channel>
+          <program value="41"/>
           </Channel>
         </Instrument>
       </Part>

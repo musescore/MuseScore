@@ -3146,7 +3146,7 @@ bool MeiImporter::buildScoreParts(pugi::xml_node scoreDefNode)
             part->setShortName(abbrLines.join(u"\n"));
         }
 
-        pugi::xml_node instrDefNode = labelNode.parent().select_node("./instrDef").node();
+        pugi::xml_node instrDefNode = labelNode.select_node("./following-sibling::instrDef").node();
         readInstrDef(instrDefNode, part);
 
         m_score->appendPart(part);

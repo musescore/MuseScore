@@ -40,6 +40,7 @@
         <trackName></trackName>
         <instrumentId>keyboard.piano</instrumentId>
         <Channel>
+          <program value="0"/>
           </Channel>
         </Instrument>
       </Part>
