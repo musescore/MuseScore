@@ -41,6 +41,11 @@ path_t::path_t(const std::string& s)
 {
 }
 
+path_t::path_t(std::string&& s)
+    : m_path(std::move(s))
+{
+}
+
 path_t::path_t(const char* s)
     : m_path(s ? s : "")
 {
