@@ -1563,6 +1563,15 @@ void Harmony::render()
     if (m_rightParen) {
         render(u" )", x, y);
     }
+
+    Segment* parentSegment = explicitParent() ? getParentSeg() : nullptr;
+    if (parentSegment) {
+        EngravingItem* fretDiagramItem = parentSegment->findAnnotation(ElementType::FRET_DIAGRAM, track(), track());
+        if (fretDiagramItem) {
+            FretDiagram* fretDiagram = toFretDiagram(fretDiagramItem);
+            fretDiagram->updateDiagram(harmonyName());
+        }
+    }
 }
 
 //---------------------------------------------------------
