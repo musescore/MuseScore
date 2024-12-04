@@ -350,64 +350,6 @@ Slur::Slur(const Slur& s)
 }
 
 //---------------------------------------------------------
-//   slurPos
-//    Calculate position of start- and endpoint of slur
-//    relative to System() position.
-//---------------------------------------------------------
-
-void Slur::slurPosChord(SlurTiePos* sp)
-{
-    Chord* stChord;
-    Chord* enChord;
-    if (startChord()->isGraceAfter()) {      // grace notes after, coming in reverse order
-        stChord = endChord();
-        enChord = startChord();
-        m_up = false;
-    } else {
-        stChord = startChord();
-        enChord = endChord();
-    }
-    Note* _startNote = stChord->downNote();
-    Note* _endNote   = enChord->downNote();
-    double hw         = _startNote->bboxRightPos();
-    double __up       = m_up ? -1.0 : 1.0;
-    double _spatium = spatium();
-
-    Measure* measure = endChord()->measure();
-    sp->system1 = measure->system();
-    if (!sp->system1) {               // DEBUG
-        LOGD("no system1");
-        return;
-    }
-    assert(sp->system1);
-    sp->system2 = sp->system1;
-    PointF pp(sp->system1->pagePos());
-
-    double xo;
-    double yo;
-
-    //------p1
-    if (m_up) {
-        xo = _startNote->x() + hw * 1.12;
-        yo = _startNote->pos().y() + hw * .3 * __up;
-    } else {
-        xo = _startNote->x() + hw * 0.4;
-        yo = _startNote->pos().y() + _spatium * .75 * __up;
-    }
-    sp->p1 = stChord->pagePos() - pp + PointF(xo, yo);
-
-    //------p2
-    if ((enChord->notes().size() > 1) || (enChord->stem() && !enChord->up() && !m_up)) {
-        xo = _endNote->x() - hw * 0.12;
-        yo = _endNote->pos().y() + hw * .3 * __up;
-    } else {
-        xo = _endNote->x() + hw * 0.15;
-        yo = _endNote->pos().y() + _spatium * .75 * __up;
-    }
-    sp->p2 = enChord->pagePos() - pp + PointF(xo, yo);
-}
-
-//---------------------------------------------------------
 //   Slur
 //---------------------------------------------------------
 
@@ -425,18 +367,6 @@ int Slur::calcStemArrangement(EngravingItem* start, EngravingItem* end)
 {
     return (start && start->isChord() && toChord(start)->stem() && toChord(start)->stem()->up() ? 2 : 0)
            + (end && end->isChord() && toChord(end)->stem() && toChord(end)->stem()->up() ? 4 : 0);
-}
-
-//---------------------------------------------------------
-//   directionMixture
-//---------------------------------------------------------
-
-bool Slur::isDirectionMixture(Chord* c1, Chord* c2)
-{
-    UNUSED(c1);
-    UNUSED(c2);
-    UNREACHABLE;
-    return false;
 }
 
 double Slur::scalingFactor() const
@@ -480,77 +410,5 @@ bool Slur::isCrossStaff()
     return startCR() && endCR()
            && (startCR()->staffMove() != 0 || endCR()->staffMove() != 0
                || startCR()->vStaffIdx() != endCR()->vStaffIdx());
-}
-
-//---------------------------------------------------------
-//   stemSideForBeam
-//    determines if the anchor point is exempted from the stem inset
-//    due to beams or tremolos.
-//---------------------------------------------------------
-
-bool Slur::stemSideForBeam(bool start)
-{
-    ChordRest* cr = start ? startCR() : endCR();
-    Chord* c = toChord(cr);
-    bool adjustForBeam = cr && cr->beam() && cr->up() == up();
-    if (start) {
-        adjustForBeam = adjustForBeam && cr->beam()->elements().back() != cr;
-    } else {
-        adjustForBeam = adjustForBeam && cr->beam()->elements().front() != cr;
-    }
-    if (adjustForBeam) {
-        return true;
-    }
-
-    bool adjustForTrem = false;
-    TremoloTwoChord* trem = c ? c->tremoloTwoChord() : nullptr;
-    adjustForTrem = trem && trem->up() == up();
-    if (start) {
-        adjustForTrem = adjustForTrem && trem->chord2() != c;
-    } else {
-        adjustForTrem = adjustForTrem && trem->chord1() != c;
-    }
-    return adjustForTrem;
-}
-
-//---------------------------------------------------------
-//   isOverBeams
-//    returns true if all the chords spanned by the slur are
-//    beamed, and all beams are on the same side of the slur
-//---------------------------------------------------------
-bool Slur::isOverBeams()
-{
-    if (!startCR() || !endCR()) {
-        return false;
-    }
-    if (startCR()->track() != endCR()->track()
-        || startCR()->tick() >= endCR()->tick()) {
-        return false;
-    }
-    size_t track = startCR()->track();
-    Segment* seg = startCR()->segment();
-    while (seg && seg->tick() <= endCR()->tick()) {
-        if (!seg->isChordRestType()
-            || !seg->elist().at(track)
-            || !seg->elist().at(track)->isChordRest()) {
-            return false;
-        }
-        ChordRest* cr = toChordRest(seg->elist().at(track));
-        bool hasBeam = cr->beam() && cr->up() == up();
-        bool hasTrem = false;
-        if (cr->isChord()) {
-            Chord* c = toChord(cr);
-            hasTrem = c->tremoloTwoChord() && c->up() == up();
-        }
-        if (!(hasBeam || hasTrem)) {
-            return false;
-        }
-        if ((!seg->next() || seg->next()->isEndBarLineType()) && seg->measure()->nextMeasure()) {
-            seg = seg->measure()->nextMeasure()->first();
-        } else {
-            seg = seg->next();
-        }
-    }
-    return true;
 }
 }
