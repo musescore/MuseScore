@@ -151,8 +151,8 @@ SoundCatalogueInfoList MuseSoundsRepository::parseSounds(const JsonDocument& sou
 
     std::string museSoundsAppName = platformMuseSoundsAppName();
 
-    for (size_t i = 0; i < catalogs.size(); ++i) {
-        JsonObject catalogueObj = catalogs.at(i).toObject();
+    for (size_t catalogIdx = 0; catalogIdx < catalogs.size(); ++catalogIdx) {
+        JsonObject catalogueObj = catalogs.at(catalogIdx).toObject();
         if (catalogueObj.empty()) {
             continue;
         }
@@ -165,8 +165,8 @@ SoundCatalogueInfoList MuseSoundsRepository::parseSounds(const JsonDocument& sou
             continue;
         }
 
-        for (size_t i = 0; i < soundsItems.size(); ++i) {
-            JsonObject soundItemObj = soundsItems.at(i).toObject();
+        for (size_t soundIdx = 0; soundIdx < soundsItems.size(); ++soundIdx) {
+            JsonObject soundItemObj = soundsItems.at(soundIdx).toObject();
             if (soundItemObj.empty()) {
                 continue;
             }

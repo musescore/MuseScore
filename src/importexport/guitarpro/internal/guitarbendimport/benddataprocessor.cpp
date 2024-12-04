@@ -166,20 +166,19 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving:
             continue;
         }
 
-        const auto& bendNoteData = bendChordData.noteDataByIdx.at(noteIndex);
-        int pitch = bendNoteData.quarterTones / 2;
+        const auto& bendNoteData = bendChordData.noteDataByIdx.at(static_cast<int>(noteIndex));
+        const int pitch = bendNoteData.quarterTones / 2;
 
         if (bendNoteData.type == GuitarBendType::PRE_BEND) {
-            int pitch = bendNoteData.quarterTones / 2;
             note->setPitch(note->pitch() + pitch);
             note->setTpcFromPitch();
             GuitarBend* bend = score->addGuitarBend(bendNoteData.type, note);
             QuarterOffset quarterOff = bendNoteData.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
             bend->setEndNotePitch(note->pitch(), quarterOff);
-            Note* startNote = bend->startNote();
-            if (startNote) {
-                startNote->setPitch(note->pitch() - pitch);
-                startNote->setTpcFromPitch();
+            Note* bendStartNote = bend->startNote();
+            if (bendStartNote) {
+                bendStartNote->setPitch(note->pitch() - pitch);
+                bendStartNote->setTpcFromPitch();
             }
         } else if (bendNoteData.type == GuitarBendType::SLIGHT_BEND) {
             GuitarBend* bend = score->addGuitarBend(bendNoteData.type, note);
