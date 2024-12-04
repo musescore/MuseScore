@@ -435,6 +435,8 @@ public:
         TIE_CHORD_OUTSIDE = 0xF466,
         TIE_CHORD_INSIDE = 0xF467,
 
+        SINGLE_NOTE = 0xF46C,
+
         TRIANGLE_SYMBOL = 0xF46D,
 
         FRETBOARD_VERTICAL = 0xF46F,

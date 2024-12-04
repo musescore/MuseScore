@@ -89,6 +89,8 @@ Item {
         contentWidth: rowLayout.width
         contentHeight: rowLayout.height
 
+        StyledScrollBar.vertical: verticalScrollBar
+
         function goToBottom() {
             var endY = flickable.contentHeight * (1.0 - flickable.visibleArea.heightRatio)
             flickable.contentY = endY
@@ -271,7 +273,13 @@ Item {
             anchors.topMargin: (padGrid.cellHeight / 2) - (panelDisabledLabel.height / 2)
 
             font: ui.theme.bodyFont
-            text: qsTrc("notation", "Select an unpitched percussion staff to use available sounds")
+            text: qsTrc("notation", "Select an unpitched percussion staff to see available sounds")
         }
+    }
+
+    StyledScrollBar {
+        id: verticalScrollBar
+        height: root.height
+        anchors.right: root.right
     }
 }

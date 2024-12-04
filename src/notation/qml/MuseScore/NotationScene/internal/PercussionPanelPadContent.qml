@@ -132,6 +132,17 @@ Column {
             text: Boolean(root.padModel) ? root.padModel.keyboardShortcut : ""
         }
 
+        StyledIconLabel {
+            id: midiNoteIcon
+
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: midiNoteLabel.left
+
+            color: ui.theme.fontPrimaryColor
+
+            iconCode: IconCode.SINGLE_NOTE
+        }
+
         StyledTextLabel {
             id: midiNoteLabel
 
