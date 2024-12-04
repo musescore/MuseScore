@@ -165,8 +165,8 @@ SoundCatalogueInfoList MuseSoundsRepository::parseSounds(const JsonDocument& sou
             continue;
         }
 
-        for (size_t i = 0; i < soundsItems.size(); ++i) {
-            JsonObject soundItemObj = soundsItems.at(i).toObject();
+        for (size_t j = 0; j < soundsItems.size(); ++j) {
+            JsonObject soundItemObj = soundsItems.at(j).toObject();
             if (soundItemObj.empty()) {
                 continue;
             }
