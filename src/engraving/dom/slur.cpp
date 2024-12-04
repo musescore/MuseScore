@@ -62,7 +62,6 @@ SlurSegment::SlurSegment(const SlurSegment& ss)
 
 static ChordRest* searchCR(Segment* segment, track_idx_t startTrack, track_idx_t endTrack)
 {
-    // for (Segment* s = segment; s; s = s->next1MM(SegmentType::ChordRest)) {
     for (Segment* s = segment; s; s = s->next(SegmentType::ChordRest)) {       // restrict search to measure
         if (startTrack > endTrack) {
             for (int t = static_cast<int>(startTrack) - 1; t >= static_cast<int>(endTrack); --t) {
@@ -251,7 +250,7 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
 
 void SlurSegment::editDrag(EditData& ed)
 {
-    Grip g     = ed.curGrip;
+    Grip g = ed.curGrip;
     if (g == Grip::NO_GRIP) {
         return;
     }
@@ -345,8 +344,8 @@ double SlurSegment::dottedWidth() const
 Slur::Slur(const Slur& s)
     : SlurTie(s)
 {
-    m_sourceStemArrangement = s.m_sourceStemArrangement;
-    m_connectedElement = s.m_connectedElement;
+    _sourceStemArrangement = s._sourceStemArrangement;
+    _connectedElement = s._connectedElement;
 }
 
 //---------------------------------------------------------
