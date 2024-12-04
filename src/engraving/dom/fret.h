@@ -159,6 +159,9 @@ public:
 
     static std::shared_ptr<FretDiagram> createFromString(Score* score, const String& s);
 
+    static void readHarmonyToDiagramFile(const muse::io::path_t& filePath);
+    void updateDiagram(const String& harmonyName);
+
     std::vector<LineF> dragAnchorLines() const override;
     PointF pagePos() const override;
     double mainWidth() const;
@@ -268,6 +271,8 @@ private:
     void removeMarker(int s);
     void removeDotsMarkers(int ss, int es, int fret);
 
+    static void applyDiagramPattern(FretDiagram* diagram, const String& pattern);
+
     int m_strings = 6;
     int m_frets = 4;
     int m_fretOffset = 0;
@@ -291,6 +296,8 @@ private:
 
     bool m_showFingering = false;
     std::vector<int> m_fingering = std::vector<int>(m_strings, 0);
+
+    static std::map<String, String> s_harmonyToDiagramMap;
 };
 } // namespace mu::engraving
 
