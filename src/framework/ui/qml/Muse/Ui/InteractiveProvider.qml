@@ -66,15 +66,16 @@ Item {
             }
 
             if (page.type === ContainerType.QmlDialog) {
-                var dialogPath = "../../" + page.path
+                var dialogPath = page.module ? page.path : "../../" + page.path
 
-                var dialogObj = root.createDialog(dialogPath, page.params)
+                var dialogObj = root.createDialog(page.module, dialogPath, page.params)
                 data.setValue("ret", dialogObj.ret)
-                data.setValue("objectId", dialogObj.object.objectId)
 
                 if (dialogObj.ret.errcode > 0) {
                     return
                 }
+
+                data.setValue("objectId", dialogObj.object.objectId)
 
                 if (Boolean(data.value("sync")) && data.value("sync") === true) {
                     dialogObj.object.exec()
@@ -86,7 +87,7 @@ Item {
 
         function onFireOpenStandardDialog(data) {
             var dialog = data.data()
-            var dialogObj = root.createDialog("internal/StandardDialog.qml", dialog.params)
+            var dialogObj = root.createDialog("", "internal/StandardDialog.qml", dialog.params)
             data.setValue("ret", dialogObj.ret)
             data.setValue("objectId", dialogObj.object.objectId)
 
@@ -116,39 +117,41 @@ Item {
             var dialog = data.data()
             var dialogObj = null
             if (dialog.selectFolder) {
-                dialogObj = root.createDialog("internal/FolderDialog.qml", dialog.params)
+                dialogObj = root.createDialog("", "internal/FolderDialog.qml", dialog.params)
             } else {
-                dialogObj = root.createDialog("internal/FileDialog.qml", dialog.params)
+                dialogObj = root.createDialog("", "internal/FileDialog.qml", dialog.params)
             }
 
             data.setValue("ret", dialogObj.ret)
-            data.setValue("objectId", dialogObj.object.objectId)
 
             if (dialogObj.ret.errcode > 0) {
                 return
             }
+
+            data.setValue("objectId", dialogObj.object.objectId)
 
             dialogObj.object.open()
         }
 
         function onFireOpenProgressDialog(data) {
             var dialog = data.data()
-            var dialogObj = createDialog("internal/ProgressDialog.qml", dialog.params)
+            var dialogObj = root.createDialog("", "internal/ProgressDialog.qml", dialog.params)
             data.setValue("ret", dialogObj.ret)
-            data.setValue("objectId", dialogObj.object.objectId)
 
             if (dialogObj.ret.errcode > 0) {
                 return
             }
 
+            data.setValue("objectId", dialogObj.object.objectId)
+
             dialogObj.object.open()
         }
     }
 
-    function createDialog(path, params) {
-        var comp = Qt.createComponent(path)
+    function createDialog(module, path, params) {
+        var comp = module ? Qt.createComponent(module, path) : Qt.createComponent(path)
         if (comp.status !== Component.Ready) {
-            console.log("[qml] failed create component: " + path + ", err: " + comp.errorString())
+            console.error("Could not create component: " + path + ", err: " + comp.errorString())
             return { "ret": { "errcode": 102 } } // CreateFailed
         }
 
