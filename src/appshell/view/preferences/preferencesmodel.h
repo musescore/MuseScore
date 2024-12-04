@@ -31,6 +31,7 @@
 
 #include "iappshellconfiguration.h"
 #include "preferencepageitem.h"
+#include "iinteractive.h"
 
 namespace mu::appshell {
 class PreferencesModel : public QAbstractItemModel, public muse::Injectable
@@ -42,6 +43,7 @@ class PreferencesModel : public QAbstractItemModel, public muse::Injectable
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<IAppShellConfiguration> configuration = { this };
     muse::Inject<muse::ui::IUiActionsRegister> actionsRegister = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
 
 public:
     explicit PreferencesModel(QObject* parent = nullptr);
@@ -57,6 +59,7 @@ public:
     QString currentPageId() const;
 
     Q_INVOKABLE void load(const QString& currentPageId);
+    Q_INVOKABLE bool askForConfirmationOfPreferencesReset();
     Q_INVOKABLE void resetFactorySettings();
     Q_INVOKABLE void apply();
     Q_INVOKABLE void cancel();

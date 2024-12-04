@@ -38,6 +38,12 @@ void MidiConfigurationStub::setUseRemoteControl(bool)
 {
 }
 
+async::Channel<bool> MidiConfigurationStub::useRemoteControlChanged() const
+{
+    static async::Channel<bool> ch;
+    return ch;
+}
+
 MidiDeviceID MidiConfigurationStub::midiInputDeviceId() const
 {
     return MidiDeviceID();
@@ -49,8 +55,8 @@ void MidiConfigurationStub::setMidiInputDeviceId(const MidiDeviceID&)
 
 async::Notification MidiConfigurationStub::midiInputDeviceIdChanged() const
 {
-    static async::Notification n;
-    return n;
+    static async::Notification ch;
+    return ch;
 }
 
 MidiDeviceID MidiConfigurationStub::midiOutputDeviceId() const
@@ -75,4 +81,10 @@ bool MidiConfigurationStub::useMIDI20Output() const
 
 void MidiConfigurationStub::setUseMIDI20Output(bool)
 {
+}
+
+async::Channel<bool> MidiConfigurationStub::useMIDI20OutputChanged() const
+{
+    static async::Channel<bool> n;
+    return n;
 }

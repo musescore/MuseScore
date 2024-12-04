@@ -115,9 +115,11 @@ public:
 
     GenerateAudioTimePeriodType generateAudioTimePeriodType() const override;
     void setGenerateAudioTimePeriodType(GenerateAudioTimePeriodType type) override;
+    muse::async::Channel<int> generateAudioTimePeriodTypeChanged() const override;
 
     int numberOfSavesToGenerateAudio() const override;
     void setNumberOfSavesToGenerateAudio(int number) override;
+    muse::async::Channel<int> numberOfSavesToGenerateAudioChanged() const override;
 
     muse::io::path_t temporaryMp3FilePathTemplate() const override;
 

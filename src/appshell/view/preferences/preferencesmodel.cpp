@@ -204,6 +204,21 @@ void PreferencesModel::load(const QString& currentPageId)
     endResetModel();
 }
 
+bool PreferencesModel::askForConfirmationOfPreferencesReset()
+{
+    std::string title = muse::trc("appshell", "Are you sure you want to reset preferences?");
+    std::string question = muse::trc("appshell", "This action will reset all your app preferences and delete all custom palettes and custom shortcuts.\n\n"
+                                                 "This action will not delete any of your scores.\n\n"
+                                                 "This action cannot be undone.");
+
+    muse::IInteractive::ButtonData cancelBtn = interactive()->buttonData(muse::IInteractive::Button::Cancel);
+    muse::IInteractive::ButtonData resetBtn = interactive()->buttonData(muse::IInteractive::Button::Reset);
+    cancelBtn.accent = true;
+
+    muse::IInteractive::Result result = interactive()->warning(title, question, { cancelBtn, resetBtn }, cancelBtn.btn);
+    return result.standardButton() == muse::IInteractive::Button::Reset;
+}
+
 void PreferencesModel::resetFactorySettings()
 {
     static constexpr bool KEEP_DEFAULT_SETTINGS = true;

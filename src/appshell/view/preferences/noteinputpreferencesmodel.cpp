@@ -31,6 +31,45 @@ NoteInputPreferencesModel::NoteInputPreferencesModel(QObject* parent)
 {
 }
 
+void NoteInputPreferencesModel::load()
+{
+    shortcutsConfiguration()->advanceToNextNoteOnKeyReleaseChanged().onReceive(this, [this](bool value) {
+        emit advanceToNextNoteOnKeyReleaseChanged(value);
+    });
+
+    notationConfiguration()->colorNotesOutsideOfUsablePitchRangeChanged().onReceive(this, [this](bool value) {
+        emit colorNotesOutsideOfUsablePitchRangeChanged(value);
+    });
+
+    notationConfiguration()->warnGuitarBendsChanged().onReceive(this, [this](bool value) {
+        emit warnGuitarBendsChanged(value);
+    });
+
+    notationConfiguration()->delayBetweenNotesInRealTimeModeMillisecondsChanged().onReceive(this, [this](int value) {
+        emit delayBetweenNotesInRealTimeModeMillisecondsChanged(value);
+    });
+
+    playbackConfiguration()->playNotesWhenEditingChanged().onReceive(this, [this](bool value) {
+        emit playNotesWhenEditingChanged(value);
+    });
+
+    notationConfiguration()->notePlayDurationMillisecondsChanged().onReceive(this, [this](int value) {
+        emit notePlayDurationMillisecondsChanged(value);
+    });
+
+    playbackConfiguration()->playChordWhenEditingChanged().onReceive(this, [this](bool value) {
+        emit playChordWhenEditingChanged(value);
+    });
+
+    playbackConfiguration()->playHarmonyWhenEditingChanged().onReceive(this, [this](bool value) {
+        emit playChordSymbolWhenEditingChanged(value);
+    });
+
+    engravingConfiguration()->dynamicsApplyToAllVoicesChanged().onReceive(this, [this](bool value) {
+        emit dynamicsApplyToAllVoicesChanged(value);
+    });
+}
+
 bool NoteInputPreferencesModel::advanceToNextNoteOnKeyRelease() const
 {
     return shortcutsConfiguration()->advanceToNextNoteOnKeyRelease();

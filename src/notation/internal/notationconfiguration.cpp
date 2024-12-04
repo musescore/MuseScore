@@ -151,9 +151,18 @@ void NotationConfiguration::init()
     });
 
     settings()->setDefaultValue(DEFAULT_ZOOM_TYPE, Val(ZoomType::Percentage));
+    settings()->valueChanged(DEFAULT_ZOOM_TYPE).onReceive(this, [this](const Val&) {
+        m_defaultZoomChanged.notify();
+    });
     settings()->setDefaultValue(DEFAULT_ZOOM, Val(100));
+    settings()->valueChanged(DEFAULT_ZOOM).onReceive(this, [this](const Val&) {
+        m_defaultZoomChanged.notify();
+    });
     settings()->setDefaultValue(KEYBOARD_ZOOM_PRECISION, Val(2));
     settings()->setDefaultValue(MOUSE_ZOOM_PRECISION, Val(6));
+    settings()->valueChanged(MOUSE_ZOOM_PRECISION).onReceive(this, [this](const Val&) {
+        m_mouseZoomPrecisionChanged.notify();
+    });
 
     settings()->setDefaultValue(USER_STYLES_PATH, Val(globalConfiguration()->userDataPath() + "/Styles"));
     settings()->valueChanged(USER_STYLES_PATH).onReceive(nullptr, [this](const Val& val) {
@@ -165,6 +174,9 @@ void NotationConfiguration::init()
     }
 
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(2));
+    settings()->valueChanged(SELECTION_PROXIMITY).onReceive(this, [this](const Val& val) {
+        m_selectionProximityChanged.send(val.toInt());
+    });
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(true));
     settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(true));
     settings()->setDefaultValue(IS_PLAY_REPEATS_ENABLED, Val(true));
@@ -191,9 +203,25 @@ void NotationConfiguration::init()
     });
 
     settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
+    settings()->valueChanged(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE).onReceive(this, [this](const Val& val) {
+        m_colorNotesOutsideOfUsablePitchRangeChanged.send(val.toBool());
+    });
     settings()->setDefaultValue(WARN_GUITAR_BENDS, Val(true));
+    settings()->valueChanged(WARN_GUITAR_BENDS).onReceive(this, [this](const Val& val) {
+        m_warnGuitarBendsChanged.send(val.toBool());
+    });
     settings()->setDefaultValue(REALTIME_DELAY, Val(750));
+    settings()->valueChanged(REALTIME_DELAY).onReceive(this, [this](const Val& val) {
+        m_delayBetweenNotesInRealTimeModeMillisecondsChanged.send(val.toInt());
+    });
     settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(500));
+    settings()->valueChanged(NOTE_DEFAULT_PLAY_DURATION).onReceive(this, [this](const Val& val) {
+        m_notePlayDurationMillisecondsChanged.send(val.toInt());
+    });
+
+    settings()->valueChanged(STYLE_FILE_IMPORT_PATH_KEY).onReceive(this, [this](const Val& val) {
+        m_styleFileImportPathChanged.send(val.toString());
+    });
 
     settings()->setDefaultValue(FIRST_SCORE_ORDER_LIST_KEY,
                                 Val(globalConfiguration()->appDataPath().toStdString() + "instruments/orders.xml"));
@@ -461,6 +489,11 @@ void NotationConfiguration::setSelectionProximity(int proximity)
     settings()->setSharedValue(SELECTION_PROXIMITY, Val(proximity));
 }
 
+Channel<int> NotationConfiguration::selectionProximityChanged() const
+{
+    return m_selectionProximityChanged;
+}
+
 ZoomType NotationConfiguration::defaultZoomType() const
 {
     return settings()->value(DEFAULT_ZOOM_TYPE).toEnum<ZoomType>();
@@ -479,6 +512,11 @@ int NotationConfiguration::defaultZoom() const
 void NotationConfiguration::setDefaultZoom(int zoomPercentage)
 {
     settings()->setSharedValue(DEFAULT_ZOOM, Val(zoomPercentage));
+}
+
+Notification NotationConfiguration::defaultZoomChanged() const
+{
+    return m_defaultZoomChanged;
 }
 
 qreal NotationConfiguration::scalingFromZoomPercentage(int zoomPercentage) const
@@ -506,6 +544,11 @@ int NotationConfiguration::mouseZoomPrecision() const
 void NotationConfiguration::setMouseZoomPrecision(int precision)
 {
     settings()->setSharedValue(MOUSE_ZOOM_PRECISION, Val(precision));
+}
+
+muse::async::Notification NotationConfiguration::mouseZoomPrecisionChanged() const
+{
+    return m_mouseZoomPrecisionChanged;
 }
 
 std::string NotationConfiguration::fontFamily() const
@@ -543,6 +586,11 @@ void NotationConfiguration::setDefaultStyleFilePath(const muse::io::path_t& path
     engravingConfiguration()->setDefaultStyleFilePath(path.toQString());
 }
 
+async::Channel<muse::io::path_t> NotationConfiguration::defaultStyleFilePathChanged() const
+{
+    return engravingConfiguration()->defaultStyleFilePathChanged();
+}
+
 muse::io::path_t NotationConfiguration::partStyleFilePath() const
 {
     return engravingConfiguration()->partStyleFilePath();
@@ -551,6 +599,11 @@ muse::io::path_t NotationConfiguration::partStyleFilePath() const
 void NotationConfiguration::setPartStyleFilePath(const muse::io::path_t& path)
 {
     engravingConfiguration()->setPartStyleFilePath(path.toQString());
+}
+
+async::Channel<muse::io::path_t> NotationConfiguration::partStyleFilePathChanged() const
+{
+    return engravingConfiguration()->partStyleFilePathChanged();
 }
 
 bool NotationConfiguration::isMidiInputEnabled() const
@@ -688,6 +741,11 @@ void NotationConfiguration::setColorNotesOutsideOfUsablePitchRange(bool value)
     settings()->setSharedValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(value));
 }
 
+async::Channel<bool> NotationConfiguration::colorNotesOutsideOfUsablePitchRangeChanged() const
+{
+    return m_colorNotesOutsideOfUsablePitchRangeChanged;
+}
+
 bool NotationConfiguration::warnGuitarBends() const
 {
     return settings()->value(WARN_GUITAR_BENDS).toBool();
@@ -697,6 +755,11 @@ void NotationConfiguration::setWarnGuitarBends(bool value)
 {
     mu::engraving::MScore::warnGuitarBends = value;
     settings()->setSharedValue(WARN_GUITAR_BENDS, Val(value));
+}
+
+async::Channel<bool> NotationConfiguration::warnGuitarBendsChanged() const
+{
+    return m_warnGuitarBendsChanged;
 }
 
 int NotationConfiguration::delayBetweenNotesInRealTimeModeMilliseconds() const
@@ -709,6 +772,11 @@ void NotationConfiguration::setDelayBetweenNotesInRealTimeModeMilliseconds(int d
     settings()->setSharedValue(REALTIME_DELAY, Val(delayMs));
 }
 
+async::Channel<int> NotationConfiguration::delayBetweenNotesInRealTimeModeMillisecondsChanged() const
+{
+    return m_delayBetweenNotesInRealTimeModeMillisecondsChanged;
+}
+
 int NotationConfiguration::notePlayDurationMilliseconds() const
 {
     return settings()->value(NOTE_DEFAULT_PLAY_DURATION).toInt();
@@ -718,6 +786,11 @@ void NotationConfiguration::setNotePlayDurationMilliseconds(int durationMs)
 {
     mu::engraving::MScore::defaultPlayDuration = durationMs;
     settings()->setSharedValue(NOTE_DEFAULT_PLAY_DURATION, Val(durationMs));
+}
+
+async::Channel<int> NotationConfiguration::notePlayDurationMillisecondsChanged() const
+{
+    return m_notePlayDurationMillisecondsChanged;
 }
 
 void NotationConfiguration::setTemplateModeEnabled(std::optional<bool> enabled)
@@ -941,6 +1014,11 @@ muse::io::path_t NotationConfiguration::styleFileImportPath() const
 void NotationConfiguration::setStyleFileImportPath(const muse::io::path_t& path)
 {
     settings()->setSharedValue(STYLE_FILE_IMPORT_PATH_KEY, Val(path.toStdString()));
+}
+
+async::Channel<std::string> NotationConfiguration::styleFileImportPathChanged() const
+{
+    return m_styleFileImportPathChanged;
 }
 
 int NotationConfiguration::styleDialogLastPageIndex() const

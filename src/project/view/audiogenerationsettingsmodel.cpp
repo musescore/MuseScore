@@ -29,6 +29,17 @@ AudioGenerationSettingsModel::AudioGenerationSettingsModel(QObject* parent)
 {
 }
 
+void AudioGenerationSettingsModel::load()
+{
+    configuration()->generateAudioTimePeriodTypeChanged().onReceive(this, [this](int) {
+        emit timePeriodTypeChanged();
+    });
+
+    configuration()->numberOfSavesToGenerateAudioChanged().onReceive(this, [this](int) {
+        emit numberOfSavesChanged();
+    });
+}
+
 int AudioGenerationSettingsModel::timePeriodType() const
 {
     return static_cast<int>(configuration()->generateAudioTimePeriodType());
