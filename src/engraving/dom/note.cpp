@@ -654,6 +654,9 @@ Note::Note(const Note& n, bool link)
         m_tieFor->setParent(this);
         m_tieFor->setStartNote(this);
         m_tieFor->setTick(m_tieFor->startNote()->tick());
+        if (link) {
+            score()->undo(new Link(m_tieFor, n.m_tieFor));
+        }
     } else if (n.m_tieFor) {
         m_tieFor = Factory::copyTie(*n.m_tieFor);
         m_tieFor->setStartNote(this);

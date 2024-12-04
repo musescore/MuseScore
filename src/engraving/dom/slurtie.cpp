@@ -54,7 +54,6 @@ SlurTieSegment::SlurTieSegment(const SlurTieSegment& b)
         m_ups[i]   = b.m_ups[i];
         m_ups[i].p = PointF();
     }
-    mutldata()->path.set_value(b.ldata()->path());
 }
 
 bool SlurTieSegment::isEditAllowed(EditData& ed) const
