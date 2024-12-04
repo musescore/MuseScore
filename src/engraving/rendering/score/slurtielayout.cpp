@@ -398,10 +398,10 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
             sa1 = SlurAnchor::STEM;
         }
         if (scr->up() == ecr->up() && scr->up() == item->up()) {
-            if (stem1 && !item->stemSideStartForBeam()) {
+            if (stem1 && !stemSideStartForBeam(item)) {
                 sa1 = SlurAnchor::STEM;
             }
-            if (stem2 && !item->stemSideEndForBeam()) {
+            if (stem2 && !stemSideEndForBeam(item)) {
                 sa2 = SlurAnchor::STEM;
             }
         } else if (ecr->segment()->system() != scr->segment()->system()) {
@@ -1309,6 +1309,75 @@ double SlurTieLayout::computeAdjustmentStep(int upSign, double spatium, double s
     }
 
     return step;
+}
+
+bool SlurTieLayout::stemSideForBeam(Slur* slur, bool start)
+{
+    // determines if the anchor point is exempted from the stem inset due to beams or tremolos.
+    if (!slur) {
+        return false;
+    }
+
+    ChordRest* cr = start ? slur->startCR() : slur->endCR();
+    Chord* c = toChord(cr);
+    bool adjustForBeam = cr && cr->beam() && cr->up() == slur->up();
+    if (start) {
+        adjustForBeam = adjustForBeam && cr->beam()->elements().back() != cr;
+    } else {
+        adjustForBeam = adjustForBeam && cr->beam()->elements().front() != cr;
+    }
+    if (adjustForBeam) {
+        return true;
+    }
+
+    bool adjustForTrem = false;
+    TremoloTwoChord* trem = c ? c->tremoloTwoChord() : nullptr;
+    adjustForTrem = trem && trem->up() == slur->up();
+    if (start) {
+        adjustForTrem = adjustForTrem && trem->chord2() != c;
+    } else {
+        adjustForTrem = adjustForTrem && trem->chord1() != c;
+    }
+    return adjustForTrem;
+}
+
+bool SlurTieLayout::isOverBeams(Slur* slur)
+{
+    // returns true if all the chords spanned by the slur are beamed, and all beams are on the same side of the slur
+    const ChordRest* startCR = slur->startCR();
+    const ChordRest* endCR = slur->endCR();
+    if (!startCR || !endCR) {
+        return false;
+    }
+    if (startCR->track() != endCR->track()
+        || startCR->tick() >= endCR->tick()) {
+        return false;
+    }
+    size_t track = startCR->track();
+    Segment* seg = startCR->segment();
+    while (seg && seg->tick() <= endCR->tick()) {
+        if (!seg->isChordRestType()
+            || !seg->elist().at(track)
+            || !seg->elist().at(track)->isChordRest()) {
+            return false;
+        }
+        ChordRest* cr = toChordRest(seg->elist().at(track));
+        bool hasBeam = cr->beam() && cr->up() == slur->up();
+        bool hasTrem = false;
+        if (cr->isChord()) {
+            Chord* c = toChord(cr);
+            hasTrem = c->tremoloTwoChord() && c->up() == slur->up();
+        }
+        if (!(hasBeam || hasTrem)) {
+            return false;
+        }
+        if ((!seg->next() || seg->next()->isEndBarLineType()) && seg->measure()->nextMeasure()) {
+            seg = seg->measure()->nextMeasure()->first();
+        } else {
+            seg = seg->next();
+        }
+    }
+    return true;
 }
 
 void SlurTieLayout::avoidPreBendsOnTab(const Chord* sc, const Chord* ec, SlurTiePos* sp)
@@ -2524,7 +2593,7 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
     shoulderH = sqrt(d / 4) * _spatium;
 
     static constexpr double shoulderReduction = 0.75;
-    if (slurSeg->slur()->isOverBeams()) {
+    if (isOverBeams(slurSeg->slur())) {
         shoulderH *= shoulderReduction;
     }
     shoulderH -= shoulderOffset.y();

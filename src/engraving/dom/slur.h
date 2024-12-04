@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SLUR_H
-#define MU_ENGRAVING_SLUR_H
+#pragma once
 
 #include "slurtie.h"
 
@@ -112,17 +111,12 @@ public:
     const SlurSegment* segmentAt(int n) const { return toSlurSegment(Spanner::segmentAt(n)); }
 
     bool isCrossStaff();
-    bool isOverBeams();
-    bool stemSideForBeam(bool start);
-    bool stemSideStartForBeam() { return stemSideForBeam(true); }
-    bool stemSideEndForBeam() { return stemSideForBeam(false); }
     const StemFloated& stemFloated() const { return m_stemFloated; }
     StemFloated& stemFloated() { return m_stemFloated; }
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
 
     static int calcStemArrangement(EngravingItem* start, EngravingItem* end);
-    static bool isDirectionMixture(Chord* c1, Chord* c2);
 
     double scalingFactor() const override;
 
@@ -142,8 +136,6 @@ private:
     Slur(EngravingItem* parent);
     Slur(const Slur&);
 
-    void slurPosChord(SlurTiePos*);
-
     int m_sourceStemArrangement = -1;
 
     StemFloated m_stemFloated; // end point position is attached to stem but floated towards the note
@@ -151,4 +143,3 @@ private:
     ConnectedElement m_connectedElement = ConnectedElement::NONE;
 };
 } // namespace mu::engraving
-#endif
