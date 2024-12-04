@@ -22,13 +22,14 @@ import MuseScore 3.0
 import FileIO 
 
 MuseScore {
+    id: window
     version: "4"
     title: "Temperaments"
     description: "Apply various temperaments and tunings"
     pluginType: "dialog"
     categoryCode: "playback"
     thumbnailName: "modal_tuning.png"
-    id: window
+    
     width: 780
     height: 640
 
@@ -53,370 +54,374 @@ MuseScore {
      * However for tunings who's default root note is not C, the values are pre-rotated so that applying the
      * root note rotation will put the first value of the sequence at the root note.
      */
-    property var equal: {
-        'offsets': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-        'root': 0,
-        'pure': 0,
-        'name': "equal"
-    }
-    property var pythagorean: {
-        'offsets': [-6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0],
-        'root': 9,
-        'pure': 3,
-        'name': "pythagorean"
-    }
-    property var aaron: {
-        'offsets': [10.5, 7.0, 3.5, 0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -21.0, -24.5, -28.0],
-        'root': 9,
-        'pure': 3,
-        'name': "aaron"
-    }
-    property var silberman: {
-        'offsets': [5.0, 3.3, 1.7, 0.0, -1.7, -3.3, -5.0, -6.7, -8.3, -10.0, -11.7, -13.3],
-        'root': 9,
-        'pure': 3,
-        'name': "silberman"
-    }
-    property var salinas: {
-        'offsets': [16.0, 10.7, 5.3, 0.0, -5.3, -10.7, -16.0, -21.3, -26.7, -32.0, -37.3, -42.7],
-        'root': 9,
-        'pure': 3,
-        'name': "salinas"
-    }
-    property var kirnberger: {
-        'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -12.0, -10.0, -10.0, -8.0, -6.0, -4.0, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "kirnberger"
-    }
-    property var vallotti: {
-        'offsets': [0.0, -2.0, -4.0, -6.0, -8.0, -10.0, -8.0, -6.0, -4.0, -2.0, 0.0, 2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "vallotti"
-    }
-    property var werkmeister: {
-        'offsets': [0.0, -4.0, -8.0, -12.0, -10.0, -8.0, -12.0, -10.0, -8.0, -6.0, -4.0, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "werkmeister"
-    }
-    property var marpurg: {
-        'offsets': [0.0, 2.0, 4.0, 6.0, 0.0, 2.0, 4.0, 6.0, 0.0, 2.0, 4.0, 6.0],
-        'root': 0,
-        'pure': 0,
-        'name': "marpurg"
-    }
-    property var just: {
-        'offsets': [0.0, 2.0, 4.0, -16.0, -14.0, -12.0, -10.0, -30.0, -28.0, 16.0, 18.0, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "just"
-    }
-    property var meanSemitone: {
-        'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, 3.5, 0.0, -3.5, -7.0, -10.5, -14.0, -17.5],
-        'root': 6,
-        'pure': 6,
-        'name': "meanSemitone"
-    }
-    property var grammateus: {
-        'offsets': [-2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 0.0, 2.0, 4.0, 6.0, 8.0],
-        'root': 11,
-        'pure': 1,
-        'name': "grammateus"
-    }
-    property var french: {
-        'offsets': [0.0, -2.5, -5.0, -7.5, -10.0, -12.5, -13.0, -13.0, -11.0, -6.0, -1.5, 2.5],
-        'root': 0,
-        'pure': 0,
-        'name': "french"
-    }
-    property var french2: {
-        'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -18.2, -19.0, -17.0, -10.5, -3.5, 3.5],
-        'root': 0,
-        'pure': 0,
-        'name': "french2"
-    }
-    property var rameau: {
-        'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -15.5, -13.5, -11.5, -2.0, 7.0, 3.5],
-        'root': 0,
-        'pure': 0,
-        'name': "rameau"
-    }
-    property var irrFr17e: {
-        'offsets': [-8.0, -2.0, 3.0, 0.0, -3.0, -6.0, -9.0, -12.0, -15.0, -18.0, -21.0, -24.0],
-        'root': 9,
-        'pure': 3,
-        'name': "irrFr17e"
-    }
-    property var bachLehman: {
-        'offsets': [0.0, -2.0, -3.9, -5.9, -7.8, -5.9, -3.9, -2.0, -2.0, -2.0, -2.0, 2.0],
-        'root': 0,
-        'pure': 3,
-        'name': "bachLehman"
-    }
+    
+    property var westernTemperaments: [
+        {
+            'name': "Equal",
+            'offsets': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Pythagorean",
+            'offsets': [-6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0],
+            'root': 9,
+            'pure': 3
+        },
+        {
+            'name': "Aaron",
+            'offsets': [10.5, 7.0, 3.5, 0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -21.0, -24.5, -28.0],
+            'root': 9,
+            'pure': 3
+        },
+        {
+            'name': "Silberman",
+            'offsets': [5.0, 3.3, 1.7, 0.0, -1.7, -3.3, -5.0, -6.7, -8.3, -10.0, -11.7, -13.3],
+            'root': 9,
+            'pure': 3
+        },
+        {
+            'name': "Salinas",
+            'offsets': [16.0, 10.7, 5.3, 0.0, -5.3, -10.7, -16.0, -21.3, -26.7, -32.0, -37.3, -42.7],
+            'root': 9,
+            'pure': 3
+        },
+        {
+            'name': "Kirnberger",
+            'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -12.0, -10.0, -10.0, -8.0, -6.0, -4.0, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Vallotti",
+            'offsets': [0.0, -2.0, -4.0, -6.0, -8.0, -10.0, -8.0, -6.0, -4.0, -2.0, 0.0, 2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Werkmeister",
+            'offsets': [0.0, -4.0, -8.0, -12.0, -10.0, -8.0, -12.0, -10.0, -8.0, -6.0, -4.0, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Marpurg",
+            'offsets': [0.0, 2.0, 4.0, 6.0, 0.0, 2.0, 4.0, 6.0, 0.0, 2.0, 4.0, 6.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Just",
+            'offsets': [0.0, 2.0, 4.0, -16.0, -14.0, -12.0, -10.0, -30.0, -28.0, 16.0, 18.0, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "MeanSemitone",
+            'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, 3.5, 0.0, -3.5, -7.0, -10.5, -14.0, -17.5],
+            'root': 6,
+            'pure': 6
+        },
+        {
+            'name': "Grammateus",
+            'offsets': [-2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0, 0.0, 2.0, 4.0, 6.0, 8.0],
+            'root': 11,
+            'pure': 1
+        },
+        {
+            'name': "French",
+            'offsets': [0.0, -2.5, -5.0, -7.5, -10.0, -12.5, -13.0, -13.0, -11.0, -6.0, -1.5, 2.5],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "French2",
+            'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -18.2, -19.0, -17.0, -10.5, -3.5, 3.5],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Rameau",
+            'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -15.5, -13.5, -11.5, -2.0, 7.0, 3.5],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "IrrFr17e",
+            'offsets': [-8.0, -2.0, 3.0, 0.0, -3.0, -6.0, -9.0, -12.0, -15.0, -18.0, -21.0, -24.0],
+            'root': 9,
+            'pure': 3
+        },
+        {
+            'name': "BachLehman",
+            'offsets': [0.0, -2.0, -3.9, -5.9, -7.8, -5.9, -3.9, -2.0, -2.0, -2.0, -2.0, 2.0],
+            'root': 0,
+            'pure': 3
+        },
+        {
+            'name': "Meantone (1/4) 5 flats",
+            'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -6.8, 30.8, 27.4, 24.0, 20.5, 17.1, 13.7],
+            'root': 0,
+            'pure': 3
+        },
+        {
+            'name': "Meantone 1/4-comma",
+            'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -6.8, -10.3, -13.7, -17.1, 20.5, 17.1, 13.7],
+            'root': 0,
+            'pure': 3
+        },
+        {
+            'name': "Meantone (1/4) 5 sharps",
+            'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -6.8, -10.3, -13.7, -17.1, -20.5, -24.0, 13.7],
+            'root': 0,
+            'pure': 3
+        },
+        {
+            'name': "Meantone 1/5-comma",
+            'offsets': [7.0, 4.7, 2.3, 0.0, -2.3, -4.7, -7.0, -9.4, -11.7, 14.1, 11.7, 9.4],
+            'root': 0,
+            'pure': 3
+        },
+        {
+            'name': "Meantone 1/6-comma",
+            'offsets': [4.9, 3.3, 1.6, 0.0, -1.6, -3.3, -4.9, -6.5, -8.1, 9.8, 8.1, 6.5],
+            'root': 0,
+            'pure': 3
+        },
+        {
+            'name': "Werckmeister III",
+            'offsets': [11.7, 7.8, 3.9, 0.0, 2.0, 3.9, 0.0, 2.0, 3.9, 5.9, 7.8, 9.8],
+            'root': 0,
+            'pure': 3
+        },
+        {
+            'name': "Kirnberger III",
+            'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -1.5, 0.5, 0.5, 2.4, 4.4, 6.4, 8.3],
+            'root': 0,
+            'pure': 3
+        },
+        {
+            'name': "Vallotti",
+            'offsets': [5.9, 3.9, 2.0, 0.0, -2.0, -3.9, -2.0, 0.0, 2.0, 3.9, 5.9, 7.8],
+            'root': 0,
+            'pure': 3
+        },
+        {
+            'name': "Young I",
+            'offsets': [6.2, 4.2, 2.1, 0.0, -2.1, -1.9, -1.8, 0.1, 2.1, 4.1, -0.3, -0.1],
+            'root': 0,
+            'pure': 3
+        },
+        {
+            'name': "Kellner",
+            'offsets': [8.2, 5.5, 2.7, 0.0, -2.7, -0.8, -3.5, -1.6, 0.4, 2.3, 4.3, 6.3],
+            'root': 0,
+            'pure': 3
+        },
+        {
+            'name': "Fernando A. Martin 1/45-comma",
+            'offsets': [6.6, 3.9, 1.7, 0.0, -1.2, -1.8, -2.0, -1.6, -0.7, 0.8, 2.7, 4.7],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "C Cm Db Dm Eb Ebm Em F Fm Ab Am Bb",
+            'offsets': [0.0, 2.0, -17.6, -15.6, -13.7, -11.7, 31.3, 11.7, 13.7, 15.6, 17.6, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "C Cm C#m D Dm E Em F F#m A Am Bb",
+            'offsets': [0.0, 2.0, -17.6, -15.6, -13.7, -11.7, -31.3, -29.3, -27.4, 15.6, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "C Cm Db D Dm Em F Fm Ab Am Bb Bbm",
+            'offsets': [0.0, 2.0, -17.6, -15.6, -13.7, -11.7, -31.3, 11.7, 13.7, 15.6, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "C Cm Db Eb Em F Fm G Gm Ab Am Bm",
+            'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "C Cm D Dm Eb Em F#m G Gm Ab Bb Bm",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, 19.6],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "C D Ebm E Em F# F#m G G#m Bbm B Bm",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, -27.4, -25.4, -23.5, -21.5],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Simple Ratios",
+            'offsets': [0.0, 2.0, 31.2, -15.6, -13.7, -28.3, -17.5, 38.6, 13.7, 15.6, -31.2, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Alternate Ratios",
+            'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, 17.5, 28.3, 13.7, 15.6, 17.6, -2.0],
+            'root': 0,
+            'pure': 0
+        }
+    ]
 
-    property var tuning01: {
-        'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -6.8, 30.8, 27.4, 24.0, 20.5, 17.1, 13.7],
-        'root': 0,
-        'pure': 3,
-        'name': "tuning01"
-    }
-    property var tuning02: {
-        'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -6.8, -10.3, -13.7, -17.1, 20.5, 17.1, 13.7],
-        'root': 0,
-        'pure': 3,
-        'name': "tuning02"
-    }
-    property var tuning03: {
-        'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -6.8, -10.3, -13.7, -17.1, -20.5, -24.0, 13.7],
-        'root': 0,
-        'pure': 3,
-        'name': "tuning03"
-    }
-    property var tuning04: {
-        'offsets': [7.0, 4.7, 2.3, 0.0, -2.3, -4.7, -7.0, -9.4, -11.7, 14.1, 11.7, 9.4],
-        'root': 0,
-        'pure': 3,
-        'name': "tuning04"
-    }
-    property var tuning05: {
-        'offsets': [4.9, 3.3, 1.6, 0.0, -1.6, -3.3, -4.9, -6.5, -8.1, 9.8, 8.1, 6.5],
-        'root': 0,
-        'pure': 3,
-        'name': "tuning05"
-    }
-    property var tuning06: {
-        'offsets': [11.7, 7.8, 3.9, 0.0, 2.0, 3.9, 0.0, 2.0, 3.9, 5.9, 7.8, 9.8],
-        'root': 0,
-        'pure': 3,
-        'name': "tuning06"
-    }
-    property var tuning07: {
-        'offsets': [10.3, 6.8, 3.4, 0.0, -3.4, -1.5, 0.5, 0.5, 2.4, 4.4, 6.4, 8.3],
-        'root': 0,
-        'pure': 3,
-        'name': "tuning07"
-    }
-    property var tuning08: {
-        'offsets': [5.9, 3.9, 2.0, 0.0, -2.0, -3.9, -2.0, 0.0, 2.0, 3.9, 5.9, 7.8],
-        'root': 0,
-        'pure': 3,
-        'name': "tuning08"
-    }
-    property var tuning09: {
-        'offsets': [6.2, 4.2, 2.1, 0.0, -2.1, -1.9, -1.8, 0.1, 2.1, 4.1, -0.3, -0.1],
-        'root': 0,
-        'pure': 3,
-        'name': "tuning09"
-    }
-    property var tuning10: {
-        'offsets': [8.2, 5.5, 2.7, 0.0, -2.7, -0.8, -3.5, -1.6, 0.4, 2.3, 4.3, 6.3],
-        'root': 0,
-        'pure': 3,
-        'name': "tuning10"
-    }
-    property var tuning11: {
-        'offsets': [6.6, 3.9, 1.7, 0.0, -1.2, -1.8, -2.0, -1.6, -0.7, 0.8, 2.7, 4.7],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning11"
-    }
-    property var tuning12: {
-        'offsets': [0.0, 2.0, -17.6, -15.6, -13.7, -11.7, 31.3, 11.7, 13.7, 15.6, 17.6, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning12"
-    }
-    property var tuning13: {
-        'offsets': [0.0, 2.0, -17.6, -15.6, -13.7, -11.7, -31.3, -29.3, -27.4, 15.6, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning13"
-    }
-    property var tuning14: {
-        'offsets': [0.0, 2.0, -17.6, -15.6, -13.7, -11.7, -31.3, 11.7, 13.7, 15.6, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning14"
-    }
-    property var tuning15: {
-        'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning15"
-    }
-    property var tuning16: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, 19.6],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning16"
-    }
-    property var tuning17: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, -27.4, -25.4, -23.5, -21.5],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning17"
-    }
-    property var tuning18: {
-        'offsets': [0.0, 2.0, 31.2, -15.6, -13.7, -28.3, -17.5, 38.6, 13.7, 15.6, -31.2, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning18"
-    }
-    property var tuning19: {
-        'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, 17.5, 28.3, 13.7, 15.6, 17.6, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning19"
-    }
-    property var tuning101: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning101"
-    }
-    property var tuning102: {
-        'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning102"
-    }
-    property var tuning103: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -33.2, -9.8, -7.8, -7.8, -25.4, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning103"
-    }
-    property var tuning104: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning104"
-    }
-    property var tuning105: {
-        'offsets': [0.0, 2.0, 3.9, -37.1, -35.2, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning105"
-    }
-    property var tuning106: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -54.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning106"
-    }
-    property var tuning107: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning107"
-    }
-    property var tuning108: {
-        'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, 43.3, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning108"
-    }
-    property var tuning109: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -33.2, -9.8, -7.8, 13.7, 15.6, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning109"
-    }
-    property var tuning110: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning110"
-    }
-    property var tuning111: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning111"
-    }
-    property var tuning112: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning112"
-    }
-    property var tuning113: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning113"
-    }
-    property var tuning114: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning114"
-    }
-    property var tuning115: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, -33.2, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning115"
-    }
-    property var tuning116: {
-        'offsets': [0.0, 2.0, 3.9, -15.6, -35.2, -11.7, 9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning116"
-    }
-    property var tuning117: {
-        'offsets': [0.0, 2.0, -17.6, -15.6, 7.8, 9.8, 9.8, 11.7, -7.8, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning117"
-    }
-    property var tuning118: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, 43.3, 17.6, 19.6],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning118"
-    }
-    property var tuning119: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning119"
-    }
-    property var tuning120: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, -54.7, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning120"
-    }
-    property var tuning121: {
-        'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning121"
-    }
-    property var tuning122: {
-        'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 58.9, 11.7, 13.7, 43.3, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning122"
-    }
-    property var tuning123: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -33.2, -9.8, 39.4, 41.4, -25.4, -3.9, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning123"
-    }
-    property var tuning124: {
-        'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -23.5, -2.0],
-        'root': 0,
-        'pure': 0,
-        'name': "tuning124"
-    }
+    property var middleEasternTemperaments: [
+        {
+            'name': "Melodic 1# 2b",
+            'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Harmonic 1# 2b",
+            'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, 17.6, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Rast, Sikah",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -33.2, -9.8, -7.8, -7.8, -25.4, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Suznak, Huzam",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Nayruz",
+            'offsets': [0.0, 2.0, 3.9, -37.1, -35.2, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Bayati, Kurd, Huseyni",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -54.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Qarjighar",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -11.7, -9.8, -7.8, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Saba, Basta Nikar, Zanjaran",
+            'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, 43.3, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Hijaz, Nikriz",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -33.2, -9.8, -7.8, 13.7, 15.6, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Nawa'athar, Shad Araban",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, 15.6, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Shehnaz",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, -7.8, 13.7, 15.6, 17.6, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Nahawand, Hijaz Kar",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -13.7, -11.7, -9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "hawand, Hijaz Kar Kurd",
+            'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Iraq, Yekah, Nawa",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Farahnak, Yekah, Nawa",
+            'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, -33.2, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Jiharkah",
+            'offsets': [0.0, 2.0, 3.9, -15.6, -35.2, -11.7, 9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Ajam Ashyran, Shawq Afza",
+            'offsets': [0.0, 2.0, -17.6, -15.6, 7.8, 9.8, 9.8, 11.7, -7.8, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Hisar",
+            'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -9.8, -7.8, -7.8, 43.3, 17.6, 19.6],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Nishaburek (Rast in D & A)",
+            'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, 9.8, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Nishaburek (Rast in D, Bayati in A)",
+            'offsets': [0.0, 2.0, 3.9, 5.9, 7.8, -54.7, -31.3, -29.3, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Saba Zamzam",
+            'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 9.8, 11.7, 13.7, -5.9, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Rakb",
+            'offsets': [0.0, 2.0, 3.9, -15.6, -13.7, -33.2, 58.9, 11.7, 13.7, 43.3, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Ikah Baladi",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -35.2, -33.2, -9.8, 39.4, 41.4, -25.4, -3.9, -2.0],
+            'root': 0,
+            'pure': 0
+        },
+        {
+            'name': "Iraq (Cadence)",
+            'offsets': [0.0, 2.0, 3.9, 5.9, -56.7, -33.2, -31.3, -7.8, 13.7, -5.9, -23.5, -2.0],
+            'root': 0,
+            'pure': 0
+        }
+    ]
 
-
-    property var currentTemperament: equal;
+    property var currentTemperament: westernTemperaments[0];
     property var currentTab: 0 ;
     property var currentRoot: 0;
     property var currentPureTone: 0;
@@ -436,8 +441,7 @@ MuseScore {
         return history
     }
 
-    function applyTemperament()
-    {
+    function applyTemperament() {
         var selection = new scoreSelection()
         curScore.startCmd()
         selection.map(filterNotes, reTune(getFinalTuning()))
@@ -448,13 +452,11 @@ MuseScore {
         return true
     }
 
-    function filterNotes(element)
-    {
+    function filterNotes(element) {
         return element.type == Element.CHORD
     }
 
-    function annotate(chord, cursor)
-    {
+    function annotate(chord, cursor) {
         function addText(noteIndex, placement) {
             var note = chord.notes[noteIndex]
             var text = newElement(Element.STAFF_TEXT);
@@ -704,14 +706,35 @@ MuseScore {
     }
 
     function checkCurrentTemperament() {
-        eval(currentTemperament.name+"_button").checked = true        
+        var idx;
+        switch (currentTab) {
+        case 0:
+            idx = westernTemperaments.indexOf(currentTemperament);
+            westernButtonRepeater.itemAt(idx).checked = true;
+            break;
+        case 1:
+            idx = middleEasternTemperaments.indexOf(currentTemperament);
+            middleEasternButtonRepeater.itemAt(idx).checked = true;
+            break;
+        }        
     }
 
     function lookupTemperament(temperamentName) {
-        return eval(temperamentName)        
+        switch (currentTab) {
+        case 0:
+            westernTemperaments.find(function (x) {
+                return x.name === temperamentName;
+            });
+            break;
+        case 1:
+            middleEasternTemperaments.find(function (x) {
+                return x.name === temperamentName;
+            });
+            break;
+        }      
     }
 
-    function setCurrentTab(tab){
+    function setCurrentTab(tab) {
         var oldTab = currentTab
         getHistory().add(
             function(){
@@ -726,7 +749,7 @@ MuseScore {
         )
     }
     
-    function checkCurrentTab(){
+    function checkCurrentTab() {
         switch (currentTab){
             case 0:
                 westernTab.checked = true
@@ -736,7 +759,6 @@ MuseScore {
                 break
         } 
     }
-
     
     function setCurrentRoot(root) {
         var oldRoot = currentRoot
@@ -937,1019 +959,517 @@ MuseScore {
         getHistory().end()
         textField.previousText = newText
     }
-    StyledTabBar{
+
+    StyledTabBar {
         id:tabBar
         width: 400               
         height: 40
         x: 30
         y: 10
-        //anchors.top: window.top
-        currentIndex: 0               
-        StyledTabButton{
+        
+        currentIndex: 0 
+
+        StyledTabButton {
             id: westernTab 
             text: "Western Temperaments" 
         }
-        StyledTabButton{
+        StyledTabButton {
             id: middleEasternTab
             text: "Middle Eastern Temperaments" 
         }
-    }
-    
+    }    
 
-        Column{
-            anchors.left: window.left
-            anchors.top: window.top
-            anchors.leftMargin:20
-            anchors.topMargin: 60
-            GroupBox {                 
-                width:280
-                height: 530                
-                ScrollView{
+    Column {
+        anchors.left: window.left
+        anchors.top: window.top
+        anchors.leftMargin:20
+        anchors.topMargin: 60
+        GroupBox {                 
+            width:280
+            height: 530
+            ButtonGroup { id: tempGroup }   
+
+            ScrollView {
+                width: parent.width
+                height: parent.height-30                      
+                visible: westernTab.checked  
+                ScrollBar.horizontal.visible: false
+
+                Column { 
                     width: parent.width
-                    height: parent.height-30                      
-                    visible: westernTab.checked  
-                    Column { 
-                        width: parent.width
-                        height: parent.height-30  
+                    height: parent.height-30  
 
-                        PageTabButton {
-                            width: parent.width                        
+                    Repeater {
+                        id: westernButtonRepeater
+                        model: westernTemperaments.length
+                        delegate: PageTabButton {
+                            width: 280
                             height: 30
+                            ButtonGroup.group: tempGroup
                             orientation: Qt.Horizontal
-                            id: equal_button
-                            title: "  " + "Equal"
+                            leftPadding: 5
+                            checked: index == 0 ? true : false
+                            title: westernTemperaments[index].name
+                            onClicked: {
+                                temperamentClicked(westernTemperaments[index]);
+                            }
+                        }
+                    }                                      
+                }
+            }
+
+            ScrollView {
+                width: parent.width
+                height: parent.height-30                    
+                visible: middleEasternTab.checked 
+                ScrollBar.horizontal.visible: false
+
+                Column { 
+                    width: parent.width
+                    height: parent.height-30 
+                    Repeater {
+                        id: middleEasternButtonRepeater
+                        model: middleEasternTemperaments.length
+                        delegate: PageTabButton {
+                            width: 280
+                            height: 30
+                            ButtonGroup.group: tempGroup
+                            orientation: Qt.Horizontal
+                            leftPadding: 5
+                            title: middleEasternTemperaments[index].name
+                            onClicked: {
+                                temperamentClicked(middleEasternTemperaments[index]);
+                            }
+                        }
+                    }                    
+                }
+            }
+        }
+    }
+
+    ColumnLayout {
+        anchors.top: parent.top
+        anchors.topMargin: 60
+        anchors.margins: 20
+        x: 330
+        GroupBox {
+            //title: "Advanced"
+            ColumnLayout {
+                spacing: 10
+                GroupBox {
+                    title: "Root Note"
+                    GridLayout {
+                        columns: 6
+                        anchors.margins: 10
+                        ButtonGroup { id: rootNoteGroup }
+                        FlatRadioButton {
+                            text: "C"
                             checked: true
-                            
-                            onClicked: { temperamentClicked(equal) }
+                            ButtonGroup.group: rootNoteGroup
+                            id: root_c
+                            onClicked: { rootNoteClicked(0) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: pythagorean_button
-                            title:"  " + "Pythagorean"
-                            
-                            onClicked: { temperamentClicked(pythagorean) }
+                        FlatRadioButton {
+                            text: "G"
+                            ButtonGroup.group: rootNoteGroup
+                            id: root_g
+                            onClicked: { rootNoteClicked(1) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: aaron_button
-                            title:"  " + "Aaron"
-                            
-                            onClicked: { temperamentClicked(aaron) }
+                        FlatRadioButton {
+                            text: "D"
+                            ButtonGroup.group: rootNoteGroup
+                            id: root_d
+                            onClicked: { rootNoteClicked(2) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: silberman_button
-                            title:"  " + "Silberman"
-                            
-                            onClicked: { temperamentClicked(silberman) }
+                        FlatRadioButton {
+                            text: "A"
+                            ButtonGroup.group: rootNoteGroup
+                            id: root_a
+                            onClicked: { rootNoteClicked(3) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: salinas_button
-                            title:"  " + "Salinas"
-                            
-                            onClicked: { temperamentClicked(salinas) }
+                        FlatRadioButton {
+                            text: "E"
+                            ButtonGroup.group: rootNoteGroup
+                            id: root_e
+                            onClicked: { rootNoteClicked(4) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: kirnberger_button
-                            title:"  " + "Kirnberger"
-                            
-                            onClicked: { temperamentClicked(kirnberger) }
+                        FlatRadioButton {
+                            text: "B"
+                            ButtonGroup.group: rootNoteGroup
+                            id: root_b
+                            onClicked: { rootNoteClicked(5) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: vallotti_button
-                            title:"  " + "Vallotti"
-                            
-                            onClicked: { temperamentClicked(vallotti) }
+                        FlatRadioButton {
+                            text: "F#"
+                            ButtonGroup.group: rootNoteGroup
+                            id: root_f_sharp
+                            onClicked: { rootNoteClicked(6) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: werkmeister_button
-                            title:"  " + "Werkmeister"
-                            
-                            onClicked: { temperamentClicked(werkmeister) }
+                        FlatRadioButton {
+                            text: "C#"
+                            ButtonGroup.group: rootNoteGroup
+                            id: root_c_sharp
+                            onClicked: { rootNoteClicked(7) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: marpurg_button
-                            title:"  " + "Marpurg"
-                            
-                            onClicked: { temperamentClicked(marpurg) }
+                        FlatRadioButton {
+                            text: "G#"
+                            ButtonGroup.group: rootNoteGroup
+                            id: root_g_sharp
+                            onClicked: { rootNoteClicked(8) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: just_button
-                            title:"  " + "Just"
-                            
-                            onClicked: { temperamentClicked(just) }
+                        FlatRadioButton {
+                            text: "Eb"
+                            ButtonGroup.group: rootNoteGroup
+                            id: root_e_flat
+                            onClicked: { rootNoteClicked(9) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: meanSemitone_button
-                            title:"  " + "Mean Semitone"
-                            
-                            onClicked: { temperamentClicked(meanSemitone) }
+                        FlatRadioButton {
+                            text: "Bb"
+                            ButtonGroup.group: rootNoteGroup
+                            id: root_b_flat
+                            onClicked: { rootNoteClicked(10) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: grammateus_button
-                            title:"  " + "Grammateus"
-                            
-                            onClicked: { temperamentClicked(grammateus) }
+                        FlatRadioButton {
+                            text: "F"
+                            ButtonGroup.group: rootNoteGroup
+                            id: root_f
+                            onClicked: { rootNoteClicked(11) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: french_button
-                            title:"  " + "French"
-                            
-                            onClicked: { temperamentClicked(french) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: french2_button
-                            title:"  " + "Tempérament Ordinaire"
-                            
-                            onClicked: { temperamentClicked(french2) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: rameau_button
-                            title:"  " + "Rameau"
-                            
-                            onClicked: { temperamentClicked(rameau) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: irrFr17e_button
-                            title:"  " + "Irr Fr 17e"
-                            
-                            onClicked: { temperamentClicked(irrFr17e) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: bachLehman_button
-                            title:"  " + "Bach/Lehman"
-                            
-                            onClicked: { temperamentClicked(bachLehman) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning01_button
-                            title:"  " + "Meantone (1/4) 5 flats"
-                            
-                            onClicked: { temperamentClicked(tuning01) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning02_button
-                            title:"  " + "Meantone 1/4-comma"
-                            
-                            onClicked: { temperamentClicked(tuning02) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning03_button
-                            title:"  " + "Meantone (1/4) 5 sharps"
-                            
-                            onClicked: { temperamentClicked(tuning03) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning04_button
-                            title:"  " + "Meantone 1/5-comma"
-                            
-                            onClicked: { temperamentClicked(tuning04) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning05_button
-                            title:"  " + "Meantone 1/6-comma"
-                            
-                            onClicked: { temperamentClicked(tuning05) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning06_button
-                            title:"  " + "Werckmeister III"
-                            
-                            onClicked: { temperamentClicked(tuning06) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning07_button
-                            title:"  " + "Kirnberger III"
-                            
-                            onClicked: { temperamentClicked(tuning07) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning08_button
-                            title:"  " + "Vallotti"
-                            
-                            onClicked: { temperamentClicked(tuning08) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning09_button
-                            title:"  " + "Young I"
-                            
-                            onClicked: { temperamentClicked(tuning09) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning10_button
-                            title:"  " + "Kellner"
-                            
-                            onClicked: { temperamentClicked(tuning10) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning11_button
-                            title:"  " + "Fernando A. Martin 1/45-comma"
-                            
-                            onClicked: { temperamentClicked(tuning11) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning12_button
-                            title:"  " + "C Cm Db Dm Eb Ebm Em F Fm Ab Am Bb"
-                            
-                            onClicked: { temperamentClicked(tuning12) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning13_button
-                            title:"  " + "C Cm C#m D Dm E Em F F#m A Am Bb"
-                            
-                            onClicked: { temperamentClicked(tuning13) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning14_button
-                            title:"  " + "C Cm Db D Dm Em F Fm Ab Am Bb Bbm"
-                            
-                            onClicked: { temperamentClicked(tuning14) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning15_button
-                            title:"  " + "C Cm Db Eb Em F Fm G Gm Ab Am Bm"
-                            
-                            onClicked: { temperamentClicked(tuning15) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning16_button
-                            title:"  " + "C Cm D Dm Eb Em F#m G Gm Ab Bb Bm"
-                            
-                            onClicked: { temperamentClicked(tuning16) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning17_button
-                            title:"  " + "C D Ebm E Em F# F#m G G#m Bbm B Bm"
-                            
-                            onClicked: { temperamentClicked(tuning17) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning18_button
-                            title:"  " + "Simple Ratios"
-                            
-                            onClicked: { temperamentClicked(tuning18) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning19_button
-                            title:"  " + "Alternate Ratios"
-                            
-                            onClicked: { temperamentClicked(tuning19) }
-                        }                    
                     }
                 }
-                ScrollView{
-                    width: parent.width
-                    height: parent.height-30                    
-                    visible: middleEasternTab.checked                    
-                    Column{ 
-                        width: parent.width
-                        height: parent.height-30 
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning101_button
-                            title:"  " + "Melodic 1# 2b"
-                            
-                            onClicked: { temperamentClicked(tuning101) }
+
+                GroupBox {
+                    title: "Pure Tone"
+                    GridLayout {
+                        columns: 6
+                        anchors.margins: 10
+                        ButtonGroup { id: pureToneGroup }
+                        FlatRadioButton {
+                            text: "C"
+                            checked: true
+                            id: pure_c
+                            ButtonGroup.group: pureToneGroup
+                            onClicked: { pureToneClicked(0) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning102_button
-                            title:"  " + "Harmonic 1# 2b"
-                            
-                            onClicked: { temperamentClicked(tuning102) }
+                        FlatRadioButton {
+                            text: "G"
+                            id: pure_g
+                            ButtonGroup.group: pureToneGroup
+                            onClicked: { pureToneClicked(1) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning103_button
-                            title:"  " + "Rast, Sikah"
-                            
-                            onClicked: { temperamentClicked(tuning103) }
+                        FlatRadioButton {
+                            text: "D"
+                            id: pure_d
+                            ButtonGroup.group: pureToneGroup
+                            onClicked: { pureToneClicked(2) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning104_button
-                            title:"  " + "Suznak, Huzam"
-                            
-                            onClicked: { temperamentClicked(tuning104) }
+                        FlatRadioButton {
+                            text: "A"
+                            id: pure_a
+                            ButtonGroup.group: pureToneGroup
+                            onClicked: { pureToneClicked(3) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning105_button
-                            title:"  " + "Nayruz"
-                            
-                            onClicked: { temperamentClicked(tuning105) }
+                        FlatRadioButton {
+                            text: "E"
+                            id: pure_e
+                            ButtonGroup.group: pureToneGroup
+                            onClicked: { pureToneClicked(4) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning106_button
-                            title:"  " + "Bayati, Kurd, Huseyni"
-                            
-                            onClicked: { temperamentClicked(tuning106) }
+                        FlatRadioButton {
+                            text: "B"
+                            id: pure_b
+                            ButtonGroup.group: pureToneGroup
+                            onClicked: { pureToneClicked(5) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning107_button
-                            title:"  " + "Qarjighar"
-                            
-                            onClicked: { temperamentClicked(tuning107) }
+                        FlatRadioButton {
+                            text: "F#"
+                            id: pure_f_sharp
+                            ButtonGroup.group: pureToneGroup
+                            onClicked: { pureToneClicked(6) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning108_button
-                            title:"  " + "Saba, Basta Nikar, Zanjaran"
-                            
-                            onClicked: { temperamentClicked(tuning108) }
+                        FlatRadioButton {
+                            text: "C#"
+                            id: pure_c_sharp
+                            ButtonGroup.group: pureToneGroup
+                            onClicked: { pureToneClicked(7) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning109_button
-                            title:"  " + "Hijaz, Nikriz"
-                            
-                            onClicked: { temperamentClicked(tuning109) }
+                        FlatRadioButton {
+                            text: "G#"
+                            id: pure_g_sharp
+                            ButtonGroup.group: pureToneGroup
+                            onClicked: { pureToneClicked(8) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning110_button
-                            title:"  " + "Nawa'athar, Shad Araban"
-                            
-                            onClicked: { temperamentClicked(tuning110) }
+                        FlatRadioButton {
+                            text: "Eb"
+                            id: pure_e_flat
+                            ButtonGroup.group: pureToneGroup
+                            onClicked: { pureToneClicked(9) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning111_button
-                            title:"  " + "Shehnaz"
-                            
-                            onClicked: { temperamentClicked(tuning111) }
+                        FlatRadioButton {
+                            text: "Bb"
+                            id: pure_b_flat
+                            ButtonGroup.group: pureToneGroup
+                            onClicked: { pureToneClicked(10) }
                         }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning112_button
-                            title:"  " + "Nahawand, Hijaz Kar"
-                            
-                            onClicked: { temperamentClicked(tuning112) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning113_button
-                            title:"  " + "Nahawand, Hijaz Kar Kurd"
-                            
-                            onClicked: { temperamentClicked(tuning113) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning114_button
-                            title:"  " + "Iraq, Yekah, Nawa"
-                            
-                            onClicked: { temperamentClicked(tuning114) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning115_button
-                            title:"  " + "Farahnak, Yekah, Nawa"
-                            
-                            onClicked: { temperamentClicked(tuning115) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning116_button
-                            title:"  " + "Jiharkah"
-                            
-                            onClicked: { temperamentClicked(tuning116) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning117_button
-                            title:"  " + "Ajam Ashyran, Shawq Afza"
-                            
-                            onClicked: { temperamentClicked(tuning117) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning118_button
-                            title:"  " + "Hisar"
-                            
-                            onClicked: { temperamentClicked(tuning118) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning119_button
-                            title:"  " + "Nishaburek (Rast in D & A)"
-                            
-                            onClicked: { temperamentClicked(tuning119) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning120_button
-                            title:"  " + "Nishaburek (Rast in D, Bayati in A)"
-                            
-                            onClicked: { temperamentClicked(tuning120) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning121_button
-                            title:"  " + "Saba Zamzam"
-                            
-                            onClicked: { temperamentClicked(tuning121) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning122_button
-                            title:"  " + "Rakb"
-                            
-                            onClicked: { temperamentClicked(tuning122) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning123_button
-                            title:"  " + "Sikah Baladi"
-                            
-                            onClicked: { temperamentClicked(tuning123) }
-                        }
-                        PageTabButton {
-                            width: parent.width
-                            height: 30
-                            orientation: Qt.Horizontal
-                            id: tuning124_button
-                            title:"  " + "Iraq (Cadence)"
-                            
-                            onClicked: { temperamentClicked(tuning124) }
+                        FlatRadioButton {
+                            text: "F"
+                            id: pure_f
+                            ButtonGroup.group: pureToneGroup
+                            onClicked: { pureToneClicked(11) }
                         }
                     }
-                }//scrollview
+                }
+
+                GroupBox {
+                    title: "Pure note offset"
+                    RowLayout {
+                        TextField {
+                            Layout.maximumWidth: offsetTextWidth
+                            id: tweakValue
+                            text: "0.0"
+                            readOnly: false
+                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
+                            property var previousText: "0.0"
+                            property var name: "tweak"
+                            onEditingFinished: { tweaked() }
+                        }
+                    }
+                }
+
+                GroupBox {
+                    title: "Final Offsets"
+                    GridLayout {
+                        columns: 12
+                        anchors.margins: 0
+
+                        StyledTextLabel {
+                            text: "C"
+                            Layout.alignment: offsetLabelAlignment
+                        }
+                        TextField {
+                            Layout.maximumWidth: offsetTextWidth
+                            id: final_c
+                            text: "0.0"
+                            readOnly: false
+                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
+                            property var previousText: "0.0"
+                            property var name: "final C"
+                            onEditingFinished: { editingFinishedFor(final_c) }
+                        }
+
+                        StyledTextLabel {
+                            text: "G"
+                            Layout.alignment: offsetLabelAlignment
+                        }
+                        TextField {
+                            Layout.maximumWidth: offsetTextWidth
+                            id: final_g
+                            text: "0.0"
+                            readOnly: false
+                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
+                            property var previousText: "0.0"
+                            property var name: "final G"
+                            onEditingFinished: { editingFinishedFor(final_g) }
+                        }
+
+                        StyledTextLabel {
+                            text: "D"
+                            Layout.alignment: offsetLabelAlignment
+                        }
+                        TextField {
+                            Layout.maximumWidth: offsetTextWidth
+                            id: final_d
+                            text: "0.0"
+                            readOnly: false
+                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
+                            property var previousText: "0.0"
+                            property var name: "final D"
+                            onEditingFinished: { editingFinishedFor(final_d) }
+                        }
+
+                        StyledTextLabel {
+                            text: "A"
+                            Layout.alignment: offsetLabelAlignment
+                        }
+                        TextField {
+                            Layout.maximumWidth: offsetTextWidth
+                            id: final_a
+                            text: "0.0"
+                            readOnly: false
+                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
+                            property var previousText: "0.0"
+                            property var name: "final A"
+                            onEditingFinished: { editingFinishedFor(final_a) }
+                        }
+
+                        StyledTextLabel {
+                            text: "E"
+                            Layout.alignment: offsetLabelAlignment
+                        }
+                        TextField {
+                            Layout.maximumWidth: offsetTextWidth
+                            id: final_e
+                            text: "0.0"
+                            readOnly: false
+                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
+                            property var previousText: "0.0"
+                            property var name: "final E"
+                            onEditingFinished: { editingFinishedFor(final_e) }
+                        }
+
+                        StyledTextLabel {
+                            text: "B"
+                            Layout.alignment: offsetLabelAlignment
+                        }
+                        TextField {
+                            Layout.maximumWidth: offsetTextWidth
+                            id: final_b
+                            text: "0.0"
+                            readOnly: false
+                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
+                            property var previousText: "0.0"
+                            property var name: "final B"
+                            onEditingFinished: { editingFinishedFor(final_b) }
+                        }
+
+                        StyledTextLabel {
+                            text: "F#"
+                            Layout.alignment: offsetLabelAlignment
+                        }
+                        TextField {
+                            Layout.maximumWidth: offsetTextWidth
+                            id: final_f_sharp
+                            text: "0.0"
+                            readOnly: false
+                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
+                            property var previousText: "0.0"
+                            property var name: "final F#"
+                            onEditingFinished: { editingFinishedFor(final_f_sharp) }
+                        }
+
+                        StyledTextLabel {
+                            text: "C#"
+                            Layout.alignment: offsetLabelAlignment
+                        }
+                        TextField {
+                            Layout.maximumWidth: offsetTextWidth
+                            id: final_c_sharp
+                            text: "0.0"
+                            readOnly: false
+                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
+                            property var previousText: "0.0"
+                            property var name: "final C#"
+                            onEditingFinished: { editingFinishedFor(final_c_sharp) }
+                        }
+
+                        StyledTextLabel {
+                            text: "G#"
+                            Layout.alignment: offsetLabelAlignment
+                        }
+                        TextField {
+                            Layout.maximumWidth: offsetTextWidth
+                            id: final_g_sharp
+                            text: "0.0"
+                            readOnly: false
+                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
+                            property var previousText: "0.0"
+                            property var name: "final G#"
+                            onEditingFinished: { editingFinishedFor(final_g_sharp) }
+                        }
+
+                        StyledTextLabel {
+                            text: "Eb"
+                            Layout.alignment: offsetLabelAlignment
+                        }
+                        TextField {
+                            Layout.maximumWidth: offsetTextWidth
+                            id: final_e_flat
+                            text: "0.0"
+                            readOnly: false
+                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
+                            property var previousText: "0.0"
+                            property var name: "final Eb"
+                            onEditingFinished: { editingFinishedFor(final_e_flat) }
+                        }
+
+                        StyledTextLabel {
+                            text: "Bb"
+                            Layout.alignment: offsetLabelAlignment
+                        }
+                        TextField {
+                            Layout.maximumWidth: offsetTextWidth
+                            id: final_b_flat
+                            text: "0.0"
+                            readOnly: false
+                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
+                            property var previousText: "0.0"
+                            property var name: "final Bb"
+                            onEditingFinished: { editingFinishedFor(final_b_flat) }
+                        }
+
+                        StyledTextLabel {
+                            text: "F"
+                            Layout.alignment: offsetLabelAlignment
+                        }
+                        TextField {
+                            Layout.maximumWidth: offsetTextWidth
+                            id: final_f
+                            text: "0.0"
+                            readOnly: false
+                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
+                            property var previousText: "0.0"
+                            property var name: "final F"
+                            onEditingFinished: { editingFinishedFor(final_f) }
+                        }
+                    }
+                }
+                RowLayout {
+                    FlatButton {
+                        id: saveButton
+                        text: qsTranslate("PrefsDialogBase", "Save")                                
+                        isNarrow: true
+                        onClicked: {
+                            saveDialog.folder = filePath
+                            saveDialog.visible = true
+                        }
+                    }
+                    FlatButton {
+                        id: loadButton
+                        text: qsTranslate("PrefsDialogBase", "Load")
+                        isNarrow: true                                
+                        onClicked: {
+                            loadDialog.folder = filePath
+                            loadDialog.visible = true
+                        }
+                    }
+                    FlatButton {
+                        id: undoButton
+                        text: qsTranslate("PrefsDialogBase", "Undo")
+                        isNarrow: true
+                        onClicked: {
+                            getHistory().undo()
+                        }
+                    }
+                    FlatButton {
+                        id: redoButton
+                        text: qsTranslate("PrefsDialogBase", "Redo")
+                        isNarrow: true
+                        onClicked: {
+                            getHistory().redo()
+                        }
+                    }
+                }
             }
         }
 
-            ColumnLayout {
-                anchors.top: parent.top
-                anchors.topMargin: 60
-                anchors.margins: 20
-                x: 330
-                GroupBox {
-                    //title: "Advanced"
-                    ColumnLayout {
-                        spacing: 10
-                        GroupBox {
-                            title: "Root Note"
-                            GridLayout {
-                                columns: 6
-                                anchors.margins: 10
-                                ButtonGroup { id: rootNoteGroup }
-                                FlatRadioButton {
-                                    text: "C"
-                                    checked: true
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_c
-                                    onClicked: { rootNoteClicked(0) }
-                                }
-                                FlatRadioButton {
-                                    text: "G"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_g
-                                    onClicked: { rootNoteClicked(1) }
-                                }
-                                FlatRadioButton {
-                                    text: "D"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_d
-                                    onClicked: { rootNoteClicked(2) }
-                                }
-                                FlatRadioButton {
-                                    text: "A"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_a
-                                    onClicked: { rootNoteClicked(3) }
-                                }
-                                FlatRadioButton {
-                                    text: "E"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_e
-                                    onClicked: { rootNoteClicked(4) }
-                                }
-                                FlatRadioButton {
-                                    text: "B"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_b
-                                    onClicked: { rootNoteClicked(5) }
-                                }
-                                FlatRadioButton {
-                                    text: "F#"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_f_sharp
-                                    onClicked: { rootNoteClicked(6) }
-                                }
-                                FlatRadioButton {
-                                    text: "C#"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_c_sharp
-                                    onClicked: { rootNoteClicked(7) }
-                                }
-                                FlatRadioButton {
-                                    text: "G#"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_g_sharp
-                                    onClicked: { rootNoteClicked(8) }
-                                }
-                                FlatRadioButton {
-                                    text: "Eb"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_e_flat
-                                    onClicked: { rootNoteClicked(9) }
-                                }
-                                FlatRadioButton {
-                                    text: "Bb"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_b_flat
-                                    onClicked: { rootNoteClicked(10) }
-                                }
-                                FlatRadioButton {
-                                    text: "F"
-                                    ButtonGroup.group: rootNoteGroup
-                                    id: root_f
-                                    onClicked: { rootNoteClicked(11) }
-                                }
-                            }
-                        }
+        CheckBox {
+            id: annotateValue
+            text: qsTr("Annotate")
+            checked: false
+            onClicked: checked = !checked 
+        }        
+    }
 
-                        GroupBox {
-                            title: "Pure Tone"
-                            GridLayout {
-                                columns: 6
-                                anchors.margins: 10
-                                ButtonGroup { id: pureToneGroup }
-                                FlatRadioButton {
-                                    text: "C"
-                                    checked: true
-                                    id: pure_c
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(0) }
-                                }
-                                FlatRadioButton {
-                                    text: "G"
-                                    id: pure_g
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(1) }
-                                }
-                                FlatRadioButton {
-                                    text: "D"
-                                    id: pure_d
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(2) }
-                                }
-                                FlatRadioButton {
-                                    text: "A"
-                                    id: pure_a
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(3) }
-                                }
-                                FlatRadioButton {
-                                    text: "E"
-                                    id: pure_e
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(4) }
-                                }
-                                FlatRadioButton {
-                                    text: "B"
-                                    id: pure_b
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(5) }
-                                }
-                                FlatRadioButton {
-                                    text: "F#"
-                                    id: pure_f_sharp
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(6) }
-                                }
-                                FlatRadioButton {
-                                    text: "C#"
-                                    id: pure_c_sharp
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(7) }
-                                }
-                                FlatRadioButton {
-                                    text: "G#"
-                                    id: pure_g_sharp
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(8) }
-                                }
-                                FlatRadioButton {
-                                    text: "Eb"
-                                    id: pure_e_flat
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(9) }
-                                }
-                                FlatRadioButton {
-                                    text: "Bb"
-                                    id: pure_b_flat
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(10) }
-                                }
-                                FlatRadioButton {
-                                    text: "F"
-                                    id: pure_f
-                                    ButtonGroup.group: pureToneGroup
-                                    onClicked: { pureToneClicked(11) }
-                                }
-                            }
-                        }
-
-                        GroupBox {
-                            title: "Pure note offset"
-                            RowLayout {
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: tweakValue
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "tweak"
-                                    onEditingFinished: { tweaked() }
-                                }
-                            }
-                        }
-
-                        GroupBox {
-                            title: "Final Offsets"
-                            GridLayout {
-                                columns: 12
-                                anchors.margins: 0
-
-                                StyledTextLabel {
-                                    text: "C"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_c
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final C"
-                                    onEditingFinished: { editingFinishedFor(final_c) }
-                                }
-
-                                StyledTextLabel {
-                                    text: "G"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_g
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final G"
-                                    onEditingFinished: { editingFinishedFor(final_g) }
-                                }
-
-                                StyledTextLabel {
-                                    text: "D"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_d
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final D"
-                                    onEditingFinished: { editingFinishedFor(final_d) }
-                                }
-
-                                StyledTextLabel {
-                                    text: "A"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_a
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final A"
-                                    onEditingFinished: { editingFinishedFor(final_a) }
-                                }
-
-                                StyledTextLabel {
-                                    text: "E"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_e
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final E"
-                                    onEditingFinished: { editingFinishedFor(final_e) }
-                                }
-
-                                StyledTextLabel {
-                                    text: "B"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_b
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final B"
-                                    onEditingFinished: { editingFinishedFor(final_b) }
-                                }
-
-                                StyledTextLabel {
-                                    text: "F#"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_f_sharp
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final F#"
-                                    onEditingFinished: { editingFinishedFor(final_f_sharp) }
-                                }
-
-                                StyledTextLabel {
-                                    text: "C#"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_c_sharp
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final C#"
-                                    onEditingFinished: { editingFinishedFor(final_c_sharp) }
-                                }
-
-                                StyledTextLabel {
-                                    text: "G#"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_g_sharp
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final G#"
-                                    onEditingFinished: { editingFinishedFor(final_g_sharp) }
-                                }
-
-                                StyledTextLabel {
-                                    text: "Eb"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_e_flat
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final Eb"
-                                    onEditingFinished: { editingFinishedFor(final_e_flat) }
-                                }
-
-                                StyledTextLabel {
-                                    text: "Bb"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_b_flat
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final Bb"
-                                    onEditingFinished: { editingFinishedFor(final_b_flat) }
-                                }
-
-                                StyledTextLabel {
-                                    text: "F"
-                                    Layout.alignment: offsetLabelAlignment
-                                }
-                                TextField {
-                                    Layout.maximumWidth: offsetTextWidth
-                                    id: final_f
-                                    text: "0.0"
-                                    readOnly: false
-                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                                    property var previousText: "0.0"
-                                    property var name: "final F"
-                                    onEditingFinished: { editingFinishedFor(final_f) }
-                                }
-                            }
-                        }
-                        RowLayout {
-                            FlatButton {
-                                id: saveButton
-                                text: qsTranslate("PrefsDialogBase", "Save")                                
-                                isNarrow: true
-                                onClicked: {
-                                    saveDialog.folder = filePath
-                                    saveDialog.visible = true
-                                }
-                            }
-                            FlatButton {
-                                id: loadButton
-                                text: qsTranslate("PrefsDialogBase", "Load")
-                                isNarrow: true                                
-                                onClicked: {
-                                    loadDialog.folder = filePath
-                                    loadDialog.visible = true
-                                }
-                            }
-                            FlatButton {
-                                id: undoButton
-                                text: qsTranslate("PrefsDialogBase", "Undo")
-                                isNarrow: true
-                                onClicked: {
-                                    getHistory().undo()
-                                }
-                            }
-                            FlatButton {
-                                id: redoButton
-                                text: qsTranslate("PrefsDialogBase", "Redo")
-                                isNarrow: true
-                                onClicked: {
-                                    getHistory().redo()
-                                }
-                            }
-                        }
-                    }
-                }
-
-                CheckBox {
-                    id: annotateValue
-                    text: qsTr("Annotate")
-                    checked: false
-                    onClicked: checked = !checked 
-                }
-                
-            }
     ButtonBox {
         id: buttonBox                
         anchors.bottom: window.bottom
@@ -1970,8 +1490,6 @@ MuseScore {
             }
         }
     }
-        
-    
 
     MessageDialog {
         id: errorDialog
@@ -2125,7 +1643,7 @@ MuseScore {
 
         this.undo = function() {
             if (index != -1) {
-                history[index].slice().reverse().forEach(
+                history[index].slice().forEach(
                     function(command) {
                         command.undo()
                     }
