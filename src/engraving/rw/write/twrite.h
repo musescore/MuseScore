@@ -310,6 +310,8 @@ public:
 
     static void writeSystemLocks(const Score* score, XmlWriter& xml);
 
+    static void writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx);
+
 private:
 
     static void writeStyledProperties(const EngravingItem* item, XmlWriter& xml);

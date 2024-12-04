@@ -214,9 +214,9 @@ public:
     virtual TranslatableString typeUserName() const;
     virtual String translatedTypeUserName() const;
 
-    inline EID eid() const { return m_eid; }
-    void setEID(EID id);
-    virtual bool registerId() const { return false; }
+    EID eid() const;
+    void setEID(EID id) const;
+    EID assignNewEID() const;
 
     EngravingObject* parent() const;
     void setParent(EngravingObject* p);
@@ -300,7 +300,7 @@ private:
     void doSetScore(Score* sc);
 
     ElementType m_type = ElementType::INVALID;
-    mutable EID m_eid;
+
     EngravingObject* m_parent = nullptr;
     bool m_isParentExplicitlySet = false;
     EngravingObjectList m_children;

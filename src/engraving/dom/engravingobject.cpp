@@ -68,17 +68,6 @@ EngravingObject::EngravingObject(const ElementType& type, EngravingObject* paren
         m_score = static_cast<Score*>(this);
     }
 
-    // gen EID
-    if (type != ElementType::SCORE) {
-        Score* s = score();
-        if (s) {
-            MasterScore* ms = s->masterScore();
-            if (ms) {
-                m_eid = ms->eidRegister()->newEID(m_type);
-            }
-        }
-    }
-
     // reg to debug
     if (type != ElementType::SCORE) {
         if (m_score && m_score->elementsProvider()) {
@@ -102,17 +91,6 @@ EngravingObject::EngravingObject(const EngravingObject& se)
         }
     }
     m_links = 0;
-
-    // gen EID
-    if (m_type != ElementType::SCORE) {
-        Score* s = score();
-        if (s) {
-            MasterScore* ms = s->masterScore();
-            if (ms) {
-                m_eid = ms->eidRegister()->newEID(m_type);
-            }
-        }
-    }
 
     // reg to debug
     if (m_type != ElementType::SCORE) {
@@ -727,12 +705,19 @@ String EngravingObject::translatedTypeUserName() const
     return typeUserName().translated();
 }
 
-void EngravingObject::setEID(EID id)
+EID EngravingObject::eid() const
 {
-    m_eid = id;
-    if (registerId()) {
-        masterScore()->eidRegister()->registerItemEID(id, this);
-    }
+    return masterScore()->eidRegister()->EIDFromItem(this);
+}
+
+void EngravingObject::setEID(EID id) const
+{
+    masterScore()->eidRegister()->registerItemEID(id, this);
+}
+
+EID EngravingObject::assignNewEID() const
+{
+    return masterScore()->eidRegister()->newEIDForItem(this);
 }
 
 //---------------------------------------------------------

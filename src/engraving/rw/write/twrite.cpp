@@ -434,12 +434,25 @@ void TWrite::writeSystemLocks(const Score* score, XmlWriter& xml)
     xml.endElement();
 }
 
+void TWrite::writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (MScore::testMode || item->score()->isPaletteScore() || ctx.clipboardmode()) {
+        return;
+    }
+
+    EID eid = item->eid();
+    if (!eid.isValid()) {
+        eid = item->assignNewEID();
+    }
+    xml.tag("eid", eid.toStdString());
+}
+
 void TWrite::writeSystemLock(const SystemLock* systemLock, XmlWriter& xml)
 {
     xml.startElement("systemLock");
 
-    xml.tag("startMeasure", systemLock->startMB()->eid().toUint64());
-    xml.tag("endMeasure", systemLock->endMB()->eid().toUint64());
+    xml.tag("startMeasure", systemLock->startMB()->eid().toStdString());
+    xml.tag("endMeasure", systemLock->endMB()->eid().toStdString());
 
     xml.endElement();
 }
@@ -453,9 +466,7 @@ void TWrite::writeStyledProperties(const EngravingItem* item, XmlWriter& xml)
 
 void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (!MScore::testMode && !item->score()->isPaletteScore() && !ctx.clipboardmode()) {
-        xml.tag("eid", item->eid().toUint64());
-    }
+    TWrite::writeItemEid(item, xml, ctx);
 
     bool autoplaceEnabled = item->score()->style().styleB(Sid::autoplaceEnabled);
     if (!autoplaceEnabled) {
