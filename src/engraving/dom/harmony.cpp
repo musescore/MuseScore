@@ -44,6 +44,7 @@
 #include "utils.h"
 
 #include "log.h"
+#include "undo.h"
 
 using namespace mu;
 using namespace muse::draw;
@@ -780,6 +781,22 @@ void Harmony::endEditTextual(EditData& ed)
     m_isMisspelled = false;
 
     TextBase::endEditTextual(ed);
+
+    UndoMacro* lastMacro = score()->undoStack() ? score()->undoStack()->last() : nullptr;
+    if (lastMacro && !lastMacro->empty() && lastMacro->hasFilteredChildren(UndoCommand::Filter::ChangePropertyLinked, this)) {
+        Segment* parentSegment = explicitParent() ? getParentSeg() : nullptr;
+        if (parentSegment) {
+            EngravingItem* fretDiagramItem = parentSegment->findAnnotation(ElementType::FRET_DIAGRAM, track(), track());
+            if (fretDiagramItem) {
+                FretDiagram* fretDiagram = toFretDiagram(fretDiagramItem);
+
+                UndoStack* undo = score()->undoStack();
+                undo->reopen();
+                score()->undo(new FretDataChange(fretDiagram, s));
+                score()->endCmd();
+            }
+        }
+    }
 
     if (links()) {
         for (EngravingObject* e : *links()) {
