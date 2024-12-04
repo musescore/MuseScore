@@ -33,6 +33,8 @@ Column {
     property int panelMode: -1
     property bool useNotationPreview: false
 
+    property alias footerHeight: footerArea.height
+
     property bool dragActive: false
 
     Rectangle {
@@ -115,7 +117,6 @@ Column {
         id: footerArea
 
         width: parent.width
-        height: 24
 
         color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityNormal)
 
