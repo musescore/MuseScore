@@ -82,6 +82,10 @@ private:
                                          double& rightBalance);
     static bool hasArticulationAbove(SlurSegment* slurSeg, const ChordRest* chordRest);
     static double computeAdjustmentStep(int upSign, double spatium, double slurLength);
+    static bool stemSideForBeam(Slur* slur, bool start);
+    static bool stemSideStartForBeam(Slur* slur) { return stemSideForBeam(slur, true); }
+    static bool stemSideEndForBeam(Slur* slur) { return stemSideForBeam(slur, false); }
+    static bool isOverBeams(Slur* slur);
 
     static void computeStartAndEndSystem(Tie* item, SlurTiePos& slurTiePos);
     static PointF computeDefaultStartOrEndPoint(const Tie* tie, Grip startOrEnd);
