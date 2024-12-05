@@ -4859,5 +4859,9 @@ void TRead::readSystemLock(Score* score, XmlReader& e)
         }
     }
 
+    IF_ASSERT_FAILED(startMeas && endMeas) {
+        return;
+    }
+
     score->addSystemLock(new SystemLock(startMeas, endMeas));
 }
