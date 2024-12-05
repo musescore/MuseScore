@@ -26,9 +26,14 @@ using namespace muse::uicomponents;
 QuickPaintedView::QuickPaintedView(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
+#ifdef Q_OS_WIN
+    setAntialiasing(true);
+    setSmooth(true);
+#else
     //! NOTE It is necessary that when UI scaling is displayed without a blur
     setAntialiasing(false);
     setSmooth(false);
+#endif
 }
 
 QSGNode* QuickPaintedView::updatePaintNode(QSGNode* old, UpdatePaintNodeData* data)
