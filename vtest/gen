@@ -49,7 +49,7 @@ else
        flag flag-straight ledger-lines-2 ledger-lines-3 frame frametext ottava bend-1 \
        barline-1 barline-2 text-barline-alignment instrument-1 instrument-names-1 symbol-1 \
        slurs-1 slurs-2 slurs-3 slurs-4 slurs-5 slurs-6 slurs-7 slurs-8 slurs-9 slurs-10 \
-       hairpins-1 pedal-1 line-1 line-2 line-3 line-4 line-5 line-6 line-7 line-colour line-dashed text-line-alignment gliss-1 gliss-2 gliss-3 \
+       hairpins-1 pedal-1 line-1 line-2 line-3 line-4 line-5 line-6 line-7 line-dashed text-line-alignment gliss-1 gliss-2 gliss-3 \
        chord-layout-1 chord-layout-2 chord-layout-3 chord-layout-4 chord-layout-5\
        chord-layout-6 chord-layout-7 chord-layout-8 chord-layout-9 chord-layout-10\
        chord-layout-11 chord-layout-12 chord-layout-13 chord-layout-14 chord-layout-15 chord-layout-16 chord-layout-17 chord-small\
@@ -67,7 +67,7 @@ else
        figured-bass-1\
        beams-1 beams-2 beams-3 beams-4 beams-5 beams-6 beams-7 beams-8 beams-9 beams-10\
        beams-11 beams-12 beams-13 beams-14 beams-15 beams-16 beams-17 beams-18 beams-19 beams-anacrusis brackets-2\
-       user-offset-1 user-offset-2 chord-space-1 chord-space-2 tablature-1 image-1\
+       user-offset-1 user-offset-2 chord-space-1 chord-space-2 image-1\
        lyrics-1 lyrics-2 lyrics-3 lyrics-4 lyrics-5 lyrics-6 lyrics-7 lyrics-8 lyrics-9\
        voice-1 voice-2 slash-1 slash-2\
        system-1 system-2 system-3 system-4 system-5 system-6 system-7 system-8 system-9 system-10 system-11\

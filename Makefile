@@ -37,7 +37,7 @@ BUILD_JACK="ON"       # Override with "OFF" to disable.
 BUILD_ALSA="ON"       # Override with "OFF" to disable.
 BUILD_PORTAUDIO="ON"  # Override with "OFF" to disable.
 BUILD_PORTMIDI="ON"   # Override with "OFF" to disable.
-BUILD_WEBENGINE="ON"  # Override with "OFF" to disable.
+BUILD_WEBENGINE="OFF" # Override with "ON" to enable.
 USE_SYSTEM_FREETYPE="OFF" # Override with "ON" to enable. Requires freetype >= 2.5.2.
 COVERAGE="OFF"        # Override with "ON" to enable.
 DOWNLOAD_SOUNDFONT="ON"   # Override with "OFF" to disable latest soundfont download.
