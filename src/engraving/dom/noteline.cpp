@@ -167,6 +167,8 @@ PropertyValue NoteLine::propertyDefault(Pid propertyId) const
 PropertyValue NoteLine::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
+    case Pid::PLAY:
+        return PropertyValue();
     case Pid::PLACEMENT:
         return PlacementV::ABOVE;
     case Pid::NOTELINE_PLACEMENT:
@@ -179,6 +181,8 @@ PropertyValue NoteLine::getProperty(Pid propertyId) const
 bool NoteLine::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
+    case Pid::PLAY:
+        break;
     case Pid::NOTELINE_PLACEMENT:
         setLineEndPlacement(val.value<NoteLineEndPlacement>());
         break;
