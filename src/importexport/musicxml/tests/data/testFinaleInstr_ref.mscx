@@ -1271,6 +1271,8 @@
           <name>Closed Hi-Hat</name>
           <stem>1</stem>
           <shortcut>G</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>2</panelColumn>
           </Drum>
         <Drum pitch="28">
           <head>cross</head>
@@ -1279,6 +1281,8 @@
           <name>Pedal Hi-Hat</name>
           <stem>2</stem>
           <shortcut>F</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>3</panelColumn>
           </Drum>
         <Drum pitch="29">
           <head>cross</head>
@@ -1287,6 +1291,8 @@
           <name>Open Hi-Hat</name>
           <stem>1</stem>
           <shortcut>E</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>4</panelColumn>
           </Drum>
         <Drum pitch="30">
           <head>cross</head>
@@ -1294,6 +1300,8 @@
           <voice>0</voice>
           <name>Ride Cymbal 1</name>
           <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>1</panelColumn>
           </Drum>
         <Drum pitch="36">
           <head>normal</head>
@@ -1302,6 +1310,8 @@
           <name>Bass Drum 1</name>
           <stem>2</stem>
           <shortcut>B</shortcut>
+          <panelRow>2</panelRow>
+          <panelColumn>0</panelColumn>
           </Drum>
         <Drum pitch="37">
           <head>cross</head>
@@ -1309,6 +1319,8 @@
           <voice>0</voice>
           <name>Side Stick</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>1</panelColumn>
           </Drum>
         <Drum pitch="38">
           <head>normal</head>
@@ -1317,6 +1329,8 @@
           <name>Acoustic Snare</name>
           <stem>1</stem>
           <shortcut>A</shortcut>
+          <panelRow>1</panelRow>
+          <panelColumn>0</panelColumn>
           </Drum>
         <Drum pitch="54">
           <head>diamond</head>
@@ -1324,6 +1338,8 @@
           <voice>0</voice>
           <name>Tambourine</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>2</panelColumn>
           </Drum>
         <Drum pitch="55">
           <head>cross</head>
@@ -1331,6 +1347,8 @@
           <voice>0</voice>
           <name>Splash Cymbal</name>
           <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>5</panelColumn>
           </Drum>
         <Drum pitch="56">
           <head>triangle-down</head>
@@ -1338,6 +1356,8 @@
           <voice>0</voice>
           <name>Cowbell</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>3</panelColumn>
           </Drum>
         <Drum pitch="58">
           <head>diamond</head>
@@ -1345,6 +1365,8 @@
           <voice>0</voice>
           <name>Vibraslap</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>6</panelColumn>
           </Drum>
         <Drum pitch="59">
           <head>cross</head>
@@ -1353,6 +1375,8 @@
           <name>Hand Cymbals</name>
           <stem>1</stem>
           <shortcut>C</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>0</panelColumn>
           </Drum>
         <Drum pitch="62">
           <head>cross</head>
@@ -1360,6 +1384,8 @@
           <voice>0</voice>
           <name>Mute High Conga</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>3</panelColumn>
           </Drum>
         <Drum pitch="63">
           <head>cross</head>
@@ -1367,6 +1393,8 @@
           <voice>0</voice>
           <name>Open High Conga</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>2</panelColumn>
           </Drum>
         <Drum pitch="64">
           <head>cross</head>
@@ -1374,6 +1402,8 @@
           <voice>0</voice>
           <name>Low Conga</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>1</panelColumn>
           </Drum>
         <Drum pitch="70">
           <head>normal</head>
@@ -1381,6 +1411,8 @@
           <voice>0</voice>
           <name>Maracas</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>5</panelColumn>
           </Drum>
         <Drum pitch="75">
           <head>normal</head>
@@ -1388,6 +1420,8 @@
           <voice>0</voice>
           <name>Claves</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>4</panelColumn>
           </Drum>
         <Drum pitch="81">
           <head>diamond</head>
@@ -1396,6 +1430,8 @@
           <name>Open Triangle</name>
           <stem>1</stem>
           <shortcut>D</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>6</panelColumn>
           </Drum>
         <Drum pitch="82">
           <head>normal</head>
@@ -1403,6 +1439,8 @@
           <voice>0</voice>
           <name>Shaker</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>4</panelColumn>
           </Drum>
         <Drum pitch="84">
           <head>cross</head>
@@ -1410,6 +1448,8 @@
           <voice>0</voice>
           <name>Mark Tree</name>
           <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>7</panelColumn>
           </Drum>
         <Drum pitch="85">
           <head>normal</head>
@@ -1417,6 +1457,8 @@
           <voice>0</voice>
           <name>Castanets</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>5</panelColumn>
           </Drum>
         <clef>PERC</clef>
         <singleNoteDynamics>0</singleNoteDynamics>
@@ -1493,6 +1535,8 @@
           <name>Closed Hi-Hat</name>
           <stem>1</stem>
           <shortcut>G</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>2</panelColumn>
           </Drum>
         <Drum pitch="28">
           <head>cross</head>
@@ -1501,6 +1545,8 @@
           <name>Pedal Hi-Hat</name>
           <stem>2</stem>
           <shortcut>F</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>3</panelColumn>
           </Drum>
         <Drum pitch="29">
           <head>cross</head>
@@ -1509,6 +1555,8 @@
           <name>Open Hi-Hat</name>
           <stem>1</stem>
           <shortcut>E</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>4</panelColumn>
           </Drum>
         <Drum pitch="30">
           <head>cross</head>
@@ -1516,6 +1564,8 @@
           <voice>0</voice>
           <name>Ride Cymbal 1</name>
           <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>1</panelColumn>
           </Drum>
         <Drum pitch="36">
           <head>normal</head>
@@ -1524,6 +1574,8 @@
           <name>Bass Drum 1</name>
           <stem>2</stem>
           <shortcut>B</shortcut>
+          <panelRow>2</panelRow>
+          <panelColumn>0</panelColumn>
           </Drum>
         <Drum pitch="37">
           <head>cross</head>
@@ -1531,6 +1583,8 @@
           <voice>0</voice>
           <name>Side Stick</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>1</panelColumn>
           </Drum>
         <Drum pitch="38">
           <head>normal</head>
@@ -1539,6 +1593,8 @@
           <name>Acoustic Snare</name>
           <stem>1</stem>
           <shortcut>A</shortcut>
+          <panelRow>1</panelRow>
+          <panelColumn>0</panelColumn>
           </Drum>
         <Drum pitch="54">
           <head>diamond</head>
@@ -1546,6 +1602,8 @@
           <voice>0</voice>
           <name>Tambourine</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>2</panelColumn>
           </Drum>
         <Drum pitch="55">
           <head>cross</head>
@@ -1553,6 +1611,8 @@
           <voice>0</voice>
           <name>Splash Cymbal</name>
           <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>5</panelColumn>
           </Drum>
         <Drum pitch="56">
           <head>triangle-down</head>
@@ -1560,6 +1620,8 @@
           <voice>0</voice>
           <name>Cowbell</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>3</panelColumn>
           </Drum>
         <Drum pitch="58">
           <head>diamond</head>
@@ -1567,6 +1629,8 @@
           <voice>0</voice>
           <name>Vibraslap</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>6</panelColumn>
           </Drum>
         <Drum pitch="59">
           <head>cross</head>
@@ -1575,6 +1639,8 @@
           <name>Hand Cymbals</name>
           <stem>1</stem>
           <shortcut>C</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>0</panelColumn>
           </Drum>
         <Drum pitch="62">
           <head>cross</head>
@@ -1582,6 +1648,8 @@
           <voice>0</voice>
           <name>Mute High Conga</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>3</panelColumn>
           </Drum>
         <Drum pitch="63">
           <head>cross</head>
@@ -1589,6 +1657,8 @@
           <voice>0</voice>
           <name>Open High Conga</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>2</panelColumn>
           </Drum>
         <Drum pitch="64">
           <head>cross</head>
@@ -1596,6 +1666,8 @@
           <voice>0</voice>
           <name>Low Conga</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>1</panelColumn>
           </Drum>
         <Drum pitch="70">
           <head>normal</head>
@@ -1603,6 +1675,8 @@
           <voice>0</voice>
           <name>Maracas</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>5</panelColumn>
           </Drum>
         <Drum pitch="75">
           <head>normal</head>
@@ -1610,6 +1684,8 @@
           <voice>0</voice>
           <name>Claves</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>4</panelColumn>
           </Drum>
         <Drum pitch="81">
           <head>diamond</head>
@@ -1618,6 +1694,8 @@
           <name>Open Triangle</name>
           <stem>1</stem>
           <shortcut>D</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>6</panelColumn>
           </Drum>
         <Drum pitch="82">
           <head>normal</head>
@@ -1625,6 +1703,8 @@
           <voice>0</voice>
           <name>Shaker</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>4</panelColumn>
           </Drum>
         <Drum pitch="84">
           <head>cross</head>
@@ -1632,6 +1712,8 @@
           <voice>0</voice>
           <name>Mark Tree</name>
           <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>7</panelColumn>
           </Drum>
         <Drum pitch="85">
           <head>normal</head>
@@ -1639,6 +1721,8 @@
           <voice>0</voice>
           <name>Castanets</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>5</panelColumn>
           </Drum>
         <clef>PERC</clef>
         <singleNoteDynamics>0</singleNoteDynamics>
