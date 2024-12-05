@@ -550,6 +550,10 @@ Ret BackendApi::doExportScoreParts(const IMasterNotationPtr masterNotation, QIOD
         }
 
         meta["open"] = partScore->isOpen();
+
+        if (!partScore->eid().isValid()) {
+            partScore->assignNewEID();
+        }
         meta["id"] = QString::fromStdString(partScore->eid().toStdString());
 
         QJsonValue partMetaObj = QJsonObject::fromVariantMap(meta);
