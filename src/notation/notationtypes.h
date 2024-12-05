@@ -149,6 +149,7 @@ using GuitarBendType = mu::engraving::GuitarBendType;
 using engraving::LoopBoundaryType;
 using Pid = mu::engraving::Pid;
 using VoiceAssignment = mu::engraving::VoiceAssignment;
+using CanvasMoveCause = mu::engraving::CanvasMoveCause;
 
 static const muse::String COMMON_GENRE_ID("common");
 
