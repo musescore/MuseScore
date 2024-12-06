@@ -136,6 +136,52 @@ void PercussionPanelPadListModel::setDrumset(const engraving::Drumset* drumset)
     removeEmptyRows();
 }
 
+mu::engraving::Drumset PercussionPanelPadListModel::constructDefaultLayout(const engraving::Drumset* defaultDrumset) const
+{
+    //! NOTE: The idea of this method is take a "default" (template) drumset, find matching drums in the current drumset, and evaluate/return
+    //! the default panel layout based on this information. The reason we can't simply revert to the default drumset in its entirety is that
+    //! there's no guarantee that all drums will match (the user may have added some of their own drums, removed some, tweaked some, etc). Any
+    //! drums that aren't accounted for in the default drumset are appended chromatically once the rest of the layout has been decided...
+
+    mu::engraving::Drumset defaultLayout = *m_drumset;
+
+    int highestIndex = -1;
+    QList<int /*pitch*/> noTemplateFound;
+
+    for (int pitch = 0; pitch < mu::engraving::DRUM_INSTRUMENTS; ++pitch) {
+        if (!defaultLayout.isValid(pitch)) {
+            // We aren't currently using this pitch, doesn't matter if it's valid in the template..
+            continue;
+        }
+        //! NOTE: Pitch + drum name isn't exactly the most robust identifier, but this will probably change with the new percussion ID system
+        if (!defaultDrumset->isValid(pitch) || defaultLayout.name(pitch) != defaultDrumset->name(pitch)) {
+            // Drum is valid, but we can't find a template for it. Set the position chromatically later...
+            noTemplateFound.emplaceBack(pitch);
+            continue;
+        }
+
+        const int templateRow = defaultDrumset->drum(pitch).panelRow;
+        const int templateColumn = defaultDrumset->drum(pitch).panelColumn;
+
+        defaultLayout.drum(pitch).panelRow = templateRow;
+        defaultLayout.drum(pitch).panelColumn = templateColumn;
+
+        const int modelIndex = templateRow * NUM_COLUMNS + templateColumn;
+
+        if (modelIndex > highestIndex) {
+            highestIndex = modelIndex;
+        }
+    }
+
+    for (int pitch : noTemplateFound) {
+        ++highestIndex;
+        defaultLayout.drum(pitch).panelRow = highestIndex / NUM_COLUMNS;
+        defaultLayout.drum(pitch).panelColumn = highestIndex % NUM_COLUMNS;
+    }
+
+    return defaultLayout;
+}
+
 void PercussionPanelPadListModel::load()
 {
     beginResetModel();

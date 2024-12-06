@@ -69,6 +69,8 @@ public:
 
     QList<PercussionPanelPadModel*> padList() const { return m_padModels; }
 
+    mu::engraving::Drumset constructDefaultLayout(const engraving::Drumset* templateDrumset) const;
+
     muse::async::Notification hasActivePadsChanged() const { return m_hasActivePadsChanged; }
     muse::async::Channel<int /*pitch*/> padTriggered() const { return m_triggeredChannel; }
 
