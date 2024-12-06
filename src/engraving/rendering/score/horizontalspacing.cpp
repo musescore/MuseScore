@@ -1031,7 +1031,8 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
             double headerTieMargin = systemHeaderGap ? f->style().styleMM(Sid::headerToLineStartDistance)
                                      : f->style().styleMM(Sid::repeatBarlineDotSeparation);
             for (Note* note : toChord(e)->notes()) {
-                bool tieOrGlissBack = note->spannerBack().size() || (note->tieBack() && !note->tieBack()->segmentsEmpty());
+                bool tieOrGlissBack = note->spannerBack().size()
+                                      || (note->tieBack() && !note->tieBack()->segmentsEmpty() && !note->tieBack()->isPartialTie());
                 if (!tieOrGlissBack || note->lineAttachPoints().empty()) {
                     continue;
                 }

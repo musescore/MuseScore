@@ -34,7 +34,7 @@ signals:
 private:
     void load();
     muse::uicomponents::MenuItemList makeMenuItems();
-    muse::uicomponents::MenuItem* makeMenuItem(const engraving::TieEndPoint& endPoint);
+    muse::uicomponents::MenuItem* makeMenuItem(const engraving::TieEndPoint* endPoint);
     mu::engraving::Tie* tie() const;
 
     muse::uicomponents::MenuItemList m_items;

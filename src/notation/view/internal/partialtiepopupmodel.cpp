@@ -135,18 +135,18 @@ MenuItemList PartialTiePopupModel::makeMenuItems()
 
     MenuItemList itemList;
 
-    for (const TieEndPoint& endPoint : *tieItem->tieEndPoints()) {
+    for (const TieEndPoint* endPoint : *tieItem->tieEndPoints()) {
         itemList << makeMenuItem(endPoint);
     }
 
     return itemList;
 }
 
-muse::uicomponents::MenuItem* PartialTiePopupModel::makeMenuItem(const engraving::TieEndPoint& endPoint)
+muse::uicomponents::MenuItem* PartialTiePopupModel::makeMenuItem(const engraving::TieEndPoint* endPoint)
 {
     MenuItem* item = new MenuItem(this);
-    item->setId(endPoint.id());
-    TranslatableString title = TranslatableString("notation", endPoint.menuTitle());
+    item->setId(endPoint->id());
+    TranslatableString title = TranslatableString("notation", endPoint->menuTitle());
     item->setTitle(title);
 
     UiAction action;
@@ -156,7 +156,7 @@ muse::uicomponents::MenuItem* PartialTiePopupModel::makeMenuItem(const engraving
 
     UiActionState state;
     state.enabled = true;
-    state.checked = endPoint.active();
+    state.checked = endPoint->active();
     item->setState(state);
 
     return item;

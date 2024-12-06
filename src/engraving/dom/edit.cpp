@@ -2924,7 +2924,8 @@ void Score::deleteItem(EngravingItem* el)
             Tie* tie = toTie(el);
             if (tie->tieEndPoints()) {
                 tie->removeTiesFromEndPoints();
-            } else if (tie->endPoint()) {
+            }
+            if (tie->endPoint()) {
                 tie->updateStartTieOnRemoval();
             }
         }
@@ -7111,7 +7112,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
             for (Note* n : c->notes()) {
                 // Remove ties crossing measure range boundaries
                 Tie* t = n->tieBack();
-                if (t && (t->startNote()->chord()->tick() < startTick)) {
+                if (t && t->startNote() && (t->startNote()->chord()->tick() < startTick)) {
                     if (preserveTies) {
                         t->setEndNote(0);
                     } else {

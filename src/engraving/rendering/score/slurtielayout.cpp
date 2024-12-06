@@ -1735,7 +1735,7 @@ PartialTieSegment* SlurTieLayout::layoutPartialTie(PartialTie* item)
         adjustX(segment, sPos, outgoing ? Grip::START : Grip::END);
     }
 
-    setPartialTieEndRelativeToBarline(item, sPos);
+    setPartialTieEndPos(item, sPos);
 
     correctForCrossStaff(item, sPos, SpannerSegmentType::SINGLE);
 
@@ -1753,7 +1753,7 @@ PartialTieSegment* SlurTieLayout::layoutPartialTie(PartialTie* item)
     return segment;
 }
 
-void SlurTieLayout::setPartialTieEndRelativeToBarline(PartialTie* item, SlurTiePos& sPos)
+void SlurTieLayout::setPartialTieEndPos(PartialTie* item, SlurTiePos& sPos)
 {
     const bool outgoing = item->isOutgoing();
 
@@ -1768,19 +1768,18 @@ void SlurTieLayout::setPartialTieEndRelativeToBarline(PartialTie* item, SlurTieP
         return;
     }
 
-    const Measure* barlineMeasure = measure;
-    const BarLine* bl = outgoing ? barlineMeasure->endBarLine() : barlineMeasure->startBarLine();
-    if (!bl && !outgoing) {
-        barlineMeasure = barlineMeasure->prevMeasure();
-        bl = barlineMeasure ? barlineMeasure->endBarLine() : nullptr;
+    const Segment* adjSeg = outgoing ? seg->next() : seg->prev();
+    while (adjSeg && (!adjSeg->isActive() || !adjSeg->enabled())) {
+        adjSeg = outgoing ? seg->next() : seg->prev();
     }
 
-    if (bl) {
-        const Segment* barlineSeg = bl->segment();
-        double widthToBarline = outgoing ? barlineSeg->xPosInSystemCoords() - sPos.p1.x()
-                                : sPos.p2.x() - (barlineSeg->xPosInSystemCoords() + bl->width());
-        widthToBarline -= 0.25 * item->spatium();
-        width = std::max(widthToBarline, width);
+    if (adjSeg) {
+        EngravingItem* element = adjSeg->element(staff2track(item->vStaffIdx()));
+        const double elementWidth = element ? element->width() : 0.0;
+        double widthToSegment = outgoing ? adjSeg->xPosInSystemCoords() - sPos.p1.x() : sPos.p2.x()
+                                - (adjSeg->xPosInSystemCoords() + elementWidth);
+        widthToSegment -= 0.25 * item->spatium();
+        width = std::max(widthToSegment, width);
     }
 
     if (outgoing) {

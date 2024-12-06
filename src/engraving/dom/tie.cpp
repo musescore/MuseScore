@@ -233,7 +233,7 @@ void Tie::collectPossibleEndPoints()
 
     if (nextNote) {
         const bool hasTie = nextNote->tieBack();
-        TieEndPoint endPoint = TieEndPoint(nextNote, u"next note", hasTie, endPointIdx, true);
+        TieEndPoint* endPoint = new TieEndPoint(nextNote, u"next note", hasTie, endPointIdx, true);
         tieEndPoints()->add(endPoint);
         endPointIdx++;
     }
@@ -247,7 +247,7 @@ void Tie::collectPossibleEndPoints()
     for (auto it = repeatList.begin(); it != repeatList.end(); it++) {
         const RepeatSegment* rs = *it;
         const auto nextSegIt = std::next(it);
-        if (!rs->containsMeasure(masterMeasure) || nextSegIt == repeatList.end()) {
+        if (!rs->endsWithMeasure(masterMeasure) || nextSegIt == repeatList.end()) {
             continue;
         }
 
@@ -268,7 +268,7 @@ void Tie::collectPossibleEndPoints()
         if (nextNote) {
             bool hasIncomingTie = nextNote->tieBack();
             String jumpName = nextNote->precedingJumpItemName();
-            TieEndPoint endPoint = TieEndPoint(nextNote, jumpName, hasIncomingTie, endPointIdx, false);
+            TieEndPoint* endPoint = new TieEndPoint(nextNote, jumpName, hasIncomingTie, endPointIdx, false);
             tieEndPoints()->add(endPoint);
             endPointIdx++;
         }
@@ -283,12 +283,12 @@ void Tie::addTiesToEndPoints()
         return;
     }
 
-    for (TieEndPoint& endPoint : *endPoints) {
-        if (endPoint.followingNote()) {
-            endPoint.undoSetActive(true);
+    for (TieEndPoint* endPoint : *endPoints) {
+        if (endPoint->followingNote()) {
+            endPoint->undoSetActive(true);
             continue;
         }
-        endPoints->addTie(&endPoint);
+        endPoints->addTie(endPoint);
     }
 }
 
@@ -298,13 +298,13 @@ void Tie::removeTiesFromEndPoints()
     if (!endPoints) {
         return;
     }
-    for (TieEndPoint& endPoint : *endPoints) {
-        if (endPoint.followingNote() || !endPoint.active()) {
-            endPoint.undoSetActive(false);
+    for (TieEndPoint* endPoint : *endPoints) {
+        if (endPoint->followingNote() || !endPoint->active()) {
+            endPoint->undoSetActive(false);
             continue;
         }
 
-        endPoints->removeTie(&endPoint);
+        endPoints->removeTie(endPoint);
     }
 }
 
@@ -317,8 +317,8 @@ bool Tie::allEndPointsInactive() const
         return true;
     }
 
-    for (const TieEndPoint& endPoint : *tieEndPoints()) {
-        if (endPoint.active()) {
+    for (const TieEndPoint* endPoint : *tieEndPoints()) {
+        if (endPoint->active()) {
             return false;
         }
     }
@@ -471,16 +471,14 @@ TieEndPoint::TieEndPoint(Note* note, String jumpName, bool active, int idx, bool
     : m_note(note), m_jumpName(jumpName), m_active(active), m_followingNote(followingNote)
 {
     m_id = u"endPoint" + String::fromStdString(std::to_string(idx));
+    if (active && endTie()) {
+        endTie()->setEndPoint(this);
+    }
 }
 
 Tie* TieEndPoint::endTie() const
 {
     return m_note ? m_note->tieBack() : nullptr;
-}
-
-bool TieEndPoint::followingNote() const
-{
-    return m_followingNote;
 }
 
 void TieEndPoint::undoSetActive(bool v)
@@ -506,27 +504,27 @@ const String TieEndPoint::menuTitle() const
 //   PartialTieEndPointList
 //---------------------------------------------------------
 
-void TieEndPointList::add(TieEndPoint& item)
+TieEndPointList::~TieEndPointList()
 {
-    item.setEndPointList(this);
-    m_endPoints.push_back(item);
+    muse::DeleteAll(m_endPoints);
 }
 
-void TieEndPointList::setStartTie(Tie* startTie)
+void TieEndPointList::add(TieEndPoint* item)
 {
-    m_startTie = startTie;
+    item->setEndPointList(this);
+    m_endPoints.push_back(item);
 }
 
 void TieEndPointList::toggleEndPoint(const String& id)
 {
     TieEndPoint* end = nullptr;
 
-    for (TieEndPoint& endPoint : m_endPoints) {
-        if (endPoint.id() != id) {
+    for (TieEndPoint* endPoint : m_endPoints) {
+        if (endPoint->id() != id) {
             continue;
         }
 
-        end = &endPoint;
+        end = endPoint;
         break;
     }
 
@@ -659,21 +657,6 @@ Tie* Tie::changeTieType(Tie* oldTie, Note* endNote)
     return newTie;
 }
 
-Tie* Tie::startTie() const
-{
-    return startTieEndPoints() ? startTieEndPoints()->startTie() : nullptr;
-}
-
-TieEndPoint* Tie::endPoint() const
-{
-    return m_endPoint;
-}
-
-void Tie::setEndPoint(TieEndPoint* endPoint)
-{
-    m_endPoint = endPoint;
-}
-
 void Tie::updateStartTieOnRemoval()
 {
     if (!endPoint() || !startTie() || !startTieEndPoints()) {
@@ -684,10 +667,5 @@ void Tie::updateStartTieOnRemoval()
     if (startTieEndPoints()->size() <= 1 || _startTie->allEndPointsInactive()) {
         score()->undoRemoveElement(_startTie);
     }
-}
-
-TieEndPointList* Tie::startTieEndPoints() const
-{
-    return m_endPoint ? m_endPoint->endPointList() : nullptr;
 }
 }
