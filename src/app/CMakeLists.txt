@@ -171,6 +171,10 @@ if (MUE_BUILD_APPSHELL_MODULE)
     list(APPEND LINK_LIB appshell)
 endif()
 
+if (MUE_BUILD_MUSESOUNDS_MODULE)
+    list(APPEND LINK_LIB musesounds)
+endif()
+
 if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB muse::cloud)
     list(APPEND LINK_LIB muse::languages)

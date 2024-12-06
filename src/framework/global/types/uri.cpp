@@ -50,6 +50,11 @@ Uri::Uri(const std::string& str)
     m_path = str.substr(pathPos, pathN);
 }
 
+Uri::Uri(const String& str)
+    : Uri(str.toStdString())
+{
+}
+
 bool Uri::isValid() const
 {
     if (m_scheme.empty()) {
@@ -84,6 +89,11 @@ UriQuery::UriQuery(const std::string& str)
     : m_uri(str)
 {
     parseParams(str, m_params);
+}
+
+UriQuery::UriQuery(const String& str)
+    : UriQuery(str.toStdString())
+{
 }
 
 UriQuery::UriQuery(const Uri& uri)

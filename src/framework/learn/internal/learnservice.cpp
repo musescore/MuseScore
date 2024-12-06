@@ -55,7 +55,11 @@ void LearnService::refreshPlaylists()
             return;
         }
 
-        m_startedPlaylist = result.val;
+        {
+            std::lock_guard lock(m_startedPlaylistMutex);
+            m_startedPlaylist = result.val;
+        }
+
         m_startedPlaylistChannel.send(m_startedPlaylist);
     };
 
@@ -69,7 +73,10 @@ void LearnService::refreshPlaylists()
             return;
         }
 
-        m_advancedPlaylist = result.val;
+        {
+            std::lock_guard lock(m_advancedPlaylistMutex);
+            m_advancedPlaylist = result.val;
+        }
         m_advancedPlaylistChannel.send(m_advancedPlaylist);
     };
 
@@ -79,6 +86,7 @@ void LearnService::refreshPlaylists()
 
 Playlist LearnService::startedPlaylist() const
 {
+    std::lock_guard lock(m_startedPlaylistMutex);
     return m_startedPlaylist;
 }
 
@@ -89,6 +97,7 @@ async::Channel<Playlist> LearnService::startedPlaylistChanged() const
 
 Playlist LearnService::advancedPlaylist() const
 {
+    std::lock_guard lock(m_advancedPlaylistMutex);
     return m_advancedPlaylist;
 }
 
