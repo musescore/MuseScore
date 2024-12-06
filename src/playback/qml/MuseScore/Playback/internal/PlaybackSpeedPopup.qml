@@ -36,6 +36,13 @@ StyledPopupView {
     contentWidth: contentColumn.implicitWidth
     contentHeight: contentColumn.implicitHeight
 
+    NavigationPanel {
+        id: navPanel
+        name: "PlaybackSpeedPopup"
+        section: root.navigationSection
+        accessible.name: qsTrc("playback", "Playback speed popup")
+    }
+
     ColumnLayout {
         id: contentColumn
         spacing: 8
@@ -75,6 +82,9 @@ StyledPopupView {
                 step: 5
                 measureUnitsSymbol: "%"
                 decimals: 0
+
+                navigation.panel: navPanel
+                navigation.accessible.name: qsTrc("playback", "Speed")
 
                 onValueEdited: function(newValue) {
                     root.playbackModel.tempoMultiplier = newValue / 100
