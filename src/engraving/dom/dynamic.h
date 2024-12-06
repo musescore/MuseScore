@@ -70,17 +70,7 @@ public:
 
     double customTextOffset() const;
 
-    bool isEditable() const override { return true; }
-    bool isEditAllowed(EditData&) const override;
-    void startEdit(EditData&) override;
-    bool edit(EditData&) override;
-    bool editNonTextual(EditData&) override;
-    void editDrag(EditData&) override;
-    void endEdit(EditData&) override;
     void reset() override;
-    bool needStartEditingAfterSelecting() const override { return true; }
-
-    bool allowTimeAnchor() const override { return true; }
 
     void setVelocity(int v) { m_velocity = v; }
     int velocity() const;
@@ -113,8 +103,6 @@ public:
     Expression* snappedExpression() const;
     HairpinSegment* findSnapBeforeHairpinAcrossSystemBreak() const;
 
-    void undoMoveSegment(Segment* newSeg, Fraction tickDiff);
-
     bool playDynamic() const { return m_playDynamic; }
     void setPlayDynamic(bool v) { m_playDynamic = v; }
 
@@ -124,10 +112,6 @@ public:
     static int dynamicVelocity(DynamicType t);
     static const std::vector<Dyn>& dynamicList() { return DYN_LIST; }
 
-    bool anchorToEndOfPrevious() const { return m_anchorToEndOfPrevious; }
-    void setAnchorToEndOfPrevious(bool v) { m_anchorToEndOfPrevious = v; }
-    void checkMeasureBoundariesAndMoveIfNeed();
-
     bool hasVoiceAssignmentProperties() const override { return true; }
 
 private:
@@ -136,12 +120,7 @@ private:
     M_PROPERTY(double, dynamicsSize, setDynamicsSize)
     M_PROPERTY(bool, centerOnNotehead, setCenterOnNotehead)
 
-    bool moveSegment(const EditData& ed);
-    void moveSnappedItems(Segment* newSeg, Fraction tickDiff) const;
-    bool nudge(const EditData& ed);
-
     std::pair<DynamicType, String> parseDynamicText(const String&) const;
-
     DynamicType m_dynamicType = DynamicType::OTHER;
     bool m_playDynamic = true;
 
@@ -153,8 +132,6 @@ private:
     DynamicSpeed m_velChangeSpeed = DynamicSpeed::NORMAL;
 
     static const std::vector<Dyn> DYN_LIST;
-
-    bool m_anchorToEndOfPrevious = false;
 };
 } // namespace mu::engraving
 

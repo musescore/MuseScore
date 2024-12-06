@@ -1564,7 +1564,6 @@ void Score::addElement(EngravingItem* element)
     break;
 
     case ElementType::DYNAMIC:
-        toDynamic(element)->checkMeasureBoundariesAndMoveIfNeed();
         setPlaylistDirty();
         break;
 
@@ -1617,6 +1616,11 @@ void Score::addElement(EngravingItem* element)
     default:
         break;
     }
+
+    if (element->isTextBase() && toTextBase(element)->hasParentSegment()) {
+        toTextBase(element)->checkMeasureBoundariesAndMoveIfNeed();
+    }
+
     element->triggerLayout();
 }
 

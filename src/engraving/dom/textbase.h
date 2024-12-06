@@ -337,17 +337,23 @@ public:
     void setFamily(const String& val);
     void setSize(const double& val);
 
+    bool anchorToEndOfPrevious() const { return m_anchorToEndOfPrevious; }
+    void setAnchorToEndOfPrevious(bool v) { m_anchorToEndOfPrevious = v; }
+
+    bool hasParentSegment() const { return explicitParent() && parent()->isSegment(); }
+    virtual bool needStartEditingAfterSelecting() const override { return hasParentSegment(); }
+    virtual bool allowTimeAnchor() const override { return hasParentSegment(); }
     virtual void startEdit(EditData&) override;
     virtual bool isEditAllowed(EditData&) const override;
     virtual bool edit(EditData&) override;
     virtual void editCut(EditData&) override;
     virtual void editCopy(EditData&) override;
     virtual void endEdit(EditData&) override;
+    virtual void editDrag(EditData&) override;
     void movePosition(EditData&, TextCursor::MoveOperation);
 
-    virtual void startEditNonTextual(EditData&);
-    virtual bool editNonTextual(EditData&);
-    virtual void endEditNonTextual(EditData&);
+    virtual void undoMoveSegment(Segment* newSeg, Fraction tickDiff);
+    void checkMeasureBoundariesAndMoveIfNeed();
 
     bool deleteSelectedText(EditData&);
 
@@ -495,6 +501,19 @@ protected:
     TextBase(const ElementType& type, EngravingItem* parent, ElementFlags);
     TextBase(const TextBase&);
 
+    virtual void startEditTextual(EditData&);
+    virtual void startEditNonTextual(EditData&);
+    virtual bool editTextual(EditData&);
+    virtual bool editNonTextual(EditData&);
+    virtual void endEditNonTextual(EditData&);
+    virtual void endEditTextual(EditData&);
+    virtual bool isNonTextualEditAllowed(EditData&) const;
+    virtual bool isTextualEditAllowed(EditData&) const;
+    bool nudge(const EditData& ed);
+
+    bool moveSegment(const EditData&);
+    void moveSnappedItems(Segment* newSeg, Fraction tickDiff) const;
+
     void insertSym(EditData& ed, SymId id);
     void prepareFormat(const String& token, TextCursor& cursor);
     bool prepareFormat(const String& token, CharFormat& format);
@@ -524,6 +543,8 @@ private:
     void notifyAboutTextInserted(int startPosition, int endPosition, const String& text);
     void notifyAboutTextRemoved(int startPosition, int endPosition, const String& text);
 
+    void shiftInitOffset(EditData& ed, const PointF& offsetShift);
+
     Align m_align;
 
     FrameType m_frameType = FrameType::NO_FRAME;
@@ -550,6 +571,7 @@ private:
     VoiceAssignment m_voiceAssignment = VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
     DirectionV m_direction = DirectionV::AUTO;
     AutoOnOff m_centerBetweenStaves = AutoOnOff::AUTO;
+    bool m_anchorToEndOfPrevious = false;
 };
 
 inline bool isTextNavigationKey(int key, KeyboardModifiers modifiers)

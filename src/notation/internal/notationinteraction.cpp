@@ -44,6 +44,7 @@
 #include "engraving/internal/qmimedataadapter.h"
 
 #include "engraving/dom/actionicon.h"
+#include "engraving/dom/anchors.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/barline.h"
 #include "engraving/dom/box.h"
@@ -5609,7 +5610,7 @@ void NotationInteraction::navigateToNearHarmony(MoveDirection direction, bool ne
                 }
             }
 
-            segment = Factory::createSegment(measure, mu::engraving::SegmentType::ChordRest, newTick - measure->tick());
+            segment = Factory::createSegment(measure, mu::engraving::SegmentType::TimeTick, newTick - measure->tick());
             if (!segment) {
                 LOGD("no prev segment");
                 return;
@@ -5725,8 +5726,7 @@ void NotationInteraction::navigateToHarmony(const Fraction& ticks)
     startEdit(TranslatableString("undoableAction", "Navigate to chord symbol"));
 
     if (!segment || segment->tick() > newTick) {      // no ChordRest segment at this tick
-        segment = Factory::createSegment(measure, mu::engraving::SegmentType::ChordRest, newTick - measure->tick());
-        score()->undoAddElement(segment);
+        segment = EditTimeTickAnchors::createTimeTickAnchor(measure, newTick - measure->tick(), harmony->staffIdx())->segment();
     }
 
     engraving::track_idx_t track = harmony->track();
@@ -5862,22 +5862,15 @@ void NotationInteraction::navigateToFiguredBass(const Fraction& ticks)
         nextSegm = nextSegm->next1(mu::engraving::SegmentType::ChordRest);
     }
 
-    bool needAddSegment = false;
-
     if (!nextSegm || nextSegm->tick() > nextSegTick) {      // no ChordRest segm at this tick
-        nextSegm = Factory::createSegment(measure, mu::engraving::SegmentType::ChordRest, nextSegTick - measure->tick());
+        nextSegm = EditTimeTickAnchors::createTimeTickAnchor(measure, nextSegTick - measure->tick(), fb->staffIdx())->segment();
         if (!nextSegm) {
             LOGD("figuredBassTicksTab: no next segment");
             return;
         }
-        needAddSegment = true;
     }
 
     startEdit(TranslatableString("undoableAction", "Navigate to figured bass"));
-
-    if (needAddSegment) {
-        score()->undoAddElement(nextSegm);
-    }
 
     bool bNew = false;
     mu::engraving::FiguredBass* fbNew = mu::engraving::FiguredBass::addFiguredBassToSegment(nextSegm, track, ticks, &bNew);

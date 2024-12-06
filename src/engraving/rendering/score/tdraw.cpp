@@ -1184,7 +1184,7 @@ void TDraw::draw(const FiguredBass* item, Painter* painter)
     if (!item->score()->printing() && item->score()->showUnprintable()) {
         for (double len : ldata->lineLengths) {
             if (len > 0) {
-                painter->setPen(Pen(item->configuration()->formattingColor(), 3));
+                painter->setPen(Pen(item->configuration()->frameColor(), 3));
                 painter->drawLine(0.0, -2, len, -2);              // -2: 2 rast. un. above digits
             }
         }
