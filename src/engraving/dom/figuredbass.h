@@ -273,9 +273,9 @@ public:
 
     void setSelected(bool f) override;
     void setVisible(bool f) override;
-    void startEdit(EditData&) override;
-    bool isEditAllowed(EditData&) const override;
-    void endEdit(EditData&) override;
+    void startEditTextual(EditData& ed) override;
+    bool isTextualEditAllowed(EditData&) const override;
+    void endEditTextual(EditData&) override;
     void regenerateText();
 
     bool onNote() const { return m_onNote; }
