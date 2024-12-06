@@ -34,6 +34,7 @@
         <trackName></trackName>
         <instrumentId>voice.soprano</instrumentId>
         <Channel>
+          <program value="52"/>
           </Channel>
         </Instrument>
       </Part>
@@ -50,6 +51,7 @@
         <trackName></trackName>
         <instrumentId>voice.alto</instrumentId>
         <Channel>
+          <program value="52"/>
           </Channel>
         </Instrument>
       </Part>
@@ -66,6 +68,7 @@
         <trackName></trackName>
         <instrumentId>voice.bass</instrumentId>
         <Channel>
+          <program value="52"/>
           </Channel>
         </Instrument>
       </Part>

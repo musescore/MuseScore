@@ -33,6 +33,7 @@
         <trackName></trackName>
         <instrumentId>wind.flutes.flute</instrumentId>
         <Channel>
+          <program value="72"/>
           </Channel>
         </Instrument>
       </Part>
