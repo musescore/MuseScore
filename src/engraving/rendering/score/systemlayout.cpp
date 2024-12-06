@@ -330,11 +330,9 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
      * **********************************************************/
 
     // Brake cross-measure beams
-    // Create end barlines
     if (ctx.state().prevMeasure() && ctx.state().prevMeasure()->isMeasure()) {
         Measure* pm = toMeasure(ctx.mutState().prevMeasure());
         BeamLayout::breakCrossMeasureBeams(pm, ctx);
-        MeasureLayout::createEndBarLines(pm, true, ctx);
     }
 
     // hide empty staves
@@ -345,9 +343,10 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     SystemLayout::layoutSystem(system, ctx, layoutSystemMinWidth, ctx.state().firstSystem(), ctx.state().firstSystemIndent());
     curSysWidth += system->leftMargin();
 
-    // add system trailer if needed (cautionary time/key signatures etc)
+    // Create end barlines and system trailer if needed (cautionary time/key signatures etc)
     Measure* lm  = system->lastMeasure();
     if (lm) {
+        MeasureLayout::createEndBarLines(lm, true, ctx);
         Measure* nm = lm->nextMeasure();
         if (nm) {
             MeasureLayout::addSystemTrailer(lm, nm, ctx);
