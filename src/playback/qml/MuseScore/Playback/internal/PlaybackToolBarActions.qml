@@ -34,6 +34,8 @@ Item {
     property PlaybackToolBarModel playbackModel: null
 
     property NavigationPanel navPanel: null
+    readonly property int navigationOrderEnd: tempoButton.navigation.order
+
     property bool floating: false
 
     width: childrenRect.width
@@ -54,6 +56,8 @@ Item {
 
         orientation: Qt.Horizontal
         interactive: false
+
+        readonly property int navigationOrderEnd: count
 
         delegate: FlatButton {
             id: btn
@@ -128,6 +132,9 @@ Item {
         maxMillisecondsNumber: 9
         time: root.playbackModel.playTime
 
+        navigationPanel: root.navPanel
+        navigationOrderStart: buttonsListView.navigationOrderEnd + 1
+
         onTimeEdited: function(newTime) {
             root.playbackModel.playTime = newTime
         }
@@ -147,6 +154,9 @@ Item {
         maxBeatNumber: root.playbackModel.maxBeatNumber
 
         font: timeField.font
+
+        navigationPanel: root.navPanel
+        navigationOrderStart: timeField.navigationOrderEnd + 1
 
         onMeasureNumberEdited: function(newValue) {
             root.playbackModel.measureNumber = newValue
@@ -171,6 +181,9 @@ Item {
 
         accentButton: playbackSpeedPopup.isOpened
         transparent: !accentButton
+
+        navigation.panel: root.navPanel
+        navigation.order: measureAndBeatFields.navigationOrderEnd + 1
 
         contentItem: TempoView {
             anchors.centerIn: parent

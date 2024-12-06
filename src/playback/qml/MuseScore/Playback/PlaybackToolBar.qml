@@ -89,6 +89,9 @@ Item {
             visible: root.floating
 
             playbackModel: thePlaybackModel
+
+            navigationPanel: navPanel
+            navigationOrderStart: playbackActions.navigationOrderEnd + 1
         }
     }
 }
