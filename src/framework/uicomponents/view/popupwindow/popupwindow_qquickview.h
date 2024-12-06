@@ -72,6 +72,7 @@ public:
 
     void setOnHidden(const std::function<void()>& callback) override;
 
+    void setAlwaysOnTop(const bool& alwaysOnTop) override;
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
