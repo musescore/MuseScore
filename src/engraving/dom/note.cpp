@@ -3740,14 +3740,14 @@ std::vector<Note*> Note::findTiedNotes(Note* startNote)
     notes.push_back(note);
 
     while (note->tieFor()) {
-        for (TieEndPoint& endPoint : *note->tieEndPoints()) {
-            if (!endPoint.active() || endPoint.followingNote()) {
+        for (TieEndPoint* endPoint : *note->tieEndPoints()) {
+            if (!endPoint->active() || endPoint->followingNote()) {
                 continue;
             }
-            if (!endPoint.note() || std::find(notes.begin(), notes.end(), endPoint.note()) != notes.end()) {
+            if (!endPoint->note() || std::find(notes.begin(), notes.end(), endPoint->note()) != notes.end()) {
                 continue;
             }
-            std::vector<Note*> partialTieNotes = findTiedNotes(endPoint.note());
+            std::vector<Note*> partialTieNotes = findTiedNotes(endPoint->note());
             notes.insert(notes.end(), partialTieNotes.begin(), partialTieNotes.end());
         }
 

@@ -34,7 +34,7 @@ public:
 
     Note* note() const { return m_note; }
     Tie* endTie() const;
-    bool followingNote() const;
+    bool followingNote() const { return m_followingNote; }
     const String& id() const { return m_id; }
     bool active() const { return m_active; }
     void setActive(bool v) { m_active = v; }
@@ -57,13 +57,14 @@ class TieEndPointList
 {
 public:
     TieEndPointList() = default;
+    ~TieEndPointList();
 
-    void add(TieEndPoint& item);
+    void add(TieEndPoint* item);
     void clear() { m_endPoints.clear(); }
     size_t size() const { return m_endPoints.size(); }
     bool empty() const { return m_endPoints.empty(); }
 
-    void setStartTie(Tie* startTie);
+    void setStartTie(Tie* startTie) { m_startTie = startTie; }
     Tie* startTie() const { return m_startTie; }
 
     void toggleEndPoint(const String& id);
@@ -71,13 +72,13 @@ public:
     void addTie(TieEndPoint* endPoint);
     void removeTie(TieEndPoint* endPoint);
 
-    std::vector<TieEndPoint>::iterator begin() { return m_endPoints.begin(); }
-    std::vector<TieEndPoint>::const_iterator begin() const { return m_endPoints.begin(); }
-    std::vector<TieEndPoint>::iterator end() { return m_endPoints.end(); }
-    std::vector<TieEndPoint>::const_iterator end() const { return m_endPoints.end(); }
+    std::vector<TieEndPoint*>::iterator begin() { return m_endPoints.begin(); }
+    std::vector<TieEndPoint*>::const_iterator begin() const { return m_endPoints.begin(); }
+    std::vector<TieEndPoint*>::iterator end() { return m_endPoints.end(); }
+    std::vector<TieEndPoint*>::const_iterator end() const { return m_endPoints.end(); }
 
 private:
-    std::vector<TieEndPoint> m_endPoints;
+    std::vector<TieEndPoint*> m_endPoints;
     Tie* m_startTie = nullptr;
 };
 
@@ -184,10 +185,10 @@ public:
     virtual const TieEndPointList* tieEndPoints() const;
 
     // Incoming ties after repeats
-    void setEndPoint(TieEndPoint* endPoint);
+    void setEndPoint(TieEndPoint* endPoint) { m_endPoint = endPoint; }
     void updateStartTieOnRemoval();
-    TieEndPoint* endPoint() const;
-    Tie* startTie() const;
+    TieEndPoint* endPoint() const { return m_endPoint; }
+    Tie* startTie() const { return startTieEndPoints() ? startTieEndPoints()->startTie() : nullptr; }
 
     static Tie* changeTieType(Tie* oldTie, Note* endNote = nullptr);
 
@@ -199,6 +200,6 @@ protected:
 
     // Endpoint information for incoming ties after repeats
     TieEndPoint* m_endPoint = nullptr;
-    TieEndPointList* startTieEndPoints() const;
+    TieEndPointList* startTieEndPoints() const { return m_endPoint ? m_endPoint->endPointList() : nullptr; }
 };
 } // namespace mu::engraving

@@ -390,7 +390,9 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
             if (sp->isTie()) {
                 Tie* tie = toTie(sp);
                 item->setTieBack(tie);
-                tie->collectPossibleEndPoints();
+                if (pasteMode) {
+                    tie->collectPossibleEndPoints();
+                }
             } else {
                 bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
                 if ((sp->isGlissando() || sp->isGuitarBend() || isNoteAnchoredTextLine) && item->explicitParent()

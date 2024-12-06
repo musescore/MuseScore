@@ -116,6 +116,6 @@ private:
     static PartialTieSegment* createPartialTieSegment(PartialTie* item);
     static PartialTieSegment* layoutPartialTie(PartialTie* item);
 
-    static void setPartialTieEndRelativeToBarline(PartialTie* item, SlurTiePos& sPos);
+    static void setPartialTieEndPos(PartialTie* item, SlurTiePos& sPos);
 };
 }
