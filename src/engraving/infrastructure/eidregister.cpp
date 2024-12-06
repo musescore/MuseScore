@@ -49,7 +49,9 @@ void EIDRegister::registerItemEID(const EID& eid, const EngravingObject* item)
 EngravingObject* EIDRegister::itemFromEID(const EID& eid) const
 {
     auto iter = m_eidToItem.find(eid);
-    assert(iter != m_eidToItem.end());
+    IF_ASSERT_FAILED(iter != m_eidToItem.end()) {
+        return nullptr;
+    }
     return iter->second;
 }
 
