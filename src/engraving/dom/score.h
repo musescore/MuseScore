@@ -361,6 +361,7 @@ public:
     void cmdMoveMeasureToPrevSystem();
     void cmdMoveMeasureToNextSystem();
     void cmdToggleSystemLock();
+    void cmdApplyLockToSelection();
     void cmdToggleScoreLock();
     void cmdMakeIntoSystem();
     void cmdAddStaffTypeChange(Measure* measure, staff_idx_t staffIdx, StaffTypeChange* stc);
@@ -1018,6 +1019,7 @@ public:
     void undoRemoveSystemLock(const SystemLock* lock);
     void undoRemoveAllLocks();
     void toggleSystemLock(const std::vector<System*>& systems);
+    void makeIntoSystem(MeasureBase* first, MeasureBase* last);
     void removeSystemLocksOnAddLayoutBreak(LayoutBreakType breakType, const MeasureBase* measure);
     void removeLayoutBreaksOnAddSystemLock(const SystemLock* lock);
 

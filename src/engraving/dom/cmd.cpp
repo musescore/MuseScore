@@ -4777,6 +4777,40 @@ void Score::cmdToggleSystemLock()
     toggleSystemLock(m_selection.selectedSystems());
 }
 
+void Score::cmdApplyLockToSelection()
+{
+    MeasureBase* first = nullptr;
+    MeasureBase* last = nullptr;
+
+    if (selection().isRange()) {
+        first = selection().startMeasureBase();
+        last = selection().endMeasureBase();
+    } else {
+        for (EngravingItem* el : selection().elements()) {
+            MeasureBase* mb = el->findMeasureBase();
+            if (!mb) {
+                continue;
+            }
+            if (!first || mb->isBefore(first)) {
+                first = mb;
+            }
+            if (!last || mb->isAfter(last)) {
+                last = mb;
+            }
+        }
+    }
+
+    if (!first || !last) {
+        return;
+    }
+
+    if (first != last) {
+        makeIntoSystem(first, last);
+    } else {
+        makeIntoSystem(first->system()->first(), last);
+    }
+}
+
 void Score::cmdToggleScoreLock()
 {
     bool unlockAll = true;
@@ -4815,40 +4849,7 @@ void Score::cmdMakeIntoSystem()
         return;
     }
 
-    bool mmrests = style().styleB(Sid::createMultiMeasureRests);
-
-    const SystemLock* lockContainingFirstSelected = m_systemLocks.lockContaining(firstSelected);
-    const SystemLock* lockContainingLastSelected = m_systemLocks.lockContaining(lastSelected);
-
-    if (lockContainingFirstSelected) {
-        undoRemoveSystemLock(lockContainingFirstSelected);
-        if (lockContainingFirstSelected->startMB()->isBefore(firstSelected)) {
-            MeasureBase* oneBeforeFirst = mmrests ? firstSelected->prevMM() : firstSelected->prev();
-            SystemLock* newLockBefore = new SystemLock(lockContainingFirstSelected->startMB(), oneBeforeFirst);
-            undoAddSystemLock(newLockBefore);
-        }
-    }
-
-    if (lockContainingLastSelected) {
-        if (lockContainingLastSelected != lockContainingFirstSelected) {
-            undoRemoveSystemLock(lockContainingLastSelected);
-        }
-        if (lastSelected->isBefore(lockContainingLastSelected->endMB())) {
-            MeasureBase* oneAfterLast = mmrests ? lastSelected->nextMM() : lastSelected->next();
-            SystemLock* newLockAfter = new SystemLock(oneAfterLast, lockContainingLastSelected->endMB());
-            undoAddSystemLock(newLockAfter);
-        }
-    }
-
-    std::vector<const SystemLock*> locksContainedInRange = m_systemLocks.locksContainedInRange(firstSelected, lastSelected);
-    for (const SystemLock* lock : locksContainedInRange) {
-        if (lock != lockContainingFirstSelected && lock != lockContainingLastSelected) {
-            undoRemoveSystemLock(lock);
-        }
-    }
-
-    SystemLock* newLock = new SystemLock(firstSelected, lastSelected);
-    undoAddSystemLock(newLock);
+    makeIntoSystem(firstSelected, lastSelected);
 }
 
 void Score::cmdAddStaffTypeChange(Measure* measure, staff_idx_t staffIdx, StaffTypeChange* stc)

@@ -208,6 +208,7 @@ public:
     void toggleSystemLock() override;
     void toggleScoreLock() override;
     void makeIntoSystem() override;
+    void applySystemLock() override;
 
     void addRemoveSystemLocks(AddRemoveSystemLockType intervalType, int interval = 0) override;
     bool transpose(const TransposeOptions& options) override;

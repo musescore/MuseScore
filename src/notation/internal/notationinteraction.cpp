@@ -1764,7 +1764,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             mu::engraving::LayoutBreak* breakElement = toLayoutBreak(element);
             score->cmdToggleLayoutBreak(breakElement->layoutBreakType());
         } else if (element->isActionIcon() && toActionIcon(element)->actionType() == ActionIconType::SYSTEM_LOCK) {
-            score->cmdToggleSystemLock();
+            score->cmdApplyLockToSelection();
         } else if (element->isSlur() && addSingle) {
             doAddSlur(toSlur(element));
         } else if (element->isSLine() && !element->isGlissando() && !element->isGuitarBend() && addSingle) {
@@ -2023,9 +2023,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 }
             }
         } else if (element->isActionIcon() && toActionIcon(element)->actionType() == ActionIconType::SYSTEM_LOCK) {
-            if (sel.isRange()) {
-                score->toggleSystemLock(sel.selectedSystems());
-            }
+            score->cmdApplyLockToSelection();
         } else {
             track_idx_t track1 = sel.staffStart() * mu::engraving::VOICES;
             track_idx_t track2 = sel.staffEnd() * mu::engraving::VOICES;
@@ -4527,6 +4525,13 @@ void NotationInteraction::makeIntoSystem()
 {
     startEdit(TranslatableString("undoableAction", "Make measure(s) into one system"));
     score()->cmdMakeIntoSystem();
+    apply();
+}
+
+void NotationInteraction::applySystemLock()
+{
+    startEdit(TranslatableString("undoableAction", "Apply system lock to selection"));
+    score()->cmdApplyLockToSelection();
     apply();
 }
 
