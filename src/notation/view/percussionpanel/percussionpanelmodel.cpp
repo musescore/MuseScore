@@ -63,7 +63,7 @@ PanelMode::Mode PercussionPanelModel::currentPanelMode() const
     return m_currentPanelMode;
 }
 
-void PercussionPanelModel::setCurrentPanelMode(const PanelMode::Mode& panelMode, bool updateNoteInput)
+void PercussionPanelModel::setCurrentPanelMode(const PanelMode::Mode& panelMode)
 {
     if (m_currentPanelMode == panelMode) {
         return;
@@ -76,13 +76,6 @@ void PercussionPanelModel::setCurrentPanelMode(const PanelMode::Mode& panelMode,
 
     m_currentPanelMode = panelMode;
     emit currentPanelModeChanged(m_currentPanelMode);
-
-    if (!updateNoteInput || !interaction() || !interaction()->noteInput()) {
-        return;
-    }
-
-    const INotationNoteInputPtr noteInput = interaction()->noteInput();
-    panelMode == PanelMode::Mode::WRITE ? noteInput->startNoteInput() : noteInput->endNoteInput();
 }
 
 bool PercussionPanelModel::useNotationPreview() const
@@ -159,7 +152,7 @@ void PercussionPanelModel::handleMenuItem(const QString& itemId)
         setUseNotationPreview(true);
     } else if (itemId == EDIT_LAYOUT_CODE) {
         const bool currentlyEditing = m_currentPanelMode == PanelMode::Mode::EDIT_LAYOUT;
-        currentlyEditing ? finishEditing() : setCurrentPanelMode(PanelMode::Mode::EDIT_LAYOUT, false);
+        currentlyEditing ? finishEditing() : setCurrentPanelMode(PanelMode::Mode::EDIT_LAYOUT);
     } else if (itemId == RESET_LAYOUT_CODE) {
         resetLayout();
     }
@@ -185,7 +178,7 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
 
     if (discardChanges) {
         m_padListModel->setDrumset(inst->drumset());
-        setCurrentPanelMode(m_panelModeToRestore, false);
+        setCurrentPanelMode(m_panelModeToRestore);
         return;
     }
 
@@ -216,7 +209,7 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
     undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Edit percussion panel layout"));
     score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, staff->part()));
 
-    setCurrentPanelMode(m_panelModeToRestore, false);
+    setCurrentPanelMode(m_panelModeToRestore);
 }
 
 void PercussionPanelModel::customizeKit()
