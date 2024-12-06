@@ -32,6 +32,9 @@ RowLayout {
 
     property PlaybackToolBarModel playbackModel: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationOrderStart: 0
+
     spacing: 12
 
     StyledTextLabel {
@@ -52,6 +55,10 @@ RowLayout {
         step: 5
         measureUnitsSymbol: "%"
         decimals: 0
+
+        navigation.panel: root.navigationPanel
+        navigation.order: root.navigationOrderStart
+        navigation.accessible.name: qsTrc("playback", "Speed")
 
         onValueEdited: function(newValue) {
             root.playbackModel.tempoMultiplier = newValue / 100
