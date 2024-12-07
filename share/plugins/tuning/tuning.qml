@@ -421,6 +421,9 @@ MuseScore {
         }
     ]
 
+    property var westernTemperamentsLength: 36
+    property var middleEasternTemperamentsLength: 24
+
     property var currentTemperament: westernTemperaments[0];
     property var currentTab: 0 ;
     property var currentRoot: 0;
@@ -1410,21 +1413,18 @@ MuseScore {
                 }
                 RowLayout {
                     FlatButton {
-                        id: saveButton
-                        text: qsTranslate("PrefsDialogBase", "Save")                                
+                        id: addButton
+                        text: "Add"                                
                         isNarrow: true
-                        onClicked: {
-                            saveDialog.folder = filePath
-                            saveDialog.visible = true
-                        }
+                        onClicked: addDialog.open() 
                     }
                     FlatButton {
-                        id: loadButton
-                        text: qsTranslate("PrefsDialogBase", "Load")
+                        id: removeButton
+                        text: "Remove"
                         isNarrow: true                                
                         onClicked: {
-                            loadDialog.folder = filePath
-                            loadDialog.visible = true
+                            removeTemperament()
+                            saveCustomTemperaments()
                         }
                     }
                     FlatButton {
@@ -1499,98 +1499,97 @@ MuseScore {
         }
     }
 
-    FileIO {
-        id: saveFile
-        source: ""
-    }
-
-    FileIO {
-        id: loadFile
-        source: ""
-    }
-
-    function getFile(dialog) {
-        var source = dialog.filePath
-        return source
-    }
-
-    function formatCurrentValues() {
-        var data = {
-            offsets: [
-                parseFloat(final_c.text),
-                parseFloat(final_c_sharp.text),
-                parseFloat(final_d.text),
-                parseFloat(final_e_flat.text),
-                parseFloat(final_e.text),
-                parseFloat(final_f.text),
-                parseFloat(final_f_sharp.text),
-                parseFloat(final_g.text),
-                parseFloat(final_g_sharp.text),
-                parseFloat(final_a.text),
-                parseFloat(final_b_flat.text),
-                parseFloat(final_b.text)
-            ],
-            tab: currentTab,
-            temperament: currentTemperament.name,
-            root: currentRoot,
-            pure: currentPureTone,
-            tweak: currentTweak
-        };
-        return(JSON.stringify(data))
-    }
-
-    function restoreSavedValues(data) {
-        getHistory().begin()
-        setCurrentTab(data.tab)
-        setCurrentTemperament(lookupTemperament(data.temperament))
-        setCurrentRoot(data.root)
-        setCurrentPureTone(data.pure)
-        // support older save files
-        if (data.hasOwnProperty('tweak')) {
-            setCurrentTweak(data.tweak)
-        } else {
-            setCurrentTweak(0.0)
-        }
-        recalculate(
-            function(pitch) {
-                return data.offsets[pitch % 12]
+    Dialog {        
+        id: addDialog 
+        title: "Add Temperament"
+        anchors.centerIn: parent
+            
+        contentItem: Column {  
+            spacing: 30              
+            Row {
+                spacing: 10
+                StyledTextLabel {
+                    text: "Temperament name:"
+                }
+                TextField {                
+                    id: customTempName
+                    //focus: true
+                }
             }
-        )
-        getHistory().end()
+            FlatButton {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "Ok"
+                accentButton: true
+                onClicked: {                   
+                    addTemperament()
+                    addDialog.close()
+                    saveCustomTemperaments()
+                    customTempName.text = ""                                       
+                }   
+            } 
+        }  
     }
 
-    FileDialog {
-        id: loadDialog
-        type: FileDialog.Load
-        title: "Please choose a file"
-        //sidebarVisible: true
-        onAccepted: {
-            loadFile.source = getFile(loadDialog)
-            var data = JSON.parse(loadFile.read())
-            restoreSavedValues(data)
-            loadDialog.visible = false
-        }
-        onRejected: {
-            loadDialog.visible = false
-        }
-        visible: false
+    FileIO {
+        id: fileIO
+        source: Qt.resolvedUrl("tuningPluginData.json").toString().replace("file:///", ""); 
+    }   
+
+    function addTemperament() {
+        var entry= {
+                        "name": customTempName.text,
+                        "offsets": [final_c.text, final_g.text, final_d.text, final_a.text, final_e.text, final_b.text, final_f_sharp.text, final_c_sharp.text, final_g_sharp.text, final_e_flat.text, final_b_flat.text, final_f.text ],
+                        "root": currentRoot,
+                        "pure": currentPureTone                        
+                    } 
+
+        switch (tabBar.currentIndex) {
+            case 0:
+                westernTemperaments = westernTemperaments.concat(entry) //adds new entry and updates buttons 
+                westernListView.positionViewAtEnd()
+                westernListView.itemAtIndex(westernTemperaments.length-1).checked = true   
+                break
+            case 1:
+                middleEasternTemperaments = middleEasternTemperaments.concat(entry) //adds new entry and updates buttons 
+                middleEasternListView.positionViewAtEnd()
+                middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).checked = true
+                break
+        }                        
     }
 
-    FileDialog {
-        id: saveDialog
-        type: FileDialog.Save
-        title: "Please name a file"
-        //sidebarVisible: true
-        //selectExisting: false
-        onAccepted: {
-            saveFile.source = getFile(saveDialog)
-            saveFile.write(formatCurrentValues())
-            saveDialog.visible = false
+    function removeTemperament() {
+        switch (tabBar.currentIndex) {
+            case 0:
+                if (westernTemperaments.indexOf(currentTemperament) < westernTemperamentsLength) {
+                    error("Cannot remove Built-in temperaments")
+                } 
+                else {
+                    westernTemperaments = westernTemperaments.filter(x => x !== currentTemperament)
+                    westernListView.positionViewAtEnd()
+                }
+                break
+
+            case 1:
+                if (middleEasternTemperaments.indexOf(currentTemperament) < middleEasternTemperamentsLength) {
+                    error("Cannot remove Built-in temperaments")
+                } 
+                else {
+                    middleEasternTemperaments = middleEasternTemperaments.filter(x => x !== currentTemperament)
+                    middleEasternListView.positionViewAtEnd()
+                }
+                break
         }
-        onRejected: {
-            saveDialog.visible = false
-        }
-        visible: false
+    }
+
+    function saveCustomTemperaments() {
+        fileIO.write(
+            JSON.stringify(
+                [
+                    westernTemperaments.slice(westernTemperamentsLength), 
+                    middleEasternTemperaments.slice(middleEasternTemperamentsLength)
+                ]
+            )
+        ) 
     }
 
     // Command pattern for undo/redo
