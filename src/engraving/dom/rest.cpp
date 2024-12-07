@@ -663,8 +663,8 @@ int Rest::upLine() const
 
 int Rest::downLine() const
 {
-    double _spatium = spatium();
-    return lrint((pos().y() + ldata()->bbox().top() + _spatium) * 2 / _spatium);
+    // for rests, downLine() is the same as upLine()
+    return Rest::upLine();
 }
 
 //---------------------------------------------------------
