@@ -834,9 +834,14 @@ EditStyle::EditStyle(QWidget* parent)
 
     musicalSymbolFont->clear();
     dynamicsFont->clear();
+    musicalTextFont->clear();
     for (auto i : engravingFonts()->fonts()) {
-        musicalSymbolFont->addItem(QString::fromStdString(i->name()), QString::fromStdString(i->name()));
-        dynamicsFont->addItem(QString::fromStdString(i->name()), QString::fromStdString(i->name()));
+        QString fontDisplayName = QString::fromStdString(i->name());
+        QString fontFamilyName = QString::fromStdString(i->family());
+        musicalSymbolFont->addItem(fontDisplayName, fontDisplayName);
+        dynamicsFont->addItem(fontDisplayName, fontDisplayName);
+        // musicalTextFont must be a font family name!
+        musicalTextFont->addItem(fontDisplayName + " Text", fontFamilyName + " Text");
     }
 
     static const SymId ids[] = {
@@ -2391,41 +2396,21 @@ void EditStyle::setValues()
     spinFBLineHeight->setValue(styleValue(StyleId::figuredBassLineHeight).toDouble() * 100.0);
 
     QString mfont(styleValue(StyleId::musicalSymbolFont).value<String>());
+    QString dynFont(styleValue(StyleId::dynamicsFont).value<String>());
+    QString tfont(styleValue(StyleId::musicalTextFont).value<String>());
     int idx = 0;
     for (const auto& i : engravingFonts()->fonts()) {
         if (QString::fromStdString(i->name()).toLower() == mfont.toLower()) {
             musicalSymbolFont->setCurrentIndex(idx);
-            break;
         }
-        ++idx;
-    }
-
-    QString dynFont(styleValue(StyleId::dynamicsFont).value<String>());
-    idx = 0;
-    for (const auto& i : engravingFonts()->fonts()) {
         if (QString::fromStdString(i->name()).toLower() == dynFont.toLower()) {
             dynamicsFont->setCurrentIndex(idx);
-            break;
+        }
+        if ((QString::fromStdString(i->family()) + " Text").toLower() == tfont.toLower()) {
+            musicalTextFont->setCurrentIndex(idx);
         }
         ++idx;
     }
-
-    musicalTextFont->blockSignals(true);
-    musicalTextFont->clear();
-    // CAUTION: the second element, the itemdata, is a font family name!
-    // It's also stored in score file as the musicalTextFont
-    musicalTextFont->addItem("Leland Text", "Leland Text");
-    musicalTextFont->addItem("Bravura Text", "Bravura Text");
-    musicalTextFont->addItem("Emmentaler Text", "MScore Text");
-    musicalTextFont->addItem("Gonville Text", "Gootville Text");
-    musicalTextFont->addItem("MuseJazz Text", "MuseJazz Text");
-    musicalTextFont->addItem("Petaluma Text", "Petaluma Text");
-    musicalTextFont->addItem("Finale Maestro Text", "Finale Maestro Text");
-    musicalTextFont->addItem("Finale Broadway Text", "Finale Broadway Text");
-    QString tfont(styleValue(StyleId::musicalTextFont).value<String>());
-    idx = musicalTextFont->findData(tfont);
-    musicalTextFont->setCurrentIndex(idx);
-    musicalTextFont->blockSignals(false);
 
     toggleHeaderOddEven(styleValue(StyleId::headerOddEven).toBool());
     toggleFooterOddEven(styleValue(StyleId::footerOddEven).toBool());

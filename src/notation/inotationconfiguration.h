@@ -132,6 +132,10 @@ public:
     virtual void setAddAccidentalDotsArticulationsToNextNoteEntered(bool value) = 0;
     virtual muse::async::Notification addAccidentalDotsArticulationsToNextNoteEnteredChanged() const = 0;
 
+    virtual muse::io::path_t userMusicFontPath() const = 0;
+    virtual void setUserMusicFontPath(const muse::io::path_t& path) = 0;
+    virtual muse::async::Channel<muse::io::path_t> userMusicFontPathChanged() const = 0;
+
     virtual bool isMidiInputEnabled() const = 0;
     virtual void setIsMidiInputEnabled(bool enabled) = 0;
     virtual muse::async::Notification isMidiInputEnabledChanged() const = 0;

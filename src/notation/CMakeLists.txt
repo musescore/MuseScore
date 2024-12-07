@@ -123,6 +123,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscoreerrorscontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscoreerrorscontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingfontscontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingfontscontroller.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractnotationpaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractnotationpaintview.h
