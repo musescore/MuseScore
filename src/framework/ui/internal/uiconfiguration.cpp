@@ -332,10 +332,10 @@ ThemeList UiConfiguration::themes() const
 QStringList UiConfiguration::possibleFontFamilies() const
 {
     QStringList allFonts = QFontDatabase::families();
-    QStringList smuflFonts
-        = { "Bravura", "Campania", "Edwin", "Finale Broadway", "Finale Maestro", "Gootville", "Leland", "MScore", "MuseJazz", "Petaluma" };
-    for (const QString& font : smuflFonts) {
-        allFonts.removeAll(font);
+    for (const auto& font : engravingFonts()->fonts()) {
+        QString fontName = QString::fromStdString(font->name());
+        allFonts.removeAll(fontName);
+        allFonts.removeAll(fontName + " Text");
     }
     return allFonts;
 }

@@ -20,6 +20,9 @@ public:
     virtual IEngravingFontPtr fontByName(const std::string& name) const = 0;
     virtual std::vector<IEngravingFontPtr> fonts() const = 0;
 
+    virtual void clearUserFonts() = 0;
+    virtual void addUserFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath) = 0;
+
     virtual void setFallbackFont(const std::string& name) = 0;
     virtual IEngravingFontPtr fallbackFont() const = 0;
     virtual bool isFallbackFont(const IEngravingFont* f) const = 0;

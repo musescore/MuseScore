@@ -64,6 +64,7 @@ static const Settings::Key KEYBOARD_ZOOM_PRECISION(module_name, "ui/canvas/zoomP
 static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrecisionMouse");
 
 static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
+static const Settings::Key USER_MUSIC_FONTS_PATH(module_name, "application/paths/myMusicFonts");
 
 static const Settings::Key DEFAULT_NOTE_INPUT_METHOD(module_name, "score/defaultInputMethod");
 
@@ -226,6 +227,11 @@ void NotationConfiguration::init()
             );
 #endif
     }
+
+    settings()->setDefaultValue(USER_MUSIC_FONTS_PATH, Val(globalConfiguration()->userDataPath() + "/MusicFonts"));
+    settings()->valueChanged(USER_MUSIC_FONTS_PATH).onReceive(nullptr, [this](const Val& val) {
+        m_userMusicFontsPathChanged.send(val.toString());
+    });
 
     settings()->setDefaultValue(DEFAULT_NOTE_INPUT_METHOD, Val(BY_NOTE_NAME_INPUT_METHOD));
     settings()->valueChanged(DEFAULT_NOTE_INPUT_METHOD).onReceive(this, [this](const Val&) {
@@ -740,6 +746,20 @@ void NotationConfiguration::setPartStyleFilePath(const muse::io::path_t& path)
 async::Channel<muse::io::path_t> NotationConfiguration::partStyleFilePathChanged() const
 {
     return engravingConfiguration()->partStyleFilePathChanged();
+}
+
+muse::io::path_t NotationConfiguration::userMusicFontPath() const {
+    return settings()->value(USER_MUSIC_FONTS_PATH).toPath();
+}
+
+void NotationConfiguration::setUserMusicFontPath(const muse::io::path_t& path)
+{
+    settings()->setSharedValue(USER_MUSIC_FONTS_PATH, Val(path));
+}
+
+muse::async::Channel<muse::io::path_t> NotationConfiguration::userMusicFontPathChanged() const
+{
+    return m_userMusicFontsPathChanged;
 }
 
 NoteInputMethod NotationConfiguration::defaultNoteInputMethod() const
