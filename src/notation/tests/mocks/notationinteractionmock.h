@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONINTERACTIONMOCK_H
-#define MU_NOTATION_NOTATIONINTERACTIONMOCK_H
+#pragma once
 
 #include <gmock/gmock.h>
 
@@ -65,15 +64,21 @@ public:
     MOCK_METHOD(void, endDrag, (), (override));
     MOCK_METHOD(muse::async::Notification, dragChanged, (), (const, override));
 
-    MOCK_METHOD(bool, isDragCopyStarted, (), (const, override));
     MOCK_METHOD(bool, dragCopyAllowed, (const EngravingItem*), (const, override));
-    MOCK_METHOD(void, startDragCopy, (const EngravingItem*, QObject*), (override));
+    MOCK_METHOD(void, prepareDragCopyElement, (const EngravingItem*, QObject*), (override));
+    MOCK_METHOD(void, prepareDragCopyRange, (QObject*), (override));
+    MOCK_METHOD(bool, hasDragCopy, (), (const, override));
+    MOCK_METHOD(bool, hasStartedDragCopy, (), (const, override));
+    MOCK_METHOD(void, startDragCopy, (), (override));
     MOCK_METHOD(void, endDragCopy, (), (override));
 
-    MOCK_METHOD(void, startDrop, (const QByteArray&), (override));
-    MOCK_METHOD(bool, startDrop, (const QUrl&), (override));
-    MOCK_METHOD(bool, isDropAccepted, (const muse::PointF&, Qt::KeyboardModifiers), (override));
-    MOCK_METHOD(bool, drop, (const muse::PointF&, Qt::KeyboardModifiers), (override));
+    MOCK_METHOD(bool, startDropSingle, (const QByteArray&), (override));
+    MOCK_METHOD(bool, startDropRange, (const QByteArray&), (override));
+    MOCK_METHOD(bool, startDropImage, (const QUrl&), (override));
+    MOCK_METHOD(bool, isDropSingleAccepted, (const muse::PointF&, Qt::KeyboardModifiers), (override));
+    MOCK_METHOD(bool, isDropRangeAccepted, (const muse::PointF&), (override));
+    MOCK_METHOD(bool, dropSingle, (const muse::PointF&, Qt::KeyboardModifiers), (override));
+    MOCK_METHOD(bool, dropRange, (const QByteArray&, const muse::PointF&), (override));
     MOCK_METHOD(void, setDropTarget, (EngravingItem*, bool), (override));
     MOCK_METHOD(void, setDropRect, (const muse::RectF&), (override));
     MOCK_METHOD(void, endDrop, (), (override));
@@ -268,5 +273,3 @@ public:
     MOCK_METHOD(void, setGetViewRectFunc, (const std::function<muse::RectF()>&), (override));
 };
 }
-
-#endif // MU_NOTATION_NOTATIONINTERACTIONMOCK_H

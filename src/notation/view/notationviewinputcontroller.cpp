@@ -647,9 +647,18 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     if (keyState == (Qt::ShiftModifier | Qt::ControlModifier)) {
         if (viewInteraction()->dragCopyAllowed(hitElement)) {
-            viewInteraction()->startDragCopy(hitElement, m_view->asItem());
+            viewInteraction()->prepareDragCopyElement(hitElement, m_view->asItem());
         }
         return;
+    }
+
+    if (button == Qt::LeftButton && (!hitElement || hitElement->isMeasure())) {
+        INotationSelectionPtr selection = viewInteraction()->selection();
+
+        if (selection->isRange() && selection->range()->containsPoint(logicPos)) {
+            viewInteraction()->prepareDragCopyRange(m_view->asItem());
+            return;
+        }
     }
 
     ClickContext ctx;
@@ -836,7 +845,12 @@ bool NotationViewInputController::tryPercussionShortcut(QKeyEvent* event)
 
 void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 {
-    if (viewInteraction()->isDragCopyStarted()) {
+    if (viewInteraction()->hasStartedDragCopy()) {
+        return;
+    }
+
+    if (viewInteraction()->hasDragCopy()) {
+        viewInteraction()->startDragCopy();
         return;
     }
 
@@ -948,7 +962,7 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
         interaction->endDrag();
     }
 
-    if (interaction->isDragCopyStarted()) {
+    if (interaction->hasDragCopy()) {
         interaction->endDragCopy();
     }
 }
@@ -1147,21 +1161,43 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
             event->setDropAction(Qt::CopyAction);
         }
 
-        if (event->dropAction() == Qt::CopyAction) {
-            event->accept();
+        if (event->dropAction() != Qt::CopyAction) {
+            event->ignore();
+            return;
         }
 
         QByteArray edata = mimeData->data(MIME_SYMBOL_FORMAT);
-        viewInteraction()->startDrop(edata);
+        if (viewInteraction()->startDropSingle(edata)) {
+            event->accept();
+            return;
+        }
 
+        event->ignore();
         return;
     }
 
-    QList<QUrl> urls = mimeData->urls();
-    if (urls.count() > 0) {
-        QUrl url = urls.first();
+    if (mimeData->hasFormat(mu::commonscene::MIME_STAFFLLIST_FORMAT)) {
+        if (event->possibleActions() & Qt::CopyAction) {
+            event->setDropAction(Qt::CopyAction);
+        }
 
-        if (viewInteraction()->startDrop(url)) {
+        if (event->dropAction() != Qt::CopyAction) {
+            event->ignore();
+            return;
+        }
+
+        QByteArray edata = mimeData->data(MIME_STAFFLLIST_FORMAT);
+        if (viewInteraction()->startDropRange(edata)) {
+            event->accept();
+            return;
+        }
+
+        event->ignore();
+        return;
+    }
+
+    for (const QUrl& url : mimeData->urls()) {
+        if (viewInteraction()->startDropImage(url)) {
             event->accept();
             return;
         }
@@ -1188,12 +1224,14 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* event)
     PointF pos = m_view->toLogical(event->position());
     Qt::KeyboardModifiers modifiers = event->modifiers();
 
-    bool isAccepted = viewInteraction()->isDropAccepted(pos, modifiers);
-    if (isAccepted) {
-        event->setAccepted(isAccepted);
+    bool isAccepted = false;
+    if (mimeData->hasFormat(MIME_STAFFLLIST_FORMAT)) {
+        isAccepted = viewInteraction()->isDropRangeAccepted(pos);
     } else {
-        event->ignore();
+        isAccepted = viewInteraction()->isDropSingleAccepted(pos, modifiers);
     }
+
+    event->setAccepted(isAccepted);
 }
 
 void NotationViewInputController::dragLeaveEvent(QDragLeaveEvent*)
@@ -1203,15 +1241,22 @@ void NotationViewInputController::dragLeaveEvent(QDragLeaveEvent*)
 
 void NotationViewInputController::dropEvent(QDropEvent* event)
 {
+    const QMimeData* mimeData = event->mimeData();
+    IF_ASSERT_FAILED(mimeData) {
+        return;
+    }
+
     PointF pos = m_view->toLogical(event->position());
     Qt::KeyboardModifiers modifiers = event->modifiers();
 
-    bool isAccepted = viewInteraction()->drop(pos, modifiers);
-    if (isAccepted) {
-        event->acceptProposedAction();
+    bool isAccepted = false;
+    if (mimeData->hasFormat(MIME_STAFFLLIST_FORMAT)) {
+        isAccepted = viewInteraction()->dropRange(mimeData->data(MIME_STAFFLLIST_FORMAT), pos);
     } else {
-        event->ignore();
+        isAccepted = viewInteraction()->dropSingle(pos, modifiers);
     }
+
+    event->setAccepted(isAccepted);
 }
 
 float NotationViewInputController::hitWidth() const
