@@ -49,6 +49,11 @@ std::shared_ptr<EngravingFont> EngravingFontsProvider::doFontByName(const std::s
             return f;
         }
     }
+    for (const std::shared_ptr<EngravingFont>& f : m_userSymbolFonts) {
+        if (muse::strings::toLower(f->name()) == name_lo) {
+            return f;
+        }
+    }
     return nullptr;
 }
 
@@ -63,10 +68,24 @@ IEngravingFontPtr EngravingFontsProvider::fontByName(const std::string& name) co
     return font;
 }
 
+void EngravingFontsProvider::clearUserFonts()
+{
+    m_userSymbolFonts.clear();
+}
+
+void EngravingFontsProvider::addUserFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath)
+{
+    std::shared_ptr<EngravingFont> f = std::make_shared<EngravingFont>(name, family, filePath, iocContext());
+    m_userSymbolFonts.push_back(f);
+}
+
 std::vector<IEngravingFontPtr> EngravingFontsProvider::fonts() const
 {
     std::vector<IEngravingFontPtr> fs;
     for (const std::shared_ptr<EngravingFont>& f : m_symbolFonts) {
+        fs.push_back(f);
+    }
+    for (const std::shared_ptr<EngravingFont>& f : m_userSymbolFonts) {
         fs.push_back(f);
     }
     return fs;
@@ -105,6 +124,9 @@ bool EngravingFontsProvider::isFallbackFont(const IEngravingFont* f) const
 void EngravingFontsProvider::loadAllFonts()
 {
     for (std::shared_ptr<EngravingFont>& f : m_symbolFonts) {
+        f->ensureLoad();
+    }
+    for (std::shared_ptr<EngravingFont>& f : m_userSymbolFonts) {
         f->ensureLoad();
     }
 }

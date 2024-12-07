@@ -58,6 +58,8 @@ static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrec
 
 static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
 
+static const Settings::Key USER_MUSIC_FONTS_PATH(module_name, "application/paths/myMusicFonts");
+
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
 static const Settings::Key USE_MIDI_INPUT_WRITTEN_PITCH(module_name, "io/midi/useWrittenPitch");
 static const Settings::Key IS_AUTOMATICALLY_PAN_ENABLED(module_name, "application/playback/panPlayback");
@@ -163,6 +165,11 @@ void NotationConfiguration::init()
     if (!userStylesPath().empty()) {
         fileSystem()->makePath(userStylesPath());
     }
+
+    settings()->setDefaultValue(USER_MUSIC_FONTS_PATH, Val(globalConfiguration()->userDataPath() + "/MusicFonts"));
+    settings()->valueChanged(USER_MUSIC_FONTS_PATH).onReceive(nullptr, [this](const Val& val) {
+        m_userMusicFontsPathChanged.send(val.toString());
+    });
 
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(2));
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(true));
@@ -551,6 +558,21 @@ muse::io::path_t NotationConfiguration::partStyleFilePath() const
 void NotationConfiguration::setPartStyleFilePath(const muse::io::path_t& path)
 {
     engravingConfiguration()->setPartStyleFilePath(path.toQString());
+}
+
+muse::io::path_t NotationConfiguration::userMusicFontPath() const
+{
+    return settings()->value(USER_MUSIC_FONTS_PATH).toPath();
+}
+
+void NotationConfiguration::setUserMusicFontPath(const muse::io::path_t& path)
+{
+    settings()->setSharedValue(USER_MUSIC_FONTS_PATH, Val(path));
+}
+
+muse::async::Channel<muse::io::path_t> NotationConfiguration::userMusicFontPathChanged() const
+{
+    return m_userMusicFontsPathChanged;
 }
 
 bool NotationConfiguration::isMidiInputEnabled() const

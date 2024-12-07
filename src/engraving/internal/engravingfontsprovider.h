@@ -42,6 +42,9 @@ public:
     IEngravingFontPtr fontByName(const std::string& name) const override;
     std::vector<IEngravingFontPtr> fonts() const override;
 
+    void clearUserFonts() override;
+    void addUserFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath) override;
+
     void setFallbackFont(const std::string& name) override;
     IEngravingFontPtr fallbackFont() const override;
     bool isFallbackFont(const IEngravingFont* f) const override;
@@ -60,6 +63,7 @@ private:
 
     mutable Fallback m_fallback;
     std::vector<std::shared_ptr<EngravingFont> > m_symbolFonts;
+    std::vector<std::shared_ptr<EngravingFont> > m_userSymbolFonts;
 };
 }
 
