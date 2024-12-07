@@ -710,11 +710,11 @@ MuseScore {
         switch (currentTab) {
         case 0:
             idx = westernTemperaments.indexOf(currentTemperament);
-            westernButtonRepeater.itemAt(idx).checked = true;
+            westernListView.itemAtIndex(idx).checked = true;
             break;
         case 1:
             idx = middleEasternTemperaments.indexOf(currentTemperament);
-            middleEasternButtonRepeater.itemAt(idx).checked = true;
+            middleEasternListView.itemAtIndex(idx).checked = true;
             break;
         }        
     }
@@ -989,59 +989,44 @@ MuseScore {
             height: 530
             ButtonGroup { id: tempGroup }   
 
-            ScrollView {
+            StyledListView {
+                id: westernListView
                 width: parent.width
                 height: parent.height-30                      
                 visible: westernTab.checked  
-                ScrollBar.horizontal.visible: false
+                model: westernTemperaments
 
-                Column { 
-                    width: parent.width
-                    height: parent.height-30  
-
-                    Repeater {
-                        id: westernButtonRepeater
-                        model: westernTemperaments.length
-                        delegate: PageTabButton {
-                            width: 280
-                            height: 30
-                            ButtonGroup.group: tempGroup
-                            orientation: Qt.Horizontal
-                            leftPadding: 5
-                            checked: index == 0 ? true : false
-                            title: westernTemperaments[index].name
-                            onClicked: {
-                                temperamentClicked(westernTemperaments[index]);
-                            }
-                        }
-                    }                                      
+                delegate: PageTabButton {
+                    width: 280
+                    height: 30
+                    ButtonGroup.group: tempGroup
+                    orientation: Qt.Horizontal
+                    leftPadding: 5
+                    checked: index == 0 ? true : false
+                    title: modelData.name
+                    onClicked: {
+                        temperamentClicked(westernTemperaments[index]);
+                    }
                 }
             }
 
-            ScrollView {
+            StyledListView {
+                id: middleEasternListView
                 width: parent.width
                 height: parent.height-30                    
                 visible: middleEasternTab.checked 
-                ScrollBar.horizontal.visible: false
+                model: middleEasternTemperaments
 
-                Column { 
-                    width: parent.width
-                    height: parent.height-30 
-                    Repeater {
-                        id: middleEasternButtonRepeater
-                        model: middleEasternTemperaments.length
-                        delegate: PageTabButton {
-                            width: 280
-                            height: 30
-                            ButtonGroup.group: tempGroup
-                            orientation: Qt.Horizontal
-                            leftPadding: 5
-                            title: middleEasternTemperaments[index].name
-                            onClicked: {
-                                temperamentClicked(middleEasternTemperaments[index]);
-                            }
-                        }
-                    }                    
+                delegate: PageTabButton {
+                    width: 280
+                    height: 30
+                    ButtonGroup.group: tempGroup
+                    orientation: Qt.Horizontal
+                    leftPadding: 5
+                    title: modelData.name
+                    onClicked: {
+                        temperamentClicked(middleEasternTemperaments[index]);
+                    }
                 }
             }
         }
