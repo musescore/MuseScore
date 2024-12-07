@@ -44,6 +44,8 @@ public:
     virtual int exportSampleRate() const = 0;
     virtual void setExportSampleRate(int rate) = 0;
     virtual const std::vector<int>& availableSampleRates() const = 0;
+    virtual bool selectionOnly() const = 0;
+    virtual void setSelectionOnly(bool flag) = 0;
 
     virtual muse::audio::samples_t exportBufferSize() const = 0;
 };
