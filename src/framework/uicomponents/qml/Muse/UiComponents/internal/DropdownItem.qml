@@ -81,6 +81,7 @@ Item {
     MouseArea {
         id: mouseAreaItem
         anchors.fill: parent
+        enabled: root.enabled
         hoverEnabled: true
         onClicked: root.clicked()
 
