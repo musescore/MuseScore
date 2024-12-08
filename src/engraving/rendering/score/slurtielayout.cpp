@@ -1582,6 +1582,9 @@ void SlurTieLayout::createSlurSegments(Slur* item, LayoutContext& ctx)
 {
     const ChordRest* startCR = item->startCR();
     const ChordRest* endCR = item->endCR();
+    if (!startCR || !endCR) {
+        return;
+    }
     const System* startSys = startCR->measure()->system();
     const System* endSys = endCR->measure()->system();
 
