@@ -83,6 +83,43 @@ async::Notification AudioDriverStub::availableOutputDevicesChanged() const
     return async::Notification();
 }
 
+int AudioDriverStub::audioDelayCompensate() const
+{
+    return 0;
+}
+
+void AudioDriverStub::setAudioDelayCompensate(const int frames)
+{
+}
+
+bool AudioDriverStub::isPlaying() const
+{
+    return false;
+}
+
+unsigned int AudioDriverStub::sampleRate() const
+{
+    return 0;
+}
+
+bool AudioDriverStub::setSampleRate(unsigned int sampleRate)
+{
+    return true;
+}
+
+async::Notification AudioDriverStub::sampleRateChanged() const
+{
+    return async::Notification();
+}
+
+void AudioDriverStub::remotePlayOrStop([[maybe_unused]] bool ps) const
+{
+}
+
+void AudioDriverStub::remoteSeek([[maybe_unused]] msecs_t millis) const
+{
+}
+
 unsigned int AudioDriverStub::outputDeviceBufferSize() const
 {
     return 0;
@@ -129,4 +166,15 @@ void AudioDriverStub::resume()
 
 void AudioDriverStub::suspend()
 {
+}
+
+bool AudioDriverStub::pushMidiEvent(muse::midi::Event&)
+{
+    return true;
+}
+
+std::vector<muse::midi::MidiDevice> AudioDriverStub::availableMidiDevices(muse::midi::MidiPortDirection direction) const
+{
+    std::vector<muse::midi::MidiDevice> x;
+    return x; // dummy
 }
