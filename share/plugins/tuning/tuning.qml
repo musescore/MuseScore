@@ -854,44 +854,7 @@ MuseScore {
     }
 
     function checkCurrentPureTone() {
-        switch (currentPureTone) {
-            case 0:
-                pure_c.checked = true
-                break
-            case 1:
-                pure_g.checked = true
-                break
-            case 2:
-                pure_d.checked = true
-                break
-            case 3:
-                pure_a.checked = true
-                break
-            case 4:
-                pure_e.checked = true
-                break
-            case 5:
-                pure_b.checked = true
-                break
-            case 6:
-                pure_f_sharp.checked = true
-                break
-            case 7:
-                pure_c_sharp.checked = true
-                break
-            case 8:
-                pure_g_sharp.checked = true
-                break
-            case 9:
-                pure_e_flat.checked = true
-                break
-            case 10:
-                pure_b_flat.checked = true
-                break
-            case 11:
-                pure_f.checked = true
-                break
-        }
+        pureTones.itemAt(currentPureTone).checked=true         
     }
 
     function setModified(state) {
@@ -1132,78 +1095,15 @@ MuseScore {
                         columns: 6
                         anchors.margins: 10
                         ButtonGroup { id: pureToneGroup }
-                        FlatRadioButton {
-                            text: "C"
-                            checked: true
-                            id: pure_c
-                            ButtonGroup.group: pureToneGroup
-                            onClicked: { pureToneClicked(0) }
-                        }
-                        FlatRadioButton {
-                            text: "G"
-                            id: pure_g
-                            ButtonGroup.group: pureToneGroup
-                            onClicked: { pureToneClicked(1) }
-                        }
-                        FlatRadioButton {
-                            text: "D"
-                            id: pure_d
-                            ButtonGroup.group: pureToneGroup
-                            onClicked: { pureToneClicked(2) }
-                        }
-                        FlatRadioButton {
-                            text: "A"
-                            id: pure_a
-                            ButtonGroup.group: pureToneGroup
-                            onClicked: { pureToneClicked(3) }
-                        }
-                        FlatRadioButton {
-                            text: "E"
-                            id: pure_e
-                            ButtonGroup.group: pureToneGroup
-                            onClicked: { pureToneClicked(4) }
-                        }
-                        FlatRadioButton {
-                            text: "B"
-                            id: pure_b
-                            ButtonGroup.group: pureToneGroup
-                            onClicked: { pureToneClicked(5) }
-                        }
-                        FlatRadioButton {
-                            text: "F#"
-                            id: pure_f_sharp
-                            ButtonGroup.group: pureToneGroup
-                            onClicked: { pureToneClicked(6) }
-                        }
-                        FlatRadioButton {
-                            text: "C#"
-                            id: pure_c_sharp
-                            ButtonGroup.group: pureToneGroup
-                            onClicked: { pureToneClicked(7) }
-                        }
-                        FlatRadioButton {
-                            text: "G#"
-                            id: pure_g_sharp
-                            ButtonGroup.group: pureToneGroup
-                            onClicked: { pureToneClicked(8) }
-                        }
-                        FlatRadioButton {
-                            text: "Eb"
-                            id: pure_e_flat
-                            ButtonGroup.group: pureToneGroup
-                            onClicked: { pureToneClicked(9) }
-                        }
-                        FlatRadioButton {
-                            text: "Bb"
-                            id: pure_b_flat
-                            ButtonGroup.group: pureToneGroup
-                            onClicked: { pureToneClicked(10) }
-                        }
-                        FlatRadioButton {
-                            text: "F"
-                            id: pure_f
-                            ButtonGroup.group: pureToneGroup
-                            onClicked: { pureToneClicked(11) }
+                        Repeater {
+                            id: pureTones
+                            model: ["C", "G", "D", "A", "E", "B", "F#", "C#", "G#", "Eb", "Bb", "F"]
+                            delegate: FlatRadioButton{
+                                ButtonGroup.group: pureToneGroup
+                                text: modelData
+                                checked: index==0? true : false
+                                onClicked: { pureToneClicked(index) }
+                            }
                         }
                     }
                 }
