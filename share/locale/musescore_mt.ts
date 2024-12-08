@@ -7358,7 +7358,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="246"/>
         <source>Snap to previous</source>
-        <translation type="unfinished"/>
+        <translation>Qabbad ma&apos; ta&apos; qabel</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="252"/>
@@ -7368,7 +7368,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="253"/>
         <source>Snap to next</source>
-        <translation type="unfinished"/>
+        <translation>Qabbad ma&apos; ta&apos; wara</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="260"/>
@@ -15077,7 +15077,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2395"/>
         <source>Shaker</source>
-        <translation type="unfinished"/>
+        <translation>Xejker</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2396"/>
@@ -15366,7 +15366,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/hairpin.cpp" line="783"/>
         <source>Crescendo line</source>
-        <translation type="unfinished"/>
+        <translation>Linja tal-Crescendo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/hairpin.cpp" line="785"/>
@@ -21772,7 +21772,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangePositionSettingsTab.qml" line="68"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml" line="77"/>
         <source>Snap to next</source>
-        <translation type="unfinished"/>
+        <translation>Qabbad ma&apos; ta&apos; wara</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml" line="63"/>
@@ -21782,7 +21782,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml" line="68"/>
         <source>Snap to previous</source>
-        <translation type="unfinished"/>
+        <translation>Qabbad ma&apos; ta&apos; qabel</translation>
     </message>
 </context>
 <context>
@@ -24485,7 +24485,7 @@ X&apos;aktarx, Mastering MuseScore għandu komunità sapportiva ta&apos; mużċi
     </message>
     <message>
         <source>Crescendo line</source>
-        <translation type="unfinished"/>
+        <translation>Linja tal-Crescendo</translation>
     </message>
     <message>
         <source>Diminuendo line</source>
