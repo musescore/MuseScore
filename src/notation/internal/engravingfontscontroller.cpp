@@ -25,7 +25,6 @@
 #include "engraving/infrastructure/smufl.h"
 #include "engraving/internal/engravingfont.h"
 #include "draw/internal/ifontsdatabase.h"
-#include "infrastructure/smufl.h"
 #include "log.h"
 
 #include <QDirIterator>
@@ -41,11 +40,17 @@ std::string EngravingFontsController::moduleName() const
 void EngravingFontsController::init()
 {
     // Standard locations as described in https://w3c.github.io/smufl/latest/specification/font-metadata-locations.html
+
+    // These standard location roughly match up with what the following returns, but some adjustments are needed.
     QStringList systemFontsPaths = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).first(2);
 
 #ifdef Q_OS_WIN
-    // On Windows, the second standard location is C:/ProgramData, but we want C:/Program Files/Common Files
-    systemFontsPaths[1] = "C:/Program Files/Common Files";
+    // On Windows, the second standard location returned by Qt is %ProgramData%, but we want %CommonProgramFiles%
+    systemFontsPaths[1] = qgetenv("CommonProgramFiles").replace("\\", "/");
+#elif Q_OS_UNIX
+    // On Unix systems, we want $XDG_DATA_DIRS and $XDG_DATA_HOME
+    QStringList xdgDataDirs = QString::fromLocal8Bit(qgetenv("XDG_DATA_DIRS")).split(':');
+    systemFontsPaths = xdgDataDirs << qgetenv("XDG_DATA_HOME");
 #endif
 
     // The first location is the system-wide location, so we should iterate in reverse order so that
