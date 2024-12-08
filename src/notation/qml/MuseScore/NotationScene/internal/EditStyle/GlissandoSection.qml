@@ -42,8 +42,6 @@ Rectangle {
     ColumnLayout {
         width: parent.width
         spacing: 12
-        Layout.fillWidth: true
-        Layout.maximumWidth: 120
 
         RadioButtonSelectorWithReset {
             styleItem: glissandoSectionModel.glissandoLineType
@@ -51,7 +49,7 @@ Rectangle {
 
             model: [
                 { text: qsTrc("notation", "Straight"), value: 0 },
-                { text: qsTrc("notation", "Wavy"), value: 1}
+                { text: qsTrc("notation", "Wavy"), value: 1 }
             ]
         }
 
@@ -64,12 +62,13 @@ Rectangle {
             lineWidth: glissandoSectionModel ? glissandoSectionModel.glissandoLineWidth : null
         }
 
-        RowLayout {
+        TextFieldWithReset {
             id: textRow
-            spacing: 6
-            CheckBox {
+            styleItem: glissandoSectionModel.glissandoText
+
+            labelComponent: CheckBox {
                 id: showTextCheckBox
-                width: parent.width
+                text: qsTrc("notation", "Show text")
 
                 checked: glissandoSectionModel.glissandoShowText && Boolean(glissandoSectionModel.glissandoShowText.value)
                 onClicked: {
@@ -77,12 +76,6 @@ Rectangle {
                         glissandoSectionModel.glissandoShowText.value = !checked
                     }
                 }
-            }
-
-            TextFieldWithReset {
-                styleItem: glissandoSectionModel.glissandoText
-                label: qsTrc("notation", "Show text:")
-                labelWidth: labelAreaWidth - showTextCheckBox.width - textRow.spacing
             }
         }
 

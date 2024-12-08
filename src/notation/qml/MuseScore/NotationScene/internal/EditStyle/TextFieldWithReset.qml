@@ -27,20 +27,18 @@ import MuseScore.NotationScene 1.0
 import Muse.UiComponents 1.0
 import Muse.Ui 1.0
 
-
 StyleControlRowWithReset {
     id: root
+
     property string suffix: ''
     property bool inPercentage: false
     property double step: 0.01
 
-    controlWidth: 138
-
     TextInputField {
         id: textField
-        Layout.fillWidth: false
+        width: 138
+
         currentText: styleItem ? styleItem.value : ""
-        enabled: glissandoSectionModel.glissandoShowText
 
         onTextEditingFinished: function(newTextValue) {
             if (styleItem) {
@@ -48,5 +46,4 @@ StyleControlRowWithReset {
             }
         }
     }
-
 }

@@ -42,7 +42,6 @@ ColumnLayout {
         styleSection.focusOnFirst()
     }
 
-
     RadioButtonSelectorWithReset {
         styleItem: lineStyle
         label: qsTrc("notation", "Line style:")
@@ -54,19 +53,19 @@ ColumnLayout {
         ]
     }
 
-    BasicStyleSelectorWithSpinboxAndReset {
+    StyleSpinboxWithReset {
         styleItem: lineWidth
         label: qsTrc("notation", "Line thickness:")
         suffix: qsTrc("global", "sp")
     }
 
-    BasicStyleSelectorWithSpinboxAndReset {
+    StyleSpinboxWithReset {
         styleItem: dashLineLength
         label: qsTrc("notation", "Dash (dashed line):")
         step: 0.1
     }
 
-    BasicStyleSelectorWithSpinboxAndReset {
+    StyleSpinboxWithReset {
         styleItem: dashGapLength
         label: qsTrc("notation", "Gap (dashed line):")
         step: 0.1
