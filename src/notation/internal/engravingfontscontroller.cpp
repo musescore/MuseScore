@@ -29,6 +29,7 @@
 #include "log.h"
 
 #include <QDirIterator>
+#include <QStandardPaths>
 
 using namespace mu::notation;
 
@@ -39,17 +40,30 @@ std::string EngravingFontsController::moduleName() const
 
 void EngravingFontsController::init()
 {
-    mu::engraving::Smufl::init();
+    // Standard locations as described in https://w3c.github.io/smufl/latest/specification/font-metadata-locations.html
+    QStringList systemFontsPaths = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).first(2);
 
+#ifdef Q_OS_WIN
+    // On Windows, the second standard location is C:/ProgramData, but we want C:/Program Files/Common Files
+    systemFontsPaths[1] = "C:/Program Files/Common Files";
+#endif
+
+    // The first location is the system-wide location, so we should iterate in reverse order so that
+    // user fonts take precedence over system fonts
+    for (QString path : systemFontsPaths) {
+        scanDirectory(path + "/SMuFL/Fonts", false);
+    }
+
+    // Additionally, also support a MuseScore-specific location
     auto musicFontsPath = configuration()->userMusicFontPathChanged();
     musicFontsPath.onReceive(this, [this](const muse::io::path_t& dir) {
-        scanDirectory(dir);
+        scanDirectory(dir, true);
     });
 
-    scanDirectory(configuration()->userMusicFontPath());
+    scanDirectory(configuration()->userMusicFontPath(), true);
 }
 
-void EngravingFontsController::scanDirectory(const muse::io::path_t& path) const
+void EngravingFontsController::scanDirectory(const muse::io::path_t& path, bool isPrivate) const
 {
     using namespace muse::draw;
 
@@ -77,14 +91,31 @@ void EngravingFontsController::scanDirectory(const muse::io::path_t& path) const
             }
         }
 
-        if (symbolFontPath.empty() || !QFileInfo::exists(iterator.filePath() + "/metadata.json")) {
+        if (symbolFontPath.empty()) {
             continue;
         }
         if (textFontPath.empty()) {
             textFontPath = symbolFontPath;
         }
 
-        engravingFonts()->addUserFont(fontName.toStdString(), fontName.toStdString(), symbolFontPath);
+        muse::io::path_t metadataPath;
+        QStringList metadataFilenameOptions = {
+            "/metadata.json",
+            QString("/%1.json").arg(fontName),
+            QString("/%1_metadata.json").arg(fontName)
+        };
+        for (const auto& option : metadataFilenameOptions) {
+            if (QFile::exists(iterator.filePath() + option)) {
+                metadataPath = iterator.filePath() + option;
+                break;
+            }
+        }
+        if (metadataPath.empty()) {
+            LOGE() << "No metadata file found for font " << fontName;
+            continue;
+        }
+
+        engravingFonts()->addExternalFont(fontName.toStdString(), fontName.toStdString(), symbolFontPath, metadataPath, isPrivate);
         fdb->addFont(FontDataKey(fontName), symbolFontPath);
         fdb->addFont(FontDataKey(fontName + u" Text"), textFontPath);
         fdb->insertSubstitution(fontName + u" Text", u"Leland Text");
