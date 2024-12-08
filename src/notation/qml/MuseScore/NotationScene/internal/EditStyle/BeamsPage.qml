@@ -127,10 +127,9 @@ StyleDialogPage {
 
     StyledGroupBox {
         width: parent.width
-        height: 120
+        height: Math.max(120, implicitHeight)
 
         title: qsTrc("notation", "Beam style")
-        label.x: 0
 
         RowLayout {
             anchors.fill: parent
