@@ -27,14 +27,13 @@ import MuseScore.NotationScene 1.0
 import Muse.UiComponents 1.0
 import Muse.Ui 1.0
 
-
 StyleControlRowWithReset {
     id: root
+
     property alias model: radioButtonGroup.model
 
     RadioButtonGroup {
         id: radioButtonGroup
-        height: 30
         anchors.fill: parent
 
         delegate: FlatRadioButton {

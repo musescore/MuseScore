@@ -42,7 +42,6 @@ ColumnLayout {
         styleSection.focusOnFirst()
     }
 
-
     RadioButtonSelectorWithReset {
         styleItem: lineStyle
         label: qsTrc("notation", "Line style:")

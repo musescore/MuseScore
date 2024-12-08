@@ -32,6 +32,8 @@ Rectangle {
     anchors.fill: parent
     color: ui.theme.backgroundPrimaryColor
 
+    readonly property real controlAreaWidth: 204
+
     signal goToTextStylePage(string s)
 
     StyledGroupBox {
@@ -52,21 +54,20 @@ Rectangle {
                 styleItem: fretboardsPage.fretY
                 label: qsTrc("notation", "Position above:")
                 suffix: qsTrc("global", "sp")
-                controlAreaWidth: 204
+                controlAreaWidth: root.controlAreaWidth
             }
 
             BasicStyleSelectorWithSpinboxAndReset {
                 styleItem: fretboardsPage.fretMag
                 label: qsTrc("notation", "Scale:")
                 inPercentage: true
-                controlAreaWidth: 204
+                controlAreaWidth: root.controlAreaWidth
             }
 
             IconAndTextButtonSelector {
                 styleItem: fretboardsPage.fretOrientation
                 label: qsTrc("notation", "Orientation:")
-
-                Layout.preferredHeight: 70
+                controlAreaWidth: root.controlAreaWidth
 
                 model: [
                     { iconCode: IconCode.FRETBOARD_VERTICAL, text: qsTrc("notation", "Vertical"), value: 0 },
@@ -78,7 +79,7 @@ Rectangle {
                 styleItem: fretboardsPage.fretNutThickness
                 label: qsTrc("notation", "Nut line thickness:")
                 suffix: qsTrc("global", "sp")
-                controlAreaWidth: 204
+                controlAreaWidth: root.controlAreaWidth
             }
 
             StyledGroupBox {
@@ -166,8 +167,7 @@ Rectangle {
                 styleItem: fretboardsPage.fretDotSpatiumSize
                 label: qsTrc("notation", "Dot size:")
                 suffix: qsTrc("global", "sp")
-                controlAreaWidth: 204
-
+                controlAreaWidth: root.controlAreaWidth
             }
 
             StyledGroupBox {
@@ -182,8 +182,7 @@ Rectangle {
                     IconAndTextButtonSelector {
                         styleItem: fretboardsPage.barreAppearanceSlur
                         label: qsTrc("notation", "Appearance:")
-
-                        Layout.preferredHeight: 70
+                        controlAreaWidth: root.controlAreaWidth
 
                         model: [
                             { iconCode: IconCode.FRETBOARD_BARRE_LINE, text: qsTrc("notation", "Line"), value: false },
@@ -195,7 +194,7 @@ Rectangle {
                         styleItem: fretboardsPage.barreLineWidth
                         label: qsTrc("notation", "Line thickness:")
                         inPercentage: true
-                        controlAreaWidth: 204
+                        controlAreaWidth: root.controlAreaWidth
                     }
                 }
             }
@@ -217,8 +216,7 @@ Rectangle {
             IconAndTextButtonSelector {
                 styleItem: fretboardsPage.fretStyleExtended
                 label: qsTrc("notation", "Fretboard style:")
-
-                Layout.preferredHeight: 70
+                controlAreaWidth: root.controlAreaWidth
 
                 model: [
                     { iconCode: IconCode.FRETBOARD_VERTICAL, text: qsTrc("notation", "Trimmed"), value: false },
@@ -230,28 +228,28 @@ Rectangle {
                 styleItem: fretboardsPage.fretStringSpacing
                 label: qsTrc("notation", "String spacing:")
                 suffix: qsTrc("global", "sp")
-                controlAreaWidth: 204
+                controlAreaWidth: root.controlAreaWidth
             }
 
             BasicStyleSelectorWithSpinboxAndReset {
                 styleItem: fretboardsPage.fretFretSpacing
                 label: qsTrc("notation", "Fret spacing:")
                 suffix: qsTrc("global", "sp")
-                controlAreaWidth: 204
+                controlAreaWidth: root.controlAreaWidth
             }
 
             BasicStyleSelectorWithSpinboxAndReset {
                 styleItem: fretboardsPage.maxFretShiftAbove
                 label: qsTrc("notation", "Maximum shift above:")
                 suffix: qsTrc("global", "sp")
-                controlAreaWidth: 204
+                controlAreaWidth: root.controlAreaWidth
             }
 
             BasicStyleSelectorWithSpinboxAndReset {
                 styleItem: fretboardsPage.maxFretShiftBelow
                 label: qsTrc("notation", "Maximum shift below:")
                 suffix: qsTrc("global", "sp")
-                controlAreaWidth: 204
+                controlAreaWidth: root.controlAreaWidth
             }
         }
     }
