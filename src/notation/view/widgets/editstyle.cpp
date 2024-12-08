@@ -913,7 +913,7 @@ EditStyle::EditStyle(QWidget* parent)
     auto fretboardsPage = createQmlWidget(
         fretboardsWidget,
         QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml")));
-    fretboardsPage.widget->setMinimumSize(224, 1000);
+    fretboardsPage.widget->setMinimumSize(224, 1006);
     connect(fretboardsPage.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
     fretboardsWidget->layout()->addWidget(fretboardsPage.widget);
 

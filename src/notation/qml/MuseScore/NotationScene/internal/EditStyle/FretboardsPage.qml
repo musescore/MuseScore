@@ -85,71 +85,64 @@ Rectangle {
                 Layout.fillWidth: true
 
                 title: qsTrc("notation", "Fret number")
+
                 ColumnLayout {
                     width: parent.width
+                    spacing: 12
+
                     RowLayout {
                         spacing: 12
+
                         StyledTextLabel {
                             horizontalAlignment: Text.AlignLeft
                             text: qsTrc("notation", "Position:")
                         }
-                        RowLayout {
-                            spacing: 8
-                            RoundedRadioButton {
-                                checked: fretboardsPage.fretNumPos.value === 0
-                                onToggled: fretboardsPage.fretNumPos.value = 0
-                            }
-                            StyledTextLabel {
-                                horizontalAlignment: Text.AlignLeft
-                                text: fretboardsPage.fretOrientation.value === 0 ? qsTrc("notation", "Left") : qsTrc("notation", "Bottom")
-                            }
+
+                        RoundedRadioButton {
+                            text: fretboardsPage.fretOrientation.value === 0 ? qsTrc("notation", "Left") : qsTrc("notation", "Bottom")
+                            checked: fretboardsPage.fretNumPos.value === 0
+                            onToggled: fretboardsPage.fretNumPos.value = 0
                         }
-                        RowLayout {
-                            spacing: 8
-                            RoundedRadioButton {
-                                checked: fretboardsPage.fretNumPos.value === 1
-                                onToggled: fretboardsPage.fretNumPos.value = 1
-                            }
-                            StyledTextLabel {
-                                horizontalAlignment: Text.AlignLeft
-                                text: fretboardsPage.fretOrientation.value === 0 ? qsTrc("notation", "Right") : qsTrc("notation", "Top")
-                            }
+
+                        RoundedRadioButton {
+                            text: fretboardsPage.fretOrientation.value === 0 ? qsTrc("notation", "Right") : qsTrc("notation", "Top")
+                            checked: fretboardsPage.fretNumPos.value === 1
+                            onToggled: fretboardsPage.fretNumPos.value = 1
                         }
                     }
 
                     StyledGroupBox {
                         title: qsTrc("notation", "Format:")
                         Layout.fillWidth: true
+
                         ColumnLayout {
-                            RowLayout {
-                                spacing: 8
-                                RoundedRadioButton {
-                                    checked: fretboardsPage.fretUseCustomSuffix.value === false
-                                    onToggled: fretboardsPage.fretUseCustomSuffix.value = false
-                                }
-                                StyledTextLabel {
-                                    horizontalAlignment: Text.AlignLeft
-                                    text: qsTrc("notation", "Number only")
-                                }
+                            width: parent.width
+                            spacing: 12
+
+                            RoundedRadioButton {
+                                text: qsTrc("notation", "Number only")
+                                checked: fretboardsPage.fretUseCustomSuffix.value === false
+                                onToggled: fretboardsPage.fretUseCustomSuffix.value = false
                             }
+
                             RowLayout {
                                 spacing: 8
+
                                 RoundedRadioButton {
+                                    text: qsTrc("notation", "Custom suffix:")
                                     checked: fretboardsPage.fretUseCustomSuffix.value === true
                                     onToggled: fretboardsPage.fretUseCustomSuffix.value = true
                                 }
-                                StyledTextLabel {
-                                    horizontalAlignment: Text.AlignLeft
-                                    text: qsTrc("notation", "Custom suffix:")
-                                }
+
                                 TextInputField {
-                                    enabled: fretboardsPage.fretUseCustomSuffix.value === true
                                     Layout.preferredWidth: 60
+                                    enabled: fretboardsPage.fretUseCustomSuffix.value === true
                                     currentText: fretboardsPage.fretCustomSuffix.value
-                                    onTextChanged: function(newTextValue) {
+                                    onTextEdited: function(newTextValue) {
                                         fretboardsPage.fretCustomSuffix.value = newTextValue
                                     }
                                 }
+
                                 StyledTextLabel {
                                     visible: fretboardsPage.fretUseCustomSuffix.value === true
                                     horizontalAlignment: Text.AlignLeft
