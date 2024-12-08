@@ -89,6 +89,7 @@ RadioDelegate {
                     text: root.text
                     font: root.font
                     horizontalAlignment: Qt.AlignLeft
+                    wrapMode: Text.WordWrap
                 }
             }
         }
