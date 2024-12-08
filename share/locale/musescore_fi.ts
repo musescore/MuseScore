@@ -27141,7 +27141,7 @@ kirjoitus epäonnistui.</translation>
     <message>
         <location filename="../../src/playback/view/internal/outputresourceitem.cpp" line="73"/>
         <source>Get more effects</source>
-        <translation type="unfinished"/>
+        <translation>Hanki lisää tehosteita</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="44"/>
@@ -27176,7 +27176,7 @@ kirjoitus epäonnistui.</translation>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="95"/>
         <source>Get more sounds</source>
-        <translation type="unfinished"/>
+        <translation>Hanki lisää ääniä</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="360"/>
@@ -27575,7 +27575,7 @@ kirjoitus epäonnistui.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1626"/>
         <source>Try again</source>
-        <translation type="unfinished"/>
+        <translation>Yritä uudelleen</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1779"/>
@@ -27670,7 +27670,7 @@ kirjoitus epäonnistui.</translation>
     <message>
         <location filename="../../src/project/internal/projectconfiguration.cpp" line="123"/>
         <source>Create backup of file on disk before saving new changes</source>
-        <translation type="unfinished"/>
+        <translation>Luo varmuuskopio levylle ennen uusien muutosten tallentamista</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectconfiguration.cpp" line="340"/>
@@ -28991,12 +28991,12 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1610"/>
         <source>An error occurred while saving your score</source>
-        <translation type="unfinished"/>
+        <translation>Partituurin tallennuksessa tapahtui virhe</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1612"/>
         <source>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</source>
-        <translation type="unfinished"/>
+        <translation>Jos haluat säilyttää partituurisi, yritä tallentaa se uudelleen. Jos tämä viesti näkyy edelleen, tallenna tuloksesi uutena kopiona. Voit myös saada apua tähän ongelmaan osoitteessa %1.&lt;br/&gt;&lt;br/&gt; Virhetiedot (mainitse kun pyydät tukea): %2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="182"/>
@@ -29122,12 +29122,12 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/project/internal/notationproject.cpp" line="834"/>
         <source>File “%1” could not be opened for validation. %2</source>
-        <translation type="unfinished"/>
+        <translation>Tiedostoa “%1” ei voitu avata vahvistusta varten. %2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/notationproject.cpp" line="845"/>
         <source>“%1” is corrupted or damaged.</source>
-        <translation type="unfinished"/>
+        <translation>&quot;%1&quot; on vioittunut tai vaurioitunut.</translation>
     </message>
 </context>
 <context>

@@ -12690,21 +12690,21 @@
         <source>Shaker.</source>
         <comment>shaker description</comment>
         <extracomment>description for Shaker; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Xejker.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4273"/>
         <source>Shaker</source>
         <comment>shaker trackName</comment>
         <extracomment>trackName for Shaker; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Xejker</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4275"/>
         <source>Shaker</source>
         <comment>shaker longName</comment>
         <extracomment>longName for Shaker; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Xejker</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4277"/>

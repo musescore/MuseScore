@@ -24269,7 +24269,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="63"/>
         <source>More palettes</source>
-        <translation>Più tavolozze</translation>
+        <translation>Altre tavolozze</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="70"/>
@@ -24565,7 +24565,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
         <location filename="../../src/palette/internal/palettecreator.cpp" line="530"/>
         <source>Layout</source>
         <extracomment>The name of a palette</extracomment>
-        <translation>Layout</translation>
+        <translation>Impaginazione</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="585"/>
