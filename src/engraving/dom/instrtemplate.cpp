@@ -604,6 +604,9 @@ void InstrumentTemplate::read(XmlReader& e)
     }
     if (id.empty()) {
         id = trackName.toLower().replace(u' ', u'-');
+    } else if (id == "drumset") {
+        delete smDrumset;
+        smDrumset = drumset;
     }
 
     if (staffCount == 0) {
