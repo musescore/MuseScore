@@ -116,6 +116,11 @@ public:
     muse::io::path_t partStyleFilePath() const override;
     void setPartStyleFilePath(const muse::io::path_t& path) override;
 
+    muse::io::path_t userMusicFontPath() const override;
+    void setUserMusicFontPath(const muse::io::path_t& path) override;
+
+    muse::async::Channel<muse::io::path_t> userMusicFontPathChanged() const override;
+
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled) override;
 
@@ -226,6 +231,7 @@ private:
     muse::async::Notification m_foregroundChanged;
     muse::async::Channel<muse::Orientation> m_canvasOrientationChanged;
     muse::async::Channel<muse::io::path_t> m_userStylesPathChanged;
+    muse::async::Channel<muse::io::path_t> m_userMusicFontsPathChanged;
     muse::async::Notification m_scoreOrderListPathsChanged;
     muse::async::Notification m_isLimitCanvasScrollAreaChanged;
     muse::async::Notification m_isPlayRepeatsChanged;
