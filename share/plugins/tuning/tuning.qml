@@ -779,44 +779,7 @@ MuseScore {
     }
 
     function checkCurrentRoot() {
-        switch (currentRoot) {
-            case 0:
-                root_c.checked = true
-                break
-            case 1:
-                root_g.checked = true
-                break
-            case 2:
-                root_d.checked = true
-                break
-            case 3:
-                root_a.checked = true
-                break
-            case 4:
-                root_e.checked = true
-                break
-            case 5:
-                root_b.checked = true
-                break
-            case 6:
-                root_f_sharp.checked = true
-                break
-            case 7:
-                root_c_sharp.checked = true
-                break
-            case 8:
-                root_g_sharp.checked = true
-                break
-            case 9:
-                root_e_flat.checked = true
-                break
-            case 10:
-                root_b_flat.checked = true
-                break
-            case 11:
-                root_f.checked = true
-                break
-        }
+        rootNotes.itemAt(currentRoot).checked=true 
     }
 
     function setCurrentPureTone(pureTone) {
@@ -1013,78 +976,15 @@ MuseScore {
                         columns: 6
                         anchors.margins: 10
                         ButtonGroup { id: rootNoteGroup }
-                        FlatRadioButton {
-                            text: "C"
-                            checked: true
-                            ButtonGroup.group: rootNoteGroup
-                            id: root_c
-                            onClicked: { rootNoteClicked(0) }
-                        }
-                        FlatRadioButton {
-                            text: "G"
-                            ButtonGroup.group: rootNoteGroup
-                            id: root_g
-                            onClicked: { rootNoteClicked(1) }
-                        }
-                        FlatRadioButton {
-                            text: "D"
-                            ButtonGroup.group: rootNoteGroup
-                            id: root_d
-                            onClicked: { rootNoteClicked(2) }
-                        }
-                        FlatRadioButton {
-                            text: "A"
-                            ButtonGroup.group: rootNoteGroup
-                            id: root_a
-                            onClicked: { rootNoteClicked(3) }
-                        }
-                        FlatRadioButton {
-                            text: "E"
-                            ButtonGroup.group: rootNoteGroup
-                            id: root_e
-                            onClicked: { rootNoteClicked(4) }
-                        }
-                        FlatRadioButton {
-                            text: "B"
-                            ButtonGroup.group: rootNoteGroup
-                            id: root_b
-                            onClicked: { rootNoteClicked(5) }
-                        }
-                        FlatRadioButton {
-                            text: "F#"
-                            ButtonGroup.group: rootNoteGroup
-                            id: root_f_sharp
-                            onClicked: { rootNoteClicked(6) }
-                        }
-                        FlatRadioButton {
-                            text: "C#"
-                            ButtonGroup.group: rootNoteGroup
-                            id: root_c_sharp
-                            onClicked: { rootNoteClicked(7) }
-                        }
-                        FlatRadioButton {
-                            text: "G#"
-                            ButtonGroup.group: rootNoteGroup
-                            id: root_g_sharp
-                            onClicked: { rootNoteClicked(8) }
-                        }
-                        FlatRadioButton {
-                            text: "Eb"
-                            ButtonGroup.group: rootNoteGroup
-                            id: root_e_flat
-                            onClicked: { rootNoteClicked(9) }
-                        }
-                        FlatRadioButton {
-                            text: "Bb"
-                            ButtonGroup.group: rootNoteGroup
-                            id: root_b_flat
-                            onClicked: { rootNoteClicked(10) }
-                        }
-                        FlatRadioButton {
-                            text: "F"
-                            ButtonGroup.group: rootNoteGroup
-                            id: root_f
-                            onClicked: { rootNoteClicked(11) }
+                        Repeater {
+                            id: rootNotes
+                            model: ["C", "G", "D", "A", "E", "B", "F#", "C#", "G#", "Eb", "Bb", "F"]
+                            delegate: FlatRadioButton {
+                                ButtonGroup.group: rootNoteGroup
+                                text: modelData
+                                checked: index==0? true : false
+                                onClicked: { rootNoteClicked(index) }
+                            }
                         }
                     }
                 }
@@ -1098,7 +998,7 @@ MuseScore {
                         Repeater {
                             id: pureTones
                             model: ["C", "G", "D", "A", "E", "B", "F#", "C#", "G#", "Eb", "Bb", "F"]
-                            delegate: FlatRadioButton{
+                            delegate: FlatRadioButton {
                                 ButtonGroup.group: pureToneGroup
                                 text: modelData
                                 checked: index==0? true : false
