@@ -27,6 +27,11 @@ Item {
     // Useful for static context menus
     property var items: []
 
+    property alias closeMenuOnSelection: contextMenuLoader.closeMenuOnSelection
+    property alias opensUpward: contextMenuLoader.opensUpward
+
+    property alias item: contextMenuLoader.item
+
     signal handleMenuItem(string itemId)
     signal opened()
     signal closed()
