@@ -23,45 +23,42 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
-import MuseScore.NotationScene 1.0
 import Muse.UiComponents 1.0
 import Muse.Ui 1.0
 
+import MuseScore.NotationScene 1.0
+
 RowLayout {
     id: root
+
     required property StyleItem styleItem
-    required property string label
+    property string label
+    property alias labelComponent: labelLoader.sourceComponent
+
     property double labelAreaWidth: 120
     property double controlAreaWidth: 326
-
-    property double labelWidth: labelAreaWidth
-    property double controlWidth: controlAreaWidth
 
     default property alias data: control.data
 
     property bool hasReset: true
 
-    height: control.height
-
     spacing: 8
 
-    StyledTextLabel {
-        id: optionLabel
-        horizontalAlignment: Text.AlignLeft
-        Layout.fillWidth: true
-        Layout.maximumWidth: Math.min(root.labelWidth, root.labelAreaWidth)
-        wrapMode: Text.WordWrap
-        text: label
+    Loader {
+        id: labelLoader
+        Layout.preferredWidth: root.labelAreaWidth
+
+        sourceComponent: StyledTextLabel {
+            horizontalAlignment: Text.AlignLeft
+            wrapMode: Text.WordWrap
+            text: root.label
+        }
     }
 
     Item {
         id: control
-        Layout.preferredWidth: Math.min(root.controlWidth, root.controlAreaWidth)
-        Layout.alignment: Qt.AlignTop
-    }
-
-    Item {
-        Layout.preferredWidth: Math.max(root.controlAreaWidth - control.width - root.spacing - 1, 0)
+        Layout.preferredWidth: root.controlAreaWidth
+        implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
     }
 
     FlatButton {
