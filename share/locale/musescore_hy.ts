@@ -4834,7 +4834,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13668"/>
         <source>Common</source>
-        <translation type="unfinished"/>
+        <translation>Ընդհանուր</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13571"/>
@@ -17424,7 +17424,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3981"/>
         <source>Piano</source>
-        <translation type="unfinished"/>
+        <translation>Դաշնամուր</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3982"/>
@@ -25309,7 +25309,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1777"/>
         <source>Guitar</source>
-        <translation type="unfinished"/>
+        <translation>Կիթառ</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1891"/>

@@ -15063,14 +15063,14 @@
         <source>Harp</source>
         <comment>harp trackName</comment>
         <extracomment>trackName for Harp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Harpa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5056"/>
         <source>Harp</source>
         <comment>harp longName</comment>
         <extracomment>longName for Harp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Harpa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5058"/>
@@ -18038,14 +18038,14 @@
         <source>Strings</source>
         <comment>strings trackName</comment>
         <extracomment>trackName for Strings; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cuerdes</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5930"/>
         <source>Strings</source>
         <comment>strings longName</comment>
         <extracomment>longName for Strings; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cuerdes</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5932"/>
@@ -19502,7 +19502,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="193"/>
         <source>Strings</source>
-        <translation type="unfinished"/>
+        <translation>Cuerdes</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="194"/>
@@ -19535,7 +19535,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="75"/>
         <source>Common</source>
-        <translation type="unfinished"/>
+        <translation>Común</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="76"/>
