@@ -39,7 +39,7 @@ public:
     void init();
 
 private:
-    void scanDirectory(const muse::io::path_t& path) const;
+    void scanDirectory(const muse::io::path_t& path, bool isPrivate) const;
 };
 }
 
