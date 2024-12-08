@@ -206,7 +206,7 @@ Item {
         navigation.row: 0
 
         onClicked: {
-            root.model.finishEditing()
+            root.model.finishEditing(/*discardChanges*/ false)
         }
     }
 

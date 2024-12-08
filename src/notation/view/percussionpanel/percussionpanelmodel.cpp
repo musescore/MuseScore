@@ -63,7 +63,7 @@ PanelMode::Mode PercussionPanelModel::currentPanelMode() const
     return m_currentPanelMode;
 }
 
-void PercussionPanelModel::setCurrentPanelMode(const PanelMode::Mode& panelMode, bool updateNoteInput)
+void PercussionPanelModel::setCurrentPanelMode(const PanelMode::Mode& panelMode)
 {
     if (m_currentPanelMode == panelMode) {
         return;
@@ -76,13 +76,6 @@ void PercussionPanelModel::setCurrentPanelMode(const PanelMode::Mode& panelMode,
 
     m_currentPanelMode = panelMode;
     emit currentPanelModeChanged(m_currentPanelMode);
-
-    if (!updateNoteInput || !interaction() || !interaction()->noteInput()) {
-        return;
-    }
-
-    const INotationNoteInputPtr noteInput = interaction()->noteInput();
-    panelMode == PanelMode::Mode::WRITE ? noteInput->startNoteInput() : noteInput->endNoteInput();
 }
 
 bool PercussionPanelModel::useNotationPreview() const
@@ -159,14 +152,13 @@ void PercussionPanelModel::handleMenuItem(const QString& itemId)
         setUseNotationPreview(true);
     } else if (itemId == EDIT_LAYOUT_CODE) {
         const bool currentlyEditing = m_currentPanelMode == PanelMode::Mode::EDIT_LAYOUT;
-        currentlyEditing ? finishEditing() : setCurrentPanelMode(PanelMode::Mode::EDIT_LAYOUT, false);
+        currentlyEditing ? finishEditing(/*discardChanges*/ false) : setCurrentPanelMode(PanelMode::Mode::EDIT_LAYOUT);
     } else if (itemId == RESET_LAYOUT_CODE) {
-        // TODO: Need a mechanism for "default" layouts...
-        // m_padListModel->resetLayout();
+        resetLayout();
     }
 }
 
-void PercussionPanelModel::finishEditing()
+void PercussionPanelModel::finishEditing(bool discardChanges)
 {
     Drumset* updatedDrumset = m_padListModel->drumset();
     m_padListModel->removeEmptyRows();
@@ -180,7 +172,13 @@ void PercussionPanelModel::finishEditing()
 
     Instrument* inst = staff->part()->instrument(inputState.segment->tick());
 
-    IF_ASSERT_FAILED(inst) {
+    IF_ASSERT_FAILED(inst && inst->drumset()) {
+        return;
+    }
+
+    if (discardChanges) {
+        m_padListModel->setDrumset(inst->drumset());
+        setCurrentPanelMode(m_panelModeToRestore);
         return;
     }
 
@@ -211,7 +209,7 @@ void PercussionPanelModel::finishEditing()
     undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Edit percussion panel layout"));
     score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, staff->part()));
 
-    setCurrentPanelMode(m_panelModeToRestore, false);
+    setCurrentPanelMode(m_panelModeToRestore);
 }
 
 void PercussionPanelModel::customizeKit()
@@ -227,7 +225,7 @@ void PercussionPanelModel::setUpConnections()
         }
 
         if (m_currentPanelMode == PanelMode::Mode::EDIT_LAYOUT) {
-            finishEditing();
+            finishEditing(/*discardChanges*/ true);
         }
 
         m_padListModel->setDrumset(drumset);
@@ -309,6 +307,48 @@ void PercussionPanelModel::playPitch(int pitch)
 
     note->setParent(nullptr);
     delete note;
+}
+
+void PercussionPanelModel::resetLayout()
+{
+    if (m_currentPanelMode == PanelMode::Mode::EDIT_LAYOUT) {
+        finishEditing(/*discardChanges*/ true);
+    }
+
+    NoteInputState inputState = interaction()->noteInput()->state();
+    const Staff* staff = inputState.staff;
+
+    IF_ASSERT_FAILED(staff && staff->part()) {
+        return;
+    }
+
+    Instrument* inst = staff->part()->instrument(inputState.segment->tick());
+
+    IF_ASSERT_FAILED(inst) {
+        return;
+    }
+
+    const InstrumentTemplate instTemplate = instrumentsRepository()->instrumentTemplate(inst->id());
+    const Drumset* defaultDrumset = instTemplate.drumset;
+
+    IF_ASSERT_FAILED(defaultDrumset) {
+        return;
+    }
+
+    Drumset defaultLayout = m_padListModel->constructDefaultLayout(defaultDrumset);
+    if (defaultLayout == *m_padListModel->drumset()) {
+        // Nothing changed after reset...
+        return;
+    }
+
+    INotationUndoStackPtr undoStack = notation()->undoStack();
+
+    DEFER {
+        undoStack->commitChanges();
+    };
+
+    undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Reset percussion panel layout"));
+    score()->undo(new engraving::ChangeDrumset(inst, &defaultLayout, staff->part()));
 }
 
 const INotationPtr PercussionPanelModel::notation() const

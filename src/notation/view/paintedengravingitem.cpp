@@ -45,6 +45,16 @@ void PaintedEngravingItem::setEngravingItemVariant(QVariant engravingItemVariant
     m_item = item;
 }
 
+double PaintedEngravingItem::spatium() const
+{
+    return m_spatium;
+}
+
+void PaintedEngravingItem::setSpatium(double spatium)
+{
+    m_spatium = spatium;
+}
+
 void PaintedEngravingItem::paint(QPainter* painter)
 {
     qreal dpi = painter->device()->logicalDpiX();
@@ -64,16 +74,16 @@ void PaintedEngravingItem::paintNotationPreview(muse::draw::Painter& painter, qr
     EngravingItemPreviewPainter::PaintParams params;
     params.painter = &painter;
 
-    params.color = muse::draw::Color::BLACK; // TODO: set this properly
+    params.color = configuration()->defaultColor();
 
     params.rect = muse::RectF(0, 0, parentItem()->width(), parentItem()->height());
     params.dpi = dpi;
 
-    params.spatium = configuration()->paletteSpatium(); // TODO: don't use the palette for this
+    params.spatium = m_spatium;
 
     params.drawStaff = true;
 
-    painter.fillRect(params.rect, muse::draw::Color::WHITE); // TODO: set this properly
+    painter.fillRect(params.rect, configuration()->scoreInversionColor());
 
     EngravingItemPreviewPainter::paintPreview(m_item.get(), params);
 }
