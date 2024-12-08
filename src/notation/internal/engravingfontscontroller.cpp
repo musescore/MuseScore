@@ -44,10 +44,10 @@ void EngravingFontsController::init()
     // These standard location roughly match up with what the following returns, but some adjustments are needed.
     QStringList systemFontsPaths = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).first(2);
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
     // On Windows, the second standard location returned by Qt is %ProgramData%, but we want %CommonProgramFiles%
     systemFontsPaths[1] = qgetenv("CommonProgramFiles").replace("\\", "/");
-#elif Q_OS_UNIX
+#elif defined(Q_OS_LINUX)
     // On Unix systems, we want $XDG_DATA_DIRS and $XDG_DATA_HOME
     QStringList xdgDataDirs = QString::fromLocal8Bit(qgetenv("XDG_DATA_DIRS")).split(':');
     systemFontsPaths = xdgDataDirs << qgetenv("XDG_DATA_HOME");
