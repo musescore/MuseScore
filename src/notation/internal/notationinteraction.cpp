@@ -93,6 +93,8 @@
 #include "notationselection.h"
 #include "scorecallbacks.h"
 
+#include "utilities/scorerangeutilities.h"
+
 using namespace mu::notation;
 using namespace mu::engraving;
 using namespace muse;
@@ -1252,6 +1254,10 @@ void NotationInteraction::prepareDragCopyRange(QObject* dragSource)
     QObject::connect(m_dragCopy, &QDrag::destroyed, [this]() {
         m_dragCopy = nullptr;
     });
+
+    QPixmap pixmap(1, 1);
+    pixmap.fill(Qt::transparent);
+    m_dragCopy->setPixmap(pixmap);
 }
 
 bool NotationInteraction::hasDragCopy() const
@@ -1484,12 +1490,36 @@ bool NotationInteraction::isDropRangeAccepted(const PointF& pos)
 
     score()->dragPosition(pos, &staffIdx, &segment, spacingFactor, useTimeAnchors);
 
+    if (staffIdx == muse::nidx || !segment) {
+        return false;
+    }
+
     rdd.targetSegment = segment;
     rdd.targetStaffIdx = staffIdx;
 
-    if (rdd.tickLength.isZero() || rdd.numStaves == 0) {
+    const Segment* endSegment = score()->tick2rightSegment(segment->tick() + rdd.tickLength,
+                                                           true,
+                                                           Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+
+    if (endSegment && !endSegment->enabled()) {
+        endSegment = endSegment->next1MMenabled();
+    }
+
+    if (!endSegment) {
+        endSegment = score()->lastSegmentMM();
+    }
+
+    if (!endSegment) {
         return false;
     }
+
+    const staff_idx_t endStaffIdx = staffIdx + rdd.numStaves;
+
+    rdd.dropRects = ScoreRangeUtilities::boundingArea(score(),
+                                                      segment, endSegment,
+                                                      staffIdx, endStaffIdx);
+
+    notifyAboutDragChanged();
 
     return true;
 }
