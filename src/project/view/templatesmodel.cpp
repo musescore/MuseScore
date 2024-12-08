@@ -54,6 +54,10 @@ void TemplatesModel::load()
         }
     }
 
+    dispatcher()->reg(this, "req-dialog-search", [this]() {
+        emit searchRequested();
+    });
+
     loadAllCategories();
 }
 

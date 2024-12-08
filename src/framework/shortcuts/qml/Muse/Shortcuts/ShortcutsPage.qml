@@ -41,6 +41,10 @@ Item {
         id: shortcutsModel
 
         selection: shortcutsView.sourceSelection
+
+        onSearchRequested: {
+            topPanel.activateSearchField()
+        }
     }
 
     function apply() {

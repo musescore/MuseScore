@@ -27,16 +27,20 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+#include "actions/actionable.h"
+
 #include "notation/iinstrumentsrepository.h"
 
 #include "uicomponents/view/itemmultiselectionmodel.h"
 
 namespace mu::instrumentsscene {
-class InstrumentListModel : public QAbstractListModel, public muse::async::Asyncable
+class InstrumentListModel : public QAbstractListModel, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
 
     INJECT(notation::IInstrumentsRepository, repository)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(QStringList genres READ genres NOTIFY genresChanged)
     Q_PROPERTY(QStringList groups READ groups NOTIFY groupsChanged)
@@ -86,6 +90,7 @@ signals:
     void selectionChanged();
 
     void focusRequested(int groupIndex, int instrumentIndex);
+    void searchRequested();
 
 private:
     enum Roles {

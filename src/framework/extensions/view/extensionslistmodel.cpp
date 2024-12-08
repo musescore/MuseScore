@@ -69,6 +69,10 @@ void ExtensionsListModel::load()
         updatePlugin(plugin);
     });
 
+    dispatcher()->reg(this, "req-search", [this]() {
+        emit searchRequested();
+    });
+
     endResetModel();
 }
 

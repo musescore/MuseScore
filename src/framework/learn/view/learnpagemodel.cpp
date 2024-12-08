@@ -58,6 +58,10 @@ void LearnPageModel::load()
     learnService()->advancedPlaylistChanged().onReceive(this, [this](const Playlist& playlist) {
         setAdvancedPlaylist(playlist);
     });
+
+    dispatcher()->reg(this, "req-search", [this]() {
+        emit searchRequested();
+    });
 }
 
 void LearnPageModel::setSearchText(const QString& text)
