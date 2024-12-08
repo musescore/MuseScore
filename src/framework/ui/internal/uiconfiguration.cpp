@@ -318,8 +318,9 @@ QStringList UiConfiguration::possibleFontFamilies() const
 {
     QStringList allFonts = QFontDatabase::families();
     for (const auto& font : engravingFonts()->fonts()) {
-        allFonts.removeAll(font->name());
-        allFonts.removeAll(font->name() + " Text");
+        QString fontName = QString::fromStdString(font->name());
+        allFonts.removeAll(fontName);
+        allFonts.removeAll(fontName + " Text");
     }
     return allFonts;
 }
