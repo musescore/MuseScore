@@ -65,6 +65,7 @@
 #include "engraving/dom/text.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
+#include "engraving/dom/trill.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
 
@@ -837,6 +838,8 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
             success = success && this->writeTempo(dynamic_cast<const TempoText*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isTie()) {
             success = success && this->writeTie(dynamic_cast<const Tie*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isTrill()) {
+            success = success && this->writeTrill(dynamic_cast<const Trill*>(controlEvent.first), controlEvent.second);
         }
     }
     m_startingControlEventList.clear();
@@ -2032,6 +2035,30 @@ bool MeiExporter::writeTie(const Tie* tie, const std::string& startid)
     return true;
 }
 
+/**
+ * Write a trill.
+ */
+
+bool MeiExporter::writeTrill(const Trill* trill, const std::string& startid)
+{
+    IF_ASSERT_FAILED(trill) {
+        return false;
+    }
+
+    pugi::xml_node trillNode = m_currentNode.append_child();
+    libmei::Trill meiTrill = Convert::trillToMEI(trill->ornament());
+    Convert::colorlineToMEI(trill, meiTrill);
+    meiTrill.SetExtender(libmei::BOOLEAN_true);
+    meiTrill.SetStartid(startid);
+
+    meiTrill.Write(trillNode, this->getXmlIdFor(trill, 't'));
+
+    // Add the node to the map of open control events
+    this->addNodeToOpenControlEvents(trillNode, trill, startid);
+
+    return true;
+}
+
 //---------------------------------------------------------
 // write MEI attribute classes
 //---------------------------------------------------------
@@ -2157,7 +2184,7 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const ChordRest*
     auto spanners = smap.findOverlapping(chordRest->tick().ticks(), chordRest->tick().ticks());
     for (auto interval : spanners) {
         Spanner* spanner = interval.value;
-        if (spanner && (spanner->isHairpin() || spanner->isOttava() || spanner->isPedal() || spanner->isSlur())) {
+        if (spanner && (spanner->isHairpin() || spanner->isOttava() || spanner->isPedal() || spanner->isSlur() || spanner->isTrill())) {
             if (spanner->startCR() == chordRest) {
                 m_startingControlEventList.push_back(std::make_pair(spanner, "#" + xmlId));
             } else if (spanner->endCR() == chordRest) {
