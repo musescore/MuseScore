@@ -96,6 +96,7 @@ void SystemObjectsLayerTreeItem::init(const Staff* staff, const SystemObjectGrou
     setIsSelectable(!isTopLayer);
 
     listenUndoStackChanged();
+    listenVisibleChanged();
 }
 
 const Staff* SystemObjectsLayerTreeItem::staff() const
@@ -148,10 +149,37 @@ void SystemObjectsLayerTreeItem::listenUndoStackChanged()
             // TODO: optimize
             m_systemObjectGroups = collectSystemObjectGroups(m_staff);
             setTitle(formatLayerTitle(m_systemObjectGroups));
+
+            m_ignoreVisibilityChanges = true;
             setIsVisible(isLayerVisible(m_systemObjectGroups));
+            m_ignoreVisibilityChanges = false;
 
             return;
         }
+    });
+}
+
+void SystemObjectsLayerTreeItem::listenVisibleChanged()
+{
+    connect(this, &AbstractLayoutPanelTreeItem::isVisibleChanged, this, [this](bool isVisible) {
+        if (m_ignoreVisibilityChanges || m_systemObjectGroups.empty()) {
+            return;
+        }
+
+        const muse::TranslatableString actionName = isVisible
+                                                    ? TranslatableString("undoableAction", "Make system object(s) visible")
+                                                    : TranslatableString("undoableAction", "Make system object(s) invisible");
+
+        notation()->undoStack()->prepareChanges(actionName);
+
+        for (const SystemObjectsGroup& group : m_systemObjectGroups) {
+            for (engraving::EngravingItem* item : group.items) {
+                item->undoSetVisible(isVisible);
+            }
+        }
+
+        notation()->undoStack()->commitChanges();
+        notation()->notationChanged().notify();
     });
 }
 
