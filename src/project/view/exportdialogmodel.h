@@ -67,6 +67,9 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
     Q_PROPERTY(int selectedUnitType READ selectedUnitType WRITE setUnitType NOTIFY selectedUnitTypeChanged)
 
     Q_PROPERTY(int pdfResolution READ pdfResolution WRITE setPdfResolution NOTIFY pdfResolutionChanged)
+    Q_PROPERTY(bool pdfTransparentBackground READ pdfTransparentBackground
+               WRITE setPdfTransparentBackground NOTIFY pdfTransparentBackgroundChanged)
+               
     Q_PROPERTY(int pngResolution READ pngResolution WRITE setPngResolution NOTIFY pngResolutionChanged)
     Q_PROPERTY(
         bool pngTransparentBackground READ pngTransparentBackground WRITE setPngTransparentBackground NOTIFY pngTransparentBackgroundChanged)
@@ -86,8 +89,6 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
 
     Q_PROPERTY(bool shouldDestinationFolderBeOpenedOnExport READ shouldDestinationFolderBeOpenedOnExport
                WRITE setShouldDestinationFolderBeOpenedOnExport NOTIFY shouldDestinationFolderBeOpenedOnExportChanged)
-    Q_PROPERTY(bool pdfTransparentBackground READ pdfTransparentBackground
-               WRITE setPdfTransparentBackground NOTIFY pdfTransparentBackgroundChanged)
 public:
     explicit ExportDialogModel(QObject* parent = nullptr);
     ~ExportDialogModel();

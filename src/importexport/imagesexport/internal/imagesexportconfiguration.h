@@ -33,7 +33,6 @@ public:
     int exportPdfDpiResolution() const override;
     void setExportPdfDpiResolution(int dpi) override;
 
-    //pdf with transparent
     bool exportPdfWithTransparentBackground() const override;
     void setExportPdfWithTransparentBackground(bool transparent) override;
 

@@ -52,7 +52,6 @@ void ImagesExportConfiguration::setExportPdfDpiResolution(int dpi)
     settings()->setSharedValue(EXPORT_PDF_DPI_RESOLUTION_KEY, Val(dpi));
 }
 
-//pdf with transparency
 bool ImagesExportConfiguration::exportPdfWithTransparentBackground() const
 {
     return settings()->value(EXPORT_PDF_USE_TRANSPARENCY_KEY).toBool();
