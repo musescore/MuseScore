@@ -25,8 +25,6 @@
 
 #include <QObject>
 
-#include "audio/audiotypes.h"
-
 namespace mu::playback {
 class AuxSendItem : public QObject
 {
