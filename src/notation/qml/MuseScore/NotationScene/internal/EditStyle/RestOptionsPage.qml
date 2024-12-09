@@ -68,5 +68,16 @@ Rectangle {
                 restsPageModel.mergeMatchingRests.value = !mergeMatchingRestsCheckbox.checked
             }
         }
+
+        CheckBox {
+            id: showLedgerLinesOnBreveRestsCheckbox
+            text: qsTrc("notation", "Show ledger lines on double whole rests")
+            checked: restsPageModel.showLedgerLinesOnBreveRests.value
+            width: parent.width
+
+            onClicked: {
+                restsPageModel.showLedgerLinesOnBreveRests.value = !showLedgerLinesOnBreveRestsCheckbox.checked
+            }
+        }
     }
 }
