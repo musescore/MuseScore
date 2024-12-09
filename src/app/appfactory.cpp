@@ -235,12 +235,12 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 
 #ifdef MUSE_MODULE_MUSESAMPLER
     bool needAdd = true;
-    if (runtime::isDebug()) {
 #ifndef MUSE_MODULE_MUSESAMPLER_ENABLE_DEBUG
+    if (runtime::isDebug()) {
         needAdd = false;
         LOGI() << "Muse Sampler is not a debuggable binary. Skipping adding.";
-#endif
     }
+#endif
 
     if (needAdd) {
         app->addModule(new muse::musesampler::MuseSamplerModule());
