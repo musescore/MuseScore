@@ -102,6 +102,9 @@ public:
 
     bool isAccessibleEnabled() const override;
 
+    bool doNotSaveEIDsForBackCompat() const override;
+    void setDoNotSaveEIDsForBackCompat(bool doNotSave) override;
+
     bool guitarProImportExperimental() const override;
     bool useStretchedBends() const override;
     bool shouldAddParenthesisOnStandardStaff() const override;
