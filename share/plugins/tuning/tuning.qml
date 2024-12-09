@@ -431,10 +431,10 @@ MuseScore {
     property var currentTweak: 0.0;
 
     onRun: {
-        if (!curScore) {
-            error("No score open.\nThis plugin requires an open score to run.\n")
-            quit()
-        }
+        var customArray= fileIO.read()
+        customArray = JSON.parse(customArray)
+        westernTemperaments = westernTemperaments.concat(customArray[0])
+        middleEasternTemperaments = middleEasternTemperaments.concat(customArray[1])
     }
 
     function getHistory() {
