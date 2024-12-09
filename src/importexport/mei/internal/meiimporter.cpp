@@ -96,6 +96,7 @@ bool MeiImporter::read(const muse::io::path_t& path)
 {
     m_uids = UIDRegister::instance();
     m_uids->clear();
+    m_hasMuseScoreIds = false;
 
     m_lastMeasure = nullptr;
     m_tremoloId.clear();
@@ -132,12 +133,27 @@ bool MeiImporter::read(const muse::io::path_t& path)
 
     success = success && this->readMeiHead(root);
 
+    pugi::xml_attribute xmlId = root.attribute("xml:id");
+    bool hasRootXmlId = false;
+    if (xmlId && !String(xmlId.value()).empty()) {
+        hasRootXmlId = true;
+        String xmlIdStr = String(xmlId.value());
+        if (xmlIdStr.startsWith(u"mscore-")) {
+            // Keep a global flag since we are going to read them only if mei@xml:id is given with LastEID
+            m_hasMuseScoreIds = true;
+            String valStr = xmlIdStr.remove(u"mscore-");
+            // The  mei@xml:id store the LastEID
+            m_score->masterScore()->getEID()->init(valStr.toInt());
+        } else {
+            // Keep it as a seed
+            m_score->setMetaTag(u"xml:id", xmlIdStr);
+        }
+    }
+
     success = success && this->readScore(root);
 
-    pugi::xml_attribute xmlId = root.attribute("xml:id");
-    if (xmlId && !String(xmlId.value()).empty()) {
-        m_score->setMetaTag(u"xml:id", String(xmlId.value()));
-        // Do not keep a xml:id map when having a xml:id seed.
+    if (hasRootXmlId) {
+        // Do not keep a xml:id map when having a xml:id seed or MscoreIds
         m_uids->clear();
     }
 
@@ -258,7 +274,7 @@ ChordRest* MeiImporter::addChordRest(pugi::xml_node node, Measure* measure, int 
     } else {
         chordRest = Factory::createChord(segment);
     }
-    m_uids->reg(chordRest, meiElement.m_xmlId);
+    this->readXmlId(chordRest, meiElement.m_xmlId);
 
     if (m_startIdChordRests.count(meiElement.m_xmlId)) {
         m_startIdChordRests[meiElement.m_xmlId] = chordRest;
@@ -456,7 +472,7 @@ EngravingItem* MeiImporter::addAnnotation(const libmei::Element& meiElement, Mea
     } else {
         return nullptr;
     }
-    m_uids->reg(item, meiElement.m_xmlId);
+    this->readXmlId(item, meiElement.m_xmlId);
 
     item->setTrack(chordRest->track());
     segment->add(item);
@@ -500,7 +516,7 @@ Spanner* MeiImporter::addSpanner(const libmei::Element& meiElement, Measure* mea
     } else {
         return nullptr;
     }
-    m_uids->reg(item, meiElement.m_xmlId);
+    this->readXmlId(item, meiElement.m_xmlId);
 
     item->setTick(chordRest->tick());
     item->setStartElement(chordRest);
@@ -545,7 +561,7 @@ EngravingItem* MeiImporter::addToChordRest(const libmei::Element& meiElement, Me
     } else {
         return nullptr;
     }
-    m_uids->reg(item, meiElement.m_xmlId);
+    this->readXmlId(item, meiElement.m_xmlId);
 
     item->setTrack(chordRest->track());
     chordRest->add(item);
@@ -849,6 +865,23 @@ void MeiImporter::setOrnamentAccid(engraving::Ornament* ornament, const Convert:
         accidental->setAccidentalType(ornamSt.accidTypeBelow);
         accidental->setParent(ornament);
         ornament->setAccidentalBelow(accidental);
+    }
+}
+
+void MeiImporter::readXmlId(engraving::EngravingItem* item, const std::string& meiUID)
+{
+    String xmlIdStr = String::fromStdString(meiUID);
+    // We have a file that has MuseScore EIDs and one on this element
+    if (m_hasMuseScoreIds && xmlIdStr.startsWith(u"mscore-")) {
+        String valStr = xmlIdStr.remove(u"mscore-");
+        EID eid = EID::fromStdString(valStr.toStdString());
+        if (!eid.isValid()) {
+            Convert::logs.push_back(String("A valid MuseScore ID could not be extracted from '%1'").arg(xmlIdStr));
+        } else {
+            item->setEID(eid);
+        }
+    } else {
+        m_uids->reg(item, meiUID);
     }
 }
 
@@ -1319,7 +1352,7 @@ bool MeiImporter::readEnding(pugi::xml_node endingNode)
     } else {
         Volta* volta = Factory::createVolta(m_score->dummy());
         Convert::endingFromMEI(volta, meiEnding, warning);
-        m_uids->reg(volta, meiEnding.m_xmlId);
+        this->readXmlId(volta, meiEnding.m_xmlId);
         volta->setTrack(0);
         volta->setTrack2(0);
         volta->setTick(m_endingStart->tick());
@@ -1352,7 +1385,7 @@ bool MeiImporter::readMeasure(pugi::xml_node measureNode)
     Convert::MeasureStruct measureSt = Convert::measureFromMEI(meiMeasure, warning);
 
     Measure* measure = Factory::createMeasure(m_score->dummy()->system());
-    m_uids->reg(measure, meiMeasure.m_xmlId);
+    this->readXmlId(measure, meiMeasure.m_xmlId);
     measure->setTick(m_ticks);
     measure->setTimesig(m_currentTimeSig);
 
@@ -1726,7 +1759,7 @@ bool MeiImporter::readChord(pugi::xml_node chordNode, Measure* measure, int trac
             NOT_SUPPORTED;
         } else {
             TremoloSingleChord* tremolo = Factory::createTremoloSingleChord(chord);
-            m_uids->reg(tremolo, m_tremoloId);
+            this->readXmlId(tremolo, m_tremoloId);
             tremolo->setTremoloType(ttype);
             chord->add(tremolo);
         }
@@ -1757,7 +1790,7 @@ bool MeiImporter::readClef(pugi::xml_node clefNode, Measure* measure, int track,
     Segment* segment = measure->getSegment(SegmentType::Clef, ticks + measure->tick());
     Clef* clef = Factory::createClef(segment);
     Convert::colorFromMEI(clef, meiClef);
-    m_uids->reg(clef, meiClef.m_xmlId);
+    this->readXmlId(clef, meiClef.m_xmlId);
     clef->setClefType(ClefTypeList(Convert::clefFromMEI(meiClef, warning)));
     if (warning) {
         this->addLog("clef", clefNode);
@@ -1824,7 +1857,7 @@ bool MeiImporter::readMRest(pugi::xml_node mRestNode, Measure* measure, int trac
     Segment* segment = measure->getSegment(SegmentType::ChordRest, ticks + measure->tick());
     Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
     Convert::colorFromMEI(rest, meiMRest);
-    m_uids->reg(rest, meiMRest.m_xmlId);
+    this->readXmlId(rest, meiMRest.m_xmlId);
     rest->setTicks(m_currentTimeSig);
     rest->setDurationType(DurationType::V_MEASURE);
     rest->setTrack(track);
@@ -1864,7 +1897,7 @@ bool MeiImporter::readMRpt(pugi::xml_node mRptNode, Measure* measure, int track,
     Segment* segment = measure->getSegment(SegmentType::ChordRest, ticks + measure->tick());
     MeasureRepeat* measureRepeat = Factory::createMeasureRepeat(segment);
     Convert::colorFromMEI(measureRepeat, meiMRpt);
-    m_uids->reg(measureRepeat, meiMRpt.m_xmlId);
+    this->readXmlId(measureRepeat, meiMRpt.m_xmlId);
     measureRepeat->setTrack(track);
     measureRepeat->setTicks(measure->ticks());
     measureRepeat->setNumMeasures(1);
@@ -1922,7 +1955,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
                 NOT_SUPPORTED;
             } else {
                 TremoloSingleChord* tremolo = Factory::createTremoloSingleChord(chord);
-                m_uids->reg(tremolo, m_tremoloId);
+                this->readXmlId(tremolo, m_tremoloId);
                 tremolo->setTremoloType(ttype);
                 chord->add(tremolo);
             }
@@ -1931,7 +1964,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
 
     Note* note = Factory::createNote(chord);
     Convert::colorFromMEI(note, meiNote);
-    m_uids->reg(note, meiNote.m_xmlId);
+    this->readXmlId(note, meiNote.m_xmlId);
 
     // If there is a reference to the note in the MEI, add it the maps (e.g., for ties)
     if (m_startIdChordRests.count(meiNote.m_xmlId)) {
@@ -1946,7 +1979,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
 
     Accidental* accid = Factory::createAccidental(note);
     Convert::colorFromMEI(accid, meiAccid);
-    m_uids->reg(accid, meiAccid.m_xmlId);
+    this->readXmlId(accid, meiAccid.m_xmlId);
     accid->setAccidentalType(pitchSt.accidType);
     //accid->setBracket(AccidentalBracket::BRACKET); // Not supported in MEI-Basic
     accid->setRole(pitchSt.accidRole);
@@ -2042,7 +2075,7 @@ bool MeiImporter::readTuplet(pugi::xml_node tupletNode, Measure* measure, int tr
     meiTuplet.Read(tupletNode);
 
     m_tuplet = Factory::createTuplet(measure);
-    m_uids->reg(m_tuplet, meiTuplet.m_xmlId);
+    this->readXmlId(m_tuplet, meiTuplet.m_xmlId);
     Convert::tupletFromMEI(m_tuplet, meiTuplet, warning);
     if (warning) {
         this->addLog("tuplet", tupletNode);
@@ -2119,7 +2152,7 @@ bool MeiImporter::readVerse(pugi::xml_node verseNode, Chord* chord)
     }
 
     Lyrics* lyrics = Factory::createLyrics(chord);
-    m_uids->reg(lyrics, meiVerse.m_xmlId);
+    this->readXmlId(lyrics, meiVerse.m_xmlId);
     Convert::colorFromMEI(lyrics, meiVerse);
 
     bool success = true;
@@ -2398,7 +2431,7 @@ bool MeiImporter::readF(pugi::xml_node fNode, engraving::FiguredBass* figuredBas
 
     const int line = static_cast<int>(figuredBass->itemsCount());
     FiguredBassItem* figuredBassItem = figuredBass->createItem(line);
-    m_uids->reg(figuredBassItem, meiF.m_xmlId);
+    this->readXmlId(figuredBassItem, meiF.m_xmlId);
     figuredBassItem->setTrack(figuredBass->track());
     figuredBassItem->setParent(figuredBass);
 
@@ -2440,7 +2473,7 @@ bool MeiImporter::readFb(pugi::xml_node harmNode, Measure* measure)
         return true;
     }
     // Needs to be registered by hand because we pass meiHarm to MeiImporter::addAnnotation
-    m_uids->reg(figuredBass, meiFb.m_xmlId);
+    this->readXmlId(figuredBass, meiFb.m_xmlId);
 
     Convert::fbFromMEI(figuredBass, meiHarm, meiFb, warning);
 
@@ -2474,7 +2507,7 @@ bool MeiImporter::readFermata(pugi::xml_node fermataNode, Measure* measure)
         if (fermataPos == measure->ticks()) {
             Segment* segment = measure->getSegment(SegmentType::EndBarLine, measure->tick() + measure->ticks());
             fermata = Factory::createFermata(segment);
-            m_uids->reg(fermata, meiFermata.m_xmlId);
+            this->readXmlId(fermata, meiFermata.m_xmlId);
             const int staffIdx
                 = (meiFermata.HasStaff() && meiFermata.GetStaff().size() > 0) ? this->getStaffIndex(meiFermata.GetStaff().at(0)) : 0;
             fermata->setTrack(staffIdx * VOICES);
@@ -2769,7 +2802,7 @@ bool MeiImporter::readRepeatMark(pugi::xml_node repeatMarkNode, Measure* measure
         item = Factory::createMarker(measure);
         Convert::markerFromMEI(dynamic_cast<Marker*>(item), meiRepeatMark, warning);
     }
-    m_uids->reg(item, meiRepeatMark.m_xmlId);
+    this->readXmlId(item, meiRepeatMark.m_xmlId);
     item->setTrack(0);
     measure->add(item);
 
@@ -2852,7 +2885,7 @@ bool MeiImporter::readTie(pugi::xml_node tieNode, Measure* measure)
     }
 
     Tie* tie = new Tie(m_score->dummy());
-    m_uids->reg(tie, meiTie.m_xmlId);
+    this->readXmlId(tie, meiTie.m_xmlId);
     startNote->setTieFor(tie);
     tie->setStartNote(startNote);
     tie->setTrack(startNote->track());
