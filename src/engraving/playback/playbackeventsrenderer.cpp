@@ -33,12 +33,12 @@
 #include "dom/staff.h"
 
 #include "utils/arrangementutils.h"
+
 #include "metaparsers/chordarticulationsparser.h"
 #include "metaparsers/notearticulationsparser.h"
 
-#include "renderers/bendsrenderer.h"
-#include "renderers/gracechordsrenderer.h"
 #include "renderers/chordarticulationsrenderer.h"
+
 #include "filters/chordfilter.h"
 
 using namespace mu::engraving;
@@ -258,7 +258,7 @@ void PlaybackEventsRenderer::renderNoteEvents(const Chord* chord, const int tick
 
     ChordArticulationsParser::buildChordArticulationMap(chord, ctx, ctx.commonArticulations);
 
-    renderArticulations(chord, ctx, result[ctx.nominalTimestamp]);
+    ChordArticulationsRenderer::render(chord, ArticulationType::Last, ctx, result[ctx.nominalTimestamp]);
 }
 
 void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::timestamp_t actualTimestamp,
@@ -312,21 +312,4 @@ void PlaybackEventsRenderer::renderRestEvents(const Rest* rest, const int tickPo
 
     result[nominalTnD.timestamp].emplace_back(mpe::RestEvent(nominalTnD.timestamp, nominalTnD.duration,
                                                              static_cast<voice_layer_idx_t>(rest->voice())));
-}
-
-void PlaybackEventsRenderer::renderArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const
-{
-    if (ctx.commonArticulations.contains(mpe::ArticulationType::Multibend)) {
-        BendsRenderer::render(chord, mpe::ArticulationType::Last, ctx, result);
-        return;
-    }
-
-    for (const auto& type : ctx.commonArticulations) {
-        if (GraceChordsRenderer::isAbleToRender(type.first)) {
-            GraceChordsRenderer::render(chord, type.first, ctx, result);
-            return;
-        }
-    }
-
-    ChordArticulationsRenderer::render(chord, ArticulationType::Last, ctx, result);
 }
