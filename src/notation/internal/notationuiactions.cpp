@@ -631,6 +631,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Add/remove page break"),
              TranslatableString("action", "Add/remove page break")
              ),
+    UiAction("apply-system-lock",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Add/remove system lock"),
+             TranslatableString("action", "Add/remove system lock")
+             ),
     UiAction("move-measure-to-prev-system",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,

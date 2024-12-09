@@ -824,6 +824,11 @@
     <seq>Ctrl+Enter</seq>
     </SC>
   <SC>
+    <key>apply-system-lock</key>
+    <seq>Alt+Return</seq>
+    <seq>Alt+Enter</seq>
+    </SC>
+  <SC>
     <key>move-measure-to-prev-system</key>
     <seq>Alt+Up</seq>
     </SC>
