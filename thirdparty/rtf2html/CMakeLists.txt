@@ -59,7 +59,7 @@ vstudio_pch( rtf2html )
 
 # MSVC does not depend on mops1 & mops2 for PCH
 if (NOT MSVC)
-   ADD_DEPENDENCIES(rtf2html mops1)
-   ADD_DEPENDENCIES(rtf2html mops2)
+   #ADD_DEPENDENCIES(rtf2html mops1)
+   #ADD_DEPENDENCIES(rtf2html mops2)
 endif (NOT MSVC)   
 

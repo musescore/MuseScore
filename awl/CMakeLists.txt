@@ -68,7 +68,7 @@ vstudio_pch( awl )
 
 # MSVC does not depend on mops1 & mops2 for PCH
 if (NOT MSVC)
-   ADD_DEPENDENCIES(awl mops1 mops2)
+   #ADD_DEPENDENCIES(awl mops1 mops2)
 endif (NOT MSVC)
 
 add_library (

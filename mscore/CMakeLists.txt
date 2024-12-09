@@ -510,8 +510,8 @@ endif (MINGW)
 
 # MSVC does not depend on mops1 & mops2 for PCH
 if (NOT MSVC)
-   ADD_DEPENDENCIES(mscoreapp mops1)
-   ADD_DEPENDENCIES(mscoreapp mops2)
+   #ADD_DEPENDENCIES(mscoreapp mops1)
+   #ADD_DEPENDENCIES(mscoreapp mops2)
 endif (NOT MSVC)
 
 add_library(

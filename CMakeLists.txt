@@ -40,7 +40,7 @@ if (APPLE)
 
     # Silently ignore non-existent dependencies (mops1, mops2)
     if(POLICY CMP0046)
-        cmake_policy(SET CMP0046 OLD)
+        #cmake_policy(SET CMP0046 OLD)
     endif(POLICY CMP0046)
 
     # Supress "The ``exec_program()`` command should not be called."
@@ -776,8 +776,8 @@ precompiled_header(QT_INCLUDES all ${BUILD_PCH})
 # MSVC does not require these targets, as all.h is not copied and the
 #   PCH generation is done per-project
 if (NOT MSVC)
-   ADD_CUSTOM_TARGET(mops1 DEPENDS ${PROJECT_BINARY_DIR}/all.h)
-   ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
+   #ADD_CUSTOM_TARGET(mops1 DEPENDS ${PROJECT_BINARY_DIR}/all.h)
+   #ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
 endif (NOT MSVC)
 
 ##
@@ -850,14 +850,14 @@ configure_file (
 ##
 ## Add subdirs
 ##
-add_subdirectory(effects)
 add_subdirectory(audio)
 add_subdirectory(audiofile)
-
-subdirs(
-      awl bww2mxml share libmscore
-      thirdparty/qzip
-      )
+add_subdirectory(awl)
+add_subdirectory(bww2mxml)
+add_subdirectory(effects)
+add_subdirectory(libmscore)
+add_subdirectory(share)
+add_subdirectory(thirdparty/qzip)
 
 if (BUILD_CRASH_REPORTER)
       set(ENABLE_CRASH_REPORTER OFF CACHE BOOL "Disable libcrashreporter-qt GUI component")

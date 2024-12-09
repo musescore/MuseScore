@@ -31,7 +31,7 @@ vstudio_pch( beatroot )
 
 # MSVC does not depend on mops1 & mops2 for PCH
 if (NOT MSVC)
-   ADD_DEPENDENCIES(beatroot mops1)
-   ADD_DEPENDENCIES(beatroot mops2)
+   #ADD_DEPENDENCIES(beatroot mops1)
+   #ADD_DEPENDENCIES(beatroot mops2)
 endif (NOT MSVC)
 

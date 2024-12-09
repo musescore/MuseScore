@@ -53,7 +53,7 @@ vstudio_pch( qzip )
 
 # MSVC does not depend on mops1 & mops2 for PCH
 if (NOT MSVC)
-   ADD_DEPENDENCIES(qzip mops1)
-   ADD_DEPENDENCIES(qzip mops2)
+   #ADD_DEPENDENCIES(qzip mops1)
+   #ADD_DEPENDENCIES(qzip mops2)
 endif (NOT MSVC)   
 
