@@ -890,9 +890,9 @@ void LineSegment::undoMoveStartEndAndSnappedItems(bool moveStart, bool moveEnd, 
     if (moveStart) {
         Fraction tickDiff = s1->tick() - thisLine->tick();
         if (EngravingItem* itemSnappedBefore = ldata()->itemSnappedBefore()) {
-            if (itemSnappedBefore->isDynamic()) {
-                // Let the dynamic manage the move
-                toDynamic(itemSnappedBefore)->undoMoveSegment(s1, tickDiff);
+            if (itemSnappedBefore->isTextBase()) {
+                // Let the TextBase manage the move
+                toTextBase(itemSnappedBefore)->undoMoveSegment(s1, tickDiff);
             } else if (itemSnappedBefore->isLineSegment()) {
                 toLineSegment(itemSnappedBefore)->line()->undoMoveEnd(tickDiff);
                 thisLine->undoMoveStart(tickDiff);
@@ -904,9 +904,9 @@ void LineSegment::undoMoveStartEndAndSnappedItems(bool moveStart, bool moveEnd, 
     if (moveEnd) {
         Fraction tickDiff = s2->tick() - thisLine->tick2();
         if (EngravingItem* itemSnappedAfter = thisLine->backSegment()->ldata()->itemSnappedAfter()) {
-            if (itemSnappedAfter->isDynamic()) {
-                // Let the dynamic manage the move
-                toDynamic(itemSnappedAfter)->undoMoveSegment(s2, tickDiff);
+            if (itemSnappedAfter->isTextBase()) {
+                // Let the TextBase manage the move
+                toTextBase(itemSnappedAfter)->undoMoveSegment(s2, tickDiff);
             } else if (itemSnappedAfter->isLineSegment()) {
                 toLineSegment(itemSnappedAfter)->line()->undoMoveStart(tickDiff);
                 thisLine->undoMoveEnd(tickDiff);

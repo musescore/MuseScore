@@ -665,7 +665,7 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int* root, int* 
 //   startEdit
 //---------------------------------------------------------
 
-void Harmony::startEdit(EditData& ed)
+void Harmony::startEditTextual(EditData& ed)
 {
     if (!m_textList.empty()) {
         // convert chord symbol to plain text
@@ -681,10 +681,10 @@ void Harmony::startEdit(EditData& ed)
     renderer()->layoutText1(this, true);
     triggerLayout();
 
-    TextBase::startEdit(ed);
+    TextBase::startEditTextual(ed);
 }
 
-bool Harmony::isEditAllowed(EditData& ed) const
+bool Harmony::isTextualEditAllowed(EditData& ed) const
 {
     if (isTextNavigationKey(ed.key, ed.modifiers)) {
         return false;
@@ -703,20 +703,20 @@ bool Harmony::isEditAllowed(EditData& ed) const
         return true;
     }
 
-    return TextBase::isEditAllowed(ed);
+    return TextBase::isTextualEditAllowed(ed);
 }
 
 //---------------------------------------------------------
 //   edit
 //---------------------------------------------------------
 
-bool Harmony::edit(EditData& ed)
+bool Harmony::editTextual(EditData& ed)
 {
     if (!isEditAllowed(ed)) {
         return false;
     }
 
-    bool rv = TextBase::edit(ed);
+    bool rv = TextBase::editTextual(ed);
 
     // layout as text, without position reset
     renderer()->layoutText1(this, true);
@@ -741,7 +741,7 @@ bool Harmony::edit(EditData& ed)
 //   endEdit
 //---------------------------------------------------------
 
-void Harmony::endEdit(EditData& ed)
+void Harmony::endEditTextual(EditData& ed)
 {
     // get plain text
     String s = plainText();
@@ -779,7 +779,7 @@ void Harmony::endEdit(EditData& ed)
     // disable spell check
     m_isMisspelled = false;
 
-    TextBase::endEdit(ed);
+    TextBase::endEditTextual(ed);
 
     if (links()) {
         for (EngravingObject* e : *links()) {
