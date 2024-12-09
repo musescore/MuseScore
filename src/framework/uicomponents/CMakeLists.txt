@@ -120,6 +120,11 @@ if (MUSE_MODULE_UI_DISABLE_MODALITY)
 endif()
 
 set(MODULE_USE_UNITY OFF)
+
 setup_module()
+
+if (MUSE_MODULE_UI_TESTS)
+    add_subdirectory(tests)
+endif()
 
 
