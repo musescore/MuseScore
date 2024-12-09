@@ -176,7 +176,6 @@
             <Ottava>
               <subtype>8va</subtype>
               <color r="4" g="51" b="255" a="255"/>
-              <color r="4" g="51" b="255" a="255"/>
               </Ottava>
             <next>
               <location>
@@ -187,7 +186,6 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
-              <color r="4" g="51" b="255" a="255"/>
               <color r="4" g="51" b="255" a="255"/>
               </HairPin>
             <next>
@@ -379,7 +377,6 @@
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
-              <color r="148" g="33" b="146" a="255"/>
               <color r="148" g="33" b="146" a="255"/>
               </Pedal>
             <next>
