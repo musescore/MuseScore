@@ -426,15 +426,18 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
     };
 
 #ifdef MUSE_MODULE_MUSESAMPLER
-    MenuItemList museSamplerItems {
-        makeMenuItem("musesampler-check"),
-    };
+    bool isMuseSamplerModuleAdded = museSamplerInfo() != nullptr;
+    if (isMuseSamplerModuleAdded) {
+        MenuItemList museSamplerItems {
+            makeMenuItem("musesampler-check"),
+        };
 
-    if (globalConfiguration()->devModeEnabled()) {
-        museSamplerItems << makeMenuItem("musesampler-reload");
+        if (globalConfiguration()->devModeEnabled()) {
+            museSamplerItems << makeMenuItem("musesampler-reload");
+        }
+
+        items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Muse Sampler"), museSamplerItems, "menu-musesampler");
     }
-
-    items << makeMenu(TranslatableString("appshell/menu/diagnostics", "&Muse Sampler"), museSamplerItems, "menu-musesampler");
 #endif
 
     if (globalConfiguration()->devModeEnabled()) {
