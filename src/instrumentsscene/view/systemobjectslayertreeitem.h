@@ -47,10 +47,13 @@ public:
 
 private:
     void listenUndoStackChanged();
+    void listenVisibleChanged();
+
     void updateStaff();
 
     const mu::engraving::Staff* m_staff = nullptr;
     mu::engraving::staff_idx_t m_staffIdx = muse::nidx;
     SystemObjectGroups m_systemObjectGroups;
+    bool m_ignoreVisibilityChanges = false;
 };
 }
