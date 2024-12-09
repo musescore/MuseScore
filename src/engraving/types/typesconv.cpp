@@ -318,8 +318,22 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::DUMMY,                "Dummy",                muse::TranslatableString::untranslatable("Dummy") },
 };
 
-const muse::TranslatableString& TConv::userName(ElementType v)
+static const std::unordered_map<ElementType, TranslatableString> ELEMENT_TYPE_PLURAL {
+    { ElementType::REHEARSAL_MARK, muse::TranslatableString("engraving", "Rehearsal marks") },
+    { ElementType::VOLTA, muse::TranslatableString("engraving", "Voltas") },
+    { ElementType::JUMP, muse::TranslatableString("engraving", "Jumps") },
+    { ElementType::MEASURE_NUMBER, muse::TranslatableString("engraving", "Measure numbers") },
+};
+
+const muse::TranslatableString& TConv::userName(ElementType v, bool plural)
 {
+    if (plural) {
+        auto it = ELEMENT_TYPE_PLURAL.find(v);
+        if (it != ELEMENT_TYPE_PLURAL.end()) {
+            return it->second;
+        }
+    }
+
     return findUserNameByType<ElementType>(ELEMENT_TYPES, v);
 }
 

@@ -46,16 +46,17 @@ static QString formatLayerTitle(const SystemObjectGroups& groups)
         }
 
         if (title.isEmpty()) {
-            title = group.name.translated();
-        } else {
-            if (i == lastIdx) {
-                title += " & ";
-            } else {
-                title += ", ";
-            }
-
-            title += group.name.translated().toLower();
+            title = translatedSystemObjectsGroupName(group);
+            continue;
         }
+
+        if (i == lastIdx) {
+            title += " & ";
+        } else {
+            title += ", ";
+        }
+
+        title += translatedSystemObjectsGroupName(group).toLower();
     }
 
     if (title.isEmpty()) {
