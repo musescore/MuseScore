@@ -46,7 +46,7 @@ static QString formatLayerTitle(const SystemObjectGroups& groups)
         }
 
         if (title.isEmpty()) {
-            title = group.name.translated();
+            title = translatedSystemObjectsGroupName(group);
         } else {
             if (i == lastIdx) {
                 title += " & ";
@@ -54,7 +54,7 @@ static QString formatLayerTitle(const SystemObjectGroups& groups)
                 title += ", ";
             }
 
-            title += group.name.translated().toLower();
+            title += translatedSystemObjectsGroupName(group).toLower();
         }
     }
 
