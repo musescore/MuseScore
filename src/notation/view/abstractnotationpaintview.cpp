@@ -736,10 +736,22 @@ RectF AbstractNotationPaintView::scrollableAreaRect() const
 {
     TRACEFUNC;
     RectF viewport = this->viewport();
+    RectF contentRect = notationContentRect();
     qreal overscrollFactor = configuration()->isLimitCanvasScrollArea() ? 0.0 : SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR;
 
     qreal overscrollX = viewport.width() * overscrollFactor;
     qreal overscrollY = viewport.height() * overscrollFactor;
+
+    // contentRect is Vertically or Horizontally larger than viewport
+    // 1) Continuous Horizontal View
+    if (notation()->viewMode() == engraving::LayoutMode::LINE && viewport.width() < contentRect.width()) {
+        return notationContentRect().adjusted(0, -overscrollY, 0, overscrollY);
+    }
+
+    // 2) Continuous Vertical View
+    if (notation()->viewMode() == engraving::LayoutMode::SYSTEM && viewport.height() < contentRect.height()) {
+        return notationContentRect().adjusted(-overscrollX, 0, overscrollX, 0);
+    }
 
     return notationContentRect().adjusted(-overscrollX, -overscrollY, overscrollX, overscrollY);
 }
