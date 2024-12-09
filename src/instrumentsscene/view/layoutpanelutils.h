@@ -25,11 +25,11 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/utils.h"
+#include "engraving/types/typesconv.h"
 
 namespace mu::instrumentsscene {
 struct SystemObjectsGroup {
     mu::engraving::ElementType type = mu::engraving::ElementType::INVALID;
-    mu::engraving::TranslatableString name;
     std::vector<mu::engraving::EngravingItem*> items;
 };
 
@@ -55,7 +55,7 @@ inline SystemObjectGroupsByStaff collectSystemObjectGroups(const std::vector<mu:
         if (it != groups.end()) {
             it->items.push_back(obj);
         } else {
-            groups.emplace_back(SystemObjectsGroup { obj->type(), obj->typeUserName(), { obj } });
+            groups.emplace_back(SystemObjectsGroup { obj->type(), { obj } });
         }
     }
 
@@ -81,6 +81,12 @@ inline bool isSystemObjectsGroupVisible(const SystemObjectsGroup& group)
     }
 
     return false;
+}
+
+inline muse::String translatedSystemObjectsGroupName(const SystemObjectsGroup& group)
+{
+    const bool plural = group.items.size() > 1;
+    return mu::engraving::TConv::userName(group.type, plural).translated();
 }
 
 inline bool hasSystemObjectStaff(const mu::engraving::Part* part)
