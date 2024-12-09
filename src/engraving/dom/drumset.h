@@ -76,7 +76,7 @@ struct DrumInstrument {
     bool operator==(const DrumInstrument& other) const
     {
         return notehead == other.notehead
-               && noteheads == other.noteheads
+               // && noteheads == other.noteheads // TODO: Investigate why this is can be unexpectedly false
                && line == other.line
                && stemDirection == other.stemDirection
                && voice == other.voice
