@@ -28,39 +28,38 @@
 #include "modularity/imoduleinterface.h"
 
 namespace mu::iex::imagesexport{
-    class IImagesExportConfiguration : MODULE_EXPORT_INTERFACE
-    {
-        INTERFACE_ID(IImagesExportConfiguration)
+class IImagesExportConfiguration : MODULE_EXPORT_INTERFACE
+{
+    INTERFACE_ID(IImagesExportConfiguration)
 
-    public:
-        virtual ~IImagesExportConfiguration() = default;
+public:
+    virtual ~IImagesExportConfiguration() = default;
 
-        // Pdf
-        virtual int exportPdfDpiResolution() const = 0;
-        virtual void setExportPdfDpiResolution(int dpi) = 0;
+    // Pdf
+    virtual int exportPdfDpiResolution() const = 0;
+    virtual void setExportPdfDpiResolution(int dpi) = 0;
 
-        // Pdf with transparent
-        virtual bool exportPdfWithTransparentBackground() const = 0;
-        virtual void setExportPdfWithTransparentBackground(bool transparent) = 0;
+    // Pdf with transparent
+    virtual bool exportPdfWithTransparentBackground() const = 0;
+    virtual void setExportPdfWithTransparentBackground(bool transparent) = 0;
 
-        // Png
-        virtual float exportPngDpiResolution() const = 0;
-        virtual void setExportPngDpiResolution(float dpi) = 0;
+    // Png
+    virtual float exportPngDpiResolution() const = 0;
+    virtual void setExportPngDpiResolution(float dpi) = 0;
 
-        //! NOTE Maybe set from command line
-        virtual void setExportPngDpiResolutionOverride(std::optional<float> dpi) = 0;
+    //! NOTE Maybe set from command line
+    virtual void setExportPngDpiResolutionOverride(std::optional<float> dpi) = 0;
 
-        virtual bool exportPngWithTransparentBackground() const = 0;
-        virtual void setExportPngWithTransparentBackground(bool transparent) = 0;
+    virtual bool exportPngWithTransparentBackground() const = 0;
+    virtual void setExportPngWithTransparentBackground(bool transparent) = 0;
 
+    // Svg
+    virtual bool exportSvgWithTransparentBackground() const = 0;
+    virtual void setExportSvgWithTransparentBackground(bool transparent) = 0;
 
-        // Svg
-        virtual bool exportSvgWithTransparentBackground() const = 0;
-        virtual void setExportSvgWithTransparentBackground(bool transparent) = 0;
-
-        virtual int trimMarginPixelSize() const = 0;
-        virtual void setTrimMarginPixelSize(std::optional<int> pixelSize) = 0;
-    };
+    virtual int trimMarginPixelSize() const = 0;
+    virtual void setTrimMarginPixelSize(std::optional<int> pixelSize) = 0;
+};
 }
 
 #endif // MU_IMPORTEXPORT_IIMAGESEXPORTCONFIGURATION_H
