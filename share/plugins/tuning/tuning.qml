@@ -117,7 +117,7 @@ MuseScore {
             'pure': 0
         },
         {
-            'name': "MeanSemitone",
+            'name': "Mean Semitone",
             'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, 3.5, 0.0, -3.5, -7.0, -10.5, -14.0, -17.5],
             'root': 6,
             'pure': 6
@@ -135,7 +135,7 @@ MuseScore {
             'pure': 0
         },
         {
-            'name': "French2",
+            'name': "French 2",
             'offsets': [0.0, -3.5, -7.0, -10.5, -14.0, -17.5, -18.2, -19.0, -17.0, -10.5, -3.5, 3.5],
             'root': 0,
             'pure': 0
@@ -147,13 +147,13 @@ MuseScore {
             'pure': 0
         },
         {
-            'name': "IrrFr17e",
+            'name': "Irr Fr 17e",
             'offsets': [-8.0, -2.0, 3.0, 0.0, -3.0, -6.0, -9.0, -12.0, -15.0, -18.0, -21.0, -24.0],
             'root': 9,
             'pure': 3
         },
         {
-            'name': "BachLehman",
+            'name': "Bach Lehman",
             'offsets': [0.0, -2.0, -3.9, -5.9, -7.8, -5.9, -3.9, -2.0, -2.0, -2.0, -2.0, 2.0],
             'root': 0,
             'pure': 3
@@ -1347,12 +1347,12 @@ MuseScore {
             case 0:
                 westernTemperaments = westernTemperaments.concat(entry) //adds new entry and updates buttons 
                 westernListView.positionViewAtEnd()
-                westernListView.itemAtIndex(westernTemperaments.length-1).checked = true   
+                temperamentClicked(westernTemperaments[westernTemperaments.length-1])
                 break
             case 1:
                 middleEasternTemperaments = middleEasternTemperaments.concat(entry) //adds new entry and updates buttons 
                 middleEasternListView.positionViewAtEnd()
-                middleEasternListView.itemAtIndex(middleEasternTemperaments.length-1).checked = true
+                temperamentClicked(middleEasternTemperaments[middleEasternTemperaments.length-1])
                 break
         }                        
     }
