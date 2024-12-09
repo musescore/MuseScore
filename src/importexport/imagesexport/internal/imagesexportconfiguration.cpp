@@ -62,7 +62,6 @@ void ImagesExportConfiguration::setExportPdfWithTransparentBackground(bool trans
     settings()->setSharedValue(EXPORT_PDF_USE_TRANSPARENCY_KEY, Val(transparent));
 }
 
-
 float ImagesExportConfiguration::exportPngDpiResolution() const
 {
     if (m_customExportPngDpiOverride) {
