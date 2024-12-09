@@ -1226,7 +1226,6 @@ void SLine::writeProperties(XmlWriter& xml) const
             xml.tag("diagonal", _diagonal);
       writeProperty(xml, Pid::LINE_WIDTH);
       writeProperty(xml, Pid::LINE_STYLE);
-      writeProperty(xml, Pid::COLOR);
       writeProperty(xml, Pid::ANCHOR);
       writeProperty(xml, Pid::DASH_LINE_LEN);
       writeProperty(xml, Pid::DASH_GAP_LEN);
