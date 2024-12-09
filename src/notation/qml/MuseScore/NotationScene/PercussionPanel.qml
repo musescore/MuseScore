@@ -301,7 +301,7 @@ Item {
                         // If this is the swap target - move the swappable area to the swap origin (preview the swap)
                         State {
                             name: "SWAP_TARGET"
-                            when: Boolean(padGrid.swapOriginPad) && (pad.containsDrag || pad.padNavigationCtrl.active) && padGrid.swapOriginPad !== pad
+                            when: Boolean(padGrid.swapOriginPad) && (pad.containsDrag || pad.padNavigation.active) && padGrid.swapOriginPad !== pad
 
                             ParentChange {
                                 target: pad.swappableArea
