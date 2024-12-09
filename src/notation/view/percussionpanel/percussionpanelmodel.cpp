@@ -160,6 +160,13 @@ void PercussionPanelModel::handleMenuItem(const QString& itemId)
 
 void PercussionPanelModel::finishEditing(bool discardChanges)
 {
+    if (!interaction()) {
+        //! NOTE: Can happen if we close the project while editing the layout...
+        m_padListModel->setDrumset(nullptr);
+        setCurrentPanelMode(m_panelModeToRestore);
+        return;
+    }
+
     Drumset* updatedDrumset = m_padListModel->drumset();
     m_padListModel->removeEmptyRows();
 
