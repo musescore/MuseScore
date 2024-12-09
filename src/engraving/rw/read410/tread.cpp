@@ -511,7 +511,10 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& c
 
     if (tag == "eid") {
         AsciiStringView s = e.readAsciiText();
-        item->setEID(EID::fromStdString(s));
+        EID eid = EID::fromStdString(s);
+        if (eid.isValid()) {
+            item->setEID(eid);
+        }
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::SIZE_SPATIUM_DEPENDENT)) {
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::OFFSET)) {
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::MIN_DISTANCE)) {
@@ -4839,23 +4842,26 @@ void TRead::readSystemLocks(Score* score, XmlReader& e)
 
 void TRead::readSystemLock(Score* score, XmlReader& e)
 {
-    EID startMeasId;
-    EID endMeasId;
+    MeasureBase* startMeas = nullptr;
+    MeasureBase* endMeas = nullptr;
+    EIDRegister* eidRegister = score->masterScore()->eidRegister();
 
     while (e.readNextStartElement()) {
         AsciiStringView tag(e.name());
         if (tag == "startMeasure") {
-            startMeasId = EID::fromStdString(e.readAsciiText());
+            EID startMeasId = EID::fromStdString(e.readAsciiText());
+            startMeas = toMeasureBase(eidRegister->itemFromEID(startMeasId));
         } else if (tag == "endMeasure") {
-            endMeasId = EID::fromStdString(e.readAsciiText());
+            EID endMeasId = EID::fromStdString(e.readAsciiText());
+            endMeas = toMeasureBase(eidRegister->itemFromEID(endMeasId));
         } else {
             e.unknown();
         }
     }
 
-    EIDRegister* eidRegister = score->masterScore()->eidRegister();
-    MeasureBase* startMeas = toMeasureBase(eidRegister->itemFromEID(startMeasId));
-    MeasureBase* endMeas = toMeasureBase(eidRegister->itemFromEID(endMeasId));
+    IF_ASSERT_FAILED(startMeas && endMeas) {
+        return;
+    }
 
     score->addSystemLock(new SystemLock(startMeas, endMeas));
 }

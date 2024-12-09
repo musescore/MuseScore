@@ -80,7 +80,7 @@ void TremoloSingleMetaParser::doParse(const EngravingItem* item, const Rendering
     articulationMeta.type = type;
     articulationMeta.pattern = pattern;
     articulationMeta.timestamp = ctx.nominalTimestamp;
-    articulationMeta.overallDuration = timestampFromTicks(tremolo->score(), ctx.nominalPositionStartTick + overallDurationTicks)
+    articulationMeta.overallDuration = timestampFromTicks(ctx.score, ctx.nominalPositionStartTick + overallDurationTicks)
                                        - ctx.nominalTimestamp;
 
     appendArticulationData(std::move(articulationMeta), result);
@@ -122,7 +122,7 @@ void TremoloTwoMetaParser::doParse(const EngravingItem* item, const RenderingCon
     articulationMeta.type = type;
     articulationMeta.pattern = pattern;
     articulationMeta.timestamp = ctx.nominalTimestamp;
-    articulationMeta.overallDuration = timestampFromTicks(tremolo->score(), ctx.nominalPositionStartTick + overallDurationTicks)
+    articulationMeta.overallDuration = timestampFromTicks(ctx.score, ctx.nominalPositionStartTick + overallDurationTicks)
                                        - ctx.nominalTimestamp;
 
     appendArticulationData(std::move(articulationMeta), result);

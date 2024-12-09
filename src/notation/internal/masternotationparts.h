@@ -42,7 +42,8 @@ public:
     bool appendStaff(Staff* staff, const muse::ID& destinationPartId) override;
     bool appendLinkedStaff(Staff* staff, const muse::ID& sourceStaffId, const muse::ID& destinationPartId) override;
 
-    void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) override;
+    void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument,
+                           const StaffType* newStaffType = nullptr) override;
     void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset, bool undoable = true) override;
 
 private:

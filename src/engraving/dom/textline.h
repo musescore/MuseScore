@@ -79,7 +79,8 @@ public:
     bool allowTimeAnchor() const override;
 
     PropertyValue propertyDefault(Pid) const override;
-    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    bool setProperty(Pid id, const PropertyValue&) override;
+    PropertyValue getProperty(Pid id) const override;
 };
 } // namespace mu::engraving
 #endif

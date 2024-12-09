@@ -306,7 +306,6 @@
         </Measure>
       </Staff>
     <Score>
-      <eid>365072220164</eid>
       <name>Flute</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
@@ -503,7 +502,6 @@
         </Staff>
       </Score>
     <Score>
-      <eid>644245094404</eid>
       <name>Oboe</name>
       <initialPartId>2</initialPartId>
       <Division>480</Division>

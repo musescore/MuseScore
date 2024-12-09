@@ -92,6 +92,9 @@ static Settings::Key auxChannelVisibleKey(aux_channel_idx_t index)
 void PlaybackConfiguration::init()
 {
     settings()->setDefaultValue(PLAY_NOTES_WHEN_EDITING, Val(true));
+    settings()->valueChanged(PLAY_NOTES_WHEN_EDITING).onReceive(this, [this](const Val&) {
+        m_playNotesWhenEditingChanged.notify();
+    });
     settings()->setDefaultValue(PLAY_CHORD_WHEN_EDITING, Val(true));
     settings()->setDefaultValue(PLAY_HARMONY_WHEN_EDITING, Val(true));
     settings()->setDefaultValue(PLAYBACK_CURSOR_TYPE_KEY, Val(PlaybackCursorType::STEPPED));
@@ -139,6 +142,11 @@ bool PlaybackConfiguration::playNotesWhenEditing() const
 void PlaybackConfiguration::setPlayNotesWhenEditing(bool value)
 {
     settings()->setSharedValue(PLAY_NOTES_WHEN_EDITING, Val(value));
+}
+
+muse::async::Notification PlaybackConfiguration::playNotesWhenEditingChanged() const
+{
+    return m_playNotesWhenEditingChanged;
 }
 
 bool PlaybackConfiguration::playChordWhenEditing() const

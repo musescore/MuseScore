@@ -30,7 +30,7 @@ RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenarioStub::selectInstru
     return make_ret(Ret::Code::NotSupported);
 }
 
-RetVal<Instrument> SelectInstrumentsScenarioStub::selectInstrument(const notation::InstrumentKey&) const
+RetVal<InstrumentTemplate> SelectInstrumentsScenarioStub::selectInstrument(const notation::InstrumentKey&) const
 {
     return make_ret(Ret::Code::NotSupported);
 }

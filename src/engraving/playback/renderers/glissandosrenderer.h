@@ -20,28 +20,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_GLISSANDOSRENDERER_H
-#define MU_ENGRAVING_GLISSANDOSRENDERER_H
+#pragma once
 
-#include "renderbase.h"
+#include "mpe/events.h"
 
 namespace mu::engraving {
 class Note;
-
-class GlissandosRenderer : public RenderBase<GlissandosRenderer>
+struct NominalNoteCtx;
+class GlissandosRenderer
 {
 public:
-    static const muse::mpe::ArticulationTypeSet& supportedTypes();
+    static muse::mpe::duration_t discreteGlissandoStepDuration(const Note* note, const muse::mpe::duration_t noteDuration);
 
-    static void doRender(const EngravingItem* item, const muse::mpe::ArticulationType type, const RenderingContext& context,
-                         muse::mpe::PlaybackEventList& result);
-
-private:
-    static void renderDiscreteGlissando(const Note* note, const RenderingContext& context, muse::mpe::PlaybackEventList& result);
-    static void renderContinuousGlissando(const Note* note, const RenderingContext& context, muse::mpe::PlaybackEventList& result);
-
-    static muse::mpe::pitch_level_t pitchLevelStep(const muse::mpe::ArticulationAppliedData& articulationData);
+    static void renderDiscreteGlissando(const Note* note, NominalNoteCtx& ctx, muse::mpe::PlaybackEventList& result);
+    static void renderContinuousGlissando(const Note* note, NominalNoteCtx& ctx, muse::mpe::PlaybackEventList& result);
 };
 }
-
-#endif // MU_ENGRAVING_GLISSANDOSRENDERER_H

@@ -334,7 +334,6 @@ TEST_F(MPE_MultiNoteArticulationsTest, IsMultiNoteArticulation)
         ArticulationType::Crescendo,
         ArticulationType::Decrescendo,
         ArticulationType::DiscreteGlissando,
-        ArticulationType::ContinuousGlissando,
         ArticulationType::Legato,
         ArticulationType::Pedal,
         ArticulationType::Multibend,

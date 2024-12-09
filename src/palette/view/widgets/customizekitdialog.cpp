@@ -301,7 +301,7 @@ void CustomizeKitDialog::loadPitchesList()
     pitchList->clear();
     pitchList->blockSignals(false);
 
-    for (int i = 0; i < 128; ++i) {
+    for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
         QTreeWidgetItem* item = new CustomizeKitTreeWidgetItem(pitchList);
         item->setText(Column::PITCH, QString("%1").arg(i));
         item->setText(Column::NOTE, pitch2string(i));

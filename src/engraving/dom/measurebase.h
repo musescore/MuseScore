@@ -189,8 +189,6 @@ public:
     bool isStartOfSystemLock() const;
     bool isEndOfSystemLock() const;
 
-    bool registerId() const override { return true; }
-
 protected:
 
     MeasureBase(const ElementType& type, System* system = 0);

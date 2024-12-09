@@ -312,7 +312,11 @@ static Note* prepareTarget(ChordRest* target, Note* with, const Fraction& durati
     DirectionV stemDirection = DirectionV::AUTO;
     if (staffGroup == StaffGroup::PERCUSSION) {
         const Drumset* ds = staff->part()->instrument(segment->tick())->drumset();
-        stemDirection = ds->stemDirection(with->noteVal().pitch);
+        DO_ASSERT(ds);
+
+        if (ds) {
+            stemDirection = ds->stemDirection(with->noteVal().pitch);
+        }
     }
 
     segment = target->score()->setNoteRest(segment, target->track(),

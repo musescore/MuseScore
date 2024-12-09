@@ -2889,7 +2889,7 @@ void MusicXmlParserPass2::measureLayout(Measure* measure)
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "measure-distance") {
             const Spatium val(m_e.readDouble() / 10.0);
-            if (!measure->prev()->isHBox()) {
+            if (!measure->prev() || !measure->prev()->isHBox()) {
                 MeasureBase* gap = m_score->insertBox(ElementType::HBOX, measure);
                 toHBox(gap)->setBoxWidth(val);
             }
@@ -5093,7 +5093,7 @@ void MusicXmlParserDirection::wedge(const String& type, const int number,
 
 String MusicXmlExtendedSpannerDesc::toString() const
 {
-    String spStr = sp ? String::number(size_t(sp->eid().id())) : u"null";
+    String spStr = sp ? String::fromStdString(sp->eid().toStdString()) : u"null";
     return String(u"sp %1 tp %2 tick2 %3 track2 %4 %5 %6")
            .arg(spStr, tick2.toString())
            .arg(static_cast<int>(track2))

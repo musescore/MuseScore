@@ -61,6 +61,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_cmnornaments.h
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_externalsymbols.cpp
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_externalsymbols.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_fingering.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_fingering.h
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_gestural.cpp
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_gestural.h
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/atts_harmony.cpp
@@ -78,6 +80,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/cmn.h
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/cmnornaments.cpp
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/cmnornaments.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/fingering.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/fingering.h
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/harmony.cpp
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/harmony.h
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/lyrics.cpp

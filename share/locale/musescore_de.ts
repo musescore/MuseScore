@@ -20516,7 +20516,7 @@ erkennen</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="148"/>
         <source>Override visual duration</source>
-        <translation>Visuelle Länge überspielen</translation>
+        <translation>Visuelle Länge überschreiben</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="159"/>
@@ -27307,7 +27307,7 @@ fehlgeschlagen.</translation>
     <message>
         <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="393"/>
         <source>ordinary</source>
-        <translation>normal</translation>
+        <translation>norm.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="90"/>

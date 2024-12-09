@@ -71,7 +71,7 @@ public:
     void setEnabled(bool enabled);
 
     PanelMode::Mode currentPanelMode() const;
-    void setCurrentPanelMode(const PanelMode::Mode& panelMode);
+    void setCurrentPanelMode(const PanelMode::Mode& panelMode, bool updateNoteInput = true);
 
     bool useNotationPreview() const;
     void setUseNotationPreview(bool useNotationPreview);

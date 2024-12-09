@@ -654,6 +654,9 @@ Note::Note(const Note& n, bool link)
         m_tieFor->setParent(this);
         m_tieFor->setStartNote(this);
         m_tieFor->setTick(m_tieFor->startNote()->tick());
+        if (link) {
+            score()->undo(new Link(m_tieFor, n.m_tieFor));
+        }
     } else if (n.m_tieFor) {
         m_tieFor = Factory::copyTie(*n.m_tieFor);
         m_tieFor->setStartNote(this);
@@ -1939,7 +1942,11 @@ EngravingItem* Note::drop(EditData& data)
         DirectionV stemDirection = DirectionV::AUTO;
         if (staffGroup == StaffGroup::PERCUSSION) {
             const Drumset* ds = st->part()->instrument(segment->tick())->drumset();
-            stemDirection = ds->stemDirection(n->noteVal().pitch);
+            DO_ASSERT(ds);
+
+            if (ds) {
+                stemDirection = ds->stemDirection(n->noteVal().pitch);
+            }
         }
         ch->setStemDirection(stemDirection);
 

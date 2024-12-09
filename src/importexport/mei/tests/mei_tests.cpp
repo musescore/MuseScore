@@ -167,6 +167,10 @@ TEST_F(Mei_Tests, mei_fig_bass_01) {
     meiReadTest("fig-bass-01");
 }
 
+TEST_F(Mei_Tests, mei_fingering_01) {
+    meiReadTest("fingering-01");
+}
+
 TEST_F(Mei_Tests, mei_gracenote_01) {
     meiReadTest("gracenote-01");
 }

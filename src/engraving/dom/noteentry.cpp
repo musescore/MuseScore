@@ -434,7 +434,11 @@ Ret Score::putNote(const Position& p, bool replace)
     switch (staffGroup) {
     case StaffGroup::PERCUSSION: {
         const Drumset* ds = st->part()->instrument(s->tick())->drumset();
-        stemDirection     = ds->stemDirection(nval.pitch);
+        DO_ASSERT(ds);
+
+        if (ds) {
+            stemDirection = ds->stemDirection(nval.pitch);
+        }
         break;
     }
     case StaffGroup::TAB:

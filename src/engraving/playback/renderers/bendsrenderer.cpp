@@ -22,14 +22,13 @@
 
 #include "bendsrenderer.h"
 
-#include "chordarticulationsrenderer.h"
+#include "noterenderer.h"
 #include "gracechordsrenderer.h"
 
 #include "playback/metaparsers/internal/gracenotesmetaparser.h"
 
 #include "dom/note.h"
 #include "dom/guitarbend.h"
-#include "dom/tempo.h"
 
 using namespace mu::engraving;
 using namespace muse;
@@ -73,18 +72,13 @@ void BendsRenderer::doRender(const EngravingItem* item, const mpe::ArticulationT
     }
 
     const Chord* chord = toChord(item);
-    const Score* score = chord->score();
-
-    IF_ASSERT_FAILED(score) {
-        return;
-    }
 
     for (const Note* note : chord->notes()) {
         if (skipNote(note, ctx.commonArticulations)) {
             continue;
         }
 
-        renderMultibend(score, note, ctx, result);
+        renderMultibend(note, ctx, result);
     }
 
     for (const Chord* graceChord : chord->graceNotes()) {
@@ -93,12 +87,12 @@ void BendsRenderer::doRender(const EngravingItem* item, const mpe::ArticulationT
                 continue;
             }
 
-            renderMultibend(score, note, ctx, result);
+            renderMultibend(note, ctx, result);
         }
     }
 }
 
-void BendsRenderer::renderMultibend(const Score* score, const Note* startNote, const RenderingContext& startNoteCtx,
+void BendsRenderer::renderMultibend(const Note* startNote, const RenderingContext& startNoteCtx,
                                     mpe::PlaybackEventList& result)
 {
     const Note* currNote = startNote;
@@ -108,8 +102,8 @@ void BendsRenderer::renderMultibend(const Score* score, const Note* startNote, c
     BendTimeFactorMap bendTimeFactorMap;
 
     while (currNote) {
-        RenderingContext currNoteCtx = buildRenderingContext(score, currNote, startNoteCtx);
-        appendBendTimeFactors(score, currBend, bendTimeFactorMap);
+        RenderingContext currNoteCtx = buildRenderingContext(currNote, startNoteCtx);
+        appendBendTimeFactors(currNoteCtx.score, currBend, bendTimeFactorMap);
 
         if (currNote->isGrace()) {
             IF_ASSERT_FAILED(currBend) {
@@ -126,9 +120,9 @@ void BendsRenderer::renderMultibend(const Score* score, const Note* startNote, c
             // Skip the principal note, it's already been rendered
             currNote = principalNote;
             currBend = principalNote->bendFor();
-            appendBendTimeFactors(score, currBend, bendTimeFactorMap);
+            appendBendTimeFactors(currNoteCtx.score, currBend, bendTimeFactorMap);
         } else {
-            ChordArticulationsRenderer::renderNote(currNote->chord(), currNote, currNoteCtx, bendEvents);
+            NoteRenderer::render(currNote, currNoteCtx, bendEvents);
         }
 
         if (currBend) {
@@ -140,7 +134,7 @@ void BendsRenderer::renderMultibend(const Score* score, const Note* startNote, c
 
         if (currNote->tieFor()) {
             currBend = currNote->lastTiedNote(false)->bendFor();
-            appendBendTimeFactors(score, currBend, bendTimeFactorMap);
+            appendBendTimeFactors(currNoteCtx.score, currBend, bendTimeFactorMap);
         }
 
         currNote = currBend ? currBend->endNote() : nullptr;
@@ -188,7 +182,7 @@ void BendsRenderer::appendBendTimeFactors(const Score* score, const GuitarBend* 
     timeFactorMap.insert_or_assign(endNoteTime, BendTimeFactors { startFactor, endFactor });
 }
 
-RenderingContext BendsRenderer::buildRenderingContext(const Score* score, const Note* note, const RenderingContext& initialCtx)
+RenderingContext BendsRenderer::buildRenderingContext(const Note* note, const RenderingContext& initialCtx)
 {
     const Chord* chord = note->chord();
 
@@ -200,25 +194,8 @@ RenderingContext BendsRenderer::buildRenderingContext(const Score* score, const 
         }
     }
 
-    int chordPosTicks = chord->tick().ticks();
-    int chordDurationTicks = chord->actualTicks().ticks();
-
-    auto tnd = timestampAndDurationFromStartAndDurationTicks(score, chordPosTicks, chordDurationTicks, initialCtx.positionTickOffset);
-
-    BeatsPerSecond bps = score->tempomap()->tempo(chordPosTicks);
-
-    RenderingContext ctx(tnd.timestamp,
-                         tnd.duration,
-                         initialCtx.nominalDynamicLevel,
-                         chordPosTicks,
-                         initialCtx.positionTickOffset,
-                         chordDurationTicks,
-                         bps,
-                         initialCtx.timeSignatureFraction,
-                         initialCtx.persistentArticulation,
-                         initialCtx.commonArticulations,
-                         initialCtx.profile,
-                         initialCtx.playbackCtx);
+    RenderingContext ctx = engraving::buildRenderingCtx(chord, initialCtx.positionTickOffset,
+                                                        initialCtx.profile, initialCtx.playbackCtx);
 
     if (note->isGrace()) {
         GraceNotesMetaParser::parse(note->chord(), ctx, ctx.commonArticulations);
@@ -245,7 +222,7 @@ mpe::NoteEvent BendsRenderer::buildBendEvent(const Note* startNote, const Render
     NominalNoteCtx noteCtx(startNote, startNoteCtx);
 
     const mpe::NoteEvent& startNoteEvent = std::get<mpe::NoteEvent>(bendNoteEvents.front());
-    noteCtx.chordCtx.commonArticulations = startNoteEvent.expressionCtx().articulations;
+    noteCtx.articulations = startNoteEvent.expressionCtx().articulations;
     noteCtx.timestamp = startNoteEvent.arrangementCtx().actualTimestamp;
 
     PitchOffsets pitchOffsets;

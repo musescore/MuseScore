@@ -104,7 +104,7 @@ Notification NotationStyle::styleChanged() const
 
 bool NotationStyle::loadStyle(const muse::io::path_t& path, bool allowAnyVersion)
 {
-    m_undoStack->prepareChanges(TranslatableString("undoableAction", "Load style"));
+    m_undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Load style"));
     bool result = score()->loadStyle(path.toQString(), allowAnyVersion);
     m_undoStack->commitChanges();
 

@@ -86,7 +86,7 @@ void DrumsetPalette::updateDrumset()
 
     TRACEFUNC;
 
-    for (int pitch = 0; pitch < 128; ++pitch) {
+    for (int pitch = 0; pitch < engraving::DRUM_INSTRUMENTS; ++pitch) {
         if (!m_drumset->isValid(pitch)) {
             continue;
         }
