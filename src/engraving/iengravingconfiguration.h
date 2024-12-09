@@ -119,6 +119,9 @@ public:
 
     virtual bool isAccessibleEnabled() const = 0;
 
+    virtual bool doNotSaveEIDsForBackCompat() const = 0;
+    virtual void setDoNotSaveEIDsForBackCompat(bool doNotSave) = 0;
+
     /// these configurations will be removed after solving https://github.com/musescore/MuseScore/issues/14294
     virtual bool guitarProImportExperimental() const = 0;
     virtual bool useStretchedBends() const = 0;

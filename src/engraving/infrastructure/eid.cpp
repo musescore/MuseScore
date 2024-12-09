@@ -112,6 +112,7 @@ static constexpr uint64_t charToInt(char c)
     case '/': return 63;
     default:
         UNREACHABLE;
+        return uint64_t(-1);
     }
 }
 

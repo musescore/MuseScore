@@ -85,6 +85,9 @@ public:
 
     MOCK_METHOD(bool, isAccessibleEnabled, (), (const, override));
 
+    MOCK_METHOD(bool, doNotSaveEIDsForBackCompat, (), (const, override));
+    MOCK_METHOD(void, setDoNotSaveEIDsForBackCompat, (bool), (override));
+
     MOCK_METHOD(bool, guitarProImportExperimental, (), (const, override));
     MOCK_METHOD(bool, useStretchedBends, (), (const, override));
     MOCK_METHOD(bool, shouldAddParenthesisOnStandardStaff, (), (const, override));
