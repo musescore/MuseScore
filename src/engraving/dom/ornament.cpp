@@ -283,6 +283,11 @@ void Ornament::computeNotesAboveAndBelow(AccidentalState* accState)
         }
         note->setTrack(track());
 
+        if (Accidental::isMicrotonal(note->accidentalType())) {
+            // If mainNote has microtonal accidental, don't clone it to the ornament note because microtonal intervals are not supported.
+            note->setAccidentalType(Accidental::value2subtype(tpc2alter(note->tpc())));
+        }
+
         bool autoMode = (above && _intervalAbove.type == IntervalType::AUTO) || (!above && _intervalBelow.type == IntervalType::AUTO);
         if (autoMode) {
             // NOTE: In AUTO mode, the ornament note should match not only any alteration from the
