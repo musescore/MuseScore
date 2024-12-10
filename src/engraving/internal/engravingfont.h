@@ -138,8 +138,8 @@ private:
 
     std::string m_name;
     std::string m_family;
-    muse::io::path_t m_metadataPath;
     muse::io::path_t m_fontPath;
+    muse::io::path_t m_metadataPath;
 
     std::unordered_map<Sid, PropertyValue> m_engravingDefaults;
     double m_textEnclosureThickness = 0;

@@ -56,6 +56,7 @@ public:
     MOCK_METHOD(int, fontSize, (FontSizeType), (const, override));
     MOCK_METHOD(void, setBodyFontSize, (int), (override));
     MOCK_METHOD(async::Notification, fontChanged, (), (const, override));
+    MOCK_METHOD(void, setNonTextFonts, (const QStringList&), (override));
 
     MOCK_METHOD(std::string, iconsFontFamily, (), (const, override));
     MOCK_METHOD(int, iconsFontSize, (IconSizeType), (const, override));

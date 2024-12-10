@@ -18,7 +18,7 @@ public:
 
     virtual void addInternalFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath) = 0;
     virtual void addExternalFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath,
-                                 const muse::io::path_t& metadataPath, bool isPrivate) = 0;
+                                 const muse::io::path_t& metadataPath) = 0;
     virtual IEngravingFontPtr fontByName(const std::string& name) const = 0;
     virtual std::vector<IEngravingFontPtr> fonts() const = 0;
 
@@ -26,7 +26,7 @@ public:
     virtual IEngravingFontPtr fallbackFont() const = 0;
     virtual bool isFallbackFont(const IEngravingFont* f) const = 0;
 
-    virtual void clearUserFonts() = 0;
+    virtual void clearExternalFonts() = 0;
 
     virtual void loadAllFonts() = 0;
 };

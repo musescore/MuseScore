@@ -34,7 +34,6 @@
 #include "types/val.h"
 #include "uiarrangement.h"
 #include "async/asyncable.h"
-#include "engraving/iengravingfontsprovider.h"
 
 namespace muse::ui {
 class UiConfiguration : public IUiConfiguration, public Injectable, public async::Asyncable
@@ -42,7 +41,6 @@ class UiConfiguration : public IUiConfiguration, public Injectable, public async
     Inject<IMainWindow> mainWindow = { this };
     Inject<IPlatformTheme> platformTheme = { this };
     Inject<IGlobalConfiguration> globalConfiguration = { this };
-    INJECT(mu::engraving::IEngravingFontsProvider, engravingFonts)
 
 public:
 
@@ -78,6 +76,7 @@ public:
     int fontSize(FontSizeType type = FontSizeType::BODY) const override;
     void setBodyFontSize(int size) override;
     async::Notification fontChanged() const override;
+    void setNonTextFonts(const QStringList& fontFamilies) override;
 
     std::string iconsFontFamily() const override;
     int iconsFontSize(IconSizeType type) const override;
@@ -163,6 +162,8 @@ private:
     ThemeList m_themes;
     size_t m_currentThemeIndex = 0;
     std::optional<double> m_customDPI;
+
+    QStringList m_nonTextFonts;
 
     Config m_config;
 };

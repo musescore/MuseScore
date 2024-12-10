@@ -26,20 +26,25 @@
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "inotationconfiguration.h"
-#include "modularity/imodulesetup.h"
+#include "draw/internal/ifontsdatabase.h"
+#include "ui/iuiconfiguration.h"
 
 namespace mu::notation {
-class EngravingFontsController : public muse::async::Asyncable, muse::modularity::IModuleSetup
+class EngravingFontsController : public muse::async::Asyncable, muse::Injectable
 {
-    INJECT(mu::notation::INotationConfiguration, configuration)
-    INJECT(mu::engraving::IEngravingFontsProvider, engravingFonts)
+    muse::Inject<mu::notation::INotationConfiguration> configuration = { this };
+    muse::Inject<mu::engraving::IEngravingFontsProvider> engravingFonts = { this };
+    muse::Inject<muse::draw::IFontsDatabase> fontsDatabase = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
 
 public:
-    std::string moduleName() const override;
     void init();
 
 private:
+    void scanAllDirectories() const;
     void scanDirectory(const muse::io::path_t& path, bool isPrivate) const;
+    muse::io::path_t findFontPathGlobal(muse::String fontName) const;
+    muse::io::path_t findFontPathPrivate(QString metadataDir, muse::String fontName) const;
 };
 }
 

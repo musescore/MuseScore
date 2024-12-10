@@ -110,8 +110,8 @@ void FoldersPreferencesModel::load()
         },
         {
             FolderType::MusicFonts, muse::qtrc("appshell/preferences", "MusicFonts"),
-            notationConfiguration()->userMusicFontPath().toString(),
-            notationConfiguration()->userMusicFontPath().toString()
+            notationConfiguration()->userMusicFontsPath().toString(),
+            notationConfiguration()->userMusicFontsPath().toString()
         },
 #ifdef MUSE_MODULE_VST
         {
@@ -149,7 +149,7 @@ void FoldersPreferencesModel::setupConnections()
         setFolderPaths(FolderType::SoundFonts, pathsToString(userSoundFontsPaths));
     });
 
-    notationConfiguration()->userMusicFontPathChanged().onReceive(this, [this](const muse::io::path_t& path) {
+    notationConfiguration()->userMusicFontsPathChanged().onReceive(this, [this](const muse::io::path_t& path) {
         setFolderPaths(FolderType::MusicFonts, path.toQString());
     });
 
@@ -186,7 +186,7 @@ void FoldersPreferencesModel::saveFolderPaths(FoldersPreferencesModel::FolderTyp
         break;
     }
     case FolderType::MusicFonts: {
-        notationConfiguration()->setUserMusicFontPath(paths.toStdString());
+        notationConfiguration()->setUserMusicFontsPath(paths.toStdString());
         break;
     }
     case FolderType::VST3: {
