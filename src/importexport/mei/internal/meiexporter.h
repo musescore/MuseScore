@@ -51,6 +51,7 @@ class Rest;
 class Score;
 class Staff;
 class TremoloSingleChord;
+class Trill;
 class Tuplet;
 class VBox;
 }
@@ -143,6 +144,7 @@ private:
     bool writeSlur(const engraving::Slur* slur, const std::string& startid);
     bool writeTempo(const engraving::TempoText* tempoText, const std::string& startid);
     bool writeTie(const engraving::Tie* tie, const std::string& startid);
+    bool writeTrill(const engraving::Trill* trill, const std::string& startid);
 
     /**
      * Methods for writing specific MEI attribute classes within elements

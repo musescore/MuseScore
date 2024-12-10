@@ -3160,6 +3160,9 @@ Convert::OrnamStruct Convert::trillFromMEI(engraving::Ornament* ornament, const 
 
     ornament->setSymId(symId);
 
+    // @color
+    Convert::colorFromMEI(ornament, meiTrill);
+
     // Other attributes
     return Convert::ornamFromMEI(ornament, meiTrill, warning);
 }
@@ -3176,6 +3179,9 @@ libmei::Trill Convert::trillToMEI(const engraving::Ornament* ornament)
         meiTrill.SetGlyphName(glyphName.ascii());
         meiTrill.SetGlyphAuth(SMUFL_AUTH);
     }
+
+    // @color
+    Convert::colorToMEI(ornament, meiTrill);
 
     return meiTrill;
 }

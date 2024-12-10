@@ -307,6 +307,10 @@ TEST_F(Mei_Tests, mei_transpose_01) {
     meiReadTest("transpose-01");
 }
 
+TEST_F(Mei_Tests, mei_trill_01) {
+    meiReadTest("trill-01");
+}
+
 TEST_F(Mei_Tests, mei_tuplet_01) {
     meiReadTest("tuplet-01");
 }
