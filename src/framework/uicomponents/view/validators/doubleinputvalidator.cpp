@@ -111,7 +111,7 @@ QValidator::State DoubleInputValidator::validate(QString& inputStr, int& cursorP
             state = Acceptable;
         }
     } else if (inputStr.contains(QRegularExpression("^\\-?\\d{0,3}\\.?$"))
-               || inputStr.contains(QRegularExpression(QString("^\\-?\\d{0,3}\\.\\d{%1,}$").arg(m_decimal)))) {
+               || inputStr.contains(QRegularExpression(QString("^\\-?\\d{0,3}\\.\\d{0,%1}$").arg(m_decimal)))) {
         state = Intermediate;
     } else {
         cursorPos = 0;
