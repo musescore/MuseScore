@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_PROPERTY_H
-#define MU_ENGRAVING_PROPERTY_H
+#pragma once
 
 #include "global/types/string.h"
 
@@ -440,6 +439,8 @@ enum class Pid {
     TIE_PLACEMENT,
     MIN_LENGTH,
 
+    PARTIAL_SPANNER_DIRECTION,
+
     POSITION_LINKED_TO_MASTER,
     APPEARANCE_LINKED_TO_MASTER,
     TEXT_LINKED_TO_MASTER,
@@ -484,5 +485,3 @@ extern PropertyGroup propertyGroup(Pid id);
 extern Pid propertyId(const muse::AsciiStringView& name);
 extern String propertyUserName(Pid);
 } // namespace mu::engraving
-
-#endif

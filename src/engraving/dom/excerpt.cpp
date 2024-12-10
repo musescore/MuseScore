@@ -26,6 +26,7 @@
 
 #include "containers.h"
 
+#include "dom/partialtie.h"
 #include "style/style.h"
 
 #include "barline.h"
@@ -770,7 +771,7 @@ static void processLinkedClone(EngravingItem* ne, Score* score, track_idx_t stra
 
 static void addTies(Note* originalNote, Note* newNote, TieMap& tieMap, Score* score)
 {
-    if (originalNote->tieFor() && !originalNote->tieFor()->isLaissezVib()) {
+    if (originalNote->tieFor() && originalNote->tieFor()->type() == ElementType::TIE) {
         Tie* tie = toTie(originalNote->tieFor()->linkedClone());
         tie->setScore(score);
         newNote->setTieFor(tie);
@@ -778,7 +779,7 @@ static void addTies(Note* originalNote, Note* newNote, TieMap& tieMap, Score* sc
         tie->setTrack(newNote->track());
         tieMap.add(originalNote->tieFor(), tie);
     }
-    if (originalNote->tieBack()) {
+    if (originalNote->tieBack() && originalNote->tieBack()->type() == ElementType::TIE) {
         Tie* tie = tieMap.findNew(originalNote->tieBack());
         if (tie) {
             newNote->setTieBack(tie);
@@ -786,6 +787,10 @@ static void addTies(Note* originalNote, Note* newNote, TieMap& tieMap, Score* sc
         } else {
             LOGD("addTiesToMap: cannot find tie");
         }
+    }
+
+    if (originalNote->outgoingPartialTie()) {
+        tieMap.add(originalNote->outgoingPartialTie(), newNote->outgoingPartialTie());
     }
 }
 
@@ -824,6 +829,16 @@ static void addTremoloTwoChord(Chord* oldChord, Chord* newChord, TremoloTwoChord
         }
     } else {
         LOGD("inconsistent two note tremolo");
+    }
+}
+
+static void collectTieEndPoints(TieMap& tieMap)
+{
+    for (auto& tie : tieMap) {
+        Tie* newTie = toTie(tie.second);
+        if (newTie->type() == ElementType::TIE || (newTie->type() == ElementType::PARTIAL_TIE && toPartialTie(newTie)->isOutgoing())) {
+            newTie->collectPossibleEndPoints();
+        }
     }
 }
 
@@ -1187,6 +1202,7 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
             }
         }
     }
+    collectTieEndPoints(tieMap);
 }
 
 void Excerpt::cloneMeasures(Score* oscore, Score* score)
@@ -1198,6 +1214,8 @@ void Excerpt::cloneMeasures(Score* oscore, Score* score)
         MeasureBase* newMeasure = cloneMeasure(mb, score, oscore, {}, {}, tieMap);
         measures->add(newMeasure);
     }
+
+    collectTieEndPoints(tieMap);
 }
 
 //! NOTE For staves in the same score
@@ -1384,6 +1402,8 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
             cloneSpanner(s, score, dstTrack, dstTrack2);
         }
     }
+
+    collectTieEndPoints(tieMap);
 }
 
 //! NOTE For staves potentially in different scores
@@ -1674,6 +1694,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
 
         score->transposeKeys(dstStaffIdx, dstStaffIdx + 1, startTick, endTick, !scoreConcertPitch);
     }
+
+    collectTieEndPoints(tieMap);
 }
 
 void Excerpt::promoteGapRestsToRealRests(const Measure* measure, staff_idx_t staffIdx)

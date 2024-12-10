@@ -90,6 +90,15 @@ bool RepeatSegment::containsMeasure(Measure const* const m) const
     return false;
 }
 
+bool RepeatSegment::endsWithMeasure(Measure const* const m) const
+{
+    if (m_measureList.empty()) {
+        return false;
+    }
+
+    return m_measureList.back() == m;
+}
+
 bool RepeatSegment::isEmpty() const
 {
     return m_measureList.empty();
