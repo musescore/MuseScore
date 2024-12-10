@@ -67,6 +67,9 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
     Q_PROPERTY(int selectedUnitType READ selectedUnitType WRITE setUnitType NOTIFY selectedUnitTypeChanged)
 
     Q_PROPERTY(int pdfResolution READ pdfResolution WRITE setPdfResolution NOTIFY pdfResolutionChanged)
+    Q_PROPERTY(bool pdfTransparentBackground READ pdfTransparentBackground
+               WRITE setPdfTransparentBackground NOTIFY pdfTransparentBackgroundChanged)
+
     Q_PROPERTY(int pngResolution READ pngResolution WRITE setPngResolution NOTIFY pngResolutionChanged)
     Q_PROPERTY(
         bool pngTransparentBackground READ pngTransparentBackground WRITE setPngTransparentBackground NOTIFY pngTransparentBackgroundChanged)
@@ -86,7 +89,6 @@ class ExportDialogModel : public QAbstractListModel, public muse::async::Asyncab
 
     Q_PROPERTY(bool shouldDestinationFolderBeOpenedOnExport READ shouldDestinationFolderBeOpenedOnExport
                WRITE setShouldDestinationFolderBeOpenedOnExport NOTIFY shouldDestinationFolderBeOpenedOnExportChanged)
-
 public:
     explicit ExportDialogModel(QObject* parent = nullptr);
     ~ExportDialogModel();
@@ -116,6 +118,9 @@ public:
 
     int pdfResolution() const;
     void setPdfResolution(const int& resolution);
+
+    bool pdfTransparentBackground() const;
+    void setPdfTransparentBackground(const bool& transparent);
 
     int pngResolution() const;
     void setPngResolution(const int& resolution);
@@ -168,8 +173,9 @@ signals:
 
     void pdfResolutionChanged(int resolution);
     void pngResolutionChanged(int resolution);
-    void pngTransparentBackgroundChanged(bool transparent);
 
+    void pdfTransparentBackgroundChanged(bool transparent);
+    void pngTransparentBackgroundChanged(bool transparent);
     void svgTransparentBackgroundChanged(bool transparent);
 
     void availableSampleRatesChanged();
