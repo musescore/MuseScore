@@ -17,17 +17,36 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //==============================================
 
-import QtQuick 2.0
-import MuseScore 3.0
-import "assets/accidentals.js" as Accidentals
+import QtQuick 2.9
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0 as MU
 
-MuseScore {
-    title: qsTr("Remove Courtesy Accidentals")
-    version: "4.0"
-    description: qsTr("This plugin removes cautionary accidentals from the score")
-    categoryCode: "composing-arranging-tools"
-    thumbnailName: "assets/accidentals.png"
-    requiresScore: true
+Column {
+    id: layout
+    property int value: radioButton1.checked ? 1 : 2
+    spacing: style.regSpace
+    opacity: enabled ? 1.0 : ui.theme.itemOpacityDisabled
+    width: parent.width
 
-    onRun: Accidentals.runPlugin("remove")
+    signal clicked
+    signal setv(int value)
+
+    MU.RoundedRadioButton {
+        id: radioButton1
+        implicitWidth: parent.width
+        text: qsTr("Stop after note is cancelled in original octave")
+        onClicked: layout.clicked()
+        checked: true
+    }
+    MU.RoundedRadioButton {
+        id: radioButton2
+        implicitWidth: parent.width
+        text: qsTr("Always cancel in all octaves")
+        onClicked: layout.clicked()
+    }
+    onSetv: function (nvalue) {
+        radioButton1.checked = nvalue == 1
+        radioButton2.checked = nvalue == 2
+        clicked()
+    }
 }
