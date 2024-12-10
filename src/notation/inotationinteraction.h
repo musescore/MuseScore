@@ -28,7 +28,6 @@
 #include "notationtypes.h"
 #include "inotationnoteinput.h"
 #include "inotationselection.h"
-#include "actions/actiontypes.h"
 
 class QKeyEvent;
 class QInputMethodEvent;
@@ -94,13 +93,11 @@ public:
     virtual void endDrag() = 0;
     virtual muse::async::Notification dragChanged() const = 0;
 
-    virtual bool dragCopyAllowed(const EngravingItem* element) const = 0;
-    virtual void prepareDragCopyElement(const EngravingItem* element, QObject* dragSource) = 0;
-    virtual void prepareDragCopyRange(QObject* dragSource) = 0;
-    virtual bool hasDragCopy() const = 0;
-    virtual bool hasStartedDragCopy() const = 0;
-    virtual void startDragCopy() = 0;
-    virtual void endDragCopy() = 0;
+    virtual bool isOutgoingDragElementAllowed(const EngravingItem* element) const = 0;
+    virtual void startOutgoingDragElement(const EngravingItem* element, QObject* dragSource) = 0;
+    virtual void startOutgoingDragRange(QObject* dragSource) = 0;
+    virtual bool isOutgoingDragStarted() const = 0;
+    virtual void endOutgoingDrag() = 0;
 
     // Drop
     //! TODO Change KeyboardModifiers to modes
