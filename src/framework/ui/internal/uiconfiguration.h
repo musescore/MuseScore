@@ -78,6 +78,7 @@ public:
     int fontSize(FontSizeType type = FontSizeType::BODY) const override;
     void setBodyFontSize(int size) override;
     async::Notification fontChanged() const override;
+    void setNonTextFonts(const QStringList& fontFamilies) override;
 
     std::string iconsFontFamily() const override;
     int iconsFontSize(IconSizeType type) const override;
@@ -154,6 +155,7 @@ private:
     ThemeList m_themes;
     size_t m_currentThemeIndex = 0;
     std::optional<double> m_customDPI;
+    QStringList m_nonTextFonts;
 };
 }
 

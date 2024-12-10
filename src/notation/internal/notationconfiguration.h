@@ -116,10 +116,10 @@ public:
     muse::io::path_t partStyleFilePath() const override;
     void setPartStyleFilePath(const muse::io::path_t& path) override;
 
-    muse::io::path_t userMusicFontPath() const override;
-    void setUserMusicFontPath(const muse::io::path_t& path) override;
+    muse::io::path_t userMusicFontsPath() const override;
+    void setUserMusicFontsPath(const muse::io::path_t& path) override;
 
-    muse::async::Channel<muse::io::path_t> userMusicFontPathChanged() const override;
+    muse::async::Channel<muse::io::path_t> userMusicFontsPathChanged() const override;
 
     bool isMidiInputEnabled() const override;
     void setIsMidiInputEnabled(bool enabled) override;
