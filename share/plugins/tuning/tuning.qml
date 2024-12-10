@@ -33,11 +33,6 @@ MuseScore {
     width: 780
     height: 640
 
-    property var offsetTextWidth: 40;
-    property var offsetLabelAlignment: 0x02 | 0x80;
-
-    property var history: 0;
-
     // set true if customisations are made to the tuning
     property var modified: false;
 
@@ -581,34 +576,7 @@ MuseScore {
     function getFinalTuning() {
         return function(pitch) {
             pitch = pitch % 12
-            switch (pitch) {
-                case 0:
-                    return getFinalOffset(final_c)
-                case 1:
-                    return getFinalOffset(final_c_sharp)
-                case 2:
-                    return getFinalOffset(final_d)
-                case 3:
-                    return getFinalOffset(final_e_flat)
-                case 4:
-                    return getFinalOffset(final_e)
-                case 5:
-                    return getFinalOffset(final_f)
-                case 6:
-                    return getFinalOffset(final_f_sharp)
-                case 7:
-                    return getFinalOffset(final_g)
-                case 8:
-                    return getFinalOffset(final_g_sharp)
-                case 9:
-                    return getFinalOffset(final_a)
-                case 10:
-                    return getFinalOffset(final_b_flat)
-                case 11:
-                    return getFinalOffset(final_b)
-                default:
-                    error("unrecognised pitch: " + pitch)
-            }
+            return getFinalOffset(finalOffsets.itemAt(pitch*7 % 12).children[1] )             
         }
     }
 
@@ -617,30 +585,9 @@ MuseScore {
     }
 
     function recalculate(tuning) {        
-        final_c.text               = tuning(0).toFixed(1)
-        final_c.previousText       = final_c.text
-        final_c_sharp.text         = tuning(1).toFixed(1)
-        final_c_sharp.previousText = final_c_sharp.text
-        final_d.text               = tuning(2).toFixed(1)
-        final_d.previousText       = final_d.text
-        final_e_flat.text          = tuning(3).toFixed(1)
-        final_e_flat.previousText  = final_e_flat.text
-        final_e.text               = tuning(4).toFixed(1)
-        final_e.previousText       = final_e.text
-        final_f.text               = tuning(5).toFixed(1)
-        final_f.previousText       = final_f.text
-        final_f_sharp.text         = tuning(6).toFixed(1)
-        final_f_sharp.previousText = final_f_sharp.text
-        final_g.text               = tuning(7).toFixed(1)
-        final_g.previousText       = final_g.text
-        final_g_sharp.text         = tuning(8).toFixed(1)
-        final_g_sharp.previousText = final_g_sharp.text
-        final_a.text               = tuning(9).toFixed(1)
-        final_a.previousText       = final_a.text
-        final_b_flat.text          = tuning(10).toFixed(1)
-        final_b_flat.previousText  = final_b_flat.text
-        final_b.text               = tuning(11).toFixed(1)
-        final_b.previousText       = final_b.text            
+        for (var i=0; i<12; i++) {
+            finalOffsets.itemAt(i*7 % 12).children[1].text = tuning(i).toFixed(1)
+        }           
     }
 
     function setCurrentTemperament(temperament) {        
@@ -885,7 +832,7 @@ MuseScore {
                     title: "Pure note offset"
                     RowLayout {
                         TextField {
-                            Layout.maximumWidth: offsetTextWidth
+                            Layout.maximumWidth: 40
                             id: tweakValue
                             text: "0.0"
                             readOnly: false
@@ -900,190 +847,30 @@ MuseScore {
                 GroupBox {
                     title: "Final Offsets"
                     GridLayout {
-                        columns: 12
+                        columns: 6
                         anchors.margins: 0
-
-                        StyledTextLabel {
-                            text: "C"
-                            Layout.alignment: offsetLabelAlignment
-                        }
-                        TextField {
-                            Layout.maximumWidth: offsetTextWidth
-                            id: final_c
-                            text: "0.0"
-                            readOnly: false
-                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                            property var previousText: "0.0"
-                            property var name: "final C"
-                            onEditingFinished: { editingFinishedFor(final_c) }
-                        }
-
-                        StyledTextLabel {
-                            text: "G"
-                            Layout.alignment: offsetLabelAlignment
-                        }
-                        TextField {
-                            Layout.maximumWidth: offsetTextWidth
-                            id: final_g
-                            text: "0.0"
-                            readOnly: false
-                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                            property var previousText: "0.0"
-                            property var name: "final G"
-                            onEditingFinished: { editingFinishedFor(final_g) }
-                        }
-
-                        StyledTextLabel {
-                            text: "D"
-                            Layout.alignment: offsetLabelAlignment
-                        }
-                        TextField {
-                            Layout.maximumWidth: offsetTextWidth
-                            id: final_d
-                            text: "0.0"
-                            readOnly: false
-                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                            property var previousText: "0.0"
-                            property var name: "final D"
-                            onEditingFinished: { editingFinishedFor(final_d) }
-                        }
-
-                        StyledTextLabel {
-                            text: "A"
-                            Layout.alignment: offsetLabelAlignment
-                        }
-                        TextField {
-                            Layout.maximumWidth: offsetTextWidth
-                            id: final_a
-                            text: "0.0"
-                            readOnly: false
-                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                            property var previousText: "0.0"
-                            property var name: "final A"
-                            onEditingFinished: { editingFinishedFor(final_a) }
-                        }
-
-                        StyledTextLabel {
-                            text: "E"
-                            Layout.alignment: offsetLabelAlignment
-                        }
-                        TextField {
-                            Layout.maximumWidth: offsetTextWidth
-                            id: final_e
-                            text: "0.0"
-                            readOnly: false
-                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                            property var previousText: "0.0"
-                            property var name: "final E"
-                            onEditingFinished: { editingFinishedFor(final_e) }
-                        }
-
-                        StyledTextLabel {
-                            text: "B"
-                            Layout.alignment: offsetLabelAlignment
-                        }
-                        TextField {
-                            Layout.maximumWidth: offsetTextWidth
-                            id: final_b
-                            text: "0.0"
-                            readOnly: false
-                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                            property var previousText: "0.0"
-                            property var name: "final B"
-                            onEditingFinished: { editingFinishedFor(final_b) }
-                        }
-
-                        StyledTextLabel {
-                            text: "F#"
-                            Layout.alignment: offsetLabelAlignment
-                        }
-                        TextField {
-                            Layout.maximumWidth: offsetTextWidth
-                            id: final_f_sharp
-                            text: "0.0"
-                            readOnly: false
-                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                            property var previousText: "0.0"
-                            property var name: "final F#"
-                            onEditingFinished: { editingFinishedFor(final_f_sharp) }
-                        }
-
-                        StyledTextLabel {
-                            text: "C#"
-                            Layout.alignment: offsetLabelAlignment
-                        }
-                        TextField {
-                            Layout.maximumWidth: offsetTextWidth
-                            id: final_c_sharp
-                            text: "0.0"
-                            readOnly: false
-                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                            property var previousText: "0.0"
-                            property var name: "final C#"
-                            onEditingFinished: { editingFinishedFor(final_c_sharp) }
-                        }
-
-                        StyledTextLabel {
-                            text: "G#"
-                            Layout.alignment: offsetLabelAlignment
-                        }
-                        TextField {
-                            Layout.maximumWidth: offsetTextWidth
-                            id: final_g_sharp
-                            text: "0.0"
-                            readOnly: false
-                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                            property var previousText: "0.0"
-                            property var name: "final G#"
-                            onEditingFinished: { editingFinishedFor(final_g_sharp) }
-                        }
-
-                        StyledTextLabel {
-                            text: "Eb"
-                            Layout.alignment: offsetLabelAlignment
-                        }
-                        TextField {
-                            Layout.maximumWidth: offsetTextWidth
-                            id: final_e_flat
-                            text: "0.0"
-                            readOnly: false
-                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                            property var previousText: "0.0"
-                            property var name: "final Eb"
-                            onEditingFinished: { editingFinishedFor(final_e_flat) }
-                        }
-
-                        StyledTextLabel {
-                            text: "Bb"
-                            Layout.alignment: offsetLabelAlignment
-                        }
-                        TextField {
-                            Layout.maximumWidth: offsetTextWidth
-                            id: final_b_flat
-                            text: "0.0"
-                            readOnly: false
-                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                            property var previousText: "0.0"
-                            property var name: "final Bb"
-                            onEditingFinished: { editingFinishedFor(final_b_flat) }
-                        }
-
-                        StyledTextLabel {
-                            text: "F"
-                            Layout.alignment: offsetLabelAlignment
-                        }
-                        TextField {
-                            Layout.maximumWidth: offsetTextWidth
-                            id: final_f
-                            text: "0.0"
-                            readOnly: false
-                            validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
-                            property var previousText: "0.0"
-                            property var name: "final F"
-                            onEditingFinished: { editingFinishedFor(final_f) }
+                        Repeater {
+                            id: finalOffsets
+                            model: ["C", "G", "D", "A", "E", "B", "F#", "C#", "G#", "Eb", "Bb", "F"]
+                            delegate: Row {
+                                StyledTextLabel {
+                                    width:20
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: modelData
+                                }
+                                TextField{
+                                    width: 40   
+                                    text: "0.0"
+                                    readOnly: false
+                                    validator: DoubleValidator { bottom: -99.9; decimals: 1; notation: DoubleValidator.StandardNotation; top: 99.9 }
+                                    property var previousText: "0.0"                                    
+                                    onEditingFinished: { editingFinishedFor(finalOffsets.itemAt(index).children[1]) }
+                                }
+                            }
                         }
                     }
                 }
+
                 RowLayout {
                     FlatButton {
                         id: addButton
@@ -1195,10 +982,13 @@ MuseScore {
     function addTemperament() {
         var entry= {
                         "name": customTempName.text,
-                        "offsets": [final_c.text, final_g.text, final_d.text, final_a.text, final_e.text, final_b.text, final_f_sharp.text, final_c_sharp.text, final_g_sharp.text, final_e_flat.text, final_b_flat.text, final_f.text ],
+                        "offsets": [],
                         "root": currentRoot,
                         "pure": currentPureTone                        
                     } 
+        for (var i=0; i<12; i++) {
+            entry.offsets.push( finalOffsets.itemAt(i).children[1].text )
+        }
 
         switch (tabBar.currentIndex) {
             case 0:
