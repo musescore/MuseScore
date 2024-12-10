@@ -748,16 +748,17 @@ async::Channel<muse::io::path_t> NotationConfiguration::partStyleFilePathChanged
     return engravingConfiguration()->partStyleFilePathChanged();
 }
 
-muse::io::path_t NotationConfiguration::userMusicFontPath() const {
+muse::io::path_t NotationConfiguration::userMusicFontsPath() const
+{
     return settings()->value(USER_MUSIC_FONTS_PATH).toPath();
 }
 
-void NotationConfiguration::setUserMusicFontPath(const muse::io::path_t& path)
+void NotationConfiguration::setUserMusicFontsPath(const muse::io::path_t& path)
 {
     settings()->setSharedValue(USER_MUSIC_FONTS_PATH, Val(path));
 }
 
-muse::async::Channel<muse::io::path_t> NotationConfiguration::userMusicFontPathChanged() const
+muse::async::Channel<muse::io::path_t> NotationConfiguration::userMusicFontsPathChanged() const
 {
     return m_userMusicFontsPathChanged;
 }

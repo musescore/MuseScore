@@ -24,107 +24,170 @@
 
 #include "engraving/infrastructure/smufl.h"
 #include "engraving/internal/engravingfont.h"
-#include "draw/internal/ifontsdatabase.h"
 #include "log.h"
 
 #include <QDirIterator>
+#include <QFontDatabase>
 #include <QStandardPaths>
 
 using namespace mu::notation;
 
-std::string EngravingFontsController::moduleName() const
-{
-    return "engraving_fonts";
-}
-
 void EngravingFontsController::init()
 {
+    auto musicFontsPath = configuration()->userMusicFontsPathChanged();
+    musicFontsPath.onReceive(this, [this](const muse::io::path_t&) {
+        scanAllDirectories();
+    });
+
+    scanAllDirectories();
+}
+
+void EngravingFontsController::scanAllDirectories() const
+{
+    engravingFonts()->clearExternalFonts();
+
     // Standard locations as described in https://w3c.github.io/smufl/latest/specification/font-metadata-locations.html
 
     // These standard location roughly match up with what the following returns, but some adjustments are needed.
-    QStringList systemFontsPaths = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).first(2);
+    QStringList standardLocations = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).first(2);
 
 #if defined(Q_OS_WIN)
     // On Windows, the second standard location returned by Qt is %ProgramData%, but we want %CommonProgramFiles%
-    systemFontsPaths[1] = qgetenv("CommonProgramFiles").replace("\\", "/");
+    QStringList globalFontsPaths {
+        standardLocations.first(),
+        qgetenv("CommonProgramFiles").replace("\\", "/")
+    };
+#elif defined(Q_OS_MACOS)
+    // MacOS is correctly handled by Qt
+    QStringList globalFontsPaths = standardLocations;
 #elif defined(Q_OS_LINUX)
-    // On Unix systems, we want $XDG_DATA_DIRS and $XDG_DATA_HOME
-    QStringList xdgDataDirs = QString::fromLocal8Bit(qgetenv("XDG_DATA_DIRS")).split(':');
-    systemFontsPaths = xdgDataDirs << qgetenv("XDG_DATA_HOME");
+    // On Unix systems, we want $XDG_DATA_HOME (user-specific) and $XDG_DATA_DIRS (system-wide)
+    QStringList globalFontsPaths { qgetenv("XDG_DATA_HOME") };
+    globalFontsPaths.append(QString::fromLocal8Bit(qgetenv("XDG_DATA_DIRS")).split(':'));
 #endif
 
-    // The first location is the system-wide location, so we should iterate in reverse order so that
-    // user fonts take precedence over system fonts
-    for (QString path : systemFontsPaths) {
-        scanDirectory(path + "/SMuFL/Fonts", false);
+    // The first location is the user-wide location, so we should iterate in reverse order so that
+    // user-specific fonts can override system-wide fonts
+    for (auto it = globalFontsPaths.rbegin(); it != globalFontsPaths.rend(); ++it) {
+        scanDirectory(*it + "/SMuFL/Fonts", false);
     }
 
-    // Additionally, also support a MuseScore-specific location
-    auto musicFontsPath = configuration()->userMusicFontPathChanged();
-    musicFontsPath.onReceive(this, [this](const muse::io::path_t& dir) {
-        scanDirectory(dir, true);
-    });
+    // Scan MuseScore-specific "private" location last so that it can override global fonts
+    scanDirectory(configuration()->userMusicFontsPath(), true);
 
-    scanDirectory(configuration()->userMusicFontPath(), true);
+    QStringList musicFonts;
+
+    for (const auto& font : engravingFonts()->fonts()) {
+        musicFonts << QString::fromStdString(font->name());
+        musicFonts << QString::fromStdString(font->name() + " Text");
+    }
+
+    uiConfiguration()->setNonTextFonts(musicFonts);
 }
 
 void EngravingFontsController::scanDirectory(const muse::io::path_t& path, bool isPrivate) const
 {
     using namespace muse::draw;
 
-    std::shared_ptr<IFontsDatabase> fdb = ioc()->resolve<IFontsDatabase>(moduleName());
-    engravingFonts()->clearUserFonts();
+    std::shared_ptr<IFontsDatabase> fdb = fontsDatabase();
 
     QDirIterator iterator(path.toQString(), QDir::Dirs | QDir::NoDotAndDotDot | QDir::Readable);
 
     while (iterator.hasNext()) {
-        QString fontDir = iterator.next();
-        muse::String fontName;
-
-        muse::io::path_t symbolFontPath;
-        muse::io::path_t textFontPath;
-        QDirIterator fontFiles(iterator.filePath(), { "*.otf", "*.ttf" }, QDir::Files);
+        iterator.next();
+        QString fontDir = iterator.filePath();
+        muse::io::path_t metadataPath;
+        QDirIterator fontFiles(fontDir, { "*.json" }, QDir::Files);
 
         while (fontFiles.hasNext()) {
             fontFiles.next();
-            QString name = fontFiles.fileInfo().baseName();
-            if (name.endsWith("Text")) {
-                textFontPath = fontFiles.filePath();
-            } else {
-                symbolFontPath = fontFiles.filePath();
-                fontName = name;
-            }
+            metadataPath = fontFiles.filePath();
         }
 
-        if (symbolFontPath.empty()) {
+        if (metadataPath.empty()) {
             continue;
         }
+
+        // We assume the font name is the same as the directory name,
+        // but maybe we should instead read the metadata.json file to get the font name
+
+        muse::String fontName = iterator.fileName();
+        muse::String fontFamily = fontName;
+
+        if (fontName.contains(u"Text")) {
+            LOGI() << "Skipping text music font: " << fontName;
+            continue;
+        }
+
+        auto findFontPath = [this, isPrivate, fontDir](muse::String fontName) {
+            if (isPrivate) {
+                return findFontPathPrivate(fontDir, fontName);
+            } else {
+                return findFontPathGlobal(fontName);
+            }
+        };
+
+        muse::io::path_t symbolFontPath = findFontPath(fontName);
+        if (symbolFontPath.empty()) {
+            muse::String tmp = fontName;
+            symbolFontPath = findFontPath(tmp.replace(u" ", u""));
+        }
+
+        muse::io::path_t textFontPath = findFontPath(fontName + u" Text");
+        if (symbolFontPath.empty()) {
+            muse::String tmp = fontName;
+            symbolFontPath = findFontPath(tmp.replace(u" ", u"") + u"Text");
+        }
+
         if (textFontPath.empty()) {
             textFontPath = symbolFontPath;
         }
 
-        muse::io::path_t metadataPath;
-        QStringList metadataFilenameOptions = {
-            "/metadata.json",
-            QString("/%1.json").arg(fontName),
-            QString("/%1_metadata.json").arg(fontName)
-        };
-        for (const auto& option : metadataFilenameOptions) {
-            if (QFile::exists(iterator.filePath() + option)) {
-                metadataPath = iterator.filePath() + option;
-                break;
-            }
-        }
-        if (metadataPath.empty()) {
-            LOGE() << "No metadata file found for font " << fontName;
+        if (symbolFontPath.empty()) {
+            LOGE() << "Music font \"" << fontName << "\" for " << metadataPath << " not found";
             continue;
         }
 
-        engravingFonts()->addExternalFont(fontName.toStdString(), fontName.toStdString(), symbolFontPath, metadataPath, isPrivate);
+        engravingFonts()->addExternalFont(fontName.toStdString(), fontFamily.toStdString(), symbolFontPath, metadataPath);
         fdb->addFont(FontDataKey(fontName), symbolFontPath);
         fdb->addFont(FontDataKey(fontName + u" Text"), textFontPath);
         fdb->insertSubstitution(fontName + u" Text", u"Leland Text");
     }
 
     engravingFonts()->loadAllFonts();
+}
+
+muse::io::path_t EngravingFontsController::findFontPathPrivate(QString metadataDir, muse::String fontName) const
+{
+    // Search in the folder where the metadata lives
+
+    QStringList testPaths {
+        metadataDir + "/" + fontName.toQString() + ".ttf",
+        metadataDir + "/" + fontName.toQString() + ".otf"
+    };
+    for (QString testPath : testPaths) {
+        if (QFile::exists(testPath)) {
+            return testPath;
+        }
+    }
+    return muse::io::path_t();
+}
+
+muse::io::path_t EngravingFontsController::findFontPathGlobal(muse::String fontName) const
+{
+    QStringList fontLocations = QStandardPaths::standardLocations(QStandardPaths::FontsLocation);
+#if defined(Q_OS_WIN)
+    // Qt does not include the local fonts folder in the standard locations
+    fontLocations << qgetenv("LocalAppData").replace("\\", "/") + "/Microsoft/Windows/Fonts";
+#endif
+    for (QString& dir : fontLocations) {
+        QDirIterator it(dir, { "*.ttf", "*.otf" }, QDir::Files);
+        while (it.hasNext()) {
+            it.next();
+            if (it.fileName() == fontName + u".ttf" || it.fileName() == fontName + u".otf") {
+                return it.filePath();
+            }
+        }
+    }
+    return muse::io::path_t();
 }
