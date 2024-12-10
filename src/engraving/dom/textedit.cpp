@@ -28,6 +28,7 @@
 #include "mscoreview.h"
 #include "navigate.h"
 #include "score.h"
+#include "dynamic.h"
 #include "lyrics.h"
 
 #include "log.h"
@@ -141,6 +142,13 @@ void TextBase::endEdit(EditData& ed)
     }
 
     ted->cursor()->endEdit();
+
+    if (isDynamic()) {
+        Dynamic* d = toDynamic(this);
+        const auto dynamicInfo = d->parseDynamicText(xmlText());
+        undoChangeProperty(Pid::DYNAMIC_TYPE, dynamicInfo.first);
+        setXmlText(dynamicInfo.second);
+    }
 
     UndoStack* undo = score()->undoStack();
     IF_ASSERT_FAILED(undo) {
@@ -711,10 +719,10 @@ bool TextBase::edit(EditData& ed)
         }
     }
     if (!s.isEmpty()) {
+        deleteSelectedText(ed);
         if (currentFormat->fontFamily() == u"ScoreText") {
             currentFormat->setFontFamily(propertyDefault(Pid::FONT_FACE).value<String>());
         }
-        deleteSelectedText(ed);
         score()->undo(new InsertText(m_cursor, s), &ed);
 
         int startPosition = cursor->currentPosition();
