@@ -226,6 +226,10 @@ void Tie::collectPossibleEndPoints()
 
     tieEndPoints()->clear();
 
+    if (!startNote()->followingJumpItem()) {
+        return;
+    }
+
     int endPointIdx = 0;
 
     Note* nextNote = searchTieNote(note);
@@ -236,10 +240,6 @@ void Tie::collectPossibleEndPoints()
         TieEndPoint* endPoint = new TieEndPoint(nextNote, u"next note", hasTie, endPointIdx, true);
         tieEndPoints()->add(endPoint);
         endPointIdx++;
-    }
-
-    if (!startNote()->followingJumpItem()) {
-        return;
     }
 
     // Get following notes by taking repeats
@@ -272,6 +272,10 @@ void Tie::collectPossibleEndPoints()
             tieEndPoints()->add(endPoint);
             endPointIdx++;
         }
+    }
+
+    if (endPointIdx < 2 && !isPartialTie()) {
+        tieEndPoints()->clear();
     }
 }
 
@@ -513,6 +517,19 @@ void TieEndPointList::add(TieEndPoint* item)
 {
     item->setEndPointList(this);
     m_endPoints.push_back(item);
+}
+
+void TieEndPointList::clear()
+{
+    for (const TieEndPoint* endPoint : m_endPoints) {
+        Tie* endTie = endPoint->endTie();
+        if (!endTie) {
+            continue;
+        }
+        endTie->setEndPoint(nullptr);
+    }
+    muse::DeleteAll(m_endPoints);
+    m_endPoints.clear();
 }
 
 void TieEndPointList::toggleEndPoint(const String& id)
