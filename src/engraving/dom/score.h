@@ -536,6 +536,8 @@ public:
     void restoreInitialKeySigAndTimeSig();
     void reconnectSlurs(MeasureBase* mbStart, MeasureBase* mbLast);
     void cmdDeleteSelection();
+    std::vector<ChordRest*> deleteRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
+                                        const SelectionFilter& filter);
     void cmdFullMeasureRest();
 
     muse::Ret putNote(const PointF&, bool replace, bool insert);
@@ -1099,8 +1101,6 @@ private:
                               const SelectionFilter& filter);
     void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
                                     const SelectionFilter& filter);
-    std::vector<ChordRest*> deleteRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
-                                        const SelectionFilter& filter);
 
     void update(bool resetCmdState, bool layoutAllParts = false);
 

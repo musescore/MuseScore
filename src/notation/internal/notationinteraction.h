@@ -115,7 +115,7 @@ public:
     bool isDropSingleAccepted(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool isDropRangeAccepted(const muse::PointF& pos) override;
     bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
-    bool dropRange(const QByteArray& data, const muse::PointF& pos) override;
+    bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) override;
     void setDropTarget(EngravingItem* item, bool notify = true) override;
     void setDropRect(const muse::RectF& rect) override;
     void endDrop() override;
@@ -456,6 +456,9 @@ private:
 
     struct RangeDropData
     {
+        engraving::Fraction sourceTick;
+        engraving::staff_idx_t sourceStaffIdx = muse::nidx;
+
         engraving::Fraction tickLength;
         size_t numStaves = 0;
 

@@ -107,7 +107,7 @@ public:
     virtual bool isDropSingleAccepted(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
     virtual bool isDropRangeAccepted(const muse::PointF& pos) = 0;
     virtual bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0;
-    virtual bool dropRange(const QByteArray& data, const muse::PointF& pos) = 0;
+    virtual bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) = 0;
     virtual void setDropTarget(EngravingItem* item, bool notify = true) = 0;
     virtual void setDropRect(const muse::RectF& rect) = 0;
     virtual void endDrop() = 0;

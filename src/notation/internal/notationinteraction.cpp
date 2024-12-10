@@ -1299,7 +1299,7 @@ void NotationInteraction::startOutgoingDragRange(QObject* dragSource)
     pixmap.fill(Qt::transparent);
     m_outgoingDrag->setPixmap(pixmap);
 
-    m_outgoingDrag->exec(Qt::CopyAction);
+    m_outgoingDrag->exec(Qt::MoveAction | Qt::CopyAction);
 }
 
 bool NotationInteraction::isOutgoingDragStarted() const
@@ -1357,7 +1357,9 @@ bool NotationInteraction::startDropRange(const QByteArray& data)
     mu::engraving::XmlReader reader(data);
     while (reader.readNextStartElement()) {
         if (reader.name() == "StaffList") {
+            rdd.sourceTick = Fraction::fromString(reader.attribute("tick"));
             rdd.tickLength = Fraction::fromString(reader.attribute("len"));
+            rdd.sourceStaffIdx = static_cast<staff_idx_t>(reader.intAttribute("staff", -1));
             rdd.numStaves = reader.intAttribute("staves", 0);
             break;
         }
@@ -1806,13 +1808,17 @@ bool NotationInteraction::doDropTextBaseAndSymbols(const PointF& pos, bool apply
     return true;
 }
 
-bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos)
+bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, bool deleteSourceMaterial)
 {
     IF_ASSERT_FAILED(m_dropData.rangeDropData.has_value()) {
         return false;
     }
 
     RangeDropData& rdd = m_dropData.rangeDropData.value();
+
+    if (rdd.tickLength.isZero() || rdd.numStaves == 0) {
+        return false;
+    }
 
     staff_idx_t staffIdx = muse::nidx;
     Segment* segment = nullptr;
@@ -1821,14 +1827,40 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos)
 
     score()->dragPosition(pos, &staffIdx, &segment, spacingFactor, useTimeAnchors);
 
-    rdd.targetSegment = segment;
-    rdd.targetStaffIdx = staffIdx;
-
-    if (rdd.tickLength.isZero() || rdd.numStaves == 0) {
+    if (staffIdx == muse::nidx || !segment) {
         return false;
     }
 
-    startEdit(TranslatableString("undoableAction", "Drop range"));
+    rdd.targetSegment = segment;
+    rdd.targetStaffIdx = staffIdx;
+
+    startEdit(deleteSourceMaterial
+              ? TranslatableString("undoableAction", "Move range")
+              : TranslatableString("undoableAction", "Copy range"));
+
+    if (deleteSourceMaterial && rdd.sourceStaffIdx != muse::nidx) {
+        Segment* sourceStartSegment = score()->tick2leftSegmentMM(rdd.sourceTick);
+        if (sourceStartSegment && !sourceStartSegment->enabled()) {
+            sourceStartSegment = sourceStartSegment->next1MMenabled();
+        }
+
+        Segment* sourceEndSegment = score()->tick2rightSegment(rdd.sourceTick + rdd.tickLength,
+                                                               true,
+                                                               Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+        if (sourceEndSegment && !sourceEndSegment->enabled()) {
+            sourceEndSegment = sourceEndSegment->next1MMenabled();
+        }
+        if (!sourceEndSegment) {
+            sourceEndSegment = score()->lastSegmentMM();
+        }
+
+        if (sourceStartSegment && sourceEndSegment) {
+            score()->deleteRange(sourceStartSegment, sourceEndSegment,
+                                 engraving::staff2track(rdd.sourceStaffIdx),
+                                 engraving::staff2track(rdd.sourceStaffIdx + rdd.numStaves),
+                                 score()->selectionFilter());
+        }
+    }
 
     XmlReader e(data);
     score()->pasteStaff(e, segment, staffIdx);
