@@ -435,14 +435,7 @@ MuseScore {
         customArray = JSON.parse(customArray)
         westernTemperaments = westernTemperaments.concat(customArray[0])
         middleEasternTemperaments = middleEasternTemperaments.concat(customArray[1])
-    }
-
-    function getHistory() {
-        if (history == 0) {
-            history = new commandHistory()
-        }
-        return history
-    }
+    }    
 
     function applyTemperament() {
         var selection = new scoreSelection()
@@ -623,89 +616,36 @@ MuseScore {
         return parseFloat(textField.text)
     }
 
-    function recalculate(tuning) {
-        var old_final_c       = final_c.text
-        var old_final_c_sharp = final_c_sharp.text
-        var old_final_d       = final_d.text
-        var old_final_e_flat  = final_e_flat.text
-        var old_final_e       = final_e.text
-        var old_final_f       = final_f.text
-        var old_final_f_sharp = final_f_sharp.text
-        var old_final_g       = final_g.text
-        var old_final_g_sharp = final_g_sharp.text
-        var old_final_a       = final_a.text
-        var old_final_b_flat  = final_b_flat.text
-        var old_final_b       = final_b.text
-        getHistory().add(
-            function () {
-                final_c.text               = old_final_c
-                final_c.previousText       = old_final_c
-                final_c_sharp.text         = old_final_c_sharp
-                final_c_sharp.previousText = old_final_c_sharp
-                final_d.text               = old_final_d
-                final_d.previousText       = old_final_d
-                final_e_flat.text          = old_final_e_flat
-                final_e_flat.previousText  = old_final_e_flat
-                final_e.text               = old_final_e
-                final_e.previousText       = old_final_e
-                final_f.text               = old_final_f
-                final_f.previousText       = old_final_f
-                final_f_sharp.text         = old_final_f_sharp
-                final_f_sharp.previousText = old_final_f_sharp
-                final_g.text               = old_final_g
-                final_g.previousText       = old_final_g
-                final_g_sharp.text         = old_final_g_sharp
-                final_g_sharp.previousText = old_final_g_sharp
-                final_a.text               = old_final_a
-                final_a.previousText       = old_final_a
-                final_b_flat.text          = old_final_b_flat
-                final_b_flat.previousText  = old_final_b_flat
-                final_b.text               = old_final_b
-                final_b.previousText       = old_final_b
-            },
-            function() {
-                final_c.text               = tuning(0).toFixed(1)
-                final_c.previousText       = final_c.text
-                final_c_sharp.text         = tuning(1).toFixed(1)
-                final_c_sharp.previousText = final_c_sharp.text
-                final_d.text               = tuning(2).toFixed(1)
-                final_d.previousText       = final_d.text
-                final_e_flat.text          = tuning(3).toFixed(1)
-                final_e_flat.previousText  = final_e_flat.text
-                final_e.text               = tuning(4).toFixed(1)
-                final_e.previousText       = final_e.text
-                final_f.text               = tuning(5).toFixed(1)
-                final_f.previousText       = final_f.text
-                final_f_sharp.text         = tuning(6).toFixed(1)
-                final_f_sharp.previousText = final_f_sharp.text
-                final_g.text               = tuning(7).toFixed(1)
-                final_g.previousText       = final_g.text
-                final_g_sharp.text         = tuning(8).toFixed(1)
-                final_g_sharp.previousText = final_g_sharp.text
-                final_a.text               = tuning(9).toFixed(1)
-                final_a.previousText       = final_a.text
-                final_b_flat.text          = tuning(10).toFixed(1)
-                final_b_flat.previousText  = final_b_flat.text
-                final_b.text               = tuning(11).toFixed(1)
-                final_b.previousText       = final_b.text
-            },
-            "final offsets"
-        )
+    function recalculate(tuning) {        
+        final_c.text               = tuning(0).toFixed(1)
+        final_c.previousText       = final_c.text
+        final_c_sharp.text         = tuning(1).toFixed(1)
+        final_c_sharp.previousText = final_c_sharp.text
+        final_d.text               = tuning(2).toFixed(1)
+        final_d.previousText       = final_d.text
+        final_e_flat.text          = tuning(3).toFixed(1)
+        final_e_flat.previousText  = final_e_flat.text
+        final_e.text               = tuning(4).toFixed(1)
+        final_e.previousText       = final_e.text
+        final_f.text               = tuning(5).toFixed(1)
+        final_f.previousText       = final_f.text
+        final_f_sharp.text         = tuning(6).toFixed(1)
+        final_f_sharp.previousText = final_f_sharp.text
+        final_g.text               = tuning(7).toFixed(1)
+        final_g.previousText       = final_g.text
+        final_g_sharp.text         = tuning(8).toFixed(1)
+        final_g_sharp.previousText = final_g_sharp.text
+        final_a.text               = tuning(9).toFixed(1)
+        final_a.previousText       = final_a.text
+        final_b_flat.text          = tuning(10).toFixed(1)
+        final_b_flat.previousText  = final_b_flat.text
+        final_b.text               = tuning(11).toFixed(1)
+        final_b.previousText       = final_b.text            
     }
 
-    function setCurrentTemperament(temperament) {
-        var oldTemperament = currentTemperament
-        getHistory().add(
-            function() {
-                currentTemperament = oldTemperament
-                checkCurrentTemperament()
-            },
-            function() {
-                currentTemperament = temperament
-                checkCurrentTemperament()
-            },
-            "current temperament"
-        )
+    function setCurrentTemperament(temperament) {        
+        currentTemperament = temperament
+        checkCurrentTemperament()            
     }
 
     function checkCurrentTemperament() {
@@ -737,19 +677,9 @@ MuseScore {
         }      
     }
 
-    function setCurrentTab(tab) {
-        var oldTab = currentTab
-        getHistory().add(
-            function(){
-                currentTab = oldTab
-                checkCurrentTab()
-            },
-            function(){
-                currentTab = tab
-                checkCurrentTab()
-            },
-            "current tab"            
-        )
+    function setCurrentTab(tab) {        
+        currentTab = tab
+        checkCurrentTab()           
     }
     
     function checkCurrentTab() {
@@ -763,53 +693,23 @@ MuseScore {
         } 
     }
     
-    function setCurrentRoot(root) {
-        var oldRoot = currentRoot
-        getHistory().add(
-            function () {
-                currentRoot = oldRoot
-                checkCurrentRoot()
-            },
-            function() {
-                currentRoot = root
-                checkCurrentRoot()
-            },
-            "current root"
-        )
+    function setCurrentRoot(root) {        
+        currentRoot = root
+        checkCurrentRoot()            
     }
 
     function checkCurrentRoot() {
         rootNotes.itemAt(currentRoot).checked=true 
     }
 
-    function setCurrentPureTone(pureTone) {
-        var oldPureTone = currentPureTone
-        getHistory().add(
-            function () {
-                currentPureTone = oldPureTone
-                checkCurrentPureTone()
-            },
-            function() {
-                currentPureTone = pureTone
-                checkCurrentPureTone()
-            },
-            "current pure tone"
-        )
+    function setCurrentPureTone(pureTone) {        
+        currentPureTone = pureTone
+        checkCurrentPureTone()            
     }
 
-    function setCurrentTweak(tweak) {
-        var oldTweak = currentTweak
-        getHistory().add(
-            function () {
-                currentTweak = oldTweak
-                checkCurrentTweak()
-            },
-            function () {
-                currentTweak = tweak
-                checkCurrentTweak()
-            },
-            "current tweak"
-        )
+    function setCurrentTweak(tweak) {        
+        currentTweak = tweak
+        checkCurrentTweak()            
     }
 
     function checkCurrentTweak() {
@@ -820,73 +720,46 @@ MuseScore {
         pureTones.itemAt(currentPureTone).checked=true         
     }
 
-    function setModified(state) {
-        var oldModified = modified
-        getHistory().add(
-            function () {
-                modified = oldModified
-            },
-            function () {
-                modified = state
-            },
-            "modified"
-        )
+    function setModified(state) {        
+        modified = state            
     }
 
-    function temperamentClicked(temperament) {
-        getHistory().begin()
+    function temperamentClicked(temperament) {        
         setCurrentTab(tabBar.currentIndex)
         setCurrentTemperament(temperament)
         setCurrentRoot(currentTemperament.root)
         setCurrentPureTone(currentTemperament.pure)
         setCurrentTweak(0.0)
-        recalculate(getTuning())
-        getHistory().end()
+        recalculate(getTuning())        
     }
 
-    function rootNoteClicked(note) {
-        getHistory().begin()
+    function rootNoteClicked(note) {        
         setModified(true)
         setCurrentRoot(note)
         setCurrentPureTone(note)
         setCurrentTweak(0.0)
-        recalculate(getTuning())
-        getHistory().end()
+        recalculate(getTuning())        
     }
 
-    function pureToneClicked(note) {
-        getHistory().begin()
+    function pureToneClicked(note) {        
         setModified(true)
         setCurrentPureTone(note)
         setCurrentTweak(0.0)
-        recalculate(getTuning())
-        getHistory().end()
+        recalculate(getTuning())        
     }
 
-    function tweaked() {
-        getHistory().begin()
+    function tweaked() {        
         setModified(true)
         setCurrentTweak(parseFloat(tweakValue.text))
-        recalculate(getTuning())
-        getHistory().end()
+        recalculate(getTuning())        
     }
 
     function editingFinishedFor(textField) {
-        var oldText = textField.previousText
         var newText = textField.text
-        getHistory().begin()
-        setModified(true)
-        getHistory().add(
-            function () {
-                textField.text = oldText
-            },
-            function () {
-                textField.text = newText
-            },
-            "edit ".concat(textField.name)
-        )
-        getHistory().end()
-        textField.previousText = newText
+        if (textField.previousText != newText) {
+            setModified(true) 
+            textField.previousText = newText
+        }
     }
 
     StyledTabBar {
@@ -1226,23 +1099,7 @@ MuseScore {
                             removeTemperament()
                             saveCustomTemperaments()
                         }
-                    }
-                    FlatButton {
-                        id: undoButton
-                        text: qsTranslate("PrefsDialogBase", "Undo")
-                        isNarrow: true
-                        onClicked: {
-                            getHistory().undo()
-                        }
-                    }
-                    FlatButton {
-                        id: redoButton
-                        text: qsTranslate("PrefsDialogBase", "Redo")
-                        isNarrow: true
-                        onClicked: {
-                            getHistory().redo()
-                        }
-                    }
+                    }                    
                 }
             }
         }
@@ -1390,77 +1247,6 @@ MuseScore {
                 ]
             )
         ) 
-    }
-
-    // Command pattern for undo/redo
-    function commandHistory() {
-        function Command(undo_fn, redo_fn, label) {
-            this.undo = undo_fn
-            this.redo = redo_fn
-            this.label = label // for debugging
-        }
-
-        var history = []
-        var index = -1
-        var transaction = 0
-        var maxHistory = 30
-
-        function newHistory(commands) {
-            if (index < maxHistory) {
-                index++
-                history = history.slice(0, index)
-            } else {
-                history = history.slice(1, index)
-            }
-            history.push(commands)
-        }
-
-        this.add = function(undo, redo, label) {
-            var command = new Command(undo, redo, label)
-            command.redo()
-            if (transaction) {
-                history[index].push(command)
-            } else {
-                newHistory([command])
-            }
-        }
-
-        this.undo = function() {
-            if (index != -1) {
-                history[index].slice().forEach(
-                    function(command) {
-                        command.undo()
-                    }
-                )
-                index--
-            }
-        }
-
-        this.redo = function() {
-            if ((index + 1) < history.length) {
-                index++
-                history[index].forEach(
-                    function(command) {
-                        command.redo()
-                    }
-                )
-            }
-        }
-
-        this.begin = function() {
-            if (transaction) {
-                throw new Error("already in transaction")
-            }
-            newHistory([])
-            transaction = 1
-        }
-
-        this.end = function() {
-            if (!transaction) {
-                throw new Error("not in transaction")
-            }
-            transaction = 0
-        }
-    }
+    }    
 }
-// vim: ft=javascript
+
