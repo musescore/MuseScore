@@ -74,8 +74,8 @@ void AudioConfiguration::init()
         m_audioOutputDeviceIdChanged.notify();
     });
 
-    settings()->setDefaultValue(AUDIO_SAMPLE_RATE_KEY, Val(44100));
-    settings()->setCanBeManuallyEdited(AUDIO_SAMPLE_RATE_KEY, false, Val(44100), Val(192000));
+    settings()->setDefaultValue(AUDIO_SAMPLE_RATE_KEY, Val(48000));
+    settings()->setCanBeManuallyEdited(AUDIO_SAMPLE_RATE_KEY, false, Val(48000), Val(192000));
     settings()->valueChanged(AUDIO_SAMPLE_RATE_KEY).onReceive(nullptr, [this](const Val&) {
         m_driverSampleRateChanged.notify();
     });
@@ -203,6 +203,16 @@ async::Notification AudioConfiguration::sampleRateChanged() const
 size_t AudioConfiguration::desiredAudioThreadNumber() const
 {
     return settings()->value(AUDIO_DESIRED_THREAD_NUMBER_KEY).toInt();
+}
+
+int AudioConfiguration::audioDelayCompensate() const
+{
+    return m_audioDelayCompensate;
+}
+
+void AudioConfiguration::setAudioDelayCompensate(const int frames)
+{
+    m_audioDelayCompensate = frames;
 }
 
 size_t AudioConfiguration::minTrackCountForMultithreading() const
