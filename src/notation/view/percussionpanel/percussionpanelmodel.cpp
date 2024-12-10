@@ -189,12 +189,6 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
         return;
     }
 
-    // Return if nothing changed after edit...
-    if (inst->drumset() && updatedDrumset
-        && *inst->drumset() == *updatedDrumset) {
-        return;
-    }
-
     for (int i = 0; i < m_padListModel->padList().size(); ++i) {
         const PercussionPanelPadModel* model = m_padListModel->padList().at(i);
         if (!model) {
@@ -205,6 +199,13 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
         engraving::DrumInstrument& drum = updatedDrumset->drum(model->pitch());
         drum.panelRow = row;
         drum.panelColumn = column;
+    }
+
+    // Return if nothing changed after edit...
+    if (inst->drumset() && updatedDrumset
+        && *inst->drumset() == *updatedDrumset) {
+        setCurrentPanelMode(m_panelModeToRestore);
+        return;
     }
 
     INotationUndoStackPtr undoStack = notation()->undoStack();
