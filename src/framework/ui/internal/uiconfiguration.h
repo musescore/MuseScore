@@ -34,7 +34,6 @@
 #include "types/val.h"
 #include "uiarrangement.h"
 #include "async/asyncable.h"
-#include "engraving/iengravingfontsprovider.h"
 
 namespace muse::ui {
 class UiConfiguration : public IUiConfiguration, public Injectable, public async::Asyncable
@@ -42,7 +41,6 @@ class UiConfiguration : public IUiConfiguration, public Injectable, public async
     Inject<IMainWindow> mainWindow = { this };
     Inject<IPlatformTheme> platformTheme = { this };
     Inject<IGlobalConfiguration> globalConfiguration = { this };
-    INJECT(mu::engraving::IEngravingFontsProvider, engravingFonts)
 
 public:
 
