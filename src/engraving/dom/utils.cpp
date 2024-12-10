@@ -839,16 +839,7 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment)
     // at this point, chord is a regular chord, not a grace chord
     // and we are looking for a note in the *next* chord (grace or regular)
 
-    // // calculate end of current note duration
-    // // but err on the safe side in case there is roundoff in tick count
-    // Fraction endTick = chord->tick() + chord->actualTicks() - Fraction(1, 4 * 480);
-
     int idx1 = note->unisonIndex();
-    // // skip ahead to end of current note duration as calculated above
-    // // but just in case, stop if we find element in current track
-    // if (nextSegment->tick() < endTick && !nextSegment->element(chord->track())) {
-    //     // continue;
-    // }
     for (track_idx_t track = strack; track < etrack; ++track) {
         EngravingItem* e = nextSegment->element(track);
         if (!e || !e->isChord()) {

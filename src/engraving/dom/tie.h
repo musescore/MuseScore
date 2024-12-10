@@ -60,7 +60,7 @@ public:
     ~TieEndPointList();
 
     void add(TieEndPoint* item);
-    void clear() { m_endPoints.clear(); }
+    void clear();
     size_t size() const { return m_endPoints.size(); }
     bool empty() const { return m_endPoints.empty(); }
 

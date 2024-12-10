@@ -494,7 +494,7 @@ private:
     int concertPitchIdx() const;
     void updateRelLine(int absLine, bool undoable);
 
-    static std::vector<Note*> findTiedNotes(Note* startNote);
+    static std::vector<Note*> findTiedNotes(Note* startNote, bool followPartialTies = true);
 
     void normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned);
 

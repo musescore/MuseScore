@@ -3731,24 +3731,29 @@ Note* Note::firstTiedNote(bool ignorePlayback) const
 //   tiedNotes
 //---------------------------------------------------------
 
-std::vector<Note*> Note::findTiedNotes(Note* startNote)
+std::vector<Note*> Note::findTiedNotes(Note* startNote, bool followPartialTies)
 {
-    // Returns all notes ahead of startNote in a chain of ties with no backtracking
+    // Returns all notes ahead of startNote in a chain of ties
     // Follows partial tie paths recursively
     Note* note = startNote;
     std::vector<Note*> notes;
     notes.push_back(note);
 
     while (note->tieFor()) {
-        for (TieEndPoint* endPoint : *note->tieEndPoints()) {
-            if (!endPoint->active() || endPoint->followingNote()) {
-                continue;
+        if (followPartialTies) {
+            for (TieEndPoint* endPoint : *note->tieEndPoints()) {
+                if (!endPoint->active() || endPoint->followingNote()) {
+                    continue;
+                }
+                if (!endPoint->note() || std::find(notes.begin(), notes.end(), endPoint->note()) != notes.end()) {
+                    continue;
+                }
+                // ONLY backtrack when end point is a full tie eg. around a segno
+                const bool endTieIsFullTie = endPoint->endTie() && !endPoint->endTie()->isPartialTie();
+                Note* endPointNote = endTieIsFullTie ? endPoint->endTie()->startNote()->firstTiedNote() : endPoint->note();
+                std::vector<Note*> partialTieNotes = findTiedNotes(endPointNote, !endTieIsFullTie);
+                notes.insert(notes.end(), partialTieNotes.begin(), partialTieNotes.end());
             }
-            if (!endPoint->note() || std::find(notes.begin(), notes.end(), endPoint->note()) != notes.end()) {
-                continue;
-            }
-            std::vector<Note*> partialTieNotes = findTiedNotes(endPoint->note());
-            notes.insert(notes.end(), partialTieNotes.begin(), partialTieNotes.end());
         }
 
         Note* endNote = note->tieFor()->endNote();

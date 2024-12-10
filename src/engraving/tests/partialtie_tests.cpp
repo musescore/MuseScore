@@ -97,6 +97,7 @@ protected:
     Tie* addTie()
     {
         // Add tie to start note
+        // Expect tie to be added successfully and all end points to have an incoming tie
         m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
         m_masterScore->select(m_startNote);
         Tie* t = m_masterScore->cmdToggleTie();
@@ -112,6 +113,8 @@ protected:
 
     void toggleEndPoint()
     {
+        // Toggle the second end point
+        // Expect the second endpoint to not have an incoming tie and all other endpoints to have incoming ties
         TieEndPointList* endPointList = m_startNote->tieEndPoints();
         EXPECT_TRUE(endPointList->size() > 1);
 
@@ -129,6 +132,8 @@ protected:
 
         m_masterScore->undoRedo(true, 0);
 
+        // Expect all endpoints to have incoming ties
+
         for (TieEndPoint* endPoint : *endPointList) {
             EXPECT_TRUE(endPoint->endTie());
         }
@@ -136,6 +141,8 @@ protected:
 
     void deleteEndTie()
     {
+        // Delete the second end tie
+        // Expect the second endpoint to not have an incoming tie and all other endpoints to have incoming ties
         TieEndPointList* endPointList = m_startNote->tieEndPoints();
         EXPECT_TRUE(endPointList->size() > 1);
         EXPECT_TRUE(m_endPoints.at(1)->tieBack()->frontSegment());
@@ -154,6 +161,8 @@ protected:
 
         m_masterScore->undoRedo(true, 0);
 
+        // Expect all endpoints to have incoming ties
+
         for (TieEndPoint* endPoint : *endPointList) {
             EXPECT_TRUE(endPoint->endTie());
         }
@@ -161,6 +170,8 @@ protected:
 
     void deleteEndNote()
     {
+        // Delete the second endpoint note
+        // Expect the second endpoint to note have in incoming tie and all other endpoints to have incoming ties
         TieEndPointList* endPointList = m_startNote->tieEndPoints();
         EXPECT_TRUE(endPointList->size() > 1);
         EXPECT_TRUE(m_endPoints.at(1)->chord());
@@ -179,6 +190,8 @@ protected:
 
         m_masterScore->undoRedo(true, 0);
 
+        // Expect all endpoints to have incoming ties
+
         for (TieEndPoint* endPoint : *endPointList) {
             EXPECT_TRUE(endPoint->endTie());
         }
@@ -186,6 +199,8 @@ protected:
 
     void toggleFirstEndPoint()
     {
+        // Toggle the first endpoint
+        // Expect the first endpoint to not have an incoming tie
         TieEndPointList* endPointList = m_startNote->tieEndPoints();
 
         Tie* startTie = endPointList->startTie();
@@ -201,16 +216,22 @@ protected:
                 EXPECT_TRUE(endPoint->endTie());
             }
         }
+
+        // Expect the start (full) tie to be replaced with a partial tie
         Tie* newStartTie = endPointList->startTie();
 
         EXPECT_NE(startTie, newStartTie);
         EXPECT_TRUE(newStartTie->isPartialTie());
+
+        // Expect all endpoints to have incoming ties
 
         m_masterScore->undoRedo(true, 0);
 
         for (TieEndPoint* endPoint : *endPointList) {
             EXPECT_TRUE(endPoint->endTie());
         }
+
+        // Expect the start (partial) tie to be replaced with a full tie
 
         startTie = endPointList->startTie();
         EXPECT_NE(startTie, newStartTie);
@@ -219,6 +240,8 @@ protected:
 
     void deleteStartTie()
     {
+        // Delete the start tie
+        // Expect no endpoints to have incoming ties
         TieEndPointList* endPointList = m_startNote->tieEndPoints();
         EXPECT_TRUE(m_startNote->tieFor()->frontSegment());
 
@@ -246,22 +269,34 @@ protected:
         Note* noteBeforeSegno = getNoteAtTick(tickBeforeSegno);
         m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
         m_masterScore->select(noteBeforeSegno);
-        Tie* newTie = m_masterScore->cmdToggleTie();
+        Tie* tieBeforeSegno = m_masterScore->cmdToggleTie();
         m_masterScore->endCmd();
 
         bool newTieFound = false;
         for (TieEndPoint* endPoint : *endPointList) {
             EXPECT_NE(endPoint->endTie(), initialTie);
-            newTieFound |= endPoint->endTie() == newTie;
+            newTieFound |= endPoint->endTie() == tieBeforeSegno;
         }
 
         EXPECT_TRUE(newTieFound);
 
-        EXPECT_TRUE(newTie);
-        EXPECT_FALSE(newTie->isPartialTie());
-        EXPECT_NE(newTie, initialTie);
+        EXPECT_TRUE(tieBeforeSegno);
+        EXPECT_FALSE(tieBeforeSegno->isPartialTie());
+        EXPECT_NE(tieBeforeSegno, initialTie);
 
-        EXPECT_EQ(newTie->tieEndPoints()->size(), 1);
+        EXPECT_EQ(tieBeforeSegno->tieEndPoints()->size(), 0);
+        EXPECT_EQ(endPointList->size(), 1);
+
+        // Delete the start tie
+        // Expect segno tie to still have a tie but no endpoint
+        EXPECT_TRUE(m_startNote->tieFor()->frontSegment());
+
+        m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+        m_masterScore->deleteItem(m_startNote->tieFor()->frontSegment());
+        m_masterScore->endCmd();
+
+        EXPECT_TRUE(tieBeforeSegno);
+        EXPECT_FALSE(tieBeforeSegno->endPoint());
     }
 
     void testSegnoPartialTieAfter(Fraction tickBeforeSegno)
@@ -270,13 +305,24 @@ protected:
         Note* noteBeforeSegno = getNoteAtTick(tickBeforeSegno);
         m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
         m_masterScore->select(noteBeforeSegno);
-        Tie* t = m_masterScore->cmdToggleTie();
-        EXPECT_TRUE(t);
+        Tie* tieBeforeSegno = m_masterScore->cmdToggleTie();
+        EXPECT_TRUE(tieBeforeSegno);
         m_masterScore->endCmd();
 
         Tie* startTie = addTie();
 
         EXPECT_EQ(startTie->tieEndPoints()->size(), 1);
+
+        // Delete the start tie
+        // Expect segno tie to still have a tie but no endpoint
+        EXPECT_TRUE(m_startNote->tieFor()->frontSegment());
+
+        m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
+        m_masterScore->deleteItem(m_startNote->tieFor()->frontSegment());
+        m_masterScore->endCmd();
+
+        EXPECT_TRUE(tieBeforeSegno);
+        EXPECT_FALSE(tieBeforeSegno->endPoint());
     }
 
     void saveAndLoad(const String& score, const Fraction& startPointLocation, const std::vector<Fraction>& endPointLocations)
@@ -292,7 +338,8 @@ protected:
         // Load
         openScore(score + u"-ref", startPointLocation, endPointLocations);
 
-        // Check partial tie has endpoints & ties are present
+        // Expect start tie has endpoints
+        // Expect each endpoint to have an incoming tie
         TieEndPointList* endPointList = m_startNote->tieEndPoints();
         EXPECT_TRUE(endPointList);
 
