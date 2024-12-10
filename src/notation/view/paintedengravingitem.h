@@ -25,7 +25,7 @@
 #include <QQuickPaintedItem>
 
 #include "modularity/ioc.h"
-#include "palette/ipaletteconfiguration.h"
+#include "engraving/iengravingconfiguration.h"
 
 #include "engraving/dom/engravingitem.h"
 
@@ -34,12 +34,12 @@
 namespace mu::notation {
 class PaintedEngravingItem : public QQuickPaintedItem
 {
-    // TODO: don't use the palette for this
-    INJECT_STATIC(palette::IPaletteConfiguration, configuration)
+    INJECT_STATIC(engraving::IEngravingConfiguration, configuration)
 
     Q_OBJECT
 
     Q_PROPERTY(QVariant engravingItem READ engravingItemVariant WRITE setEngravingItemVariant NOTIFY engravingItemVariantChanged)
+    Q_PROPERTY(double spatium READ spatium WRITE setSpatium NOTIFY spatiumChanged)
 
 public:
     explicit PaintedEngravingItem(QQuickItem* parent = nullptr);
@@ -47,14 +47,19 @@ public:
     QVariant engravingItemVariant() const;
     void setEngravingItemVariant(QVariant engravingItemVariant);
 
+    double spatium() const;
+    void setSpatium(double spatium);
+
     void paint(QPainter* painter) override;
 
 signals:
     void engravingItemVariantChanged();
+    void spatiumChanged();
 
 private:
     void paintNotationPreview(muse::draw::Painter& painter, qreal dpi) const;
 
     mu::engraving::ElementPtr m_item;
+    double m_spatium = 1.0;
 };
 }

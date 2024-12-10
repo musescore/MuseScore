@@ -30,6 +30,7 @@
 #include "context/iglobalcontext.h"
 #include "actions/iactionsdispatcher.h"
 #include "playback/iplaybackcontroller.h"
+#include "iinstrumentsrepository.h"
 
 #include "percussionpanelpadlistmodel.h"
 
@@ -52,6 +53,7 @@ class PercussionPanelModel : public QObject, public muse::Injectable, public mus
     muse::Inject<context::IGlobalContext> globalContext = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
     muse::Inject<playback::IPlaybackController> playbackController = { this };
+    muse::Inject<IInstrumentsRepository> instrumentsRepository = { this };
 
     Q_OBJECT
 
@@ -71,7 +73,7 @@ public:
     void setEnabled(bool enabled);
 
     PanelMode::Mode currentPanelMode() const;
-    void setCurrentPanelMode(const PanelMode::Mode& panelMode, bool updateNoteInput = true);
+    void setCurrentPanelMode(const PanelMode::Mode& panelMode);
 
     bool useNotationPreview() const;
     void setUseNotationPreview(bool useNotationPreview);
@@ -83,7 +85,9 @@ public:
     QList<QVariantMap> layoutMenuItems() const;
     Q_INVOKABLE void handleMenuItem(const QString& itemId);
 
-    Q_INVOKABLE void finishEditing();
+    //! NOTE: There are a handful of circumstances where we should discard changes (e.g. undoing/redoing a layout change mid
+    //! edit, resetting the layout mid edit, or selecting a different drumset mid edit)
+    Q_INVOKABLE void finishEditing(bool discardChanges = false);
 
     Q_INVOKABLE void customizeKit();
 
@@ -100,6 +104,8 @@ private:
 
     void writePitch(int pitch);
     void playPitch(int pitch);
+
+    void resetLayout();
 
     const mu::notation::INotationPtr notation() const;
     const mu::notation::INotationInteractionPtr interaction() const;

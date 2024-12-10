@@ -54,7 +54,7 @@ struct DrumInstrument {
 
     // if notehead = HEAD_CUSTOM, custom, use noteheads
     NoteHeadGroup notehead = NoteHeadGroup::HEAD_INVALID;   ///< notehead symbol set
-    SymId noteheads[int(NoteHeadType::HEAD_TYPES)]
+    std::array<SymId, int(NoteHeadType::HEAD_TYPES)> noteheads
         = { SymId::noteheadWhole, SymId::noteheadHalf, SymId::noteheadBlack, SymId::noteheadDoubleWhole };
 
     int line = 0;               ///< place notehead onto this line
