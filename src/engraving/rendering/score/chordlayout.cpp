@@ -2496,7 +2496,7 @@ void ChordLayout::layoutChords3(const std::vector<Chord*>& chords,
 
         std::vector<Note*> chordNotes = chord->notes();
         std::sort(chordNotes.begin(), chordNotes.end(),
-                  [](Note* n1, const Note* n2) ->bool { return n1->line() <= n2->line(); });
+                  [](Note* n1, const Note* n2) ->bool { return n1->line() < n2->line(); });
         for (Note* note : chordNotes) {
             double noteX = 0.0;
             if (note->ldata()->mirror()) {
