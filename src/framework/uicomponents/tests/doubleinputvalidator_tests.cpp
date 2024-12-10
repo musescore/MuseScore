@@ -68,8 +68,8 @@ TEST_F(DoubleInputValidatorTests, Validate) {
         { "2.", QValidator::Intermediate, "2" },
         { "-100.1", QValidator::Intermediate, "-100" },
         { "100.1", QValidator::Intermediate, "100" },
-        { "1.123", QValidator::Intermediate, "1.12" },
-        { "abc", QValidator::Invalid, "" }
+        { "1.123", QValidator::Invalid },
+        { "abc", QValidator::Invalid }
     };
 
     int pos = 0;
