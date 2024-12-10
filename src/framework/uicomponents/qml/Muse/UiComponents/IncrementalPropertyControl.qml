@@ -229,7 +229,7 @@ Item {
             scrolled = 0
         }
 
-        onTextChanged: function(newTextValue) {
+        onTextEdited: function(newTextValue) {
             if (prv.isCustom) {
                 root.valueEdited(newTextValue)
                 return

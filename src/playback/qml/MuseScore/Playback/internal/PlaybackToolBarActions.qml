@@ -19,18 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Layouts
 
-import Muse.UiComponents 1.0
-import Muse.Ui 1.0
-import MuseScore.CommonScene 1.0
+import Muse.UiComponents
+import Muse.Ui
+
+import MuseScore.CommonScene
+import MuseScore.Playback
 
 Item {
     id: root
 
-    property var playbackModel: null
+    property PlaybackToolBarModel playbackModel: null
+
     property NavigationPanel navPanel: null
+    readonly property int navigationOrderEnd: tempoButton.navigation.order
+
     property bool floating: false
 
     width: childrenRect.width
@@ -51,6 +56,8 @@ Item {
 
         orientation: Qt.Horizontal
         interactive: false
+
+        readonly property int navigationOrderEnd: count
 
         delegate: FlatButton {
             id: btn
@@ -125,6 +132,9 @@ Item {
         maxMillisecondsNumber: 9
         time: root.playbackModel.playTime
 
+        navigationPanel: root.navPanel
+        navigationOrderStart: buttonsListView.navigationOrderEnd + 1
+
         onTimeEdited: function(newTime) {
             root.playbackModel.playTime = newTime
         }
@@ -145,6 +155,9 @@ Item {
 
         font: timeField.font
 
+        navigationPanel: root.navPanel
+        navigationOrderStart: timeField.navigationOrderEnd + 1
+
         onMeasureNumberEdited: function(newValue) {
             root.playbackModel.measureNumber = newValue
         }
@@ -154,8 +167,8 @@ Item {
         }
     }
 
-    Item {
-        id: tempoViewContainer
+    FlatButton {
+        id: tempoButton
 
         anchors.left: measureAndBeatFields.right
         anchors.leftMargin: 6
@@ -166,11 +179,14 @@ Item {
         width: 48
         height: parent.height
 
-        TempoView {
-            id: tempoView
+        accentButton: playbackSpeedPopup.isOpened
+        transparent: !accentButton
 
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
+        navigation.panel: root.navPanel
+        navigation.order: measureAndBeatFields.navigationOrderEnd + 1
+
+        contentItem: TempoView {
+            anchors.centerIn: parent
 
             noteSymbol: root.playbackModel.tempo.noteSymbol
             tempoValue: root.playbackModel.tempo.value
@@ -178,10 +194,20 @@ Item {
             noteSymbolFont.pixelSize: ui.theme.iconsFont.pixelSize
             tempoValueFont: timeField.font
         }
+
+        onClicked: {
+            playbackSpeedPopup.toggleOpened()
+        }
+
+        PlaybackSpeedPopup {
+            id: playbackSpeedPopup
+
+            playbackModel: root.playbackModel
+        }
     }
 
     SeparatorLine {
-        anchors.left: tempoViewContainer.right
+        anchors.left: tempoButton.right
         anchors.leftMargin: 12
         anchors.topMargin: 2
         anchors.bottomMargin: 2
