@@ -36,3 +36,6 @@ set(MODULE_SRC
 
 setup_module()
 
+if (MUSE_MODULE_LANGUAGES_TESTS)
+    add_subdirectory(tests)
+endif()
