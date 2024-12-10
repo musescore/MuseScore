@@ -1203,7 +1203,7 @@ muse::async::Notification NotationInteraction::dragChanged() const
     return m_dragChanged;
 }
 
-bool NotationInteraction::dragCopyAllowed(const EngravingItem* element) const
+bool NotationInteraction::isOutgoingDragElementAllowed(const EngravingItem* element) const
 {
     if (!element) {
         return false;
@@ -1228,10 +1228,10 @@ bool NotationInteraction::dragCopyAllowed(const EngravingItem* element) const
 }
 
 //! NOTE: Copied from ScoreView::cloneElement
-void NotationInteraction::prepareDragCopyElement(const EngravingItem* element, QObject* dragSource)
+void NotationInteraction::startOutgoingDragElement(const EngravingItem* element, QObject* dragSource)
 {
     if (isDragStarted()) {
-        endDragCopy();
+        endOutgoingDrag();
     }
 
     if (element->isSpannerSegment()) {
@@ -1241,11 +1241,11 @@ void NotationInteraction::prepareDragCopyElement(const EngravingItem* element, Q
     QMimeData* mimeData = new QMimeData();
     mimeData->setData(mu::engraving::mimeSymbolFormat, element->mimeData().toQByteArray());
 
-    m_dragCopy = new QDrag(dragSource);
-    m_dragCopy->setMimeData(mimeData);
+    m_outgoingDrag = new QDrag(dragSource);
+    m_outgoingDrag->setMimeData(mimeData);
 
-    QObject::connect(m_dragCopy, &QDrag::destroyed, [this]() {
-        m_dragCopy = nullptr;
+    QObject::connect(m_outgoingDrag, &QDrag::destroyed, [this]() {
+        m_outgoingDrag = nullptr;
     });
 
     const qreal adjustedRatio = 0.4;
@@ -1268,13 +1268,15 @@ void NotationInteraction::prepareDragCopyElement(const EngravingItem* element, Q
     p.scale(adjustedRatio, adjustedRatio);
     engravingRenderer()->drawItem(element, &p);
 
-    m_dragCopy->setPixmap(pixmap);
+    m_outgoingDrag->setPixmap(pixmap);
+
+    m_outgoingDrag->exec(Qt::CopyAction);
 }
 
-void NotationInteraction::prepareDragCopyRange(QObject* dragSource)
+void NotationInteraction::startOutgoingDragRange(QObject* dragSource)
 {
     if (isDragStarted()) {
-        endDragCopy();
+        endOutgoingDrag();
     }
 
     if (!selection()->isRange() || !selection()->canCopy()) {
@@ -1286,41 +1288,31 @@ void NotationInteraction::prepareDragCopyRange(QObject* dragSource)
         return;
     }
 
-    m_dragCopy = new QDrag(dragSource);
-    m_dragCopy->setMimeData(mimeData);
+    m_outgoingDrag = new QDrag(dragSource);
+    m_outgoingDrag->setMimeData(mimeData);
 
-    QObject::connect(m_dragCopy, &QDrag::destroyed, [this]() {
-        m_dragCopy = nullptr;
+    QObject::connect(m_outgoingDrag, &QDrag::destroyed, [this]() {
+        m_outgoingDrag = nullptr;
     });
 
     QPixmap pixmap(1, 1);
     pixmap.fill(Qt::transparent);
-    m_dragCopy->setPixmap(pixmap);
+    m_outgoingDrag->setPixmap(pixmap);
+
+    m_outgoingDrag->exec(Qt::CopyAction);
 }
 
-bool NotationInteraction::hasDragCopy() const
+bool NotationInteraction::isOutgoingDragStarted() const
 {
-    return m_dragCopy != nullptr;
+    return m_outgoingDrag != nullptr;
 }
 
-bool NotationInteraction::hasStartedDragCopy() const
+void NotationInteraction::endOutgoingDrag()
 {
-    return m_dragCopy != nullptr && m_dragCopyStarted;
-}
-
-void NotationInteraction::startDragCopy()
-{
-    m_dragCopyStarted = true;
-    m_dragCopy->exec(Qt::CopyAction);
-}
-
-void NotationInteraction::endDragCopy()
-{
-    if (m_dragCopy) {
-        delete m_dragCopy;
-        m_dragCopy = nullptr;
+    if (m_outgoingDrag) {
+        delete m_outgoingDrag;
+        m_outgoingDrag = nullptr;
     }
-    m_dragCopyStarted = false;
 }
 
 //! NOTE Copied from ScoreView::dragEnterEvent

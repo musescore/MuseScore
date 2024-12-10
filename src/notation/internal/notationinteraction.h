@@ -102,13 +102,11 @@ public:
     void endDrag() override;
     muse::async::Notification dragChanged() const override;
 
-    bool dragCopyAllowed(const EngravingItem* element) const override;
-    void prepareDragCopyElement(const EngravingItem* element, QObject* dragSource) override;
-    void prepareDragCopyRange(QObject* dragSource) override;
-    bool hasDragCopy() const override;
-    bool hasStartedDragCopy() const override;
-    void startDragCopy() override;
-    void endDragCopy() override;
+    bool isOutgoingDragElementAllowed(const EngravingItem* element) const override;
+    void startOutgoingDragElement(const EngravingItem* element, QObject* dragSource) override;
+    void startOutgoingDragRange(QObject* dragSource) override;
+    bool isOutgoingDragStarted() const override;
+    void endOutgoingDrag() override;
 
     // Drop
     bool startDropSingle(const QByteArray& edata) override;
@@ -486,8 +484,7 @@ private:
     muse::async::Notification m_dragChanged;
     std::vector<muse::LineF> m_anchorLines;
 
-    QDrag* m_dragCopy = nullptr;
-    bool m_dragCopyStarted = false;
+    QDrag* m_outgoingDrag = nullptr;
 
     mu::engraving::EditData m_editData;
 
