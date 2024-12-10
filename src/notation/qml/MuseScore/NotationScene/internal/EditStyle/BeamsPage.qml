@@ -127,10 +127,9 @@ StyleDialogPage {
 
     StyledGroupBox {
         width: parent.width
-        height: 120
+        height: Math.max(120, implicitHeight)
 
         title: qsTrc("notation", "Beam style")
-        label.x: 0
 
         RowLayout {
             anchors.fill: parent
@@ -138,7 +137,6 @@ StyleDialogPage {
 
             RadioButtonGroup {
                 Layout.fillWidth: true
-                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
 
                 spacing: 12
                 orientation: ListView.Vertical
@@ -147,14 +145,11 @@ StyleDialogPage {
                     { title: qsTrc("notation", "Draw inner stems through beams"), value: false },
                     { title: qsTrc("notation", "Draw inner stems to nearest beam (“French” style)"), value: true }
                 ]
+
                 delegate: RoundedRadioButton {
-                    leftPadding: 0
-                    spacing: 6
-
+                    width: ListView.view.width
                     text: modelData.title
-
                     checked: modelData.value === beamsPageModel.frenchStyleBeams.value
-
                     onToggled: {
                         beamsPageModel.frenchStyleBeams.value = modelData.value
                     }

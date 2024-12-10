@@ -27,18 +27,17 @@ import MuseScore.NotationScene 1.0
 import Muse.UiComponents 1.0
 import Muse.Ui 1.0
 
-
 StyleControlRowWithReset {
     id: root
+
     property string suffix: ''
     property bool inPercentage: false
     property double step: 0.01
 
-    controlWidth: 80
-
     IncrementalPropertyControl {
         id: spinBox
-        Layout.fillWidth: false
+
+        width: 80
 
         currentValue: inPercentage ? Math.round(styleItem.value * 100) : styleItem.value
         minValue: 0
@@ -52,5 +51,4 @@ StyleControlRowWithReset {
             styleItem.value = inPercentage ? newValue / 100 : newValue
         }
     }
-
 }
