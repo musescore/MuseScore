@@ -1137,10 +1137,7 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
     }
 
     if (mimeData->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
-        if (event->possibleActions() & Qt::CopyAction) {
-            event->setDropAction(Qt::CopyAction);
-        }
-
+        event->setDropAction(Qt::CopyAction);
         if (event->dropAction() != Qt::CopyAction) {
             event->ignore();
             return;
@@ -1157,13 +1154,19 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
     }
 
     if (mimeData->hasFormat(mu::commonscene::MIME_STAFFLLIST_FORMAT)) {
-        if (event->possibleActions() & Qt::CopyAction) {
+        bool isInternal = event->source() == m_view->asItem();
+        if (!isInternal || event->modifiers() & Qt::AltModifier) {
             event->setDropAction(Qt::CopyAction);
-        }
-
-        if (event->dropAction() != Qt::CopyAction) {
-            event->ignore();
-            return;
+            if (event->dropAction() != Qt::CopyAction) {
+                event->ignore();
+                return;
+            }
+        } else {
+            event->setDropAction(Qt::MoveAction);
+            if (event->dropAction() != Qt::MoveAction) {
+                event->ignore();
+                return;
+            }
         }
 
         QByteArray edata = mimeData->data(MIME_STAFFLLIST_FORMAT);
@@ -1193,12 +1196,15 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* event)
         return;
     }
 
-    if (mimeData->hasFormat(MIME_SYMBOL_FORMAT)
-        || mimeData->hasFormat(MIME_SYMBOLLIST_FORMAT)
-        || mimeData->hasFormat(MIME_STAFFLLIST_FORMAT)) {
-        if (event->possibleActions() & Qt::CopyAction) {
+    if (mimeData->hasFormat(MIME_STAFFLLIST_FORMAT)) {
+        bool isInternal = event->source() == m_view->asItem();
+        if (!isInternal || event->modifiers() & Qt::AltModifier) {
             event->setDropAction(Qt::CopyAction);
+        } else {
+            event->setDropAction(Qt::MoveAction);
         }
+    } else {
+        event->setDropAction(Qt::CopyAction);
     }
 
     PointF pos = m_view->toLogical(event->position());
@@ -1231,7 +1237,9 @@ void NotationViewInputController::dropEvent(QDropEvent* event)
 
     bool isAccepted = false;
     if (mimeData->hasFormat(MIME_STAFFLLIST_FORMAT)) {
-        isAccepted = viewInteraction()->dropRange(mimeData->data(MIME_STAFFLLIST_FORMAT), pos);
+        bool isInternal = event->source() == m_view->asItem();
+        bool isMove = isInternal && event->dropAction() == Qt::MoveAction;
+        isAccepted = viewInteraction()->dropRange(mimeData->data(MIME_STAFFLLIST_FORMAT), pos, isMove);
     } else {
         isAccepted = viewInteraction()->dropSingle(pos, modifiers);
     }
