@@ -142,20 +142,25 @@ void SystemObjectsLayerTreeItem::listenUndoStackChanged()
             return;
         }
 
-        for (const EngravingItem* item : changes.changedItems) {
+        bool shouldUpdateState = false;
+
+        for (const auto& pair : changes.changedItems) {
+            EngravingItem* item = pair.first;
             if (!item->systemFlag() || item->staffIdx() != m_staffIdx) {
                 continue;
             }
 
-            // TODO: optimize
-            m_systemObjectGroups = collectSystemObjectGroups(m_staff);
-            setTitle(formatLayerTitle(m_systemObjectGroups));
+            if (muse::contains(pair.second, CommandType::AddElement)) {
+                shouldUpdateState |= addSystemObject(item);
+            } else if (muse::contains(pair.second, CommandType::RemoveElement)) {
+                shouldUpdateState |= removeSystemObject(item);
+            } else if (muse::contains(pair.second, CommandType::ChangeProperty)) {
+                shouldUpdateState |= muse::contains(changes.changedPropertyIdSet, Pid::VISIBLE);
+            }
+        }
 
-            m_ignoreVisibilityChanges = true;
-            setIsVisible(isLayerVisible(m_systemObjectGroups));
-            m_ignoreVisibilityChanges = false;
-
-            return;
+        if (shouldUpdateState) {
+            updateState();
         }
     });
 }
@@ -184,6 +189,43 @@ void SystemObjectsLayerTreeItem::listenVisibleChanged()
     });
 }
 
+bool SystemObjectsLayerTreeItem::addSystemObject(engraving::EngravingItem* obj)
+{
+    for (auto& pair : m_systemObjectGroups) {
+        if (pair.type != obj->type()) {
+            continue;
+        }
+
+        if (muse::contains(pair.items, obj)) {
+            return false;
+        }
+
+        pair.items.push_back(obj);
+        return true;
+    }
+
+    m_systemObjectGroups.push_back({ obj->type(), { obj } });
+    return true;
+}
+
+bool SystemObjectsLayerTreeItem::removeSystemObject(engraving::EngravingItem* obj)
+{
+    for (auto it = m_systemObjectGroups.begin(); it != m_systemObjectGroups.end(); ++it) {
+        if (it->type != obj->type()) {
+            continue;
+        }
+
+        bool removed = muse::remove(it->items, obj);
+        if (it->items.empty()) {
+            m_systemObjectGroups.erase(it);
+        }
+
+        return removed;
+    }
+
+    return false;
+}
+
 void SystemObjectsLayerTreeItem::updateStaff()
 {
     if (!m_systemObjectGroups.empty()) {
@@ -192,4 +234,12 @@ void SystemObjectsLayerTreeItem::updateStaff()
             setStaff(firstGroup.items.front()->staff());
         }
     }
+}
+
+void SystemObjectsLayerTreeItem::updateState()
+{
+    setTitle(formatLayerTitle(m_systemObjectGroups));
+    m_ignoreVisibilityChanges = true;
+    setIsVisible(isLayerVisible(m_systemObjectGroups));
+    m_ignoreVisibilityChanges = false;
 }

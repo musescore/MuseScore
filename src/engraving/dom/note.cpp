@@ -568,14 +568,14 @@ Note::~Note()
     m_rightParenthesis = nullptr;
 }
 
-std::vector<const Note*> Note::compoundNotes() const
+std::vector<Note*> Note::compoundNotes() const
 {
-    std::vector<const Note*> elements;
-    if (const Note* note = firstTiedNote()) {
+    std::vector<Note*> elements;
+    if (Note* note = firstTiedNote()) {
         elements.push_back(note);
     }
 
-    if (const Note* note = lastTiedNote()) {
+    if (Note* note = lastTiedNote()) {
         elements.push_back(note);
     }
 
@@ -3708,7 +3708,7 @@ EngravingItem* Note::prevSegmentElement()
 //   lastTiedNote
 //---------------------------------------------------------
 
-const Note* Note::lastTiedNote(bool ignorePlayback) const
+Note* Note::lastTiedNote(bool ignorePlayback) const
 {
     std::vector<const Note*> notes;
     const Note* note = this;
@@ -3723,7 +3723,7 @@ const Note* Note::lastTiedNote(bool ignorePlayback) const
         note = note->tieFor()->endNote();
         notes.push_back(note);
     }
-    return note;
+    return const_cast<Note*>(note);
 }
 
 //---------------------------------------------------------

@@ -535,7 +535,7 @@ struct ScoreChangesRange {
     staff_idx_t staffIdxFrom = muse::nidx;
     staff_idx_t staffIdxTo = muse::nidx;
 
-    std::set<const EngravingItem*> changedItems;
+    std::map<EngravingItem*, std::unordered_set<CommandType> > changedItems;
     ElementTypeSet changedTypes;
     PropertyIdSet changedPropertyIdSet;
     StyleIdSet changedStyleIdSet;

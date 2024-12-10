@@ -90,7 +90,7 @@ using namespace muse::io;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static UndoMacro::ChangesInfo changesInfo(const UndoStack* stack)
+static UndoMacro::ChangesInfo changesInfo(const UndoStack* stack, bool undo)
 {
     IF_ASSERT_FAILED(stack) {
         static UndoMacro::ChangesInfo empty;
@@ -108,16 +108,17 @@ static UndoMacro::ChangesInfo changesInfo(const UndoStack* stack)
         return empty;
     }
 
-    return actualMacro->changesInfo();
+    return actualMacro->changesInfo(undo);
 }
 
-static std::pair<int, int> changedTicksRange(const CmdState& cmdState, const std::set<const EngravingItem*>& changedItems)
+static std::pair<int, int> changedTicksRange(const CmdState& cmdState, const std::map<EngravingItem*,
+                                                                                      std::unordered_set<CommandType> >& changedItems)
 {
     int startTick = cmdState.startTick().ticks();
     int endTick = cmdState.endTick().ticks();
 
-    for (const EngravingItem* element : changedItems) {
-        int tick = element->tick().ticks();
+    for (const auto& pair : changedItems) {
+        int tick = pair.first->tick().ticks();
 
         if (startTick > tick) {
             startTick = tick;
@@ -357,7 +358,7 @@ void Score::undoRedo(bool undo, EditData* ed)
     //! NOTE: the order of operations is very important here
     //! 1. for the undo operation, the list of changed elements is available before undo()
     //! 2. for the redo operation, the list of changed elements will be available after redo()
-    UndoMacro::ChangesInfo changes = changesInfo(undoStack());
+    UndoMacro::ChangesInfo changes = changesInfo(undoStack(), undo);
 
     cmdState().reset();
     if (undo) {
@@ -369,7 +370,7 @@ void Score::undoRedo(bool undo, EditData* ed)
     masterScore()->setPlaylistDirty();    // TODO: flag all individual operations
     updateSelection();
 
-    ScoreChangesRange range = changesRange();
+    ScoreChangesRange range = changesRange(undo);
 
     if (range.changedItems.empty()) {
         range.changedItems = std::move(changes.changedItems);
@@ -436,10 +437,10 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
     }
 }
 
-ScoreChangesRange Score::changesRange() const
+ScoreChangesRange Score::changesRange(bool undo) const
 {
     const CmdState& cmdState = score()->cmdState();
-    UndoMacro::ChangesInfo changes = changesInfo(undoStack());
+    UndoMacro::ChangesInfo changes = changesInfo(undoStack(), undo);
     auto ticksRange = changedTicksRange(cmdState, changes.changedItems);
 
     return { ticksRange.first, ticksRange.second,
