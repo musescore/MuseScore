@@ -40,6 +40,7 @@ PercussionPanelModel::PercussionPanelModel(QObject* parent)
     : QObject(parent)
 {
     m_padListModel = new PercussionPanelPadListModel(this);
+    qApp->installEventFilter(this);
 }
 
 bool PercussionPanelModel::enabled() const
@@ -263,6 +264,21 @@ void PercussionPanelModel::setUpConnections()
         case PanelMode::Mode::SOUND_PREVIEW: playPitch(pitch);
         }
     });
+}
+
+bool PercussionPanelModel::eventFilter(QObject* watched, QEvent* event)
+{
+    // Finish editing on escape...
+    if (m_currentPanelMode != PanelMode::Mode::EDIT_LAYOUT || event->type() != QEvent::Type::ShortcutOverride) {
+        return QObject::eventFilter(watched, event);
+    }
+    QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+    if (!keyEvent || keyEvent->key() != Qt::Key_Escape) {
+        return QObject::eventFilter(watched, event);
+    }
+    finishEditing();
+    event->setAccepted(true);
+    return true;
 }
 
 void PercussionPanelModel::writePitch(int pitch)

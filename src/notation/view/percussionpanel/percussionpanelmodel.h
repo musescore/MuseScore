@@ -102,6 +102,8 @@ signals:
 private:
     void setUpConnections();
 
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
     void writePitch(int pitch);
     void playPitch(int pitch);
 
