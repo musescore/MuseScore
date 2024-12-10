@@ -2588,6 +2588,24 @@ bool MeiImporter::readHarm(pugi::xml_node harmNode, Measure* measure)
 }
 
 /**
+ * Read a instrDef (instrument definition).
+ */
+
+bool MeiImporter::readInstrDef(pugi::xml_node instrDefNode, Part* part)
+{
+    IF_ASSERT_FAILED(part) {
+        return false;
+    }
+
+    libmei::InstrDef meiInstrDef;
+    meiInstrDef.Read(instrDefNode);
+
+    part->setMidiProgram(meiInstrDef.GetMidiInstrnum());
+
+    return true;
+}
+
+/**
  * Read a lv.
  */
 
@@ -3140,6 +3158,9 @@ bool MeiImporter::buildScoreParts(pugi::xml_node scoreDefNode)
             this->readLines(labelAbbrNode, abbrLines, abbrLine);
             part->setShortName(abbrLines.join(u"\n"));
         }
+
+        pugi::xml_node instrDefNode = labelNode.select_node("./following-sibling::instrDef").node();
+        readInstrDef(instrDefNode, part);
 
         m_score->appendPart(part);
 

@@ -32,6 +32,7 @@
                      <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
                         <label>Classical Guitar</label>
                         <labelAbbr>Guit.</labelAbbr>
+                        <instrDef midi.instrnum="52" />
                         <clef shape="G" line="2" dis="8" dis.place="below" />
                      </staffDef>
                   </staffGrp>

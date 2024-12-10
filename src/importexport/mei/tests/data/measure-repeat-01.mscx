@@ -33,6 +33,7 @@
         <trackName></trackName>
         <instrumentId>pluck.guitar.nylon-string</instrumentId>
         <Channel>
+          <program value="52"/>
           </Channel>
         </Instrument>
       </Part>

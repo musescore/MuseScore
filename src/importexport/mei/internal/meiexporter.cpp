@@ -40,6 +40,7 @@
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
+#include "engraving/dom/instrument.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/laissezvib.h"
@@ -73,6 +74,7 @@
 #include "thirdparty/libmei/fingering.h"
 #include "thirdparty/libmei/harmony.h"
 #include "thirdparty/libmei/lyrics.h"
+#include "thirdparty/libmei/midi.h"
 #include "thirdparty/libmei/shared.h"
 
 using namespace mu::iex::mei;
@@ -608,6 +610,7 @@ bool MeiExporter::writeStaffGrpStart(const Staff* staff, std::vector<int>& ends,
             // If we have a part and reached the latest level, write the label and labelAbbr
             if (staffGrpPart && j == staff->bracketLevels()) {
                 this->writeLabel(m_currentNode, staffGrpPart);
+                this->writeInstrDef(m_currentNode, staffGrpPart);
             }
         }
     }
@@ -648,6 +651,7 @@ bool MeiExporter::writeStaffDef(const Staff* staff, const Measure* measure, cons
 
     if (isPart) {
         this->writeLabel(staffDefNode, part);
+        this->writeInstrDef(staffDefNode, part);
     }
 
     if (measure) {
@@ -729,6 +733,34 @@ bool MeiExporter::writeLabel(pugi::xml_node node, const Part* part)
         lines = instrument->abbreviatureAsPlainText().split(u"\n");
         this->writeLines(labelAbbrNode, lines);
     }
+
+    return true;
+}
+
+/**
+ * Write instrument definition for MIDI information.
+ */
+
+bool MeiExporter::writeInstrDef(pugi::xml_node node, const Part* part)
+{
+    IF_ASSERT_FAILED(part) {
+        return false;
+    }
+
+    const int midiProgram = part->midiProgram();
+    // const int midiChannel = part->midiChannel();
+    // const int midiPort = part->midiPort();
+
+    if (midiProgram < 0) {
+        return false;
+    }
+
+    libmei::InstrDef meiInstrDef;
+    pugi::xml_node instrDefNode = node.append_child();
+    if (midiProgram >= 0 && midiProgram < 128) {
+        meiInstrDef.SetMidiInstrnum(midiProgram);
+    }
+    meiInstrDef.Write(instrDefNode);
 
     return true;
 }

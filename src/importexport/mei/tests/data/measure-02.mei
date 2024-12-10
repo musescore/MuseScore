@@ -35,21 +35,25 @@
                         <staffDef n="1" lines="5" meter.count="3" meter.unit="4">
                            <label>Violin</label>
                            <labelAbbr>Vln.</labelAbbr>
+                           <instrDef midi.instrnum="40" />
                            <clef shape="G" line="2" />
                         </staffDef>
                         <staffDef n="2" lines="5" meter.count="3" meter.unit="4">
                            <label>Violin 2</label>
                            <labelAbbr>Vln. 2</labelAbbr>
+                           <instrDef midi.instrnum="40" />
                            <clef shape="G" line="2" />
                         </staffDef>
                         <staffDef n="3" lines="5" meter.count="3" meter.unit="4">
                            <label>Viola</label>
                            <labelAbbr>Vla.</labelAbbr>
+                           <instrDef midi.instrnum="41" />
                            <clef shape="C" line="3" />
                         </staffDef>
                         <staffDef n="4" lines="5" meter.count="3" meter.unit="4">
                            <label>Violoncello</label>
                            <labelAbbr>Vc.</labelAbbr>
+                           <instrDef midi.instrnum="42" />
                            <clef shape="F" line="4" />
                         </staffDef>
                      </staffGrp>
