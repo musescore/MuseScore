@@ -27,8 +27,6 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/undo.h"
 
-#include "defer.h"
-
 static const QString INSTRUMENT_NAMES_CODE("percussion-instrument-names");
 static const QString NOTATION_PREVIEW_CODE("percussion-notation-preview");
 static const QString EDIT_LAYOUT_CODE("percussion-edit-layout");
@@ -210,12 +208,9 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
 
     INotationUndoStackPtr undoStack = notation()->undoStack();
 
-    DEFER {
-        undoStack->commitChanges();
-    };
-
     undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Edit percussion panel layout"));
     score()->undo(new engraving::ChangeDrumset(inst, updatedDrumset, staff->part()));
+    undoStack->commitChanges();
 
     setCurrentPanelMode(m_panelModeToRestore);
 }
@@ -277,15 +272,12 @@ void PercussionPanelModel::writePitch(int pitch)
         return;
     }
 
-    DEFER {
-        undoStack->commitChanges();
-    };
-
     undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Enter percussion note"));
 
     interaction()->noteInput()->startNoteInput();
 
     score()->addMidiPitch(pitch, false, /*transpose*/ false);
+    undoStack->commitChanges();
 
     const mu::engraving::InputState& inputState = score()->inputState();
     if (inputState.cr()) {
@@ -351,12 +343,9 @@ void PercussionPanelModel::resetLayout()
 
     INotationUndoStackPtr undoStack = notation()->undoStack();
 
-    DEFER {
-        undoStack->commitChanges();
-    };
-
     undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Reset percussion panel layout"));
     score()->undo(new engraving::ChangeDrumset(inst, &defaultLayout, staff->part()));
+    undoStack->commitChanges();
 }
 
 const INotationPtr PercussionPanelModel::notation() const
