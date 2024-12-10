@@ -167,12 +167,12 @@ mu::engraving::Segment* NotationSelectionRange::rangeEndSegment() const
 {
     mu::engraving::Segment* endSegment = score()->selection().endSegment();
 
-    if (!endSegment) {
-        return nullptr;
+    if (endSegment && !endSegment->enabled()) {
+        endSegment = endSegment->next1MMenabled();
     }
 
-    if (!endSegment->enabled()) {
-        endSegment = endSegment->next1MMenabled();
+    if (!endSegment) {
+        endSegment = score()->lastSegmentMM();
     }
 
     return endSegment;
