@@ -52,11 +52,16 @@ FocusScope {
 
     ScoresPageModel {
         id: scoresPageModel
+
+        onSearchRequested: {
+            searchField.forceActiveFocus()
+        }
     }
 
     Component.onCompleted: {
         tabBar.currentIndex = scoresPageModel.tabIndex
         tabBar.completed = true
+        scoresPageModel.load()
     }
 
     Rectangle {

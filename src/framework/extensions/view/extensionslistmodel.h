@@ -28,18 +28,21 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+#include "actions/actionable.h"
 #include "iinteractive.h"
 #include "extensions/iextensionsconfiguration.h"
 #include "extensions/iextensionsprovider.h"
 
 namespace muse::extensions {
-class ExtensionsListModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class ExtensionsListModel : public QAbstractListModel, public Injectable, public async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
 
     Inject<IInteractive> interactive = { this };
     Inject<IExtensionsProvider> provider = { this };
     Inject<IExtensionsConfiguration> configuration = { this };
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
 
 public:
     explicit ExtensionsListModel(QObject* parent = nullptr);
@@ -61,6 +64,7 @@ public:
 
 signals:
     void finished();
+    void searchRequested();
 
 private:
     enum Roles {

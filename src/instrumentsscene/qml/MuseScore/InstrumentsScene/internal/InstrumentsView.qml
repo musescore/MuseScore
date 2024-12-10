@@ -45,6 +45,10 @@ Item {
         instrumentsView.positionViewAtIndex(instrumentIndex, ListView.Beginning)
     }
 
+    function activateSearchField() {
+        searchField.forceActiveFocus()
+    }
+
     StyledTextLabel {
         id: instrumentsLabel
 

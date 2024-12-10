@@ -833,6 +833,14 @@
     <std>22</std>
     </SC>
   <SC>
+    <key>req-search</key>
+    <std>22</std>
+    </SC>
+  <SC>
+    <key>req-dialog-search</key>
+    <std>22</std>
+    </SC>
+  <SC>
     <key>zoomin</key>
     <seq>Ctrl++</seq>
     </SC>

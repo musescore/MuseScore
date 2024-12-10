@@ -28,11 +28,13 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+#include "actions/actionable.h"
 #include "ilearnservice.h"
 #include "ilearnconfiguration.h"
 
 namespace muse::learn {
-class LearnPageModel : public QObject, public Injectable, public async::Asyncable
+class LearnPageModel : public QObject, public Injectable, public async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
 
@@ -40,6 +42,7 @@ class LearnPageModel : public QObject, public Injectable, public async::Asyncabl
     Q_PROPERTY(QVariantList advancedPlaylist READ advancedPlaylist NOTIFY advancedPlaylistChanged)
 
     Inject<ILearnService> learnService = { this };
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     Inject<ILearnConfiguration> learnConfiguration = { this };
 
 public:
@@ -60,6 +63,7 @@ private slots:
 signals:
     void startedPlaylistChanged();
     void advancedPlaylistChanged();
+    void searchRequested();
 
 private:
     QVariantList playlistToVariantList(const Playlist& playlist) const;

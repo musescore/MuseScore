@@ -46,6 +46,10 @@ Item {
         searchField.clear()
     }
 
+    function activateSearchField() {
+        searchField.forceActiveFocus()
+    }
+
     StyledTextLabel {
         id: title
 

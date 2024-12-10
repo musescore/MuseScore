@@ -55,6 +55,10 @@ RowLayout {
         searchField.currentText = text
     }
 
+    function activateSearchField() {
+        searchField.forceActiveFocus()
+    }
+
     FlatButton {
         id: editButton
 

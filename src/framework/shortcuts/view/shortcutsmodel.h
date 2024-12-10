@@ -27,6 +27,8 @@
 #include <QItemSelection>
 
 #include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+#include "actions/actionable.h"
 #include "ishortcutsregister.h"
 #include "ishortcutsconfiguration.h"
 #include "ui/iuiactionsregister.h"
@@ -37,7 +39,7 @@
 class QItemSelection;
 
 namespace muse::shortcuts {
-class ShortcutsModel : public QAbstractListModel, public Injectable, public async::Asyncable
+class ShortcutsModel : public QAbstractListModel, public Injectable, public async::Asyncable, public actions::Actionable
 {
     Q_OBJECT
 
@@ -49,6 +51,7 @@ class ShortcutsModel : public QAbstractListModel, public Injectable, public asyn
     Inject<IInteractive> interactive = { this };
     Inject<IShortcutsConfiguration> configuration = { this };
     Inject<IGlobalConfiguration> globalConfiguration = { this };
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
 
 public:
     explicit ShortcutsModel(QObject* parent = nullptr);
@@ -79,6 +82,7 @@ public slots:
 
 signals:
     void selectionChanged();
+    void searchRequested();
 
 private:
     const muse::ui::UiAction& action(const std::string& actionCode) const;

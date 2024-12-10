@@ -120,6 +120,10 @@ void ShortcutsModel::load()
         return actionText(s1.action) < actionText(s2.action);
     });
 
+    dispatcher()->reg(this, "req-dialog-search", [this]() {
+        emit searchRequested();
+    });
+
     endResetModel();
 }
 
