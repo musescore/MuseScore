@@ -106,6 +106,10 @@ void AbstractMenuModel::load()
     uiActionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codes) {
         onActionsStateChanges(codes);
     });
+
+    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
+        updateShortcutsAll();
+    });
 }
 
 QVariantList AbstractMenuModel::itemsProperty() const
@@ -314,4 +318,42 @@ MenuItem& AbstractMenuModel::menu(MenuItemList& items, const QString& menuId)
 
     static MenuItem dummy;
     return dummy;
+}
+
+void AbstractMenuModel::updateShortcutsMenuItem(const std::vector<MenuItem*>& menuItemList)
+{
+    auto screg = shortcutsRegister();
+
+    for (MenuItem* menuItem : menuItemList) {
+        if (!menuItem) {
+            continue;
+        }
+
+        UiAction action = menuItem->action();
+        action.shortcuts = screg->shortcut(action.code).sequences;
+        menuItem->setAction(action);
+
+        std::vector<MenuItem*> subMenuItemList;
+        for (MenuItem* menuSubItem : menuItem->subitems()) {
+            if (!menuSubItem) {
+                continue;
+            }
+            subMenuItemList.insert(subMenuItemList.end(), menuSubItem);
+        }
+        updateShortcutsMenuItem(subMenuItemList);
+    }
+}
+
+void AbstractMenuModel::updateShortcutsAll()
+{
+    std::vector<MenuItem*> menuItemList;
+
+    for (MenuItem* menuItem : m_items) {
+        if (!menuItem) {
+            continue;
+        }
+        menuItemList.insert(menuItemList.end(), menuItem);
+    }
+
+    updateShortcutsMenuItem(menuItemList);
 }
