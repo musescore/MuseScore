@@ -1441,7 +1441,7 @@ static CharFormat formatForWords(const MStyle& s)
 
 static void creditWords(XmlWriter& xml, const MStyle& s, const page_idx_t pageNr,
                         const double x, const double y, const String& just, const String& val,
-                        const std::list<TextFragment>& words, const String& creditType)
+                        const std::list<std::shared_ptr<TextFragment> >& words, const String& creditType)
 {
     // prevent incorrect MusicXML for empty text
     if (words.empty()) {
@@ -1601,10 +1601,10 @@ void ExportMusicXml::credits(XmlWriter& xml)
         const double tm = getTenthsFromInches(_score->styleD(Sid::pageOddTopMargin));
         LOGD("page h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
         */
-        TextFragment f(XmlWriter::xmlString(rights));
-        f.changeFormat(FormatId::FontFamily, style.styleSt(Sid::footerFontFace));
-        f.changeFormat(FormatId::FontSize, style.styleD(Sid::footerFontSize));
-        std::list<TextFragment> list;
+        std::shared_ptr<TextFragment> f = std::make_shared<TextFragment>(XmlWriter::xmlString(rights));
+        f->changeFormat(FormatId::FontFamily, style.styleSt(Sid::footerFontFace));
+        f->changeFormat(FormatId::FontSize, style.styleD(Sid::footerFontSize));
+        std::list<std::shared_ptr<TextFragment> > list;
         list.push_back(f);
         for (page_idx_t pageIdx = 0; pageIdx < m_score->npages(); ++pageIdx) {
             creditWords(xml, style, pageIdx + 1, w / 2, bm, u"center", u"bottom", list, u"rights");
@@ -4771,12 +4771,12 @@ static size_t indexOf(const String& src_, const std::wregex& re, size_t from, st
     return std::u16string::npos;
 }
 
-static bool findMetronome(const std::list<TextFragment>& list,
-                          std::list<TextFragment>& wordsLeft,  // words left of metronome
+static bool findMetronome(const std::list<std::shared_ptr<TextFragment> >& list,
+                          std::list<std::shared_ptr<TextFragment> >& wordsLeft,  // words left of metronome
                           bool& hasParen,      // parenthesis
                           String& metroLeft,  // left part of metronome
                           String& metroRight, // right part of metronome
-                          std::list<TextFragment>& wordsRight // words right of metronome
+                          std::list<std::shared_ptr<TextFragment> >& wordsRight // words right of metronome
                           )
 {
     String words = MScoreTextToMusicXml::toPlainTextPlusSymbols(list);
@@ -4858,7 +4858,7 @@ static bool findMetronome(const std::list<TextFragment>& list,
             }
             metroPos = corrPos;
 
-            std::list<TextFragment> mid;       // not used
+            std::list<std::shared_ptr<TextFragment> > mid;       // not used
             MScoreTextToMusicXml::split(list, metroPos, metroLen, wordsLeft, mid, wordsRight);
             return true;
         }
@@ -4886,12 +4886,12 @@ static void beatUnit(XmlWriter& xml, const TDuration dur)
 
 static void wordsMetronome(XmlWriter& xml, const MStyle& s, TextBase const* const text, const int offset)
 {
-    const std::list<TextFragment> list = text->fragmentList();
-    std::list<TextFragment> wordsLeft;          // words left of metronome
+    const std::list<std::shared_ptr<TextFragment> > list = text->fragmentList();
+    std::list<std::shared_ptr<TextFragment> > wordsLeft;          // words left of metronome
     bool hasParen;                          // parenthesis
     String metroLeft;                      // left part of metronome
     String metroRight;                     // right part of metronome
-    std::list<TextFragment> wordsRight;         // words right of metronome
+    std::list<std::shared_ptr<TextFragment> > wordsRight;         // words right of metronome
 
     // set the default words format
     const String mtf = s.styleSt(Sid::musicalTextFont);
