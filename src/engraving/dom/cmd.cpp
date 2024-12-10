@@ -2804,7 +2804,12 @@ void Score::cmdResetNoteAndRestGroupings()
 
     if (noSelection) {
         deselectAll();
+        return;
     }
+
+    // Reset selection to original selection
+    selection().setRangeTicks(sTick, eTick, sStaff, eStaff);
+    selection().updateSelectedElements();
 }
 
 static void resetBeamOffSet(void*, EngravingItem* e)
