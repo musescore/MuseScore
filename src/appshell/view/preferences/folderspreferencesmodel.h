@@ -72,6 +72,7 @@ private:
         Templates,
         Plugins,
         SoundFonts,
+        MusicFonts,
         VST3
     };
 
