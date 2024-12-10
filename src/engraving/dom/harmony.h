@@ -128,10 +128,10 @@ public:
     void textChanged();
 
     bool isEditable() const override { return true; }
-    void startEdit(EditData&) override;
-    bool isEditAllowed(EditData&) const override;
-    bool edit(EditData&) override;
-    void endEdit(EditData&) override;
+    void startEditTextual(EditData&) override;
+    bool isTextualEditAllowed(EditData&) const override;
+    bool editTextual(EditData&) override;
+    void endEditTextual(EditData&) override;
 
     bool isRealizable() const;
 
