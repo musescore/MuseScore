@@ -63,7 +63,7 @@ void EngravingFontsController::scanAllDirectories() const
 #elif defined(Q_OS_LINUX)
     // On Unix systems, we want $XDG_DATA_HOME (user-specific) and $XDG_DATA_DIRS (system-wide)
     QStringList globalFontsPaths { qgetenv("XDG_DATA_HOME") };
-    xdgDirs.append(QString::fromLocal8Bit(qgetenv("XDG_DATA_DIRS")).split(':'));
+    globalFontsPaths.append(QString::fromLocal8Bit(qgetenv("XDG_DATA_DIRS")).split(':'));
 #endif
 
     // The first location is the user-wide location, so we should iterate in reverse order so that
