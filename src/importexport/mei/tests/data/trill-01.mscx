@@ -289,7 +289,6 @@
             <Trill>
               <subtype>trill</subtype>
               <color r="255" g="38" b="0" a="255"/>
-              <color r="255" g="38" b="0" a="255"/>
               <Ornament>
                 <Accidental>
                   <subtype>accidentalFlat</subtype>
