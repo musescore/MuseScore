@@ -66,7 +66,7 @@ Column {
                 }
 
                 if (mouseArea.containsMouse && root.useNotationPreview) {
-                    ui.tooltip.show(root, root.padModel.instrumentName)
+                    ui.tooltip.show(root, root.padModel.padName)
                 } else {
                     ui.tooltip.hide(root)
                 }
@@ -74,7 +74,7 @@ Column {
         }
 
         Rectangle {
-            id: instrumentNameBackground
+            id: padNameBackground
 
             visible: !root.useNotationPreview
             anchors.fill: parent
@@ -83,7 +83,7 @@ Column {
         }
 
         StyledTextLabel {
-            id: instrumentNameLabel
+            id: padNameLabel
 
             visible: !root.useNotationPreview
 
@@ -94,7 +94,7 @@ Column {
             maximumLineCount: 4
             font: ui.theme.bodyBoldFont
 
-            text: Boolean(root.padModel) ? root.padModel.instrumentName : ""
+            text: Boolean(root.padModel) ? root.padModel.padName : ""
         }
 
         PaintedEngravingItem {
@@ -115,7 +115,7 @@ Column {
                 name: "MOUSE_HOVERED"
                 when: mouseArea.containsMouse && !mouseArea.pressed && !root.padSwapActive
                 PropertyChanges {
-                    target: instrumentNameBackground
+                    target: padNameBackground
                     color: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.buttonOpacityHover)
                 }
                 PropertyChanges {
@@ -127,7 +127,7 @@ Column {
                 name: "MOUSE_HIT"
                 when: mouseArea.pressed || root.padSwapActive
                 PropertyChanges {
-                    target: instrumentNameBackground
+                    target: padNameBackground
                     color: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.buttonOpacityHit)
                 }
                 PropertyChanges {

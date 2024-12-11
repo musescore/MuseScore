@@ -36,7 +36,7 @@ class PercussionPanelPadModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString instrumentName READ instrumentName NOTIFY instrumentNameChanged)
+    Q_PROPERTY(QString padName READ padName NOTIFY padNameChanged)
 
     Q_PROPERTY(QString keyboardShortcut READ keyboardShortcut NOTIFY keyboardShortcutChanged)
     Q_PROPERTY(QString midiNote READ midiNote NOTIFY midiNoteChanged)
@@ -46,8 +46,8 @@ class PercussionPanelPadModel : public QObject, public muse::async::Asyncable
 public:
     explicit PercussionPanelPadModel(QObject* parent = nullptr);
 
-    QString instrumentName() const { return m_instrumentName; }
-    void setInstrumentName(const QString& instrumentName);
+    QString padName() const { return m_padName; }
+    void setPadName(const QString& padName);
 
     QString keyboardShortcut() const { return m_keyboardShortcut; }
     void setKeyboardShortcut(const QString& keyboardShortcut);
@@ -66,7 +66,7 @@ public:
     muse::async::Notification padTriggered() const { return m_triggeredNotification; }
 
 signals:
-    void instrumentNameChanged();
+    void padNameChanged();
 
     void keyboardShortcutChanged();
     void midiNoteChanged();
@@ -74,7 +74,7 @@ signals:
     void notationPreviewItemChanged();
 
 private:
-    QString m_instrumentName;
+    QString m_padName;
 
     QString m_keyboardShortcut;
     int m_pitch = -1;

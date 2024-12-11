@@ -88,7 +88,7 @@ DropArea {
         enabled: Boolean(root.padModel) || root.panelMode === PanelMode.EDIT_LAYOUT
 
         accessible.role: MUAccessible.Button
-        accessible.name: Boolean(root.padModel) ? root.padModel.instrumentName : qsTrc("notation", "Empty pad")
+        accessible.name: Boolean(root.padModel) ? root.padModel.padName : qsTrc("notation", "Empty pad")
 
         accessible.description: prv.accessibleDescription
 
@@ -115,7 +115,7 @@ DropArea {
         enabled: Boolean(root.padModel)
 
         accessible.role: MUAccessible.Button
-        accessible.name: Boolean(root.padModel) ? root.padModel.instrumentName + " " + qsTrc("notation", "footer") : ""
+        accessible.name: Boolean(root.padModel) ? root.padModel.padName + " " + qsTrc("notation", "footer") : ""
 
         accessible.description: prv.accessibleDescription
 

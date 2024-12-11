@@ -27,7 +27,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/undo.h"
 
-static const QString INSTRUMENT_NAMES_CODE("percussion-instrument-names");
+static const QString PAD_NAMES_CODE("percussion-pad-names");
 static const QString NOTATION_PREVIEW_CODE("percussion-notation-preview");
 static const QString EDIT_LAYOUT_CODE("percussion-edit-layout");
 static const QString RESET_LAYOUT_CODE("percussion-reset-layout");
@@ -108,9 +108,9 @@ void PercussionPanelModel::init()
 
 QList<QVariantMap> PercussionPanelModel::layoutMenuItems() const
 {
-    const TranslatableString instrumentNamesTitle("notation", "Instrument names");
+    const TranslatableString padNamesTitle("notation", "Pad names");
     // Using IconCode for this instead of "checked" because we want the tick to display on the left
-    const int instrumentNamesIcon = static_cast<int>(m_useNotationPreview ? IconCode::Code::NONE : IconCode::Code::TICK_RIGHT_ANGLE);
+    const int padNamesIcon = static_cast<int>(m_useNotationPreview ? IconCode::Code::NONE : IconCode::Code::TICK_RIGHT_ANGLE);
 
     const TranslatableString notationPreviewTitle("notation", "Notation preview");
     // Using IconCode for this instead of "checked" because we want the tick to display on the left
@@ -125,8 +125,8 @@ QList<QVariantMap> PercussionPanelModel::layoutMenuItems() const
     const int resetLayoutIcon = static_cast<int>(IconCode::Code::UNDO);
 
     QList<QVariantMap> menuItems = {
-        { { "id", INSTRUMENT_NAMES_CODE },
-            { "title", instrumentNamesTitle.qTranslated() }, { "icon", instrumentNamesIcon }, { "enabled", true } },
+        { { "id", PAD_NAMES_CODE },
+            { "title", padNamesTitle.qTranslated() }, { "icon", padNamesIcon }, { "enabled", true } },
 
         { { "id", NOTATION_PREVIEW_CODE },
             { "title", notationPreviewTitle.qTranslated() }, { "icon", notationPreviewIcon }, { "enabled", true } },
@@ -145,7 +145,7 @@ QList<QVariantMap> PercussionPanelModel::layoutMenuItems() const
 
 void PercussionPanelModel::handleMenuItem(const QString& itemId)
 {
-    if (itemId == INSTRUMENT_NAMES_CODE) {
+    if (itemId == PAD_NAMES_CODE) {
         setUseNotationPreview(false);
     } else if (itemId == NOTATION_PREVIEW_CODE) {
         setUseNotationPreview(true);
