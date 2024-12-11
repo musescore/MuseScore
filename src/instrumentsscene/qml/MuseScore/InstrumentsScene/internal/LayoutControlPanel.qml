@@ -25,6 +25,8 @@ import QtQuick.Layouts 1.15
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 
+import MuseScore.InstrumentsScene 1.0
+
 RowLayout {
     id: root
 
@@ -32,7 +34,8 @@ RowLayout {
     property bool isMovingDownAvailable: false
     property bool isRemovingAvailable: false
     property bool isAddingAvailable: value
-    property bool isInstrumentSelected: false
+
+    property int selectedItemsType: LayoutPanelItemType.UNDEFINED
 
     property alias navigation: keynavSub
 
@@ -82,7 +85,14 @@ RowLayout {
         navigation.panel: keynavSub
         navigation.order: 2
 
-        toolTipTitle: root.isInstrumentSelected ? qsTrc("instruments", "Move selected instruments up") : qsTrc("instruments", "Move selected staves up")
+        toolTipTitle: {
+            switch(root.selectedItemsType) {
+            case LayoutPanelItemType.PART: return qsTrc("instruments", "Move selected instruments up")
+            case LayoutPanelItemType.STAFF: return qsTrc("instruments", "Move selected staves up")
+            case LayoutPanelItemType.SYSTEM_OBJECTS_LAYER: return qsTrc("instruments", "Move selected system objects up")
+            default: return ""
+            }
+        }
 
         enabled: root.isMovingUpAvailable
 
@@ -100,7 +110,14 @@ RowLayout {
         navigation.panel: keynavSub
         navigation.order: 3
 
-        toolTipTitle: root.isInstrumentSelected ? qsTrc("instruments", "Move selected instruments down") : qsTrc("instruments", "Move selected staves down")
+        toolTipTitle: {
+            switch(root.selectedItemsType) {
+            case LayoutPanelItemType.PART: return qsTrc("instruments", "Move selected instruments down")
+            case LayoutPanelItemType.STAFF: return qsTrc("instruments", "Move selected staves down")
+            case LayoutPanelItemType.SYSTEM_OBJECTS_LAYER: return qsTrc("instruments", "Move selected system objects down")
+            default: return ""
+            }
+        }
 
         enabled: root.isMovingDownAvailable
 
@@ -118,7 +135,14 @@ RowLayout {
         navigation.panel: keynavSub
         navigation.order: 4
 
-        toolTipTitle: root.isInstrumentSelected ? qsTrc("instruments", "Remove selected instruments") : qsTrc("instruments", "Remove selected staves")
+        toolTipTitle: {
+            switch(root.selectedItemsType) {
+            case LayoutPanelItemType.PART: return qsTrc("instruments", "Remove selected instruments")
+            case LayoutPanelItemType.STAFF: return qsTrc("instruments", "Remove selected staves")
+            case LayoutPanelItemType.SYSTEM_OBJECTS_LAYER: return qsTrc("instruments", "Remove selected system objects")
+            default: return ""
+            }
+        }
 
         enabled: root.isRemovingAvailable
 

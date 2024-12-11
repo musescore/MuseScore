@@ -99,7 +99,7 @@ Item {
             isMovingDownAvailable: treeModel.isMovingDownAvailable
             isAddingAvailable: treeModel.isAddingAvailable
             isRemovingAvailable: treeModel.isRemovingAvailable
-            isInstrumentSelected: treeModel.isInstrumentSelected
+            selectedItemsType: treeModel.selectedItemsType
 
             onAddInstrumentRequested: {
                 treeModel.addInstruments()
