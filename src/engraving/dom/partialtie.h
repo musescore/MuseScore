@@ -64,7 +64,7 @@ public:
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new PartialTieSegment(parent); }
 
-    Note* note() const { return startNote() ? startNote() : endNote(); }
+    Note* note() const { return isOutgoing() ? startNote() : endNote(); }
     void setStartNote(Note* note) override;
     void setEndNote(Note* note) override;
 

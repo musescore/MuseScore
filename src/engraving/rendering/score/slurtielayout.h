@@ -106,6 +106,7 @@ private:
     static bool shouldHideSlurSegment(SlurSegment* item, LayoutContext& ctx);
 
     static void addLineAttachPoints(TieSegment* segment);
+    static void addLineAttachPoints(PartialTieSegment* segment);
 
     static void calculateIsInside(Tie* item);
 

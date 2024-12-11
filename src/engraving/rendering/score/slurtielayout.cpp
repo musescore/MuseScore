@@ -1750,6 +1750,8 @@ PartialTieSegment* SlurTieLayout::layoutPartialTie(PartialTie* item)
         computeBezier(segment);
     }
 
+    addLineAttachPoints(segment);
+
     return segment;
 }
 
@@ -1761,7 +1763,7 @@ void SlurTieLayout::setPartialTieEndPos(PartialTie* item, SlurTiePos& sPos)
     const Segment* seg = chord->segment();
     const Measure* measure = seg->measure();
     const System* system = measure->system();
-    double width = item->style().styleS(Sid::minTieLength).val() * item->spatium();
+    double width = item->style().styleS(Sid::minHangingTieLength).val() * item->spatium();
 
     if (seg->measure()->isFirstInSystem() && !outgoing) {
         sPos.p1 = PointF((system ? system->firstNoteRestSegmentX(true) : 0), sPos.p2.y());
@@ -2695,15 +2697,40 @@ bool SlurTieLayout::shouldHideSlurSegment(SlurSegment* item, LayoutContext& ctx)
 
 void SlurTieLayout::addLineAttachPoints(TieSegment* segment)
 {
-    // Add tie attach point to start and end note
+    // Add tie attach point to start and end note of segment
     Tie* tie = segment->tie();
     Note* startNote = tie->startNote();
     Note* endNote = tie->endNote();
-    if (startNote) {
-        startNote->addLineAttachPoint(segment->ups(Grip::START).pos(), tie);
+
+    const bool singleOrBegin = segment->spannerSegmentType() == SpannerSegmentType::SINGLE
+                               || segment->spannerSegmentType() == SpannerSegmentType::BEGIN;
+
+    const bool singleOrEnd = segment->spannerSegmentType() == SpannerSegmentType::SINGLE
+                             || segment->spannerSegmentType() == SpannerSegmentType::END;
+
+    if (startNote && singleOrBegin) {
+        startNote->addStartLineAttachPoint(segment->ups(Grip::START).pos(), tie);
     }
-    if (endNote) {
-        endNote->addLineAttachPoint(segment->ups(Grip::END).pos(), tie);
+    if (endNote && singleOrEnd) {
+        endNote->addEndLineAttachPoint(segment->ups(Grip::END).pos(), tie);
+    }
+}
+
+void SlurTieLayout::addLineAttachPoints(PartialTieSegment* segment)
+{
+    // Add tie attach point to parent note
+    PartialTie* tie = segment->partialTie();
+    Note* note = tie ? tie->note() : nullptr;
+    if (!note) {
+        return;
+    }
+
+    const bool isOutgoing = tie->isOutgoing();
+
+    if (isOutgoing) {
+        note->addStartLineAttachPoint(segment->ups(Grip::START).pos(), tie);
+    } else {
+        note->addEndLineAttachPoint(segment->ups(Grip::END).pos(), tie);
     }
 }
 

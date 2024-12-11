@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_HORIZONTALSPACINGUTILS_DEV_H
-#define MU_ENGRAVING_HORIZONTALSPACINGUTILS_DEV_H
+#pragma once
 
 #include "types/fraction.h"
 
@@ -141,6 +140,7 @@ private:
     static KerningType computeNoteKerningType(const Note* note, const EngravingItem* item2);
     static KerningType computeStemSlashKerningType(const StemSlash* stemSlash, const EngravingItem* item2);
     static KerningType computeLyricsKerningType(const Lyrics* lyrics1, const EngravingItem* item2);
+
+    static void computeDanglingLineWidth(const Segment* firstSeg, const Segment* nextSeg, double& width, bool systemHeaderGap);
 };
 } // namespace mu::engraving::layout
-#endif // MU_ENGRAVING_HORIZONTALSPACINGUTILS_DEV_H

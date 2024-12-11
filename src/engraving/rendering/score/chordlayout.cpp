@@ -2771,7 +2771,12 @@ void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, La
         Tie* tie = note->tieFor();
         if (tie) {
             Note* endNote = tie->endNote();
-            if (endNote && endNote->findMeasure() == note->findMeasure()) {
+            if (!endNote) {
+                continue;
+            }
+            const Measure* endNoteMeasure = endNote->findMeasure();
+            const Measure* noteMeasure = note->findMeasure();
+            if (endNoteMeasure == noteMeasure || endNoteMeasure->system() != noteMeasure->system()) {
                 SlurTieLayout::layoutTieFor(tie, note->findMeasure()->system());  // line attach points are updated here
             }
         }
@@ -3525,6 +3530,6 @@ void ChordLayout::addLineAttachPoints(Spanner* spanner)
     double endX = backSeg->pos2().x() + backSeg->ldata()->pos().x(); // because pos2 is relative to ipos
     // Here we don't pass y() because its value is unreliable during the first stages of layout.
     // The y() is irrelevant anyway for horizontal spacing.
-    startNote->addLineAttachPoint(PointF(startX, 0.0), spanner);
-    endNote->addLineAttachPoint(PointF(endX, 0.0), spanner);
+    startNote->addStartLineAttachPoint(PointF(startX, 0.0), spanner);
+    endNote->addEndLineAttachPoint(PointF(endX, 0.0), spanner);
 }
