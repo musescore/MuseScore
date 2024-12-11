@@ -69,7 +69,7 @@ LayoutPanelTreeModel::LayoutPanelTreeModel(QObject* parent)
 
         updateRearrangementAvailability();
         updateRemovingAvailability();
-        updateIsInstrumentSelected();
+        updateSelectedItemsType();
     });
 
     connect(this, &LayoutPanelTreeModel::rowsInserted, this, [this]() {
@@ -678,9 +678,9 @@ bool LayoutPanelTreeModel::isEmpty() const
     return m_rootItem ? m_rootItem->isEmpty() : true;
 }
 
-bool LayoutPanelTreeModel::isInstrumentSelected() const
+int LayoutPanelTreeModel::selectedItemsType() const
 {
-    return m_isInstrumentSelected;
+    return static_cast<int>(m_selectedItemsType);
 }
 
 QString LayoutPanelTreeModel::addInstrumentsKeyboardShortcut() const
@@ -702,16 +702,6 @@ void LayoutPanelTreeModel::setIsRemovingAvailable(bool isRemovingAvailable)
 
     m_isRemovingAvailable = isRemovingAvailable;
     emit isRemovingAvailableChanged(m_isRemovingAvailable);
-}
-
-void LayoutPanelTreeModel::setIsInstrumentSelected(bool isInstrumentSelected)
-{
-    if (m_isInstrumentSelected == isInstrumentSelected) {
-        return;
-    }
-
-    m_isInstrumentSelected = isInstrumentSelected;
-    emit isInstrumentSelectedChanged(m_isInstrumentSelected);
 }
 
 void LayoutPanelTreeModel::updateRearrangementAvailability()
@@ -834,21 +824,23 @@ void LayoutPanelTreeModel::updateRemovingAvailability()
     setIsRemovingAvailable(isRemovingAvailable);
 }
 
-void LayoutPanelTreeModel::updateIsInstrumentSelected()
+void LayoutPanelTreeModel::updateSelectedItemsType()
 {
     QModelIndexList selectedIndexes = m_selectionModel->selectedIndexes();
-    bool isInstrumentSelected = true;
+    LayoutPanelItemType::ItemType selectedItemsType = LayoutPanelItemType::ItemType::UNDEFINED;
 
     for (const QModelIndex& index : selectedIndexes) {
         const AbstractLayoutPanelTreeItem* item = modelIndexToItem(index);
-
-        if (item && item->type() == LayoutPanelItemType::STAFF) {
-            isInstrumentSelected = false;
+        if (item) {
+            selectedItemsType = item->type();
             break;
         }
     }
 
-    setIsInstrumentSelected(isInstrumentSelected);
+    if (m_selectedItemsType != selectedItemsType) {
+        m_selectedItemsType = selectedItemsType;
+        emit selectedItemsTypeChanged(static_cast<int>(m_selectedItemsType));
+    }
 }
 
 void LayoutPanelTreeModel::setItemsSelected(const QModelIndexList& indexes, bool selected)

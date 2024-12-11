@@ -62,7 +62,7 @@ class LayoutPanelTreeModel : public QAbstractItemModel, public muse::async::Asyn
     Q_PROPERTY(bool isAddingAvailable READ isAddingAvailable NOTIFY isAddingAvailableChanged)
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
     Q_PROPERTY(QString addInstrumentsKeyboardShortcut READ addInstrumentsKeyboardShortcut NOTIFY addInstrumentsKeyboardShortcutChanged)
-    Q_PROPERTY(bool isInstrumentSelected READ isInstrumentSelected NOTIFY isInstrumentSelectedChanged)
+    Q_PROPERTY(int selectedItemsType READ selectedItemsType NOTIFY selectedItemsTypeChanged)
 
 public:
     explicit LayoutPanelTreeModel(QObject* parent = nullptr);
@@ -81,7 +81,7 @@ public:
     bool isAddingAvailable() const;
     bool isEmpty() const;
     QString addInstrumentsKeyboardShortcut() const;
-    bool isInstrumentSelected() const;
+    int selectedItemsType() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void setLayoutPanelVisible(bool visible);
@@ -109,14 +109,14 @@ signals:
     void isRemovingAvailableChanged(bool isRemovingAvailable);
     void isEmptyChanged();
     void addInstrumentsKeyboardShortcutChanged();
-    void isInstrumentSelectedChanged(bool isInstrumentSelected);
+    void selectedItemsTypeChanged(int type);
 
 private slots:
     void updateRearrangementAvailability();
     void updateMovingUpAvailability(bool isSelectionMovable, const QModelIndex& firstSelectedRowIndex = QModelIndex());
     void updateMovingDownAvailability(bool isSelectionMovable, const QModelIndex& lastSelectedRowIndex = QModelIndex());
     void updateRemovingAvailability();
-    void updateIsInstrumentSelected();
+    void updateSelectedItemsType();
 
 private:
     bool removeRows(int row, int count, const QModelIndex& parent) override;
@@ -145,7 +145,6 @@ private:
     void setIsMovingUpAvailable(bool isMovingUpAvailable);
     void setIsMovingDownAvailable(bool isMovingDownAvailable);
     void setIsRemovingAvailable(bool isRemovingAvailable);
-    void setIsInstrumentSelected(bool isInstrumentSelected);
 
     void setItemsSelected(const QModelIndexList& indexes, bool selected);
 
@@ -166,9 +165,10 @@ private:
     bool m_isMovingUpAvailable = false;
     bool m_isMovingDownAvailable = false;
     bool m_isRemovingAvailable = false;
-    bool m_isInstrumentSelected = false;
     bool m_isLoadingBlocked = false;
     bool m_notationChangedWhileLoadingWasBlocked = false;
+
+    LayoutPanelItemType::ItemType m_selectedItemsType = LayoutPanelItemType::ItemType::UNDEFINED;
 
     AbstractLayoutPanelTreeItem* m_rootItem = nullptr;
     muse::uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
