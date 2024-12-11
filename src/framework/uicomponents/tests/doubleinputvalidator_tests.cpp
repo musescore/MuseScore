@@ -33,9 +33,6 @@ public:
     void SetUp() override
     {
         m_validator = new DoubleInputValidator(nullptr);
-        m_validator->setTop(100.0);
-        m_validator->setBottom(-100.0);
-        m_validator->setDecimal(2);
     }
 
     void TearDown() override
@@ -55,7 +52,11 @@ TEST_F(DoubleInputValidatorTests, Validate) {
         QString fixedStr;
     };
 
-    std::vector<Input> validInputs = {
+    m_validator->setTop(100.0);
+    m_validator->setBottom(-100.0);
+    m_validator->setDecimal(2);
+
+    std::vector<Input> inputs = {
         { "-0.1", QValidator::Acceptable },
         { "0", QValidator::Acceptable },
         { "1.23", QValidator::Acceptable },
@@ -68,12 +69,12 @@ TEST_F(DoubleInputValidatorTests, Validate) {
         { "2.", QValidator::Intermediate, "2" },
         { "-100.1", QValidator::Intermediate, "-100" },
         { "100.1", QValidator::Intermediate, "100" },
-        { "1.123", QValidator::Intermediate, "1.12" },
-        { "abc", QValidator::Invalid, "" }
+        { "1.123", QValidator::Invalid }, // more than 2 decimal
+        { "abc", QValidator::Invalid }
     };
 
     int pos = 0;
-    for (Input& input : validInputs) {
+    for (Input& input : inputs) {
         EXPECT_EQ(m_validator->validate(input.str, pos), input.expectedState);
 
         if (QValidator::Invalid == input.expectedState) {
