@@ -64,15 +64,17 @@ static constexpr int MAX_DOTS = 4;
 class LineAttachPoint
 {
 public:
-    LineAttachPoint(EngravingItem* l, double x, double y)
-        : m_line(l), m_pos(PointF(x, y)) {}
+    LineAttachPoint(EngravingItem* l, double x, double y, bool start)
+        : m_line(l), m_pos(PointF(x, y)), m_start(start) {}
 
     const EngravingItem* line() const { return m_line; }
     const PointF pos() const { return m_pos; }
+    bool start() const { return m_start; }
 
 private:
     EngravingItem* m_line = nullptr;
     PointF m_pos = PointF(0.0, 0.0);
+    bool m_start = true;
 };
 
 //---------------------------------------------------------
@@ -446,9 +448,10 @@ public:
 
     bool hasAnotherStraightAboveOrBelow(bool above) const;
 
-    void addLineAttachPoint(PointF point, EngravingItem* line);
     std::vector<LineAttachPoint>& lineAttachPoints() { return m_lineAttachPoints; }
     const std::vector<LineAttachPoint>& lineAttachPoints() const { return m_lineAttachPoints; }
+    void addStartLineAttachPoint(PointF point, EngravingItem* line) { addLineAttachPoint(point, line, true); }
+    void addEndLineAttachPoint(PointF point, EngravingItem* line) { addLineAttachPoint(point, line, false); }
 
     PointF posInStaffCoordinates();
 
@@ -501,6 +504,8 @@ private:
     static String tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full = false);
 
     void getNoteListForDots(std::vector<Note*>& topDownNotes, std::vector<Note*>& bottomUpNotes, std::vector<int>& anchoredDots);
+
+    void addLineAttachPoint(PointF point, EngravingItem* line, bool start);
 
     bool m_ghost = false;        // ghost note
     bool m_deadNote = false;     // dead note

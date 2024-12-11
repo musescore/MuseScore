@@ -330,6 +330,9 @@ public:
     bool nextIsOneMeasureRepeat(staff_idx_t staffidx) const;
     bool prevIsOneMeasureRepeat(staff_idx_t staffIdx) const;
 
+    ChordRest* lastChordRest(track_idx_t track) const;
+    ChordRest* firstChordRest(track_idx_t track) const;
+
     EngravingItem* nextElementStaff(staff_idx_t staff, EngravingItem* fromItem = nullptr);
     EngravingItem* prevElementStaff(staff_idx_t staff, EngravingItem* fromItem = nullptr);
 

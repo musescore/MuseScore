@@ -4094,12 +4094,12 @@ void Note::setIsTrillCueNote(bool v)
     }
 }
 
-void Note::addLineAttachPoint(PointF point, EngravingItem* line)
+void Note::addLineAttachPoint(PointF point, EngravingItem* line, bool start)
 {
     // IMPORTANT: the point is expected in *staff* coordinates
     // We transform into note coordinates by subtracting the note position in staff coordinates
     point -= posInStaffCoordinates();
-    m_lineAttachPoints.push_back(LineAttachPoint(line, point.x(), point.y()));
+    m_lineAttachPoints.push_back(LineAttachPoint(line, point.x(), point.y(), start));
 }
 
 bool Note::negativeFretUsed() const

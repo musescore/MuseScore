@@ -495,6 +495,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::tieDottedWidth,          false, tieDottedLineWidth,      resetTieDottedLineWidth },
         { StyleId::tieMinDistance,          false, tieMinDistance,          resetTieMinDistance },
         { StyleId::minTieLength,            false, minTieLength,            resetMinTieLength },
+        { StyleId::minHangingTieLength,     false, minHangingTieLength,     resetMinHangingTieLength },
 
         { StyleId::minLaissezVibLength,            false, minLaissezVibLength,            resetMinLaissezVibLength },
         { StyleId::laissezVibUseSmuflSym,          false, laissezVibUseSmufl,            0 },

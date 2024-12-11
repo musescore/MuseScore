@@ -178,8 +178,8 @@ public:
 
     double firstNoteRestSegmentX(bool leading = false) const;
     double endingXForOpenEndedLines() const;
-    ChordRest* lastChordRest(track_idx_t track);
-    ChordRest* firstChordRest(track_idx_t track);
+    ChordRest* lastChordRest(track_idx_t track) const;
+    ChordRest* firstChordRest(track_idx_t track) const;
 
     bool hasFixedDownDistance() const { return m_fixedDownDistance; }
     void setFixedDownDistance(bool val) const { m_fixedDownDistance = val; }

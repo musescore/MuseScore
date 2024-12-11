@@ -26,7 +26,6 @@
 #include "dom/chord.h"
 #include "dom/engravingitem.h"
 #include "dom/glissando.h"
-#include "dom/laissezvib.h"
 #include "dom/lyrics.h"
 #include "dom/note.h"
 #include "dom/rest.h"
@@ -1023,42 +1022,17 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
     }
 
     // Allocate space to ensure minimum length of "dangling" ties or gliss at start of system
-    if ((systemHeaderGap || f->isStartRepeatBarLineType()) && ns && ns->isChordRestType()) {
-        for (EngravingItem* e : ns->elist()) {
-            if (!e || !e->isChord()) {
-                continue;
-            }
-            double headerTieMargin = systemHeaderGap ? f->style().styleMM(Sid::headerToLineStartDistance)
-                                     : f->style().styleMM(Sid::repeatBarlineDotSeparation);
-            for (Note* note : toChord(e)->notes()) {
-                bool tieOrGlissBack = note->spannerBack().size()
-                                      || (note->tieBack() && !note->tieBack()->segmentsEmpty() && !note->tieBack()->isPartialTie());
-                if (!tieOrGlissBack || note->lineAttachPoints().empty()) {
-                    continue;
-                }
-                const EngravingItem* attachedLine = note->lineAttachPoints().front().line();
-                if (!attachedLine->addToSkyline()) {
-                    continue;
-                }
-                double minLength = 0.0;
-                if (attachedLine->isTie()) {
-                    minLength = f->style().styleMM(Sid::minTieLength);
-                } else if (attachedLine->isGlissando()) {
-                    bool straight = toGlissando(attachedLine)->glissandoType() == GlissandoType::STRAIGHT;
-                    minLength = straight ? f->style().styleMM(Sid::minStraightGlissandoLength)
-                                : f->style().styleMM(Sid::minWigglyGlissandoLength);
-                } else if (attachedLine->isNoteLine()) {
-                    minLength = f->style().styleMM(Sid::minStraightGlissandoLength);
-                }
-                double tieStartPointX = f->minRight() + headerTieMargin;
-                double notePosX = w + note->pos().x() + toChord(e)->pos().x() + note->headWidth() / 2;
-                double tieEndPointX = notePosX + note->lineAttachPoints().at(0).pos().x();
-                double tieLength = tieEndPointX - tieStartPointX;
-                if (tieLength < minLength) {
-                    w += minLength - tieLength;
-                }
-            }
-        }
+    // These only occur when one segment is a ChordRest and the other isn't
+    if (f->isChordRestType() == ns->isChordRestType()) {
+        return w;
+    }
+
+    const bool afterRepeat = f->isStartRepeatBarLineType() && ns && ns->isChordRestType();
+    const bool endOfSystem = f->isChordRestType() && !(ns->isChordRestType() || ns->isStartRepeatBarLineType())
+                             && (f->measure()->isLastInSystem() || f->measure()->next()->isHBox());
+
+    if (systemHeaderGap || afterRepeat || endOfSystem) {
+        computeDanglingLineWidth(f, ns, w, systemHeaderGap);
     }
 
     return w;
@@ -1403,4 +1377,69 @@ KerningType HorizontalSpacing::computeLyricsKerningType(const Lyrics* lyrics1, c
     }
 
     return KerningType::ALLOW_COLLISION;
+}
+
+void HorizontalSpacing::computeDanglingLineWidth(const Segment* firstSeg, const Segment* nextSeg, double& width, bool systemHeaderGap)
+{
+    const MStyle& style = firstSeg->style();
+    const Segment* crSeg = firstSeg->isChordRestType() ? firstSeg : nextSeg;
+    const Segment* otherSeg = firstSeg->isChordRestType() ? nextSeg : firstSeg;
+    const bool incoming = !firstSeg->isChordRestType();
+    const Measure* crMeasure = crSeg->measure();
+    const size_t ntracks = crSeg->score()->ntracks();
+
+    for (track_idx_t track = 0; track < ntracks; track++) {
+        const ChordRest* cr = incoming ? crMeasure->firstChordRest(track) : crMeasure->lastChordRest(track);
+        if (!cr || !cr->isChord() || cr->segment() != crSeg) {
+            continue;
+        }
+
+        const double headerLineMargin = systemHeaderGap ? otherSeg->style().styleMM(Sid::headerToLineStartDistance)
+                                        : otherSeg->style().styleMM(Sid::repeatBarlineDotSeparation);
+        const double endSystemMargin = style.styleMM(Sid::lineEndToSystemEndDistance);
+
+        for (const Note* note : toChord(cr)->notes()) {
+            const bool lineBack = note->spannerBack().size()
+                                  || (note->tieBack() && !note->tieBack()->segmentsEmpty());
+            const bool lineFor = note->spannerFor().size()
+                                 || (note->tieFor() && !note->tieFor()->segmentsEmpty());
+            if (!(lineBack || lineFor) || note->lineAttachPoints().empty()) {
+                continue;
+            }
+
+            for (const LineAttachPoint& lap : note->lineAttachPoints()) {
+                if (lap.start() == incoming) {
+                    continue;
+                }
+                const EngravingItem* attachedLine = lap.line();
+                if (!attachedLine->addToSkyline()) {
+                    continue;
+                }
+
+                double minLength = 0.0;
+                if (attachedLine->isTie()) {
+                    minLength = style.styleMM(Sid::minHangingTieLength);
+                } else if (attachedLine->isGlissando()) {
+                    bool straight = toGlissando(attachedLine)->glissandoType() == GlissandoType::STRAIGHT;
+                    minLength = straight ? style.styleMM(Sid::minStraightGlissandoLength)
+                                : style.styleMM(Sid::minWigglyGlissandoLength);
+                } else if (attachedLine->isNoteLine()) {
+                    minLength = style.styleMM(Sid::minStraightGlissandoLength);
+                }
+
+                const double notePosX = note->pos().x() + toChord(cr)->pos().x() + note->headWidth() / 2;
+                const double lineNoteEndPos = (incoming ? width : 0.0) + notePosX + lap.pos().x();
+                const double lineSegEndPos
+                    = (incoming ? otherSeg->minRight() + headerLineMargin : width + otherSeg->minLeft() - endSystemMargin);
+
+                const double lineStartPointX = incoming ? lineSegEndPos : lineNoteEndPos;
+                const double lineEndPointX = incoming ? lineNoteEndPos : lineSegEndPos;
+                const double lineLength = lineEndPointX - lineStartPointX;
+
+                if (lineLength < minLength) {
+                    width += minLength - lineLength;
+                }
+            }
+        }
+    }
 }
