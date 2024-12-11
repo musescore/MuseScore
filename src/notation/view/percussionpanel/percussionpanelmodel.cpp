@@ -204,6 +204,7 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
     if (inst->drumset() && updatedDrumset
         && *inst->drumset() == *updatedDrumset) {
         setCurrentPanelMode(m_panelModeToRestore);
+        m_padListModel->focusLastActivePad();
         return;
     }
 
@@ -214,6 +215,7 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
     undoStack->commitChanges();
 
     setCurrentPanelMode(m_panelModeToRestore);
+    m_padListModel->focusLastActivePad();
 }
 
 void PercussionPanelModel::customizeKit()

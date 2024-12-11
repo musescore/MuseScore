@@ -75,6 +75,9 @@ void PercussionPanelPadListModel::addEmptyRow()
     }
     emit layoutChanged();
     emit numPadsChanged();
+
+    const int indexToFocus = numPads() - NUM_COLUMNS;
+    emit padFocusRequested(indexToFocus);
 }
 
 void PercussionPanelPadListModel::deleteRow(int row)
@@ -119,6 +122,7 @@ void PercussionPanelPadListModel::endPadSwap(int endIndex)
         emit layoutChanged();
     }
     m_padSwapStartIndex = -1;
+    emit padFocusRequested(endIndex);
 }
 
 void PercussionPanelPadListModel::setDrumset(const engraving::Drumset* drumset)
@@ -180,6 +184,16 @@ mu::engraving::Drumset PercussionPanelPadListModel::constructDefaultLayout(const
     }
 
     return defaultLayout;
+}
+
+void PercussionPanelPadListModel::focusLastActivePad()
+{
+    for (int i = m_padModels.size() - 1; i >= 0; --i) {
+        if (m_padModels.at(i)) {
+            emit padFocusRequested(i);
+            return;
+        }
+    }
 }
 
 void PercussionPanelPadListModel::load()

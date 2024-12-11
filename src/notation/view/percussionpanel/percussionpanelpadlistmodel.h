@@ -71,12 +71,15 @@ public:
 
     mu::engraving::Drumset constructDefaultLayout(const engraving::Drumset* templateDrumset) const;
 
+    void focusLastActivePad();
+
     muse::async::Notification hasActivePadsChanged() const { return m_hasActivePadsChanged; }
     muse::async::Channel<int /*pitch*/> padTriggered() const { return m_triggeredChannel; }
 
 signals:
     void numPadsChanged();
     void rowIsEmptyChanged(int row, bool empty);
+    void padFocusRequested(int padIndex); //! NOTE: This won't work if it is called immediately before a layoutChange
 
 private:
     static constexpr int NUM_COLUMNS = 8;

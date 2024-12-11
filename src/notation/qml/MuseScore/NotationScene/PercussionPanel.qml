@@ -195,6 +195,18 @@ Item {
                     // This variable ensures we stay within a given pad when tabbing back-and-forth between
                     // "main" and "footer" controls
                     property var currentPadNavigationIndex: [0, 0]
+                    function onNavigationEvent(event) {
+                        var navigationRow = gridPrv.currentPadNavigationIndex[0]
+                        var navigationColumn = gridPrv.currentPadNavigationIndex[1]
+
+                        if (navigationRow >= padGrid.numRows || navigationColumn >= padGrid.numColumns) {
+                            gridPrv.currentPadNavigationIndex = [0, 0]
+                        }
+
+                        if (event.type === NavigationEvent.AboutActive) {
+                            event.setData("controlIndex", gridPrv.currentPadNavigationIndex)
+                        }
+                    }
                 }
 
                 Layout.alignment: Qt.AlignTop
@@ -217,9 +229,7 @@ Item {
                     order: toolbar.navigationOrderEnd + 1
 
                     onNavigationEvent: function(event) {
-                        if (event.type === NavigationEvent.AboutActive) {
-                            event.setData("controlIndex", gridPrv.currentPadNavigationIndex)
-                        }
+                        gridPrv.onNavigationEvent(event)
                     }
                 }
 
@@ -233,9 +243,7 @@ Item {
                     enabled: percModel.currentPanelMode !== PanelMode.EDIT_LAYOUT
 
                     onNavigationEvent: function(event) {
-                        if (event.type === NavigationEvent.AboutActive) {
-                            event.setData("controlIndex", gridPrv.currentPadNavigationIndex)
-                        }
+                        gridPrv.onNavigationEvent(event)
                     }
                 }
 
@@ -275,6 +283,7 @@ Item {
                             padGrid.swapOriginPad = pad
                             padGrid.isKeyboardSwapActive = isKeyboardSwap
                             padGrid.model.startPadSwap(index)
+                            pad.padNavigation.requestActive()
                         }
 
                         onEndPadSwapRequested: {
@@ -294,6 +303,17 @@ Item {
                                 return;
                             }
                             gridPrv.currentPadNavigationIndex = [pad.navigationRow, pad.navigationColumn]
+                        }
+
+                        Connections {
+                            target: padGrid.model
+
+                            function onPadFocusRequested(padIndex) {
+                                if (index !== padIndex) {
+                                    return
+                                }
+                                pad.padNavigation.requestActive()
+                            }
                         }
                     }
 
