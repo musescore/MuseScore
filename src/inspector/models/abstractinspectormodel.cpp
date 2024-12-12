@@ -416,6 +416,9 @@ mu::engraving::Sid AbstractInspectorModel::styleIdByPropertyId(const mu::engravi
     mu::engraving::Sid result = mu::engraving::Sid::NOSTYLE;
 
     for (const mu::engraving::EngravingItem* element : m_elementList) {
+        IF_ASSERT_FAILED(element) {
+            continue;
+        }
         result = element->getPropertyStyle(pid);
 
         if (result != mu::engraving::Sid::NOSTYLE) {
