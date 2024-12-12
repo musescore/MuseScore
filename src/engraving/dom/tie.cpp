@@ -491,7 +491,7 @@ void TieEndPoint::undoSetActive(bool v)
     if (!score || m_active == v) {
         return;
     }
-    score->undo(new ChangeTieEndPointActive(this, v));
+    score->undo(new ChangeTieEndPointActive(m_endPointList, m_id, v));
 }
 
 const String TieEndPoint::menuTitle() const
@@ -511,6 +511,7 @@ const String TieEndPoint::menuTitle() const
 TieEndPointList::~TieEndPointList()
 {
     muse::DeleteAll(m_endPoints);
+    m_endPoints.clear();
 }
 
 void TieEndPointList::add(TieEndPoint* item)
@@ -532,18 +533,21 @@ void TieEndPointList::clear()
     m_endPoints.clear();
 }
 
-void TieEndPointList::toggleEndPoint(const String& id)
+TieEndPoint* TieEndPointList::findEndPoint(const String& id)
 {
-    TieEndPoint* end = nullptr;
-
     for (TieEndPoint* endPoint : m_endPoints) {
         if (endPoint->id() != id) {
             continue;
         }
 
-        end = endPoint;
-        break;
+        return endPoint;
     }
+    return nullptr;
+}
+
+void TieEndPointList::toggleEndPoint(const String& id)
+{
+    TieEndPoint* end = findEndPoint(id);
 
     if (!end) {
         LOGE() << "No partial tie end point found with id: " << id;

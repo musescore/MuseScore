@@ -31,6 +31,7 @@ class TieEndPoint
 public:
     TieEndPoint(Note* note, String jumpName, bool active, int idx, bool followingNote);
     TieEndPoint() {}
+    ~TieEndPoint();
 
     Note* note() const { return m_note; }
     Tie* endTie() const;
@@ -67,6 +68,7 @@ public:
     void setStartTie(Tie* startTie) { m_startTie = startTie; }
     Tie* startTie() const { return m_startTie; }
 
+    TieEndPoint* findEndPoint(const String& id);
     void toggleEndPoint(const String& id);
 
     void addTie(TieEndPoint* endPoint);

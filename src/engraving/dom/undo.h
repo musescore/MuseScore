@@ -1737,14 +1737,15 @@ class ChangeTieEndPointActive : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeTieEndPointActive)
 
-    TieEndPoint* m_endPoint = nullptr;
+    TieEndPointList* m_endPointList = nullptr;
+    String m_id;
     bool m_active = false;
 
     void flip(EditData*) override;
 
 public:
-    ChangeTieEndPointActive(TieEndPoint* endPoint, bool active)
-        : m_endPoint(endPoint), m_active(active) {}
+    ChangeTieEndPointActive(TieEndPointList* endPointList, String& id, bool active)
+        : m_endPointList(endPointList), m_id(id), m_active(active) {}
 
     UNDO_TYPE(CommandType::ChangeTieEndPointActive)
     UNDO_NAME("ChangeTieEndPointActive")
