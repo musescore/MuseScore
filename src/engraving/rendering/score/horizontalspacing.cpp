@@ -1021,19 +1021,19 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
         }
     }
 
-    // Allocate space to ensure minimum length of "dangling" ties or gliss at start of system
+    // Allocate space to ensure minimum length of hanging ties or gliss at start of system
     // These only occur when one segment is a ChordRest and the other isn't
+    // Allocate space to ensure minimum length of partial ties
     if (f->isChordRestType() == ns->isChordRestType()) {
         return w;
     }
 
-    const bool afterRepeat = f->isStartRepeatBarLineType() && ns && ns->isChordRestType();
+    const bool repeatSeg = f->isStartRepeatBarLineType() || ns->isStartRepeatBarLineType();
     const bool endOfSystem = f->isChordRestType() && !(ns->isChordRestType() || ns->isStartRepeatBarLineType())
                              && (f->measure()->isLastInSystem() || f->measure()->next()->isHBox());
+    const bool systemEnd = repeatSeg || endOfSystem;
 
-    if (systemHeaderGap || afterRepeat || endOfSystem) {
-        computeDanglingLineWidth(f, ns, w, systemHeaderGap);
-    }
+    computeHangingLineWidth(f, ns, w, systemHeaderGap, systemEnd);
 
     return w;
 }
@@ -1379,7 +1379,8 @@ KerningType HorizontalSpacing::computeLyricsKerningType(const Lyrics* lyrics1, c
     return KerningType::ALLOW_COLLISION;
 }
 
-void HorizontalSpacing::computeDanglingLineWidth(const Segment* firstSeg, const Segment* nextSeg, double& width, bool systemHeaderGap)
+void HorizontalSpacing::computeHangingLineWidth(const Segment* firstSeg, const Segment* nextSeg, double& width, bool systemHeaderGap,
+                                                bool systemEnd)
 {
     const MStyle& style = firstSeg->style();
     const Segment* crSeg = firstSeg->isChordRestType() ? firstSeg : nextSeg;
@@ -1389,6 +1390,7 @@ void HorizontalSpacing::computeDanglingLineWidth(const Segment* firstSeg, const 
     const size_t ntracks = crSeg->score()->ntracks();
 
     for (track_idx_t track = 0; track < ntracks; track++) {
+        // Hanging lines only occur at start or end of a measure
         const ChordRest* cr = incoming ? crMeasure->firstChordRest(track) : crMeasure->lastChordRest(track);
         if (!cr || !cr->isChord() || cr->segment() != crSeg) {
             continue;
@@ -1411,8 +1413,13 @@ void HorizontalSpacing::computeDanglingLineWidth(const Segment* firstSeg, const 
                 if (lap.start() == incoming) {
                     continue;
                 }
-                const EngravingItem* attachedLine = lap.line();
+                const Spanner* attachedLine = toSpanner(lap.line());
                 if (!attachedLine->addToSkyline()) {
+                    continue;
+                }
+
+                // Partial ties are adjusted wherever they are in the system, other spanners are only adjusted over system breaks
+                if (!(systemEnd || systemHeaderGap) && !attachedLine->isPartialTie()) {
                     continue;
                 }
 

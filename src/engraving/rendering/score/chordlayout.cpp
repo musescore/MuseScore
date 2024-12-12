@@ -2771,6 +2771,10 @@ void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, La
     for (Note* note : chord->notes()) {
         Tie* tie = note->tieFor();
         if (tie) {
+            if (tie->isPartialTie()) {
+                SlurTieLayout::layoutTieFor(tie, note->findMeasure()->system());  // line attach points are updated here
+            }
+
             Note* endNote = tie->endNote();
             if (!endNote) {
                 continue;

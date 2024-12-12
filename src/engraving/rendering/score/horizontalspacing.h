@@ -141,6 +141,7 @@ private:
     static KerningType computeStemSlashKerningType(const StemSlash* stemSlash, const EngravingItem* item2);
     static KerningType computeLyricsKerningType(const Lyrics* lyrics1, const EngravingItem* item2);
 
-    static void computeDanglingLineWidth(const Segment* firstSeg, const Segment* nextSeg, double& width, bool systemHeaderGap);
+    static void computeHangingLineWidth(const Segment* firstSeg, const Segment* nextSeg, double& width, bool systemHeaderGap,
+                                        bool systemEnd);
 };
 } // namespace mu::engraving::layout
