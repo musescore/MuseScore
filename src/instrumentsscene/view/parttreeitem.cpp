@@ -50,7 +50,8 @@ void PartTreeItem::init(const notation::Part* masterPart)
     setId(part->id());
     setTitle(part->instrument()->nameAsPlainText());
     setIsVisible(visible);
-    setIsEditable(partExists);
+    setSettingsAvailable(partExists);
+    setSettingsEnabled(partExists);
     setIsExpandable(partExists);
     setIsRemovable(partExists);
     setIsSelectable(partExists);

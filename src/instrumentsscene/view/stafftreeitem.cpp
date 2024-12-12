@@ -40,7 +40,8 @@ StaffTreeItem::StaffTreeItem(IMasterNotationPtr masterNotation, INotationPtr not
         this->notation()->parts()->setStaffVisible(id(), isVisible);
     });
 
-    setIsEditable(true);
+    setSettingsAvailable(true);
+    setSettingsEnabled(true);
     setIsRemovable(true);
     setIsSelectable(true);
 }

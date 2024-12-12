@@ -53,10 +53,11 @@ class AbstractLayoutPanelTreeItem : public QObject
     Q_PROPERTY(int type READ typeInt CONSTANT)
     Q_PROPERTY(bool isVisible READ isVisible WRITE setIsVisible NOTIFY isVisibleChanged)
     Q_PROPERTY(bool isExpandable READ isExpandable NOTIFY isExpandableChanged)
-    Q_PROPERTY(bool isEditable READ isEditable NOTIFY isEditableChanged)
     Q_PROPERTY(bool isRemovable READ isRemovable NOTIFY isRemovableChanged)
     Q_PROPERTY(bool isSelectable READ isSelectable CONSTANT)
     Q_PROPERTY(bool isSelected READ isSelected NOTIFY isSelectedChanged)
+    Q_PROPERTY(bool settingsAvailable READ settingsAvailable NOTIFY settingsAvailableChanged)
+    Q_PROPERTY(bool settingsEnabled READ settingsEnabled NOTIFY settingsEnabledChanged)
 
 public:
     AbstractLayoutPanelTreeItem(LayoutPanelItemType::ItemType type, notation::IMasterNotationPtr masterNotation,
@@ -70,11 +71,13 @@ public:
     LayoutPanelItemType::ItemType type() const;
     bool isVisible() const;
     bool isExpandable() const;
-    bool isEditable() const;
     bool isRemovable() const;
 
     bool isSelectable() const;
     bool isSelected() const;
+
+    bool settingsAvailable() const;
+    bool settingsEnabled() const;
 
     Q_INVOKABLE virtual bool canAcceptDrop(const QVariant& item) const;
     Q_INVOKABLE virtual void appendNewItem();
@@ -109,19 +112,21 @@ public slots:
     void setIsVisible(bool isVisible, bool setChildren = true);
     void setId(const muse::ID& id);
     void setIsExpandable(bool expandable);
-    void setIsEditable(bool editable);
     void setIsRemovable(bool removable);
     void setIsSelectable(bool selectable);
     void setIsSelected(bool selected);
+    void setSettingsAvailable(bool available);
+    void setSettingsEnabled(bool enabled);
 
 signals:
     void titleChanged(QString title);
     void isVisibleChanged(bool isVisible);
     void isExpandableChanged(bool isExpandable);
-    void isEditableChanged(bool isEditable);
     void isRemovableChanged(bool isRemovable);
     void isSelectableChanged(bool isSelectable);
     void isSelectedChanged(bool isSelected);
+    void settingsAvailableChanged(bool available);
+    void settingsEnabledChanged(bool enabled);
 
 protected:
     notation::IMasterNotationPtr masterNotation() const;
@@ -138,10 +143,11 @@ private:
     LayoutPanelItemType::ItemType m_type = LayoutPanelItemType::UNDEFINED;
     bool m_isVisible = false;
     bool m_isExpandable = false;
-    bool m_isEditable = false;
     bool m_isRemovable = false;
     bool m_isSelectable = false;
     bool m_isSelected = false;
+    bool m_settingsAvailable = false;
+    bool m_settingsEnabled = false;
 
     notation::IMasterNotationPtr m_masterNotation = nullptr;
     notation::INotationPtr m_notation = nullptr;
