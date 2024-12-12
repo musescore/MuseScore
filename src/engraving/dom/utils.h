@@ -34,9 +34,11 @@ class EngravingItem;
 class KeySig;
 class Note;
 class Rest;
+class Score;
 class Segment;
 class System;
 class Tuplet;
+class Volta;
 
 enum class Key;
 
@@ -66,6 +68,7 @@ extern Note* prevChordNote(Note* note);
 extern Segment* nextSeg1(Segment* s);
 extern Segment* prevSeg1(Segment* seg);
 
+extern Volta* findVolta(const Segment* seg, const Score* score);
 extern Note* searchTieNote(const Note* note, const Segment* nextSegment = nullptr);
 extern Note* searchTieNote114(Note* note);
 

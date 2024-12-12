@@ -769,6 +769,20 @@ int diatonicUpDown(Key k, int pitch, int steps)
     return pitch;
 }
 
+Volta* findVolta(const Segment* seg, const Score* score)
+{
+    const Measure* measure = seg->measure();
+    const Fraction tick = measure->tick() + Fraction::eps();
+    auto spanners = score->spannerMap().findOverlapping(tick.ticks(), tick.ticks());
+    for (auto& spanner : spanners) {
+        if (!spanner.value->isVolta()) {
+            continue;
+        }
+        return toVolta(spanner.value);
+    }
+    return nullptr;
+}
+
 //---------------------------------------------------------
 //   searchTieNote
 //    search Note to tie to "note"
@@ -784,6 +798,7 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment)
     Chord* chord = note->chord();
     Segment* seg = chord->segment();
     Part* part   = chord->part();
+    Score* score = chord->score();
     track_idx_t strack = part->staves().front()->idx() * VOICES;
     track_idx_t etrack = strack + part->staves().size() * VOICES;
 
@@ -796,6 +811,13 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment)
     }
 
     if (!nextSegment) {
+        return nullptr;
+    }
+
+    Volta* startVolta = findVolta(seg, score);
+    Volta* endVolta = findVolta(nextSegment, score);
+
+    if (startVolta && endVolta && startVolta != endVolta) {
         return nullptr;
     }
 

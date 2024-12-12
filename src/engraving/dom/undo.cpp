@@ -3364,8 +3364,12 @@ std::vector<const EngravingObject*> RemoveSystemLock::objectItems() const
 
 void ChangeTieEndPointActive::flip(EditData*)
 {
-    bool oldActive = m_endPoint->active();
+    TieEndPoint* endPoint = m_endPointList->findEndPoint(m_id);
+    if (!endPoint) {
+        return;
+    }
+    bool oldActive = endPoint->active();
 
-    m_endPoint->setActive(m_active);
+    endPoint->setActive(m_active);
     m_active = oldActive;
 }
