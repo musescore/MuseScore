@@ -844,13 +844,13 @@ void PowerTab::addToScore(ptSection& sec)
         lastPart = sec.partMarker;
         auto seg = measure->getSegment(SegmentType::ChordRest, measure->tick());
         RehearsalMark* t = new RehearsalMark(seg);
-        t->setFrameType(FrameType::SQUARE);
+        t->setBorderType(BorderType::SQUARE);
         t->setPlainText(String(Char::fromAscii(sec.partMarker)));
         t->setTrack(0);
         seg->add(t);
 
         t = new RehearsalMark(seg);
-        t->setFrameType(FrameType::NO_FRAME);
+        t->setBorderType(BorderType::NO_BORDER);
         std::string valid;
         muse::UtfCodec::replaceInvalid(sec.partName, valid);
         t->setPlainText(String::fromStdString(valid));

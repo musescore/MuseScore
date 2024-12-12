@@ -72,7 +72,7 @@ void EngravingItemPreviewPainter::paintItem(mu::engraving::EngravingItem* elemen
         painter->translate(item->pos()); // necessary for drawing child items
 
         const Color colorBackup = item->getProperty(Pid::COLOR).value<Color>();
-        const Color frameColorBackup = item->getProperty(Pid::FRAME_FG_COLOR).value<Color>();
+        const Color frameColorBackup = item->getProperty(Pid::BORDER_FG_COLOR).value<Color>();
         const bool colorsInversionEnabledBackup = item->colorsInversionEnabled();
 
         item->setColorsInverionEnabled(ctx->colorsInversionEnabled);
@@ -80,14 +80,14 @@ void EngravingItemPreviewPainter::paintItem(mu::engraving::EngravingItem* elemen
         if (!ctx->useElementColors) {
             const Color color = ctx->color;
             item->setProperty(Pid::COLOR, color);
-            item->setProperty(Pid::FRAME_FG_COLOR, color);
+            item->setProperty(Pid::BORDER_FG_COLOR, color);
         }
 
         engravingRender()->drawItem(item, painter);
 
         item->setColorsInverionEnabled(colorsInversionEnabledBackup);
         item->setProperty(Pid::COLOR, colorBackup);
-        item->setProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
+        item->setProperty(Pid::BORDER_FG_COLOR, frameColorBackup);
 
         painter->restore();
     };

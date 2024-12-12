@@ -1507,29 +1507,29 @@ void SingleDraw::drawTextBase(const TextBase* item, Painter* painter)
 
     const TextBase::LayoutData* ldata = item->ldata();
 
-    if (item->hasFrame()) {
+    if (item->hasBorder()) {
         double baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
-        if (!RealIsNull(item->frameWidth().val())) {
-            Color fColor = item->curColor(item->visible(), item->frameColor());
-            double frameWidthVal = item->frameWidth().val() * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
+        if (!RealIsNull(item->borderThickness().val())) {
+            Color fColor = item->curColor(item->visible(), item->borderColor());
+            double borderThicknessVal = item->borderThickness().val() * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
 
-            Pen pen(fColor, frameWidthVal, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
+            Pen pen(fColor, borderThicknessVal, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
             painter->setPen(pen);
         } else {
             painter->setNoPen();
         }
-        Color bg(item->bgColor());
+        Color bg(item->backgroundColor());
         painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
         if (item->circle()) {
-            painter->drawEllipse(ldata->frame);
+            painter->drawEllipse(ldata->borderRect);
         } else {
-            double frameRoundFactor = (item->sizeIsSpatiumDependent() ? (item->spatium() / baseSpatium) / 2 : 0.5f);
+            double borderRadiusFactor = (item->sizeIsSpatiumDependent() ? (item->spatium() / baseSpatium) / 2 : 0.5f);
 
-            int r2 = item->frameRound() * frameRoundFactor;
+            int r2 = item->borderRadius() * borderRadiusFactor;
             if (r2 > 99) {
                 r2 = 99;
             }
-            painter->drawRoundedRect(ldata->frame, item->frameRound() * frameRoundFactor, r2);
+            painter->drawRoundedRect(ldata->borderRect, item->borderRadius() * borderRadiusFactor, r2);
         }
     }
     painter->setBrush(BrushStyle::NoBrush);
@@ -1726,25 +1726,25 @@ void SingleDraw::draw(const Harmony* item, Painter* painter)
 
     const Harmony::LayoutData* ldata = item->ldata();
 
-    if (item->hasFrame()) {
-        if (!RealIsNull(item->frameWidth().val())) {
-            Color color = item->frameColor();
-            Pen pen(color, item->frameWidth().val() * item->spatium(), PenStyle::SolidLine,
+    if (item->hasBorder()) {
+        if (!RealIsNull(item->borderThickness().val())) {
+            Color color = item->borderColor();
+            Pen pen(color, item->borderThickness().val() * item->spatium(), PenStyle::SolidLine,
                     PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
             painter->setPen(pen);
         } else {
             painter->setNoPen();
         }
-        Color bg(item->bgColor());
+        Color bg(item->backgroundColor());
         painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
         if (item->circle()) {
-            painter->drawArc(ldata->frame, 0, 5760);
+            painter->drawArc(ldata->borderRect, 0, 5760);
         } else {
-            int r2 = item->frameRound();
+            int r2 = item->borderRadius();
             if (r2 > 99) {
                 r2 = 99;
             }
-            painter->drawRoundedRect(ldata->frame, item->frameRound(), r2);
+            painter->drawRoundedRect(ldata->borderRect, item->borderRadius(), r2);
         }
     }
     painter->setBrush(BrushStyle::NoBrush);

@@ -14059,15 +14059,15 @@ followed by dashes</string>
               <item row="0" column="0">
                <widget class="QLabel" name="label_202">
                 <property name="text">
-                 <string>Frame:</string>
+                 <string>Border:</string>
                 </property>
                 <property name="buddy">
-                 <cstring>textStyleFrameType</cstring>
+                 <cstring>textStyleBorderType</cstring>
                 </property>
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QComboBox" name="textStyleFrameType">
+               <widget class="QComboBox" name="textStyleBorderType">
                 <item>
                  <property name="text">
                   <string notr="true">None</string>
@@ -14086,12 +14086,12 @@ followed by dashes</string>
                </widget>
               </item>
               <item row="0" column="2">
-               <widget class="QToolButton" name="resetTextStyleFrameType">
+               <widget class="QToolButton" name="resetTextStyleBorderType">
                 <property name="toolTip">
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Frame' value</string>
+                 <string>Reset 'Border' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -14099,7 +14099,7 @@ followed by dashes</string>
                </widget>
               </item>
               <item row="1" column="0" colspan="3">
-               <widget class="QWidget" name="frameWidget" native="true">
+               <widget class="QWidget" name="borderWidget" native="true">
                 <layout class="QGridLayout" name="gridLayout_43">
                  <property name="leftMargin">
                   <number>0</number>
@@ -14114,7 +14114,7 @@ followed by dashes</string>
                   <number>0</number>
                  </property>
                  <item row="0" column="1">
-                  <widget class="Awl::ColorLabel" name="textStyleFrameForeground"/>
+                  <widget class="Awl::ColorLabel" name="textStyleBorderForeground"/>
                  </item>
                  <item row="2" column="0">
                   <widget class="QLabel" name="label_205">
@@ -14122,12 +14122,12 @@ followed by dashes</string>
                     <string>Thickness:</string>
                    </property>
                    <property name="buddy">
-                    <cstring>textStyleFrameBorder</cstring>
+                    <cstring>textStyleBorder</cstring>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="1">
-                  <widget class="QDoubleSpinBox" name="textStyleFrameBorderRadius">
+                  <widget class="QDoubleSpinBox" name="textStyleBorderRadius">
                    <property name="keyboardTracking">
                     <bool>false</bool>
                    </property>
@@ -14137,7 +14137,7 @@ followed by dashes</string>
                   </widget>
                  </item>
                  <item row="1" column="2">
-                  <widget class="QToolButton" name="resetTextStyleFrameBackground">
+                  <widget class="QToolButton" name="resetTextStyleBorderBackground">
                    <property name="toolTip">
                     <string>Reset to default</string>
                    </property>
@@ -14150,7 +14150,7 @@ followed by dashes</string>
                   </widget>
                  </item>
                  <item row="0" column="2">
-                  <widget class="QToolButton" name="resetTextStyleFrameForeground">
+                  <widget class="QToolButton" name="resetTextStyleBorderForeground">
                    <property name="toolTip">
                     <string>Reset to default</string>
                    </property>
@@ -14168,7 +14168,7 @@ followed by dashes</string>
                     <string>Padding:</string>
                    </property>
                    <property name="buddy">
-                    <cstring>textStyleFramePadding</cstring>
+                    <cstring>textStyleBorderPadding</cstring>
                    </property>
                   </widget>
                  </item>
@@ -14178,12 +14178,12 @@ followed by dashes</string>
                     <string>Corner radius:</string>
                    </property>
                    <property name="buddy">
-                    <cstring>textStyleFrameBorderRadius</cstring>
+                    <cstring>textStyleBorderRadius</cstring>
                    </property>
                   </widget>
                  </item>
                  <item row="2" column="2">
-                  <widget class="QToolButton" name="resetTextStyleFrameBorder">
+                  <widget class="QToolButton" name="resetTextStyleBorder">
                    <property name="toolTip">
                     <string>Reset to default</string>
                    </property>
@@ -14196,17 +14196,17 @@ followed by dashes</string>
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QDoubleSpinBox" name="textStyleFramePadding">
+                  <widget class="QDoubleSpinBox" name="textStyleBorderPadding">
                    <property name="keyboardTracking">
                     <bool>false</bool>
                    </property>
                   </widget>
                  </item>
                  <item row="1" column="1">
-                  <widget class="Awl::ColorLabel" name="textStyleFrameBackground"/>
+                  <widget class="Awl::ColorLabel" name="textStyleBorderBackground"/>
                  </item>
                  <item row="3" column="2">
-                  <widget class="QToolButton" name="resetTextStyleFramePadding">
+                  <widget class="QToolButton" name="resetTextStyleBorderPadding">
                    <property name="toolTip">
                     <string>Reset to default</string>
                    </property>
@@ -14219,7 +14219,7 @@ followed by dashes</string>
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QDoubleSpinBox" name="textStyleFrameBorder">
+                  <widget class="QDoubleSpinBox" name="textStyleBorder">
                    <property name="keyboardTracking">
                     <bool>false</bool>
                    </property>
@@ -14231,7 +14231,7 @@ followed by dashes</string>
                     <string>Border:</string>
                    </property>
                    <property name="buddy">
-                    <cstring>textStyleFrameForeground</cstring>
+                    <cstring>textStyleBorderForeground</cstring>
                    </property>
                   </widget>
                  </item>
@@ -14241,12 +14241,12 @@ followed by dashes</string>
                     <string>Highlight:</string>
                    </property>
                    <property name="buddy">
-                    <cstring>textStyleFrameBackground</cstring>
+                    <cstring>textStyleBorderBackground</cstring>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="2">
-                  <widget class="QToolButton" name="resetTextStyleFrameBorderRadius">
+                  <widget class="QToolButton" name="resetTextStyleBorderRadius">
                    <property name="toolTip">
                     <string>Reset to default</string>
                    </property>
@@ -15285,18 +15285,18 @@ followed by dashes</string>
   <tabstop>resetTextStyleColor</tabstop>
   <tabstop>textStyleOffset</tabstop>
   <tabstop>resetTextStyleOffset</tabstop>
-  <tabstop>textStyleFrameType</tabstop>
-  <tabstop>resetTextStyleFrameType</tabstop>
-  <tabstop>textStyleFrameForeground</tabstop>
-  <tabstop>resetTextStyleFrameForeground</tabstop>
-  <tabstop>textStyleFrameBackground</tabstop>
-  <tabstop>resetTextStyleFrameBackground</tabstop>
-  <tabstop>textStyleFrameBorder</tabstop>
-  <tabstop>resetTextStyleFrameBorder</tabstop>
-  <tabstop>textStyleFramePadding</tabstop>
-  <tabstop>resetTextStyleFramePadding</tabstop>
-  <tabstop>textStyleFrameBorderRadius</tabstop>
-  <tabstop>resetTextStyleFrameBorderRadius</tabstop>
+  <tabstop>textStyleBorderType</tabstop>
+  <tabstop>resetTextStyleBorderType</tabstop>
+  <tabstop>textStyleBorderForeground</tabstop>
+  <tabstop>resetTextStyleBorderForeground</tabstop>
+  <tabstop>textStyleBorderBackground</tabstop>
+  <tabstop>resetTextStyleBorderBackground</tabstop>
+  <tabstop>textStyleBorder</tabstop>
+  <tabstop>resetTextStyleBorder</tabstop>
+  <tabstop>textStyleBorderPadding</tabstop>
+  <tabstop>resetTextStyleBorderPadding</tabstop>
+  <tabstop>textStyleBorderRadius</tabstop>
+  <tabstop>resetTextStyleBorderRadius</tabstop>
   <tabstop>buttonTogglePagelist</tabstop>
   <tabstop>resetStylesButton</tabstop>
  </tabstops>

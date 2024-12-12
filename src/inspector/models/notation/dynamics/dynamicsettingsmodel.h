@@ -33,13 +33,13 @@ class DynamicsSettingsModel : public InspectorModelWithVoiceAndPositionOptions
     Q_PROPERTY(PropertyItem * dynamicSize READ dynamicSize CONSTANT)
     Q_PROPERTY(PropertyItem * centerOnNotehead READ centerOnNotehead CONSTANT)
 
-    // Frame-related settings
-    Q_PROPERTY(PropertyItem * frameType READ frameType CONSTANT)
-    Q_PROPERTY(PropertyItem * frameBorderColor READ frameBorderColor CONSTANT)
-    Q_PROPERTY(PropertyItem * frameFillColor READ frameFillColor CONSTANT)
-    Q_PROPERTY(PropertyItem * frameThickness READ frameThickness CONSTANT)
-    Q_PROPERTY(PropertyItem * frameMargin READ frameMargin CONSTANT)
-    Q_PROPERTY(PropertyItem * frameCornerRadius READ frameCornerRadius CONSTANT)
+    // Border-related settings
+    Q_PROPERTY(PropertyItem * borderType READ borderType CONSTANT)
+    Q_PROPERTY(PropertyItem * borderColor READ borderColor CONSTANT)
+    Q_PROPERTY(PropertyItem * borderFillColor READ borderFillColor CONSTANT)
+    Q_PROPERTY(PropertyItem * borderThickness READ borderThickness CONSTANT)
+    Q_PROPERTY(PropertyItem * borderMargin READ borderMargin CONSTANT)
+    Q_PROPERTY(PropertyItem * borderCornerRadius READ borderCornerRadius CONSTANT)
 
 public:
     explicit DynamicsSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -53,27 +53,27 @@ public:
     PropertyItem* dynamicSize() const;
     PropertyItem* centerOnNotehead() const;
 
-    PropertyItem* frameType() const;
-    PropertyItem* frameBorderColor() const;
-    PropertyItem* frameFillColor() const;
-    PropertyItem* frameThickness() const;
-    PropertyItem* frameMargin() const;
-    PropertyItem* frameCornerRadius() const;
+    PropertyItem* borderType() const;
+    PropertyItem* borderColor() const;
+    PropertyItem* borderFillColor() const;
+    PropertyItem* borderThickness() const;
+    PropertyItem* borderMargin() const;
+    PropertyItem* borderCornerRadius() const;
 
 private:
-    void updateFramePropertiesAvailability();
+    void updateBorderPropertiesAvailability();
 
 private:
     PropertyItem* m_avoidBarLines = nullptr;
     PropertyItem* m_dynamicSize = nullptr;
     PropertyItem* m_centerOnNotehead = nullptr;
 
-    PropertyItem* m_frameType = nullptr;
-    PropertyItem* m_frameBorderColor = nullptr;
-    PropertyItem* m_frameFillColor = nullptr;
-    PropertyItem* m_frameThickness = nullptr;
-    PropertyItem* m_frameMargin = nullptr;
-    PropertyItem* m_frameCornerRadius = nullptr;
+    PropertyItem* m_borderType = nullptr;
+    PropertyItem* m_borderColor = nullptr;
+    PropertyItem* m_borderFillColor = nullptr;
+    PropertyItem* m_borderThickness = nullptr;
+    PropertyItem* m_borderMargin = nullptr;
+    PropertyItem* m_borderCornerRadius = nullptr;
 };
 }
 

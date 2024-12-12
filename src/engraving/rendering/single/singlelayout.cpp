@@ -1920,8 +1920,8 @@ void SingleLayout::layout1TextBase(const TextBase* item, const Context&, TextBas
     bb.translate(0.0, yoff);
 
     ldata->setBbox(bb);
-    if (item->hasFrame()) {
-        item->layoutFrame(ldata);
+    if (item->hasBorder()) {
+        item->layoutBorder(ldata);
     }
 }
 

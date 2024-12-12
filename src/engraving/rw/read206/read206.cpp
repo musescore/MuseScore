@@ -136,9 +136,9 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
     PointF offset;
     OffsetType offsetType = OffsetType::SPATIUM;
 
-    FrameType frameType = FrameType::NO_FRAME;
+    BorderType borderType = BorderType::NO_BORDER;
     Spatium paddingWidth(0.0);
-    Spatium frameWidth(0.0);
+    Spatium borderWidth(0.0);
     Color foregroundColor = Color::BLACK;
     Color backgroundColor = Color::transparent;
 
@@ -146,7 +146,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
     bool placementValid = false;
 
     String name = e.attribute("name");
-    Color frameColor = Color::BLACK;
+    Color borderColor = Color::BLACK;
 
     bool systemFlag = false;
     double lineWidth = -1.0;
@@ -217,13 +217,13 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
         } else if (tag == "sizeIsSpatiumDependent" || tag == "spatiumSizeDependent") {
             sizeIsSpatiumDependent = e.readInt();
         } else if (tag == "frameWidth") {   // obsolete
-            frameType = FrameType::SQUARE;
-            /*frameWidthMM =*/ e.readDouble();
+            borderType = BorderType::SQUARE;
+            /*borderWidthMM =*/ e.readDouble();
         } else if (tag == "frameWidthS") {
-            frameType = FrameType::SQUARE;
-            frameWidth = Spatium(e.readDouble());
+            borderType = BorderType::SQUARE;
+            borderWidth = Spatium(e.readDouble());
         } else if (tag == "frame") {
-            frameType = e.readInt() ? FrameType::SQUARE : FrameType::NO_FRAME;
+            borderType = e.readInt() ? BorderType::SQUARE : BorderType::NO_BORDER;
         } else if (tag == "paddingWidth") {          // obsolete
             /*paddingWidthMM =*/
             e.readDouble();
@@ -232,13 +232,13 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
         } else if (tag == "frameRound") {
             e.readInt();
         } else if (tag == "frameColor") {
-            frameColor = e.readColor();
+            borderColor = e.readColor();
         } else if (tag == "foregroundColor") {
             foregroundColor = e.readColor();
         } else if (tag == "backgroundColor") {
             backgroundColor = e.readColor();
         } else if (tag == "circle") {
-            frameType = e.readInt() ? FrameType::CIRCLE : FrameType::NO_FRAME;
+            borderType = e.readInt() ? BorderType::CIRCLE : BorderType::NO_BORDER;
         } else if (tag == "systemFlag") {
             systemFlag = e.readInt();
         } else if (tag == "placement") {
@@ -377,19 +377,19 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
         case Pid::FONT_STYLE:
             value = int(fontStyle);
             break;
-        case Pid::FRAME_TYPE:
-            value = int(frameType);
+        case Pid::BORDER_TYPE:
+            value = int(borderType);
             break;
-        case Pid::FRAME_WIDTH:
-            value = frameWidth;
+        case Pid::BORDER_WIDTH:
+            value = borderWidth;
             break;
-        case Pid::FRAME_PADDING:
+        case Pid::BORDER_PADDING:
             value = paddingWidth;
             break;
-        case Pid::FRAME_FG_COLOR:
-            value = PropertyValue::fromValue(frameColor);
+        case Pid::BORDER_FG_COLOR:
+            value = PropertyValue::fromValue(borderColor);
             break;
-        case Pid::FRAME_BG_COLOR:
+        case Pid::BORDER_BG_COLOR:
             value = PropertyValue::fromValue(backgroundColor);
             break;
         case Pid::SIZE_SPATIUM_DEPENDENT:
@@ -1242,27 +1242,27 @@ static bool readTextProperties206(XmlReader& e, ReadContext& ctx, TextBase* t)
     } else if (tag == "foregroundColor") { // same as "color" ?
         e.skipCurrentElement();
     } else if (tag == "frame") {
-        t->setFrameType(e.readBool() ? FrameType::SQUARE : FrameType::NO_FRAME);
-        t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
+        t->setBorderType(e.readBool() ? BorderType::SQUARE : BorderType::NO_BORDER);
+        t->setPropertyFlags(Pid::BORDER_TYPE, PropertyFlags::UNSTYLED);
     } else if (tag == "frameRound") {
-        read400::TRead::readProperty(t, e, ctx, Pid::FRAME_ROUND);
+        read400::TRead::readProperty(t, e, ctx, Pid::BORDER_ROUND);
     } else if (tag == "circle") {
         if (e.readBool()) {
-            t->setFrameType(FrameType::CIRCLE);
+            t->setBorderType(BorderType::CIRCLE);
         } else {
             if (t->circle()) {
-                t->setFrameType(FrameType::SQUARE);
+                t->setBorderType(BorderType::SQUARE);
             }
         }
-        t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
+        t->setPropertyFlags(Pid::BORDER_TYPE, PropertyFlags::UNSTYLED);
     } else if (tag == "paddingWidthS") {
-        read400::TRead::readProperty(t, e, ctx, Pid::FRAME_PADDING);
+        read400::TRead::readProperty(t, e, ctx, Pid::BORDER_PADDING);
     } else if (tag == "frameWidthS") {
-        read400::TRead::readProperty(t, e, ctx, Pid::FRAME_WIDTH);
+        read400::TRead::readProperty(t, e, ctx, Pid::BORDER_WIDTH);
     } else if (tag == "frameColor") {
-        read400::TRead::readProperty(t, e, ctx, Pid::FRAME_FG_COLOR);
+        read400::TRead::readProperty(t, e, ctx, Pid::BORDER_FG_COLOR);
     } else if (tag == "backgroundColor") {
-        read400::TRead::readProperty(t, e, ctx, Pid::FRAME_BG_COLOR);
+        read400::TRead::readProperty(t, e, ctx, Pid::BORDER_BG_COLOR);
     } else if (tag == "halign") {
         Align align = t->align();
         align.horizontal = TConv::fromXml(e.readAsciiText(), AlignH::LEFT);

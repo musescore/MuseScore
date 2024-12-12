@@ -1140,10 +1140,10 @@ EditStyle::EditStyle(QWidget* parent)
         textStyles->addItem(item);
     }
 
-    textStyleFrameType->clear();
-    textStyleFrameType->addItem(muse::qtrc("notation/editstyle", "None", "no frame for text"), int(FrameType::NO_FRAME));
-    textStyleFrameType->addItem(muse::qtrc("notation/editstyle", "Rectangle"), int(FrameType::SQUARE));
-    textStyleFrameType->addItem(muse::qtrc("notation/editstyle", "Circle"), int(FrameType::CIRCLE));
+    textStyleBorderType->clear();
+    textStyleBorderType->addItem(muse::qtrc("notation/editstyle", "None", "no border for text"), int(BorderType::NO_BORDER));
+    textStyleBorderType->addItem(muse::qtrc("notation/editstyle", "Rectangle"), int(BorderType::SQUARE));
+    textStyleBorderType->addItem(muse::qtrc("notation/editstyle", "Circle"), int(BorderType::CIRCLE));
 
     connect(dynamicsAndHairpinPos, &QComboBox::currentIndexChanged, dynamicsAndHairpinPosDescription, [=]() {
         dynamicsAndHairpinPosDescription->setVisible(dynamicsAndHairpinPos->currentIndex() == int(DirectionV::AUTO));
@@ -1230,52 +1230,52 @@ EditStyle::EditStyle(QWidget* parent)
         textStyleValueChanged(TextStylePropertyType::SizeSpatiumDependent, textStyleSpatiumDependent->isChecked());
     });
 
-    WidgetUtils::setWidgetIcon(resetTextStyleFrameType, IconCode::Code::UNDO);
-    connect(resetTextStyleFrameType, &QToolButton::clicked, this, [=]() {
-        resetTextStyle(TextStylePropertyType::FrameType);
+    WidgetUtils::setWidgetIcon(resetTextStyleBorderType, IconCode::Code::UNDO);
+    connect(resetTextStyleBorderType, &QToolButton::clicked, this, [=]() {
+        resetTextStyle(TextStylePropertyType::BorderType);
     });
-    connect(textStyleFrameType, &QComboBox::currentIndexChanged, this, [=]() {
-        textStyleValueChanged(TextStylePropertyType::FrameType, textStyleFrameType->currentIndex());
-    });
-
-    WidgetUtils::setWidgetIcon(resetTextStyleFramePadding, IconCode::Code::UNDO);
-    connect(resetTextStyleFramePadding, &QToolButton::clicked, this, [=]() {
-        resetTextStyle(TextStylePropertyType::FramePadding);
-    });
-    connect(textStyleFramePadding, &QDoubleSpinBox::valueChanged, this, [=]() {
-        textStyleValueChanged(TextStylePropertyType::FramePadding, textStyleFramePadding->value());
+    connect(textStyleBorderType, &QComboBox::currentIndexChanged, this, [=]() {
+        textStyleValueChanged(TextStylePropertyType::BorderType, textStyleBorderType->currentIndex());
     });
 
-    WidgetUtils::setWidgetIcon(resetTextStyleFrameBorder, IconCode::Code::UNDO);
-    connect(resetTextStyleFrameBorder, &QToolButton::clicked, this, [=]() {
-        resetTextStyle(TextStylePropertyType::FrameWidth);
+    WidgetUtils::setWidgetIcon(resetTextStyleBorderPadding, IconCode::Code::UNDO);
+    connect(resetTextStyleBorderPadding, &QToolButton::clicked, this, [=]() {
+        resetTextStyle(TextStylePropertyType::BorderPadding);
     });
-    connect(textStyleFrameBorder, &QDoubleSpinBox::valueChanged, this, [=]() {
-        textStyleValueChanged(TextStylePropertyType::FrameWidth, textStyleFrameBorder->value());
-    });
-
-    WidgetUtils::setWidgetIcon(resetTextStyleFrameBorderRadius, IconCode::Code::UNDO);
-    connect(resetTextStyleFrameBorderRadius, &QToolButton::clicked, this, [=]() {
-        resetTextStyle(TextStylePropertyType::FrameRound);
-    });
-    connect(textStyleFrameBorderRadius, &QDoubleSpinBox::valueChanged, this, [=]() {
-        textStyleValueChanged(TextStylePropertyType::FrameRound, textStyleFrameBorderRadius->value());
+    connect(textStyleBorderPadding, &QDoubleSpinBox::valueChanged, this, [=]() {
+        textStyleValueChanged(TextStylePropertyType::BorderPadding, textStyleBorderPadding->value());
     });
 
-    WidgetUtils::setWidgetIcon(resetTextStyleFrameForeground, IconCode::Code::UNDO);
-    connect(resetTextStyleFrameForeground, &QToolButton::clicked, this, [=]() {
-        resetTextStyle(TextStylePropertyType::FrameBorderColor);
+    WidgetUtils::setWidgetIcon(resetTextStyleBorder, IconCode::Code::UNDO);
+    connect(resetTextStyleBorder, &QToolButton::clicked, this, [=]() {
+        resetTextStyle(TextStylePropertyType::BorderWidth);
     });
-    connect(textStyleFrameForeground, &Awl::ColorLabel::colorChanged, this, [=]() {
-        textStyleValueChanged(TextStylePropertyType::FrameBorderColor, textStyleFrameForeground->color());
+    connect(textStyleBorder, &QDoubleSpinBox::valueChanged, this, [=]() {
+        textStyleValueChanged(TextStylePropertyType::BorderWidth, textStyleBorder->value());
     });
 
-    WidgetUtils::setWidgetIcon(resetTextStyleFrameBackground, IconCode::Code::UNDO);
-    connect(resetTextStyleFrameBackground, &QToolButton::clicked, this, [=]() {
-        resetTextStyle(TextStylePropertyType::FrameFillColor);
+    WidgetUtils::setWidgetIcon(resetTextStyleBorderRadius, IconCode::Code::UNDO);
+    connect(resetTextStyleBorderRadius, &QToolButton::clicked, this, [=]() {
+        resetTextStyle(TextStylePropertyType::BorderRound);
     });
-    connect(textStyleFrameBackground, &Awl::ColorLabel::colorChanged, this, [=]() {
-        textStyleValueChanged(TextStylePropertyType::FrameFillColor, textStyleFrameBackground->color());
+    connect(textStyleBorderRadius, &QDoubleSpinBox::valueChanged, this, [=]() {
+        textStyleValueChanged(TextStylePropertyType::BorderRound, textStyleBorderRadius->value());
+    });
+
+    WidgetUtils::setWidgetIcon(resetTextStyleBorderForeground, IconCode::Code::UNDO);
+    connect(resetTextStyleBorderForeground, &QToolButton::clicked, this, [=]() {
+        resetTextStyle(TextStylePropertyType::BorderColor);
+    });
+    connect(textStyleBorderForeground, &Awl::ColorLabel::colorChanged, this, [=]() {
+        textStyleValueChanged(TextStylePropertyType::BorderColor, textStyleBorderForeground->color());
+    });
+
+    WidgetUtils::setWidgetIcon(resetTextStyleBorderBackground, IconCode::Code::UNDO);
+    connect(resetTextStyleBorderBackground, &QToolButton::clicked, this, [=]() {
+        resetTextStyle(TextStylePropertyType::BorderFillColor);
+    });
+    connect(textStyleBorderBackground, &Awl::ColorLabel::colorChanged, this, [=]() {
+        textStyleValueChanged(TextStylePropertyType::BorderFillColor, textStyleBorderBackground->color());
     });
 
     WidgetUtils::setWidgetIcon(resetTextStyleColor, IconCode::Code::UNDO);
@@ -1417,9 +1417,9 @@ void EditStyle::retranslate()
         ++idx;
     }
 
-    textStyleFrameType->setItemText(0, muse::qtrc("notation/editstyle", "None", "no frame for text"));
-    textStyleFrameType->setItemText(1, muse::qtrc("notation/editstyle", "Rectangle"));
-    textStyleFrameType->setItemText(2, muse::qtrc("notation/editstyle", "Circle"));
+    textStyleBorderType->setItemText(0, muse::qtrc("notation/editstyle", "None", "no border for text"));
+    textStyleBorderType->setItemText(1, muse::qtrc("notation/editstyle", "Rectangle"));
+    textStyleBorderType->setItemText(2, muse::qtrc("notation/editstyle", "Circle"));
 }
 
 //---------------------------------------------------------
@@ -2832,35 +2832,35 @@ void EditStyle::textStyleChanged(int row)
         }
         break;
 
-        case TextStylePropertyType::FrameType:
-            textStyleFrameType->setCurrentIndex(styleValue(a.sid).toInt());
-            resetTextStyleFrameType->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
-            frameWidget->setEnabled(styleValue(a.sid).toInt() != 0);             // disable if no frame
+        case TextStylePropertyType::BorderType:
+            textStyleBorderType->setCurrentIndex(styleValue(a.sid).toInt());
+            resetTextStyleBorderType->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
+            borderWidget->setEnabled(styleValue(a.sid).toInt() != 0);             // disable if no border
             break;
 
-        case TextStylePropertyType::FramePadding:
-            textStyleFramePadding->setValue(styleValue(a.sid).toDouble());
-            resetTextStyleFramePadding->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
+        case TextStylePropertyType::BorderPadding:
+            textStyleBorderPadding->setValue(styleValue(a.sid).toDouble());
+            resetTextStyleBorderPadding->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case TextStylePropertyType::FrameWidth:
-            textStyleFrameBorder->setValue(styleValue(a.sid).toDouble());
-            resetTextStyleFrameBorder->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
+        case TextStylePropertyType::BorderWidth:
+            textStyleBorder->setValue(styleValue(a.sid).toDouble());
+            resetTextStyleBorder->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case TextStylePropertyType::FrameRound:
-            textStyleFrameBorderRadius->setValue(double(styleValue(a.sid).toInt()));
-            resetTextStyleFrameBorderRadius->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
+        case TextStylePropertyType::BorderRound:
+            textStyleBorderRadius->setValue(double(styleValue(a.sid).toInt()));
+            resetTextStyleBorderRadius->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case TextStylePropertyType::FrameBorderColor:
-            textStyleFrameForeground->setColor(styleValue(a.sid).value<Color>().toQColor());
-            resetTextStyleFrameForeground->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
+        case TextStylePropertyType::BorderColor:
+            textStyleBorderForeground->setColor(styleValue(a.sid).value<Color>().toQColor());
+            resetTextStyleBorderForeground->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
-        case TextStylePropertyType::FrameFillColor:
-            textStyleFrameBackground->setColor(styleValue(a.sid).value<Color>().toQColor());
-            resetTextStyleFrameBackground->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
+        case TextStylePropertyType::BorderFillColor:
+            textStyleBorderBackground->setColor(styleValue(a.sid).value<Color>().toQColor());
+            resetTextStyleBorderBackground->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
         case TextStylePropertyType::Color:

@@ -99,20 +99,20 @@ Column {
         }
     }
 
-    FrameSettings {
-        id: frameSettings
+    BorderSettings {
+        id: borderSettings
         visible: root.model ? !root.model.isDynamicSpecificSettings : false
         height: visible ? implicitHeight : 0
 
         navigationPanel: root.navigationPanel
         navigationRowStart: subscriptOptionsButtonList.navigationRowEnd + 1
 
-        frameType: root.model ? root.model.frameType : null
-        frameBorderColor: root.model ? root.model.frameBorderColor : null
-        frameFillColor: root.model ? root.model.frameFillColor : null
-        frameThickness: root.model ? root.model.frameThickness : null
-        frameMargin: root.model ? root.model.frameMargin : null
-        frameCornerRadius: root.model ? root.model.frameCornerRadius : null
+        borderType: root.model ? root.model.borderType : null
+        borderColor: root.model ? root.model.borderColor : null
+        borderFillColor: root.model ? root.model.borderFillColor : null
+        borderThickness: root.model ? root.model.borderThickness : null
+        borderMargin: root.model ? root.model.borderMargin : null
+        borderCornerRadius: root.model ? root.model.borderCornerRadius : null
     }
 
     SeparatorLine { anchors.margins: -12 }
@@ -125,7 +125,7 @@ Column {
 
         navigationName: "Line Spacing"
         navigationPanel: root.navigationPanel
-        navigationRowStart: frameSettings.navigationRowEnd + 1
+        navigationRowStart: borderSettings.navigationRowEnd + 1
 
         titleText: qsTrc("inspector", "Line spacing")
         //: Stands for "Lines". Used for text line spacing controls, for example.

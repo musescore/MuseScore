@@ -32,31 +32,31 @@ Column {
     width: parent.width
     spacing: 12
 
-    property string navigationName: "FrameSettings"
+    property string navigationName: "BorderSettings"
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
     readonly property int navigationRowEnd: cornerRadiusSection.navigationRowEnd
 
-    required property PropertyItem frameType
-    required property PropertyItem frameBorderColor
-    required property PropertyItem frameFillColor
-    required property PropertyItem frameThickness
-    required property PropertyItem frameMargin
-    required property PropertyItem frameCornerRadius
+    required property PropertyItem borderType
+    required property PropertyItem borderColor
+    required property PropertyItem borderFillColor
+    required property PropertyItem borderThickness
+    required property PropertyItem borderMargin
+    required property PropertyItem borderCornerRadius
 
     FlatRadioButtonGroupPropertyView {
-        id: frameSection
-        titleText: qsTrc("inspector", "Frame")
-        propertyItem: root.frameType ? root.frameType : null
+        id: borderSection
+        titleText: qsTrc("inspector", "Border")
+        propertyItem: root.borderType ? root.borderType : null
 
-        navigationName: "FrameMenu"
+        navigationName: "BorderMenu"
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart
 
         model: [
-            { text: qsTrc("inspector", "None"), value: TextTypes.FRAME_TYPE_NONE, titleRole: qsTrc("inspector", "None") },
-            { iconCode: IconCode.FRAME_SQUARE, value: TextTypes.FRAME_TYPE_SQUARE, titleRole: qsTrc("inspector", "Rectangle") },
-            { iconCode: IconCode.FRAME_CIRCLE, value: TextTypes.FRAME_TYPE_CIRCLE, titleRole: qsTrc("inspector", "Circle") }
+            { text: qsTrc("inspector", "None"), value: TextTypes.BORDER_TYPE_NONE, titleRole: qsTrc("inspector", "None") },
+            { iconCode: IconCode.BORDER_SQUARE, value: TextTypes.BORDER_TYPE_SQUARE, titleRole: qsTrc("inspector", "Rectangle") },
+            { iconCode: IconCode.BORDER_CIRCLE, value: TextTypes.BORDER_TYPE_CIRCLE, titleRole: qsTrc("inspector", "Circle") }
         ]
     }
 
@@ -72,13 +72,13 @@ Column {
 
             navigationName: "BorderColorMenu"
             navigationPanel: root.navigationPanel
-            navigationRowStart: frameSection.navigationRowEnd + 1
+            navigationRowStart: borderSection.navigationRowEnd + 1
 
-            visible: root.frameBorderColor ? root.frameBorderColor.isEnabled : false
+            visible: root.borderColor ? root.borderColor.isEnabled : false
             height: visible ? implicitHeight : 0
 
             titleText: qsTrc("inspector", "Border")
-            propertyItem: root.frameBorderColor
+            propertyItem: root.borderColor
         }
 
         ColorSection {
@@ -91,11 +91,11 @@ Column {
             navigationPanel: root.navigationPanel
             navigationRowStart: borderColorSection.navigationRowEnd + 1
 
-            visible: root.frameFillColor ? root.frameFillColor.isEnabled : false
+            visible: root.borderFillColor ? root.borderFillColor.isEnabled : false
             height: visible ? implicitHeight : 0
 
             titleText: qsTrc("inspector", "Fill color")
-            propertyItem: root.frameFillColor
+            propertyItem: root.borderFillColor
         }
     }
 
@@ -113,11 +113,11 @@ Column {
             navigationPanel: root.navigationPanel
             navigationRowStart: highlightColorSection.navigationRowEnd + 1
 
-            visible: root.frameThickness ? root.frameThickness.isEnabled : false
+            visible: root.borderThickness ? root.borderThickness.isEnabled : false
             height: visible ? implicitHeight : 0
 
             titleText: qsTrc("inspector", "Thickness")
-            propertyItem: root.frameThickness
+            propertyItem: root.borderThickness
 
             step: 0.1
             minValue: 0
@@ -134,11 +134,11 @@ Column {
             navigationPanel: root.navigationPanel
             navigationRowStart: thicknessSection.navigationRowEnd + 1
 
-            visible: root.frameMargin ? root.frameMargin.isEnabled : false
+            visible: root.borderMargin ? root.borderMargin.isEnabled : false
             height: visible ? implicitHeight : 0
 
             titleText: qsTrc("inspector", "Padding")
-            propertyItem: root.frameMargin
+            propertyItem: root.borderMargin
 
             step: 0.1
             minValue: 0
@@ -156,11 +156,11 @@ Column {
         navigationPanel: root.navigationPanel
         navigationRowStart: marginSection.navigationRowEnd + 1
 
-        visible: root.frameCornerRadius ? root.frameCornerRadius.isEnabled : false
+        visible: root.borderCornerRadius ? root.borderCornerRadius.isEnabled : false
         height: visible ? implicitHeight : 0
 
         titleText: qsTrc("inspector", "Corner radius")
-        propertyItem: root.frameCornerRadius
+        propertyItem: root.borderCornerRadius
 
         step: 1
         decimals: 2
