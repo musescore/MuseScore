@@ -30,37 +30,38 @@ import Muse.Ui 1.0
 
 StyleControlRowWithReset {
     id: root
+
     property alias model: radioButtonGroup.model
-
-    controlAreaWidth: 203
-
 
     RadioButtonGroup {
         id: radioButtonGroup
-        height: 70
+
         anchors.fill: parent
 
         delegate: FlatRadioButton {
-            width: 100
             height: 70
+
+            navigation.accessible.name: modelData.title ? modelData.title : (modelData.text ? modelData.text : "")
+
+            checked: styleItem.value === modelData.value
+            onToggled: styleItem.value = modelData.value
+
             Column {
                 anchors.centerIn: parent
                 height: childrenRect.height
                 spacing: 8
+
                 StyledIconLabel {
                     anchors.horizontalCenter: parent.horizontalCenter
                     iconCode: modelData.iconCode ? modelData.iconCode : IconCode.NONE
                     font.pixelSize: 28
                 }
+
                 StyledTextLabel {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: modelData.text ? modelData.text : ""
                 }
             }
-            navigation.accessible.name: modelData.title ? modelData.title : (modelData.text ? modelData.text : "")
-
-            checked: styleItem.value === modelData.value
-            onToggled: styleItem.value = modelData.value
         }
     }
 }

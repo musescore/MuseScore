@@ -75,7 +75,7 @@ StyledPopupView {
     }
 
     function checkPedalState(string, state) {
-        return harpModel.pedalState[string] == state
+        return harpModel.pedalState[string] === state
     }
 
     function updatePedalState(string, state) {
@@ -227,7 +227,6 @@ StyledPopupView {
                 { buttonId: "AFlatButton",  stringId: 6, pos: 0, col: 8, btnGroup: aGroup },
                 { buttonId: "ANatButton",   stringId: 6, pos: 1, col: 8, btnGroup: aGroup },
                 { buttonId: "ASharpButton", stringId: 6, pos: 2, col: 8, btnGroup: aGroup },
-
             ]
 
             RoundedRadioButton {

@@ -35,6 +35,8 @@ ExportSettingsPage {
         model: root.model.musicXmlLayoutTypes()
 
         delegate: RoundedRadioButton {
+            width: ListView.view.width
+
             text: modelData["text"]
 
             navigation.name: "MusicXmlLayoutTypeRadioButton " + text
