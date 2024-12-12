@@ -80,7 +80,7 @@ static bool isLayerVisible(const SystemObjectGroups& groups)
 SystemObjectsLayerTreeItem::SystemObjectsLayerTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
     : AbstractLayoutPanelTreeItem(LayoutPanelItemType::SYSTEM_OBJECTS_LAYER, masterNotation, notation, parent)
 {
-    setIsEditable(true);
+    setSettingsAvailable(true);
     setIsExpandable(false);
 }
 
@@ -89,12 +89,12 @@ void SystemObjectsLayerTreeItem::init(const Staff* staff, const SystemObjectGrou
     m_systemObjectGroups = systemObjects;
 
     setStaff(staff);
-    setTitle(formatLayerTitle(systemObjects));
-    setIsVisible(isLayerVisible(systemObjects));
 
     bool isTopLayer = staff->score()->staff(0) == staff;
     setIsRemovable(!isTopLayer);
     setIsSelectable(!isTopLayer);
+
+    updateState();
 
     listenUndoStackChanged();
     listenVisibleChanged();
@@ -239,6 +239,8 @@ void SystemObjectsLayerTreeItem::updateStaff()
 void SystemObjectsLayerTreeItem::updateState()
 {
     setTitle(formatLayerTitle(m_systemObjectGroups));
+    setSettingsEnabled(!m_systemObjectGroups.empty());
+
     m_ignoreVisibilityChanges = true;
     setIsVisible(isLayerVisible(m_systemObjectGroups));
     m_ignoreVisibilityChanges = false;
