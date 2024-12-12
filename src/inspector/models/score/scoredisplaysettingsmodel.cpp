@@ -70,7 +70,7 @@ void ScoreSettingsModel::resetProperties()
 {
     setShouldShowInvisible(false);
     setShouldShowFormatting(false);
-    setShouldShowFrames(false);
+    setShouldShowBorders(false);
     setShouldShowPageMargins(false);
 }
 
@@ -93,9 +93,9 @@ bool ScoreSettingsModel::shouldShowFormatting() const
     return m_shouldShowFormatting;
 }
 
-bool ScoreSettingsModel::shouldShowFrames() const
+bool ScoreSettingsModel::shouldShowBorders() const
 {
-    return m_shouldShowFrames;
+    return m_shouldShowBorders;
 }
 
 bool ScoreSettingsModel::shouldShowPageMargins() const
@@ -128,14 +128,14 @@ void ScoreSettingsModel::setShouldShowFormatting(bool shouldShowFormatting)
     updateShouldShowFormatting(shouldShowFormatting);
 }
 
-void ScoreSettingsModel::setShouldShowFrames(bool shouldShowFrames)
+void ScoreSettingsModel::setShouldShowBorders(bool shouldShowBorders)
 {
-    if (m_shouldShowFrames == shouldShowFrames) {
+    if (m_shouldShowBorders == shouldShowBorders) {
         return;
     }
 
-    dispatcher()->dispatch("show-frames");
-    updateShouldShowFrames(shouldShowFrames);
+    dispatcher()->dispatch("show-borders");
+    updateShouldShowBorders(shouldShowBorders);
 }
 
 void ScoreSettingsModel::setShouldShowPageMargins(bool shouldShowPageMargins)
@@ -178,14 +178,14 @@ void ScoreSettingsModel::updateShouldShowFormatting(bool isVisible)
     emit shouldShowFormattingChanged(isVisible);
 }
 
-void ScoreSettingsModel::updateShouldShowFrames(bool isVisible)
+void ScoreSettingsModel::updateShouldShowBorders(bool isVisible)
 {
-    if (isVisible == m_shouldShowFrames) {
+    if (isVisible == m_shouldShowBorders) {
         return;
     }
 
-    m_shouldShowFrames = isVisible;
-    emit shouldShowFramesChanged(isVisible);
+    m_shouldShowBorders = isVisible;
+    emit shouldShowBordersChanged(isVisible);
 }
 
 void ScoreSettingsModel::updateShouldShowPageMargins(bool isVisible)
@@ -217,8 +217,8 @@ void ScoreSettingsModel::updateFromConfig(ScoreConfigType configType)
     case notation::ScoreConfigType::ShowUnprintableElements:
         updateShouldShowFormatting(scoreConfig().isShowUnprintableElements);
         break;
-    case notation::ScoreConfigType::ShowFrames:
-        updateShouldShowFrames(scoreConfig().isShowFrames);
+    case notation::ScoreConfigType::ShowBorders:
+        updateShouldShowBorders(scoreConfig().isShowBorders);
         break;
     case notation::ScoreConfigType::ShowPageMargins:
         updateShouldShowPageMargins(scoreConfig().isShowPageMargins);
@@ -237,7 +237,7 @@ void ScoreSettingsModel::updateAll()
 
     updateShouldShowInvisible(config.isShowInvisibleElements);
     updateShouldShowFormatting(config.isShowUnprintableElements);
-    updateShouldShowFrames(config.isShowFrames);
+    updateShouldShowBorders(config.isShowBorders);
     updateShouldShowSoundFlags(config.isShowSoundFlags);
     updateShouldShowPageMargins(config.isShowPageMargins);
 }

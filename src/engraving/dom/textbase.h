@@ -39,10 +39,10 @@ class TextBase;
 class TextBlock;
 
 //---------------------------------------------------------
-//   FrameType
+//   BorderType
 //---------------------------------------------------------
 
-enum class FrameType : char {
+enum class BorderType : char {
     NO_FRAME, SQUARE, CIRCLE
 };
 
@@ -408,9 +408,9 @@ public:
     bool isTextInvalid() const { return m_textInvalid; }
 
     // helper functions
-    bool hasFrame() const { return m_frameType != FrameType::NO_FRAME; }
-    bool circle() const { return m_frameType == FrameType::CIRCLE; }
-    bool square() const { return m_frameType == FrameType::SQUARE; }
+    bool hasBorder() const { return m_borderType != BorderType::NO_FRAME; }
+    bool circle() const { return m_borderType == BorderType::CIRCLE; }
+    bool square() const { return m_borderType == BorderType::SQUARE; }
 
     TextStyleType textStyleType() const { return m_textStyleType; }
     void setTextStyleType(TextStyleType id) { m_textStyleType = id; }
@@ -443,26 +443,26 @@ public:
     using EngravingObject::undoChangeProperty;
 
     Color textColor() const;
-    FrameType frameType() const { return m_frameType; }
-    void setFrameType(FrameType val) { m_frameType = val; }
+    BorderType borderType() const { return m_borderType; }
+    void setBorderType(BorderType val) { m_borderType = val; }
     double textLineSpacing() const { return m_textLineSpacing; }
     void setTextLineSpacing(double val) { m_textLineSpacing = val; }
     Color bgColor() const { return m_bgColor; }
     void setBgColor(const Color& val) { m_bgColor = val; }
-    Color frameColor() const { return m_frameColor; }
-    void setFrameColor(const Color& val) { m_frameColor = val; }
-    Spatium frameWidth() const { return m_frameWidth; }
-    void setFrameWidth(Spatium val) { m_frameWidth = val; }
+    Color borderColor() const { return m_borderColor; }
+    void setBorderColor(const Color& val) { m_borderColor = val; }
+    Spatium borderWidth() const { return m_borderWidth; }
+    void setBorderWidth(Spatium val) { m_borderWidth = val; }
     Spatium paddingWidth() const { return m_paddingWidth; }
     void setPaddingWidth(Spatium val) { m_paddingWidth = val; }
-    int frameRound() const { return m_frameRound; }
-    void setFrameRound(int val) { m_frameRound = val; }
+    int borderRound() const { return m_borderRound; }
+    void setBorderRound(int val) { m_borderRound = val; }
 
     struct LayoutData : public EngravingItem::LayoutData {
         std::vector<TextBlock> blocks;
         bool layoutInvalid = true;
 
-        RectF frame;
+        RectF border;
 
         size_t rows() const { return blocks.size(); }
         const TextBlock& textBlock(size_t i) const { return blocks.at(i); }
@@ -474,8 +474,8 @@ public:
 
     void createBlocks();
     void createBlocks(LayoutData* ldata) const;
-    void layoutFrame();
-    void layoutFrame(LayoutData* ldata) const;
+    void layoutBorder();
+    void layoutBorder(LayoutData* ldata) const;
 
     //! NOTE It can only be set for some types of text, see who has the setter.
     //! At the moment it's: Text, Jump, Marker
@@ -526,13 +526,13 @@ private:
 
     Align m_align;
 
-    FrameType m_frameType = FrameType::NO_FRAME;
+    BorderType m_borderType = BorderType::NO_FRAME;
     double m_textLineSpacing = 1.0;
     Color m_bgColor;
-    Color m_frameColor;
-    Spatium m_frameWidth;
+    Color m_borderColor;
+    Spatium m_borderWidth;
     Spatium m_paddingWidth;
-    int m_frameRound = 0;
+    int m_borderRound = 0;
 
     // there are two representations of text; only one
     // might be valid and the other can be constructed from it

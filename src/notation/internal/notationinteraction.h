@@ -84,7 +84,7 @@ public:
                 engraving::staff_idx_t staffIndex = 0) override;
     void selectAll() override;
     void selectSection() override;
-    void selectFirstElement(bool frame = false) override;
+    void selectFirstElement(bool border = false) override;
     void selectLastElement() override;
     INotationSelectionPtr selection() const override;
     void clearSelection() override;
@@ -219,7 +219,7 @@ public:
     void changeSelectedElementsVoiceAssignment(VoiceAssignment voiceAssignment) override;
     void addAnchoredLineToSelectedNotes() override;
 
-    void addTextToTopFrame(TextStyleType type) override;
+    void addTextToTopBorder(TextStyleType type) override;
 
     muse::Ret canAddTextToItem(TextStyleType type, const EngravingItem* item) const override;
     void addTextToItem(TextStyleType type, EngravingItem* item) override;

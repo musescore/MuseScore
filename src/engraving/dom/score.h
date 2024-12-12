@@ -582,14 +582,14 @@ public:
 
     bool isShowInvisible() const { return m_showInvisible; }
     bool showUnprintable() const { return m_showUnprintable; }
-    bool showFrames() const { return m_showFrames; }
+    bool showBorders() const { return m_showBorders; }
     bool showPageborders() const { return m_showPageborders; }
     bool showSoundFlags() const { return m_showSoundFlags; }
     bool markIrregularMeasures() const { return m_markIrregularMeasures; }
     bool showInstrumentNames() const { return m_showInstrumentNames; }
     void setShowInvisible(bool v);
     void setShowUnprintable(bool v);
-    void setShowFrames(bool v);
+    void setShowBorders(bool v);
     void setShowPageborders(bool v);
     void setShowSoundFlags(bool v);
     void setMarkIrregularMeasures(bool v);
@@ -1136,7 +1136,7 @@ private:
 
     bool m_showInvisible = true;
     bool m_showUnprintable = true;
-    bool m_showFrames = true;
+    bool m_showBorders = true;
     bool m_showPageborders = false;
     bool m_showSoundFlags = true;
     bool m_markIrregularMeasures = true;

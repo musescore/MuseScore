@@ -271,8 +271,8 @@ static bool readTextProperties(XmlReader& e, ReadContext& ctx, TextBase* t, Engr
         t->setXmlText(s);
     } else if (tag == "foregroundColor") { // same as "color" ?
         e.skipCurrentElement();
-    } else if (tag == "frame") {
-        t->setFrameType(e.readBool() ? FrameType::SQUARE : FrameType::NO_FRAME);
+    } else if (tag == "border") {
+        t->setBorderType(e.readBool() ? BorderType::SQUARE : BorderType::NO_FRAME);
         t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
     } else if (tag == "halign") {
         Align align = t->align();
@@ -494,23 +494,23 @@ static void readFingering114(XmlReader& e, Fingering* fing)
                 fing->setProperty(Pid::TEXT_STYLE, TextStyleType::STRING_NUMBER);
                 fing->setPropertyFlags(Pid::TEXT_STYLE, PropertyFlags::UNSTYLED);
             }
-        } else if (tag == "frame") {
-            auto frame = e.readInt();
-            if (frame) {
+        } else if (tag == "border") {
+            auto border = e.readInt();
+            if (border) {
                 if (isStringNumber) {       //default value is circle for stringnumber, square is set in tag circle
-                    fing->setFrameType(FrameType::CIRCLE);
+                    fing->setBorderType(BorderType::CIRCLE);
                 } else {     //default value is square for stringnumber, circle is set in tag circle
-                    fing->setFrameType(FrameType::SQUARE);
+                    fing->setBorderType(BorderType::SQUARE);
                 }
             } else {
-                fing->setFrameType(FrameType::NO_FRAME);
+                fing->setBorderType(BorderType::NO_FRAME);
             }
         } else if (tag == "circle") {
             auto circle = e.readInt();
             if (circle) {
-                fing->setFrameType(FrameType::CIRCLE);
+                fing->setBorderType(BorderType::CIRCLE);
             } else {
-                fing->setFrameType(FrameType::SQUARE);
+                fing->setBorderType(BorderType::SQUARE);
             }
         } else {
             e.skipCurrentElement();
@@ -2804,8 +2804,8 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             masterScore->m_fileDivision = e.readInt();
         } else if (tag == "showInvisible") {
             masterScore->setShowInvisible(e.readInt());
-        } else if (tag == "showFrames") {
-            masterScore->setShowFrames(e.readInt());
+        } else if (tag == "showBorders") {
+            masterScore->setShowBorders(e.readInt());
         } else if (tag == "showMargins") {
             masterScore->setShowPageborders(e.readInt());
         } else if (tag == "Style") {

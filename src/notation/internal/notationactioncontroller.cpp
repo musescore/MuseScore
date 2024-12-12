@@ -187,8 +187,8 @@ void NotationActionController::init()
     registerMoveSelectionAction("prev-element", MoveSelectionType::EngravingItem, MoveDirection::Left, PlayMode::PlayNote);
     registerMoveSelectionAction("next-track", MoveSelectionType::Track, MoveDirection::Right, PlayMode::PlayChord);
     registerMoveSelectionAction("prev-track", MoveSelectionType::Track, MoveDirection::Left, PlayMode::PlayChord);
-    registerMoveSelectionAction("next-frame", MoveSelectionType::Frame, MoveDirection::Right);
-    registerMoveSelectionAction("prev-frame", MoveSelectionType::Frame, MoveDirection::Left);
+    registerMoveSelectionAction("next-border", MoveSelectionType::Border, MoveDirection::Right);
+    registerMoveSelectionAction("prev-border", MoveSelectionType::Border, MoveDirection::Left);
     registerMoveSelectionAction("next-system", MoveSelectionType::System, MoveDirection::Right);
     registerMoveSelectionAction("prev-system", MoveSelectionType::System, MoveDirection::Left);
 
@@ -329,7 +329,7 @@ void NotationActionController::init()
     registerAction("composer-text", [this]() { addText(TextStyleType::COMPOSER); });
     registerAction("poet-text", [this]() { addText(TextStyleType::LYRICIST); });
     registerAction("part-text", [this]() { addText(TextStyleType::INSTRUMENT_EXCERPT); });
-    registerAction("frame-text", [this]() { addText(TextStyleType::FRAME); });
+    registerAction("border-text", [this]() { addText(TextStyleType::FRAME); });
 
     registerAction("system-text", [this]() { addText(TextStyleType::SYSTEM); });
     registerAction("staff-text", [this]() { addText(TextStyleType::STAFF); });
@@ -358,7 +358,7 @@ void NotationActionController::init()
 
     registerAction("show-invisible", [this]() { toggleScoreConfig(ScoreConfigType::ShowInvisibleElements); });
     registerAction("show-unprintable", [this]() { toggleScoreConfig(ScoreConfigType::ShowUnprintableElements); });
-    registerAction("show-frames", [this]() { toggleScoreConfig(ScoreConfigType::ShowFrames); });
+    registerAction("show-borders", [this]() { toggleScoreConfig(ScoreConfigType::ShowBorders); });
     registerAction("show-pageborders", [this]() { toggleScoreConfig(ScoreConfigType::ShowPageMargins); });
     registerAction("show-soundflags", [this]() { toggleScoreConfig(ScoreConfigType::ShowSoundFlags); });
     registerAction("show-irregular", [this]() { toggleScoreConfig(ScoreConfigType::MarkIrregularMeasures); });
@@ -1320,7 +1320,7 @@ void NotationActionController::addText(TextStyleType type)
 
     if (isVerticalBoxTextStyle(type)) {
         if (!item || !item->isVBox()) {
-            interaction->addTextToTopFrame(type);
+            interaction->addTextToTopBorder(type);
             return;
         }
     }
@@ -2001,8 +2001,8 @@ void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
     case ScoreConfigType::ShowUnprintableElements:
         config.isShowUnprintableElements = !config.isShowUnprintableElements;
         break;
-    case ScoreConfigType::ShowFrames:
-        config.isShowFrames = !config.isShowFrames;
+    case ScoreConfigType::ShowBorders:
+        config.isShowBorders = !config.isShowBorders;
         break;
     case ScoreConfigType::ShowPageMargins:
         config.isShowPageMargins = !config.isShowPageMargins;

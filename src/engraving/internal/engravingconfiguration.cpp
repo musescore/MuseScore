@@ -47,7 +47,7 @@ static const Settings::Key INVERT_SCORE_COLOR("engraving", "engraving/scoreColor
 
 static const Settings::Key ALL_VOICES_COLOR("engraving", "engraving/colors/allVoicesColor");
 static const Settings::Key FORMATTING_COLOR("engraving", "engraving/colors/formattingColor");
-static const Settings::Key FRAME_COLOR("engraving", "engraving/colors/frameColor");
+static const Settings::Key FRAME_COLOR("engraving", "engraving/colors/borderColor");
 static const Settings::Key UNLINKED_COLOR("engraving", "engraving/colors/unlinkedColor");
 
 static const Settings::Key DYNAMICS_APPLY_TO_ALL_VOICES("engraving", "score/dynamicsApplyToAllVoices");
@@ -109,10 +109,10 @@ void EngravingConfiguration::init()
     settings()->setDefaultValue(DYNAMICS_APPLY_TO_ALL_VOICES, Val(true));
 
     settings()->setDefaultValue(FRAME_COLOR, Val(Color("#A0A0A4").toQColor()));
-    settings()->setDescription(FRAME_COLOR, muse::trc("engraving", "Frame color"));
+    settings()->setDescription(FRAME_COLOR, muse::trc("engraving", "Border color"));
     settings()->setCanBeManuallyEdited(FRAME_COLOR, true);
     settings()->valueChanged(FRAME_COLOR).onReceive(nullptr, [this](const Val& val) {
-        m_frameColorChanged.send(Color::fromQColor(val.toQColor()));
+        m_borderColorChanged.send(Color::fromQColor(val.toQColor()));
     });
 
     settings()->setDefaultValue(FORMATTING_COLOR, Val(Color("#C31989").toQColor()));
@@ -333,14 +333,14 @@ muse::async::Channel<Color> EngravingConfiguration::formattingColorChanged() con
     return m_formattingColorChanged;
 }
 
-Color EngravingConfiguration::frameColor() const
+Color EngravingConfiguration::borderColor() const
 {
     return Color::fromQColor(settings()->value(FRAME_COLOR).toQColor());
 }
 
-muse::async::Channel<Color> EngravingConfiguration::frameColorChanged() const
+muse::async::Channel<Color> EngravingConfiguration::borderColorChanged() const
 {
-    return m_frameColorChanged;
+    return m_borderColorChanged;
 }
 
 Color EngravingConfiguration::unlinkedColor() const

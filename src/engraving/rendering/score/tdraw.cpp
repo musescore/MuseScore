@@ -988,18 +988,18 @@ void TDraw::draw(const Box* item, Painter* painter)
 
     const Box::LayoutData* ldata = item->ldata();
 
-    const bool showHighlightedFrame = item->selected() || item->dropTarget();
-    const bool showFrame = showHighlightedFrame || (item->score() ? item->score()->showFrames() : false);
+    const bool showHighlightedBorder = item->selected() || item->dropTarget();
+    const bool showBorder = showHighlightedBorder || (item->score() ? item->score()->showBorders() : false);
 
-    if (showFrame) {
+    if (showBorder) {
         double lineWidth = item->spatium() * .15;
         Pen pen;
         pen.setWidthF(lineWidth);
         pen.setJoinStyle(PenJoinStyle::MiterJoin);
         pen.setCapStyle(PenCapStyle::SquareCap);
-        pen.setColor(showHighlightedFrame
+        pen.setColor(showHighlightedBorder
                      ? item->configuration()->selectionColor()
-                     : item->configuration()->frameColor());
+                     : item->configuration()->borderColor());
         pen.setDashPattern({ 1, 3 });
 
         painter->setBrush(BrushStyle::NoBrush);
@@ -1697,13 +1697,13 @@ void TDraw::drawTextBase(const TextBase* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     const TextBase::LayoutData* ldata = item->ldata();
-    if (item->hasFrame()) {
+    if (item->hasBorder()) {
         double baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
-        if (!RealIsNull(item->frameWidth().val())) {
-            Color fColor = item->curColor(item->visible(), item->frameColor());
-            double frameWidthVal = item->frameWidth().val() * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
+        if (!RealIsNull(item->borderWidth().val())) {
+            Color fColor = item->curColor(item->visible(), item->borderColor());
+            double borderWidthVal = item->borderWidth().val() * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
 
-            Pen pen(fColor, frameWidthVal, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
+            Pen pen(fColor, borderWidthVal, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
             painter->setPen(pen);
         } else {
             painter->setNoPen();
@@ -1711,15 +1711,15 @@ void TDraw::drawTextBase(const TextBase* item, Painter* painter)
         Color bg(item->bgColor());
         painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
         if (item->circle()) {
-            painter->drawEllipse(ldata->frame);
+            painter->drawEllipse(ldata->border);
         } else {
-            double frameRoundFactor = (item->sizeIsSpatiumDependent() ? (item->spatium() / baseSpatium) / 2 : 0.5f);
+            double borderRoundFactor = (item->sizeIsSpatiumDependent() ? (item->spatium() / baseSpatium) / 2 : 0.5f);
 
-            int r2 = item->frameRound() * frameRoundFactor;
+            int r2 = item->borderRound() * borderRoundFactor;
             if (r2 > 99) {
                 r2 = 99;
             }
-            painter->drawRoundedRect(ldata->frame, item->frameRound() * frameRoundFactor, r2);
+            painter->drawRoundedRect(ldata->border, item->borderRound() * borderRoundFactor, r2);
         }
     }
     painter->setBrush(BrushStyle::NoBrush);
@@ -1888,10 +1888,10 @@ void TDraw::draw(const Harmony* item, Painter* painter)
         return;
     }
 
-    if (item->hasFrame()) {
-        if (!RealIsNull(item->frameWidth().val())) {
-            Color color = item->frameColor();
-            Pen pen(color, item->frameWidth().val() * item->spatium(), PenStyle::SolidLine,
+    if (item->hasBorder()) {
+        if (!RealIsNull(item->borderWidth().val())) {
+            Color color = item->borderColor();
+            Pen pen(color, item->borderWidth().val() * item->spatium(), PenStyle::SolidLine,
                     PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
             painter->setPen(pen);
         } else {
@@ -1900,13 +1900,13 @@ void TDraw::draw(const Harmony* item, Painter* painter)
         Color bg(item->bgColor());
         painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
         if (item->circle()) {
-            painter->drawArc(ldata->frame, 0, 5760);
+            painter->drawArc(ldata->border, 0, 5760);
         } else {
-            int r2 = item->frameRound();
+            int r2 = item->borderRound();
             if (r2 > 99) {
                 r2 = 99;
             }
-            painter->drawRoundedRect(ldata->frame, item->frameRound(), r2);
+            painter->drawRoundedRect(ldata->border, item->borderRound(), r2);
         }
     }
     painter->setBrush(BrushStyle::NoBrush);

@@ -54,7 +54,7 @@ public:
         FONT_ALIGN_V_BASELINE = 3
     };
 
-    enum class FrameType {
+    enum class BorderType {
         FRAME_TYPE_NONE = 0,
         FRAME_TYPE_SQUARE,
         FRAME_TYPE_CIRCLE
@@ -132,7 +132,7 @@ public:
     };
 
     Q_ENUM(FontStyle)
-    Q_ENUM(FrameType)
+    Q_ENUM(BorderType)
     Q_ENUM(TextType)
     Q_ENUM(TextSubscriptMode)
 

@@ -459,18 +459,18 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             set(Sid::systemTextPosBelow, PointF(e.readPoint()));
         } else if (tag == "systemMinDistance") { // pre-4.4 typo
             set(Sid::systemTextMinDistance, Spatium(e.readDouble()));
-        } else if (tag == "systemFrameType") { // pre-4.4 typo
-            set(Sid::systemTextFrameType, e.readInt());
-        } else if (tag == "systemFramePadding") { // pre-4.4 typo
-            set(Sid::systemTextFramePadding, e.readDouble());
-        } else if (tag == "systemFrameWidth") { // pre-4.4 typo
-            set(Sid::systemTextFrameWidth, e.readDouble());
-        } else if (tag == "systemFrameRound") { // pre-4.4 typo
-            set(Sid::systemTextFrameRound, e.readInt());
-        } else if (tag == "systemFrameFgColor") { // pre-4.4 typo
-            set(Sid::systemTextFrameFgColor, e.readColor());
-        } else if (tag == "systemFrameBgColor") { // pre-4.4 typo
-            set(Sid::systemTextFrameBgColor, e.readColor());
+        } else if (tag == "systemBorderType") { // pre-4.4 typo
+            set(Sid::systemTextBorderType, e.readInt());
+        } else if (tag == "systemBorderPadding") { // pre-4.4 typo
+            set(Sid::systemTextBorderPadding, e.readDouble());
+        } else if (tag == "systemBorderWidth") { // pre-4.4 typo
+            set(Sid::systemTextBorderWidth, e.readDouble());
+        } else if (tag == "systemBorderRound") { // pre-4.4 typo
+            set(Sid::systemTextBorderRound, e.readInt());
+        } else if (tag == "systemBorderFgColor") { // pre-4.4 typo
+            set(Sid::systemTextBorderFgColor, e.readColor());
+        } else if (tag == "systemBorderBgColor") { // pre-4.4 typo
+            set(Sid::systemTextBorderBgColor, e.readColor());
         } else if (tag == "staffFontFace") { // pre-4.4 typo
             set(Sid::staffTextFontFace, e.readText());
         } else if (tag == "staffFontSize") { // pre-4.4 typo
@@ -498,18 +498,18 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             set(Sid::staffTextMinDistance, Spatium(e.readDouble()));
         } else if (tag == "staffMinDistance") { // pre-4.4 typo
             set(Sid::staffTextMinDistance, Spatium(e.readDouble()));
-        } else if (tag == "staffFrameType") { // pre-4.4 typo
-            set(Sid::staffTextFrameType, e.readInt());
-        } else if (tag == "staffFramePadding") { // pre-4.4 typo
-            set(Sid::staffTextFramePadding, e.readDouble());
-        } else if (tag == "staffFrameWidth") { // pre-4.4 typo
-            set(Sid::staffTextFrameWidth, e.readDouble());
-        } else if (tag == "staffFrameRound") { // pre-4.4 typo
-            set(Sid::staffTextFrameRound, e.readInt());
-        } else if (tag == "staffFrameFgColor") { // pre-4.4 typo
-            set(Sid::staffTextFrameFgColor, e.readColor());
-        } else if (tag == "staffFrameBgColor") { // pre-4.4 typo
-            set(Sid::staffTextFrameBgColor, e.readColor());
+        } else if (tag == "staffBorderType") { // pre-4.4 typo
+            set(Sid::staffTextBorderType, e.readInt());
+        } else if (tag == "staffBorderPadding") { // pre-4.4 typo
+            set(Sid::staffTextBorderPadding, e.readDouble());
+        } else if (tag == "staffBorderWidth") { // pre-4.4 typo
+            set(Sid::staffTextBorderWidth, e.readDouble());
+        } else if (tag == "staffBorderRound") { // pre-4.4 typo
+            set(Sid::staffTextBorderRound, e.readInt());
+        } else if (tag == "staffBorderFgColor") { // pre-4.4 typo
+            set(Sid::staffTextBorderFgColor, e.readColor());
+        } else if (tag == "staffBorderBgColor") { // pre-4.4 typo
+            set(Sid::staffTextBorderBgColor, e.readColor());
         } else if (tag == "dymanicsShowTabCommon") { // pre-4.4 typo in gp-style.mss
             set(Sid::dynamicsShowTabCommon, bool(e.readInt()));
         } else if (tag == "tupletOufOfStaff") {

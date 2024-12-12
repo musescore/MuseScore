@@ -161,12 +161,12 @@ void Expression::mapPropertiesFromOldExpressions(StaffText* staffText)
         setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         setPropertyFlags(Pid::SNAP_TO_DYNAMICS, PropertyFlags::UNSTYLED);
     }
-    if (staffText->frameType() != FrameType::NO_FRAME) {
-        setFrameType(staffText->frameType());
-        setFrameWidth(staffText->frameWidth());
-        setFrameColor(staffText->frameColor());
+    if (staffText->borderType() != BorderType::NO_FRAME) {
+        setBorderType(staffText->borderType());
+        setBorderWidth(staffText->borderWidth());
+        setBorderColor(staffText->borderColor());
         setBgColor(staffText->bgColor());
-        setFrameRound(staffText->frameRound());
+        setBorderRound(staffText->borderRound());
     }
 }
 
