@@ -40,7 +40,8 @@ FocusableControl {
     readonly property bool isSelected: item && item.isSelected
     readonly property bool isSelectable: item && item.isSelectable
     readonly property bool isExpandable: item && item.isExpandable
-    readonly property bool isEditable: item && item.isEditable
+    readonly property bool settingsAvailable: item && item.settingsAvailable
+    readonly property bool settingsEnabled: item && item.settingsEnabled
 
     property int sideMargin: 0
 
@@ -301,10 +302,10 @@ FocusableControl {
             Layout.alignment: Qt.AlignRight
             Layout.preferredWidth: width
 
-            visible: root.isEditable
+            visible: root.settingsAvailable
+            enabled: root.visible && root.settingsEnabled
 
             objectName: "SettingsBtn"
-            enabled: root.visible
             navigation.panel: root.navigation.panel
             navigation.row: root.navigation.row
             navigation.column: 3

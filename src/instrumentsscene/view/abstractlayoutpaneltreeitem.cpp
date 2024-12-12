@@ -88,9 +88,14 @@ bool AbstractLayoutPanelTreeItem::isExpandable() const
     return m_isExpandable;
 }
 
-bool AbstractLayoutPanelTreeItem::isEditable() const
+bool AbstractLayoutPanelTreeItem::settingsAvailable() const
 {
-    return m_isEditable;
+    return m_settingsAvailable;
+}
+
+bool AbstractLayoutPanelTreeItem::settingsEnabled() const
+{
+    return m_settingsEnabled;
 }
 
 bool AbstractLayoutPanelTreeItem::isRemovable() const
@@ -295,14 +300,28 @@ void AbstractLayoutPanelTreeItem::setIsExpandable(bool expandable)
     emit isExpandableChanged(expandable);
 }
 
-void AbstractLayoutPanelTreeItem::setIsEditable(bool editable)
+void AbstractLayoutPanelTreeItem::setSettingsAvailable(bool available)
 {
-    if (m_isEditable == editable) {
+    if (m_settingsAvailable == available) {
         return;
     }
 
-    m_isEditable = editable;
-    emit isEditableChanged(editable);
+    m_settingsAvailable = available;
+    emit settingsAvailableChanged(available);
+
+    if (!available) {
+        setSettingsEnabled(false);
+    }
+}
+
+void AbstractLayoutPanelTreeItem::setSettingsEnabled(bool enabled)
+{
+    if (m_settingsEnabled == enabled) {
+        return;
+    }
+
+    m_settingsEnabled = enabled;
+    emit settingsEnabledChanged(enabled);
 }
 
 void AbstractLayoutPanelTreeItem::setIsRemovable(bool removable)
