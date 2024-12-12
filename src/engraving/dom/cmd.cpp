@@ -1692,8 +1692,11 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                 undoRemoveElement(c->tremoloTwoChord());
             }
             for (Note* n : c->notes()) {
-                if (n->tieFor()) {
-                    undoRemoveElement(n->tieFor());
+                if (Tie* tie = n->tieFor()) {
+                    if (tie->tieEndPoints()) {
+                        tie->removeTiesFromEndPoints();
+                    }
+                    undoRemoveElement(tie);
                 }
                 for (Spanner* sp : n->spannerFor()) {
                     if (sp->isGlissando() || sp->isGuitarBend()) {
