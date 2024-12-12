@@ -144,7 +144,6 @@ void TextBase::endEdit(EditData& ed)
     ted->cursor()->endEdit();
 
     if (isDynamic()) {
-        Dynamic* d = toDynamic(this);
         undoChangeProperty(Pid::DYNAMIC_TYPE, xmlText());
     }
 
