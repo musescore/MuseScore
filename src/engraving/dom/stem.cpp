@@ -108,7 +108,7 @@ void Stem::editDrag(EditData& ed)
     renderer()->layoutItem(this);
     Chord* c = chord();
     if (c->hook()) {
-        c->hook()->move(PointF(0.0, yDelta));
+        c->hook()->move(PointF(0.0, ed.delta.y()));
     }
 }
 
