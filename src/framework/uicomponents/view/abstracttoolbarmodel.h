@@ -114,8 +114,9 @@ protected:
 private:
     ToolBarItem& item(const ToolBarItemList& items, const QString& itemId);
     ToolBarItem& item(const ToolBarItemList& items, const actions::ActionCode& actionCode);
-    void updateShortcutsMenuItem(const std::vector<MenuItem*>& menuItemList);
+
     void updateShortcutsAll();
+    void updateShortcuts(MenuItem* menuItem);
 
     ToolBarItemList m_items;
 };

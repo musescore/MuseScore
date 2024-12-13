@@ -99,8 +99,9 @@ private:
     MenuItem& item(MenuItemList& items, const QString& itemId);
     MenuItem& item(MenuItemList& items, const muse::actions::ActionCode& actionCode);
     MenuItem& menu(MenuItemList& items, const QString& menuId);
-    void updateShortcutsMenuItem(const std::vector<MenuItem*>& menuItemList);
+
     void updateShortcutsAll();
+    void updateShortcuts(MenuItem* item);
 
     MenuItemList m_items;
 };
