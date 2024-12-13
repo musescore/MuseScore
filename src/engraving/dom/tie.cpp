@@ -224,6 +224,11 @@ void Tie::collectPossibleEndPoints()
         return;
     }
 
+    std::vector<Tie*> oldTies;
+    for (TieEndPoint* endPoint : *tieEndPoints()) {
+        oldTies.push_back(endPoint->endTie());
+    }
+
     tieEndPoints()->clear();
 
     if (!startNote()->followingJumpItem()) {
@@ -244,6 +249,7 @@ void Tie::collectPossibleEndPoints()
 
     // Get following notes by taking repeats
     const RepeatList& repeatList = master->repeatList();
+
     for (auto it = repeatList.begin(); it != repeatList.end(); it++) {
         const RepeatSegment* rs = *it;
         const auto nextSegIt = std::next(it);
@@ -263,8 +269,6 @@ void Tie::collectPossibleEndPoints()
 
         Note* nextNote = searchTieNote(note, firstCrSeg);
 
-        // EITHER add RepeatListElementType to repeat segment to RepeatSegment (less calculation)
-        // OR get preceding repeat element from note method (get more info)
         if (nextNote) {
             bool hasIncomingTie = nextNote->tieBack();
             String jumpName = nextNote->precedingJumpItemName();
@@ -272,6 +276,16 @@ void Tie::collectPossibleEndPoints()
             tieEndPoints()->add(endPoint);
             endPointIdx++;
         }
+    }
+    for (Tie* tie : oldTies) {
+        auto findEndTie = [&tie](const TieEndPoint* endPoint){
+            return endPoint->endTie() == tie;
+        };
+
+        if (std::find_if((*tieEndPoints()).begin(), (*tieEndPoints()).end(), findEndTie) != (*tieEndPoints()).end()) {
+            continue;
+        }
+        score()->undoRemoveElement(tie);
     }
 
     if (endPointIdx < 2 && !isPartialTie()) {
