@@ -1305,9 +1305,7 @@ libmei::Dynam Convert::dynamToMEI(const engraving::Dynamic* dynamic, StringList&
     libmei::Dynam meiDynam;
 
     // @place
-    if (dynamic->getProperty(engraving::Pid::DIRECTION) != dynamic->propertyDefault(engraving::Pid::DIRECTION)) {
-        meiDynam.SetPlace(Convert::directionToMEI(dynamic->direction()));
-    }
+    meiDynam.SetPlace(Convert::directionToMEI(dynamic->direction()));
 
     // @layer
     Convert::layerIdentToMEI(dynamic, meiDynam);
@@ -1654,9 +1652,7 @@ libmei::Hairpin Convert::hairpinToMEI(const engraving::Hairpin* hairpin)
     libmei::Hairpin meiHairpin;
 
     // @place
-    if (hairpin->getProperty(engraving::Pid::DIRECTION) != hairpin->propertyDefault(engraving::Pid::DIRECTION)) {
-        meiHairpin.SetPlace(Convert::directionToMEI(hairpin->direction()));
-    }
+    meiHairpin.SetPlace(Convert::directionToMEI(hairpin->direction()));
 
     // @form
     if (hairpin->hairpinType() == engraving::HairpinType::CRESC_HAIRPIN) {
@@ -2656,7 +2652,7 @@ libmei::data_STAFFREL Convert::directionToMEI(engraving::DirectionV direction)
     case (engraving::DirectionV::UP): return libmei::STAFFREL_above;
     case (engraving::DirectionV::DOWN): return libmei::STAFFREL_below;
     default:
-        return libmei::STAFFREL_above;
+        return libmei::STAFFREL_NONE;
     }
 }
 
