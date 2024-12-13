@@ -231,7 +231,7 @@ void Tie::collectPossibleEndPoints()
 
     tieEndPoints()->clear();
 
-    if (!startNote()->followingJumpItem()) {
+    if (!chord->followingJumpItem()) {
         return;
     }
 
@@ -271,7 +271,7 @@ void Tie::collectPossibleEndPoints()
 
         if (nextNote) {
             bool hasIncomingTie = nextNote->tieBack();
-            String jumpName = nextNote->precedingJumpItemName();
+            String jumpName = nextNote->chord()->precedingJumpItemName();
             TieEndPoint* endPoint = new TieEndPoint(nextNote, jumpName, hasIncomingTie, endPointIdx, false);
             tieEndPoints()->add(endPoint);
             endPointIdx++;

@@ -275,14 +275,14 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
     if ((prevBarType == BarLineType::END_REPEAT || prevBarType == BarLineType::END_START_REPEAT)
         && !(barType == BarLineType::END_REPEAT || prevBarType == BarLineType::END_START_REPEAT)) {
         // Remove outgoing partial tie & endpoints
-        m->removePartialTiesOnRepeatChange(true);
+        m->removePartialSpannersOnRepeatChange(true);
     }
     if ((prevBarType == BarLineType::START_REPEAT || prevBarType == BarLineType::END_START_REPEAT)
         && !(barType == BarLineType::START_REPEAT || prevBarType == BarLineType::END_START_REPEAT)) {
         // Remove incoming partial tie
         Measure* nextMeasure = m->nextMeasure();
         if (nextMeasure) {
-            nextMeasure->removePartialTiesOnRepeatChange(false);
+            nextMeasure->removePartialSpannersOnRepeatChange(false);
         }
     }
 }

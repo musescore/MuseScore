@@ -100,6 +100,10 @@ public:
 
     void setTrack(track_idx_t val) override;
 
+    PropertyValue getProperty(Pid propertyId) const override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& v) override;
+
     SlurSegment* frontSegment() { return toSlurSegment(Spanner::frontSegment()); }
     const SlurSegment* frontSegment() const { return toSlurSegment(Spanner::frontSegment()); }
     SlurSegment* backSegment() { return toSlurSegment(Spanner::backSegment()); }
@@ -117,9 +121,14 @@ public:
 
     double scalingFactor() const override;
 
+    void undoSetIncoming(bool incoming);
+    void undoSetOutgoing(bool outgoing);
+    bool isIncoming();
+    bool isOutgoing();
 private:
     M_PROPERTY2(int, sourceStemArrangement, setSourceStemArrangement, -1)
     M_PROPERTY2(ConnectedElement, connectedElement, setConnectedElement, ConnectedElement::NONE)
+    M_PROPERTY2(PartialSpannerDirection, partialSpannerDirection, setPartialSpannerDirection, PartialSpannerDirection::NONE)
 
     friend class Factory;
     Slur(EngravingItem* parent);

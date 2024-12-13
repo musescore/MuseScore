@@ -313,9 +313,6 @@ public:
     void disconnectTiedNotes();
     void connectTiedNotes();
 
-    bool followingJumpItem();
-    String precedingJumpItemName();
-
     void setupAfterRead(const Fraction& tick, bool pasteMode);
 
     bool acceptDrop(EditData&) const override;

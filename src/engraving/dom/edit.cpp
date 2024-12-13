@@ -2067,11 +2067,12 @@ Tie* Score::cmdToggleTie()
         bool shouldTieListSelection = noteList.size() == 2;
         for (Note* n : noteList) {
             tie = n->tieFor();
+            Chord* chord = n->chord();
             if (tie) {
                 undoRemoveElement(tie);
                 tie = nullptr;
                 shouldTieListSelection = false;
-            } else if (n->followingJumpItem()) {
+            } else if (chord->followingJumpItem()) {
                 // Create outgoing partial tie
                 tie = createAndAddTie(n, nullptr);
                 shouldTieListSelection = false;
@@ -2765,7 +2766,7 @@ void Score::deleteItem(EngravingItem* el)
                     Measure* lmeasure = lscore->tick2measure(m2->tick());
                     if (lmeasure) {
                         lmeasure->undoChangeProperty(Pid::REPEAT_START, false);
-                        lmeasure->removePartialTiesOnRepeatChange(false);
+                        lmeasure->removePartialSpannersOnRepeatChange(false);
                     }
                 }
             } else if (bl->barLineType() == BarLineType::END_REPEAT) {
@@ -2774,7 +2775,7 @@ void Score::deleteItem(EngravingItem* el)
                     Measure* lmeasure = lscore->tick2measure(m2->tick());
                     if (lmeasure) {
                         lmeasure->undoChangeProperty(Pid::REPEAT_END, false);
-                        lmeasure->removePartialTiesOnRepeatChange(true);
+                        lmeasure->removePartialSpannersOnRepeatChange(true);
                     }
                 }
             } else {
@@ -2931,7 +2932,7 @@ void Score::deleteItem(EngravingItem* el)
         }
 
         if (el->isVolta()) {
-            toVolta(el)->startMeasure()->removePartialTiesOnRepeatChange(false);
+            toVolta(el)->startMeasure()->removePartialSpannersOnRepeatChange(false);
         }
 
         undoRemoveElement(el);

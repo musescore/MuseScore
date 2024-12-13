@@ -61,6 +61,7 @@
 #include "segment.h"
 #include "select.h"
 #include "sig.h"
+#include "slur.h"
 #include "spacer.h"
 #include "staff.h"
 #include "stafflines.h"
@@ -941,14 +942,14 @@ void Measure::remove(EngravingItem* e)
         break;
 
     case ElementType::MARKER:
-        removePartialTiesOnRepeatChange(muse::contains(Marker::RIGHT_MARKERS, toMarker(e)->markerType()));
+        removePartialSpannersOnRepeatChange(muse::contains(Marker::RIGHT_MARKERS, toMarker(e)->markerType()));
 
         if (!el().remove(e)) {
             LOGD("Measure(%p)::remove(%s,%p) not found", this, e->typeName(), e);
         }
         break;
     case ElementType::JUMP:
-        removePartialTiesOnRepeatChange(true);
+        removePartialSpannersOnRepeatChange(true);
         setRepeatJump(false);
     case ElementType::HBOX:
         if (!el().remove(e)) {
@@ -1030,10 +1031,25 @@ void Measure::spatiumChanged(double /*oldValue*/, double /*newValue*/)
 {
 }
 
-void Measure::removePartialTiesOnRepeatChange(bool outgoing)
+void Measure::removePartialSpannersOnRepeatChange(bool outgoing)
 {
     const track_idx_t startTrack = 0;
     const track_idx_t ntracks = score()->ntracks();
+    const Fraction startTick = tick();
+    const Fraction endTick = startTick + ticks();
+    for (auto& interval : score()->spannerMap().findOverlapping(startTick.ticks(), endTick.ticks())) {
+        if (!interval.value->isSlur()) {
+            continue;
+        }
+        Slur* slur = toSlur(interval.value);
+        if (slur->tick() >= startTick && slur->tick() < endTick) {
+            slur->undoSetIncoming(false);
+        }
+
+        if (slur->tick2() >= startTick && slur->tick2() < endTick) {
+            slur->undoSetOutgoing(false);
+        }
+    }
 
     Segment* seg = first(SegmentType::ChordRest);
     while (seg) {
@@ -3216,6 +3232,65 @@ EngravingItem* Measure::prevElementStaff(staff_idx_t staff, EngravingItem* fromI
         }
     }
     return score()->firstElement();
+}
+
+double Measure::firstNoteRestSegmentX(bool leading) const
+{
+    const System* sys = system();
+    double margin = style().styleMM(Sid::headerToLineStartDistance);
+    for (const Segment* seg = first(); seg; seg = seg->next()) {
+        if (seg->isChordRestType()) {
+            double noteRestPos = seg->measure()->pos().x() + seg->pos().x();
+            if (!leading) {
+                return noteRestPos;
+            }
+
+            // first CR found; back up to previous segment
+            seg = seg->prevActive();
+            while (seg && seg->allElementsInvisible()) {
+                seg = seg->prevActive();
+            }
+            if (seg) {
+                // find maximum width
+                double width = 0.0;
+                size_t n = score()->nstaves();
+                for (staff_idx_t i = 0; i < n; ++i) {
+                    if (!sys->staff(i)->show()) {
+                        continue;
+                    }
+                    EngravingItem* e = seg->element(i * VOICES);
+                    if (e && e->addToSkyline()) {
+                        width = std::max(width, e->pos().x() + e->ldata()->bbox().right());
+                    }
+                }
+                if (seg->isStartRepeatBarLineType()) {
+                    margin = style().styleMM(Sid::repeatBarlineDotSeparation);
+                }
+                return std::min(seg->measure()->pos().x() + seg->pos().x() + width + margin, noteRestPos);
+            } else {
+                return noteRestPos;
+            }
+        }
+    }
+
+    return margin;
+}
+
+double Measure::endingXForOpenEndedLines() const
+{
+    const System* sys = system();
+    double margin = style().styleMM(Sid::lineEndToSystemEndDistance);
+    double systemEndX = sys->ldata()->bbox().width();
+
+    Segment* lastSeg = last();
+    while (lastSeg && !lastSeg->isType(SegmentType::BarLineType)) {
+        lastSeg = lastSeg->prevEnabled();
+    }
+    if (!lastSeg) {
+        return systemEndX - margin;
+    }
+
+    return lastSeg->x() + x() - margin;
 }
 
 //---------------------------------------------------------

@@ -165,7 +165,7 @@ public:
     void change(EngravingItem* o, EngravingItem* n) override;
     void spatiumChanged(double oldValue, double newValue) override;
 
-    void removePartialTiesOnRepeatChange(bool outgoing);
+    void removePartialSpannersOnRepeatChange(bool outgoing);
 
     System* system() const { return toSystem(explicitParent()); }
     bool hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len, bool considerInvisible = false) const;
@@ -335,6 +335,9 @@ public:
 
     EngravingItem* nextElementStaff(staff_idx_t staff, EngravingItem* fromItem = nullptr);
     EngravingItem* prevElementStaff(staff_idx_t staff, EngravingItem* fromItem = nullptr);
+
+    double firstNoteRestSegmentX(bool leading = false) const;
+    double endingXForOpenEndedLines() const;
 
     String accessibleInfo() const override;
 

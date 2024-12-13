@@ -217,7 +217,7 @@ bool Volta::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::SPANNER_TICKS:
-        startMeasure()->removePartialTiesOnRepeatChange(false);
+        startMeasure()->removePartialSpannersOnRepeatChange(false);
         return TextLineBase::setProperty(propertyId, val);
     case Pid::VOLTA_ENDING: {
         setEndings(val.value<std::vector<int> >());
