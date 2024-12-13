@@ -3578,17 +3578,14 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
             return;
         }
     } else if (e->isNote() || e->isChordRest()) {
-        if (e->isNote()) {
-            e = e->parentItem();
-        }
-        ChordRest* cr = toChordRest(e);
+        ChordRest* cr = e->isNote() ? toChordRest(e->parentItem()) : toChordRest(e);
 
         if (m_selection.isNone() || (m_selection.isList() && !m_selection.isSingle())) {
             if (m_selection.isList()) {
                 deselectAll();
             }
             SegmentType st = SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef;
-            m_selection.setRange(cr->segment(), cr->nextSegmentAfterCR(st), e->staffIdx(), e->staffIdx() + 1);
+            m_selection.setRange(cr->segment(), cr->nextSegmentAfterCR(st), cr->staffIdx(), cr->staffIdx() + 1);
             activeTrack = cr->track();
         } else if (m_selection.isSingle()) {
             EngravingItem* oe = m_selection.element();
@@ -3606,8 +3603,10 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
                 m_selection.setRange(ocr->segment(), endSeg, oe->staffIdx(), oe->staffIdx() + 1);
                 m_selection.extendRangeSelection(cr);
             } else {
-                doSelect(e, SelectType::SINGLE, 0);
-                return;
+                deselectAll();
+                SegmentType st = SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef;
+                m_selection.setRange(cr->segment(), cr->nextSegmentAfterCR(st), cr->staffIdx(), cr->staffIdx() + 1);
+                activeTrack = cr->track();
             }
         } else if (m_selection.isRange()) {
             m_selection.extendRangeSelection(cr);
