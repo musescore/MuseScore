@@ -24,6 +24,7 @@
 
 #include <QObject>
 
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "engraving/iengravingconfiguration.h"
 #include "shortcuts/ishortcutsconfiguration.h"

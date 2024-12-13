@@ -65,7 +65,6 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/stafftype.h"
-#include "engraving/dom/stretchedbend.h"
 #include "engraving/dom/stringdata.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/text.h"
@@ -636,17 +635,8 @@ void GuitarPro::createBend(Note* note, std::vector<PitchValue>& bendData)
         return;
     }
 
-    bool useStretchedBends = engravingConfiguration()->useStretchedBends();
-
-    if (useStretchedBends) {
-        Chord* chord = toChord(note->parent());
-        StretchedBend* stretchedBend = Factory::createStretchedBend(chord);
-        stretchedBend->setPitchValues(bendData);
-        stretchedBend->setTrack(note->track());
-        stretchedBend->setNote(note);
-        note->setStretchedBend(stretchedBend);
-        chord->add(stretchedBend);
-        m_stretchedBends.push_back(stretchedBend);
+    if (engravingConfiguration()->experimentalGuitarBendImport()) {
+        m_guitarBendImporter->collectBend(note, bendData);
     } else {
         Bend* bend = Factory::createBend(note);
         bend->setPoints(bendData);
@@ -2657,7 +2647,9 @@ bool GuitarPro3::read(IODevice* io)
     }
 
     m_continiousElementsBuilder->addElementsToScore();
-    StretchedBend::prepareBends(m_stretchedBends);
+    if (engravingConfiguration()->experimentalGuitarBendImport()) {
+        m_guitarBendImporter->applyBendsToChords();
+    }
 
     return true;
 }

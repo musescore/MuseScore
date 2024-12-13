@@ -585,7 +585,7 @@ bool Measure::showsMeasureNumber()
 ///   Search for chord at position \a tick in \a track
 //---------------------------------------------------------
 
-Chord* Measure::findChord(Fraction t, track_idx_t track)
+Chord* Measure::findChord(Fraction t, track_idx_t track) const
 {
     t -= tick();
     for (Segment* seg = last(); seg; seg = seg->prev()) {
@@ -607,7 +607,7 @@ Chord* Measure::findChord(Fraction t, track_idx_t track)
 ///   Search for chord or rest at position \a tick at \a staff in \a voice.
 //---------------------------------------------------------
 
-ChordRest* Measure::findChordRest(Fraction t, track_idx_t track)
+ChordRest* Measure::findChordRest(Fraction t, track_idx_t track) const
 {
     t -= tick();
     for (const Segment& seg : m_segments) {
