@@ -31,7 +31,6 @@ class TieEndPoint
 public:
     TieEndPoint(Note* note, String jumpName, bool active, int idx, bool followingNote);
     TieEndPoint() {}
-    ~TieEndPoint();
 
     Note* note() const { return m_note; }
     Tie* endTie() const;

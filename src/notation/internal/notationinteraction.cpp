@@ -3226,6 +3226,45 @@ void NotationInteraction::nudge(MoveDirection d, bool quickly)
     notifyAboutDragChanged();
 }
 
+void NotationInteraction::nudgeAnchors(MoveDirection d)
+{
+    startEdit(TranslatableString("undoableAction", "Nudge"));
+    qreal vRaster = mu::engraving::MScore::vRaster();
+    qreal hRaster = mu::engraving::MScore::hRaster();
+
+    switch (d) {
+    case MoveDirection::Left:
+        m_editData.delta = QPointF(-nudgeDistance(m_editData, hRaster), 0);
+        break;
+    case MoveDirection::Right:
+        m_editData.delta = QPointF(nudgeDistance(m_editData, hRaster), 0);
+        break;
+    case MoveDirection::Up:
+        m_editData.delta = QPointF(0, -nudgeDistance(m_editData, vRaster));
+        break;
+    case MoveDirection::Down:
+        m_editData.delta = QPointF(0, nudgeDistance(m_editData, vRaster));
+        break;
+    default:
+        rollback();
+        return;
+    }
+
+    m_editData.evtDelta = m_editData.moveDelta = m_editData.delta;
+    m_editData.hRaster = hRaster;
+    m_editData.vRaster = vRaster;
+
+    if (m_editData.curGrip != mu::engraving::Grip::NO_GRIP && int(m_editData.curGrip) < m_editData.grips) {
+        m_editData.pos = m_editData.grip[int(m_editData.curGrip)].center() + m_editData.delta;
+    }
+
+    m_editData.element->startEditDrag(m_editData);
+    m_editData.element->editDrag(m_editData);
+    m_editData.element->endEditDrag(m_editData);
+
+    apply();
+}
+
 bool NotationInteraction::isTextSelected() const
 {
     EngravingItem* selectedElement = m_selection->element();

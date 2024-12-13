@@ -32,6 +32,9 @@ MenuView {
 
     property alias model: view.model
 
+    property NavigationSection notationViewNavigationSection: null
+    property int navigationOrderStart: 0
+
     property int preferredAlign: Qt.AlignRight // Left, HCenter, Right
     property bool hasSiblingMenus: loader.hasSiblingMenus
 
@@ -45,6 +48,13 @@ MenuView {
     property string accessibleName: ""
 
     signal loaded()
+
+    onNotationViewNavigationSectionChanged: function() {
+        menuNavPanel.section = root.notationViewNavigationSection
+    }
+    onNavigationOrderStartChanged: function() {
+        menuNavPanel.order = root.navigationOrderStart
+    }
 
     function requestFocus() {
         var focused = prv.focusOnSelected()
@@ -133,6 +143,7 @@ MenuView {
         }
 
         property NavigationPanel navigationPanel: NavigationPanel {
+            id: menuNavPanel
             name: "StyledMenu"
             section: content.navigationSection
             direction: NavigationPanel.Vertical

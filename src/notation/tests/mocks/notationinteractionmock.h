@@ -96,6 +96,7 @@ public:
 
     MOCK_METHOD(void, movePitch, (MoveDirection, PitchMode), (override));
     MOCK_METHOD(void, nudge, (MoveDirection, bool), (override));
+    MOCK_METHOD(void, nudgeAnchors, (MoveDirection), (override));
     MOCK_METHOD(void, moveChordRestToStaff, (MoveDirection), (override));
     MOCK_METHOD(void, swapChordRest, (MoveDirection), (override));
     MOCK_METHOD(void, toggleSnapToPrevious, (), (override));
