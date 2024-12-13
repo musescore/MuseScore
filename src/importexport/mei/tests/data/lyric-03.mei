@@ -35,11 +35,13 @@
                         <staffDef n="1" lines="5" keysig="1s" meter.sym="cut">
                            <label>Tenor</label>
                            <labelAbbr>T.</labelAbbr>
+                           <instrDef midi.instrnum="52" />
                            <clef shape="G" line="2" dis="8" dis.place="below" />
                         </staffDef>
                         <staffDef n="2" lines="5" keysig="1s" meter.sym="cut">
                            <label>Bass</label>
                            <labelAbbr>B.</labelAbbr>
+                           <instrDef midi.instrnum="52" />
                            <clef shape="F" line="4" />
                         </staffDef>
                      </staffGrp>

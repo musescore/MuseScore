@@ -33,6 +33,7 @@
         <trackName></trackName>
         <instrumentId>voice.vocals</instrumentId>
         <Channel>
+          <program value="52"/>
           </Channel>
         </Instrument>
       </Part>

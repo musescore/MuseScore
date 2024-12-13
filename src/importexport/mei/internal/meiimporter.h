@@ -89,6 +89,7 @@ private:
     bool readLinesWithSmufl(pugi::xml_node parentNode, muse::StringList& lines);
     bool readStaffDefs(pugi::xml_node parentNode);
     bool readStaffGrps(pugi::xml_node parentNode, int& staffSpan, int column, size_t& idx);
+    bool readInstrDef(pugi::xml_node instrDefNode, Part* part);
     bool readSectionElements(pugi::xml_node parentNode);
     bool readEnding(pugi::xml_node endingNode);
     bool readMeasure(pugi::xml_node measureNode);

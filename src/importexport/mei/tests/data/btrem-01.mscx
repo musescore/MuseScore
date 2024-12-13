@@ -27,12 +27,13 @@
           </StaffType>
         </Staff>
       <trackName></trackName>
-      <Instrument id="piano">
+      <Instrument id="violin">
         <longName>Violine</longName>
         <shortName>Vl.</shortName>
         <trackName></trackName>
-        <instrumentId>keyboard.piano</instrumentId>
+        <instrumentId>strings.violin</instrumentId>
         <Channel>
+          <program value="40"/>
           </Channel>
         </Instrument>
       </Part>

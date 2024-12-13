@@ -94,6 +94,7 @@ private:
     bool writeStaffGrpEnd(const engraving::Staff* staff, std::vector<int>& ends);
     bool writeStaffDef(const engraving::Staff* staff, const engraving::Measure* measure, const engraving::Part* part, bool isPart);
     bool writeLabel(pugi::xml_node node, const engraving::Part* part);
+    bool writeInstrDef(pugi::xml_node node, const engraving::Part* part);
     bool writeEnding(const engraving::Measure* measure);
     bool writeEndingEnd(const engraving::Measure* measure);
     bool writeMeasure(const engraving::Measure* measure, int& measureN, bool& isFirst, bool& wasLastIrregular);
