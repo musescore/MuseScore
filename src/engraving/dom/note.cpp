@@ -1387,6 +1387,7 @@ void Note::remove(EngravingItem* e)
             setTieFor(nullptr);
         } else {
             setTieBack(nullptr);
+            pt->setEndPoint(nullptr);
         }
         break;
     }
@@ -1395,6 +1396,7 @@ void Note::remove(EngravingItem* e)
         Tie* tie = toTie(e);
         assert(tie->startNote() == this);
         setTieFor(nullptr);
+        tie->setEndPoint(nullptr);
         if (tie->endNote()) {
             tie->endNote()->setTieBack(0);
         }
