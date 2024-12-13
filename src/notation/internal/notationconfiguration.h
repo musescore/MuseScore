@@ -155,15 +155,19 @@ public:
 
     bool colorNotesOutsideOfUsablePitchRange() const override;
     void setColorNotesOutsideOfUsablePitchRange(bool value) override;
+    muse::async::Channel<bool> colorNotesOutsideOfUsablePitchRangeChanged() const override;
 
     bool warnGuitarBends() const override;
     void setWarnGuitarBends(bool value) override;
+    muse::async::Channel<bool> warnGuitarBendsChanged() const override;
 
     int delayBetweenNotesInRealTimeModeMilliseconds() const override;
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs) override;
+    muse::async::Channel<int> delayBetweenNotesInRealTimeModeMillisecondsChanged() const override;
 
     int notePlayDurationMilliseconds() const override;
     void setNotePlayDurationMilliseconds(int durationMs) override;
+    muse::async::Channel<int> notePlayDurationMillisecondsChanged() const override;
 
     void setTemplateModeEnabled(std::optional<bool> enabled) override;
     void setTestModeEnabled(std::optional<bool> enabled) override;
@@ -246,6 +250,10 @@ private:
     muse::async::Notification m_scoreOrderListPathsChanged;
     muse::async::Notification m_isLimitCanvasScrollAreaChanged;
     muse::async::Channel<int> m_selectionProximityChanged;
+    muse::async::Channel<bool> m_colorNotesOutsideOfUsablePitchRangeChanged;
+    muse::async::Channel<bool> m_warnGuitarBendsChanged;
+    muse::async::Channel<int> m_delayBetweenNotesInRealTimeModeMillisecondsChanged;
+    muse::async::Channel<int> m_notePlayDurationMillisecondsChanged;
     muse::async::Notification m_isPlayRepeatsChanged;
     muse::async::Notification m_isPlayChordSymbolsChanged;
     muse::ValCh<int> m_pianoKeyboardNumberOfKeys;

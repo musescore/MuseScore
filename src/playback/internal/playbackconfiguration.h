@@ -44,9 +44,11 @@ public:
 
     bool playChordWhenEditing() const override;
     void setPlayChordWhenEditing(bool value) override;
+    muse::async::Channel<bool> playChordWhenEditingChanged() const override;
 
     bool playHarmonyWhenEditing() const override;
     void setPlayHarmonyWhenEditing(bool value) override;
+    muse::async::Channel<bool> playHarmonyWhenEditingChanged() const override;
 
     PlaybackCursorType cursorType() const override;
 
@@ -89,7 +91,8 @@ private:
     const SoundProfileName& fallbackSoundProfileStr() const;
 
     muse::async::Notification m_playNotesWhenEditingChanged;
-
+    muse::async::Channel<bool> m_playChordWhenEditingChanged;
+    muse::async::Channel<bool> m_playHarmonyWhenEditingChanged;
     muse::async::Channel<muse::audio::aux_channel_idx_t, bool> m_isAuxSendVisibleChanged;
     muse::async::Channel<muse::audio::aux_channel_idx_t, bool> m_isAuxChannelVisibleChanged;
     muse::async::Channel<MixerSectionType, bool> m_isMixerSectionVisibleChanged;
