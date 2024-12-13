@@ -150,15 +150,19 @@ public:
 
     virtual bool colorNotesOutsideOfUsablePitchRange() const = 0;
     virtual void setColorNotesOutsideOfUsablePitchRange(bool value) = 0;
+    virtual muse::async::Channel<bool> colorNotesOutsideOfUsablePitchRangeChanged() const = 0;
 
     virtual bool warnGuitarBends() const = 0;
     virtual void setWarnGuitarBends(bool value) = 0;
+    virtual muse::async::Channel<bool> warnGuitarBendsChanged() const = 0;
 
     virtual int delayBetweenNotesInRealTimeModeMilliseconds() const = 0;
     virtual void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs) = 0;
+    virtual muse::async::Channel<int> delayBetweenNotesInRealTimeModeMillisecondsChanged() const = 0;
 
     virtual int notePlayDurationMilliseconds() const = 0;
     virtual void setNotePlayDurationMilliseconds(int durationMs) = 0;
+    virtual muse::async::Channel<int> notePlayDurationMillisecondsChanged() const = 0;
 
     virtual void setTemplateModeEnabled(std::optional<bool> enabled) = 0;
     virtual void setTestModeEnabled(std::optional<bool> enabled) = 0;

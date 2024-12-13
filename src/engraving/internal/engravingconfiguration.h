@@ -83,6 +83,7 @@ public:
 
     bool dynamicsApplyToAllVoices() const override;
     void setDynamicsApplyToAllVoices(bool v) override;
+    muse::async::Channel<bool> dynamicsApplyToAllVoicesChanged() const override;
 
     muse::async::Notification scoreInversionChanged() const override;
 
@@ -122,6 +123,7 @@ public:
 private:
     muse::async::Channel<voice_idx_t, Color> m_voiceColorChanged;
     muse::async::Notification m_scoreInversionChanged;
+    muse::async::Channel<bool> m_dynamicsApplyToAllVoicesChanged;
     muse::async::Channel<Color> m_formattingColorChanged;
     muse::async::Channel<Color> m_frameColorChanged;
     muse::async::Channel<Color> m_invisibleColorChanged;

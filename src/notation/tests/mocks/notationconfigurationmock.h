@@ -140,15 +140,19 @@ public:
 
     MOCK_METHOD(bool, colorNotesOutsideOfUsablePitchRange, (), (const, override));
     MOCK_METHOD(void, setColorNotesOutsideOfUsablePitchRange, (bool), (override));
+    MOCK_METHOD((muse::async::Channel<bool>), colorNotesOutsideOfUsablePitchRangeChanged, (), (const, override));
 
     MOCK_METHOD(bool, warnGuitarBends, (), (const, override));
     MOCK_METHOD(void, setWarnGuitarBends, (bool), (override));
+    MOCK_METHOD((muse::async::Channel<bool>), warnGuitarBendsChanged, (), (const, override));
 
     MOCK_METHOD(int, delayBetweenNotesInRealTimeModeMilliseconds, (), (const, override));
     MOCK_METHOD(void, setDelayBetweenNotesInRealTimeModeMilliseconds, (int), (override));
+    MOCK_METHOD((muse::async::Channel<int>), delayBetweenNotesInRealTimeModeMillisecondsChanged, (), (const, override));
 
     MOCK_METHOD(int, notePlayDurationMilliseconds, (), (const, override));
     MOCK_METHOD(void, setNotePlayDurationMilliseconds, (int), (override));
+    MOCK_METHOD((muse::async::Channel<int>), notePlayDurationMillisecondsChanged, (), (const, override));
 
     MOCK_METHOD(void, setTemplateModeEnabled, (std::optional<bool>), (override));
     MOCK_METHOD(void, setTestModeEnabled, (std::optional<bool>), (override));

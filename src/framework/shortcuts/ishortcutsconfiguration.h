@@ -44,6 +44,7 @@ public:
 
     virtual bool advanceToNextNoteOnKeyRelease() const = 0;
     virtual void setAdvanceToNextNoteOnKeyRelease(bool value) = 0;
+    virtual muse::async::Channel<bool> advanceToNextNoteOnKeyReleaseChanged() const = 0;
 };
 }
 
