@@ -732,9 +732,11 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu)
     EXPECT_CALL(*m_selection, isRange())
     .WillRepeatedly(Return(true));
 
-    //! [THEN] New element is in selected range
+    //! [THEN] New element is initially not in selected range,
+    //!        but is in selected range after performing selection
     EXPECT_CALL(*m_selectionRange, containsItem(contextMenuOnMeasureContext.element))
-    .WillRepeatedly(Return(true));
+    .WillOnce(Return(false))
+    .WillOnce(Return(true));
 
     std::vector<const EngravingItem*> playElements = { selectMeasureContext.element };
     EXPECT_CALL(*m_playbackController, playElements(playElements))
@@ -824,9 +826,13 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
     .WillOnce(ReturnRef(selectElements))
     .WillOnce(ReturnRef(contextMenuSelectElements));
 
-    //! [THEN] New element isn't in selected range
+    //! [THEN] Old element is not in selected range at the moment that it is selected
+    EXPECT_CALL(*m_selectionRange, containsItem(selectMeasureContext.element))
+    .WillOnce(Return(false));
+
+    //! [THEN] New element is not in selected range at the moment that it is selected
     EXPECT_CALL(*m_selectionRange, containsItem(contextMenuOnMeasureContext.element))
-    .WillRepeatedly(Return(false));
+    .WillOnce(Return(false));
 
     EXPECT_CALL(*m_playbackController, playElements(_))
     .Times(0);
