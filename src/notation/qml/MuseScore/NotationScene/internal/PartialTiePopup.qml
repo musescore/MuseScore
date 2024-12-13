@@ -41,7 +41,6 @@ StyledPopupView {
     showArrow: false
 
     onOpened: {
-        console.log(Qt.point(root.x, root.y))
         tieMenuLoader.show(Qt.point(0, 0))
     }
 
@@ -86,6 +85,7 @@ StyledPopupView {
         ContextMenuLoader {
             id: tieMenuLoader
             closeMenuOnSelection: false
+            focusOnOpened: false
             opensUpward: root.opensUpward
 
             items: partialTiePopupModel.items
@@ -102,6 +102,14 @@ StyledPopupView {
             section: root.notationViewNavigationSection
             order: root.navigationOrderStart
             accessible.name: qsTrc("notation", "Partial tie menu items")
+
+            onSectionChanged: function() {
+                tieMenuLoader.notationViewNavigationSection = section
+            }
+
+            onOrderChanged: function() {
+                tieMenuLoader.navigationOrderStart = order
+            }
         }
     }
 }

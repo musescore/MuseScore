@@ -130,6 +130,7 @@ public:
     // Move/nudge elements
     virtual void movePitch(MoveDirection d, PitchMode mode) = 0;
     virtual void nudge(MoveDirection d, bool quickly) = 0;
+    virtual void nudgeAnchors(MoveDirection d) = 0;
     virtual void moveChordRestToStaff(MoveDirection d) = 0;
     virtual void swapChordRest(MoveDirection d) = 0;
     virtual void toggleSnapToPrevious() = 0;
