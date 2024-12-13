@@ -98,12 +98,8 @@ bool NotationSelectionRange::containsItem(const EngravingItem* item) const
         return itemTick >= selectionStartTick && itemTick < selectionEndTick;
     }
 
-    if (itemTick < selectionStartTick || itemTick > selectionEndTick) {
+    if (itemTick < selectionStartTick || itemTick >= selectionEndTick) {
         return false;
-    }
-
-    if (itemTick == selectionEndTick) {
-        return item->rtick() > Fraction(0, 1);
     }
 
     track_idx_t itemTrack = item->track();
