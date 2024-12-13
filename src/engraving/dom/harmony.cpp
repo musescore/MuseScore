@@ -782,16 +782,19 @@ void Harmony::endEdit(EditData& ed)
 
     TextBase::endEdit(ed);
 
-    Segment* parentSegment = explicitParent() ? getParentSeg() : nullptr;
-    if (parentSegment) {
-        EngravingItem* fretDiagramItem = parentSegment->findAnnotation(ElementType::FRET_DIAGRAM, track(), track());
-        if (fretDiagramItem) {
-            FretDiagram* fretDiagram = toFretDiagram(fretDiagramItem);
+    UndoMacro* lastMacro = score()->undoStack() ? score()->undoStack()->last() : nullptr;
+    if (lastMacro && !lastMacro->empty() && lastMacro->hasFilteredChildren(UndoCommand::Filter::ChangePropertyLinked, this)) {
+        Segment* parentSegment = explicitParent() ? getParentSeg() : nullptr;
+        if (parentSegment) {
+            EngravingItem* fretDiagramItem = parentSegment->findAnnotation(ElementType::FRET_DIAGRAM, track(), track());
+            if (fretDiagramItem) {
+                FretDiagram* fretDiagram = toFretDiagram(fretDiagramItem);
 
-            UndoStack* undo = score()->undoStack();
-            undo->reopen();
-            score()->undo(new FretDataChange(fretDiagram, s));
-            score()->endCmd();
+                UndoStack* undo = score()->undoStack();
+                undo->reopen();
+                score()->undo(new FretDataChange(fretDiagram, s));
+                score()->endCmd();
+            }
         }
     }
 

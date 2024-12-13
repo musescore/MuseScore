@@ -38,6 +38,7 @@
 #include "stringdata.h"
 #include "system.h"
 #include "undo.h"
+#include "rw/read410/tread.h"
 
 #include "log.h"
 
@@ -146,22 +147,42 @@ void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath)
         return;
     }
 
-    std::string err;
-    muse::JsonDocument jsonDoc = muse::JsonDocument::fromJson(file.readAll(), &err);
-    if (!err.empty()) {
-        LOGE() << "failed parse file, err: " << err;
-        return;
-    }
+    XmlReader reader(&file);
 
-    muse::JsonArray items = jsonDoc.rootArray();
+    while (reader.readNextStartElement()) {
+        if (reader.name() != "Data") {
+            break;
+        }
+        while (reader.readNextStartElement()) {
+            if (reader.name() == "HarmonyToDiagram") {
+                String harmony;
+                String diagram;
+                while (reader.readNextStartElement()) {
+                    if (reader.name() == "Harmony") {
+                        while (reader.readNextStartElement()) {
+                            if (reader.name() == "name") {
+                                harmony = reader.readText();
+                            } else {
+                                reader.unknown();
+                            }
+                        }
+                    } else if (reader.name() == "FretDiagram") {
+                        diagram = reader.readBody();
+                        reader.skipCurrentElement();
+                    } else {
+                        reader.unknown();
+                    }
+                }
 
-    for (size_t i = 0; i < items.size(); i++) {
-        muse::JsonObject itemObj = items.at(i).toObject();
-
-        String harmony = itemObj.value("harmony").toString();
-        String diagram = itemObj.value("diagram").toString();
-
-        s_harmonyToDiagramMap.insert({ harmony, diagram });
+                if (!harmony.isEmpty() && !diagram.isEmpty()) {
+                    s_harmonyToDiagramMap.insert({ harmony, diagram });
+                }
+                harmony.clear();
+                diagram.clear();
+            } else {
+                reader.unknown();
+            }
+        }
     }
 }
 
@@ -177,7 +198,12 @@ void FretDiagram::updateDiagram(const String& harmonyName)
         return;
     }
 
-    applyDiagramPattern(this, it->second);
+    clear();
+
+    read410::ReadContext ctx;
+    XmlReader reader(it->second.toUtf8());
+
+    read410::TRead::read(this, reader, ctx);
 
     triggerLayout();
 }

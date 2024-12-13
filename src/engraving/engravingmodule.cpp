@@ -263,7 +263,7 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
 
     Drumset::initDrumset();
     FiguredBass::readConfigFile(String());
-    FretDiagram::readHarmonyToDiagramFile("://data/harmony_to_diagram.json");
+    FretDiagram::readHarmonyToDiagramFile("://data/harmony_to_diagram.xml");
 
     MScore::setNudgeStep(0.1);     // cursor key (default 0.1)
     MScore::setNudgeStep10(1.0);     // Ctrl + cursor key (default 1.0)
