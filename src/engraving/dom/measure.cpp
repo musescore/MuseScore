@@ -61,6 +61,7 @@
 #include "segment.h"
 #include "select.h"
 #include "sig.h"
+#include "slur.h"
 #include "spacer.h"
 #include "staff.h"
 #include "stafflines.h"
@@ -3177,6 +3178,65 @@ EngravingItem* Measure::prevElementStaff(staff_idx_t staff, EngravingItem* fromI
         }
     }
     return score()->firstElement();
+}
+
+double Measure::firstNoteRestSegmentX(bool leading) const
+{
+    const System* sys = system();
+    double margin = style().styleMM(Sid::headerToLineStartDistance);
+    for (const Segment* seg = first(); seg; seg = seg->next()) {
+        if (seg->isChordRestType()) {
+            double noteRestPos = seg->measure()->pos().x() + seg->pos().x();
+            if (!leading) {
+                return noteRestPos;
+            }
+
+            // first CR found; back up to previous segment
+            seg = seg->prevActive();
+            while (seg && seg->allElementsInvisible()) {
+                seg = seg->prevActive();
+            }
+            if (seg) {
+                // find maximum width
+                double width = 0.0;
+                size_t n = score()->nstaves();
+                for (staff_idx_t i = 0; i < n; ++i) {
+                    if (!sys->staff(i)->show()) {
+                        continue;
+                    }
+                    EngravingItem* e = seg->element(i * VOICES);
+                    if (e && e->addToSkyline()) {
+                        width = std::max(width, e->pos().x() + e->ldata()->bbox().right());
+                    }
+                }
+                if (seg->isStartRepeatBarLineType()) {
+                    margin = style().styleMM(Sid::repeatBarlineDotSeparation);
+                }
+                return std::min(seg->measure()->pos().x() + seg->pos().x() + width + margin, noteRestPos);
+            } else {
+                return noteRestPos;
+            }
+        }
+    }
+
+    return margin;
+}
+
+double Measure::endingXForOpenEndedLines() const
+{
+    const System* sys = system();
+    double margin = style().styleMM(Sid::lineEndToSystemEndDistance);
+    double systemEndX = sys->ldata()->bbox().width();
+
+    Segment* lastSeg = last();
+    while (lastSeg && !lastSeg->isType(SegmentType::BarLineType)) {
+        lastSeg = lastSeg->prevEnabled();
+    }
+    if (!lastSeg) {
+        return systemEndX - margin;
+    }
+
+    return lastSeg->x() + x() - margin;
 }
 
 //---------------------------------------------------------

@@ -121,10 +121,11 @@ bool SlurSegment::edit(EditData& ed)
 
     Slur* sl = slur();
 
-    ChordRest* cr = 0;
+    ChordRest* cr = nullptr;
     ChordRest* e;
     ChordRest* e1;
-    if (ed.curGrip == Grip::START) {
+    const bool start = ed.curGrip == Grip::START;
+    if (start) {
         e  = sl->startCR();
         e1 = sl->endCR();
     } else {
@@ -132,10 +133,40 @@ bool SlurSegment::edit(EditData& ed)
         e1 = sl->startCR();
     }
 
+    const bool altMod = ed.modifiers & AltModifier;
+    const bool shiftMod = ed.modifiers & ShiftModifier;
+    const bool extendToBarLine = shiftMod && altMod;
+
     if (ed.key == Key_Left) {
-        cr = prevChordRest(e);
+        if (extendToBarLine) {
+            const Measure* measure = e->measure();
+            if (start) {
+                cr = measure->firstChordRest(e->track());
+                if (!cr->precedingJumpItem()) {
+                    return false;
+                }
+                sl->undoSetIncoming(true);
+            } else if (e->followingJumpItem()) {
+                sl->undoSetOutgoing(false);
+            }
+        } else {
+            cr = prevChordRest(e);
+        }
     } else if (ed.key == Key_Right) {
-        cr = nextChordRest(e);
+        if (extendToBarLine) {
+            const Measure* measure = e->measure();
+            if (start && e->precedingJumpItem()) {
+                sl->undoSetIncoming(false);
+            } else if (!start) {
+                cr = measure->lastChordRest(e->track());
+                if (!cr->followingJumpItem()) {
+                    return false;
+                }
+                sl->undoSetOutgoing(true);
+            }
+        } else {
+            cr = nextChordRest(e);
+        }
     } else if (ed.key == Key_Up) {
         Part* part     = e->part();
         track_idx_t startTrack = part->startTrack();
@@ -392,6 +423,48 @@ double Slur::scalingFactor() const
     return 0.5 * (startC->intrinsicMag() + endC->intrinsicMag());
 }
 
+void Slur::undoSetIncoming(bool incoming)
+{
+    if (incoming == isIncoming()) {
+        return;
+    }
+
+    PartialSpannerDirection dir = PartialSpannerDirection::INCOMING;
+    if (incoming) {
+        dir = _partialSpannerDirection
+              == PartialSpannerDirection::OUTGOING ? PartialSpannerDirection::BOTH : PartialSpannerDirection::INCOMING;
+    } else {
+        dir = _partialSpannerDirection == PartialSpannerDirection::BOTH ? PartialSpannerDirection::OUTGOING : PartialSpannerDirection::NONE;
+    }
+    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, dir, PropertyFlags::UNSTYLED);
+}
+
+void Slur::undoSetOutgoing(bool outgoing)
+{
+    if (outgoing == isOutgoing()) {
+        return;
+    }
+
+    PartialSpannerDirection dir = PartialSpannerDirection::OUTGOING;
+    if (outgoing) {
+        dir = _partialSpannerDirection
+              == PartialSpannerDirection::INCOMING ? PartialSpannerDirection::BOTH : PartialSpannerDirection::OUTGOING;
+    } else {
+        dir = _partialSpannerDirection == PartialSpannerDirection::BOTH ? PartialSpannerDirection::INCOMING : PartialSpannerDirection::NONE;
+    }
+    undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, dir, PropertyFlags::UNSTYLED);
+}
+
+bool Slur::isIncoming()
+{
+    return _partialSpannerDirection == PartialSpannerDirection::BOTH || _partialSpannerDirection == PartialSpannerDirection::INCOMING;
+}
+
+bool Slur::isOutgoing()
+{
+    return _partialSpannerDirection == PartialSpannerDirection::BOTH || _partialSpannerDirection == PartialSpannerDirection::OUTGOING;
+}
+
 //---------------------------------------------------------
 //   setTrack
 //---------------------------------------------------------
@@ -409,5 +482,38 @@ bool Slur::isCrossStaff()
     return startCR() && endCR()
            && (startCR()->staffMove() != 0 || endCR()->staffMove() != 0
                || startCR()->vStaffIdx() != endCR()->vStaffIdx());
+}
+
+PropertyValue Slur::getProperty(Pid propertyId) const
+{
+    switch (propertyId) {
+    case Pid::PARTIAL_SPANNER_DIRECTION:
+        return partialSpannerDirection();
+    default:
+        return SlurTie::getProperty(propertyId);
+    }
+}
+
+PropertyValue Slur::propertyDefault(Pid id) const
+{
+    switch (id) {
+    case Pid::PARTIAL_SPANNER_DIRECTION:
+        return PartialSpannerDirection::NONE;
+    default:
+        return SlurTie::propertyDefault(id);
+    }
+}
+
+bool Slur::setProperty(Pid propertyId, const PropertyValue& v)
+{
+    switch (propertyId) {
+    case Pid::PARTIAL_SPANNER_DIRECTION:
+        setPartialSpannerDirection(v.value<PartialSpannerDirection>());
+        break;
+    default:
+        return SlurTie::setProperty(propertyId, v);
+    }
+    triggerLayout();
+    return true;
 }
 }

@@ -315,8 +315,6 @@ public:
     void disconnectTiedNotes();
     void connectTiedNotes();
 
-    bool hasFollowingJumpItem();
-
     void setupAfterRead(const Fraction& tick, bool pasteMode);
 
     bool acceptDrop(EditData&) const override;
