@@ -30,6 +30,7 @@
 
 #include "modularity/ioc.h"
 #include "ui/iuiactionsregister.h"
+#include "shortcuts/ishortcutsregister.h"
 #include "actions/iactionsdispatcher.h"
 
 namespace muse::uicomponents {
@@ -43,6 +44,7 @@ class AbstractMenuModel : public QAbstractListModel, public muse::Injectable, pu
 public:
     muse::Inject<ui::IUiActionsRegister> uiActionsRegister = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
+    muse::Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
     explicit AbstractMenuModel(QObject* parent = nullptr);
@@ -97,6 +99,9 @@ private:
     MenuItem& item(MenuItemList& items, const QString& itemId);
     MenuItem& item(MenuItemList& items, const muse::actions::ActionCode& actionCode);
     MenuItem& menu(MenuItemList& items, const QString& menuId);
+
+    void updateShortcutsAll();
+    void updateShortcuts(MenuItem* item);
 
     MenuItemList m_items;
 };

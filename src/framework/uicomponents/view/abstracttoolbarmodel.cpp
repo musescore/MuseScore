@@ -102,6 +102,10 @@ void AbstractToolBarModel::load()
     uiActionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codes) {
         onActionsStateChanges(codes);
     });
+
+    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
+        updateShortcutsAll();
+    });
 }
 
 QVariantList AbstractToolBarModel::itemsProperty() const
@@ -321,4 +325,40 @@ ToolBarItem& AbstractToolBarModel::item(const ToolBarItemList& items, const Acti
 
     static ToolBarItem dummy;
     return dummy;
+}
+
+void AbstractToolBarModel::updateShortcutsAll()
+{
+    for (ToolBarItem* toolBarItem : m_items) {
+        if (!toolBarItem) {
+            continue;
+        }
+
+        UiAction action = toolBarItem->action();
+        action.shortcuts = shortcutsRegister()->shortcut(action.code).sequences;
+        toolBarItem->setAction(action);
+
+        for (MenuItem* menuItem : toolBarItem->menuItems()) {
+            if (!menuItem) {
+                continue;
+            }
+
+            updateShortcuts(menuItem);
+        }
+    }
+}
+
+void AbstractToolBarModel::updateShortcuts(MenuItem* menuItem)
+{
+    UiAction action = menuItem->action();
+    action.shortcuts = shortcutsRegister()->shortcut(action.code).sequences;
+    menuItem->setAction(action);
+
+    for (MenuItem* subItem : menuItem->subitems()) {
+        if (!subItem) {
+            continue;
+        }
+
+        updateShortcuts(subItem);
+    }
 }

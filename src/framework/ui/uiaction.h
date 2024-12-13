@@ -91,7 +91,7 @@ struct UiAction
                && description == other.description
                && iconCode == other.iconCode
                && checkable == other.checkable
-               && shortcuts == shortcuts;
+               && shortcuts == other.shortcuts;
     }
 };
 
