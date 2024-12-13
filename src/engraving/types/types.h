@@ -744,9 +744,10 @@ enum class OrnamentShowAccidental {
 };
 
 enum class PartialSpannerDirection : char {
-    NONE,
+    NONE = -1,
     INCOMING,
-    OUTGOING
+    OUTGOING,
+    BOTH
 };
 
 //-------------------------------------------------------------------

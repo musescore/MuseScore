@@ -3847,61 +3847,6 @@ void Note::connectTiedNotes()
     }
 }
 
-bool Note::hasFollowingJumpItem()
-{
-    const Chord* startChord = chord();
-    const Segment* seg = startChord->segment();
-    const Measure* measure = seg->measure();
-    const Fraction nextTick = seg->tick() + startChord->actualTicks();
-
-    // Jumps & markers
-    for (const EngravingItem* e : measure->el()) {
-        if (!e->isJump() && !e->isMarker()) {
-            continue;
-        }
-
-        if (e->isJump()) {
-            return true;
-        }
-
-        const Marker* marker = toMarker(e);
-
-        if (muse::contains(Marker::RIGHT_MARKERS, marker->markerType())) {
-            return true;
-        }
-    }
-
-    // Voltas
-    auto spanners = score()->spannerMap().findOverlapping(measure->endTick().ticks(), measure->endTick().ticks());
-    for (auto& spanner : spanners) {
-        if (!spanner.value->isVolta() || Fraction::fromTicks(spanner.start) != nextTick) {
-            continue;
-        }
-
-        return true;
-    }
-
-    // Repeats
-    if (measure->endTick() == nextTick && measure->repeatEnd()) {
-        return true;
-    }
-
-    for (Segment* nextSeg = seg->next(SegmentType::BarLineType); nextSeg && nextSeg->tick() == nextTick;
-         nextSeg = nextSeg->next(SegmentType::BarLineType)) {
-        const EngravingItem* el = nextSeg->element(startChord->track());
-        if (!el || !el->isBarLine()) {
-            continue;
-        }
-        const BarLine* bl = toBarLine(el);
-
-        if (bl->barLineType() & (BarLineType::END_REPEAT | BarLineType::END_START_REPEAT)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 //---------------------------------------------------------
 //   accidentalType
 //---------------------------------------------------------

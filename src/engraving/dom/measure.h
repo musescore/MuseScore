@@ -334,6 +334,9 @@ public:
     EngravingItem* nextElementStaff(staff_idx_t staff, EngravingItem* fromItem = nullptr);
     EngravingItem* prevElementStaff(staff_idx_t staff, EngravingItem* fromItem = nullptr);
 
+    double firstNoteRestSegmentX(bool leading = false) const;
+    double endingXForOpenEndedLines() const;
+
     String accessibleInfo() const override;
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
