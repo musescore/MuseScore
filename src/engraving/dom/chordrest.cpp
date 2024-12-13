@@ -40,6 +40,7 @@
 #include "instrchange.h"
 #include "keysig.h"
 #include "lyrics.h"
+#include "marker.h"
 #include "measure.h"
 #include "navigate.h"
 #include "note.h"
@@ -54,6 +55,7 @@
 #include "system.h"
 #include "tuplet.h"
 #include "utils.h"
+#include "volta.h"
 
 #include "log.h"
 
@@ -1290,5 +1292,173 @@ void ChordRest::checkStaffMoveValidity()
         // Move valid, clear stored move
         m_storedStaffMove = 0;
     }
+}
+
+bool ChordRest::followingJumpItem() const
+{
+    const Segment* seg = segment();
+    const Measure* measure = seg->measure();
+    const Fraction nextTick = seg->tick() + actualTicks();
+
+    // Jumps & markers
+    for (const EngravingItem* e : measure->el()) {
+        if (!e->isJump() && !e->isMarker()) {
+            continue;
+        }
+
+        if (e->isJump()) {
+            return true;
+        }
+
+        const Marker* marker = toMarker(e);
+
+        if (muse::contains(Marker::RIGHT_MARKERS, marker->markerType())) {
+            return true;
+        }
+    }
+
+    // Voltas
+    auto spanners = score()->spannerMap().findOverlapping(measure->endTick().ticks(), measure->endTick().ticks());
+    for (auto& spanner : spanners) {
+        if (!spanner.value->isVolta() || Fraction::fromTicks(spanner.start) != nextTick) {
+            continue;
+        }
+
+        return true;
+    }
+
+    // Repeats
+    if (measure->endTick() == nextTick && measure->repeatEnd()) {
+        return true;
+    }
+
+    for (Segment* nextSeg = seg->next(SegmentType::BarLineType); nextSeg && nextSeg->tick() == nextTick;
+         nextSeg = nextSeg->next(SegmentType::BarLineType)) {
+        const EngravingItem* el = nextSeg->element(track());
+        if (!el || !el->isBarLine()) {
+            continue;
+        }
+        const BarLine* bl = toBarLine(el);
+
+        if (bl->barLineType() & (BarLineType::END_REPEAT | BarLineType::END_START_REPEAT)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool ChordRest::precedingJumpItem() const
+{
+    const Segment* seg = segment();
+    const Measure* measure = seg->measure();
+
+    if (seg->score()->firstSegment(SegmentType::ChordRest) == seg) {
+        return true;
+    }
+
+    // Markers
+    for (const EngravingItem* e : measure->el()) {
+        if (!e->isMarker()) {
+            continue;
+        }
+
+        const Marker* marker = toMarker(e);
+        if (muse::contains(Marker::RIGHT_MARKERS, marker->markerType())) {
+            continue;
+        }
+
+        return true;
+    }
+
+    // Voltas
+    auto spanners = score()->spannerMap().findOverlapping(measure->tick().ticks(), measure->tick().ticks());
+    for (auto& spanner : spanners) {
+        if (!spanner.value->isVolta() || Fraction::fromTicks(spanner.start) != tick()) {
+            continue;
+        }
+
+        return true;
+    }
+
+    // Repeat barlines
+    if (measure->repeatStart()) {
+        return true;
+    }
+
+    for (Segment* prevSeg = seg->prev(SegmentType::BarLineType); prevSeg && prevSeg->tick() == seg->tick();
+         prevSeg = prevSeg->prev(SegmentType::BarLineType)) {
+        EngravingItem* el = prevSeg->element(track());
+        if (!el || !el->isBarLine()) {
+            continue;
+        }
+
+        BarLine* bl = toBarLine(el);
+        if (bl->barLineType() & (BarLineType::START_REPEAT | BarLineType::END_START_REPEAT)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+String ChordRest::precedingJumpItemName() const
+{
+    const Segment* seg = segment();
+    const Measure* measure = seg->measure();
+
+    if (seg->score()->firstSegment(SegmentType::ChordRest) == seg) {
+        return muse::mtrc("engraving", "start of score");
+    }
+
+    // Markers
+    for (const EngravingItem* e : measure->el()) {
+        if (!e->isMarker()) {
+            continue;
+        }
+
+        const Marker* marker = toMarker(e);
+        if (muse::contains(Marker::RIGHT_MARKERS, marker->markerType())) {
+            continue;
+        }
+
+        if (marker->markerType() == MarkerType::CODA || marker->markerType() == MarkerType::VARCODA) {
+            return muse::mtrc("engraving", "coda");
+        } else {
+            return muse::mtrc("engraving", "segno");
+        }
+    }
+
+    // Voltas
+    auto spanners = score()->spannerMap().findOverlapping(measure->tick().ticks(), measure->tick().ticks());
+    for (auto& spanner : spanners) {
+        if (!spanner.value->isVolta() || Fraction::fromTicks(spanner.start) != tick()) {
+            continue;
+        }
+
+        Volta* volta = toVolta(spanner.value);
+
+        return muse::mtrc("engraving", "“%1” volta").arg(volta->beginText());
+    }
+
+    // Repeat barlines
+    if (measure->repeatStart()) {
+        return muse::mtrc("engraving", "start repeat");
+    }
+
+    for (Segment* prevSeg = seg->prev(SegmentType::BarLineType); prevSeg && prevSeg->tick() == seg->tick();
+         prevSeg = prevSeg->prev(SegmentType::BarLineType)) {
+        EngravingItem* el = prevSeg->element(track());
+        if (!el || !el->isBarLine()) {
+            continue;
+        }
+
+        BarLine* bl = toBarLine(el);
+        if (bl->barLineType() & (BarLineType::START_REPEAT | BarLineType::END_START_REPEAT)) {
+            return muse::mtrc("engraving", "start repeat");
+        }
+    }
+
+    return muse::mtrc("engraving", "invalid");
 }
 }

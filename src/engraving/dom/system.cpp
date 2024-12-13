@@ -997,40 +997,8 @@ double System::firstNoteRestSegmentX(bool leading) const
     for (const MeasureBase* mb : measures()) {
         if (mb->isMeasure()) {
             const Measure* measure = static_cast<const Measure*>(mb);
-            for (const Segment* seg = measure->first(); seg; seg = seg->next()) {
-                if (seg->isChordRestType()) {
-                    double noteRestPos = seg->measure()->pos().x() + seg->pos().x();
-                    if (!leading) {
-                        return noteRestPos;
-                    }
-
-                    // first CR found; back up to previous segment
-                    seg = seg->prevActive();
-                    while (seg && seg->allElementsInvisible()) {
-                        seg = seg->prevActive();
-                    }
-                    if (seg) {
-                        // find maximum width
-                        double width = 0.0;
-                        size_t n = score()->nstaves();
-                        for (staff_idx_t i = 0; i < n; ++i) {
-                            if (!staff(i)->show()) {
-                                continue;
-                            }
-                            EngravingItem* e = seg->element(i * VOICES);
-                            if (e && e->addToSkyline()) {
-                                width = std::max(width, e->pos().x() + e->ldata()->bbox().right());
-                            }
-                        }
-                        if (seg->isStartRepeatBarLineType()) {
-                            margin = style().styleMM(Sid::repeatBarlineDotSeparation);
-                        }
-                        return std::min(seg->measure()->pos().x() + seg->pos().x() + width + margin, noteRestPos);
-                    } else {
-                        return margin;
-                    }
-                }
-            }
+            margin = measure->firstNoteRestSegmentX(leading);
+            break;
         }
     }
     LOGD("firstNoteRestSegmentX: did not find segment");
@@ -1053,15 +1021,7 @@ double System::endingXForOpenEndedLines() const
         return systemEndX - margin;
     }
 
-    Segment* lastSeg = lastMeas->last();
-    while (lastSeg && !lastSeg->isType(SegmentType::BarLineType)) {
-        lastSeg = lastSeg->prevEnabled();
-    }
-    if (!lastSeg) {
-        return systemEndX - margin;
-    }
-
-    return lastSeg->x() + lastMeas->x() - margin;
+    return lastMeas->endingXForOpenEndedLines();
 }
 
 //---------------------------------------------------------

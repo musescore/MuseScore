@@ -111,8 +111,11 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
     p2 = sPos.p2;
     bool constrainLeftAnchor = false;
 
+    const bool incomingPartialSlur = item->partialSpannerDirection() == PartialSpannerDirection::INCOMING;
+    const bool outgoingPartialSlur = item->partialSpannerDirection() == PartialSpannerDirection::OUTGOING;
+
     // start anchor, either on the start chordrest or at the beginning of the system
-    if (sst == SpannerSegmentType::SINGLE || sst == SpannerSegmentType::BEGIN) {
+    if ((sst == SpannerSegmentType::SINGLE || sst == SpannerSegmentType::BEGIN) && !incomingPartialSlur) {
         Chord* sc = item->startCR()->isChord() ? toChord(item->startCR()) : nullptr;
 
         // on chord
@@ -152,9 +155,10 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
                 }
             }
         }
-    } else if (sst == SpannerSegmentType::END || sst == SpannerSegmentType::MIDDLE) {
+    } else if (sst == SpannerSegmentType::END || sst == SpannerSegmentType::MIDDLE || incomingPartialSlur) {
         // beginning of system
-        ChordRest* firstCr = system->firstChordRest(item->track2());
+        Measure* measure = item->startCR()->measure();
+        ChordRest* firstCr = incomingPartialSlur ? measure->firstChordRest(item->track()) : system->firstChordRest(item->track2());
         double y = p1.y();
         if (firstCr && firstCr == item->endCR()) {
             constrainLeftAnchor = true;
@@ -169,12 +173,13 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
                 y += continuedSlurOffsetY * (item->up() ? -1 : 1);
             }
         }
-        p1 = PointF(system->firstNoteRestSegmentX(true), y);
 
-        // adjust for ties at the end of the system
-        ChordRest* cr = system->firstChordRest(item->track());
+        double segmentX = incomingPartialSlur ? measure->firstNoteRestSegmentX() : system->firstNoteRestSegmentX(true);
+        p1 = PointF(segmentX, y);
+
+        // adjust for ties at the start of the system
+        ChordRest* cr = incomingPartialSlur ? measure->firstChordRest(item->track()) : system->firstChordRest(item->track());
         if (cr && cr->isChord() && cr->tick() >= stick && cr->tick() <= etick) {
-            // TODO: can ties go to or from rests?
             Chord* c = toChord(cr);
             Tie* tie = nullptr;
             PointF endPoint;
@@ -187,6 +192,9 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
                 }
             }
             if (tie) {
+                if (tie->isPartialTie()) {
+                    p1.rx() = endPoint.rx();
+                }
                 if (item->up() && tie->up()) {
                     if (endPoint.y() - p1.y() < tieClearance) {
                         p1.ry() = endPoint.y() - tieClearance;
@@ -201,7 +209,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
     }
 
     // end anchor
-    if (sst == SpannerSegmentType::SINGLE || sst == SpannerSegmentType::END) {
+    if ((sst == SpannerSegmentType::SINGLE || sst == SpannerSegmentType::END) && !outgoingPartialSlur) {
         Chord* ec = item->endCR()->isChord() ? toChord(item->endCR()) : nullptr;
 
         // on chord
@@ -236,7 +244,8 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         }
     } else {
         // at end of system
-        ChordRest* lastCr = system->lastChordRest(item->track());
+        Measure* measure = item->endCR()->measure();
+        ChordRest* lastCr = outgoingPartialSlur ? measure->lastChordRest(item->track()) : system->lastChordRest(item->track());
         double y = p1.y();
         if (lastCr && lastCr == item->startCR()) {
             y += 0.25 * item->spatium() * (item->up() ? -1 : 1);
@@ -255,22 +264,33 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
             }
         }
 
-        p2 = PointF(system->endingXForOpenEndedLines(), y);
+        double endingX = outgoingPartialSlur ? measure->endingXForOpenEndedLines() : system->endingXForOpenEndedLines();
+        p2 = PointF(endingX, y);
 
         // adjust for ties at the end of the system
-        ChordRest* cr = system->lastChordRest(item->track());
+        ChordRest* cr = outgoingPartialSlur ? measure->lastChordRest(item->track()) : system->lastChordRest(item->track());
 
         if (cr && cr->isChord() && cr->tick() >= stick && cr->tick() <= etick) {
-            // TODO: can ties go to or from rests?
             Chord* c = toChord(cr);
             Tie* tie = nullptr;
             PointF endPoint;
             Tie* tieFor = c->notes()[0]->tieFor();
-            if (tieFor && !tieFor->isInside() && tieFor->up() == item->up()) {
+            if (tieFor && (!tieFor->isInside() || outgoingPartialSlur) && tieFor->up() == item->up()) {
                 // there is a tie that starts on this chordrest
                 if (!tieFor->segmentsEmpty()) { //Checks is spanner segment exists
                     tie = tieFor;
                     endPoint = tie->segmentAt(0)->ups(Grip::END).pos();
+                }
+
+                if (outgoingPartialSlur && tie->nsegments() == 1) {
+                    // For partial slurs ending midway through a tie, get top of the tie shape at the slur's end X
+                    const TieSegment* tieSeg = tie->frontSegment();
+                    const Shape tieShape = tieSeg->shape().translate(tieSeg->pos());
+                    if (item->up() && tie->up()) {
+                        endPoint.ry() = p2.y() + tieShape.topDistance(p2);
+                    } else if (!item->up() && !tie->up()) {
+                        endPoint.ry() = p2.y() - tieShape.bottomDistance(p2);
+                    }
                 }
             }
             if (tie) {

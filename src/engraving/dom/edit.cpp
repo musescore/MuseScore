@@ -2066,11 +2066,12 @@ Tie* Score::cmdToggleTie()
         bool shouldTieListSelection = noteList.size() == 2;
         for (Note* n : noteList) {
             tie = n->tieFor();
+            Chord* chord = n->chord();
             if (tie) {
                 undoRemoveElement(tie);
                 tie = nullptr;
                 shouldTieListSelection = false;
-            } else if (n->hasFollowingJumpItem()) {
+            } else if (chord->followingJumpItem()) {
                 // Create outgoing partial tie
                 tie = createAndAddTie(n, nullptr);
                 shouldTieListSelection = false;
@@ -2926,7 +2927,6 @@ void Score::deleteItem(EngravingItem* el)
                 tie->updateStartTieOnRemoval();
             }
         }
-
         undoRemoveElement(el);
     }
     break;
