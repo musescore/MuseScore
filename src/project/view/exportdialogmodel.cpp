@@ -406,6 +406,21 @@ void ExportDialogModel::setPdfResolution(const int& resolution)
     emit pdfResolutionChanged(resolution);
 }
 
+bool ExportDialogModel::pdfTransparentBackground() const
+{
+    return imageExportConfiguration()->exportPdfWithTransparentBackground();
+}
+
+void ExportDialogModel::setPdfTransparentBackground(const bool& transparent)
+{
+    if (transparent == pdfTransparentBackground()) {
+        return;
+    }
+
+    imageExportConfiguration()->setExportPdfWithTransparentBackground(transparent);
+    emit pdfTransparentBackgroundChanged(transparent);
+}
+
 int ExportDialogModel::pngResolution() const
 {
     return imageExportConfiguration()->exportPngDpiResolution();

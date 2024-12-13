@@ -55,4 +55,19 @@ ExportSettingsPage {
             }
         }
     }
+
+    CheckBox {
+        width: parent.width
+        text: qsTrc("project/export", "Transparent background")
+
+        navigation.name: "TransparentBackgroundCheckbox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationOrder + 2
+
+        checked: root.model.pdfTransparentBackground
+
+        onClicked: {
+            root.model.pdfTransparentBackground = !checked
+        }
+    }
 }
