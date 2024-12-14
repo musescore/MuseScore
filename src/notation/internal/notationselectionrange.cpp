@@ -126,7 +126,7 @@ std::vector<muse::RectF> NotationSelectionRange::boundingArea() const
         }
 
         double x1 = sectionStartSegment->pagePos().x();
-        double x2 = sectionEndSegment->pageBoundingRect().topRight().x();
+        double x2 = sectionEndSegment->pageBoundingRect().right();
         const int SELECTION_BOX_PADDING = 0.5 * scoreFirstStaff->spatium(startSegment->tick());
         double y1 = topY + segmentFirstStaff->y() + sectionStartSegment->pagePos().y() - SELECTION_BOX_PADDING;
         double y2 = bottomY + segmentLastStaff->y() + sectionStartSegment->pagePos().y() + SELECTION_BOX_PADDING;
@@ -271,7 +271,7 @@ const
     const mu::engraving::Segment* startSegment = rangeStartSegment;
     Fraction rangeEndTick = rangeEndSegment->tick();
     for (const mu::engraving::Segment* segment = rangeStartSegment;
-         segment && segment != rangeEndSegment && segment->tick() <= rangeEndTick;) {
+         segment && segment != rangeEndSegment && segment->tick() < rangeEndTick;) {
         mu::engraving::System* currentSegmentSystem = segment->measure()->system();
 
         mu::engraving::Segment* nextSegment = segment->next1MMenabled();
@@ -296,7 +296,7 @@ const
             }
         }
 
-        if (nextSegmentSystem != currentSegmentSystem || nextSegment == rangeEndSegment) {
+        if (nextSegmentSystem != currentSegmentSystem || nextSegment->tick() >= rangeEndTick) {
             RangeSection section;
             section.system = currentSegmentSystem;
             section.startSegment = startSegment;
