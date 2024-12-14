@@ -95,7 +95,6 @@ public:
 
     int defaultZoom() const override;
     void setDefaultZoom(int zoomPercentage) override;
-
     muse::async::Notification defaultZoomChanged() const override;
 
     qreal scalingFromZoomPercentage(int zoomPercentage) const override;

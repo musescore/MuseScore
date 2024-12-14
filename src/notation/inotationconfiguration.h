@@ -90,7 +90,6 @@ public:
 
     virtual int defaultZoom() const = 0;
     virtual void setDefaultZoom(int zoomPercentage) = 0;
-
     virtual muse::async::Notification defaultZoomChanged() const = 0;
 
     virtual QList<int> possibleZoomPercentageList() const = 0;
