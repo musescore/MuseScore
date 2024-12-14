@@ -2572,7 +2572,7 @@ void Score::cmdDeleteSelection()
       deselectAll();
       // make new selection if appropriate
       if (noteEntryMode()) {
-            if (!crsSelectedAfterDeletion.empty())
+            if (crsSelectedAfterDeletion[0])
                   _is.setSegment(crsSelectedAfterDeletion[0]->segment());
             else
                   crsSelectedAfterDeletion.push_back(_is.cr());
