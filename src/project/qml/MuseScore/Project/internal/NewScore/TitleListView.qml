@@ -60,7 +60,7 @@ Item {
         anchors.top: title.bottom
         anchors.topMargin: 16
 
-        navigation.name: "Search"
+        navigation.name: "SearchControl"
         navigation.panel: view.navigation
         navigation.row: 1
 

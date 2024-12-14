@@ -66,7 +66,7 @@ BaseSection {
             //: Search advanced preferences
             hint: qsTrc("appshell/preferences", "Search advanced")
 
-            navigation.name: "SearchAdvancedField"
+            navigation.name: "SearchControl"
             navigation.panel: root.navigation
             navigation.column: 1
         }

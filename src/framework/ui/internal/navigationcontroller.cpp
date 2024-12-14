@@ -295,6 +295,7 @@ void NavigationController::init()
     dispatcher()->reg(this, "nav-last-control", [this]() { navigateTo(NavigationType::LastControl); });           // typically End key
     dispatcher()->reg(this, "nav-nextrow-control", [this]() { navigateTo(NavigationType::NextRowControl); });     // typically PageDown key
     dispatcher()->reg(this, "nav-prevrow-control", [this]() { navigateTo(NavigationType::PrevRowControl); });     // typically PageUp key
+    dispatcher()->reg(this, "nav-search-control", [this]() { goToSearchControl(); });
 
     qApp->installEventFilter(this);
 }
@@ -818,6 +819,58 @@ void NavigationController::goToPrevPanel()
 
     // active is first, go to last panel in prev section
     goToPrevSection(true);
+}
+
+bool NavigationController::activateSearchControl(INavigationSection* activeSec)
+{
+    const std::string sectionName = activeSec->name().toStdString();
+    const std::string searchCtrl = "SearchControl";
+
+    for (const auto& panel : activeSec->panels()) {
+        if (panel->enabled()) {
+            if (requestActivateByName(sectionName, panel->name().toStdString(), searchCtrl)) {
+                INavigationControl* ctrl = activeControl();
+                doDeactivateControl(ctrl);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void NavigationController::goToSearchControl()
+{
+    INavigationSection* activeSec = activeSection();
+    if (activeSec) {
+        doDeactivateSection(activeSec);
+    }
+
+    auto it = std::find(m_sections.cbegin(), m_sections.cend(), activeSec);
+    if (it != m_sections.cend()) {
+        for (; it != m_sections.cend(); ++it) {
+            if (!(*it)->enabled()) {
+                continue;
+            }
+
+            if (activateSearchControl(*it)) {
+                return;
+            }
+        }
+    }
+
+    for (it = m_sections.cbegin(); it != m_sections.cend(); ++it) {
+        if (*it == activeSec) {
+            break;
+        }
+
+        if (!(*it)->enabled()) {
+            continue;
+        }
+
+        if (activateSearchControl(*it)) {
+            return;
+        }
+    }
 }
 
 void NavigationController::onRight()

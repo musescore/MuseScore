@@ -95,6 +95,10 @@ const UiActionList NavigationUiActions::m_actions = {
     UiAction("nav-prevrow-control",
              ui::UiCtxAny,
              muse::shortcuts::CTX_NOT_PROJECT_FOCUSED
+             ),
+    UiAction("nav-search-control",
+             ui::UiCtxAny,
+             muse::shortcuts::CTX_ANY
              )
 };
 

@@ -96,7 +96,7 @@ RowLayout {
 
         hint: qsTrc("shortcuts", "Search shortcut")
 
-        navigation.name: "ShortcutSearchField"
+        navigation.name: "SearchControl"
         navigation.panel: root.navigation
         navigation.column: 2
     }

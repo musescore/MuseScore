@@ -104,7 +104,7 @@ FocusScope {
 
                 Layout.preferredWidth: 220
 
-                navigation.name: "PluginsSearch"
+                navigation.name: "SearchControl"
                 navigation.panel: navTopPanel
                 navigation.order: 1
                 accessible.name: qsTrc("appshell", "Plugins search")
