@@ -55,8 +55,8 @@ void MidiConfigurationStub::setMidiInputDeviceId(const MidiDeviceID&)
 
 async::Notification MidiConfigurationStub::midiInputDeviceIdChanged() const
 {
-    static async::Notification ch;
-    return ch;
+    static async::Notification n;
+    return n;
 }
 
 MidiDeviceID MidiConfigurationStub::midiOutputDeviceId() const
@@ -85,6 +85,6 @@ void MidiConfigurationStub::setUseMIDI20Output(bool)
 
 async::Channel<bool> MidiConfigurationStub::useMIDI20OutputChanged() const
 {
-    static async::Channel<bool> n;
-    return n;
+    static async::Channel<bool> ch;
+    return ch;
 }

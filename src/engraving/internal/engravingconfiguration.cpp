@@ -74,10 +74,12 @@ void EngravingConfiguration::init()
         "#6038FC", // "all voices"
     };
 
+    settings()->setDefaultValue(DEFAULT_STYLE_FILE_PATH, Val(muse::io::path_t()));
     settings()->valueChanged(DEFAULT_STYLE_FILE_PATH).onReceive(this, [this](const Val& val) {
         m_defaultStyleFilePathChanged.send(val.toPath());
     });
 
+    settings()->setDefaultValue(PART_STYLE_FILE_PATH, Val(muse::io::path_t()));
     settings()->valueChanged(PART_STYLE_FILE_PATH).onReceive(this, [this](const Val& val) {
         m_partStyleFilePathChanged.send(val.toPath());
     });
