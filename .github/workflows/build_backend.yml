@@ -14,6 +14,10 @@ on:
         description: 'Publish: on - publish'
         default: 'off'
         required: false
+      deploy_stage:
+        description: 'Deploy stage: dev, stable'
+        default: 'dev'
+        required: false
   workflow_call:
     inputs:
       build_mode:
@@ -82,11 +86,6 @@ jobs:
       run: |
         bash ./buildscripts/ci/backend/package.sh
 
-    - name: Publish to S3
-      if: env.DO_PUBLISH == 'true'
-      run: |
-        bash ./buildscripts/ci/backend/publish_to_s3.sh --s3_key ${{ secrets.S3_KEY_CONVERTER }} --s3_secret ${{ secrets.S3_SECRET_CONVERTER }}
-
     - name: Build Docker
       if: env.DO_PUBLISH == 'true'
       run: |
@@ -96,6 +95,11 @@ jobs:
       if: env.DO_PUBLISH == 'true'
       run: |
         bash ./buildscripts/ci/backend/publish_to_registry.sh --token ${{ secrets.PACKAGES_PAT }}
+
+    - name: Publish to S3
+      if: env.DO_PUBLISH == 'true'
+      run: |
+        bash ./buildscripts/ci/backend/publish_to_s3.sh --s3_key ${{ secrets.S3_KEY_CONVERTER }} --s3_secret ${{ secrets.S3_SECRET_CONVERTER }} --stage ${{ inputs.deploy_stage }}
 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
