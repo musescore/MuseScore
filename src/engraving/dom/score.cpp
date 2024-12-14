@@ -3522,153 +3522,241 @@ void Score::selectAdd(EngravingItem* e)
 //    staffIdx is valid, if element is of type MEASURE
 //---------------------------------------------------------
 
+static Segment* findElementStartSegment(Score* score, EngravingItem* e)
+{
+    if (Segment* ancestor = toSegment(e->findAncestor(ElementType::SEGMENT))) {
+        if (ancestor->isChordRestType()) {
+            return ancestor;
+        }
+    }
+
+    return score->tick2segmentMM(e->tick(), true, Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+}
+
+/// Returns `nullptr` when the end segment is the end of the score;
+/// returns `def` if no end segment is found.
+static Segment* findElementEndSegment(Score* score, EngravingItem* e, Segment* def)
+{
+    ChordRest* cr = nullptr;
+
+    if (e->isNote()) {
+        cr = toChordRest(e->parentItem());
+    } else if (e->isChordRest()) {
+        cr = toChordRest(e);
+    } else if (EngravingItem* a = e->findAncestor(ElementType::CHORD)) {
+        cr = toChordRest(a);
+    } else if (EngravingItem* a = e->findAncestor(ElementType::REST)) {
+        cr = toChordRest(a);
+    }
+
+    if (cr) {
+        return cr->nextSegmentAfterCR(SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef);
+    }
+
+    if (e->isSpanner() || e->isSpannerSegment()) {
+        Spanner* sp = e->isSpanner() ? toSpanner(e) : toSpannerSegment(e)->spanner();
+        return score->tick2segmentMM(sp->tick2(), true, Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+    }
+
+    return def;
+}
+
 void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
 {
-    track_idx_t activeTrack = e->track();
-    // current selection is range extending to end of score?
-    bool endRangeSelected = selection().isRange() && selection().endSegment() == nullptr;
+    if (m_selection.isSingle()) {
+        if (!e->isMeasureBase()
+            && !e->isNote()
+            && !e->isChordRest()) {
+            // Try to select similar in range
+            bool success = trySelectSimilarInRange(e);
+            if (success) {
+                return;
+            }
+        }
+
+        // Try to extend single selection into range selection
+        bool success = tryExtendSingleSelectionToRange(e, staffIdx);
+        if (success) {
+            return;
+        }
+    }
+
     if (e->isMeasure()) {
-        Measure* m  = toMeasure(e);
-        Fraction tick    = m->tick();
-        Fraction etick   = tick + m->ticks();
-        activeTrack = staffIdx * VOICES;
-        Segment* s1 = m->tick2segment(tick);
-        if (!s1) {                        // m is corrupted!
-            s1 = m->first(SegmentType::ChordRest);
-        }
-        Segment* s2 = m == lastMeasure() ? 0 : m->last();
-        if (m_selection.isNone() || (m_selection.isList() && !m_selection.isSingle())) {
-            if (m_selection.isList()) {
-                deselectAll();
-            }
-            m_selection.setRange(s1, s2, staffIdx, staffIdx + 1);
-        } else if (m_selection.isRange()) {
-            m_selection.extendRangeSelection(s1, s2, staffIdx, tick, etick);
-        } else if (m_selection.isSingle()) {
-            EngravingItem* oe = selection().element();
-            if (oe->isNote() || oe->isChordRest()) {
-                if (oe->isNote()) {
-                    oe = oe->parentItem();
-                }
-                ChordRest* cr = toChordRest(oe);
-                Fraction oetick = cr->segment()->tick();
-                Segment* startSegment = cr->segment();
-                Segment* endSegment = m->last();
-                if (tick < oetick) {
-                    startSegment = m->tick2segment(tick);
-                    if (etick <= oetick) {
-                        SegmentType st = SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef;
-                        endSegment = cr->nextSegmentAfterCR(st);
-                    }
-                }
-                staff_idx_t staffStart = staffIdx;
-                staff_idx_t endStaff = staffIdx + 1;
-                if (staffStart > cr->staffIdx()) {
-                    staffStart = cr->staffIdx();
-                } else if (cr->staffIdx() >= endStaff) {
-                    endStaff = cr->staffIdx() + 1;
-                }
-                m_selection.setRange(startSegment, endSegment, staffStart, endStaff);
-            } else {
-                deselectAll();
-                m_selection.setRange(s1, s2, staffIdx, staffIdx + 1);
-            }
+        Measure* m = toMeasure(e);
+        Segment* startSegment = m->first(SegmentType::ChordRest);
+        Segment* endSegment = m == lastMeasure() ? nullptr : m->last();
+        Fraction tick = m->tick();
+        Fraction etick = tick + m->ticks();
+
+        if (m_selection.isRange()) {
+            // Extend existing range selection
+            m_selection.extendRangeSelection(startSegment, endSegment, staffIdx, tick, etick);
         } else {
-            LOGD("SELECT_RANGE: measure: sel state %d", int(m_selection.state()));
-            return;
-        }
-    } else if (e->isNote() || e->isChordRest()) {
-        ChordRest* cr = e->isNote() ? toChordRest(e->parentItem()) : toChordRest(e);
-
-        if (m_selection.isNone() || (m_selection.isList() && !m_selection.isSingle())) {
-            if (m_selection.isList()) {
+            // Create new range selection
+            if (!m_selection.isNone()) {
                 deselectAll();
             }
-            SegmentType st = SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef;
-            m_selection.setRange(cr->segment(), cr->nextSegmentAfterCR(st), cr->staffIdx(), cr->staffIdx() + 1);
-            activeTrack = cr->track();
-        } else if (m_selection.isSingle()) {
-            EngravingItem* oe = m_selection.element();
-            if (oe && (oe->isNote() || oe->isRest() || oe->isMMRest())) {
-                if (oe->isNote()) {
-                    oe = oe->parentItem();
-                }
-                ChordRest* ocr = toChordRest(oe);
-
-                Segment* endSeg = tick2segmentMM(ocr->segment()->tick() + ocr->actualTicks(), true);
-                if (!endSeg) {
-                    endSeg = ocr->segment()->next();
-                }
-
-                m_selection.setRange(ocr->segment(), endSeg, oe->staffIdx(), oe->staffIdx() + 1);
-                m_selection.extendRangeSelection(cr);
-            } else {
-                deselectAll();
-                SegmentType st = SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef;
-                m_selection.setRange(cr->segment(), cr->nextSegmentAfterCR(st), cr->staffIdx(), cr->staffIdx() + 1);
-                activeTrack = cr->track();
-            }
-        } else if (m_selection.isRange()) {
-            m_selection.extendRangeSelection(cr);
-        } else {
-            LOGD("sel state %d", int(m_selection.state()));
-            return;
+            m_selection.setRange(startSegment, endSegment, staffIdx, staffIdx + 1);
         }
-        if (!endRangeSelected && !m_selection.endSegment()) {
-            m_selection.setEndSegment(cr->segment()->nextCR());
-        }
-        if (!m_selection.startSegment()) {
-            m_selection.setStartSegment(cr->segment());
-        }
-    } else {
-        // try to select similar in range
-        EngravingItem* selectedElement = m_selection.element();
-        if (selectedElement && e->type() == selectedElement->type()) {
-            staff_idx_t idx1 = selectedElement->staffIdx();
-            staff_idx_t idx2 = e->staffIdx();
-            if (idx2 < idx1) {
-                staff_idx_t temp = idx1;
-                idx1 = idx2;
-                idx2 = temp;
-            }
 
-            if (idx1 != muse::nidx && idx2 != muse::nidx) {
-                Fraction t1 = selectedElement->tick();
-                Fraction t2 = e->tick();
-                if (t1 > t2) {
-                    Fraction temp = t1;
-                    t1 = t2;
-                    t2 = temp;
-                }
-                Segment* s1 = tick2segmentMM(t1, true, SegmentType::ChordRest);
-                Segment* s2 = tick2segmentMM(t2, true, SegmentType::ChordRest);
-                if (s2) {
-                    s2 = s2->next1MM(SegmentType::ChordRest);
-                }
-
-                if (s1) {
-                    m_selection.setRange(s1, s2, idx1, idx2 + 1);
-                    selectSimilarInRange(e);
-                    if (selectedElement->track() == e->track()) {
-                        // limit to this voice only
-                        const std::vector<EngravingItem*>& list = m_selection.elements();
-                        for (EngravingItem* el : list) {
-                            if (el->track() != e->track()) {
-                                m_selection.remove(el);
-                            }
-                        }
-                    }
-
-                    return;
-                }
-            }
-        }
-        doSelect(e, SelectType::SINGLE, staffIdx);
+        m_selection.updateSelectedElements();
+        m_selection.setActiveTrack(staffIdx * VOICES);
         return;
     }
 
-    m_selection.setActiveTrack(activeTrack);
+    if (m_selection.isRange()) {
+        // Extend existing range selection
+
+        Segment* startSegment = findElementStartSegment(this, e);
+        if (startSegment) {
+            Segment* endSegment = findElementEndSegment(this, e, m_selection.endSegment());
+            staff_idx_t elementStaffIdx = e->staffIdx();
+            Fraction tick = startSegment->tick();
+            Fraction etick = endSegment->tick();
+
+            if (endSegment && elementStaffIdx != muse::nidx) {
+                m_selection.extendRangeSelection(startSegment, endSegment, elementStaffIdx, tick, etick);
+                m_selection.updateSelectedElements();
+
+                m_selection.setActiveTrack(e->track());
+                return;
+            }
+        }
+    }
+
+    if (e->isNote() || e->isChordRest()) {
+        // Create new range selection
+        if (!m_selection.isNone()) {
+            deselectAll();
+        }
+
+        ChordRest* cr = e->isNote() ? toChordRest(e->parentItem()) : toChordRest(e);
+
+        SegmentType st = SegmentType::ChordRest | SegmentType::EndBarLine | SegmentType::Clef;
+        m_selection.setRange(cr->segment(), cr->nextSegmentAfterCR(st), cr->staffIdx(), cr->staffIdx() + 1);
+        m_selection.updateSelectedElements();
+
+        m_selection.setActiveTrack(cr->track());
+        return;
+    }
+
+    // Nothing worked; just select the new element
+    doSelect(e, SelectType::SINGLE, staffIdx);
+}
+
+bool Score::trySelectSimilarInRange(EngravingItem* e)
+{
+    EngravingItem* selectedElement = m_selection.element();
+    if (!selectedElement || e->type() != selectedElement->type()) {
+        return false;
+    }
+
+    staff_idx_t idx1 = selectedElement->staffIdx();
+    staff_idx_t idx2 = e->staffIdx();
+
+    if (idx1 == muse::nidx || idx2 == muse::nidx) {
+        return false;
+    }
+
+    if (idx2 < idx1) {
+        std::swap(idx1, idx2);
+    }
+
+    Fraction t1 = selectedElement->tick();
+    Fraction t2 = e->tick();
+    if (t1 > t2) {
+        std::swap(t1, t2);
+    }
+
+    Segment* s1 = tick2segmentMM(t1, true, SegmentType::ChordRest);
+    Segment* s2 = tick2segmentMM(t2, true, SegmentType::ChordRest);
+    if (s2) {
+        s2 = s2->next1MM(SegmentType::ChordRest);
+    }
+
+    if (!s1) {
+        return false;
+    }
+
+    m_selection.setRange(s1, s2, idx1, idx2 + 1);
+    selectSimilarInRange(e);
+    if (selectedElement->track() == e->track()) {
+        // limit to this voice only
+        const std::vector<EngravingItem*>& list = m_selection.elements();
+        for (EngravingItem* el : list) {
+            if (el->track() != e->track()) {
+                m_selection.remove(el);
+            }
+        }
+    }
+
+    return true;
+}
+
+bool Score::tryExtendSingleSelectionToRange(EngravingItem* newElement, staff_idx_t staffIdx)
+{
+    EngravingItem* selectedElement = m_selection.element();
+    if (!selectedElement) {
+        return false;
+    }
+
+    Segment* startSegment = findElementStartSegment(this, selectedElement);
+    if (!startSegment) {
+        return false;
+    }
+
+    Segment* endSegment = findElementEndSegment(this, selectedElement, startSegment);
+
+    staff_idx_t startStaffIdx = selectedElement->staffIdx();
+    if (startStaffIdx == muse::nidx) {
+        return false;
+    }
+
+    staff_idx_t endStaffIdx = startStaffIdx + 1;
+
+    track_idx_t activeTrack = newElement->track();
+
+    if (newElement->isMeasure()) {
+        Measure* m = toMeasure(newElement);
+        const Fraction tick = m->tick();
+
+        if (tick < startSegment->tick()) {
+            startSegment = m->first(SegmentType::ChordRest);
+        }
+        if (m == lastMeasure()) {
+            endSegment = nullptr;
+        } else if (endSegment && tick + m->ticks() > endSegment->tick()) {
+            endSegment = m->last();
+        }
+
+        startStaffIdx = std::min(startStaffIdx, staffIdx);
+        endStaffIdx = std::max(endStaffIdx, staffIdx + 1);
+
+        activeTrack = staffIdx * VOICES;
+    } else {
+        Segment* newStartSegment = findElementStartSegment(this, newElement);
+        if (newStartSegment && newStartSegment->tick() < startSegment->tick()) {
+            startSegment = newStartSegment;
+        }
+
+        Segment* newEndSegment = findElementEndSegment(this, newElement, newStartSegment);
+        if (endSegment && newEndSegment->tick() > endSegment->tick()) {
+            endSegment = newEndSegment;
+        }
+
+        staff_idx_t newStaffIdx = newElement->staffIdx();
+        if (newStaffIdx != muse::nidx) {
+            startStaffIdx = std::min(startStaffIdx, newStaffIdx);
+            endStaffIdx = std::max(endStaffIdx, newStaffIdx + 1);
+        }
+    }
+
+    m_selection.setRange(startSegment, endSegment, startStaffIdx, endStaffIdx);
     m_selection.updateSelectedElements();
+
+    m_selection.setActiveTrack(activeTrack);
+
+    return true;
 }
 
 //---------------------------------------------------------
