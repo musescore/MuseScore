@@ -51,7 +51,7 @@ public:
 
     virtual std::vector<muse::RectF> boundingArea() const = 0;
     virtual bool containsPoint(const muse::PointF& point) const = 0;
-    virtual bool containsItem(const engraving::EngravingItem* item) const = 0;
+    virtual bool containsItem(const EngravingItem* item, engraving::staff_idx_t staffIdx = muse::nidx) const = 0;
 };
 
 using INotationSelectionRangePtr = std::shared_ptr<INotationSelectionRange>;
