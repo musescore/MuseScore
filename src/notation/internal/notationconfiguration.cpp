@@ -219,6 +219,7 @@ void NotationConfiguration::init()
         m_notePlayDurationMillisecondsChanged.send(val.toInt());
     });
 
+    settings()->setDefaultValue(STYLE_FILE_IMPORT_PATH_KEY, Val(""));
     settings()->valueChanged(STYLE_FILE_IMPORT_PATH_KEY).onReceive(this, [this](const Val& val) {
         m_styleFileImportPathChanged.send(val.toString());
     });
@@ -546,7 +547,7 @@ void NotationConfiguration::setMouseZoomPrecision(int precision)
     settings()->setSharedValue(MOUSE_ZOOM_PRECISION, Val(precision));
 }
 
-muse::async::Notification NotationConfiguration::mouseZoomPrecisionChanged() const
+Notification NotationConfiguration::mouseZoomPrecisionChanged() const
 {
     return m_mouseZoomPrecisionChanged;
 }

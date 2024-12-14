@@ -80,7 +80,6 @@ public:
 
     MOCK_METHOD(int, defaultZoom, (), (const, override));
     MOCK_METHOD(void, setDefaultZoom, (int), (override));
-
     MOCK_METHOD(muse::async::Notification, defaultZoomChanged, (), (const, override));
 
     MOCK_METHOD(QList<int>, possibleZoomPercentageList, (), (const, override));
