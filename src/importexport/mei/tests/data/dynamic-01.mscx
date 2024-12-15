@@ -126,6 +126,7 @@
           <Dynamic>
             <subtype>pp</subtype>
             <velocity>33</velocity>
+            <direction>down</direction>
             </Dynamic>
           <Chord>
             <durationType>whole</durationType>

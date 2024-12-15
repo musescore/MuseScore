@@ -275,7 +275,7 @@ public:
     static engraving::PlacementV placeFromMEI(const libmei::data_STAFFREL meiPlace, bool& warning);
     static libmei::data_STAFFREL placeToMEI(engraving::PlacementV place);
 
-    static engraving::DirectionV directionFromMEI(const libmei::data_STAFFREL meiPlace, bool& warning);
+    static engraving::DirectionV directionFromMEI(const libmei::data_STAFFREL meiPlace);
     static libmei::data_STAFFREL directionToMEI(engraving::DirectionV direction);
 
     static void slurFromMEI(engraving::SlurTie* slur, const libmei::Slur& meiSlur, bool& warning);
