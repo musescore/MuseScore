@@ -24,7 +24,9 @@ S3_SECRET=""
 S3_URL="s3://convertor.musescore.org"
 ARTIFACTS_DIR=build.artifacts
 ARTIFACT_PATH=""
-STAGE="dev"
+STAGE="devel"
+MU_VERSION=""
+MU_VERSION_MAJOR_MINOR=""
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -32,6 +34,8 @@ while [[ "$#" -gt 0 ]]; do
         --s3_secret) S3_SECRET="$2"; shift ;;
         --artifact) ARTIFACT_PATH="$2"; shift ;;
         --stage) STAGE="$2"; shift ;;
+        --mu_version) MU_VERSION="$2"; shift ;;
+        --mu_version_major_minor) MU_VERSION_MAJOR_MINOR="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -58,9 +62,6 @@ CONFIGURE_FILE_PATH="$ARTIFACTS_DIR/${CONFIGURE_FILE}"
 s3cmd get "$S3_URL/$CONFIGURE_FILE" "$CONFIGURE_FILE_PATH"
 
 ARTIFACT_NAME_NO_EXT="${ARTIFACT_NAME%.*}"
-
-MU_VERSION=$(cat $ARTIFACTS_DIR/env/build_version.env)
-MU_VERSION_MAJOR_MINOR=$(echo "$MU_VERSION" | cut -d '.' -f 1,2)
 
 NEW_DISTR=$ARTIFACT_NAME
 NEW_IMAGE_URL="ghcr.io/musescore/converter_4:${MU_VERSION}"
