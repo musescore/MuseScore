@@ -261,11 +261,11 @@ TEST_F(Engraving_BendsRendererTests, PreBend)
 }
 
 /*!
- * @details Render a note (A3) with a slight bend
+ * @details Render a quarter note (A3) with a slight bend
  */
 TEST_F(Engraving_BendsRendererTests, SlightBend)
 {
-    // [GIVEN] Note with a slight bend
+    // [GIVEN] Quarter note with a slight bend
     const Chord* chord = findChord(7680);
     ASSERT_TRUE(chord);
     ASSERT_EQ(chord->notes().size(), 1);
@@ -292,6 +292,14 @@ TEST_F(Engraving_BendsRendererTests, SlightBend)
     const mpe::NoteEvent& event = std::get<mpe::NoteEvent>(events.front());
     EXPECT_EQ(event.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::A, 3));
     EXPECT_EQ(event.pitchCtx().pitchCurve, expectedPitchCurve);
+
+    EXPECT_EQ(event.expressionCtx().articulations.size(), 1);
+    auto artIt = event.expressionCtx().articulations.find(mpe::ArticulationType::Multibend);
+    EXPECT_TRUE(artIt != event.expressionCtx().articulations.end());
+
+    const ArticulationMeta& meta = artIt->second.meta;
+    EXPECT_EQ(meta.timestamp, timestampFromTicks(m_score, note->tick().ticks()));
+    EXPECT_EQ(meta.overallDuration, QUARTER_NOTE_DURATION);
 }
 
 /*!
