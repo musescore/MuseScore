@@ -43,6 +43,12 @@ static void updateWindowPosition()
     SetWindowPos(s_hwnd, nullptr, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE);
 }
 
+static void redrawWindowContent()
+{
+    //! Redrawing a window by updating a position
+    updateWindowPosition();
+}
+
 WinFramelessWindowController::WinFramelessWindowController()
     : FramelessWindowController()
 {
@@ -90,8 +96,8 @@ bool WinFramelessWindowController::eventFilter(QObject* watched, QEvent* event)
 
     if (m_screen != window->screen()) {
         m_screen = window->screen();
-        //! Redrawing a window by updating a position
-        updateWindowPosition();
+
+        redrawWindowContent();
     }
 
     return false;
@@ -112,6 +118,7 @@ bool WinFramelessWindowController::nativeEventFilter(const QByteArray& eventType
         return false;
     }
 
+    LOGD() << "=================== msg " << msg->message;
     switch (msg->message) {
     case WM_NCCALCSIZE: {
         return removeWindowFrame(msg, result);
@@ -124,6 +131,12 @@ bool WinFramelessWindowController::nativeEventFilter(const QByteArray& eventType
     }
     case WM_NCRBUTTONDOWN: {
         return processMouseRightClick(msg);
+    }
+    case WM_SHOWWINDOW: {
+        if (msg->wParam) { // the window is being shown
+            redrawWindowContent();
+        }
+        return false;
     }
     default:
         break;
