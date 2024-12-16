@@ -227,14 +227,19 @@ TEST_F(Engraving_BendsRendererTests, PreBend)
     // [GIVEN] Chord with a pre-bend
     const Chord* chord = findChord(5760);
     ASSERT_TRUE(chord);
-    ASSERT_EQ(chord->notes().size(), 1);
-    ASSERT_EQ(chord->graceNotesBefore().size(), 1);
 
     // [GIVEN] Pre-bend grace note (unplayable)
+    ASSERT_EQ(chord->graceNotesBefore().size(), 1);
     const Chord* graceChord = chord->graceNotesBefore().front();
     ASSERT_EQ(graceChord->notes().size(), 1);
-    const Note* gracePreBendNote = graceChord->notes().front();
-    ASSERT_TRUE(gracePreBendNote->isPreBendStart());
+    const Note* unplayableGracePreBendNote = graceChord->notes().front();
+    ASSERT_TRUE(unplayableGracePreBendNote->isPreBendStart());
+
+    // [GIVEN] Playable principal note
+    ASSERT_EQ(chord->notes().size(), 1);
+    const Note* playblePrincipalNote = chord->notes().front();
+    ASSERT_TRUE(playblePrincipalNote->bendBack());
+    ASSERT_EQ(playblePrincipalNote->bendBack()->startNote(), unplayableGracePreBendNote);
 
     // [GIVEN] Context of the chord
     ArticulationsProfilePtr profile = std::make_shared<ArticulationsProfile>();
@@ -244,7 +249,13 @@ TEST_F(Engraving_BendsRendererTests, PreBend)
 
     // [WHEN] Render the unplayable pre-bend grace note
     PlaybackEventList events;
-    BendsRenderer::render(gracePreBendNote, ctx, events);
+    BendsRenderer::render(unplayableGracePreBendNote, ctx, events);
+
+    // [THEN] No events
+    EXPECT_TRUE(events.empty());
+
+    // [WHEN] Render the first playable (principal) note
+    BendsRenderer::render(playblePrincipalNote, ctx, events);
 
     // [THEN] Note successfully rendered
     ASSERT_EQ(events.size(), 1);
@@ -252,6 +263,7 @@ TEST_F(Engraving_BendsRendererTests, PreBend)
 
     PitchCurve expectedPitchCurve;
     expectedPitchCurve.emplace(0, 0); // A3
+    expectedPitchCurve.emplace(3300, 0); // tied A3
     expectedPitchCurve.emplace(6600, -100); // Release down to G3
 
     const mpe::NoteEvent& event = std::get<mpe::NoteEvent>(events.front());

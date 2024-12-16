@@ -63,16 +63,19 @@ void BendsRenderer::render(const Note* note, const RenderingContext& ctx, mpe::P
         return;
     }
 
-    if (note->bendBack()) {
+    //! NOTE: ignore the grace note and render only the principal note
+    if (note->isPreBendStart()) {
         return;
+    }
+
+    if (const GuitarBend* bendBack = note->bendBack()) {
+        if (bendBack->type() != GuitarBendType::PRE_BEND) {
+            return;
+        }
     }
 
     if (!isNotePlayable(note, ctx.commonArticulations)) {
         return;
-    }
-
-    if (note->isPreBendStart()) {
-        note = note->bendFor()->endNote();
     }
 
     renderMultibend(note, ctx, result);
@@ -236,12 +239,10 @@ mpe::NoteEvent BendsRenderer::buildBendEvent(const Note* startNote, const Render
 
     PitchOffsets pitchOffsets;
 
-    if (!startNote->bendBack()) {
-        auto multibendIt = noteCtx.articulations.find(mpe::ArticulationType::Multibend);
-        if (multibendIt != noteCtx.articulations.end()) {
-            const mpe::ArticulationMeta& meta = multibendIt->second.meta;
-            pitchOffsets.emplace_back(meta.timestamp, 0);
-        }
+    auto multibendIt = noteCtx.articulations.find(mpe::ArticulationType::Multibend);
+    if (multibendIt != noteCtx.articulations.end()) {
+        const mpe::ArticulationMeta& meta = multibendIt->second.meta;
+        pitchOffsets.emplace_back(meta.timestamp, 0);
     }
 
     for (size_t i = 1; i < bendNoteEvents.size(); ++i) {
