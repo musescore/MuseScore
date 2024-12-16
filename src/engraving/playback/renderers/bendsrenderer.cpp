@@ -259,6 +259,12 @@ mpe::NoteEvent BendsRenderer::buildBendEvent(const Note* startNote, const Render
         pitchOffsets.emplace_back(arrangementCtx.actualTimestamp, offset);
     }
 
+    if (multibendIt != noteCtx.articulations.end()) {
+        mpe::ArticulationMeta& meta = multibendIt->second.meta;
+        meta.timestamp = noteCtx.timestamp;
+        meta.overallDuration = noteCtx.duration;
+    }
+
     mpe::PitchCurve curve = buildPitchCurve(noteCtx.timestamp, noteCtx.duration, pitchOffsets, timeFactorMap);
     mpe::NoteEvent result = buildNoteEvent(std::move(noteCtx), curve);
 

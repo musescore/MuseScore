@@ -132,14 +132,23 @@ TEST_F(Engraving_BendsRendererTests, Multibend)
     ASSERT_EQ(events.size(), 1);
     ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(events.front()));
 
+    // [THEN] The note event has the correct timestamp and duration
     const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(events.front());
-
-    EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Multibend));
-    EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Distortion)); // persistent articulation applied
     EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, QUARTER_NOTE_DURATION); // starts after a quarter rest
     EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, QUARTER_NOTE_DURATION * 6); // F3 + G3 + F3 + A3 + A3 + G3
     EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 3));
 
+    // [THEN] The note event contains the multibend articulation with the correct timestamp and duration
+    auto multibendIt = noteEvent.expressionCtx().articulations.find(ArticulationType::Multibend);
+    ASSERT_TRUE(multibendIt != noteEvent.expressionCtx().articulations.end());
+    const mpe::ArticulationMeta& multibendMeta = multibendIt->second.meta;
+    EXPECT_EQ(multibendMeta.timestamp, noteEvent.arrangementCtx().actualTimestamp);
+    EXPECT_EQ(multibendMeta.overallDuration, noteEvent.arrangementCtx().actualDuration);
+
+    // [THEN] The note event contains the distortion articulation (persistent)
+    EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Distortion));
+
+    // [THEN] The pitch curve is correct
     PitchCurve expectedPitchCurve;
     expectedPitchCurve.emplace(0, 0); // F3
     expectedPitchCurve.emplace(1600, 100); // F3 -> G3
@@ -404,4 +413,11 @@ TEST_F(Engraving_BendsRendererTests, BendOnTiedNotes)
     EXPECT_EQ(event.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::A, 3));
     EXPECT_EQ(event.pitchCtx().pitchCurve, expectedPitchCurve);
     EXPECT_EQ(event.arrangementCtx().actualDuration, QUARTER_NOTE_DURATION * 3); // 2 tied A3 + B3
+
+    // [THEN] The note event contains the multibend articulation with the correct timestamp and duration
+    auto multibendIt = event.expressionCtx().articulations.find(ArticulationType::Multibend);
+    ASSERT_TRUE(multibendIt != event.expressionCtx().articulations.end());
+    const mpe::ArticulationMeta& multibendMeta = multibendIt->second.meta;
+    EXPECT_EQ(multibendMeta.timestamp, event.arrangementCtx().actualTimestamp);
+    EXPECT_EQ(multibendMeta.overallDuration, event.arrangementCtx().actualDuration);
 }
