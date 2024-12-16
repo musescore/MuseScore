@@ -24,12 +24,18 @@ S3_SECRET=""
 S3_URL="s3://convertor.musescore.org"
 ARTIFACTS_DIR=build.artifacts
 ARTIFACT_PATH=""
+STAGE="devel"
+MU_VERSION=""
+MU_VERSION_MAJOR_MINOR=""
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --s3_key) S3_KEY="$2"; shift ;;
         --s3_secret) S3_SECRET="$2"; shift ;;
         --artifact) ARTIFACT_PATH="$2"; shift ;;
+        --stage) STAGE="$2"; shift ;;
+        --mu_version) MU_VERSION="$2"; shift ;;
+        --mu_version_major_minor) MU_VERSION_MAJOR_MINOR="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -47,3 +53,40 @@ ARTIFACT_NAME=$(basename $ARTIFACT_PATH)
 echo "=== Publish to S3 ==="
 
 s3cmd put --acl-public --guess-mime-type "$ARTIFACT_PATH" "$S3_URL/$ARTIFACT_NAME"
+
+echo "=== Edit configure file ==="
+
+CONFIGURE_FILE="configure.json"
+CONFIGURE_FILE_PATH="$ARTIFACTS_DIR/${CONFIGURE_FILE}"
+
+s3cmd get "$S3_URL/$CONFIGURE_FILE" "$CONFIGURE_FILE_PATH"
+
+ARTIFACT_NAME_NO_EXT="${ARTIFACT_NAME%.*}"
+
+NEW_DISTR=$ARTIFACT_NAME
+NEW_IMAGE_URL="ghcr.io/musescore/converter_4:${MU_VERSION}"
+NEW_STAGE=$STAGE
+
+if jq -e "has(\"$MU_VERSION_MAJOR_MINOR\")" "$CONFIGURE_FILE_PATH" > /dev/null; then
+    jq --arg version "$MU_VERSION_MAJOR_MINOR" \
+       --arg distr "$NEW_DISTR" \
+       --arg image_url "$NEW_IMAGE_URL" \
+       --arg stage "$NEW_STAGE" \
+       '(.[$version] // {}) |= {
+           distr: $distr,
+           image_url: $image_url,
+           stage: $stage
+       }' "$CONFIGURE_FILE_PATH" > "$CONFIGURE_FILE_PATH.tmp" && mv "$CONFIGURE_FILE_PATH.tmp" "$CONFIGURE_FILE_PATH"
+else
+    jq --arg version "$MU_VERSION_MAJOR_MINOR" \
+       --arg distr "$NEW_DISTR" \
+       --arg image_url "$NEW_IMAGE_URL" \
+       --arg stage "$NEW_STAGE" \
+       '. + {($version): {
+           distr: $distr,
+           image_url: $image_url,
+           stage: $stage
+       }}' "$CONFIGURE_FILE_PATH" > "$CONFIGURE_FILE_PATH.tmp" && mv "$CONFIGURE_FILE_PATH.tmp" "$CONFIGURE_FILE_PATH"
+fi
+
+s3cmd put --acl-public --guess-mime-type "$CONFIGURE_FILE_PATH" "$S3_URL/$CONFIGURE_FILE"

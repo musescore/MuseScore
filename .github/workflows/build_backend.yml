@@ -63,11 +63,15 @@ jobs:
         bash ./buildscripts/ci/tools/make_version_env.sh $BUILD_NUMBER
         VERSION=$(cat ./build.artifacts/env/build_version.env)
         GITHUB_ARTIFACT_NAME="MuseScore-${VERSION}"
+        
+        VERSION_MAJOR_MINOR=$(echo "$VERSION" | cut -d '.' -f 1,2)
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
         echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
+        echo "VERSION=$VERSION" | tee -a $GITHUB_ENV
+        echo "VERSION_MAJOR_MINOR=$VERSION_MAJOR_MINOR" | tee -a $GITHUB_ENV
         echo "GITHUB_ARTIFACT_NAME=$GITHUB_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
     - name: Setup environment
@@ -82,11 +86,6 @@ jobs:
       run: |
         bash ./buildscripts/ci/backend/package.sh
 
-    - name: Publish to S3
-      if: env.DO_PUBLISH == 'true'
-      run: |
-        bash ./buildscripts/ci/backend/publish_to_s3.sh --s3_key ${{ secrets.S3_KEY_CONVERTER }} --s3_secret ${{ secrets.S3_SECRET_CONVERTER }}
-
     - name: Build Docker
       if: env.DO_PUBLISH == 'true'
       run: |
@@ -96,6 +95,18 @@ jobs:
       if: env.DO_PUBLISH == 'true'
       run: |
         bash ./buildscripts/ci/backend/publish_to_registry.sh --token ${{ secrets.PACKAGES_PAT }}
+
+    - name: Deploy to musescore.com
+      if: env.DO_PUBLISH == 'true'
+      run: |
+        bash ./buildscripts/ci/backend/publish_to_s3.sh \
+          --s3_key ${{ secrets.S3_KEY_CONVERTER }} \
+          --s3_secret ${{ secrets.S3_SECRET_CONVERTER }} \
+          --stage ${{ inputs.build_mode }} \
+          --mu_version ${{ env.VERSION }} \
+          --mu_version_major_minor ${{ env.VERSION_MAJOR_MINOR }}
+
+        python3 ./buildscripts/ci/backend/deploy.py --mu_version ${{ env.VERSION }} --api_token ${{ secrets.JENKINS_API_TOKEN }}
 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
