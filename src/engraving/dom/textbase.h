@@ -43,7 +43,7 @@ class TextBlock;
 //---------------------------------------------------------
 
 enum class BorderType : char {
-    NO_FRAME, SQUARE, CIRCLE
+    NO_BORDER, SQUARE, CIRCLE
 };
 
 //---------------------------------------------------------
@@ -408,7 +408,7 @@ public:
     bool isTextInvalid() const { return m_textInvalid; }
 
     // helper functions
-    bool hasBorder() const { return m_borderType != BorderType::NO_FRAME; }
+    bool hasBorder() const { return m_borderType != BorderType::NO_BORDER; }
     bool circle() const { return m_borderType == BorderType::CIRCLE; }
     bool square() const { return m_borderType == BorderType::SQUARE; }
 
@@ -526,7 +526,7 @@ private:
 
     Align m_align;
 
-    BorderType m_borderType = BorderType::NO_FRAME;
+    BorderType m_borderType = BorderType::NO_BORDER;
     double m_textLineSpacing = 1.0;
     Color m_bgColor;
     Color m_borderColor;

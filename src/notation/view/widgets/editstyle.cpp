@@ -1081,7 +1081,7 @@ EditStyle::EditStyle(QWidget* parent)
     }
 
     textStyleBorderType->clear();
-    textStyleBorderType->addItem(muse::qtrc("notation/editstyle", "None", "no border for text"), int(BorderType::NO_FRAME));
+    textStyleBorderType->addItem(muse::qtrc("notation/editstyle", "None", "no border for text"), int(BorderType::NO_BORDER));
     textStyleBorderType->addItem(muse::qtrc("notation/editstyle", "Rectangle"), int(BorderType::SQUARE));
     textStyleBorderType->addItem(muse::qtrc("notation/editstyle", "Circle"), int(BorderType::CIRCLE));
 
@@ -1684,7 +1684,7 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
         case TextStyleType::TRANSLATOR:
             return "translator";
 
-        case TextStyleType::FRAME:
+        case TextStyleType::BORDER:
             return "border";
 
         case TextStyleType::INSTRUMENT_EXCERPT:

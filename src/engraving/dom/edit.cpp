@@ -727,7 +727,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         undoAddElement(textBox);
         break;
     }
-    case TextStyleType::FRAME: {
+    case TextStyleType::BORDER: {
         if (!destinationElement) {
             break;
         }

@@ -39,13 +39,13 @@ static const ElementStyle rehearsalMarkStyle {
 };
 
 static const ElementStyle mainRehearsalMarkStyle {
-    { Sid::rehearsalMarkBorderType, Pid::FRAME_TYPE },
+    { Sid::rehearsalMarkBorderType, Pid::BORDER_TYPE },
     { Sid::rehearsalMarkFontSize, Pid::FONT_SIZE },
     { Sid::rehearsalMarkAlign, Pid::ALIGN },
 };
 
 static const ElementStyle additionalRehearsalMarkStyle {
-    { Sid::tempoBorderType, Pid::FRAME_TYPE },
+    { Sid::tempoBorderType, Pid::BORDER_TYPE },
     { Sid::tempoFontSize, Pid::FONT_SIZE },
     { Sid::tempoAlign, Pid::ALIGN },
 };

@@ -161,7 +161,7 @@ void Expression::mapPropertiesFromOldExpressions(StaffText* staffText)
         setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         setPropertyFlags(Pid::SNAP_TO_DYNAMICS, PropertyFlags::UNSTYLED);
     }
-    if (staffText->borderType() != BorderType::NO_FRAME) {
+    if (staffText->borderType() != BorderType::NO_BORDER) {
         setBorderType(staffText->borderType());
         setBorderWidth(staffText->borderWidth());
         setBorderColor(staffText->borderColor());

@@ -3439,7 +3439,7 @@ void MusicXmlParserDirection::direction(const String& partId,
             if (m_enclosure == "circle") {
                 t->setBorderType(BorderType::CIRCLE);
             } else if (m_enclosure == "none") {
-                t->setBorderType(BorderType::NO_FRAME);
+                t->setBorderType(BorderType::NO_BORDER);
             } else if (m_enclosure == "rectangle") {
                 t->setBorderType(BorderType::SQUARE);
                 t->setBorderRound(0);

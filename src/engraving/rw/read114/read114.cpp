@@ -239,7 +239,7 @@ static bool readTextProperties(XmlReader& e, ReadContext& ctx, TextBase* t, Engr
             break;
         case 27: ss = TextStyleType::VOLTA;
             break;
-        case 28: ss = TextStyleType::FRAME;
+        case 28: ss = TextStyleType::BORDER;
             break;
         case 29: ss = TextStyleType::TEXTLINE;
             break;
@@ -272,8 +272,8 @@ static bool readTextProperties(XmlReader& e, ReadContext& ctx, TextBase* t, Engr
     } else if (tag == "foregroundColor") { // same as "color" ?
         e.skipCurrentElement();
     } else if (tag == "border") {
-        t->setBorderType(e.readBool() ? BorderType::SQUARE : BorderType::NO_FRAME);
-        t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
+        t->setBorderType(e.readBool() ? BorderType::SQUARE : BorderType::NO_BORDER);
+        t->setPropertyFlags(Pid::BORDER_TYPE, PropertyFlags::UNSTYLED);
     } else if (tag == "halign") {
         Align align = t->align();
         align.horizontal = TConv::fromXml(e.readAsciiText(), AlignH::LEFT);
@@ -503,7 +503,7 @@ static void readFingering114(XmlReader& e, Fingering* fing)
                     fing->setBorderType(BorderType::SQUARE);
                 }
             } else {
-                fing->setBorderType(BorderType::NO_FRAME);
+                fing->setBorderType(BorderType::NO_BORDER);
             }
         } else if (tag == "circle") {
             auto circle = e.readInt();

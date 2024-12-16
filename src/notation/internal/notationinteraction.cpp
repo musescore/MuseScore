@@ -4662,7 +4662,7 @@ Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIte
         return item && item->isVBox();
     }
 
-    if (type == TextStyleType::FRAME) {
+    if (type == TextStyleType::BORDER) {
         return item && item->isBox() ? muse::make_ok() : make_ret(Err::EmptySelection);
     }
 

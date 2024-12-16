@@ -329,7 +329,7 @@ void NotationActionController::init()
     registerAction("composer-text", [this]() { addText(TextStyleType::COMPOSER); });
     registerAction("poet-text", [this]() { addText(TextStyleType::LYRICIST); });
     registerAction("part-text", [this]() { addText(TextStyleType::INSTRUMENT_EXCERPT); });
-    registerAction("border-text", [this]() { addText(TextStyleType::FRAME); });
+    registerAction("border-text", [this]() { addText(TextStyleType::BORDER); });
 
     registerAction("system-text", [this]() { addText(TextStyleType::SYSTEM); });
     registerAction("staff-text", [this]() { addText(TextStyleType::STAFF); });

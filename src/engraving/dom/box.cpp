@@ -392,7 +392,7 @@ EngravingItem* Box::drop(EditData& data)
 
     case ElementType::STAFF_TEXT:
     {
-        Text* text = Factory::createText(this, TextStyleType::FRAME);
+        Text* text = Factory::createText(this, TextStyleType::BORDER);
         text->setParent(this);
         text->setXmlText(toStaffText(e)->xmlText());
         score()->undoAddElement(text);
@@ -690,7 +690,7 @@ TBox::TBox(System* parent)
     : VBox(ElementType::TBOX, parent)
 {
     resetProperty(Pid::BOX_HEIGHT);
-    m_text  = Factory::createText(this, TextStyleType::FRAME);
+    m_text  = Factory::createText(this, TextStyleType::BORDER);
     m_text->setLayoutToParentWidth(true);
     m_text->setParent(this);
 }
@@ -761,7 +761,7 @@ void TBox::remove(EngravingItem* el)
         // replace with new empty text element
         // this keeps undo/redo happier than just clearing the text
         LOGD("TBox::remove() - replacing _text");
-        m_text = Factory::createText(this, TextStyleType::FRAME);
+        m_text = Factory::createText(this, TextStyleType::BORDER);
         m_text->setLayoutToParentWidth(true);
         m_text->setParent(this);
         el->removed();

@@ -55,9 +55,9 @@ public:
     };
 
     enum class BorderType {
-        FRAME_TYPE_NONE = 0,
-        FRAME_TYPE_SQUARE,
-        FRAME_TYPE_CIRCLE
+        BORDER_TYPE_NONE = 0,
+        BORDER_TYPE_SQUARE,
+        BORDER_TYPE_CIRCLE
     };
     // must match mu::engraving::Tid
     enum class TextType {
@@ -67,7 +67,7 @@ public:
         TEXT_TYPE_COMPOSER,
         TEXT_TYPE_POET,
         TEXT_TYPE_TRANSLATOR,
-        TEXT_TYPE_FRAME,
+        TEXT_TYPE_BORDER,
         TEXT_TYPE_INSTRUMENT_EXCERPT,
         TEXT_TYPE_INSTRUMENT_LONG,
         TEXT_TYPE_INSTRUMENT_SHORT,

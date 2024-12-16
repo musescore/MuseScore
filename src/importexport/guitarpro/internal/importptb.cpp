@@ -850,7 +850,7 @@ void PowerTab::addToScore(ptSection& sec)
         seg->add(t);
 
         t = new RehearsalMark(seg);
-        t->setBorderType(BorderType::NO_FRAME);
+        t->setBorderType(BorderType::NO_BORDER);
         std::string valid;
         muse::UtfCodec::replaceInvalid(sec.partName, valid);
         t->setPlainText(String::fromStdString(valid));

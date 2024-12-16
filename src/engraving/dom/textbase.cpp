@@ -1686,7 +1686,7 @@ TextBase::TextBase(const ElementType& type, EngravingItem* parent, TextStyleType
     m_bgColor                = Color::transparent;
     m_borderColor             = Color::BLACK;
     m_align                  = { AlignH::LEFT, AlignV::TOP };
-    m_borderType              = BorderType::NO_FRAME;
+    m_borderType              = BorderType::NO_BORDER;
     m_borderWidth             = Spatium(0.1);
     m_paddingWidth           = Spatium(0.2);
     m_borderRound             = 0;
@@ -2781,17 +2781,17 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
         return static_cast<int>(m_cursor->selectedFragmentsFormat().style());
     case Pid::TEXT_LINE_SPACING:
         return textLineSpacing();
-    case Pid::FRAME_TYPE:
+    case Pid::BORDER_TYPE:
         return static_cast<int>(borderType());
-    case Pid::FRAME_WIDTH:
+    case Pid::BORDER_WIDTH:
         return borderWidth();
-    case Pid::FRAME_PADDING:
+    case Pid::BORDER_PADDING:
         return paddingWidth();
-    case Pid::FRAME_ROUND:
+    case Pid::BORDER_ROUND:
         return borderRound();
-    case Pid::FRAME_FG_COLOR:
+    case Pid::BORDER_FG_COLOR:
         return PropertyValue::fromValue(borderColor());
-    case Pid::FRAME_BG_COLOR:
+    case Pid::BORDER_BG_COLOR:
         return PropertyValue::fromValue(bgColor());
     case Pid::ALIGN:
         return PropertyValue::fromValue(align());
@@ -2839,22 +2839,22 @@ bool TextBase::setProperty(Pid pid, const PropertyValue& v)
     case Pid::TEXT_LINE_SPACING:
         setTextLineSpacing(v.toReal());
         break;
-    case Pid::FRAME_TYPE:
+    case Pid::BORDER_TYPE:
         setBorderType(BorderType(v.toInt()));
         break;
-    case Pid::FRAME_WIDTH:
+    case Pid::BORDER_WIDTH:
         setBorderWidth(v.value<Spatium>());
         break;
-    case Pid::FRAME_PADDING:
+    case Pid::BORDER_PADDING:
         setPaddingWidth(v.value<Spatium>());
         break;
-    case Pid::FRAME_ROUND:
+    case Pid::BORDER_ROUND:
         setBorderRound(v.toInt());
         break;
-    case Pid::FRAME_FG_COLOR:
+    case Pid::BORDER_FG_COLOR:
         setBorderColor(v.value<Color>());
         break;
-    case Pid::FRAME_BG_COLOR:
+    case Pid::BORDER_BG_COLOR:
         setBgColor(v.value<Color>());
         break;
     case Pid::TEXT:

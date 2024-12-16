@@ -52,15 +52,15 @@ void DynamicsSettingsModel::createProperties()
     });
     m_centerOnNotehead = buildPropertyItem(Pid::CENTER_ON_NOTEHEAD);
 
-    m_borderType = buildPropertyItem(Pid::FRAME_TYPE, [this](const Pid pid, const QVariant& newValue) {
+    m_borderType = buildPropertyItem(Pid::BORDER_TYPE, [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
         updateBorderPropertiesAvailability();
     });
-    m_borderColor = buildPropertyItem(Pid::FRAME_FG_COLOR);
-    m_borderFillColor = buildPropertyItem(Pid::FRAME_BG_COLOR);
-    m_borderThickness = buildPropertyItem(Pid::FRAME_WIDTH);
-    m_borderMargin = buildPropertyItem(Pid::FRAME_PADDING);
-    m_borderCornerRadius = buildPropertyItem(Pid::FRAME_ROUND);
+    m_borderColor = buildPropertyItem(Pid::BORDER_FG_COLOR);
+    m_borderFillColor = buildPropertyItem(Pid::BORDER_BG_COLOR);
+    m_borderThickness = buildPropertyItem(Pid::BORDER_WIDTH);
+    m_borderMargin = buildPropertyItem(Pid::BORDER_PADDING);
+    m_borderCornerRadius = buildPropertyItem(Pid::BORDER_ROUND);
 }
 
 void DynamicsSettingsModel::requestElements()
@@ -152,12 +152,12 @@ PropertyItem* DynamicsSettingsModel::borderCornerRadius() const
 void DynamicsSettingsModel::updateBorderPropertiesAvailability()
 {
     bool isBorderVisible = static_cast<TextTypes::BorderType>(m_borderType->value().toInt())
-                          != TextTypes::BorderType::FRAME_TYPE_NONE;
+                          != TextTypes::BorderType::BORDER_TYPE_NONE;
 
     m_borderThickness->setIsEnabled(isBorderVisible);
     m_borderColor->setIsEnabled(isBorderVisible);
     m_borderFillColor->setIsEnabled(isBorderVisible);
     m_borderMargin->setIsEnabled(isBorderVisible);
     m_borderCornerRadius->setIsEnabled(
-        static_cast<TextTypes::BorderType>(m_borderType->value().toInt()) == TextTypes::BorderType::FRAME_TYPE_SQUARE);
+        static_cast<TextTypes::BorderType>(m_borderType->value().toInt()) == TextTypes::BorderType::BORDER_TYPE_SQUARE);
 }
