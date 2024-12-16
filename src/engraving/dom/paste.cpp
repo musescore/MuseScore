@@ -382,11 +382,6 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
     std::vector<EngravingItem*> droppedElements;
 
     if (ms->hasFormat(mimeSymbolFormat)) {
-        if (!m_selection.isList()) {
-            LOGE() << "Cannot paste single element onto non-list selection";
-            return {};
-        }
-
         muse::ByteArray data = ms->data(mimeSymbolFormat);
 
         PointF dragOffset;
@@ -402,7 +397,25 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
             return {};
         }
 
-        std::vector<EngravingItem*> targetElements = m_selection.elements();
+        std::vector<EngravingItem*> targetElements;
+        switch (m_selection.state()) {
+        case SelState::NONE:
+            UNREACHABLE;
+            return {};
+        case SelState::LIST:
+            targetElements = m_selection.elements();
+            break;
+        case SelState::RANGE:
+            targetElements = { m_selection.firstChordRest() };
+            break;
+        }
+
+        if (targetElements.empty()) {
+            LOGE() << "No target selection";
+            MScore::setError(MsError::NO_DEST);
+            return {};
+        }
+
         for (EngravingItem* target : targetElements) {
             addRefresh(target->pageBoundingRect()); // layout() ?!
             el->setTrack(target->track());
