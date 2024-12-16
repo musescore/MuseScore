@@ -38,5 +38,5 @@ Ret WaveWriter::write(notation::INotationPtr notation, io::IODevice& destination
         0 /* bitRate */
     };
 
-    return doWriteAndWait(notation, destinationDevice, format);
+    return doWriteAndWait(notation, destinationDevice, format, configuration()->selectionOnly());
 }
