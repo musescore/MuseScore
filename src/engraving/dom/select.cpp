@@ -1173,6 +1173,8 @@ muse::ByteArray Selection::symbolListMimeData() const
                                 continue;
         */
         case ElementType::ARTICULATION:
+        case ElementType::ORNAMENT:
+        case ElementType::FERMATA:
             // ignore articulations not attached to chords/rest
             if (e->explicitParent()->isChord()) {
                 Chord* par = toChord(e->explicitParent());

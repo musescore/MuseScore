@@ -25,30 +25,30 @@
 
 #include "dom/anchors.h"
 #include "dom/audio.h"
+#include "dom/beam.h"
+#include "dom/breath.h"
+#include "dom/chord.h"
+#include "dom/dynamic.h"
 #include "dom/excerpt.h"
 #include "dom/factory.h"
+#include "dom/figuredbass.h"
+#include "dom/fret.h"
+#include "dom/hairpin.h"
+#include "dom/harmony.h"
+#include "dom/lyrics.h"
 #include "dom/masterscore.h"
+#include "dom/measurerepeat.h"
+#include "dom/mscoreview.h"
+#include "dom/note.h"
 #include "dom/part.h"
 #include "dom/score.h"
 #include "dom/spanner.h"
 #include "dom/staff.h"
+#include "dom/sticking.h"
 #include "dom/text.h"
-#include "dom/tuplet.h"
-#include "dom/chord.h"
-#include "dom/beam.h"
-#include "dom/lyrics.h"
-#include "dom/note.h"
-#include "dom/measurerepeat.h"
-#include "dom/staff.h"
-#include "dom/harmony.h"
 #include "dom/tie.h"
-#include "dom/breath.h"
-#include "dom/mscoreview.h"
-#include "dom/fret.h"
-#include "dom/dynamic.h"
-#include "dom/hairpin.h"
-#include "dom/figuredbass.h"
 #include "dom/tremolotwochord.h"
+#include "dom/tuplet.h"
 
 #include "../compat/tremolocompat.h"
 #include "staffread.h"
@@ -806,7 +806,6 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
     Fraction startTick   = dst->tick();        // the initial tick and track where to start pasting
     track_idx_t startTrack  = dst->track();
     track_idx_t maxTrack    = score->ntracks();
-    Fraction lastTick = score->lastSegment()->tick();
 
     while (e.readNextStartElement()) {
         if (done) {
@@ -840,24 +839,16 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
                 // the original tickOffset: advance to destTick (or near)
                 // same for FretDiagram elements
                 //
-                Segment* harmSegm;
-                for (harmSegm = startSegm; harmSegm && (harmSegm->tick() < destTick);
-                     harmSegm = harmSegm->nextCR()) {
-                }
-                // if destTick overshot, no dest. segment: create one
-                if (destTick >= lastTick) {
-                    harmSegm = nullptr;
-                } else if (!harmSegm || harmSegm->tick() > destTick) {
-                    Measure* meas     = score->tick2measure(destTick);
-                    harmSegm          = meas ? meas->undoGetSegment(SegmentType::ChordRest, destTick) : nullptr;
-                }
-                if (destTrack >= maxTrack || harmSegm == nullptr) {
-                    LOGD("PasteSymbols: no track or segment for %s", tag.ascii());
-                    e.skipCurrentElement();                       // ignore
+                Measure* meas = score->tick2measure(destTick);
+                Segment* seg = meas ? meas->undoGetChordRestOrTimeTickSegment(destTick) : nullptr;
+
+                if (destTrack >= maxTrack || seg == nullptr) {
+                    LOGD() << "No track or segment for " << tag << " at tick " << destTick.ticks();
+                    e.skipCurrentElement(); // ignore
                     continue;
                 }
                 if (tag == "Harmony") {
-                    Harmony* el = Factory::createHarmony(harmSegm);
+                    Harmony* el = Factory::createHarmony(seg);
                     el->setTrack(trackZeroVoice(destTrack));
                     TRead::read(el, e, ctx);
                     el->setTrack(trackZeroVoice(destTrack));
@@ -870,28 +861,36 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
                         int baseTpc = transposeTpc(el->baseTpc(), interval, true);
                         score->undoTransposeHarmony(el, rootTpc, baseTpc);
                     }
-                    el->setParent(harmSegm);
+                    el->setParent(seg);
                     score->undoAddElement(el);
                 } else {
-                    FretDiagram* el = Factory::createFretDiagram(harmSegm);
+                    FretDiagram* el = Factory::createFretDiagram(seg);
                     el->setTrack(trackZeroVoice(destTrack));
                     TRead::read(el, e, ctx);
                     el->setTrack(trackZeroVoice(destTrack));
-                    el->setParent(harmSegm);
+                    el->setParent(seg);
                     score->undoAddElement(el);
                 }
-            } else if (tag == "Dynamic") {
-                ChordRest* destCR = score->findCR(destTick, destTrack);
-                if (!destCR) {
+            } else if (tag == "Dynamic"
+                       || tag == "StaffText"
+                       || tag == "PlayTechAnnotation"
+                       || tag == "Capo"
+                       || tag == "HarpPedalDiagram"
+                       || tag == "StringTunings") {
+                Measure* meas = score->tick2measure(destTick);
+                Segment* seg = meas ? meas->undoGetChordRestOrTimeTickSegment(destTick) : nullptr;
+                if (!seg) {
+                    LOGD() << "No segment for Dynamic at tick " << destTick.ticks();
                     e.skipCurrentElement();
                     continue;
                 }
-                Dynamic* d = Factory::createDynamic(destCR->segment());
-                d->setTrack(destTrack);
-                TRead::read(d, e, ctx);
-                d->setTrack(destTrack);
-                d->setParent(destCR->segment());
-                score->undoAddElement(d);
+
+                EngravingItem* el = Factory::createItemByName(tag, score->dummy());
+                el->setTrack(destTrack);
+                TRead::readItem(el, e, ctx);
+                el->setTrack(destTrack);
+                el->setParent(seg);
+                score->undoAddElement(el);
             } else if (tag == "HairPin") {
                 if (destTrack >= maxTrack) {
                     LOGD("PasteSymbols: no track for %s", tag.ascii());
@@ -926,7 +925,9 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
                 }
                 ChordRest* cr = toChordRest(currSegm->element(destTrack));
 
-                if (tag == "Articulation") {
+                if (tag == "Articulation"
+                    || tag == "Fermata"
+                    || tag == "Ornament") {
                     Articulation* el = Factory::createArticulation(cr);
                     TRead::read(el, e, ctx);
                     el->setTrack(destTrack);
@@ -936,17 +937,17 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
                     } else {
                         score->undoAddElement(el);
                     }
-                } else if (tag == "StaffText" || tag == "PlayTechAnnotation" || tag == "Capo" || tag == "Sticking"
-                           || tag == "HarpPedalDiagram" || tag == "StringTunings") {
-                    EngravingItem* el = Factory::createItemByName(tag, score->dummy());
-                    TRead::readItem(el, e, ctx);
+                } else if (tag == "Sticking") {
+                    if (!cr->isChord()) {
+                        LOGD() << "Not pasting Sticking onto Rest";
+                        e.skipCurrentElement();
+                        continue;
+                    }
+                    Sticking* el = Factory::createSticking(currSegm);
+                    TRead::read(el, e, ctx);
                     el->setTrack(destTrack);
                     el->setParent(currSegm);
-                    if (el->isSticking() && cr->isRest()) {
-                        delete el;
-                    } else {
-                        score->undoAddElement(el);
-                    }
+                    score->undoAddElement(el);
                 } else if (tag == "FiguredBass") {
                     // FiguredBass always belongs to first staff voice
                     destTrack = trackZeroVoice(destTrack);
