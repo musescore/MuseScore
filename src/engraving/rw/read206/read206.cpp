@@ -216,22 +216,22 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
             }
         } else if (tag == "sizeIsSpatiumDependent" || tag == "spatiumSizeDependent") {
             sizeIsSpatiumDependent = e.readInt();
-        } else if (tag == "borderWidth") {   // obsolete
+        } else if (tag == "frameWidth") {   // obsolete
             borderType = BorderType::SQUARE;
             /*borderWidthMM =*/ e.readDouble();
-        } else if (tag == "borderWidthS") {
+        } else if (tag == "frameWidthS") {
             borderType = BorderType::SQUARE;
             borderWidth = Spatium(e.readDouble());
-        } else if (tag == "border") {
+        } else if (tag == "frame") {
             borderType = e.readInt() ? BorderType::SQUARE : BorderType::NO_BORDER;
         } else if (tag == "paddingWidth") {          // obsolete
             /*paddingWidthMM =*/
             e.readDouble();
         } else if (tag == "paddingWidthS") {
             paddingWidth = Spatium(e.readDouble());
-        } else if (tag == "borderRound") {
+        } else if (tag == "frameRound") {
             e.readInt();
-        } else if (tag == "borderColor") {
+        } else if (tag == "frameColor") {
             borderColor = e.readColor();
         } else if (tag == "foregroundColor") {
             foregroundColor = e.readColor();
@@ -290,7 +290,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
         { "Rehearsal Mark",          TextStyleType::REHEARSAL_MARK },
         { "Repeat Text Left",        TextStyleType::REPEAT_LEFT },
         { "Repeat Text Right",       TextStyleType::REPEAT_RIGHT },
-        { "Border",                   TextStyleType::BORDER },
+        { "Frame",                   TextStyleType::FRAME },
         { "Text Line",               TextStyleType::TEXTLINE },
         { "Glissando",               TextStyleType::GLISSANDO },
         { "Ottava",                  TextStyleType::OTTAVA },
@@ -1221,10 +1221,10 @@ static bool readTextProperties206(XmlReader& e, ReadContext& ctx, TextBase* t)
         e.skipCurrentElement();     // read in readTextPropertyStyle206
     } else if (tag == "foregroundColor") { // same as "color" ?
         e.skipCurrentElement();
-    } else if (tag == "border") {
+    } else if (tag == "frame") {
         t->setBorderType(e.readBool() ? BorderType::SQUARE : BorderType::NO_BORDER);
         t->setPropertyFlags(Pid::BORDER_TYPE, PropertyFlags::UNSTYLED);
-    } else if (tag == "borderRound") {
+    } else if (tag == "frameRound") {
         read400::TRead::readProperty(t, e, ctx, Pid::BORDER_ROUND);
     } else if (tag == "circle") {
         if (e.readBool()) {
@@ -1237,9 +1237,9 @@ static bool readTextProperties206(XmlReader& e, ReadContext& ctx, TextBase* t)
         t->setPropertyFlags(Pid::BORDER_TYPE, PropertyFlags::UNSTYLED);
     } else if (tag == "paddingWidthS") {
         read400::TRead::readProperty(t, e, ctx, Pid::BORDER_PADDING);
-    } else if (tag == "borderWidthS") {
+    } else if (tag == "frameWidthS") {
         read400::TRead::readProperty(t, e, ctx, Pid::BORDER_WIDTH);
-    } else if (tag == "borderColor") {
+    } else if (tag == "frameColor") {
         read400::TRead::readProperty(t, e, ctx, Pid::BORDER_FG_COLOR);
     } else if (tag == "backgroundColor") {
         read400::TRead::readProperty(t, e, ctx, Pid::BORDER_BG_COLOR);
@@ -3266,8 +3266,8 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
             score->setShowInvisible(e.readInt());
         } else if (tag == "showUnprintable") {
             score->setShowUnprintable(e.readInt());
-        } else if (tag == "showBorders") {
-            score->setShowBorders(e.readInt());
+        } else if (tag == "showFrames") {
+            score->setShowFrames(e.readInt());
         } else if (tag == "showMargins") {
             score->setShowPageborders(e.readInt());
         } else if (tag == "Style") {

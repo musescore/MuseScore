@@ -84,8 +84,8 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
             score->m_showInvisible = e.readInt();
         } else if (tag == "showUnprintable") {
             score->m_showUnprintable = e.readInt();
-        } else if (tag == "showBorders") {
-            score->m_showBorders = e.readInt();
+        } else if (tag == "showFrames") {
+            score->m_showFrames = e.readInt();
         } else if (tag == "showMargins") {
             score->m_showPageborders = e.readInt();
         } else if (tag == "markIrregularMeasures") {

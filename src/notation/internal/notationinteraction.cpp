@@ -894,9 +894,9 @@ void NotationInteraction::selectSection()
     notifyAboutSelectionChangedIfNeed();
 }
 
-void NotationInteraction::selectFirstElement(bool border)
+void NotationInteraction::selectFirstElement(bool frame)
 {
-    if (EngravingItem* element = score()->firstElement(border)) {
+    if (EngravingItem* element = score()->firstElement(frame)) {
         select({ element }, SelectType::SINGLE, element->staffIdx());
         showItem(element);
     }
@@ -2769,7 +2769,7 @@ void NotationInteraction::addToSelection(MoveDirection d, MoveSelectionType type
             el = score()->downStaff(cr);
         }
     case MoveSelectionType::EngravingItem:
-    case MoveSelectionType::Border:
+    case MoveSelectionType::Frame:
     case MoveSelectionType::System:
     case MoveSelectionType::String:
     case MoveSelectionType::Undefined:
@@ -2842,7 +2842,7 @@ void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)
         case MoveSelectionType::Chord:     return QString("chord");
         case MoveSelectionType::Measure:   return QString("measure");
         case MoveSelectionType::Track:     return QString("track");
-        case MoveSelectionType::Border:     return QString("frame");
+        case MoveSelectionType::Frame:     return QString("frame");
         case MoveSelectionType::System:    return QString("system");
         case MoveSelectionType::String:   return QString();
         }
@@ -4651,7 +4651,7 @@ void NotationInteraction::addAnchoredLineToSelectedNotes()
     apply();
 }
 
-void NotationInteraction::addTextToTopBorder(TextStyleType type)
+void NotationInteraction::addTextToTopFrame(TextStyleType type)
 {
     addText(type);
 }
@@ -4662,7 +4662,7 @@ Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIte
         return item && item->isVBox();
     }
 
-    if (type == TextStyleType::BORDER) {
+    if (type == TextStyleType::FRAME) {
         return item && item->isBox() ? muse::make_ok() : make_ret(Err::EmptySelection);
     }
 
@@ -5058,7 +5058,7 @@ ScoreConfig NotationInteraction::scoreConfig() const
     ScoreConfig config;
     config.isShowInvisibleElements = score()->isShowInvisible();
     config.isShowUnprintableElements = score()->showUnprintable();
-    config.isShowBorders = score()->showBorders();
+    config.isShowFrames = score()->showFrames();
     config.isShowPageMargins = score()->showPageborders();
     config.isShowSoundFlags = score()->showSoundFlags();
     config.isMarkIrregularMeasures = score()->markIrregularMeasures();
@@ -5077,7 +5077,7 @@ void NotationInteraction::setScoreConfig(const ScoreConfig& config)
     startEdit(TranslatableString("undoableAction", "Set score view settings"));
     score()->setShowInvisible(config.isShowInvisibleElements);
     score()->setShowUnprintable(config.isShowUnprintableElements);
-    score()->setShowBorders(config.isShowBorders);
+    score()->setShowFrames(config.isShowFrames);
     score()->setShowPageborders(config.isShowPageMargins);
     score()->setShowSoundFlags(config.isShowSoundFlags);
     score()->setMarkIrregularMeasures(config.isMarkIrregularMeasures);

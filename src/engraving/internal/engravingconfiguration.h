@@ -90,8 +90,8 @@ public:
     Color formattingColor() const override;
     muse::async::Channel<Color> formattingColorChanged() const override;
 
-    Color borderColor() const override;
-    muse::async::Channel<Color> borderColorChanged() const override;
+    Color frameColor() const override;
+    muse::async::Channel<Color> frameColorChanged() const override;
 
     Color unlinkedColor() const override;
     muse::async::Channel<Color> unlinkedColorChanged() const override;
@@ -120,7 +120,7 @@ private:
     muse::async::Channel<voice_idx_t, Color> m_voiceColorChanged;
     muse::async::Notification m_scoreInversionChanged;
     muse::async::Channel<Color> m_formattingColorChanged;
-    muse::async::Channel<Color> m_borderColorChanged;
+    muse::async::Channel<Color> m_frameColorChanged;
     muse::async::Channel<Color> m_unlinkedColorChanged;
 
     muse::ValNt<DebuggingOptions> m_debuggingOptions;

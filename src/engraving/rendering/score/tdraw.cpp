@@ -988,18 +988,18 @@ void TDraw::draw(const Box* item, Painter* painter)
 
     const Box::LayoutData* ldata = item->ldata();
 
-    const bool showHighlightedBorder = item->selected() || item->dropTarget();
-    const bool showBorder = showHighlightedBorder || (item->score() ? item->score()->showBorders() : false);
+    const bool showHighlightedFrame = item->selected() || item->dropTarget();
+    const bool showFrame = showHighlightedFrame || (item->score() ? item->score()->showFrames() : false);
 
-    if (showBorder) {
+    if (showFrame) {
         double lineWidth = item->spatium() * .15;
         Pen pen;
         pen.setWidthF(lineWidth);
         pen.setJoinStyle(PenJoinStyle::MiterJoin);
         pen.setCapStyle(PenCapStyle::SquareCap);
-        pen.setColor(showHighlightedBorder
+        pen.setColor(showHighlightedFrame
                      ? item->configuration()->selectionColor()
-                     : item->configuration()->borderColor());
+                     : item->configuration()->frameColor());
         pen.setDashPattern({ 1, 3 });
 
         painter->setBrush(BrushStyle::NoBrush);
@@ -1699,27 +1699,27 @@ void TDraw::drawTextBase(const TextBase* item, Painter* painter)
     const TextBase::LayoutData* ldata = item->ldata();
     if (item->hasBorder()) {
         double baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
-        if (!RealIsNull(item->borderWidth().val())) {
+        if (!RealIsNull(item->borderThickness().val())) {
             Color fColor = item->curColor(item->visible(), item->borderColor());
-            double borderWidthVal = item->borderWidth().val() * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
+            double borderThicknessVal = item->borderThickness().val() * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
 
-            Pen pen(fColor, borderWidthVal, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
+            Pen pen(fColor, borderThicknessVal, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
             painter->setPen(pen);
         } else {
             painter->setNoPen();
         }
-        Color bg(item->bgColor());
+        Color bg(item->backgroundColor());
         painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
         if (item->circle()) {
             painter->drawEllipse(ldata->border);
         } else {
-            double borderRoundFactor = (item->sizeIsSpatiumDependent() ? (item->spatium() / baseSpatium) / 2 : 0.5f);
+            double borderRadiusFactor = (item->sizeIsSpatiumDependent() ? (item->spatium() / baseSpatium) / 2 : 0.5f);
 
-            int r2 = item->borderRound() * borderRoundFactor;
+            int r2 = item->borderRadius() * borderRadiusFactor;
             if (r2 > 99) {
                 r2 = 99;
             }
-            painter->drawRoundedRect(ldata->border, item->borderRound() * borderRoundFactor, r2);
+            painter->drawRoundedRect(ldata->border, item->borderRadius() * borderRadiusFactor, r2);
         }
     }
     painter->setBrush(BrushStyle::NoBrush);
@@ -1889,24 +1889,24 @@ void TDraw::draw(const Harmony* item, Painter* painter)
     }
 
     if (item->hasBorder()) {
-        if (!RealIsNull(item->borderWidth().val())) {
+        if (!RealIsNull(item->borderThickness().val())) {
             Color color = item->borderColor();
-            Pen pen(color, item->borderWidth().val() * item->spatium(), PenStyle::SolidLine,
+            Pen pen(color, item->borderThickness().val() * item->spatium(), PenStyle::SolidLine,
                     PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
             painter->setPen(pen);
         } else {
             painter->setNoPen();
         }
-        Color bg(item->bgColor());
+        Color bg(item->backgroundColor());
         painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
         if (item->circle()) {
             painter->drawArc(ldata->border, 0, 5760);
         } else {
-            int r2 = item->borderRound();
+            int r2 = item->borderRadius();
             if (r2 > 99) {
                 r2 = 99;
             }
-            painter->drawRoundedRect(ldata->border, item->borderRound(), r2);
+            painter->drawRoundedRect(ldata->border, item->borderRadius(), r2);
         }
     }
     painter->setBrush(BrushStyle::NoBrush);

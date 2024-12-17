@@ -178,7 +178,7 @@ public:
     MOCK_METHOD(void, changeSelectedElementsVoiceAssignment, (VoiceAssignment), (override));
     MOCK_METHOD(void, addAnchoredLineToSelectedNotes, (), (override));
 
-    MOCK_METHOD(void, addTextToTopBorder, (TextStyleType), (override));
+    MOCK_METHOD(void, addTextToTopFrame, (TextStyleType), (override));
 
     MOCK_METHOD(muse::Ret, canAddTextToItem, (TextStyleType, const EngravingItem*), (const, override));
     MOCK_METHOD(void, addTextToItem, (TextStyleType, EngravingItem*), (override));

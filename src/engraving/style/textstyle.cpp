@@ -693,7 +693,7 @@ const TextStyle repeatRightTextStyle { {
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
 } };
 
-const TextStyle borderTextStyle { {
+const TextStyle frameTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::borderFontFace,                          Pid::FONT_FACE },
     { TextStylePropertyType::FontSize,             Sid::borderFontSize,                          Pid::FONT_SIZE },
     { TextStylePropertyType::LineSpacing,          Sid::borderLineSpacing,                       Pid::TEXT_LINE_SPACING },
@@ -1225,7 +1225,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::COMPOSER: return &composerTextStyle;
     case TextStyleType::LYRICIST: return &lyricistTextStyle;
     case TextStyleType::TRANSLATOR: return &translatorTextStyle;
-    case TextStyleType::BORDER: return &borderTextStyle;
+    case TextStyleType::FRAME: return &frameTextStyle;
     case TextStyleType::INSTRUMENT_EXCERPT: return &partInstrumentTextStyle;
     case TextStyleType::INSTRUMENT_LONG: return &longInstrumentTextStyle;
     case TextStyleType::INSTRUMENT_SHORT: return &shortInstrumentTextStyle;
@@ -1308,7 +1308,7 @@ static const std::vector<TextStyleType> _primaryTextStyles = {
     TextStyleType::COMPOSER,
     TextStyleType::LYRICIST,
     TextStyleType::TRANSLATOR,
-    TextStyleType::BORDER,
+    TextStyleType::FRAME,
     TextStyleType::INSTRUMENT_EXCERPT,
     TextStyleType::INSTRUMENT_CHANGE,
     TextStyleType::HEADER,

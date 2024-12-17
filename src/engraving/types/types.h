@@ -758,7 +758,7 @@ enum class TextStyleType {
     COMPOSER,
     LYRICIST,
     TRANSLATOR,
-    BORDER,
+    FRAME,
     INSTRUMENT_EXCERPT,
     INSTRUMENT_LONG,
     INSTRUMENT_SHORT,

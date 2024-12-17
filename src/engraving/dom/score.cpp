@@ -774,12 +774,12 @@ void Score::setShowUnprintable(bool v)
 }
 
 //---------------------------------------------------------
-//   setShowBorders
+//   setShowFrames
 //---------------------------------------------------------
 
-void Score::setShowBorders(bool v)
+void Score::setShowFrames(bool v)
 {
-    m_showBorders = v;
+    m_showFrames = v;
 }
 
 //---------------------------------------------------------

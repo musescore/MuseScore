@@ -76,7 +76,7 @@ public:
                         engraving::staff_idx_t staffIndex = 0) = 0;
     virtual void selectAll() = 0;
     virtual void selectSection() = 0;
-    virtual void selectFirstElement(bool border = true) = 0;
+    virtual void selectFirstElement(bool frame = true) = 0;
     virtual void selectLastElement() = 0;
     virtual INotationSelectionPtr selection() const = 0;
     virtual void clearSelection() = 0;
@@ -216,7 +216,7 @@ public:
     virtual void changeSelectedElementsVoiceAssignment(VoiceAssignment voiceAssignment) = 0;
     virtual void addAnchoredLineToSelectedNotes() = 0;
 
-    virtual void addTextToTopBorder(TextStyleType type) = 0;
+    virtual void addTextToTopFrame(TextStyleType type) = 0;
 
     virtual muse::Ret canAddTextToItem(TextStyleType type, const EngravingItem* item) const = 0;
     virtual void addTextToItem(TextStyleType type, EngravingItem* item) = 0;

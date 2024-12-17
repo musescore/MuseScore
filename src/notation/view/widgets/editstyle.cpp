@@ -105,7 +105,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "composer",
     "poet",
     "translator",
-    "border",
+    "frame",
     "instrument-name-part",
     "instrument-name-long",
     "instrument-name-short",
@@ -1684,8 +1684,8 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
         case TextStyleType::TRANSLATOR:
             return "translator";
 
-        case TextStyleType::BORDER:
-            return "border";
+        case TextStyleType::FRAME:
+            return "frame";
 
         case TextStyleType::INSTRUMENT_EXCERPT:
             return "instrument-name-part";

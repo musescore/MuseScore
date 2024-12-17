@@ -447,16 +447,16 @@ public:
     void setBorderType(BorderType val) { m_borderType = val; }
     double textLineSpacing() const { return m_textLineSpacing; }
     void setTextLineSpacing(double val) { m_textLineSpacing = val; }
-    Color bgColor() const { return m_bgColor; }
-    void setBgColor(const Color& val) { m_bgColor = val; }
+    Color backgroundColor() const { return m_backgroundColor; }
+    void setBackgroundColor(const Color& val) { m_backgroundColor = val; }
     Color borderColor() const { return m_borderColor; }
     void setBorderColor(const Color& val) { m_borderColor = val; }
-    Spatium borderWidth() const { return m_borderWidth; }
-    void setBorderWidth(Spatium val) { m_borderWidth = val; }
-    Spatium paddingWidth() const { return m_paddingWidth; }
-    void setPaddingWidth(Spatium val) { m_paddingWidth = val; }
-    int borderRound() const { return m_borderRound; }
-    void setBorderRound(int val) { m_borderRound = val; }
+    Spatium borderThickness() const { return m_borderThickness; }
+    void setBorderThickness(Spatium val) { m_borderThickness = val; }
+    Spatium padding() const { return m_padding; }
+    void setPadding(Spatium val) { m_padding = val; }
+    double borderRadius() const { return m_borderRadius; }
+    void setBorderRadius(int val) { m_borderRadius = val; }
 
     struct LayoutData : public EngravingItem::LayoutData {
         std::vector<TextBlock> blocks;
@@ -528,11 +528,11 @@ private:
 
     BorderType m_borderType = BorderType::NO_BORDER;
     double m_textLineSpacing = 1.0;
-    Color m_bgColor;
+    Color m_backgroundColor;
     Color m_borderColor;
-    Spatium m_borderWidth;
-    Spatium m_paddingWidth;
-    int m_borderRound = 0;
+    Spatium m_borderThickness;
+    Spatium m_padding;
+    double m_borderRadius = 0;
 
     // there are two representations of text; only one
     // might be valid and the other can be constructed from it

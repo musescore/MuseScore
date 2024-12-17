@@ -2623,7 +2623,7 @@ void NotationUiActions::init()
                 static const std::unordered_map<ScoreConfigType, std::string> configActions = {
                     { ScoreConfigType::ShowInvisibleElements, SHOW_INVISIBLE_CODE },
                     { ScoreConfigType::ShowUnprintableElements, SHOW_UNPRINTABLE_CODE },
-                    { ScoreConfigType::ShowBorders, SHOW_FRAMES_CODE },
+                    { ScoreConfigType::ShowFrames, SHOW_FRAMES_CODE },
                     { ScoreConfigType::ShowPageMargins, SHOW_PAGEBORDERS_CODE },
                     { ScoreConfigType::MarkIrregularMeasures, SHOW_IRREGULAR_CODE },
                     { ScoreConfigType::ShowSoundFlags, SHOW_SOUND_FLAGS },
@@ -2687,7 +2687,7 @@ bool NotationUiActions::isScoreConfigChecked(const ActionCode& code, const Score
         return cfg.isShowUnprintableElements;
     }
     if (SHOW_FRAMES_CODE == code) {
-        return cfg.isShowBorders;
+        return cfg.isShowFrames;
     }
     if (SHOW_PAGEBORDERS_CODE == code) {
         return cfg.isShowPageMargins;

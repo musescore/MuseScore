@@ -175,7 +175,7 @@ enum class MoveSelectionType
     Chord,
     Measure,
     Track,
-    Border,
+    Frame,
     System,
     String // TAB Staff
 };
@@ -505,7 +505,7 @@ enum class ScoreConfigType
 {
     ShowInvisibleElements,
     ShowUnprintableElements,
-    ShowBorders,
+    ShowFrames,
     ShowPageMargins,
     ShowSoundFlags,
     MarkIrregularMeasures
@@ -515,7 +515,7 @@ struct ScoreConfig
 {
     bool isShowInvisibleElements = false;
     bool isShowUnprintableElements = false;
-    bool isShowBorders = false;
+    bool isShowFrames = false;
     bool isShowPageMargins = false;
     bool isShowSoundFlags = false;
     bool isMarkIrregularMeasures = false;
@@ -524,7 +524,7 @@ struct ScoreConfig
     {
         bool equal = (isShowInvisibleElements == conf.isShowInvisibleElements);
         equal &= (isShowUnprintableElements == conf.isShowUnprintableElements);
-        equal &= (isShowBorders == conf.isShowBorders);
+        equal &= (isShowFrames == conf.isShowFrames);
         equal &= (isShowPageMargins == conf.isShowPageMargins);
         equal &= (isShowSoundFlags == conf.isShowSoundFlags);
         equal &= (isMarkIrregularMeasures == conf.isMarkIrregularMeasures);

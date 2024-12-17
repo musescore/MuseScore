@@ -7966,10 +7966,10 @@ static bool systemHasMeasures(const System* const system)
 }
 
 //---------------------------------------------------------
-//  findTextBordersToWriteAsWordsAbove
+//  findTextFranesToWriteAsWordsAbove
 //---------------------------------------------------------
 
-static std::vector<TBox*> findTextBordersToWriteAsWordsAbove(const Measure* const measure)
+static std::vector<TBox*> findTextFramesToWriteAsWordsAbove(const Measure* const measure)
 {
     const System* system = measure->coveringMMRestOrThis()->system();
     const Page* page = system->page();
@@ -7990,10 +7990,10 @@ static std::vector<TBox*> findTextBordersToWriteAsWordsAbove(const Measure* cons
 }
 
 //---------------------------------------------------------
-//  findTextBordersToWriteAsWordsBelow
+//  findTextFramesToWriteAsWordsBelow
 //---------------------------------------------------------
 
-static std::vector<TBox*> findTextBordersToWriteAsWordsBelow(const Measure* const measure)
+static std::vector<TBox*> findTextFramesToWriteAsWordsBelow(const Measure* const measure)
 {
     const System* system = measure->coveringMMRestOrThis()->system();
     const Page* page = system->page();
@@ -8031,8 +8031,8 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
                                         FigBassMap& fbMap,
                                         std::set<const Spanner*>& spannersStopped)
 {
-    const auto tboxesAbove = findTextBordersToWriteAsWordsAbove(m);
-    const auto tboxesBelow = findTextBordersToWriteAsWordsBelow(m);
+    const auto tboxesAbove = findTextFramesToWriteAsWordsAbove(m);
+    const auto tboxesBelow = findTextFramesToWriteAsWordsBelow(m);
 
     track_idx_t etrack = strack + VOICES;
     for (track_idx_t track = strack; track < etrack; ++track) {

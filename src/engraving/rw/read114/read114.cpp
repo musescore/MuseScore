@@ -239,7 +239,7 @@ static bool readTextProperties(XmlReader& e, ReadContext& ctx, TextBase* t, Engr
             break;
         case 27: ss = TextStyleType::VOLTA;
             break;
-        case 28: ss = TextStyleType::BORDER;
+        case 28: ss = TextStyleType::FRAME;
             break;
         case 29: ss = TextStyleType::TEXTLINE;
             break;
@@ -271,7 +271,7 @@ static bool readTextProperties(XmlReader& e, ReadContext& ctx, TextBase* t, Engr
         t->setXmlText(s);
     } else if (tag == "foregroundColor") { // same as "color" ?
         e.skipCurrentElement();
-    } else if (tag == "border") {
+    } else if (tag == "frame") {
         t->setBorderType(e.readBool() ? BorderType::SQUARE : BorderType::NO_BORDER);
         t->setPropertyFlags(Pid::BORDER_TYPE, PropertyFlags::UNSTYLED);
     } else if (tag == "halign") {
@@ -494,7 +494,7 @@ static void readFingering114(XmlReader& e, Fingering* fing)
                 fing->setProperty(Pid::TEXT_STYLE, TextStyleType::STRING_NUMBER);
                 fing->setPropertyFlags(Pid::TEXT_STYLE, PropertyFlags::UNSTYLED);
             }
-        } else if (tag == "border") {
+        } else if (tag == "frame") {
             auto border = e.readInt();
             if (border) {
                 if (isStringNumber) {       //default value is circle for stringnumber, square is set in tag circle
@@ -2804,8 +2804,8 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             masterScore->m_fileDivision = e.readInt();
         } else if (tag == "showInvisible") {
             masterScore->setShowInvisible(e.readInt());
-        } else if (tag == "showBorders") {
-            masterScore->setShowBorders(e.readInt());
+        } else if (tag == "showFrames") {
+            masterScore->setShowFrames(e.readInt());
         } else if (tag == "showMargins") {
             masterScore->setShowPageborders(e.readInt());
         } else if (tag == "Style") {

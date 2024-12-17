@@ -1683,13 +1683,13 @@ TextBase::TextBase(const ElementType& type, EngravingItem* parent, TextStyleType
 {
     m_textLineSpacing        = 1.0;
     m_textStyleType          = tid;
-    m_bgColor                = Color::transparent;
+    m_backgroundColor                = Color::transparent;
     m_borderColor             = Color::BLACK;
     m_align                  = { AlignH::LEFT, AlignV::TOP };
     m_borderType              = BorderType::NO_BORDER;
-    m_borderWidth             = Spatium(0.1);
-    m_paddingWidth           = Spatium(0.2);
-    m_borderRound             = 0;
+    m_borderThickness             = Spatium(0.1);
+    m_padding           = Spatium(0.2);
+    m_borderRadius             = 0;
 
     m_cursor                 = new TextCursor(this);
     m_cursor->init();
@@ -1712,13 +1712,13 @@ TextBase::TextBase(const TextBase& st)
 
     m_textStyleType               = st.m_textStyleType;
     m_textLineSpacing             = st.m_textLineSpacing;
-    m_bgColor                     = st.m_bgColor;
+    m_backgroundColor                     = st.m_backgroundColor;
     m_borderColor                  = st.m_borderColor;
     m_align                       = st.m_align;
     m_borderType                   = st.m_borderType;
-    m_borderWidth                  = st.m_borderWidth;
-    m_paddingWidth                = st.m_paddingWidth;
-    m_borderRound                  = st.m_borderRound;
+    m_borderThickness                  = st.m_borderThickness;
+    m_padding                = st.m_padding;
+    m_borderRadius                  = st.m_borderRadius;
 
     m_voiceAssignment = st.m_voiceAssignment;
     m_direction = st.m_direction;
@@ -2027,9 +2027,9 @@ void TextBase::layoutBorder(LayoutData* ldata) const
         }
     }
     double _spatium = spatium();
-    double w = (paddingWidth() + borderWidth() * .5f).val() * _spatium;
+    double w = (padding() + borderThickness() * .5f).val() * _spatium;
     ldata->border.adjust(-w, -w, w, w);
-    w = borderWidth().val() * _spatium;
+    w = borderThickness().val() * _spatium;
     ldata->setBbox(ldata->border.adjusted(-w, -w, w, w));
 }
 
@@ -2785,15 +2785,15 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
     case Pid::BORDER_TYPE:
         return static_cast<int>(borderType());
     case Pid::BORDER_WIDTH:
-        return borderWidth();
+        return borderThickness();
     case Pid::BORDER_PADDING:
-        return paddingWidth();
+        return padding();
     case Pid::BORDER_ROUND:
-        return borderRound();
+        return borderRadius();
     case Pid::BORDER_FG_COLOR:
         return PropertyValue::fromValue(borderColor());
     case Pid::BORDER_BG_COLOR:
-        return PropertyValue::fromValue(bgColor());
+        return PropertyValue::fromValue(backgroundColor());
     case Pid::ALIGN:
         return PropertyValue::fromValue(align());
     case Pid::TEXT_SCRIPT_ALIGN:
@@ -2844,19 +2844,19 @@ bool TextBase::setProperty(Pid pid, const PropertyValue& v)
         setBorderType(BorderType(v.toInt()));
         break;
     case Pid::BORDER_WIDTH:
-        setBorderWidth(v.value<Spatium>());
+        setBorderThickness(v.value<Spatium>());
         break;
     case Pid::BORDER_PADDING:
-        setPaddingWidth(v.value<Spatium>());
+        setPadding(v.value<Spatium>());
         break;
     case Pid::BORDER_ROUND:
-        setBorderRound(v.toInt());
+        setBorderRadius(v.toInt());
         break;
     case Pid::BORDER_FG_COLOR:
         setBorderColor(v.value<Color>());
         break;
     case Pid::BORDER_BG_COLOR:
-        setBgColor(v.value<Color>());
+        setBackgroundColor(v.value<Color>());
         break;
     case Pid::TEXT:
         setXmlText(v.value<String>());

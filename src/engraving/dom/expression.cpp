@@ -163,10 +163,10 @@ void Expression::mapPropertiesFromOldExpressions(StaffText* staffText)
     }
     if (staffText->borderType() != BorderType::NO_BORDER) {
         setBorderType(staffText->borderType());
-        setBorderWidth(staffText->borderWidth());
+        setBorderThickness(staffText->borderThickness());
         setBorderColor(staffText->borderColor());
-        setBgColor(staffText->bgColor());
-        setBorderRound(staffText->borderRound());
+        setBackgroundColor(staffText->backgroundColor());
+        setBorderRadius(staffText->borderRadius());
     }
 }
 

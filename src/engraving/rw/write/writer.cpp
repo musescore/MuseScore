@@ -158,7 +158,7 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
 
     xml.tag("showInvisible", score->m_showInvisible);
     xml.tag("showUnprintable", score->m_showUnprintable);
-    xml.tag("showBorders", score->m_showBorders);
+    xml.tag("showFrames", score->m_showFrames);
     xml.tag("showMargins", score->m_showPageborders);
     xml.tag("markIrregularMeasures", score->m_markIrregularMeasures, true);
 
