@@ -256,7 +256,7 @@
       </item>
      </widget>
      <widget class="QStackedWidget" name="pageStack">
-            <widget class="QWidget" name="PageScore">
+      <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
         <item>
          <widget class="QGroupBox" name="groupBox_score">
