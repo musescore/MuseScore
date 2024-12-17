@@ -210,11 +210,17 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
         if (!model) {
             continue;
         }
+
         const int row = i / m_padListModel->numColumns();
         const int column = i % m_padListModel->numColumns();
+
         engraving::DrumInstrument& drum = updatedDrumset->drum(model->pitch());
+
         drum.panelRow = row;
         drum.panelColumn = column;
+
+        const QString& shortcut = model->keyboardShortcut();
+        drum.shortcut = shortcut.isEmpty() ? '\0' : shortcut.toLatin1().at(0);
     }
 
     // Return if nothing changed after edit...
@@ -319,7 +325,8 @@ void PercussionPanelModel::updateSoundTitle(const InstrumentTrackId& trackId)
 bool PercussionPanelModel::eventFilter(QObject* watched, QEvent* event)
 {
     // Finish editing on escape...
-    if (m_currentPanelMode != PanelMode::Mode::EDIT_LAYOUT || event->type() != QEvent::Type::ShortcutOverride) {
+    if (m_currentPanelMode != PanelMode::Mode::EDIT_LAYOUT || event->type() != QEvent::Type::ShortcutOverride
+        || m_padListModel->swapInProgress()) {
         return QObject::eventFilter(watched, event);
     }
     QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);

@@ -24,16 +24,23 @@
 
 #include <QAbstractListModel>
 
+#include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "async/channel.h"
+
+#include "iinteractive.h"
+#include "inotationconfiguration.h"
 
 #include "engraving/dom/drumset.h"
 
 #include "percussionpanelpadmodel.h"
 
 namespace mu::notation {
-class PercussionPanelPadListModel : public QAbstractListModel, public muse::async::Asyncable
+class PercussionPanelPadListModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
 {
+    muse::Inject<muse::IInteractive> interactive = { this };
+    muse::Inject<INotationConfiguration> configuration = { this };
+
     Q_OBJECT
 
     Q_PROPERTY(int numColumns READ numColumns CONSTANT)
@@ -58,6 +65,7 @@ public:
 
     Q_INVOKABLE void startPadSwap(int startIndex);
     Q_INVOKABLE void endPadSwap(int endIndex);
+    bool swapInProgress() const { return indexIsValid(m_padSwapStartIndex); }
 
     bool hasActivePads() const { return m_drumset; }
 
@@ -96,6 +104,8 @@ private:
     int createModelIndexForPitch(int pitch) const;
 
     void movePad(int fromIndex, int toIndex);
+
+    void applyPadSwapOptions(int fromIndex, int toIndex);
 
     int numEmptySlotsAtRow(int row) const;
 

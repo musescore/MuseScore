@@ -65,5 +65,6 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleControlRowWithReset.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/TextFieldWithReset.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/IconAndTextButtonSelector.qml</file>
+        <file>qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml</file>
     </qresource>
 </RCC>
