@@ -52,8 +52,51 @@ void ActionsDispatcher::dispatch(const ActionCode& actionCode, const ActionData&
         return;
     }
 
+    doDispatch(it->second, actionCode, data);
+}
+
+void ActionsDispatcher::dispatch(const ActionQuery& actionQuery)
+{
+    //! NOTE Try find full query
+    const std::string full = actionQuery.toString();
+    auto it = m_clients.find(full);
+    if (it != m_clients.end()) {
+        static ActionData dummy;
+        doDispatch(it->second, full, dummy);
+        return;
+    }
+
+    const ActionCode code = actionQuery.uri().toString();
+    it = m_clients.find(code);
+    if (it != m_clients.end()) {
+        LOGW() << "not a registered action: " << code;
+        return;
+    }
+
+    const ActionQuery::Params& params = actionQuery.params();
+    ActionData data;
+    int i = 0;
+    for (const auto& p : params) {
+        const Val& val = p.second;
+        switch (val.type()) {
+        case Val::Type::Bool:
+            data.setArg<bool>(i, val.toBool());
+            break;
+        case Val::Type::String:
+            data.setArg<std::string>(i, val.toString());
+            break;
+        default:
+            UNREACHABLE;
+            data.setArg<int>(i, 0); // dummy
+        }
+    }
+
+    doDispatch(it->second, code, data);
+}
+
+void ActionsDispatcher::doDispatch(const Clients& clients, const ActionCode& actionCode, const ActionData& data)
+{
     int canReceiveCount = 0;
-    const Clients& clients = it->second;
     for (auto cit = clients.cbegin(); cit != clients.cend(); ++cit) {
         const Actionable* client = cit->first;
         if (client->canReceiveAction(actionCode)) {
@@ -93,6 +136,11 @@ void ActionsDispatcher::reg(Actionable* client, const ActionCode& actionCode, co
     Clients& clients = m_clients[actionCode];
     CallBacks& callbacks = clients[client];
     callbacks.insert({ actionCode, call });
+}
+
+void ActionsDispatcher::reg(Actionable* client, const ActionQuery& actionQuery, const ActionCallBackWithQuery& call)
+{
+    reg(client, actionQuery.toString(), [call](const ActionCode& action, const ActionData&) { call(ActionQuery(action)); });
 }
 
 bool ActionsDispatcher::isReg(Actionable* client) const

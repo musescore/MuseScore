@@ -45,6 +45,8 @@ public:
     bool isValid() const;
 
     Scheme scheme() const;
+    void setScheme(const Scheme& scheme);
+
     std::string path() const;
 
     inline bool operator==(const Uri& uri) const { return m_path == uri.m_path && m_scheme == uri.m_scheme; }
@@ -76,8 +78,9 @@ public:
     explicit UriQuery(const String& str);
     explicit UriQuery(const Uri& uri);
 
-    const Uri& uri() const;
     bool isValid() const;
+    const Uri& uri() const;
+    void setScheme(const Uri::Scheme& scheme);
 
     const Params& params() const;
     Val param(const std::string& key, const Val& def = Val()) const;
