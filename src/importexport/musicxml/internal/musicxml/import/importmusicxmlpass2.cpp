@@ -1281,6 +1281,34 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
 }
 
 //---------------------------------------------------------
+//   addTurnToChord
+//---------------------------------------------------------
+
+/**
+ Add Turn to Chord.
+ */
+
+static void addTurnToChord(const Notation& notation, ChordRest* cr)
+{
+    const SymId turnSym = notation.symId();
+    const Color color = Color::fromString(notation.attribute(u"color"));
+    const String place = notation.attribute(u"placement");
+    Ornament* turn = Factory::createOrnament(cr);
+    turn->setSymId(turnSym);
+    if (place == u"above") {
+        turn->setAnchor(ArticulationAnchor::TOP);
+    } else if (place == u"below") {
+        turn->setAnchor(ArticulationAnchor::BOTTOM);
+    } else {
+        turn->setAnchor(ArticulationAnchor::AUTO);
+    }
+    if (color.isValid()) {
+        turn->setColor(color);
+    }
+    cr->add(turn);
+}
+
+//---------------------------------------------------------
 //   addOtherOrnamentToChord
 //---------------------------------------------------------
 
@@ -1297,12 +1325,12 @@ static void addOtherOrnamentToChord(const Notation& notation, ChordRest* cr)
 
     if (sym != SymId::noSym) {
         const Color color = Color::fromString(notation.attribute(u"color"));
-        Articulation* na = Factory::createArticulation(cr);
-        na->setSymId(sym);
+        Ornament* ornam = Factory::createOrnament(cr);
+        ornam->setSymId(sym);
         if (color.isValid()) {
-            na->setColor(color);
+            ornam->setColor(color);
         }
-        cr->add(na);
+        cr->add(ornam);
     } else {
         LOGD("unknown ornament: name '%s': '%s'.", muPrintable(name), muPrintable(symname));
     }
@@ -8067,7 +8095,7 @@ void MusicXmlParserNotations::ornaments()
         SymId id { SymId::noSym };
         if (convertArticulationToSymId(String::fromAscii(m_e.name().ascii()), id)) {
             Notation notation = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
-                                                                 m_e.attributes(), u"articulations", id);
+                                                                 m_e.attributes(), u"ornaments", id);
             m_notations.push_back(notation);
             m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "trill-mark") {
@@ -8761,6 +8789,8 @@ void MusicXmlParserNotations::addNotation(const Notation& notation, ChordRest* c
             // Terminate tempo line
             const InferredTempoLineStack& lines = m_pass2.getInferredTempoLine();
             terminateInferredLine(std::vector<TextLineBase*>(lines.begin(), lines.end()), cr->tick(), cr->track());
+        } else if (String(notation.name()).contains(u"turn")) {
+            addTurnToChord(notation, cr);
         } else {
             addArticulationToChord(notation, cr);
         }
