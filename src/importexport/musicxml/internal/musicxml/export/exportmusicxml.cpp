@@ -3253,6 +3253,9 @@ static String symIdToOrnam(const SymId sid)
         // MusicXML 3.0 does not distinguish between downprall and lineprall
         return u"inverted-mordent long=\"yes\" approach=\"above\"";
         break;
+    case SymId::ornamentHaydn:
+        return u"haydn";
+        break;
     case SymId::ornamentPrecompSlide:
         return u"schleifer";
         break;
