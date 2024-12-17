@@ -143,10 +143,6 @@ void TextBase::endEdit(EditData& ed)
 
     ted->cursor()->endEdit();
 
-    if (isDynamic()) {
-        undoChangeProperty(Pid::DYNAMIC_TYPE, xmlText());
-    }
-
     UndoStack* undo = score()->undoStack();
     IF_ASSERT_FAILED(undo) {
         return;
@@ -235,6 +231,10 @@ void TextBase::endEdit(EditData& ed)
 
         // change property to set text to actual value again - this also changes text of linked elements
         undoChangeProperty(Pid::TEXT, actualXmlText);
+
+        if (isDynamic()) {
+            undoChangeProperty(Pid::DYNAMIC_TYPE, actualXmlText);
+        }
 
         renderer()->layoutText1(this);
     }

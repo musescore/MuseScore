@@ -129,8 +129,7 @@
             <text>𝅘𝅥 = 100</text>
             </Tempo>
           <Dynamic>
-            <subtype>f</subtype>
-            <velocity>96</velocity>
+            <subtype>other-dynamics</subtype>
             <text><sym>dynamicForte</sym><font face="FreeSerif"/> ma non troppo</text>
             </Dynamic>
           <Chord>
