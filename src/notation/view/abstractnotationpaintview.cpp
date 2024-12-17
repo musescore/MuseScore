@@ -248,8 +248,18 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     });
 
     onNoteInputStateChanged();
+    if (isNoteEnterMode()) {
+        emit activeFocusRequested();
+    }
+
     interaction->noteInput()->stateChanged().onNotify(this, [this]() {
         onNoteInputStateChanged();
+    });
+
+    interaction->noteInput()->noteInputStarted().onReceive(this, [this](bool focusNotation) {
+        if (focusNotation) {
+            emit activeFocusRequested();
+        }
     });
 
     interaction->selectionChanged().onNotify(this, [this]() {
@@ -457,12 +467,7 @@ void AbstractNotationPaintView::onNoteInputStateChanged()
 {
     TRACEFUNC;
 
-    bool noteEnterMode = isNoteEnterMode();
-    setAcceptHoverEvents(noteEnterMode);
-
-    if (noteEnterMode) {
-        emit activeFocusRequested();
-    }
+    setAcceptHoverEvents(isNoteEnterMode());
 
     if (INotationInteractionPtr interaction = notationInteraction()) {
         interaction->hideShadowNote();

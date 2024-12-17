@@ -67,7 +67,7 @@ void UiContextResolver::init()
                 notifyAboutContextChanged();
             });
 
-            notation->interaction()->noteInput()->noteInputStarted().onNotify(this, [this]() {
+            notation->interaction()->noteInput()->noteInputStarted().onReceive(this, [this](bool) {
                 notifyAboutContextChanged();
             });
 

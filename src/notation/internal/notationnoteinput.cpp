@@ -89,7 +89,7 @@ NoteInputState NotationNoteInput::state() const
 }
 
 //! NOTE Copied from `void ScoreView::startNoteEntry()`
-void NotationNoteInput::startNoteInput()
+void NotationNoteInput::startNoteInput(bool focusNotation)
 {
     TRACEFUNC;
 
@@ -143,7 +143,7 @@ void NotationNoteInput::startNoteInput()
         break;
     }
 
-    notifyAboutNoteInputStarted();
+    notifyAboutNoteInputStarted(focusNotation);
     notifyAboutStateChanged();
 
     m_interaction->showItem(el);
@@ -399,7 +399,7 @@ void NotationNoteInput::removeNote(const PointF& pos)
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 }
 
-Notification NotationNoteInput::noteInputStarted() const
+Channel</*focusNotation*/ bool> NotationNoteInput::noteInputStarted() const
 {
     return m_noteInputStarted;
 }
@@ -675,9 +675,9 @@ void NotationNoteInput::notifyNoteAddedChanged()
     m_noteAdded.notify();
 }
 
-void NotationNoteInput::notifyAboutNoteInputStarted()
+void NotationNoteInput::notifyAboutNoteInputStarted(bool focusNotation)
 {
-    m_noteInputStarted.notify();
+    m_noteInputStarted.send(focusNotation);
 }
 
 void NotationNoteInput::notifyAboutNoteInputEnded()
