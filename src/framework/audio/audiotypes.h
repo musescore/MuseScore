@@ -69,6 +69,8 @@ using PlaybackSetupData = mpe::PlaybackSetupData;
 
 static constexpr TrackId INVALID_TRACK_ID = -1;
 
+static constexpr char DEFAULT_DEVICE_ID[] = "default";
+
 #ifdef Q_OS_WIN
 static constexpr size_t MINIMUM_BUFFER_SIZE = 256;
 #else
