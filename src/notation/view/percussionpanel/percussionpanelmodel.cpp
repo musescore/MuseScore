@@ -125,20 +125,20 @@ void PercussionPanelModel::init()
 
 QList<QVariantMap> PercussionPanelModel::layoutMenuItems() const
 {
-    const TranslatableString padNamesTitle("notation", "Pad names");
+    const TranslatableString padNamesTitle("notation/percussion", "Pad names");
     // Using IconCode for this instead of "checked" because we want the tick to display on the left
     const int padNamesIcon = static_cast<int>(m_useNotationPreview ? IconCode::Code::NONE : IconCode::Code::TICK_RIGHT_ANGLE);
 
-    const TranslatableString notationPreviewTitle("notation", "Notation preview");
+    const TranslatableString notationPreviewTitle("notation/percussion", "Notation preview");
     // Using IconCode for this instead of "checked" because we want the tick to display on the left
     const int notationPreviewIcon = static_cast<int>(m_useNotationPreview ? IconCode::Code::TICK_RIGHT_ANGLE : IconCode::Code::NONE);
 
     const TranslatableString editLayoutTitle = m_currentPanelMode == PanelMode::Mode::EDIT_LAYOUT
-                                               ? TranslatableString("notation", "Finish editing")
-                                               : TranslatableString("notation", "Edit layout");
+                                               ? TranslatableString("notation/percussion", "Finish editing")
+                                               : TranslatableString("notation/percussion", "Edit layout");
     const int editLayoutIcon = static_cast<int>(IconCode::Code::CONFIGURE);
 
-    const TranslatableString resetLayoutTitle("notation", "Reset layout");
+    const TranslatableString resetLayoutTitle("notation/percussion", "Reset layout");
     const int resetLayoutIcon = static_cast<int>(IconCode::Code::UNDO);
 
     QList<QVariantMap> menuItems = {

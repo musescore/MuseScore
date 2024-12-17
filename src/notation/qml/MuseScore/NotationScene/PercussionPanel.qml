@@ -411,7 +411,7 @@ Item {
                 enabled: !padGrid.isKeyboardSwapActive
 
                 icon: IconCode.PLUS
-                text: qsTrc("notation", "Add row")
+                text: qsTrc("notation/percussion", "Add row")
                 orientation: Qt.Horizontal
 
                 navigation.panel: addRowButtonPanel
@@ -433,7 +433,7 @@ Item {
             anchors.topMargin: (padGrid.cellHeight / 2) - (panelDisabledLabel.height / 2)
 
             font: ui.theme.bodyFont
-            text: qsTrc("notation", "Select an unpitched percussion staff to see available sounds")
+            text: qsTrc("notation/percussion", "Select an unpitched percussion staff to see available sounds")
         }
     }
 

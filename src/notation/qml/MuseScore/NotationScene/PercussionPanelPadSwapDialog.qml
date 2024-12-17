@@ -114,7 +114,7 @@ StyledDialogView {
                 horizontalAlignment: Text.AlignLeft
                 wrapMode: Text.Wrap
 
-                text: qsTrc("notation", "Do you also want to move the MIDI notes and keyboard shortcuts that trigger these sounds?")
+                text: qsTrc("notation/percussion", "Do you also want to move the MIDI notes and keyboard shortcuts that trigger these sounds?")
             }
 
             RadioButtonGroup {
@@ -126,8 +126,8 @@ StyledDialogView {
                 orientation: ListView.Vertical
 
                 model: [
-                    { text: qsTrc("notation", "Move MIDI notes and keyboard shortcuts with their sounds"), value: true },
-                    { text: qsTrc("notation", "Leave MIDI notes and keyboard shortcuts fixed to original pad positions"), value: false }
+                    { text: qsTrc("notation/percussion", "Move MIDI notes and keyboard shortcuts with their sounds"), value: true },
+                    { text: qsTrc("notation/percussion", "Leave MIDI notes and keyboard shortcuts fixed to original pad positions"), value: false }
                 ]
 
                 delegate: Row {

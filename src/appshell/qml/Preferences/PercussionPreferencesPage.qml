@@ -73,7 +73,7 @@ PreferencesPage {
 
             horizontalAlignment: Text.AlignLeft
             wrapMode: Text.Wrap
-            text: qsTrc("notation", "When swapping the positions of two drum pads:")
+            text: qsTrc("notation/percussion", "When swapping the positions of two drum pads:")
         }
 
         RadioButtonGroup {
@@ -90,8 +90,8 @@ PreferencesPage {
             orientation: ListView.Vertical
 
             model: [
-                { text: qsTrc("notation", "Move MIDI notes and keyboard shortcuts with their sounds"), value: true },
-                { text: qsTrc("notation", "Leave MIDI notes and keyboard shortcuts fixed to original pad positions"), value: false }
+                { text: qsTrc("notation/percussion", "Move MIDI notes and keyboard shortcuts with their sounds"), value: true },
+                { text: qsTrc("notation/percussion", "Leave MIDI notes and keyboard shortcuts fixed to original pad positions"), value: false }
             ]
 
             delegate: Row {
@@ -159,8 +159,8 @@ PreferencesPage {
         FlatButton {
             id: useNewPercussionPanel
 
-            text: percussionPreferencesModel.useNewPercussionPanel ? qsTrc("notation", "Switch to old percussion panel")
-                                                                   : qsTrc("notation", "Switch to new percussion panel")
+            text: percussionPreferencesModel.useNewPercussionPanel ? qsTrc("notation/percussion", "Switch to old percussion panel")
+                                                                   : qsTrc("notation/percussion", "Switch to new percussion panel")
 
             navigation.name: "SwitchPercussionPanels"
             navigation.panel: percussionPanelPreferences.navigation
