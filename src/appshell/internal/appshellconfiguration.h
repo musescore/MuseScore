@@ -94,7 +94,7 @@ public:
     void applySettings() override;
     void rollbackSettings() override;
 
-    void revertToFactorySettings(bool keepDefaultSettings = false, bool notifyAboutChanges = true) const override;
+    void revertToFactorySettings(bool keepDefaultSettings = false, bool notifyAboutChanges = true) override;
 
     muse::io::paths_t sessionProjectsPaths() const override;
     muse::Ret setSessionProjectsPaths(const muse::io::paths_t& paths) override;
