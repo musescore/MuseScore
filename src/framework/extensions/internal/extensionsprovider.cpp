@@ -231,7 +231,7 @@ muse::Ret ExtensionsProvider::performPoint(const ExecPointName& name)
                 continue;
             }
 
-            Ret r = perform(makeUriQuery(m.uri, a.code));
+            Ret r = perform(makeActionQuery(m.uri, a.code));
             if (ret) {
                 ret = r;
             }

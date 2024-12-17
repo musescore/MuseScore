@@ -156,16 +156,24 @@ struct Action {
     bool isValid() const { return type != Type::Undefined && !code.empty(); }
 };
 
-inline UriQuery makeUriQuery(const Uri& uri, const std::string& actionCode)
+inline actions::ActionQuery makeActionQuery(const Uri& uri, const std::string& actionCode)
 {
     UriQuery q(uri);
+    q.setScheme("action");
     q.addParam("action", Val(actionCode));
+    return q;
+}
+
+inline UriQuery uriQueryFromActionQuery(const actions::ActionQuery& a)
+{
+    UriQuery q(a.toString());
+    q.setScheme("musescore");
     return q;
 }
 
 inline actions::ActionCode makeActionCode(const Uri& uri, const std::string& extActionCode)
 {
-    return makeUriQuery(uri, extActionCode).toString();
+    return makeActionQuery(uri, extActionCode).toString();
 }
 
 /*
