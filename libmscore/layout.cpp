@@ -4204,11 +4204,8 @@ System* Score::collectSystem(LayoutContext& lc)
       // now we have a complete set of measures for this system
       //
       // prevMeasure is the last measure in the system
-      if (lc.prevMeasure && lc.prevMeasure->isMeasure()) {
+      if (lc.prevMeasure && lc.prevMeasure->isMeasure())
             breakCrossMeasureBeams(toMeasure(lc.prevMeasure));
-            qreal w = toMeasure(lc.prevMeasure)->createEndBarLines(true);
-            minWidth += w;
-            }
 
       hideEmptyStaves(system, lc.firstSystem);
       // Relayout system decorations to reuse space properly for
@@ -4224,6 +4221,7 @@ System* Score::collectSystem(LayoutContext& lc)
 
       Measure* lm  = system->lastMeasure();
       if (lm) {
+            minWidth += lm->createEndBarLines(true);
             Measure* nm = lm->nextMeasure();
             if (nm) {
                   qreal w = lm->width();
