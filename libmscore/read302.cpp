@@ -142,6 +142,8 @@ bool Score::read(XmlReader& e)
                   QString name = e.attribute("name");
                   setMetaTag(name, e.readElementText());
                   }
+            else if (tag == "SystemObjects") // Mu4 compatibility
+                  e.skipCurrentElement();    // skip, don't log
             else if (tag == "Order") {
                   order = new ScoreOrder(e.attribute("id"));
                   order->read(e);
@@ -414,7 +416,8 @@ Score::FileError MasterScore::read302(XmlReader& e)
                   }
             else if (tag == "programRevision")
                   setMscoreRevision(e.readIntHex());
-            else if (tag == "LastEID")    // Mu4.2+ compatibility
+            else if (tag == "LastEID"     // Mu4.2+ compatibility
+                  || tag == "eid")        // Mu4.5+ compatibility
                   e.skipCurrentElement(); // skip, don't log
             else if (tag == "Score") {
                   MasterScore* score;

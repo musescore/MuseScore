@@ -3477,7 +3477,7 @@ bool MStyle::readProperties400(XmlReader& e, int mscVersion)
 
 bool MStyle::readProperties440(XmlReader& e, int mscVersion)
       {
-      if (/*mscVersion >= 450 && */readProperties450(e, mscVersion)) // mscVersion not yet bumped
+      if (mscVersion >= 450 && readProperties450(e, mscVersion))
             return true;
 
       const QStringRef& tag(e.name());
@@ -3493,7 +3493,8 @@ bool MStyle::readProperties440(XmlReader& e, int mscVersion)
       else if (tag == "lyricsShowDashIfSyllableOnFirstNote"         // Mu4.4+ only, let's skip
             || tag == "lyricsMelismaForce"                          // Mu4.4+ only, let's skip
             || tag == "lyricsMelismaMinLength"                      // Mu4.4+ only, let's skip
-            || tag == "lyricsDashPosAtStartOfSystem")               // Mu4.4+ only, let's skip
+            || tag == "lyricsDashPosAtStartOfSystem"                // Mu4.4+ only, let's skip
+            || tag == "lyricsDashFirstAndLastGapAreHalf")           // Mu4.4.3+ only, let's skip
             e.skipCurrentElement();
       else if (tag == "clefKeyDistance") {                          // 1 -> 0.75
             qreal clefKeyDistance = e.readDouble();
@@ -3744,7 +3745,7 @@ bool MStyle::readProperties440(XmlReader& e, int mscVersion)
 
 bool  MStyle::readProperties450(XmlReader& e, int mscVersion)
       {
-      if (mscVersion >= 450) // mscVersion not yet bumped
+      if (mscVersion > 450)
             qDebug("Yet unknown version detected");
 
       const QStringRef& tag(e.name());
