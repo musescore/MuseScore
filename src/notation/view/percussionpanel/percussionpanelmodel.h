@@ -59,6 +59,8 @@ class PercussionPanelModel : public QObject, public muse::Injectable, public mus
 
     Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
 
+    Q_PROPERTY(QString soundTitle READ soundTitle NOTIFY soundTitleChanged)
+
     Q_PROPERTY(PanelMode::Mode currentPanelMode READ currentPanelMode WRITE setCurrentPanelMode NOTIFY currentPanelModeChanged)
     Q_PROPERTY(bool useNotationPreview READ useNotationPreview WRITE setUseNotationPreview NOTIFY useNotationPreviewChanged)
 
@@ -71,6 +73,9 @@ public:
 
     bool enabled() const;
     void setEnabled(bool enabled);
+
+    QString soundTitle() const;
+    void setSoundTitle(const QString& soundTitle);
 
     PanelMode::Mode currentPanelMode() const;
     void setCurrentPanelMode(const PanelMode::Mode& panelMode);
@@ -94,6 +99,8 @@ public:
 signals:
     void enabledChanged();
 
+    void soundTitleChanged();
+
     void currentPanelModeChanged(const PanelMode::Mode& panelMode);
     void useNotationPreviewChanged(bool useNotationPreview);
 
@@ -102,6 +109,8 @@ signals:
 private:
     void setUpConnections();
 
+    void updateSoundTitle(const InstrumentTrackId& trackId);
+
     bool eventFilter(QObject* watched, QEvent* event) override;
 
     void writePitch(int pitch);
@@ -109,12 +118,17 @@ private:
 
     void resetLayout();
 
+    mu::engraving::InstrumentTrackId currentTrackId() const;
+
+    const project::IProjectAudioSettingsPtr audioSettings() const;
     const mu::notation::INotationPtr notation() const;
     const mu::notation::INotationInteractionPtr interaction() const;
 
     mu::engraving::Score* score() const;
 
     bool m_enabled = false;
+
+    QString m_soundTitle;
 
     PanelMode::Mode m_currentPanelMode = PanelMode::Mode::WRITE;
     PanelMode::Mode m_panelModeToRestore = PanelMode::Mode::WRITE;

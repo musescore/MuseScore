@@ -86,10 +86,42 @@ Item {
         panelWidth: root.width
     }
 
+    StyledIconLabel {
+        id: soundTitleIcon
+
+        anchors.verticalCenter: soundTitleLabel.verticalCenter
+        anchors.right: soundTitleLabel.left
+
+        anchors.rightMargin: 6
+
+        visible: percModel.enabled && !percModel.soundTitle.isEmpty
+
+        color: ui.theme.fontPrimaryColor
+
+        iconCode: IconCode.AUDIO
+    }
+
+    StyledTextLabel {
+        id: soundTitleLabel
+
+        anchors {
+            top: toolbar.bottom
+            right: parent.right
+
+            topMargin: 8
+            bottomMargin: 8
+            rightMargin: 16
+        }
+
+        visible: percModel.enabled && !percModel.soundTitle.isEmpty
+
+        text: percModel.soundTitle
+    }
+
     StyledFlickable {
         id: flickable
 
-        anchors.top: toolbar.bottom
+        anchors.top: soundTitleLabel.bottom
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
 
