@@ -15083,6 +15083,7 @@ first note of the system</string>
   <tabstop>dontHideStavesInFirstSystem</tabstop>
   <tabstop>alwaysShowBrackets</tabstop>
   <tabstop>crossMeasureValues</tabstop>
+  <tabstop>hideInstrumentNameIfOneInstrument</tabstop>
   <tabstop>firstLongBtn</tabstop>
   <tabstop>firstShortBtn</tabstop>
   <tabstop>firstHideBtn</tabstop>
@@ -15142,6 +15143,11 @@ first note of the system</string>
   <tabstop>resetSmallStaffSize</tabstop>
   <tabstop>smallClefSize</tabstop>
   <tabstop>resetSmallClefSize</tabstop>
+  <tabstop>graceNoteSize</tabstop>
+  <tabstop>resetGraceNoteSize</tabstop>
+  <tabstop>smallNoteSize</tabstop>
+  <tabstop>resetSmallNoteSize</tabstop>
+  <tabstop>reduceRythmicSpacing</tabstop>
   <tabstop>scrollArea_headerFooter</tabstop>
   <tabstop>showHeader</tabstop>
   <tabstop>showHeaderFirstPage</tabstop>
@@ -15163,16 +15169,16 @@ first note of the system</string>
   <tabstop>evenFooterR</tabstop>
   <tabstop>showMeasureNumber</tabstop>
   <tabstop>showFirstMeasureNumber</tabstop>
-  <tabstop>showAllStavesMeasureNumber</tabstop>
-  <tabstop>showEverySystemMeasureNumber</tabstop>
-  <tabstop>showIntervalMeasureNumber</tabstop>
-  <tabstop>intervalMeasureNumber</tabstop>
   <tabstop>measureNumberVPlacement</tabstop>
   <tabstop>resetMeasureNumberVPlacement</tabstop>
+  <tabstop>showAllStavesMeasureNumber</tabstop>
   <tabstop>measureNumberHPlacement</tabstop>
   <tabstop>resetMeasureNumberHPlacement</tabstop>
+  <tabstop>showEverySystemMeasureNumber</tabstop>
   <tabstop>measureNumberPosAbove</tabstop>
   <tabstop>resetMeasureNumberPosAbove</tabstop>
+  <tabstop>showIntervalMeasureNumber</tabstop>
+  <tabstop>intervalMeasureNumber</tabstop>
   <tabstop>measureNumberPosBelow</tabstop>
   <tabstop>resetMeasureNumberPosBelow</tabstop>
   <tabstop>mmRestShowMeasureNumberRange</tabstop>
@@ -15188,10 +15194,10 @@ first note of the system</string>
   <tabstop>resetMMRestRangePosBelow</tabstop>
   <tabstop>bracketWidth</tabstop>
   <tabstop>resetBracketThickness</tabstop>
-  <tabstop>bracketDistance</tabstop>
-  <tabstop>resetBracketDistance</tabstop>
   <tabstop>akkoladeWidth</tabstop>
   <tabstop>resetBraceThickness</tabstop>
+  <tabstop>bracketDistance</tabstop>
+  <tabstop>resetBracketDistance</tabstop>
   <tabstop>akkoladeBarDistance</tabstop>
   <tabstop>resetBraceDistance</tabstop>
   <tabstop>dividerLeft</tabstop>
@@ -15212,6 +15218,7 @@ first note of the system</string>
   <tabstop>radioHideKeys</tabstop>
   <tabstop>genCourtesyKeysig</tabstop>
   <tabstop>genCourtesyTimesig</tabstop>
+  <tabstop>scrollAreaAccidentals</tabstop>
   <tabstop>accidentalsBracketsBadding</tabstop>
   <tabstop>resetAccidentalsBracketPadding</tabstop>
   <tabstop>accidentalTable</tabstop>
@@ -15257,6 +15264,7 @@ first note of the system</string>
   <tabstop>resetSystemHeaderDistance</tabstop>
   <tabstop>systemHeaderTimeSigDistance</tabstop>
   <tabstop>resetSystemHeaderTimeSigDistance</tabstop>
+  <tabstop>scrollArea_3</tabstop>
   <tabstop>showRepeatBarTips</tabstop>
   <tabstop>resetShowRepeatBarTips</tabstop>
   <tabstop>showStartBarlineSingle</tabstop>
@@ -15293,7 +15301,36 @@ first note of the system</string>
   <tabstop>stemWidth</tabstop>
   <tabstop>ledgerLineWidth</tabstop>
   <tabstop>ledgerLineLength</tabstop>
+  <tabstop>combineVoices</tabstop>
+  <tabstop>resetCombineVoices</tabstop>
+  <tabstop>scrollArea_4</tabstop>
+  <tabstop>multiMeasureRests</tabstop>
   <tabstop>minEmptyMeasures</tabstop>
+  <tabstop>mmRestSingleUseNormalRest</tabstop>
+  <tabstop>singleMMRestShowNumber</tabstop>
+  <tabstop>mmRestSingleUseHBar</tabstop>
+  <tabstop>mmRestWidthProportional</tabstop>
+  <tabstop>mmRestWidthConstant</tabstop>
+  <tabstop>mmRestRefDuration</tabstop>
+  <tabstop>resetMMRestRefDuration</tabstop>
+  <tabstop>minMeasureWidth</tabstop>
+  <tabstop>resetMinMMRestWidth</tabstop>
+  <tabstop>mmRestMaxMeasures</tabstop>
+  <tabstop>mmRestMaxMeasuresReset</tabstop>
+  <tabstop>mmRestNumberPos</tabstop>
+  <tabstop>resetMMRestNumberPos</tabstop>
+  <tabstop>mmRestNumberMaskHBar</tabstop>
+  <tabstop>resetMMRestNumberMaskHBar</tabstop>
+  <tabstop>placeBetweenStaves</tabstop>
+  <tabstop>resetPlaceBetweenStaves</tabstop>
+  <tabstop>mmRestHBarThickness</tabstop>
+  <tabstop>resetMMRestHBarThickness</tabstop>
+  <tabstop>multiMeasureRestMargin</tabstop>
+  <tabstop>resetMultiMeasureRestMargin</tabstop>
+  <tabstop>mmRestHBarVStrokeThickness</tabstop>
+  <tabstop>resetMMRestHBarVStrokeThickness</tabstop>
+  <tabstop>mmRestHBarVStrokeHeight</tabstop>
+  <tabstop>resetMMRestHBarVStrokeHeight</tabstop>
   <tabstop>oldStyleMultiMeasureRests</tabstop>
   <tabstop>mmRestOldStyleMaxMeasures</tabstop>
   <tabstop>resetMMRestOldStyleMaxMeasures</tabstop>
@@ -15317,7 +15354,6 @@ first note of the system</string>
   <tabstop>resetTupletNumberType</tabstop>
   <tabstop>tupletBracketType</tabstop>
   <tabstop>resetTupletBracketType</tabstop>
-  <tabstop>tupletUseSymbols</tabstop>
   <tabstop>tupletBracketWidth</tabstop>
   <tabstop>resetTupletBracketWidth</tabstop>
   <tabstop>tupletBracketHookHeight</tabstop>
@@ -15341,6 +15377,43 @@ first note of the system</string>
   <tabstop>arpeggioLineWidth</tabstop>
   <tabstop>arpeggioHookLen</tabstop>
   <tabstop>arpeggioHiddenInStdIfTab</tabstop>
+  <tabstop>scrollArea_41</tabstop>
+  <tabstop>slurEndLineWidth</tabstop>
+  <tabstop>resetSlurEndLineWidth</tabstop>
+  <tabstop>slurMidLineWidth</tabstop>
+  <tabstop>resetSlurMidLineWidth</tabstop>
+  <tabstop>slurDottedLineWidth</tabstop>
+  <tabstop>resetSlurDottedLineWidth</tabstop>
+  <tabstop>slurMinDistance</tabstop>
+  <tabstop>resetSlurMinDistance</tabstop>
+  <tabstop>tieEndLineWidth</tabstop>
+  <tabstop>resetTieEndLineWidth</tabstop>
+  <tabstop>tieMidLineWidth</tabstop>
+  <tabstop>resetTieMidLineWidth</tabstop>
+  <tabstop>tieDottedLineWidth</tabstop>
+  <tabstop>resetTieDottedLineWidth</tabstop>
+  <tabstop>tieMinDistance</tabstop>
+  <tabstop>resetTieMinDistance</tabstop>
+  <tabstop>minTieLength</tabstop>
+  <tabstop>resetMinTieLength</tabstop>
+  <tabstop>minLaissezVibLength</tabstop>
+  <tabstop>resetMinLaissezVibLength</tabstop>
+  <tabstop>laissezVibUseSmufl</tabstop>
+  <tabstop>scrollArea_dynamicsAndHairpins</tabstop>
+  <tabstop>dynamicsAndHairpinPos</tabstop>
+  <tabstop>resetDynamicsAndHairpinPos</tabstop>
+  <tabstop>dynamicsAndHairpinsAboveOnVocalStaves</tabstop>
+  <tabstop>dynamicsAndHairpinsCenterOnGrandStaff</tabstop>
+  <tabstop>dynamicsOverrideFont</tabstop>
+  <tabstop>dynamicsFont</tabstop>
+  <tabstop>avoidBarLines</tabstop>
+  <tabstop>resetAvoidBarLines</tabstop>
+  <tabstop>dynamicsSize</tabstop>
+  <tabstop>resetDynamicsSize</tabstop>
+  <tabstop>resetDynamicsPosAbove</tabstop>
+  <tabstop>resetDynamicsPosBelow</tabstop>
+  <tabstop>dynamicsMinDistance</tabstop>
+  <tabstop>resetDynamicsMinDistance</tabstop>
   <tabstop>hairpinPosAbove</tabstop>
   <tabstop>resetHairpinPosAbove</tabstop>
   <tabstop>hairpinPosBelow</tabstop>
@@ -15445,6 +15518,8 @@ first note of the system</string>
   <tabstop>radioArticAlignCenter</tabstop>
   <tabstop>radioArticKeepTogether</tabstop>
   <tabstop>radioArticAllowSeparate</tabstop>
+  <tabstop>ornamentShowCueNoteOnlyNonSeconds</tabstop>
+  <tabstop>ornamentShowCueNoteAlways</tabstop>
   <tabstop>fermataPosAbove</tabstop>
   <tabstop>resetFermataPosAbove</tabstop>
   <tabstop>fermataPosBelow</tabstop>
@@ -15468,9 +15543,12 @@ first note of the system</string>
   <tabstop>tempoTextMinDistance</tabstop>
   <tabstop>resetTempoTextMinDistance</tabstop>
   <tabstop>scrollArea_lyrics</tabstop>
+  <tabstop>editLyricsTextStyleButton</tabstop>
   <tabstop>lyricsPlacement</tabstop>
   <tabstop>resetLyricsPlacement</tabstop>
+  <tabstop>yLyricsPosAbove</tabstop>
   <tabstop>resetLyricsPosAbove</tabstop>
+  <tabstop>yLyricsPosBelow</tabstop>
   <tabstop>resetLyricsPosBelow</tabstop>
   <tabstop>lyricsLineHeight</tabstop>
   <tabstop>resetLyricsLineHeight</tabstop>
@@ -15486,20 +15564,28 @@ first note of the system</string>
   <tabstop>resetLyricsDashMinLength</tabstop>
   <tabstop>lyricsDashMaxLength</tabstop>
   <tabstop>resetLyricsDashMaxLength</tabstop>
-  <tabstop>lyricsDashMaxDistance</tabstop>
-  <tabstop>resetLyricsDashMaxDistance</tabstop>
   <tabstop>lyricsDashLineThickness</tabstop>
   <tabstop>resetLyricsDashLineThickness</tabstop>
   <tabstop>lyricsDashPad</tabstop>
   <tabstop>resetLyricsDashPad</tabstop>
+  <tabstop>lyricsDashMaxDistance</tabstop>
+  <tabstop>resetLyricsDashMaxDistance</tabstop>
   <tabstop>lyricsDashYposRatio</tabstop>
   <tabstop>resetLyricsDashYposRatio</tabstop>
   <tabstop>lyricsDashForce</tabstop>
   <tabstop>resetLyricsDashForce</tabstop>
+  <tabstop>lyricsShowDashIfSyllableOnFirstNote</tabstop>
+  <tabstop>resetLyricsShowDashIfSyllableOnFirstNote</tabstop>
+  <tabstop>lyricsDashStartSystemPlacement</tabstop>
+  <tabstop>resetLyricsDashStartSystemPlacement</tabstop>
+  <tabstop>minMelismaLength</tabstop>
+  <tabstop>resetMinMelismaLength</tabstop>
   <tabstop>lyricsLineThickness</tabstop>
   <tabstop>resetLyricsLineThickness</tabstop>
   <tabstop>lyricsMelismaPad</tabstop>
   <tabstop>resetLyricsMelismaPad</tabstop>
+  <tabstop>lyricsMelismaForce</tabstop>
+  <tabstop>resetLyricsMelismaForce</tabstop>
   <tabstop>snapExpression</tabstop>
   <tabstop>resetSnapExpression</tabstop>
   <tabstop>rehearsalMarkPlacement</tabstop>
@@ -15550,6 +15636,7 @@ first note of the system</string>
   <tabstop>maxChordShiftBelow</tabstop>
   <tabstop>resetMaxChordShiftBelow</tabstop>
   <tabstop>capoPosition</tabstop>
+  <tabstop>scrollArea_2</tabstop>
   <tabstop>scrollArea</tabstop>
   <tabstop>slurShowTabCommon</tabstop>
   <tabstop>slurShowTabSimple</tabstop>
@@ -15579,6 +15666,13 @@ first note of the system</string>
   <tabstop>wahShowTabSimple</tabstop>
   <tabstop>golpeShowTabCommon</tabstop>
   <tabstop>golpeShowTabSimple</tabstop>
+  <tabstop>tabShowTiesAndFret</tabstop>
+  <tabstop>tabShowTies</tabstop>
+  <tabstop>tabShowNone</tabstop>
+  <tabstop>tabParenthSystem</tabstop>
+  <tabstop>tabParenthMeasure</tabstop>
+  <tabstop>tabParenthNone</tabstop>
+  <tabstop>tabParenthArticulation</tabstop>
   <tabstop>textStyles</tabstop>
   <tabstop>styleName</tabstop>
   <tabstop>resetTextStyleName</tabstop>
@@ -15590,6 +15684,8 @@ first note of the system</string>
   <tabstop>resetTextStyleLineSpacing</tabstop>
   <tabstop>textStyleSpatiumDependent</tabstop>
   <tabstop>resetTextStyleSpatiumDependent</tabstop>
+  <tabstop>tupletUseSymbols</tabstop>
+  <tabstop>resetTupletUseSymbols</tabstop>
   <tabstop>textStyleMusicalSymbolsScale</tabstop>
   <tabstop>resetTextStyleMusicalSymbolsScale</tabstop>
   <tabstop>resetTextStyleFontStyle</tabstop>
@@ -15612,14 +15708,6 @@ first note of the system</string>
   <tabstop>resetTextStyleFrameBorderRadius</tabstop>
   <tabstop>buttonTogglePagelist</tabstop>
   <tabstop>resetStylesButton</tabstop>
-  <tabstop>tabShowTiesAndFret</tabstop>
-  <tabstop>tabShowTies</tabstop>
-  <tabstop>tabShowNone</tabstop>
-  <tabstop>tabParenthSystem</tabstop>
-  <tabstop>tabParenthMeasure</tabstop>
-  <tabstop>tabParenthNone</tabstop>
-  <tabstop>tabParenthArticulation</tabstop>
-  <tabstop>resetTupletUseSymbols</tabstop>
  </tabstops>
  <resources/>
  <connections/>
