@@ -1261,19 +1261,19 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
     if (articSym != SymId::noSym) {
         const Color color = Color::fromString(notation.attribute(u"color"));
         const String place = notation.attribute(u"placement");
-        Articulation* na = Factory::createArticulation(cr);
-        na->setSymId(articSym);
+        Ornament* mordent = Factory::createOrnament(cr);
+        mordent->setSymId(articSym);
         if (place == u"above") {
-            na->setAnchor(ArticulationAnchor::TOP);
+            mordent->setAnchor(ArticulationAnchor::TOP);
         } else if (place == u"below") {
-            na->setAnchor(ArticulationAnchor::BOTTOM);
+            mordent->setAnchor(ArticulationAnchor::BOTTOM);
         } else {
-            na->setAnchor(ArticulationAnchor::AUTO);
+            mordent->setAnchor(ArticulationAnchor::AUTO);
         }
         if (color.isValid()) {
-            na->setColor(color);
+            mordent->setColor(color);
         }
-        cr->add(na);
+        cr->add(mordent);
     } else {
         LOGD("unknown ornament: name '%s' long '%s' approach '%s' departure '%s'",
              muPrintable(name), muPrintable(attrLong), muPrintable(attrAppr), muPrintable(attrDep));        // TODO
