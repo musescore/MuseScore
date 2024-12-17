@@ -1875,6 +1875,18 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Toggle turn with slash"),
              TranslatableString("action", "Add ornament: turn with slash")
              ),
+    UiAction("add-turn-up",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Toggle vertical turn"),
+             TranslatableString("action", "Add ornament: vertical turn")
+             ),
+    UiAction("add-turn-inverted-up",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Toggle vertical inverted turn"),
+             TranslatableString("action", "Add ornament: vertical inverted turn")
+             ),
     UiAction("add-trill",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

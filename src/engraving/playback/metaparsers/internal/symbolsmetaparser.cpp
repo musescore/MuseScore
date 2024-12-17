@@ -344,10 +344,12 @@ mpe::ArticulationTypeSet SymbolsMetaParser::symbolToArticulations(SymId symId, O
         types.emplace(mpe::ArticulationType::DownMordent);
         break;
     case SymId::ornamentTurn:
+    case SymId::ornamentTurnUp:
     case SymId::brassJazzTurn:
         types.emplace(mpe::ArticulationType::Turn);
         break;
     case SymId::ornamentTurnInverted:
+    case SymId::ornamentTurnUpS:
     case SymId::ornamentTurnSlash:
         types.emplace(mpe::ArticulationType::InvertedTurn);
         break;

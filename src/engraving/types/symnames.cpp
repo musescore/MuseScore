@@ -6315,6 +6315,8 @@ const std::map<AsciiStringView, SymId> SymNames::s_oldNameToSymIdHash {
     { "down bow",                  SymId::stringsDownBow },             // scripts.downbow
     { "reverse turn",              SymId::ornamentTurnInverted },       // scripts.reverseturn
     { "turn",                      SymId::ornamentTurn },               // scripts.turn
+    { "vertical turn",             SymId::ornamentTurnUp },             // scripts.verticalturn
+    { "reverse vertical turn",     SymId::ornamentTurnUpS },            // scripts.reverseverticalturn
     { "trill",                     SymId::ornamentTrill },              // scripts.trill
     { "upedal heel",               SymId::keyboardPedalHeel1 },         // scripts.upedalheel
     { "dpedalheel",                SymId::keyboardPedalHeel2 },         // scripts.dpedalheel
