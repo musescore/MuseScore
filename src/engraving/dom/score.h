@@ -216,9 +216,9 @@ enum class PlayMode : char {
 struct ShowAnchors {
     ShowAnchors() = default;
     ShowAnchors(voice_idx_t vIdx, staff_idx_t stfIdx, const Fraction& sTickMain, const Fraction& eTickMain,
-                const Fraction& sTickExt, const Fraction& eTickExt)
-        : voiceIdx(vIdx), staffIdx(stfIdx), startTickMainRegion(sTickMain), endTickMainRegion(eTickMain),
-        startTickExtendedRegion(sTickExt), endTickExtendedRegion(eTickExt) {}
+                const Fraction& sTickExt, const Fraction& eTickExt) : voiceIdx(vIdx), staffIdx(stfIdx), startTickMainRegion(sTickMain),
+        endTickMainRegion(eTickMain), startTickExtendedRegion(sTickExt), endTickExtendedRegion(eTickExt) {
+    }
 
     void reset()
     {
@@ -877,7 +877,8 @@ public:
     void transposeDiatonicAlterations(TransposeDirection direction);
 
     struct InsertMeasureOptions {
-        InsertMeasureOptions() {}
+        InsertMeasureOptions() {
+        }
 
         bool createEmptyMeasures = false;
         bool moveSignaturesClef = true;

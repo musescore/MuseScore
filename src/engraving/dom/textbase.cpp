@@ -1892,7 +1892,8 @@ void TextBase::createBlocks(LayoutData* ldata) const
 
                         //char32_t code = score()->scoreFont()->symCode(id);
                         char32_t code = id
-                                        == SymId::space ? static_cast<char32_t>(' ') : score()->engravingFonts()->fallbackFont()->symCode(id);
+                                        == SymId::space ? static_cast<char32_t>(' ')
+                                        : score()->engravingFonts()->fallbackFont()->symCode(id);
                         cursor.format()->setFontFamily(u"ScoreText");
                         insert(&cursor, code, ldata);
                         cursor.setFormat(fmt); // restore format

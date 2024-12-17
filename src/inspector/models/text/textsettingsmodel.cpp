@@ -433,7 +433,7 @@ void TextSettingsModel::setIsHorizontalAlignmentAvailable(bool isHorizontalAlign
 void TextSettingsModel::updateBorderPropertiesAvailability()
 {
     bool isBorderVisible = static_cast<TextTypes::BorderType>(m_borderType->value().toInt())
-                          != TextTypes::BorderType::BORDER_TYPE_NONE;
+                           != TextTypes::BorderType::BORDER_TYPE_NONE;
 
     m_borderThickness->setIsEnabled(isBorderVisible);
     m_borderColor->setIsEnabled(isBorderVisible);
