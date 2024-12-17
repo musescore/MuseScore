@@ -75,7 +75,7 @@ public:
     virtual void applySettings() = 0;
     virtual void rollbackSettings() = 0;
 
-    virtual void revertToFactorySettings(bool keepDefaultSettings = false, bool notifyAboutChanges = true) const = 0;
+    virtual void revertToFactorySettings(bool keepDefaultSettings = false, bool notifyAboutChanges = true) = 0;
 
     virtual muse::io::paths_t sessionProjectsPaths() const = 0;
     virtual muse::Ret setSessionProjectsPaths(const muse::io::paths_t& paths) = 0;
