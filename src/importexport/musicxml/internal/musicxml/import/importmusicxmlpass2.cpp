@@ -8563,20 +8563,21 @@ static void addChordLine(const Notation& notation, Note* note,
                          MusicXmlLogger* logger, const XmlStreamReader* const xmlreader)
 {
     const String chordLineType = notation.subType();
+    const Color color = Color::fromString(notation.attribute(u"color"));
     if (!chordLineType.empty()) {
         if (note) {
             ChordLine* const chordline = Factory::createChordLine(note->chord());
             if (chordLineType == u"falloff") {
                 chordline->setChordLineType(ChordLineType::FALL);
-            }
-            if (chordLineType == u"doit") {
+            } else if (chordLineType == u"doit") {
                 chordline->setChordLineType(ChordLineType::DOIT);
-            }
-            if (chordLineType == u"plop") {
+            } else if (chordLineType == u"plop") {
                 chordline->setChordLineType(ChordLineType::PLOP);
-            }
-            if (chordLineType == u"scoop") {
+            } else if (chordLineType == u"scoop") {
                 chordline->setChordLineType(ChordLineType::SCOOP);
+            }
+            if (color.isValid()) {
+                chordline->setColor(color);
             }
             note->chord()->add(chordline);
         } else {

@@ -3370,6 +3370,7 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
             default:
                 LOGD("unknown ChordLine subtype %d", int(cl->chordLineType()));
             }
+            subtype += color2xml(cl);
             if (!subtype.empty()) {
                 notations.tag(xml, e);
                 articulations.tag(xml);
