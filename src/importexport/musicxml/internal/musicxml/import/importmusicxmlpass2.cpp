@@ -1325,29 +1325,43 @@ static void addOtherOrnamentToChord(const Notation& notation, ChordRest* cr)
 
 static bool convertArticulationToSymId(const String& mxmlName, SymId& id)
 {
-    // map MusicXML articulation name to MuseScore symbol
+    // map MusicXML notations name to MuseScore symbol
     static const std::map<String, SymId> map {
-        { u"accent",          SymId::articAccentAbove },
-        { u"staccatissimo",   SymId::articStaccatissimoWedgeAbove },
-        { u"staccato",        SymId::articStaccatoAbove },
-        { u"tenuto",          SymId::articTenutoAbove },
-        { u"strong-accent",   SymId::articMarcatoAbove },
-        { u"delayed-turn",    SymId::ornamentTurn },
-        { u"turn",            SymId::ornamentTurn },
-        { u"inverted-turn",   SymId::ornamentTurnInverted },
-        { u"stopped",         SymId::brassMuteClosed },
-        { u"up-bow",          SymId::stringsUpBow },
-        { u"down-bow",        SymId::stringsDownBow },
-        { u"detached-legato", SymId::articTenutoStaccatoAbove },
-        { u"spiccato",        SymId::articStaccatissimoAbove },
-        { u"snap-pizzicato",  SymId::pluckedSnapPizzicatoAbove },
-        { u"schleifer",       SymId::ornamentPrecompSlide },
-        { u"open",            SymId::brassMuteOpen },
-        { u"open-string",     SymId::brassMuteOpen },
-        { u"thumb-position",  SymId::stringsThumbPosition },
-        { u"soft-accent",     SymId::articSoftAccentAbove },
-        { u"stress",          SymId::articStressAbove },
-        { u"unstress",        SymId::articUnstressAbove }
+        // ornaments
+        { u"delayed-turn",           SymId::ornamentTurn },
+        { u"inverted-turn",          SymId::ornamentTurnInverted },
+        { u"vertical-turn",          SymId::ornamentTurnUp },
+        { u"inverted-vertical-turn", SymId::ornamentTurnUpS },
+        { u"turn",                   SymId::ornamentTurn },
+        { u"schleifer",              SymId::ornamentPrecompSlide },
+        { u"haydn",                  SymId::ornamentHaydn },
+        // articulations
+        { u"accent",                 SymId::articAccentAbove },
+        { u"strong-accent",          SymId::articMarcatoAbove },
+        { u"staccato",               SymId::articStaccatoAbove },
+        { u"tenuto",                 SymId::articTenutoAbove },
+        { u"detached-legato",        SymId::articTenutoStaccatoAbove },
+        { u"staccatissimo",          SymId::articStaccatissimoWedgeAbove },
+        { u"spiccato",               SymId::articStaccatissimoAbove },
+        { u"stress",                 SymId::articStressAbove },
+        { u"unstress",               SymId::articUnstressAbove },
+        { u"soft-accent",            SymId::articSoftAccentAbove },
+        // technical
+        { u"up-bow",                 SymId::stringsUpBow },
+        { u"down-bow",               SymId::stringsDownBow },
+        { u"open-string",            SymId::brassMuteOpen },
+        { u"thumb-position",         SymId::stringsThumbPosition },
+        { u"double-tongue",          SymId::doubleTongueAbove },
+        { u"triple-tongue",          SymId::tripleTongueAbove },
+        { u"stopped",                SymId::brassMuteClosed },
+        { u"snap-pizzicato",         SymId::pluckedSnapPizzicatoAbove },
+        { u"heel",                   SymId::keyboardPedalHeel1 },
+        { u"toe",                    SymId::keyboardPedalToe1 },
+        { u"fingernails",            SymId::pluckedWithFingernails },
+        { u"brass-bend",             SymId::brassBend },
+        { u"flip",                   SymId::brassFlip },
+        { u"smear",                  SymId::brassSmear },
+        { u"open",                   SymId::brassMuteOpen }
     };
 
     auto it = map.find(mxmlName);
