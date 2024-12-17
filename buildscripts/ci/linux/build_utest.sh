@@ -28,10 +28,12 @@ df -h .
 BUILD_TOOLS=$HOME/build_tools
 ARTIFACTS_DIR=build.artifacts
 BUILD_NUMBER=42
+ENABLE_CODE_COVERAGE="false"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -n|--number) BUILD_NUMBER="$2"; shift ;;
+        --enable_code_coverage) ENABLE_CODE_COVERAGE="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -51,6 +53,14 @@ source $BUILD_TOOLS/environment.sh
 
 BUILD_VST=OFF
 
+TESTS_ENABLE_CODE_COVERAGE=OFF
+
+if [[ "$ENABLE_CODE_COVERAGE" == "true" ]]; then
+    TESTS_ENABLE_CODE_COVERAGE=ON
+else
+    TESTS_ENABLE_CODE_COVERAGE=OFF
+fi
+
 echo "=== BUILD ==="
 
 MUSESCORE_REVISION=$(git rev-parse --short=7 HEAD)
@@ -63,6 +73,8 @@ MUSESCORE_BUILD_VST_MODULE=$BUILD_VST \
 MUSESCORE_VST3_SDK_PATH=$VST3_SDK_PATH \
 MUSESCORE_DOWNLOAD_SOUNDFONT=OFF \
 MUSESCORE_BUILD_UNIT_TESTS=ON \
+MUSESCORE_UNIT_TESTS_ENABLE_CODE_COVERAGE=$TESTS_ENABLE_CODE_COVERAGE \
+MUSESCORE_COMPILE_USE_UNITY=OFF \
 bash ./ninja_build.sh -t installdebug          
 
 df -h .
