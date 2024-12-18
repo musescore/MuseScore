@@ -1015,7 +1015,7 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
 }
 
 static const mpe::ArticulationTypeSet PEDAL_CC_SUPPORTED_TYPES = {
-    mpe::ArticulationType::Pedal
+    mpe::ArticulationType::Pedal, mpe::ArticulationType::LaissezVibrer,
 };
 
 static const mpe::ArticulationTypeSet BEND_SUPPORTED_TYPES = {
