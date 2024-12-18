@@ -3845,42 +3845,6 @@ void Score::cmdFullMeasureRest()
     }
 }
 
-//---------------------------------------------------------
-//   addLyrics
-//    called from Keyboard Accelerator & menu
-//---------------------------------------------------------
-
-Lyrics* Score::addLyrics()
-{
-    EngravingItem* el = selection().element();
-    if (el == 0 || (!el->isNote() && !el->isLyrics() && !el->isRest())) {
-        MScore::setError(MsError::NO_LYRICS_SELECTED);
-        return 0;
-    }
-    ChordRest* cr;
-    if (el->isNote()) {
-        cr = toNote(el)->chord();
-        if (cr->isGrace()) {
-            cr = toChordRest(cr->explicitParent());
-        }
-    } else if (el->isLyrics()) {
-        cr = toLyrics(el)->chordRest();
-    } else if (el->isRest()) {
-        cr = toChordRest(el);
-    } else {
-        return 0;
-    }
-
-    int no = int(cr->lyrics().size());
-    Lyrics* lyrics = Factory::createLyrics(cr);
-    lyrics->setTrack(cr->track());
-    lyrics->setParent(cr);
-    lyrics->setNo(no);
-    undoAddElement(lyrics);
-    select(lyrics, SelectType::SINGLE, 0);
-    return lyrics;
-}
-
 std::vector<Hairpin*> Score::addHairpins(HairpinType type)
 {
     std::vector<Hairpin*> hairpins;

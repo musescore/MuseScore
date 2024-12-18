@@ -809,7 +809,6 @@ public:
     void scanElementsInRange(void* data, void (* func)(void*, EngravingItem*), bool all = true);
     int fileDivision() const { return m_fileDivision; }   ///< division of current loading *.msc file
     void splitStaff(staff_idx_t staffIdx, int splitPoint);
-    Lyrics* addLyrics();
     FiguredBass* addFiguredBass();
     void expandVoice(Segment* s, track_idx_t track);
     void expandVoice();
