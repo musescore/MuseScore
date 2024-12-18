@@ -369,6 +369,7 @@ Slur::Slur(const Slur& s)
 {
     _sourceStemArrangement = s._sourceStemArrangement;
     _connectedElement = s._connectedElement;
+    _partialSpannerDirection = s._partialSpannerDirection;
 }
 
 //---------------------------------------------------------
@@ -447,12 +448,12 @@ void Slur::undoSetOutgoing(bool outgoing)
     undoChangeProperty(Pid::PARTIAL_SPANNER_DIRECTION, dir, PropertyFlags::UNSTYLED);
 }
 
-bool Slur::isIncoming()
+bool Slur::isIncoming() const
 {
     return _partialSpannerDirection == PartialSpannerDirection::BOTH || _partialSpannerDirection == PartialSpannerDirection::INCOMING;
 }
 
-bool Slur::isOutgoing()
+bool Slur::isOutgoing() const
 {
     return _partialSpannerDirection == PartialSpannerDirection::BOTH || _partialSpannerDirection == PartialSpannerDirection::OUTGOING;
 }
