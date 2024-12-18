@@ -26,6 +26,19 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 include(${CMAKE_CURRENT_LIST_DIR}/view/widgets/widgets.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/view/styledialog/styledialog.cmake)
 
+if (MUE_BUILD_ENGRAVING_PLAYBACK)
+    set(NOTATION_PLAYBACK_SRC_FILES
+        ${CMAKE_CURRENT_LIST_DIR}/internal/notationplayback.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/notationplayback.h
+        )
+    set(MODULE_DEF ${MODULE_DEF} -DMUE_BUILD_ENGRAVING_PLAYBACK)
+else()
+    set(NOTATION_PLAYBACK_SRC_FILES
+        ${CMAKE_CURRENT_LIST_DIR}/internal/notationplaybackstub.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/notationplaybackstub.h
+        )
+endif()
+
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/notationmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notationmodule.h
@@ -92,8 +105,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/positionswriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscnotationwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscnotationwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationplayback.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationplayback.h
+    ${NOTATION_PLAYBACK_SRC_FILES}
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiinputoutputcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/midiinputoutputcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidiinput.cpp
