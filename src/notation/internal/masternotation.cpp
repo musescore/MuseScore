@@ -39,12 +39,19 @@
 #include "engraving/dom/box.h"
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/rest.h"
+#include "engraving/dom/sig.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/undo.h"
 
 #include "excerptnotation.h"
 #include "masternotationparts.h"
+
+#ifdef MUE_BUILD_ENGRAVING_PLAYBACK
 #include "notationplayback.h"
+#else
+#include "notationplaybackstub.h"
+#endif
+
 #include "../notationerrors.h"
 
 using namespace mu::notation;
@@ -69,7 +76,12 @@ MasterNotation::MasterNotation(const muse::modularity::ContextPtr& iocCtx)
     : Notation(iocCtx)
 {
     m_parts = std::make_shared<MasterNotationParts>(this, interaction(), undoStack());
-    m_notationPlayback = std::make_shared<NotationPlayback>(this, m_notationChanged);
+
+#ifdef MUE_BUILD_ENGRAVING_PLAYBACK
+    m_notationPlayback = std::make_shared<NotationPlayback>(this, m_notationChanged, iocCtx);
+#else
+    m_notationPlayback = std::make_shared<NotationPlaybackStub>();
+#endif
 
     m_parts->partsChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
