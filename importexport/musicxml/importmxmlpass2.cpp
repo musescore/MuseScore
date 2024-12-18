@@ -1184,21 +1184,47 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
       if (articSym != SymId::noSym) {
             const QString place = notation.attribute("placement");
             const QColor color = notation.attribute("color");
-            Articulation* na = new Articulation(cr->score());
-            na->setSymId(articSym);
+            Articulation* mordent = new Articulation(cr->score());
+            mordent->setSymId(articSym);
             if (place == "above")
-                  na->setAnchor(ArticulationAnchor::TOP_CHORD);
+                  mordent->setAnchor(ArticulationAnchor::TOP_CHORD);
             else if (place == "below")
-                  na->setAnchor(ArticulationAnchor::BOTTOM_CHORD);
+                  mordent->setAnchor(ArticulationAnchor::BOTTOM_CHORD);
             else
-                  na->setAnchor(ArticulationAnchor::CHORD);
+                  mordent->setAnchor(ArticulationAnchor::CHORD);
             if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
-                  na->setColor(color);
-            cr->add(na);
+                  mordent->setColor(color);
+            cr->add(mordent);
             }
       else
             qDebug("unknown ornament: name '%s' long '%s' approach '%s' departure '%s'",
                    qPrintable(name), qPrintable(attrLong), qPrintable(attrAppr), qPrintable(attrDep));  // TODO
+      }
+
+//---------------------------------------------------------
+//   addTurnToChord
+//---------------------------------------------------------
+
+/**
+ Add Turn to Chord.
+ */
+
+static void addTurnToChord(const Notation& notation, ChordRest* cr)
+      {
+      const SymId turnSym = notation.symId();
+      const QColor color = notation.attribute("color");
+      const QString place = notation.attribute("placement");
+      Articulation* turn =  new Articulation(cr->score());
+      turn->setSymId(turnSym);
+      if (place == "above")
+            turn->setAnchor(ArticulationAnchor::TOP_CHORD);
+      else if (place == "below")
+            turn->setAnchor(ArticulationAnchor::BOTTOM_CHORD);
+      else
+            turn->setAnchor(ArticulationAnchor::CHORD);
+      if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
+            turn->setColor(color);
+      cr->add(turn);
       }
 
 //---------------------------------------------------------
@@ -1218,11 +1244,11 @@ static void addOtherOrnamentToChord(const Notation& notation, ChordRest* cr)
 
       if (sym != SymId::noSym) {
             const QColor color = notation.attribute("color");
-            Articulation* na = new Articulation(cr->score());
-            na->setSymId(sym);
+            Articulation* ornam = new Articulation(cr->score());
+            ornam ->setSymId(sym);
             if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
-                  na->setColor(color);
-            cr->add(na);
+                  ornam->setColor(color);
+            cr->add(ornam);
             }
       else {
             qDebug("unknown ornament: name '%s': '%s'.", qPrintable(name), qPrintable(symname));
@@ -7622,7 +7648,7 @@ void MusicXMLParserNotations::ornaments()
             SymId id { SymId::noSym };
             if (convertArticulationToSymId(_e.name().toString(), id)) {
                   Notation notation = Notation::notationWithAttributes(_e.name().toString(),
-                                                                       _e.attributes(), "articulations", id);
+                                                                       _e.attributes(), "ornaments", id);
                   _notations.push_back(notation);
                   _e.skipCurrentElement();  // skip but don't log
                   }
@@ -8325,6 +8351,8 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
                   addBreath(notation, cr);
             else if (notation.name() == "fermata")
                   addFermataToChord(notation, cr);
+            else if (notation.parent() == "ornament")
+                  addTurnToChord(notation, cr);
             else
                   addArticulationToChord(notation, cr);
             }
