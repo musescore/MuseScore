@@ -176,9 +176,19 @@ public:
 
     bool useNewPercussionPanel() const override;
     void setUseNewPercussionPanel(bool use) override;
+    muse::async::Notification useNewPercussionPanelChanged() const override;
 
     bool autoShowPercussionPanel() const override;
     void setAutoShowPercussionPanel(bool autoShow) override;
+    muse::async::Notification autoShowPercussionPanelChanged() const override;
+
+    bool showPercussionPanelPadSwapDialog() const override;
+    void setShowPercussionPanelPadSwapDialog(bool show);
+    muse::async::Notification showPercussionPanelPadSwapDialogChanged() const override;
+
+    bool percussionPanelMoveMidiNotesAndShortcuts() const override;
+    void setPercussionPanelMoveMidiNotesAndShortcuts(bool move);
+    muse::async::Notification percussionPanelMoveMidiNotesAndShortcutsChanged() const override;
 
     muse::io::path_t styleFileImportPath() const override;
     void setStyleFileImportPath(const muse::io::path_t& path)  override;
