@@ -174,7 +174,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
             }
         }
 
-        double segmentX = incomingPartialSlur ? measure->firstNoteRestSegmentX() : system->firstNoteRestSegmentX(true);
+        double segmentX = incomingPartialSlur ? measure->firstNoteRestSegmentX(true) : system->firstNoteRestSegmentX(true);
         p1 = PointF(segmentX, y);
 
         // adjust for ties at the start of the system

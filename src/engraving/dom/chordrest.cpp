@@ -1209,17 +1209,29 @@ void ChordRest::removeMarkings(bool /* keepTremolo */)
 //   isBefore
 //---------------------------------------------------------
 
-bool ChordRest::isBefore(const ChordRest* o) const
+bool ChordRest::isBefore(const EngravingItem* o) const
 {
     if (!o || this == o) {
         return false;
     }
+
+    const ChordRest* otherCr = nullptr;
+    if (o->isChordRest()) {
+        otherCr = toChordRest(o);
+    } else if (o->isNote()) {
+        otherCr = toNote(o)->chord();
+    }
+
+    if (!otherCr) {
+        return EngravingItem::isBefore(o);
+    }
+
     int otick = o->tick().ticks();
     int t     = tick().ticks();
     if (t == otick) {   // At least one of the chord is a grace, order the grace notes
-        bool oGraceAfter = o->isGraceAfter();
+        bool oGraceAfter = otherCr->isGraceAfter();
         bool graceAfter  = isGraceAfter();
-        bool oGrace      = o->isGrace();
+        bool oGrace      = otherCr->isGrace();
         bool grace       = isGrace();
         // normal note are initialized at graceIndex 0 and graceIndex is 0 based
         size_t oGraceIndex  = oGrace ? toChord(o)->graceIndex() + 1 : 0;

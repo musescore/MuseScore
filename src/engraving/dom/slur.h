@@ -123,8 +123,8 @@ public:
 
     void undoSetIncoming(bool incoming);
     void undoSetOutgoing(bool outgoing);
-    bool isIncoming();
-    bool isOutgoing();
+    bool isIncoming() const;
+    bool isOutgoing() const;
 private:
     M_PROPERTY2(int, sourceStemArrangement, setSourceStemArrangement, -1)
     M_PROPERTY2(ConnectedElement, connectedElement, setConnectedElement, ConnectedElement::NONE)
