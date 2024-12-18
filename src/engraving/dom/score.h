@@ -1065,8 +1065,6 @@ private:
 
     static std::set<Score*> validScores;
 
-    ScoreChangesRange changesRange(bool undo = false) const;
-
     Note* getSelectedNote();
     ChordRest* nextTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
     ChordRest* prevTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
