@@ -105,7 +105,8 @@ private:
 
     void movePad(int fromIndex, int toIndex);
 
-    void applyPadSwapOptions(int fromIndex, int toIndex);
+    muse::RetVal<muse::Val> openPadSwapDialog();
+    void swapMidiNotesAndShortcuts(int fromIndex, int toIndex);
 
     int numEmptySlotsAtRow(int row) const;
 

@@ -31,6 +31,14 @@ import "internal"
 PreferencesPage {
     id: root
 
+    PercussionPreferencesModel {
+        id: percussionPreferencesModel
+    }
+
+    Component.onCompleted: {
+        percussionPreferencesModel.init()
+    }
+
     BaseSection {
         id: percussionPanelPreferences
 
@@ -40,6 +48,8 @@ PreferencesPage {
 
         CheckBox {
             id: unpitchedSelectedCheckbox
+
+            visible: percussionPreferencesModel.useNewPercussionPanel
             width: parent.width
 
             text: qsTrc("appshell/preferences", "Open the percussion panel when an unpitched staff is selected")
@@ -48,14 +58,17 @@ PreferencesPage {
             navigation.panel: percussionPanelPreferences.navigation
             navigation.row: 0
 
+            checked: percussionPreferencesModel.autoShowPercussionPanel
+
             onClicked:  {
-                // TODO: configuration - toggle autoShowPercussionPanel
+                percussionPreferencesModel.autoShowPercussionPanel = !unpitchedSelectedCheckbox.checked
             }
         }
 
         StyledTextLabel {
             id: padSwapInfo
 
+            visible: percussionPreferencesModel.useNewPercussionPanel
             width: parent.width
 
             horizontalAlignment: Text.AlignLeft
@@ -68,6 +81,8 @@ PreferencesPage {
 
             property int navigationRowStart: unpitchedSelectedCheckbox.navigation.row + 1
             property int navigationRowEnd: radioButtons.navigationRowStart + model.length
+
+            visible: percussionPreferencesModel.useNewPercussionPanel
 
             width: parent.width
             spacing: percussionPanelPreferences.spacing
@@ -92,10 +107,10 @@ PreferencesPage {
                     navigation.panel: percussionPanelPreferences.navigation
                     navigation.row: radioButtons.navigationRowStart + model.index
 
-                    // TODO: checked: modelData.value === pad swap preference
+                    checked: modelData.value === percussionPreferencesModel.percussionPanelMoveMidiNotesAndShortcuts
 
                     onToggled: {
-                        // TODO: configuration - change pad swap preference
+                        percussionPreferencesModel.percussionPanelMoveMidiNotesAndShortcuts = modelData.value
                     }
                 }
 
@@ -115,7 +130,7 @@ PreferencesPage {
                         anchors.fill: parent
 
                         onClicked: {
-                            // TODO: configuration - change pad swap preference
+                            percussionPreferencesModel.percussionPanelMoveMidiNotesAndShortcuts = modelData.value
                         }
                     }
                 }
@@ -125,6 +140,7 @@ PreferencesPage {
         CheckBox {
             id: alwaysAsk
 
+            visible: percussionPreferencesModel.useNewPercussionPanel
             width: parent.width
 
             text: qsTrc("global", "Always ask")
@@ -133,29 +149,26 @@ PreferencesPage {
             navigation.panel: percussionPanelPreferences.navigation
             navigation.row: radioButtons.navigationRowEnd
 
+            checked: percussionPreferencesModel.showPercussionPanelPadSwapDialog
+
             onClicked:  {
-                // TODO: configuration - toggle "show pad swap dialog"
+                percussionPreferencesModel.showPercussionPanelPadSwapDialog = !alwaysAsk.checked
             }
         }
-    }
 
-    FlatButton {
-        id: useNewPercussionPanel
+        FlatButton {
+            id: useNewPercussionPanel
 
-        anchors {
-            top: percussionPanelPreferences.bottom
-            topMargin: percussionPanelPreferences.spacing
-            left: parent.left
-        }
+            text: percussionPreferencesModel.useNewPercussionPanel ? qsTrc("notation", "Switch to old percussion panel")
+                                                                   : qsTrc("notation", "Switch to new percussion panel")
 
-        text: qsTrc("notation", "Switch to old percussion panel") // TODO: "old/new" depending on current configuration...
+            navigation.name: "SwitchPercussionPanels"
+            navigation.panel: percussionPanelPreferences.navigation
+            navigation.row: alwaysAsk.navigation.row + 1
 
-        navigation.name: "SwitchPercussionPanels"
-        navigation.panel: percussionPanelPreferences.navigation
-        navigation.row: alwaysAsk.navigation.row + 1
-
-        onClicked: {
-            // TODO: configuration - toggle use of new percussion panel
+            onClicked: {
+                percussionPreferencesModel.useNewPercussionPanel = !percussionPreferencesModel.useNewPercussionPanel
+            }
         }
     }
 }

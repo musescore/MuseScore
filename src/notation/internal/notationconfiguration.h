@@ -200,9 +200,19 @@ public:
 
     bool useNewPercussionPanel() const override;
     void setUseNewPercussionPanel(bool use) override;
+    muse::async::Notification useNewPercussionPanelChanged() const override;
 
     bool autoShowPercussionPanel() const override;
     void setAutoShowPercussionPanel(bool autoShow) override;
+    muse::async::Notification autoShowPercussionPanelChanged() const override;
+
+    bool showPercussionPanelPadSwapDialog() const override;
+    void setShowPercussionPanelPadSwapDialog(bool show);
+    muse::async::Notification showPercussionPanelPadSwapDialogChanged() const override;
+
+    bool percussionPanelMoveMidiNotesAndShortcuts() const override;
+    void setPercussionPanelMoveMidiNotesAndShortcuts(bool move);
+    muse::async::Notification percussionPanelMoveMidiNotesAndShortcutsChanged() const override;
 
     muse::io::path_t styleFileImportPath() const override;
     void setStyleFileImportPath(const muse::io::path_t& path) override;
@@ -224,6 +234,7 @@ private:
 
     muse::async::Notification m_backgroundChanged;
     muse::async::Notification m_foregroundChanged;
+
     muse::async::Channel<muse::Orientation> m_canvasOrientationChanged;
     muse::async::Channel<muse::io::path_t> m_userStylesPathChanged;
     muse::async::Notification m_scoreOrderListPathsChanged;
@@ -233,6 +244,10 @@ private:
     muse::ValCh<int> m_pianoKeyboardNumberOfKeys;
     muse::ValCh<bool> m_midiInputUseWrittenPitch;
     muse::async::Channel<QColor> m_anchorColorChanged;
+    muse::async::Notification m_useNewPercussionPanelChanged;
+    muse::async::Notification m_autoShowPercussionPanelChanged;
+    muse::async::Notification m_showPercussionPanelPadSwapDialogChanged;
+    muse::async::Notification m_percussionPanelMoveMidiNotesAndShortcutsChanged;
 
     int m_styleDialogLastPageIndex = 0;
     int m_styleDialogLastSubPageIndex = 0;

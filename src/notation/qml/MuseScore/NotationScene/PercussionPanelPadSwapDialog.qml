@@ -27,6 +27,8 @@ import Muse.UiComponents 1.0
 StyledDialogView {
     id: root
 
+    property bool moveMidiNotesAndShortcuts: true
+
     contentWidth: 500
     contentHeight: contentRow.implicitHeight + contentColumn.spacing + buttonBox.implicitHeight
 
@@ -55,11 +57,6 @@ StyledDialogView {
 
     onAccessibilityActivateRequested: {
         accessibleInfo.readInfo()
-    }
-
-    QtObject {
-        id: prv
-        property bool moveMidiNotesAndShortcuts: true
     }
 
     AccessibleItem {
@@ -146,11 +143,11 @@ StyledDialogView {
                         navigation.panel: contentNavigationPanel
                         navigation.row: model.index
 
-                        checked: modelData.value === prv.moveMidiNotesAndShortcuts
+                        checked: modelData.value === root.moveMidiNotesAndShortcuts
 
                         onToggled: {
                             // TODO: Live update the pads when this value is changed...
-                            prv.moveMidiNotesAndShortcuts = modelData.value
+                            root.moveMidiNotesAndShortcuts = modelData.value
                         }
                     }
 
@@ -171,7 +168,7 @@ StyledDialogView {
 
                             onClicked: {
                                 // TODO: Live update the pads when this value is changed...
-                                prv.moveMidiNotesAndShortcuts = modelData.value
+                                root.moveMidiNotesAndShortcuts = modelData.value
                             }
                         }
                     }
@@ -230,7 +227,7 @@ StyledDialogView {
                 return
             }
 
-            root.done({ moveMidiNotesAndShortcuts: prv.moveMidiNotesAndShortcuts, rememberMyChoice: rememberMyChoice.checked })
+            root.done({ moveMidiNotesAndShortcuts: root.moveMidiNotesAndShortcuts, rememberMyChoice: rememberMyChoice.checked })
         }
     }
 }
