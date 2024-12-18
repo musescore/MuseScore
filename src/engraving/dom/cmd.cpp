@@ -48,6 +48,7 @@
 #include "hairpin.h"
 #include "harmony.h"
 #include "key.h"
+#include "laissezvib.h"
 #include "linkedobjects.h"
 #include "lyrics.h"
 #include "masterscore.h"
@@ -96,7 +97,7 @@ static UndoMacro::ChangesInfo changesInfo(const UndoStack* stack)
         return empty;
     }
 
-    const UndoMacro* actualMacro = stack->current();
+    const UndoMacro* actualMacro = stack->activeCommand();
 
     if (!actualMacro) {
         actualMacro = stack->last();
@@ -319,9 +320,9 @@ void CmdState::setUpdateMode(UpdateMode m)
 ///   and starting a user-visible undo.
 //---------------------------------------------------------
 
-void Score::startCmd()
+void Score::startCmd(const TranslatableString& actionName)
 {
-    if (undoStack()->locked()) {
+    if (undoStack()->isLocked()) {
         return;
     }
 
@@ -335,11 +336,11 @@ void Score::startCmd()
 
     // Start collecting low-level undo operations for a
     // user-visible undo action.
-    if (undoStack()->active()) {
+    if (undoStack()->hasActiveCommand()) {
         LOGD("Score::startCmd(): cmd already active");
         return;
     }
-    undoStack()->beginMacro(this);
+    undoStack()->beginMacro(this, actionName);
 }
 
 //---------------------------------------------------------
@@ -396,11 +397,11 @@ void Score::undoRedo(bool undo, EditData* ed)
 
 void Score::endCmd(bool rollback, bool layoutAllParts)
 {
-    if (undoStack()->locked()) {
+    if (undoStack()->isLocked()) {
         return;
     }
 
-    if (!undoStack()->active()) {
+    if (!undoStack()->hasActiveCommand()) {
         LOGW() << "no command active";
         update();
         return;
@@ -411,17 +412,17 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
     }
 
     if (rollback) {
-        undoStack()->current()->unwind();
+        undoStack()->activeCommand()->unwind();
     }
 
     update(false, layoutAllParts);
 
     ScoreChangesRange range = changesRange();
 
-    LOGD() << "Undo stack current macro child count: " << undoStack()->current()->childCount();
+    LOGD() << "Undo stack current macro child count: " << undoStack()->activeCommand()->childCount();
 
-    const bool noUndo = undoStack()->current()->empty(); // nothing to undo?
-    undoStack()->endMacro(noUndo);
+    const bool isCurrentCommandEmpty = undoStack()->activeCommand()->empty(); // nothing to undo?
+    undoStack()->endMacro(isCurrentCommandEmpty);
 
     if (dirty()) {
         masterScore()->setPlaylistDirty(); // TODO: flag individual operations
@@ -429,7 +430,7 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
 
     cmdState().reset();
 
-    if (!rollback) {
+    if (!isCurrentCommandEmpty && !rollback) {
         changesChannel().send(range);
     }
 }
@@ -732,8 +733,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
             continue;
         }
         tmpnl.push_back(n);
-        if (n->tieFor()
-            && (std::find(tmpnl.begin(), tmpnl.end(), n->tieFor()->endNote()) == tmpnl.end())) {
+        if (n->tieFor() && n->tieFor()->endNote() && std::find(tmpnl.begin(), tmpnl.end(), n->tieFor()->endNote()) == tmpnl.end()) {
             Note* currNote = n->tieFor()->endNote();
             do {
                 tmpnl.push_back(currNote);
@@ -824,8 +824,10 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
             undoAddElement(tie);
             prevTied = nullptr;
         }
-        if (on->tieFor()) {
-            Tie* tie = Factory::createTie(this->dummy());
+
+        Tie* tieFor = on->tieFor();
+        if (tieFor) {
+            Tie* tie = tieFor->isLaissezVib() ? Factory::createLaissezVib(this->dummy()->note()) : Factory::createTie(this->dummy());
             tie->setStartNote(note);
             tie->setTick(note->tick());
             tie->setTrack(note->track());
@@ -903,7 +905,6 @@ Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
     chord->mutldata()->setMag(ch->staff()->staffMag(chord->tick()) * style().styleD(Sid::graceNoteMag));
 
     undoAddElement(chord);
-    select(note, SelectType::SINGLE, 0);
     return note;
 }
 
@@ -942,7 +943,7 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
         }
 
         if (!endNote) {
-            endNote = Glissando::guessFinalNote(chord, note);
+            endNote = SLine::guessFinalNote(note);
         }
 
         bool suitableEndNote = endNote;
@@ -2666,6 +2667,7 @@ void Score::cmdResetToDefaultLayout()
     cmdResetMeasuresLayout();
     scanElements(nullptr, resetPositionAndTextProperties);
     cmdResetAllStyles(dontResetTheseStyles);
+    undoRemoveAllLocks();
 }
 
 //---------------------------------------------------------
@@ -2790,7 +2792,6 @@ void Score::cmdResetNoteAndRestGroupings()
     staff_idx_t sStaff = selection().staffStart();
     staff_idx_t eStaff = selection().staffEnd();
 
-    startCmd();
     for (staff_idx_t staff = sStaff; staff < eStaff; staff++) {
         track_idx_t sTrack = staff * VOICES;
         track_idx_t eTrack = sTrack + VOICES;
@@ -2800,10 +2801,15 @@ void Score::cmdResetNoteAndRestGroupings()
             }
         }
     }
-    endCmd();
+
     if (noSelection) {
         deselectAll();
+        return;
     }
+
+    // Reset selection to original selection
+    selection().setRangeTicks(sTick, eTick, sStaff, eStaff);
+    selection().updateSelectedElements();
 }
 
 static void resetBeamOffSet(void*, EngravingItem* e)
@@ -2822,7 +2828,7 @@ void Score::cmdResetAllPositions(bool undoable)
     TRACEFUNC;
 
     if (undoable) {
-        startCmd();
+        startCmd(TranslatableString("undoableAction", "Reset all positions"));
     }
     resetAutoplace();
     if (undoable) {
@@ -3384,7 +3390,7 @@ void Score::cmdMoveLyrics(Lyrics* lyrics, DirectionV dir)
 //   realtimeAdvance
 //---------------------------------------------------------
 
-void Score::realtimeAdvance()
+void Score::realtimeAdvance(bool allowTransposition)
 {
     InputState& is = inputState();
     if (!is.noteEntryMode()) {
@@ -3410,7 +3416,7 @@ void Score::realtimeAdvance()
         Chord* prevChord = prevCR->isChord() ? toChord(prevCR) : 0;
         bool partOfChord = false;
         for (const MidiInputEvent& ev : midiPitches) {
-            addTiedMidiPitch(ev.pitch, partOfChord, prevChord);
+            addTiedMidiPitch(ev.pitch, partOfChord, prevChord, allowTransposition);
             partOfChord = true;
         }
     }
@@ -3462,7 +3468,8 @@ void Score::cmdAddGrace(NoteType graceType, int duration)
     for (EngravingItem* e : copyOfElements) {
         if (e->type() == ElementType::NOTE) {
             Note* n = toNote(e);
-            setGraceNote(n->chord(), n->pitch(), graceType, duration);
+            Note* graceNote = setGraceNote(n->chord(), n->pitch(), graceType, duration);
+            select(graceNote, SelectType::SINGLE, 0);
         }
     }
 }
@@ -4323,72 +4330,57 @@ void Score::cmdResequenceRehearsalMarks()
     }
 }
 
-//---------------------------------------------------------
-//   addRemoveBreaks
-//    interval lock
-//    0        false    remove all linebreaks
-//    > 0      false    add linebreak every interval measure
-//    d.c.     true     add linebreak at every system end
-//---------------------------------------------------------
-
-void Score::addRemoveBreaks(int interval, bool lock)
+void Score::addRemoveSystemLocks(int interval, bool lock)
 {
-    Segment* startSegment = selection().startSegment();
-    if (!startSegment) { // empty score?
+    bool mmrests = style().styleB(Sid::createMultiMeasureRests);
+
+    MeasureBase* startMeasure = selection().startMeasureBase();
+    MeasureBase* endMeasure = selection().endMeasureBase();
+    if (!endMeasure) {
+        endMeasure = mmrests ? lastMeasureMM() : lastMeasure();
+    }
+
+    if (!startMeasure || !endMeasure) {
         return;
     }
-    Segment* endSegment   = selection().endSegment();
-    Measure* startMeasure = startSegment->measure();
-    Measure* endMeasure   = endSegment ? endSegment->measure() : lastMeasureMM();
-    Measure* lastMeasure  = lastMeasureMM();
 
-    // loop through measures in selection
-    // count mmrests as a single measure
-    int count = 0;
-    for (Measure* mm = startMeasure; mm; mm = mm->nextMeasureMM()) {
-        // even though we are counting mmrests as a single measure,
-        // we need to find last real measure within mmrest for the actual break
-        Measure* m = mm->isMMRest() ? mm->mmRestLast() : mm;
-
-        if (lock) {
-            // skip last measure of score
-            if (mm == lastMeasure) {
-                break;
-            }
-            // skip if it already has a break
-            if (m->lineBreak() || m->pageBreak()) {
+    if (lock) {
+        for (const System* system : m_systems) {
+            if (system->last()->isBefore(startMeasure)) {
                 continue;
             }
-            // add break if last measure of system
-            if (mm->system() && mm->system()->lastMeasure() == mm) {
-                m->undoSetLineBreak(true);
+            if (system->first()->isAfter(endMeasure)) {
+                break;
             }
-        } else {
-            if (interval == 0) {
-                // remove line break if present
-                if (m->lineBreak()) {
-                    m->undoSetLineBreak(false);
-                }
-            } else {
-                if (++count == interval) {
-                    // skip last measure of score
-                    if (mm == lastMeasure) {
-                        break;
-                    }
-                    // found place for break; add if not already one present
-                    if (!(m->lineBreak() || m->pageBreak())) {
-                        m->undoSetLineBreak(true);
-                    }
-                    // reset count
-                    count = 0;
-                } else if (m->lineBreak()) {
-                    // remove line break if present in wrong place
-                    m->undoSetLineBreak(false);
-                }
+            if (!system->isLocked()) {
+                undoAddSystemLock(new SystemLock(system->first(), system->last()));
             }
         }
+        return;
+    }
 
-        if (mm == endMeasure) {
+    std::vector<const SystemLock*> currentLocks = m_systemLocks.locksContainedInRange(startMeasure, endMeasure);
+    for (const SystemLock* l : currentLocks) {
+        undoRemoveSystemLock(l);
+    }
+
+    if (interval == 0) {
+        return;
+    }
+
+    int count = 0;
+    MeasureBase* lockStart = nullptr;
+    for (MeasureBase* mb = startMeasure; mb; mb = mmrests ? mb->nextMM() : mb->next()) {
+        if (count == 0) {
+            lockStart = mb;
+        }
+        count++;
+        if (count == interval || mb == endMeasure) {
+            undoAddSystemLock(new SystemLock(lockStart, mb));
+            lockStart = nullptr;
+            count = 0;
+        }
+        if (mb == endMeasure) {
             break;
         }
     }
@@ -4648,49 +4640,221 @@ void Score::cmdToggleLayoutBreak(LayoutBreakType type)
             mbl.push_back(mb);
         }
     }
-    // toggle the breaks
-    for (MeasureBase* mb: mbl) {
-        if (mb) {
-            bool val = false;
-            switch (type) {
-            case LayoutBreakType::LINE:
-                val = !mb->lineBreak();
-                mb->undoSetBreak(val, type);
-                // remove page break if appropriate
-                if (val && mb->pageBreak()) {
-                    mb->undoSetBreak(false, LayoutBreakType::PAGE);
-                }
-                break;
-            case LayoutBreakType::PAGE:
-                val = !mb->pageBreak();
-                mb->undoSetBreak(val, type);
-                // remove line break if appropriate
-                if (val && mb->lineBreak()) {
-                    mb->undoSetBreak(false, LayoutBreakType::LINE);
-                }
-                break;
-            case LayoutBreakType::SECTION:
-                val = !mb->sectionBreak();
-                mb->undoSetBreak(val, type);
-                break;
-            case LayoutBreakType::NOBREAK:
-                mb->undoSetBreak(!allNoBreaks, type);
-                // remove other breaks if appropriate
-                if (!mb->noBreak()) {
-                    if (mb->pageBreak()) {
-                        mb->undoSetBreak(false, LayoutBreakType::PAGE);
-                    } else if (mb->lineBreak()) {
-                        mb->undoSetBreak(false, LayoutBreakType::LINE);
-                    } else if (mb->sectionBreak()) {
-                        mb->undoSetBreak(false, LayoutBreakType::SECTION);
-                    }
-                }
-                break;
-            default:
-                break;
+
+    if (type == LayoutBreakType::NOBREAK && !allNoBreaks) {
+        for (MeasureBase* mb : mbl) {
+            if (mb->systemLock()) {
+                return;
             }
         }
     }
+
+    // toggle the breaks
+    for (MeasureBase* mb: mbl) {
+        bool val = false;
+        switch (type) {
+        case LayoutBreakType::LINE:
+            val = !mb->lineBreak();
+            if (val) {
+                removeSystemLocksOnAddLayoutBreak(type, mb);
+            }
+            mb->undoSetBreak(val, type);
+            // remove page break if appropriate
+            if (val && mb->pageBreak()) {
+                mb->undoSetBreak(false, LayoutBreakType::PAGE);
+            }
+            break;
+        case LayoutBreakType::PAGE:
+            val = !mb->pageBreak();
+            if (val) {
+                removeSystemLocksOnAddLayoutBreak(type, mb);
+            }
+            mb->undoSetBreak(val, type);
+            // remove line break if appropriate
+            if (val && mb->lineBreak()) {
+                mb->undoSetBreak(false, LayoutBreakType::LINE);
+            }
+            break;
+        case LayoutBreakType::SECTION:
+            val = !mb->sectionBreak();
+            if (val) {
+                removeSystemLocksOnAddLayoutBreak(type, mb);
+            }
+            mb->undoSetBreak(val, type);
+            break;
+        case LayoutBreakType::NOBREAK:
+            mb->undoSetBreak(!allNoBreaks, type);
+            // remove other breaks if appropriate
+            if (!mb->noBreak()) {
+                if (mb->pageBreak()) {
+                    mb->undoSetBreak(false, LayoutBreakType::PAGE);
+                } else if (mb->lineBreak()) {
+                    mb->undoSetBreak(false, LayoutBreakType::LINE);
+                } else if (mb->sectionBreak()) {
+                    mb->undoSetBreak(false, LayoutBreakType::SECTION);
+                }
+            }
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+void Score::cmdMoveMeasureToPrevSystem()
+{
+    bool mmrests = style().styleB(Sid::createMultiMeasureRests);
+
+    MeasureBase* refMeasure = m_selection.endMeasureBase();
+    if (!refMeasure) {
+        return;
+    }
+
+    const System* prevSystem = refMeasure->prevNonVBoxSystem();
+    if (!prevSystem) {
+        return;
+    }
+
+    MeasureBase* prevSystemFirstMeas = prevSystem->first();
+
+    const SystemLock* prevSystemLock = m_systemLocks.lockStartingAt(prevSystemFirstMeas);
+    if (prevSystemLock) {
+        undoRemoveSystemLock(prevSystemLock);
+    }
+
+    const System* curSystem = refMeasure->system();
+    const SystemLock* curSystemLock = m_systemLocks.lockStartingAt(curSystem->first());
+    if (curSystemLock) {
+        undoRemoveSystemLock(curSystemLock);
+        if (curSystemLock->endMB() != refMeasure) {
+            MeasureBase* nextMB = mmrests ? refMeasure->nextMM() : refMeasure->next();
+            SystemLock* newLockOnCurSystem = new SystemLock(nextMB, curSystemLock->endMB());
+            undoAddSystemLock(newLockOnCurSystem);
+        }
+    }
+
+    SystemLock* sysLock = new SystemLock(prevSystemFirstMeas, refMeasure);
+    undoAddSystemLock(sysLock);
+}
+
+void Score::cmdMoveMeasureToNextSystem()
+{
+    bool mmrests = style().styleB(Sid::createMultiMeasureRests);
+
+    MeasureBase* refMeasure = m_selection.startMeasureBase();
+    if (!refMeasure) {
+        return;
+    }
+
+    const System* curSystem = refMeasure->system();
+    MeasureBase* startMeas = curSystem->first();
+    bool refMeasureIsStartOfSystem = refMeasure == startMeas;
+
+    const SystemLock* curLock = m_systemLocks.lockStartingAt(startMeas);
+    if (curLock) {
+        undoRemoveSystemLock(curLock);
+    }
+
+    if (!refMeasureIsStartOfSystem) {
+        MeasureBase* prevMeas = mmrests ? refMeasure->prevMM() : refMeasure->prev();
+        SystemLock* sysLock = new SystemLock(startMeas, prevMeas);
+        undoAddSystemLock(sysLock);
+    }
+
+    const System* nextSystem = refMeasure->nextNonVBoxSystem();
+    if (!nextSystem) {
+        return;
+    }
+
+    const SystemLock* nextSysLock = m_systemLocks.lockStartingAt(nextSystem->first());
+    if (nextSysLock) {
+        undoRemoveSystemLock(nextSysLock);
+    }
+
+    if (nextSysLock || refMeasureIsStartOfSystem) {
+        SystemLock* newNextSysLock = new SystemLock(refMeasure, nextSystem->last());
+        undoAddSystemLock(newNextSysLock);
+    }
+}
+
+void Score::cmdToggleSystemLock()
+{
+    toggleSystemLock(m_selection.selectedSystems());
+}
+
+void Score::cmdApplyLockToSelection()
+{
+    MeasureBase* first = nullptr;
+    MeasureBase* last = nullptr;
+
+    if (selection().isRange()) {
+        first = selection().startMeasureBase();
+        last = selection().endMeasureBase();
+    } else {
+        for (EngravingItem* el : selection().elements()) {
+            MeasureBase* mb = el->findMeasureBase();
+            if (!mb) {
+                continue;
+            }
+            if (!first || mb->isBefore(first)) {
+                first = mb;
+            }
+            if (!last || mb->isAfter(last)) {
+                last = mb;
+            }
+        }
+    }
+
+    if (!first || !last) {
+        return;
+    }
+
+    if (first != last) {
+        makeIntoSystem(first, last);
+    } else {
+        makeIntoSystem(first->system()->first(), last);
+    }
+}
+
+void Score::cmdToggleScoreLock()
+{
+    bool unlockAll = true;
+    for (const System* system : m_systems) {
+        const MeasureBase* first = system->first();
+        if (!(first->isMeasure() || first->isHBox())) {
+            continue;
+        }
+        if (!system->isLocked()) {
+            unlockAll = false;
+            break;
+        }
+    }
+
+    for (System* system : m_systems) {
+        MeasureBase* startMeas = system->first();
+        if (!(startMeas->isMeasure() || startMeas->isHBox())) {
+            continue;
+        }
+        const SystemLock* currentLock = m_systemLocks.lockStartingAt(startMeas);
+        if (currentLock && unlockAll) {
+            undoRemoveSystemLock(currentLock);
+            continue;
+        } else if (!currentLock && !unlockAll) {
+            SystemLock* newSystemLock = new SystemLock(startMeas, system->last());
+            undoAddSystemLock(newSystemLock);
+        }
+    }
+}
+
+void Score::cmdMakeIntoSystem()
+{
+    MeasureBase* firstSelected = m_selection.startMeasureBase();
+    MeasureBase* lastSelected = m_selection.endMeasureBase();
+    if (!(firstSelected && lastSelected)) {
+        return;
+    }
+
+    makeIntoSystem(firstSelected, lastSelected);
 }
 
 void Score::cmdAddStaffTypeChange(Measure* measure, staff_idx_t staffIdx, StaffTypeChange* stc)

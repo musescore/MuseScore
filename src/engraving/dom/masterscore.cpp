@@ -722,7 +722,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
             TimeSig* nts = Factory::copyTimeSig(*ts);
             Segment* s   = newMeasure->undoGetSegmentR(SegmentType::TimeSig, Fraction(0, 1));
             nts->setParent(s);
-            undoAddElement(nts);
+            doUndoAddElement(nts);
         }
         for (KeySig* ks : keySigList) {
             KeySig* nks = Factory::copyKeySig(*ks);
@@ -734,39 +734,39 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
             if (!nks->isAtonal()) {
                 nks->setKey(nks->concertKey());  // to set correct (transposing) key
             }
-            undoAddElement(nks);
+            doUndoAddElement(nks);
         }
         for (Clef* clef : initClefList) {
             Clef* nClef = Factory::copyClef(*clef);
             Segment* s  = newMeasure->undoGetSegmentR(SegmentType::HeaderClef, Fraction(0, 1));
             s->setHeader(true);
             nClef->setParent(s);
-            undoAddElement(nClef);
+            doUndoAddElement(nClef);
         }
         for (Clef* clef : afterBarlineClefs) {
             Clef* nClef = Factory::copyClef(*clef);
             Segment* s  = newMeasure->undoGetSegmentR(SegmentType::Clef, Fraction(0, 1));
             s->setHeader(true);
             nClef->setParent(s);
-            undoAddElement(nClef);
+            doUndoAddElement(nClef);
         }
         for (Clef* clef : previousClefList) {
             Clef* nClef = Factory::copyClef(*clef);
             Segment* s  = newMeasure->undoGetSegmentR(SegmentType::Clef, newMeasure->ticks());
             nClef->setParent(s);
-            undoAddElement(nClef);
+            doUndoAddElement(nClef);
         }
         for (Clef* clef : specialCaseClefs) {
             Clef* nClef = Factory::copyClef(*clef);
             Segment* s  = newMeasure->undoGetSegmentR(SegmentType::Clef, newMeasure->ticks());
             nClef->setParent(s);
-            undoAddElement(nClef);
+            doUndoAddElement(nClef);
         }
         for (BarLine* barLine : previousBarLinesList) {
             BarLine* nBarLine = Factory::copyBarLine(*barLine);
             Segment* s = newMeasure->undoGetSegmentR(SegmentType::EndBarLine, newMeasure->ticks());
             nBarLine->setParent(s);
-            undoAddElement(nBarLine);
+            doUndoAddElement(nBarLine);
         }
     }
 

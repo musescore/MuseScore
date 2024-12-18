@@ -1,4 +1,15 @@
 contact_links:
-  - name: Muse Hub issue
-    url: https://musehub.zendesk.com/
-    about: All issues to do with installing apps and sounds via Muse Hub.
+  - name: MuseSounds issue
+    url: https://support.musehub.com/hc/en-gb/requests/new
+    about: Report playback issues specific to MuseSounds.
+  - name: MuseHub issue
+    url: https://support.musehub.com/
+    about: Learn how to install apps and sounds via MuseHub.
+  - name: Support forum
+    url: https://musescore.org/en/forum/6
+    about: Get help solving a problem or checking if something is a bug in MuseScore Studio.
+  - name: Discord server
+    url: https://discord.gg/HwHhXEbJ4r
+    about: >-
+      Ask development questions (programming, translating, etc.) and chat with 
+      the MuseScore Studio development team, other contributors, and users.

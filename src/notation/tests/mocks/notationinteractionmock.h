@@ -74,7 +74,7 @@ public:
     MOCK_METHOD(bool, startDrop, (const QUrl&), (override));
     MOCK_METHOD(bool, isDropAccepted, (const muse::PointF&, Qt::KeyboardModifiers), (override));
     MOCK_METHOD(bool, drop, (const muse::PointF&, Qt::KeyboardModifiers), (override));
-    MOCK_METHOD(void, setDropTarget, (const EngravingItem*, bool), (override));
+    MOCK_METHOD(void, setDropTarget, (EngravingItem*, bool), (override));
     MOCK_METHOD(void, setDropRect, (const muse::RectF&), (override));
     MOCK_METHOD(void, endDrop, (), (override));
     MOCK_METHOD(muse::async::Notification, dropChanged, (), (const, override));
@@ -82,6 +82,7 @@ public:
     MOCK_METHOD(bool, applyPaletteElement, (mu::engraving::EngravingItem*, Qt::KeyboardModifiers), (override));
     MOCK_METHOD(void, undo, (), (override));
     MOCK_METHOD(void, redo, (), (override));
+    MOCK_METHOD(void, undoRedoToIndex, (size_t idx), (override));
 
     MOCK_METHOD(bool, moveSelectionAvailable, (MoveSelectionType), (const, override));
     MOCK_METHOD(void, moveSelection, (MoveDirection, MoveSelectionType), (override));
@@ -126,7 +127,6 @@ public:
     MOCK_METHOD(bool, isEditAllowed, (QKeyEvent*), (override));
     MOCK_METHOD(void, editElement, (QKeyEvent*), (override));
     MOCK_METHOD(void, endEditElement, (), (override));
-    MOCK_METHOD(const EngravingItem*, editedItem, (), (const, override));
 
     MOCK_METHOD(void, splitSelectedMeasure, (), (override));
     MOCK_METHOD(void, joinSelectedMeasures, (), (override));
@@ -143,6 +143,7 @@ public:
     MOCK_METHOD(void, deleteSelection, (), (override));
     MOCK_METHOD(void, flipSelection, (), (override));
     MOCK_METHOD(void, addTieToSelection, (), (override));
+    MOCK_METHOD(void, addLaissezVibToSelection, (), (override));
     MOCK_METHOD(void, addTiedNoteToChord, (), (override));
     MOCK_METHOD(void, addSlurToSelection, (), (override));
     MOCK_METHOD(void, addOttavaToSelection, (OttavaType), (override));
@@ -161,8 +162,14 @@ public:
 
     MOCK_METHOD(bool, toggleLayoutBreakAvailable, (), (const, override));
     MOCK_METHOD(void, toggleLayoutBreak, (LayoutBreakType), (override));
+    MOCK_METHOD(void, moveMeasureToPrevSystem, (), (override));
+    MOCK_METHOD(void, moveMeasureToNextSystem, (), (override));
+    MOCK_METHOD(void, toggleSystemLock, (), (override));
+    MOCK_METHOD(void, toggleScoreLock, (), (override));
+    MOCK_METHOD(void, makeIntoSystem, (), (override));
+    MOCK_METHOD(void, applySystemLock, (), (override));
 
-    MOCK_METHOD(void, setBreaksSpawnInterval, (BreaksSpawnIntervalType, int), (override));
+    MOCK_METHOD(void, addRemoveSystemLocks, (AddRemoveSystemLockType, int), (override));
     MOCK_METHOD(bool, transpose, (const TransposeOptions&), (override));
     MOCK_METHOD(void, swapVoices, (voice_idx_t, voice_idx_t), (override));
     MOCK_METHOD(void, addIntervalToSelectedNotes, (int), (override));
@@ -184,6 +191,7 @@ public:
 
     MOCK_METHOD(void, addStretch, (qreal), (override));
 
+    MOCK_METHOD(Measure*, selectedMeasure, (), (const, override));
     MOCK_METHOD(void, addTimeSignature, (Measure*, engraving::staff_idx_t, TimeSignature*), (override));
 
     MOCK_METHOD(void, explodeSelectedStaff, (), (override));
@@ -249,7 +257,7 @@ public:
     MOCK_METHOD(void, transposeDiatonicAlterations, (mu::engraving::TransposeDirection), (override));
     MOCK_METHOD(void, toggleAutoplace, (bool), (override));
     MOCK_METHOD(void, getLocation, (), (override));
-    MOCK_METHOD(void, execute, (void (mu::engraving::Score::*)()), (override));
+    MOCK_METHOD(void, execute, (void (mu::engraving::Score::*)(), const muse::TranslatableString&), (override));
 
     MOCK_METHOD(void, showItem, (const mu::engraving::EngravingItem*, int), (override));
     MOCK_METHOD(muse::async::Channel<ShowItemRequest>, showItemRequested, (), (const, override));

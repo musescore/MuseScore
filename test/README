@@ -6,7 +6,7 @@ iotest      read *.msc files, save files and compare
 rendertest  renders misc *.xml files with lilypond and mscore
             and puts up *.html pages
 
-All MusicXml files starting with a number are from Reinhold Kainhofer from
+All MusicXML files starting with a number are from Reinhold Kainhofer from
 the Lilypond project (used in rendertest)
 I did some changes to the files to better fit for MuseScore:
       12b-Tuplets-Finale

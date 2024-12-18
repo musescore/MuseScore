@@ -34,6 +34,7 @@
                      <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
                         <label>Violin</label>
                         <labelAbbr>Vln.</labelAbbr>
+                        <instrDef midi.instrnum="40" />
                         <clef shape="G" line="2" />
                      </staffDef>
                   </staffGrp>
@@ -88,8 +89,8 @@
                            <note xml:id="n12667r3" dur="4" pname="c" oct="5" />
                         </layer>
                      </staff>
-                     <octave xml:id="oggpsks" dis="8" dis.place="above" startid="#nx5z8ek" color="#0433FF" endid="#n1p30nx0" />
-                     <hairpin xml:id="h1ofeby0" form="cres" startid="#nx5z8ek" color="#0433FF" endid="#n12667r3" />
+                     <octave xml:id="oggpsks" staff="1" dis="8" dis.place="above" startid="#nx5z8ek" color="#0433FF" endid="#n1p30nx0" />
+                     <hairpin xml:id="h1ofeby0" form="cres" staff="1" startid="#nx5z8ek" color="#0433FF" endid="#n12667r3" />
                      <tie xml:id="t1cu6c7m" startid="#n12667r3" color="#0433FF" endid="#n1oshtpn" />
                   </measure>
                   <measure xml:id="m1dsz34o" n="4">

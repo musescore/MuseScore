@@ -43,6 +43,7 @@ Spacer::Spacer(Measure* parent)
 {
     m_spacerType = SpacerType::UP;
     m_gap = 0.0;
+    m_z = -10; // Ensure behind notation
 }
 
 Spacer::Spacer(const Spacer& s)
@@ -97,6 +98,8 @@ void Spacer::layout0()
     RectF bb(0, 0, w, h);
     bb.adjust(-lw, -lw, lw, lw);
     setbbox(bb);
+
+    setZ(0.0);
 }
 
 //---------------------------------------------------------

@@ -16,7 +16,6 @@ FocusableControl 1.0 FocusableControl.qml
 FocusableItem 1.0 FocusableItem.qml
 GradientRectangle 1.0 GradientRectangle.qml
 GridViewSectional 1.0 GridViewSectional.qml
-Icon 1.0 Icon.qml
 IncrementalPropertyControl 1.0 IncrementalPropertyControl.qml
 InfoPanel 1.0 InfoPanel.qml
 ItemWithDropShadow 1.0 ItemWithDropShadow.qml

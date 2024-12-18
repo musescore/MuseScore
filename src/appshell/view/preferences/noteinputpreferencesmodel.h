@@ -31,7 +31,7 @@
 #include "playback/iplaybackconfiguration.h"
 
 namespace mu::appshell {
-class NoteInputPreferencesModel : public QObject, public muse::Injectable
+class NoteInputPreferencesModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -61,6 +61,8 @@ class NoteInputPreferencesModel : public QObject, public muse::Injectable
 
 public:
     explicit NoteInputPreferencesModel(QObject* parent = nullptr);
+
+    Q_INVOKABLE void load();
 
     bool advanceToNextNoteOnKeyRelease() const;
     bool colorNotesOutsideOfUsablePitchRange() const;

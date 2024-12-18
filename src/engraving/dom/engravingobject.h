@@ -97,6 +97,8 @@ class Jump;
 class KeySig;
 class Lasso;
 class LayoutBreak;
+class LaissezVib;
+class LaissezVibSegment;
 class LedgerLine;
 class LetRing;
 class LetRingSegment;
@@ -117,6 +119,7 @@ class Note;
 class NoteDot;
 class NoteHead;
 class NoteLine;
+class NoteLineSegment;
 class Ornament;
 class Ottava;
 class OttavaSegment;
@@ -155,6 +158,7 @@ class StringTunings;
 class Symbol;
 class System;
 class SystemDivider;
+class SystemLockIndicator;
 class SystemText;
 class SoundFlag;
 class TBox;
@@ -210,8 +214,9 @@ public:
     virtual TranslatableString typeUserName() const;
     virtual String translatedTypeUserName() const;
 
-    inline EID eid() const { return m_eid; }
-    inline void setEID(EID id) { m_eid = id; }
+    EID eid() const;
+    void setEID(EID id) const;
+    EID assignNewEID() const;
 
     EngravingObject* parent() const;
     void setParent(EngravingObject* p);
@@ -295,7 +300,7 @@ private:
     void doSetScore(Score* sc);
 
     ElementType m_type = ElementType::INVALID;
-    mutable EID m_eid;
+
     EngravingObject* m_parent = nullptr;
     bool m_isParentExplicitlySet = false;
     EngravingObjectList m_children;
@@ -336,7 +341,6 @@ public:
     CONVERT(VBox,          VBOX)
     CONVERT(TBox,          TBOX)
     CONVERT(FBox,          FBOX)
-    CONVERT(Tie,           TIE)
     CONVERT(Slur,          SLUR)
     CONVERT(Glissando,     GLISSANDO)
     CONVERT(GlissandoSegment,     GLISSANDO_SEGMENT)
@@ -353,6 +357,7 @@ public:
     CONVERT(Jump,          JUMP)
     CONVERT(Ottava,        OTTAVA)
     CONVERT(LayoutBreak,   LAYOUT_BREAK)
+    CONVERT(SystemLockIndicator, SYSTEM_LOCK_INDICATOR)
     CONVERT(Segment,       SEGMENT)
     CONVERT(System,        SYSTEM)
     CONVERT(Lyrics,        LYRICS)
@@ -362,7 +367,8 @@ public:
     CONVERT(Hook,          HOOK)
     CONVERT(StemSlash,     STEM_SLASH)
     CONVERT(SlurSegment,   SLUR_SEGMENT)
-    CONVERT(TieSegment,    TIE_SEGMENT)
+    CONVERT(LaissezVibSegment,    LAISSEZ_VIB_SEGMENT)
+    CONVERT(LaissezVib,    LAISSEZ_VIB)
     CONVERT(Spacer,        SPACER)
     CONVERT(StaffLines,    STAFF_LINES)
     CONVERT(Ambitus,       AMBITUS)
@@ -390,6 +396,7 @@ public:
     CONVERT(ActionIcon,    ACTION_ICON)
     CONVERT(VoltaSegment,  VOLTA_SEGMENT)
     CONVERT(NoteLine,      NOTELINE)
+    CONVERT(NoteLineSegment,      NOTELINE_SEGMENT)
     CONVERT(Trill,         TRILL)
     CONVERT(TrillSegment,  TRILL_SEGMENT)
     CONVERT(LetRing,       LET_RING)
@@ -468,7 +475,7 @@ public:
                || isHarmonicMarkSegment()
                || isPedalSegment()
                || isVoltaSegment()
-        ;
+               || isNoteLineSegment();
     }
 
     bool isLineSegment() const
@@ -481,6 +488,16 @@ public:
                || isGuitarBendSegment()
                || isGuitarBendHoldSegment()
         ;
+    }
+
+    bool isTieSegment() const
+    {
+        return type() == ElementType::TIE_SEGMENT || type() == ElementType::LAISSEZ_VIB_SEGMENT;
+    }
+
+    bool isTie() const
+    {
+        return type() == ElementType::TIE || type() == ElementType::LAISSEZ_VIB;
     }
 
     bool isSpannerSegment() const
@@ -586,13 +603,17 @@ static inline const Rest* toRest(const EngravingObject* e)
 
 static inline SlurTieSegment* toSlurTieSegment(EngravingObject* e)
 {
-    assert(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
+    assert(
+        e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT
+        || e->type() == ElementType::LAISSEZ_VIB_SEGMENT);
     return (SlurTieSegment*)e;
 }
 
 static inline const SlurTieSegment* toSlurTieSegment(const EngravingObject* e)
 {
-    assert(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
+    assert(
+        e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT
+        || e->type() == ElementType::LAISSEZ_VIB_SEGMENT);
     return (const SlurTieSegment*)e;
 }
 
@@ -686,6 +707,18 @@ static inline const Articulation* toArticulation(const EngravingObject* e)
     return (const Articulation*)e;
 }
 
+static inline Tie* toTie(EngravingObject* e)
+{
+    assert(e == 0 || e->isTie() || e->isLaissezVib());
+    return (Tie*)e;
+}
+
+static inline const Tie* toTie(const EngravingObject* e)
+{
+    assert(e == 0 || e->isTie() || e->isLaissezVib());
+    return (const Tie*)e;
+}
+
 #define CONVERT(a)  \
     static inline a* to##a(EngravingObject * e) { assert(e == 0 || e->is##a()); return (a*)e; } \
     static inline const a* to##a(const EngravingObject * e) { assert(e == 0 || e->is##a()); return (const a*)e; }
@@ -708,7 +741,6 @@ CONVERT(VBox)
 CONVERT(TBox)
 CONVERT(FBox)
 CONVERT(Spanner)
-CONVERT(Tie)
 CONVERT(Slur)
 CONVERT(Glissando)
 CONVERT(GlissandoSegment)
@@ -728,6 +760,7 @@ CONVERT(PlayTechAnnotation)
 CONVERT(Capo)
 CONVERT(Ottava)
 CONVERT(LayoutBreak)
+CONVERT(SystemLockIndicator)
 CONVERT(Segment)
 CONVERT(System)
 CONVERT(Lyrics)
@@ -739,6 +772,7 @@ CONVERT(StemSlash)
 CONVERT(LineSegment)
 CONVERT(SlurSegment)
 CONVERT(TieSegment)
+CONVERT(LaissezVibSegment)
 CONVERT(Spacer)
 CONVERT(StaffLines)
 CONVERT(Ambitus)
@@ -769,6 +803,7 @@ CONVERT(LedgerLine)
 CONVERT(ActionIcon)
 CONVERT(VoltaSegment)
 CONVERT(NoteLine)
+CONVERT(NoteLineSegment)
 CONVERT(Trill)
 CONVERT(TrillSegment)
 CONVERT(LetRing)
@@ -815,6 +850,7 @@ CONVERT(DeadSlapped)
 CONVERT(StringTunings)
 CONVERT(SoundFlag)
 CONVERT(TimeTickAnchor)
+CONVERT(LaissezVib)
 #undef CONVERT
 }
 

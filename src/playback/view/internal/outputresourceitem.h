@@ -28,7 +28,10 @@
 #include <map>
 
 #include "modularity/ioc.h"
-#include "async/asyncable.h"
+
+#include "global/iglobalconfiguration.h"
+#include "iinteractive.h"
+
 #include "audio/iaudiooutput.h"
 #include "audio/iplayback.h"
 #include "audio/audiotypes.h"
@@ -41,13 +44,15 @@
 #endif
 
 namespace mu::playback {
-class OutputResourceItem : public AbstractAudioResourceItem, public muse::async::Asyncable
+class OutputResourceItem : public AbstractAudioResourceItem
 {
     Q_OBJECT
 
     Q_PROPERTY(QString id READ id NOTIFY fxParamsChanged)
     Q_PROPERTY(bool isActive READ isActive WRITE setIsActive NOTIFY isActiveChanged)
 
+    INJECT(muse::IGlobalConfiguration, globalConfiguration)
+    INJECT(muse::IInteractive, interactive)
     INJECT(muse::audio::IPlayback, playback)
 
 public:

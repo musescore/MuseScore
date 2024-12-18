@@ -93,6 +93,8 @@ public:
     Q_INVOKABLE void onContextMenuIsOpenChanged(bool open);
     Q_INVOKABLE void onElementPopupIsOpenChanged(bool open);
 
+    Q_INVOKABLE void setPlaybackCursorItem(QQuickItem* cursor);
+
     qreal width() const override;
     qreal height() const override;
 
@@ -241,6 +243,8 @@ private:
     void movePlaybackCursor(muse::midi::tick_t tick);
     bool needAdjustCanvasVerticallyWhilePlayback(const muse::RectF& cursorRect);
 
+    void onPlaybackCursorRectChanged();
+
     void updateLoopMarkers();
 
     const Page* pageByPoint(const muse::PointF& point) const;
@@ -276,6 +280,8 @@ private:
     bool m_isContextMenuOpen = false;
 
     muse::RectF m_shadowNoteRect;
+
+    QQuickItem* m_playbackCursorItem = nullptr;
 };
 }
 

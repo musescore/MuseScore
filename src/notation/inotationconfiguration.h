@@ -73,9 +73,6 @@ public:
     virtual QColor borderColor() const = 0;
     virtual int borderWidth() const = 0;
 
-    virtual QColor anchorColor() const = 0;
-    virtual muse::async::Channel<QColor> anchorColorChanged() const = 0;
-
     virtual QColor playbackCursorColor() const = 0;
     virtual QColor loopMarkerColor() const = 0;
     virtual int cursorOpacity() const = 0;
@@ -192,6 +189,9 @@ public:
 
     virtual muse::ValCh<int> pianoKeyboardNumberOfKeys() const = 0;
     virtual void setPianoKeyboardNumberOfKeys(int number) = 0;
+
+    virtual muse::ValCh<bool> midiUseWrittenPitch() const = 0;
+    virtual void setMidiUseWrittenPitch(bool useWrittenPitch) = 0;
 
     // TODO: Delete when the new percussion panel is finished
     virtual bool useNewPercussionPanel() const = 0;

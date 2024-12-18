@@ -35,8 +35,8 @@ RadioDelegate {
     property int orientation: Qt.Vertical
     readonly property bool isVertical: orientation === Qt.Vertical
 
-    property var normalStateFont: ui.theme.largeBodyFont
-    property var selectedStateFont: ui.theme.largeBodyBoldFont
+    property font normalStateFont: ui.theme.largeBodyFont
+    property font selectedStateFont: ui.theme.largeBodyBoldFont
 
     property alias navigation: navCtrl
 
@@ -132,6 +132,12 @@ RadioDelegate {
         implicitHeight: contentRow.implicitHeight
 
         TextMetrics {
+            id: textMetricsNormal
+            font: root.normalStateFont
+            text: root.title
+        }
+
+        TextMetrics {
             id: textMetricsSelected
             font: root.selectedStateFont
             text: root.title
@@ -155,7 +161,7 @@ RadioDelegate {
                 horizontalAlignment: root.isVertical ? Text.AlignHCenter : Text.AlignLeft
                 font: root.normalStateFont
                 text: root.title
-                width: textMetricsSelected.advanceWidth
+                width: Math.max(textMetricsNormal.advanceWidth, textMetricsSelected.advanceWidth)
 
                 visible: !root.iconOnly
             }

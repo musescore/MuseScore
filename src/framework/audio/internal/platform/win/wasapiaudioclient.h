@@ -71,6 +71,8 @@ private:
     void setState(const DeviceState newState);
     void setStateAndNotify(const DeviceState newState, hresult resultCode);
 
+    std::vector<uint8_t> m_surroundAudioBuffer; //! NOTE: See #17648
+
     hstring m_deviceIdString;
     hstring m_fallbackDeviceIdString;
     uint32_t m_bufferFrames = 0;

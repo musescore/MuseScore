@@ -49,7 +49,7 @@ public:
 
     QString pitchName() const;
 
-    Q_INVOKABLE void editDrumset();
+    Q_INVOKABLE void customizeKit();
 
 signals:
     void pitchNameChanged();

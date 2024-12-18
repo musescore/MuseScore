@@ -65,6 +65,7 @@ enum class P_TYPE {
     ORNAMENT_INTERVAL,
     ORNAMENT_SHOW_ACCIDENTAL,
     GLISS_STYLE,
+    GLISS_TYPE,
 
     // Layout
     ALIGN,
@@ -77,6 +78,7 @@ enum class P_TYPE {
     BEAM_MODE,
     ACCIDENTAL_ROLE,
     TIE_PLACEMENT,
+    TIE_DOTS_PLACEMENT,
 
     // Sound
     FRACTION,
@@ -103,6 +105,7 @@ enum class P_TYPE {
     PLAYTECH_TYPE,
     TEMPOCHANGE_TYPE,
     SLUR_STYLE_TYPE,
+    NOTELINE_PLACEMENT_TYPE,
     LYRICS_DASH_SYSTEM_START_TYPE,
 
     VOICE_ASSIGNMENT,
@@ -179,6 +182,9 @@ public:
     PropertyValue(GlissandoStyle v)
         : m_type(P_TYPE::GLISS_STYLE), m_data(make_data<GlissandoStyle>(v)) {}
 
+    PropertyValue(GlissandoType v)
+        : m_type(P_TYPE::GLISS_TYPE), m_data(make_data<GlissandoType>(v)) {}
+
     // Layout
     PropertyValue(Align v)
         : m_type(P_TYPE::ALIGN), m_data(make_data<Align>(v)) {}
@@ -207,6 +213,9 @@ public:
 
     PropertyValue(TiePlacement v)
         : m_type(P_TYPE::TIE_PLACEMENT), m_data(make_data<TiePlacement>(v)) {}
+
+    PropertyValue(TieDotsPlacement v)
+        : m_type(P_TYPE::TIE_DOTS_PLACEMENT), m_data(make_data<TieDotsPlacement>(v)) {}
 
     // Sound
     PropertyValue(const Fraction& v)
@@ -267,6 +276,9 @@ public:
 
     PropertyValue(SlurStyleType v)
         : m_type(P_TYPE::SLUR_STYLE_TYPE), m_data(make_data<SlurStyleType>(v)) {}
+
+    PropertyValue(const NoteLineEndPlacement& v)
+        : m_type(P_TYPE::NOTELINE_PLACEMENT_TYPE), m_data(make_data<NoteLineEndPlacement>(v)) {}
 
     // Other
     PropertyValue(const GroupNodes& v)

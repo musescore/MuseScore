@@ -24,12 +24,17 @@
 
 #include "abstractinstrumentspaneltreeitem.h"
 
-#include "notation/inotationparts.h"
+#include "modularity/ioc.h"
+#include "iinteractive.h"
+#include "notation/iselectinstrumentscenario.h"
 
 namespace mu::instrumentsscene {
-class PartTreeItem : public AbstractInstrumentsPanelTreeItem
+class PartTreeItem : public AbstractInstrumentsPanelTreeItem, public muse::Injectable
 {
     Q_OBJECT
+
+    muse::Inject<notation::ISelectInstrumentsScenario> selectInstrumentsScenario { this };
+    muse::Inject<muse::IInteractive> interactive { this };
 
 public:
     PartTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
@@ -38,8 +43,6 @@ public:
 
     bool isSelectable() const override;
 
-    Q_INVOKABLE QString instrumentId() const;
-
     MoveParams buildMoveParams(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent,
                                int destinationRow) const override;
 
@@ -47,6 +50,10 @@ public:
                       bool updateNotation) override;
 
     void removeChildren(int row, int count, bool deleteChild) override;
+
+    Q_INVOKABLE QString instrumentId() const;
+    Q_INVOKABLE void replaceInstrument();
+    Q_INVOKABLE void resetAllFormatting();
 
 private:
     void listenVisibilityChanged();

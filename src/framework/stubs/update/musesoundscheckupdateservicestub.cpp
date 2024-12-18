@@ -43,7 +43,3 @@ Progress MuseSoundsCheckUpdateServiceStub::updateProgress()
 {
     return Progress();
 }
-
-void MuseSoundsCheckUpdateServiceStub::openMuseHub()
-{
-}

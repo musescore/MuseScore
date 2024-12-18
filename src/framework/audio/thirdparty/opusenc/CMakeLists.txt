@@ -32,8 +32,8 @@ set(MODULE_SRC
 
 set(MODULE_LINK ${OPUS_LIBRARIES})
 
-set(MODULE_USE_PCH_DISABLED ON)
-set(MODULE_USE_UNITY_NONE ON)
+set(MODULE_USE_PCH OFF)
+set(MODULE_USE_UNITY OFF)
 setup_module()
 
 target_no_warning(${MODULE} -Wno-unused-parameter)

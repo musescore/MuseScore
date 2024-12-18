@@ -250,7 +250,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::v
                 const Measure* m = toMeasure(mb);
                 for (size_t staffIdx = 0; staffIdx < m->score()->nstaves(); staffIdx++) {
                     if (m->corrupted(staffIdx)) {
-                        painter.drawRect(m->staffabbox(staffIdx).adjusted(0, -_spatium, 0, _spatium));
+                        painter.drawRect(m->staffPageBoundingRect(staffIdx).adjusted(0, -_spatium, 0, _spatium));
                     }
                 }
             }

@@ -39,7 +39,6 @@ ExpandableBlank {
     property var sectionModel // Comes from inspectorListModel
     property var anchorItem: null
 
-    signal returnToBoundsRequested()
     signal ensureContentVisibleRequested(int invisibleContentHeight)
     signal popupOpened(var openedPopup, var visualControl)
 
@@ -77,10 +76,6 @@ ExpandableBlank {
         }
 
         return undefined
-    }
-
-    onContentItemComponentChanged: {
-        root.returnToBoundsRequested()
     }
 
     Component {

@@ -838,31 +838,31 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChangesRa
                 result.tickFrom = std::min(result.tickFrom, startChord->tick().ticks());
                 result.tickTo = std::max(result.tickTo, endChord->tick().ticks());
             }
+
+            applyTiedNotesTickBoundaries(note, result);
         } else if (item->isTie()) {
-            const Tie* tie = toTie(item);
-            const Note* startNote = tie->startNote();
-            const Note* endNote = tie->endNote();
-
-            if (!startNote || !endNote) {
-                continue;
-            }
-
-            const Note* firstTiedNote = startNote->firstTiedNote(false);
-            const Note* lastTiedNote = endNote->lastTiedNote(false);
-
-            IF_ASSERT_FAILED(firstTiedNote && lastTiedNote) {
-                continue;
-            }
-
-            result.tickFrom = std::min(result.tickFrom, firstTiedNote->tick().ticks());
-            result.tickTo = std::max(result.tickTo, lastTiedNote->tick().ticks());
+            applyTieTickBoundaries(toTie(item), result);
         }
-        if (item->parent() && item->parent()->isChord()) {
-            for (Spanner* spanner : toChord(item->parent())->startingSpanners()) {
+
+        const EngravingItem* parent = item->parentItem();
+        if (!parent) {
+            continue;
+        }
+
+        if (parent->isChord()) {
+            const Chord* chord = toChord(parent);
+
+            for (const Note* note : chord->notes()) {
+                applyTiedNotesTickBoundaries(note, result);
+            }
+
+            for (const Spanner* spanner : chord->startingSpanners()) {
                 if (spanner->isTrill() && result.tickTo < spanner->tick2().ticks()) {
                     result.tickTo = spanner->tick2().ticks();
                 }
             }
+        } else if (parent->isNote()) {
+            applyTiedNotesTickBoundaries(toNote(parent), result);
         }
     }
 
@@ -946,4 +946,31 @@ PlaybackContextPtr PlaybackModel::playbackCtx(const InstrumentTrackId& trackId)
     }
 
     return it->second;
+}
+
+void PlaybackModel::applyTiedNotesTickBoundaries(const Note* note, TickBoundaries& tickBoundaries)
+{
+    if (const Tie* tie = note->tieFor()) {
+        applyTieTickBoundaries(tie, tickBoundaries);
+    } else if (const Tie* tie = note->tieBack()) {
+        applyTieTickBoundaries(tie, tickBoundaries);
+    }
+}
+
+void PlaybackModel::applyTieTickBoundaries(const Tie* tie, TickBoundaries& tickBoundaries)
+{
+    const Note* startNote = tie->startNote();
+    const Note* endNote = tie->endNote();
+    if (!startNote || !endNote) {
+        return;
+    }
+
+    const Note* firstTiedNote = startNote->firstTiedNote();
+    const Note* lastTiedNote = endNote->lastTiedNote();
+    IF_ASSERT_FAILED(firstTiedNote && lastTiedNote) {
+        return;
+    }
+
+    tickBoundaries.tickFrom = std::min(tickBoundaries.tickFrom, firstTiedNote->tick().ticks());
+    tickBoundaries.tickTo = std::max(tickBoundaries.tickTo, lastTiedNote->tick().ticks());
 }

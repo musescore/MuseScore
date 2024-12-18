@@ -169,10 +169,9 @@
       </measure>
     <measure number="3">
       <note>
-        <rest/>
+        <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>
-        <type>whole</type>
         <notations>
           <fermata type="upright"/>
           </notations>

@@ -92,7 +92,8 @@ public:
     muse::Ret openProject(const ProjectFile& file) override;
     bool closeOpenedProject(bool quitApp = false) override;
     bool saveProject(const muse::io::path_t& path = muse::io::path_t()) override;
-    bool saveProjectLocally(const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save) override;
+    bool saveProjectLocally(
+        const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save, bool createBackup = true) override;
 
     // mi::IProjectProvider
     bool isProjectOpened(const muse::io::path_t& scorePath) const override;
@@ -180,6 +181,7 @@ private:
 
     void warnScoreCouldnotBeSaved(const muse::Ret& ret);
     void warnScoreCouldnotBeSaved(const std::string& errorText);
+    int warnScoreHasBecomeCorruptedAfterSave(const muse::Ret& ret);
 
     void revertCorruptedScoreToLastSaved();
 

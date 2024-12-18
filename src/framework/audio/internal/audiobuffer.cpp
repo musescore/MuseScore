@@ -21,7 +21,8 @@
  */
 #include "audiobuffer.h"
 
-#include "audiosanitizer.h"
+#include <iostream>
+
 #include "log.h"
 
 using namespace muse::audio;

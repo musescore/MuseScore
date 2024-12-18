@@ -55,6 +55,7 @@ void MeasureWrite::writeMeasure(const Measure* measure, XmlWriter& xml, WriteCon
         xml.tag("multiMeasureRest", measure->m_mmRestCount);
     }
     if (writeSystemElements) {
+        TWrite::writeItemEid(measure, xml, ctx);
         if (measure->repeatStart()) {
             xml.tag("startRepeat");
         }

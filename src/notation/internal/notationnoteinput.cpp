@@ -337,7 +337,7 @@ void NotationNoteInput::addNote(NoteName noteName, NoteAddingMode addingMode)
 
     mu::engraving::EditData editData(m_scoreCallbacks);
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Enter note"));
     int inote = static_cast<int>(noteName);
     bool addToUpOnCurrentChord = addingMode == NoteAddingMode::CurrentChord;
     bool insertNewChord = addingMode == NoteAddingMode::InsertChord;
@@ -356,7 +356,7 @@ void NotationNoteInput::padNote(const Pad& pad)
 
     mu::engraving::EditData editData(m_scoreCallbacks);
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Pad note"));
     score()->padToggle(pad, editData);
     apply();
 
@@ -369,7 +369,7 @@ Ret NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
 {
     TRACEFUNC;
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Enter note"));
     Ret ret = score()->putNote(pos, replace, insert);
     apply();
 
@@ -388,7 +388,7 @@ void NotationNoteInput::removeNote(const PointF& pos)
     mu::engraving::InputState& inputState = score()->inputState();
     bool restMode = inputState.rest();
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Delete note"));
     inputState.setRest(!restMode);
     score()->putNote(pos, false, false);
     inputState.setRest(restMode);
@@ -454,6 +454,20 @@ void NotationNoteInput::setCurrentVoice(voice_idx_t voiceIndex)
     }
 
     mu::engraving::InputState& inputState = score()->inputState();
+
+    // TODO: Inserting notes to a new voice in the middle of a tuplet is not yet supported. In this case
+    // we'll move the input to the start of the tuplet...
+    if (const Segment* prevSeg = inputState.segment()) {
+        const ChordRest* prevCr = prevSeg->cr(inputState.track());
+        //! NOTE: if there's an existing ChordRest at the new voiceIndex, we don't need to move the cursor
+        if (prevCr && prevCr->topTuplet() && !prevSeg->cr(voiceIndex)) {
+            Segment* newSeg = score()->tick2segment(prevCr->topTuplet()->tick());
+            if (newSeg) {
+                inputState.setSegment(newSeg);
+            }
+        }
+    }
+
     inputState.setVoice(voiceIndex);
     notifyAboutStateChanged();
 }
@@ -472,7 +486,7 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
 
     const mu::engraving::InputState& inputState = score()->inputState();
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Add tuplet"));
     score()->expandVoice();
     mu::engraving::ChordRest* chordRest = inputState.cr();
     if (chordRest) {
@@ -588,9 +602,20 @@ void NotationNoteInput::addTie()
 {
     TRACEFUNC;
 
-    startEdit();
+    // Calls `startEdit` internally
     score()->cmdAddTie();
-    apply();
+
+    notifyAboutStateChanged();
+
+    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+}
+
+void NotationNoteInput::addLaissezVib()
+{
+    TRACEFUNC;
+
+    // Calls `startEdit` internally
+    score()->cmdToggleLaissezVib();
 
     notifyAboutStateChanged();
 
@@ -617,9 +642,9 @@ mu::engraving::Score* NotationNoteInput::score() const
     return m_getScore->score();
 }
 
-void NotationNoteInput::startEdit()
+void NotationNoteInput::startEdit(const muse::TranslatableString& actionName)
 {
-    m_undoStack->prepareChanges();
+    m_undoStack->prepareChanges(actionName);
 }
 
 void NotationNoteInput::apply()
@@ -672,7 +697,7 @@ void NotationNoteInput::doubleNoteInputDuration()
 
     mu::engraving::EditData editData(m_scoreCallbacks);
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Double note input duration"));
     score()->cmdPadNoteIncreaseTAB(editData);
     apply();
 
@@ -687,7 +712,7 @@ void NotationNoteInput::halveNoteInputDuration()
 
     mu::engraving::EditData editData(m_scoreCallbacks);
 
-    startEdit();
+    startEdit(TranslatableString("undoableAction", "Halve note input duration"));
     score()->cmdPadNoteDecreaseTAB(editData);
     apply();
 

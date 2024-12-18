@@ -2198,7 +2198,7 @@ public:
     // put Tempo, Text, RepeatSymbol to MeasureData at part=0 && staff=0
     void addMusicData(MusicData* ptr);
     // if type==MusicData_None, return all
-    QList<MusicData*> getMusicDatas(MusicDataType type); // MusicXml: note | direction | harmony
+    QList<MusicData*> getMusicDatas(MusicDataType type); // MusicXML: note | direction | harmony
 
     // put NumericEnding to MeasureData at part = 0 && staff = 0
     void addCrossMeasureElement(MusicData* ptr, bool start);

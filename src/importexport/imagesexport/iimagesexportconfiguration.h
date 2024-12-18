@@ -39,6 +39,9 @@ public:
     virtual int exportPdfDpiResolution() const = 0;
     virtual void setExportPdfDpiResolution(int dpi) = 0;
 
+    virtual bool exportPdfWithTransparentBackground() const = 0;
+    virtual void setExportPdfWithTransparentBackground(bool transparent) = 0;
+
     // Png
     virtual float exportPngDpiResolution() const = 0;
     virtual void setExportPngDpiResolution(float dpi) = 0;

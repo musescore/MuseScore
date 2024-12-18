@@ -48,27 +48,6 @@ public:
 
         T::doRender(item, preferredType, context, result);
     }
-
-protected:
-    static void updateArticulationBoundaries(const muse::mpe::ArticulationType type, const muse::mpe::timestamp_t nominalTimestamp,
-                                             const muse::mpe::duration_t nominalDuration,
-                                             muse::mpe::ArticulationMap& noteArticulationMap)
-    {
-        if (noteArticulationMap.empty()) {
-            return;
-        }
-
-        const muse::mpe::ArticulationAppliedData& articulationData = noteArticulationMap.at(type);
-
-        muse::mpe::timestamp_t articulationOccupiedFrom = nominalTimestamp - articulationData.meta.timestamp;
-        muse::mpe::timestamp_t articulationOccupiedTo = nominalTimestamp + nominalDuration - articulationData.meta.timestamp;
-
-        noteArticulationMap.updateOccupiedRange(type,
-                                                muse::mpe::occupiedPercentage(articulationOccupiedFrom,
-                                                                              articulationData.meta.overallDuration),
-                                                muse::mpe::occupiedPercentage(articulationOccupiedTo,
-                                                                              articulationData.meta.overallDuration));
-    }
 };
 }
 

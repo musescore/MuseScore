@@ -48,6 +48,7 @@ signals:
 private:
     muse::uicomponents::MenuItem* createIsSingleClickToOpenPaletteItem();
     muse::uicomponents::MenuItem* createIsSinglePaletteItem();
+    muse::uicomponents::MenuItem* createIsDragEnabledItem();
     muse::uicomponents::MenuItem* createExpandCollapseAllItem(bool expand);
 };
 }

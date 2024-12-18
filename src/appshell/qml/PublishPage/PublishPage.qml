@@ -37,7 +37,7 @@ DockPage {
     objectName: "Publish"
     uri: "musescore://publish"
 
-    property var topToolKeyNavSec
+    required property NavigationSection topToolbarKeyNavSec
 
     property NavigationSection publishToolBarKeyNavSec: NavigationSection {
         id: keynavSec
@@ -63,7 +63,7 @@ DockPage {
             contentBottomPadding: 2
 
             NotationToolBar {
-                navigationPanel.section: root.topToolKeyNavSec
+                navigationPanel.section: root.topToolbarKeyNavSec
                 navigationPanel.order: 2
             }
         },
@@ -79,7 +79,7 @@ DockPage {
             contentBottomPadding: 2
 
             PlaybackToolBar {
-                navigationPanelSection: root.topToolKeyNavSec
+                navigationPanelSection: root.topToolbarKeyNavSec
                 navigationPanelOrder: 3
 
                 floating: playbackToolBar.floating
@@ -101,7 +101,7 @@ DockPage {
             contentBottomPadding: 2
 
             UndoRedoToolBar {
-                navigationPanel.section: root.topToolKeyNavSec
+                navigationPanel.section: root.topToolbarKeyNavSec
                 navigationPanel.order: 4
             }
         }

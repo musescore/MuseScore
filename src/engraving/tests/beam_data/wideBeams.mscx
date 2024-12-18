@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
       <useWideBeams>1</useWideBeams>
-      <Spatium>1.74978</Spatium>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -518,7 +519,7 @@
             <durationType>eighth</durationType>
             </Rest>
           <Beam>
-            <l1>18</l1>
+            <l1>16</l1>
             <l2>14</l2>
             </Beam>
           <Chord>
@@ -561,7 +562,7 @@
             </Rest>
           <Beam>
             <l1>14</l1>
-            <l2>18</l2>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>

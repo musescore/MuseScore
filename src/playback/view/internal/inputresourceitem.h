@@ -30,7 +30,10 @@
 #include <QString>
 
 #include "modularity/ioc.h"
-#include "async/asyncable.h"
+
+#include "global/iglobalconfiguration.h"
+#include "iinteractive.h"
+
 #include "audio/iplayback.h"
 #include "audio/audiotypes.h"
 #include "midi/miditypes.h"
@@ -38,10 +41,12 @@
 #include "abstractaudioresourceitem.h"
 
 namespace mu::playback {
-class InputResourceItem : public AbstractAudioResourceItem, public muse::async::Asyncable
+class InputResourceItem : public AbstractAudioResourceItem
 {
     Q_OBJECT
 
+    INJECT(muse::IGlobalConfiguration, globalConfiguration)
+    INJECT(muse::IInteractive, interactive)
     INJECT(muse::audio::IPlayback, playback)
 
 public:

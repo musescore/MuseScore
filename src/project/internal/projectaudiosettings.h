@@ -49,6 +49,7 @@ public:
     void setTrackInputParams(const engraving::InstrumentTrackId& partId, const muse::audio::AudioInputParams& params) override;
     void clearTrackInputParams() override;
 
+    bool trackHasExistingOutputParams(const engraving::InstrumentTrackId& partId) const override;
     const muse::audio::AudioOutputParams& trackOutputParams(const engraving::InstrumentTrackId& partId) const override;
     void setTrackOutputParams(const engraving::InstrumentTrackId& partId, const muse::audio::AudioOutputParams& params) override;
 

@@ -463,6 +463,44 @@ StyledGridView {
         visible: false
     }
 
+    MouseArea {
+        id: rightClickArea
+        anchors.fill: parent
+        acceptedButtons: Qt.RightButton
+
+        onClicked: function(mouseEvent) {
+            var paletteCell = paletteView.itemAt(mouseEvent.x, mouseEvent.y)
+            if (Boolean(paletteCell)) {
+                contextMenuLoader.modelIndex = paletteCell.modelIndex
+                contextMenuLoader.canEdit = paletteView.paletteController.canEdit(paletteView.paletteRootIndex)
+                contextMenuLoader.show(Qt.point(mouseEvent.x, mouseEvent.y))
+            }
+        }
+
+        ContextMenuLoader {
+            id: contextMenuLoader
+
+            property var modelIndex: null
+            property bool canEdit: true
+
+            items: [
+                { id: "delete", title: qsTrc("palette", "Delete"), icon: IconCode.DELETE_TANK, enabled: contextMenuLoader.canEdit },
+                { id: "properties", title: qsTrc("palette", "Properties…"), enabled: contextMenuLoader.canEdit }
+            ]
+
+            onHandleMenuItem: function(itemId) {
+                switch(itemId) {
+                case "delete":
+                    paletteView.paletteController.remove(contextMenuLoader.modelIndex)
+                    break
+                case "properties":
+                    Qt.callLater(paletteView.paletteController.editCellProperties, contextMenuLoader.modelIndex)
+                    break
+                }
+            }
+        }
+    }
+
     model: DelegateModel {
         id: paletteCellDelegateModel
         //         model: paletteView.visible ? paletteView.paletteModel : null // TODO: use this optimization? TODO: apply it manually where appropriate (Custom palette breaks)
@@ -541,13 +579,6 @@ StyledGridView {
                 removeSelectedCells()
             }
 
-            MouseArea {
-                id: rightClickArea
-                anchors.fill: parent
-                acceptedButtons: Qt.RightButton
-                onClicked: showCellMenu(true)
-            }
-
             Drag.active: mouseArea.drag.active
             Drag.dragType: Drag.Automatic
             Drag.supportedActions: Qt.CopyAction | (model.editable ? Qt.MoveAction : 0)
@@ -565,7 +596,7 @@ StyledGridView {
             property var dropData: null
 
             Drag.onDragStarted: {
-                contextMenu.close()
+                contextMenuLoader.close()
 
                 paletteView.state = "drag";
                 DelegateModel.inPersistedItems = true;
@@ -600,35 +631,6 @@ StyledGridView {
                     Drag.hotSpot.y = paletteCell.mouseArea.mouseY
                     dragDropReorderTimer.restart();
                 })
-            }
-
-            function showCellMenu() {
-                contextMenu.modelIndex = modelIndex
-                contextMenu.canEdit = paletteView.paletteController.canEdit(paletteView.paletteRootIndex)
-                contextMenu.toggleOpened(contextMenu.items, mouseArea.mouseX, mouseArea.mouseY)
-            }
-
-            StyledMenuLoader {
-                id: contextMenu
-
-                property var modelIndex: null
-                property bool canEdit: true
-
-                property var items: [
-                    { id: "delete", title: qsTrc("palette", "Delete"), icon: IconCode.DELETE_TANK, enabled: contextMenu.canEdit },
-                    { id: "properties", title: qsTrc("palette", "Properties…"), enabled: contextMenu.canEdit }
-                ]
-
-                onHandleMenuItem: function(itemId) {
-                    switch(itemId) {
-                    case "delete":
-                        paletteView.paletteController.remove(contextMenu.modelIndex)
-                        break
-                    case "properties":
-                        Qt.callLater(paletteView.paletteController.editCellProperties, contextMenu.modelIndex)
-                        break
-                    }
-                }
             }
 
             /* TODO?

@@ -30,6 +30,7 @@ class PlaybackConfigurationStub : public IPlaybackConfiguration
 public:
     bool playNotesWhenEditing() const override;
     void setPlayNotesWhenEditing(bool value) override;
+    muse::async::Notification playNotesWhenEditingChanged() const override;
 
     bool playNotesOnMidiInput() const override;
     void setPlayNotesOnMidiInput(bool value) override;

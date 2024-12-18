@@ -106,6 +106,10 @@ void AbstractMenuModel::load()
     uiActionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codes) {
         onActionsStateChanges(codes);
     });
+
+    shortcutsRegister()->shortcutsChanged().onNotify(this, [this]() {
+        updateShortcutsAll();
+    });
 }
 
 QVariantList AbstractMenuModel::itemsProperty() const
@@ -314,4 +318,30 @@ MenuItem& AbstractMenuModel::menu(MenuItemList& items, const QString& menuId)
 
     static MenuItem dummy;
     return dummy;
+}
+
+void AbstractMenuModel::updateShortcutsAll()
+{
+    for (MenuItem* menuItem : m_items) {
+        if (!menuItem) {
+            continue;
+        }
+
+        updateShortcuts(menuItem);
+    }
+}
+
+void AbstractMenuModel::updateShortcuts(MenuItem* item)
+{
+    UiAction action = item->action();
+    action.shortcuts = shortcutsRegister()->shortcut(action.code).sequences;
+    item->setAction(action);
+
+    for (MenuItem* subItem : item->subitems()) {
+        if (!subItem) {
+            continue;
+        }
+
+        updateShortcuts(subItem);
+    }
 }

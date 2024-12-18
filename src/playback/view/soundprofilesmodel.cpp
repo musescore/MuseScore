@@ -35,6 +35,8 @@ SoundProfilesModel::SoundProfilesModel(QObject* parent)
 
 void SoundProfilesModel::init()
 {
+    beginResetModel();
+
     const SoundProfilesMap& availableProfiles = profilesRepo()->availableProfiles();
     for (const auto& pair : availableProfiles) {
         m_profiles.push_back(pair.second);
@@ -55,6 +57,8 @@ void SoundProfilesModel::init()
     }
 
     m_defaultProjectsProfile = config()->defaultProfileForNewProjects().toQString();
+
+    endResetModel();
 }
 
 int SoundProfilesModel::rowCount(const QModelIndex& /*parent*/) const

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
-      <Spatium>1.76389</Spatium>
+      <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -92,10 +93,8 @@
               <tpc>14</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <text>gliss.</text>
                   <linkedMain/>
                   <diagonal>1</diagonal>
-                  <anchor>3</anchor>
                   </Glissando>
                 <next>
                   <location>
@@ -138,8 +137,9 @@
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
+        <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
         <createMultiMeasureRests>1</createMultiMeasureRests>
-        <Spatium>1.76389</Spatium>
+        <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -226,11 +226,9 @@
                 <tpc>14</tpc>
                 <Spanner type="Glissando">
                   <Glissando>
-                    <text>gliss.</text>
                     <linked>
                       </linked>
                     <diagonal>1</diagonal>
-                    <anchor>3</anchor>
                     </Glissando>
                   <next>
                     <location>
@@ -265,6 +263,16 @@
             <Rest>
               <linked>
                 </linked>
+              <durationType>measure</durationType>
+              <duration>2/4</duration>
+              </Rest>
+            </voice>
+          </Measure>
+        <Measure>
+          <multiMeasureRest>1</multiMeasureRest>
+          <voice>
+            <Rest>
+              <placement>above</placement>
               <durationType>measure</durationType>
               <duration>2/4</duration>
               </Rest>

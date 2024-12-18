@@ -38,6 +38,7 @@ class GeneralSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(QObject * playbackProxyModel READ playbackProxyModel CONSTANT)
     Q_PROPERTY(QObject * appearanceSettingsModel READ appearanceSettingsModel CONSTANT)
+    Q_PROPERTY(bool areGeneralPropertiesAvailable READ areGeneralPropertiesAvailable NOTIFY areGeneralPropertiesAvailableChanged)
 
 public:
     explicit GeneralSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -50,7 +51,12 @@ public:
     QObject* playbackProxyModel() const;
     QObject* appearanceSettingsModel() const;
 
+    bool areGeneralPropertiesAvailable();
+
     void onCurrentNotationChanged() override;
+
+signals:
+    void areGeneralPropertiesAvailableChanged(bool available);
 
 private:
     void createProperties() override;
@@ -63,6 +69,8 @@ private:
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
+    void updateAreGeneralPropertiesAvailable();
+
     PropertyItem* m_isVisible = nullptr;
     PropertyItem* m_isAutoPlaceAllowed = nullptr;
     PropertyItem* m_isPlayable = nullptr;
@@ -72,6 +80,8 @@ private:
     AppearanceSettingsModel* m_appearanceSettingsModel = nullptr;
 
     QList<engraving::EngravingItem*> m_elementsForIsSmallProperty;
+
+    bool m_areGeneralPropertiesAvailable = true;
 };
 }
 

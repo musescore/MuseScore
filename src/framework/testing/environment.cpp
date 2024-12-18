@@ -22,7 +22,8 @@
 
 #include "environment.h"
 
-#include "framework/global/globalmodule.h"
+#include "global/globalmodule.h"
+#include "global/iapplication.h"
 
 using namespace muse::testing;
 

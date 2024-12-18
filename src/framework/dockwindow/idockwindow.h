@@ -22,10 +22,10 @@
 #ifndef MUSE_DOCK_IDOCKWINDOW_H
 #define MUSE_DOCK_IDOCKWINDOW_H
 
-#include "internal/dockbase.h"
-#include "async/channel.h"
-
+#include <QQuickItem>
 #include <QString>
+
+#include "async/channel.h"
 
 class QPoint;
 

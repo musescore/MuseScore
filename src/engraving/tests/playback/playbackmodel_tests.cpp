@@ -549,7 +549,7 @@ TEST_F(Engraving_PlaybackModelTests, Dynamics)
     const DynamicLevelMap& dynamicLevelMap = dynamics.begin()->second;
 
     // [THEN] Dynamic level map matches expectations
-    EXPECT_EQ(dynamicLevelMap.size(), 51);
+    EXPECT_EQ(dynamicLevelMap.size(), 52);
 
     static constexpr dynamic_level_t piano = dynamicLevelFromType(mpe::DynamicType::p);
     static constexpr dynamic_level_t forte = dynamicLevelFromType(mpe::DynamicType::f);
@@ -579,18 +579,21 @@ TEST_F(Engraving_PlaybackModelTests, Dynamics)
     // Still forte at the start of next crescendo
     EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION), forte);
 
-    // Gradually grow loader than forte after that
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 1 / 24), 5770);
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 2 / 24),
+    // Gradually grow louder than forte after that
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 1) / 480.0 * QUARTER_NOTE_DURATION), 5770);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 2) / 480.0 * QUARTER_NOTE_DURATION),
               forte + (fortePlusSomething - forte) * 2 / 24);
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 3 / 24), 5812);
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 7 / 24), 5895);
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 15 / 24),
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 3) / 480.0 * QUARTER_NOTE_DURATION), 5812);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 7) / 480.0 * QUARTER_NOTE_DURATION), 5895);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 15) / 480.0 * QUARTER_NOTE_DURATION),
               forte + (fortePlusSomething - forte) * 15 / 24);
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 21 / 24),
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 21) / 480.0 * QUARTER_NOTE_DURATION),
               forte + (fortePlusSomething - forte) * 21 / 24);
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 22 / 24), 6208);
-    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 23 / 24), 6229);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 22) / 480.0 * QUARTER_NOTE_DURATION), 6208);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + int(1919 / 24.f * 23) / 480.0 * QUARTER_NOTE_DURATION), 6229);
+
+    // Reach forte plus something, just before the start of the next measure
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + 1919 / 480.0 * QUARTER_NOTE_DURATION), fortePlusSomething);
 
     // Finally, jump to pianissimo
     EXPECT_EQ(dynamicLevelMap.at(16 * QUARTER_NOTE_DURATION), pianissimo);

@@ -154,7 +154,7 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
         return make_ret(Ret::Code::InternalError);
     }
 
-    score->startCmd();
+    score->startCmd(TranslatableString("undoableAction", "Migrate project"));
 
     bool ok = true;
     if (opt.isApplyLeland) {

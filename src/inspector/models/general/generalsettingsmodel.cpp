@@ -89,6 +89,7 @@ void GeneralSettingsModel::loadProperties()
     };
 
     loadProperties(propertyIdSet);
+    updateAreGeneralPropertiesAvailable();
 }
 
 void GeneralSettingsModel::resetProperties()
@@ -138,7 +139,11 @@ void GeneralSettingsModel::onCurrentNotationChanged()
 
 void GeneralSettingsModel::onVisibleChanged(bool visible)
 {
-    beginCommand();
+    const muse::TranslatableString actionName = visible
+                                                ? TranslatableString("undoableAction", "Make element(s) visible")
+                                                : TranslatableString("undoableAction", "Make element(s) invisible");
+
+    beginCommand(actionName);
 
     Score* score = currentNotation()->elements()->msScore();
 
@@ -178,4 +183,30 @@ QObject* GeneralSettingsModel::playbackProxyModel() const
 QObject* GeneralSettingsModel::appearanceSettingsModel() const
 {
     return m_appearanceSettingsModel;
+}
+
+bool GeneralSettingsModel::areGeneralPropertiesAvailable()
+{
+    return m_areGeneralPropertiesAvailable;
+}
+
+void GeneralSettingsModel::updateAreGeneralPropertiesAvailable()
+{
+    static const std::set<ElementType> TYPES_NO_PROPERTIES = {
+        ElementType::LAYOUT_BREAK,
+        ElementType::SYSTEM_LOCK_INDICATOR
+    };
+
+    bool available = true;
+    for (EngravingItem* item : m_elementList) {
+        if (item && muse::contains(TYPES_NO_PROPERTIES, item->type())) {
+            available = false;
+            break;
+        }
+    }
+
+    if (m_areGeneralPropertiesAvailable != available) {
+        m_areGeneralPropertiesAvailable = available;
+        emit areGeneralPropertiesAvailableChanged(m_areGeneralPropertiesAvailable);
+    }
 }

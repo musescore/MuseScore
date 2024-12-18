@@ -45,6 +45,8 @@ class OrnamentSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * showAccidental READ showAccidental CONSTANT)
     Q_PROPERTY(PropertyItem * startOnUpperNote READ startOnUpperNote CONSTANT)
 
+    Q_PROPERTY(PropertyItem * showCueNote READ showCueNote CONSTANT)
+
 public:
     explicit OrnamentSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
@@ -59,6 +61,7 @@ public:
     PropertyItem* intervalStep() const;
     PropertyItem* intervalType() const;
     PropertyItem* showAccidental() const;
+    PropertyItem* showCueNote() const;
     PropertyItem* startOnUpperNote() const;
 
     bool isIntervalAboveAvailable() const;
@@ -102,6 +105,8 @@ private:
 
     PropertyItem* m_showAccidental = nullptr;
     PropertyItem* m_startOnUpperNote = nullptr;
+
+    PropertyItem* m_showCueNote = nullptr;
 };
 }
 

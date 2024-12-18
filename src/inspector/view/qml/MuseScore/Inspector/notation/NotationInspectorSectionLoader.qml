@@ -91,7 +91,8 @@ Loader {
             case Inspector.TYPE_GLISSANDO: return glissandoComp
             case Inspector.TYPE_VIBRATO: return vibratoComp
             case Inspector.TYPE_SLUR:
-            case Inspector.TYPE_TIE: return slurAndTieComp
+            case Inspector.TYPE_TIE:
+            case Inspector.TYPE_LAISSEZ_VIB: return slurAndTieComp
             case Inspector.TYPE_TEMPO: return tempoComp
             case Inspector.TYPE_A_TEMPO: return aTempoComp
             case Inspector.TYPE_TEMPO_PRIMO: return tempoPrimoComp
@@ -112,6 +113,7 @@ Loader {
             case Inspector.TYPE_PALM_MUTE:
             case Inspector.TYPE_LET_RING:
             case Inspector.TYPE_VOLTA:
+            case Inspector.TYPE_NOTELINE:
             case Inspector.TYPE_TEXT_LINE: return lineComp
             case Inspector.TYPE_GRADUAL_TEMPO_CHANGE: return gradualTempoChangeComp
             case Inspector.TYPE_STAFF_TYPE_CHANGES: return staffTypeComp

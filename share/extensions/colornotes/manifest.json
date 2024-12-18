@@ -8,5 +8,5 @@
     "version":  "3.5",
     "apiversion": 1,
 
-    "main": "main.js"
+    "path": "main.js"
 }

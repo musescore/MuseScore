@@ -28,6 +28,8 @@
 
 #include "appmenumodel.h"
 
+Q_MOC_INCLUDE(< QWindow >)
+
 namespace mu::appshell {
 class NavigableAppMenuModel : public AppMenuModel
 {

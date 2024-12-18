@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <limits>
 #include "instrtemplate.h"
 
 #include "io/file.h"
@@ -37,6 +38,7 @@
 #include "scoreorder.h"
 #include "stafftype.h"
 #include "stringdata.h"
+#include "stringutils.h"
 #include "utils.h"
 
 #include "log.h"
@@ -231,7 +233,7 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
     longNames = t.longNames;
     shortNames = t.shortNames;
     description = t.description;
-    musicXMLid = t.musicXMLid;
+    musicXmlId = t.musicXmlId;
     staffCount = t.staffCount;
     extended = t.extended;
     minPitchA = t.minPitchA;
@@ -299,7 +301,7 @@ void InstrumentTemplate::write(XmlWriter& xml) const
         xml.tag("trackName", trackName);
     }
     xml.tag("description", description);
-    xml.tag("musicXMLid", musicXMLid);
+    xml.tag("musicXMLid", musicXmlId);
     if (extended) {
         xml.tag("extended", extended);
     }
@@ -570,7 +572,7 @@ void InstrumentTemplate::read(XmlReader& e)
                 LOGD("InstrumentTemplate:: init instrument <%s> not found", muPrintable(val));
             }
         } else if (tag == "musicXMLid") {
-            musicXMLid = e.readText();
+            musicXmlId = e.readText();
         } else if (tag == "family") {
             family = searchInstrumentFamily(e.readText());
         } else if (tag == "genre") {
@@ -720,6 +722,9 @@ const InstrumentTemplate* searchTemplate(const String& name)
 const InstrumentTemplate* combinedTemplateSearch(const String& mxmlId, const String& name, const int transposition, int bank,
                                                  int program)
 {
+    size_t minLevenshteinDistance = std::numeric_limits<size_t>::max();
+    const InstrumentTemplate* templateWithMinLevenshteinDistance = nullptr;
+
     if (mxmlId.empty() && name.empty() && bank == 0 && program == -1) {
         // No instrument information provided
         return nullptr;
@@ -762,7 +767,7 @@ const InstrumentTemplate* combinedTemplateSearch(const String& mxmlId, const Str
             int nameWeight = 0;
 
             // MusicXML ID
-            if (!it->musicXMLid.empty() && it->musicXMLid == id) {
+            if (!it->musicXmlId.empty() && it->musicXmlId == id) {
                 matchStrength += MXML_ID_WEIGHT;
             }
 
@@ -790,11 +795,43 @@ const InstrumentTemplate* combinedTemplateSearch(const String& mxmlId, const Str
             if (matchStrength > bestMatchStrength) {
                 bestMatch = it;
                 bestMatchStrength = matchStrength;
+
                 if (bestMatchStrength - nameWeight == perfectMatchStrength && nameWeight > 0) {
                     return bestMatch; // stop looking for matches
+                } else {
+                    // We reset the distance
+                    minLevenshteinDistance = std::numeric_limits<int>::max();
+                    templateWithMinLevenshteinDistance = nullptr;
+                }
+            }
+
+            // We look for the shortest distance
+            if ((matchStrength == bestMatchStrength) && (matchStrength > 0)) {
+                // if the name has some meaning we calculate the distance
+                if ((!name.isEmpty()) && (name != u"MusicXML Part") && (name != u"Staff")) {
+                    // We keep the lowest distance with trackName ...
+                    size_t levenshteinDistance = muse::strings::levenshteinDistance(
+                        StaffName(name).toString().toStdString(), it->trackName.toStdString());
+
+                    // ... and longNames
+                    for (const muse::String& instLongName : it->longNames.toStringList()) {
+                        levenshteinDistance = std::min(levenshteinDistance,
+                                                       muse::strings::levenshteinDistance(
+                                                           StaffName(name).toString().toStdString(), instLongName.toStdString()));
+                    }
+                    // If we have a shortest distance we keep this element
+                    if (levenshteinDistance < minLevenshteinDistance) {
+                        minLevenshteinDistance = levenshteinDistance;
+                        templateWithMinLevenshteinDistance = it;
+                    }
                 }
             }
         }
+    }
+
+    // If we have improved the Levenshtein distance we change the best match
+    if (minLevenshteinDistance < std::numeric_limits<int>::max()) {
+        bestMatch = templateWithMinLevenshteinDistance;
     }
 
     return bestMatch;
@@ -804,7 +841,7 @@ const InstrumentTemplate* searchTemplateForMusicXmlId(const String& mxmlId)
 {
     for (const InstrumentGroup* g : instrumentGroups) {
         for (const InstrumentTemplate* it : g->instrumentTemplates) {
-            if (it->musicXMLid == mxmlId) {
+            if (it->musicXmlId == mxmlId) {
                 return it;
             }
         }

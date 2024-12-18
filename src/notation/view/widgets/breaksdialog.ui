@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Add/remove system breaks</string>
+   <string>Measures per system</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -21,10 +21,10 @@
        <item>
         <widget class="QRadioButton" name="intervalButton">
          <property name="accessibleName">
-          <string>Break systems every X measures</string>
+          <string>Lock layout with X measures per system</string>
          </property>
          <property name="text">
-          <string notr="true">[Break systems every]</string>
+          <string notr="true">Lock layout with</string>
          </property>
         </widget>
        </item>
@@ -44,7 +44,7 @@
        <item>
         <widget class="QLabel" name="intervalLabel2">
          <property name="text">
-          <string notr="true">[measures]</string>
+          <string notr="true">measures per system</string>
          </property>
         </widget>
        </item>
@@ -66,20 +66,20 @@
      <item>
       <widget class="QRadioButton" name="lockButton">
        <property name="accessibleName">
-        <string>Add system break at end of each system</string>
+        <string>Add system locks to each system</string>
        </property>
        <property name="text">
-        <string>Add system break at end of each system</string>
+        <string>Add system locks to each system</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="removeButton">
        <property name="accessibleName">
-        <string>Remove current system breaks</string>
+        <string>Remove current system locks</string>
        </property>
        <property name="text">
-        <string>Remove current system breaks</string>
+        <string>Remove current system locks</string>
        </property>
       </widget>
      </item>

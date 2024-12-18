@@ -36,7 +36,7 @@ RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstrument
     return selectInstruments(params);
 }
 
-RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const InstrumentKey& currentInstrumentKey) const
+RetVal<InstrumentTemplate> SelectInstrumentsScenario::selectInstrument(const InstrumentKey& currentInstrumentKey) const
 {
     StringList params {
         u"canSelectMultipleInstruments=false",
@@ -49,8 +49,7 @@ RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const InstrumentK
     }
 
     const InstrumentTemplate& templ = selectedInstruments.val.instruments.first().instrumentTemplate;
-
-    return RetVal<Instrument>::make_ok(Instrument::fromTemplate(&templ));
+    return RetVal<InstrumentTemplate>::make_ok(templ);
 }
 
 RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(const StringList& params) const

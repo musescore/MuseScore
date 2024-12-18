@@ -19922,7 +19922,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="24"/>
         <source>General</source>
-        <translation type="unfinished"/>
+        <translation>ძირითადი</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="28"/>

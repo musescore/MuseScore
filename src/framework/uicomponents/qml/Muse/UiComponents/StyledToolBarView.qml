@@ -31,7 +31,11 @@ Rectangle {
     property alias model: repeater.model
 
     property alias spacing: content.spacing
+    property int padding: 4
     property int rowHeight: 32
+    property int separatorHeight: rowHeight
+
+    property int maximumWidth: -1
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: root.objectName !== "" ? root.objectName : "ToolBarView"
@@ -43,16 +47,10 @@ Rectangle {
 
     property var sourceComponentCallback
 
-    width: content.width + prv.padding * 2
-    height: content.height + prv.padding * 2
+    width: content.width + padding * 2
+    height: content.height + padding * 2
 
     color: ui.theme.backgroundPrimaryColor
-
-    QtObject {
-        id: prv
-
-        property int padding: 4
-    }
 
     Component.onCompleted: {
         root.model.load()
@@ -62,6 +60,25 @@ Rectangle {
         id: content
 
         anchors.verticalCenter: parent.verticalCenter
+        anchors.left: root.left
+        anchors.leftMargin: root.padding
+
+        width: {
+            var result = 0
+            var children = content.children
+
+            for (var i = 0; i < children.length; ++i) {
+                result += children[i].width + spacing
+
+            }
+
+            if (result > 0) {
+                result -= spacing
+            }
+
+            return root.maximumWidth !== -1 ? Math.min(result, root.maximumWidth) : result
+        }
+        height: childrenRect.height
 
         clip: true
         spacing: 4
@@ -116,7 +133,7 @@ Rectangle {
                             property var itemData: loader.itemData
 
                             width: 1
-                            height: root.rowHeight
+                            height: root.separatorHeight
 
                             orientation: Qt.Vertical
                         }

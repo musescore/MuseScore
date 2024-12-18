@@ -59,7 +59,7 @@ TEST_F(Engraving_BoxTests, undoRemoveVBox)
     System* s = score->systems()[0];
     VBox* box = toVBox(s->measure(0));
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving box tests"));
     score->select(box);
     score->cmdDeleteSelection();
     score->endCmd();

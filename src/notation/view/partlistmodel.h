@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <QAbstractListModel>
+
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "iinteractive.h"

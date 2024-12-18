@@ -236,6 +236,7 @@ void NoteInputBarModel::updateNoteInputState()
     updateNoteDurationState();
     updateNoteAccidentalState();
     updateTieState();
+    updateLvState();
     updateSlurState();
     updateVoicesState();
     updateArticulationsState();
@@ -333,9 +334,32 @@ void NoteInputBarModel::updateTieState()
             checked = false;
             break;
         }
+        if (note->laissezVib()) {
+            checked = false;
+            break;
+        }
     }
 
     updateItemStateChecked(&findItem(codeFromQString("tie")), checked); // todo
+}
+
+void NoteInputBarModel::updateLvState()
+{
+    if (!selection()) {
+        return;
+    }
+
+    std::vector<Note*> tiedNotes = selection()->notes(NoteFilter::WithTie);
+
+    bool checked = !tiedNotes.empty();
+    for (const Note* note: tiedNotes) {
+        if (!note->laissezVib()) {
+            checked = false;
+            break;
+        }
+    }
+
+    updateItemStateChecked(&findItem(codeFromQString("lv")), checked);
 }
 
 void NoteInputBarModel::updateSlurState()
@@ -740,6 +764,7 @@ MenuItemList NoteInputBarModel::makeTextItems()
         makeMenuItem("system-text"),
         makeMenuItem("staff-text"),
         makeMenuItem("expression-text"),
+        makeMenuItem("dynamics"),
         makeMenuItem("rehearsalmark-text"),
         makeMenuItem("instrument-change-text"),
         makeMenuItem("fingering-text"),

@@ -38,10 +38,13 @@ public:
 
     virtual void reg(const IUiActionsModulePtr& actions) = 0;
 
-    virtual const UiAction& action(const muse::actions::ActionCode& code) const = 0;
-    virtual const std::vector<UiAction> getActions() const = 0;
-    virtual UiActionState actionState(const muse::actions::ActionCode& code) const = 0;
-    virtual async::Channel<muse::actions::ActionCodeList> actionStateChanged() const = 0;
+    virtual std::vector<UiAction> actionList() const = 0;
+
+    virtual const UiAction& action(const actions::ActionCode& code) const = 0;
+    virtual async::Channel<UiActionList> actionsChanged() const = 0;
+
+    virtual UiActionState actionState(const actions::ActionCode& code) const = 0;
+    virtual async::Channel<actions::ActionCodeList> actionStateChanged() const = 0;
 };
 }
 

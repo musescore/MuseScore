@@ -44,8 +44,12 @@ public:
     void init();
 
     void reg(const IUiActionsModulePtr& actions) override;
+
+    std::vector<UiAction> actionList() const override;
+
     const UiAction& action(const actions::ActionCode& code) const override;
-    const std::vector<UiAction> getActions() const override;
+    async::Channel<UiActionList> actionsChanged() const override;
+
     UiActionState actionState(const actions::ActionCode& code) const override;
     async::Channel<actions::ActionCodeList> actionStateChanged() const override;
 
@@ -69,6 +73,8 @@ private:
     void updateShortcuts(const actions::ActionCodeList& codes);
     void updateShortcutsAll();
 
+    void updateActions(const UiActionList& actions);
+
     void updateEnabled(const actions::ActionCodeList& codes);
     void updateEnabledAll();
     void doUpdateEnabled(Info& inf, const IUiContextResolverPtr& ctxResolver, const UiContext& currentCtx,
@@ -78,6 +84,7 @@ private:
     void updateChecked(const actions::ActionCodeList& codes);
 
     std::unordered_map<actions::ActionCode, Info> m_actions;
+    async::Channel<UiActionList> m_actionsChanged;
     async::Channel<actions::ActionCodeList> m_actionStateChanged;
 };
 }

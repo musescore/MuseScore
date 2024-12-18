@@ -58,6 +58,7 @@
 #include "scoreorder.h"
 #include "select.h"
 #include "spannermap.h"
+#include "systemlock.h"
 #include "synthesizerstate.h"
 #include "rootitem.h"
 #include "cmd.h"
@@ -340,6 +341,7 @@ public:
     void cmdRemovePart(Part*);
     void cmdAddTie(bool addToChord = false);
     void cmdToggleTie();
+    void cmdToggleLaissezVib();
     static std::vector<Note*> cmdTieNoteList(const Selection& selection, bool noteEntryMode);
     void cmdAddOttava(OttavaType);
     std::vector<Hairpin*> addHairpins(HairpinType);
@@ -356,6 +358,12 @@ public:
     void cmdDecDurationDotted() { cmdIncDecDuration(1, true); }
     void cmdIncDecDuration(int nSteps, bool stepDotted = false);
     void cmdToggleLayoutBreak(LayoutBreakType);
+    void cmdMoveMeasureToPrevSystem();
+    void cmdMoveMeasureToNextSystem();
+    void cmdToggleSystemLock();
+    void cmdApplyLockToSelection();
+    void cmdToggleScoreLock();
+    void cmdMakeIntoSystem();
     void cmdAddStaffTypeChange(Measure* measure, staff_idx_t staffIdx, StaffTypeChange* stc);
     void cmdAddMeasureRepeat(Measure*, int numMeasures, staff_idx_t staffIdx);
     bool makeMeasureRepeatGroup(Measure*, int numMeasures, staff_idx_t staffIdx);
@@ -382,9 +390,9 @@ public:
     void cmdMoveRest(Rest*, DirectionV);
     void cmdMoveLyrics(Lyrics*, DirectionV);
 
-    void realtimeAdvance();
+    void realtimeAdvance(bool allowTransposition);
 
-    void addRemoveBreaks(int interval, bool lock);
+    void addRemoveSystemLocks(int interval, bool lock);
 
     bool transpose(Note* n, Interval, bool useSharpsFlats);
     void transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fraction& tickStart, const Fraction& tickEnd, bool flip = false);
@@ -497,9 +505,9 @@ public:
     bool containsElement(const EngravingItem*) const;
 
     Note* addPitch(NoteVal&, bool addFlag, InputState* externalInputState = nullptr);
-    Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord);
-    NoteVal noteVal(int pitch) const;
-    Note* addMidiPitch(int pitch, bool addFlag);
+    Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool allowTransposition);
+    NoteVal noteVal(int pitch, bool allowTransposition) const;
+    Note* addMidiPitch(int pitch, bool addFlag, bool allowTransposition);
     Note* addNote(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {},
                   InputState* externalInputState = nullptr);
     Note* addNoteToTiedChord(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {});
@@ -524,7 +532,7 @@ public:
     muse::Ret repitchNote(const Position& pos, bool replace);
     void regroupNotesAndRests(const Fraction& startTick, const Fraction& endTick, track_idx_t track);
 
-    void startCmd();                    // start undoable command
+    void startCmd(const TranslatableString& actionName);             // start undoable command
     void endCmd(bool rollback = false, bool layoutAllParts = false); // end undoable command
     void update() { update(true); }
     void lockUpdates(bool locked);
@@ -1002,6 +1010,19 @@ public:
 
     void autoUpdateSpatium();
 
+    const SystemLocks* systemLocks() const { return &m_systemLocks; }
+    void addSystemLock(const SystemLock* lock);
+    void removeSystemLock(const SystemLock* lock);
+    void clearSystemLocks() { m_systemLocks.clear(); }
+
+    void undoAddSystemLock(const SystemLock* lock);
+    void undoRemoveSystemLock(const SystemLock* lock);
+    void undoRemoveAllLocks();
+    void toggleSystemLock(const std::vector<System*>& systems);
+    void makeIntoSystem(MeasureBase* first, MeasureBase* last);
+    void removeSystemLocksOnAddLayoutBreak(LayoutBreakType breakType, const MeasureBase* measure);
+    void removeLayoutBreaksOnAddSystemLock(const SystemLock* lock);
+
     friend class Chord;
 
 protected:
@@ -1098,6 +1119,7 @@ private:
     std::vector<Part*> m_parts;
     std::vector<Staff*> m_staves;
     std::vector<Staff*> m_systemObjectStaves;
+    SystemLocks m_systemLocks;
 
     SpannerMap m_spanner;
     std::set<Spanner*> m_unmanagedSpanner;

@@ -167,7 +167,7 @@ void InstrumentsRepository::load()
 
             m_instrumentTemplateList.push_back(templ);
             m_instrumentTemplateMap.insert_or_assign(templ->id, templ);
-            instrumentByMusicXmlId.insert_or_assign(templ->musicXMLid, templ);
+            instrumentByMusicXmlId.insert_or_assign(templ->musicXmlId, templ);
         }
     }
 
@@ -279,7 +279,7 @@ void InstrumentsRepository::loadMuseInstruments(const InstrumentTemplateMap& sta
         InstrumentTemplate* templ = new InstrumentTemplate();
         templ->id = instrument.id;
         templ->soundId = instrument.soundId;
-        templ->musicXMLid = instrument.musicXmlId;
+        templ->musicXmlId = instrument.musicXmlId;
         templ->trackName = instrument.name;
         templ->longNames.emplace_back(StaffName(instrument.name));
         templ->shortNames.emplace_back(StaffName(instrument.abbreviation));

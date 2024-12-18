@@ -60,6 +60,8 @@
 #include "engraving/style/style.h"
 #include "engraving/compat/dummyelement.h"
 
+#include "notation/utilities/engravingitempreviewpainter.h"
+
 #include "internal/palettecelliconengine.h"
 
 #include "log.h"
@@ -609,10 +611,11 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
 
     painter.setPen(Pen(color));
 
-    PaletteCellIconEngine::PaintContext ctx;
-    ctx.painter = &painter;
+    notation::EngravingItemPreviewPainter::PaintParams params;
+    params.painter = &painter;
+    params.color = configuration()->elementsColor();
 
-    element->scanElements(&ctx, PaletteCellIconEngine::paintPaletteItem);
+    notation::EngravingItemPreviewPainter::paintItem(element.get(), params);
 
     element->setPos(pos);
     return pm;
@@ -1089,12 +1092,15 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
 
         painter.setPen(Pen(color));
 
-        PaletteCellIconEngine::PaintContext ctx;
-        ctx.painter = &painter;
-        ctx.useElementColors = m_paintOptions.useElementColors;
-        ctx.colorsInversionEnabled = m_paintOptions.colorsInverionsEnabled;
+        notation::EngravingItemPreviewPainter::PaintParams params;
+        params.painter = &painter;
+        params.color = configuration()->elementsColor();
 
-        el->scanElements(&ctx, PaletteCellIconEngine::paintPaletteItem);
+        params.useElementColors = m_paintOptions.useElementColors;
+        params.colorsInversionEnabled = m_paintOptions.colorsInverionsEnabled;
+
+        notation::EngravingItemPreviewPainter::paintItem(el.get(), params);
+
         painter.restore();
     }
 }

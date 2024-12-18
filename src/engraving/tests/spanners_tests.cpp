@@ -377,7 +377,7 @@ TEST_F(Engraving_SpannersTests, spanners09)
     EXPECT_TRUE(msr);
     msr = msr->nextMeasure();
     EXPECT_TRUE(msr);
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving spanners tests"));
     score->select(msr);
     score->cmdTimeDelete();
     score->endCmd();
@@ -410,7 +410,7 @@ TEST_F(Engraving_SpannersTests, spanners10)
     EXPECT_TRUE(msr);
     msr = msr->nextMeasure();
     EXPECT_TRUE(msr);
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving spanners tests"));
     score->select(msr);
     score->cmdTimeDelete();
     score->endCmd();
@@ -443,7 +443,7 @@ TEST_F(Engraving_SpannersTests, spanners11)
     EXPECT_TRUE(msr);
     msr = msr->nextMeasure();
     EXPECT_TRUE(msr);
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving spanners tests"));
     score->select(msr);
     score->cmdTimeDelete();
     score->endCmd();
@@ -476,7 +476,7 @@ TEST_F(Engraving_SpannersTests, spanners12)
     EXPECT_TRUE(msr);
     msr = msr->nextMeasure();
     EXPECT_TRUE(msr);
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving spanners tests"));
     score->select(msr);
     score->cmdTimeDelete();
     score->endCmd();
@@ -511,7 +511,7 @@ TEST_F(Engraving_SpannersTests, DISABLED_spanners13)
     brk->setLayoutBreakType(LayoutBreakType::LINE);
     dropData.pos      = msr->pagePos();
     dropData.dropElement  = brk;
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving spanners tests"));
     msr->drop(dropData);
     score->endCmd();
     // VERIFY SEGMENTS IN SYSTEMS AND THEN SCORE

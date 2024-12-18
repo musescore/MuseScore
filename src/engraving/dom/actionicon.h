@@ -62,6 +62,10 @@ enum class ActionIconType {
     PRE_BEND,
     GRACE_NOTE_BEND,
     SLIGHT_BEND,
+
+    NOTE_ANCHORED_LINE,
+
+    SYSTEM_LOCK,
 };
 
 //! Dummy element, used for drag&drop

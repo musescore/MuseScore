@@ -37,9 +37,11 @@ public:
     NotationSelectionRange(IGetScore* getScore);
 
     engraving::staff_idx_t startStaffIndex() const override;
+    engraving::Segment* rangeStartSegment() const override;
     Fraction startTick() const override;
 
     engraving::staff_idx_t endStaffIndex() const override;
+    engraving::Segment* rangeEndSegment() const override;
     Fraction endTick() const override;
 
     MeasureRange measureRange() const override;
@@ -52,9 +54,6 @@ public:
 
 private:
     mu::engraving::Score* score() const;
-
-    mu::engraving::Segment* rangeStartSegment() const;
-    mu::engraving::Segment* rangeEndSegment() const;
 
     mu::engraving::staff_idx_t selectionLastVisibleStaff(const System* system) const;
     mu::engraving::staff_idx_t selectionFirstVisibleStaff(const System* system) const;

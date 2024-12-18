@@ -51,7 +51,7 @@ TEST_F(Engraving_TransposeTests, undoTranspose)
     score->cmdSelectAll();
 
     // transpose major second up
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving transpose tests"));
     score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4,
                      true, true, true);
     score->endCmd();
@@ -80,7 +80,7 @@ TEST_F(Engraving_TransposeTests, undoDiatonicTranspose)
     score->cmdSelectAll();
 
     // transpose diatonic fourth down
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving transpose tests"));
     score->transpose(TransposeMode::DIATONICALLY, TransposeDirection::DOWN, Key::C, 3,
                      true, false, false);
     score->endCmd();

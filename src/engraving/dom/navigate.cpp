@@ -405,6 +405,10 @@ EngravingItem* Score::lastElement(bool frame)
     if (frame) {
         MeasureBase* mb = measures()->last();
         if (mb && mb->isBox()) {
+            auto boxChildren = toChildPairsSet(mb);
+            if (!boxChildren.empty()) {
+                return boxChildren.rbegin()->first;
+            }
             return mb;
         }
     }
@@ -795,6 +799,8 @@ EngravingItem* Score::nextElement()
             break;
         }
         case ElementType::GLISSANDO_SEGMENT:
+        case ElementType::NOTELINE_SEGMENT:
+        case ElementType::LAISSEZ_VIB_SEGMENT:
         case ElementType::TIE_SEGMENT: {
             EngravingItem* next = nextElementForSpannerSegment(toSpannerSegment(e));
             if (next) {
@@ -985,6 +991,8 @@ EngravingItem* Score::prevElement()
             return bend->startNote();
         }
         case ElementType::GLISSANDO_SEGMENT:
+        case ElementType::NOTELINE_SEGMENT:
+        case ElementType::LAISSEZ_VIB_SEGMENT:
         case ElementType::TIE_SEGMENT: {
             EngravingItem* prev = prevElementForSpannerSegment(toSpannerSegment(e));
             if (prev) {

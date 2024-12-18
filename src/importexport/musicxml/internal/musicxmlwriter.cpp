@@ -23,7 +23,7 @@
 #include "musicxmlwriter.h"
 
 #include "engraving/dom/masterscore.h"
-#include "musicxml/exportxml.h"
+#include "musicxml/export/exportmusicxml.h"
 
 #include "log.h"
 
@@ -53,7 +53,7 @@ Ret MusicXmlWriter::write(notation::INotationPtr notation, io::IODevice& destina
         return make_ret(Ret::Code::UnknownError);
     }
 
-    Ret ret = mu::engraving::saveXml(score, &destinationDevice);
+    Ret ret = saveXml(score, &destinationDevice);
 
     return ret;
 }

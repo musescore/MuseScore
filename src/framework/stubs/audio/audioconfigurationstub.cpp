@@ -105,6 +105,11 @@ async::Notification AudioConfigurationStub::sampleRateChanged() const
     return async::Notification();
 }
 
+size_t AudioConfigurationStub::desiredAudioThreadNumber() const
+{
+    return 0;
+}
+
 size_t AudioConfigurationStub::minTrackCountForMultithreading() const
 {
     return 0;

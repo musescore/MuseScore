@@ -1,5 +1,5 @@
 name: Feature request
-description: Request an existing feature to be made better, or a new feature
+description: Request new functionality or enhancements to existing features in MuseScore Studio.
 labels: ["Feature Request"]
 body:
   - type: textarea

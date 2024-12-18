@@ -41,6 +41,7 @@ class DockPanelView : public DockBase
     Q_PROPERTY(
         muse::uicomponents::AbstractMenuModel
         * contextMenuModel READ contextMenuModel WRITE setContextMenuModel NOTIFY contextMenuModelChanged)
+    Q_PROPERTY(QQmlComponent * titleBar READ titleBar WRITE setTitleBar NOTIFY titleBarChanged)
 
 public:
     explicit DockPanelView(QQuickItem* parent = nullptr);
@@ -49,6 +50,7 @@ public:
     QString groupName() const;
     QObject* navigationSection() const;
     uicomponents::AbstractMenuModel* contextMenuModel() const;
+    QQmlComponent* titleBar() const;
 
     bool isTabAllowed(const DockPanelView* tab) const;
     void addPanelAsTab(DockPanelView* tab);
@@ -58,11 +60,13 @@ public slots:
     void setGroupName(const QString& name);
     void setNavigationSection(QObject* newNavigation);
     void setContextMenuModel(uicomponents::AbstractMenuModel* model);
+    void setTitleBar(QQmlComponent* titleBar);
 
 signals:
     void groupNameChanged();
     void navigationSectionChanged();
     void contextMenuModelChanged();
+    void titleBarChanged();
 
 private:
     void componentComplete() override;
@@ -72,6 +76,7 @@ private:
 
     class DockPanelMenuModel;
     DockPanelMenuModel* m_menuModel = nullptr;
+    QQmlComponent* m_titleBar = nullptr;
 };
 }
 

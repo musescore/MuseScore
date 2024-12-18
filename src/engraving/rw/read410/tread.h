@@ -245,6 +245,7 @@ public:
     static void read(KeyList* item, XmlReader& xml, ReadContext& ctx);
     static void read(KeySig* s, XmlReader& xml, ReadContext& ctx);
 
+    static void read(LaissezVib* lv, XmlReader& xml, ReadContext& ctx);
     static void read(LayoutBreak* b, XmlReader& xml, ReadContext& ctx);
     static void read(LedgerLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(LetRing* r, XmlReader& xml, ReadContext& ctx);
@@ -263,6 +264,7 @@ public:
     static void read(NoteEvent* item, XmlReader& xml, ReadContext& ctx);
     static void read(NoteDot* d, XmlReader& xml, ReadContext& ctx);
     static void read(NoteHead* h, XmlReader& xml, ReadContext& ctx);
+    static void read(NoteLine* nl, XmlReader& xml, ReadContext& ctx);
     static void read(Ornament* o, XmlReader& xml, ReadContext& ctx);
     static void read(Ottava* o, XmlReader& xml, ReadContext& ctx);
 
@@ -370,12 +372,16 @@ public:
     static void readSpanner(XmlReader& e, ReadContext& ctx, EngravingItem* current, track_idx_t track);
     static void readSpanner(XmlReader& e, ReadContext& ctx, Score* current, track_idx_t track);
 
+    static void readSystemLocks(Score* score, XmlReader& e);
+
 private:
     static bool readProperties(Box* b, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(HBox* b, XmlReader& xml, ReadContext& ctx);
 
     static bool readProperties(TextBase* t, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
+
+    static void readSystemLock(Score* score, XmlReader& e);
 };
 }
 

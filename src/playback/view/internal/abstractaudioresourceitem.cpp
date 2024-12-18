@@ -4,6 +4,7 @@
 #include <QTimer>
 
 #include "stringutils.h"
+#include "ui/view/iconcodes.h"
 
 using namespace muse;
 using namespace mu::playback;
@@ -79,6 +80,19 @@ QVariantMap AbstractAudioResourceItem::buildMenuItem(const QString& itemId,
 QVariantMap AbstractAudioResourceItem::buildSeparator() const
 {
     static QVariantMap result;
+    return result;
+}
+
+QVariantMap AbstractAudioResourceItem::buildExternalLinkMenuItem(const QString& menuId, const QString& title) const
+{
+    QVariantMap result;
+
+    result["id"] = menuId;
+    result["title"] = title;
+
+    const int openLinkIcon = static_cast<int>(ui::IconCode::Code::OPEN_LINK);
+    result["icon"] = openLinkIcon;
+
     return result;
 }
 

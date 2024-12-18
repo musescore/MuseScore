@@ -170,7 +170,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     hideMode->setCurrentIndex(int(m_staff->hideWhenEmpty()));
     showIfEmpty->setChecked(m_staff->showIfEmpty());
     hideSystemBarLine->setChecked(m_staff->hideSystemBarLine());
-    mergeMatchingRests->setChecked(m_staff->mergeMatchingRests());
+    mergeMatchingRests->setCurrentIndex(static_cast<int>(m_staff->mergeMatchingRests()));
     noReflectTranspositionInLinkedTab->setChecked(!m_staff->reflectTranspositionInLinkedTab());
 
     updateStaffType(*stt);
@@ -269,6 +269,7 @@ void EditStaff::updateNextPreviousButtons()
 
 void EditStaff::gotoNextStaff()
 {
+    apply();
     staff_idx_t nextStaffIndex = m_orgStaff->idx() + 1;
     Staff* nextStaff = m_orgStaff->score()->staff(nextStaffIndex);
 
@@ -279,6 +280,7 @@ void EditStaff::gotoNextStaff()
 
 void EditStaff::gotoPreviousStaff()
 {
+    apply();
     staff_idx_t previousStaffIndex = m_orgStaff->idx() - 1;
     Staff* prevStaff = m_orgStaff->score()->staff(previousStaffIndex);
 
@@ -313,7 +315,7 @@ void EditStaff::bboxClicked(QAbstractButton* button)
 
 void EditStaff::apply()
 {
-    size_t index = m_staff->score()->undoStack()->getCurIdx();
+    size_t index = m_staff->score()->undoStack()->currentIndex();
     applyStaffProperties();
     applyPartProperties();
     m_staff->score()->undoStack()->mergeCommands(index);
@@ -504,7 +506,7 @@ void EditStaff::applyStaffProperties()
     config.cutaway = cutaway->isChecked();
     config.showIfEmpty = showIfEmpty->isChecked();
     config.hideSystemBarline = hideSystemBarLine->isChecked();
-    config.mergeMatchingRests = mergeMatchingRests->isChecked();
+    config.mergeMatchingRests = static_cast<AutoOnOff>(mergeMatchingRests->currentIndex());
     config.hideMode = Staff::HideMode(hideMode->currentIndex());
     config.clefTypeList = m_instrument.clefType(m_orgStaff->rstaff());
     config.staffType = *m_staff->staffType(mu::engraving::Fraction(0, 1));
@@ -577,14 +579,22 @@ void EditStaff::applyPartProperties()
 
 void EditStaff::showReplaceInstrumentDialog()
 {
-    RetVal<Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument(m_instrumentKey);
-    if (!selectedInstrument.ret) {
-        LOGE() << selectedInstrument.ret.toString();
+    RetVal<InstrumentTemplate> templ = selectInstrumentsScenario()->selectInstrument(m_instrumentKey);
+    if (!templ.ret) {
+        LOGE() << templ.ret.toString();
         return;
     }
 
-    m_instrument = selectedInstrument.val;
+    const StaffType* staffType = templ.val.staffTypePreset;
+    if (!staffType) {
+        staffType = StaffType::getDefaultPreset(StaffGroup::STANDARD);
+    }
+
+    m_instrument = Instrument::fromTemplate(&templ.val);
+    m_staff->setStaffType(Fraction(0, 1), *staffType);
+
     updateInstrument();
+    updateStaffType(*staffType);
 }
 
 void EditStaff::editStringDataClicked()

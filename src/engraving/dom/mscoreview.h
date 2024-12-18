@@ -59,7 +59,7 @@ public:
     virtual void setDropRectangle(const RectF&) {}
     virtual void startNoteEntryMode() {}
     virtual void drawBackground(muse::draw::Painter*, const RectF&) const = 0;
-    virtual void setDropTarget(const EngravingItem*) {}
+    virtual void setDropTarget(EngravingItem*) {}
 
     virtual void textTab(bool /*back*/) {}
 

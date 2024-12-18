@@ -77,6 +77,8 @@ enum class ElementType {
     INSTRUMENT_NAME,
     SLUR_SEGMENT,
     TIE_SEGMENT,
+    LAISSEZ_VIB_SEGMENT,
+    LAISSEZ_VIB,
     BAR_LINE,
     STAFF_LINES,
     SYSTEM_DIVIDER,
@@ -147,7 +149,9 @@ enum class ElementType {
     PEDAL_SEGMENT,
     LYRICSLINE_SEGMENT,
     GLISSANDO_SEGMENT,
+    NOTELINE_SEGMENT,
     LAYOUT_BREAK,
+    SYSTEM_LOCK_INDICATOR,
     SPACER,
     STAFF_STATE,
     NOTEHEAD,
@@ -804,6 +808,7 @@ enum class TextStyleType {
 
     // Line-oriented styles
     TEXTLINE,
+    NOTELINE,
     VOLTA,
     OTTAVA,
     GLISSANDO,
@@ -1053,6 +1058,11 @@ enum class LyricsDashSystemStart {
     UNDER_FIRST_NOTE
 };
 
+enum class NoteLineEndPlacement {
+    LEFT_EDGE,
+    OFFSET_ENDS,
+};
+
 enum class SpannerSegmentType {
     SINGLE, BEGIN, MIDDLE, END
 };
@@ -1061,6 +1071,12 @@ enum class TiePlacement {
     AUTO,
     INSIDE,
     OUTSIDE,
+};
+
+enum class TieDotsPlacement {
+    AUTO,
+    BEFORE_DOTS,
+    AFTER_DOTS
 };
 
 //---------------------------------------------------------

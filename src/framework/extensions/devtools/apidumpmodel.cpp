@@ -22,6 +22,7 @@
 #include "apidumpmodel.h"
 
 #include <QClipboard>
+#include <QGuiApplication>
 
 #include "extensions/api/extapi.h"
 
@@ -274,8 +275,7 @@ QString ApiDumpModel::makeWiki() const
 void ApiDumpModel::copyWiki()
 {
     QString str = makeWiki();
-    QClipboard* clipboard = QGuiApplication::clipboard();
-    clipboard->setText(str);
+    QGuiApplication::clipboard()->setText(str);
 }
 
 void ApiDumpModel::printWiki()

@@ -77,7 +77,7 @@ std::shared_ptr<Pixmap> Score::createThumbnail()
     switchToPageMode();
 
     Page* page = pages().at(0);
-    RectF fr = page->abbox();
+    RectF fr = page->pageBoundingRect();
     double mag = 256.0 / std::max(fr.width(), fr.height());
     int w = int(fr.width() * mag);
     int h = int(fr.height() * mag);
@@ -165,7 +165,7 @@ void Score::print(Painter* painter, int pageNo)
     m_printing  = true;
     MScore::pdfPrinting = true;
     Page* page = pages().at(pageNo);
-    RectF fr  = page->abbox();
+    RectF fr  = page->pageBoundingRect();
 
     std::vector<EngravingItem*> ell = page->items(fr);
     std::sort(ell.begin(), ell.end(), elementLessThan);

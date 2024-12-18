@@ -221,7 +221,7 @@
         <repeatLeftFontSize>18</repeatLeftFontSize>
         <systemTextLineFontSize>12</systemTextLineFontSize>
         <defaultsVersion>410</defaultsVersion>
-        <Spatium>1.74978</Spatium>
+        <spatium>1.74978</spatium>
       </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>

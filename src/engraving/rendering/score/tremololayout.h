@@ -45,6 +45,7 @@ public:
 private:
     static void layoutOneNoteTremolo(TremoloSingleChord* item, const LayoutContext& ctx, double x, double y, double h, double spatium);
     static void layoutTwoNotesTremolo(TremoloTwoChord* item, const LayoutContext& ctx, double x, double y, double h, double spatium);
+    static void calcIsUp(TremoloTwoChord* item);
 };
 }
 

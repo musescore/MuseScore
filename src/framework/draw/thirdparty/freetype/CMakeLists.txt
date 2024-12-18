@@ -160,8 +160,8 @@ set(MODULE_DEF
     -DFT2_BUILD_LIBRARY
 )
 
-set(MODULE_USE_PCH_DISABLED ON)
-set(MODULE_USE_UNITY_NONE ON)
+set(MODULE_USE_PCH OFF)
+set(MODULE_USE_UNITY OFF)
 setup_module()
 
 # Export variables

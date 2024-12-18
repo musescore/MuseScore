@@ -306,6 +306,8 @@ for group in groups.values():
                 to_subelement(d_el, drum, 'drum', 'name')
                 to_subelement(d_el, drum, 'stem')
                 to_subelement(d_el, drum, 'shortcut')
+                to_subelement(d_el, drum, 'row', 'panelRow')
+                to_subelement(d_el, drum, 'col', 'panelColumn')
 
         if instrument['id'] in channels:
             for channel in channels[instrument['id']].values():

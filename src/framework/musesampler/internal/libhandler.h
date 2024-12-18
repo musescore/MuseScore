@@ -120,7 +120,7 @@ private:
     ms_MuseSampler_init_2 initSamplerInternal2 = nullptr;
 
 public:
-    MuseSamplerLibHandler(const io::path_t& path)
+    MuseSamplerLibHandler(const io::path_t& path, bool useLegacyAudition = false)
     {
         // The specific versions supported, based on known functions/etc:
         const Version minimumSupported{ 0, 6, 0 };
@@ -188,7 +188,11 @@ public:
         create = (ms_MuseSampler_create)muse::getLibFunc(m_lib, "ms_MuseSampler_create");
         destroy = (ms_MuseSampler_destroy)muse::getLibFunc(m_lib, "ms_MuseSampler_destroy");
 
-        if (at_least_v_0_100) {
+        if (useLegacyAudition) {
+            LOGI() << "Use legacy audition (ms_MuseSampler_init)";
+        }
+
+        if (at_least_v_0_100 && !useLegacyAudition) {
             initSamplerInternal2 = (ms_MuseSampler_init_2)muse::getLibFunc(m_lib, "ms_MuseSampler_init_2");
             initSampler = [this](ms_MuseSampler ms, double sample_rate, int block_size, int channel_count) {
                 return initSamplerInternal2(ms, sample_rate, block_size, channel_count) == ms_Result_OK;

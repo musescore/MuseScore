@@ -82,6 +82,7 @@ class Jump;
 
 class KeySig;
 
+class LaissezVib;
 class LayoutBreak;
 class LedgerLine;
 class LetRing;
@@ -101,6 +102,7 @@ class MMRestRange;
 
 class Note;
 class NoteDot;
+class NoteLineSegment;
 
 class Ornament;
 
@@ -139,6 +141,7 @@ class FSymbol;
 
 class SystemDivider;
 class SystemText;
+class SystemLockIndicator;
 class SoundFlag;
 
 class TabDurationSymbol;
@@ -235,6 +238,7 @@ private:
 
     static void draw(const KeySig* item, muse::draw::Painter* painter);
 
+    static void draw(const LaissezVibSegment* item, muse::draw::Painter* painter);
     static void draw(const Lasso* item, muse::draw::Painter* painter);
     static void draw(const LayoutBreak* item, muse::draw::Painter* painter);
     static void draw(const LedgerLine* item, muse::draw::Painter* painter);
@@ -251,6 +255,7 @@ private:
     static void draw(const Note* item, muse::draw::Painter* painter);
     static void draw(const NoteDot* item, muse::draw::Painter* painter);
     static void draw(const NoteHead* item, muse::draw::Painter* painter);
+    static void draw(const NoteLineSegment* item, muse::draw::Painter* painter);
 
     static void draw(const Ornament* item, muse::draw::Painter* painter);
     static void draw(const OttavaSegment* item, muse::draw::Painter* painter);
@@ -281,6 +286,7 @@ private:
     static void draw(const FSymbol* item, muse::draw::Painter* painter);
     static void draw(const SystemDivider* item, muse::draw::Painter* painter);
     static void draw(const SystemText* item, muse::draw::Painter* painter);
+    static void draw(const SystemLockIndicator* item, muse::draw::Painter* painter);
     static void draw(const SoundFlag* item, muse::draw::Painter* painter);
 
     static void draw(const TabDurationSymbol* item, muse::draw::Painter* painter);

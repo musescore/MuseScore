@@ -85,8 +85,8 @@ if [ "$PACKTYPE" == "appimage" ]; then
     # To enable automatic updates for AppImages, set UPDATE_INFORMATION according to
     # https://github.com/AppImage/AppImageSpec/blob/master/draft.md#update-information
     case "${BUILD_MODE}" in
-    "stable")  export UPDATE_INFORMATION="gh-releases-zsync|musescore|MuseScore|latest|MuseScore-*${PACKARCH}.AppImage.zsync";;
-    "nightly") export UPDATE_INFORMATION="zsync|https://ftp.osuosl.org/pub/musescore-nightlies/linux/${MAJOR_VERSION}x/nightly/MuseScoreNightly-latest-${BUILD_BRANCH}-${PACKARCH}.AppImage.zsync";;
+    "stable")  export UPDATE_INFORMATION="gh-releases-zsync|musescore|MuseScore|latest|MuseScore-Studio-*${PACKARCH}.AppImage.zsync";;
+    "nightly") export UPDATE_INFORMATION="zsync|https://ftp.osuosl.org/pub/musescore-nightlies/linux/${MAJOR_VERSION}x/nightly/MuseScore-Studio-Nightly-latest-${BUILD_BRANCH}-${PACKARCH}.AppImage.zsync";;
     *) unset UPDATE_INFORMATION;; # disable updates for other build modes
     esac
 

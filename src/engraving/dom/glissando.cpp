@@ -54,13 +54,17 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 static const ElementStyle glissandoElementStyle {
-    { Sid::glissandoFontFace,  Pid::FONT_FACE },
-    { Sid::glissandoFontSize,  Pid::FONT_SIZE },
-    { Sid::glissandoFontStyle, Pid::FONT_STYLE },
-    { Sid::glissandoLineWidth, Pid::LINE_WIDTH },
-    { Sid::glissandoText,      Pid::GLISS_TEXT },
-    { Sid::glissandoStyle,     Pid::GLISS_STYLE },
-    { Sid::glissandoStyleHarp, Pid::GLISS_STYLE }
+    { Sid::glissandoFontFace,    Pid::FONT_FACE },
+    { Sid::glissandoFontSize,    Pid::FONT_SIZE },
+    { Sid::glissandoFontStyle,   Pid::FONT_STYLE },
+    { Sid::glissandoLineWidth,   Pid::LINE_WIDTH },
+    { Sid::glissandoShowText,    Pid::GLISS_SHOW_TEXT },
+    { Sid::glissandoText,        Pid::GLISS_TEXT },
+    { Sid::glissandoStyle,       Pid::GLISS_STYLE },
+    { Sid::glissandoLineStyle,   Pid::LINE_STYLE },
+    { Sid::glissandoDashLineLen, Pid::DASH_LINE_LEN },
+    { Sid::glissandoDashGapLen,  Pid::DASH_GAP_LEN },
+    { Sid::glissandoType,        Pid::GLISS_TYPE }
 };
 
 //=========================================================
@@ -103,18 +107,19 @@ EngravingItem* GlissandoSegment::propertyDelegate(Pid pid)
 Glissando::Glissando(EngravingItem* parent)
     : SLine(ElementType::GLISSANDO, parent, ElementFlag::MOVABLE)
 {
-    setAnchor(Spanner::Anchor::NOTE);
-    setDiagonal(true);
-
     initElementStyle(&glissandoElementStyle);
 
-    resetProperty(Pid::GLISS_SHOW_TEXT);
-    resetProperty(Pid::GLISS_STYLE);
-    resetProperty(Pid::GLISS_SHIFT);
-    resetProperty(Pid::GLISS_TYPE);
-    resetProperty(Pid::GLISS_TEXT);
-    resetProperty(Pid::GLISS_EASEIN);
-    resetProperty(Pid::GLISS_EASEOUT);
+    static const std::array<Pid, 5> propertiesToInitialise {
+        Pid::GLISS_SHIFT,
+        Pid::GLISS_EASEIN,
+        Pid::GLISS_EASEOUT,
+        Pid::DIAGONAL,
+        Pid::ANCHOR
+    };
+
+    for (const Pid& pid : propertiesToInitialise) {
+        resetProperty(pid);
+    }
 }
 
 Glissando::Glissando(const Glissando& g)
@@ -157,29 +162,6 @@ Sid Glissando::getPropertyStyle(Pid id) const
     }
 
     return SLine::getPropertyStyle(id);
-}
-
-void Glissando::addLineAttachPoints()
-{
-    GlissandoSegment* frontSeg = toGlissandoSegment(frontSegment());
-    GlissandoSegment* backSeg = toGlissandoSegment(backSegment());
-    Note* startNote = nullptr;
-    Note* endNote = nullptr;
-    if (startElement() && startElement()->isNote()) {
-        startNote = toNote(startElement());
-    }
-    if (endElement() && endElement()->isNote()) {
-        endNote = toNote(endElement());
-    }
-    if (!frontSeg || !backSeg || !startNote || !endNote) {
-        return;
-    }
-    double startX = frontSeg->ldata()->pos().x();
-    double endX = backSeg->pos2().x() + backSeg->ldata()->pos().x(); // because pos2 is relative to ipos
-    // Here we don't pass y() because its value is unreliable during the first stages of layout.
-    // The y() is irrelevant anyway for horizontal spacing.
-    startNote->addLineAttachPoint(PointF(startX, 0.0), this);
-    endNote->addLineAttachPoint(PointF(endX, 0.0), this);
 }
 
 bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffsets)
@@ -367,81 +349,6 @@ Note* Glissando::guessInitialNote(Chord* chord)
     return 0;
 }
 
-Note* Glissando::guessFinalNote(Chord* chord, Note* startNote)
-{
-    if (chord->isGraceBefore()) {
-        Chord* parentChord = toChord(chord->parent());
-        GraceNotesGroup& gracesBefore = parentChord->graceNotesBefore();
-        auto positionOfThis = std::find(gracesBefore.begin(), gracesBefore.end(), chord);
-        if (positionOfThis != gracesBefore.end()) {
-            auto nextPosition = ++positionOfThis;
-            if (nextPosition != gracesBefore.end()) {
-                return (*nextPosition)->upNote();
-            }
-        }
-        return parentChord->upNote();
-    } else if (chord->isGraceAfter()) {
-        Chord* parentChord = toChord(chord->parent());
-        GraceNotesGroup& gracesAfter = parentChord->graceNotesAfter();
-        auto positionOfThis = std::find(gracesAfter.begin(), gracesAfter.end(), chord);
-        if (positionOfThis != gracesAfter.end()) {
-            auto nextPosition = ++positionOfThis;
-            if (nextPosition != gracesAfter.end()) {
-                return (*nextPosition)->upNote();
-            }
-        }
-        chord = toChord(chord->parent());
-    } else {
-        std::vector<Chord*> graces = chord->graceNotesAfter();
-        if (graces.size() > 0) {
-            return graces.front()->upNote();
-        }
-    }
-
-    if (!chord->explicitParent()->isSegment()) {
-        return 0;
-    }
-
-    Segment* segm = chord->score()->tick2rightSegment(chord->tick() + chord->actualTicks());
-    while (segm && !segm->isChordRestType()) {
-        segm = segm->next1();
-    }
-
-    if (!segm) {
-        return nullptr;
-    }
-
-    track_idx_t chordTrack = chord->track();
-    Part* part = chord->part();
-
-    Chord* target = nullptr;
-    if (segm->element(chordTrack) && segm->element(chordTrack)->isChord()) {
-        target = toChord(segm->element(chordTrack));
-    } else {
-        for (EngravingItem* currChord : segm->elist()) {
-            if (currChord && currChord->isChord() && toChord(currChord)->part() == part) {
-                target = toChord(currChord);
-                break;
-            }
-        }
-    }
-
-    if (target && target->notes().size() > 0) {
-        const std::vector<Chord*>& graces = target->graceNotesBefore();
-        if (graces.size() > 0) {
-            return graces.front()->upNote();
-        }
-        // normal case: try to return the note in the next chord that is in the
-        // same position as the start note relative to the end chord
-        size_t startNoteIdx = muse::indexOf(chord->notes(), startNote);
-        size_t endNoteIdx = std::min(startNoteIdx, target->notes().size() - 1);
-        return target->notes().at(endNoteIdx);
-    }
-
-    LOGD("no second note for glissando found");
-    return nullptr;
-}
-
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
@@ -537,7 +444,7 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::GLISS_TYPE:
-        return int(GlissandoType::STRAIGHT);
+        return style().styleV(Sid::glissandoType);
     case Pid::GLISS_SHOW_TEXT:
         return true;
     case Pid::GLISS_STYLE:
@@ -547,6 +454,12 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
     case Pid::GLISS_EASEIN:
     case Pid::GLISS_EASEOUT:
         return 0;
+    case Pid::GLISS_TEXT:
+        return style().styleV(Sid::glissandoText);
+    case Pid::DIAGONAL:
+        return true;
+    case Pid::ANCHOR:
+        return int(Spanner::Anchor::NOTE);
     default:
         break;
     }

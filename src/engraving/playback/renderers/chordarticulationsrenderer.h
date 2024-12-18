@@ -34,13 +34,8 @@ public:
     static void doRender(const EngravingItem* item, const muse::mpe::ArticulationType type, const RenderingContext& ctx,
                          muse::mpe::PlaybackEventList& result);
 
-    static void renderNote(const Chord* chord, const Note* note, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
-
 private:
     static bool renderChordArticulations(const Chord* chord, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
-    static void doRenderNote(const Chord* chord, const Note* note, NominalNoteCtx&& noteCtx, muse::mpe::PlaybackEventList& result);
-
-    static NominalNoteCtx buildNominalNoteCtx(const Note* note, const RenderingContext& ctx);
 };
 }
 

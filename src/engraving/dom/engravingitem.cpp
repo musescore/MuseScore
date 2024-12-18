@@ -247,7 +247,7 @@ double EngravingItem::spatium() const
 
 bool EngravingItem::isInteractionAvailable() const
 {
-    if (!visible() && (score()->printing() || !score()->isShowInvisible())) {
+    if (!getProperty(Pid::VISIBLE).toBool() && (score()->printing() || !score()->isShowInvisible())) {
         return false;
     }
 
@@ -452,8 +452,15 @@ staff_idx_t EngravingItem::staffIdxOrNextVisible() const
         m = s ? s->measure() : nullptr;
     } else if (parent() && parent()->isMeasure()) {
         m = parent() ? toMeasure(parent()) : nullptr;
-    } else if (isSpanner() || isSpannerSegment()) {
+    } else if (isSpanner()) {
         m = score()->tick2measure(tick());
+    } else if (isSpannerSegment()) {
+        const SpannerSegment* spannerSeg = toSpannerSegment(this);
+        if (spannerSeg->isSingleBeginType()) {
+            m = score()->tick2measure(tick());
+        } else if (spannerSeg->isMiddleType() || spannerSeg->isEndType()) {
+            m = spannerSeg->system() ? spannerSeg->system()->firstMeasure() : nullptr;
+        }
     }
     if (!m || !m->system() || !m->system()->staff(si)) {
         return si;
@@ -615,7 +622,7 @@ Color EngravingItem::color() const
 
 Color EngravingItem::curColor() const
 {
-    return curColor(visible());
+    return curColor(getProperty(Pid::VISIBLE).toBool());
 }
 
 //---------------------------------------------------------
@@ -984,7 +991,7 @@ void EngravingItem::dump() const
          "\n  parent: %p",
          typeName(), ldata->pos().x(), ldata->pos().y(),
          ldata->bbox().x(), ldata->bbox().y(), ldata->bbox().width(), ldata->bbox().height(),
-         abbox().x(), abbox().y(), abbox().width(), abbox().height(),
+         pageBoundingRect().x(), pageBoundingRect().y(), pageBoundingRect().width(), pageBoundingRect().height(),
          explicitParent());
 }
 
@@ -1455,6 +1462,13 @@ PropertyPropagation EngravingItem::propertyPropagation(const EngravingItem* dest
     const Score* sourceScore = score();
     const Score* destinationScore = destinationItem->score();
     const bool isTextProperty = propertyGroup(propertyId) == PropertyGroup::TEXT;
+    const Staff* sourceStaff = staff();
+    const Staff* destinationStaff = destinationItem->staff();
+
+    // Properties must be propagated to items cloned for MMRests
+    if (sourceScore == destinationScore && sourceStaff == destinationStaff) {
+        return PropertyPropagation::PROPAGATE;
+    }
 
     if (propertyGroup(propertyId) != PropertyGroup::TEXT && sourceScore == destinationScore) {
         return PropertyPropagation::NONE;
@@ -2712,6 +2726,7 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
         case ElementType::WHAMMY_BAR_SEGMENT:
         case ElementType::SLUR_SEGMENT:
         case ElementType::TIE_SEGMENT:
+        case ElementType::LAISSEZ_VIB_SEGMENT:
             return sh;
         case ElementType::CHORD:
         case ElementType::REST:
@@ -2786,7 +2801,7 @@ void EngravingItem::LayoutData::setWidthDebugHook(double w)
 void EngravingItem::LayoutData::dump(std::stringstream& ss) const
 {
     ss << "\n";
-    ss << m_item->typeName() << " id: " << m_item->eid().id() << "\n";
+    ss << m_item->typeName() << " id: " << m_item->eid().toStdString() << "\n";
 
     ss << "skip: " << (m_isSkipDraw ? "yes" : "no") << "\n";
     ss << "mag: " << m_mag << "\n";

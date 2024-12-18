@@ -21,8 +21,10 @@
  */
 #include "allocator.h"
 
+#include <algorithm>
 #include <cstdlib>
 #include <iostream>
+#include <set>
 #include <sstream>
 
 #include "stringutils.h"

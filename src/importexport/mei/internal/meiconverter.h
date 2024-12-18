@@ -34,6 +34,7 @@
 
 #include "thirdparty/libmei/cmn.h"
 #include "thirdparty/libmei/cmnornaments.h"
+#include "thirdparty/libmei/fingering.h"
 #include "thirdparty/libmei/harmony.h"
 #include "thirdparty/libmei/shared.h"
 
@@ -213,6 +214,9 @@ public:
     static void fermataFromMEI(engraving::Fermata* fermata, const libmei::Fermata& meiFermata, bool& warning);
     static libmei::Fermata fermataToMEI(const engraving::Fermata* fermata);
 
+    static void fingFromMEI(engraving::Fingering* fing, const muse::StringList& meiLines, const libmei::Fing& meiFing, bool& warning);
+    static libmei::Fing fingToMEI(const engraving::Fingering* fing, StringList& meiLines);
+
     static std::pair<bool, engraving::NoteType> gracegrpFromMEI(const libmei::graceGrpLog_ATTACH meiAttach,
                                                                 const libmei::data_GRACE meiGrace, bool& warning);
     static std::pair<libmei::graceGrpLog_ATTACH, libmei::data_GRACE> gracegrpToMEI(bool isAfter, engraving::NoteType noteType);
@@ -223,8 +227,10 @@ public:
     static void harmFromMEI(engraving::Harmony* harmony, const muse::StringList& meiLines, const libmei::Harm& meiHarm, bool& warning);
     static libmei::Harm harmToMEI(const engraving::Harmony* harmony, muse::StringList& meiLines);
 
-    static void lvFromMEI(engraving::Articulation* lv, const libmei::Lv& meiLv, bool& warning);
-    static libmei::Lv lvToMEI(const engraving::Articulation* lv);
+    static void layerIdentFromMEI(engraving::EngravingItem* item, const libmei::Element& meiElement);
+    static void layerIdentToMEI(const engraving::EngravingItem* item, libmei::Element& meiElement);
+
+    static void lvFromMEI(engraving::LaissezVib* lv, const libmei::Lv& meiLv, bool& warning);
 
     static void jumpFromMEI(engraving::Jump* jump, const libmei::RepeatMark& meiRepeatMark, bool& warning);
     static libmei::RepeatMark jumpToMEI(const engraving::Jump* jump, muse::String& text);
@@ -269,7 +275,7 @@ public:
     static engraving::PlacementV placeFromMEI(const libmei::data_STAFFREL meiPlace, bool& warning);
     static libmei::data_STAFFREL placeToMEI(engraving::PlacementV place);
 
-    static engraving::DirectionV directionFromMEI(const libmei::data_STAFFREL meiPlace, bool& warning);
+    static engraving::DirectionV directionFromMEI(const libmei::data_STAFFREL meiPlace);
     static libmei::data_STAFFREL directionToMEI(engraving::DirectionV direction);
 
     static void slurFromMEI(engraving::SlurTie* slur, const libmei::Slur& meiSlur, bool& warning);
@@ -280,6 +286,8 @@ public:
 
     static StaffStruct staffFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
     static libmei::StaffDef staffToMEI(const engraving::Staff* staff);
+
+    static void staffIdentToMEI(const engraving::EngravingItem* item, libmei::Element& meiElement);
 
     static std::pair<engraving::DirectionV, bool> stemFromMEI(const libmei::AttStems& meiStemsAtt, bool& warning);
     static std::pair<libmei::data_STEMDIRECTION, double> stemToMEI(const engraving::DirectionV direction, bool noStem);

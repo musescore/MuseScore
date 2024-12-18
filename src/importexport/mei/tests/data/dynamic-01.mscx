@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -33,6 +33,7 @@
         <trackName></trackName>
         <instrumentId>wind.reed.oboe</instrumentId>
         <Channel>
+          <program value="68"/>
           </Channel>
         </Instrument>
       </Part>
@@ -104,6 +105,7 @@
           <Dynamic>
             <subtype>sfz</subtype>
             <velocity>112</velocity>
+            <voiceAssignment>currentVoiceOnly</voiceAssignment>
             </Dynamic>
           <Chord>
             <durationType>eighth</durationType>
@@ -124,6 +126,7 @@
           <Dynamic>
             <subtype>pp</subtype>
             <velocity>33</velocity>
+            <direction>down</direction>
             </Dynamic>
           <Chord>
             <durationType>whole</durationType>

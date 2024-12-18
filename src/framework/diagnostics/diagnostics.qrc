@@ -9,5 +9,9 @@
         <file>qml/Muse/Diagnostics/DiagnosticAccessiblePanel.qml</file>
         <file>qml/Muse/Diagnostics/DiagnosticProfilerDialog.qml</file>
         <file>qml/Muse/Diagnostics/DiagnosticProfilerPanel.qml</file>
+        <file>qml/Muse/Diagnostics/DiagnosticGraphicsInfoDialog.qml</file>
+        <file>qml/Muse/Diagnostics/DiagnosticGraphicsInfoPanel.qml</file>
+        <file>qml/Muse/Diagnostics/DiagnosticActionsDialog.qml</file>
+        <file>qml/Muse/Diagnostics/DiagnosticActionsPanel.qml</file>
     </qresource>
 </RCC>

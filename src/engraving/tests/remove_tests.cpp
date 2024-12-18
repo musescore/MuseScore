@@ -94,7 +94,7 @@ TEST_F(Engraving_RemoveTests, removeStaff)
     EXPECT_TRUE(score);
 
     // Remove the second staff and see what happens
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving remove tests"));
     score->cmdRemoveStaff(1);
     score->endCmd(false, /*layoutAllParts = */ true);
 

@@ -84,6 +84,9 @@ public:
     virtual Color unlinkedColor() const = 0;
     virtual muse::async::Channel<Color> unlinkedColorChanged() const = 0;
 
+    virtual Color frameColor() const = 0;
+    virtual muse::async::Channel<Color> frameColorChanged() const = 0;
+
     virtual Color highlightSelectionColor(voice_idx_t voiceIndex = 0) const = 0;
 
     struct DebuggingOptions {
@@ -115,6 +118,9 @@ public:
     virtual muse::async::Notification debuggingOptionsChanged() const = 0;
 
     virtual bool isAccessibleEnabled() const = 0;
+
+    virtual bool doNotSaveEIDsForBackCompat() const = 0;
+    virtual void setDoNotSaveEIDsForBackCompat(bool doNotSave) = 0;
 
     /// these configurations will be removed after solving https://github.com/musescore/MuseScore/issues/14294
     virtual bool guitarProImportExperimental() const = 0;

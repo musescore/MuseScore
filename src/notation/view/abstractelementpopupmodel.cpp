@@ -79,16 +79,16 @@ INotationUndoStackPtr AbstractElementPopupModel::undoStack() const
     return currentNotation() ? currentNotation()->undoStack() : nullptr;
 }
 
-void AbstractElementPopupModel::beginCommand()
+void AbstractElementPopupModel::beginCommand(const muse::TranslatableString& actionName)
 {
     if (undoStack()) {
-        undoStack()->prepareChanges();
+        undoStack()->prepareChanges(actionName);
     }
 }
 
-void AbstractElementPopupModel::beginMultiCommands()
+void AbstractElementPopupModel::beginMultiCommands(const muse::TranslatableString& actionName)
 {
-    beginCommand();
+    beginCommand(actionName);
 
     if (undoStack()) {
         undoStack()->lock();
@@ -136,7 +136,7 @@ void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const 
         flags = mu::engraving::PropertyFlags::UNSTYLED;
     }
 
-    beginCommand();
+    beginCommand(muse::TranslatableString("undoableAction", "Edit element property"));
     m_item->undoChangeProperty(id, value, flags);
     endCommand();
     updateNotation();
@@ -148,7 +148,7 @@ void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const 
         return;
     }
 
-    beginCommand();
+    beginCommand(muse::TranslatableString("undoableAction", "Edit element property"));
     m_item->undoChangeProperty(id, value, flags);
     endCommand();
     updateNotation();

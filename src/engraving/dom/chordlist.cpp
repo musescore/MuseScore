@@ -1662,7 +1662,7 @@ void ChordList::configureAutoAdjust(double emag, double eadjust, double mmag, do
 //   read
 //---------------------------------------------------------
 
-void ChordList::read(XmlReader& e)
+void ChordList::read(XmlReader& e, int mscVersion)
 {
     int fontIdx = static_cast<int>(fonts.size());
     m_autoAdjust = false;
@@ -1687,6 +1687,9 @@ void ChordList::read(XmlReader& e)
                     if (!code.empty()) {
                         bool ok = true;
                         char32_t val = code.toUInt(&ok, 0);
+                        if (!ok && mscVersion >= 400 && mscVersion < 440) {
+                            val = code.toUInt(&ok, 16);
+                        }
                         if (!ok) {
                             cs.code = 0;
                             cs.value = code;
@@ -1848,10 +1851,10 @@ bool ChordList::read(IODevice* device)
 
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
-            // String version = e.attribute(String("version"));
-            // StringList sl = version.split('.');
-            // int _mscVersion = sl[0].toInt() * 100 + sl[1].toInt();
-            read(e);
+            const String version = e.attribute("version");
+            const StringList sl = version.split(u'.');
+            const int mscVersion = sl.size() == 2 ? sl[0].toInt() * 100 + sl[1].toInt() : 0;
+            read(e, mscVersion);
             return true;
         }
     }

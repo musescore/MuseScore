@@ -23,7 +23,9 @@
 #ifndef MU_BRAILLE_BRAILLEINPUTPARSER_H
 #define MU_BRAILLE_BRAILLEINPUTPARSER_H
 
+#include <map>
 #include <string>
+#include <vector>
 
 namespace mu::engraving {
 class braille_code;

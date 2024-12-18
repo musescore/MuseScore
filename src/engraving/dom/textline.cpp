@@ -244,7 +244,7 @@ Sid TextLine::getPropertyStyle(Pid pid) const
 //   propertyDefault
 //---------------------------------------------------------
 
-engraving::PropertyValue TextLine::propertyDefault(Pid propertyId) const
+PropertyValue TextLine::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::PLACEMENT:
@@ -279,12 +279,22 @@ engraving::PropertyValue TextLine::propertyDefault(Pid propertyId) const
 }
 
 //---------------------------------------------------------
+//   allowTimeAnchor
+//---------------------------------------------------------
+bool TextLine::allowTimeAnchor() const
+{
+    return !(anchor() == Spanner::Anchor::NOTE);
+}
+
+//---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
 bool TextLine::setProperty(Pid id, const engraving::PropertyValue& v)
 {
     switch (id) {
+    case Pid::PLAY:
+        break;
     case Pid::PLACEMENT:
         setPlacement(v.value<PlacementV>());
         break;
@@ -293,6 +303,21 @@ bool TextLine::setProperty(Pid id, const engraving::PropertyValue& v)
     }
     triggerLayout();
     return true;
+}
+
+//---------------------------------------------------------
+//   getProperty
+//---------------------------------------------------------
+
+PropertyValue TextLine::getProperty(Pid id) const
+{
+    switch (id) {
+    case Pid::PLAY:
+        return PropertyValue();
+    default:
+        break;
+    }
+    return TextLineBase::getProperty(id);
 }
 
 //---------------------------------------------------------

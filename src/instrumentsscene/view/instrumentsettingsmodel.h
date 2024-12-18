@@ -28,8 +28,6 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "notation/iselectinstrumentscenario.h"
-#include "global/iinteractive.h"
 
 #include "notation/notationtypes.h"
 
@@ -38,9 +36,7 @@ class InstrumentSettingsModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
     INJECT(context::IGlobalContext, context)
-    INJECT(muse::IInteractive, interactive)
 
     Q_PROPERTY(QString instrumentName READ instrumentName WRITE setInstrumentName NOTIFY dataChanged)
     Q_PROPERTY(QString abbreviature READ abbreviature WRITE setAbbreviature NOTIFY dataChanged)
@@ -51,8 +47,6 @@ public:
     explicit InstrumentSettingsModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load(const QVariant& instrument);
-    Q_INVOKABLE void replaceInstrument();
-    Q_INVOKABLE void resetAllFormatting();
 
     QString instrumentName() const;
     QString abbreviature() const;
@@ -71,7 +65,6 @@ private:
     notation::INotationPtr currentNotation() const;
     notation::INotationPtr currentMasterNotation() const;
     notation::INotationPartsPtr notationParts() const;
-    notation::INotationPartsPtr masterNotationParts() const;
 
     notation::InstrumentKey m_instrumentKey;
     QString m_instrumentName;

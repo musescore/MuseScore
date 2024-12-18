@@ -483,7 +483,8 @@ void TRead::read(TempoText* t, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
-        if (tag == "tempo") {
+        if (readProperty(t, tag, e, ctx, Pid::PLAY)) {
+        } else if (tag == "tempo") {
             t->setTempo(TConv::fromXml(e.readAsciiText(), Constants::DEFAULT_TEMPO));
         } else if (tag == "followText") {
             t->setFollowText(e.readInt());
@@ -1567,7 +1568,7 @@ void TRead::read(Beam* b, XmlReader& e, ReadContext& ctx)
             b->setGrowRight(e.readDouble());
         } else if (tag == "Fragment") {
             BeamFragment* f = new BeamFragment;
-            int idx = (b->beamDirection() == DirectionV::AUTO || b->beamDirection() == DirectionV::DOWN) ? 0 : 1;
+            int idx = (b->direction() == DirectionV::AUTO || b->direction() == DirectionV::DOWN) ? 0 : 1;
             b->setUserModified(true);
             double _spatium = b->spatium();
             while (e.readNextStartElement()) {
@@ -2661,7 +2662,6 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
         ctx.addSpanner(e.intAttribute("id", -1), g);
     }
 
-    g->setShowText(false);
     staff_idx_t staffIdx = track2staff(ctx.track());
     Staff* staff = ctx.score()->staff(staffIdx);
     if (staff) {
@@ -2669,7 +2669,6 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
         g->setIsHarpGliss(instrId == "harp");
     }
     g->resetProperty(Pid::GLISS_STYLE);
-
     g->setShowText(false);
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
@@ -2889,7 +2888,6 @@ void TRead::read(LayoutBreak* b, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
-    b->init();
 }
 
 void TRead::read(LedgerLine* l, XmlReader& e, ReadContext& ctx)
@@ -3052,6 +3050,9 @@ void TRead::read(MMRest* r, XmlReader& e, ReadContext& ctx)
             NoteDot* dot = Factory::createNoteDot(r);
             TRead::read(dot, e, ctx);
             r->add(dot);
+        } else if (tag == "mmRestNumberPos") {
+            // Old property, deprecated in 4.5
+            r->setNumberOffset(e.readDouble() - ctx.style().styleS(Sid::mmRestNumberPos).val());
         } else if (TRead::readStyledProperty(r, tag, e, ctx)) {
         } else if (readProperties(r, e, ctx)) {
         } else {
@@ -3773,7 +3774,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "hideSystemBarLine") {
         s->setHideSystemBarLine(e.readInt());
     } else if (tag == "mergeMatchingRests") {
-        s->setMergeMatchingRests(e.readInt());
+        s->setMergeMatchingRests(e.readInt() ? AutoOnOff::ON : AutoOnOff::AUTO);
     } else if (tag == "isStaffVisible") {
         s->setVisible(e.readBool());
     } else if (tag == "keylist") {
@@ -3865,7 +3866,7 @@ bool TRead::readProperties(Stem* s, XmlReader& e, ReadContext& ctx)
     if (tag == "userLen" && s->score()->mscVersion() < 400) {
         // Ignore stem length pre-4.0
         e.skipCurrentElement();
-        s->setUserLength(Millimetre(0.0));
+        s->setUserLength(Spatium(0));
     } else if (TRead::readProperty(s, tag, e, ctx, Pid::USER_LEN)) {
     } else if (TRead::readStyledProperty(s, tag, e, ctx)) {
     } else if (readItemProperties(s, e, ctx)) {
@@ -4153,8 +4154,8 @@ void TRead::read(TremoloCompat& t, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Fragment") {
             if (t.two) {
                 BeamFragment f = BeamFragment();
-                int idx = (t.two->direction() == DirectionV::AUTO || t.two->direction() == DirectionV::DOWN) ? 0 : 1;
-                t.two->setUserModified(t.two->direction(), true);
+                int idx = t.two->directionIdx();
+                t.two->setUserModified(true);
                 double _spatium = t.two->spatium();
                 while (e.readNextStartElement()) {
                     const AsciiStringView tag1(e.name());

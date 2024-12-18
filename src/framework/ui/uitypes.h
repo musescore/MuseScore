@@ -31,6 +31,18 @@
 #include "workspace/workspacetypes.h"
 
 namespace muse::ui {
+//! NOTE Same as QSGRendererInterface::Api
+enum class GraphicsApi {
+    Default,
+    Software,
+    OpenVG,
+    OpenGL,
+    Direct3D11,
+    Vulkan,
+    Metal,
+    Null
+};
+
 using ThemeCode = std::string;
 
 inline ThemeCode themeCodeFromString(const QString& str)

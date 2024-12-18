@@ -122,7 +122,7 @@ Fraction DurationElement::actualTicks() const
 void DurationElement::readAddTuplet(Tuplet* t)
 {
     setTuplet(t);
-    if (!score()->undoStack()->active()) {     // HACK, also added in Undo::AddElement()
+    if (!score()->undoStack()->hasActiveCommand()) { // HACK, also added in Undo::AddElement()
         t->add(this);
     }
 }

@@ -26,10 +26,7 @@ export MACOSX_DEPLOYMENT_TARGET=10.14
 
 # Install build tools
 echo "Install build tools"
-
-rm '/usr/local/bin/2to3' # fixing install python 3.9 error (it is a dependency for ninja)
-brew install ninja pkg-config --quiet
-brew install cmake --formula --quiet
+brew install cmake ninja --formula --quiet
 
 # Download dependencies
 echo "Download dependencies"
@@ -45,7 +42,8 @@ echo "Download Qt $QT_SHORT_VERSION"
 export QT_PATH=$HOME/Qt/$QT_SHORT_VERSION/
 export PATH=$PATH:$QT_PATH/macos/bin
 echo "PATH=$PATH" >> $GITHUB_ENV
-wget -nv -O qt.7z https://s3.amazonaws.com/utils.musescore.org/Qt624_mac.7z
+# r2 - added websocket support
+wget -nv -O qt.7z https://s3.amazonaws.com/utils.musescore.org/Qt624_mac_r2.7z
 mkdir -p $QT_PATH
 7z x -y qt.7z -o$QT_PATH
 rm qt.7z

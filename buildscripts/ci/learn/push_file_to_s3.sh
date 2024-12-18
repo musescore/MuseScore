@@ -38,7 +38,7 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
-sudo bash ./buildscripts/ci/tools/s3_install.sh --s3_key ${S3_KEY} --s3_secret ${S3_SECRET}
+bash ./buildscripts/ci/tools/s3_install.sh --s3_key ${S3_KEY} --s3_secret ${S3_SECRET}
 
 echo "=== Publish to S3 ==="
 

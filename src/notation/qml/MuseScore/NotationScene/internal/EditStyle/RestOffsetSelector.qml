@@ -21,6 +21,7 @@
  */
 
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.NotationScene 1.0
 import Muse.UiComponents 1.0
@@ -34,21 +35,37 @@ Rectangle {
         id: restsPageModel
     }
 
-    RadioButtonGroup {
-        model: [
-            { text: qsTrc("notation", "1 space"), value: false },
-            { text: qsTrc("notation", "2 spaces"), value: true }
-        ]
+    Column {
+        anchors.fill: parent
+        spacing: 12
 
-        delegate: FlatRadioButton {
-            width: 106
-            height: 30
+        RadioButtonGroup {
+            model: [
+                { text: qsTrc("notation", "1 space"), value: false },
+                { text: qsTrc("notation", "2 spaces"), value: true }
+            ]
 
-            checked: modelData.value === restsPageModel.multiVoiceRestTwoSpaceOffset.value
-            text: modelData.text
+            delegate: FlatRadioButton {
+                width: 106
+                height: 30
 
-            onToggled: {
-                restsPageModel.multiVoiceRestTwoSpaceOffset.value = modelData.value
+                checked: modelData.value === restsPageModel.multiVoiceRestTwoSpaceOffset.value
+                text: modelData.text
+
+                onToggled: {
+                    restsPageModel.multiVoiceRestTwoSpaceOffset.value = modelData.value
+                }
+            }
+        }
+
+        CheckBox {
+            id: mergeMatchingRestsCheckbox
+            text: qsTrc("notation", "Merge matching rests")
+            checked: restsPageModel.mergeMatchingRests.value
+            width: parent.width
+
+            onClicked: {
+                restsPageModel.mergeMatchingRests.value = !mergeMatchingRestsCheckbox.checked
             }
         }
     }

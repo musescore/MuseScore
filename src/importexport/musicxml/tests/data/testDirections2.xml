@@ -77,7 +77,7 @@
           <line>2</line>
           </clef>
         </attributes>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <words font-weight="bold" font-size="12">Lento</words>
           </direction-type>
@@ -95,7 +95,7 @@
         <duration>4</duration>
         <voice>1</voice>
         </note>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <words font-weight="bold" font-size="12">Andante</words>
           </direction-type>

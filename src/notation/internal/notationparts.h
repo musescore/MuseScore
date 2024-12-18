@@ -71,7 +71,8 @@ public:
     void insertPart(Part* part, size_t index) override;
 
     void replacePart(const muse::ID& partId, Part* newPart) override;
-    void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) override;
+    void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument,
+                           const StaffType* newStaffType = nullptr) override;
     void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset, bool undoable = true) override;
 
     muse::async::Notification partsChanged() const override;
@@ -83,7 +84,7 @@ protected:
 
     Part* partModifiable(const muse::ID& partId) const;
 
-    void startEdit();
+    void startEdit(const muse::TranslatableString& actionName);
     void apply();
     void rollback();
 

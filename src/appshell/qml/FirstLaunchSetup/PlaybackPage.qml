@@ -29,14 +29,14 @@ import MuseScore.AppShell 1.0
 
 Page {
     title: qsTrc("appshell/gettingstarted", "Playback")
-    explanation: qsTrc("appshell/gettingstarted", "Enjoy realistic playback for free by downloading our new Muse Sounds library")
+    explanation: qsTrc("appshell/gettingstarted", "Discover new sound libraries in MuseHub and enjoy realistic score playback")
 
     titleContentSpacing: 12
 
     extraButtonTitle: qsTrc("appshell/gettingstarted", "Watch video")
 
     onExtraButtonClicked: {
-        Qt.openUrlExternally("https://youtu.be/n7UgN69e2Y8")
+        Qt.openUrlExternally("https://youtu.be/L8OdWHOjL8c")
     }
 
     Image {
@@ -46,7 +46,7 @@ Page {
         source: "resources/MuseSounds.png"
         sourceSize: Qt.size(width * Screen.devicePixelRatio, height * Screen.devicePixelRatio)
 
-        layer.enabled: true
+        layer.enabled: ui.isEffectsAllowed
         layer.effect: EffectOpacityMask {
             maskSource: Rectangle {
                 width: image.width

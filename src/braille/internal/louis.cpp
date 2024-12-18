@@ -20,13 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
 #include <sstream>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <vector>
+
+#include <QString>
 
 #include "braille/thirdparty/liblouis/liblouis/internal.h"
 #include "braille/thirdparty/liblouis/liblouis/liblouis.h"

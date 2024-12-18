@@ -552,7 +552,7 @@ Err importBB(MasterScore* score, const QString& name)
         ++n;
     }
 
-    foreach (Staff* staff, score->staves()) {
+    for (Staff* staff : score->staves()) {
         Fraction tick = Fraction(0, 1);
         KeySigEvent ke;
         Key key = Key(bb.key());
@@ -923,7 +923,7 @@ void BBTrack::cleanup()
     // quantize
     //
     int lastTick = 0;
-    foreach (const Event& e, _events) {
+    for (const Event& e : _events) {
         if (e.type() != ME_NOTE) {
             continue;
         }

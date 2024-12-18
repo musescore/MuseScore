@@ -319,7 +319,7 @@ void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx)
         painter.drawTiledPixmap(bg, wallpaper, bg.topLeft() - PointF(lrint(ctx.xOffset), lrint(ctx.yOffset)));
     }
 
-    Color color = engravingConfiguration()->formattingColor();
+    Color color = engravingConfiguration()->invisibleColor();
 
     // Draw measure text number
     // TODO: simplify (no Text element)

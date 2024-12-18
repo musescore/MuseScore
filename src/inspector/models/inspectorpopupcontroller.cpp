@@ -22,7 +22,7 @@
 
 #include "inspectorpopupcontroller.h"
 
-#include <QApplication>
+#include <QGuiApplication>
 #include <QWindow>
 
 #include "uicomponents/view/popupview.h"
@@ -44,7 +44,7 @@ InspectorPopupController::~InspectorPopupController()
 
 void InspectorPopupController::load()
 {
-    connect(qApp, &QApplication::applicationStateChanged, this, [this](Qt::ApplicationState state) {
+    connect(qApp, &QGuiApplication::applicationStateChanged, this, [this](Qt::ApplicationState state) {
         if (state != Qt::ApplicationActive) {
             //! NOTE If the application became inactive
             //! due to opening a color selection dialog,

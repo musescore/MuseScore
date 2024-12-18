@@ -22,6 +22,7 @@
 #include "dataformatter.h"
 
 #include "translation.h"
+#include "types/datetime.h"
 
 using namespace muse;
 

@@ -75,8 +75,12 @@ public:
     void initStyle();
 
     LineSegment* createLineSegment(System* parent) override;
+
+    bool allowTimeAnchor() const override;
+
     PropertyValue propertyDefault(Pid) const override;
-    bool setProperty(Pid propertyId, const PropertyValue&) override;
+    bool setProperty(Pid id, const PropertyValue&) override;
+    PropertyValue getProperty(Pid id) const override;
 };
 } // namespace mu::engraving
 #endif

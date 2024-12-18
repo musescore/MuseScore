@@ -148,6 +148,8 @@ Item {
             TreeView {
                 id: instrumentsTreeView
 
+                readonly property real delegateHeight: 38
+
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -181,6 +183,17 @@ Item {
                         }
                     }
                     flickable.returnToBounds();
+                }
+
+                function scrollToFocusedItem(focusedIndex) {
+                    let targetScrollPosition = focusedIndex * instrumentsTreeView.delegateHeight
+                    let visibleAreaEnd = flickable.contentY + flickable.height
+
+                    if (targetScrollPosition + instrumentsTreeView.delegateHeight > visibleAreaEnd) {
+                        flickable.contentY = Math.min(targetScrollPosition + instrumentsTreeView.delegateHeight - flickable.height, flickable.contentHeight - flickable.height)
+                    } else if (targetScrollPosition < flickable.contentY) {
+                        flickable.contentY = Math.max(targetScrollPosition, 0)
+                    }
                 }
 
                 property NavigationPanel navigationTreePanel : NavigationPanel {
@@ -219,7 +232,7 @@ Item {
                     backgroundColor: "transparent"
 
                     rowDelegate: Item {
-                        height: 38
+                        height: instrumentsTreeView.delegateHeight
                         width: parent.width
                     }
                 }
@@ -227,13 +240,10 @@ Item {
                 itemDelegate: DropArea {
                     id: dropArea
 
-
                     Loader {
                         id: treeItemDelegateLoader
 
-                        property var item: model ? model.itemRole : null
                         property int delegateType: model ? model.itemRole.type : InstrumentsTreeItemType.UNDEFINED
-                        property bool isSelected: model ? model.itemRole.isSelected : false
 
                         height: parent.height
                         width: parent.width
@@ -246,7 +256,7 @@ Item {
 
                             InstrumentsTreeItemDelegate {
                                 treeView: instrumentsTreeView
-                                item: treeItemDelegateLoader.item
+                                item: model ? model.itemRole : null
                                 originalParent: treeItemDelegateLoader
 
                                 sideMargin: contentColumn.sideMargin
@@ -258,6 +268,7 @@ Item {
                                 navigation.onActiveChanged: {
                                     if (navigation.active) {
                                         prv.currentItemNavigationName = navigation.name
+                                        instrumentsTreeView.scrollToFocusedItem(model.index)
                                     }
                                 }
 
@@ -317,7 +328,7 @@ Item {
                             id: controlItemDelegateComponent
 
                             InstrumentsTreeItemControl {
-                                isSelected: treeItemDelegateLoader.isSelected
+                                isSelected: model ? model.itemRole.isSelected : false
 
                                 navigation.panel: instrumentsTreeView.navigationTreePanel
                                 navigation.row: model ? model.index : 0

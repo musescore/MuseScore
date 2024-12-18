@@ -148,7 +148,7 @@ void BarlineSettingsModel::applySpanPreset(const int presetType)
 
 void BarlineSettingsModel::setSpanIntervalAsStaffDefault()
 {
-    undoStack()->prepareChanges();
+    undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Set barline span interval as staff default"));
 
     std::vector<mu::engraving::EngravingItem*> staves;
 

@@ -19644,12 +19644,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5049"/>
         <source>Strings - Plucked</source>
-        <translation>Струнні - щипкові</translation>
+        <translation>Струнні — щипкові</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5923"/>
         <source>Strings - Bowed</source>
-        <translation>Струнні - смичкові</translation>
+        <translation>Струнні — смичкові</translation>
     </message>
 </context>
 <context>
@@ -19800,12 +19800,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="44"/>
         <source>Saxophone Quartet</source>
-        <translation type="unfinished"/>
+        <translation>Квартет саксофонів</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="45"/>
         <source>Brass Quartet</source>
-        <translation type="unfinished"/>
+        <translation>Квартет мідних духових</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="46"/>
@@ -19905,17 +19905,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="70"/>
         <source>Classical Orchestra</source>
-        <translation type="unfinished"/>
+        <translation>Класичний оркестр</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="71"/>
         <source>Symphony Orchestra</source>
-        <translation type="unfinished"/>
+        <translation>Симфонічний оркестр</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="72"/>
         <source>String Orchestra</source>
-        <translation type="unfinished"/>
+        <translation>Струнний оркестр</translation>
     </message>
 </context>
 <context>

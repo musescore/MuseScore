@@ -29,9 +29,6 @@
 #include "types.h"
 
 namespace mu::engraving {
-// the amount of white space to leave before a system-initial chord with glissando
-static const double GLISS_STARTOFSYSTEM_WIDTH = 4;           // in sp
-
 class Glissando;
 class Note;
 enum class GlissandoType;
@@ -83,7 +80,6 @@ public:
     Glissando(const Glissando&);
 
     static Note* guessInitialNote(Chord* chord);
-    static Note* guessFinalNote(Chord* chord, Note* startNote);
 
     const TranslatableString& glissandoTypeName() const;
 
@@ -95,12 +91,13 @@ public:
 
     LineSegment* createLineSegment(System* parent) override;
 
+    bool allowTimeAnchor() const override { return false; }
+
     // property/style methods
     Sid getPropertyStyle(Pid id) const override;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
-    void addLineAttachPoints();
 
     static bool pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffsets);
 

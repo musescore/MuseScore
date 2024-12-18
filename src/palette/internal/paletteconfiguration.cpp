@@ -36,6 +36,7 @@ static const std::string MODULE_NAME("palette");
 static const Settings::Key PALETTE_SCALE(MODULE_NAME, "application/paletteScale");
 static const Settings::Key PALETTE_USE_SINGLE(MODULE_NAME, "application/useSinglePalette");
 static const Settings::Key IS_SINGLE_CLICK_TO_OPEN_PALETTE(MODULE_NAME, "application/singleClickToOpenPalette");
+static const Settings::Key IS_PALETTE_DRAG_ENABLED(MODULE_NAME, "application/paletteDragEnabled");
 
 void PaletteConfiguration::init()
 {
@@ -55,6 +56,13 @@ void PaletteConfiguration::init()
     m_isSingleClickToOpenPalette.val = settings()->value(IS_SINGLE_CLICK_TO_OPEN_PALETTE).toBool();
     settings()->valueChanged(IS_SINGLE_CLICK_TO_OPEN_PALETTE).onReceive(this, [this](const Val& newValue) {
         m_isSingleClickToOpenPalette.set(newValue.toBool());
+    });
+
+    settings()->setDefaultValue(IS_PALETTE_DRAG_ENABLED, Val(true));
+
+    m_isPaletteDragEnabled.val = settings()->value(IS_PALETTE_DRAG_ENABLED).toBool();
+    settings()->valueChanged(IS_PALETTE_DRAG_ENABLED).onReceive(this, [this](const Val& newValue) {
+        m_isPaletteDragEnabled.set(newValue.toBool());
     });
 }
 
@@ -95,6 +103,16 @@ ValCh<bool> PaletteConfiguration::isSingleClickToOpenPalette() const
 void PaletteConfiguration::setIsSingleClickToOpenPalette(bool isSingleClick)
 {
     settings()->setSharedValue(IS_SINGLE_CLICK_TO_OPEN_PALETTE, Val(isSingleClick));
+}
+
+ValCh<bool> PaletteConfiguration::isPaletteDragEnabled() const
+{
+    return m_isPaletteDragEnabled;
+}
+
+void PaletteConfiguration::setIsPaletteDragEnabled(bool enabled)
+{
+    settings()->setSharedValue(IS_PALETTE_DRAG_ENABLED, Val(enabled));
 }
 
 QColor PaletteConfiguration::elementsBackgroundColor() const

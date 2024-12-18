@@ -160,6 +160,9 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/keylist.h
     ${CMAKE_CURRENT_LIST_DIR}/keysig.cpp
     ${CMAKE_CURRENT_LIST_DIR}/keysig.h
+    ${CMAKE_CURRENT_LIST_DIR}/laissezvib.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/laissezvib.h
+    ${CMAKE_CURRENT_LIST_DIR}/lasso.cpp
     ${CMAKE_CURRENT_LIST_DIR}/lasso.cpp
     ${CMAKE_CURRENT_LIST_DIR}/lasso.h
     ${CMAKE_CURRENT_LIST_DIR}/layoutbreak.cpp
@@ -314,6 +317,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/symbol.h
     ${CMAKE_CURRENT_LIST_DIR}/synthesizerstate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/synthesizerstate.h
+    ${CMAKE_CURRENT_LIST_DIR}/systemlock.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/systemlock.h
     ${CMAKE_CURRENT_LIST_DIR}/system.cpp
     ${CMAKE_CURRENT_LIST_DIR}/system.h
     ${CMAKE_CURRENT_LIST_DIR}/systemdivider.cpp

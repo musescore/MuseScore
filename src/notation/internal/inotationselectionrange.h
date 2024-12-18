@@ -33,9 +33,11 @@ public:
     virtual ~INotationSelectionRange() = default;
 
     virtual engraving::staff_idx_t startStaffIndex() const = 0;
+    virtual engraving::Segment* rangeStartSegment() const = 0;
     virtual Fraction startTick() const = 0;
 
     virtual engraving::staff_idx_t endStaffIndex() const = 0;
+    virtual engraving::Segment* rangeEndSegment() const = 0;
     virtual Fraction endTick() const = 0;
 
     struct MeasureRange {

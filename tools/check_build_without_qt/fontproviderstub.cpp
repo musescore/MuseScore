@@ -23,7 +23,7 @@ double FontProviderStub::height(const Font&) const
     return 0.0;
 }
 
-double FontProviderStub::capHeight(const Font& f) const
+double FontProviderStub::capHeight(const Font&) const
 {
     return 0.0;
 }

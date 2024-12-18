@@ -45,10 +45,10 @@ include_directories(
 
 set(THIRDPARTY_DIR ${MU_ROOT}/thirdparty)
 
-add_definitions(
-    -DNO_QT_SUPPORT
-    -DNO_ENGRAVING_INTERACTIVE
-    -DNO_ENGRAVING_QSVGRENDER
+add_compile_definitions(
+    NO_QT_SUPPORT
+    NO_ENGRAVING_INTERACTIVE
+    NO_ENGRAVING_QSVGRENDER
 )
 
 set(NO_ENGRAVING_INTERNAL ON)

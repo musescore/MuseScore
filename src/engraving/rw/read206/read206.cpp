@@ -69,6 +69,7 @@
 #include "dom/measurenumber.h"
 #include "dom/measurerepeat.h"
 #include "dom/mmrest.h"
+#include "dom/noteline.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"
 #include "dom/page.h"
@@ -1069,8 +1070,9 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
             if (sp->isTie()) {
                 note->setTieBack(toTie(sp));
             } else {
-                if (sp->isGlissando() && note->explicitParent() && note->explicitParent()->isChord()) {
-                    toChord(note->explicitParent())->setEndsGlissandoOrGuitarBend(true);
+                bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
+                if ((sp->isGlissando() || isNoteAnchoredTextLine) && note->explicitParent() && note->explicitParent()->isChord()) {
+                    toChord(note->explicitParent())->setEndsNoteAnchoredLine(true);
                 }
                 note->addSpannerBack(sp);
             }
@@ -2054,6 +2056,11 @@ static void readVolta206(XmlReader& e, ReadContext& ctx, Volta* volta)
         } else if (!readTextLineProperties(e, ctx, volta)) {
             e.unknown();
         }
+    }
+    if (volta->anchor() != Volta::VOLTA_ANCHOR) {
+        // Volta strictly assumes that its anchor is measure, so don't let old scores override this.
+        LOGW("Correcting volta anchor type from %d to %d", int(volta->anchor()), int(Volta::VOLTA_ANCHOR));
+        volta->setAnchor(Volta::VOLTA_ANCHOR);
     }
     adjustPlacement(volta);
 }

@@ -86,7 +86,7 @@ FocusScope {
         border.color: ui.theme.strokeColor
         border.width: Math.max(ui.theme.borderWidth, 1)
 
-        layer.enabled: true
+        layer.enabled: ui.isEffectsAllowed
         layer.effect: EffectOpacityMask {
             maskSource: Item {
                 width: backgroundRect.width

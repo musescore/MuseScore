@@ -36,6 +36,7 @@ class ModifyDom
 {
 public:
 
+    static void setCrossMeasure(const Measure* measure, LayoutContext& ctx);
     static void connectTremolo(Measure* m);
     static void cmdUpdateNotes(const Measure* measure, const DomAccessor& dom);
     static void createStems(const Measure* measure, LayoutContext& ctx);

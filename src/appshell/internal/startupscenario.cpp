@@ -22,6 +22,8 @@
 
 #include "startupscenario.h"
 
+#include <QCoreApplication>
+
 #include "async/async.h"
 #include "translation.h"
 #include "log.h"

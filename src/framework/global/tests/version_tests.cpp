@@ -21,6 +21,7 @@
  */
 #include <gtest/gtest.h>
 
+#include "types/string.h"
 #include "types/version.h"
 
 using namespace muse;

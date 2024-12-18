@@ -32,6 +32,7 @@
                      <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
                         <label>Violine</label>
                         <labelAbbr>Vl.</labelAbbr>
+                        <instrDef midi.instrnum="40" />
                         <clef shape="G" line="2" />
                      </staffDef>
                   </staffGrp>

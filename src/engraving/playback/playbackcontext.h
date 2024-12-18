@@ -32,6 +32,7 @@ namespace mu::engraving {
 class EngravingItem;
 class Segment;
 class Dynamic;
+class Hairpin;
 class PlayTechAnnotation;
 class SoundFlag;
 class Score;
@@ -78,6 +79,7 @@ private:
 
     void handleSpanners(const ID partId, const Score* score, const int segmentStartTick, const int segmentEndTick,
                         const int tickPositionOffset);
+    void handleHairpin(const Hairpin* hairpin, const int tickPositionOffset);
     void handleSegmentAnnotations(const ID partId, const Segment* segment, const int segmentPositionTick);
     void handleSegmentElements(const Segment* segment, const int segmentPositionTick,
                                std::vector<const MeasureRepeat*>& foundMeasureRepeats);

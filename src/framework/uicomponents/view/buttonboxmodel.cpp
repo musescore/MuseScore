@@ -108,7 +108,7 @@ const std::vector <ButtonBoxModel::ButtonRole>& ButtonBoxModel::chooseButtonLayo
     if (m_buttonLayout != ButtonLayout::UnknownLayout) {
         index = static_cast<size_t>(m_buttonLayout);
     } else {
-#if defined (Q_OS_OSX)
+#if defined (Q_OS_MACOS)
         index = 1;
 #elif defined (Q_OS_LINUX) || defined (Q_OS_UNIX) || defined(Q_OS_FREEBSD)
         index = 2;

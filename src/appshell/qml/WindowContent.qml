@@ -37,7 +37,12 @@ DockWindow {
 
     objectName: "WindowContent"
 
-    property var interactiveProvider: InteractiveProvider {
+    onPageLoaded: {
+        interactiveProvider.onPageOpened()
+    }
+
+    InteractiveProvider {
+        id: interactiveProvider
         topParent: root
 
         onRequestedDockPage: function(uri, params) {
@@ -45,12 +50,8 @@ DockWindow {
         }
     }
 
-    onPageLoaded: {
-        root.interactiveProvider.onPageOpened()
-    }
-
-    property NavigationSection topToolKeyNavSec: NavigationSection {
-        id: keynavSec
+    NavigationSection {
+        id: topToolbarKeyNavSec
         name: "TopTool"
         order: 1
     }
@@ -67,7 +68,7 @@ DockWindow {
 
             MainToolBar {
                 id: toolBar
-                navigation.section: root.topToolKeyNavSec
+                navigation.section: topToolbarKeyNavSec
                 navigation.order: 1
 
                 currentUri: root.currentPageUri
@@ -95,11 +96,11 @@ DockWindow {
         },
 
         NotationPage {
-            topToolKeyNavSec: root.topToolKeyNavSec
+            topToolbarKeyNavSec: topToolbarKeyNavSec
         },
 
         PublishPage {
-            topToolKeyNavSec: root.topToolKeyNavSec
+            topToolbarKeyNavSec: topToolbarKeyNavSec
         },
 
         DevToolsPage {}

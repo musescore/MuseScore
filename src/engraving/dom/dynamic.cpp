@@ -333,7 +333,7 @@ bool Dynamic::isEditAllowed(EditData& ed) const
 
 void Dynamic::manageBarlineCollisions()
 {
-    if (!_avoidBarLines || score()->nstaves() <= 1 || anchorToEndOfPrevious()) {
+    if (!_avoidBarLines || score()->nstaves() <= 1 || anchorToEndOfPrevious() || !isStyled(Pid::OFFSET)) {
         return;
     }
 
@@ -403,6 +403,7 @@ void Dynamic::manageBarlineCollisions()
             break;
         }
     }
+
     if (rightBarLineSegment) {
         EngravingItem* e = rightBarLineSegment->elementAt(barLineStaff * VOICES);
         if (e) {

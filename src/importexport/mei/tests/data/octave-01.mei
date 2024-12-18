@@ -34,6 +34,7 @@
                      <staffGrp bar.thru="true" symbol="brace">
                         <label>Piano</label>
                         <labelAbbr>Pno.</labelAbbr>
+                        <instrDef midi.instrnum="0" />
                         <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
                            <clef shape="G" line="2" />
                         </staffDef>
@@ -58,7 +59,7 @@
                            <mRest xml:id="s2l1_t0_1" />
                         </layer>
                      </staff>
-                     <octave xml:id="m1ot1" dis="8" dis.place="above" startid="#s1l1_t1_2" endid="#s1l1_t5_4" />
+                     <octave xml:id="m1ot1" staff="1" dis="8" dis.place="above" startid="#s1l1_t1_2" endid="#s1l1_t5_4" />
                   </measure>
                   <measure xml:id="m2" n="2">
                      <staff xml:id="m2s1" n="1">
@@ -74,7 +75,7 @@
                            <mRest xml:id="s2l1_t1_1" />
                         </layer>
                      </staff>
-                     <octave xml:id="m2ot1" dis="15" dis.place="above" startid="#s1l1_t3_2" lform="solid" endid="#s1l1_t5_2" />
+                     <octave xml:id="m2ot1" staff="1" dis="15" dis.place="above" startid="#s1l1_t3_2" lform="solid" endid="#s1l1_t5_2" />
                   </measure>
                   <measure xml:id="m3" n="3">
                      <staff xml:id="m3s1" n="1">
@@ -104,7 +105,7 @@
                            <note xml:id="s2l1_t15_4" dur="4" pname="d" oct="3" oct.ges="2" />
                         </layer>
                      </staff>
-                     <octave xml:id="m4ot1" dis="8" dis.place="below" startid="#s2l1_t7_2" lform="dotted" endid="#s2l1_t17_4" />
+                     <octave xml:id="m4ot1" staff="2" dis="8" dis.place="below" startid="#s2l1_t7_2" lform="dotted" endid="#s2l1_t17_4" />
                   </measure>
                   <measure xml:id="m5" n="5">
                      <staff xml:id="m5s1" n="1">
@@ -120,7 +121,7 @@
                            <note xml:id="s2l1_t19_4" dur="4" pname="g" oct="3" oct.ges="1" />
                         </layer>
                      </staff>
-                     <octave xml:id="m5ot1" dis="15" dis.place="below" startid="#s2l1_t9_2" lendsym="none" endid="#s2l1_t11_2" />
+                     <octave xml:id="m5ot1" staff="2" dis="15" dis.place="below" startid="#s2l1_t9_2" lendsym="none" endid="#s2l1_t11_2" />
                   </measure>
                   <measure xml:id="m6" n="6">
                      <staff xml:id="m6s1" n="1">
@@ -149,8 +150,8 @@
                            <rest xml:id="s2l1_t13_2" dur="2" />
                         </layer>
                      </staff>
-                     <octave xml:id="m7ot1" dis="22" dis.place="above" startid="#s1l1_t6_1" extender="false" endid="#s1l1_t13_2" />
-                     <octave xml:id="m7ot2" dis="22" dis.place="below" startid="#s2l1_t6_1" endid="#s2l1_t13_2" />
+                     <octave xml:id="m7ot1" staff="1" dis="22" dis.place="above" startid="#s1l1_t6_1" extender="false" endid="#s1l1_t13_2" />
+                     <octave xml:id="m7ot2" staff="2" dis="22" dis.place="below" startid="#s2l1_t6_1" endid="#s2l1_t13_2" />
                   </measure>
                </section>
             </score>

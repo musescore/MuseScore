@@ -37,6 +37,7 @@ class TremoloTwoChord;
 class TremoloSingleChord;
 
 class SoundFlag;
+class SystemLock;
 
 class Factory
 {
@@ -111,9 +112,15 @@ public:
     static KeySig* copyKeySig(const KeySig& src);
     static std::shared_ptr<KeySig> makeKeySig(Segment* parent);
 
+    static LaissezVib* createLaissezVib(Note* parent, bool isAccessibleEnabled = true);
+    static LaissezVib* copyLaissezVib(const LaissezVib& src);
+
     static LayoutBreak* createLayoutBreak(MeasureBase* parent, bool isAccessibleEnabled = true);
     static LayoutBreak* copyLayoutBreak(const LayoutBreak& src);
     static std::shared_ptr<LayoutBreak> makeLayoutBreak(MeasureBase* parent);
+
+    static SystemLockIndicator* createSystemLockIndicator(System* parent, const SystemLock* lock, bool isAccessibleEnabled = true);
+    static SystemLockIndicator* copySystemLockIndicator(const SystemLockIndicator& src);
 
     static Lyrics* createLyrics(ChordRest* parent, bool isAccessibleEnabled = true);
     static Lyrics* copyLyrics(const Lyrics& src);
@@ -131,6 +138,9 @@ public:
     static NoteDot* createNoteDot(Note* parent, bool isAccessibleEnabled = true);
     static NoteDot* createNoteDot(Rest* parent, bool isAccessibleEnabled = true);
     static NoteDot* copyNoteDot(const NoteDot& src);
+
+    static NoteLine* createNoteLine(Note* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<NoteLine> makeNoteLine(Note* parent);
 
     static Page* createPage(RootItem* parent, bool isAccessibleEnabled = true);
 

@@ -77,7 +77,8 @@ public:
     virtual void insertPart(Part* part, size_t index) = 0;
 
     virtual void replacePart(const muse::ID& partId, Part* newPart) = 0;
-    virtual void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) = 0;
+    virtual void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument,
+                                   const StaffType* newStaffType = nullptr) = 0;
     virtual void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset, bool undoable = true) = 0;
 
     virtual muse::async::Notification partsChanged() const = 0;

@@ -1,4 +1,5 @@
-name: 'Build: All'
+name: "Build: All"
+run-name: "Build: All - ${{ inputs.build_mode }}"
 
 on:
   workflow_dispatch:

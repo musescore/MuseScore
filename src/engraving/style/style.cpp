@@ -189,8 +189,14 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::TIE_PLACEMENT:
                 set(idx, TConv::fromXml(e.readAsciiText(), TiePlacement::AUTO));
                 break;
+            case P_TYPE::TIE_DOTS_PLACEMENT:
+                set(idx, TConv::fromXml(e.readAsciiText(), TieDotsPlacement::AUTO));
+                break;
             case P_TYPE::GLISS_STYLE:
                 set(idx, GlissandoStyle(e.readText().toInt()));
+                break;
+            case P_TYPE::GLISS_TYPE:
+                set(idx, GlissandoType(e.readText().toInt()));
                 break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
@@ -519,6 +525,11 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
         }
     }
 
+    if (m_version < 450) {
+        // Doesn't exist before 4.5. Default to false for compatibility.
+        set(Sid::scaleRythmicSpacingForSmallNotes, false);
+    }
+
     if (m_version < 420 && !MScore::testMode) {
         // This style didn't exist before version 4.2. For files older than 4.2, defaults
         // to INSIDE for compatibility. For files 4.2 and newer, defaults to OUTSIDE.
@@ -568,6 +579,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tagProperty(st.name(), value(idx));
         } else if (P_TYPE::TIE_PLACEMENT == type) {
             xml.tag(st.name(), TConv::toXml(value(idx).value<TiePlacement>()));
+        } else if (P_TYPE::TIE_DOTS_PLACEMENT == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<TieDotsPlacement>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility
@@ -578,7 +591,7 @@ void MStyle::save(XmlWriter& xml, bool optimize)
         }
     }
 
-    xml.tag("Spatium", value(Sid::spatium).toReal() / DPMM);
+    xml.tag("spatium", value(Sid::spatium).toReal() / DPMM);
     xml.endElement();
 }
 

@@ -30,7 +30,6 @@
 #include "notationviewstate.h"
 #include "notationsolomutestate.h"
 #include "notationinteraction.h"
-#include "notationplayback.h"
 #include "notationundostack.h"
 #include "notationstyle.h"
 #include "notationelements.h"

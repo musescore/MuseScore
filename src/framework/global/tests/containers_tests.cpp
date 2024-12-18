@@ -21,6 +21,11 @@
  */
 #include <gtest/gtest.h>
 
+#include <map>
+#include <string>
+#include <utility>
+#include <vector>
+
 #include "containers.h"
 
 using namespace muse;

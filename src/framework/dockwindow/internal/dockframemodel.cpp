@@ -25,6 +25,7 @@
 #include <QQuickItem>
 #include <QApplication>
 
+#include "private/TitleBar_p.h"
 #include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
 #include "uicomponents/view/abstractmenumodel.h"
 
@@ -93,6 +94,11 @@ QVariantList DockFrameModel::tabs() const
     return result;
 }
 
+QQmlComponent* DockFrameModel::titleBar() const
+{
+    return m_titleBar;
+}
+
 bool DockFrameModel::titleBarVisible() const
 {
     return m_titleBarVisible;
@@ -139,6 +145,7 @@ void DockFrameModel::listenChangesInFrame()
                                  && (properties.location == Location::Top || properties.location == Location::Bottom);
         setIsHorizontalPanel(isHorizontalPanel);
 
+        updateTitleBar();
         bool visible = (allDocks.size() == 1) && (properties.type == DockType::Panel) && (properties.floatable || properties.closable);
         setTitleBarVisible(visible);
 
@@ -184,6 +191,21 @@ void DockFrameModel::updateNavigationSection()
     if (m_navigationSection != n) {
         m_navigationSection = n;
         emit navigationSectionChanged();
+    }
+}
+
+QQmlComponent* DockFrameModel::currentTitleBar() const
+{
+    QQmlComponent* titleBar = currentDockProperty(TITLEBAR_PROPERTY).value<QQmlComponent*>();
+    return titleBar;
+}
+
+void DockFrameModel::updateTitleBar()
+{
+    QQmlComponent* tb = currentTitleBar();
+    if (m_titleBar != tb) {
+        m_titleBar = tb;
+        emit titleBarChanged();
     }
 }
 

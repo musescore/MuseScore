@@ -140,7 +140,7 @@ Item {
 
                         fillMode: Image.PreserveAspectCrop
 
-                        layer.enabled: true
+                        layer.enabled: ui.isEffectsAllowed
                         layer.effect: EffectOpacityMask {
                             maskSource: Rectangle {
                                 width: avatar.width

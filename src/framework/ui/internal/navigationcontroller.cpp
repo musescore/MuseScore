@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <limits>
 
-#include <QApplication>
+#include <QCoreApplication>
 #include <QWindow>
 #include <QTextStream>
 

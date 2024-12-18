@@ -110,6 +110,8 @@ void DockWindow::componentComplete()
 
     connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
     connect(this, &QQuickItem::windowChanged, this, &DockWindow::windowPropertyChanged);
+
+    connect(this, &QQuickItem::widthChanged, this, &DockWindow::adjustContentForAvailableSpace);
 }
 
 void DockWindow::geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry)
@@ -216,6 +218,11 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
     bool ok = doLoadPage(uri, params);
     if (!ok) {
         return;
+    }
+
+    if (checkLayoutIsCorrupted()) {
+        LOGE() << "Layout is corrupted, restoring default";
+        restoreDefaultLayout();
     }
 
     auto notifyAboutPageLoaded = [this, &uri]() {
@@ -579,6 +586,23 @@ bool DockWindow::restoreLayout(const QByteArray& layout, bool restoreRelativeToM
     return layoutSaver.restoreLayout(layout);
 }
 
+bool DockWindow::checkLayoutIsCorrupted() const
+{
+    TRACEFUNC;
+
+    for (const DockBase* dock : m_currentPage->allDocks()) {
+        if (!dock) {
+            continue;
+        }
+
+        if (!dock->floatable() && dock->floating()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 QByteArray DockWindow::windowState() const
 {
     TRACEFUNC;
@@ -639,6 +663,70 @@ void DockWindow::initDocks(DockPageView* page)
             alignTopLevelToolBars(page);
         }, Qt::UniqueConnection);
     }
+}
+
+void DockWindow::adjustContentForAvailableSpace()
+{
+    if (!m_currentPage) {
+        return;
+    }
+
+    int spaceWidth = width();
+
+    auto adjustDocks = [&spaceWidth](QList<DockBase*> docks) {
+        int width = 0;
+        for (DockBase* dock : docks) {
+            width += dock->contentWidth();
+        }
+
+        docks.erase(std::remove_if(docks.begin(), docks.end(), [](const DockBase* dock){
+            return dock->compactPriorityOrder() == -1;
+        }), docks.end());
+
+        if (docks.empty()) {
+            return;
+        }
+
+        std::sort(docks.begin(), docks.end(), [](const DockBase* dock1, DockBase* dock2) {
+            return dock1->compactPriorityOrder() < dock2->compactPriorityOrder();
+        });
+
+        if (width >= spaceWidth) {
+            for (DockBase* dock : docks) {
+                if (!dock->isCompact()) {
+                    dock->setIsCompact(true);
+
+                    //! NOTE: as soon as we have compacted the first found dock - we finish the work so that the view is redrawn
+                    break;
+                }
+            }
+        } else {
+            for (int i = docks.size() - 1; i >= 0; i--) {
+                DockBase* dock = docks.at(i);
+                if (!dock->isCompact()) {
+                    continue;
+                }
+
+                int actualWidth = dock->contentWidth();
+                int nonCompactWidth = dock->nonCompactWidth();
+                if (width - actualWidth + nonCompactWidth < spaceWidth) {
+                    dock->setIsCompact(false);
+                }
+
+                break;
+            }
+        }
+    };
+
+    QList<DockBase*> topLevelToolBarsDocks;
+
+    for (DockToolBarView* toolBar : topLevelToolBars(m_currentPage)) {
+        if (!toolBar->dockWidget()->isFloating()) {
+            topLevelToolBarsDocks << toolBar;
+        }
+    }
+
+    adjustDocks(topLevelToolBarsDocks);
 }
 
 void DockWindow::notifyAboutDocksOpenStatus()

@@ -230,8 +230,8 @@ Ret MscLoader::readMasterScore(MasterScore* score, XmlReader& e, bool ignoreVers
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
-            const String& version = e.attribute("version");
-            StringList sl = version.split('.');
+            const String version = e.attribute("version");
+            const StringList sl = version.split(u'.');
             score->setMscVersion(sl[0].toInt() * 100 + sl[1].toInt());
 
             RetVal<IReaderPtr> reader = makeReader(score->mscVersion(), ignoreVersionError);

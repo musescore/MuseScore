@@ -48,7 +48,7 @@
           <line>2</line>
           </clef>
         </attributes>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -64,7 +64,7 @@
         </note>
       </measure>
     <measure number="2">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <words font-weight="bold" font-size="12">Andante</words>
           </direction-type>

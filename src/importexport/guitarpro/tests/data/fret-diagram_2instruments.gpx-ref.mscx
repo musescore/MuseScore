@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
@@ -76,6 +76,10 @@
           </StringData>
         <Channel>
           <program value="24"/>
+          <controller ctrl="7" value="95"/>
+          </Channel>
+        <Channel name="harmony">
+          <program value="0"/>
           <controller ctrl="7" value="95"/>
           </Channel>
         </Instrument>
@@ -160,6 +164,10 @@
             <subtype>mf</subtype>
             <velocity>80</velocity>
             </Dynamic>
+          <Harmony>
+            <root>18</root>
+            <name>m</name>
+            </Harmony>
           <Chord>
             <durationType>whole</durationType>
             <Note>
@@ -175,6 +183,10 @@
         </Measure>
       <Measure>
         <voice>
+          <Harmony>
+            <root>17</root>
+            <name>m</name>
+            </Harmony>
           <Chord>
             <durationType>whole</durationType>
             <Note>
@@ -190,6 +202,10 @@
         </Measure>
       <Measure>
         <voice>
+          <Harmony>
+            <root>18</root>
+            <name>m</name>
+            </Harmony>
           <Chord>
             <durationType>whole</durationType>
             <Note>

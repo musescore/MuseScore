@@ -54,7 +54,32 @@ static bool soundFlagPlayable(const SoundFlag* flag)
     return false;
 }
 
-static mu::engraving::DynamicType findEndDynamicType(const Hairpin* hairpin)
+static mu::engraving::DynamicType findNominalStartDynamicType(const Hairpin* hairpin)
+{
+    return hairpin->dynamicTypeFrom();
+}
+
+static dynamic_level_t findNominalStartDynamicLevel(const Hairpin* hairpin)
+{
+    mu::engraving::DynamicType type = findNominalStartDynamicType(hairpin);
+
+    if (isOrdinaryDynamicType(type)) {
+        return dynamicLevelFromOrdinaryType(type);
+    }
+
+    if (isSingleNoteDynamicType(type)) {
+        return dynamicLevelFromSingleNoteType(type);
+    }
+
+    if (isCompoundDynamicType(type)) {
+        const CompoundDynamic& transition = compoundDynamicFromType(type);
+        return dynamicLevelFromOrdinaryType(transition.to);
+    }
+
+    return NATURAL_DYNAMIC_LEVEL;
+}
+
+static mu::engraving::DynamicType findNominalEndDynamicType(const Hairpin* hairpin)
 {
     const mu::engraving::DynamicType textDynamicType = hairpin->dynamicTypeTo();
     if (textDynamicType != mu::engraving::DynamicType::OTHER) {
@@ -78,17 +103,37 @@ static mu::engraving::DynamicType findEndDynamicType(const Hairpin* hairpin)
     return toDynamic(snappedItem)->dynamicType();
 }
 
+static dynamic_level_t findNominalEndDynamicLevel(const Hairpin* hairpin)
+{
+    mu::engraving::DynamicType type = findNominalEndDynamicType(hairpin);
+
+    if (isOrdinaryDynamicType(type)) {
+        return dynamicLevelFromOrdinaryType(type);
+    }
+
+    if (isSingleNoteDynamicType(type)) {
+        return dynamicLevelFromSingleNoteType(type);
+    }
+
+    if (isCompoundDynamicType(type)) {
+        const CompoundDynamic& transition = compoundDynamicFromType(type);
+        return dynamicLevelFromOrdinaryType(transition.from);
+    }
+
+    return NATURAL_DYNAMIC_LEVEL;
+}
+
 dynamic_level_t PlaybackContext::appliableDynamicLevel(const track_idx_t trackIdx, const int nominalPositionTick) const
 {
     auto dynamicsIt = m_dynamicsByTrack.find(trackIdx);
     if (dynamicsIt == m_dynamicsByTrack.end()) {
-        return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+        return NATURAL_DYNAMIC_LEVEL;
     }
 
     const DynamicMap& dynamics = dynamicsIt->second;
     auto it = muse::findLessOrEqual(dynamics, nominalPositionTick);
     if (it == dynamics.end()) {
-        return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+        return NATURAL_DYNAMIC_LEVEL;
     }
 
     return it->second.level;
@@ -254,13 +299,13 @@ void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* se
     const DynamicType type = dynamic->dynamicType();
 
     if (isOrdinaryDynamicType(type)) {
-        applyDynamic(dynamic, dynamicLevelFromType(type), segmentPositionTick);
+        applyDynamic(dynamic, dynamicLevelFromOrdinaryType(type), segmentPositionTick);
         return;
     }
 
     if (isSingleNoteDynamicType(type)) {
         mpe::dynamic_level_t prevDynamicLevel = appliableDynamicLevel(dynamic->track(), segmentPositionTick);
-        applyDynamic(dynamic, dynamicLevelFromType(type), segmentPositionTick);
+        applyDynamic(dynamic, dynamicLevelFromSingleNoteType(type), segmentPositionTick);
 
         if (segment->next()) {
             int tickPositionOffset = segmentPositionTick - segment->tick().ticks();
@@ -271,21 +316,23 @@ void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* se
         return;
     }
 
-    const DynamicTransition& transition = dynamicTransitionFromType(type);
-    const int transitionDuration = dynamic->velocityChangeLength().ticks();
+    if (isCompoundDynamicType(type)) {
+        const CompoundDynamic& transition = compoundDynamicFromType(type);
+        const int transitionDuration = dynamic->velocityChangeLength().ticks();
 
-    dynamic_level_t levelFrom = dynamicLevelFromType(transition.from);
-    dynamic_level_t levelTo = dynamicLevelFromType(transition.to);
+        dynamic_level_t levelFrom = dynamicLevelFromOrdinaryType(transition.from);
+        dynamic_level_t levelTo = dynamicLevelFromOrdinaryType(transition.to);
 
-    dynamic_level_t range = levelTo - levelFrom;
+        dynamic_level_t range = levelTo - levelFrom;
 
-    std::map<int, int> dynamicsCurve = TConv::easingValueCurve(transitionDuration,
-                                                               6 /*stepsCount*/,
-                                                               static_cast<int>(range),
-                                                               ChangeMethod::NORMAL);
+        std::map<int, int> dynamicsCurve = TConv::easingValueCurve(transitionDuration,
+                                                                   6 /*stepsCount*/,
+                                                                   static_cast<int>(range),
+                                                                   ChangeMethod::NORMAL);
 
-    for (const auto& pair : dynamicsCurve) {
-        applyDynamic(dynamic, levelFrom + pair.second, segmentPositionTick + pair.first);
+        for (const auto& pair : dynamicsCurve) {
+            applyDynamic(dynamic, levelFrom + pair.second, segmentPositionTick + pair.first);
+        }
     }
 }
 
@@ -394,77 +441,86 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
             continue; // ignore linked staves
         }
 
-        int spannerFrom = spanner->tick().ticks();
-        int spannerTo = spannerFrom + std::abs(spanner->ticks().ticks());
+        handleHairpin(toHairpin(spanner), tickPositionOffset);
+    }
+}
 
-        const Hairpin* hairpin = toHairpin(spanner);
-        const track_idx_t trackIdx = hairpin->track();
+void PlaybackContext::handleHairpin(const Hairpin* hairpin, const int tickPositionOffset)
+{
+    int spannerFrom = hairpin->tick().ticks();
+    int spannerTo = spannerFrom + std::abs(hairpin->ticks().ticks());
 
-        {
-            const Segment* startSegment = hairpin->startSegment();
-            const Dynamic* startDynamic = startSegment
-                                          ? toDynamic(startSegment->findAnnotation(ElementType::DYNAMIC, trackIdx, trackIdx))
-                                          : nullptr;
-            if (startDynamic) {
-                const DynamicType dynamicType = startDynamic->dynamicType();
+    const track_idx_t trackIdx = hairpin->track();
 
-                if (dynamicType != DynamicType::OTHER
-                    && !isOrdinaryDynamicType(dynamicType)
-                    && !isSingleNoteDynamicType(dynamicType)) {
-                    // The hairpin starts with a transition dynamic; we should start the hairpin after the transition is complete
-                    // This solution should be replaced once we have better infrastructure to see relations between Dynamics and Hairpins.
-                    spannerFrom += startDynamic->velocityChangeLength().ticks();
-                }
+    // --- Check start tick
+    {
+        const Segment* startSegment = hairpin->startSegment();
+        const Dynamic* startDynamic = startSegment
+                                      ? toDynamic(startSegment->findAnnotation(ElementType::DYNAMIC, trackIdx, trackIdx))
+                                      : nullptr;
+        if (startDynamic) {
+            const DynamicType dynamicType = startDynamic->dynamicType();
+
+            if (dynamicType != DynamicType::OTHER
+                && !isOrdinaryDynamicType(dynamicType)
+                && !isSingleNoteDynamicType(dynamicType)) {
+                // The hairpin starts with a compound dynamic; we should start the hairpin after the transition is complete
+                // This solution should be replaced once we have better infrastructure to see relations between Dynamics and Hairpins.
+                spannerFrom += startDynamic->velocityChangeLength().ticks();
             }
         }
+    }
 
-        const DynamicType dynamicTypeFrom = hairpin->dynamicTypeFrom();
-        const DynamicType dynamicTypeTo = findEndDynamicType(hairpin);
+    // --- Determine levelFrom
+    const dynamic_level_t nominalLevelFrom = findNominalStartDynamicLevel(hairpin);
+    const bool hasNominalLevelFrom = nominalLevelFrom != NATURAL_DYNAMIC_LEVEL;
 
-        const dynamic_level_t nominalLevelTo = dynamicLevelFromType(dynamicTypeTo);
-        const bool hasNominalLevelTo = nominalLevelTo != mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+    // If the hairpin has no specific start level, use the currently-applicable level at the start tick of the hairpin
+    const dynamic_level_t levelFrom
+        = hasNominalLevelFrom ? nominalLevelFrom : appliableDynamicLevel(trackIdx, spannerFrom + tickPositionOffset);
 
-        if (hasNominalLevelTo) {
-            const dynamic_level_t dynamicLevelAtEndTick = nominalDynamicLevel(trackIdx, spannerTo + tickPositionOffset);
-            if (dynamicLevelAtEndTick != nominalLevelTo) {
-                // Fix overlap with the following dynamic by subtracting a small fraction
-                spannerTo -= Fraction::eps().ticks();
-            }
-        }
+    // --- Determine levelTo
+    const dynamic_level_t nominalLevelTo = findNominalEndDynamicLevel(hairpin);
+    const bool hasNominalLevelTo = nominalLevelTo != NATURAL_DYNAMIC_LEVEL;
 
-        const int spannerDurationTicks = spannerTo - spannerFrom;
-        if (spannerDurationTicks <= 0) {
-            continue;
-        }
+    // If there is an end dynamic marking, check if it matches the 'direction' of the hairpin (cresc. vs decresc.)
+    const bool isCrescendo = hairpin->isCrescendo();
+    const bool useNominalLevelTo = hasNominalLevelTo && (isCrescendo
+                                                         ? nominalLevelTo > levelFrom
+                                                         : nominalLevelTo < levelFrom);
 
-        // For the start level, use the currently-applicable level at the start tick of the hairpin
-        const dynamic_level_t levelFrom
-            = dynamicLevelFromType(dynamicTypeFrom, appliableDynamicLevel(trackIdx, spannerFrom + tickPositionOffset));
+    const dynamic_level_t levelTo = useNominalLevelTo
+                                    ? nominalLevelTo
+                                    : levelFrom + (isCrescendo ? mpe::DYNAMIC_LEVEL_STEP : -mpe::DYNAMIC_LEVEL_STEP);
 
-        // If there is an end dynamic marking, check if it matches the 'direction' of the hairpin (cresc. vs decresc.)
-        const bool isCrescendo = hairpin->isCrescendo();
-        const bool useNominalLevelTo = hasNominalLevelTo && (isCrescendo
-                                                             ? nominalLevelTo > levelFrom
-                                                             : nominalLevelTo < levelFrom);
+    // --- Check end tick
+    const dynamic_level_t dynamicLevelAtEndTick = nominalDynamicLevel(trackIdx, spannerTo + tickPositionOffset);
+    const bool hasDynamicAtEndTick = dynamicLevelAtEndTick != NATURAL_DYNAMIC_LEVEL;
 
-        const dynamic_level_t levelTo = useNominalLevelTo
-                                        ? nominalLevelTo
-                                        : levelFrom + (isCrescendo ? mpe::DYNAMIC_LEVEL_STEP : -mpe::DYNAMIC_LEVEL_STEP);
+    if (hasDynamicAtEndTick && dynamicLevelAtEndTick != levelTo) {
+        // Fix overlap with the following dynamic by subtracting a small fraction
+        spannerTo -= Fraction::eps().ticks();
+    }
 
-        std::map<int, int> dynamicsCurve = TConv::easingValueCurve(spannerDurationTicks,
-                                                                   24 /*stepsCount*/,
-                                                                   static_cast<int>(levelTo - levelFrom),
-                                                                   hairpin->veloChangeMethod());
+    const int spannerDurationTicks = spannerTo - spannerFrom;
+    if (spannerDurationTicks <= 0) {
+        return;
+    }
 
-        for (const auto& pair : dynamicsCurve) {
-            applyDynamic(hairpin, levelFrom + pair.second, spannerFrom + pair.first + tickPositionOffset);
-        }
+    // --- Render
+    std::map<int, int> dynamicsCurve = TConv::easingValueCurve(spannerDurationTicks,
+                                                               24 /*stepsCount*/,
+                                                               static_cast<int>(levelTo - levelFrom),
+                                                               hairpin->veloChangeMethod());
 
-        if (hasNominalLevelTo && !useNominalLevelTo) {
-            // If there is a dynamic at the end of the hairpin that we couldn't use because it didn't match the direction of the hairpin,
-            // insert that dynamic directly after the hairpin
-            applyDynamic(hairpin, nominalLevelTo, spannerTo + tickPositionOffset);
-        }
+    for (const auto& pair : dynamicsCurve) {
+        applyDynamic(hairpin, levelFrom + pair.second, spannerFrom + pair.first + tickPositionOffset);
+    }
+
+    if (hasNominalLevelTo && !useNominalLevelTo && !hasDynamicAtEndTick) {
+        // If there is a dynamic at the end of the hairpin that we couldn't use because it didn't match the direction of the hairpin,
+        // insert that dynamic directly after the hairpin
+        applyDynamic(hairpin, nominalLevelTo, spannerTo + tickPositionOffset);
     }
 }
 

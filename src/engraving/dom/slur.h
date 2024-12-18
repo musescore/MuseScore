@@ -62,6 +62,10 @@ public:
     void setEndPointOff1(const PointF& p) { m_endPointOff1 = p; }
     void setEndPointOff2(const PointF& p) { m_endPointOff2 = p; }
 
+    double endWidth() const override;
+    double midWidth() const override;
+    double dottedWidth() const override;
+
 protected:
     void changeAnchor(EditData&, EngravingItem*) override;
     double m_extraHeight = 0.0;

@@ -112,6 +112,7 @@ public:
     void setIsExportingAudio(bool exporting) override;
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
+
 private:
     muse::audio::IPlayerPtr currentPlayer() const;
 
@@ -163,8 +164,10 @@ private:
     void toggleAutomaticallyPan();
     void toggleMetronome();
     void toggleMidiInput();
+    void setMidiUseWrittenPitch(bool useWrittenPitch);
     void toggleCountIn();
     void toggleLoopPlayback();
+    void toggleHearPlaybackWhenEditing();
 
     void openPlaybackSetupDialog();
 
@@ -201,6 +204,8 @@ private:
     engraving::InstrumentTrackIdSet availableInstrumentTracks() const;
     void removeNonExistingTracks();
     void removeTrack(const engraving::InstrumentTrackId& instrumentTrackId);
+
+    void onTrackNewlyAdded(const engraving::InstrumentTrackId& instrumentTrackId);
 
     muse::audio::secs_t playedTickToSecs(int tick) const;
 

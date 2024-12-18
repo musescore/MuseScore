@@ -42,20 +42,10 @@ static const double DEFAULT_PIXEL_SIZE = 100.0;
 static const double SYMBOLS_PIXEL_SIZE = 200.0;
 static const double LOADED_PIXEL_SIZE = 200.0;
 
-static const double TEXT_LINE_SCALE = 1.2;
-
-static const int SDF_WIDTH = 64;
-static const int SDF_HEIGHT = 64;
-
 static inline RectF fromFBBox(const FBBox& bb, double scale)
 {
     return RectF(from_f26d6(bb.left()) * scale, from_f26d6(bb.top()) * scale,
                  from_f26d6(bb.width()) * scale, from_f26d6(bb.height()) * scale);
-}
-
-static inline RectF scaleRect(const RectF& r, double scale)
-{
-    return RectF(r.x() * scale, r.y() * scale, r.width() * scale, r.height() * scale);
 }
 
 static const IFontFace* findSubtitutionFont(char32_t ch, const std::vector<IFontFace*>& subtitutionFaces)

@@ -35,6 +35,7 @@ class Uri
 public:
     Uri() = default;
     explicit Uri(const std::string& str);
+    explicit Uri(const muse::String& str);
 
     using Scheme = std::string;
     static const Scheme MuseScore;
@@ -44,6 +45,8 @@ public:
     bool isValid() const;
 
     Scheme scheme() const;
+    void setScheme(const Scheme& scheme);
+
     std::string path() const;
 
     inline bool operator==(const Uri& uri) const { return m_path == uri.m_path && m_scheme == uri.m_scheme; }
@@ -72,10 +75,12 @@ public:
 
     UriQuery() = default;
     explicit UriQuery(const std::string& str);
+    explicit UriQuery(const String& str);
     explicit UriQuery(const Uri& uri);
 
-    const Uri& uri() const;
     bool isValid() const;
+    const Uri& uri() const;
+    void setScheme(const Uri::Scheme& scheme);
 
     const Params& params() const;
     Val param(const std::string& key, const Val& def = Val()) const;
@@ -90,7 +95,7 @@ public:
 
 private:
 
-    void parceParams(const std::string& str, Params& out) const;
+    void parseParams(const std::string& str, Params& out) const;
     void extractQuotedStrings(const std::string& str, std::vector<std::string>& out) const;
 
     Uri m_uri;

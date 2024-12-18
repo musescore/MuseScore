@@ -49,7 +49,7 @@ signals:
     void beamPropertyDropped(engraving::Chord*, engraving::ActionIcon*);
 
 private:
-    void setDropTarget(const engraving::EngravingItem* el) override;
+    void setDropTarget(engraving::EngravingItem* el) override;
 
     void dragEnterEvent(QDragEnterEvent*) override;
     void dragLeaveEvent(QDragLeaveEvent*) override;

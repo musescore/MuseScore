@@ -29,6 +29,7 @@
 #include "global/io/path.h"
 #include "global/types/translatablestring.h"
 #include "ui/uiaction.h"
+#include "ui/view/iconcodes.h"
 #include "shortcuts/shortcutcontext.h"
 
 #include "log.h"
@@ -138,9 +139,12 @@ struct Action {
     Type type = Type::Undefined;
     bool modal = DEFAULT_MODAL;
     String title;
+    ui::IconCode::Code icon = ui::IconCode::Code::NONE;
     String uiCtx = DEFAULT_UI_CONTEXT;
-    bool hidden = false; // hidden from menu, can be called programmatically
-    io::path_t main;
+    bool showOnToolbar = false;
+    bool showOnAppmenu = true;
+    io::path_t path;
+    String func = u"main";
     int apiversion = DEFAULT_API_VERSION;
     bool legacyPlugin = false;
 
@@ -152,11 +156,24 @@ struct Action {
     bool isValid() const { return type != Type::Undefined && !code.empty(); }
 };
 
-inline UriQuery makeUriQuery(const Uri& uri, const std::string& actionCode)
+inline actions::ActionQuery makeActionQuery(const Uri& uri, const std::string& actionCode)
 {
     UriQuery q(uri);
+    q.setScheme("action");
     q.addParam("action", Val(actionCode));
     return q;
+}
+
+inline UriQuery uriQueryFromActionQuery(const actions::ActionQuery& a)
+{
+    UriQuery q(a.toString());
+    q.setScheme("musescore");
+    return q;
+}
+
+inline actions::ActionCode makeActionCode(const Uri& uri, const std::string& extActionCode)
+{
+    return makeActionQuery(uri, extActionCode).toString();
 }
 
 /*
@@ -176,18 +193,6 @@ manifest.json
 }*/
 
 struct Manifest {
-    Uri uri;
-    Type type = Type::Undefined;
-    String title;
-    String description;
-    String category;
-    io::path_t thumbnail;
-    String version;
-    int apiversion = DEFAULT_API_VERSION;
-    bool legacyPlugin = false;
-
-    std::vector<Action> actions;
-
     struct Config {
         std::map<std::string /*action*/, Action::Config> actions;
 
@@ -203,7 +208,21 @@ struct Manifest {
             static Action::Config _dummy;
             return _dummy;
         }
-    } config;
+    };
+
+    Uri uri;
+    Type type = Type::Undefined;
+    String title;
+    String description;
+    String category;
+    io::path_t thumbnail;
+    String version;
+    int apiversion = DEFAULT_API_VERSION;
+    bool legacyPlugin = false;
+
+    std::vector<Action> actions;
+
+    Config config;
 
     bool isValid() const { return type != Type::Undefined && uri.isValid(); }
 

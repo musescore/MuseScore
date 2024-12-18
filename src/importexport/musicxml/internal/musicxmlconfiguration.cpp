@@ -30,15 +30,15 @@ using namespace mu::iex::musicxml;
 
 static const std::string module_name("iex_musicxml");
 
-static const Settings::Key MUSICXML_IMPORT_BREAKS_KEY(module_name, "import/musicXML/importBreaks");
-static const Settings::Key MUSICXML_IMPORT_LAYOUT_KEY(module_name, "import/musicXML/importLayout");
-static const Settings::Key MUSICXML_EXPORT_LAYOUT_KEY(module_name, "export/musicXML/exportLayout");
-static const Settings::Key MUSICXML_EXPORT_MU3_COMPAT_KEY(module_name, "export/musicXML/exportMu3Compat");
-static const Settings::Key MUSICXML_EXPORT_BREAKS_TYPE_KEY(module_name, "export/musicXML/exportBreaks");
-static const Settings::Key MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY(module_name, "export/musicXML/exportInvisibleElements");
+static const Settings::Key MUSICXML_IMPORT_BREAKS_KEY(module_name, "import/musicXml/importBreaks");
+static const Settings::Key MUSICXML_IMPORT_LAYOUT_KEY(module_name, "import/musicXml/importLayout");
+static const Settings::Key MUSICXML_EXPORT_LAYOUT_KEY(module_name, "export/musicXml/exportLayout");
+static const Settings::Key MUSICXML_EXPORT_MU3_COMPAT_KEY(module_name, "export/musicXml/exportMu3Compat");
+static const Settings::Key MUSICXML_EXPORT_BREAKS_TYPE_KEY(module_name, "export/musicXml/exportBreaks");
+static const Settings::Key MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY(module_name, "export/musicXml/exportInvisibleElements");
 static const Settings::Key MIGRATION_APPLY_EDWIN_FOR_XML(module_name, "import/compatibility/apply_edwin_for_xml");
 static const Settings::Key MIGRATION_NOT_ASK_AGAIN_KEY(module_name, "import/compatibility/do_not_ask_me_again");
-static const Settings::Key MUSICXML_IMPORT_INFER_TEXT_TYPE(module_name, "import/musicXML/importInferTextType");
+static const Settings::Key MUSICXML_IMPORT_INFER_TEXT_TYPE(module_name, "import/musicXml/importInferTextType");
 
 void MusicXmlConfiguration::init()
 {
@@ -51,7 +51,7 @@ void MusicXmlConfiguration::init()
                                //: to prevent errors when importing them into MuseScore 3
                                muse::trc("iex_musicxml", "Limit MusicXML export for compatibility with MuseScore 3"));
     settings()->setCanBeManuallyEdited(MUSICXML_EXPORT_MU3_COMPAT_KEY, true);
-    settings()->setDefaultValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(MusicxmlExportBreaksType::All));
+    settings()->setDefaultValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(MusicXmlExportBreaksType::All));
     settings()->setDefaultValue(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY, Val(false));
     settings()->setDescription(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY,
                                muse::trc("iex_musicxml", "Export invisible elements to MusicXML"));
@@ -61,62 +61,62 @@ void MusicXmlConfiguration::init()
     settings()->setDefaultValue(MUSICXML_IMPORT_INFER_TEXT_TYPE, Val(false));
 }
 
-bool MusicXmlConfiguration::musicxmlImportBreaks() const
+bool MusicXmlConfiguration::importBreaks() const
 {
     return settings()->value(MUSICXML_IMPORT_BREAKS_KEY).toBool();
 }
 
-void MusicXmlConfiguration::setMusicxmlImportBreaks(bool value)
+void MusicXmlConfiguration::setImportBreaks(bool value)
 {
     settings()->setSharedValue(MUSICXML_IMPORT_BREAKS_KEY, Val(value));
 }
 
-bool MusicXmlConfiguration::musicxmlImportLayout() const
+bool MusicXmlConfiguration::importLayout() const
 {
     return settings()->value(MUSICXML_IMPORT_LAYOUT_KEY).toBool();
 }
 
-void MusicXmlConfiguration::setMusicxmlImportLayout(bool value)
+void MusicXmlConfiguration::setImportLayout(bool value)
 {
     settings()->setSharedValue(MUSICXML_IMPORT_LAYOUT_KEY, Val(value));
 }
 
-bool MusicXmlConfiguration::musicxmlExportLayout() const
+bool MusicXmlConfiguration::exportLayout() const
 {
     return settings()->value(MUSICXML_EXPORT_LAYOUT_KEY).toBool();
 }
 
-void MusicXmlConfiguration::setMusicxmlExportLayout(bool value)
+void MusicXmlConfiguration::setExportLayout(bool value)
 {
     settings()->setSharedValue(MUSICXML_EXPORT_LAYOUT_KEY, Val(value));
 }
 
-bool MusicXmlConfiguration::musicxmlExportMu3Compat() const
+bool MusicXmlConfiguration::exportMu3Compat() const
 {
     return settings()->value(MUSICXML_EXPORT_MU3_COMPAT_KEY).toBool();
 }
 
-void MusicXmlConfiguration::setMusicxmlExportMu3Compat(bool value)
+void MusicXmlConfiguration::setExportMu3Compat(bool value)
 {
     settings()->setSharedValue(MUSICXML_EXPORT_MU3_COMPAT_KEY, Val(value));
 }
 
-MusicXmlConfiguration::MusicxmlExportBreaksType MusicXmlConfiguration::musicxmlExportBreaksType() const
+MusicXmlConfiguration::MusicXmlExportBreaksType MusicXmlConfiguration::exportBreaksType() const
 {
-    return settings()->value(MUSICXML_EXPORT_BREAKS_TYPE_KEY).toEnum<MusicxmlExportBreaksType>();
+    return settings()->value(MUSICXML_EXPORT_BREAKS_TYPE_KEY).toEnum<MusicXmlExportBreaksType>();
 }
 
-void MusicXmlConfiguration::setMusicxmlExportBreaksType(MusicxmlExportBreaksType breaksType)
+void MusicXmlConfiguration::setExportBreaksType(MusicXmlExportBreaksType breaksType)
 {
     settings()->setSharedValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(breaksType));
 }
 
-bool MusicXmlConfiguration::musicxmlExportInvisibleElements() const
+bool MusicXmlConfiguration::exportInvisibleElements() const
 {
     return settings()->value(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY).toBool();
 }
 
-void MusicXmlConfiguration::setMusicxmlExportInvisibleElements(bool value)
+void MusicXmlConfiguration::setExportInvisibleElements(bool value)
 {
     settings()->setSharedValue(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY, Val(value));
 }

@@ -112,6 +112,10 @@ void CommandLineParser::init()
                                           "Use with '-o <file>.mp3' or with '-j <file>', override the sound profile in the given score(s). "
                                           "Possible values: \"MuseScore Basic\", \"Muse Sounds\"", "sound-profile"));
 
+    m_parser.addOption(QCommandLineOption("transpose",
+                                          "Transpose the given score before executing the '-o' options",
+                                          "options"));
+
     // MusicXML
     m_parser.addOption(QCommandLineOption("musicxml-use-default-font",
                                           "Apply default typeface (Edwin) to imported scores"));
@@ -292,6 +296,11 @@ void CommandLineParser::parse(int argc, char** argv)
             }
             m_options.converterTask.inputFile = scorefiles[0];
             m_options.converterTask.outputFile = fromUserInputPath(m_parser.value("o"));
+
+            // Only if "-o" is set "transpose" has some meaning
+            if (m_parser.isSet("transpose")) {
+                m_options.converterTask.params[CmdOptions::ParamKey::ScoreTransposeOptions] = m_parser.value("transpose");
+            }
         }
     }
 
@@ -360,11 +369,11 @@ void CommandLineParser::parse(int argc, char** argv)
 
     // MusicXML
     if (m_parser.isSet("musicxml-use-default-font")) {
-        m_options.importMusicXML.useDefaultFont = true;
+        m_options.importMusicXml.useDefaultFont = true;
     }
 
     if (m_parser.isSet("musicxml-infer-text-type")) {
-        m_options.importMusicXML.inferTextType = true;
+        m_options.importMusicXml.inferTextType = true;
     }
 
     // Video

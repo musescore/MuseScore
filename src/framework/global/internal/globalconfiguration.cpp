@@ -40,6 +40,7 @@ static const Settings::Key METRIC_UNIT_KEY("global", "application/metricUnit");
 static const Settings::Key HIGH_RESOLUTION_TIMERS("global", "application/highResolutionTimers");
 
 static const std::string MUSESCORE_URL("https://www.musescore.org/");
+static const std::string MUSEHUB_WEB_URL("https://www.musehub.com/");
 
 void GlobalConfiguration::init()
 {
@@ -172,6 +173,11 @@ void GlobalConfiguration::setMetricUnit(bool metricUnit)
 std::string GlobalConfiguration::museScoreUrl() const
 {
     return MUSESCORE_URL;
+}
+
+std::string GlobalConfiguration::museHubWebUrl() const
+{
+    return MUSEHUB_WEB_URL;
 }
 
 bool GlobalConfiguration::highResolutionTimers() const

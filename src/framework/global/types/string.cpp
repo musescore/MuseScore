@@ -22,13 +22,19 @@
 #include "string.h"
 
 #include <algorithm>
-#include <cstring>
-#include <cstdlib>
-#include <locale>
 #include <cctype>
+#include <clocale>
+#include <cstdlib>
+#include <cstring>
+#include <exception>
 #include <iomanip>
+#include <iterator>
+#include <sstream>
+#include <utility>
 
 #include "../thirdparty/utfcpp-3.2.1/utf8.h"
+
+#include "bytearray.h"
 
 #include "log.h"
 

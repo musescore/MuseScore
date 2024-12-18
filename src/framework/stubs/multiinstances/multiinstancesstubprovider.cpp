@@ -40,7 +40,7 @@ bool MultiInstancesStubProvider::isHasAppInstanceWithoutProject() const
     return false;
 }
 
-void MultiInstancesStubProvider::activateWindowWithoutProject()
+void MultiInstancesStubProvider::activateWindowWithoutProject(const QStringList&)
 {
 }
 

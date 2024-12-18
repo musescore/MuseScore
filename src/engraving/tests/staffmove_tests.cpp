@@ -59,12 +59,12 @@ TEST_F(Engraving_StaffMoveTests, hiddenStaff)
     Staff* staff = score->staff(0);
 
     // Move chord
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving staff move tests"));
     score->moveUp(c1);
     score->endCmd();
 
     // Hide staff
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving staff move tests"));
     score->undo(new mu::engraving::ChangeStaff(staff, false, staff->defaultClefType(), staff->userDist(), staff->hideWhenEmpty(),
                                                staff->showIfEmpty(), staff->cutaway(), staff->hideSystemBarLine(),
                                                staff->mergeMatchingRests(),
@@ -75,7 +75,7 @@ TEST_F(Engraving_StaffMoveTests, hiddenStaff)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"hiddenStaff1.mscx", STAFF_MOVE_DIR + u"hiddenStaff-ref.mscx"));
 
     // Unhide staff
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving staff move tests"));
     score->undo(new mu::engraving::ChangeStaff(staff, true, staff->defaultClefType(), staff->userDist(), staff->hideWhenEmpty(),
                                                staff->showIfEmpty(), staff->cutaway(), staff->hideSystemBarLine(),
                                                staff->mergeMatchingRests(),
@@ -83,7 +83,7 @@ TEST_F(Engraving_StaffMoveTests, hiddenStaff)
     score->endCmd();
 
     // Move chord back
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving staff move tests"));
     score->moveDown(c1);
     score->endCmd();
 
@@ -104,19 +104,19 @@ TEST_F(Engraving_StaffMoveTests, linkedStaff)
     Chord* c2 = toChord(s->element(8));
     EXPECT_TRUE(c2);
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving staff move tests"));
     score->moveDown(c1);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"linkedStaff1.mscx", STAFF_MOVE_DIR + u"linkedStaff-ref.mscx"));
 
     // Try to move linked chord - should be no change
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving staff move tests"));
     score->moveUp(c2);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"linkedStaff2.mscx", STAFF_MOVE_DIR + u"linkedStaff-ref.mscx"));
 
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving staff move tests"));
     score->moveUp(c1);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"linkedStaff3.mscx", STAFF_MOVE_DIR + u"linkedStaff.mscx"));

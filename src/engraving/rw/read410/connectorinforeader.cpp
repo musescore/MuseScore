@@ -30,6 +30,7 @@
 #include "../../dom/chordrest.h"
 #include "../../dom/measure.h"
 #include "../../dom/note.h"
+#include "../../dom/noteline.h"
 #include "../../dom/tie.h"
 #include "../../dom/chord.h"
 #include "../../dom/staff.h"
@@ -361,6 +362,8 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
     case ElementType::TEXTLINE:
     case ElementType::GLISSANDO:
     case ElementType::GUITAR_BEND:
+    case ElementType::NOTELINE:
+    case ElementType::LAISSEZ_VIB:
     {
         Spanner* sp = toSpanner(info->connector());
         if (info->isStart()) {
@@ -388,8 +391,10 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
             if (sp->isTie()) {
                 item->setTieBack(toTie(sp));
             } else {
-                if ((sp->isGlissando() || sp->isGuitarBend()) && item->explicitParent() && item->explicitParent()->isChord()) {
-                    toChord(item->explicitParent())->setEndsGlissandoOrGuitarBend(true);
+                bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
+                if ((sp->isGlissando() || sp->isGuitarBend() || isNoteAnchoredTextLine) && item->explicitParent()
+                    && item->explicitParent()->isChord()) {
+                    toChord(item->explicitParent())->setEndsNoteAnchoredLine(true);
                 }
                 item->addSpannerBack(sp);
             }

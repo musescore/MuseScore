@@ -51,9 +51,13 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/diagnosticspathsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/diagnosticaccessiblemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/diagnosticaccessiblemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/actionsviewmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/actionsviewmodel.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/system/profilerviewmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/system/profilerviewmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/system/graphicsinfomodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/system/graphicsinfomodel.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/keynav/diagnosticnavigationmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/keynav/diagnosticnavigationmodel.h
@@ -83,7 +87,7 @@ if (MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT)
         ${CMAKE_CURRENT_LIST_DIR}/internal/crashhandler/crashhandler.h
     )
 
-    set(MODULE_INCLUDE ${MODULE_INCLUDE}
+    set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE}
         ${CMAKE_CURRENT_LIST_DIR}/thirdparty/google_crashpad_client
         ${CMAKE_CURRENT_LIST_DIR}/thirdparty/google_crashpad_client/third_party/mini_chromium/mini_chromium
     )

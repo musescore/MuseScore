@@ -73,6 +73,8 @@ public:
 
     LineSegment* createLineSegment(System* parent) override;
 
+    bool allowTimeAnchor() const override { return false; }
+
     void setChannel() const;
     void setTempo() const;
 

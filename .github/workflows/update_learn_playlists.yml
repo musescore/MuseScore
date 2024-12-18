@@ -50,11 +50,11 @@ jobs:
             S3_URL='s3://extensions.musescore.org/4.0/learn/${{ matrix.playlist.filename }}.test.json'
           fi
 
-          sudo bash ./buildscripts/ci/learn/make_playlists_info_file.sh \
+          bash ./buildscripts/ci/learn/make_playlists_info_file.sh \
             --youtube_api_key '${{ secrets.YOUTUBE_API_KEY }}' \
             --youtube_playlist_id '${{ matrix.playlist.id }}'
 
-          sudo bash ./buildscripts/ci/learn/push_file_to_s3.sh \
+          bash ./buildscripts/ci/learn/push_file_to_s3.sh \
             --s3_key '${{ secrets.S3_KEY }}' \
             --s3_secret '${{ secrets.S3_SECRET }}' \
             --s3_url "${S3_URL}" \

@@ -20,9 +20,7 @@
 
 cmake_minimum_required(VERSION 3.16)
 
-cmake_policy(SET CMP0091 OLD) # not set MSVC default args
-
-project(mscore LANGUAGES C CXX)
+project(MuseScore LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -68,12 +66,14 @@ option(MUE_BUILD_BRAILLE_TESTS "Build braille tests" ON)
 option(MUE_BUILD_CONVERTER_MODULE "Build converter module" ON)
 option(MUE_BUILD_ENGRAVING_TESTS "Build engraving tests" ON)
 option(MUE_BUILD_ENGRAVING_DEVTOOLS "Build engraving devtools" ON)
+option(MUE_BUILD_ENGRAVING_PLAYBACK "Build engraving playback" ON)
 option(MUE_BUILD_IMPORTEXPORT_MODULE "Build importexport module" ON)
 option(MUE_BUILD_IMPORTEXPORT_TESTS "Build importexport tests" ON)
 option(MUE_BUILD_VIDEOEXPORT_MODULE "Build videoexport module" OFF)
 option(MUE_BUILD_IMAGESEXPORT_MODULE "Build imagesexport module" ON)
 option(MUE_BUILD_INSPECTOR_MODULE "Build inspector module" ON)
 option(MUE_BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON)
+option(MUE_BUILD_MUSESOUNDS_MODULE "Build muse sounds module" ON)
 option(MUE_BUILD_NOTATION_MODULE "Build notation module" ON)
 option(MUE_BUILD_NOTATION_TESTS "Build notation tests" ON)
 option(MUE_BUILD_PALETTE_MODULE "Build palette module" ON)
@@ -152,7 +152,12 @@ if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
 endif()
 
 set(QT_MIN_VERSION "6.2.4")
-include(FindQt6)
+set(QT_ADD_STATEMACHINE ON)
+if (MUSE_MODULE_NETWORK_WEBSOCKET)
+    set(QT_ADD_WEBSOCKET ON)
+endif()
+
+include(SetupQt6)
 
 if (MUE_DOWNLOAD_SOUNDFONT)
     include(DownloadSoundFont)

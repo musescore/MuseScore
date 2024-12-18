@@ -274,7 +274,7 @@ void BendSettingsModel::setBendCurve(const QVariantList& newBendCurve)
 
     bool pitchChanged = endTimePoint.pitch != m_bendCurve.at(END_POINT_INDEX).pitch;
 
-    beginCommand();
+    beginCommand(muse::TranslatableString("undoableAction", "Edit bend curve"));
 
     if (pitchChanged) {
         int bendAmount = curvePitchToBendAmount(endTimePoint.pitch);

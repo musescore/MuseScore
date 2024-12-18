@@ -78,6 +78,8 @@ private:
     INotationUndoStackPtr currentNotationUndoStack() const;
     INotationMidiInputPtr currentNotationMidiInput() const;
 
+    mu::engraving::Score* currentNotationScore() const;
+
     void toggleNoteInput();
     void toggleNoteInputMethod(NoteInputMethod method);
     void toggleNoteInputInsert();
@@ -108,6 +110,7 @@ private:
     void repeatSelection();
     void addTie();
     void chordTie();
+    void addLaissezVib();
     void addSlur();
     void addFret(int num);
 
@@ -211,6 +214,7 @@ private:
 
     bool canUndo() const;
     bool canRedo() const;
+
     bool isNotationPage() const;
     bool isStandardStaff() const;
     bool isTablatureStaff() const;

@@ -106,7 +106,7 @@ public:
     virtual bool startDrop(const QUrl& url) = 0;
     virtual bool isDropAccepted(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
     virtual bool drop(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0;
-    virtual void setDropTarget(const EngravingItem* item, bool notify = true) = 0;
+    virtual void setDropTarget(EngravingItem* item, bool notify = true) = 0;
     virtual void setDropRect(const muse::RectF& rect) = 0;
     virtual void endDrop() = 0;
     virtual muse::async::Notification dropChanged() const = 0;
@@ -114,6 +114,7 @@ public:
     virtual bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) = 0;
     virtual void undo() = 0;
     virtual void redo() = 0;
+    virtual void undoRedoToIndex(size_t idx) = 0;
 
     // Change selection
     virtual bool moveSelectionAvailable(MoveSelectionType type) const = 0;
@@ -164,7 +165,6 @@ public:
     virtual bool isEditAllowed(QKeyEvent* event) = 0;
     virtual void editElement(QKeyEvent* event) = 0;
     virtual void endEditElement() = 0;
-    virtual const EngravingItem* editedItem() const = 0;
 
     virtual void splitSelectedMeasure() = 0;
     virtual void joinSelectedMeasures() = 0;
@@ -182,6 +182,7 @@ public:
     virtual void flipSelection() = 0;
     virtual void addTieToSelection() = 0;
     virtual void addTiedNoteToChord() = 0;
+    virtual void addLaissezVibToSelection() = 0;
     virtual void addSlurToSelection() = 0;
     virtual void addOttavaToSelection(OttavaType type) = 0;
     virtual void addHairpinsToSelection(HairpinType type) = 0;
@@ -199,8 +200,14 @@ public:
 
     virtual bool toggleLayoutBreakAvailable() const = 0;
     virtual void toggleLayoutBreak(LayoutBreakType breakType) = 0;
+    virtual void moveMeasureToPrevSystem() = 0;
+    virtual void moveMeasureToNextSystem() = 0;
+    virtual void toggleSystemLock() = 0;
+    virtual void toggleScoreLock() = 0;
+    virtual void makeIntoSystem() = 0;
+    virtual void applySystemLock() = 0;
 
-    virtual void setBreaksSpawnInterval(BreaksSpawnIntervalType intervalType, int interval = 0) = 0;
+    virtual void addRemoveSystemLocks(AddRemoveSystemLockType intervalType, int interval = 0) = 0;
     virtual bool transpose(const TransposeOptions& options) = 0;
     virtual void swapVoices(voice_idx_t voiceIndex1, voice_idx_t voiceIndex2) = 0;
     virtual void addIntervalToSelectedNotes(int interval) = 0;
@@ -222,6 +229,7 @@ public:
 
     virtual void addStretch(qreal value) = 0;
 
+    virtual Measure* selectedMeasure() const = 0;
     virtual void addTimeSignature(Measure* measure, engraving::staff_idx_t staffIndex, TimeSignature* timeSignature) = 0;
 
     virtual void explodeSelectedStaff() = 0;
@@ -289,7 +297,7 @@ public:
     virtual void transposeDiatonicAlterations(mu::engraving::TransposeDirection) = 0;
     virtual void toggleAutoplace(bool all) = 0;
     virtual void getLocation() = 0;
-    virtual void execute(void (mu::engraving::Score::*)()) = 0;
+    virtual void execute(void (mu::engraving::Score::*)(), const muse::TranslatableString& actionName) = 0;
 
     struct ShowItemRequest {
         const EngravingItem* item = nullptr;

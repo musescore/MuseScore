@@ -61,7 +61,7 @@ Item {
         anchors.margins: background.border.width
 
         // Clip content to our beautiful rounded rect
-        layer.enabled: true
+        layer.enabled: ui.isEffectsAllowed
         layer.effect: EffectOpacityMask {
             maskSource: Rectangle {
                 width: dropArea.width

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
@@ -84,7 +84,7 @@
               <string>2</string>
               </Note>
             <Arpeggio>
-              <subtype>5</subtype>
+              <subtype>4</subtype>
               <timeStretch>0.5</timeStretch>
               </Arpeggio>
             </Chord>
@@ -113,7 +113,7 @@
               <string>2</string>
               </Note>
             <Arpeggio>
-              <subtype>4</subtype>
+              <subtype>5</subtype>
               <timeStretch>0.5</timeStretch>
               </Arpeggio>
             </Chord>

@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CONVERTER_ICONVERTERCONTROLLER_H
-#define MU_CONVERTER_ICONVERTERCONTROLLER_H
+#pragma once
 
 #include "modularity/imoduleinterface.h"
 #include "global/types/ret.h"
@@ -38,7 +37,7 @@ public:
     virtual muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out,
                                   const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
                                   const muse::String& soundProfile = muse::String(),
-                                  const muse::UriQuery& extensionUri = muse::UriQuery()) = 0;
+                                  const muse::UriQuery& extensionUri = muse::UriQuery(), const std::string& transposeOptionsJson = {}) = 0;
 
     virtual muse::Ret batchConvert(const muse::io::path_t& batchJobFile,
                                    const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
@@ -65,5 +64,3 @@ public:
     virtual muse::Ret updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode = false) = 0;
 };
 }
-
-#endif // MU_CONVERTER_ICONVERTERCONTROLLER_H

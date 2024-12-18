@@ -188,7 +188,7 @@ enum class ExpandSelectionMode
     EndScore,
 };
 
-enum class BreaksSpawnIntervalType
+enum class AddRemoveSystemLockType
 {
     AfterEachSystem = -1,
     None = 0,
@@ -247,7 +247,7 @@ struct NoteInputState
     engraving::voice_idx_t currentVoiceIndex = 0;
     engraving::track_idx_t currentTrack = 0;
     int currentString = 0;
-    const Drumset* drumset = nullptr;
+    Drumset* drumset = nullptr;
     StaffGroup staffGroup = StaffGroup::STANDARD;
     const Staff* staff = nullptr;
     Segment* segment = nullptr;
@@ -425,7 +425,7 @@ struct StaffConfig
     bool cutaway = false;
     bool showIfEmpty = false;
     bool hideSystemBarline = false;
-    bool mergeMatchingRests = false;
+    engraving::AutoOnOff mergeMatchingRests = engraving::AutoOnOff::AUTO;
     bool reflectTranspositionInLinkedTab = false;
     Staff::HideMode hideMode = Staff::HideMode::AUTO;
     ClefTypeList clefTypeList;
@@ -445,6 +445,11 @@ struct StaffConfig
         equal &= reflectTranspositionInLinkedTab == conf.reflectTranspositionInLinkedTab;
 
         return equal;
+    }
+
+    bool operator!=(const StaffConfig& conf) const
+    {
+        return !(*this == conf);
     }
 };
 

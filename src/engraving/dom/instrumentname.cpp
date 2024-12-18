@@ -165,7 +165,6 @@ bool InstrumentName::setProperty(Pid id, const PropertyValue& v)
         m_layoutPos = v.toInt();
         break;
     case Pid::VISIBLE:
-    case Pid::COLOR:
         // not supported
         break;
     default:

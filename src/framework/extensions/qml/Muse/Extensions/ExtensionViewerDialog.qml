@@ -34,6 +34,8 @@ StyledDialogView {
     contentWidth: viewer.width
     contentHeight: viewer.height
 
+    alwaysOnTop: true
+
     ExtensionViewer {
         id: viewer
 

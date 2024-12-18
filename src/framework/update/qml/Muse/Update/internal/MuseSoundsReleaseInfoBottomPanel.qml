@@ -28,7 +28,8 @@ import Muse.UiComponents 1.0
 RowLayout {
     id: root
 
-    property string defaultButtonName: openMuseHubButton.text
+    property alias defaultButtonName: openMuseHubButton.text
+    property alias cancelButtonName: cancelBtn.text
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "UpdateBottomPanel"
@@ -45,10 +46,9 @@ RowLayout {
     }
 
     FlatButton {
+        id: cancelBtn
         Layout.alignment: Qt.AlignVCenter
         Layout.preferredWidth: (root.width - root.spacing) / 2
-
-        text: qsTrc("update", "No thanks")
 
         navigation.name: "NoButton"
         navigation.panel: root.navigationPanel
@@ -64,8 +64,6 @@ RowLayout {
 
         Layout.alignment: Qt.AlignVCenter
         Layout.preferredWidth: (root.width - root.spacing) / 2
-
-        text: qsTrc("update", "Take me to Muse Hub")
 
         accentButton: true
 

@@ -26,16 +26,29 @@
 #include "textlinebase.h"
 
 namespace mu::engraving {
-class Note;
+class NoteLineSegment final : public TextLineBaseSegment
+{
+    OBJECT_ALLOCATOR(engraving, NoteLineSegment)
+    DECLARE_CLASSOF(ElementType::NOTELINE_SEGMENT)
 
-//---------------------------------------------------------
-//   @@ NoteLine
-//---------------------------------------------------------
+    Sid getPropertyStyle(Pid) const override;
+
+public:
+    NoteLineSegment(Spanner* sp, System* parent);
+
+    NoteLine* noteLine() const { return toNoteLine(spanner()); }
+
+    NoteLineSegment* clone() const override { return new NoteLineSegment(*this); }
+
+    EngravingItem* propertyDelegate(Pid) override;
+};
 
 class NoteLine final : public TextLineBase
 {
     OBJECT_ALLOCATOR(engraving, NoteLine)
     DECLARE_CLASSOF(ElementType::NOTELINE)
+
+    Sid getPropertyStyle(Pid) const override;
 
 public:
     NoteLine(EngravingItem* parent);
@@ -44,16 +57,22 @@ public:
 
     NoteLine* clone() const override { return new NoteLine(*this); }
 
-    void setStartNote(Note* n) { m_startNote = n; }
-    Note* startNote() const { return m_startNote; }
-    void setEndNote(Note* n) { m_endNote = n; }
-    Note* endNote() const { return m_endNote; }
     LineSegment* createLineSegment(System* parent) override;
 
-private:
+    PropertyValue propertyDefault(Pid) const override;
+    PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
 
-    Note* m_startNote = nullptr;
-    Note* m_endNote = nullptr;
+    bool allowTimeAnchor() const override { return false; }
+
+    NoteLineEndPlacement lineEndPlacement() { return m_lineEndPlacement; }
+    void setLineEndPlacement(NoteLineEndPlacement v) { m_lineEndPlacement = v; }
+
+    void reset() override;
+
+    bool enforceMinLength() { return m_lineEndPlacement != NoteLineEndPlacement::LEFT_EDGE; }
+private:
+    NoteLineEndPlacement m_lineEndPlacement = NoteLineEndPlacement::OFFSET_ENDS;
 };
 } // namespace mu::engraving
 #endif

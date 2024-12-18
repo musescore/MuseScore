@@ -81,7 +81,7 @@ struct CmdOptions {
     struct {
         std::optional<bool> useDefaultFont;
         std::optional<bool> inferTextType;
-    } importMusicXML;
+    } importMusicXml;
 
     struct {
         std::optional<bool> linkedTabStaffCreated;

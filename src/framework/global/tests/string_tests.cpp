@@ -21,10 +21,13 @@
  */
 #include <gtest/gtest.h>
 
-#include <QString>
-#include <QRegularExpression>
+#include <cstring>
 #include <regex>
+#include <string>
 
+#include <QString>
+
+#include "types/bytearray.h"
 #include "types/string.h"
 
 #include "log.h"

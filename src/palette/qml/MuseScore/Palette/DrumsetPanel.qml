@@ -53,18 +53,18 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 height: 20
-                width: editDrumsetButton.width
+                width: customizeKitButton.width
 
                 text: drumsetView.pitchName
             }
 
             FlatButton {
-                id: editDrumsetButton
+                id: customizeKitButton
 
-                text: qsTrc("palette", "Edit drumset")
+                text: qsTrc("palette", "Customize kit")
 
                 onClicked: {
-                    drumsetView.editDrumset()
+                    drumsetView.customizeKit()
                 }
             }
         }

@@ -217,23 +217,6 @@ set(MODULE_SRC
 include(SetupSndFile)
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/fluidsynth fluidsynth)
-set(FLUIDSYNTH_DIR ${CMAKE_CURRENT_LIST_DIR}/thirdparty/fluidsynth/fluidsynth-2.3.3)
-set (FLUIDSYNTH_INC
-    ${FLUIDSYNTH_DIR}/include
-    ${FLUIDSYNTH_DIR}/src
-    ${FLUIDSYNTH_DIR}/src/external
-    ${FLUIDSYNTH_DIR}/src/utils
-    ${FLUIDSYNTH_DIR}/src/midi
-    ${FLUIDSYNTH_DIR}/src/rvoice
-    ${FLUIDSYNTH_DIR}/src/sfloader
-    ${FLUIDSYNTH_DIR}/src/bindings
-    ${FLUIDSYNTH_DIR}/src/synth
-    ${FLUIDSYNTH_DIR}/src/drivers
-    )
-
-set (MODULE_INCLUDE
-    ${FLUIDSYNTH_INC}
-    )
 
 set(MODULE_LINK
     fluidsynth
@@ -259,7 +242,7 @@ if (MUSE_MODULE_AUDIO_EXPORT)
         ${CMAKE_CURRENT_LIST_DIR}/internal/soundtracks/soundtrackwriter.h
         )
 
-    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/lame lame)
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/lame lame EXCLUDE_FROM_ALL)
     set(MODULE_LINK
         ${MODULE_LINK}
         lame
@@ -294,10 +277,10 @@ endif()
 
 if (MUSE_MODULE_AUDIO_JACK)
     find_package(Jack REQUIRED)
-    set(MODULE_INCLUDE ${MODULE_INCLUDE} ${JACK_INCLUDE_DIRS} )
+    set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${JACK_INCLUDE_DIRS} )
     set(MODULE_LINK ${MODULE_LINK} ${JACK_LIBRARIES} pthread )
     find_package(ALSA REQUIRED)
-    set(MODULE_INCLUDE ${MODULE_INCLUDE} ${ALSA_INCLUDE_DIRS} )
+    set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${ALSA_INCLUDE_DIRS} )
     set(MODULE_LINK ${MODULE_LINK} ${ALSA_LIBRARIES} pthread )
 else ()
     if (OS_IS_MAC)
@@ -308,7 +291,7 @@ else ()
         set(MODULE_LINK ${MODULE_LINK} winmm mmdevapi mfplat)
     elseif (OS_IS_LIN)
         find_package(ALSA REQUIRED)
-        set(MODULE_INCLUDE ${MODULE_INCLUDE} ${ALSA_INCLUDE_DIRS} )
+        set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${ALSA_INCLUDE_DIRS} )
         set(MODULE_LINK ${MODULE_LINK} ${ALSA_LIBRARIES} pthread )
     endif()
 endif()
@@ -317,6 +300,15 @@ set(MODULE_QRC audio.qrc)
 
 set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
+
+if (OS_IS_WIN)
+    # Prevent mysterious compile errors in debug builds
+    set_source_files_properties(
+        ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiostream.cpp
+        PROPERTIES
+        SKIP_UNITY_BUILD_INCLUSION ON
+    )
+endif()
 
 setup_module()
 

@@ -50,7 +50,7 @@
           <multiple-rest>3</multiple-rest>
           </measure-style>
         </attributes>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>

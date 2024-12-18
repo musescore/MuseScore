@@ -26,9 +26,9 @@ jobs:
             S3_URL="s3://musescore-updates/feed/latest.test.xml"
           fi
 
-          sudo bash ./buildscripts/ci/release/make_empty_release_info_file.sh
+          bash ./buildscripts/ci/release/make_empty_release_info_file.sh
 
-          sudo bash ./buildscripts/ci/release/push_file_to_s3.sh \
+          bash ./buildscripts/ci/release/push_file_to_s3.sh \
             --s3_key ${{ secrets.S3_KEY_UPDATE }} \
             --s3_secret ${{ secrets.S3_SECRET_UPDATE }} \
             --s3_url ${S3_URL} \

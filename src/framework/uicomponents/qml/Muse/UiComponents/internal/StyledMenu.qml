@@ -42,6 +42,8 @@ MenuView {
     property alias width: content.width
     property alias height: content.height
 
+    property string accessibleName: ""
+
     signal loaded()
 
     function requestFocus() {
@@ -135,6 +137,8 @@ MenuView {
             section: content.navigationSection
             direction: NavigationPanel.Vertical
             order: 1
+
+            accessible.name: root.accessibleName
 
             onNavigationEvent: function(event) {
                 switch (event.type) {

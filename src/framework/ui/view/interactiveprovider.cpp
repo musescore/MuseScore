@@ -585,7 +585,7 @@ QString InteractiveProvider::objectId(const QVariant& val) const
             return QString();
         }
 
-        objectId = QString(obj->metaObject()->className());
+        objectId = QString(obj->metaObject()->className()) + "_" + QString::number(count);
     } else {
         objectId = "unknown_" + QString::number(count);
     }

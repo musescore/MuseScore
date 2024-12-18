@@ -2,9 +2,9 @@
 # Common
 if (MSVC)
     add_compile_options(/W4)
-    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
     add_compile_options(/wd4127) # disabled warning: C4127: conditional expression is constant
-    add_definitions(-D_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING) # needed for VS 17.8.1 to suppress tons of C4996 warnings
+    add_compile_definitions(_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING) # needed for VS 17.8.1 to suppress tons of C4996 warnings
     # either the above or the below, or even both
     #add_compile_options(/wd4996) # disabled warning: C4996, needed for VS 17.8.1 to suppress tons (some 1000) of them in VS' own code
 else()
@@ -29,13 +29,11 @@ function(target_no_warning TARGET WNAME)
     elseif(WNAME STREQUAL "-Wno-unused-variable")
         set(MSVC_Warning /wd4101 /wd4189)
     elseif(WNAME STREQUAL "-Wunused-const-variable=0")
-
     elseif(WNAME STREQUAL "-Wno-type-limits")
-
     elseif(WNAME STREQUAL "-Wno-unknown-pragmas")
-
     elseif(WNAME STREQUAL "-Wno-truncate")
         set(MSVC_Warning /wd4310 /wd4311)
+        unset(GCC_Warning)
     elseif(WNAME STREQUAL "-Wno-uninitialized")
         set(MSVC_Warning /wd4701 /wd4703)
     elseif(WNAME STREQUAL "-Wno-float-conversion")
@@ -53,8 +51,16 @@ function(target_no_warning TARGET WNAME)
     elseif(WNAME STREQUAL "-Wno-implicit-fallthrough")
     elseif(WNAME STREQUAL "-Wno-empty-body")
     elseif(WNAME STREQUAL "-Wno-attributes")
-    elseif(WNAME STREQUAL "-Wno-absolute-value")
-    elseif(WNAME STREQUAL "-Wno-tautological-pointer-compare")
+    elseif(WNAME STREQUAL "-Wc-no-absolute-value")
+        set(GCC_Warning $<$<COMPILE_LANGUAGE:C>:-Wno-absolute-value>)
+        set(CLANG_Warning $<$<COMPILE_LANGUAGE:C>:-Wno-absolute-value>)
+    elseif(WNAME STREQUAL "-Wc-no-tautological-pointer-compare")
+        set(GCC_Warning $<$<COMPILE_LANGUAGE:C>:-Wno-tautological-pointer-compare>)
+        set(CLANG_Warning $<$<COMPILE_LANGUAGE:C>:-Wno-tautological-pointer-compare>)
+    elseif(WNAME STREQUAL "-Wc-no-array-parameter")
+        set(GCC_Warning $<$<COMPILE_LANGUAGE:C>:-Wno-array-parameter>)
+        set(CLANG_Warning $<$<COMPILE_LANGUAGE:C>:-Wno-array-parameter>)
+    elseif(WNAME STREQUAL "-Wno-unused-but-set-variable")
     elseif(WNAME STREQUAL "-Wno-sign-compare")
     elseif(WNAME STREQUAL "-Wno-attributes")
     elseif(WNAME STREQUAL "-Wno-restrict")

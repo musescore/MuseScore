@@ -188,6 +188,16 @@ void AppShellConfiguration::setNeedShowSplashScreen(bool show)
     settings()->setSharedValue(SPLASH_SCREEN_VISIBLE_KEY, Val(show));
 }
 
+const QString& AppShellConfiguration::preferencesDialogLastOpenedPageId() const
+{
+    return m_preferencesDialogCurrentPageId;
+}
+
+void AppShellConfiguration::setPreferencesDialogLastOpenedPageId(const QString& lastOpenedPageId)
+{
+    m_preferencesDialogCurrentPageId = lastOpenedPageId;
+}
+
 void AppShellConfiguration::startEditSettings()
 {
     settings()->beginTransaction();

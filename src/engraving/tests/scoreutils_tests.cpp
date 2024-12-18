@@ -80,3 +80,43 @@ TEST_F(Engraving_ScoreUtilsTests, StaffIdxSetFromRange)
 
     delete score;
 }
+
+TEST_F(Engraving_ScoreUtilsTests, StaffTestMergeMatchingRests)
+{
+    // [GIVEN] Score containing a part and staff
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    score->appendPart(new Part(score));
+    score->appendStaff(Factory::createStaff(score->parts().at(0)));
+
+    // GIVEN score style setting is false
+    score->style().set(Sid::mergeMatchingRests, false);
+    // GIVEN staff setting is AUTO
+    score->staff(0)->setMergeMatchingRests(AutoOnOff::AUTO);
+    // [THEN] rests display unmerged
+    EXPECT_FALSE(score->staff(0)->shouldMergeMatchingRests());
+    // GIVEN staff setting is ON
+    score->staff(0)->setMergeMatchingRests(AutoOnOff::ON);
+    // [THEN] rests display merged
+    EXPECT_TRUE(score->staff(0)->shouldMergeMatchingRests());
+    // GIVEN staff setting is OFF
+    score->staff(0)->setMergeMatchingRests(AutoOnOff::OFF);
+    // [THEN] rests display unmerged
+    EXPECT_FALSE(score->staff(0)->shouldMergeMatchingRests());
+
+    // GIVEN score style setting is true
+    score->style().set(Sid::mergeMatchingRests, true);
+    // GIVEN staff setting is AUTO
+    score->staff(0)->setMergeMatchingRests(AutoOnOff::AUTO);
+    // [THEN] rests display merged
+    EXPECT_TRUE(score->staff(0)->shouldMergeMatchingRests());
+    // GIVEN staff setting is ON
+    score->staff(0)->setMergeMatchingRests(AutoOnOff::ON);
+    // [THEN] rests display merged
+    EXPECT_TRUE(score->staff(0)->shouldMergeMatchingRests());
+    // GIVEN staff setting is OFF
+    score->staff(0)->setMergeMatchingRests(AutoOnOff::OFF);
+    // [THEN] rests display unmerged
+    EXPECT_FALSE(score->staff(0)->shouldMergeMatchingRests());
+
+    delete score;
+}

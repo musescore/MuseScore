@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -61,14 +61,9 @@
             </TimeSig>
           <Chord>
             <durationType>half</durationType>
-            <Articulation>
-              <subtype>noSym</subtype>
-              </Articulation>
-            <Articulation>
-              <subtype>articLaissezVibrerAbove</subtype>
-              <anchor>0</anchor>
-              </Articulation>
             <Note>
+              <LaissezVib>
+                </LaissezVib>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -79,15 +74,10 @@
         <voice>
           <Chord>
             <durationType>half</durationType>
-            <Articulation>
-              <subtype>noSym</subtype>
-              <anchor>1</anchor>
-              </Articulation>
-            <Articulation>
-              <subtype>articLaissezVibrerBelow</subtype>
-              <anchor>1</anchor>
-              </Articulation>
             <Note>
+              <LaissezVib>
+                <up>up</up>
+                </LaissezVib>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -98,14 +88,10 @@
         <voice>
           <Chord>
             <durationType>half</durationType>
-            <Articulation>
-              <subtype>noSym</subtype>
-              </Articulation>
-            <Articulation>
-              <subtype>articLaissezVibrerAbove</subtype>
-              <anchor>0</anchor>
-              </Articulation>
             <Note>
+              <LaissezVib>
+                <up>down</up>
+                </LaissezVib>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -116,16 +102,38 @@
         <voice>
           <Chord>
             <durationType>half</durationType>
-            <Articulation>
-              <subtype>noSym</subtype>
-              <color r="255" g="38" b="0" a="255"/>
-              </Articulation>
-            <Articulation>
-              <subtype>articLaissezVibrerAbove</subtype>
-              <anchor>0</anchor>
-              <color r="255" g="38" b="0" a="255"/>
-              </Articulation>
             <Note>
+              <LaissezVib>
+                <lineType>2</lineType>
+                </LaissezVib>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <LaissezVib>
+                <lineType>1</lineType>
+                </LaissezVib>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <LaissezVib>
+                <color r="255" g="38" b="0" a="255"/>
+                </LaissezVib>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>

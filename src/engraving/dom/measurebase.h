@@ -35,6 +35,7 @@ class LayoutBreak;
 class Measure;
 class Score;
 class System;
+class SystemLock;
 
 //---------------------------------------------------------
 //   Repeat
@@ -79,6 +80,8 @@ public:
     ~MeasureBase();
 
     System* system() const { return toSystem(explicitParent()); }
+    System* prevNonVBoxSystem() const;
+    System* nextNonVBoxSystem() const;
     void setParent(System* s) { EngravingItem::setParent((EngravingObject*)(s)); }
 
     // Score Tree functions
@@ -171,15 +174,20 @@ public:
     void setNoBreak(bool v) { setFlag(ElementFlag::NO_BREAK, v); }
 
     bool hasCourtesyKeySig() const { return flag(ElementFlag::KEYSIG); }
-    void setHasCourtesyKeySig(int v) { setFlag(ElementFlag::KEYSIG, v); }
+    void setHasCourtesyKeySig(bool v) { setFlag(ElementFlag::KEYSIG, v); }
 
     virtual void computeMinWidth() { }
 
     int index() const;
     int measureIndex() const;
 
-    void setOldWidth(double n) { m_oldWidth = n; }
-    double oldWidth() const { return m_oldWidth; }
+    bool isBefore(const MeasureBase* other) const;
+    bool isBeforeOrEqual(const MeasureBase* other) const { return other == this || isBefore(other); }
+    bool isAfter(const MeasureBase* other) const { return !isBeforeOrEqual(other); }
+
+    const SystemLock* systemLock() const;
+    bool isStartOfSystemLock() const;
+    bool isEndOfSystemLock() const;
 
 protected:
 

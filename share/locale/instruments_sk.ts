@@ -55,7 +55,7 @@
         <source>Picc.</source>
         <comment>eb-piccolo shortName</comment>
         <extracomment>shortName for Piccolo; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>flp.</translation>
+        <translation>Flp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="223"/>
@@ -90,7 +90,7 @@
         <source>Picc.</source>
         <comment>db-piccolo shortName</comment>
         <extracomment>shortName for Piccolo; transposition: D♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pik.</translation>
+        <translation>Flp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="234"/>
@@ -125,7 +125,7 @@
         <source>Picc.</source>
         <comment>piccolo shortName</comment>
         <extracomment>shortName for Piccolo; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pik.</translation>
+        <translation>Flp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="245"/>
@@ -9148,7 +9148,7 @@
         <source>Trombone (treble clef)</source>
         <comment>trombone-treble trackName</comment>
         <extracomment>trackName for Trombone (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Pozauna (husľový kľúč)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3112"/>
@@ -9414,7 +9414,7 @@
         <source>Euphonium (treble clef)</source>
         <comment>euphonium-treble trackName</comment>
         <extracomment>trackName for Euphonium (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Eufónium (husľový kľúč)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3196"/>
@@ -9596,7 +9596,7 @@
         <source>Bass Tuba (treble clef)</source>
         <comment>eb-tuba-treble trackName</comment>
         <extracomment>trackName for Bass Tuba (treble clef); transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Basová Tuba (husľový kľúč)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3254"/>
@@ -9799,7 +9799,7 @@
         <source>Sousaphone (treble clef)</source>
         <comment>bb-sousaphone-treble trackName</comment>
         <extracomment>trackName for Sousaphone (treble clef); transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Suzafón (husľový kľúč)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3318"/>
@@ -13145,7 +13145,7 @@
         <source>Soprano (C clef)</source>
         <comment>soprano-c-clef trackName</comment>
         <extracomment>trackName for Soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Soprán (C kľúč)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4437"/>
@@ -13201,7 +13201,7 @@
         <source>Mezzo-soprano (C clef)</source>
         <comment>mezzo-soprano-c-clef trackName</comment>
         <extracomment>trackName for Mezzo-soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mezzosoprán (C kľúč)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4455"/>
@@ -13285,7 +13285,7 @@
         <source>Alto (C clef)</source>
         <comment>alto-c-clef trackName</comment>
         <extracomment>trackName for Alto (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Alt (C kľúč)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4482"/>
@@ -13369,7 +13369,7 @@
         <source>Tenor (C clef)</source>
         <comment>tenor-c-clef trackName</comment>
         <extracomment>trackName for Tenor (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tenor (C kľúč)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4509"/>
@@ -13425,7 +13425,7 @@
         <source>Baritone (C clef)</source>
         <comment>baritone-c-clef trackName</comment>
         <extracomment>trackName for Baritone (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Barytón (C kľúč)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4527"/>
@@ -15308,7 +15308,7 @@
         <source>Electric Guitar (treble clef)</source>
         <comment>electric-guitar-treble-clef trackName</comment>
         <extracomment>trackName for Electric Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Elektrická Gitara (husľový kľúč)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5132"/>
@@ -15644,7 +15644,7 @@
         <source>Acoustic Guitar (treble clef)</source>
         <comment>guitar-steel-treble-clef trackName</comment>
         <extracomment>trackName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Akustická Gitara (husľový kľúč)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5156"/>
@@ -15700,7 +15700,7 @@
         <source>Guitar (treble clef)</source>
         <comment>guitar-nylon-treble-clef trackName</comment>
         <extracomment>trackName for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Gitara (husľový kľúč)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5178"/>
@@ -19714,12 +19714,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="25"/>
         <source>Treble Clef</source>
-        <translation>Husľový kľúč</translation>
+        <translation>Husľový Kľúč</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="26"/>
         <source>Bass Clef</source>
-        <translation>Basový kľúč</translation>
+        <translation>Basový Kľúč</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="27"/>

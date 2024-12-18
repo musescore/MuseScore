@@ -24,14 +24,14 @@ SOFTWARE.
 #ifndef KORS_ASYNC_ABSTRACTINVOKER_H
 #define KORS_ASYNC_ABSTRACTINVOKER_H
 
-#include <memory>
-#include <vector>
+#include <functional>
 #include <list>
-#include <iostream>
 #include <map>
+#include <memory>
 #include <mutex>
 #include <thread>
-#include <functional>
+#include <tuple>
+#include <vector>
 
 #include "../asyncable.h"
 
@@ -85,7 +85,6 @@ private:
     std::vector<std::shared_ptr<IArg> > m_args;
 };
 
-class QueuedInvoker;
 class AbstractInvoker : public Asyncable::IConnectable
 {
 public:

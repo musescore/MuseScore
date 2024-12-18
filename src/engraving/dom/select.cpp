@@ -43,6 +43,7 @@
 #include "hairpin.h"
 #include "harppedaldiagram.h"
 #include "hook.h"
+#include "laissezvib.h"
 #include "linkedobjects.h"
 #include "lyrics.h"
 #include "measure.h"
@@ -405,6 +406,64 @@ Measure* Selection::findMeasure() const
     return m;
 }
 
+MeasureBase* Selection::startMeasureBase() const
+{
+    EngravingItem* selectionElement = element();
+    if (selectionElement) {
+        if (selectionElement->isHBox()) {
+            return toMeasureBase(selectionElement);
+        }
+        MeasureBase* mb = selectionElement->findMeasureBase();
+        if (mb) {
+            return mb;
+        }
+    }
+
+    bool mmrests = m_score->style().styleB(Sid::createMultiMeasureRests);
+    Fraction refTick = tickStart();
+
+    return mmrests ? m_score->tick2measureMM(refTick) : m_score->tick2measure(refTick);
+}
+
+MeasureBase* Selection::endMeasureBase() const
+{
+    EngravingItem* selectionElement = element();
+    if (selectionElement) {
+        if (selectionElement->isHBox()) {
+            return toMeasureBase(selectionElement);
+        }
+        MeasureBase* mb = selectionElement->findMeasureBase();
+        if (mb) {
+            return mb;
+        }
+    }
+
+    bool mmrests = m_score->style().styleB(Sid::createMultiMeasureRests);
+    Fraction refTick = tickEnd() - Fraction::eps();
+
+    return mmrests ? m_score->tick2measureMM(refTick) : m_score->tick2measure(refTick);
+}
+
+std::vector<System*> Selection::selectedSystems() const
+{
+    const MeasureBase* startMB = startMeasureBase();
+    const MeasureBase* endMB = endMeasureBase();
+    if (!startMB || !endMB) {
+        return {};
+    }
+
+    bool mmrests = score()->style().styleB(Sid::createMultiMeasureRests);
+    std::vector<System*> systems;
+    for (const MeasureBase* mb = startMB; mb && mb->isBeforeOrEqual(endMB); mb = mmrests ? mb->nextMM() : mb->next()) {
+        System* sys = mb->system();
+        if ((mb->isMeasure() || mb->isHBox()) && (systems.empty() || sys != systems.back())) {
+            systems.push_back(sys);
+        }
+    }
+
+    return systems;
+}
+
 void Selection::deselectAll()
 {
     if (m_state == SelState::RANGE) {
@@ -523,7 +582,9 @@ void Selection::appendChord(Chord* chord)
                 Note* endNote = toNote(note->tieFor()->endElement());
                 Segment* s = endNote->chord()->segment();
                 if (!s || s->tick() < tickEnd()) {
-                    m_el.push_back(note->tieFor());
+                    for (auto seg : note->tieFor()->spannerSegments()) {
+                        appendFiltered(seg);
+                    }
                 }
             }
         }
@@ -539,6 +600,9 @@ void Selection::appendChord(Chord* chord)
                     m_el.push_back(sp);
                 }
             }
+        }
+        if (note->laissezVib()) {
+            appendFiltered(note->laissezVib()->frontSegment());
         }
     }
 }
@@ -610,9 +674,12 @@ void Selection::updateSelectedElements()
             return;
         }
 
-        if (s2 && s2 == s2->measure()->first() && !(s2->measure()->prevMeasure() && s2->measure()->prevMeasure()->coveringMMRestOrThis())) {
+        if (s2 && s2 == s2->measure()->first()) {
             // we want the last segment of the previous measure (unless it's part of a MMrest)
-            s2 = s2->prev1();
+            Measure* prevMeasure = s2->measure()->prevMeasure();
+            if (!(prevMeasure && prevMeasure != prevMeasure->coveringMMRestOrThis())) {
+                s2 = s2->prev1();
+            }
         }
 
         setRange(s1, s2, staffStart, staffEnd);
@@ -711,14 +778,20 @@ void Selection::updateSelectedElements()
         if (sp->isVolta()) {
             continue;
         }
-        if (sp->isSlur()) {
+        if (sp->isSlur() || sp->isHairpin()) {
             // ignore if start & end elements not calculated yet
             if (!sp->startElement() || !sp->endElement()) {
                 continue;
             }
             if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() < etick)) {
-                if (canSelect(sp->startCR()) && canSelect(sp->endCR())) {
-                    appendFiltered(sp);               // slur with start or end in range selection
+                EngravingItem* startCR = sp->startCR();
+                EngravingItem* endCR = sp->endCR();
+                const bool canSelectStart = (sp->startElement()->isTimeTickAnchor() || canSelect(startCR));
+                const bool canSelectEnd = (sp->endElement()->isTimeTickAnchor() || canSelect(endCR));
+                if (canSelectStart && canSelectEnd) {
+                    for (auto seg : sp->spannerSegments()) {
+                        appendFiltered(seg);               // slur with start or end in range selection
+                    }
                 }
             }
         } else if ((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() <= etick)) {

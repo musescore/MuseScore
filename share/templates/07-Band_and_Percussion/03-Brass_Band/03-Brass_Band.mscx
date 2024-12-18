@@ -624,7 +624,7 @@
           </StaffType>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <trackName>Alto Horn</trackName>
+      <trackName>Alto Horn 1</trackName>
       <Instrument id="eb-alto-horn">
         <longName>Alto Horn 1</longName>
         <shortName>A. Hn. 1</shortName>
@@ -698,10 +698,10 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Alto Horn</trackName>
+      <trackName>Alto Horn 2</trackName>
       <Instrument id="eb-alto-horn">
-        <longName>Alto Horn 1</longName>
-        <shortName>A. Hn. 1</shortName>
+        <longName>Alto Horn 2</longName>
+        <shortName>A. Hn. 2</shortName>
         <trackName>Alto Horn.</trackName>
         <minPitchP>45</minPitchP>
         <maxPitchP>75</maxPitchP>

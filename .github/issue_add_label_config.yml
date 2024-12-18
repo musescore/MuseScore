@@ -10,8 +10,6 @@ accessibility:
     - "Accessibility issue \\(e\\.g\\. for keyboard-only or screen reader users\\)"
 VST:
     - "VST bug"
-"Muse Sounds":
-    - "Muse Sounds bug"
 playback:
     - "General playback bug"
 cloud:

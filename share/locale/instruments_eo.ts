@@ -832,7 +832,7 @@
         <source>Whistle pitched in B♭ (notated at concert pitch).</source>
         <comment>bflat-tin-whistle description</comment>
         <extracomment>description for Tin Whistle; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Fajfo agordita en B♭ (notita en ĉambrotono).</translation>
+        <translation>Fajfilo agordita en B♭ (notita en ĉambrotono).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="475"/>

@@ -22,6 +22,7 @@
 
 #include "engravingcompat.h"
 
+#include "dom/marker.h"
 #include "engraving/dom/beam.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/instrument.h"
@@ -37,6 +38,7 @@ namespace mu::engraving::compat {
 void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
 {
     if (score->mscVersion() >= 440) {
+        resetMarkerLeftFontSize(score);
         return;
     }
 
@@ -139,6 +141,37 @@ void EngravingCompat::migrateDynamicPosOnVocalStaves(MasterScore* masterScore)
             Spanner* spanner = pair.second;
             if (spanner->isHairpin()) {
                 migrateVoiceAssignmentAndPosition(spanner);
+            }
+        }
+    }
+}
+
+void EngravingCompat::resetMarkerLeftFontSize(MasterScore* masterScore)
+{
+    // Reset the new incorrect 4.4.0 - 4.4.2 default size of 11 to the previous correct size of 18
+    const double INCORRECT_DEFAULT_SIZE = 11.0;
+    const double CORRECT_DEFAULT_SIZE = 18.0;
+    bool needsAdjustMarkerSize = masterScore->mscoreVersion().contains(u"4.4") && masterScore->mscoreVersion() != u"4.4.3";
+    if (!needsAdjustMarkerSize || masterScore->style().styleD(Sid::repeatLeftFontSize) != INCORRECT_DEFAULT_SIZE) {
+        return;
+    }
+    masterScore->style().set(Sid::repeatLeftFontSize, CORRECT_DEFAULT_SIZE);
+
+    for (Score* score : masterScore->scoreList()) {
+        for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+            if (!mb->isMeasure()) {
+                continue;
+            }
+            Measure* meas = toMeasure(mb);
+            for (EngravingItem* item : meas->el()) {
+                if (!item->isMarker()) {
+                    continue;
+                }
+                Marker* marker = toMarker(item);
+                if (marker->textStyleType() != TextStyleType::REPEAT_LEFT || marker->size() != INCORRECT_DEFAULT_SIZE) {
+                    continue;
+                }
+                marker->setSize(CORRECT_DEFAULT_SIZE);
             }
         }
     }

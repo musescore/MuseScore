@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
       <frameSystemDistance>21</frameSystemDistance>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <defaultFramePadding>0</defaultFramePadding>
       <defaultFrameWidth>0</defaultFrameWidth>
       <titleFontFace>Arial</titleFontFace>
@@ -11,7 +12,7 @@
       <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
-      <Spatium>1.364</Spatium>
+      <spatium>1.364</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -310,13 +311,14 @@
       <Division>480</Division>
       <Style>
         <frameSystemDistance>21</frameSystemDistance>
+        <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <defaultFramePadding>0</defaultFramePadding>
         <defaultFrameWidth>0</defaultFrameWidth>
         <titleFontFace>Arial</titleFontFace>
         <titleFontSize>48</titleFontSize>
         <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
-        <Spatium>1.76389</Spatium>
+        <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -505,13 +507,14 @@
       <Division>480</Division>
       <Style>
         <frameSystemDistance>21</frameSystemDistance>
+        <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <defaultFramePadding>0</defaultFramePadding>
         <defaultFrameWidth>0</defaultFrameWidth>
         <titleFontFace>Arial</titleFontFace>
         <titleFontSize>48</titleFontSize>
         <titleFontSpatiumDependent>1</titleFontSpatiumDependent>
-        <Spatium>1.76389</Spatium>
+        <spatium>1.76389</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -591,6 +594,7 @@
               <sigD>4</sigD>
               </TimeSig>
             <Rest>
+              <placement>above</placement>
               <durationType>measure</durationType>
               <duration>32/4</duration>
               </Rest>

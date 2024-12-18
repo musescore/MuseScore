@@ -2,8 +2,6 @@ name: 'Check: Unit Tests (utest)'
 
 on:
   pull_request:
-    branches:
-    - master
   workflow_dispatch:
 
 jobs:
@@ -18,28 +16,33 @@ jobs:
       uses: actions/checkout@v4
     - name: "Configure workflow"
       run: |
-        sudo bash ./buildscripts/ci/tools/make_build_number.sh
+        bash ./buildscripts/ci/tools/make_build_number.sh
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
-        echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
-        echo "BUILD_NUMBER: $BUILD_NUMBER"
+        echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
 
-    - name: Ccache cache files
+        echo "CCACHE_TIMESTAMP=$(date -u +"%F-%T")" | tee -a $GITHUB_ENV
+
+    - name: Restore ccache files
       uses: actions/cache@v4
       with:
-        path: ~/.ccache
-        key: ${{github.workflow}}-ccache-$(date -u +"%F-%T")
-        restore-keys: ${{github.workflow}}-ccache- # restore ccache from either previous build on this branch or on master
+        path: ${{ github.workspace }}/.ccache
+        key: ${{github.workflow}}-ccache-${{ env.CCACHE_TIMESTAMP }}
+        restore-keys: ${{github.workflow}}-ccache-
     - name: Setup ccache
       run: |
-        sudo bash ./buildscripts/ci/tools/setup_ccache.sh
+        sudo apt-get update && sudo apt-get install -y ccache
+        bash ./buildscripts/ci/tools/setup_ccache_config.sh
+
     - name: Setup environment
       run: |
-        sudo bash ./buildscripts/ci/linux/setup.sh
+        bash ./buildscripts/ci/linux/setup.sh
     - name: Build
       run: |
         mkdir -p build.artifacts/env
-        sudo bash ./buildscripts/ci/linux/build_utest.sh -n ${{ env.BUILD_NUMBER }}
+        bash ./buildscripts/ci/linux/build_utest.sh -n ${{ env.BUILD_NUMBER }}
+        echo "============== ccache ==============="
+        ccache -s
     - name: Free up disk space
       # After building, too little disk space is left. Remove unnecessary tools to free up disk space.
       run: |
@@ -47,6 +50,6 @@ jobs:
         sudo rm -rf /usr/local/lib/android
     - name: Run tests
       run: |
-        sudo bash ./buildscripts/ci/linux/runutests.sh
+        bash ./buildscripts/ci/linux/runutests.sh
       env:
         ASAN_OPTIONS: "detect_leaks=0"

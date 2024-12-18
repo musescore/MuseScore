@@ -35,16 +35,19 @@
                         <staffDef n="1" lines="5" meter.count="4" meter.unit="2">
                            <label>Soprano</label>
                            <labelAbbr>S.</labelAbbr>
+                           <instrDef midi.instrnum="52" />
                            <clef shape="G" line="2" />
                         </staffDef>
                         <staffDef n="2" lines="5" meter.count="4" meter.unit="2">
                            <label>Alto</label>
                            <labelAbbr>A.</labelAbbr>
+                           <instrDef midi.instrnum="52" />
                            <clef shape="G" line="2" />
                         </staffDef>
                         <staffDef n="3" lines="5" meter.count="4" meter.unit="2">
                            <label>Bass</label>
                            <labelAbbr>B.</labelAbbr>
+                           <instrDef midi.instrnum="52" />
                            <clef shape="F" line="4" />
                         </staffDef>
                      </staffGrp>

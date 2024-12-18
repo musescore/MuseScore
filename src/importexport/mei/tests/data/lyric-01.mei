@@ -34,6 +34,7 @@
                      <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
                         <label>Voice</label>
                         <labelAbbr>Vo.</labelAbbr>
+                        <instrDef midi.instrnum="52" />
                         <clef shape="G" line="2" />
                      </staffDef>
                   </staffGrp>

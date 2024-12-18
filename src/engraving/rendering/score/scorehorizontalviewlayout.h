@@ -36,6 +36,7 @@ private:
     static void layoutLinear(LayoutContext& ctx);
     static void resetSystems(LayoutContext& ctx, bool layoutAll);
     static void collectLinearSystem(LayoutContext& ctx);
+    static void layoutSystemLockIndicators(System* system);
 
     //! puts segments on the positions according to their length
     static void layoutSegmentsWithDuration(Measure* m, const std::vector<int>& visibleParts);

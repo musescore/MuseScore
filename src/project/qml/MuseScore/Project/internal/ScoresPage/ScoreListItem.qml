@@ -72,7 +72,7 @@ ListItemBlank {
                     thumbnailUrl: root.score.thumbnailUrl ?? ""
                 }
 
-                layer.enabled: true
+                layer.enabled: ui.isEffectsAllowed
                 layer.effect: EffectOpacityMask {
                     maskSource: Rectangle {
                         width: thumbnailLoader.width

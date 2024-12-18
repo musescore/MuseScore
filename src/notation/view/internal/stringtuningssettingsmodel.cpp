@@ -139,7 +139,7 @@ bool StringTuningsSettingsModel::setStringValue(int stringIndex, const QString& 
     bool useFlat = _stringValue.contains(u'♭');
     item->setUseFlat(useFlat);
 
-    beginMultiCommands();
+    beginMultiCommands(TranslatableString("undoableAction", "Set string tuning"));
 
     updateCurrentPreset();
     saveStrings();
@@ -229,7 +229,7 @@ void StringTuningsSettingsModel::setCurrentPreset(const QString& preset)
 {
     bool isCurrentCustom = currentPreset() == customPreset();
 
-    beginMultiCommands();
+    beginMultiCommands(TranslatableString("undoableAction", "Load string tunings preset"));
 
     changeItemProperty(mu::engraving::Pid::STRINGTUNINGS_PRESET, String::fromQString(preset));
     emit currentPresetChanged();
@@ -282,7 +282,7 @@ void StringTuningsSettingsModel::setCurrentNumberOfStrings(int number)
         return;
     }
 
-    beginMultiCommands();
+    beginMultiCommands(TranslatableString("undoableAction", "Set number of strings"));
 
     changeItemProperty(mu::engraving::Pid::STRINGTUNINGS_STRINGS_COUNT, number);
 
@@ -353,7 +353,7 @@ void StringTuningsSettingsModel::saveStrings()
         stringList[i].useFlat = item->useFlat();
     }
 
-    beginCommand();
+    beginCommand(TranslatableString("undoableAction", "Edit strings"));
 
     StringData newStringData(originStringData->frets(), stringList);
     stringTunings->undoStringData(newStringData);

@@ -1936,22 +1936,14 @@ void SingleDraw::draw(const LayoutBreak* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    Pen pen;
-    pen.setColor(item->configuration()->fontPrimaryColor());
-    pen.setWidthF(item->lineWidth() / 2);
-    pen.setJoinStyle(PenJoinStyle::MiterJoin);
-    pen.setCapStyle(PenCapStyle::SquareCap);
-    pen.setDashPattern({ 1, 3 });
-
+    Pen pen(item->configuration()->fontPrimaryColor());
     painter->setPen(pen);
-    painter->setBrush(BrushStyle::NoBrush);
-    painter->drawRect(item->iconBorderRect());
 
-    pen.setWidthF(item->lineWidth());
-    pen.setStyle(PenStyle::SolidLine);
+    Font f(item->font());
+    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    painter->setFont(f);
 
-    painter->setPen(pen);
-    painter->drawPath(item->iconPath());
+    painter->drawSymbol(PointF(0.0, 0.0), item->iconCode());
 }
 
 void SingleDraw::draw(const LedgerLine* item, Painter* painter)
@@ -2361,23 +2353,23 @@ void SingleDraw::draw(const TieSegment* item, Painter* painter)
         painter->setBrush(Brush(pen.color()));
         pen.setCapStyle(PenCapStyle::RoundCap);
         pen.setJoinStyle(PenJoinStyle::RoundJoin);
-        pen.setWidthF(item->style().styleMM(Sid::tieEndWidth) * mag);
+        pen.setWidthF(item->endWidth() * mag);
         break;
     case SlurStyleType::Dotted:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setCapStyle(PenCapStyle::RoundCap);           // True dots
         pen.setDashPattern(dotted);
-        pen.setWidthF(item->style().styleMM(Sid::tieDottedWidth) * mag);
+        pen.setWidthF(item->dottedWidth() * mag);
         break;
     case SlurStyleType::Dashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(dashed);
-        pen.setWidthF(item->style().styleMM(Sid::tieDottedWidth) * mag);
+        pen.setWidthF(item->dottedWidth() * mag);
         break;
     case SlurStyleType::WideDashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(wideDashed);
-        pen.setWidthF(item->style().styleMM(Sid::tieDottedWidth) * mag);
+        pen.setWidthF(item->dottedWidth() * mag);
         break;
     case SlurStyleType::Undefined:
         break;

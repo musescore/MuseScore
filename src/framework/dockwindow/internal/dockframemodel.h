@@ -41,6 +41,7 @@ class DockFrameModel : public QObject, public muse::Injectable
     Q_PROPERTY(QQuickItem * frame READ frame WRITE setFrame NOTIFY frameChanged)
     Q_PROPERTY(QVariantList tabs READ tabs NOTIFY tabsChanged)
 
+    Q_PROPERTY(QQmlComponent * titleBar READ titleBar NOTIFY titleBarChanged)
     Q_PROPERTY(bool titleBarVisible READ titleBarVisible NOTIFY titleBarVisibleChanged)
     Q_PROPERTY(bool isHorizontalPanel READ isHorizontalPanel NOTIFY isHorizontalPanelChanged)
     Q_PROPERTY(QObject * navigationSection READ navigationSection NOTIFY navigationSectionChanged)
@@ -58,6 +59,7 @@ public:
     QQuickItem* frame() const;
     QVariantList tabs() const;
 
+    QQmlComponent* titleBar() const;
     bool titleBarVisible() const;
     bool isHorizontalPanel() const;
     QObject* navigationSection() const;
@@ -75,6 +77,7 @@ public slots:
 signals:
     void frameChanged(QQuickItem* frame);
     void tabsChanged();
+    void titleBarChanged();
     void titleBarVisibleChanged(bool visible);
     void isHorizontalPanelChanged();
     void navigationSectionChanged();
@@ -94,7 +97,11 @@ private:
     QObject* currentNavigationSection() const;
     void updateNavigationSection();
 
+    QQmlComponent* currentTitleBar() const;
+    void updateTitleBar();
+
     KDDockWidgets::Frame* m_frame = nullptr;
+    QQmlComponent* m_titleBar = nullptr;
     bool m_titleBarVisible = false;
     bool m_isHorizontalPanel = false;
     QObject* m_navigationSection = nullptr;

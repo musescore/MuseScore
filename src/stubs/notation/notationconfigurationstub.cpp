@@ -465,6 +465,16 @@ void NotationConfigurationStub::setPianoKeyboardNumberOfKeys(int)
 {
 }
 
+ValCh<bool> NotationConfigurationStub::midiUseWrittenPitch() const
+{
+    static ValCh<bool> vch;
+    return vch;
+}
+
+void NotationConfigurationStub::setMidiUseWrittenPitch(bool)
+{
+}
+
 bool NotationConfigurationStub::useNewPercussionPanel() const
 {
     return false

@@ -55,11 +55,12 @@ const muse::ui::UiActionList& ExtensionsUiActions::actionsList() const
     for (const Manifest& m : manifests) {
         for (const Action& a : m.actions) {
             UiAction action;
-            action.code = makeUriQuery(m.uri, a.code).toString();
+            action.code = makeActionCode(m.uri, a.code);
             action.uiCtx = toUiContext(a.uiCtx);
             action.scCtx = toScContext(a.uiCtx);
             action.description = TranslatableString("extensions", "Run plugin %1 (%2)").arg(m.title, a.title);
             action.title = action.description;
+            action.iconCode = a.icon;
 
             result.push_back(std::move(action));
         }

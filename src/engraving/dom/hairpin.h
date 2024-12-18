@@ -88,6 +88,8 @@ private:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 
+    void setPropertyFlags(Pid id, PropertyFlags f) override;
+
     bool m_drawCircledTip = false;
     PointF m_circledTip;
     double m_circledTipRadius = 0.0;

@@ -134,6 +134,8 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
     score->setShowUnprintable(false);
     score->setShowVBox(false);
 
+    score->doLayout();
+
     PageList pages = masterNotation->notation()->elements()->pages();
     if (pages.empty()) {
         LOGE() << "No pages";
@@ -190,7 +192,7 @@ muse::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, c
 
     // Setup duration
     INotationPlaybackPtr playback = masterNotation->playback();
-    float totalPlayTimeSec = playback->totalPlayTime() / 1000.0;
+    float totalPlayTimeSec = playback->totalPlayTime();
 
     LOGI() << "totalPlayTime: " << totalPlayTimeSec << " sec";
 

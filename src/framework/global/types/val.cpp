@@ -24,6 +24,10 @@
 #include <sstream>
 #include <iomanip>
 
+#ifndef NO_QT_SUPPORT
+#include <QMetaType>
+#endif
+
 #include "log.h"
 
 using namespace muse;

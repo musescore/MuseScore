@@ -33,12 +33,18 @@ using namespace muse;
 using namespace muse::audio;
 using namespace muse::async;
 
-static constexpr size_t DEFAULT_AUX_BUFFER_SIZE = 1024;
-
 Mixer::Mixer(const modularity::ContextPtr& iocCtx)
     : muse::Injectable(iocCtx)
 {
     ONLY_AUDIO_WORKER_THREAD;
+
+    m_taskScheduler = std::make_unique<TaskScheduler>(static_cast<thread_pool_size_t>(configuration()->desiredAudioThreadNumber()));
+
+    if (!m_taskScheduler->setThreadsPriority(ThreadPriority::High)) {
+        LOGE() << "Unable to change audio threads priority";
+    }
+
+    AudioSanitizer::setMixerThreads(m_taskScheduler->threadIdSet());
 
     m_minTrackCountForMultithreading = configuration()->minTrackCountForMultithreading();
 }
@@ -271,7 +277,7 @@ void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel,
                 continue;
             }
 
-            std::future<std::vector<float> > future = TaskScheduler::instance()->submit(processChannel, pair.second);
+            std::future<std::vector<float> > future = m_taskScheduler->submit(processChannel, pair.second);
             futures.emplace(pair.first, std::move(future));
         }
 
@@ -524,7 +530,7 @@ void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
     m_isSilence = true;
 
     float totalSquaredSum = 0.f;
-    float volume = dsp::linearFromDecibels(m_masterParams.volume);
+    float volume = muse::db_to_linear(m_masterParams.volume);
 
     for (audioch_t audioChNum = 0; audioChNum < m_audioChannelsCount; ++audioChNum) {
         float singleChannelSquaredSum = 0.f;
@@ -547,7 +553,7 @@ void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
         }
 
         float rms = dsp::samplesRootMeanSquare(singleChannelSquaredSum, samplesPerChannel);
-        m_audioSignalNotifier.updateSignalValues(audioChNum, rms, dsp::dbFromSample(rms));
+        m_audioSignalNotifier.updateSignalValues(audioChNum, rms);
     }
 
     m_audioSignalNotifier.notifyAboutChanges();
@@ -563,7 +569,7 @@ void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
 void Mixer::notifyNoAudioSignal()
 {
     for (audioch_t audioChNum = 0; audioChNum < m_audioChannelsCount; ++audioChNum) {
-        m_audioSignalNotifier.updateSignalValues(audioChNum, 0.f, dsp::dbFromSample(0.f));
+        m_audioSignalNotifier.updateSignalValues(audioChNum, 0.f);
     }
 
     m_audioSignalNotifier.notifyAboutChanges();

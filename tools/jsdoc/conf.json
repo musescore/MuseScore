@@ -9,10 +9,13 @@
     "plugins": ["plugins/markdown"],
     "templates": {
         "cleverLinks": false,
-        "monospaceLinks": false
+        "monospaceLinks": false,
+        "default": {
+            "outputSourceFiles": false
+        }
     },
 	"opts": {
-        "template": "node_modules/docdash",  
+        "template": "./template",
         "encoding": "utf8",               
         "destination": "./out/",          
         "recurse": false,                  

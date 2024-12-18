@@ -59,6 +59,7 @@ static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrec
 static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
 
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
+static const Settings::Key USE_MIDI_INPUT_WRITTEN_PITCH(module_name, "io/midi/useWrittenPitch");
 static const Settings::Key IS_AUTOMATICALLY_PAN_ENABLED(module_name, "application/playback/panPlayback");
 static const Settings::Key PLAYBACK_SMOOTH_PANNING(module_name, "application/playback/smoothPan");
 static const Settings::Key IS_PLAY_REPEATS_ENABLED(module_name, "application/playback/playRepeats");
@@ -96,8 +97,6 @@ static const Settings::Key AUTO_SHOW_PERCUSSION_PANEL_KEY(module_name,  "ui/auto
 static const Settings::Key STYLE_FILE_IMPORT_PATH_KEY(module_name, "import/style/styleFile");
 
 static constexpr int DEFAULT_GRID_SIZE_SPATIUM = 2;
-
-static const Settings::Key ANCHOR_COLOR(module_name, "ui/colors/anchorColor");
 
 void NotationConfiguration::init()
 {
@@ -220,19 +219,14 @@ void NotationConfiguration::init()
         m_pianoKeyboardNumberOfKeys.set(val.toInt());
     });
 
+    settings()->setDefaultValue(USE_MIDI_INPUT_WRITTEN_PITCH, Val(true));
+    m_midiInputUseWrittenPitch.val = settings()->value(USE_MIDI_INPUT_WRITTEN_PITCH).toBool();
+    settings()->valueChanged(USE_MIDI_INPUT_WRITTEN_PITCH).onReceive(this, [this](const Val& val) {
+        m_midiInputUseWrittenPitch.set(val.toBool());
+    });
+
     settings()->setDefaultValue(USE_NEW_PERCUSSION_PANEL_KEY, Val(false));
     settings()->setDefaultValue(AUTO_SHOW_PERCUSSION_PANEL_KEY, Val(true));
-
-    settings()->setDefaultValue(ANCHOR_COLOR, Val(QColor("#C31989")));
-    settings()->setDescription(ANCHOR_COLOR, muse::qtrc("notation", "Anchor color").toStdString());
-    settings()->setCanBeManuallyEdited(ANCHOR_COLOR, true);
-    settings()->valueChanged(ANCHOR_COLOR).onReceive(nullptr, [this](const Val& val) {
-        m_anchorColorChanged.send(val.toQColor());
-    });
-
-    anchorColorChanged().onReceive(this, [this](const QColor&) {
-        m_foregroundChanged.notify();
-    });
 
     engravingConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
         m_foregroundChanged.notify();
@@ -256,16 +250,6 @@ void NotationConfiguration::init()
     context()->currentProjectChanged().onNotify(this, [this]() {
         resetStyleDialogPageIndices();
     });
-}
-
-QColor NotationConfiguration::anchorColor() const
-{
-    return settings()->value(ANCHOR_COLOR).toQColor();
-}
-
-muse::async::Channel<QColor> NotationConfiguration::anchorColorChanged() const
-{
-    return m_anchorColorChanged;
 }
 
 QColor NotationConfiguration::backgroundColor() const
@@ -917,6 +901,16 @@ void NotationConfiguration::setAutoShowPercussionPanel(bool autoShow)
 void NotationConfiguration::setPianoKeyboardNumberOfKeys(int number)
 {
     settings()->setSharedValue(PIANO_KEYBOARD_NUMBER_OF_KEYS, Val(number));
+}
+
+ValCh<bool> NotationConfiguration::midiUseWrittenPitch() const
+{
+    return m_midiInputUseWrittenPitch;
+}
+
+void NotationConfiguration::setMidiUseWrittenPitch(bool useWrittenPitch)
+{
+    settings()->setSharedValue(USE_MIDI_INPUT_WRITTEN_PITCH, Val(useWrittenPitch));
 }
 
 muse::io::path_t NotationConfiguration::firstScoreOrderListPath() const

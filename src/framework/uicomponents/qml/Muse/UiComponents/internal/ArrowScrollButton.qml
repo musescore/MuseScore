@@ -28,7 +28,7 @@ FlatButton {
     id: root
 
     property bool isScrollUp: false
-    property var view: null
+    property Flickable view: null
 
     visible: enabled && (isScrollUp ? (view.contentY !== 0)
                                     : (view.contentY !== view.contentHeight - view.height))

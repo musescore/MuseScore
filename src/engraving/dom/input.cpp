@@ -50,7 +50,7 @@ bool InputState::isValid() const
 //   drumset
 //---------------------------------------------------------
 
-const Drumset* InputState::drumset() const
+Drumset* InputState::drumset() const
 {
     if (!m_segment || m_track == muse::nidx) {
         return nullptr;

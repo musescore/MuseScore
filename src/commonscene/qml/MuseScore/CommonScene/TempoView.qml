@@ -29,7 +29,7 @@ RowLayout {
     id: root
 
     property alias noteSymbol: noteSymbolLabel.text
-    property var tempoValue: 0
+    property int tempoValue: 0
 
     property alias noteSymbolFont: noteSymbolLabel.font
     property alias tempoValueFont: tempoValueLabel.font

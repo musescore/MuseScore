@@ -82,7 +82,7 @@
           <words>Direction metronome with sound tempo</words>
           </direction-type>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -98,7 +98,7 @@
         </note>
       </measure>
     <measure number="2">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -114,7 +114,7 @@
         </note>
       </measure>
     <measure number="3">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -130,7 +130,7 @@
         </note>
       </measure>
     <measure number="4">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -152,7 +152,7 @@
           <words>Voice</words>
           </direction-type>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -168,7 +168,7 @@
         </note>
       </measure>
     <measure number="6">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -189,7 +189,7 @@
           <words>Voice</words>
           </direction-type>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -211,7 +211,7 @@
           <words>Direction words (empty) with sound tempo</words>
           </direction-type>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -227,7 +227,7 @@
         </note>
       </measure>
     <measure number="9">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -254,7 +254,7 @@
           <words>Sound tempo only</words>
           </direction-type>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -270,7 +270,7 @@
         </note>
       </measure>
     <measure number="11">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -286,7 +286,7 @@
         </note>
       </measure>
     <measure number="12">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -302,7 +302,7 @@
         </note>
       </measure>
     <measure number="13">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -324,7 +324,7 @@
           <words>Voice</words>
           </direction-type>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -340,7 +340,7 @@
         </note>
       </measure>
     <measure number="15">
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -361,7 +361,7 @@
           <words>Voice</words>
           </direction-type>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -401,7 +401,7 @@
           <line>4</line>
           </clef>
         </attributes>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -420,7 +420,7 @@
       <backup>
         <duration>4</duration>
         </backup>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -444,7 +444,7 @@
           </direction-type>
         <staff>1</staff>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -463,7 +463,7 @@
       <backup>
         <duration>4</duration>
         </backup>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -481,7 +481,7 @@
         </note>
       </measure>
     <measure number="3">
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -506,7 +506,7 @@
           </direction-type>
         <staff>2</staff>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -524,7 +524,7 @@
         </note>
       </measure>
     <measure number="4">
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -543,7 +543,7 @@
       <backup>
         <duration>4</duration>
         </backup>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -562,7 +562,7 @@
       </measure>
     <measure number="5">
       <print new-system="yes"/>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -581,7 +581,7 @@
       <backup>
         <duration>4</duration>
         </backup>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -605,7 +605,7 @@
           </direction-type>
         <staff>1</staff>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -630,7 +630,7 @@
           </direction-type>
         <staff>2</staff>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -654,7 +654,7 @@
           </direction-type>
         <staff>1</staff>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -673,7 +673,7 @@
       <backup>
         <duration>4</duration>
         </backup>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -698,7 +698,7 @@
           </direction-type>
         <staff>1</staff>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -717,7 +717,7 @@
       <backup>
         <duration>4</duration>
         </backup>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -741,7 +741,7 @@
           </direction-type>
         <staff>1</staff>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -766,7 +766,7 @@
           </direction-type>
         <staff>2</staff>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -785,7 +785,7 @@
       </measure>
     <measure number="10">
       <print new-system="yes"/>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -804,7 +804,7 @@
       <backup>
         <duration>4</duration>
         </backup>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -828,7 +828,7 @@
           </direction-type>
         <staff>1</staff>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -847,7 +847,7 @@
       <backup>
         <duration>4</duration>
         </backup>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -865,7 +865,7 @@
         </note>
       </measure>
     <measure number="12">
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -890,7 +890,7 @@
           </direction-type>
         <staff>2</staff>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -908,7 +908,7 @@
         </note>
       </measure>
     <measure number="13">
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -927,7 +927,7 @@
       <backup>
         <duration>4</duration>
         </backup>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -946,7 +946,7 @@
       </measure>
     <measure number="14">
       <print new-system="yes"/>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -965,7 +965,7 @@
       <backup>
         <duration>4</duration>
         </backup>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -989,7 +989,7 @@
           </direction-type>
         <staff>1</staff>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -1014,7 +1014,7 @@
           </direction-type>
         <staff>2</staff>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -1038,7 +1038,7 @@
           </direction-type>
         <staff>1</staff>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -1057,7 +1057,7 @@
       <backup>
         <duration>4</duration>
         </backup>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -1099,7 +1099,7 @@
           <octave-change>-1</octave-change>
           </transpose>
         </attributes>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -1115,7 +1115,7 @@
         </note>
       </measure>
     <measure number="2">
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -1131,7 +1131,7 @@
         </note>
       </measure>
     <measure number="3">
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -1152,7 +1152,7 @@
           <words>Bass</words>
           </direction-type>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -1174,7 +1174,7 @@
           <words>Bass</words>
           </direction-type>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -1190,7 +1190,7 @@
         </note>
       </measure>
     <measure number="6">
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -1211,7 +1211,7 @@
           <words>Bass</words>
           </direction-type>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -1228,7 +1228,7 @@
       </measure>
     <measure number="8">
       <print new-system="yes"/>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -1244,7 +1244,7 @@
         </note>
       </measure>
     <measure number="9">
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -1261,7 +1261,7 @@
       </measure>
     <measure number="10">
       <print new-system="yes"/>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -1277,7 +1277,7 @@
         </note>
       </measure>
     <measure number="11">
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -1293,7 +1293,7 @@
         </note>
       </measure>
     <measure number="12">
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -1314,7 +1314,7 @@
           <words>Bass</words>
           </direction-type>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -1336,7 +1336,7 @@
           <words>Bass</words>
           </direction-type>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -1352,7 +1352,7 @@
         </note>
       </measure>
     <measure number="15">
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>
@@ -1373,7 +1373,7 @@
           <words>Bass</words>
           </direction-type>
         </direction>
-      <direction placement="above">
+      <direction placement="above" system="also-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>

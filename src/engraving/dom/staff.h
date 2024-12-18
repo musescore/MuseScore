@@ -144,8 +144,9 @@ public:
     void setHideSystemBarLine(bool val) { m_hideSystemBarLine = val; }
     HideMode hideWhenEmpty() const { return m_hideWhenEmpty; }
     void setHideWhenEmpty(HideMode v) { m_hideWhenEmpty = v; }
-    bool mergeMatchingRests() const { return m_mergeMatchingRests; }
-    void setMergeMatchingRests(bool val) { m_mergeMatchingRests = val; }
+    AutoOnOff mergeMatchingRests() const { return m_mergeMatchingRests; }
+    void setMergeMatchingRests(AutoOnOff val) { m_mergeMatchingRests = val; }
+    bool shouldMergeMatchingRests() const;
 
     int barLineSpan() const { return m_barLineSpan; }
     int barLineFrom() const { return m_barLineFrom; }
@@ -296,7 +297,7 @@ private:
     bool m_cutaway = false;
     bool m_showIfEmpty = false;             // show this staff if system is empty and hideEmptyStaves is true
     bool m_hideSystemBarLine = false;       // no system barline if not preceded by staff with barline
-    bool m_mergeMatchingRests = false;      // merge matching rests in multiple voices
+    AutoOnOff m_mergeMatchingRests = AutoOnOff::AUTO;      // merge matching rests in multiple voices
     HideMode m_hideWhenEmpty = HideMode::AUTO;      // hide empty staves
 
     Color m_color;

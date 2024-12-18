@@ -191,6 +191,21 @@ bool DockBase::separatorsVisible() const
     return m_properties.separatorsVisible;
 }
 
+bool DockBase::isCompact() const
+{
+    return m_isCompact;
+}
+
+int DockBase::compactPriorityOrder() const
+{
+    return m_compactPriorityOrder;
+}
+
+int DockBase::nonCompactWidth() const
+{
+    return m_nonCompactWidth;
+}
+
 bool DockBase::floatable() const
 {
     return m_properties.floatable;
@@ -346,6 +361,30 @@ void DockBase::setSeparatorsVisible(bool visible)
     emit separatorsVisibleChanged();
 }
 
+void DockBase::setIsCompact(bool compact)
+{
+    if (m_isCompact == compact) {
+        return;
+    }
+
+    if (compact) {
+        m_nonCompactWidth = width();
+    }
+
+    m_isCompact = compact;
+    emit isCompactChanged();
+}
+
+void DockBase::setCompactPriorityOrder(int order)
+{
+    if (m_compactPriorityOrder == order) {
+        return;
+    }
+
+    m_compactPriorityOrder = order;
+    emit compactPriorityOrderChanged();
+}
+
 void DockBase::setFloating(bool floating)
 {
     IF_ASSERT_FAILED(m_dockWidget) {
@@ -375,6 +414,7 @@ void DockBase::init()
     setInited(true);
 
     applySizeConstraints();
+    updateFloatingStatus();
 }
 
 void DockBase::deinit()

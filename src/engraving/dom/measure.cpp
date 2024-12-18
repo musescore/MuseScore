@@ -540,8 +540,7 @@ bool Measure::showsMeasureNumberInAutoMode()
 
     // Measure numbers should not show on first measure unless specified with Sid::showMeasureNumberOne
     // except, when showing numbers on each measure, and first measure is after anacrusis - then show always
-    if (!prevMeasure || prevMeasure->sectionBreak()
-        || (prevMeasure->irregular() && prevMeasure->isFirstInSection() && interval != 1)) {
+    if (isFirstInSection() || (prevMeasure->irregular() && prevMeasure->isFirstInSection() && interval != 1)) {
         return style().styleB(Sid::showMeasureNumberOne);
     }
 
@@ -723,6 +722,23 @@ Segment* Measure::getChordRestOrTimeTickSegment(const Fraction& f)
     return seg;
 }
 
+Segment* Measure::undoGetChordRestOrTimeTickSegment(const Fraction& f)
+{
+    Segment* seg = findSegment(SegmentType::ChordRest, f);
+    if (!seg) {
+        seg = findSegment(SegmentType::TimeTick, f);
+    }
+    if (!seg) {
+        if (f - tick() == ticks()) { // end of measure
+            seg = undoGetSegment(SegmentType::TimeTick, f);
+        } else {
+            seg = undoGetSegment(SegmentType::ChordRest, f);
+        }
+    }
+
+    return seg;
+}
+
 //---------------------------------------------------------
 //   getSegmentR
 ///   Get a segment of type st at relative tick position t.
@@ -764,7 +780,9 @@ void Measure::add(EngravingItem* e)
         while (s && s->rtick() == t) {
             if (!seg->isChordRestType() && (seg->segmentType() == s->segmentType())) {
                 LOGD("there is already a <%s> segment", seg->subTypeName());
-                return;
+                /// HACK: REMOVED to prevent crash in 4.4.3.
+                /// Adding multiple identical segments may cause problems, so we should resolve this properly
+                // return;
             }
             if (seg->goesBefore(s)) {
                 break;
@@ -1283,20 +1301,18 @@ void Measure::insertStaff(Staff* staff, staff_idx_t staffIdx)
 }
 
 //---------------------------------------------------------
-//   staffabbox
+//   staffPageBoundingRect
 //---------------------------------------------------------
 
-RectF Measure::staffabbox(staff_idx_t staffIdx) const
+RectF Measure::staffPageBoundingRect(staff_idx_t staffIdx) const
 {
     System* s = system();
     IF_ASSERT_FAILED(s) {
         return RectF();
     }
-    RectF sb(s->staff(staffIdx)->bbox());
-    RectF rrr(sb.translated(s->pagePos()));
-    RectF rr(abbox());
-    RectF r(rr.x(), rrr.y(), rr.width(), rrr.height());
-    return r;
+    RectF sysStaffPageBbox = s->staff(staffIdx)->bbox().translated(s->pagePos());
+    RectF measurePageBbox = pageBoundingRect();
+    return RectF(measurePageBbox.x(), sysStaffPageBbox.y(), measurePageBbox.width(), sysStaffPageBbox.height());
 }
 
 //---------------------------------------------------------
@@ -1380,6 +1396,15 @@ bool Measure::acceptDrop(EditData& data) const
         case ActionIconType::STAFF_TYPE_CHANGE:
             viewer->setDropRectangle(staffRect);
             return true;
+        case ActionIconType::SYSTEM_LOCK:
+        {
+            LayoutMode layoutMode = score()->layoutMode();
+            if (layoutMode == LayoutMode::PAGE || layoutMode == LayoutMode::SYSTEM) {
+                viewer->setDropRectangle(canvasBoundingRect().adjusted(-x(), 0.0, 0.0, 0.0));
+                return true;
+            }
+            return false;
+        }
         default:
             break;
         }
@@ -1716,6 +1741,9 @@ EngravingItem* Measure::drop(EditData& data)
             score()->undoAddElement(stc);
             break;
         }
+        case ActionIconType::SYSTEM_LOCK:
+            score()->makeIntoSystem(system()->first(), this);
+            break;
         default:
             break;
         }
@@ -1801,8 +1829,12 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                 rest->undoChangeProperty(Pid::DURATION_TYPE_WITH_DOTS, DurationTypeWithDots(DurationType::V_MEASURE));
             } else {          // if measure value did change, represent with rests actual measure value
                 // convert the measure duration in a list of values (no dots for rests)
-                std::vector<TDuration> durList = toRhythmicDurationList(nf * stretch, true, tick(),
-                                                                        score()->sigmap()->timesig(tick().ticks()).nominal(), this, 0);
+                std::vector<TDuration> durList = toRhythmicDurationList(nf * stretch,
+                                                                        /*isRest=*/ true,
+                                                                        /*rtickStart=*/ Fraction(0, 1),
+                                                                        /*nominal=*/ score()->sigmap()->timesig(tick().ticks()).nominal(),
+                                                                        /*measure=*/ this,
+                                                                        /*maxDots=*/ 0);
 
                 // set the existing rest to the first value of the duration list
                 TDuration firstDur = durList[0];
@@ -1969,14 +2001,28 @@ bool Measure::isFirstInSystem() const
     return system()->firstMeasure() == this;
 }
 
+bool Measure::isLastInSystem() const
+{
+    IF_ASSERT_FAILED(system()) {
+        return false;
+    }
+    return system()->lastMeasure() == this;
+}
+
 //---------------------------------------------------------
 //   isFirstInSection
 //---------------------------------------------------------
 
 bool Measure::isFirstInSection() const
 {
-    Measure* prevMeasure = this->prevMeasure();
-    return !prevMeasure || prevMeasure->sectionBreak();
+    for (MeasureBase* m = prev(); m; m = m->prev()) {
+        if (m->sectionBreak()) {
+            return true;
+        } else if (m->isMeasure()) {
+            return false;
+        }
+    }
+    return true;
 }
 
 //---------------------------------------------------------
@@ -3035,9 +3081,9 @@ double Measure::userStretch() const
 //   nextElementStaff
 //---------------------------------------------------------
 
-EngravingItem* Measure::nextElementStaff(staff_idx_t staff)
+EngravingItem* Measure::nextElementStaff(staff_idx_t staff, EngravingItem* fromItem)
 {
-    EngravingItem* e = score()->selection().element();
+    EngravingItem* e = fromItem ? fromItem : score()->selection().element();
     if (!e && !score()->selection().elements().empty()) {
         e = score()->selection().elements().front();
     }
@@ -3071,9 +3117,9 @@ EngravingItem* Measure::nextElementStaff(staff_idx_t staff)
 //   prevElementStaff
 //---------------------------------------------------------
 
-EngravingItem* Measure::prevElementStaff(staff_idx_t staff)
+EngravingItem* Measure::prevElementStaff(staff_idx_t staff, EngravingItem* fromItem)
 {
-    EngravingItem* e = score()->selection().element();
+    EngravingItem* e = fromItem ? fromItem : score()->selection().element();
     if (!e && !score()->selection().elements().empty()) {
         e = score()->selection().elements().front();
     }
@@ -3134,6 +3180,9 @@ void Measure::computeTicks()
                 break;
             }
             nextSegment = nextSegment->next();
+        }
+        if (segment->ticks().isZero()) {
+            segment->setTicks(ticks() - segment->rtick());
         }
     }
 }
@@ -3238,34 +3287,6 @@ void Measure::setEndBarLineType(BarLineType val, track_idx_t track, bool visible
 }
 
 //---------------------------------------------------------
-//   basicStretch
-//---------------------------------------------------------
-
-double Measure::basicStretch() const
-{
-    double stretch = userStretch() * style().styleD(Sid::measureSpacing);
-    if (stretch < 1.0) {
-        stretch = 1.0;
-    }
-    return stretch;
-}
-
-//---------------------------------------------------------
-//   basicWidth
-//---------------------------------------------------------
-
-double Measure::basicWidth() const
-{
-    Segment* ls = last();
-    double w = (ls->x() + ls->width()) * basicStretch();
-    double minMeasureWidth = style().styleMM(Sid::minMeasureWidth);
-    if (w < minMeasureWidth) {
-        w = minMeasureWidth;
-    }
-    return w;
-}
-
-//---------------------------------------------------------
 //   checkHeader
 //---------------------------------------------------------
 
@@ -3328,24 +3349,6 @@ bool Measure::canAddStringTunings(staff_idx_t staffIdx) const
     return !alreadyHasStringTunings;
 }
 
-void Measure::stretchToTargetWidth(double targetWidth)
-{
-    if (targetWidth < width()) {
-        return;
-    }
-    std::vector<Spring> springs;
-    for (Segment& s : m_segments) {
-        if (s.isChordRestType() && s.visible() && s.enabled() && !s.allElementsInvisible()) {
-            double springConst = 1 / s.stretch();
-            double width = s.width(LD_ACCESS::BAD) - s.widthOffset();
-            double preTension = width * springConst;
-            springs.emplace_back(springConst, width, preTension, &s);
-        }
-    }
-    Segment::stretchSegmentsToWidth(springs, targetWidth - width());
-    respaceSegments();
-}
-
 Fraction Measure::maxTicks() const
 {
     Segment* s = first();
@@ -3360,23 +3363,6 @@ Fraction Measure::maxTicks() const
         s = s->next();
     }
     return maxticks;
-}
-
-Fraction Measure::shortestChordRest() const
-{
-    Fraction shortest = Fraction::max(); // Initializing at arbitrary high value
-    Fraction cur = Fraction::max();
-    Segment* s = first();
-    while (s) {
-        if (s->isChordRestType() && !s->allElementsInvisible()) {
-            cur = s->shortestChordRest();
-            if (cur < shortest) {
-                shortest = cur;
-            }
-        }
-        s = s->next();
-    }
-    return shortest;
 }
 
 void Measure::respaceSegments()

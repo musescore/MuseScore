@@ -312,7 +312,11 @@ static Note* prepareTarget(ChordRest* target, Note* with, const Fraction& durati
     DirectionV stemDirection = DirectionV::AUTO;
     if (staffGroup == StaffGroup::PERCUSSION) {
         const Drumset* ds = staff->part()->instrument(segment->tick())->drumset();
-        stemDirection = ds->stemDirection(with->noteVal().pitch);
+        DO_ASSERT(ds);
+
+        if (ds) {
+            stemDirection = ds->stemDirection(with->noteVal().pitch);
+        }
     }
 
     segment = target->score()->setNoteRest(segment, target->track(),
@@ -395,9 +399,10 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
         EngravingItem* newEl = 0;
         for (EngravingItem* target : els) {
             el->setTrack(target->track());
-            addRefresh(target->abbox());         // layout() ?!
+            addRefresh(target->pageBoundingRect()); // layout() ?!
             EditData ddata(view);
             ddata.dropElement = el.get();
+            ddata.pos = target->pageBoundingRect().topLeft();
             if (target->acceptDrop(ddata)) {
                 if (!el->isNote() || (target = prepareTarget(target, toNote(el.get()), duration))) {
                     ddata.dropElement = el->clone();
@@ -494,7 +499,7 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
 
         for (EngravingItem* target : els) {
             EngravingItem* nel = image->clone();
-            addRefresh(target->abbox());         // layout() ?!
+            addRefresh(target->pageBoundingRect()); // layout() ?!
             EditData ddata(view);
             ddata.dropElement    = nel;
             if (target->acceptDrop(ddata)) {
@@ -504,7 +509,7 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
                 }
 
                 if (m_selection.element()) {
-                    addRefresh(m_selection.element()->abbox());
+                    addRefresh(m_selection.element()->pageBoundingRect());
                 }
             }
         }

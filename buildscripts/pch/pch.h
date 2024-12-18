@@ -20,15 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PCH_H
-#define MU_PCH_H
+#pragma once
 
 /*
 This is not `all.h`, you don’t need to put all the includes that are used in the project here.
 
 Here should be only the most frequently used includes.
 If you put a few includes here, the build will not speed up much.
-If you put a lot of includes here, then the build may also be slower than possible (due to the large .pch  file)
+If you put a lot of includes here, then the build may also be slower than possible (due to the large .pch file)
 So, here should be not few and not many includes :)
 
 It is best to use a tool to determine the most commonly used inclusions.
@@ -36,70 +35,100 @@ See https://github.com/musescore/musescore_devtools/tree/main/include-what-you-u
 */
 
 // Std includes
-#include <memory> //413
-#include <vector> //401
-#include <algorithm> //274
-#include <utility> //267
-#include <string> //236
-#include <stddef.h> //213
-#include <map> //161
-#include <stdint.h> //65
-#include <string.h> //65
-#include <set> //62
-#include <list> //61
-#include <ostream> //51
-#include <cmath> //51
-#include <stdio.h> //47
-#include <iterator> //40
-#include <functional> //38
-#include <type_traits> //30
-#include <math.h> //30
-#include <stdlib.h> //30
-#include <limits> //28
-#include <initializer_list> //28
-#include <array> //25
-#include <errno.h> //20
+#include <memory> //1222
+#include <string> //1188
+#include <vector> //1036
+#include <utility> //695
+#include <algorithm> //472
+#include <map> //405
+#include <cstddef> //381
+#include <list> //304
+#include <functional> //219
+#include <set> //219
+#include <cstdint> //192
+#include <cmath> //155+68+28
+#include <cstring> //154+22
+#include <unordered_map> //131+50
+#include <iterator> //115
+#include <cstdlib> //104+33
+#include <optional> //83
+#include <cstdio> //76+27
+#include <string_view> //64+34
+#include <unordered_set> //63+50
+#include <array> //60
+#include <sstream> //52+37
+#include <limits> //47
+#include <cassert> //47
+#include <initializer_list> //44
+#include <variant> //29
+#include <tuple> //22
+#include <climits> //22
+#include <regex> //21 and via types/string.h
 
-// Qt includes
-#include <QString> //771
-#include <QList> //465
-#include <QVariant> //376
-#include <QByteArray> //257
-#include <QPointF> //249
-#include <QRectF> //191
-#include <QStringList> //164
-#include <QObject> //152
-#include <QVector> //143
-#include <QPainter> //139
-#include <QColor> //126
-#include <QFlags> //99
-#include <QIODevice> //92
-#include <QPen> //90
-#include <QMap> //88
-#include <QFile> //85
-#include <QLineF> //67
-#include <QChar> //66
-#include <QApplication> //61
-#include <QWidget> //52
-#include <QVariantMap> //51
-#include <QModelIndex> //41
-#include <QFont> //40
-#include <QFileInfo> //40
-#include <QSizeF> //39
-#include <QSet> //39
-#include <QRect> //38
-#include <QDebug> //35
-#include <QSize> //34
-#include <QUrl> //32
-#include <QTransform> //30
-#include <QDialog> //27
-#include <QXmlStreamReader> //26
-#include <QVariantList> //25
-#include <QMetaType> //25
-#include <QFontMetricsF> //24
-#include <QMultiMap> //22
-#include <QPushButton> //22
-#include <QPixmap> //22
-#include <QXmlStreamAttributes> //22
+#include <numeric> //via types/types.h(998) -> fraction.h
+#include <iostream> //via log.h(591)
 
-#endif //MU_PCH_H
+#ifndef NO_QT_SUPPORT
+
+// QtCore includes
+#include <QObject> //382+794(qtmetamacros.h)+54(qobjectdefs.h)
+#include <QString> //928
+#include <QList> //660
+#include <QVariant> //452
+#include <QtGlobal> //439
+// #include <qcontainerfwd.h> //378 (no canonical Qt header available, but included via other headers anyway)
+#include <QByteArray> //354
+#include <Qt> //310
+#include <QMap> //292
+#include <QPoint> //150
+#include <QRect> //140
+#include <QHash> //137
+#include <QSize> //114
+#include <QAbstractItemModel> //100
+#include <QEvent> //91
+#include <QUrl> //88
+#include <QDebug> //79
+#include <QMetaType> //74
+#include <QIODevice> //70
+#include <QTimer> //66
+#include <QChar> //52
+#include <QJsonDocument> //50
+#include <QFile> //46
+#include <QCoreApplication> //43
+#include <QTextStream> //38
+#include <QStringLiteral> //38
+#include <QJsonValue> //36
+#include <QJsonObject> //36
+#include <QDateTime> //34
+#include <QJsonArray> //34
+#include <QBuffer> //34
+#include <QSet> //32
+#include <QPointer> //31
+
+#include <QPolygon> //via types/types.h -> geometry.h
+#include <QLine>
+#include <QPair>
+
+// QtGui includes
+#include <QGuiApplication> //106
+#include <QColor> //90
+#include <QEvent> //80
+#include <QPixmap> //44
+#include <QPainter> //42
+#include <QWindow> //40
+#include <QFont> //30
+
+// QtQml includes
+#include <QQmlEngine> //26+62(qqml.h)
+#include <QJSValue> //41
+#include <QQmlListProperty> //30
+
+// QtQuick includes
+#include <QQuickItem> //106
+
+// QtWidgets includes
+#include <QWidget> //62
+#include <QApplication> //50
+#include <QDialog> //42
+
+#endif // NO_QT_SUPPORT

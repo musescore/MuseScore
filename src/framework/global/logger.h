@@ -31,7 +31,9 @@ using Logger = kors::logger::Logger;
 using Type = kors::logger::Type;
 using Level = kors::logger::Level;
 using Color = kors::logger::Color;
+using LogMsg = kors::logger::LogMsg;
 using LogLayout = kors::logger::LogLayout;
+using LogDest = kors::logger::LogDest;
 using ConsoleLogDest = kors::logger::ConsoleLogDest;
 using FileLogDest = kors::logger::FileLogDest;
 }

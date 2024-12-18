@@ -68,17 +68,6 @@ EngravingObject::EngravingObject(const ElementType& type, EngravingObject* paren
         m_score = static_cast<Score*>(this);
     }
 
-    // gen EID
-    if (type != ElementType::SCORE) {
-        Score* s = score();
-        if (s) {
-            MasterScore* ms = s->masterScore();
-            if (ms) {
-                m_eid = ms->getEID()->newEID(m_type);
-            }
-        }
-    }
-
     // reg to debug
     if (type != ElementType::SCORE) {
         if (m_score && m_score->elementsProvider()) {
@@ -102,17 +91,6 @@ EngravingObject::EngravingObject(const EngravingObject& se)
         }
     }
     m_links = 0;
-
-    // gen EID
-    if (m_type != ElementType::SCORE) {
-        Score* s = score();
-        if (s) {
-            MasterScore* ms = s->masterScore();
-            if (ms) {
-                m_eid = ms->getEID()->newEID(m_type);
-            }
-        }
-    }
 
     // reg to debug
     if (m_type != ElementType::SCORE) {
@@ -528,7 +506,7 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
 void EngravingObject::undoPushProperty(Pid id)
 {
     PropertyValue val = getProperty(id);
-    score()->undoStack()->push1(new ChangeProperty(this, id, val));
+    score()->undoStack()->pushWithoutPerforming(new ChangeProperty(this, id, val));
 }
 
 //---------------------------------------------------------
@@ -725,6 +703,21 @@ TranslatableString EngravingObject::typeUserName() const
 String EngravingObject::translatedTypeUserName() const
 {
     return typeUserName().translated();
+}
+
+EID EngravingObject::eid() const
+{
+    return masterScore()->eidRegister()->EIDFromItem(this);
+}
+
+void EngravingObject::setEID(EID id) const
+{
+    masterScore()->eidRegister()->registerItemEID(id, this);
+}
+
+EID EngravingObject::assignNewEID() const
+{
+    return masterScore()->eidRegister()->newEIDForItem(this);
 }
 
 //---------------------------------------------------------

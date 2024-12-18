@@ -5504,7 +5504,7 @@ const std::array<muse::TranslatableString, size_t(SymId::lastSym) + 1> SymNames:
     muse::TranslatableString::untranslatable("Soft gum beater, right"),
     muse::TranslatableString::untranslatable("Soft gum beater, up"),
     muse::TranslatableString::untranslatable("Half-open"),
-    muse::TranslatableString::untranslatable("Half-open 2 (Weinberg)"),
+    muse::TranslatableString("engraving/sym", "Half-open 2 (Weinberg)"),
     muse::TranslatableString::untranslatable("Handbell"),
     muse::TranslatableString::untranslatable("Hi-hat"),
     muse::TranslatableString::untranslatable("Hi-hat cymbals on stand"),

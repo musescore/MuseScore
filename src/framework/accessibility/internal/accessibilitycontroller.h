@@ -154,9 +154,7 @@ private:
 
     void cancelPreviousReading();
     void savePanelAccessibleName(const IAccessible* oldItem, const IAccessible* newItem);
-#ifndef Q_OS_MAC
     void triggerRevoicingOfChangedName(IAccessible* item);
-#endif
 
     const IAccessible* panel(const IAccessible* item) const;
 

@@ -219,11 +219,11 @@ struct ChordDescription {
                              // that will by recognized from keyboard entry (without root/base)
     std::list<ParsedChord> parsedChords;
     // parsed forms of primary name (optionally also include parsed forms of other names)
-    String xmlKind;          // MusicXml: kind
-    String xmlText;          // MusicXml: kind text=
-    String xmlSymbols;       // MusicXml: kind use-symbols=
-    String xmlParens;        // MusicXml: kind parentheses-degrees=
-    StringList xmlDegrees;   // MusicXml: list of degrees (if any)
+    String xmlKind;          // MusicXML: kind
+    String xmlText;          // MusicXML: kind text=
+    String xmlSymbols;       // MusicXML: kind use-symbols=
+    String xmlParens;        // MusicXML: kind parentheses-degrees=
+    StringList xmlDegrees;   // MusicXML: list of degrees (if any)
     HChord chord;             // C based chord
     std::list<RenderAction> renderList;
     bool generated = false;
@@ -305,7 +305,7 @@ private:
 
     friend class compat::ReadChordListHook;
 
-    void read(XmlReader&);
+    void read(XmlReader& xml, int mscVersion);
     void write(XmlWriter& xml) const;
 
     std::map<String, ChordSymbol> m_symbols;

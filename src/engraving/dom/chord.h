@@ -97,10 +97,6 @@ public:
     ~Chord();
     Chord& operator=(const Chord&) = delete;
 
-    bool containsEqualArticulations(const Chord* other) const;
-    bool containsEqualArpeggio(const Chord* other) const;
-    bool containsEqualTremolo(const Chord* other) const;
-
     // Score Tree functions
     EngravingObject* scanParent() const override;
     EngravingObjectList scanChildren() const override;
@@ -171,9 +167,9 @@ public:
     void setTremoloSingleChord(TremoloSingleChord* tr);
 
     ChordLine* chordLine() const;
-    bool endsGlissandoOrGuitarBend() const { return m_endsGlissando; }
-    void setEndsGlissandoOrGuitarBend(bool val) { m_endsGlissando = val; }
-    void updateEndsGlissandoOrGuitarBend();
+    bool endsNoteAnchoredLine() const { return m_endsNoteAnchoredLine; }
+    void setEndsNoteAnchoredLine(bool val) { m_endsNoteAnchoredLine = val; }
+    void updateEndsNoteAnchoredLine();
     StemSlash* stemSlash() const { return m_stemSlash; }
     bool showStemSlash() const { return m_showStemSlash; }
     void setShowStemSlashInAdvance();
@@ -240,9 +236,10 @@ public:
     double spaceRw() { return m_spaceRw; }
     void setSpaceRw(double rw) { m_spaceRw = rw; }
 
-    bool combineVoice() const { return m_combineVoice; }
-    void setCombineVoice(bool v) { m_combineVoice = v; }
-    inline static bool combineVoice(const Chord* chord1, const Chord* chord2) { return chord1->combineVoice() && chord2->combineVoice(); }
+    AutoOnOff combineVoice() const { return m_combineVoice; }
+    void setCombineVoice(AutoOnOff v) { m_combineVoice = v; }
+    bool shouldCombineVoice() const;
+    static bool combineVoice(const Chord* chord1, const Chord* chord2);
 
     PlayEventType playEventType() const { return m_playEventType; }
     void setPlayEventType(PlayEventType v) { m_playEventType = v; }
@@ -366,7 +363,7 @@ private:
     TremoloTwoChord* m_tremoloTwoChord = nullptr;
     TremoloSingleChord* m_tremoloSingleChord = nullptr;
 
-    bool m_endsGlissando = false;        // true if this chord is the ending point of a glissando (needed for layout)
+    bool m_endsNoteAnchoredLine = false;        // true if this chord is the ending point of a glissando (needed for layout)
     std::vector<Chord*> m_graceNotes;    // storage for all grace notes
     mutable GraceNotesGroup m_graceNotesBefore = GraceNotesGroup(this); // will store before-chord grace notes
     mutable GraceNotesGroup m_graceNotesAfter = GraceNotesGroup(this); // will store after-chord grace notes
@@ -397,7 +394,7 @@ private:
     bool m_allowKerningAbove = true;
     bool m_allowKerningBelow = true;
 
-    bool m_combineVoice = true;
+    AutoOnOff m_combineVoice = AutoOnOff::AUTO;
 
     std::vector<Articulation*> m_articulations;
 };

@@ -86,7 +86,7 @@ public:
     AccessibleItemPtr createAccessible() override;
 #endif
 
-    Text* layoutHeaderFooter(int area, const String& ss) const;
+    Text* layoutHeaderFooter(int area, const String& s) const;
 
 private:
 
@@ -94,7 +94,7 @@ private:
     Page(RootItem* parent);
 
     void doRebuildBspTree();
-    TextBlock replaceTextMacros(bool isHeader, const String&) const;
+    TextBlock replaceTextMacros(const TextBlock&) const;
     const CharFormat formatForMacro(const String&) const;
 
     std::vector<System*> m_systems;

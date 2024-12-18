@@ -65,6 +65,8 @@ ApplicationWindow {
         fileModified: titleProvider.fileModified
     }
 
+    GraphicsTestObject {}
+
     ToolTipProvider { }
 
     //! NOTE Need only create

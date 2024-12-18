@@ -89,6 +89,7 @@
 
 #include "dom/keysig.h"
 
+#include "dom/laissezvib.h"
 #include "dom/layoutbreak.h"
 #include "dom/ledgerline.h"
 #include "dom/letring.h"
@@ -244,6 +245,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::JUMP:         write(item_cast<const Jump*>(item), xml, ctx);
         break;
     case ElementType::KEYSIG:       write(item_cast<const KeySig*>(item), xml, ctx);
+        break;
+    case ElementType::LAISSEZ_VIB:  write(item_cast<const LaissezVib*>(item), xml, ctx);
         break;
     case ElementType::LAYOUT_BREAK: write(item_cast<const LayoutBreak*>(item), xml, ctx);
         break;
@@ -417,6 +420,43 @@ void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, b
     xml.tagProperty(pid, p, d);
 }
 
+void TWrite::writeSystemLocks(const Score* score, XmlWriter& xml)
+{
+    std::vector<const SystemLock*> locks = score->systemLocks()->allLocks();
+    if (locks.empty()) {
+        return;
+    }
+
+    xml.startElement("SystemLocks");
+    for (const SystemLock* sl : locks) {
+        writeSystemLock(sl, xml);
+    }
+    xml.endElement();
+}
+
+void TWrite::writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (MScore::testMode || ctx.configuration()->doNotSaveEIDsForBackCompat() || item->score()->isPaletteScore() || ctx.clipboardmode()) {
+        return;
+    }
+
+    EID eid = item->eid();
+    if (!eid.isValid()) {
+        eid = item->assignNewEID();
+    }
+    xml.tag("eid", eid.toStdString());
+}
+
+void TWrite::writeSystemLock(const SystemLock* systemLock, XmlWriter& xml)
+{
+    xml.startElement("systemLock");
+
+    xml.tag("startMeasure", systemLock->startMB()->eid().toStdString());
+    xml.tag("endMeasure", systemLock->endMB()->eid().toStdString());
+
+    xml.endElement();
+}
+
 void TWrite::writeStyledProperties(const EngravingItem* item, XmlWriter& xml)
 {
     for (const StyledProperty& spp : *item->styledProperties()) {
@@ -426,9 +466,7 @@ void TWrite::writeStyledProperties(const EngravingItem* item, XmlWriter& xml)
 
 void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (!MScore::testMode && !item->score()->isPaletteScore()) {
-        xml.tag("eid", item->eid().toUint64());
-    }
+    TWrite::writeItemEid(item, xml, ctx);
 
     bool autoplaceEnabled = item->score()->style().styleB(Sid::autoplaceEnabled);
     if (!autoplaceEnabled) {
@@ -636,6 +674,7 @@ void TWrite::write(const Ornament* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::INTERVAL_ABOVE);
     writeProperty(item, xml, Pid::INTERVAL_BELOW);
     writeProperty(item, xml, Pid::ORNAMENT_SHOW_ACCIDENTAL);
+    writeProperty(item, xml, Pid::ORNAMENT_SHOW_CUE_NOTE);
     writeProperty(item, xml, Pid::START_ON_UPPER_NOTE);
     writeProperties(static_cast<const Articulation*>(item), xml, ctx);
     xml.endElement();
@@ -877,7 +916,7 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
 
     if (item->noStem()) {
         xml.tag("noStem", item->noStem());
-    } else if (item->stem() && (item->stem()->isUserModified() || !RealIsNull(item->stem()->userLength()))) {
+    } else if (item->stem() && (item->stem()->isUserModified() || !item->stem()->userLength().isZero())) {
         write(item->stem(), xml, ctx);
     }
     if (item->hook() && item->hook()->isUserModified()) {
@@ -1443,14 +1482,14 @@ void TWrite::write(const Glissando* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     if (item->showText() && !item->text().isEmpty()) {
-        xml.tag("text", item->text());
+        xml.tagProperty("text", item->text(), item->propertyDefault(Pid::GLISS_TEXT));
     }
 
     if (ctx.clipboardmode() && item->isHarpGliss().has_value()) {
         xml.tagProperty("isHarpGliss", PropertyValue(item->isHarpGliss().value()));
     }
 
-    for (auto id : { Pid::GLISS_TYPE, Pid::GLISS_STYLE, Pid::GLISS_SHIFT, Pid::GLISS_EASEIN, Pid::GLISS_EASEOUT }) {
+    for (auto id : { Pid::GLISS_SHIFT, Pid::GLISS_EASEIN, Pid::GLISS_EASEOUT }) {
         writeProperty(item, xml, id);
     }
     for (const StyledProperty& spp : *item->styledProperties()) {
@@ -1510,7 +1549,6 @@ void TWrite::writeProperties(const SLine* item, XmlWriter& xml, WriteContext& ct
     }
     writeProperty(item, xml, Pid::LINE_WIDTH);
     writeProperty(item, xml, Pid::LINE_STYLE);
-    writeProperty(item, xml, Pid::COLOR);
     writeProperty(item, xml, Pid::ANCHOR);
     writeProperty(item, xml, Pid::DASH_LINE_LEN);
     writeProperty(item, xml, Pid::DASH_GAP_LEN);
@@ -1573,6 +1611,7 @@ void TWrite::writeProperties(const TextLineBase* item, XmlWriter& xml, WriteCont
             writeProperty(item, xml, pid);
         }
     }
+
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
 }
 
@@ -1603,6 +1642,9 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
 
     writeProperty(item, xml, Pid::SNAP_BEFORE);
     writeProperty(item, xml, Pid::SNAP_AFTER);
+
+    writeProperty(item, xml, Pid::HAIRPIN_HEIGHT);
+    writeProperty(item, xml, Pid::HAIRPIN_CONT_HEIGHT);
 
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
@@ -2076,6 +2118,15 @@ void TWrite::write(const KeySig* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
+void TWrite::write(const LaissezVib* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::MIN_LENGTH);
+    writeProperty(item, xml, Pid::TIE_PLACEMENT);
+    writeProperties(static_cast<const SlurTie*>(item), xml, ctx);
+    xml.endElement();
+}
+
 void TWrite::write(const LayoutBreak* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
@@ -2179,7 +2230,7 @@ void TWrite::write(const MMRest* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement("Rest"); // for compatibility, see also Measure::readVoice()
     writeProperties(static_cast<const ChordRest*>(item), xml, ctx);
-    writeProperty(item, xml, Pid::MMREST_NUMBER_POS);
+    writeProperty(item, xml, Pid::MMREST_NUMBER_OFFSET);
     writeProperty(item, xml, Pid::MMREST_NUMBER_VISIBLE);
     writeItems(item->el(), xml, ctx);
     xml.endElement();
@@ -2218,12 +2269,18 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
         }
     }
 
-    if (item->tieFor()) {
+    if (item->laissezVib()) {
+        write(item->laissezVib(), xml, ctx);
+    }
+
+    if (item->tieFor() && !item->laissezVib()) {
         writeSpannerStart(item->tieFor(), xml, ctx, item, item->track());
     }
+
     if (item->tieBack()) {
         writeSpannerEnd(item->tieBack(), xml, ctx, item, item->track());
     }
+
     if ((item->chord() == 0 || item->chord()->playEventType() != PlayEventType::Auto) && !item->playEvents().empty()) {
         xml.startElement("Events");
         for (const NoteEvent& e : item->playEvents()) {
@@ -2586,8 +2643,8 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
     if (item->hideSystemBarLine()) {
         xml.tag("hideSystemBarLine", item->hideSystemBarLine());
     }
-    if (item->mergeMatchingRests()) {
-        xml.tag("mergeMatchingRests", item->mergeMatchingRests());
+    if (item->mergeMatchingRests() != AutoOnOff::AUTO) {
+        xml.tag("mergeMatchingRests", TConv::toXml(item->mergeMatchingRests()));
     }
     if (!item->visible()) {
         xml.tag("isStaffVisible", item->visible());
@@ -2916,6 +2973,7 @@ void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext&)
 void TWrite::write(const TempoText* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
+    writeProperty(item, xml, Pid::PLAY);
     xml.tag("tempo", TConv::toXml(item->tempo()));
     if (item->followText()) {
         xml.tag("followText", item->followText());
@@ -3020,7 +3078,7 @@ void TWrite::write(const TremoloTwoChord* item, XmlWriter& xml, WriteContext& ct
     writeItemProperties(item, xml, ctx);
 
     // write manual adjustments to file
-    int idx = (item->direction() == DirectionV::AUTO || item->direction() == DirectionV::DOWN) ? 0 : 1;
+    int idx = item->directionIdx();
     if (item->userModified()) {
         double _spatium = item->spatium();
 

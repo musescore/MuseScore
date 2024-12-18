@@ -34,8 +34,6 @@ public:
     RetVal<ReleaseInfo> lastCheckResult() override;
 
     Progress updateProgress() override;
-
-    void openMuseHub() override;
 };
 }
 

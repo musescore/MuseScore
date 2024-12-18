@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -189,10 +189,8 @@
               <tpc>15</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <text>gliss.</text>
                   <linkedMain/>
                   <diagonal>1</diagonal>
-                  <anchor>3</anchor>
                   </Glissando>
                 <next>
                   <location>
@@ -482,10 +480,8 @@
               <tpc>15</tpc>
               <Spanner type="Glissando">
                 <Glissando>
-                  <text>gliss.</text>
                   <linkedMain/>
                   <diagonal>1</diagonal>
-                  <anchor>3</anchor>
                   </Glissando>
                 <next>
                   <location>
@@ -688,7 +684,7 @@
       <name>Flute</name>
       <Division>480</Division>
       <Style>
-        <Spatium>1.74978</Spatium>
+        <spatium>1.74978</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -803,11 +799,9 @@
                 <tpc>15</tpc>
                 <Spanner type="Glissando">
                   <Glissando>
-                    <text>gliss.</text>
                     <linked>
                       </linked>
                     <diagonal>1</diagonal>
-                    <anchor>3</anchor>
                     </Glissando>
                   <next>
                     <location>
@@ -1061,7 +1055,7 @@
       <name>Oboe</name>
       <Division>480</Division>
       <Style>
-        <Spatium>1.74978</Spatium>
+        <spatium>1.74978</spatium>
         </Style>
       <showInvisible>1</showInvisible>
       <showUnprintable>1</showUnprintable>
@@ -1179,11 +1173,9 @@
                 <tpc>15</tpc>
                 <Spanner type="Glissando">
                   <Glissando>
-                    <text>gliss.</text>
                     <linked>
                       </linked>
                     <diagonal>1</diagonal>
-                    <anchor>3</anchor>
                     </Glissando>
                   <next>
                     <location>

@@ -21,20 +21,18 @@
 
 trap 'echo Generate PNGs failed; exit 1' ERR
 
-REF_BIN=./musescore_reference/app/bin/mscore4portable
-CUR_BIN=./musescore_current/app/bin/mscore4portable
+sudo apt-get install libegl1 -y
+export QT_QPA_PLATFORM=offscreen
 
-sudo apt install libopengl0 -y
-sudo apt install libegl1 -y
-
+REF_BIN=./musescore_reference/MuseScore-Studio-vtest.AppImage
 chmod +x $REF_BIN
-# chmod +x ./musescore_reference/app/bin/crashpad_handler
-
-chmod +x $CUR_BIN
-# chmod +x ./musescore_current/app/bin/crashpad_handler
 
 echo reference version:
 $REF_BIN --long-version
+
+CUR_BIN=./musescore_current/MuseScore-Studio-vtest.AppImage
+chmod +x $CUR_BIN
+
 echo current version:
 $CUR_BIN --long-version
 

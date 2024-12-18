@@ -47,7 +47,7 @@ private:
     void toggleMasterPalette(const muse::actions::ActionData& args);
     void toggleSpecialCharactersDialog();
     void openTimeSignaturePropertiesDialog();
-    void openEditDrumsetDialog();
+    void openCustomizeKitDialog();
 
     muse::ValCh<bool> m_masterPaletteOpened;
     muse::async::Channel<muse::actions::ActionCodeList> m_actionsReceiveAvailableChanged;

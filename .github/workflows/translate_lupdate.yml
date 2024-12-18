@@ -26,8 +26,7 @@ jobs:
             LUPDATE_ARGS='-no-obsolete'
           fi
 
-          echo "LUPDATE_ARGS=$LUPDATE_ARGS" >> $GITHUB_ENV
-          echo "LUPDATE_ARGS: $LUPDATE_ARGS"
+          echo "LUPDATE_ARGS=$LUPDATE_ARGS" | tee -a $GITHUB_ENV
 
       - name: Setup environment
         run: |
@@ -38,9 +37,10 @@ jobs:
           bash ./buildscripts/ci/translation/run_lupdate.sh
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           commit-message: "Run `lupdate` with arguments `${{ env.LUPDATE_ARGS }}`"
           branch: "ci_lupdate${{github.ref_name && format('_{0}', github.ref_name) || ''}}"
           add-paths: share/locale/*

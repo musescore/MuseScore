@@ -68,6 +68,17 @@ ColumnLayout {
         }
     }
 
+    function scrollToFocusedItem(focusedIndex) {
+        let targetScrollPosition = (focusedIndex) * (prv.channelItemWidth + 1) // + 1 for separators
+        let maxContentX = flickable.contentWidth - flickable.width
+
+        if (targetScrollPosition + prv.channelItemWidth > flickable.contentX + flickable.width) {
+            flickable.contentX = Math.min(targetScrollPosition + prv.channelItemWidth - flickable.width, maxContentX)
+        } else if (targetScrollPosition < flickable.contentX) {
+            flickable.contentX = Math.max(targetScrollPosition - prv.channelItemWidth, 0)
+        }
+    }
+
     MixerPanelModel {
         id: mixerPanelModel
 
@@ -82,8 +93,8 @@ ColumnLayout {
         }
 
         function setupConnections() {
-            for (var i = 0; i < mixerPanelModel.rowCount(); i++) {
-                var item = mixerPanelModel.get(i)
+            for (let i = 0; i < mixerPanelModel.rowCount(); i++) {
+                let item = mixerPanelModel.get(i)
                 item.channelItem.panel.navigationEvent.connect(function(event) {
                     if (event.type === NavigationEvent.AboutActive) {
                         if (Boolean(prv.currentNavigateControlIndex)) {
@@ -92,6 +103,7 @@ ColumnLayout {
                         }
 
                         prv.isPanelActivated = true
+                        scrollToFocusedItem(i)
                     }
                 })
             }

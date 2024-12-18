@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.50">
   <Score>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -27,12 +27,13 @@
           </StaffType>
         </Staff>
       <trackName></trackName>
-      <Instrument id="piano">
+      <Instrument id="violin">
         <longName>Violine</longName>
         <shortName>Vl.</shortName>
         <trackName></trackName>
-        <instrumentId>keyboard.piano</instrumentId>
+        <instrumentId>strings.violin</instrumentId>
         <Channel>
+          <program value="40"/>
           </Channel>
         </Instrument>
       </Part>

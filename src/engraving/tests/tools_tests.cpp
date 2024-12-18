@@ -40,36 +40,6 @@ public:
     void changeEnharmonic(bool);
 };
 
-TEST_F(Engraving_ToolsTests, undoAddLineBreaks)
-{
-    String readFile(TOOLS_DATA_DIR + "undoAddLineBreaks.mscx");
-    String writeFile1("undoAddLineBreaks01-test.mscx");
-    String reference1(TOOLS_DATA_DIR + "undoAddLineBreaks01-ref.mscx");
-    String writeFile2("undoAddLineBreaks02-test.mscx");
-    String reference2(TOOLS_DATA_DIR + "undoAddLineBreaks02-ref.mscx");
-
-    MasterScore* score = ScoreRW::readScore(readFile);
-    score->doLayout();
-
-    // select all
-    score->startCmd();
-    score->cmdSelectAll();
-    score->endCmd();
-
-    // do
-    score->startCmd();
-    score->addRemoveBreaks(4, false);
-    score->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
-
-    // undo
-    EditData ed;
-    score->undoStack()->undo(&ed);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
-
-    delete score;
-}
-
 TEST_F(Engraving_ToolsTests, undoSlashFill)
 {
     String readFile(TOOLS_DATA_DIR + "undoSlashFill.mscx");
@@ -85,7 +55,7 @@ TEST_F(Engraving_ToolsTests, undoSlashFill)
     score->selection().setRange(s, score->lastSegment(), 0, 2);
 
     // do
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
     score->cmdSlashFill();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
@@ -110,12 +80,12 @@ TEST_F(Engraving_ToolsTests, undoSlashRhythm)
     score->doLayout();
 
     // select all
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
     score->cmdSelectAll();
     score->endCmd();
 
     // do
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
     score->cmdSlashRhythm();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
@@ -140,7 +110,7 @@ TEST_F(Engraving_ToolsTests, undoResequenceAlpha)
     score->doLayout();
 
     // do
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
     score->cmdResequenceRehearsalMarks();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
@@ -165,7 +135,7 @@ TEST_F(Engraving_ToolsTests, undoResequenceNumeric)
     score->doLayout();
 
     // do
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
     score->cmdResequenceRehearsalMarks();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
@@ -190,7 +160,7 @@ TEST_F(Engraving_ToolsTests, undoResequenceMeasure)
     score->doLayout();
 
     // do
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
     score->cmdResequenceRehearsalMarks();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
@@ -215,7 +185,7 @@ TEST_F(Engraving_ToolsTests, undoResequencePart)
     score->doLayout();
 
     // do
-    score->startCmd();
+    score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
     score->cmdResequenceRehearsalMarks();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
@@ -236,7 +206,7 @@ void Engraving_ToolsTests::changeEnharmonic(bool both)
     score->doLayout();
     score->cmdSelectAll();
     for (int i = 1; i < 6; ++i) {
-        score->startCmd();
+        score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
         score->changeEnharmonicSpelling(both);
         score->endCmd();
         String prefix = u"change-enharmonic-" + mode + u"-0" + (u'0' + i);

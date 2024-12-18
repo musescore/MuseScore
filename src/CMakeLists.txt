@@ -52,6 +52,10 @@ if (MUE_BUILD_INSTRUMENTSSCENE_MODULE)
     add_subdirectory(instrumentsscene)
 endif()
 
+if (MUE_BUILD_MUSESOUNDS_MODULE)
+    add_subdirectory(musesounds)
+endif()
+
 if (MUE_BUILD_NOTATION_MODULE)
     add_subdirectory(notation)
 endif()

@@ -23,6 +23,9 @@
 
 #include <QApplication>
 #include <QCloseEvent>
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
 #include <QFileOpenEvent>
 #include <QWindow>
 #include <QMimeData>

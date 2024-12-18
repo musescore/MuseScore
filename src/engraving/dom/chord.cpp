@@ -37,12 +37,14 @@
 #include "guitarbend.h"
 #include "hook.h"
 #include "key.h"
+#include "laissezvib.h"
 #include "ledgerline.h"
 #include "measure.h"
 #include "mscore.h"
 #include "navigate.h"
 #include "note.h"
 #include "noteevent.h"
+#include "noteline.h"
 #include "ornament.h"
 #include "part.h"
 #include "score.h"
@@ -265,7 +267,7 @@ Chord::Chord(Segment* parent)
     m_stemDirection    = DirectionV::AUTO;
     m_arpeggio         = 0;
     m_spanArpeggio     = 0;
-    m_endsGlissando    = false;
+    m_endsNoteAnchoredLine    = false;
     m_noteType         = NoteType::NORMAL;
     m_stemSlash        = 0;
     m_noStem           = false;
@@ -275,7 +277,7 @@ Chord::Chord(Segment* parent)
     m_spaceRw          = 0.;
     m_crossMeasure     = CrossMeasure::UNKNOWN;
     m_graceIndex       = 0;
-    m_combineVoice       = true;
+    m_combineVoice     = AutoOnOff::AUTO;
 }
 
 Chord::Chord(const Chord& c, bool link)
@@ -304,7 +306,7 @@ Chord::Chord(const Chord& c, bool link)
     }
     m_stem          = 0;
     m_hook          = 0;
-    m_endsGlissando = false;
+    m_endsNoteAnchoredLine = false;
     m_arpeggio      = 0;
     m_stemSlash     = 0;
 
@@ -341,6 +343,15 @@ Chord::Chord(const Chord& c, bool link)
             score()->undo(new Link(t, const_cast<TremoloSingleChord*>(c.m_tremoloSingleChord)));
         }
         add(t);
+    } else if (c.m_tremoloTwoChord) {
+        if (c.m_tremoloTwoChord->chord1() == &c) {
+            TremoloTwoChord* t = Factory::copyTremoloTwoChord(*(c.m_tremoloTwoChord));
+            if (link) {
+                score()->undo(new Link(t, const_cast<TremoloTwoChord*>(c.m_tremoloTwoChord)));
+            }
+            t->setChords(this, nullptr);
+            add(t);
+        }
     }
 
     for (EngravingItem* e : c.el()) {
@@ -436,61 +447,6 @@ AccessibleItemPtr Chord::createAccessible()
 }
 
 #endif
-
-bool Chord::containsEqualArticulations(const Chord* other) const
-{
-    if (!other) {
-        return false;
-    }
-
-    if (m_articulations.size() != other->m_articulations.size()) {
-        return false;
-    }
-
-    for (size_t i = 0; i < m_articulations.size(); ++i) {
-        const Articulation* first = m_articulations.at(i);
-        const Articulation* second = other->m_articulations.at(i);
-
-        if (!first || !second) {
-            return false;
-        }
-
-        if (first->symId() != second->symId()) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool Chord::containsEqualArpeggio(const Chord* other) const
-{
-    if (m_arpeggio && other->m_arpeggio) {
-        if (m_arpeggio->arpeggioType() != other->m_arpeggio->arpeggioType()) {
-            return false;
-        }
-    }
-
-    return !m_arpeggio && !other->m_arpeggio;
-}
-
-bool Chord::containsEqualTremolo(const Chord* other) const
-{
-    if (tremoloSingleChord() && other->tremoloSingleChord()) {
-        if (tremoloSingleChord()->tremoloType() != other->tremoloSingleChord()->tremoloType()) {
-            return false;
-        }
-    }
-
-    if (tremoloTwoChord() && other->tremoloTwoChord()) {
-        if (tremoloTwoChord()->tremoloType() != other->tremoloTwoChord()->tremoloType()) {
-            return false;
-        }
-    }
-
-    return !tremoloSingleChord() && !other->tremoloSingleChord()
-           && !tremoloTwoChord() && !other->tremoloTwoChord();
-}
 
 //---------------------------------------------------------
 //   noteHeadWidth
@@ -728,7 +684,7 @@ void Chord::add(EngravingItem* e)
         setTremoloSingleChord(item_cast<TremoloSingleChord*>(e));
         break;
     case ElementType::GLISSANDO:
-        m_endsGlissando = true;
+        m_endsNoteAnchoredLine = true;
         break;
     case ElementType::STEM:
         assert(!m_stem);
@@ -836,7 +792,7 @@ void Chord::remove(EngravingItem* e)
         setTremoloSingleChord(nullptr);
         break;
     case ElementType::GLISSANDO:
-        m_endsGlissando = false;
+        m_endsNoteAnchoredLine = false;
         break;
     case ElementType::STEM:
         m_stem = 0;
@@ -1175,6 +1131,16 @@ void Chord::setTrack(track_idx_t val)
 {
     ChordRest::setTrack(val);
     processSiblings([val](EngravingItem* e) { e->setTrack(val); }, true);
+}
+
+bool Chord::shouldCombineVoice() const
+{
+    return combineVoice() == AutoOnOff::ON || (combineVoice() == AutoOnOff::AUTO && style().styleB(Sid::combineVoice));
+}
+
+bool Chord::combineVoice(const Chord* chord1, const Chord* chord2)
+{
+    return chord1->shouldCombineVoice() && chord2->shouldCombineVoice();
 }
 
 //---------------------------------------------------------
@@ -2139,7 +2105,7 @@ PropertyValue Chord::getProperty(Pid propertyId) const
     case Pid::SMALL:           return isSmall();
     case Pid::STEM_DIRECTION:  return PropertyValue::fromValue<DirectionV>(stemDirection());
     case Pid::PLAY: return isChordPlayable();
-    case Pid::COMBINE_VOICE: return combineVoice();
+    case Pid::COMBINE_VOICE: return PropertyValue::fromValue<AutoOnOff>(combineVoice());
     default:
         return ChordRest::getProperty(propertyId);
     }
@@ -2157,7 +2123,7 @@ PropertyValue Chord::propertyDefault(Pid propertyId) const
     case Pid::SMALL:           return false;
     case Pid::STEM_DIRECTION:  return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
     case Pid::PLAY: return true;
-    case Pid::COMBINE_VOICE: return true;
+    case Pid::COMBINE_VOICE: return AutoOnOff::AUTO;
     default:
         return ChordRest::propertyDefault(propertyId);
     }
@@ -2186,7 +2152,7 @@ bool Chord::setProperty(Pid propertyId, const PropertyValue& v)
         setIsChordPlayable(v.toBool());
         break;
     case Pid::COMBINE_VOICE:
-        setCombineVoice(v.toBool());
+        setCombineVoice(v.value<AutoOnOff>());
         break;
     default:
         return ChordRest::setProperty(propertyId, v);
@@ -2440,19 +2406,20 @@ void Chord::setSlash(bool flag, bool stemless)
 }
 
 //---------------------------------------------------------
-//  updateEndsGlissando
-//    sets/resets the chord _endsGlissando according any glissando (or more)
+//  updateEndsNoteAnchoredLine
+//    sets/resets the chord m_endsNoteAnchoredLine according any note anchored line
 //    end into this chord or no.
 //---------------------------------------------------------
 
-void Chord::updateEndsGlissandoOrGuitarBend()
+void Chord::updateEndsNoteAnchoredLine()
 {
-    m_endsGlissando = false;         // assume no glissando ends here
-    // scan all chord notes for glissandi ending on this chord
+    m_endsNoteAnchoredLine = false;         // assume no note anchored line ends here
+    // scan all chord notes for note anchored lines ending on this chord
     for (Note* note : notes()) {
         for (Spanner* sp : note->spannerBack()) {
-            if (sp->type() == ElementType::GLISSANDO) {
-                m_endsGlissando = true;
+            bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
+            if (sp->type() == ElementType::GLISSANDO || isNoteAnchoredTextLine) {
+                m_endsNoteAnchoredLine = true;
                 return;
             }
         }
@@ -2901,6 +2868,8 @@ EngravingItem* Chord::nextElement()
 
     case ElementType::GUITAR_BEND_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
+    case ElementType::NOTELINE_SEGMENT:
+    case ElementType::LAISSEZ_VIB_SEGMENT:
     case ElementType::TIE_SEGMENT: {
         SpannerSegment* s = toSpannerSegment(e);
         Spanner* sp = s->spanner();

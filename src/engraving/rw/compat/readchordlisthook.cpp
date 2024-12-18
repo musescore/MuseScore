@@ -45,7 +45,7 @@ void ReadChordListHook::read(XmlReader& e)
     }
 
     m_score->chordList()->clear();
-    m_score->chordList()->read(e);
+    m_score->chordList()->read(e, m_score->mscVersion());
     m_score->chordList()->setCustomChordList(true);
 
     m_chordListTag = true;

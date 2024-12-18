@@ -26,7 +26,7 @@ import "internal"
 PinchArea {
     id: root
 
-    required default property var view
+    required default property Item view
 
     property alias horizontalScrollbarSize: horizontalScrollBar.size
     property alias startHorizontalScrollPosition: horizontalScrollBar.position

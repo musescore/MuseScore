@@ -780,6 +780,8 @@ void Spanner::doComputeStartElement()
         break;
 
     case Anchor::CHORD:
+        m_startElement = startCR();
+        break;
     case Anchor::NOTE:
         break;
     }
@@ -837,7 +839,9 @@ void Spanner::doComputeEndElement()
         break;
 
     case Anchor::NOTE:
+        break;
     case Anchor::CHORD:
+        m_endElement = endCR();
         break;
     }
 }
@@ -1146,7 +1150,26 @@ Measure* Spanner::startMeasure() const
 
 Measure* Spanner::endMeasure() const
 {
+    assert(anchor() == Spanner::Anchor::MEASURE);
     return toMeasure(m_endElement);
+}
+
+Measure* Spanner::findStartMeasure() const
+{
+    if (!m_startElement) {
+        return nullptr;
+    }
+
+    return toMeasure(m_startElement->findAncestor(ElementType::MEASURE));
+}
+
+Measure* Spanner::findEndMeasure() const
+{
+    if (!m_endElement) {
+        return nullptr;
+    }
+
+    return toMeasure(m_endElement->findAncestor(ElementType::MEASURE));
 }
 
 //---------------------------------------------------------
@@ -1505,6 +1528,18 @@ bool Spanner::isUserModified() const
 
 void Spanner::eraseSpannerSegments()
 {
+    for (SpannerSegment* seg : m_segments) {
+        if (System* system = seg->system()) {
+            system->remove(seg);
+        }
+    }
+
+    for (SpannerSegment* seg : m_unusedSegments) {
+        if (System* system = seg->system()) {
+            system->remove(seg);
+        }
+    }
+
     muse::DeleteAll(m_segments);
     muse::DeleteAll(m_unusedSegments);
     m_segments.clear();

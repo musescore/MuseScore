@@ -29,13 +29,14 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 
-#include "../updateerrors.h"
-#include "types/version.h"
+#include "global/types/version.h"
 
-#include "defer.h"
+#include "../updateerrors.h"
+
 #include "log.h"
 
 static const muse::Uri MUSEHUB_APP_URI("musehub://?from=musescore");
+static const muse::Uri MUSEHUB_APP_V1_URI("muse-hub://?from=musescore");
 
 using namespace muse::update;
 using namespace muse::network;
@@ -69,8 +70,10 @@ muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::checkForUpdate()
     clear();
 
     QBuffer buff;
+    std::string url = configuration()->checkForMuseSamplerUpdateUrl();
     m_networkManager = networkManagerCreator()->makeNetworkManager();
-    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(configuration()->checkForMuseSamplerUpdateUrl()), &buff,
+
+    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(url), &buff,
                                               configuration()->updateHeaders());
 
     if (!getUpdateInfo) {
@@ -118,31 +121,6 @@ muse::Progress MuseSoundsCheckUpdateService::updateProgress()
     return m_updateProgress;
 }
 
-void MuseSoundsCheckUpdateService::openMuseHub()
-{
-    auto openMuseHubWebsite = [this]() {
-        static const std::string MUSEHUB_URL = "https://www.musehub.com/";
-        interactive()->openUrl(MUSEHUB_URL);
-    };
-
-#ifdef Q_OS_WIN
-    interactive()->openApp(MUSEHUB_APP_URI).onReject(this, [=](int, const std::string&) {
-        static const muse::Uri MUSEHUB_APP_V1_URI("muse-hub://?from=musescore");
-        interactive()->openApp(MUSEHUB_APP_V1_URI).onReject(this, [=](int, const std::string&) {
-            openMuseHubWebsite();
-        });
-    });
-    return;
-#elif defined(Q_OS_MAC)
-    interactive()->openApp(MUSEHUB_APP_URI).onReject(this, [=](int, const std::string&) {
-        openMuseHubWebsite();
-    });
-    return;
-#else
-    openMuseHubWebsite();
-#endif
-}
-
 muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::parseRelease(const QByteArray& json) const
 {
     RetVal<ReleaseInfo> result;
@@ -150,9 +128,32 @@ muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::parseRelease(const QByte
     QJsonParseError err;
     QJsonDocument jsonDoc = QJsonDocument::fromJson(json, &err);
     if (err.error != QJsonParseError::NoError || !jsonDoc.isObject()) {
+        LOGE() << "parse error: " << err.errorString();
         result.ret = make_ret(Err::NoUpdate);
         return result;
     }
+
+    /*
+    {
+        "version": String,
+        "image_url": String,  // it can be base64 data, like "data:image/png;base64,iVBORw0KGgoA......"
+        "content": {
+            "locale_code": {
+                "notes": String,
+                "features": [String]
+                "action_title": String // title of action button
+            }
+        },
+
+        // open app or web page url, try in order,
+        // like this ["musehub://?from=musescore", "muse-hub://?from=musescore", "https://www.musehub.com"]
+        "actions": {
+            "windows": [String],
+            "macos": [String],
+            "linux": [String]
+        }
+    }
+    */
 
     QJsonObject releaseObj = jsonDoc.object();
 
@@ -182,16 +183,56 @@ muse::RetVal<ReleaseInfo> MuseSoundsCheckUpdateService::parseRelease(const QByte
     result.ret = make_ok();
 
     result.val.version = releaseObj.value("version").toString().toStdString();
+    result.val.imageUrl = releaseObj.value("image_url").toString().toStdString();
 
     result.val.notes = contentLocaleObj.value("notes").toString().toStdString();
-
     ValList featuresList;
     QJsonArray features = contentLocaleObj.value("features").toArray();
     for (const QJsonValue& feature : features) {
         featuresList.push_back(Val(feature.toString().toStdString()));
     }
-
     result.val.additionInfo.insert({ "features", Val(featuresList) });
+
+    result.val.actionTitle = contentLocaleObj.value("action_title").toString().toStdString();
+    result.val.cancelTitle = contentLocaleObj.value("cancel_title").toString().toStdString();
+
+    QJsonObject actionsObj = releaseObj.value("actions").toObject();
+
+#ifdef Q_OS_WIN
+    QJsonArray actionsArr = actionsObj.value("windows").toArray();
+    for (const QJsonValue& a : actionsArr) {
+        result.val.actions.push_back(Val(a.toString().toStdString()));
+    }
+
+    // def
+    if (result.val.actions.empty()) {
+        result.val.actions.push_back(Val(MUSEHUB_APP_URI.toString()));
+        result.val.actions.push_back(Val(MUSEHUB_APP_V1_URI.toString()));
+        result.val.actions.push_back(Val(globalConfiguration()->museHubWebUrl()));
+    }
+
+#elif defined(Q_OS_MAC)
+    QJsonArray actionsArr = actionsObj.value("macos").toArray();
+    for (const QJsonValue& a : actionsArr) {
+        result.val.actions.push_back(Val(a.toString().toStdString()));
+    }
+
+    // def
+    if (result.val.actions.empty()) {
+        result.val.actions.push_back(Val(MUSEHUB_APP_URI.toString()));
+        result.val.actions.push_back(Val(globalConfiguration()->museHubWebUrl()));
+    }
+#else
+    QJsonArray actionsArr = actionsObj.value("linux").toArray();
+    for (const QJsonValue& a : actionsArr) {
+        result.val.actions.push_back(Val(a.toString().toStdString()));
+    }
+
+    // def
+    if (result.val.actions.empty()) {
+        result.val.actions.push_back(Val(globalConfiguration()->museHubWebUrl()));
+    }
+#endif
 
     return result;
 }

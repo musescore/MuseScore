@@ -102,14 +102,14 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Toolbars
     UiAction("toggle-transport",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Playback controls"),
              TranslatableString("action", "Show/hide playback controls"),
              Checkable::Yes
              ),
     UiAction("toggle-noteinput",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Note input"),
              TranslatableString("action", "Show/hide note input toolbar"),
@@ -118,37 +118,44 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Vertical panels
     UiAction("toggle-palettes",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Palettes"),
              TranslatableString("action", "Show/hide palettes"),
              Checkable::Yes
              ),
     UiAction("toggle-instruments",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Instr&uments"),
              TranslatableString("action", "Open instruments dialog…"),
              Checkable::Yes
              ),
     UiAction("inspector",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Propert&ies"),
              TranslatableString("action", "Show/hide properties"),
              Checkable::Yes
              ),
     UiAction("toggle-selection-filter",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Se&lection filter"),
              TranslatableString("action", "Show/hide selection filter"),
              Checkable::Yes
              ),
+    UiAction("toggle-undo-history-panel",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "&History"),
+             TranslatableString("action", "Show/hide undo history"),
+             Checkable::Yes
+             ),
 
     // Navigator
     UiAction(TOGGLE_NAVIGATOR_ACTION_CODE,
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Navigator"),
              TranslatableString("action", "Show/hide navigator"),
@@ -157,7 +164,7 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Braille panel
     UiAction(TOGGLE_BRAILLE_ACTION_CODE,
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Braille"),
              TranslatableString("action", "Show/hide braille panel"),
@@ -166,14 +173,14 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Horizontal panels
     UiAction("toggle-timeline",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Tim&eline"),
              TranslatableString("action", "Show/hide timeline"),
              Checkable::Yes
              ),
     UiAction("toggle-mixer",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Mixer"),
              TranslatableString("action", "Show/hide mixer"),
@@ -181,7 +188,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              Checkable::Yes
              ),
     UiAction("toggle-piano-keyboard",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "Piano &keyboard"),
              TranslatableString("action", "Show/hide piano keyboard"),
@@ -196,7 +203,7 @@ const UiActionList ApplicationUiActions::m_actions = {
     //          Checkable::Yes
     //          ),
     UiAction("toggle-scorecmp-tool",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Score comparison tool"),
              Checkable::Yes
@@ -204,7 +211,7 @@ const UiActionList ApplicationUiActions::m_actions = {
 
     // Status bar
     UiAction("toggle-statusbar",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "&Status bar"),
              TranslatableString("action", "Show/hide status bar"),
@@ -325,6 +332,7 @@ const QMap<ActionCode, DockName>& ApplicationUiActions::toggleDockActions()
         { "toggle-instruments", INSTRUMENTS_PANEL_NAME },
         { "inspector", INSPECTOR_PANEL_NAME },
         { "toggle-selection-filter", SELECTION_FILTERS_PANEL_NAME },
+        { "toggle-undo-history-panel", UNDO_HISTORY_PANEL_NAME },
 
         { TOGGLE_NAVIGATOR_ACTION_CODE, NOTATION_NAVIGATOR_PANEL_NAME },
         { TOGGLE_BRAILLE_ACTION_CODE, NOTATION_BRAILLE_PANEL_NAME },

@@ -43,7 +43,7 @@
           <line>2</line>
           </clef>
         </attributes>
-      <direction placement="above">
+      <direction placement="above" system="only-top">
         <direction-type>
           <metronome parentheses="no" print-object="no">
             <beat-unit>quarter</beat-unit>

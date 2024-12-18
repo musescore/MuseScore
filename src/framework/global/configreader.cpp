@@ -21,8 +21,13 @@
  */
 #include "configreader.h"
 
+#include <string>
+
 #include "io/file.h"
 #include "serialization/json.h"
+#include "types/bytearray.h"
+#include "types/ret.h"
+#include "types/val.h"
 
 #include "log.h"
 

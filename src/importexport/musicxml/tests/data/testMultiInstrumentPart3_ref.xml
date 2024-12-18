@@ -168,12 +168,31 @@
           <fifths>-3</fifths>
           </key>
         </attributes>
+      <print>
+        <part-name-display>
+          <display-text>B</display-text>
+          <accidental-text>flat</accidental-text>
+          <display-text> Clarinet</display-text>
+          </part-name-display>
+        <part-abbreviation-display>
+          <display-text>B</display-text>
+          <accidental-text>flat</accidental-text>
+          <display-text> Cl.</display-text>
+          </part-abbreviation-display>
+        </print>
       <attributes>
         <transpose>
           <diatonic>-1</diatonic>
           <chromatic>-2</chromatic>
           </transpose>
         </attributes>
+      <sound>
+        <instrument-change>
+          <score-instrument id="P1-I2">
+            <instrument-name>B♭ Clarinet</instrument-name>
+            </score-instrument>
+          </instrument-change>
+        </sound>
       <direction placement="above">
         <direction-type>
           <words font-weight="bold" font-size="12">B♭ Clarinet</words>

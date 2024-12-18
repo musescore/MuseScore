@@ -57,6 +57,8 @@ public:
 
     virtual void addTie() = 0;
 
+    virtual void addLaissezVib() = 0;
+
     virtual void setAccidental(AccidentalType accidentalType) = 0;
     virtual void setArticulation(SymbolId articulationSymbolId) = 0;
     virtual void setDrumNote(int note) = 0;
