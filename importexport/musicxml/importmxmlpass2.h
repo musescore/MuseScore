@@ -261,6 +261,7 @@ private:
       MxmlLogger* _logger;                      // the error logger
       QString _errors;                          // errors to present to the user
       MusicXmlTupletDesc _tupletDesc;
+      QColor _dynamicsColor;
       QString _dynamicsPlacement;
       QStringList _dynamicsList;
       std::vector<Notation> _notations;

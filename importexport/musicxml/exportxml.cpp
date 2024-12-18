@@ -2953,25 +2953,30 @@ static std::vector<QString> symIdToArtics(const SymId sid)
 static QString symIdToOrnam(const SymId sid)
       {
       switch (sid) {
+            case SymId::ornamentTrill:
+            case SymId::ornamentShake3:
+            case SymId::ornamentShakeMuffat1:
+                  return "trill-mark";
+                  break;
+            case SymId::ornamentTurn:
+                  return "turn";
+                  break;
             case SymId::ornamentTurnInverted:
                   return "inverted-turn";
                   break;
             case SymId::ornamentTurnSlash:
                   return "turn slash=\"yes\"";
                   break;
-            case SymId::ornamentTurn:
-                  return "turn";
+            case SymId::ornamentTurnUp:
+                  return "vertical-turn";
                   break;
-            case SymId::ornamentTrill:
-            case SymId::ornamentShake3:
-            case SymId::ornamentShakeMuffat1:
-                  return "trill-mark";
+            case SymId::ornamentTurnUpS:
+                  return "inverted-vertical-turn";
                   break;
             case SymId::ornamentMordent:
                   return "mordent";
                   break;
             case SymId::ornamentShortTrill:
-                  // return "short-trill";
                   return "inverted-mordent";
                   break;
             case SymId::ornamentTremblement:
@@ -3001,6 +3006,9 @@ static QString symIdToOrnam(const SymId sid)
             case SymId::ornamentLinePrall:
                   // MusicXML 3.0 does not distinguish between downprall and lineprall
                   return "inverted-mordent long=\"yes\" approach=\"above\"";
+                  break;
+            case SymId::ornamentHaydn:
+                  return "haydn";
                   break;
             case SymId::ornamentPrecompSlide:
                   return "schleifer";
@@ -3124,6 +3132,7 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
                         default:
                               qDebug("unknown ChordLine subtype %d", int(cl->chordLineType()));
                         }
+                  subtype += color2xml(cl);
                   if (!subtype.isEmpty()) {
                         notations.tag(xml);
                         articulations.tag(xml);

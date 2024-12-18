@@ -1061,7 +1061,7 @@ static void addArticulationToChord(const Notation& notation, ChordRest* cr)
       const SymId articSym = notation.symId();
       const QString dir = notation.attribute("type");
       const QString place = notation.attribute("placement");
-      const QColor color { notation.attribute("color") };
+      const QColor color = notation.attribute("color");
       Articulation* na = new Articulation(articSym, cr->score());
 
       if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
@@ -1098,7 +1098,7 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
       {
       const SymId articSym = notation.symId();
       const QString direction = notation.attribute("type");
-      const QColor color { notation.attribute("color") };
+      const QColor color = notation.attribute("color");
       Segment* seg = cr->segment();
       Fermata* na = new Fermata(articSym, cr->score());
       na->setTrack(cr->track());
@@ -1183,7 +1183,7 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
             }
       if (articSym != SymId::noSym) {
             const QString place = notation.attribute("placement");
-            const QColor color { notation.attribute("color") };
+            const QColor color = notation.attribute("color");
             Articulation* na = new Articulation(cr->score());
             na->setSymId(articSym);
             if (place == "above")
@@ -1217,8 +1217,11 @@ static void addOtherOrnamentToChord(const Notation& notation, ChordRest* cr)
       sym = Sym::name2id(symname);
 
       if (sym != SymId::noSym) {
+            const QColor color = notation.attribute("color");
             Articulation* na = new Articulation(cr->score());
             na->setSymId(sym);
+            if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
+                  na->setColor(color);
             cr->add(na);
             }
       else {
@@ -1243,28 +1246,43 @@ static void addOtherOrnamentToChord(const Notation& notation, ChordRest* cr)
 
 static bool convertArticulationToSymId(const QString& mxmlName, SymId& id)
       {
-      QMap<QString, SymId> map;       // map MusicXML articulation name to MuseScore symbol
-      map["accent"]           = SymId::articAccentAbove;
-      map["staccatissimo"]    = SymId::articStaccatissimoWedgeAbove;
-      map["staccato"]         = SymId::articStaccatoAbove;
-      map["tenuto"]           = SymId::articTenutoAbove;
-      map["strong-accent"]    = SymId::articMarcatoAbove;
-      map["delayed-turn"]     = SymId::ornamentTurn;
-      map["turn"]             = SymId::ornamentTurn;
-      map["inverted-turn"]    = SymId::ornamentTurnInverted;
-      map["stopped"]          = SymId::brassMuteClosed;
-      map["up-bow"]           = SymId::stringsUpBow;
-      map["down-bow"]         = SymId::stringsDownBow;
-      map["detached-legato"]  = SymId::articTenutoStaccatoAbove;
-      map["spiccato"]         = SymId::articStaccatissimoAbove;
-      map["snap-pizzicato"]   = SymId::pluckedSnapPizzicatoAbove;
-      map["schleifer"]        = SymId::ornamentPrecompSlide;
-      map["open"]             = SymId::brassMuteOpen;
-      map["open-string"]      = SymId::brassMuteOpen;
-      map["thumb-position"]   = SymId::stringsThumbPosition;
-      map["soft-accent"]      = SymId::articSoftAccentAbove;
-      map["stress"]           = SymId::articStressAbove;
-      map["unstress"]         = SymId::articUnstressAbove;
+      // map MusicXML notations name to MuseScore symbol
+      QMap<QString, SymId> map;
+      // ornaments
+      map["delayed-turn"]           = SymId::ornamentTurn;
+      map["inverted-turn"]          = SymId::ornamentTurnInverted;
+      map["vertical-turn"]          = SymId::ornamentTurnUp;
+      map["inverted-vertical-turn"] = SymId::ornamentTurnUpS;
+      map["turn"]                   = SymId::ornamentTurn;
+      map["schleifer"]              = SymId::ornamentPrecompSlide;
+      map["haydn"]                  = SymId::ornamentHaydn;
+      // articulations
+      map["accent"]                 = SymId::articAccentAbove;
+      map["strong-accent"]          = SymId::articMarcatoAbove;
+      map["staccato"]               = SymId::articStaccatoAbove;
+      map["tenuto"]                 = SymId::articTenutoAbove;
+      map["detached-legato"]        = SymId::articTenutoStaccatoAbove;
+      map["staccatissimo"]          = SymId::articStaccatissimoWedgeAbove;
+      map["spiccato"]               = SymId::articStaccatissimoAbove;
+      map["stress"]                 = SymId::articStressAbove;
+      map["unstress"]               = SymId::articUnstressAbove;
+      map["soft-accent"]            = SymId::articSoftAccentAbove;
+      // technical
+      map["up-bow"]                 = SymId::stringsUpBow;
+      map["down-bow"]               = SymId::stringsDownBow;
+      map["open-string"]            = SymId::brassMuteOpen;
+      map["thumb-position"]         = SymId::stringsThumbPosition ;
+      map["double-tongue"]          = SymId::doubleTongueAbove;
+      map["triple-tongue"]          = SymId::tripleTongueAbove ;
+      map["stopped"]                = SymId::brassMuteClosed;
+      map["snap-pizzicato"]         = SymId::pluckedSnapPizzicatoAbove;
+      map["heal"]                   = SymId::keyboardPedalHeel1 ;
+      map["toe"]                    = SymId::keyboardPedalToe1 ;
+      map["fingernails"]            = SymId::pluckedWithFingernails  ;
+      map["brass-bend"]             = SymId::brassBend ;
+      map["flip"]                   = SymId::brassFlip;
+      map["smear"]                  = SymId::brassSmear ;
+      map["open"]                   = SymId::brassMuteOpen;
 
       if (map.contains(mxmlName)) {
             id = map.value(mxmlName);
@@ -1380,7 +1398,7 @@ static void addTextToNote(int l, int c, QString txt, QString placement, QString 
                         t->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
                         t->resetProperty(Pid::OFFSET);
                         }
-                  if (color.isValid()) {
+                  if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/) {
                         t->setColor(color);
                         t->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
                         }
@@ -3405,7 +3423,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         t->setFrameRound(0);
                         }
 
-                  if (_color.isValid()) {
+                  if (_color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/) {
                         t->setColor(_color);
                         t->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
                         }
@@ -3718,8 +3736,8 @@ void MusicXMLParserDirection::dynamics()
 void MusicXMLParserDirection::otherDirection()
       {
       // <other-direction> element is used to define any <direction> symbols not yet in the MusicXML format
-      const QString smufl = { _e.attributes().value("smufl").toString() };
-      const QColor color = { _e.attributes().value("color").toString() };
+      const QString smufl = _e.attributes().value("smufl").toString();
+      const QColor color = _e.attributes().value("color").toString();
 
       // Read smufl symbol
       if (!smufl.isEmpty()) {
@@ -3727,7 +3745,7 @@ void MusicXMLParserDirection::otherDirection()
             if (convertArticulationToSymId(_e.name().toString(), id) && id != SymId::noSym) {
                   Symbol* smuflSym = new Symbol(_score);
                   smuflSym->setSym(id);
-                  if (color.isValid())
+                  if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                         smuflSym->setColor(color);
                   _elems.push_back(smuflSym);
                   }
@@ -3762,7 +3780,7 @@ void MusicXMLParserDirection::otherDirection()
                   SymId sym = otherDirectionSyms.value(t);
                   Symbol* smuflSym = new Symbol(_score);
                   smuflSym->setSym(sym);
-                  if (color.isValid())
+                  if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                         smuflSym->setColor(color);
                   _elems.push_back(smuflSym);
                   }
@@ -4466,7 +4484,7 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
                   else if (lineType != "wavy")
                         _logger->logError(QString("unsupported line-type: %1").arg(lineType.toString()), &_e);
 
-                  const QColor color { _e.attributes().value("color").toString() };
+                  const QColor color = _e.attributes().value("color").toString();
                   if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                         textLine->setLineColor(color);
                   }
@@ -4568,7 +4586,7 @@ void MusicXMLParserDirection::octaveShift(const QString& type, const int number,
                               o->setOttavaType(OttavaType::OTTAVA_15MB);
                         }
 
-                  const QColor color { _e.attributes().value("color").toString() };
+                  const QColor color = _e.attributes().value("color").toString();
                   if (color.isValid())
                         o->setLineColor(color);
 
@@ -4597,7 +4615,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
       const int number { 0 };
       QStringRef line = _e.attributes().value("line");
       QString sign = _e.attributes().value("sign").toString();
-      const QColor color { _e.attributes().value("color").toString() };
+      const QColor color = _e.attributes().value("color").toString();
 
       if (_placement.isEmpty())
             _placement = "below";
@@ -4630,7 +4648,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
                               p->setContinueText("");
                               p->setEndText("");
                               }
-                        if (color.isValid()) {
+                        if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/) {
                               p->setColor(color);
                               }
                         starts.push_back(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
@@ -4740,7 +4758,7 @@ void MusicXMLParserDirection::wedge(const QString& type, const int number,
             if (niente == "yes")
                   h->setHairpinCircledTip(true);
 
-            const QColor color { _e.attributes().value("color").toString() };
+            const QColor color = _e.attributes().value("color").toString();
             if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                   h->setLineColor(color);
 
@@ -5025,7 +5043,7 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
                   fermata->setSymId(convertFermataToSymId(_e.readElementText()));
                   fermata->setTrack(track);
                   segment->add(fermata);
-                  if (fermataColor.isValid())
+                  if (fermataColor.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                         fermata->setColor(fermataColor);
                   if (fermataType == "inverted") {
                         fermata->setPlacement(Placement::BELOW);
@@ -5305,7 +5323,7 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
                   }
             }
       const bool printObject = _e.attributes().value("print-object") != "no";
-      const QColor keyColor { _e.attributes().value("color").toString() };
+      const QColor keyColor = _e.attributes().value("color").toString();
 
       // for custom keys, a single altered tone is described by
       // key-step (required),  key-alter (required) and key-accidental (optional)
@@ -5396,7 +5414,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
       const QString strClefno = _e.attributes().value("number").toString();
       const bool afterBarline = _e.attributes().value("after-barline") == "yes";
       const bool printObject  = _e.attributes().value("print-object") != "no";
-      const QColor clefColor { _e.attributes().value("color").toString() };
+      const QColor clefColor  = _e.attributes().value("color").toString();
 
       while (_e.readNextStartElement()) {
             if (_e.name() == "sign")
@@ -5581,7 +5599,7 @@ void MusicXMLParserPass2::time(const QString& partId, Measure* measure, const Fr
       QString beatType;
       QString timeSymbol = _e.attributes().value("symbol").toString();
       bool printObject = _e.attributes().value("print-object") != "no";
-      const QColor timeColor { _e.attributes().value("color").toString() };
+      const QColor timeColor = _e.attributes().value("color").toString();
 
       while (_e.readNextStartElement()) {
             if (_e.name() == "beats")
@@ -6105,7 +6123,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       bool hasHead = true;
       NoteHead::Group headGroup = NoteHead::Group::HEAD_NORMAL;
       NoteHead::Scheme headScheme = NoteHead::Scheme::HEAD_AUTO;
-      const QColor noteColor { _e.attributes().value("color").toString() };
+      const QColor noteColor = _e.attributes().value("color").toString();
       QColor noteheadColor = QColor::Invalid;
       QColor stemColor = QColor::Invalid;
       bool noteheadParentheses = false;
@@ -6366,9 +6384,9 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             Stem* stem = c->stem();
             if (!stem) {
                   stem = new Stem(_score);
-                  if (stemColor.isValid())
+                  if (stemColor.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                         stem->setColor(stemColor);
-                  else if (noteColor.isValid())
+                  else if (noteColor.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                         stem->setColor(noteColor);
                   c->add(stem);
                   }
@@ -6380,7 +6398,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   handleSmallness(cue || isSmall, note, c);
                   note->setPlay(!cue);          // cue notes don't play
                   note->setHeadGroup(headGroup);
-                  if (noteColor.isValid())
+                  if (noteColor.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                         note->setColor(noteColor);
                   setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
                   note->setVisible(hasHead && printObject); // TODO also set the stem to invisible
@@ -6644,7 +6662,7 @@ FiguredBassItem* MusicXMLParserPass2::figure(const int idx, const bool paren)
                   _e.skipCurrentElement();
                   }
             else if (_e.name() == "figure-number") {
-                  const QColor color { _e.attributes().value("color").toString() };
+                  const QColor color = _e.attributes().value("color").toString();
                   QString val = _e.readElementText();
                   int iVal = val.toInt();
                   // MusicXML spec states figure-number is a number
@@ -6711,7 +6729,7 @@ FiguredBass* MusicXMLParserPass2::figuredBass()
       const QColor color = _e.attributes().value("color").toString();
 
       fb->setVisible(printObject);
-      if (color.isValid()) {
+      if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/) {
             fb->setColor(color);
       }
 
@@ -6911,7 +6929,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       const bool printObject = _e.attributes().value("print-object") != "no";
       //QString printFrame = _e.attributes().value("print-frame").toString();
       //QString printStyle = _e.attributes().value("print-style").toString();
-      const QColor color { _e.attributes().value("color").toString() };
+      const QColor color = _e.attributes().value("color").toString();
 
       QString kind, kindText, functionText, inversionText, symbols, parens;
       QList<HDegree> degreeList;
@@ -7245,7 +7263,7 @@ void MusicXMLParserLyric::parse()
 
       bool hasExtend = false;
       const QString lyricNumber = _e.attributes().value("number").toString();
-      const QColor lyricColor { _e.attributes().value("color").toString() };
+      const QColor lyricColor = _e.attributes().value("color").toString();
       const bool printLyric = _e.attributes().value("print-object") != "no";
       _placement = _e.attributes().value("placement").toString();
       qreal relX = _e.attributes().value("relative-x").toDouble() / 10 * DPMM;
@@ -7408,7 +7426,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
                         newSlur->setLineType(1);
                   else if (lineType == "dashed")
                         newSlur->setLineType(2);
-                  const QColor color { notation.attribute("color") };
+                  const QColor color = notation.attribute("color");
                   if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT))*/)
                         newSlur->setColor(color);
                   newSlur->setTick(Fraction::fromTicks(tick));
@@ -7498,6 +7516,7 @@ void MusicXMLParserNotations::tied()
 
 void MusicXMLParserNotations::dynamics()
       {
+      _dynamicsColor = _e.attributes().value("color").toString();
       _dynamicsPlacement = _e.attributes().value("placement").toString();
 
       while (_e.readNextStartElement()) {
@@ -7820,7 +7839,7 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
       Score* score = note->score();
 
       if (glissandoType == "start") {
-            const QColor glissandoColor { notation.attribute("color") };
+            const QColor glissandoColor = notation.attribute("color");
             const QString glissandoText = notation.text();
             if (gliss) {
                   logger->logError(QString("overlapping glissando/slide number %1").arg(glissandoNumber+1), xmlreader);
@@ -7919,7 +7938,7 @@ static void addTie(const Notation& notation, Note* note, const int track, MusicX
             currTie->setStartNote(note);
             currTie->setTrack(track);
 
-            const QColor color { notation.attribute("color") };
+            const QColor color = notation.attribute("color");
             if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                   currTie->setColor(color);
 
@@ -8052,17 +8071,20 @@ static void addChordLine(const Notation& notation, Note* note,
                          MxmlLogger* logger, const QXmlStreamReader* const xmlreader)
       {
       const QString& chordLineType = notation.subType();
+      const QColor color = notation.attribute("color");
       if (!chordLineType.isEmpty()) {
             if (note) {
                   ChordLine* const chordline = new ChordLine(note->score());
                   if (chordLineType == "falloff")
                         chordline->setChordLineType(ChordLineType::FALL);
-                  if (chordLineType == "doit")
+                  else if (chordLineType == "doit")
                         chordline->setChordLineType(ChordLineType::DOIT);
-                  if (chordLineType == "plop")
+                  else if (chordLineType == "plop")
                         chordline->setChordLineType(ChordLineType::PLOP);
-                  if (chordLineType == "scoop")
+                  else if (chordLineType == "scoop")
                         chordline->setChordLineType(ChordLineType::SCOOP);
+                  if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
+                        chordline->setColor(color);
                   note->chord()->add(chordline);
                   }
             else
@@ -8317,6 +8339,8 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
             Dynamic* dynamic = new Dynamic(_score);
             dynamic->setDynamicType(d);
 //TODO:ws            if (hasYoffset) dyn->textStyle().setYoff(yoffset);
+            if (_dynamicsColor.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
+                  dynamic->setColor(_dynamicsColor);
             addElemOffset(dynamic, cr->track(), _dynamicsPlacement, cr->measure(), Fraction::fromTicks(tick));
             }
       }
@@ -8421,7 +8445,7 @@ void MusicXMLParserNotations::tuplet()
 
 void MusicXMLParserNotations::otherNotation()
       {
-      const QString smufl = { _e.attributes().value("smufl").toString() };
+      const QString smufl = _e.attributes().value("smufl").toString();
       if (!smufl.isEmpty()) {
             SymId id { SymId::noSym };
             if (convertArticulationToSymId(_e.name().toString(), id) && id != SymId::noSym) {
