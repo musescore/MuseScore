@@ -54,6 +54,14 @@ void NotationPaintView::onUnloadNotation(INotationPtr notation)
     notation->viewState()->matrixChanged().resetOnReceive(this);
 }
 
+void NotationPaintView::initZoomAndPosition()
+{
+    if (notation() && !notation()->viewState()->isMatrixInited()) {
+        inputController()->initZoom();
+        inputController()->initCanvasPos();
+    }
+}
+
 void NotationPaintView::onMatrixChanged(const Transform& oldMatrix, const Transform& newMatrix, bool overrideZoomType)
 {
     AbstractNotationPaintView::onMatrixChanged(oldMatrix, newMatrix, overrideZoomType);
