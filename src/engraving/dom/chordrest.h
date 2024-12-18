@@ -191,7 +191,7 @@ public:
     bool isFullMeasureRest() const { return m_durationType == DurationType::V_MEASURE; }
     virtual void removeMarkings(bool keepTremolo = false);
 
-    bool isBefore(const ChordRest*) const;
+    bool isBefore(const EngravingItem*) const override;
 
     void undoAddAnnotation(EngravingItem*);
 
