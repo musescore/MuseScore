@@ -49,6 +49,10 @@ if (MUE_BUILD_ENGRAVING_DEVTOOLS)
     include(${CMAKE_CURRENT_LIST_DIR}/devtools/devtools.cmake)
 endif()
 
+if (MUE_BUILD_ENGRAVING_PLAYBACK)
+    include(${CMAKE_CURRENT_LIST_DIR}/playback/playback.cmake)
+endif()
+
 set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/engravingmodule.cpp
@@ -211,74 +215,7 @@ set(MODULE_SRC
     ${RENDERING_SCORE_SRC}
     ${RENDERING_SINGLE_SRC}
 
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderingcontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackeventsrenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackeventsrenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbacksetupdataresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbacksetupdataresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/renderbase.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/ornamentsrenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/ornamentsrenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/glissandosrenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/glissandosrenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/arpeggiorenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/arpeggiorenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/gracechordsrenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/gracechordsrenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/tremolorenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/tremolorenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/chordarticulationsrenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/chordarticulationsrenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/noterenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/noterenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/bendsrenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/bendsrenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/symbolsmetaparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/symbolsmetaparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/annotationsmetaparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/annotationsmetaparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/spannersmetaparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/spannersmetaparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/tremolometaparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/tremolometaparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/arpeggiometaparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/arpeggiometaparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/gracenotesmetaparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/gracenotesmetaparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/chordlinemetaparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/chordlinemetaparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/notearticulationsparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/notearticulationsparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/chordarticulationsparser.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/chordarticulationsparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/metaparserbase.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/setupresolverbase.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/keyboardssetupdataresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/keyboardssetupdataresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/stringssetupdataresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/stringssetupdataresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/windssetupdataresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/windssetupdataresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/percussionssetupdataresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/percussionssetupdataresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/voicessetupdataresolver.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/mapping/voicessetupdataresolver.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/filterbase.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/chordfilter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/chordfilter.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/spannerfilter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/spannerfilter.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/internal/tremolofilter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/filters/internal/tremolofilter.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/playback/utils/pitchutils.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/utils/expressionutils.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/utils/arrangementutils.h
-
+    ${PLAYBACK_SRC}
     ${DEVTOOLS_SRC}
     )
 
