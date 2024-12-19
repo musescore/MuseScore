@@ -45,6 +45,7 @@ class NoteInputPreferencesModel : public QObject, public muse::Injectable, publi
         int delayBetweenNotesInRealTimeModeMilliseconds READ delayBetweenNotesInRealTimeModeMilliseconds WRITE setDelayBetweenNotesInRealTimeModeMilliseconds NOTIFY delayBetweenNotesInRealTimeModeMillisecondsChanged)
 
     Q_PROPERTY(bool playNotesWhenEditing READ playNotesWhenEditing WRITE setPlayNotesWhenEditing NOTIFY playNotesWhenEditingChanged)
+    Q_PROPERTY(bool playNotesOnMidiInput READ playNotesOnMidiInput WRITE setPlayNotesOnMidiInput NOTIFY playNotesOnMidiInputChanged)
     Q_PROPERTY(
         int notePlayDurationMilliseconds READ notePlayDurationMilliseconds WRITE setNotePlayDurationMilliseconds NOTIFY notePlayDurationMillisecondsChanged)
     Q_PROPERTY(bool playChordWhenEditing READ playChordWhenEditing WRITE setPlayChordWhenEditing NOTIFY playChordWhenEditingChanged)
@@ -72,6 +73,7 @@ public:
     int notePlayDurationMilliseconds() const;
     bool playChordWhenEditing() const;
     bool playChordSymbolWhenEditing() const;
+    bool playNotesOnMidiInput() const;
 
     bool dynamicsApplyToAllVoices() const;
 
@@ -84,6 +86,7 @@ public slots:
     void setNotePlayDurationMilliseconds(int duration);
     void setPlayChordWhenEditing(bool value);
     void setPlayChordSymbolWhenEditing(bool value);
+    void setPlayNotesOnMidiInput(bool value);
     void setDynamicsApplyToAllVoices(bool value);
 
 signals:
@@ -95,6 +98,7 @@ signals:
     void notePlayDurationMillisecondsChanged(int duration);
     void playChordWhenEditingChanged(bool value);
     void playChordSymbolWhenEditingChanged(bool value);
+    void playNotesOnMidiInputChanged(bool value);
     void dynamicsApplyToAllVoicesChanged(bool value);
 };
 }
