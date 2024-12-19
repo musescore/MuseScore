@@ -200,7 +200,7 @@ void NoteArticulationsParser::parseSpanners(const Note* note, const RenderingCon
         int spannerDurationTicks = spannerTo - spannerFrom;
 
         if (spannerDurationTicks == 0) {
-            continue;
+            spannerDurationTicks = ctx.nominalDurationTicks;
         }
 
         auto spannerTnD = timestampAndDurationFromStartAndDurationTicks(ctx.score, spannerFrom, spannerDurationTicks, 0);
