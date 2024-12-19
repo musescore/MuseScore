@@ -68,14 +68,8 @@ InstrumentInfo findInstrument(MuseSamplerLibHandlerPtr libHandler, const AudioRe
 
     while (auto instrument = libHandler->getNextInstrument(instrumentList)) {
         int instrumentId = libHandler->getInstrumentId(instrument);
-        String internalName = String::fromUtf8(libHandler->getInstrumentName(instrument));
-        String internalCategory = String::fromUtf8(libHandler->getInstrumentCategory(instrument));
-        String instrumentSoundId = String::fromUtf8(libHandler->getMpeSoundId(instrument));
 
-        if (resourceMeta.attributeVal(u"playbackSetupData") == instrumentSoundId
-            && resourceMeta.attributeVal(u"museCategory") == internalCategory
-            && resourceMeta.attributeVal(u"museName") == internalName
-            && resourceMeta.attributeVal(u"museUID") == String::fromStdString(std::to_string(instrumentId))) {
+        if (resourceMeta.attributeVal(u"museUID") == String::number(instrumentId)) {
             return { instrumentId, instrument };
         }
     }
