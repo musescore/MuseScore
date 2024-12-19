@@ -22,8 +22,6 @@
 
 #include "auxsenditem.h"
 
-#include "realfn.h"
-
 using namespace mu::playback;
 
 AuxSendItem::AuxSendItem(QObject* parent)
