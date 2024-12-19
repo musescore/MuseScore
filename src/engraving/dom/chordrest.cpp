@@ -1312,6 +1312,10 @@ bool ChordRest::followingJumpItem() const
     const Measure* measure = seg->measure();
     const Fraction nextTick = seg->tick() + actualTicks();
 
+    if (measure->lastChordRest(track()) != this) {
+        return false;
+    }
+
     // Jumps & markers
     for (const EngravingItem* e : measure->el()) {
         if (!e->isJump() && !e->isMarker()) {
@@ -1340,7 +1344,7 @@ bool ChordRest::followingJumpItem() const
     }
 
     // Repeats
-    if (measure->endTick() == nextTick && measure->repeatEnd()) {
+    if (measure->repeatEnd()) {
         return true;
     }
 
@@ -1364,6 +1368,10 @@ bool ChordRest::precedingJumpItem() const
 {
     const Segment* seg = segment();
     const Measure* measure = seg->measure();
+
+    if (measure->firstChordRest(track()) != this) {
+        return false;
+    }
 
     if (seg->score()->firstSegment(SegmentType::ChordRest) == seg) {
         return true;

@@ -282,7 +282,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
                     endPoint = tie->segmentAt(0)->ups(Grip::END).pos();
                 }
 
-                if (outgoingPartialSlur && tie->nsegments() == 1) {
+                if (outgoingPartialSlur && tie->type() == ElementType::TIE && tie->nsegments() == 1) {
                     // For partial slurs ending midway through a tie, get top of the tie shape at the slur's end X
                     const TieSegment* tieSeg = tie->frontSegment();
                     const Shape tieShape = tieSeg->shape().translate(tieSeg->pos());
