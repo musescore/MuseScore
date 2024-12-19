@@ -45,6 +45,7 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/figuredbass.h"
+#include "engraving/dom/fret.h"
 
 #include "rendering/score/scorerenderer.h"
 #include "rendering/single/singlerenderer.h"
@@ -262,6 +263,7 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
 
     Drumset::initDrumset();
     FiguredBass::readConfigFile(String());
+    FretDiagram::readHarmonyToDiagramFile("://data/harmony_to_diagram.xml");
 
     MScore::setNudgeStep(0.1);     // cursor key (default 0.1)
     MScore::setNudgeStep10(1.0);     // Ctrl + cursor key (default 1.0)
