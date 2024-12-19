@@ -25,12 +25,12 @@
 #include "slurtie.h"
 
 namespace mu::engraving {
-class TieEndPointList;
-class TieEndPoint
+class TieJumpPointList;
+class TieJumpPoint
 {
 public:
-    TieEndPoint(Note* note, String jumpName, bool active, int idx, bool followingNote);
-    TieEndPoint() {}
+    TieJumpPoint(Note* note, bool active, int idx, bool followingNote);
+    TieJumpPoint() {}
 
     Note* note() const { return m_note; }
     Tie* endTie() const;
@@ -39,47 +39,47 @@ public:
     bool active() const { return m_active; }
     void setActive(bool v) { m_active = v; }
     void undoSetActive(bool v);
-    void setEndPointList(TieEndPointList* endPointList) { m_endPointList = endPointList; }
-    TieEndPointList* endPointList() { return m_endPointList; }
+    void setJumpPointList(TieJumpPointList* jumpPointList) { m_jumpPointList = jumpPointList; }
+    TieJumpPointList* jumpPointList() { return m_jumpPointList; }
 
     const String menuTitle() const;
 
 private:
+    String precedingJumpItemName() const;
     Note* m_note = nullptr;
-    String m_jumpName;
     bool m_active = false;
     String m_id;
-    TieEndPointList* m_endPointList = nullptr;
+    TieJumpPointList* m_jumpPointList = nullptr;
     bool m_followingNote = false;
 };
 
-class TieEndPointList
+class TieJumpPointList
 {
 public:
-    TieEndPointList() = default;
-    ~TieEndPointList();
+    TieJumpPointList() = default;
+    ~TieJumpPointList();
 
-    void add(TieEndPoint* item);
+    void add(TieJumpPoint* item);
     void clear();
-    size_t size() const { return m_endPoints.size(); }
-    bool empty() const { return m_endPoints.empty(); }
+    size_t size() const { return m_jumpPoints.size(); }
+    bool empty() const { return m_jumpPoints.empty(); }
 
     void setStartTie(Tie* startTie) { m_startTie = startTie; }
     Tie* startTie() const { return m_startTie; }
 
-    TieEndPoint* findEndPoint(const String& id);
-    void toggleEndPoint(const String& id);
+    TieJumpPoint* findJumpPoint(const String& id);
+    void toggleJumpPoint(const String& id);
 
-    void addTie(TieEndPoint* endPoint);
-    void removeTie(TieEndPoint* endPoint);
+    void addTieToScore(TieJumpPoint* jumpPoint);
+    void removeTieFromScore(TieJumpPoint* jumpPoint);
 
-    std::vector<TieEndPoint*>::iterator begin() { return m_endPoints.begin(); }
-    std::vector<TieEndPoint*>::const_iterator begin() const { return m_endPoints.begin(); }
-    std::vector<TieEndPoint*>::iterator end() { return m_endPoints.end(); }
-    std::vector<TieEndPoint*>::const_iterator end() const { return m_endPoints.end(); }
+    std::vector<TieJumpPoint*>::iterator begin() { return m_jumpPoints.begin(); }
+    std::vector<TieJumpPoint*>::const_iterator begin() const { return m_jumpPoints.begin(); }
+    std::vector<TieJumpPoint*>::iterator end() { return m_jumpPoints.end(); }
+    std::vector<TieJumpPoint*>::const_iterator end() const { return m_jumpPoints.end(); }
 
 private:
-    std::vector<TieEndPoint*> m_endPoints;
+    std::vector<TieJumpPoint*> m_jumpPoints;
     Tie* m_startTie = nullptr;
 };
 
@@ -121,7 +121,7 @@ public:
     double dottedWidth() const override;
 
     struct LayoutData : public SlurTieSegment::LayoutData {
-        bool allEndPointsInactive = false;
+        bool allJumpPointsInactive = false;
     };
     DECLARE_LAYOUTDATA_METHODS(TieSegment)
 
@@ -178,18 +178,18 @@ public:
     double scalingFactor() const override;
 
     // Outgoing ties before repeats
-    void collectPossibleEndPoints();
-    void addTiesToEndPoints();
-    void removeTiesFromEndPoints();
-    virtual bool allEndPointsInactive() const;
-    virtual TieEndPointList* tieEndPoints();
-    virtual const TieEndPointList* tieEndPoints() const;
+    void collectPossibleJumpPoints();
+    void addTiesToJumpPoints();
+    void removeTiesFromJumpPoints();
+    virtual bool allJumpPointsInactive() const;
+    virtual TieJumpPointList* tieJumpPoints();
+    virtual const TieJumpPointList* tieJumpPoints() const;
 
     // Incoming ties after repeats
-    void setEndPoint(TieEndPoint* endPoint) { m_endPoint = endPoint; }
+    void setJumpPoint(TieJumpPoint* jumpPoint) { m_jumpPoint = jumpPoint; }
     void updateStartTieOnRemoval();
-    TieEndPoint* endPoint() const { return m_endPoint; }
-    Tie* startTie() const { return startTieEndPoints() ? startTieEndPoints()->startTie() : nullptr; }
+    TieJumpPoint* jumpPoint() const { return m_jumpPoint; }
+    Tie* startTie() const { return startTieJumpPoints() ? startTieJumpPoints()->startTie() : nullptr; }
 
     static Tie* changeTieType(Tie* oldTie, Note* endNote = nullptr);
 
@@ -199,8 +199,8 @@ protected:
     bool m_isInside = false;
     M_PROPERTY2(TiePlacement, tiePlacement, setTiePlacement, TiePlacement::AUTO)
 
-    // Endpoint information for incoming ties after repeats
-    TieEndPoint* m_endPoint = nullptr;
-    TieEndPointList* startTieEndPoints() const { return m_endPoint ? m_endPoint->endPointList() : nullptr; }
+    // Jump point information for incoming ties after repeats
+    TieJumpPoint* m_jumpPoint = nullptr;
+    TieJumpPointList* startTieJumpPoints() const { return m_jumpPoint ? m_jumpPoint->jumpPointList() : nullptr; }
 };
 } // namespace mu::engraving

@@ -1310,7 +1310,7 @@ void Note::add(EngravingItem* e)
     case ElementType::PARTIAL_TIE: {
         PartialTie* pt = toPartialTie(e);
         pt->setTick(tick());
-        if (pt->partialSpannerDirection() == PartialSpannerDirection::OUTGOING) {
+        if (pt->isOutgoing()) {
             pt->setStartNote(this);
             setTieFor(pt);
         } else {
@@ -1387,7 +1387,7 @@ void Note::remove(EngravingItem* e)
             setTieFor(nullptr);
         } else {
             setTieBack(nullptr);
-            pt->setEndPoint(nullptr);
+            pt->setJumpPoint(nullptr);
         }
         break;
     }
@@ -1396,7 +1396,7 @@ void Note::remove(EngravingItem* e)
         Tie* tie = toTie(e);
         assert(tie->startNote() == this);
         setTieFor(nullptr);
-        tie->setEndPoint(nullptr);
+        tie->setJumpPoint(nullptr);
         if (tie->endNote()) {
             tie->endNote()->setTieBack(0);
         }
@@ -2232,7 +2232,7 @@ void Note::updateAccidental(AccidentalState* as)
             as->setAccidentalVal(eAbsLine, accVal, m_tieBack != 0 && m_accidental == 0);
             acci = Accidental::value2subtype(accVal);
             // if previous tied note has same tpc, don't show accidental
-            if (m_tieBack && !incomingPartialTie() && m_tieBack->startNote()->tpc1() == tpc1()) {
+            if (tieBackNonPartial() && m_tieBack->startNote()->tpc1() == tpc1()) {
                 acci = AccidentalType::NONE;
             } else if (acci == AccidentalType::NONE) {
                 acci = AccidentalType::NATURAL;
@@ -2461,6 +2461,24 @@ GuitarBend* Note::bendBack() const
     return nullptr;
 }
 
+Tie* Note::tieForNonPartial() const
+{
+    if (!m_tieFor || m_tieFor->type() != ElementType::TIE) {
+        return nullptr;
+    }
+
+    return m_tieFor;
+}
+
+Tie* Note::tieBackNonPartial() const
+{
+    if (!m_tieBack || m_tieBack->type() != ElementType::TIE) {
+        return nullptr;
+    }
+
+    return m_tieBack;
+}
+
 LaissezVib* Note::laissezVib() const
 {
     if (!m_tieFor || !m_tieFor->isLaissezVib()) {
@@ -2491,13 +2509,13 @@ PartialTie* Note::outgoingPartialTie() const
 void Note::setTieFor(Tie* t)
 {
     m_tieFor = t;
-    m_endPoints.setStartTie(m_tieFor);
+    m_jumpPoints.setStartTie(m_tieFor);
 }
 
 void Note::setTieBack(Tie* t)
 {
-    if (m_tieBack && t && m_tieBack->endPoint()) {
-        t->setEndPoint(m_tieBack->endPoint());
+    if (m_tieBack && t && m_tieBack->jumpPoint()) {
+        t->setJumpPoint(m_tieBack->jumpPoint());
     }
     m_tieBack = t;
 }
@@ -3743,17 +3761,17 @@ std::vector<Note*> Note::findTiedNotes(Note* startNote, bool followPartialTies)
 
     while (note->tieFor()) {
         if (followPartialTies) {
-            for (TieEndPoint* endPoint : *note->tieEndPoints()) {
-                if (!endPoint->active() || endPoint->followingNote()) {
+            for (TieJumpPoint* jumpPoint : *note->tieJumpPoints()) {
+                if (!jumpPoint->active() || jumpPoint->followingNote()) {
                     continue;
                 }
-                if (!endPoint->note() || std::find(notes.begin(), notes.end(), endPoint->note()) != notes.end()) {
+                if (!jumpPoint->note() || std::find(notes.begin(), notes.end(), jumpPoint->note()) != notes.end()) {
                     continue;
                 }
                 // ONLY backtrack when end point is a full tie eg. around a segno
-                const bool endTieIsFullTie = endPoint->endTie() && !endPoint->endTie()->isPartialTie();
-                Note* endPointNote = endTieIsFullTie ? endPoint->endTie()->startNote()->firstTiedNote() : endPoint->note();
-                std::vector<Note*> partialTieNotes = findTiedNotes(endPointNote, !endTieIsFullTie);
+                const bool endTieIsFullTie = jumpPoint->endTie() && !jumpPoint->endTie()->isPartialTie();
+                Note* jumpPointNote = endTieIsFullTie ? jumpPoint->endTie()->startNote()->firstTiedNote() : jumpPoint->note();
+                std::vector<Note*> partialTieNotes = findTiedNotes(jumpPointNote, !endTieIsFullTie);
                 notes.insert(notes.end(), partialTieNotes.begin(), partialTieNotes.end());
             }
         }
@@ -3829,7 +3847,7 @@ void Note::connectTiedNotes()
     }
 }
 
-bool Note::followingJumpItem()
+bool Note::hasFollowingJumpItem()
 {
     const Chord* startChord = chord();
     const Segment* seg = startChord->segment();
@@ -3882,67 +3900,6 @@ bool Note::followingJumpItem()
     }
 
     return false;
-}
-
-String Note::precedingJumpItemName()
-{
-    const Chord* startChord = chord();
-    const Segment* seg = startChord->segment();
-    const Measure* measure = seg->measure();
-
-    if (seg->score()->firstSegment(SegmentType::ChordRest) == seg) {
-        return muse::mtrc("engraving", "start of score");
-    }
-
-    // Markers
-    for (const EngravingItem* e : measure->el()) {
-        if (!e->isMarker()) {
-            continue;
-        }
-
-        const Marker* marker = toMarker(e);
-        if (muse::contains(Marker::RIGHT_MARKERS, marker->markerType())) {
-            continue;
-        }
-
-        if (marker->markerType() == MarkerType::CODA || marker->markerType() == MarkerType::VARCODA) {
-            return muse::mtrc("engraving", "coda");
-        } else {
-            return muse::mtrc("engraving", "segno");
-        }
-    }
-
-    // Voltas
-    auto spanners = score()->spannerMap().findOverlapping(measure->tick().ticks(), measure->tick().ticks());
-    for (auto& spanner : spanners) {
-        if (!spanner.value->isVolta() || Fraction::fromTicks(spanner.start) != startChord->tick()) {
-            continue;
-        }
-
-        Volta* volta = toVolta(spanner.value);
-
-        return muse::mtrc("engraving", "“%1” volta").arg(volta->beginText());
-    }
-
-    // Repeat barlines
-    if (measure->repeatStart()) {
-        return muse::mtrc("engraving", "start repeat");
-    }
-
-    for (Segment* prevSeg = seg->prev(SegmentType::BarLineType); prevSeg && prevSeg->tick() == seg->tick();
-         prevSeg = prevSeg->prev(SegmentType::BarLineType)) {
-        EngravingItem* el = prevSeg->element(startChord->track());
-        if (!el || !el->isBarLine()) {
-            continue;
-        }
-
-        BarLine* bl = toBarLine(el);
-        if (bl->barLineType() & (BarLineType::START_REPEAT | BarLineType::END_START_REPEAT)) {
-            return muse::mtrc("engraving", "start repeat");
-        }
-    }
-
-    return muse::mtrc("engraving", "invalid");
 }
 
 //---------------------------------------------------------

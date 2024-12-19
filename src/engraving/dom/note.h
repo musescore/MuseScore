@@ -297,6 +297,8 @@ public:
     GuitarBend* bendBack() const;
     Tie* tieFor() const { return m_tieFor; }
     Tie* tieBack() const { return m_tieBack; }
+    Tie* tieForNonPartial() const;
+    Tie* tieBackNonPartial() const;
     LaissezVib* laissezVib() const;
     PartialTie* incomingPartialTie() const;
     PartialTie* outgoingPartialTie() const;
@@ -313,8 +315,7 @@ public:
     void disconnectTiedNotes();
     void connectTiedNotes();
 
-    bool followingJumpItem();
-    String precedingJumpItemName();
+    bool hasFollowingJumpItem();
 
     void setupAfterRead(const Fraction& tick, bool pasteMode);
 
@@ -467,8 +468,8 @@ public:
 
     void setVisible(bool v) override;
 
-    TieEndPointList* tieEndPoints() { return &m_endPoints; }
-    const TieEndPointList* tieEndPoints() const { return &m_endPoints; }
+    TieJumpPointList* tieJumpPoints() { return &m_jumpPoints; }
+    const TieJumpPointList* tieJumpPoints() const { return &m_jumpPoints; }
 
     struct LayoutData : public EngravingItem::LayoutData {
         ld_field<bool> useTablature = { "[Note] useTablature", false };
@@ -575,6 +576,6 @@ private:
     String m_fretString;
 
     std::vector<LineAttachPoint> m_lineAttachPoints;
-    TieEndPointList m_endPoints;
+    TieJumpPointList m_jumpPoints;
 };
 } // namespace mu::engraving

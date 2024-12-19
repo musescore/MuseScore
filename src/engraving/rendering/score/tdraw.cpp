@@ -3056,7 +3056,7 @@ void TDraw::draw(const TieSegment* item, Painter* painter)
     }
 
     Color penColor = item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>());
-    if (!item->score()->printing() && item->ldata()->allEndPointsInactive) {
+    if (!item->score()->printing() && item->ldata()->allJumpPointsInactive) {
         penColor.setAlpha(std::min(penColor.alpha(), 85));
     }
 

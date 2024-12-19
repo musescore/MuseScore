@@ -22,7 +22,6 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <memory>
 
 #include "dom/note.h"
 #include "dom/chord.h"
@@ -61,26 +60,26 @@ protected:
         return note;
     }
 
-    void testPartialTies(const String& score, const Fraction& startPointLocation, const std::vector<Fraction>& endPointLocations)
+    void testPartialTies(const String& score, const Fraction& startPointLocation, const std::vector<Fraction>& jumpPointLocations)
     {
-        openScore(score, startPointLocation, endPointLocations);
+        openScore(score, startPointLocation, jumpPointLocations);
 
         addTie();
 
-        saveAndLoad(score, startPointLocation, endPointLocations);
+        saveAndLoad(score, startPointLocation, jumpPointLocations);
 
-        toggleEndPoint();
+        toggleJumpPoint();
 
-        deleteEndTie();
+        deleteJumpTie();
 
-        deleteEndNote();
+        deleteJumpNote();
 
-        toggleFirstEndPoint();
+        toggleFirstJumpPoint();
 
         deleteStartTie();
     }
 
-    void openScore(const String& score, const Fraction& startPointLocation, const std::vector<Fraction>& endPointLocations)
+    void openScore(const String& score, const Fraction& startPointLocation, const std::vector<Fraction>& jumpPointLocations)
     {
         m_masterScore = ScoreRW::readScore(PARTIALTIE_DATA_DIR + score + u".mscx");
 
@@ -88,152 +87,152 @@ protected:
 
         // Find start note
         m_startNote = getNoteAtTick(startPointLocation);
-        // Find endpoints
-        for (const Fraction& endPointTick : endPointLocations) {
-            m_endPoints.push_back(getNoteAtTick(endPointTick));
+        // Find jump points
+        for (const Fraction& jumpPointTick : jumpPointLocations) {
+            m_jumpPoints.push_back(getNoteAtTick(jumpPointTick));
         }
     }
 
     Tie* addTie()
     {
         // Add tie to start note
-        // Expect tie to be added successfully and all end points to have an incoming tie
+        // Expect tie to be added successfully and all jump points to have an incoming tie
         m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
         m_masterScore->select(m_startNote);
         Tie* t = m_masterScore->cmdToggleTie();
         EXPECT_TRUE(t);
         m_masterScore->endCmd();
 
-        for (const Note* note : m_endPoints) {
+        for (const Note* note : m_jumpPoints) {
             EXPECT_TRUE(note->tieBack());
         }
 
         return t;
     }
 
-    void toggleEndPoint()
+    void toggleJumpPoint()
     {
-        // Toggle the second end point
-        // Expect the second endpoint to not have an incoming tie and all other endpoints to have incoming ties
-        TieEndPointList* endPointList = m_startNote->tieEndPoints();
-        EXPECT_TRUE(endPointList->size() > 1);
+        // Toggle the second jump point
+        // Expect the second jump point to not have an incoming tie and all other jump points to have incoming ties
+        TieJumpPointList* jumpPointList = m_startNote->tieJumpPoints();
+        EXPECT_TRUE(jumpPointList->size() > 1);
 
         m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-        endPointList->toggleEndPoint(u"endPoint1");
+        jumpPointList->toggleJumpPoint(u"jumpPoint1");
         m_masterScore->endCmd();
 
-        for (TieEndPoint* endPoint : *endPointList) {
-            if (endPoint->id() == u"endPoint1") {
-                EXPECT_FALSE(endPoint->endTie());
+        for (TieJumpPoint* jumpPoint : *jumpPointList) {
+            if (jumpPoint->id() == u"jumpPoint1") {
+                EXPECT_FALSE(jumpPoint->endTie());
             } else {
-                EXPECT_TRUE(endPoint->endTie());
+                EXPECT_TRUE(jumpPoint->endTie());
             }
         }
 
         m_masterScore->undoRedo(true, 0);
 
-        // Expect all endpoints to have incoming ties
+        // Expect all jump points to have incoming ties
 
-        for (TieEndPoint* endPoint : *endPointList) {
-            EXPECT_TRUE(endPoint->endTie());
+        for (TieJumpPoint* jumpPoint : *jumpPointList) {
+            EXPECT_TRUE(jumpPoint->endTie());
         }
     }
 
-    void deleteEndTie()
+    void deleteJumpTie()
     {
-        // Delete the second end tie
-        // Expect the second endpoint to not have an incoming tie and all other endpoints to have incoming ties
-        TieEndPointList* endPointList = m_startNote->tieEndPoints();
-        EXPECT_TRUE(endPointList->size() > 1);
-        EXPECT_TRUE(m_endPoints.at(1)->tieBack()->frontSegment());
+        // Delete the second jump tie
+        // Expect the second jump point to not have an incoming tie and all other jump points to have incoming ties
+        TieJumpPointList* jumpPointList = m_startNote->tieJumpPoints();
+        EXPECT_TRUE(jumpPointList->size() > 1);
+        EXPECT_TRUE(m_jumpPoints.at(1)->tieBack()->frontSegment());
 
         m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-        m_masterScore->deleteItem(m_endPoints.at(1)->tieBack()->frontSegment());
+        m_masterScore->deleteItem(m_jumpPoints.at(1)->tieBack()->frontSegment());
         m_masterScore->endCmd();
 
-        for (TieEndPoint* endPoint : *endPointList) {
-            if (endPoint->id() == u"endPoint1") {
-                EXPECT_FALSE(endPoint->endTie());
+        for (TieJumpPoint* jumpPoint : *jumpPointList) {
+            if (jumpPoint->id() == u"jumpPoint1") {
+                EXPECT_FALSE(jumpPoint->endTie());
             } else {
-                EXPECT_TRUE(endPoint->endTie());
+                EXPECT_TRUE(jumpPoint->endTie());
             }
         }
 
         m_masterScore->undoRedo(true, 0);
 
-        // Expect all endpoints to have incoming ties
+        // Expect all jumpPoints to have incoming ties
 
-        for (TieEndPoint* endPoint : *endPointList) {
-            EXPECT_TRUE(endPoint->endTie());
+        for (TieJumpPoint* jumpPoint : *jumpPointList) {
+            EXPECT_TRUE(jumpPoint->endTie());
         }
     }
 
-    void deleteEndNote()
+    void deleteJumpNote()
     {
-        // Delete the second endpoint note
-        // Expect the second endpoint to note have in incoming tie and all other endpoints to have incoming ties
-        TieEndPointList* endPointList = m_startNote->tieEndPoints();
-        EXPECT_TRUE(endPointList->size() > 1);
-        EXPECT_TRUE(m_endPoints.at(1)->chord());
+        // Delete the second jump point note
+        // Expect the second jump point to note have in incoming tie and all other jump points to have incoming ties
+        TieJumpPointList* jumpPointList = m_startNote->tieJumpPoints();
+        EXPECT_TRUE(jumpPointList->size() > 1);
+        EXPECT_TRUE(m_jumpPoints.at(1)->chord());
 
         m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-        m_masterScore->deleteItem(m_endPoints.at(1)->chord());
+        m_masterScore->deleteItem(m_jumpPoints.at(1)->chord());
         m_masterScore->endCmd();
 
-        for (TieEndPoint* endPoint : *endPointList) {
-            if (endPoint->id() == u"endPoint1") {
-                EXPECT_FALSE(endPoint->endTie());
+        for (TieJumpPoint* jumpPoint : *jumpPointList) {
+            if (jumpPoint->id() == u"jumpPoint1") {
+                EXPECT_FALSE(jumpPoint->endTie());
             } else {
-                EXPECT_TRUE(endPoint->endTie());
+                EXPECT_TRUE(jumpPoint->endTie());
             }
         }
 
         m_masterScore->undoRedo(true, 0);
 
-        // Expect all endpoints to have incoming ties
+        // Expect all jump points to have incoming ties
 
-        for (TieEndPoint* endPoint : *endPointList) {
-            EXPECT_TRUE(endPoint->endTie());
+        for (TieJumpPoint* jumpPoint : *jumpPointList) {
+            EXPECT_TRUE(jumpPoint->endTie());
         }
     }
 
-    void toggleFirstEndPoint()
+    void toggleFirstJumpPoint()
     {
-        // Toggle the first endpoint
-        // Expect the first endpoint to not have an incoming tie
-        TieEndPointList* endPointList = m_startNote->tieEndPoints();
+        // Toggle the first jump point
+        // Expect the first jump point to not have an incoming tie
+        TieJumpPointList* jumpPointList = m_startNote->tieJumpPoints();
 
-        Tie* startTie = endPointList->startTie();
+        Tie* startTie = jumpPointList->startTie();
 
         m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
-        endPointList->toggleEndPoint(u"endPoint0");
+        jumpPointList->toggleJumpPoint(u"jumpPoint0");
         m_masterScore->endCmd();
 
-        for (TieEndPoint* endPoint : *endPointList) {
-            if (endPoint->id() == u"endPoint0") {
-                EXPECT_FALSE(endPoint->endTie());
+        for (TieJumpPoint* jumpPoint : *jumpPointList) {
+            if (jumpPoint->id() == u"jumpPoint0") {
+                EXPECT_FALSE(jumpPoint->endTie());
             } else {
-                EXPECT_TRUE(endPoint->endTie());
+                EXPECT_TRUE(jumpPoint->endTie());
             }
         }
 
         // Expect the start (full) tie to be replaced with a partial tie
-        Tie* newStartTie = endPointList->startTie();
+        Tie* newStartTie = jumpPointList->startTie();
 
         EXPECT_NE(startTie, newStartTie);
         EXPECT_TRUE(newStartTie->isPartialTie());
 
-        // Expect all endpoints to have incoming ties
+        // Expect all jump points to have incoming ties
 
         m_masterScore->undoRedo(true, 0);
 
-        for (TieEndPoint* endPoint : *endPointList) {
-            EXPECT_TRUE(endPoint->endTie());
+        for (TieJumpPoint* jumpPoint : *jumpPointList) {
+            EXPECT_TRUE(jumpPoint->endTie());
         }
 
         // Expect the start (partial) tie to be replaced with a full tie
 
-        startTie = endPointList->startTie();
+        startTie = jumpPointList->startTie();
         EXPECT_NE(startTie, newStartTie);
         EXPECT_FALSE(startTie->isPartialTie());
     }
@@ -241,17 +240,17 @@ protected:
     void deleteStartTie()
     {
         // Delete the start tie
-        // Expect no endpoints to have incoming ties
-        TieEndPointList* endPointList = m_startNote->tieEndPoints();
+        // Expect no jump points to have incoming ties
+        TieJumpPointList* jumpPointList = m_startNote->tieJumpPoints();
         EXPECT_TRUE(m_startNote->tieFor()->frontSegment());
 
         m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
         m_masterScore->deleteItem(m_startNote->tieFor()->frontSegment());
         m_masterScore->endCmd();
 
-        for (TieEndPoint* endPoint : *endPointList) {
-            EXPECT_FALSE(endPoint->endTie());
-            EXPECT_FALSE(endPoint->active());
+        for (TieJumpPoint* jumpPoint : *jumpPointList) {
+            EXPECT_FALSE(jumpPoint->endTie());
+            EXPECT_FALSE(jumpPoint->active());
         }
     }
 
@@ -260,7 +259,7 @@ protected:
         // Add a partial tie to the note following a segno, then add a full tie to the note preceding the segno
         addTie();
 
-        TieEndPointList* endPointList = m_startNote->tieEndPoints();
+        TieJumpPointList* jumpPointList = m_startNote->tieJumpPoints();
 
         Note* noteAfterSegno = getNoteAtTick(tickAfterSegno);
         Tie* initialTie = noteAfterSegno->tieBack();
@@ -273,9 +272,9 @@ protected:
         m_masterScore->endCmd();
 
         bool newTieFound = false;
-        for (TieEndPoint* endPoint : *endPointList) {
-            EXPECT_NE(endPoint->endTie(), initialTie);
-            newTieFound |= endPoint->endTie() == tieBeforeSegno;
+        for (TieJumpPoint* jumpPoint : *jumpPointList) {
+            EXPECT_NE(jumpPoint->endTie(), initialTie);
+            newTieFound |= jumpPoint->endTie() == tieBeforeSegno;
         }
 
         EXPECT_TRUE(newTieFound);
@@ -284,11 +283,11 @@ protected:
         EXPECT_FALSE(tieBeforeSegno->isPartialTie());
         EXPECT_NE(tieBeforeSegno, initialTie);
 
-        EXPECT_EQ(tieBeforeSegno->tieEndPoints()->size(), 0);
-        EXPECT_EQ(endPointList->size(), 1);
+        EXPECT_EQ(tieBeforeSegno->tieJumpPoints()->size(), 0);
+        EXPECT_EQ(jumpPointList->size(), 1);
 
         // Delete the start tie
-        // Expect segno tie to still have a tie but no endpoint
+        // Expect segno tie to still have a tie but no jump point
         EXPECT_TRUE(m_startNote->tieFor()->frontSegment());
 
         m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
@@ -296,12 +295,12 @@ protected:
         m_masterScore->endCmd();
 
         EXPECT_TRUE(tieBeforeSegno);
-        EXPECT_FALSE(tieBeforeSegno->endPoint());
+        EXPECT_FALSE(tieBeforeSegno->jumpPoint());
     }
 
     void testSegnoPartialTieAfter(Fraction tickBeforeSegno)
     {
-        // Add a full tie to the note preceding a segno, then add a tie to the D.S which should add the previous tie to the list of endpoints
+        // Add a full tie to the note preceding a segno, then add a tie to the D.S which should add the previous tie to the list of jump points
         Note* noteBeforeSegno = getNoteAtTick(tickBeforeSegno);
         m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
         m_masterScore->select(noteBeforeSegno);
@@ -311,10 +310,10 @@ protected:
 
         Tie* startTie = addTie();
 
-        EXPECT_EQ(startTie->tieEndPoints()->size(), 1);
+        EXPECT_EQ(startTie->tieJumpPoints()->size(), 1);
 
         // Delete the start tie
-        // Expect segno tie to still have a tie but no endpoint
+        // Expect segno tie to still have a tie but no jump point
         EXPECT_TRUE(m_startNote->tieFor()->frontSegment());
 
         m_masterScore->startCmd(TranslatableString::untranslatable("Partial tie tests"));
@@ -322,10 +321,10 @@ protected:
         m_masterScore->endCmd();
 
         EXPECT_TRUE(tieBeforeSegno);
-        EXPECT_FALSE(tieBeforeSegno->endPoint());
+        EXPECT_FALSE(tieBeforeSegno->jumpPoint());
     }
 
-    void saveAndLoad(const String& score, const Fraction& startPointLocation, const std::vector<Fraction>& endPointLocations)
+    void saveAndLoad(const String& score, const Fraction& startPointLocation, const std::vector<Fraction>& jumpPointLocations)
     {
         // Save score
         const String savePath = score + u".mscx";
@@ -333,23 +332,23 @@ protected:
         delete m_masterScore;
         m_masterScore = nullptr;
         m_startNote = nullptr;
-        m_endPoints.clear();
+        m_jumpPoints.clear();
 
         // Load
-        openScore(score + u"-ref", startPointLocation, endPointLocations);
+        openScore(score + u"-ref", startPointLocation, jumpPointLocations);
 
-        // Expect start tie has endpoints
-        // Expect each endpoint to have an incoming tie
-        TieEndPointList* endPointList = m_startNote->tieEndPoints();
-        EXPECT_TRUE(endPointList);
+        // Expect start tie has jumpPoints
+        // Expect each jumpPoint to have an incoming tie
+        TieJumpPointList* jumpPointList = m_startNote->tieJumpPoints();
+        EXPECT_TRUE(jumpPointList);
 
-        EXPECT_EQ(endPointLocations.size(), endPointList->size());
+        EXPECT_EQ(jumpPointLocations.size(), jumpPointList->size());
 
-        for (TieEndPoint* endPoint : *endPointList) {
-            EXPECT_EQ(endPoint->endTie()->startTie(), m_startNote->tieFor());
+        for (TieJumpPoint* jumpPoint : *jumpPointList) {
+            EXPECT_EQ(jumpPoint->endTie()->startTie(), m_startNote->tieFor());
         }
 
-        for (const Note* note : m_endPoints) {
+        for (const Note* note : m_jumpPoints) {
             EXPECT_TRUE(note->tieBack());
         }
     }
@@ -359,7 +358,7 @@ private:
 
     MasterScore* m_masterScore = nullptr;
     Note* m_startNote = nullptr;
-    std::vector<Note*> m_endPoints;
+    std::vector<Note*> m_jumpPoints;
 };
 
 TEST_F(Engraving_PartialTieTests, repeatBarlines)
@@ -367,9 +366,9 @@ TEST_F(Engraving_PartialTieTests, repeatBarlines)
     const String test = u"repeat_barlines";
 
     const Fraction startPointTick = Fraction(7, 4);
-    const std::vector<Fraction> endPoints = { Fraction(8, 4), Fraction(0, 4) };
+    const std::vector<Fraction> jumpPoints = { Fraction(8, 4), Fraction(0, 4) };
 
-    testPartialTies(test, startPointTick, endPoints);
+    testPartialTies(test, startPointTick, jumpPoints);
 }
 
 TEST_F(Engraving_PartialTieTests, voltaCoda)
@@ -377,9 +376,9 @@ TEST_F(Engraving_PartialTieTests, voltaCoda)
     const String test = u"volta_coda";
 
     const Fraction startPointTick = Fraction(3, 4);
-    const std::vector<Fraction> endPoints = { Fraction(4, 4), Fraction(8, 4), Fraction(12, 4), Fraction(16, 4) };
+    const std::vector<Fraction> jumpPoints = { Fraction(4, 4), Fraction(8, 4), Fraction(12, 4), Fraction(16, 4) };
 
-    testPartialTies(test, startPointTick, endPoints);
+    testPartialTies(test, startPointTick, jumpPoints);
 }
 
 TEST_F(Engraving_PartialTieTests, coda)
@@ -387,9 +386,9 @@ TEST_F(Engraving_PartialTieTests, coda)
     const String test = u"coda";
 
     const Fraction startPointTick = Fraction(3, 4);
-    const std::vector<Fraction> endPoints = { Fraction(4, 4), Fraction(8, 4) };
+    const std::vector<Fraction> jumpPoints = { Fraction(4, 4), Fraction(8, 4) };
 
-    testPartialTies(test, startPointTick, endPoints);
+    testPartialTies(test, startPointTick, jumpPoints);
 }
 
 TEST_F(Engraving_PartialTieTests, segnoBefore)
@@ -397,9 +396,9 @@ TEST_F(Engraving_PartialTieTests, segnoBefore)
     const String test = u"segno";
 
     const Fraction startPointTick = Fraction(11, 4);
-    const std::vector<Fraction> endPoints = { Fraction(4, 4) };
+    const std::vector<Fraction> jumpPoints = { Fraction(4, 4) };
 
-    openScore(test, startPointTick, endPoints);
+    openScore(test, startPointTick, jumpPoints);
 
     // Add tie to 3,4.  Replace incoming partial tie at 4,4 with full tie
     testSegnoPartialTieFirst(Fraction(3, 4), Fraction(4, 4));
@@ -410,9 +409,9 @@ TEST_F(Engraving_PartialTieTests, segnoAfter)
     const String test = u"segno";
 
     const Fraction startPointTick = Fraction(11, 4);
-    const std::vector<Fraction> endPoints = { Fraction(4, 4) };
+    const std::vector<Fraction> jumpPoints = { Fraction(4, 4) };
 
-    openScore(test, startPointTick, endPoints);
+    openScore(test, startPointTick, jumpPoints);
 
     testSegnoPartialTieAfter(Fraction(3, 4));
 }

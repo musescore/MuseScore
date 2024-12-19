@@ -1080,7 +1080,7 @@ std::set<size_t> CompatMidiRender::getNotesIndexesToRender(Chord* chord)
     }
 
     auto noteShouldBeRendered = [](Note* n) {
-        while (n->tieBack() && !n->incomingPartialTie() && n != n->tieBack()->startNote()) {
+        while (n->tieBackNonPartial() && n != n->tieBack()->startNote()) {
             n = n->tieBack()->startNote();
             if (findFirstTrill(n->chord())) {
                 // The previous tied note probably has events for this note too.

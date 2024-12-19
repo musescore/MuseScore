@@ -1,7 +1,6 @@
 #include "partialtiepopupmodel.h"
 #include "dom/partialtie.h"
 #include "dom/tie.h"
-#include "types/typesconv.h"
 #include "dom/undo.h"
 
 using namespace mu::notation;
@@ -26,11 +25,11 @@ bool PartialTiePopupModel::tieDirection() const
 bool PartialTiePopupModel::canOpen() const
 {
     Tie* tieItem = tie();
-    if (!tieItem || !tieItem->tieEndPoints()) {
+    if (!tieItem || !tieItem->tieJumpPoints()) {
         return false;
     }
 
-    if (tieItem->tieEndPoints()->size() < 2) {
+    if (tieItem->tieJumpPoints()->size() < 2) {
         return false;
     }
 
@@ -79,7 +78,7 @@ void PartialTiePopupModel::init()
 void PartialTiePopupModel::toggleItemChecked(QString& id)
 {
     Tie* tieItem = tie();
-    if (!tieItem || !tieItem->tieEndPoints()) {
+    if (!tieItem || !tieItem->tieJumpPoints()) {
         return;
     }
 
@@ -93,9 +92,9 @@ void PartialTiePopupModel::toggleItemChecked(QString& id)
         break;
     }
 
-    TieEndPointList* ends = tieItem->tieEndPoints();
-    ends->toggleEndPoint(id);
-    Tie* newTie = ends->startTie();
+    TieJumpPointList* jumpList = tieItem->tieJumpPoints();
+    jumpList->toggleJumpPoint(id);
+    Tie* newTie = jumpList->startTie();
 
     // Update popup item if it has changed
     if (newTie && newTie != tieItem) {
@@ -117,7 +116,7 @@ void PartialTiePopupModel::load()
         return;
     }
 
-    tieItem->collectPossibleEndPoints();
+    tieItem->collectPossibleJumpPoints();
 
     m_items = makeMenuItems();
 
@@ -129,24 +128,24 @@ void PartialTiePopupModel::load()
 MenuItemList PartialTiePopupModel::makeMenuItems()
 {
     Tie* tieItem = tie();
-    if (!tieItem || !tieItem->tieEndPoints()) {
+    if (!tieItem || !tieItem->tieJumpPoints()) {
         return MenuItemList{};
     }
 
     MenuItemList itemList;
 
-    for (const TieEndPoint* endPoint : *tieItem->tieEndPoints()) {
-        itemList << makeMenuItem(endPoint);
+    for (const TieJumpPoint* jumpPoint : *tieItem->tieJumpPoints()) {
+        itemList << makeMenuItem(jumpPoint);
     }
 
     return itemList;
 }
 
-muse::uicomponents::MenuItem* PartialTiePopupModel::makeMenuItem(const engraving::TieEndPoint* endPoint)
+muse::uicomponents::MenuItem* PartialTiePopupModel::makeMenuItem(const engraving::TieJumpPoint* jumpPoint)
 {
     MenuItem* item = new MenuItem(this);
-    item->setId(endPoint->id());
-    TranslatableString title = TranslatableString("notation", endPoint->menuTitle());
+    item->setId(jumpPoint->id());
+    TranslatableString title = TranslatableString("notation", jumpPoint->menuTitle());
     item->setTitle(title);
 
     UiAction action;
@@ -156,7 +155,7 @@ muse::uicomponents::MenuItem* PartialTiePopupModel::makeMenuItem(const engraving
 
     UiActionState state;
     state.enabled = true;
-    state.checked = endPoint->active();
+    state.checked = jumpPoint->active();
     item->setState(state);
 
     return item;
@@ -176,7 +175,7 @@ void mu::notation::PartialTiePopupModel::onClosed()
         return;
     }
 
-    if (tieItem->allEndPointsInactive()) {
+    if (tieItem->allJumpPointsInactive()) {
         Score* score = tieItem->score();
         beginCommand(TranslatableString("engraving", "Remove partial tie"));
         score->undoRemoveElement(tieItem);

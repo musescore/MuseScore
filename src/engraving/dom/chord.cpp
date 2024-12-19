@@ -1672,7 +1672,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as, staff_idx_t staffIdx)
         if (vStaffIdx() == staffIdx) {
             std::vector<Note*> lnotes(notes());      // we need a copy!
             for (Note* note : lnotes) {
-                if (note->tieBack() && !note->incomingPartialTie() && note->tpc() == note->tieBack()->startNote()->tpc()) {
+                if (note->tieBackNonPartial() && note->tpc() == note->tieBack()->startNote()->tpc()) {
                     // same pitch
                     if (note->accidental() && note->accidental()->role() == AccidentalRole::AUTO) {
                         // not courtesy

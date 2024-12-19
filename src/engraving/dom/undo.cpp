@@ -1015,7 +1015,7 @@ static void removeNote(const Note* note)
         score->doUndoRemoveElement(tieFor);
     }
     if (tieBack) {
-        if (tieBack->tieEndPoints() && tieBack->tieEndPoints()->size() > 1) {
+        if (tieBack->tieJumpPoints() && tieBack->tieJumpPoints()->size() > 1) {
             Tie::changeTieType(tieBack);
         } else {
             score->doUndoRemoveElement(tieBack);
@@ -3362,14 +3362,14 @@ std::vector<const EngravingObject*> RemoveSystemLock::objectItems() const
     return { m_systemLock->startMB(), m_systemLock->endMB() };
 }
 
-void ChangeTieEndPointActive::flip(EditData*)
+void ChangeTieJumpPointActive::flip(EditData*)
 {
-    TieEndPoint* endPoint = m_endPointList->findEndPoint(m_id);
-    if (!endPoint) {
+    TieJumpPoint* jumpPoint = m_jumpPointList->findJumpPoint(m_id);
+    if (!jumpPoint) {
         return;
     }
-    bool oldActive = endPoint->active();
+    bool oldActive = jumpPoint->active();
 
-    endPoint->setActive(m_active);
+    jumpPoint->setActive(m_active);
     m_active = oldActive;
 }

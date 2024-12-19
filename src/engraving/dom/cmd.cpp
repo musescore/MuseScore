@@ -1693,8 +1693,8 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
             }
             for (Note* n : c->notes()) {
                 if (Tie* tie = n->tieFor()) {
-                    if (tie->tieEndPoints()) {
-                        tie->removeTiesFromEndPoints();
+                    if (tie->tieJumpPoints()) {
+                        tie->removeTiesFromJumpPoints();
                     }
                     undoRemoveElement(tie);
                 }
@@ -3793,7 +3793,7 @@ void Score::cmdImplode()
                 // see if we are tying in to this chord
                 Chord* tied = 0;
                 for (Note* n : dstChord->notes()) {
-                    if (n->tieBack() && !n->incomingPartialTie()) {
+                    if (n->tieBackNonPartial()) {
                         tied = n->tieBack()->startNote()->chord();
                         break;
                     }

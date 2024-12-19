@@ -2284,11 +2284,11 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
         write(item->outgoingPartialTie(), xml, ctx);
     }
 
-    if (item->tieFor() && !item->laissezVib() && !item->outgoingPartialTie()) {
+    if (item->tieForNonPartial()) {
         writeSpannerStart(item->tieFor(), xml, ctx, item, item->track());
     }
 
-    if (item->tieBack() && !item->incomingPartialTie()) {
+    if (item->tieBackNonPartial()) {
         writeSpannerEnd(item->tieBack(), xml, ctx, item, item->track());
     }
 

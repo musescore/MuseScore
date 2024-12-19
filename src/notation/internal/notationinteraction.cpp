@@ -4263,7 +4263,7 @@ void NotationInteraction::addTieToSelection()
 
     notifyAboutNotationChanged();
 
-    if (newTie && newTie->tieEndPoints() && newTie->tieEndPoints()->size() > 1) {
+    if (newTie && newTie->tieJumpPoints() && newTie->tieJumpPoints()->size() > 1) {
         selectAndStartEditIfNeeded(newTie);
     }
 }

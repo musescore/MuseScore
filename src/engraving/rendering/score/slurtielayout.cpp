@@ -1415,7 +1415,7 @@ TieSegment* SlurTieLayout::layoutTieFor(Tie* item, System* system)
     segment->setSpannerSegmentType(sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
     segment->setSystem(system);   // Needed to populate System.spannerSegments
     segment->resetAdjustmentOffset();
-    segment->mutldata()->allEndPointsInactive = item->allEndPointsInactive();
+    segment->mutldata()->allJumpPointsInactive = item->allJumpPointsInactive();
 
     const Chord* startChord = item->startNote()->chord();
     item->setTick(startChord->tick()); // Why is this here?? (M.S.)
@@ -1701,8 +1701,7 @@ void SlurTieLayout::calculateLaissezVibY(LaissezVibSegment* segment, SlurTiePos&
 
 PartialTieSegment* SlurTieLayout::createPartialTieSegment(PartialTie* item)
 {
-    Chord* chord = item->partialSpannerDirection()
-                   == PartialSpannerDirection::OUTGOING ? item->startNote()->chord() : item->endNote()->chord();
+    Chord* chord = item->isOutgoing() ? item->startNote()->chord() : item->endNote()->chord();
     item->setTick(chord->tick());
 
     calculateDirection(item);
@@ -1713,7 +1712,7 @@ PartialTieSegment* SlurTieLayout::createPartialTieSegment(PartialTie* item)
     segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
     segment->setSystem(chord->segment()->measure()->system());
     segment->resetAdjustmentOffset();
-    segment->mutldata()->allEndPointsInactive = item->allEndPointsInactive();
+    segment->mutldata()->allJumpPointsInactive = item->allJumpPointsInactive();
 
     return segment;
 }

@@ -68,9 +68,9 @@ public:
     void setStartNote(Note* note) override;
     void setEndNote(Note* note) override;
 
-    TieEndPointList* tieEndPoints() override;
-    const TieEndPointList* tieEndPoints() const override;
-    bool allEndPointsInactive() const override;
+    TieJumpPointList* tieJumpPoints() override;
+    const TieJumpPointList* tieJumpPoints() const override;
+    bool allJumpPointsInactive() const override;
 
     Note* startNote() const override;
 

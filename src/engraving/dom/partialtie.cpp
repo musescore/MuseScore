@@ -59,30 +59,30 @@ void PartialTie::setEndNote(Note* note)
     setParent(note);
 }
 
-bool PartialTie::allEndPointsInactive() const
+bool PartialTie::allJumpPointsInactive() const
 {
     if (!isOutgoing()) {
         return false;
     }
-    return Tie::allEndPointsInactive();
+    return Tie::allJumpPointsInactive();
 }
 
-TieEndPointList* PartialTie::tieEndPoints()
+TieJumpPointList* PartialTie::tieJumpPoints()
 {
     if (!isOutgoing()) {
         return nullptr;
     }
 
-    return Tie::tieEndPoints();
+    return Tie::tieJumpPoints();
 }
 
-const TieEndPointList* PartialTie::tieEndPoints() const
+const TieJumpPointList* PartialTie::tieJumpPoints() const
 {
     if (!isOutgoing()) {
         return nullptr;
     }
 
-    return Tie::tieEndPoints();
+    return Tie::tieJumpPoints();
 }
 
 Note* PartialTie::startNote() const
