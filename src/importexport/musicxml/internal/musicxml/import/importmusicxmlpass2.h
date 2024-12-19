@@ -380,6 +380,7 @@ private:
     MusicXmlLogger* m_logger = nullptr;                              // the error logger
     muse::String m_errors;                    // errors to present to the user
     MusicXmlTupletDesc m_tupletDesc;
+    engraving::Color m_dynamicsColor;
     muse::String m_dynamicsPlacement;
     engraving::StringList m_dynamicsList;
     std::vector<Notation> m_notations;

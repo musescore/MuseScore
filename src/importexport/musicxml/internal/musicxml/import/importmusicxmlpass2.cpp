@@ -8282,6 +8282,7 @@ void MusicXmlParserNotations::tied()
 
 void MusicXmlParserNotations::dynamics()
 {
+    m_dynamicsColor = Color::fromString(m_e.attribute("color"));
     m_dynamicsPlacement = m_e.attribute("placement");
 
     while (m_e.readNextStartElement()) {
@@ -9267,7 +9268,10 @@ void MusicXmlParserNotations::addToScore(ChordRest* const cr, Note* const note, 
     for (const String& d : std::as_const(m_dynamicsList)) {
         Dynamic* dynamic = Factory::createDynamic(m_score->dummy()->segment());
         dynamic->setDynamicType(d);
-        m_pass2.addElemOffset(dynamic, cr->track(), m_dynamicsPlacement, cr->measure(), Fraction::fromTicks(tick));
+        if (m_dynamicsColor.isValid()) {
+            dynamic->setColor(m_dynamicsColor);
+        }
+        addElemOffset(dynamic, cr->track(), m_dynamicsPlacement, cr->measure(), Fraction::fromTicks(tick), m_pass2);
     }
 }
 
