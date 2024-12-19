@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SEGMENTLIST_H
-#define MU_ENGRAVING_SEGMENTLIST_H
+#pragma once
 
 #include "segment.h"
 
@@ -52,6 +51,7 @@ public:
 
     Segment* last() const { return m_last; }
     Segment* last(ElementFlag) const;
+    Segment* last(SegmentType) const;
     Segment* firstCRSegment() const;
     void remove(Segment*);
     void push_back(Segment*);
@@ -92,4 +92,3 @@ private:
 // Segment* begin(SegmentList& l) { return l.first(); }
 // Segment* end(SegmentList&) { return 0; }
 } // namespace mu::engraving
-#endif

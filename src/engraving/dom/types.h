@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TYPES_OLD_H
-#define MU_ENGRAVING_TYPES_OLD_H
+#pragma once
 
 #include <unordered_set>
 
@@ -115,6 +114,9 @@ enum class CommandType {
     ChangeSpannerElements,
     InsertTimeUnmanagedSpanner,
     ChangeStartEndSpanner,
+
+    // Ties
+    ChangeTieEndPointActive,
 
     // Style
     ChangeStyle,
@@ -537,6 +539,4 @@ struct ScoreChangesRange {
 Q_DECLARE_METATYPE(mu::engraving::NoteType)
 Q_DECLARE_METATYPE(mu::engraving::PlayEventType)
 Q_DECLARE_METATYPE(mu::engraving::AccidentalType)
-#endif
-
 #endif
