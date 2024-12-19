@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_MEASURE_H
-#define MU_ENGRAVING_MEASURE_H
+#pragma once
 
 /**
  \file
@@ -166,6 +165,8 @@ public:
     void change(EngravingItem* o, EngravingItem* n) override;
     void spatiumChanged(double oldValue, double newValue) override;
 
+    void removePartialSpannersOnRepeatChange(bool outgoing);
+
     System* system() const { return toSystem(explicitParent()); }
     bool hasVoices(staff_idx_t staffIdx, Fraction stick, Fraction len, bool considerInvisible = false) const;
     bool hasVoices(staff_idx_t staffIdx) const;
@@ -207,6 +208,7 @@ public:
     Segment* firstActive() const { return m_segments.firstActive(); }
 
     Segment* last() const { return m_segments.last(); }
+    Segment* last(SegmentType t) const { return m_segments.last(t); }
     Segment* lastEnabled() const { return m_segments.last(ElementFlag::ENABLED); }
     SegmentList& segments() { return m_segments; }
     const SegmentList& segments() const { return m_segments; }
@@ -328,8 +330,14 @@ public:
     bool nextIsOneMeasureRepeat(staff_idx_t staffidx) const;
     bool prevIsOneMeasureRepeat(staff_idx_t staffIdx) const;
 
+    ChordRest* lastChordRest(track_idx_t track) const;
+    ChordRest* firstChordRest(track_idx_t track) const;
+
     EngravingItem* nextElementStaff(staff_idx_t staff, EngravingItem* fromItem = nullptr);
     EngravingItem* prevElementStaff(staff_idx_t staff, EngravingItem* fromItem = nullptr);
+
+    double firstNoteRestSegmentX(bool leading = false) const;
+    double endingXForOpenEndedLines() const;
 
     String accessibleInfo() const override;
 
@@ -340,6 +348,7 @@ public:
     const BarLine* endBarLine() const;
     BarLineType endBarLineType() const;
     bool endBarLineVisible() const;
+    const BarLine* startBarLine() const;
     void triggerLayout() const override;
 
     void checkHeader();
@@ -387,4 +396,3 @@ private:
     bool m_breakMultiMeasureRest = false;
 };
 } // namespace mu::engraving
-#endif

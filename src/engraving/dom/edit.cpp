@@ -23,6 +23,7 @@
 #include <map>
 #include <set>
 
+#include "dom/volta.h"
 #include "infrastructure/messagebox.h"
 
 #include "accidental.h"
@@ -65,6 +66,7 @@
 #include "ornament.h"
 #include "ottava.h"
 #include "part.h"
+#include "partialtie.h"
 #include "range.h"
 #include "rehearsalmark.h"
 #include "rest.h"
@@ -602,7 +604,7 @@ Note* Score::addNoteToTiedChord(Chord* chord, const NoteVal& noteVal, bool force
         if (referenceNote->chord()->findNote(noteVal.pitch)) {
             return nullptr;
         }
-        if (!referenceNote->tieBack()) {
+        if (!referenceNote->tieBack() || referenceNote->incomingPartialTie()) {
             break;
         }
         referenceNote = referenceNote->tieBack()->startNote();
@@ -682,7 +684,7 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
     firstChordRest->score()->undoAddElement(slur);
     SlurSegment* ss = new SlurSegment(firstChordRest->score()->dummy()->system());
     ss->setSpannerSegmentType(SpannerSegmentType::SINGLE);
-    if (firstChordRest == secondChordRest) {
+    if (firstChordRest == secondChordRest && !(slur->isOutgoing() || slur->isIncoming())) {
         ss->setSlurOffset(Grip::END, PointF(3.0 * firstChordRest->style().spatium(), 0.0));
     }
     slur->add(ss);
@@ -1890,6 +1892,29 @@ std::vector<Note*> Score::cmdTieNoteList(const Selection& selection, bool noteEn
 //   cmdAddTie
 //---------------------------------------------------------
 
+static Tie* createAndAddTie(Note* startNote, Note* endNote)
+{
+    Score* score = startNote->score();
+    const bool createPartialTie = !endNote;
+    Tie* tie = createPartialTie ? Factory::createPartialTie(startNote) : Factory::createTie(startNote);
+    tie->setStartNote(startNote);
+    tie->setTrack(startNote->track());
+    tie->setTick(startNote->chord()->segment()->tick());
+    if (!createPartialTie) {
+        tie->setEndNote(endNote);
+        tie->setTicks(endNote->chord()->segment()->tick() - startNote->chord()->segment()->tick());
+    }
+    score->undoAddElement(tie);
+
+    tie->addTiesToEndPoints();
+    if (!tie->endNote() && tie->tieEndPoints() && tie->tieEndPoints()->empty()) {
+        score->undoRemoveElement(tie);
+        tie = nullptr;
+    }
+
+    return tie;
+}
+
 void Score::cmdAddTie(bool addToChord)
 {
     const std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
@@ -1968,13 +1993,8 @@ void Score::cmdAddTie(bool addToChord)
                     // tpc was set correctly already
                     //n->setLine(note->line());
                     //n->setTpc(note->tpc());
-                    Tie* tie = Factory::createTie(this->dummy());
-                    tie->setStartNote(note);
-                    tie->setEndNote(nnote);
-                    tie->setTrack(note->track());
-                    tie->setTick(note->chord()->segment()->tick());
-                    tie->setTicks(nnote->chord()->segment()->tick() - note->chord()->segment()->tick());
-                    undoAddElement(tie);
+                    createAndAddTie(note, nnote);
+
                     if (!addFlag || nnote->chord()->tick() >= lastAddedChord->tick() || nnote->chord()->isGrace()) {
                         break;
                     } else {
@@ -1987,13 +2007,7 @@ void Score::cmdAddTie(bool addToChord)
         } else {
             Note* note2 = searchTieNote(note);
             if (note2) {
-                Tie* tie = Factory::createTie(this->dummy());
-                tie->setStartNote(note);
-                tie->setEndNote(note2);
-                tie->setTrack(note->track());
-                tie->setTick(note->chord()->segment()->tick());
-                tie->setTicks(note2->chord()->segment()->tick() - note->chord()->segment()->tick());
-                undoAddElement(tie);
+                createAndAddTie(note, note2);
             }
         }
     }
@@ -2007,13 +2021,13 @@ void Score::cmdAddTie(bool addToChord)
 //   cmdRemoveTie
 //---------------------------------------------------------
 
-void Score::cmdToggleTie()
+Tie* Score::cmdToggleTie()
 {
     const std::vector<Note*> noteList = cmdTieNoteList(selection(), noteEntryMode());
 
     if (noteList.empty()) {
         LOGD("no notes selected");
-        return;
+        return nullptr;
     }
 
     bool canAddTies = false;
@@ -2039,31 +2053,45 @@ void Score::cmdToggleTie()
 
     startCmd(actionName);
 
+    Tie* tie = nullptr;
+
     if (canAddTies) {
         for (size_t i = 0; i < notes; ++i) {
             Note* note2 = tieNoteList[i];
             if (note2) {
                 Note* note = noteList[i];
-
-                Tie* tie = Factory::createTie(this->dummy());
-                tie->setStartNote(note);
-                tie->setEndNote(note2);
-                tie->setTrack(note->track());
-                tie->setTick(note->chord()->segment()->tick());
-                tie->setTicks(note2->chord()->segment()->tick() - note->chord()->segment()->tick());
-                undoAddElement(tie);
+                tie = createAndAddTie(note, note2);
             }
         }
     } else {
+        bool shouldTieListSelection = noteList.size() == 2;
         for (Note* n : noteList) {
-            Tie* tie = n->tieFor();
+            tie = n->tieFor();
+            Chord* chord = n->chord();
             if (tie) {
                 undoRemoveElement(tie);
+                tie = nullptr;
+                shouldTieListSelection = false;
+            } else if (chord->followingJumpItem()) {
+                // Create outgoing partial tie
+                tie = createAndAddTie(n, nullptr);
+                shouldTieListSelection = false;
+            }
+        }
+
+        if (shouldTieListSelection) {
+            Note* startNote = noteList.at(0);
+            Note* endNote = noteList.at(1);
+            if (startNote->part() == endNote->part() && startNote->pitch() == endNote->pitch()
+                && startNote->unisonIndex() == endNote->unisonIndex() && startNote->tick() != endNote->tick()) {
+                tie = createAndAddTie(startNote, endNote);
             }
         }
     }
 
     endCmd();
+
+    return tie;
 }
 
 void Score::cmdToggleLaissezVib()
@@ -2738,6 +2766,7 @@ void Score::deleteItem(EngravingItem* el)
                     Measure* lmeasure = lscore->tick2measure(m2->tick());
                     if (lmeasure) {
                         lmeasure->undoChangeProperty(Pid::REPEAT_START, false);
+                        lmeasure->removePartialSpannersOnRepeatChange(false);
                     }
                 }
             } else if (bl->barLineType() == BarLineType::END_REPEAT) {
@@ -2746,6 +2775,7 @@ void Score::deleteItem(EngravingItem* el)
                     Measure* lmeasure = lscore->tick2measure(m2->tick());
                     if (lmeasure) {
                         lmeasure->undoChangeProperty(Pid::REPEAT_END, false);
+                        lmeasure->removePartialSpannersOnRepeatChange(true);
                     }
                 }
             } else {
@@ -2876,6 +2906,7 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
     case ElementType::LAISSEZ_VIB_SEGMENT:
+    case ElementType::PARTIAL_TIE_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
@@ -2890,6 +2921,20 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::GUITAR_BEND_SEGMENT:
     {
         el = toSpannerSegment(el)->spanner();
+        if (el->isTie()) {
+            Tie* tie = toTie(el);
+            if (tie->tieEndPoints()) {
+                tie->removeTiesFromEndPoints();
+            }
+            if (tie->endPoint()) {
+                tie->updateStartTieOnRemoval();
+            }
+        }
+
+        if (el->isVolta()) {
+            toVolta(el)->startMeasure()->removePartialSpannersOnRepeatChange(false);
+        }
+
         undoRemoveElement(el);
     }
     break;
@@ -3806,42 +3851,6 @@ void Score::cmdFullMeasureRest()
     } else {
         deselectAll();
     }
-}
-
-//---------------------------------------------------------
-//   addLyrics
-//    called from Keyboard Accelerator & menu
-//---------------------------------------------------------
-
-Lyrics* Score::addLyrics()
-{
-    EngravingItem* el = selection().element();
-    if (el == 0 || (!el->isNote() && !el->isLyrics() && !el->isRest())) {
-        MScore::setError(MsError::NO_LYRICS_SELECTED);
-        return 0;
-    }
-    ChordRest* cr;
-    if (el->isNote()) {
-        cr = toNote(el)->chord();
-        if (cr->isGrace()) {
-            cr = toChordRest(cr->explicitParent());
-        }
-    } else if (el->isLyrics()) {
-        cr = toLyrics(el)->chordRest();
-    } else if (el->isRest()) {
-        cr = toChordRest(el);
-    } else {
-        return 0;
-    }
-
-    int no = int(cr->lyrics().size());
-    Lyrics* lyrics = Factory::createLyrics(cr);
-    lyrics->setTrack(cr->track());
-    lyrics->setParent(cr);
-    lyrics->setNo(no);
-    undoAddElement(lyrics);
-    select(lyrics, SelectType::SINGLE, 0);
-    return lyrics;
 }
 
 std::vector<Hairpin*> Score::addHairpins(HairpinType type)
@@ -5971,6 +5980,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         || et == ElementType::BEND
         || (et == ElementType::CHORD && toChord(element)->isGrace())
         || et == ElementType::LAISSEZ_VIB
+        || et == ElementType::PARTIAL_TIE
         ) {
         const EngravingItem* parent = element->parentItem();
         const LinkedObjects* links = parent ? parent->links() : nullptr;
@@ -7067,7 +7077,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
             for (Note* n : c->notes()) {
                 // Remove ties crossing measure range boundaries
                 Tie* t = n->tieBack();
-                if (t && (t->startNote()->chord()->tick() < startTick)) {
+                if (t && t->startNote() && (t->startNote()->chord()->tick() < startTick)) {
                     if (preserveTies) {
                         t->setEndNote(0);
                     } else {

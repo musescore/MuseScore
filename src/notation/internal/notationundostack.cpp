@@ -153,6 +153,15 @@ bool NotationUndoStack::isStackClean() const
     return undoStack()->isClean();
 }
 
+void NotationUndoStack::mergeCommands(size_t startIdx)
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        return;
+    }
+
+    undoStack()->mergeCommands(startIdx);
+}
+
 void NotationUndoStack::lock()
 {
     IF_ASSERT_FAILED(undoStack()) {

@@ -57,6 +57,7 @@ public:
     void addMeasure(Measure const* const);
     void addMeasures(Measure const* const);
     bool containsMeasure(Measure const* const) const;
+    bool endsWithMeasure(Measure const* const) const;
     bool isEmpty() const;
     int len() const;
     void popMeasure();
