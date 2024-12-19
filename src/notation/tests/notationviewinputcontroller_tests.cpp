@@ -387,7 +387,7 @@ TEST_F(NotationViewInputControllerTests, DISABLED_Mouse_Press_On_Selected_Text_E
     .Times(1);
 
     std::vector<const EngravingItem*> elements = { newContext.element };
-    EXPECT_CALL(*m_playbackController, playElements(elements))
+    EXPECT_CALL(*m_playbackController, playElements(elements, false))
     .Times(0);
 
     std::vector<EngravingItem*> selectElements = { newContext.element };
@@ -463,7 +463,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Selected_Non_Text_Elemen
     .Times(1);
 
     std::vector<const EngravingItem*> elements = { newContext.element };
-    EXPECT_CALL(*m_playbackController, playElements(elements))
+    EXPECT_CALL(*m_playbackController, playElements(elements, false))
     .Times(0);
 
     std::vector<EngravingItem*> selectElements = { newContext.element };
