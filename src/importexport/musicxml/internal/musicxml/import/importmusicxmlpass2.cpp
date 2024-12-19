@@ -8789,7 +8789,7 @@ void MusicXmlParserNotations::addNotation(const Notation& notation, ChordRest* c
             // Terminate tempo line
             const InferredTempoLineStack& lines = m_pass2.getInferredTempoLine();
             terminateInferredLine(std::vector<TextLineBase*>(lines.begin(), lines.end()), cr->tick(), cr->track());
-        } else if (String(notation.name()).contains(u"turn")) {
+        } else if (String(notation.name()).contains(u"turn") || notation.name() == u"schleifer") {
             addTurnToChord(notation, cr);
         } else {
             addArticulationToChord(notation, cr);
