@@ -242,6 +242,7 @@ private:
       void addNotation(const Notation& notation, ChordRest* const cr, Note* const note);
       void addTechnical(const Notation& notation, Note* note);
       void harmonic();
+      void harmonMute();
       void articulations();
       void dynamics();
       void fermata();

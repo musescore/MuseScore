@@ -7694,6 +7694,8 @@ void MusicXMLParserNotations::technical()
                   }
             else if (_e.name() == "harmonic")
                   harmonic();
+            else if (_e.name() == "harmon-mute")
+                  harmonMute();
             else if (_e.name() == "other-technical")
                 otherTechnical();
             else
@@ -7741,6 +7743,42 @@ void MusicXMLParserNotations::harmonic()
       if (!notation.subType().isEmpty()) {
             _notations.push_back(notation);
             }
+      }
+
+//---------------------------------------------------------
+//   harmonMute
+//---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/note/notations/technical/harmon-mute node.
+ */
+
+void MusicXMLParserNotations::harmonMute()
+      {
+      SymId mute = SymId::brassHarmonMuteClosed;
+      while (_e.readNextStartElement()) {
+            QString name = _e.name().toString();
+            if (name == "harmon-closed") {
+                  const QString location = _e.attributes().value("location").toString();
+                  QString value = _e.readElementText();
+                  if (value == "yes")
+                        mute = SymId::brassHarmonMuteClosed;
+                  else if (value == "no")
+                        mute = SymId::brassHarmonMuteStemOpen;
+                  else if (value == "half") {
+                        if (location == "left")
+                              mute = SymId::brassHarmonMuteStemHalfLeft;
+                        else if (location == "right")
+                              mute = SymId::brassHarmonMuteStemHalfRight;
+                        else {
+                              _logger->logError(QString("unsupported harmon-closed location '%1'").arg(location), &_e);
+                              mute = SymId::brassHarmonMuteStemHalfLeft;
+                              }
+                        }
+                  } else
+                  _e.skipCurrentElement();
+            }
+      _notations.push_back(Notation::notationWithAttributes("harmon-closed", _e.attributes(), "technical", mute));
       }
 
 //---------------------------------------------------------

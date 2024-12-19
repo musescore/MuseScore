@@ -3092,6 +3092,9 @@ static QString symIdToTechn(const SymId sid)
                   return "half-muted";
                   break;
             case SymId::brassHarmonMuteClosed:
+            case SymId::brassHarmonMuteStemHalfLeft:
+            case SymId::brassHarmonMuteStemHalfRight:
+            case SymId::brassHarmonMuteStemOpen:
                   return "harmon-mute";
                   break;
             case SymId::guitarGolpe:
@@ -3301,7 +3304,6 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             QString placement;
             QString direction;
 
-            QString attr;
             if (!a->isStyled(Pid::ARTICULATION_ANCHOR) && a->anchor() != ArticulationAnchor::CHORD) {
                   placement = (a->anchor() == ArticulationAnchor::BOTTOM_STAFF || a->anchor() == ArticulationAnchor::BOTTOM_CHORD) ? "below" : "above";
                   }
@@ -3323,18 +3325,35 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                   technical.tag(_xml);
                   mxmlTechn += color2xml(a);
                   mxmlTechn += positioningAttributes(a);
+                  if (!placement.isEmpty())
+                      mxmlTechn += QString(" placement=\"%1\"").arg(placement);
                   if (sid == SymId::stringsHarmonic) {
-                        if (!placement.isEmpty())
-                              attr += QString(" placement=\"%1\"").arg(placement);
-                        _xml.stag(mxmlTechn + attr);
+                        _xml.stag(mxmlTechn);
                         _xml.tagE("natural");
                         _xml.etag();
                         }
-                  else {
-                        if (!placement.isEmpty())
-                              attr += QString(" placement=\"%1\"").arg(placement);
-                        _xml.tagE(mxmlTechn + attr);
+                  else if (mxmlTechn.startsWith("harmon")) {
+                        _xml.stag(mxmlTechn);
+                        QString location = {};
+                        QString harmonClosedValue;
+                        switch (sid)
+                              {
+                              case SymId::brassHarmonMuteClosed:
+                                    harmonClosedValue = "yes";
+                                    break;
+                              case SymId::brassHarmonMuteStemOpen:
+                                    harmonClosedValue = "no";
+                                    break;
+                              default:
+                                    harmonClosedValue = "half";
+                                    location = QString(" location=\"%1\"").arg(sid == SymId::brassHarmonMuteStemHalfLeft ? "left" : "right");
+                                    break;
+                              }
+                        _xml.tag("harmon-closed" + location, harmonClosedValue);
+                        _xml.etag();
                         }
+                  else
+                        _xml.tagE(mxmlTechn);
                   }
             }
 
