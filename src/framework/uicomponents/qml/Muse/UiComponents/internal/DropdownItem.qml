@@ -81,7 +81,7 @@ Item {
     MouseArea {
         id: mouseAreaItem
         anchors.fill: parent
-        hoverEnabled: true
+        enabled: root.enabled
         onClicked: root.clicked()
 
         onContainsMouseChanged: {
@@ -89,7 +89,7 @@ Item {
                 return
             }
 
-            if (mouseArea.containsMouse) {
+            if (mouseArea.containsMouse && root.enabled) {
                 ui.tooltip.show(root, labelItem.text)
             } else {
                 ui.tooltip.hide(root)
