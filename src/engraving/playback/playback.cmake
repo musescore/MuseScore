@@ -35,8 +35,8 @@ set(PLAYBACK_SRC
     ${CMAKE_CURRENT_LIST_DIR}/renderers/glissandosrenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/renderers/arpeggiorenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/renderers/arpeggiorenderer.h
-    ${CMAKE_CURRENT_LIST_DIR}/renderers/gracechordsrenderer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/renderers/gracechordsrenderer.h
+    ${CMAKE_CURRENT_LIST_DIR}/renderers/gracechordcontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/renderers/gracechordcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/renderers/tremolorenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/renderers/tremolorenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/renderers/chordarticulationsrenderer.cpp

@@ -153,6 +153,17 @@ inline muse::mpe::ArticulationType articulationFromPlayTechType(const PlayingTec
     return muse::mpe::ArticulationType::Undefined;
 }
 
+static const muse::mpe::ArticulationTypeSet GRACE_NOTE_ARTICULATION_TYPES {
+    muse::mpe::ArticulationType::Acciaccatura,
+    muse::mpe::ArticulationType::PostAppoggiatura,
+    muse::mpe::ArticulationType::PreAppoggiatura,
+};
+
+inline bool isGraceNotePlacedBeforePrincipalNote(const muse::mpe::ArticulationType type)
+{
+    return type == muse::mpe::ArticulationType::Acciaccatura || type == muse::mpe::ArticulationType::PreAppoggiatura;
+}
+
 inline void updateArticulationBoundaries(const muse::mpe::ArticulationType type, const muse::mpe::timestamp_t nominalTimestamp,
                                          const muse::mpe::duration_t nominalDuration,
                                          muse::mpe::ArticulationMap& articulations)
