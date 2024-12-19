@@ -130,7 +130,7 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
 
             destination[timestampTo].emplace(std::move(noteOff));
 
-            appendControlSwitch(destination, noteEvent, PEDAL_CC_SUPPORTED_TYPES, midi::SUSTAIN_PEDAL_CONTROLLER);
+            appendControlSwitch(destination, noteEvent, PEDAL_CC_SUPPORTED_TYPES, midi::SUSTAIN_PEDAL_CONTROLLER, channelIdx);
             appendPitchBend(destination, noteEvent, BEND_SUPPORTED_TYPES, channelIdx);
         }
     }
@@ -150,7 +150,8 @@ void FluidSequencer::updateDynamicEvents(EventSequenceMap& destination, const mp
 }
 
 void FluidSequencer::appendControlSwitch(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
-                                         const mpe::ArticulationTypeSet& appliableTypes, const int midiControlIdx)
+                                         const mpe::ArticulationTypeSet& appliableTypes,
+                                         const int midiControlIdx, const channel_t channelIdx)
 {
     mpe::ArticulationType currentType = mpe::ArticulationType::Undefined;
 
@@ -170,12 +171,14 @@ void FluidSequencer::appendControlSwitch(EventSequenceMap& destination, const mp
 
     midi::Event start(Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
     start.setIndex(midiControlIdx);
+    start.setChannel(channelIdx);
     start.setData(127);
 
     destination[noteEvent.arrangementCtx().actualTimestamp].emplace(std::move(start));
 
     midi::Event end(Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
     end.setIndex(midiControlIdx);
+    end.setChannel(channelIdx);
     end.setData(0);
 
     destination[articulationMeta.timestamp + articulationMeta.overallDuration].emplace(std::move(end));
