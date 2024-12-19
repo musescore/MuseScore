@@ -45,6 +45,7 @@
 #include "keysig.h"
 #include "layoutbreak.h"
 #include "linkedobjects.h"
+#include "marker.h"
 #include "masterscore.h"
 #include "measure.h"
 #include "measurenumber.h"
@@ -60,6 +61,7 @@
 #include "segment.h"
 #include "select.h"
 #include "sig.h"
+#include "slur.h"
 #include "spacer.h"
 #include "staff.h"
 #include "stafflines.h"
@@ -939,11 +941,16 @@ void Measure::remove(EngravingItem* e)
         }
         break;
 
-    case ElementType::JUMP:
-        setRepeatJump(false);
-    // fall through
-
     case ElementType::MARKER:
+        removePartialSpannersOnRepeatChange(muse::contains(Marker::RIGHT_MARKERS, toMarker(e)->markerType()));
+
+        if (!el().remove(e)) {
+            LOGD("Measure(%p)::remove(%s,%p) not found", this, e->typeName(), e);
+        }
+        break;
+    case ElementType::JUMP:
+        removePartialSpannersOnRepeatChange(true);
+        setRepeatJump(false);
     case ElementType::HBOX:
         if (!el().remove(e)) {
             LOGD("Measure(%p)::remove(%s,%p) not found", this, e->typeName(), e);
@@ -1022,6 +1029,53 @@ void Measure::change(EngravingItem* o, EngravingItem* n)
 
 void Measure::spatiumChanged(double /*oldValue*/, double /*newValue*/)
 {
+}
+
+void Measure::removePartialSpannersOnRepeatChange(bool outgoing)
+{
+    const track_idx_t startTrack = 0;
+    const track_idx_t ntracks = score()->ntracks();
+    const Fraction startTick = tick();
+    const Fraction endTick = startTick + ticks();
+    for (auto& interval : score()->spannerMap().findOverlapping(startTick.ticks(), endTick.ticks())) {
+        if (!interval.value->isSlur()) {
+            continue;
+        }
+        Slur* slur = toSlur(interval.value);
+        if (slur->tick() >= startTick && slur->tick() < endTick) {
+            slur->undoSetIncoming(false);
+        }
+
+        if (slur->tick2() >= startTick && slur->tick2() < endTick) {
+            slur->undoSetOutgoing(false);
+        }
+    }
+
+    Segment* seg = first(SegmentType::ChordRest);
+    while (seg) {
+        for (track_idx_t track = startTrack; track < ntracks; track++) {
+            EngravingItem* item = seg->element(track);
+            if (!item || !item->isChord()) {
+                continue;
+            }
+
+            Chord* chord = toChord(item);
+
+            for (Note* note : chord->notes()) {
+                Tie* tie = outgoing ? note->tieFor() : note->tieBack();
+                if (!tie) {
+                    continue;
+                }
+
+                if (outgoing) {
+                    tie->removeTiesFromEndPoints();
+                } else if (tie->isPartialTie()) {
+                    score()->doUndoRemoveElement(tie);
+                }
+            }
+        }
+        seg = seg->next(SegmentType::ChordRest);
+    }
 }
 
 //-------------------------------------------------------------------
@@ -3068,6 +3122,38 @@ bool Measure::prevIsOneMeasureRepeat(staff_idx_t staffIdx) const
     return prevMeasure()->isOneMeasureRepeat(staffIdx);
 }
 
+ChordRest* Measure::lastChordRest(track_idx_t track) const
+{
+    for (const Segment* seg = last(); seg; seg = seg->prev()) {
+        if (!seg->isChordRestType()) {
+            continue;
+        }
+        ChordRest* cr = seg->cr(track);
+        if (!cr) {
+            continue;
+        }
+
+        return cr;
+    }
+    return nullptr;
+}
+
+ChordRest* Measure::firstChordRest(track_idx_t track) const
+{
+    for (const Segment* seg = first(); seg; seg = seg->next()) {
+        if (!seg->isChordRestType()) {
+            continue;
+        }
+        ChordRest* cr = seg->cr(track);
+        if (!cr) {
+            continue;
+        }
+
+        return cr;
+    }
+    return nullptr;
+}
+
 //-------------------------------------------------------------------
 //   userStretch
 //-------------------------------------------------------------------
@@ -3145,6 +3231,65 @@ EngravingItem* Measure::prevElementStaff(staff_idx_t staff, EngravingItem* fromI
         }
     }
     return score()->firstElement();
+}
+
+double Measure::firstNoteRestSegmentX(bool leading) const
+{
+    const System* sys = system();
+    double margin = style().styleMM(Sid::headerToLineStartDistance);
+    for (const Segment* seg = first(); seg; seg = seg->next()) {
+        if (seg->isChordRestType()) {
+            double noteRestPos = seg->measure()->pos().x() + seg->pos().x();
+            if (!leading) {
+                return noteRestPos;
+            }
+
+            // first CR found; back up to previous segment
+            seg = seg->prevActive();
+            while (seg && seg->allElementsInvisible()) {
+                seg = seg->prevActive();
+            }
+            if (seg) {
+                // find maximum width
+                double width = 0.0;
+                size_t n = score()->nstaves();
+                for (staff_idx_t i = 0; i < n; ++i) {
+                    if (!sys->staff(i)->show()) {
+                        continue;
+                    }
+                    EngravingItem* e = seg->element(i * VOICES);
+                    if (e && e->addToSkyline()) {
+                        width = std::max(width, e->pos().x() + e->ldata()->bbox().right());
+                    }
+                }
+                if (seg->isStartRepeatBarLineType()) {
+                    margin = style().styleMM(Sid::repeatBarlineDotSeparation);
+                }
+                return std::min(seg->measure()->pos().x() + seg->pos().x() + width + margin, noteRestPos);
+            } else {
+                return noteRestPos;
+            }
+        }
+    }
+
+    return margin;
+}
+
+double Measure::endingXForOpenEndedLines() const
+{
+    const System* sys = system();
+    double margin = style().styleMM(Sid::lineEndToSystemEndDistance);
+    double systemEndX = sys->ldata()->bbox().width();
+
+    Segment* lastSeg = last();
+    while (lastSeg && !lastSeg->isType(SegmentType::BarLineType)) {
+        lastSeg = lastSeg->prevEnabled();
+    }
+    if (!lastSeg) {
+        return systemEndX - margin;
+    }
+
+    return lastSeg->x() + x() - margin;
 }
 
 //---------------------------------------------------------
@@ -3243,6 +3388,24 @@ bool Measure::endBarLineVisible() const
 {
     const BarLine* bl = endBarLine();
     return bl ? bl->visible() : true;
+}
+
+const BarLine* Measure::startBarLine() const
+{
+    // search barline segment:
+    Segment* s = first();
+    while (s && !(s->isStartRepeatBarLineType() || s->isBeginBarLineType())) {
+        s = s->next();
+    }
+    // search first element
+    if (s) {
+        for (const EngravingItem* e : s->elist()) {
+            if (e) {
+                return toBarLine(e);
+            }
+        }
+    }
+    return nullptr;
 }
 
 //---------------------------------------------------------

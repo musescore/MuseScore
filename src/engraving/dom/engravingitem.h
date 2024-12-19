@@ -662,6 +662,8 @@ public:
     virtual bool canBeExcludedFromOtherParts() const { return false; }
     virtual void manageExclusionFromParts(bool exclude);
 
+    virtual bool isBefore(const EngravingItem* item) const;
+
     //! --- Old Interface ---
     void setbbox(const RectF& r) { mutldata()->setBbox(r); }
     double height() const { return ldata()->bbox().height(); }
