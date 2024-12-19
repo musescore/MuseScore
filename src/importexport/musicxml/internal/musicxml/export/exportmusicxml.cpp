@@ -3591,16 +3591,15 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                 m_xml.startElementRaw(mxmlTechn);
                 XmlWriter::Attributes location = {};
                 String harmonClosedValue;
-                switch (sid)
-                {
+                switch (sid) {
                 case SymId::brassHarmonMuteClosed:
-                    harmonClosedValue = "yes";
+                    harmonClosedValue = u"yes";
                     break;
                 case SymId::brassHarmonMuteStemOpen:
-                    harmonClosedValue = "no";
-                    break;                
+                    harmonClosedValue = u"no";
+                    break;
                 default:
-                    harmonClosedValue = "half";
+                    harmonClosedValue = u"half";
                     location = { { "location", (sid == SymId::brassHarmonMuteStemHalfLeft) ? "left" : "right" } };
                     break;
                 }
