@@ -5742,7 +5742,7 @@ void Score::connectTies(bool silent)
                 // connect a tie without end note
                 Tie* tie = n->tieFor();
                 if (tie) {
-                    tie->collectPossibleEndPoints();
+                    tie->collectPossibleJumpPoints();
                 }
                 if (tie && !tie->isPartialTie() && !tie->endNote()) {
                     Note* nnote;

@@ -1733,19 +1733,19 @@ public:
     UNDO_CHANGED_OBJECTS({ m_chord })
 };
 
-class ChangeTieEndPointActive : public UndoCommand
+class ChangeTieJumpPointActive : public UndoCommand
 {
-    OBJECT_ALLOCATOR(engraving, ChangeTieEndPointActive)
+    OBJECT_ALLOCATOR(engraving, ChangeTieJumpPointActive)
 
-    TieEndPointList* m_endPointList = nullptr;
+    TieJumpPointList* m_jumpPointList = nullptr;
     String m_id;
     bool m_active = false;
 
     void flip(EditData*) override;
 
 public:
-    ChangeTieEndPointActive(TieEndPointList* endPointList, String& id, bool active)
-        : m_endPointList(endPointList), m_id(id), m_active(active) {}
+    ChangeTieJumpPointActive(TieJumpPointList* jumpPointList, String& id, bool active)
+        : m_jumpPointList(jumpPointList), m_id(id), m_active(active) {}
 
     UNDO_TYPE(CommandType::ChangeTieEndPointActive)
     UNDO_NAME("ChangeTieEndPointActive")

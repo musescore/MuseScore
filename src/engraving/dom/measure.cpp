@@ -1032,13 +1032,9 @@ void Measure::spatiumChanged(double /*oldValue*/, double /*newValue*/)
 
 void Measure::removePartialTiesOnRepeatChange(bool outgoing)
 {
-    const track_idx_t startTrack = 0;
-    const track_idx_t ntracks = score()->ntracks();
-
     Segment* seg = first(SegmentType::ChordRest);
     while (seg) {
-        for (track_idx_t track = startTrack; track < ntracks; track++) {
-            EngravingItem* item = seg->element(track);
+        for (EngravingItem* item : seg->elist()) {
             if (!item || !item->isChord()) {
                 continue;
             }
@@ -1052,7 +1048,7 @@ void Measure::removePartialTiesOnRepeatChange(bool outgoing)
                 }
 
                 if (outgoing) {
-                    tie->removeTiesFromEndPoints();
+                    tie->removeTiesFromJumpPoints();
                 } else if (tie->isPartialTie()) {
                     score()->doUndoRemoveElement(tie);
                 }

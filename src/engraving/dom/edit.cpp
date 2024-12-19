@@ -1895,19 +1895,18 @@ std::vector<Note*> Score::cmdTieNoteList(const Selection& selection, bool noteEn
 static Tie* createAndAddTie(Note* startNote, Note* endNote)
 {
     Score* score = startNote->score();
-    const bool createPartialTie = !endNote;
-    Tie* tie = createPartialTie ? Factory::createPartialTie(startNote) : Factory::createTie(startNote);
+    Tie* tie = endNote ? Factory::createTie(startNote) : Factory::createPartialTie(startNote);
     tie->setStartNote(startNote);
     tie->setTrack(startNote->track());
     tie->setTick(startNote->chord()->segment()->tick());
-    if (!createPartialTie) {
+    if (endNote) {
         tie->setEndNote(endNote);
         tie->setTicks(endNote->chord()->segment()->tick() - startNote->chord()->segment()->tick());
     }
     score->undoAddElement(tie);
 
-    tie->addTiesToEndPoints();
-    if (!tie->endNote() && tie->tieEndPoints() && tie->tieEndPoints()->empty()) {
+    tie->addTiesToJumpPoints();
+    if (!tie->endNote() && tie->tieJumpPoints() && tie->tieJumpPoints()->empty()) {
         score->undoRemoveElement(tie);
         tie = nullptr;
     }
@@ -2071,7 +2070,7 @@ Tie* Score::cmdToggleTie()
                 undoRemoveElement(tie);
                 tie = nullptr;
                 shouldTieListSelection = false;
-            } else if (n->followingJumpItem()) {
+            } else if (n->hasFollowingJumpItem()) {
                 // Create outgoing partial tie
                 tie = createAndAddTie(n, nullptr);
                 shouldTieListSelection = false;
@@ -2922,10 +2921,10 @@ void Score::deleteItem(EngravingItem* el)
         el = toSpannerSegment(el)->spanner();
         if (el->isTie()) {
             Tie* tie = toTie(el);
-            if (tie->tieEndPoints()) {
-                tie->removeTiesFromEndPoints();
+            if (tie->tieJumpPoints()) {
+                tie->removeTiesFromJumpPoints();
             }
-            if (tie->endPoint()) {
+            if (tie->jumpPoint()) {
                 tie->updateStartTieOnRemoval();
             }
         }

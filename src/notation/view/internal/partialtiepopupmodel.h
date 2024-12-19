@@ -1,6 +1,5 @@
 #pragma once
 
-#include "uicomponents/view/abstractmenumodel.h"
 #include "view/abstractelementpopupmodel.h"
 #include "framework/uicomponents/view/menuitem.h"
 #include "dom/tie.h"
@@ -34,7 +33,7 @@ signals:
 private:
     void load();
     muse::uicomponents::MenuItemList makeMenuItems();
-    muse::uicomponents::MenuItem* makeMenuItem(const engraving::TieEndPoint* endPoint);
+    muse::uicomponents::MenuItem* makeMenuItem(const engraving::TieJumpPoint* jumpPoint);
     mu::engraving::Tie* tie() const;
 
     muse::uicomponents::MenuItemList m_items;
