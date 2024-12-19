@@ -47,7 +47,6 @@
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/stringdata.h"
-#include "engraving/dom/stretchedbend.h"
 #include "types/symid.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/tremolosinglechord.h"
@@ -615,6 +614,10 @@ int GuitarPro4::convertGP4SlideNum(int sl)
 bool GuitarPro4::read(IODevice* io)
 {
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(score);
+    if (engravingConfiguration()->experimentalGuitarBendImport()) {
+        m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
+    }
+
     f      = io;
     curPos = 30;
 
@@ -1187,7 +1190,10 @@ bool GuitarPro4::read(IODevice* io)
     }
 
     m_continiousElementsBuilder->addElementsToScore();
-    StretchedBend::prepareBends(m_stretchedBends);
+
+    if (engravingConfiguration()->experimentalGuitarBendImport()) {
+        m_guitarBendImporter->applyBendsToChords();
+    }
 
     return true;
 }
