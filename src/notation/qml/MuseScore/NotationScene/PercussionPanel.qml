@@ -86,10 +86,42 @@ Item {
         panelWidth: root.width
     }
 
+    StyledIconLabel {
+        id: soundTitleIcon
+
+        anchors.verticalCenter: soundTitleLabel.verticalCenter
+        anchors.right: soundTitleLabel.left
+
+        anchors.rightMargin: 6
+
+        visible: percModel.enabled && !percModel.soundTitle.isEmpty
+
+        color: ui.theme.fontPrimaryColor
+
+        iconCode: IconCode.AUDIO
+    }
+
+    StyledTextLabel {
+        id: soundTitleLabel
+
+        anchors {
+            top: toolbar.bottom
+            right: parent.right
+
+            topMargin: 8
+            bottomMargin: 8
+            rightMargin: 16
+        }
+
+        visible: percModel.enabled && !percModel.soundTitle.isEmpty
+
+        text: percModel.soundTitle
+    }
+
     StyledFlickable {
         id: flickable
 
-        anchors.top: toolbar.bottom
+        anchors.top: soundTitleLabel.bottom
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
 
@@ -195,6 +227,18 @@ Item {
                     // This variable ensures we stay within a given pad when tabbing back-and-forth between
                     // "main" and "footer" controls
                     property var currentPadNavigationIndex: [0, 0]
+                    function onNavigationEvent(event) {
+                        var navigationRow = gridPrv.currentPadNavigationIndex[0]
+                        var navigationColumn = gridPrv.currentPadNavigationIndex[1]
+
+                        if (navigationRow >= padGrid.numRows || navigationColumn >= padGrid.numColumns) {
+                            gridPrv.currentPadNavigationIndex = [0, 0]
+                        }
+
+                        if (event.type === NavigationEvent.AboutActive) {
+                            event.setData("controlIndex", gridPrv.currentPadNavigationIndex)
+                        }
+                    }
                 }
 
                 Layout.alignment: Qt.AlignTop
@@ -217,9 +261,7 @@ Item {
                     order: toolbar.navigationOrderEnd + 1
 
                     onNavigationEvent: function(event) {
-                        if (event.type === NavigationEvent.AboutActive) {
-                            event.setData("controlIndex", gridPrv.currentPadNavigationIndex)
-                        }
+                        gridPrv.onNavigationEvent(event)
                     }
                 }
 
@@ -233,9 +275,7 @@ Item {
                     enabled: percModel.currentPanelMode !== PanelMode.EDIT_LAYOUT
 
                     onNavigationEvent: function(event) {
-                        if (event.type === NavigationEvent.AboutActive) {
-                            event.setData("controlIndex", gridPrv.currentPadNavigationIndex)
-                        }
+                        gridPrv.onNavigationEvent(event)
                     }
                 }
 
@@ -275,6 +315,7 @@ Item {
                             padGrid.swapOriginPad = pad
                             padGrid.isKeyboardSwapActive = isKeyboardSwap
                             padGrid.model.startPadSwap(index)
+                            pad.padNavigation.requestActive()
                         }
 
                         onEndPadSwapRequested: {
@@ -294,6 +335,17 @@ Item {
                                 return;
                             }
                             gridPrv.currentPadNavigationIndex = [pad.navigationRow, pad.navigationColumn]
+                        }
+
+                        Connections {
+                            target: padGrid.model
+
+                            function onPadFocusRequested(padIndex) {
+                                if (index !== padIndex) {
+                                    return
+                                }
+                                pad.padNavigation.requestActive()
+                            }
                         }
                     }
 
@@ -359,7 +411,7 @@ Item {
                 enabled: !padGrid.isKeyboardSwapActive
 
                 icon: IconCode.PLUS
-                text: qsTrc("notation", "Add row")
+                text: qsTrc("notation/percussion", "Add row")
                 orientation: Qt.Horizontal
 
                 navigation.panel: addRowButtonPanel
@@ -381,7 +433,7 @@ Item {
             anchors.topMargin: (padGrid.cellHeight / 2) - (panelDisabledLabel.height / 2)
 
             font: ui.theme.bodyFont
-            text: qsTrc("notation", "Select an unpitched percussion staff to see available sounds")
+            text: qsTrc("notation/percussion", "Select an unpitched percussion staff to see available sounds")
         }
     }
 

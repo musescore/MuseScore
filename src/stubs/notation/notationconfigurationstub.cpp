@@ -477,11 +477,17 @@ void NotationConfigurationStub::setMidiUseWrittenPitch(bool)
 
 bool NotationConfigurationStub::useNewPercussionPanel() const
 {
-    return false
+    return false;
 }
 
 void NotationConfigurationStub::setUseNewPercussionPanel(bool)
 {
+}
+
+muse::async::Notification NotationConfigurationStub::useNewPercussionPanelChanged() const
+{
+    static muse::async::Notification n;
+    return n;
 }
 
 bool NotationConfigurationStub::autoShowPercussionPanel() const
@@ -491,6 +497,42 @@ bool NotationConfigurationStub::autoShowPercussionPanel() const
 
 void NotationConfigurationStub::setAutoShowPercussionPanel(bool)
 {
+}
+
+muse::async::Notification NotationConfigurationStub::autoShowPercussionPanelChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+bool NotationConfigurationStub::showPercussionPanelPadSwapDialog() const
+{
+    return true;
+}
+
+void NotationConfigurationStub::setShowPercussionPanelPadSwapDialog(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::showPercussionPanelPadSwapDialogChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+bool NotationConfigurationStub::percussionPanelMoveMidiNotesAndShortcuts() const
+{
+    return true;
+}
+
+void NotationConfigurationStub::setPercussionPanelMoveMidiNotesAndShortcuts(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::percussionPanelMoveMidiNotesAndShortcutsChanged() const
+{
+    static muse::async::Notification n;
+    return n;
 }
 
 muse::io::path_t NotationConfigurationStub::styleFileImportPath() const
