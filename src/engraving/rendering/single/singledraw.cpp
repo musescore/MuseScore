@@ -482,7 +482,7 @@ void SingleDraw::draw(const Note* item, Painter* painter)
         }
         const Staff* st = item->staff();
         const StaffType* tab = st->staffTypeForElement(item);
-        if (item->tieBack() && !tab->showBackTied()) {
+        if (item->tieBack() && !item->incomingPartialTie() && !tab->showBackTied()) {
             if (item->chord()->measure()->system() == item->tieBack()->startNote()->chord()->measure()->system() && item->el().empty()) {
                 // fret should be hidden, so return without drawing it
                 return;

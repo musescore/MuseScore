@@ -474,6 +474,7 @@ void System::add(EngravingItem* el)
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
     case ElementType::LAISSEZ_VIB_SEGMENT:
+    case ElementType::PARTIAL_TIE_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
@@ -555,6 +556,7 @@ void System::remove(EngravingItem* el)
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
     case ElementType::LAISSEZ_VIB_SEGMENT:
+    case ElementType::PARTIAL_TIE_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
@@ -989,7 +991,7 @@ Spacer* System::downSpacer(staff_idx_t staffIdx) const
 //    or the position just after the last non-chordrest segment
 //---------------------------------------------------------
 
-double System::firstNoteRestSegmentX(bool leading)
+double System::firstNoteRestSegmentX(bool leading) const
 {
     double margin = style().styleMM(Sid::headerToLineStartDistance);
     for (const MeasureBase* mb : measures()) {
@@ -1043,7 +1045,7 @@ double System::firstNoteRestSegmentX(bool leading)
 
 double System::endingXForOpenEndedLines() const
 {
-    double margin = style().spatium() / 4;  // TODO: this can be parameterizable
+    double margin = style().styleMM(Sid::lineEndToSystemEndDistance);
     double systemEndX = ldata()->bbox().width();
 
     Measure* lastMeas = lastMeasure();
@@ -1067,19 +1069,12 @@ double System::endingXForOpenEndedLines() const
 //    returns the last chordrest of a system for a particular track
 //---------------------------------------------------------
 
-ChordRest* System::lastChordRest(track_idx_t track)
+ChordRest* System::lastChordRest(track_idx_t track) const
 {
     for (auto measureBaseIter = measures().rbegin(); measureBaseIter != measures().rend(); measureBaseIter++) {
         if ((*measureBaseIter)->isMeasure()) {
             const Measure* measure = static_cast<const Measure*>(*measureBaseIter);
-            for (const Segment* seg = measure->last(); seg; seg = seg->prev()) {
-                if (seg->isChordRestType()) {
-                    ChordRest* cr = seg->cr(track);
-                    if (cr) {
-                        return cr;
-                    }
-                }
-            }
+            return measure->lastChordRest(track);
         }
     }
     return nullptr;
@@ -1090,23 +1085,16 @@ ChordRest* System::lastChordRest(track_idx_t track)
 //    returns the last chordrest of a system for a particular track
 //---------------------------------------------------------
 
-ChordRest* System::firstChordRest(track_idx_t track)
+ChordRest* System::firstChordRest(track_idx_t track) const
 {
     for (const MeasureBase* mb : measures()) {
         if (!mb->isMeasure()) {
             continue;
         }
         const Measure* measure = static_cast<const Measure*>(mb);
-        for (const Segment* seg = measure->first(); seg; seg = seg->next()) {
-            if (seg->isChordRestType()) {
-                ChordRest* cr = seg->cr(track);
-                if (cr) {
-                    return cr;
-                }
-            }
-        }
+        return measure->firstChordRest(track);
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------

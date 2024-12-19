@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_GLOBAL_CONTAINERS_H
-#define MUSE_GLOBAL_CONTAINERS_H
+#pragma once
 
 #include <algorithm>
 #include <vector>
@@ -224,6 +223,15 @@ template<typename T>
 inline bool contains(const std::unordered_set<T>& s, const T& v)
 {
     return s.find(v) != s.cend();
+}
+
+// ===========================
+// Array
+// ===========================
+template<typename T, size_t size>
+inline bool contains(const std::array<T, size>& s, const T& v)
+{
+    return std::find(s.begin(), s.end(), v) != s.cend();
 }
 
 // ===========================
@@ -449,5 +457,3 @@ inline std::set<T>& operator<<(std::set<T>& s, const T& v)
     s.insert(v);
     return s;
 }
-
-#endif // MUSE_GLOBAL_CONTAINERS_H

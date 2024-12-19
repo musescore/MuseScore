@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_OBJECT_H
-#define MU_ENGRAVING_OBJECT_H
+#pragma once
 
 #include "global/allocator.h"
 #include "types/string.h"
@@ -127,6 +126,8 @@ class Page;
 class PalmMute;
 class PalmMuteSegment;
 class Part;
+class PartialTie;
+class PartialTieSegment;
 class Pedal;
 class PedalSegment;
 class PickScrape;
@@ -369,6 +370,8 @@ public:
     CONVERT(SlurSegment,   SLUR_SEGMENT)
     CONVERT(LaissezVibSegment,    LAISSEZ_VIB_SEGMENT)
     CONVERT(LaissezVib,    LAISSEZ_VIB)
+    CONVERT(PartialTieSegment,    PARTIAL_TIE_SEGMENT)
+    CONVERT(PartialTie,    PARTIAL_TIE)
     CONVERT(Spacer,        SPACER)
     CONVERT(StaffLines,    STAFF_LINES)
     CONVERT(Ambitus,       AMBITUS)
@@ -492,12 +495,13 @@ public:
 
     bool isTieSegment() const
     {
-        return type() == ElementType::TIE_SEGMENT || type() == ElementType::LAISSEZ_VIB_SEGMENT;
+        return type() == ElementType::TIE_SEGMENT || type() == ElementType::LAISSEZ_VIB_SEGMENT
+               || type() == ElementType::PARTIAL_TIE_SEGMENT;
     }
 
     bool isTie() const
     {
-        return type() == ElementType::TIE || type() == ElementType::LAISSEZ_VIB;
+        return type() == ElementType::TIE || type() == ElementType::LAISSEZ_VIB || type() == ElementType::PARTIAL_TIE;
     }
 
     bool isSpannerSegment() const
@@ -605,7 +609,7 @@ static inline SlurTieSegment* toSlurTieSegment(EngravingObject* e)
 {
     assert(
         e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT
-        || e->type() == ElementType::LAISSEZ_VIB_SEGMENT);
+        || e->type() == ElementType::LAISSEZ_VIB_SEGMENT || e->type() == ElementType::PARTIAL_TIE_SEGMENT);
     return (SlurTieSegment*)e;
 }
 
@@ -613,7 +617,7 @@ static inline const SlurTieSegment* toSlurTieSegment(const EngravingObject* e)
 {
     assert(
         e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT
-        || e->type() == ElementType::LAISSEZ_VIB_SEGMENT);
+        || e->type() == ElementType::LAISSEZ_VIB_SEGMENT || e->type() == ElementType::PARTIAL_TIE_SEGMENT);
     return (const SlurTieSegment*)e;
 }
 
@@ -773,6 +777,7 @@ CONVERT(LineSegment)
 CONVERT(SlurSegment)
 CONVERT(TieSegment)
 CONVERT(LaissezVibSegment)
+CONVERT(PartialTieSegment)
 CONVERT(Spacer)
 CONVERT(StaffLines)
 CONVERT(Ambitus)
@@ -851,7 +856,6 @@ CONVERT(StringTunings)
 CONVERT(SoundFlag)
 CONVERT(TimeTickAnchor)
 CONVERT(LaissezVib)
+CONVERT(PartialTie)
 #undef CONVERT
 }
-
-#endif
