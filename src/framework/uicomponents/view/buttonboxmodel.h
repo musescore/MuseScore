@@ -165,11 +165,11 @@ private:
                                    RejectRole, HelpRole },
 
         // MacLayout
-        std::vector <ButtonRole> { CustomRole, HelpRole, ResetRole, RetryRole, DestructiveRole, RejectRole, BackRole, AcceptRole,
+        std::vector <ButtonRole> { CustomRole, HelpRole, RetryRole, DestructiveRole, RejectRole, ResetRole, BackRole, AcceptRole,
                                    ApplyRole, ContinueRole },
 
         // LinuxLayout
-        std::vector <ButtonRole> { CustomRole, HelpRole, ResetRole, RetryRole, DestructiveRole, RejectRole, BackRole, AcceptRole,
+        std::vector <ButtonRole> { CustomRole, HelpRole, RetryRole, DestructiveRole, RejectRole, ResetRole, BackRole, AcceptRole,
                                    ApplyRole, ContinueRole }
     };
 

@@ -70,6 +70,7 @@ void AudioConfiguration::init()
 
     settings()->setDefaultValue(AUDIO_API_KEY, Val("Core Audio"));
 
+    settings()->setDefaultValue(AUDIO_OUTPUT_DEVICE_ID_KEY, Val(DEFAULT_DEVICE_ID));
     settings()->valueChanged(AUDIO_OUTPUT_DEVICE_ID_KEY).onReceive(nullptr, [this](const Val&) {
         m_audioOutputDeviceIdChanged.notify();
     });

@@ -124,6 +124,10 @@ QHash<int, QByteArray> MidiDeviceMappingModel::roleNames() const
 
 void MidiDeviceMappingModel::load()
 {
+    midiConfiguration()->useRemoteControlChanged().onReceive(this, [this](bool val) {
+        emit useRemoteControlChanged(val);
+    });
+
     beginResetModel();
     m_midiMappings.clear();
 
