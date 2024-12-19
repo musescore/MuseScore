@@ -3338,6 +3338,9 @@ static String symIdToTechn(const SymId sid)
         return u"half-muted";
         break;
     case SymId::brassHarmonMuteClosed:
+    case SymId::brassHarmonMuteStemHalfLeft:
+    case SymId::brassHarmonMuteStemHalfRight:
+    case SymId::brassHarmonMuteStemOpen:
         return u"harmon-mute";
         break;
     case SymId::guitarGolpe:
@@ -3557,7 +3560,6 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         String placement;
         String direction;
 
-        String attr;
         if (!a->isStyled(Pid::ARTICULATION_ANCHOR) && a->anchor() != ArticulationAnchor::AUTO) {
             placement = (a->anchor() == ArticulationAnchor::BOTTOM) ? u"below" : u"above";
         } else if (!a->isStyled(Pid::DIRECTION) && a->direction() != DirectionV::AUTO) {
@@ -3578,18 +3580,34 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             technical.tag(m_xml);
             mxmlTechn += color2xml(a);
             mxmlTechn += ExportMusicXml::positioningAttributes(a);
+            if (!placement.empty()) {
+                mxmlTechn += String(u" placement=\"%1\"").arg(placement);
+            }
             if (sid == SymId::stringsHarmonic) {
-                if (!placement.empty()) {
-                    attr += String(u" placement=\"%1\"").arg(placement);
-                }
-                m_xml.startElementRaw(mxmlTechn + attr);
+                m_xml.startElementRaw(mxmlTechn);
                 m_xml.tag("natural");
                 m_xml.endElement();
-            } else {
-                if (!placement.empty()) {
-                    attr += String(u" placement=\"%1\"").arg(placement);
+            } else if (mxmlTechn.startsWith(u"harmon")) {
+                m_xml.startElementRaw(mxmlTechn);
+                XmlWriter::Attributes location = {};
+                String harmonClosedValue;
+                switch (sid)
+                {
+                case SymId::brassHarmonMuteClosed:
+                    harmonClosedValue = "yes";
+                    break;
+                case SymId::brassHarmonMuteStemOpen:
+                    harmonClosedValue = "no";
+                    break;                
+                default:
+                    harmonClosedValue = "half";
+                    location = { { "location", (sid == SymId::brassHarmonMuteStemHalfLeft) ? "left" : "right" } };
+                    break;
                 }
-                m_xml.tagRaw(mxmlTechn + attr);
+                m_xml.tag("harmon-closed", location, harmonClosedValue);
+                m_xml.endElement();
+            } else {
+                m_xml.tagRaw(mxmlTechn);
             }
         }
     }
