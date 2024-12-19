@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2024 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,17 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSTRUMENTSSCENE_PARTTREEITEM_H
-#define MU_INSTRUMENTSSCENE_PARTTREEITEM_H
 
-#include "abstractinstrumentspaneltreeitem.h"
+#pragma once
+
+#include "abstractlayoutpaneltreeitem.h"
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 #include "notation/iselectinstrumentscenario.h"
 
 namespace mu::instrumentsscene {
-class PartTreeItem : public AbstractInstrumentsPanelTreeItem, public muse::Injectable
+class PartTreeItem : public AbstractLayoutPanelTreeItem, public muse::Injectable
 {
     Q_OBJECT
 
@@ -41,15 +41,18 @@ public:
 
     void init(const notation::Part* masterPart);
 
-    bool isSelectable() const override;
+    const notation::Part* part() const;
 
-    MoveParams buildMoveParams(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent,
-                               int destinationRow) const override;
+    MoveParams buildMoveParams(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow) const override;
 
-    void moveChildren(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent, int destinationRow,
+    void moveChildren(int sourceRow, int count, AbstractLayoutPanelTreeItem* destinationParent, int destinationRow,
                       bool updateNotation) override;
 
+    void moveChildrenOnScore(const MoveParams& params) override;
+
     void removeChildren(int row, int count, bool deleteChild) override;
+
+    Q_INVOKABLE bool canAcceptDrop(const QVariant& item) const override;
 
     Q_INVOKABLE QString instrumentId() const;
     Q_INVOKABLE void replaceInstrument();
@@ -61,9 +64,7 @@ private:
 
     size_t resolveNewPartIndex(const muse::ID& partId) const;
 
-    QString m_instrumentId;
+    const notation::Part* m_part = nullptr;
     bool m_isInited = false;
 };
 }
-
-#endif // MU_INSTRUMENTSSCENE_PARTTREEITEM_H
