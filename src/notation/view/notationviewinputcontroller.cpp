@@ -167,8 +167,6 @@ void NotationViewInputController::initZoom()
         doZoomToTwoPages();
         break;
     }
-
-    currentNotation()->viewState()->setMatrixInited(true);
 }
 
 void NotationViewInputController::initCanvasPos()
