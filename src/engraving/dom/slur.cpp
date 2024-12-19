@@ -142,11 +142,11 @@ bool SlurSegment::edit(EditData& ed)
             const Measure* measure = e->measure();
             if (start) {
                 cr = measure->firstChordRest(e->track());
-                if (!cr->precedingJumpItem()) {
+                if (!cr->hasPrecedingJumpItem()) {
                     return false;
                 }
                 sl->undoSetIncoming(true);
-            } else if (e->followingJumpItem()) {
+            } else if (e->hasFollowingJumpItem()) {
                 sl->undoSetOutgoing(false);
             }
         } else {
@@ -155,11 +155,11 @@ bool SlurSegment::edit(EditData& ed)
     } else if (ed.key == Key_Right) {
         if (extendToBarLine) {
             const Measure* measure = e->measure();
-            if (start && e->precedingJumpItem()) {
+            if (start && e->hasPrecedingJumpItem()) {
                 sl->undoSetIncoming(false);
             } else if (!start) {
                 cr = measure->lastChordRest(e->track());
-                if (!cr->followingJumpItem()) {
+                if (!cr->hasFollowingJumpItem()) {
                     return false;
                 }
                 sl->undoSetOutgoing(true);

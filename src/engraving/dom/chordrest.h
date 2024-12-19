@@ -202,9 +202,8 @@ public:
 
     bool isBelowCrossBeam(const BeamBase* beamBase) const;
 
-    bool followingJumpItem() const;
-    bool precedingJumpItem() const;
-    String precedingJumpItemName() const;
+    bool hasFollowingJumpItem() const;
+    bool hasPrecedingJumpItem() const;
 
     struct LayoutData : public DurationElement::LayoutData {
         ld_field<bool> up = { "[ChordRest] up", true }; // actual stem direction

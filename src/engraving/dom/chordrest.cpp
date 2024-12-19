@@ -1306,11 +1306,15 @@ void ChordRest::checkStaffMoveValidity()
     }
 }
 
-bool ChordRest::followingJumpItem() const
+bool ChordRest::hasFollowingJumpItem() const
 {
     const Segment* seg = segment();
     const Measure* measure = seg->measure();
     const Fraction nextTick = seg->tick() + actualTicks();
+
+    if (measure->lastChordRest(track()) != this) {
+        return false;
+    }
 
     // Jumps & markers
     for (const EngravingItem* e : measure->el()) {
@@ -1340,7 +1344,7 @@ bool ChordRest::followingJumpItem() const
     }
 
     // Repeats
-    if (measure->endTick() == nextTick && measure->repeatEnd()) {
+    if (measure->repeatEnd()) {
         return true;
     }
 
@@ -1360,10 +1364,14 @@ bool ChordRest::followingJumpItem() const
     return false;
 }
 
-bool ChordRest::precedingJumpItem() const
+bool ChordRest::hasPrecedingJumpItem() const
 {
     const Segment* seg = segment();
     const Measure* measure = seg->measure();
+
+    if (measure->firstChordRest(track()) != this) {
+        return false;
+    }
 
     if (seg->score()->firstSegment(SegmentType::ChordRest) == seg) {
         return true;
@@ -1412,65 +1420,5 @@ bool ChordRest::precedingJumpItem() const
     }
 
     return false;
-}
-
-String ChordRest::precedingJumpItemName() const
-{
-    const Segment* seg = segment();
-    const Measure* measure = seg->measure();
-
-    if (seg->score()->firstSegment(SegmentType::ChordRest) == seg) {
-        return muse::mtrc("engraving", "start of score");
-    }
-
-    // Markers
-    for (const EngravingItem* e : measure->el()) {
-        if (!e->isMarker()) {
-            continue;
-        }
-
-        const Marker* marker = toMarker(e);
-        if (muse::contains(Marker::RIGHT_MARKERS, marker->markerType())) {
-            continue;
-        }
-
-        if (marker->markerType() == MarkerType::CODA || marker->markerType() == MarkerType::VARCODA) {
-            return muse::mtrc("engraving", "coda");
-        } else {
-            return muse::mtrc("engraving", "segno");
-        }
-    }
-
-    // Voltas
-    auto spanners = score()->spannerMap().findOverlapping(measure->tick().ticks(), measure->tick().ticks());
-    for (auto& spanner : spanners) {
-        if (!spanner.value->isVolta() || Fraction::fromTicks(spanner.start) != tick()) {
-            continue;
-        }
-
-        Volta* volta = toVolta(spanner.value);
-
-        return muse::mtrc("engraving", "“%1” volta").arg(volta->beginText());
-    }
-
-    // Repeat barlines
-    if (measure->repeatStart()) {
-        return muse::mtrc("engraving", "start repeat");
-    }
-
-    for (Segment* prevSeg = seg->prev(SegmentType::BarLineType); prevSeg && prevSeg->tick() == seg->tick();
-         prevSeg = prevSeg->prev(SegmentType::BarLineType)) {
-        EngravingItem* el = prevSeg->element(track());
-        if (!el || !el->isBarLine()) {
-            continue;
-        }
-
-        BarLine* bl = toBarLine(el);
-        if (bl->barLineType() & (BarLineType::START_REPEAT | BarLineType::END_START_REPEAT)) {
-            return muse::mtrc("engraving", "start repeat");
-        }
-    }
-
-    return muse::mtrc("engraving", "invalid");
 }
 }
