@@ -32,9 +32,11 @@ class NotationInteractionMock : public INotationInteraction
 public:
     MOCK_METHOD(INotationNoteInputPtr, noteInput, (), (const, override));
 
-    MOCK_METHOD(bool, showShadowNote, (const muse::PointF&), (override));
+    MOCK_METHOD(void, showShadowNoteForPosition, (const muse::PointF&), (override));
+    MOCK_METHOD(void, showShadowNoteForMidiPitch, (const uint8_t), (override));
     MOCK_METHOD(void, hideShadowNote, (), (override));
     MOCK_METHOD(muse::RectF, shadowNoteRect, (), (const, override));
+    MOCK_METHOD(muse::async::Channel<bool>, shadowNoteChanged, (), (const, override));
 
     MOCK_METHOD(void, toggleVisible, (), (override));
 
