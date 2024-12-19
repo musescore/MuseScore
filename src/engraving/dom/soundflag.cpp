@@ -235,7 +235,7 @@ void SoundFlag::setIconFontSize(double size)
 
 Color SoundFlag::iconBackgroundColor() const
 {
-    Color color = curColor();
+    Color color = curColor(true);
     if (!selected()) {
         color = Color("#CFD5DD");
         color.setAlpha(128);
