@@ -36,6 +36,10 @@ Item {
 
     property font font: ui.theme.largeBodyFont
 
+    property NavigationPanel navigationPanel: null
+    property int navigationOrderStart: 0
+    readonly property int navigationOrderEnd: beatNumberField.navigation.order
+
     signal measureNumberEdited(var newValue)
     signal beatNumberEdited(var newValue)
 
@@ -66,6 +70,11 @@ Item {
 
                 font: root.font
 
+                navigation.panel: root.navigationPanel
+                navigation.order: root.navigationOrderStart
+                navigation.name: "measure"
+                accessible.name: qsTrc("playback", "Measure", "Measure number")
+
                 onValueEdited: function(newValue) {
                     root.measureNumberEdited(newValue)
                 }
@@ -93,6 +102,11 @@ Item {
                 addLeadingZeros: false
 
                 font: root.font
+
+                navigation.panel: root.navigationPanel
+                navigation.order: root.navigationOrderStart + 1
+                navigation.name: "beat"
+                accessible.name: qsTrc("playback", "Beat", "Beat number")
 
                 onValueEdited: function(newValue) {
                     root.beatNumberEdited(newValue)
