@@ -38,6 +38,10 @@ static const Settings::Key EXPAND_REPEATS_KEY("iex_midi", "io/midi/expandRepeats
 void MidiConfiguration::init()
 {
     settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(mu::engraving::Constants::DIVISION / 4));
+    settings()->valueChanged(SHORTEST_NOTE_KEY).onReceive(this, [this](const Val& val) {
+        m_midiShortestNoteChanged.send(val.toInt());
+    });
+
     settings()->setDefaultValue(EXPAND_REPEATS_KEY, Val(true));
     settings()->setDefaultValue(EXPORTRPNS_KEY, Val(true));
 }
@@ -50,6 +54,11 @@ int MidiConfiguration::midiShortestNote() const
 void MidiConfiguration::setMidiShortestNote(int ticks)
 {
     settings()->setSharedValue(SHORTEST_NOTE_KEY, Val(ticks));
+}
+
+async::Channel<int> MidiConfiguration::midiShortestNoteChanged() const
+{
+    return m_midiShortestNoteChanged;
 }
 
 void MidiConfiguration::setMidiImportOperationsFile(const std::optional<muse::io::path_t>& filePath) const

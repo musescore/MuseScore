@@ -46,6 +46,12 @@ void UpdateConfigurationStub::setNeedCheckForUpdate(bool)
 {
 }
 
+muse::async::Notification UpdateConfigurationStub::needCheckForUpdateChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 std::string UpdateConfigurationStub::skippedReleaseVersion() const
 {
     return "";
