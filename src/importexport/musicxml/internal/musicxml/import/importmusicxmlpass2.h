@@ -379,7 +379,6 @@ private:
     muse::String m_dynamicsPlacement;
     engraving::StringList m_dynamicsList;
     std::vector<Notation> m_notations;
-    engraving::SymId m_breath { engraving::SymId::noSym };
     bool m_hasTremolo = false;
     muse::String m_tremoloType;
     int m_tremoloNr = 0;

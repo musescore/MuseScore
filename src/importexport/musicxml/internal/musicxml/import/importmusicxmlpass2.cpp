@@ -8012,30 +8012,38 @@ void MusicXmlParserNotations::articulations()
             }
             m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "breath-mark") {
+            std::vector<XmlStreamReader::Attribute> attributes = m_e.attributes();
             String value = m_e.readText();
+            engraving::SymId breath = SymId::noSym;
             if (value == "tick") {
-                m_breath = SymId::breathMarkTick;
+                breath = SymId::breathMarkTick;
             } else if (value == "upbow") {
-                m_breath = SymId::breathMarkUpbow;
+                breath = SymId::breathMarkUpbow;
             } else if (value == "salzedo") {
-                m_breath = SymId::breathMarkSalzedo;
+                breath = SymId::breathMarkSalzedo;
             } else {
                 // Use comma as the default symbol
-                m_breath = SymId::breathMarkComma;
+                breath = SymId::breathMarkComma;
             }
+            m_notations.push_back(Notation::notationWithAttributes(u"breath",
+                                                                   attributes, u"articulations", breath));
         } else if (m_e.name() == "caesura") {
+            std::vector<XmlStreamReader::Attribute> attributes = m_e.attributes();
             String value = m_e.readText();
+            engraving::SymId caesura = SymId::noSym;
             if (value == "curved") {
-                m_breath = SymId::caesuraCurved;
+                caesura = SymId::caesuraCurved;
             } else if (value == "short") {
-                m_breath = SymId::caesuraShort;
+                caesura = SymId::caesuraShort;
             } else if (value == "thick") {
-                m_breath = SymId::caesuraThick;
+                caesura = SymId::caesuraThick;
             } else if (value == "single") {
-                m_breath = SymId::caesuraSingleStroke;
+                caesura = SymId::caesuraSingleStroke;
             } else { // Use as the default symbol
-                m_breath = SymId::caesura;
+                caesura = SymId::caesura;
             }
+            m_notations.push_back(Notation::notationWithAttributes(u"breath",
+                                                                   attributes, u"articulations", caesura));
         } else if (m_e.name() == "doit"
                    || m_e.name() == "falloff"
                    || m_e.name() == "plop"
@@ -8595,18 +8603,23 @@ static void addWavyLine(ChordRest* cr, const Fraction& tick,
 //   addBreath
 //---------------------------------------------------------
 
-static void addBreath(ChordRest* cr, const Fraction& tick, SymId breath)
+static void addBreath(const Notation& notation, ChordRest* cr)
 {
-    if (breath != SymId::noSym && !cr->isGrace()) {
-        const Fraction& ticks = cr->ticks();
-        Segment* const seg = cr->measure()->getSegment(SegmentType::Breath, tick + ticks);
-        Breath* const b = Factory::createBreath(seg);
-        // b->setTrack(trk + voice); TODO check next line
-        b->setTrack(cr->track());
-        b->setSymId(breath);
-        b->setPlacement(b->propertyDefault(Pid::PLACEMENT).value<PlacementV>());
-        seg->add(b);
+    const SymId breath = notation.symId();
+    const Color color = Color::fromString(notation.attribute(u"color"));
+    const String placement = notation.attribute(u"placement");
+
+    Segment* const seg = cr->measure()->getSegment(SegmentType::Breath, cr->tick() + cr->ticks());
+    Breath* const b = Factory::createBreath(seg);
+    // b->setTrack(trk + voice); TODO check next line
+    b->setTrack(cr->track());
+    b->setSymId(breath);
+    if (color.isValid()) {
+        b->setColor(color);
     }
+    b->setPlacement(placement == u"below" ? PlacementV::BELOW : PlacementV::ABOVE);
+    b->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    seg->add(b);
 }
 
 //---------------------------------------------------------
@@ -8795,7 +8808,9 @@ void MusicXmlParserNotations::parse()
 void MusicXmlParserNotations::addNotation(const Notation& notation, ChordRest* const cr, Note* const note)
 {
     if (notation.symId() != SymId::noSym) {
-        if (notation.name() == u"fermata") {
+        if (notation.name() == u"breath") {
+            addBreath(notation, cr);
+        } else if (notation.name() == u"fermata") {
             addFermataToChord(notation, cr);
 
             // Terminate tempo line
@@ -8837,7 +8852,6 @@ void MusicXmlParserNotations::addToScore(ChordRest* const cr, Note* const note, 
                                          DelayedArpMap& delayedArps)
 {
     addArpeggio(cr, m_arpeggioType, m_arpeggioNo, arpMap, delayedArps);
-    addBreath(cr, cr->tick(), m_breath);
     addWavyLine(cr, Fraction::fromTicks(tick), m_wavyLineNo, m_wavyLineType, spanners, trills, m_logger, &m_e);
 
     for (const Notation& notation : m_notations) {
