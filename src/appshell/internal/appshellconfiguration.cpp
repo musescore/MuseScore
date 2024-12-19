@@ -233,11 +233,6 @@ void AppShellConfiguration::rollbackSettings()
 void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings, bool notifyAboutChanges)
 {
     settings()->reset(keepDefaultSettings, notifyAboutChanges);
-
-    // Unreset the "First Launch Completed" setting so the first-time launch wizard
-    // does not appear. If more settings need to be unresettable in the future,
-    // we could pass those to settings->reset or add "IsNonResettable" to Settings::Item.
-    setHasCompletedFirstLaunchSetup(true);
 }
 
 muse::io::paths_t AppShellConfiguration::sessionProjectsPaths() const
