@@ -424,18 +424,33 @@ void Dynamic::manageBarlineCollisions()
 
 void Dynamic::setDynamicType(const String& tag)
 {
+    const auto dynamicInfo = parseDynamicText(tag);
+
+    if (dynamicInfo.first == DynamicType::OTHER) {
+        LOGD("setDynamicType: other <%s>", muPrintable(tag));
+    }
+
+    setDynamicType(dynamicInfo.first);
+    setXmlText(dynamicInfo.second);
+}
+
+std::pair<DynamicType, String> Dynamic::parseDynamicText(const String& tag) const
+{
     std::string utf8Tag = tag.toStdString();
-    size_t n = DYN_LIST.size();
-    for (size_t i = 0; i < n; ++i) {
-        if (TConv::toXml(DynamicType(i)).ascii() == utf8Tag || DYN_LIST[i].text == utf8Tag) {
-            setDynamicType(DynamicType(i));
-            setXmlText(String::fromUtf8(DYN_LIST[i].text));
-            return;
+    const std::regex dynamicRegex(R"((?:<sym>.*?</sym>)+|(?:\b)[fmnprsz]+(?:\b(?=[^>]|$)))");
+    auto begin = std::sregex_iterator(utf8Tag.begin(), utf8Tag.end(), dynamicRegex);
+    for (auto it = begin; it != std::sregex_iterator(); ++it) {
+        const std::smatch match = *it;
+        const std::string matchStr = match.str();
+        size_t n = DYN_LIST.size();
+        for (size_t i = 0; i < n; ++i) {
+            if (TConv::toXml(DynamicType(i)).ascii() == matchStr || DYN_LIST[i].text == matchStr) {
+                utf8Tag.replace(match.position(0), match.length(0), DYN_LIST[i].text);
+                return { DynamicType(i), String::fromStdString(utf8Tag) };
+            }
         }
     }
-    LOGD("setDynamicType: other <%s>", muPrintable(tag));
-    setDynamicType(DynamicType::OTHER);
-    setXmlText(tag);
+    return { DynamicType::OTHER, tag };
 }
 
 String Dynamic::dynamicText(DynamicType t)
@@ -854,7 +869,11 @@ bool Dynamic::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::DYNAMIC_TYPE:
-        m_dynamicType = v.value<DynamicType>();
+        if (v.type() == P_TYPE::DYNAMIC_TYPE) {
+            setDynamicType(v.value<DynamicType>());
+            break;
+        }
+        setDynamicType(v.value<String>());
         break;
     case Pid::VELOCITY:
         m_velocity = v.toInt();
