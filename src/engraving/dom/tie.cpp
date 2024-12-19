@@ -229,7 +229,7 @@ void Tie::updatePossibleJumpPoints()
 
     tieJumpPoints()->clear();
 
-    if (!chord->followingJumpItem()) {
+    if (!chord->hasFollowingJumpItem()) {
         return;
     }
 

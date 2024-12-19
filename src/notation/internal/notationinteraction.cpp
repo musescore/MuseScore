@@ -2267,9 +2267,22 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
 
     if (firstItem && secondItem && (firstItem->isBarLine() != secondItem->isBarLine())) {
         const bool outgoing = firstItem->isChordRest();
-        const ChordRest* cr = outgoing ? toChordRest(firstItem) : toChordRest(secondItem);
+        const BarLine* bl = outgoing ? toBarLine(secondItem) : toBarLine(firstItem);
 
-        if ((outgoing && !cr->followingJumpItem()) || (!outgoing && !cr->precedingJumpItem())) {
+        // Check the barline is the start of a repeat section
+        const Segment* adjacentCrSeg
+            = outgoing ? bl->segment()->prev1(SegmentType::ChordRest) : bl->segment()->next1(SegmentType::ChordRest);
+        ChordRest* adjacentCr = nullptr;
+        for (track_idx_t track = 0; track < score()->ntracks(); track++) {
+            EngravingItem* adjacentItem = adjacentCrSeg->element(track);
+            if (!adjacentItem || !adjacentItem->isChordRest()) {
+                continue;
+            }
+            adjacentCr = toChordRest(adjacentItem);
+            break;
+        }
+
+        if (!adjacentCr || (outgoing && !adjacentCr->hasFollowingJumpItem()) || (!outgoing && !adjacentCr->hasPrecedingJumpItem())) {
             return;
         }
 
@@ -2277,10 +2290,10 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
         if (outgoing) {
             partialSlur->undoSetOutgoing(true);
             firstChordRest = toChordRest(firstItem);
-            secondChordRest = toChordRest(firstItem);
+            secondChordRest = toChordRest(adjacentCr);
         } else {
             partialSlur->undoSetIncoming(true);
-            firstChordRest = toChordRest(secondItem);
+            firstChordRest = toChordRest(adjacentCr);
             secondChordRest = toChordRest(secondItem);
         }
         slurTemplate = partialSlur;

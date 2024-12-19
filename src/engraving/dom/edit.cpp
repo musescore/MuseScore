@@ -2071,7 +2071,7 @@ Tie* Score::cmdToggleTie()
                 undoRemoveElement(tie);
                 tie = nullptr;
                 shouldTieListSelection = false;
-            } else if (chord->followingJumpItem()) {
+            } else if (chord->hasFollowingJumpItem()) {
                 // Create outgoing partial tie
                 tie = createAndAddTie(n, nullptr);
                 shouldTieListSelection = false;
@@ -7163,12 +7163,40 @@ void Score::doUndoRemoveStaleTieJumpPoints(Tie* tie)
     }
 }
 
+void Score::doUndoResetPartialSlur(Slur* slur)
+{
+    const size_t undoIdx = undoStack()->currentIndex();
+    if (!slur->startCR()->hasPrecedingJumpItem() && slur->isIncoming()) {
+        startCmd(TranslatableString("engraving", "Reset incoming partial slur"));
+        slur->undoSetIncoming(false);
+        endCmd();
+    }
+
+    if (!slur->endCR()->hasFollowingJumpItem() && slur->isOutgoing()) {
+        startCmd(TranslatableString("engraving", "Reset outgoing partial slur"));
+        slur->undoSetOutgoing(false);
+        endCmd();
+    }
+
+    if (undoIdx != undoStack()->currentIndex()) {
+        undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
+    }
+}
+
 void Score::undoRemoveStaleTieJumpPoints()
 {
     size_t tracks = nstaves() * VOICES;
     Measure* m = firstMeasure();
     if (!m) {
         return;
+    }
+
+    for (auto& interval : spanner()) {
+        Spanner* sp = interval.second;
+        if (!sp || !sp->isSlur()) {
+            continue;
+        }
+        doUndoResetPartialSlur(toSlur(sp));
     }
 
     SegmentType st = SegmentType::ChordRest;

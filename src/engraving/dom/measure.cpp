@@ -3213,6 +3213,22 @@ double Measure::firstNoteRestSegmentX(bool leading) const
                     margin = style().styleMM(Sid::repeatBarlineDotSeparation);
                 }
                 return std::min(seg->measure()->pos().x() + seg->pos().x() + width + margin, noteRestPos);
+            } else if (!isFirstInSystem() && !isFirstInSection() && prevMeasure()) {
+                const BarLine* endBl = prevMeasure()->endBarLine();
+                const Segment* endBlSeg = endBl ? endBl->segment() : nullptr;
+
+                if (!endBlSeg) {
+                    return noteRestPos;
+                }
+
+                double width = 0.0;
+                if (endBl && endBl->addToSkyline()) {
+                    width = std::max(width, endBl->pos().x() + endBl->ldata()->bbox().right());
+                }
+
+                const double startBlMargin = style().styleMM(Sid::lineEndToSystemEndDistance);
+
+                return std::min(endBlSeg->measure()->pos().x() + endBlSeg->pos().x() + width + startBlMargin, noteRestPos);
             } else {
                 return noteRestPos;
             }
