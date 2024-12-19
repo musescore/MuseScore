@@ -204,24 +204,6 @@ std::vector<Staff*> NotationParts::staves(const IDList& stavesIds) const
     return staves;
 }
 
-std::vector<staff_idx_t> NotationParts::staffIndices(const muse::IDList& stavesIds) const
-{
-    std::vector<staff_idx_t> staffIndices;
-
-    if (stavesIds.empty()) {
-        return staffIndices;
-    }
-
-    const auto& staves = score()->staves();
-    for (staff_idx_t staffIdx = 0; staffIdx < staves.size(); ++staffIdx) {
-        if (muse::contains(stavesIds, staves.at(staffIdx)->id())) {
-            staffIndices.push_back(staffIdx);
-        }
-    }
-
-    return staffIndices;
-}
-
 std::vector<Part*> NotationParts::parts(const IDList& partsIds) const
 {
     std::vector<Part*> parts;
@@ -834,21 +816,24 @@ void NotationParts::removeStaves(const IDList& stavesIds)
 {
     TRACEFUNC;
 
-    std::vector<staff_idx_t> staffIndicesToRemove = staffIndices(stavesIds);
+    std::vector<Staff*> stavesToRemove = staves(stavesIds);
+    if (stavesToRemove.empty()) {
+        return;
+    }
 
     endInteractionWithScore();
     startEdit(TranslatableString("undoableAction", "Remove staves"));
 
-    for (staff_idx_t staffIdx: staffIndicesToRemove) {
-        score()->cmdRemoveStaff(staffIdx);
+    for (Staff* staff: stavesToRemove) {
+        score()->cmdRemoveStaff(staff->idx());
     }
 
     setBracketsAndBarlines();
 
     apply();
 
-    for (staff_idx_t staffIdx: staffIndicesToRemove) {
-        notifyAboutStaffRemoved(score()->staff(staffIdx));
+    for (const Staff* staff : stavesToRemove) {
+        notifyAboutStaffRemoved(staff);
     }
 }
 
