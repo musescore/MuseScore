@@ -356,6 +356,7 @@ private:
     void addTechnical(const Notation& notation, engraving::Note* note);
     void arpeggio();
     void harmonic();
+    void harmonMute();
     void articulations();
     void dynamics();
     void fermata();
