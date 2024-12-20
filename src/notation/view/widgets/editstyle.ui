@@ -91,7 +91,12 @@
       </item>
       <item>
        <property name="text">
-        <string>Clefs, key &amp; time signatures</string>
+        <string>Clefs &amp; key signatures</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Time signatures</string>
        </property>
       </item>
       <item>
@@ -256,6 +261,9 @@
       </item>
      </widget>
      <widget class="QStackedWidget" name="pageStack">
+      <property name="currentIndex">
+       <number>7</number>
+      </property>
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
         <item>
@@ -289,7 +297,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>591</width>
+                <width>409</width>
                 <height>523</height>
                </rect>
               </property>
@@ -3976,6 +3984,18 @@
            </size>
           </property>
          </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="PageTimeSignatures">
+       <layout class="QVBoxLayout" name="verticalLayout_71">
+        <item>
+         <widget class="QGroupBox" name="groupBoxTimeSig">
+          <property name="title">
+           <string>Time signatures</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_72"/>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -13748,8 +13768,8 @@ first note of the system</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>701</width>
-             <height>744</height>
+             <width>98</width>
+             <height>28</height>
             </rect>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">

@@ -456,6 +456,37 @@ TieDotsPlacement TConv::fromXml(const AsciiStringView& str, TieDotsPlacement def
     return findTypeByXmlTag<TieDotsPlacement>(TIE_DOTS_PLACEMENT, str, def);
 }
 
+static const std::vector<Item<TimeSigPlacement> > TIMESIG_PLACEMENT = {
+    { TimeSigPlacement::NORMAL, "normal" },
+    { TimeSigPlacement::ABOVE_STAVES, "aboveStaves" },
+    { TimeSigPlacement::ACROSS_STAVES, "acrossStaves" }
+};
+static const std::vector<Item<TimeSigStyle> > TIMESIG_STYLE = {
+    { TimeSigStyle::NORMAL, "normal" },
+    { TimeSigStyle::NARROW, "narrow" },
+    { TimeSigStyle::LARGE, "large" }
+};
+
+AsciiStringView TConv::toXml(TimeSigPlacement timeSigPos)
+{
+    return findXmlTagByType<TimeSigPlacement>(TIMESIG_PLACEMENT, timeSigPos);
+}
+
+TimeSigPlacement TConv::fromXml(const AsciiStringView& str, TimeSigPlacement def)
+{
+    return findTypeByXmlTag<TimeSigPlacement>(TIMESIG_PLACEMENT, str, def);
+}
+
+AsciiStringView TConv::toXml(TimeSigStyle timeSigStyle)
+{
+    return findXmlTagByType<TimeSigStyle>(TIMESIG_STYLE, timeSigStyle);
+}
+
+TimeSigStyle TConv::fromXml(const AsciiStringView& str, TimeSigStyle def)
+{
+    return findTypeByXmlTag<TimeSigStyle>(TIMESIG_STYLE, str, def);
+}
+
 static const std::vector<Item<VoiceAssignment> > VOICE_ASSIGNMENT = {
     { VoiceAssignment::ALL_VOICE_IN_INSTRUMENT, "allInInstrument" },
     { VoiceAssignment::ALL_VOICE_IN_STAFF,      "allInStaff" },

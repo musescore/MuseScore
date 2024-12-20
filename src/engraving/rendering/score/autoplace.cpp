@@ -438,6 +438,10 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
     ElementType type1 = itemToAutoplace->type();
     ElementType type2 = itemInSkyline->type();
 
+    if (type1 == ElementType::TIMESIG) {
+        return type2 != ElementType::KEYSIG;
+    }
+
     if (type1 == type2) {
         // Items of same type should ignore each other in most cases
         static const std::set<ElementType> TEXT_BASED_TYPES_WHICH_IGNORE_EACH_OTHER {

@@ -36,8 +36,8 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static const ElementStyle timesigStyle {
-    { Sid::timesigScale,                       Pid::SCALE },
+static const ElementStyle tsStyle {
+    { Sid::timeSigNormalScale, Pid::SCALE },
 };
 
 //---------------------------------------------------------
@@ -49,15 +49,16 @@ static const ElementStyle timesigStyle {
 //---------------------------------------------------------
 
 TimeSig::TimeSig(Segment* parent)
-    : EngravingItem(ElementType::TIMESIG, parent, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
+    : EngravingItem(ElementType::TIMESIG, parent, ElementFlag::ON_STAFF | ElementFlag::MOVABLE | ElementFlag::PLACE_ABOVE)
 {
-    initElementStyle(&timesigStyle);
+    initElementStyle(&tsStyle);
 
     m_showCourtesySig = true;
     m_stretch.set(1, 1);
     m_sig.set(0, 1);                 // initialize to invalid
     m_timeSigType      = TimeSigType::NORMAL;
     m_largeParentheses = false;
+    setMinDistance(Spatium(0.5)); // TODO: style
 }
 
 void TimeSig::setParent(Segment* parent)
@@ -272,7 +273,15 @@ PropertyValue TimeSig::propertyDefault(Pid id) const
     case Pid::TIMESIG_TYPE:
         return int(TimeSigType::NORMAL);
     case Pid::SCALE:
-        return style().styleV(Sid::timesigScale);
+    {
+        switch (timeSigPlacement()) {
+        case TimeSigPlacement::NORMAL: return style().styleV(Sid::timeSigNormalScale).value<ScaleF>();
+        case TimeSigPlacement::ABOVE_STAVES: return style().styleV(Sid::timeSigAboveScale).value<ScaleF>();
+        case TimeSigPlacement::ACROSS_STAVES: return style().styleV(Sid::timeSigAcrossScale).value<ScaleF>();
+        default:
+            return ScaleF();
+        }
+    }
     default:
         return EngravingItem::propertyDefault(id);
     }
@@ -346,6 +355,73 @@ muse::TranslatableString TimeSig::subtypeUserName() const
 String TimeSig::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
+}
+
+void TimeSig::initElementStyle(const ElementStyle* elementStype)
+{
+    EngravingItem::initElementStyle(elementStype);
+
+    setProperty(Pid::SCALE, propertyDefault(Pid::SCALE));
+}
+
+void TimeSig::styleChanged()
+{
+    if (isStyled(Pid::SCALE)) {
+        setProperty(Pid::SCALE, propertyDefault(Pid::SCALE));
+    }
+}
+
+TimeSigPlacement TimeSig::timeSigPlacement() const
+{
+    return style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>();
+}
+
+TimeSigStyle TimeSig::timeSigStyle() const
+{
+    switch (timeSigPlacement()) {
+    case TimeSigPlacement::NORMAL: return style().styleV(Sid::timeSigNormalStyle).value<TimeSigStyle>();
+    case TimeSigPlacement::ABOVE_STAVES: return style().styleV(Sid::timeSigAboveStyle).value<TimeSigStyle>();
+    case TimeSigPlacement::ACROSS_STAVES: return style().styleV(Sid::timeSigAcrossStyle).value<TimeSigStyle>();
+    default:
+        return TimeSigStyle::NORMAL;
+    }
+}
+
+double TimeSig::numDist() const
+{
+    switch (timeSigPlacement()) {
+    case TimeSigPlacement::NORMAL: return style().styleMM(Sid::timeSigNormalNumDist);
+    case TimeSigPlacement::ABOVE_STAVES: return style().styleMM(Sid::timeSigAboveNumDist);
+    case TimeSigPlacement::ACROSS_STAVES: return style().styleMM(Sid::timeSigAcrossNumDist);
+    default:
+        return 0.0;
+    }
+}
+
+double TimeSig::yPos() const
+{
+    switch (timeSigPlacement()) {
+    case TimeSigPlacement::NORMAL: return style().styleMM(Sid::timeSigNormalY);
+    case TimeSigPlacement::ABOVE_STAVES: return style().styleMM(Sid::timeSigAboveY);
+    case TimeSigPlacement::ACROSS_STAVES: return style().styleMM(Sid::timeSigAcrossY);
+    default:
+        return 0.0;
+    }
+}
+
+bool TimeSig::showOnThisStaff() const
+{
+    return timeSigPlacement() == TimeSigPlacement::NORMAL || staffIdx() == 0 || score()->isSystemObjectStaff(staff());
+}
+
+bool TimeSig::isAboveStaves() const
+{
+    return timeSigPlacement() == TimeSigPlacement::ABOVE_STAVES;
+}
+
+bool TimeSig::isAcrossStaves() const
+{
+    return timeSigPlacement() == TimeSigPlacement::ACROSS_STAVES;
 }
 
 //---------------------------------------------------------
