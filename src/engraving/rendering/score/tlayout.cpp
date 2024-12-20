@@ -6296,10 +6296,9 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
     IEngravingFontPtr font = ctx.engravingFont();
     ScaleF scale = item->scale();
     SizeF mag(item->magS() * scale);
-    TimeSigStyle timeSigStyle = style.styleV(Sid::timeSigStyle).value<TimeSigStyle>();
+    TimeSigStyle timeSigStyle = item->timeSigStyle();
 
-    double numDist = scale.height()
-                     * (item->isLarge() ? style.styleMM(Sid::timeSigLargeNumDist) : style.styleMM(Sid::timeSigNormalNumDist));
+    double numDist = item->numDist() * scale.height();
 
     Shape shape;
     if (sigType == TimeSigType::FOUR_FOUR) {
@@ -6395,8 +6394,8 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
     ldata->setShape(shape);
 
     if (item->isAboveStaves()) {
-        ldata->setPosY(-0.5 * spatium * scale.height() /*TODO: style*/ - 2 * spatium * (1 + scale.height()) - 0.5 * numDist);
-        if (style.styleB(Sid::timeSigAboveCenterOnBarline)) {
+        ldata->setPosY(item->yPos() * scale.height() - 2 * spatium * (1 + scale.height()) - 0.5 * numDist);
+        if (style.styleB(Sid::timeSigCenterOnBarline)) {
             ldata->setPosX(-0.5 * ldata->bbox().width());
         }
     } else if (item->isAcrossStaves()) {

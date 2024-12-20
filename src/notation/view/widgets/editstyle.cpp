@@ -323,28 +323,6 @@ EditStyle::EditStyle(QWidget* parent)
     mmRestConstantWidth->addButton(mmRestWidthProportional, 0);
     mmRestConstantWidth->addButton(mmRestWidthConstant, 1);
 
-    QButtonGroup* timeSigPlacement = new QButtonGroup(this);
-    timeSigPlacement->addButton(timeSigAllStaves, int(TimeSigPlacement::NORMAL));
-    timeSigPlacement->addButton(timeSigAboveStaves, int(TimeSigPlacement::ABOVE_STAVES));
-    timeSigPlacement->addButton(timeSigAcrossStaves, int(TimeSigPlacement::ACROSS_STAVES));
-
-    QButtonGroup* timeSigCenterOnBarline = new QButtonGroup(this);
-    timeSigCenterOnBarline->addButton(timeSigBarlineCenter, int(true));
-    timeSigCenterOnBarline->addButton(timeSigBarlineLeftAlign, int(false));
-
-    QButtonGroup* timeSigHangIntoMargin = new QButtonGroup(this);
-    timeSigHangIntoMargin->addButton(timeSigIntoMargin, int(true));
-    timeSigHangIntoMargin->addButton(timeSigRightAlignBeforeMargin, int(false));
-
-    QButtonGroup* timeSigStyle = new QButtonGroup(this);
-    timeSigStyle->addButton(timeSigStyleNormal, int(TimeSigStyle::NORMAL));
-    timeSigStyle->addButton(timeSigStyleNarrow, int(TimeSigStyle::NARROW));
-    timeSigStyle->addButton(timeSigStyleLarge, int(TimeSigStyle::LARGE));
-
-    QButtonGroup* timeSigAcrossAlign = new QButtonGroup(this);
-    timeSigAcrossAlign->addButton(timeSigCenterAcrossStaves, int(true));
-    timeSigAcrossAlign->addButton(timeSigAlignToTopStaff, int(false));
-
     // ====================================================
     // Style widgets
     // ====================================================
@@ -645,18 +623,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::oddFooterL,               false, oddFooterL,                   0 },
         { StyleId::oddFooterC,               false, oddFooterC,                   0 },
         { StyleId::oddFooterR,               false, oddFooterR,                   0 },
-
-        { StyleId::timeSigPlacement,         false, timeSigPlacement,             0 },
-        { StyleId::timeSigAboveCenterOnBarline, false, timeSigCenterOnBarline,    0 },
-        { StyleId::timeSigAboveCautionaryHangIntoMargin, false, timeSigHangIntoMargin, 0 },
-        { StyleId::timeSigCenterAcrossStaveGroup, false, timeSigAcrossAlign, 0 },
-        { StyleId::timeSigStyle,             false, timeSigStyle,                 0 },
-        { StyleId::timeSigNormalHeight,      false,  timeSigNormalHeight,          resetTimeSigNormalHeight },
-        { StyleId::timeSigNormalWidth,       false,  timeSigNormalWidth,           resetTimeSigNormalWidth },
-        { StyleId::timeSigNormalNumDist,     false, timeSigNormalNumDist,         resetTimeSigNormalNumDist },
-        { StyleId::timeSigLargeHeight,       false,  timeSigLargeHeight,           resetTimeSigLargeHeight },
-        { StyleId::timeSigLargeWidth,        false,  timeSigLargeWidth,            resetTimeSigLargeWidth },
-        { StyleId::timeSigLargeNumDist,      false, timeSigLargeNumDist,          resetTimeSigLargeNumDist },
 
         { StyleId::ottavaNumbersOnly,        false, ottavaNumbersOnly,            resetOttavaNumbersOnly },
         { StyleId::capoPosition,             false, capoPosition,                 0 },
@@ -2100,9 +2066,6 @@ bool EditStyle::isBoolStyleRepresentedByButtonGroup(StyleId id)
     case StyleId::genKeysig:
     case StyleId::singleMeasureMMRestUseNormalRest:
     case StyleId::mmRestConstantWidth:
-    case StyleId::timeSigAboveCenterOnBarline:
-    case StyleId::timeSigAboveCautionaryHangIntoMargin:
-    case StyleId::timeSigCenterAcrossStaveGroup:
         return true;
     default:
         return false;

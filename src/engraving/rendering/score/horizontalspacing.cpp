@@ -491,7 +491,7 @@ void HorizontalSpacing::checkLargeTimeSigAgainstRightMargin(std::vector<SegmentP
     }
 
     const MStyle& style = cautionaryTSSegPos.segment->style();
-    bool letHangIntoMargin = style.styleB(Sid::timeSigAboveCenterOnBarline) && style.styleB(Sid::timeSigAboveCautionaryHangIntoMargin);
+    bool letHangIntoMargin = style.styleB(Sid::timeSigCenterOnBarline) && style.styleB(Sid::timeSigHangIntoMargin);
     if (letHangIntoMargin) {
         return;
     }
