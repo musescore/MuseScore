@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_SCORE_H
-#define MU_ENGRAVING_SCORE_H
+#pragma once
 
 /**
  \file
@@ -522,6 +520,8 @@ public:
     void restoreInitialKeySigAndTimeSig();
     void reconnectSlurs(MeasureBase* mbStart, MeasureBase* mbLast);
     void cmdDeleteSelection();
+    std::vector<ChordRest*> deleteRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
+                                        const SelectionFilter& filter);
     void cmdFullMeasureRest();
 
     muse::Ret putNote(const PointF&, bool replace, bool insert);
@@ -1085,8 +1085,6 @@ private:
                               const SelectionFilter& filter);
     void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
                                     const SelectionFilter& filter);
-    std::vector<ChordRest*> deleteRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
-                                        const SelectionFilter& filter);
 
     void update(bool resetCmdState, bool layoutAllParts = false);
 
@@ -1206,5 +1204,3 @@ public:
 
 DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags)
 } // namespace mu::engraving
-
-#endif
