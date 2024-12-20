@@ -31,10 +31,39 @@ class Segment;
 
 struct Dyn {
     DynamicType type = DynamicType::OTHER;
-    int velocity = -1;              // associated midi velocity (0-127, -1 = none)
+    int velocity = -1;                // associated midi velocity (0-127, -1 = none)
     int changeInVelocity = 0;
-    bool accent = 0;                // if true add velocity to current chord velocity
-    const char* text = nullptr;     // utf8 text of dynamic
+    bool accent = 0;                  // if true add velocity to current chord velocity
+    std::vector<DynamicType> dynamics;// dynamics which is used to build up the
+    const char* plainText = nullptr;  // text to display when in expression text style
+    const char* text = nullptr;       // utf8 text of dynamic
+};
+
+class DynamicFragment final : public TextFragment
+{
+public:
+    DynamicFragment() = default;
+    DynamicFragment(CharFormat charFormat, String dynamictext, bool displayAsExpression = false); // Pointer to CharFormat?
+    DynamicFragment(const DynamicFragment& dynamicFragment);
+
+    DynamicFragment& operator =(const DynamicFragment& dynamicFragment);
+
+    std::shared_ptr<TextFragment> clone() override { return std::make_shared<TextFragment>(*this); }
+
+    void setText(String newText) override;
+    void appendText(String newText) override { setText(m_dynamicText + newText); }
+
+    void setDisplayAsExpressionText(bool asExpression);
+    String toSymbolXml();
+
+private:
+    std::vector<DynamicType> getDynamics(String text);
+    void calculateDynamicText(std::vector<DynamicType> dynamics);
+    void calculatePlainText(std::vector<DynamicType> dynamics);
+
+    String m_dynamicText;
+    String m_plainText;
+    bool m_displayAsExpressionText = false;
 };
 
 //-----------------------------------------------------------------------------
@@ -99,6 +128,7 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
     Sid getPropertyStyle(Pid) const override;
+    void styleChanged() override;
 
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
 
@@ -129,6 +159,9 @@ public:
     void checkMeasureBoundariesAndMoveIfNeed();
 
     bool hasVoiceAssignmentProperties() const override { return true; }
+
+    bool useExpressionFontFace() const;
+    static bool isDynamicType(String s);
 
 private:
 

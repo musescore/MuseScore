@@ -3230,7 +3230,7 @@ std::vector<const EngravingObject*> ChangeHarpPedalState::objectItems() const
 void ChangeSingleHarpPedal::flip(EditData*)
 {
     HarpStringType f_type = type;
-    PedalPosition f_pos = diagram->getPedalState()[type];
+    PedalPosition f_pos = diagram->getPedalState()[(size_t)type];
     if (f_pos == pos) {
         return;
     }
