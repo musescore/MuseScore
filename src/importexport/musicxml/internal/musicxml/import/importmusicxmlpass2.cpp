@@ -8227,7 +8227,7 @@ void MusicXmlParserNotations::harmonMute()
             m_e.skipCurrentElement();
         }
     }
-    m_notations.push_back(Notation::notationWithAttributes(u"harmon-closed", attributes, u"articulations", mute));
+    m_notations.push_back(Notation::notationWithAttributes(u"harmon-closed", attributes, u"technical", mute));
 }
 
 //---------------------------------------------------------
