@@ -69,6 +69,11 @@ using voice_layer_idx_t = uint_fast8_t;
 using staff_layer_idx_t = uint_fast16_t;
 using layer_idx_t = size_t;
 
+struct TimestampAndDuration {
+    timestamp_t timestamp = 0;
+    duration_t duration = 0;
+};
+
 static constexpr voice_layer_idx_t MAX_VOICES = 4;
 
 constexpr inline layer_idx_t makeLayerIdx(const staff_layer_idx_t staffIdx, const voice_layer_idx_t voiceIdx)

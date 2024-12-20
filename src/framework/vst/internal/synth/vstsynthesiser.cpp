@@ -33,6 +33,7 @@ static const std::set<Steinberg::Vst::CtrlNumber> SUPPORTED_CONTROLLERS = {
     Steinberg::Vst::kCtrlVolume,
     Steinberg::Vst::kCtrlExpression,
     Steinberg::Vst::kCtrlSustainOnOff,
+    Steinberg::Vst::kCtrlSustenutoOnOff,
     Steinberg::Vst::kPitchBend,
 };
 

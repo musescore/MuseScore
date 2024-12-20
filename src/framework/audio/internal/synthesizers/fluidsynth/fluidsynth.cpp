@@ -158,6 +158,7 @@ void FluidSynth::allNotesOff()
     int lastChannelIdx = static_cast<int>(m_sequencer.channels().lastIndex());
     for (int i = 0; i < lastChannelIdx; ++i) {
         setControllerValue(i, midi::SUSTAIN_PEDAL_CONTROLLER, 0);
+        setControllerValue(i, midi::SOSTENUTO_PEDAL_CONTROLLER, 0);
         setPitchBend(i, 8192);
     }
 }
