@@ -38,13 +38,17 @@ public:
 
     EngravingFontsProvider(const muse::modularity::ContextPtr& iocCtx);
 
-    void addFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath) override;
+    void addInternalFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath) override;
+    void addExternalFont(const std::string& name, const std::string& family, const muse::io::path_t& filePath,
+                         const muse::io::path_t& metadataPath) override;
     IEngravingFontPtr fontByName(const std::string& name) const override;
     std::vector<IEngravingFontPtr> fonts() const override;
 
     void setFallbackFont(const std::string& name) override;
     IEngravingFontPtr fallbackFont() const override;
     bool isFallbackFont(const IEngravingFont* f) const override;
+
+    void clearExternalFonts() override;
 
     void loadAllFonts() override;
 
@@ -60,6 +64,7 @@ private:
 
     mutable Fallback m_fallback;
     std::vector<std::shared_ptr<EngravingFont> > m_symbolFonts;
+    std::unordered_map<std::string, std::shared_ptr<EngravingFont> > m_externalSymbolFonts;
 };
 }
 
