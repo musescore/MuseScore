@@ -60,6 +60,7 @@ void NotationPaintView::onMatrixChanged(const Transform& oldMatrix, const Transf
 
     if (!m_isLocalMatrixUpdate && notation()) {
         notation()->viewState()->setMatrix(newMatrix, this);
+        notation()->viewState()->setMatrixInited(true);
 
         if (overrideZoomType) {
             notation()->viewState()->setZoomType(ZoomType::Percentage);
