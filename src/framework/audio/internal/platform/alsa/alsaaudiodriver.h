@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,47 +20,40 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_JACKAUDIODRIVER_H
-#define MUSE_AUDIO_JACKAUDIODRIVER_H
-
-#include <jack/jack.h>
+#ifndef MU_AUDIO_ALSAAUDIODRIVER_H
+#define MU_AUDIO_ALSAAUDIODRIVER_H
 
 #include "iaudiodriver.h"
-#include "playback/iplaybackcontroller.h"
 
 namespace muse::audio {
-class JackDriverState : public AudioDriverState, public async::Asyncable
+class AlsaDriverState : public AudioDriverState
 {
 public:
-    JackDriverState(IAudioDriver* amm, bool transportEnable);
-    ~JackDriverState();
+    AlsaDriverState();
+    ~AlsaDriverState();
 
     std::string name() const override;
     bool open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec) override;
     void close() override;
     bool isOpened() const override;
     void setAudioDelayCompensate(const int frames) override;
-
     std::string deviceName() const;
     void deviceName(const std::string newDeviceName);
-
     void changedPlaying() const override;
     void changedPosition(muse::audio::secs_t secs, muse::midi::tick_t tick) const override;
 
-    bool isPlaying() const;
-    float playbackPositionInSeconds() const;
-    void remotePlayOrStop(bool) const;
-    void remoteSeek(msecs_t) const;
-
-    void* jackDeviceHandle = nullptr;
+    void* alsaDeviceHandle = nullptr;
     float* buffer = nullptr;
-    std::vector<jack_port_t*> outputPorts;
-    mu::playback::IPlaybackController* playbackController;
+    bool audioProcessingDone = false;
 
 private:
-    IAudioDriver* m_audiomidiManager;
-    std::string m_deviceName;
+    void alsaCleanup();
+
+    pthread_t m_threadHandle = 0;
+
+    async::Channel<muse::midi::tick_t, muse::midi::Event > m_eventReceived;
+    std::string m_deviceName = "default";
 };
 }
 
-#endif // MUSE_AUDIO_JACKAUDIODRIVER_H
+#endif // MU_AUDIO_ALSAAUDIODRIVER_H
