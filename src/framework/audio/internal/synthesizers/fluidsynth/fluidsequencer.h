@@ -52,7 +52,7 @@ private:
     void updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& changes);
 
     void appendControlSwitch(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationMeta& artMeta,
-                             const int midiControlIdx);
+                             const int midiControlIdx, const midi::channel_t channelIdx);
 
     void appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationMeta& artMeta,
                          const midi::channel_t channelIdx);
