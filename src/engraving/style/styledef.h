@@ -533,8 +533,8 @@ enum class Sid {
     slurMinDistance,
     tieMinDistance,
     laissezVibMinDistance,
-    headerToLineStartDistance,   // determines start point of "dangling" lines (ties, gliss, lyrics...) at start of system
-    lineEndToSystemEndDistance,  // determines end point of "dangling" lines (ties, gliss, lyrics...) at end of system
+    headerToLineStartDistance,   // determines start point of "dangling" lines (ties, gliss, lyrics...) when preceded by header clefs/timesigs/keysigs
+    lineEndToBarlineDistance,  // determines end point of "dangling" lines (ties, gliss, lyrics...) in relation to barlines
 
     tiePlacementSingleNote,
     tiePlacementChord,
