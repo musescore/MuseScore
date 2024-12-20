@@ -3199,25 +3199,30 @@ static std::vector<String> symIdToArtic(const SymId sid)
 static String symIdToOrnam(const SymId sid)
 {
     switch (sid) {
+    case SymId::ornamentTrill:
+    case SymId::ornamentShake3:
+    case SymId::ornamentShakeMuffat1:
+        return u"trill-mark";
+        break;
+    case SymId::ornamentTurn:
+        return u"turn";
+        break;
     case SymId::ornamentTurnInverted:
         return u"inverted-turn";
         break;
     case SymId::ornamentTurnSlash:
         return u"turn slash=\"yes\"";
         break;
-    case SymId::ornamentTurn:
-        return u"turn";
+    case SymId::ornamentTurnUp:
+        return u"vertical-turn";
         break;
-    case SymId::ornamentTrill:
-    case SymId::ornamentShake3:
-    case SymId::ornamentShakeMuffat1:
-        return u"trill-mark";
+    case SymId::ornamentTurnUpS:
+        return u"inverted-vertical-turn";
         break;
     case SymId::ornamentMordent:
         return u"mordent";
         break;
     case SymId::ornamentShortTrill:
-        // return "short-trill";
         return u"inverted-mordent";
         break;
     case SymId::ornamentTremblement:
@@ -3247,6 +3252,9 @@ static String symIdToOrnam(const SymId sid)
     case SymId::ornamentLinePrall:
         // MusicXML 3.0 does not distinguish between downprall and lineprall
         return u"inverted-mordent long=\"yes\" approach=\"above\"";
+        break;
+    case SymId::ornamentHaydn:
+        return u"haydn";
         break;
     case SymId::ornamentPrecompSlide:
         return u"schleifer";
@@ -3370,6 +3378,7 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
             default:
                 LOGD("unknown ChordLine subtype %d", int(cl->chordLineType()));
             }
+            subtype += color2xml(cl);
             if (!subtype.empty()) {
                 notations.tag(xml, e);
                 articulations.tag(xml);
