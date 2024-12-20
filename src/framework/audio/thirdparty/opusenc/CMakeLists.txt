@@ -34,6 +34,8 @@ set(MODULE_LINK ${OPUS_LIBRARIES})
 
 set(MODULE_USE_PCH OFF)
 set(MODULE_USE_UNITY OFF)
+set(MODULE_USE_COVERAGE OFF)
+
 setup_module()
 
 target_no_warning(${MODULE} -Wno-unused-parameter)
