@@ -1672,7 +1672,7 @@ void Chord::cmdUpdateNotes(AccidentalState* as, staff_idx_t staffIdx)
         if (vStaffIdx() == staffIdx) {
             std::vector<Note*> lnotes(notes());      // we need a copy!
             for (Note* note : lnotes) {
-                if (note->tieBack() && note->tpc() == note->tieBack()->startNote()->tpc()) {
+                if (note->tieBackNonPartial() && note->tpc() == note->tieBack()->startNote()->tpc()) {
                     // same pitch
                     if (note->accidental() && note->accidental()->role() == AccidentalRole::AUTO) {
                         // not courtesy
@@ -2618,7 +2618,7 @@ static bool noteIsBefore(const Note* n1, const Note* n2)
     }
 
     if (n1->tieBack()) {
-        if (n2->tieBack()) {
+        if (n2->tieBack() && !n2->incomingPartialTie()) {
             const Note* sn1 = n1->tieBack()->startNote();
             const Note* sn2 = n2->tieBack()->startNote();
             if (sn1->chord() == sn2->chord()) {
@@ -2853,6 +2853,7 @@ EngravingItem* Chord::nextElement()
     case ElementType::GLISSANDO_SEGMENT:
     case ElementType::NOTELINE_SEGMENT:
     case ElementType::LAISSEZ_VIB_SEGMENT:
+    case ElementType::PARTIAL_TIE_SEGMENT:
     case ElementType::TIE_SEGMENT: {
         SpannerSegment* s = toSpannerSegment(e);
         Spanner* sp = s->spanner();

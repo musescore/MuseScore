@@ -363,7 +363,6 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
     case ElementType::GLISSANDO:
     case ElementType::GUITAR_BEND:
     case ElementType::NOTELINE:
-    case ElementType::LAISSEZ_VIB:
     {
         Spanner* sp = toSpanner(info->connector());
         if (info->isStart()) {
@@ -389,7 +388,11 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
             sp->setTick2(item->tick());
             sp->setEndElement(item);
             if (sp->isTie()) {
-                item->setTieBack(toTie(sp));
+                Tie* tie = toTie(sp);
+                item->setTieBack(tie);
+                if (pasteMode) {
+                    tie->updatePossibleJumpPoints();
+                }
             } else {
                 bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();
                 if ((sp->isGlissando() || sp->isGuitarBend() || isNoteAnchoredTextLine) && item->explicitParent()

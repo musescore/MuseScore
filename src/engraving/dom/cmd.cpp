@@ -330,16 +330,17 @@ void Score::startCmd(const TranslatableString& actionName)
         LOGD("===startCmd()");
     }
 
+    if (undoStack()->hasActiveCommand()) {
+        LOGD("Score::startCmd(): cmd already active");
+        return;
+    }
+
     MScore::setError(MsError::MS_NO_ERROR);
 
     cmdState().reset();
 
     // Start collecting low-level undo operations for a
     // user-visible undo action.
-    if (undoStack()->hasActiveCommand()) {
-        LOGD("Score::startCmd(): cmd already active");
-        return;
-    }
     undoStack()->beginMacro(this, actionName);
 }
 
@@ -1691,8 +1692,11 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                 undoRemoveElement(c->tremoloTwoChord());
             }
             for (Note* n : c->notes()) {
-                if (n->tieFor()) {
-                    undoRemoveElement(n->tieFor());
+                if (Tie* tie = n->tieFor()) {
+                    if (tie->tieJumpPoints()) {
+                        tie->undoRemoveTiesFromJumpPoints();
+                    }
+                    undoRemoveElement(tie);
                 }
                 for (Spanner* sp : n->spannerFor()) {
                     if (sp->isGlissando() || sp->isGuitarBend()) {
@@ -3789,7 +3793,7 @@ void Score::cmdImplode()
                 // see if we are tying in to this chord
                 Chord* tied = 0;
                 for (Note* n : dstChord->notes()) {
-                    if (n->tieBack()) {
+                    if (n->tieBackNonPartial()) {
                         tied = n->tieBack()->startNote()->chord();
                         break;
                     }

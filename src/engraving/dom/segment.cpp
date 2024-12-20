@@ -1171,17 +1171,17 @@ bool Segment::setProperty(Pid propertyId, const PropertyValue& v)
 //   widthInStaff
 //---------------------------------------------------------
 
-double Segment::widthInStaff(staff_idx_t staffIdx, SegmentType t) const
+double Segment::widthInStaff(staff_idx_t staffIdx, SegmentType nextSegType) const
 {
     const double segX = x();
     double nextSegX = segX;
 
-    Segment* nextSeg = nextInStaff(staffIdx, t);
+    Segment* nextSeg = nextInStaff(staffIdx, nextSegType);
     if (nextSeg) {
         nextSegX = nextSeg->x();
     } else {
         Segment* lastSeg = measure()->lastEnabled();
-        if (lastSeg->segmentType() & t) {
+        if (lastSeg->segmentType() & nextSegType) {
             nextSegX = lastSeg->x() + lastSeg->width();
         } else {
             nextSegX = lastSeg->x();
@@ -2219,6 +2219,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
         EngravingItem* el = e;
         Segment* seg = this;
         if (e->type() == ElementType::TIE_SEGMENT || e->type() == ElementType::LAISSEZ_VIB_SEGMENT
+            || e->type() == ElementType::PARTIAL_TIE_SEGMENT
             || e->type() == ElementType::GLISSANDO_SEGMENT || e->type() == ElementType::NOTELINE_SEGMENT) {
             SpannerSegment* s = toSpannerSegment(e);
             Spanner* sp = s->spanner();

@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_UNDO_H
-#define MU_ENGRAVING_UNDO_H
+#pragma once
 
 /**
  \file
@@ -1733,5 +1732,22 @@ public:
     UNDO_NAME("ChangeSpanArpeggio")
     UNDO_CHANGED_OBJECTS({ m_chord })
 };
+
+class ChangeTieJumpPointActive : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, ChangeTieJumpPointActive)
+
+    TieJumpPointList* m_jumpPointList = nullptr;
+    String m_id;
+    bool m_active = false;
+
+    void flip(EditData*) override;
+
+public:
+    ChangeTieJumpPointActive(TieJumpPointList* jumpPointList, String& id, bool active)
+        : m_jumpPointList(jumpPointList), m_id(id), m_active(active) {}
+
+    UNDO_TYPE(CommandType::ChangeTieEndPointActive)
+    UNDO_NAME("ChangeTieEndPointActive")
+};
 } // namespace mu::engraving
-#endif

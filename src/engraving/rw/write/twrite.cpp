@@ -111,6 +111,7 @@
 #include "dom/page.h"
 #include "dom/palmmute.h"
 #include "dom/part.h"
+#include "dom/partialtie.h"
 #include "dom/pedal.h"
 #include "dom/pickscrape.h"
 #include "dom/playtechannotation.h"
@@ -281,6 +282,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::PAGE:         write(item_cast<const Page*>(item), xml, ctx);
         break;
     case ElementType::PALM_MUTE:    write(item_cast<const PalmMute*>(item), xml, ctx);
+        break;
+    case ElementType::PARTIAL_TIE:  write(item_cast<const PartialTie*>(item), xml, ctx);
         break;
     case ElementType::PEDAL:        write(item_cast<const Pedal*>(item), xml, ctx);
         break;
@@ -2273,11 +2276,19 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
         write(item->laissezVib(), xml, ctx);
     }
 
-    if (item->tieFor() && !item->laissezVib()) {
+    if (item->incomingPartialTie() && !ctx.clipboardmode()) {
+        write(item->incomingPartialTie(), xml, ctx);
+    }
+
+    if (item->outgoingPartialTie() && !ctx.clipboardmode()) {
+        write(item->outgoingPartialTie(), xml, ctx);
+    }
+
+    if (item->tieForNonPartial()) {
         writeSpannerStart(item->tieFor(), xml, ctx, item, item->track());
     }
 
-    if (item->tieBack()) {
+    if (item->tieBackNonPartial()) {
         writeSpannerEnd(item->tieBack(), xml, ctx, item, item->track());
     }
 
@@ -2417,6 +2428,15 @@ void TWrite::write(const Part* item, XmlWriter& xml, WriteContext& ctx)
 
     write(item->instrument(), xml, ctx, item);
 
+    xml.endElement();
+}
+
+void TWrite::write(const PartialTie* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::TIE_PLACEMENT);
+    writeProperty(item, xml, Pid::PARTIAL_SPANNER_DIRECTION);
+    writeProperties(static_cast<const SlurTie*>(item), xml, ctx);
     xml.endElement();
 }
 

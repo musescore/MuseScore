@@ -495,6 +495,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::tieDottedWidth,          false, tieDottedLineWidth,      resetTieDottedLineWidth },
         { StyleId::tieMinDistance,          false, tieMinDistance,          resetTieMinDistance },
         { StyleId::minTieLength,            false, minTieLength,            resetMinTieLength },
+        { StyleId::minHangingTieLength,     false, minHangingTieLength,     resetMinHangingTieLength },
 
         { StyleId::minLaissezVibLength,            false, minLaissezVibLength,            resetMinLaissezVibLength },
         { StyleId::laissezVibUseSmuflSym,          false, laissezVibUseSmufl,            0 },
@@ -1577,6 +1578,8 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
     case ElementType::TIE_SEGMENT:
     case ElementType::LAISSEZ_VIB:
     case ElementType::LAISSEZ_VIB_SEGMENT:
+    case ElementType::PARTIAL_TIE:
+    case ElementType::PARTIAL_TIE_SEGMENT:
         return "slurs-and-ties";
 
     case ElementType::HAIRPIN:

@@ -170,6 +170,7 @@ private:
     bool isNoteInputMode() const;
     bool isEditingElement() const;
     bool isNotEditingElement() const;
+    bool isNotEditingOrHasPopup() const;
     bool isNotNoteInputMode() const;
 
     bool isToggleVisibleAllowed() const;
@@ -210,7 +211,7 @@ private:
 
     const mu::engraving::Harmony* editedChordSymbol() const;
 
-    bool elementHasPopup(EngravingItem* e);
+    bool elementHasPopup(const EngravingItem* e) const;
 
     bool canUndo() const;
     bool canRedo() const;

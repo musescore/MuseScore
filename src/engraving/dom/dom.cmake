@@ -223,6 +223,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/ottava.h
     ${CMAKE_CURRENT_LIST_DIR}/page.cpp
     ${CMAKE_CURRENT_LIST_DIR}/page.h
+    ${CMAKE_CURRENT_LIST_DIR}/partialtie.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/partialtie.h
     ${CMAKE_CURRENT_LIST_DIR}/palmmute.cpp
     ${CMAKE_CURRENT_LIST_DIR}/palmmute.h
     ${CMAKE_CURRENT_LIST_DIR}/part.cpp
