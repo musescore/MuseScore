@@ -36,10 +36,6 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-static const ElementStyle timesigStyle {
-    { Sid::timesigScale,                       Pid::SCALE },
-};
-
 //---------------------------------------------------------
 //   TimeSig
 //    Constructs an invalid time signature element.
@@ -49,15 +45,14 @@ static const ElementStyle timesigStyle {
 //---------------------------------------------------------
 
 TimeSig::TimeSig(Segment* parent)
-    : EngravingItem(ElementType::TIMESIG, parent, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
+    : EngravingItem(ElementType::TIMESIG, parent, ElementFlag::ON_STAFF | ElementFlag::MOVABLE | ElementFlag::PLACE_ABOVE)
 {
-    initElementStyle(&timesigStyle);
-
     m_showCourtesySig = true;
     m_stretch.set(1, 1);
     m_sig.set(0, 1);                 // initialize to invalid
     m_timeSigType      = TimeSigType::NORMAL;
     m_largeParentheses = false;
+    setMinDistance(Spatium(0.5)); // TODO: style
 }
 
 void TimeSig::setParent(Segment* parent)
@@ -137,6 +132,18 @@ void TimeSig::setDenominatorString(const String& a)
     if (m_timeSigType == TimeSigType::NORMAL) {
         m_denominatorString = a;
     }
+}
+
+const bool TimeSig::isLarge() const
+{
+    return style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() != TimeSigPlacement::NORMAL;
+}
+
+ScaleF TimeSig::scale() const
+{
+    double xScale = isLarge() ? style().styleD(Sid::timeSigLargeWidth) : style().styleD(Sid::timeSigNormalWidth);
+    double yScale = isLarge() ? style().styleD(Sid::timeSigLargeHeight) : style().styleD(Sid::timeSigNormalHeight);
+    return ScaleF(xScale, yScale);
 }
 
 //---------------------------------------------------------
@@ -272,7 +279,7 @@ PropertyValue TimeSig::propertyDefault(Pid id) const
     case Pid::TIMESIG_TYPE:
         return int(TimeSigType::NORMAL);
     case Pid::SCALE:
-        return style().styleV(Sid::timesigScale);
+        return scale();
     default:
         return EngravingItem::propertyDefault(id);
     }
@@ -346,6 +353,22 @@ muse::TranslatableString TimeSig::subtypeUserName() const
 String TimeSig::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
+}
+
+bool TimeSig::showOnThisStaff() const
+{
+    TimeSigPlacement timeSigPlacement = style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>();
+    return timeSigPlacement == TimeSigPlacement::NORMAL || staffIdx() == 0 || score()->isSystemObjectStaff(staff());
+}
+
+bool TimeSig::isAboveStaves() const
+{
+    return style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ABOVE_STAVES;
+}
+
+bool TimeSig::isAcrossStaves() const
+{
+    return style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ACROSS_STAVES;
 }
 
 //---------------------------------------------------------

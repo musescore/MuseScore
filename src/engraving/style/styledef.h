@@ -196,6 +196,18 @@ enum class Sid {
     clefBarlineDistance,
     timesigBarlineDistance,
 
+    timeSigPlacement,
+    timeSigAboveCenterOnBarline,
+    timeSigAboveCautionaryHangIntoMargin,
+    timeSigCenterAcrossStaveGroup,
+    timeSigStyle,
+    timeSigNormalHeight,
+    timeSigNormalWidth,
+    timeSigNormalNumDist,
+    timeSigLargeHeight,
+    timeSigLargeWidth,
+    timeSigLargeNumDist,
+
     useStraightNoteFlags,
     stemWidth,
     shortenStem,

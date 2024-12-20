@@ -99,8 +99,9 @@ public:
     bool largeParentheses() const { return m_largeParentheses; }
     void setLargeParentheses(bool v) { m_largeParentheses = v; }
 
-    const ScaleF& scale() const { return m_scale; }
-    void setScale(const ScaleF& s) { m_scale = s; }
+    const bool isLarge() const;
+    ScaleF scale() const;
+    void setScale(const ScaleF& s) { m_scale = s; } // TODO: think about what to do with this
 
     void setFrom(const TimeSig*);
 
@@ -121,6 +122,10 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
+
+    bool showOnThisStaff() const;
+    bool isAboveStaves() const;
+    bool isAcrossStaves() const;
 
     struct LayoutData : public EngravingItem::LayoutData {
         SymIdList ns;
@@ -148,7 +153,7 @@ private:
     Fraction m_stretch;        // localSig / globalSig
     Groups m_groups;
 
-    ScaleF m_scale;
+    ScaleF m_scale = ScaleF(1.0, 1.0);
     TimeSigType m_timeSigType = TimeSigType::NORMAL;
     bool m_showCourtesySig = false;
     bool m_largeParentheses = false;

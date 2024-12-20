@@ -181,6 +181,19 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(clefBarlineDistance,                        Spatium(0.5)),
     styleDef(timesigBarlineDistance,                     Spatium(0.5)),
+
+    styleDef(timeSigPlacement,                           TimeSigPlacement::NORMAL),
+    styleDef(timeSigAboveCenterOnBarline,                true),
+    styleDef(timeSigAboveCautionaryHangIntoMargin,       true),
+    styleDef(timeSigCenterAcrossStaveGroup,              false),
+    styleDef(timeSigStyle,                               TimeSigStyle::NORMAL),
+    styleDef(timeSigNormalHeight,                        1.0),
+    styleDef(timeSigNormalWidth,                         1.0),
+    styleDef(timeSigNormalNumDist,                       Spatium(0.0)),
+    styleDef(timeSigLargeHeight,                         1.0),
+    styleDef(timeSigLargeWidth,                          1.0),
+    styleDef(timeSigLargeNumDist,                        Spatium(0.0)),
+
     styleDef(useStraightNoteFlags,                       false),
     styleDef(stemWidth,                                  Spatium(0.10)),
     styleDef(shortenStem,                                true),

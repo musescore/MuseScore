@@ -244,6 +244,12 @@ public:
 
     static AsciiStringView toXml(AutoOnOff autoOnOff);
     static AutoOnOff fromXml(const AsciiStringView& str, AutoOnOff def);
+
+    static AsciiStringView toXml(TimeSigPlacement timeSigPos);
+    static TimeSigPlacement fromXml(const AsciiStringView& str, TimeSigPlacement def);
+
+    static AsciiStringView toXml(TimeSigStyle timeSigStyle);
+    static TimeSigStyle fromXml(const AsciiStringView& str, TimeSigStyle def);
 };
 }
 

@@ -80,6 +80,9 @@ enum class P_TYPE {
     TIE_PLACEMENT,
     TIE_DOTS_PLACEMENT,
 
+    TIMESIG_PLACEMENT,
+    TIMESIG_STYLE,
+
     // Sound
     FRACTION,
     DURATION_TYPE_WITH_DOTS,
@@ -216,6 +219,12 @@ public:
 
     PropertyValue(TieDotsPlacement v)
         : m_type(P_TYPE::TIE_DOTS_PLACEMENT), m_data(make_data<TieDotsPlacement>(v)) {}
+
+    PropertyValue(TimeSigPlacement v)
+        : m_type(P_TYPE::TIMESIG_PLACEMENT), m_data(make_data<TimeSigPlacement>(v)) {}
+
+    PropertyValue(TimeSigStyle v)
+        : m_type(P_TYPE::TIMESIG_STYLE), m_data(make_data<TimeSigStyle>(v)) {}
 
     // Sound
     PropertyValue(const Fraction& v)

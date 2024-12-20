@@ -1079,6 +1079,18 @@ enum class TieDotsPlacement {
     AFTER_DOTS
 };
 
+enum class TimeSigPlacement {
+    NORMAL,
+    ABOVE_STAVES,
+    ACROSS_STAVES
+};
+
+enum class TimeSigStyle {
+    NORMAL,
+    NARROW,
+    LARGE
+};
+
 //---------------------------------------------------------
 //   Key
 //---------------------------------------------------------

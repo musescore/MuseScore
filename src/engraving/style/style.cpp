@@ -198,6 +198,12 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::GLISS_TYPE:
                 set(idx, GlissandoType(e.readText().toInt()));
                 break;
+            case P_TYPE::TIMESIG_PLACEMENT:
+                set(idx, TConv::fromXml(e.readAsciiText(), TimeSigPlacement::NORMAL));
+                break;
+            case P_TYPE::TIMESIG_STYLE:
+                set(idx, TConv::fromXml(e.readAsciiText(), TimeSigStyle::NORMAL));
+                break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
             }
@@ -581,6 +587,10 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.name(), TConv::toXml(value(idx).value<TiePlacement>()));
         } else if (P_TYPE::TIE_DOTS_PLACEMENT == type) {
             xml.tag(st.name(), TConv::toXml(value(idx).value<TieDotsPlacement>()));
+        } else if (P_TYPE::TIMESIG_PLACEMENT == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<TimeSigPlacement>()));
+        } else if (P_TYPE::TIMESIG_STYLE == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<TimeSigStyle>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility

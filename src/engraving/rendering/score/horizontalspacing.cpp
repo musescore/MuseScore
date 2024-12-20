@@ -35,6 +35,7 @@
 #include "dom/staff.h"
 #include "dom/system.h"
 #include "dom/tie.h"
+#include "dom/timesig.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
@@ -289,6 +290,7 @@ std::vector<HorizontalSpacing::SegmentPosition> HorizontalSpacing::spaceSegments
 
     if (ctx.systemIsFull) {
         checkLyricsAgainstRightMargin(placedSegments);
+        checkLargeTimeSigAgainstRightMargin(placedSegments);
     }
 
     return placedSegments;
@@ -320,6 +322,8 @@ void HorizontalSpacing::spaceAgainstPreviousSegments(Segment* segment, std::vect
         checkLyricsAgainstLeftMargin(segment, x, ctx);
     }
 
+    bool segmentHasTimeSigAboveStaff = segment->hasTimeSigAboveStaves();
+
     for (size_t i = prevSegPositions.size(); i > 0; --i) {
         const SegmentPosition& prevSegPos = prevSegPositions[i - 1];
         Segment* prevSeg = prevSegPos.segment;
@@ -333,10 +337,19 @@ void HorizontalSpacing::spaceAgainstPreviousSegments(Segment* segment, std::vect
             ++prevCRSegmentsCount;
         }
 
-        double xNonCollision = xPrevSeg + minHorizontalDistance(prevSeg, segment, ctx.squeezeFactor);
-        x = std::max(x, xNonCollision);
+        bool timeSigAboveBarlineCase = segmentHasTimeSigAboveStaff && prevSeg->isEndBarLineType() && prevSeg->tick() == segment->tick();
+        bool timeSigAboveKeySigCase = segmentHasTimeSigAboveStaff && prevSeg->isKeySigType() && prevSeg->tick() == segment->tick();
 
-        if (x > ctx.xCur) {
+        if (timeSigAboveBarlineCase) {
+            x = xPrevSeg; // align to the preceding barline
+        } else if (timeSigAboveKeySigCase) {
+            x = xPrevSeg + segment->minLeft(); // align to the preceding keySig
+        } else {
+            double xNonCollision = xPrevSeg + minHorizontalDistance(prevSeg, segment, ctx.squeezeFactor);
+            x = std::max(x, xNonCollision);
+        }
+
+        if (x > ctx.xCur || timeSigAboveBarlineCase) {
             if (prevCRSegmentsCount > 0) {
                 double spaceIncrease = (x - ctx.xCur) / prevCRSegmentsCount;
                 double xMovement = spaceIncrease;
@@ -467,6 +480,37 @@ void HorizontalSpacing::checkLyricsAgainstRightMargin(std::vector<SegmentPositio
                 }
             }
         }
+    }
+}
+
+void HorizontalSpacing::checkLargeTimeSigAgainstRightMargin(std::vector<SegmentPosition>& segPositions)
+{
+    SegmentPosition& cautionaryTSSegPos = segPositions.back();
+    if (!cautionaryTSSegPos.segment->hasTimeSigAboveStaves()) {
+        return;
+    }
+
+    const MStyle& style = cautionaryTSSegPos.segment->style();
+    bool letHangIntoMargin = style.styleB(Sid::timeSigAboveCenterOnBarline) && style.styleB(Sid::timeSigAboveCautionaryHangIntoMargin);
+    if (letHangIntoMargin) {
+        return;
+    }
+
+    double xMax = 0.0;
+    for (auto iter = segPositions.rbegin(); iter != segPositions.rend(); ++iter) {
+        if (iter->segment->isType(SegmentType::EndBarLine | SegmentType::KeySigAnnounce)) {
+            xMax = std::max(xMax, iter->xPosInSystemCoords + iter->segment->minRight());
+        }
+    }
+
+    if (xMax == 0.0) {
+        return;
+    }
+
+    double curTSPos = cautionaryTSSegPos.xPosInSystemCoords;
+    double xMaxPos = xMax - cautionaryTSSegPos.segment->minRight();
+    if (xMaxPos < curTSPos) {
+        cautionaryTSSegPos.xPosInSystemCoords = xMaxPos;
     }
 }
 
@@ -846,7 +890,20 @@ void HorizontalSpacing::setPositionsAndWidths(const std::vector<SegmentPosition>
         curSeg->setXPosInSystemCoords(curX);
 
         if (nextSeg == curSeg) {
-            double nextSegWidth = nextSeg->minRight();
+            double nextSegWidth = 0.0;
+            if (nextSeg->hasTimeSigAboveStaves()) {
+                assert(i > 0);
+                Segment* prevSeg = segmentPositions[i - 1].segment;
+                double xDiff = segmentPositions[i - 1].xPosInSystemCoords - curX;
+                nextSegWidth = xDiff + prevSeg->minRight();
+                if (prevSeg->trailer()) {
+                    nextSegWidth += prevSeg->style().styleMM(Sid::systemTrailerRightMargin);
+                }
+            } else if (nextSeg->trailer()) {
+                nextSegWidth = nextSeg->minRight() + nextSeg->style().styleMM(Sid::systemTrailerRightMargin);
+            } else {
+                nextSegWidth = nextSeg->minRight();
+            }
             nextSeg->setWidth(nextSegWidth);
             nextSegMeasure->setWidth(nextX + nextSegWidth - nextSegMeasure->x());
             nextSeg->setXPosInSystemCoords(nextX);
@@ -957,9 +1014,20 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
         }
     }
 
+    if (f->isHeaderClefType() && ns->hasTimeSigAboveStaves()) {
+        Segment* possibleKeySig = f->nextActive();
+        if (possibleKeySig && possibleKeySig->isKeySigType() && !ignoreSegmentForSpacing(possibleKeySig)) {
+            return 0.0;
+        }
+        return f->minRight() + ns->minLeft() + f->style().styleMM(Sid::headerToLineStartDistance);
+    }
+
     bool systemHeaderGap = f->segmentType() != SegmentType::ChordRest && f->segmentType() != SegmentType::StartRepeatBarLine
-                           && f->rtick().isZero() && (ns->measure()->isFirstInSystem() || ns->measure()->prev()->isHBox())
+                           && f->rtick().isZero() && !f->hasTimeSigAboveStaves()
+                           && (ns->measure()->isFirstInSystem() || ns->measure()->prev()->isHBox())
                            && (ns->isStartRepeatBarLineType() || ns->isChordRestType() || (ns->isClefType() && !ns->header()));
+
+    bool timeSigMustClearCollisionsOnAllStaves = f->hasTimeSigCenteredAcrossStaves() || ns->hasTimeSigCenteredAcrossStaves();
 
     double ww = -DBL_MAX;          // can remain negative
     double d = 0.0;
@@ -974,7 +1042,7 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
         d = ns ? minHorizontalDistance(fshape, ns->staffShape(staffIdx), sp, squeezeFactor) : 0.0;
         // first chordrest of a staff should clear the widest header for any staff
         // so make sure segment is as wide as it needs to be
-        if (systemHeaderGap) {
+        if (systemHeaderGap || timeSigMustClearCollisionsOnAllStaves) {
             d = std::max(d, f->staffShape(staffIdx).right());
         }
         ww = std::max(ww, d);
@@ -1290,10 +1358,11 @@ bool HorizontalSpacing::isNeverKernable(const EngravingItem* item)
             return false;
         }
     // fall through
-    case ElementType::TIMESIG:
     case ElementType::KEYSIG:
     case ElementType::BAR_LINE:
         return true;
+    case ElementType::TIMESIG:
+        return !toTimeSig(item)->isAboveStaves();
     default:
         return false;
     }
