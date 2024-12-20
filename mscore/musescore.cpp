@@ -464,7 +464,7 @@ void updateExternalValuesFromPreferences() {
             dir.mkpath(preferences.getString(PREF_APP_PATHS_MYEXTENSIONS));
             dir.mkpath(preferences.getString(PREF_APP_PATHS_MYPLUGINS));
             dir.mkpath(preferences.getString(PREF_APP_PATHS_MYSCOREFONTS));
-            foreach (QString path, preferences.getString(PREF_APP_PATHS_MYSOUNDFONTS).split(";"))
+            for (QString path : preferences.getString(PREF_APP_PATHS_MYSOUNDFONTS).split(";"))
                   dir.mkpath(path);
                   }
             }
@@ -2315,7 +2315,7 @@ void MuseScore::helpBrowser1() const
       QString help = QString("https://musescore.org/redirect/help?tag=handbook&locale=%1").arg(getLocaleISOCode());
       //try to find an exact match
       bool found = false;
-      foreach (LanguageItem item, _languages) {
+      for (LanguageItem item : _languages) {
             if (item.key == lang) {
                   QString handbook = item.handbook;
                   if (!handbook.isNull()) {
@@ -2328,7 +2328,7 @@ void MuseScore::helpBrowser1() const
       //try a to find a match on first two letters
       if (!found && lang.size() > 2) {
             lang = lang.left(2);
-            foreach (LanguageItem item, _languages) {
+            for (LanguageItem item : _languages) {
                   if (item.key == lang){
                       QString handbook = item.handbook;
                       if (!handbook.isNull())
@@ -2968,7 +2968,7 @@ void MuseScore::dropEvent(QDropEvent* event)
       {
       const QMimeData* dta = event->mimeData();
       if (dta->hasUrls()) {
-            foreach(const QUrl& u, event->mimeData()->urls()) {
+            for (const QUrl& u : event->mimeData()->urls()) {
                   if (u.scheme() == "file") {
                         QString file = u.toLocalFile();
                         openScore(file);
@@ -4413,7 +4413,7 @@ void MuseScore::changeState(ScoreState val)
       // work for MAC
 
       QList<QObject*> ol = menuBar()->children();
-      foreach(QObject* o, ol) {
+      for (QObject* o : ol) {
             QMenu* menu = qobject_cast<QMenu*>(o);
             if (!menu)
                   continue;
@@ -5150,7 +5150,7 @@ void MuseScore::writeSessionFile(bool cleanExit)
       xml.stag(QStringLiteral("museScore version=\"" MSC_VERSION "\" full-version=\"%1\"").arg(fullVersion()));
       xml.tagE(cleanExit ? "clean" : "dirty");
 
-      foreach(MasterScore* score, scoreList) {
+      for (MasterScore* score : scoreList) {
             xml.stag("Score");
             xml.tag("created", score->created());
             xml.tag("dirty", score->dirty());
@@ -6721,7 +6721,7 @@ void MuseScore::updateLayer()
       if (cs) {
             enable = cs->layer().size() > 1;
             if (enable) {
-                  foreach(const Layer& l, cs->layer())
+                  for (const Layer& l : cs->layer())
                         layerSwitch->addItem(l.name);
                   layerSwitch->setCurrentIndex(cs->currentLayer());
                   }
@@ -7325,7 +7325,6 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
                               *l++ = *sp++;
                               *r++ = *sp++;
                               }
-                        //playTime += frames;
                         }
 
                   if (pass == 1) {
@@ -8154,7 +8153,7 @@ void MuseScore::init(QStringList& argv)
 
       if (MScore::debugMode) {
             QStringList sl(QCoreApplication::libraryPaths());
-            foreach(const QString& s, sl)
+            for (const QString& s : sl)
                   qDebug("LibraryPath: <%s>", qPrintable(s));
             }
 
@@ -8253,20 +8252,20 @@ void MuseScore::init(QStringList& argv)
       else {
             showSplashMessage(sc, tr("Initializing main window…"));
             mscore->readSettings();
-            QObject::connect(qApp, SIGNAL(messageReceived(QString&)),
-               mscore, SLOT(handleMessage(QString&)));
+            QObject::connect(qApp, SIGNAL(messageReceived(const QString&)),
+               mscore, SLOT(handleMessage(const QString&)));
 
             static_cast<QtSingleApplication*>(qApp)->setActivationWindow(mscore, false);
             // count filenames specified on the command line
             // these are the non-empty strings remaining in argv
-            foreach(const QString& name, argv) {
+            for (const QString& name : argv) {
                   if (!name.isEmpty())
                         ++files;
                   }
 #ifdef Q_OS_MAC
             // app->paths contains files requested to be loaded by OS X
             // append these to argv and update file count
-            foreach(const QString& name, static_cast<MuseScoreApplication*>(qApp)->paths) {
+            for (const QString& name : static_cast<MuseScoreApplication*>(qApp)->paths) {
                   if (!name.isEmpty()) {
                         argv << name;
                         ++files;

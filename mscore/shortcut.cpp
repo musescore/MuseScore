@@ -13,8 +13,8 @@
 #include "globals.h"
 #include "icons.h"
 #include "shortcut.h"
-#include "libmscore/xml.h"
 
+#include "libmscore/xml.h"
 
 namespace Ms {
 
