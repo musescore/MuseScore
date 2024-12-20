@@ -198,7 +198,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(timeSigAcrossStyle,                         TimeSigStyle::NORMAL),
     styleDef(timeSigAcrossScale,                         ScaleF(2.0, 2.0)),
     styleDef(timeSigAcrossNumDist,                       Spatium(0.1)),
-    styleDef(timeSigAcrossY,                             Spatium(0.1)),
+    styleDef(timeSigAcrossY,                             Spatium(0.0)),
 
     styleDef(useStraightNoteFlags,                       false),
     styleDef(stemWidth,                                  Spatium(0.10)),

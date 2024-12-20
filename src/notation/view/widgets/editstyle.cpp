@@ -940,6 +940,16 @@ EditStyle::EditStyle(QWidget* parent)
     groupBox_noteline->layout()->addWidget(noteLineSection.widget);
 
     // ====================================================
+    // TIME SIG PAGE (QML)
+    // ====================================================
+
+    auto timeSigPage = createQmlWidget(
+        groupBoxTimeSig,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/TimeSigPage.qml")));
+    timeSigPage.widget->setMinimumSize(224, 440);
+    groupBoxTimeSig->layout()->addWidget(timeSigPage.widget);
+
+    // ====================================================
     // Figured Bass
     // ====================================================
 

@@ -3990,10 +3990,11 @@
       <widget class="QWidget" name="PageTimeSignatures">
        <layout class="QVBoxLayout" name="verticalLayout_71">
         <item>
-         <widget class="QGroupBox" name="timeSignaturesPage">
+         <widget class="QGroupBox" name="groupBoxTimeSig">
           <property name="title">
            <string>Time signatures</string>
           </property>
+          <layout class="QVBoxLayout" name="verticalLayout_72"/>
          </widget>
         </item>
        </layout>
