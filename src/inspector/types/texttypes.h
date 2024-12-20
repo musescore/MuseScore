@@ -54,10 +54,10 @@ public:
         FONT_ALIGN_V_BASELINE = 3
     };
 
-    enum class FrameType {
-        FRAME_TYPE_NONE = 0,
-        FRAME_TYPE_SQUARE,
-        FRAME_TYPE_CIRCLE
+    enum class BorderType {
+        BORDER_TYPE_NONE = 0,
+        BORDER_TYPE_SQUARE,
+        BORDER_TYPE_CIRCLE
     };
     // must match mu::engraving::Tid
     enum class TextType {
@@ -132,7 +132,7 @@ public:
     };
 
     Q_ENUM(FontStyle)
-    Q_ENUM(FrameType)
+    Q_ENUM(BorderType)
     Q_ENUM(TextType)
     Q_ENUM(TextSubscriptMode)
 
