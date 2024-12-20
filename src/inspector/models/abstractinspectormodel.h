@@ -68,6 +68,7 @@ public:
         SECTION_TEXT,
         SECTION_SCORE_DISPLAY,
         SECTION_SCORE_APPEARANCE,
+        SECTION_SCORE_ACCESSIBILITY,
         SECTION_PARTS,
     };
     Q_ENUM(InspectorSectionType)
