@@ -158,7 +158,7 @@ int RepeatList::ticks() const
 //   update
 //---------------------------------------------------------
 
-void RepeatList::update(bool expand)
+void RepeatList::update(bool expand, bool updateTies)
 {
     if (!m_scoreChanged && expand == m_expanded) {
         return;
@@ -171,6 +171,10 @@ void RepeatList::update(bool expand)
     }
 
     m_scoreChanged = false;
+
+    if (updateTies) {
+        m_score->undoRemoveStaleTieJumpPoints();
+    }
 }
 
 //---------------------------------------------------------

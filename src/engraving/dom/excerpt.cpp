@@ -837,7 +837,7 @@ static void collectTieEndPoints(TieMap& tieMap)
     for (auto& tie : tieMap) {
         Tie* newTie = toTie(tie.second);
         if (newTie->type() == ElementType::TIE || (newTie->type() == ElementType::PARTIAL_TIE && toPartialTie(newTie)->isOutgoing())) {
-            newTie->collectPossibleJumpPoints();
+            newTie->updatePossibleJumpPoints();
         }
     }
 }

@@ -86,7 +86,7 @@ public:
     RepeatList& operator=(const RepeatList&) = delete;
     ~RepeatList();
 
-    void update(bool expand);
+    void update(bool expand, bool updateTies = true);
     void setScoreChanged() { m_scoreChanged = true; }
     const Score* score() const { return m_score; }
 

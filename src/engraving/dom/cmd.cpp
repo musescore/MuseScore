@@ -1694,7 +1694,7 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
             for (Note* n : c->notes()) {
                 if (Tie* tie = n->tieFor()) {
                     if (tie->tieJumpPoints()) {
-                        tie->removeTiesFromJumpPoints();
+                        tie->undoRemoveTiesFromJumpPoints();
                     }
                     undoRemoveElement(tie);
                 }

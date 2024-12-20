@@ -767,7 +767,7 @@ public:
     /// where those need to have the same value for expandRepeats.
     virtual const RepeatList& repeatList() const;
     /// For small, one-step operations, where you need to get the relevant repeatList just once
-    virtual const RepeatList& repeatList(bool expandRepeats) const;
+    virtual const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const;
 
     double utick2utime(int tick) const;
     int utime2utick(double utime) const;
@@ -803,6 +803,8 @@ public:
     Segment* lastSegmentMM() const;
 
     void connectTies(bool silent = false);
+    void undoRemoveStaleTieJumpPoints();
+    void doUndoRemoveStaleTieJumpPoints(Tie* tie);
 
     void scanElementsInRange(void* data, void (* func)(void*, EngravingItem*), bool all = true);
     int fileDivision() const { return m_fileDivision; }   ///< division of current loading *.msc file

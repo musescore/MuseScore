@@ -215,9 +215,9 @@ Tie::Tie(const ElementType& type, EngravingItem* parent)
     setAnchor(Anchor::NOTE);
 }
 
-void Tie::collectPossibleJumpPoints()
+void Tie::updatePossibleJumpPoints()
 {
-    const MasterScore* master = masterScore();
+    MasterScore* master = masterScore();
     const Note* note = toNote(parentItem());
     const Chord* chord = note->chord();
     const Measure* measure = chord->measure();
@@ -225,11 +225,6 @@ void Tie::collectPossibleJumpPoints()
     const Measure* masterMeasure = masterMeasureBase && masterMeasureBase->isMeasure() ? toMeasure(masterMeasureBase) : nullptr;
     if (!tieJumpPoints()) {
         return;
-    }
-
-    std::vector<Tie*> oldTies;
-    for (TieJumpPoint* jumpPoint : *tieJumpPoints()) {
-        oldTies.push_back(jumpPoint->endTie());
     }
 
     tieJumpPoints()->clear();
@@ -251,7 +246,7 @@ void Tie::collectPossibleJumpPoints()
     }
 
     // Get following notes by taking repeats
-    const RepeatList& repeatList = master->repeatList();
+    const RepeatList& repeatList = master->repeatList(true, false);
 
     for (auto it = repeatList.begin(); it != repeatList.end(); it++) {
         const RepeatSegment* rs = *it;
@@ -279,16 +274,6 @@ void Tie::collectPossibleJumpPoints()
             jumpPointIdx++;
         }
     }
-    for (Tie* tie : oldTies) {
-        auto findEndTie = [&tie](const TieJumpPoint* jumpPoint){
-            return jumpPoint->endTie() == tie;
-        };
-
-        if (std::find_if((*tieJumpPoints()).begin(), (*tieJumpPoints()).end(), findEndTie) != (*tieJumpPoints()).end()) {
-            continue;
-        }
-        score()->undoRemoveElement(tie);
-    }
 
     if (jumpPointIdx < 2 && !isPartialTie()) {
         tieJumpPoints()->clear();
@@ -297,7 +282,7 @@ void Tie::collectPossibleJumpPoints()
 
 void Tie::addTiesToJumpPoints()
 {
-    collectPossibleJumpPoints();
+    updatePossibleJumpPoints();
     TieJumpPointList* jumpPoints = tieJumpPoints();
     if (!jumpPoints) {
         return;
@@ -312,7 +297,7 @@ void Tie::addTiesToJumpPoints()
     }
 }
 
-void Tie::removeTiesFromJumpPoints()
+void Tie::undoRemoveTiesFromJumpPoints()
 {
     TieJumpPointList* jumpPoints = tieJumpPoints();
     if (!jumpPoints) {
@@ -324,7 +309,7 @@ void Tie::removeTiesFromJumpPoints()
             continue;
         }
 
-        jumpPoints->removeTieFromScore(jumpPoint);
+        jumpPoints->undoRemoveTieFromScore(jumpPoint);
     }
 }
 
@@ -643,7 +628,7 @@ void TieJumpPointList::toggleJumpPoint(const String& id)
     score->startCmd(TranslatableString("engraving", "Toggle partial tie"));
     const bool checked = end->active();
     if (checked) {
-        removeTieFromScore(end);
+        undoRemoveTieFromScore(end);
     } else {
         addTieToScore(end);
     }
@@ -684,7 +669,7 @@ void TieJumpPointList::addTieToScore(TieJumpPoint* jumpPoint)
     score->undoAddElement(pt);
 }
 
-void TieJumpPointList::removeTieFromScore(TieJumpPoint* jumpPoint)
+void TieJumpPointList::undoRemoveTieFromScore(TieJumpPoint* jumpPoint)
 {
     Note* note = jumpPoint->note();
     Score* score = note ? note->score() : nullptr;

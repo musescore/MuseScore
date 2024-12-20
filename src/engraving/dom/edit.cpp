@@ -2764,7 +2764,6 @@ void Score::deleteItem(EngravingItem* el)
                     Measure* lmeasure = lscore->tick2measure(m2->tick());
                     if (lmeasure) {
                         lmeasure->undoChangeProperty(Pid::REPEAT_START, false);
-                        lmeasure->removePartialTiesOnRepeatChange(false);
                     }
                 }
             } else if (bl->barLineType() == BarLineType::END_REPEAT) {
@@ -2773,7 +2772,6 @@ void Score::deleteItem(EngravingItem* el)
                     Measure* lmeasure = lscore->tick2measure(m2->tick());
                     if (lmeasure) {
                         lmeasure->undoChangeProperty(Pid::REPEAT_END, false);
-                        lmeasure->removePartialTiesOnRepeatChange(true);
                     }
                 }
             } else {
@@ -2922,15 +2920,11 @@ void Score::deleteItem(EngravingItem* el)
         if (el->isTie()) {
             Tie* tie = toTie(el);
             if (tie->tieJumpPoints()) {
-                tie->removeTiesFromJumpPoints();
+                tie->undoRemoveTiesFromJumpPoints();
             }
             if (tie->jumpPoint()) {
                 tie->updateStartTieOnRemoval();
             }
-        }
-
-        if (el->isVolta()) {
-            toVolta(el)->startMeasure()->removePartialTiesOnRepeatChange(false);
         }
 
         undoRemoveElement(el);
@@ -7172,6 +7166,62 @@ void Score::undoChangeMeasureRepeatCount(Measure* m, int newCount, staff_idx_t s
         int currCount = linkedMeasure->measureRepeatCount(linkedStaffIdx);
         if (currCount != newCount) {
             linkedScore->undo(new ChangeMeasureRepeatCount(linkedMeasure, newCount, linkedStaffIdx));
+        }
+    }
+}
+
+void Score::doUndoRemoveStaleTieJumpPoints(Tie* tie)
+{
+    std::vector<Tie*> oldTies;
+    for (TieJumpPoint* jumpPoint : *tie->tieJumpPoints()) {
+        if (jumpPoint->followingNote()) {
+            continue;
+        }
+        oldTies.push_back(jumpPoint->endTie());
+    }
+
+    tie->updatePossibleJumpPoints();
+
+    for (Tie* oldTie : oldTies) {
+        auto findEndTie = [&oldTie](const TieJumpPoint* jumpPoint) {
+            return jumpPoint->endTie() == oldTie;
+        };
+
+        if (std::find_if((*tie->tieJumpPoints()).begin(), (*tie->tieJumpPoints()).end(),
+                         findEndTie) != (*tie->tieJumpPoints()).end()) {
+            continue;
+        }
+        startCmd(TranslatableString("engraving", "Remove stale partial tie"));
+        undoRemoveElement(oldTie);
+        endCmd();
+        // These changes should be merged with the change in repeat structure which caused the ties to become invalid
+        undoStack()->mergeCommands(undoStack()->currentIndex() - 2);
+    }
+}
+
+void Score::undoRemoveStaleTieJumpPoints()
+{
+    size_t tracks = nstaves() * VOICES;
+    Measure* m = firstMeasure();
+    if (!m) {
+        return;
+    }
+
+    SegmentType st = SegmentType::ChordRest;
+    for (Segment* s = m->first(st); s; s = s->next1(st)) {
+        for (track_idx_t i = 0; i < tracks; ++i) {
+            EngravingItem* e = s->element(i);
+            if (e == 0 || !e->isChord()) {
+                continue;
+            }
+            Chord* c = toChord(e);
+            for (Note* n : c->notes()) {
+                if (!n->tieFor()) {
+                    continue;
+                }
+
+                doUndoRemoveStaleTieJumpPoints(n->tieFor());
+            }
         }
     }
 }
