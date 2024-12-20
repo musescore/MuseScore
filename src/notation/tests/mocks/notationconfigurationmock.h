@@ -185,9 +185,19 @@ public:
 
     MOCK_METHOD(bool, useNewPercussionPanel, (), (const, override));
     MOCK_METHOD(void, setUseNewPercussionPanel, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, useNewPercussionPanelChanged, (), (const, override));
 
     MOCK_METHOD(bool, autoShowPercussionPanel, (), (const, override));
     MOCK_METHOD(void, setAutoShowPercussionPanel, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, autoShowPercussionPanelChanged, (), (const, override));
+
+    MOCK_METHOD(bool, showPercussionPanelPadSwapDialog, (), (const, override));
+    MOCK_METHOD(void, setShowPercussionPanelPadSwapDialog, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, showPercussionPanelPadSwapDialogChanged, (), (const, override));
+
+    MOCK_METHOD(bool, percussionPanelMoveMidiNotesAndShortcuts, (), (const, override));
+    MOCK_METHOD(void, setPercussionPanelMoveMidiNotesAndShortcuts, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, percussionPanelMoveMidiNotesAndShortcutsChanged, (), (const, override));
 
     MOCK_METHOD(muse::io::path_t, styleFileImportPath, (), (const, override));
     MOCK_METHOD(void, setStyleFileImportPath, (const muse::io::path_t&), (override));

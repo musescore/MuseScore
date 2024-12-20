@@ -153,6 +153,7 @@ void NotationModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://notation/parts"), "MuseScore/NotationScene/PartsDialog.qml");
         ir->registerQmlUri(Uri("musescore://notation/selectmeasurescount"), "MuseScore/NotationScene/SelectMeasuresCountDialog.qml");
         ir->registerQmlUri(Uri("musescore://notation/editgridsize"), "MuseScore/NotationScene/EditGridSizeDialog.qml");
+        ir->registerQmlUri(Uri("musescore://notation/percussionpanelpadswap"), "MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml");
     }
 }
 

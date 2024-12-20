@@ -460,6 +460,8 @@ public:
         LV_CHORD_OUTSIDE = 0xF47F,
         LV_CHORD_INSIDE = 0xF480,
 
+        PERCUSSION = 0xF479,
+
         SYSTEM_LOCK_START = 0xF481,
         SYSTEM_LOCK_END = 0xF482,
 

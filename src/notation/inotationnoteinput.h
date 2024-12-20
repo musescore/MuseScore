@@ -37,14 +37,14 @@ public:
 
     virtual NoteInputState state() const = 0;
 
-    virtual void startNoteInput() = 0;
+    virtual void startNoteInput(bool focusNotation = true) = 0;
     virtual void endNoteInput(bool resetState = false) = 0;
     virtual void toggleNoteInputMethod(NoteInputMethod method) = 0;
     virtual void addNote(NoteName noteName, NoteAddingMode addingMode) = 0;
     virtual void padNote(const Pad& pad)  = 0;
     virtual muse::Ret putNote(const muse::PointF& pos, bool replace, bool insert) = 0;
     virtual void removeNote(const muse::PointF& pos) = 0;
-    virtual muse::async::Notification noteInputStarted() const = 0;
+    virtual muse::async::Channel</*focusNotation*/ bool> noteInputStarted() const = 0;
     virtual muse::async::Notification noteInputEnded() const = 0;
 
     virtual void addTuplet(const TupletOptions& options) = 0;

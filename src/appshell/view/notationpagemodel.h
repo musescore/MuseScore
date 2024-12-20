@@ -85,7 +85,7 @@ private:
 
     void toggleDock(const QString& name);
 
-    void updateDrumsetPanelVisibility(); // TODO: Delete when the new percussion panel is finished
+    void updateDrumsetPanelVisibility();
     void updatePercussionPanelVisibility();
 };
 }

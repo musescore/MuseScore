@@ -66,6 +66,11 @@ void NotationPageModel::init()
 
     updateDrumsetPanelVisibility();
     updatePercussionPanelVisibility();
+
+    notationConfiguration()->useNewPercussionPanelChanged().onNotify(this, [this]() {
+        updateDrumsetPanelVisibility();
+        updatePercussionPanelVisibility();
+    });
 }
 
 QString NotationPageModel::notationToolBarName() const
@@ -150,7 +155,6 @@ void NotationPageModel::onNotationChanged()
         return;
     }
 
-    // TODO: Delete when the new percussion panel is finished
     if (!notationConfiguration()->useNewPercussionPanel()) {
         INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
         noteInput->stateChanged().onNotify(this, [this]() {
@@ -235,7 +239,6 @@ void NotationPageModel::updatePercussionPanelVisibility()
     };
 
     // This should never be open when the old drumset panel is in use...
-    // TODO: Delete when the new percussion panel is finished
     if (!notationConfiguration()->useNewPercussionPanel()) {
         setPercussionPanelOpen(false);
         return;

@@ -178,6 +178,9 @@ void PreferencesModel::load(const QString& currentPageId)
         makeItem("midi-device-mapping", QT_TRANSLATE_NOOP("appshell/preferences", "MIDI mappings"), IconCode::Code::MIDI_INPUT,
                  "Preferences/MidiDeviceMappingPreferencesPage.qml"),
 
+        makeItem("percussion", QT_TRANSLATE_NOOP("appshell/preferences", "Percussion"), IconCode::Code::PERCUSSION,
+                 "Preferences/PercussionPreferencesPage.qml"),
+
         makeItem("import", QT_TRANSLATE_NOOP("appshell/preferences", "Import"), IconCode::Code::IMPORT,
                  "Preferences/ImportPreferencesPage.qml"),
 

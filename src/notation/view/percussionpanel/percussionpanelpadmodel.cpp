@@ -29,14 +29,14 @@ PercussionPanelPadModel::PercussionPanelPadModel(QObject* parent)
 {
 }
 
-void PercussionPanelPadModel::setInstrumentName(const QString& instrumentName)
+void PercussionPanelPadModel::setPadName(const QString& padName)
 {
-    if (m_instrumentName == instrumentName) {
+    if (m_padName == padName) {
         return;
     }
 
-    m_instrumentName = instrumentName;
-    emit instrumentNameChanged();
+    m_padName = padName;
+    emit padNameChanged();
 }
 
 void PercussionPanelPadModel::setKeyboardShortcut(const QString& keyboardShortcut)
