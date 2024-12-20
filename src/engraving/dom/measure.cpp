@@ -3226,7 +3226,7 @@ double Measure::firstNoteRestSegmentX(bool leading) const
                     width = std::max(width, endBl->pos().x() + endBl->ldata()->bbox().right());
                 }
 
-                const double startBlMargin = style().styleMM(Sid::lineEndToSystemEndDistance);
+                const double startBlMargin = style().styleMM(Sid::lineEndToBarlineDistance);
 
                 return std::min(endBlSeg->measure()->pos().x() + endBlSeg->pos().x() + width + startBlMargin, noteRestPos);
             } else {
@@ -3241,7 +3241,7 @@ double Measure::firstNoteRestSegmentX(bool leading) const
 double Measure::endingXForOpenEndedLines() const
 {
     const System* sys = system();
-    double margin = style().styleMM(Sid::lineEndToSystemEndDistance);
+    double margin = style().styleMM(Sid::lineEndToBarlineDistance);
     double systemEndX = sys->ldata()->bbox().width();
 
     Segment* lastSeg = last();

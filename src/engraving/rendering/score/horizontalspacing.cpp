@@ -1398,7 +1398,7 @@ void HorizontalSpacing::computeHangingLineWidth(const Segment* firstSeg, const S
 
         const double headerLineMargin = systemHeaderGap ? otherSeg->style().styleMM(Sid::headerToLineStartDistance)
                                         : otherSeg->style().styleMM(Sid::repeatBarlineDotSeparation);
-        const double endSystemMargin = style.styleMM(Sid::lineEndToSystemEndDistance);
+        const double endSystemMargin = style.styleMM(Sid::lineEndToBarlineDistance);
 
         for (const Note* note : toChord(cr)->notes()) {
             const bool lineBack = note->spannerBack().size()

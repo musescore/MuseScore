@@ -520,6 +520,8 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
                    || tag == "defaultFontSpatiumDependent"
                    || tag == "usePre_3_6_defaults") {
             e.skipCurrentElement(); // obsolete
+        } else if (tag == "lineEndToSystemEndDistance") { // renamed in 4.5
+            set(Sid::lineEndToBarlineDistance, Spatium(e.readDouble()));
         } else if (!readProperties(e)) {
             e.unknown();
         }
