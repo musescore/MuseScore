@@ -71,7 +71,7 @@ public:
     void toggleJumpPoint(const String& id);
 
     void addTieToScore(TieJumpPoint* jumpPoint);
-    void removeTieFromScore(TieJumpPoint* jumpPoint);
+    void undoRemoveTieFromScore(TieJumpPoint* jumpPoint);
 
     std::vector<TieJumpPoint*>::iterator begin() { return m_jumpPoints.begin(); }
     std::vector<TieJumpPoint*>::const_iterator begin() const { return m_jumpPoints.begin(); }
@@ -178,9 +178,9 @@ public:
     double scalingFactor() const override;
 
     // Outgoing ties before repeats
-    void collectPossibleJumpPoints();
+    void updatePossibleJumpPoints();
     void addTiesToJumpPoints();
-    void removeTiesFromJumpPoints();
+    void undoRemoveTiesFromJumpPoints();
     virtual bool allJumpPointsInactive() const;
     virtual TieJumpPointList* tieJumpPoints();
     virtual const TieJumpPointList* tieJumpPoints() const;

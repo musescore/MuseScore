@@ -940,16 +940,10 @@ void Measure::remove(EngravingItem* e)
         }
         break;
 
-    case ElementType::MARKER:
-        removePartialTiesOnRepeatChange(muse::contains(Marker::RIGHT_MARKERS, toMarker(e)->markerType()));
-
-        if (!el().remove(e)) {
-            LOGD("Measure(%p)::remove(%s,%p) not found", this, e->typeName(), e);
-        }
-        break;
     case ElementType::JUMP:
-        removePartialTiesOnRepeatChange(true);
         setRepeatJump(false);
+    // fall through
+    case ElementType::MARKER:
     case ElementType::HBOX:
         if (!el().remove(e)) {
             LOGD("Measure(%p)::remove(%s,%p) not found", this, e->typeName(), e);
@@ -1028,34 +1022,6 @@ void Measure::change(EngravingItem* o, EngravingItem* n)
 
 void Measure::spatiumChanged(double /*oldValue*/, double /*newValue*/)
 {
-}
-
-void Measure::removePartialTiesOnRepeatChange(bool outgoing)
-{
-    Segment* seg = first(SegmentType::ChordRest);
-    while (seg) {
-        for (EngravingItem* item : seg->elist()) {
-            if (!item || !item->isChord()) {
-                continue;
-            }
-
-            Chord* chord = toChord(item);
-
-            for (Note* note : chord->notes()) {
-                Tie* tie = outgoing ? note->tieFor() : note->tieBack();
-                if (!tie) {
-                    continue;
-                }
-
-                if (outgoing) {
-                    tie->removeTiesFromJumpPoints();
-                } else if (tie->isPartialTie()) {
-                    score()->doUndoRemoveElement(tie);
-                }
-            }
-        }
-        seg = seg->next(SegmentType::ChordRest);
-    }
 }
 
 //-------------------------------------------------------------------

@@ -391,7 +391,7 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
                 Tie* tie = toTie(sp);
                 item->setTieBack(tie);
                 if (pasteMode) {
-                    tie->collectPossibleJumpPoints();
+                    tie->updatePossibleJumpPoints();
                 }
             } else {
                 bool isNoteAnchoredTextLine = sp->isNoteLine() && toNoteLine(sp)->enforceMinLength();

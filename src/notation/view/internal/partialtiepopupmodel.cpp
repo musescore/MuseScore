@@ -116,7 +116,7 @@ void PartialTiePopupModel::load()
         return;
     }
 
-    tieItem->collectPossibleJumpPoints();
+    tieItem->updatePossibleJumpPoints();
 
     m_items = makeMenuItems();
 
