@@ -8141,6 +8141,8 @@ void MusicXmlParserNotations::technical()
             m_notations.push_back(notation);
         } else if (m_e.name() == "harmonic") {
             harmonic();
+        } else if (m_e.name() == "harmon-mute") {
+            harmonMute();
         } else if (m_e.name() == "other-technical") {
             otherTechnical();
         } else {
@@ -8188,6 +8190,44 @@ void MusicXmlParserNotations::harmonic()
     if (notation.subType() != "") {
         m_notations.push_back(notation);
     }
+}
+
+//---------------------------------------------------------
+//   harmonMute
+//---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/note/notations/technical/harmon-mute node.
+ */
+
+void MusicXmlParserNotations::harmonMute()
+{
+    engraving::SymId mute = SymId::brassHarmonMuteClosed;
+    const std::vector<XmlStreamReader::Attribute> attributes = m_e.attributes();
+    while (m_e.readNextStartElement()) {
+        String name = String::fromAscii(m_e.name().ascii());
+        if (name == "harmon-closed") {
+            const String location = m_e.attribute("location");
+            String value = m_e.readText();
+            if (value == "yes") {
+                mute = SymId::brassHarmonMuteClosed;
+            } else if (value == "no") {
+                mute = SymId::brassHarmonMuteStemOpen;
+            } else if (value == "half") {
+                if (location == "left") {
+                    mute = SymId::brassHarmonMuteStemHalfLeft;
+                } else if (location == "right") {
+                    mute = SymId::brassHarmonMuteStemHalfRight;
+                } else {
+                    m_logger->logError(String(u"unsupported harmon-closed location '%1'").arg(location), &m_e);
+                    mute = SymId::brassHarmonMuteStemHalfLeft;
+                }
+            }
+        } else {
+            m_e.skipCurrentElement();
+        }
+    }
+    m_notations.push_back(Notation::notationWithAttributes(u"harmon-closed", attributes, u"technical", mute));
 }
 
 //---------------------------------------------------------
