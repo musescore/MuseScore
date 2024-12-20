@@ -24,6 +24,7 @@
 
 #include "dom/note.h"
 #include "dom/spanner.h"
+#include "dom/laissezvib.h"
 
 #include "playback/utils/arrangementutils.h"
 #include "internal/spannersmetaparser.h"
@@ -69,6 +70,7 @@ void NoteArticulationsParser::doParse(const EngravingItem* item, const Rendering
     parsePersistentMeta(ctx, result);
     parseGhostNote(note, ctx, result);
     parseNoteHead(note, ctx, result);
+    parseLaissezVibrer(note, ctx, result);
     parseSpanners(note, ctx, result);
 }
 
@@ -190,6 +192,33 @@ void NoteArticulationsParser::parseNoteHead(const Note* note, const RenderingCon
                                                      ctx.nominalTimestamp,
                                                      ctx.nominalDuration), result);
     }
+}
+
+void NoteArticulationsParser::parseLaissezVibrer(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
+{
+    const LaissezVib* laissezVib = note->laissezVib();
+    if (!laissezVib || !laissezVib->playSpanner()) {
+        return;
+    }
+
+    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(mpe::ArticulationType::LaissezVibrer);
+    if (pattern.empty()) {
+        return;
+    }
+
+    const Measure* noteMeasure = note->findMeasure();
+    if (!noteMeasure) {
+        return;
+    }
+
+    const Measure* nextMeasure = noteMeasure->nextMeasure();
+    const Fraction endTick = nextMeasure ? nextMeasure->endTick() : noteMeasure->endTick();
+    const timestamp_t endTime = timestampFromTicks(ctx.score, endTick.ticks() + ctx.positionTickOffset);
+
+    appendArticulationData(mpe::ArticulationMeta(mpe::ArticulationType::LaissezVibrer,
+                                                 pattern,
+                                                 ctx.nominalTimestamp,
+                                                 endTime - ctx.nominalTimestamp), result);
 }
 
 void NoteArticulationsParser::parseSpanners(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)

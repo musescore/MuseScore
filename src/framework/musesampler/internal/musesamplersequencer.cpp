@@ -79,6 +79,8 @@ static const std::unordered_map<ArticulationType, ms_NoteArticulation> ARTICULAT
     { ArticulationType::ColLegno, ms_NoteArticulation_ColLegno },
     { ArticulationType::SulTasto, ms_NoteArticulation_SulTasto },
     { ArticulationType::SulPont, ms_NoteArticulation_SulPonticello },
+
+    { ArticulationType::LaissezVibrer, ms_NoteArticulation_LaissezVibrer },
 };
 
 static const std::unordered_map<ArticulationType, ms_NoteHead> NOTEHEAD_TYPES = {
