@@ -6394,7 +6394,7 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
     ldata->setShape(shape);
 
     if (item->isAboveStaves()) {
-        ldata->setPosY(item->yPos() * scale.height() - 2 * spatium * (1 + scale.height()) - 0.5 * numDist);
+        ldata->setPosY(-2 * spatium * (1 + scale.height()) - 0.5 * numDist);
         if (style.styleB(Sid::timeSigCenterOnBarline)) {
             ldata->setPosX(-0.5 * ldata->bbox().width());
         }
@@ -6402,6 +6402,8 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
         double top = ldata->bbox().top();
         ldata->setPosY(-top);
     }
+
+    ldata->moveY(item->yPos() * scale.height());
 }
 
 void TLayout::layoutTimeTickAnchor(TimeTickAnchor* item, LayoutContext&)
