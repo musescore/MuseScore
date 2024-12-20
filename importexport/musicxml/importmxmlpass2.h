@@ -266,7 +266,6 @@ private:
       QString _dynamicsPlacement;
       QStringList _dynamicsList;
       std::vector<Notation> _notations;
-      SymId _breath { SymId::noSym };
       bool _hasTremolo = false;
       QString _tremoloType;
       int _tremoloNr { 0 };
