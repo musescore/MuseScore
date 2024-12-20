@@ -162,7 +162,7 @@ AudioResourceMetaList MuseSamplerResolver::resolveResources() const
         }
 
         AudioResourceMeta meta;
-        meta.id = buildMuseInstrumentId(internalCategory, internalName, instrumentId).toStdString();
+        meta.id = std::to_string(instrumentId);
         meta.type = AudioResourceType::MuseSamplerSoundPack;
         meta.vendor = "MuseSounds";
         meta.attributes = {
@@ -307,7 +307,7 @@ std::vector<Instrument> MuseSamplerResolver::instruments() const
         JsonObject obj = doc.rootObject();
 
         Instrument instrument;
-        instrument.id = buildMuseInstrumentId(instrument.category, instrument.name, id);
+        instrument.id = String::number(id);
         instrument.soundId = String::fromUtf8(m_libHandler->getMpeSoundId(msInstrument));
         instrument.musicXmlId = String::fromUtf8(m_libHandler->getMusicXmlSoundId(msInstrument));
         instrument.name = obj.value("FriendlyName").toString();
@@ -335,14 +335,4 @@ void MuseSamplerResolver::loadSoundPresetAttributes(SoundPresetAttributes& attri
             attributes.emplace(PLAYING_TECHNIQUES_ATTRIBUTE, std::move(articulation));
         }
     }
-}
-
-String MuseSamplerResolver::buildMuseInstrumentId(const String& category, const String& name, int uniqueId) const
-{
-    StringList list;
-    list.append(category);
-    list.append(name);
-    list.append(String::fromStdString(std::to_string(uniqueId)));
-
-    return list.join(u"\\");
 }
