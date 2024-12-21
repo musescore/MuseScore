@@ -38,6 +38,11 @@ void NoteInputPreferencesModel::load()
     });
 }
 
+bool NoteInputPreferencesModel::enableMidiInput() const
+{
+    return notationConfiguration()->isMidiInputEnabled();
+}
+
 bool NoteInputPreferencesModel::advanceToNextNoteOnKeyRelease() const
 {
     return shortcutsConfiguration()->advanceToNextNoteOnKeyRelease();
@@ -78,9 +83,24 @@ bool NoteInputPreferencesModel::playChordSymbolWhenEditing() const
     return playbackConfiguration()->playHarmonyWhenEditing();
 }
 
+bool NoteInputPreferencesModel::playNotesOnMidiInput() const
+{
+    return playbackConfiguration()->playNotesOnMidiInput();
+}
+
 bool NoteInputPreferencesModel::dynamicsApplyToAllVoices() const
 {
     return engravingConfiguration()->dynamicsApplyToAllVoices();
+}
+
+void NoteInputPreferencesModel::setEnableMidiInput(bool value)
+{
+    if (value == enableMidiInput()) {
+        return;
+    }
+
+    notationConfiguration()->setIsMidiInputEnabled(value);
+    emit enableMidiInputChanged(value);
 }
 
 void NoteInputPreferencesModel::setAdvanceToNextNoteOnKeyRelease(bool value)
@@ -161,6 +181,16 @@ void NoteInputPreferencesModel::setPlayChordSymbolWhenEditing(bool value)
 
     playbackConfiguration()->setPlayHarmonyWhenEditing(value);
     emit playChordSymbolWhenEditingChanged(value);
+}
+
+void NoteInputPreferencesModel::setPlayNotesOnMidiInput(bool value)
+{
+    if (value == playNotesOnMidiInput()) {
+        return;
+    }
+
+    playbackConfiguration()->setPlayNotesOnMidiInput(value);
+    emit playNotesOnMidiInputChanged(value);
 }
 
 void NoteInputPreferencesModel::setDynamicsApplyToAllVoices(bool value)
