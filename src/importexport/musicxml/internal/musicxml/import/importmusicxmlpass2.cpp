@@ -8151,6 +8151,8 @@ void MusicXmlParserNotations::technical()
             harmonic();
         } else if (m_e.name() == "harmon-mute") {
             harmonMute();
+        } else if (m_e.name() == "hole") {
+            hole();
         } else if (m_e.name() == "other-technical") {
             otherTechnical();
         } else {
@@ -8236,6 +8238,44 @@ void MusicXmlParserNotations::harmonMute()
         }
     }
     m_notations.push_back(Notation::notationWithAttributes(u"harmon-closed", attributes, u"technical", mute));
+}
+
+//---------------------------------------------------------
+//   harmonMute
+//---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/note/notations/technical/hole node.
+ */
+
+void MusicXmlParserNotations::hole()
+{
+    engraving::SymId hole = SymId::noSym;
+    const std::vector<XmlStreamReader::Attribute> attributes = m_e.attributes();
+    while (m_e.readNextStartElement()) {
+        String name = String::fromAscii(m_e.name().ascii());
+        if (name == "hole-closed") {
+            const String location = m_e.attribute("location");
+            String value = m_e.readText();
+            if (value == "yes") {
+                hole = SymId::windClosedHole;
+            } else if (value == "no") {
+                hole = SymId::windOpenHole;
+            } else if (value == "half") {
+                if (location == "bottom") {
+                    hole = SymId::windHalfClosedHole2;
+                } else if (location == "right") {
+                    hole = SymId::windHalfClosedHole1;
+                } else {
+                    m_logger->logError(String(u"unsupported hole-closed location '%1'").arg(location), &m_e);
+                    hole = SymId::windHalfClosedHole3;
+                }
+            }
+        } else {
+            m_e.skipCurrentElement();
+        }
+    }
+    m_notations.push_back(Notation::notationWithAttributes(u"hole-closed", attributes, u"technical", hole));
 }
 
 //---------------------------------------------------------

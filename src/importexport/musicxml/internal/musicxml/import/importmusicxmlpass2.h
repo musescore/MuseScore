@@ -357,6 +357,7 @@ private:
     void arpeggio();
     void harmonic();
     void harmonMute();
+    void hole();
     void articulations();
     void dynamics();
     void fermata();
