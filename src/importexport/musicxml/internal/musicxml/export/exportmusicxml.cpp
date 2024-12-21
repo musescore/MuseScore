@@ -3929,6 +3929,21 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
         noteheadTagname += String(u" smufl=\"%1\"").arg(String::fromAscii(noteheadName.ascii()));
         xml.tagRaw(noteheadTagname, "other");
     }
+
+    if (note->headScheme() == NoteHeadScheme::HEAD_PITCHNAME 
+        || note->headScheme() == NoteHeadScheme::HEAD_PITCHNAME_GERMAN
+        || note->headScheme() == NoteHeadScheme::HEAD_SOLFEGE
+        || note->headScheme() == NoteHeadScheme::HEAD_SOLFEGE_FIXED) {
+        static const std::regex nameparts("^note([A-Z][a-z]*)(Sharp|Flat)?");
+        AsciiStringView noteheadName = SymNames::nameForSymId(note->noteHead());
+        StringList matches = String::fromAscii(noteheadName.ascii()).search(nameparts, { 1, 2 }, SplitBehavior::SkipEmptyParts);
+        xml.startElement("notehead-text");
+        xml.tag("display-text", matches.at(0));
+        if (matches.size() > 1) {
+            xml.tag("accidental-text", matches.at(1).toLower());
+        }
+        xml.endElement();
+    }
 }
 
 //---------------------------------------------------------
