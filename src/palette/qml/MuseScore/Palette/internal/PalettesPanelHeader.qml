@@ -174,6 +174,7 @@ Item {
         objectName: "SearchPalettesField"
         width: parent.width
 
+        navigation.name: "SearchControl"
         navigation.panel: navPanel
         navigation.order: 3
         navigation.onActiveChanged: {
