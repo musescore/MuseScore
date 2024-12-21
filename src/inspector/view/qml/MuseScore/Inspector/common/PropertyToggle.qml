@@ -58,5 +58,13 @@ RowLayout {
         Layout.fillWidth: true
 
         horizontalAlignment: Text.AlignLeft
+
+        MouseArea {
+            anchors.fill: parent
+
+            onClicked: {
+                toggle.toggled()
+            }
+        }
     }
 }
