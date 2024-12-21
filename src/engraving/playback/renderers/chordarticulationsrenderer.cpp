@@ -22,10 +22,14 @@
 
 #include "chordarticulationsrenderer.h"
 
+#include "bendsrenderer.h"
 #include "noterenderer.h"
+#include "gracechordcontext.h"
 #include "ornamentsrenderer.h"
 #include "tremolorenderer.h"
 #include "arpeggiorenderer.h"
+
+#include "playback/utils/expressionutils.h"
 
 using namespace mu::engraving;
 using namespace muse;
@@ -36,6 +40,8 @@ const mpe::ArticulationTypeSet& ChordArticulationsRenderer::supportedTypes()
     static mpe::ArticulationTypeSet SUPPORTED_TYPES;
 
     if (SUPPORTED_TYPES.empty()) {
+        SUPPORTED_TYPES = GRACE_NOTE_ARTICULATION_TYPES;
+
         SUPPORTED_TYPES.insert(OrnamentsRenderer::supportedTypes().cbegin(),
                                OrnamentsRenderer::supportedTypes().cend());
         SUPPORTED_TYPES.insert(TremoloRenderer::supportedTypes().cbegin(),
@@ -54,14 +60,49 @@ void ChordArticulationsRenderer::doRender(const EngravingItem* item, const mpe::
         return;
     }
 
-    const Chord* chord = toChord(item);
+    for (const auto& type : ctx.commonArticulations) {
+        if (muse::contains(GRACE_NOTE_ARTICULATION_TYPES, type.first)) {
+            renderChordWithGraceChords(toChord(item), type.first, ctx, result);
+            return;
+        }
+    }
 
+    renderChord(toChord(item), ctx, result);
+}
+
+void ChordArticulationsRenderer::renderChord(const Chord* chord, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result)
+{
     if (renderChordArticulations(chord, ctx, result)) {
         return;
     }
 
+    const bool supportsMultibend = ctx.profile->contains(ArticulationType::Multibend);
+
     for (const Note* note: chord->notes()) {
-        NoteRenderer::render(note, ctx, result);
+        if (supportsMultibend && BendsRenderer::isMultibendPart(note)) {
+            BendsRenderer::render(note, ctx, result);
+        } else {
+            NoteRenderer::render(note, ctx, result);
+        }
+    }
+}
+
+void ChordArticulationsRenderer::renderChordWithGraceChords(const Chord* chord, const muse::mpe::ArticulationType type,
+                                                            const RenderingContext& ctx,
+                                                            muse::mpe::PlaybackEventList& result)
+{
+    const GraceChordCtx graceChordCtx = GraceChordCtx::buildCtx(chord, type, ctx);
+
+    if (isGraceNotePlacedBeforePrincipalNote(type)) {
+        for (const auto& pair : graceChordCtx.graceChordCtxList) {
+            renderChord(pair.first, pair.second, result);
+        }
+        renderChord(chord, graceChordCtx.principalChordCtx, result);
+    } else {
+        renderChord(chord, graceChordCtx.principalChordCtx, result);
+        for (const auto& pair : graceChordCtx.graceChordCtxList) {
+            renderChord(pair.first, pair.second, result);
+        }
     }
 }
 

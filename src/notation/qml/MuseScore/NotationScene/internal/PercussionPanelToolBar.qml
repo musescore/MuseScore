@@ -70,7 +70,7 @@ Item {
             enabled: root.model.enabled
 
             icon: IconCode.EDIT
-            text: qsTrc("notation", "Write")
+            text: qsTrc("notation/percussion", "Write")
             orientation: Qt.Horizontal
             accentButton: root.model.currentPanelMode === PanelMode.WRITE
             backgroundRadius: 0
@@ -137,7 +137,7 @@ Item {
             enabled: root.model.enabled
 
             icon: IconCode.PLAY
-            text: qsTrc("notation", "Preview")
+            text: qsTrc("notation/percussion", "Preview")
             orientation: Qt.Horizontal
             accentButton: root.model.currentPanelMode === PanelMode.SOUND_PREVIEW
             backgroundRadius: 0
@@ -198,7 +198,7 @@ Item {
         enabled: root.model.enabled
 
         visible: root.model.currentPanelMode === PanelMode.EDIT_LAYOUT
-        text: qsTrc("notation", "Finish editing")
+        text: qsTrc("notation/percussion", "Finish editing")
         orientation: Qt.Horizontal
         accentButton: true
 
@@ -230,7 +230,7 @@ Item {
             enabled: root.model.enabled
 
             icon: IconCode.SPLIT_VIEW_HORIZONTAL
-            text: qsTrc("notation", "Layout")
+            text: qsTrc("notation/percussion", "Layout")
             orientation: Qt.Horizontal
 
             navigation.panel: rightSideNavPanel
@@ -251,7 +251,7 @@ Item {
 
         FlatButton {
             enabled: root.model.enabled && root.model.currentPanelMode !== PanelMode.EDIT_LAYOUT
-            text: qsTrc("notation", "Customize kit")
+            text: qsTrc("notation/percussion", "Customize kit")
             orientation: Qt.Horizontal
 
             navigation.panel: rightSideNavPanel

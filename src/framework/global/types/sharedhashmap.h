@@ -123,6 +123,12 @@ public:
         return m_dataPtr->find(key);
     }
 
+    iterator find(const KeyType& key) noexcept
+    {
+        ensureDetach();
+        return m_dataPtr->find(key);
+    }
+
     bool contains(const KeyType& key) const noexcept
     {
         return find(key) != end();

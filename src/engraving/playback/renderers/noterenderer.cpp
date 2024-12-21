@@ -93,7 +93,20 @@ void NoteRenderer::render(const Note* note, const RenderingContext& ctx, mpe::Pl
         return;
     }
 
-    result.emplace_back(buildNoteEvent(std::move(noteCtx)));
+    mpe::NoteEvent ev = buildNoteEvent(std::move(noteCtx));
+
+    if (ev.arrangementCtx().actualTimestamp >= 0) {
+        result.emplace_back(std::move(ev));
+    } else {
+        ArrangementContext arrCtx = ev.arrangementCtx();
+        arrCtx.actualDuration = arrCtx.actualDuration + arrCtx.actualTimestamp;
+        arrCtx.actualTimestamp = 0;
+
+        PitchContext pitchCtx = ev.pitchCtx();
+        ExpressionContext expCtx = ev.expressionCtx();
+
+        result.emplace_back(mpe::NoteEvent(std::move(arrCtx), std::move(pitchCtx), std::move(expCtx)));
+    }
 }
 
 void NoteRenderer::renderTiedNotes(const Note* firstNote, NominalNoteCtx& firstNoteCtx)

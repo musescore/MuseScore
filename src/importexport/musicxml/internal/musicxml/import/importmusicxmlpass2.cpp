@@ -1325,29 +1325,43 @@ static void addOtherOrnamentToChord(const Notation& notation, ChordRest* cr)
 
 static bool convertArticulationToSymId(const String& mxmlName, SymId& id)
 {
-    // map MusicXML articulation name to MuseScore symbol
+    // map MusicXML notations name to MuseScore symbol
     static const std::map<String, SymId> map {
-        { u"accent",          SymId::articAccentAbove },
-        { u"staccatissimo",   SymId::articStaccatissimoWedgeAbove },
-        { u"staccato",        SymId::articStaccatoAbove },
-        { u"tenuto",          SymId::articTenutoAbove },
-        { u"strong-accent",   SymId::articMarcatoAbove },
-        { u"delayed-turn",    SymId::ornamentTurn },
-        { u"turn",            SymId::ornamentTurn },
-        { u"inverted-turn",   SymId::ornamentTurnInverted },
-        { u"stopped",         SymId::brassMuteClosed },
-        { u"up-bow",          SymId::stringsUpBow },
-        { u"down-bow",        SymId::stringsDownBow },
-        { u"detached-legato", SymId::articTenutoStaccatoAbove },
-        { u"spiccato",        SymId::articStaccatissimoAbove },
-        { u"snap-pizzicato",  SymId::pluckedSnapPizzicatoAbove },
-        { u"schleifer",       SymId::ornamentPrecompSlide },
-        { u"open",            SymId::brassMuteOpen },
-        { u"open-string",     SymId::brassMuteOpen },
-        { u"thumb-position",  SymId::stringsThumbPosition },
-        { u"soft-accent",     SymId::articSoftAccentAbove },
-        { u"stress",          SymId::articStressAbove },
-        { u"unstress",        SymId::articUnstressAbove }
+        // ornaments
+        { u"delayed-turn",           SymId::ornamentTurn },
+        { u"inverted-turn",          SymId::ornamentTurnInverted },
+        { u"vertical-turn",          SymId::ornamentTurnUp },
+        { u"inverted-vertical-turn", SymId::ornamentTurnUpS },
+        { u"turn",                   SymId::ornamentTurn },
+        { u"schleifer",              SymId::ornamentPrecompSlide },
+        { u"haydn",                  SymId::ornamentHaydn },
+        // articulations
+        { u"accent",                 SymId::articAccentAbove },
+        { u"strong-accent",          SymId::articMarcatoAbove },
+        { u"staccato",               SymId::articStaccatoAbove },
+        { u"tenuto",                 SymId::articTenutoAbove },
+        { u"detached-legato",        SymId::articTenutoStaccatoAbove },
+        { u"staccatissimo",          SymId::articStaccatissimoWedgeAbove },
+        { u"spiccato",               SymId::articStaccatissimoAbove },
+        { u"stress",                 SymId::articStressAbove },
+        { u"unstress",               SymId::articUnstressAbove },
+        { u"soft-accent",            SymId::articSoftAccentAbove },
+        // technical
+        { u"up-bow",                 SymId::stringsUpBow },
+        { u"down-bow",               SymId::stringsDownBow },
+        { u"open-string",            SymId::brassMuteOpen },
+        { u"thumb-position",         SymId::stringsThumbPosition },
+        { u"double-tongue",          SymId::doubleTongueAbove },
+        { u"triple-tongue",          SymId::tripleTongueAbove },
+        { u"stopped",                SymId::brassMuteClosed },
+        { u"snap-pizzicato",         SymId::pluckedSnapPizzicatoAbove },
+        { u"heel",                   SymId::keyboardPedalHeel1 },
+        { u"toe",                    SymId::keyboardPedalToe1 },
+        { u"fingernails",            SymId::pluckedWithFingernails },
+        { u"brass-bend",             SymId::brassBend },
+        { u"flip",                   SymId::brassFlip },
+        { u"smear",                  SymId::brassSmear },
+        { u"open",                   SymId::brassMuteOpen }
     };
 
     auto it = map.find(mxmlName);
@@ -7998,30 +8012,38 @@ void MusicXmlParserNotations::articulations()
             }
             m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "breath-mark") {
+            std::vector<XmlStreamReader::Attribute> attributes = m_e.attributes();
             String value = m_e.readText();
+            engraving::SymId breath = SymId::noSym;
             if (value == "tick") {
-                m_breath = SymId::breathMarkTick;
+                breath = SymId::breathMarkTick;
             } else if (value == "upbow") {
-                m_breath = SymId::breathMarkUpbow;
+                breath = SymId::breathMarkUpbow;
             } else if (value == "salzedo") {
-                m_breath = SymId::breathMarkSalzedo;
+                breath = SymId::breathMarkSalzedo;
             } else {
                 // Use comma as the default symbol
-                m_breath = SymId::breathMarkComma;
+                breath = SymId::breathMarkComma;
             }
+            m_notations.push_back(Notation::notationWithAttributes(u"breath",
+                                                                   attributes, u"articulations", breath));
         } else if (m_e.name() == "caesura") {
+            std::vector<XmlStreamReader::Attribute> attributes = m_e.attributes();
             String value = m_e.readText();
+            engraving::SymId caesura = SymId::noSym;
             if (value == "curved") {
-                m_breath = SymId::caesuraCurved;
+                caesura = SymId::caesuraCurved;
             } else if (value == "short") {
-                m_breath = SymId::caesuraShort;
+                caesura = SymId::caesuraShort;
             } else if (value == "thick") {
-                m_breath = SymId::caesuraThick;
+                caesura = SymId::caesuraThick;
             } else if (value == "single") {
-                m_breath = SymId::caesuraSingleStroke;
+                caesura = SymId::caesuraSingleStroke;
             } else { // Use as the default symbol
-                m_breath = SymId::caesura;
+                caesura = SymId::caesura;
             }
+            m_notations.push_back(Notation::notationWithAttributes(u"breath",
+                                                                   attributes, u"articulations", caesura));
         } else if (m_e.name() == "doit"
                    || m_e.name() == "falloff"
                    || m_e.name() == "plop"
@@ -8127,6 +8149,8 @@ void MusicXmlParserNotations::technical()
             m_notations.push_back(notation);
         } else if (m_e.name() == "harmonic") {
             harmonic();
+        } else if (m_e.name() == "harmon-mute") {
+            harmonMute();
         } else if (m_e.name() == "other-technical") {
             otherTechnical();
         } else {
@@ -8174,6 +8198,44 @@ void MusicXmlParserNotations::harmonic()
     if (notation.subType() != "") {
         m_notations.push_back(notation);
     }
+}
+
+//---------------------------------------------------------
+//   harmonMute
+//---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/note/notations/technical/harmon-mute node.
+ */
+
+void MusicXmlParserNotations::harmonMute()
+{
+    engraving::SymId mute = SymId::brassHarmonMuteClosed;
+    const std::vector<XmlStreamReader::Attribute> attributes = m_e.attributes();
+    while (m_e.readNextStartElement()) {
+        String name = String::fromAscii(m_e.name().ascii());
+        if (name == "harmon-closed") {
+            const String location = m_e.attribute("location");
+            String value = m_e.readText();
+            if (value == "yes") {
+                mute = SymId::brassHarmonMuteClosed;
+            } else if (value == "no") {
+                mute = SymId::brassHarmonMuteStemOpen;
+            } else if (value == "half") {
+                if (location == "left") {
+                    mute = SymId::brassHarmonMuteStemHalfLeft;
+                } else if (location == "right") {
+                    mute = SymId::brassHarmonMuteStemHalfRight;
+                } else {
+                    m_logger->logError(String(u"unsupported harmon-closed location '%1'").arg(location), &m_e);
+                    mute = SymId::brassHarmonMuteStemHalfLeft;
+                }
+            }
+        } else {
+            m_e.skipCurrentElement();
+        }
+    }
+    m_notations.push_back(Notation::notationWithAttributes(u"harmon-closed", attributes, u"technical", mute));
 }
 
 //---------------------------------------------------------
@@ -8541,18 +8603,23 @@ static void addWavyLine(ChordRest* cr, const Fraction& tick,
 //   addBreath
 //---------------------------------------------------------
 
-static void addBreath(ChordRest* cr, const Fraction& tick, SymId breath)
+static void addBreath(const Notation& notation, ChordRest* cr)
 {
-    if (breath != SymId::noSym && !cr->isGrace()) {
-        const Fraction& ticks = cr->ticks();
-        Segment* const seg = cr->measure()->getSegment(SegmentType::Breath, tick + ticks);
-        Breath* const b = Factory::createBreath(seg);
-        // b->setTrack(trk + voice); TODO check next line
-        b->setTrack(cr->track());
-        b->setSymId(breath);
-        b->setPlacement(b->propertyDefault(Pid::PLACEMENT).value<PlacementV>());
-        seg->add(b);
+    const SymId breath = notation.symId();
+    const Color color = Color::fromString(notation.attribute(u"color"));
+    const String placement = notation.attribute(u"placement");
+
+    Segment* const seg = cr->measure()->getSegment(SegmentType::Breath, cr->tick() + cr->ticks());
+    Breath* const b = Factory::createBreath(seg);
+    // b->setTrack(trk + voice); TODO check next line
+    b->setTrack(cr->track());
+    b->setSymId(breath);
+    if (color.isValid()) {
+        b->setColor(color);
     }
+    b->setPlacement(placement == u"below" ? PlacementV::BELOW : PlacementV::ABOVE);
+    b->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    seg->add(b);
 }
 
 //---------------------------------------------------------
@@ -8563,20 +8630,21 @@ static void addChordLine(const Notation& notation, Note* note,
                          MusicXmlLogger* logger, const XmlStreamReader* const xmlreader)
 {
     const String chordLineType = notation.subType();
+    const Color color = Color::fromString(notation.attribute(u"color"));
     if (!chordLineType.empty()) {
         if (note) {
             ChordLine* const chordline = Factory::createChordLine(note->chord());
             if (chordLineType == u"falloff") {
                 chordline->setChordLineType(ChordLineType::FALL);
-            }
-            if (chordLineType == u"doit") {
+            } else if (chordLineType == u"doit") {
                 chordline->setChordLineType(ChordLineType::DOIT);
-            }
-            if (chordLineType == u"plop") {
+            } else if (chordLineType == u"plop") {
                 chordline->setChordLineType(ChordLineType::PLOP);
-            }
-            if (chordLineType == u"scoop") {
+            } else if (chordLineType == u"scoop") {
                 chordline->setChordLineType(ChordLineType::SCOOP);
+            }
+            if (color.isValid()) {
+                chordline->setColor(color);
             }
             note->chord()->add(chordline);
         } else {
@@ -8740,7 +8808,9 @@ void MusicXmlParserNotations::parse()
 void MusicXmlParserNotations::addNotation(const Notation& notation, ChordRest* const cr, Note* const note)
 {
     if (notation.symId() != SymId::noSym) {
-        if (notation.name() == u"fermata") {
+        if (notation.name() == u"breath") {
+            addBreath(notation, cr);
+        } else if (notation.name() == u"fermata") {
             addFermataToChord(notation, cr);
 
             // Terminate tempo line
@@ -8782,7 +8852,6 @@ void MusicXmlParserNotations::addToScore(ChordRest* const cr, Note* const note, 
                                          DelayedArpMap& delayedArps)
 {
     addArpeggio(cr, m_arpeggioType, m_arpeggioNo, arpMap, delayedArps);
-    addBreath(cr, cr->tick(), m_breath);
     addWavyLine(cr, Fraction::fromTicks(tick), m_wavyLineNo, m_wavyLineType, spanners, trills, m_logger, &m_e);
 
     for (const Notation& notation : m_notations) {

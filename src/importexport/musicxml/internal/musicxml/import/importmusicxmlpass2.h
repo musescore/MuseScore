@@ -356,6 +356,7 @@ private:
     void addTechnical(const Notation& notation, engraving::Note* note);
     void arpeggio();
     void harmonic();
+    void harmonMute();
     void articulations();
     void dynamics();
     void fermata();
@@ -378,7 +379,6 @@ private:
     muse::String m_dynamicsPlacement;
     engraving::StringList m_dynamicsList;
     std::vector<Notation> m_notations;
-    engraving::SymId m_breath { engraving::SymId::noSym };
     bool m_hasTremolo = false;
     muse::String m_tremoloType;
     int m_tremoloNr = 0;

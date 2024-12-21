@@ -26,8 +26,11 @@
 
 #include "engraving/dom/factory.h"
 #include "engraving/dom/undo.h"
+#include "engraving/dom/utils.h"
 
-static const QString INSTRUMENT_NAMES_CODE("percussion-instrument-names");
+#include "audio/audioutils.h"
+
+static const QString PAD_NAMES_CODE("percussion-pad-names");
 static const QString NOTATION_PREVIEW_CODE("percussion-notation-preview");
 static const QString EDIT_LAYOUT_CODE("percussion-edit-layout");
 static const QString RESET_LAYOUT_CODE("percussion-reset-layout");
@@ -40,6 +43,7 @@ PercussionPanelModel::PercussionPanelModel(QObject* parent)
     : QObject(parent)
 {
     m_padListModel = new PercussionPanelPadListModel(this);
+    qApp->installEventFilter(this);
 }
 
 bool PercussionPanelModel::enabled() const
@@ -54,6 +58,20 @@ void PercussionPanelModel::setEnabled(bool enabled)
     }
     m_enabled = enabled;
     emit enabledChanged();
+}
+
+QString PercussionPanelModel::soundTitle() const
+{
+    return m_soundTitle;
+}
+
+void PercussionPanelModel::setSoundTitle(const QString& soundTitle)
+{
+    if (m_soundTitle == soundTitle) {
+        return;
+    }
+    m_soundTitle = soundTitle;
+    emit soundTitleChanged();
 }
 
 PanelMode::Mode PercussionPanelModel::currentPanelMode() const
@@ -107,25 +125,25 @@ void PercussionPanelModel::init()
 
 QList<QVariantMap> PercussionPanelModel::layoutMenuItems() const
 {
-    const TranslatableString instrumentNamesTitle("notation", "Instrument names");
+    const TranslatableString padNamesTitle("notation/percussion", "Pad names");
     // Using IconCode for this instead of "checked" because we want the tick to display on the left
-    const int instrumentNamesIcon = static_cast<int>(m_useNotationPreview ? IconCode::Code::NONE : IconCode::Code::TICK_RIGHT_ANGLE);
+    const int padNamesIcon = static_cast<int>(m_useNotationPreview ? IconCode::Code::NONE : IconCode::Code::TICK_RIGHT_ANGLE);
 
-    const TranslatableString notationPreviewTitle("notation", "Notation preview");
+    const TranslatableString notationPreviewTitle("notation/percussion", "Notation preview");
     // Using IconCode for this instead of "checked" because we want the tick to display on the left
     const int notationPreviewIcon = static_cast<int>(m_useNotationPreview ? IconCode::Code::TICK_RIGHT_ANGLE : IconCode::Code::NONE);
 
     const TranslatableString editLayoutTitle = m_currentPanelMode == PanelMode::Mode::EDIT_LAYOUT
-                                               ? TranslatableString("notation", "Finish editing")
-                                               : TranslatableString("notation", "Edit layout");
+                                               ? TranslatableString("notation/percussion", "Finish editing")
+                                               : TranslatableString("notation/percussion", "Edit layout");
     const int editLayoutIcon = static_cast<int>(IconCode::Code::CONFIGURE);
 
-    const TranslatableString resetLayoutTitle("notation", "Reset layout");
+    const TranslatableString resetLayoutTitle("notation/percussion", "Reset layout");
     const int resetLayoutIcon = static_cast<int>(IconCode::Code::UNDO);
 
     QList<QVariantMap> menuItems = {
-        { { "id", INSTRUMENT_NAMES_CODE },
-            { "title", instrumentNamesTitle.qTranslated() }, { "icon", instrumentNamesIcon }, { "enabled", true } },
+        { { "id", PAD_NAMES_CODE },
+            { "title", padNamesTitle.qTranslated() }, { "icon", padNamesIcon }, { "enabled", true } },
 
         { { "id", NOTATION_PREVIEW_CODE },
             { "title", notationPreviewTitle.qTranslated() }, { "icon", notationPreviewIcon }, { "enabled", true } },
@@ -144,7 +162,7 @@ QList<QVariantMap> PercussionPanelModel::layoutMenuItems() const
 
 void PercussionPanelModel::handleMenuItem(const QString& itemId)
 {
-    if (itemId == INSTRUMENT_NAMES_CODE) {
+    if (itemId == PAD_NAMES_CODE) {
         setUseNotationPreview(false);
     } else if (itemId == NOTATION_PREVIEW_CODE) {
         setUseNotationPreview(true);
@@ -192,17 +210,24 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
         if (!model) {
             continue;
         }
+
         const int row = i / m_padListModel->numColumns();
         const int column = i % m_padListModel->numColumns();
+
         engraving::DrumInstrument& drum = updatedDrumset->drum(model->pitch());
+
         drum.panelRow = row;
         drum.panelColumn = column;
+
+        const QString& shortcut = model->keyboardShortcut();
+        drum.shortcut = shortcut.isEmpty() ? '\0' : shortcut.toLatin1().at(0);
     }
 
     // Return if nothing changed after edit...
     if (inst->drumset() && updatedDrumset
         && *inst->drumset() == *updatedDrumset) {
         setCurrentPanelMode(m_panelModeToRestore);
+        m_padListModel->focusLastActivePad();
         return;
     }
 
@@ -213,6 +238,7 @@ void PercussionPanelModel::finishEditing(bool discardChanges)
     undoStack->commitChanges();
 
     setCurrentPanelMode(m_panelModeToRestore);
+    m_padListModel->focusLastActivePad();
 }
 
 void PercussionPanelModel::customizeKit()
@@ -232,6 +258,7 @@ void PercussionPanelModel::setUpConnections()
         }
 
         m_padListModel->setDrumset(drumset);
+        updateSoundTitle(currentTrackId());
     };
 
     if (!notation()) {
@@ -263,6 +290,52 @@ void PercussionPanelModel::setUpConnections()
         case PanelMode::Mode::SOUND_PREVIEW: playPitch(pitch);
         }
     });
+
+    if (!audioSettings()) {
+        return;
+    }
+
+    audioSettings()->trackInputParamsChanged().onReceive(this, [this](InstrumentTrackId trackId) {
+        if (trackId != currentTrackId()) {
+            return;
+        }
+        updateSoundTitle(trackId);
+    });
+}
+
+void PercussionPanelModel::updateSoundTitle(const InstrumentTrackId& trackId)
+{
+    if (!trackId.isValid()) {
+        setSoundTitle(QString());
+        return;
+    }
+
+    const audio::AudioInputParams& params = audioSettings()->trackInputParams(trackId);
+
+    const QString name = muse::audio::audioSourceName(params).toQString();
+    const QString category = muse::audio::audioSourceCategoryName(params).toQString();
+    if (name.isEmpty() || category.isEmpty()) {
+        setSoundTitle(QString());
+        return;
+    }
+
+    setSoundTitle(category + ": " + name);
+}
+
+bool PercussionPanelModel::eventFilter(QObject* watched, QEvent* event)
+{
+    // Finish editing on escape...
+    if (m_currentPanelMode != PanelMode::Mode::EDIT_LAYOUT || event->type() != QEvent::Type::ShortcutOverride
+        || m_padListModel->swapInProgress()) {
+        return QObject::eventFilter(watched, event);
+    }
+    QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+    if (!keyEvent || keyEvent->key() != Qt::Key_Escape) {
+        return QObject::eventFilter(watched, event);
+    }
+    finishEditing();
+    event->setAccepted(true);
+    return true;
 }
 
 void PercussionPanelModel::writePitch(int pitch)
@@ -274,7 +347,7 @@ void PercussionPanelModel::writePitch(int pitch)
 
     undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Enter percussion note"));
 
-    interaction()->noteInput()->startNoteInput();
+    interaction()->noteInput()->startNoteInput(/*focusNotation*/ false);
 
     score()->addMidiPitch(pitch, false, /*transpose*/ false);
     undoStack->commitChanges();
@@ -346,6 +419,27 @@ void PercussionPanelModel::resetLayout()
     undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Reset percussion panel layout"));
     score()->undo(new engraving::ChangeDrumset(inst, &defaultLayout, staff->part()));
     undoStack->commitChanges();
+}
+
+InstrumentTrackId PercussionPanelModel::currentTrackId() const
+{
+    if (!interaction()) {
+        return InstrumentTrackId();
+    }
+
+    const NoteInputState inputState = interaction()->noteInput()->state();
+    const Staff* staff = inputState.staff;
+
+    if (!staff || !staff->part() || !inputState.segment) {
+        return InstrumentTrackId();
+    }
+
+    return { staff->part()->id(), staff->part()->instrumentId(inputState.segment->tick()) };
+}
+
+const project::IProjectAudioSettingsPtr PercussionPanelModel::audioSettings() const
+{
+    return globalContext()->currentProject() ? globalContext()->currentProject()->audioSettings() : nullptr;
 }
 
 const INotationPtr PercussionPanelModel::notation() const
