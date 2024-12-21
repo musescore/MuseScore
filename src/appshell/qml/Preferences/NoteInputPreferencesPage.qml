@@ -43,6 +43,7 @@ PreferencesPage {
         spacing: root.sectionsSpacing
 
         NoteInputSection {
+            enableMidiInput: noteInputModel.enableMidiInput
             advanceToNextNote: noteInputModel.advanceToNextNoteOnKeyRelease
             colorNotes: noteInputModel.colorNotesOutsideOfUsablePitchRange
             warnGuitarBends: noteInputModel.warnGuitarBends
@@ -50,6 +51,10 @@ PreferencesPage {
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
+
+            onEnableMidiInputChangeRequested: function(midi) {
+                noteInputModel.enableMidiInput = midi
+            }
 
             onAdvanceToNextNoteChangeRequested: function(advance) {
                 noteInputModel.advanceToNextNoteOnKeyRelease = advance
@@ -72,10 +77,10 @@ PreferencesPage {
 
         NoteInputPlaySection {
             playNotesWhenEditing: noteInputModel.playNotesWhenEditing
-            playChordWhenEditing: noteInputModel.playChordWhenEditing
-            playNotesOnMidiInput: noteInputModel.playNotesOnMidiInput
-            playChordSymbolWhenEditing: noteInputModel.playChordSymbolWhenEditing
             notePlayDurationMilliseconds: noteInputModel.notePlayDurationMilliseconds
+            playChordWhenEditing: noteInputModel.playChordWhenEditing
+            playChordSymbolWhenEditing: noteInputModel.playChordSymbolWhenEditing          
+            playNotesOnMidiInput: noteInputModel.playNotesOnMidiInput
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2

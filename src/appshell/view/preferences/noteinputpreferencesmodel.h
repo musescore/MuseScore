@@ -38,6 +38,8 @@ class NoteInputPreferencesModel : public QObject, public muse::Injectable, publi
     Q_OBJECT
 
     Q_PROPERTY(
+        bool enableMidiInput READ enableMidiInput WRITE setEnableMidiInput NOTIFY enableMidiInputChanged)
+    Q_PROPERTY(
         bool advanceToNextNoteOnKeyRelease READ advanceToNextNoteOnKeyRelease WRITE setAdvanceToNextNoteOnKeyRelease NOTIFY advanceToNextNoteOnKeyReleaseChanged)
     Q_PROPERTY(
         bool colorNotesOutsideOfUsablePitchRange READ colorNotesOutsideOfUsablePitchRange WRITE setColorNotesOutsideOfUsablePitchRange NOTIFY colorNotesOutsideOfUsablePitchRangeChanged)
@@ -47,12 +49,12 @@ class NoteInputPreferencesModel : public QObject, public muse::Injectable, publi
         int delayBetweenNotesInRealTimeModeMilliseconds READ delayBetweenNotesInRealTimeModeMilliseconds WRITE setDelayBetweenNotesInRealTimeModeMilliseconds NOTIFY delayBetweenNotesInRealTimeModeMillisecondsChanged)
 
     Q_PROPERTY(bool playNotesWhenEditing READ playNotesWhenEditing WRITE setPlayNotesWhenEditing NOTIFY playNotesWhenEditingChanged)
-    Q_PROPERTY(bool playNotesOnMidiInput READ playNotesOnMidiInput WRITE setPlayNotesOnMidiInput NOTIFY playNotesOnMidiInputChanged)
     Q_PROPERTY(
         int notePlayDurationMilliseconds READ notePlayDurationMilliseconds WRITE setNotePlayDurationMilliseconds NOTIFY notePlayDurationMillisecondsChanged)
     Q_PROPERTY(bool playChordWhenEditing READ playChordWhenEditing WRITE setPlayChordWhenEditing NOTIFY playChordWhenEditingChanged)
     Q_PROPERTY(
         bool playChordSymbolWhenEditing READ playChordSymbolWhenEditing WRITE setPlayChordSymbolWhenEditing NOTIFY playChordSymbolWhenEditingChanged)
+    Q_PROPERTY(bool playNotesOnMidiInput READ playNotesOnMidiInput WRITE setPlayNotesOnMidiInput NOTIFY playNotesOnMidiInputChanged)
     Q_PROPERTY(
         bool dynamicsApplyToAllVoices READ dynamicsApplyToAllVoices WRITE setDynamicsApplyToAllVoices NOTIFY dynamicsApplyToAllVoicesChanged FINAL)
 
@@ -66,6 +68,7 @@ public:
 
     Q_INVOKABLE void load();
 
+    bool enableMidiInput() const;
     bool advanceToNextNoteOnKeyRelease() const;
     bool colorNotesOutsideOfUsablePitchRange() const;
     bool warnGuitarBends() const;
@@ -80,10 +83,12 @@ public:
     bool dynamicsApplyToAllVoices() const;
 
 public slots:
+    void setEnableMidiInput(bool value);
     void setAdvanceToNextNoteOnKeyRelease(bool value);
     void setColorNotesOutsideOfUsablePitchRange(bool value);
     void setWarnGuitarBends(bool value);
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delay);
+
     void setPlayNotesWhenEditing(bool value);
     void setNotePlayDurationMilliseconds(int duration);
     void setPlayChordWhenEditing(bool value);
@@ -92,10 +97,12 @@ public slots:
     void setDynamicsApplyToAllVoices(bool value);
 
 signals:
+    void enableMidiInputChanged(bool value);
     void advanceToNextNoteOnKeyReleaseChanged(bool value);
     void colorNotesOutsideOfUsablePitchRangeChanged(bool value);
     void warnGuitarBendsChanged(bool value);
     void delayBetweenNotesInRealTimeModeMillisecondsChanged(int delay);
+
     void playNotesWhenEditingChanged(bool value);
     void notePlayDurationMillisecondsChanged(int duration);
     void playChordWhenEditingChanged(bool value);
