@@ -182,6 +182,16 @@ async::Channel<bool> PlaybackConfiguration::playChordWhenEditingChanged() const
     return m_playChordWhenEditingChanged;
 }
 
+bool PlaybackConfiguration::playNotesOnMidiInput() const
+{
+    return settings()->value(PLAY_NOTES_ON_MIDI_INPUT).toBool();
+}
+
+void PlaybackConfiguration::setPlayNotesOnMidiInput(bool value)
+{
+    settings()->setSharedValue(PLAY_NOTES_ON_MIDI_INPUT, Val(value));
+}
+
 bool PlaybackConfiguration::playHarmonyWhenEditing() const
 {
     return settings()->value(PLAY_HARMONY_WHEN_EDITING).toBool();

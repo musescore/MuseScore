@@ -640,6 +640,11 @@ void NotationConfiguration::setIsMidiInputEnabled(bool enabled)
     settings()->setSharedValue(IS_MIDI_INPUT_ENABLED, Val(enabled));
 }
 
+muse::async::Notification NotationConfiguration::isMidiInputEnabledChanged() const
+{
+    return m_isMidiInputEnabledChanged;
+}
+
 bool NotationConfiguration::isAutomaticallyPanEnabled() const
 {
     return settings()->value(IS_AUTOMATICALLY_PAN_ENABLED).toBool();

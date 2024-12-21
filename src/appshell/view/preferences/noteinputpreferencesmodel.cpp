@@ -68,6 +68,10 @@ void NoteInputPreferencesModel::load()
     engravingConfiguration()->dynamicsApplyToAllVoicesChanged().onReceive(this, [this](bool value) {
         emit dynamicsApplyToAllVoicesChanged(value);
     });
+
+    notationConfiguration()->isMidiInputEnabledChanged().onNotify(this, [this]() {
+        emit enableMidiInputChanged(playNotesWhenEditing());
+    });
 }
 
 bool NoteInputPreferencesModel::enableMidiInput() const
