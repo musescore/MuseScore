@@ -125,7 +125,8 @@ bool NoteInputPreferencesModel::dynamicsApplyToAllVoices() const
     return engravingConfiguration()->dynamicsApplyToAllVoices();
 }
 
-void NoteInputPreferencesModel::setEnableMidiInput(bool value) {
+void NoteInputPreferencesModel::setEnableMidiInput(bool value)
+{
     if (value == enableMidiInput()) {
         return;
     }
