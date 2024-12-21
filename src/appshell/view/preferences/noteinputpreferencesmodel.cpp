@@ -36,6 +36,10 @@ void NoteInputPreferencesModel::load()
     playbackConfiguration()->playNotesWhenEditingChanged().onNotify(this, [this]() {
         emit playNotesWhenEditingChanged(playNotesWhenEditing());
     });
+
+    notationConfiguration()->isMidiInputEnabledChanged().onNotify(this, [this]() {
+        emit enableMidiInputChanged(playNotesWhenEditing());
+    });
 }
 
 bool NoteInputPreferencesModel::enableMidiInput() const

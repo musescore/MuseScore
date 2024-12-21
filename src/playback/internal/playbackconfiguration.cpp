@@ -146,16 +146,6 @@ void PlaybackConfiguration::setPlayNotesWhenEditing(bool value)
     settings()->setSharedValue(PLAY_NOTES_WHEN_EDITING, Val(value));
 }
 
-bool PlaybackConfiguration::playNotesOnMidiInput() const
-{
-    return settings()->value(PLAY_NOTES_ON_MIDI_INPUT).toBool();
-}
-
-void PlaybackConfiguration::setPlayNotesOnMidiInput(bool value)
-{
-    settings()->setSharedValue(PLAY_NOTES_ON_MIDI_INPUT, Val(value));
-}
-
 muse::async::Notification PlaybackConfiguration::playNotesWhenEditingChanged() const
 {
     return m_playNotesWhenEditingChanged;
@@ -169,6 +159,16 @@ bool PlaybackConfiguration::playChordWhenEditing() const
 void PlaybackConfiguration::setPlayChordWhenEditing(bool value)
 {
     settings()->setSharedValue(PLAY_CHORD_WHEN_EDITING, Val(value));
+}
+
+bool PlaybackConfiguration::playNotesOnMidiInput() const
+{
+    return settings()->value(PLAY_NOTES_ON_MIDI_INPUT).toBool();
+}
+
+void PlaybackConfiguration::setPlayNotesOnMidiInput(bool value)
+{
+    settings()->setSharedValue(PLAY_NOTES_ON_MIDI_INPUT, Val(value));
 }
 
 bool PlaybackConfiguration::playHarmonyWhenEditing() const
