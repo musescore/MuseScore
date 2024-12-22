@@ -13826,32 +13826,32 @@ Frette %1 sur les cordes %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2013"/>
         <source>Half doubling on low G</source>
-        <translation>Demi-doublé sur le Sol grave</translation>
+        <translation>Demi-doublé sur Sol grave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2014"/>
         <source>Half doubling on low A</source>
-        <translation>Demi-doublé sur le La grave</translation>
+        <translation>Demi-doublé sur La grave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2015"/>
         <source>Half doubling on B</source>
-        <translation>Demi-doublé sur le Si</translation>
+        <translation>Demi-doublé sur Si</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2016"/>
         <source>Half doubling on C</source>
-        <translation>Demi-doublé sur le Do</translation>
+        <translation>Demi-doublé sur Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2017"/>
         <source>Half doubling on D</source>
-        <translation>Demi-doublé sur le Ré</translation>
+        <translation>Demi-doublé sur Ré</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2018"/>
         <source>Half doubling on E</source>
-        <translation>Demi-doublé sur le Mi</translation>
+        <translation>Demi-doublé sur Mi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2019"/>
@@ -13861,48 +13861,48 @@ Frette %1 sur les cordes %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2024"/>
         <source>Doubling on high G</source>
-        <translation>Doublé sur le Sol aigu</translation>
+        <translation>Doublé sur Sol aigu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2025"/>
         <source>Doubling on high A</source>
-        <translation>Doublé sur le La aigu</translation>
+        <translation>Doublé sur La aigu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2028"/>
         <source>Half strike on low A</source>
-        <translation>Demi frappe sur le La grave</translation>
+        <translation>Demi frappe sur La grave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2029"/>
         <source>Half strike on B</source>
-        <translation>Demi frappe sur le Si</translation>
+        <translation>Demi frappe sur Si</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2030"/>
         <source>Half strike on C</source>
-        <translation>Demi frappe sur le Do</translation>
+        <translation>Demi frappe sur Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2031"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2032"/>
         <source>Half strike on D</source>
-        <translation>Demi frappe sur le Ré</translation>
+        <translation>Demi frappe sur Ré</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2033"/>
         <source>Half strike on E</source>
-        <translation>Demi frappe sur le Mi</translation>
+        <translation>Demi frappe sur Mi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2034"/>
         <source>Half strike on F</source>
-        <translation>Demi frappe sur le Fa</translation>
+        <translation>Demi frappe sur Fa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2035"/>
         <source>Half strike on high G</source>
-        <translation>Demi frappe sur le Sol aigu</translation>
+        <translation>Demi frappe sur Sol aigu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2038"/>
@@ -13914,185 +13914,185 @@ Frette %1 sur les cordes %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2041"/>
         <source>Half D throw</source>
-        <translation>Half D throw</translation>
+        <translation>Demi throw sur Ré</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2044"/>
         <source>Doubling on low G</source>
-        <translation>Doublé sur le Sol grave</translation>
+        <translation>Doublé sur Sol grave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2045"/>
         <source>Doubling on low A</source>
-        <translation>Doublé sur le La grave</translation>
+        <translation>Doublé sur La grave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2046"/>
         <source>Doubling on B</source>
-        <translation>Doublé sur le Si</translation>
+        <translation>Doublé sur Si</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2047"/>
         <source>Doubling on C</source>
-        <translation>Doublé sur le Do</translation>
+        <translation>Doublé sur Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2048"/>
         <source>Doubling on D</source>
-        <translation>Doublé sur le Ré</translation>
+        <translation>Doublé sur Ré</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2049"/>
         <source>Doubling on E</source>
-        <translation>Doublé sur le Mi</translation>
+        <translation>Doublé sur Mi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2050"/>
         <source>Doubling on F</source>
-        <translation>Doublé sur le Fa</translation>
+        <translation>Doublé sur Fa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2053"/>
         <source>Thumb doubling on low G</source>
-        <translation>Doublage avec le pouce sur le Sol grave</translation>
+        <translation>Doublé avec le pouce sur Sol grave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2054"/>
         <source>Thumb doubling on low A</source>
-        <translation>Doublage avec le pouce sur le La grave</translation>
+        <translation>Doublé avec le pouce sur La grave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2055"/>
         <source>Thumb doubling on B</source>
-        <translation>Doublage avec le pouce sur  le Si</translation>
+        <translation>Doublé avec le pouce sur Si</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2056"/>
         <source>Thumb doubling on C</source>
-        <translation>Doublage avec le pouce sur le Do</translation>
+        <translation>Doublé avec le pouce sur Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2057"/>
         <source>Thumb doubling on D</source>
-        <translation>Doublage avec le pouce sur le Ré</translation>
+        <translation>Doublé avec le pouce sur Ré</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2058"/>
         <source>Thumb doubling on E</source>
-        <translation>Doublage avec le pouce sur le Mi</translation>
+        <translation>Doublé avec le pouce sur Mi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2059"/>
         <source>Thumb doubling on F</source>
-        <translation>Doublage avec le pouce sur le Fa</translation>
+        <translation>Doublé avec le pouce sur Fa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2063"/>
         <source>G grace note on low A</source>
-        <translation>Sol en appogiature d&apos;un La grave</translation>
+        <translation>Sol en appogiature sur La grave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2064"/>
         <source>G grace note on B</source>
-        <translation>Sol en appogiature d&apos;un Si</translation>
+        <translation>Sol en appogiature sur Si</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2065"/>
         <source>G grace note on C</source>
-        <translation>Sol en appogiature d&apos;un Do</translation>
+        <translation>Sol en appogiature sur Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2066"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2067"/>
         <source>G grace note on D</source>
-        <translation>Sol en appogiature d&apos;un Ré</translation>
+        <translation>Sol en appogiature sur Ré</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2068"/>
         <source>G grace note on E</source>
-        <translation>Sol en appogiature d&apos;un Mi</translation>
+        <translation>Sol en appogiature sur Mi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2069"/>
         <source>G grace note on F</source>
-        <translation>Sol en appogiature d&apos;un Fa</translation>
+        <translation>Sol en appogiature sur Fa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2072"/>
         <source>Double strike on low A</source>
-        <translation>Double frappe sur le La grave</translation>
+        <translation>Double frappe sur La grave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2073"/>
         <source>Double strike on B</source>
-        <translation>Double frappe sur le Si</translation>
+        <translation>Double frappe sur Si</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2074"/>
         <source>Double strike on C</source>
-        <translation>Double frappe sur le Do</translation>
+        <translation>Double frappe sur Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2075"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2076"/>
         <source>Double strike on D</source>
-        <translation>Double frappe sur le Ré</translation>
+        <translation>Double frappe sur Ré</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2077"/>
         <source>Double strike on E</source>
-        <translation>Double frappe sur le Mi</translation>
+        <translation>Double frappe sur Mi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2078"/>
         <source>Double strike on F</source>
-        <translation>Double frappe sur le Fa</translation>
+        <translation>Double frappe sur Fa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2079"/>
         <source>Double strike on high G</source>
-        <translation>Double frappe sur le Sol aigu</translation>
+        <translation>Double frappe sur Sol aigu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2080"/>
         <source>Double strike on high A</source>
-        <translation>Double frappe sur le La aigu</translation>
+        <translation>Double frappe sur La aigu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2083"/>
         <source>Thumb strike on low A</source>
-        <translation>Frappe du pouce sur le La grave</translation>
+        <translation>Frappe du pouce sur La grave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2084"/>
         <source>Thumb strike on B</source>
-        <translation>Frappe du pouce sur le Si</translation>
+        <translation>Frappe du pouce sur Si</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2085"/>
         <source>Thumb strike on C</source>
-        <translation>Frappe du pouce sur le Do</translation>
+        <translation>Frappe du pouce sur Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2086"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2087"/>
         <source>Thumb strike on D</source>
-        <translation>Frappe du pouce sur le Ré</translation>
+        <translation>Frappe du pouce sur Ré</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2088"/>
         <source>Thumb strike on E</source>
-        <translation>Frappe du pouce sur le Mi</translation>
+        <translation>Frappe du pouce sur Mi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2089"/>
         <source>Thumb strike on F</source>
-        <translation>Frappe du pouce sur le Fa</translation>
+        <translation>Frappe du pouce sur Fa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2090"/>
         <source>Thumb strike on high G</source>
-        <translation>Frappe du pouce sur le Sol aigu</translation>
+        <translation>Frappe du pouce sur Sol aigu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2097"/>
@@ -14105,12 +14105,12 @@ Frette %1 sur les cordes %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2098"/>
         <source>D throw</source>
-        <translation>D throw</translation>
+        <translation>Throw sur Ré</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2099"/>
         <source>Half heavy D throw</source>
-        <translation>Half heavy D throw</translation>
+        <translation>Throw moyen sur Ré</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2100"/>
@@ -14128,48 +14128,48 @@ Frette %1 sur les cordes %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2105"/>
         <source>Heavy D throw</source>
-        <translation>Heavy D throw</translation>
+        <translation>Throw lourd sur Ré</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2110"/>
         <source>Half double strike on low A</source>
-        <translation>Half double strike on low A</translation>
+        <translation>Frappe demi doublé sur La grave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2111"/>
         <source>Half double strike on B</source>
-        <translation>Half double strike on B</translation>
+        <translation>Frappe demi doublé sur Si</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2112"/>
         <source>Half double strike on C</source>
-        <translation>Half double strike on C</translation>
+        <translation>Frappe demi doublé sur Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2113"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2114"/>
         <source>Half double strike on D</source>
-        <translation>Half double strike on D</translation>
+        <translation>Frappe demi doublé sur Ré</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2115"/>
         <source>Half double strike on E</source>
-        <translation>Half double strike on E</translation>
+        <translation>Frappe demi doublé sur Mi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2116"/>
         <source>Half double strike on F</source>
-        <translation>Half double strike on F</translation>
+        <translation>Frappe demi doublé sur Fa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2117"/>
         <source>Half double strike on high G</source>
-        <translation>Half double strike on high G</translation>
+        <translation>Frappe demi doublé sur sol aigu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2118"/>
         <source>Half double strike on high A</source>
-        <translation>Half double strike on high A</translation>
+        <translation>Frappe demi doublé sur La aigu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2121"/>
@@ -14215,136 +14215,136 @@ Frette %1 sur les cordes %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2132"/>
         <source>Half pele on low A</source>
-        <translation>Half pele on low A</translation>
+        <translation>Demi pele sur La grave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2133"/>
         <source>Half pele on B</source>
-        <translation>Half pele on B</translation>
+        <translation>Demi pele sur Si</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2134"/>
         <source>Half pele on C</source>
-        <translation>Half pele on C</translation>
+        <translation>Demi pele sur Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2135"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2136"/>
         <source>Half pele on D</source>
-        <translation>Half pele on D</translation>
+        <translation>Demi pele sur Ré</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2137"/>
         <source>Half pele on E</source>
-        <translation>Half pele on E</translation>
+        <translation>Demi pele sur Mi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2138"/>
         <source>Half pele on F</source>
-        <translation>Half pele on F</translation>
+        <translation>Demi pele sur Fa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2139"/>
         <source>Half pele on high G</source>
-        <translation>Half pele on high G</translation>
+        <translation>Demi pele sur Sol aigu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2142"/>
         <source>G grace note grip on low A</source>
-        <translation>Sol en appogiature de La grave</translation>
+        <translation>Sol en appogiature sur La grave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2143"/>
         <source>G grace note grip on B</source>
-        <translation>Sol en appogiature de Si</translation>
+        <translation>Sol en appogiature sur Si</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2144"/>
         <source>G grace note grip on C</source>
-        <translation>Sol en appogiature de Do</translation>
+        <translation>Sol en appogiature sur Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2145"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2146"/>
         <source>G grace note grip on D</source>
-        <translation>Sol en appogiature de Ré</translation>
+        <translation>Sol en appogiature sur Ré</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2147"/>
         <source>G grace note grip on E</source>
-        <translation>Sol en appogiature de Mi</translation>
+        <translation>Sol en appogiature sur Mi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2148"/>
         <source>G grace note grip on F</source>
-        <translation>Sol en appogiature de Fa</translation>
+        <translation>Sol en appogiature sur Fa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2151"/>
         <source>Thumb grip on low A</source>
-        <translation>Pouce sur le La grave</translation>
+        <translation>Pouce grip sur La grave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2152"/>
         <source>Thumb grip on B</source>
-        <translation>Pouce sur le Si</translation>
+        <translation>Pouce grip sur Si</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2153"/>
         <source>Thumb grip on C</source>
-        <translation>Pouce sur le Do</translation>
+        <translation>Pouce grip sur Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2154"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2155"/>
         <source>Thumb grip on D</source>
-        <translation>Pouce sur le Ré</translation>
+        <translation>Pouce grip sur Ré</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2156"/>
         <source>Thumb grip on E</source>
-        <translation>Pouce sur le Mi</translation>
+        <translation>Pouce grip sur Mi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2157"/>
         <source>Thumb grip on F</source>
-        <translation>Pouce sur le Fa</translation>
+        <translation>Pouce grip sur Fa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2158"/>
         <source>Thumb grip on high G</source>
-        <translation>Pouce sur le Sol aigu</translation>
+        <translation>Pouce grip sur Sol aigu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2168"/>
         <source>Pele on low A</source>
-        <translation>Pele on low A</translation>
+        <translation>Pele sur La grave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2169"/>
         <source>Pele on B</source>
-        <translation>Pele on B</translation>
+        <translation>Pele sur Si</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2170"/>
         <source>Pele on C</source>
-        <translation>Pele on C</translation>
+        <translation>Pele sur Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2171"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2172"/>
         <source>Pele on D</source>
-        <translation>Pele on D</translation>
+        <translation>Pele sur Ré</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2173"/>
         <source>Pele on E</source>
-        <translation>Pele on E</translation>
+        <translation>Pele sur Mi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2174"/>
         <source>Pele on F</source>
-        <translation>Pele on F</translation>
+        <translation>Pele sur Fa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2177"/>
