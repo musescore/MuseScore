@@ -55,7 +55,8 @@ RadioDelegate {
     implicitHeight: ListView.view ? ListView.view.height : ui.theme.defaultButtonSize
     implicitWidth: ListView.view ? (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count
                                  : ui.theme.defaultButtonSize
-    hoverEnabled: true
+
+    hoverEnabled: root.enabled
 
     onClicked: {
         navigation.requestActiveByInteraction()
