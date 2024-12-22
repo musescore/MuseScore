@@ -577,6 +577,7 @@ private:
     void play();
     void swing();
     void dynamics();
+    void harpPedal();
     void otherDirection();
     void handleRepeats(engraving::Measure* measure, const engraving::Fraction tick, bool& measureHasCoda, SegnoStack& segnos,
                        DelayedDirectionsList& delayedDirections);
