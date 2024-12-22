@@ -11220,7 +11220,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/FoldersSection.qml" line="31"/>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="190"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="193"/>
         <source>Folders</source>
         <translation type="unfinished">Folders</translation>
     </message>
@@ -11630,27 +11630,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Score</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="181"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="184"/>
         <source>Import</source>
         <translation type="unfinished">Import</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="184"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="187"/>
         <source>Shortcuts</source>
         <translation type="unfinished">Shortcuts</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="187"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="190"/>
         <source>Update</source>
         <translation type="unfinished">Update</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="193"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="196"/>
         <source>Advanced</source>
         <translation type="unfinished">Advanced</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="196"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="199"/>
         <source>Braille</source>
         <translation type="unfinished">Braille</translation>
     </message>
@@ -11822,6 +11822,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/appshell/qml/Preferences/NoteInputPreferencesPage.qml" line="128"/>
         <source>Only the voice they are applied to</source>
         <translation type="unfinished">Only the voice they are applied to</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="45"/>
+        <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="181"/>
+        <source>Percussion</source>
+        <translation type="unfinished">Percussion</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="55"/>
+        <source>Open the percussion panel when an unpitched staff is selected</source>
+        <translation type="unfinished">Open the percussion panel when an unpitched staff is selected</translation>
     </message>
 </context>
 <context>
@@ -18554,12 +18565,12 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Plugin is not in the correct format</translation>
     </message>
     <message>
-        <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="75"/>
+        <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="76"/>
         <source>The plugin “%1” is currently disabled. Do you want to enable it now?</source>
         <translation type="unfinished">The plugin “%1” is currently disabled. Do you want to enable it now?</translation>
     </message>
     <message>
-        <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="76"/>
+        <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="77"/>
         <source>Alternatively, you can enable it at any time from Home &gt; Plugins.</source>
         <translation type="unfinished">Alternatively, you can enable it at any time from Home &gt; Plugins.</translation>
     </message>
@@ -19278,6 +19289,27 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="172"/>
         <source>Please check your internet connection or try again later.</source>
         <translation type="unfinished">Please check your internet connection or try again later.</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="146"/>
+        <source>Always ask</source>
+        <translation type="unfinished">Always ask</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="187"/>
+        <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="165"/>
+        <source>Remember my choice</source>
+        <translation type="unfinished">Remember my choice</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="203"/>
+        <source>This setting can be changed at any time in Preferences</source>
+        <translation type="unfinished">This setting can be changed at any time in Preferences</translation>
+    </message>
+    <message>
+        <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
+        <source>You can change this setting in Preferences at any time.</source>
+        <translation type="unfinished">You can change this setting in Preferences at any time.</translation>
     </message>
 </context>
 <context>
@@ -24186,7 +24218,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Below</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="176"/>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="178"/>
         <source>Smooth panning</source>
         <translation type="unfinished">Smooth panning</translation>
     </message>
@@ -24279,42 +24311,6 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Align accidentals on offset octaves</translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="73"/>
-        <source>Write</source>
-        <translation type="unfinished">Write</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="140"/>
-        <source>Preview</source>
-        <translation type="unfinished">Preview</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="201"/>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="119"/>
-        <source>Finish editing</source>
-        <translation type="unfinished">Finish editing</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="233"/>
-        <source>Layout</source>
-        <translation type="unfinished">Layout</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="254"/>
-        <source>Customize kit</source>
-        <translation type="unfinished">Customize kit</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="362"/>
-        <source>Add row</source>
-        <translation type="unfinished">Add row</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="384"/>
-        <source>Select an unpitched percussion staff to see available sounds</source>
-        <translation type="unfinished">Select an unpitched percussion staff to see available sounds</translation>
-    </message>
-    <message>
         <location filename="../../src/playback/view/playbacktoolbarmodel.cpp" line="149"/>
         <source>Input pitch</source>
         <translation type="unfinished">Input pitch</translation>
@@ -24333,33 +24329,6 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteLineSection.qml" line="56"/>
         <source>Edit note-anchored line text style</source>
         <translation type="unfinished">Edit note-anchored line text style</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="70"/>
-        <source>Row: %1</source>
-        <extracomment>%1 will be the row number of a percussion panel pad</extracomment>
-        <translation type="unfinished">Row: %1</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="73"/>
-        <source>Column: %1</source>
-        <extracomment>%1 will be the column number of a percussion panel pad</extracomment>
-        <translation type="unfinished">Column: %1</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="91"/>
-        <source>Empty pad</source>
-        <translation type="unfinished">Empty pad</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="118"/>
-        <source>footer</source>
-        <translation type="unfinished">footer</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="120"/>
-        <source>Edit layout</source>
-        <translation type="unfinished">Edit layout</translation>
     </message>
 </context>
 <context>
@@ -24758,6 +24727,104 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="233"/>
         <source>Stemless</source>
         <translation type="unfinished">Stemless</translation>
+    </message>
+</context>
+<context>
+    <name>notation/percussion</name>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="76"/>
+        <source>When swapping the positions of two drum pads:</source>
+        <translation type="unfinished">When swapping the positions of two drum pads:</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="93"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="129"/>
+        <source>Move MIDI notes and keyboard shortcuts with their sounds</source>
+        <translation type="unfinished">Move MIDI notes and keyboard shortcuts with their sounds</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="94"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="130"/>
+        <source>Leave MIDI notes and keyboard shortcuts fixed to original pad positions</source>
+        <translation type="unfinished">Leave MIDI notes and keyboard shortcuts fixed to original pad positions</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="162"/>
+        <source>Switch to old percussion panel</source>
+        <translation type="unfinished">Switch to old percussion panel</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="163"/>
+        <source>Switch to new percussion panel</source>
+        <translation type="unfinished">Switch to new percussion panel</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="70"/>
+        <source>Row: %1</source>
+        <extracomment>%1 will be the row number of a percussion panel pad</extracomment>
+        <translation type="unfinished">Row: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="73"/>
+        <source>Column: %1</source>
+        <extracomment>%1 will be the column number of a percussion panel pad</extracomment>
+        <translation type="unfinished">Column: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="91"/>
+        <source>Empty pad</source>
+        <translation type="unfinished">Empty pad</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml" line="118"/>
+        <source>footer</source>
+        <translation type="unfinished">footer</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="73"/>
+        <source>Write</source>
+        <translation type="unfinished">Write</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="140"/>
+        <source>Preview</source>
+        <translation type="unfinished">Preview</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="201"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="137"/>
+        <source>Finish editing</source>
+        <translation type="unfinished">Finish editing</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="233"/>
+        <source>Layout</source>
+        <translation type="unfinished">Layout</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="254"/>
+        <source>Customize kit</source>
+        <translation type="unfinished">Customize kit</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="414"/>
+        <source>Add row</source>
+        <translation type="unfinished">Add row</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanel.qml" line="436"/>
+        <source>Select an unpitched percussion staff to see available sounds</source>
+        <translation type="unfinished">Select an unpitched percussion staff to see available sounds</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="117"/>
+        <source>Do you also want to move the MIDI notes and keyboard shortcuts that trigger these sounds?</source>
+        <translation type="unfinished">Do you also want to move the MIDI notes and keyboard shortcuts that trigger these sounds?</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="138"/>
+        <source>Edit layout</source>
+        <translation type="unfinished">Edit layout</translation>
     </message>
 </context>
 <context>
@@ -28543,16 +28610,6 @@ failed.</translation>
         <source>Share your score’s audio with millions of listeners on this free streaming platform</source>
         <translation type="unfinished">Share your score’s audio with millions of listeners on this free streaming platform</translation>
     </message>
-    <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
-        <source>You can change this setting in Preferences at any time.</source>
-        <translation type="unfinished">You can change this setting in Preferences at any time.</translation>
-    </message>
-    <message>
-        <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="165"/>
-        <source>Remember my choice</source>
-        <translation type="unfinished">Remember my choice</translation>
-    </message>
 </context>
 <context>
     <name>project/export</name>
@@ -30441,54 +30498,54 @@ failed.</translation>
         <translation type="unfinished">Rename part</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="526"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="538"/>
         <source>Add/remove parts</source>
         <translation type="unfinished">Add/remove parts</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/masternotation.cpp" line="569"/>
+        <location filename="../../src/notation/internal/masternotation.cpp" line="581"/>
         <source>Reset part</source>
         <translation type="unfinished">Reset part</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="70"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="254"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="236"/>
         <source>Add/remove instruments</source>
         <translation type="unfinished">Add/remove instruments</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="106"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="719"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="701"/>
         <source>Remove instruments</source>
         <translation type="unfinished">Remove instruments</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="121"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="840"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="825"/>
         <source>Remove staves</source>
         <translation type="unfinished">Remove staves</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="140"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="526"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="508"/>
         <source>Add staff</source>
         <translation type="unfinished">Add staff</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="168"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="549"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="531"/>
         <source>Add linked staff</source>
         <translation type="unfinished">Add linked staff</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="192"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="610"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="592"/>
         <source>Replace instrument</source>
         <translation type="unfinished">Replace instrument</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/masternotationparts.cpp" line="227"/>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="660"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="642"/>
         <source>Edit drumset</source>
         <translation type="unfinished">Edit drumset</translation>
     </message>
@@ -31030,104 +31087,104 @@ failed.</translation>
         <translation type="unfinished">Halve note input duration</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="274"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="256"/>
         <source>Set score order</source>
         <translation type="unfinished">Set score order</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="296"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="278"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3042"/>
         <source>Show instrument</source>
         <translation type="unfinished">Show instrument</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="297"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="279"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="3043"/>
         <source>Hide instrument</source>
         <translation type="unfinished">Hide instrument</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="324"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="306"/>
         <source>Set sharps/flats no preference</source>
         <translation type="unfinished">Set sharps/flats no preference</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="325"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="307"/>
         <source>Set prefer flats</source>
         <translation type="unfinished">Set prefer flats</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="326"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="308"/>
         <source>Set prefer sharps</source>
         <translation type="unfinished">Set prefer sharps</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="327"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="309"/>
         <source>Set sharps/flats automatic</source>
         <translation type="unfinished">Set sharps/flats automatic</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="329"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="311"/>
         <source>Set sharps/flats preference</source>
         <translation type="unfinished">Set sharps/flats preference</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="370"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="352"/>
         <source>Set instrument name</source>
         <translation type="unfinished">Set instrument name</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="397"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="379"/>
         <source>Set abbreviated instrument name</source>
         <translation type="unfinished">Set abbreviated instrument name</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="424"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="406"/>
         <source>Show voice %1</source>
         <translation type="unfinished">Show voice %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="425"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="407"/>
         <source>Hide voice %1</source>
         <translation type="unfinished">Hide voice %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="454"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="436"/>
         <source>Show staff</source>
         <translation type="unfinished">Show staff</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="455"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="437"/>
         <source>Hide staff</source>
         <translation type="unfinished">Hide staff</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="482"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="464"/>
         <source>Set staff type</source>
         <translation type="unfinished">Set staff type</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="504"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="486"/>
         <source>Edit staff properties</source>
         <translation type="unfinished">Edit staff properties</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="572"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="554"/>
         <source>Add instrument</source>
         <translation type="unfinished">Add instrument</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="590"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="572"/>
         <source>Reset instrument formatting</source>
         <translation type="unfinished">Reset instrument formatting</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="895"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="880"/>
         <source>Move instruments</source>
         <translation type="unfinished">Move instruments</translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/notationparts.cpp" line="924"/>
+        <location filename="../../src/notation/internal/notationparts.cpp" line="909"/>
         <source>Move staves</source>
         <translation type="unfinished">Move staves</translation>
     </message>
@@ -31162,17 +31219,17 @@ failed.</translation>
         <translation type="unfinished">Edit strings</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="211"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="236"/>
         <source>Edit percussion panel layout</source>
         <translation type="unfinished">Edit percussion panel layout</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="275"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="348"/>
         <source>Enter percussion note</source>
         <translation type="unfinished">Enter percussion note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="346"/>
+        <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="419"/>
         <source>Reset percussion panel layout</source>
         <translation type="unfinished">Reset percussion panel layout</translation>
     </message>
