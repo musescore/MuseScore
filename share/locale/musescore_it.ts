@@ -6523,12 +6523,12 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="116"/>
         <source>Project propert&amp;ies…</source>
-        <translation>Propriet&amp;à progetto...</translation>
+        <translation>Propriet&amp;à del progetto...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
         <source>Project properties…</source>
-        <translation>Proprietà progetto...</translation>
+        <translation>Proprietà del progetto...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="122"/>
@@ -6748,7 +6748,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="346"/>
         <source>&amp;Swap with clipboard</source>
-        <translation>&amp;Scambia con Appunti</translation>
+        <translation>&amp;Scambia con appunti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="352"/>
@@ -7485,7 +7485,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="408"/>
         <source>Page settings…</source>
-        <translation>Impostazioni pagina…</translation>
+        <translation>Impostazioni di pagina…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="414"/>
@@ -9307,7 +9307,7 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="407"/>
         <source>&amp;Page settings…</source>
-        <translation>&amp;Impostazioni pagina…</translation>
+        <translation>&amp;Impostazioni di pagina…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="413"/>
@@ -10213,12 +10213,12 @@ altezza x del testo):</translation>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="37"/>
         <source>Check Muse Sampler</source>
-        <translation>Controlla il catalogo Muse</translation>
+        <translation>Controlla Muse Sampler</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="42"/>
         <source>Reload Muse Sampler</source>
-        <translation>Ricarica il catalogo Muse</translation>
+        <translation>Ricarica Muse Sampler</translation>
     </message>
 </context>
 <context>
@@ -22041,13 +22041,13 @@ battuta in levare</translation>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml" line="129"/>
         <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;, or use the keyboard shortcut %1.</source>
         <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Instruments panel (InstrumentsControlPanel.qml)</extracomment>
-        <translation>Non ci sono strumenti nella partitura. Per sceglierne alcuni, premi&lt;b&gt;Aggiungi&lt;/b&gt;, o usa la scorciatoia %1.</translation>
+        <translation>Non ci sono strumenti in partitura. Per sceglierne alcuni, premi&lt;b&gt;Aggiungi&lt;/b&gt;, o usa la scorciatoia %1.</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml" line="132"/>
         <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;.</source>
         <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Instruments panel (InstrumentsControlPanel.qml)</extracomment>
-        <translation>Non ci sono strumenti nella partitura. Per sceglierne qualcuno, premi &lt;b&gt;Aggiungi&lt;/b&gt;.</translation>
+        <translation>Non ci sono strumenti in partitura. Per sceglierne qualcuno, premi &lt;b&gt;Aggiungi&lt;/b&gt;.</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/instrumentsscene/view/instrumentspaneltreemodel.cpp" line="826"/>
@@ -24111,7 +24111,7 @@ Inoltre, Mastering MuseScore offre una comunità di musicisti di supporto, con s
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1362"/>
         <source>(in File &gt; Project properties…):</source>
-        <translation>(in File &gt; Proprietà progetto…):</translation>
+        <translation>(in File &gt; Proprietà del progetto…):</translation>
     </message>
 </context>
 <context>

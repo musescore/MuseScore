@@ -6,7 +6,7 @@
         <source>Wind section notated on a grand staff.</source>
         <comment>winds description</comment>
         <extracomment>description for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Seición de vientu anotada nun pentagrama doble.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="208"/>
@@ -132,7 +132,7 @@
         <source>*(C)</source>
         <comment>piccolo traitName</comment>
         <extracomment>traitName for Piccolo; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>*(Do)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="248"/>
@@ -384,7 +384,7 @@
         <source>Flute in C, sounding two octaves lower than the standard flute.</source>
         <comment>contrabass-flute description</comment>
         <extracomment>description for Contrabass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Flauta en Do, sonando dos octaves pembaxo de la flauta estándar.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="331"/>
@@ -468,7 +468,7 @@
         <source>Flute in C, sounding four octaves below the standard flute.</source>
         <comment>hyperbass-flute description</comment>
         <extracomment>description for Hyperbass Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Flauta en Do, sonando cuatro octaves pembaxo de la flauta estándar.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="358"/>
@@ -559,7 +559,7 @@
         <source>*G</source>
         <comment>g-dizi traitName</comment>
         <extracomment>traitName for Dizi; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>*Sol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="387"/>
@@ -1819,7 +1819,7 @@
         <source>*G</source>
         <comment>g-quena traitName</comment>
         <extracomment>traitName for Quena; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>*Sol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="794"/>
@@ -1987,14 +1987,14 @@
         <source>Oboe</source>
         <comment>oboe trackName</comment>
         <extracomment>trackName for Oboe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Oboe</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="847"/>
         <source>Oboe</source>
         <comment>oboe longName</comment>
         <extracomment>longName for Oboe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Oboe</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="849"/>
@@ -3352,7 +3352,7 @@
         <source>Cl.</source>
         <comment>eb-clarinet shortName</comment>
         <extracomment>shortName for Clarinet; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1283"/>
@@ -3387,7 +3387,7 @@
         <source>Cl.</source>
         <comment>d-clarinet shortName</comment>
         <extracomment>shortName for Clarinet; transposition: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1294"/>
@@ -3422,7 +3422,7 @@
         <source>Cl.</source>
         <comment>c-clarinet shortName</comment>
         <extracomment>shortName for Clarinet; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1305"/>
@@ -3457,14 +3457,14 @@
         <source>Cl.</source>
         <comment>bb-clarinet shortName</comment>
         <extracomment>shortName for Clarinet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1316"/>
         <source>*B♭</source>
         <comment>bb-clarinet traitName</comment>
         <extracomment>traitName for Clarinet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>*Si♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1319"/>
@@ -3492,7 +3492,7 @@
         <source>Cl.</source>
         <comment>clarinet shortName</comment>
         <extracomment>shortName for Clarinet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1328"/>
@@ -3520,7 +3520,7 @@
         <source>Cl.</source>
         <comment>a-clarinet shortName</comment>
         <extracomment>shortName for Clarinet; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1336"/>
@@ -3555,7 +3555,7 @@
         <source>Cl.</source>
         <comment>g-clarinet shortName</comment>
         <extracomment>shortName for Clarinet; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Cl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1347"/>
@@ -5844,7 +5844,7 @@
         <source>Brass section notated on a grand staff.</source>
         <comment>brass description</comment>
         <extracomment>description for Brass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Seición de vientos metal anotada nun pentagrama doble.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2082"/>
@@ -5865,14 +5865,14 @@
         <source>Br.</source>
         <comment>brass shortName</comment>
         <extracomment>shortName for Brass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Met.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2089"/>
         <source>Horn in high C.</source>
         <comment>c-horn-alto description</comment>
         <extracomment>description for Horn; transposition: C alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trompa en Do altu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2091"/>
@@ -5893,7 +5893,7 @@
         <source>Hn.</source>
         <comment>c-horn-alto shortName</comment>
         <extracomment>shortName for Horn; transposition: C alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2097"/>
@@ -5921,7 +5921,7 @@
         <source>Horn in high B♭.</source>
         <comment>bb-horn-alto description</comment>
         <extracomment>description for Horn; transposition: B♭ alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trompa en Si♭ altu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2106"/>
@@ -5942,7 +5942,7 @@
         <source>Hn.</source>
         <comment>bb-horn-alto shortName</comment>
         <extracomment>shortName for Horn; transposition: B♭ alto; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2112"/>
@@ -5970,7 +5970,7 @@
         <source>Horn in A.</source>
         <comment>a-horn description</comment>
         <extracomment>description for Horn; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trompa en La.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2121"/>
@@ -5991,7 +5991,7 @@
         <source>Hn.</source>
         <comment>a-horn shortName</comment>
         <extracomment>shortName for Horn; transposition: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2127"/>
@@ -6019,7 +6019,7 @@
         <source>Horn in A♭.</source>
         <comment>ab-horn description</comment>
         <extracomment>description for Horn; transposition: A♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trompa en La♭.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2136"/>
@@ -6040,7 +6040,7 @@
         <source>Hn.</source>
         <comment>ab-horn shortName</comment>
         <extracomment>shortName for Horn; transposition: A♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2142"/>
@@ -6068,7 +6068,7 @@
         <source>Horn in G.</source>
         <comment>g-horn description</comment>
         <extracomment>description for Horn; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trompa en Sol.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2151"/>
@@ -6089,7 +6089,7 @@
         <source>Hn.</source>
         <comment>g-horn shortName</comment>
         <extracomment>shortName for Horn; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2157"/>
@@ -6117,7 +6117,7 @@
         <source>Horn in E.</source>
         <comment>e-horn description</comment>
         <extracomment>description for Horn; transposition: E; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trompa en Mi.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2166"/>
@@ -6138,7 +6138,7 @@
         <source>Hn.</source>
         <comment>e-horn shortName</comment>
         <extracomment>shortName for Horn; transposition: E; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2172"/>
@@ -6166,7 +6166,7 @@
         <source>Horn in E♭.</source>
         <comment>eb-horn description</comment>
         <extracomment>description for Horn; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trompa en Mi♭.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2181"/>
@@ -6187,7 +6187,7 @@
         <source>Hn.</source>
         <comment>eb-horn shortName</comment>
         <extracomment>shortName for Horn; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2187"/>
@@ -6215,7 +6215,7 @@
         <source>Horn in D.</source>
         <comment>d-horn description</comment>
         <extracomment>description for Horn; transposition: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trompa en Re.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2196"/>
@@ -6236,7 +6236,7 @@
         <source>Hn.</source>
         <comment>d-horn shortName</comment>
         <extracomment>shortName for Horn; transposition: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2202"/>
@@ -6264,7 +6264,7 @@
         <source>Horn in F. The most common modern orchestral horn.</source>
         <comment>horn description</comment>
         <extracomment>description for Horn; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trompa en Fa. La trompa orquestral moderna más común.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2211"/>
@@ -6285,14 +6285,14 @@
         <source>Hn.</source>
         <comment>horn shortName</comment>
         <extracomment>shortName for Horn; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2217"/>
         <source>*F</source>
         <comment>horn traitName</comment>
         <extracomment>traitName for Horn; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>*Fa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2219"/>
@@ -6313,7 +6313,7 @@
         <source>Horn in low C.</source>
         <comment>c-horn description</comment>
         <extracomment>description for Horn; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trompa en Do baxu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2226"/>
@@ -6334,7 +6334,7 @@
         <source>Hn.</source>
         <comment>c-horn shortName</comment>
         <extracomment>shortName for Horn; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2232"/>
@@ -6362,14 +6362,14 @@
         <source>Horn in low C (notated in bass clef).</source>
         <comment>c-horn-bass description</comment>
         <extracomment>description for Horn (bass clef); transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trompa en Do baxu (anotao en clave de fa).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2241"/>
         <source>Horn (bass clef)</source>
         <comment>c-horn-bass trackName</comment>
         <extracomment>trackName for Horn (bass clef); transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trompa (clave de fa)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2243"/>
@@ -6383,7 +6383,7 @@
         <source>Hn.</source>
         <comment>c-horn-bass shortName</comment>
         <extracomment>shortName for Horn (bass clef); transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2247"/>
@@ -6411,7 +6411,7 @@
         <source>Horn in low B♭.</source>
         <comment>bb-horn-basso description</comment>
         <extracomment>description for Horn; transposition: B♭ basso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trompa en Si♭ baxu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2256"/>
@@ -6432,7 +6432,7 @@
         <source>Hn.</source>
         <comment>bb-horn-basso shortName</comment>
         <extracomment>shortName for Horn; transposition: B♭ basso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trp.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2262"/>
@@ -6565,7 +6565,7 @@
         <source>*F</source>
         <comment>f-wagner-tuba traitName</comment>
         <extracomment>traitName for Wagner Tuba; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>*Fa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2304"/>
@@ -6726,7 +6726,7 @@
         <source>*B♭</source>
         <comment>bb-cornet traitName</comment>
         <extracomment>traitName for Cornet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>*Si♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2353"/>
@@ -6915,7 +6915,7 @@
         <source>*E♭</source>
         <comment>eb-alto-horn traitName</comment>
         <extracomment>traitName for Alto Horn; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>*Mi♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2411"/>
@@ -7174,7 +7174,7 @@
         <source>*B♭</source>
         <comment>bb-piccolo-trumpet traitName</comment>
         <extracomment>traitName for Piccolo Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>*Si♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2491"/>
@@ -8665,7 +8665,7 @@
         <source>*E♭</source>
         <comment>eb-alto-ophicleide traitName</comment>
         <extracomment>traitName for Alto Ophicleide; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>*Mi♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2960"/>
@@ -8798,7 +8798,7 @@
         <source>*E♭</source>
         <comment>eb-contrabass-ophicleide traitName</comment>
         <extracomment>traitName for Contrabass Ophicleide; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>*Mi♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3002"/>
@@ -9106,14 +9106,14 @@
         <source>Trombone</source>
         <comment>trombone trackName</comment>
         <extracomment>trackName for Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trombón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3099"/>
         <source>Trombone</source>
         <comment>trombone longName</comment>
         <extracomment>longName for Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trombón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3101"/>
@@ -9155,7 +9155,7 @@
         <source>Trombone</source>
         <comment>trombone-treble longName</comment>
         <extracomment>longName for Trombone (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Trombón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3114"/>
@@ -9449,7 +9449,7 @@
         <source>Tuba</source>
         <comment>tuba longName</comment>
         <extracomment>longName for Tuba (unspecified); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tuba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3207"/>
@@ -9470,7 +9470,7 @@
         <source>Tuba</source>
         <comment>f-tuba trackName</comment>
         <extracomment>trackName for Tuba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tuba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3214"/>
@@ -9498,7 +9498,7 @@
         <source>Tuba</source>
         <comment>eb-tuba trackName</comment>
         <extracomment>trackName for Tuba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tuba</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3223"/>
@@ -9582,7 +9582,7 @@
         <source>*F</source>
         <comment>bass-f-tuba traitName</comment>
         <extracomment>traitName for Bass Tuba; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>*Fa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3250"/>
@@ -9687,7 +9687,7 @@
         <source>*B♭</source>
         <comment>bb-tuba traitName</comment>
         <extracomment>traitName for Contrabass Tuba; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>*Si♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3283"/>
@@ -15511,7 +15511,7 @@
         <source>*B♭</source>
         <comment>bb-trumpet traitName</comment>
         <extracomment>traitName for Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>*Si♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3340"/>
@@ -17842,7 +17842,7 @@
         <source>Br.</source>
         <comment>brac shortName</comment>
         <extracomment>shortName for Brač; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Met.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5864"/>
@@ -18311,14 +18311,14 @@
         <source>Violoncello</source>
         <comment>violoncello trackName</comment>
         <extracomment>trackName for Violoncello; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Violonchelu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6014"/>
         <source>Violoncello</source>
         <comment>violoncello longName</comment>
         <extracomment>longName for Violoncello; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Violonchelu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6016"/>
@@ -18360,14 +18360,14 @@
         <source>Violoncellos (section)</source>
         <comment>violoncellos trackName</comment>
         <extracomment>trackName for Violoncellos (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Violonchelos (seición)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6029"/>
         <source>Violoncellos</source>
         <comment>violoncellos longName</comment>
         <extracomment>longName for Violoncellos (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Violonchelos</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6031"/>
@@ -18409,14 +18409,14 @@
         <source>Contrabass</source>
         <comment>contrabass trackName</comment>
         <extracomment>trackName for Contrabass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Contrabaxu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6044"/>
         <source>Contrabass</source>
         <comment>contrabass longName</comment>
         <extracomment>longName for Contrabass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Contrabaxu</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6046"/>
@@ -18458,14 +18458,14 @@
         <source>Contrabasses (section)</source>
         <comment>contrabasses trackName</comment>
         <extracomment>trackName for Contrabasses (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Contrabaxos (seición)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6059"/>
         <source>Contrabasses</source>
         <comment>contrabasses longName</comment>
         <extracomment>longName for Contrabasses (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Contrabaxos</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6061"/>
@@ -18759,7 +18759,7 @@
         <source>*G</source>
         <comment>violone traitName</comment>
         <extracomment>traitName for Violone; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>*Sol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6179"/>
@@ -19037,7 +19037,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="100"/>
         <source>Oboes</source>
-        <translation type="unfinished"/>
+        <translation>Oboes</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="101"/>
@@ -19237,7 +19237,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="140"/>
         <source>Trombones</source>
-        <translation type="unfinished"/>
+        <translation>Trombones</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="141"/>
@@ -19257,7 +19257,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="144"/>
         <source>Tubas</source>
-        <translation type="unfinished"/>
+        <translation>Tubes</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="145"/>

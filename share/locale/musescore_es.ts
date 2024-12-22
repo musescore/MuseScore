@@ -29023,7 +29023,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1612"/>
         <source>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</source>
-        <translation>Para preservar su partitura, intente guardarla de nuevo. Si este mensaje sigue apareciendo, por favor, guarde su partitura como una nueva copia. También puede obtener ayuda para este problema en %1. &lt;br/&gt;&lt;br/&gt;Detalles del error (por favor, menciónelos cuando solicite ayuda): %2</translation>
+        <translation>Para conservar su partitura, intente guardarla de nuevo. Si este mensaje sigue apareciendo, por favor, guarde su partitura como una nueva copia. También puede obtener ayuda para este problema en %1. &lt;br/&gt;&lt;br/&gt;Detalles del error (por favor, menciónelos cuando solicite ayuda): %2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="182"/>

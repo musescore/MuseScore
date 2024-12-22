@@ -8521,7 +8521,7 @@ yüzdesel yüksekliği):</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2450"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2451"/>
         <source>Slight bend</source>
-        <translation>Hafif bend</translation>
+        <translation>Küçük bend (1/4)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2461"/>
@@ -11146,7 +11146,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="49"/>
         <source>Disabled text:</source>
-        <translation>Etkin olmayan metin:</translation>
+        <translation>Pasif metin:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="50"/>
@@ -11434,7 +11434,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleSection.qml" line="31"/>
         <source>Enable/disable</source>
-        <translation>Etkin/devre dışı</translation>
+        <translation>Etkin/pasif</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleSection.qml" line="40"/>
@@ -18161,7 +18161,7 @@ Perde %1 teller %2</translation>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="145"/>
         <location filename="../../src/framework/extensions/extensionsmodule.cpp" line="92"/>
         <source>Disabled</source>
-        <translation>Etkin Olmayanlar</translation>
+        <translation>Pasifleştirilmiş</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="192"/>
@@ -27264,12 +27264,12 @@ yazılamadı.</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="100"/>
         <source>Active</source>
-        <translation>Etkin</translation>
+        <translation>Aktif</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="101"/>
         <source>Inactive</source>
-        <translation>Etkin değil</translation>
+        <translation>Pasif</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="193"/>
@@ -29329,7 +29329,7 @@ yazılamadı.</translation>
     <message>
         <location filename="../../src/framework/shortcuts/view/mididevicemappingmodel.cpp" line="101"/>
         <source>Inactive</source>
-        <translation>Etkin değil</translation>
+        <translation>Pasif</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/shortcutsmodel.cpp" line="37"/>
