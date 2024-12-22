@@ -81,9 +81,11 @@ Rectangle {
 
     MouseArea {
         id: clickableArea
-
         anchors.fill: parent
+
+        enabled: root.enabled
         hoverEnabled: true
+
         onClicked: {
             navigation.requestActiveByInteraction()
 

@@ -65,6 +65,7 @@ Column {
             id: increaseMouseArea
             anchors.fill: parent
 
+            enabled: increaseButton.enabled
             hoverEnabled: true
             preventStealing: true
 
@@ -130,6 +131,7 @@ Column {
             id: decreaseMouseArea
             anchors.fill: parent
 
+            enabled: decreaseButton.enabled
             hoverEnabled: true
             preventStealing: true
 

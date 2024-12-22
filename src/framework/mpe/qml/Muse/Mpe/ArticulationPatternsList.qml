@@ -84,6 +84,7 @@ ListView {
                     anchors.fill: label
 
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
+                    enabled: label.enabled
                     hoverEnabled: true
 
                     onClicked: function(mouse) {

@@ -226,9 +226,9 @@ FocusScope {
 
     MouseArea {
         id: clickableArea
-
         anchors.fill: parent
 
+        enabled: root.enabled
         propagateComposedEvents: true
         hoverEnabled: true
         cursorShape: Qt.IBeamCursor

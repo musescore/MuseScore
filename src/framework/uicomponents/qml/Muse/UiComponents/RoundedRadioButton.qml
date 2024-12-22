@@ -42,7 +42,7 @@ RadioDelegate {
 
     font: ui.theme.bodyFont
 
-    hoverEnabled: true
+    hoverEnabled: root.enabled
 
     onToggled: {
         navigation.requestActiveByInteraction()
