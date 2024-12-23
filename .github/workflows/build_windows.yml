@@ -22,7 +22,7 @@ on:
         required: true
       publish:
         description: 'Publish to FTP: on - publish'
-        default: 'off'   
+        default: 'off'
         required: false
   workflow_call:
     inputs:
@@ -75,7 +75,7 @@ jobs:
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
             echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled"
             DO_PUBLISH='false'
-          fi  
+          fi
         fi
 
         DO_CHECKSUM='true'
@@ -89,7 +89,7 @@ jobs:
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\�' '_' <<<"Mu3.7_${BUILD_NUMBER}_Win64${ADD_INFO}")"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Win64${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
@@ -139,7 +139,7 @@ jobs:
       if: env.DO_APPCAST == 'true'
       shell: bash
       run: |
-        bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows 
+        bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
       uses: actions/upload-artifact@v4
@@ -158,10 +158,7 @@ jobs:
     - name: Clone repository
       uses: actions/checkout@v4
       with:
-        fetch-depth: 3
-    - name: Fetch submodules
-      run: |
-        git submodule update --init --recursive
+        submodules: 'true'
     - name: "Configure workflow"
       shell: bash
       env:
@@ -174,12 +171,12 @@ jobs:
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_PUBLISH='false'
-        if [ "${{ inputs.publish }}" == "on" ]; then 
+        if [[ "${{ inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
             echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled"
             DO_PUBLISH='false'
-          fi  
+          fi
         fi
 
         DO_CHECKSUM='true'
@@ -198,7 +195,7 @@ jobs:
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\?' '_' <<<"Mu3.7_${BUILD_NUMBER}_Win32${ADD_INFO}")"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Win32${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
@@ -235,8 +232,8 @@ jobs:
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="''" )
         IF ${{ env.BUILD_MODE }} == stable ( SET GUID=${{ secrets.WIN_MSI_STABLE_GUID }} ) ELSE ( SET GUID=${{ secrets.WIN_MSI_TESTING_GUID }} )
         build\ci\windows\package.bat -b 32 --signsecret %S_S% --signpass %S_P% --guid %GUID%
-    - name: Checksum 
-      if: env.DO_BUILD == 'true'
+    - name: Checksum
+      if: env.DO_CHECKSUM == 'true'
       run: |
         bash ./build/ci/tools/checksum.sh
     - name: Publish package
@@ -245,7 +242,7 @@ jobs:
       run: |
         bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 3
     - name: AppCast
-      if: env.DO_BUILD == 'true'
+      if: env.DO_APPCAST == 'true'
       shell: bash
       run: |
         bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows
@@ -258,7 +255,9 @@ jobs:
 
   windows_portable:
     # Disable on pull_request
-    if: ${{ github.event_name == 'schedule' || contains(inputs.platforms, 'windows_portable') }}
+    if: |
+      github.event_name != 'pull_request' &&
+      (github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_portable'))
     runs-on: windows-2022
     steps:
     - name: Cancel Previous Runs
@@ -288,7 +287,7 @@ jobs:
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
             echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled"
             DO_PUBLISH='false'
-          fi  
+          fi
         fi
 
         DO_CHECKSUM='true'
@@ -299,7 +298,7 @@ jobs:
 
         DO_BUILD='false'
         if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then
-          DO_BUILD='true'  
+          DO_BUILD='true'
         fi
         echo "!! ATTENTION !! Windows portable build run only for 'testing' and 'stable', and SKIP for 'pull requests' and nightly"
 
@@ -307,7 +306,7 @@ jobs:
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\?' '_' <<<"Mu3.7_${BUILD_NUMBER}_WinPortable${ADD_INFO}")"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_WinPortable${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
@@ -343,9 +342,9 @@ jobs:
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="''" )
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="''" )
         build\ci\windows\package.bat -b 32 --portable ON --signsecret %S_S% --signpass %S_P%
-    - name: Checksum 
+    - name: Checksum
       shell: bash
-      if: env.DO_BUILD == 'true'
+      if: env.DO_CHECKSUM == 'true'
       run: |
         bash ./build/ci/tools/checksum.sh
     - name: Publish package
@@ -354,11 +353,11 @@ jobs:
       run: |
         bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 3
     - name: AppCast
-      if: env.DO_BUILD == 'true'
+      if: env.DO_APPCAST == 'true'
       shell: bash
       run: |
         bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows
-    - name: Upload artifacts on GitHub 
+    - name: Upload artifacts on GitHub
       if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v4
       with:
