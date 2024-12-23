@@ -12,7 +12,7 @@
 
 set(TARGET tst_sfzcomments)
 
-include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
+include(${PROJECT_SOURCE_DIR}/mtest/CreateMtestTarget.cmake)
 
 include_directories(
       ${SNDFILE_INCDIR}

@@ -12,4 +12,4 @@
 
 set(TARGET tst_tools)
 
-include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
+include(${PROJECT_SOURCE_DIR}/mtest/CreateMtestTarget.cmake)

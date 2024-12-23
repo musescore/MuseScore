@@ -12,5 +12,4 @@
 
 set(TARGET tst_compat206)
 
-include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
-
+include(${PROJECT_SOURCE_DIR}/mtest/CreateMtestTarget.cmake)
