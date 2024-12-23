@@ -17,49 +17,21 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
 if (APPLE)
-        file(GLOB_RECURSE INCS "*.h")
+    file(GLOB_RECURSE INCS "*.h")
 else (APPLE)
-        set(INCS "")
+    set(INCS "")
 endif (APPLE)
 
-if (NOT MSVC)
-   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
-else (NOT MSVC)
-   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
-endif (NOT MSVC)
+add_library (rtf2html STATIC
+    ${INCS}
+    fmt_opts.cpp
+    rtf2html.cpp
+    rtf_keyword.cpp
+    rtf_table.cpp
+    )
 
-add_library (
-  rtf2html STATIC
-  ${_all_h_file}
-  ${INCS}
-  fmt_opts.cpp
-  rtf2html.cpp
-  rtf_keyword.cpp
-  rtf_table.cpp
-  )
-
-if (NOT MSVC)
-   set_target_properties( rtf2html
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
-      )
-else (NOT MSVC)
-   set_target_properties ( rtf2html
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} /wd4267"
-      )
-endif (NOT MSVC)   
-
-xcode_pch(rtf2html all)
-
-# Use MSVC pre-compiled headers
-vstudio_pch( rtf2html )
-
-# MSVC does not depend on mops1 & mops2 for PCH
-if (NOT MSVC)
-   #ADD_DEPENDENCIES(rtf2html mops1)
-   #ADD_DEPENDENCIES(rtf2html mops2)
-endif (NOT MSVC)   
-
+if (BUILD_PCH)
+    target_link_libraries(rtf2html global)
+    target_precompile_headers(rtf2html REUSE_FROM global)
+endif (BUILD_PCH)

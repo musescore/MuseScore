@@ -67,7 +67,6 @@ include (FindQt5)
 include (UsePkgConfig1) # Defines MACRO(PKGCONFIG1 _package _minVersion _include_DIR _link_DIR _link_FLAGS _cflags)
 include (FindPulseAudio)
 include (GetCompilerVersion)
-include (CreatePrecompiledHeader)
 
 # For debugging the make system uncomment next line:
 # set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -732,29 +731,8 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
     # Note: Must now run "update-mime-database" to apply changes. This is done in the Makefile.
 endif (NOT MINGW AND NOT MSVC AND NOT APPLE)
 
-#
-#  Create precompiled header file
-#
-
-# all.h is expected in PROJECT_BINARY_DIR by subdirs, except for MSVC
-if (NOT MSVC)
-   execute_process(
-      COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/all.h ${PROJECT_BINARY_DIR}/all.h
-      WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-      )
-endif (NOT MSVC)
-
-precompiled_header(QT_INCLUDES all ${BUILD_PCH})
-
-# MSVC does not require these targets, as all.h is not copied and the
-#   PCH generation is done per-project
-if (NOT MSVC)
-   #ADD_CUSTOM_TARGET(mops1 DEPENDS ${PROJECT_BINARY_DIR}/all.h)
-   #ADD_CUSTOM_TARGET(mops2 DEPENDS ${PCH})
-endif (NOT MSVC)
 
 ##
-
 ## Includes
 ##
 include_directories(
@@ -795,12 +773,25 @@ if (OMR)
  endif (NOT USE_SYSTEM_POPPLER)
 endif (OMR)
 
+## 
+## `global` target
+##
+
+add_subdirectory(global)
+
+##
+## Precompiled header
+##
+
+if (BUILD_PCH)
+    target_precompile_headers(global PRIVATE ${PROJECT_SOURCE_DIR}/build/pch.h)
+endif (BUILD_PCH)
+
 if (BUILD_TELEMETRY_MODULE)
       add_subdirectory(telemetry)
       add_subdirectory(thirdparty/qt-google-analytics)
 endif (BUILD_TELEMETRY_MODULE)
 
-add_subdirectory(global)
 add_subdirectory(importexport)
 add_subdirectory(mscore)
 add_subdirectory(main)

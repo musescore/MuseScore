@@ -108,13 +108,13 @@ if (MINGW)
    if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
      set_target_properties( mscore
         PROPERTIES
-           COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
+           COMPILE_FLAGS "-g -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
            LINK_FLAGS "-mwindows -mconsole -L ${QT_INSTALL_LIBS}"
         )
    else(CMAKE_BUILD_TYPE MATCHES "DEBUG")
      set_target_properties( mscore
           PROPERTIES
-             COMPILE_FLAGS "${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
+             COMPILE_FLAGS "-Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
              LINK_FLAGS "-Wl,-S -mwindows -L ${QT_INSTALL_LIBS}"
           )
    endif(CMAKE_BUILD_TYPE MATCHES "DEBUG")
@@ -247,7 +247,7 @@ else (MINGW)
       set_target_properties (
          mscore
          PROPERTIES
-            COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wno-overloaded-virtual -Winvalid-pch"
+            COMPILE_FLAGS "-g -Wall -Wno-overloaded-virtual -Winvalid-pch"
          )
 
       if (APPLE)
@@ -261,10 +261,10 @@ else (MINGW)
            PROPERTIES
               LINK_FLAGS "-stdlib=libc++"
            )
-        xcode_pch(mscore all)
-        install (TARGETS mscore BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
-        install (FILES "${PROJECT_SOURCE_DIR}/mscore/data/mscore.icns" DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
-        install (FILES "${PROJECT_SOURCE_DIR}/mscore/data/musescoreDocument.icns" DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
+
+         install (TARGETS mscore BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
+         install (FILES "${PROJECT_SOURCE_DIR}/mscore/data/mscore.icns" DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
+         install (FILES "${PROJECT_SOURCE_DIR}/mscore/data/musescoreDocument.icns" DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
       else (APPLE)
         #### PACKAGING for Linux and BSD based systems (more in top-level CMakeLists.txt) ####
         # Install mscore executable (package maintainers may add "MuseScore" and/or "musescore" aliases that symlink to mscore)
@@ -326,14 +326,14 @@ else (MINGW)
       if(CMAKE_BUILD_TYPE MATCHES "REL*")
         set_target_properties( mscore
            PROPERTIES
-              COMPILE_FLAGS "${PCH_INCLUDE} ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
+              COMPILE_FLAGS "${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
               LINK_FLAGS    "/LIBPATH:${QT_INSTALL_LIBS} ${all_library_paths}"
               LINK_FLAGS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup"
            )
       else(CMAKE_BUILD_TYPE MATCHES "REL*")
         set_target_properties( mscore
            PROPERTIES
-              COMPILE_FLAGS "${PCH_INCLUDE} ${QT_DEFINITIONS} /DQT_SVG_LIB /DQT_GUI_LIB /DQT_XML_LIB /DQT_CORE_LIB"
+              COMPILE_FLAGS "${QT_DEFINITIONS} /DQT_SVG_LIB /DQT_GUI_LIB /DQT_XML_LIB /DQT_CORE_LIB"
               LINK_FLAGS    "/LIBPATH:${QT_INSTALL_LIBS} ${all_library_paths}"
               LINK_FLAGS "/SUBSYSTEM:CONSOLE"
            )
@@ -539,10 +539,14 @@ if (APPLE)
       REGEX ".*_debug\\.dylib" EXCLUDE)
 endif (APPLE)
 
-
 if (MSCORE_OUTPUT_NAME)
       set (MSCORE_EXECUTABLE_NAME ${MSCORE_OUTPUT_NAME})
 else (MSCORE_OUTPUT_NAME)
       set (MSCORE_EXECUTABLE_NAME ${ExecutableName})
 endif (MSCORE_OUTPUT_NAME)
 set (MSCORE_EXECUTABLE_NAME "${MSCORE_EXECUTABLE_NAME}" PARENT_SCOPE)
+
+if (BUILD_PCH)
+    target_link_libraries(mscore global)
+    target_precompile_headers(mscore REUSE_FROM global)
+endif (BUILD_PCH)
