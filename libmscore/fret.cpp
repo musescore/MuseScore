@@ -1291,13 +1291,13 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
             xml.tag("first-fret", fretOffset() + 1);
 
       for (int i = 0; i < _strings; ++i) {
-            int mxmlString = _strings - i;
+            const int mxmlString = _strings - i;
 
             std::vector<int> bStarts;
             std::vector<int> bEnds;
             for (auto const& j : _barres) {
                   FretItem::Barre b = j.second;
-                  int fret = j.first;
+                  const int fret = j.first;
                   int mxmlFret = fret + fretOffset();
                   if (!b.exists())
                         continue;
@@ -1318,7 +1318,7 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
             // Markers may exists alongside with dots
             // Write dots
             for (auto const& d : dot(i)) {
-                  if (!d.exists())
+                  if (!d.exists() || d.dtype == FretDotType::CROSS)
                         continue;
                   xml.stag("frame-note");
                   xml.tag("string", mxmlString);
