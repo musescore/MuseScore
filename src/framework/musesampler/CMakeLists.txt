@@ -45,8 +45,4 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/musesampleractioncontroller.h
     )
 
-if(MUSE_MODULE_MUSESAMPLER_ENABLE_DEBUG)
-    set(MODULE_DEF -DMUSE_MODULE_MUSESAMPLER_ENABLE_DEBUG)
-endif()
-
 setup_module()
