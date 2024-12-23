@@ -37,14 +37,16 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
       c.move(0, Fraction(0,1));
       c.addKeySig(Key::C);
       TimeSig* nts = c.addTimeSig(_sig);
-      if (!_z.isEmpty())
-            nts->setNumeratorString(_z);
-      if (!_n.isEmpty())
-            nts->setDenominatorString(_n);
-      GroupNode node {0, 0};
-      Groups ng;
-      ng.push_back(node);
-      nts->setGroups(ng);
+      if (nts) {
+            if (!_z.isEmpty())
+                  nts->setNumeratorString(_z);
+            if (!_n.isEmpty())
+                  nts->setDenominatorString(_n);
+            GroupNode node {0, 0};
+            Groups ng;
+            ng.push_back(node);
+            nts->setGroups(ng);
+            }
 
       for (int i = 0; i < n; ++i) {
             Chord* chord = c.addChord(77, t);

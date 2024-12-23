@@ -156,11 +156,12 @@ void MCursor::addPart(const QString& instrument)
       Staff* staff = new Staff(_score);
       staff->setPart(part);
       InstrumentTemplate* it = searchTemplate(instrument);
-      if (it == 0) {
-            qFatal("Did not find instrument <%s>", qPrintable(instrument));
+      if (it) {
+            part->initFromInstrTemplate(it);
+            staff->init(it, 0, 0);
             }
-      part->initFromInstrTemplate(it);
-      staff->init(it, 0, 0);
+      else
+            qCritical("Did not find instrument <%s>", qPrintable(instrument));  // this is a critical error, but no longer a reason to crash on it
       _score->appendPart(part);
       _score->insertStaff(staff, 0);
       }
