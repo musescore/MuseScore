@@ -787,27 +787,6 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     }
 
     //-------------------------------------------------------------
-    // Compute autoplace for TimeSig above the staff
-    //-------------------------------------------------------------
-
-    if (system->style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ABOVE_STAVES) {
-        for (MeasureBase* mb : system->measures()) {
-            if (!mb->isMeasure()) {
-                continue;
-            }
-            for (Segment& s : toMeasure(mb)->segments()) {
-                if (s.isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)) {
-                    for (EngravingItem* timeSig : s.elist()) {
-                        if (timeSig && timeSig->ldata()->isValid()) {
-                            Autoplace::autoplaceSegmentElement(timeSig, timeSig->mutldata());
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    //-------------------------------------------------------------
     // layout ties and guitar bends
     //-------------------------------------------------------------
 
@@ -1306,6 +1285,27 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         for (EngravingItem* e : s->annotations()) {
             if (e->isImage()) {
                 TLayout::layoutItem(e, ctx);
+            }
+        }
+    }
+
+    //-------------------------------------------------------------
+    // TimeSig above staff
+    //-------------------------------------------------------------
+
+    if (system->style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ABOVE_STAVES) {
+        for (MeasureBase* mb : system->measures()) {
+            if (!mb->isMeasure()) {
+                continue;
+            }
+            for (Segment& s : toMeasure(mb)->segments()) {
+                if (s.isType(SegmentType::TimeSig | SegmentType::TimeSigAnnounce)) {
+                    for (EngravingItem* timeSig : s.elist()) {
+                        if (timeSig && timeSig->ldata()->isValid()) {
+                            Autoplace::autoplaceSegmentElement(timeSig, timeSig->mutldata());
+                        }
+                    }
+                }
             }
         }
     }
