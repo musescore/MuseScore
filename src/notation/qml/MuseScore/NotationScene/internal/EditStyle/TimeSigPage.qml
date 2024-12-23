@@ -28,7 +28,7 @@ import Muse.Ui 1.0
 
 Rectangle {
     anchors.fill: parent
-    color: ui.theme.backgroundPrimaryColor
+    color: "transparent"
 
     TimeSigPageModel {
         id: model
@@ -38,40 +38,72 @@ Rectangle {
         width: parent.width
         spacing: 12
 
-        StyledTextLabel {
-            horizontalAlignment: Text.AlignLeft
-            text: qsTrc("notation/editstyle/timesignatures", "Position:")
-        }
+        RowLayout {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
 
-        RoundedRadioButton {
-            text: qsTrc("notation/editstyle/timesignatures", "On all staves")
-            checked: model.timeSigPlacement.value === 0
-            onToggled: model.timeSigPlacement.value = 0
-        }
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: 8
 
-        RoundedRadioButton {
-            text: qsTrc("notation/editstyle/timesignatures", "Above staves")
-            checked: model.timeSigPlacement.value === 1
-            onToggled: model.timeSigPlacement.value = 1
-        }
+                StyledTextLabel {
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignLeft
+                    text: qsTrc("notation/editstyle/timesignatures", "Position:")
+                }
 
-        RoundedRadioButton {
-            text: qsTrc("notation/editstyle/timesignatures", "Across staves")
-            checked: model.timeSigPlacement.value === 2
-            onToggled: model.timeSigPlacement.value = 2
-        }
+                RoundedRadioButton {
+                    text: qsTrc("notation/editstyle/timesignatures", "On all staves")
+                    checked: model.timeSigPlacement.value === 0
+                    onToggled: model.timeSigPlacement.value = 0
+                }
 
-        FlatButton {
-            visible: model.timeSigPlacement.value !== 0
-            text: qsTrc("notation/editstyle/timesignatures", "Edit system object staves…")
-            //onClicked:
+                RoundedRadioButton {
+                    text: qsTrc("notation/editstyle/timesignatures", "Above staves")
+                    checked: model.timeSigPlacement.value === 1
+                    onToggled: model.timeSigPlacement.value = 1
+                }
+
+                RoundedRadioButton {
+                    text: qsTrc("notation/editstyle/timesignatures", "Across staves")
+                    checked: model.timeSigPlacement.value === 2
+                    onToggled: model.timeSigPlacement.value = 2
+                }
+
+                StyledTextLabel {
+                    visible: model.timeSigPlacement.value !== 0
+                    text: qsTrc("notation/editstyle/timesignatures", "Set where time signatures appear using the Layout panel.")
+                }
+            }
+
+            Rectangle {
+                Layout.preferredWidth: childrenRect.width + 16
+                Layout.fillHeight: true
+                color: "#ffffff"
+                border.color: ui.theme.strokeColor
+                radius: ui.theme.borderWidth
+
+                Image {
+                    id: image
+
+                    height: parent.height - 16
+                    anchors.centerIn: parent
+                    mipmap: true
+
+                    fillMode: Image.PreserveAspectFit
+
+                    source: model.timeSigPlacement.value === 0 ? "timeSigImages/timesig-on_all_staves.png"
+                          : model.timeSigPlacement.value === 1 ? "timeSigImages/timesig-above_staves.png"
+                                                               : "timeSigImages/timesig-across_staves.png"
+                }
+            }
         }
 
         StyledGroupBox {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            title: qsTrc("notation/editstyle/timesignatures", "Style")
+            title: qsTrc("notation/editstyle/timesignatures", "Style and size")
 
             ColumnLayout {
                 Layout.fillWidth: true

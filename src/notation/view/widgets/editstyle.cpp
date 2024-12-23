@@ -595,7 +595,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::hideTabClefAfterFirst,    false, hideTabClefs,                 0 },
         { StyleId::genClef,                  false, clefVisibility,               0 },
         { StyleId::genKeysig,                false, keysigVisibility,             0 },
-        { StyleId::genCourtesyTimesig,       false, genCourtesyTimesig,           0 },
         { StyleId::genCourtesyKeysig,        false, genCourtesyKeysig,            0 },
         { StyleId::genCourtesyClef,          false, genCourtesyClef,              0 },
         { StyleId::keySigCourtesyBarlineMode, false, ksbl,                        0 },
@@ -944,10 +943,10 @@ EditStyle::EditStyle(QWidget* parent)
     // ====================================================
 
     auto timeSigPage = createQmlWidget(
-        groupBoxTimeSig,
+        groupBox_timeSigSettings,
         QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/TimeSigPage.qml")));
-    timeSigPage.widget->setMinimumSize(224, 440);
-    groupBoxTimeSig->layout()->addWidget(timeSigPage.widget);
+    timeSigPage.widget->setMinimumSize(224, 650);
+    groupBox_timeSigSettings->layout()->addWidget(timeSigPage.widget);
 
     // ====================================================
     // Figured Bass
