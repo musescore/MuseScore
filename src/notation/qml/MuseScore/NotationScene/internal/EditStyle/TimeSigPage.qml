@@ -63,7 +63,7 @@ Rectangle {
 
         FlatButton {
             visible: model.timeSigPlacement.value !== 0
-            text: qsTrc("notation", "Edit system object staves...")
+            text: qsTrc("notation", "Edit system object staves…")
             //onClicked:
         }
 
