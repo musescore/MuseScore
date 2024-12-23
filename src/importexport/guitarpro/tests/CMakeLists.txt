@@ -28,6 +28,7 @@ set(MODULE_TEST_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/guitarpro_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/guitarbendimporter_tests.cpp
 )
 
 set(MODULE_TEST_LINK

@@ -132,6 +132,8 @@ void EngravingConfiguration::init()
     settings()->setDefaultValue(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, Val(false));
     settings()->setDescription(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, muse::trc("engraving", "Do not save EIDs"));
     settings()->setCanBeManuallyEdited(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, false);
+
+    setExperimentalGuitarBendImport(guitarProImportExperimental());
 }
 
 muse::io::path_t EngravingConfiguration::appDataPath() const
@@ -388,9 +390,14 @@ bool EngravingConfiguration::guitarProImportExperimental() const
     return guitarProConfiguration() ? guitarProConfiguration()->experimental() : false;
 }
 
-bool EngravingConfiguration::useStretchedBends() const
+bool EngravingConfiguration::experimentalGuitarBendImport() const
 {
-    return guitarProImportExperimental();
+    return m_experimentalGuitarBendImport;
+}
+
+void EngravingConfiguration::setExperimentalGuitarBendImport(bool enabled)
+{
+    m_experimentalGuitarBendImport = enabled;
 }
 
 bool EngravingConfiguration::shouldAddParenthesisOnStandardStaff() const

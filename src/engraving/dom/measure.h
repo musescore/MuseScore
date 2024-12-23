@@ -221,8 +221,8 @@ public:
     bool showsMeasureNumber();
     bool showsMeasureNumberInAutoMode();
 
-    Chord* findChord(Fraction tick, track_idx_t track);
-    ChordRest* findChordRest(Fraction tick, track_idx_t track);
+    Chord* findChord(Fraction tick, track_idx_t track) const;
+    ChordRest* findChordRest(Fraction tick, track_idx_t track) const;
     Fraction snap(const Fraction& tick, const PointF p) const;
     Fraction snapNote(const Fraction& tick, const PointF p, int staff) const;
 
