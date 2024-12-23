@@ -38,7 +38,7 @@ BendDataCollector::ImportedBendInfo fillBendInfo(const Note* note, const PitchVa
 void BendDataCollector::storeBendData(mu::engraving::Note* note, const mu::engraving::PitchValues& pitchValues)
 {
     if (!pitchValues.empty()) {
-        m_bendInfoForNote[note->track()][note->tick().ticks()] = fillBendInfo(note, pitchValues);
+        m_bendInfoForNote[note->track()][note->tick().ticks()][note->pitch()] = fillBendInfo(note, pitchValues);
     }
 }
 
@@ -47,8 +47,10 @@ BendDataContext BendDataCollector::collectBendDataContext()
     BendDataContext bendDataCtx;
 
     for (const auto& [track, trackInfo] : m_bendInfoForNote) {
-        for (const auto& [tick, importedBendInfo] : trackInfo) {
-            fillBendDataContextForNote(bendDataCtx, importedBendInfo);
+        for (const auto& [tick, tickInfo] : trackInfo) {
+            for (const auto& [pitch, importedBendInfo] : tickInfo) {
+                fillBendDataContextForNote(bendDataCtx, importedBendInfo);
+            }
         }
     }
 
@@ -126,27 +128,8 @@ std::vector<BendDataCollector::BendSegment> bendSegmentsFromPitchValues(const Pi
 
 BendDataCollector::ImportedBendInfo fillBendInfo(const Note* note, const PitchValues& pitchValues)
 {
-    PitchValues adaptedPitchValues;
-    adaptedPitchValues.reserve(pitchValues.size() + 2);
-
-    if (pitchValues.front().time != 0) {
-        PitchValue firstPv = pitchValues.front();
-        firstPv.time = 0;
-        adaptedPitchValues.push_back(firstPv);
-    }
-
-    for (const auto& pv : pitchValues) {
-        adaptedPitchValues.push_back(pv);
-    }
-
-    if (pitchValues.back().time != BEND_DIVISIONS) {
-        PitchValue lastPv = pitchValues.back();
-        lastPv.time = BEND_DIVISIONS;
-        adaptedPitchValues.push_back(lastPv);
-    }
-
     BendDataCollector::ImportedBendInfo info;
-    info.segments = bendSegmentsFromPitchValues(adaptedPitchValues, note->tieBack());
+    info.segments = bendSegmentsFromPitchValues(pitchValues, note->tieBack());
     info.note = note;
 
     for (const auto& bs : info.segments) {
@@ -160,7 +143,7 @@ BendDataCollector::ImportedBendInfo fillBendInfo(const Note* note, const PitchVa
 
 static bool isSlightBend(const BendDataCollector::ImportedBendInfo& importedInfo)
 {
-    if (importedInfo.pitchChangesAmount != 1 || importedInfo.note->tieFor() || importedInfo.segments.size() != 2) {
+    if (importedInfo.pitchChangesAmount != 1 || importedInfo.note->tieFor()) {
         return false;
     }
 
@@ -185,18 +168,21 @@ void fillSlightBendDataContext(BendDataContext& bendDataCtx, const BendDataColle
 
     bendDataCtx.bendChordDurations[note->track()][tick.ticks()] = std::move(bendDurations);
 
-    BendDataContext::BendData slightBendData;
-    slightBendData.quarterTones = 1;
+    BendDataContext::BendChordData& slightBendChordData = bendDataCtx.bendDataByEndTick[note->track()][tick.ticks()];
+    slightBendChordData.startTick = tick;
+
+    BendDataContext::BendNoteData slightBendNoteData;
+    slightBendNoteData.quarterTones = 1;
 
     const auto& firstSeg = importedInfo.segments.front();
     if (firstSeg.middleTime != -1) {
-        slightBendData.startFactor = (double)firstSeg.middleTime / BEND_DIVISIONS;
+        slightBendNoteData.startFactor = (double)firstSeg.middleTime / BEND_DIVISIONS;
     }
 
-    slightBendData.endFactor = (double)(firstSeg.endTime + 1) / BEND_DIVISIONS;
-    slightBendData.type = GuitarBendType::SLIGHT_BEND;
-    slightBendData.startTick = tick;
-    bendDataCtx.bendDataByEndTick[note->track()][tick.ticks()] = std::move(slightBendData);
+    slightBendNoteData.endFactor = (double)(firstSeg.endTime + 1) / BEND_DIVISIONS;
+    slightBendNoteData.type = GuitarBendType::SLIGHT_BEND;
+
+    slightBendChordData.noteDataByPitch[note->pitch()] = std::move(slightBendNoteData);
 }
 
 static bool isFirstPrebend(const BendDataCollector::ImportedBendInfo& importedInfo)
@@ -208,14 +194,17 @@ static bool isFirstPrebend(const BendDataCollector::ImportedBendInfo& importedIn
 static void fillPrebendDataContext(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo)
 {
     const Note* note = importedInfo.note;
-    BendDataContext::BendData prebendData;
+    Fraction tick = note->tick();
+    BendDataContext::BendChordData& prebendChordData = bendDataCtx.bendDataByEndTick[note->track()][tick.ticks()];
+    prebendChordData.startTick = tick;
 
     const auto& firstSeg = importedInfo.segments.front();
-    prebendData.type = GuitarBendType::PRE_BEND;
-    prebendData.startTick = note->tick();
-    prebendData.quarterTones = firstSeg.pitchDiff / 25;
 
-    bendDataCtx.bendDataByEndTick[note->track()][note->tick().ticks()] = std::move(prebendData);
+    BendDataContext::BendNoteData prebendNoteData;
+    prebendNoteData.type = GuitarBendType::PRE_BEND;
+    prebendNoteData.quarterTones = firstSeg.pitchDiff / 25;
+
+    prebendChordData.noteDataByPitch[note->pitch()] = std::move(prebendNoteData);
 
     std::vector<Fraction> bendDurations;
     Fraction duration = note->chord()->actualTicks();
@@ -228,19 +217,25 @@ static void fillNormalBendDataContext(BendDataContext& bendDataCtx, const BendDa
                                       size_t startIndex)
 {
     // TODO: fill chords durations in proportion to bend diagram
-    const Note* note = importedInfo.note;
-    BendDataContext::BendData bendData;
-
-    if (startIndex >= importedInfo.segments.size() - 1) {
+    if (startIndex >= importedInfo.segments.size()) {
         return;
     }
 
     const auto& firstSeg = importedInfo.segments.at(startIndex);
-    bendData.type = GuitarBendType::BEND;
-    bendData.startTick = note->tick();
-    bendData.quarterTones = firstSeg.pitchDiff / 25;
+    if (firstSeg.pitchDiff == 0) {
+        return;
+    }
 
-    bendDataCtx.bendDataByEndTick[note->track()][note->chord()->actualTicks().ticks()] = std::move(bendData);
+    const Note* note = importedInfo.note;
+    Fraction tick = note->tick();
+    BendDataContext::BendChordData& bendChordData = bendDataCtx.bendDataByEndTick[note->track()][note->chord()->actualTicks().ticks()];
+    bendChordData.startTick = tick;
+
+    BendDataContext::BendNoteData bendNoteData;
+    bendNoteData.type = GuitarBendType::BEND;
+    bendNoteData.quarterTones = firstSeg.pitchDiff / 25;
+
+    bendChordData.noteDataByPitch[note->pitch()] = std::move(bendNoteData);
 
     std::vector<Fraction> bendDurations;
     Fraction duration = note->chord()->actualTicks();
