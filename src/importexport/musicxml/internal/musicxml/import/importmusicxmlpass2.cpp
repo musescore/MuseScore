@@ -6622,6 +6622,23 @@ Note* MusicXmlParserPass2::note(const String& partId,
             } else {
                 headGroup = convertNotehead(noteheadValue);
             }
+        } else if (m_e.name() == "notehead-text") {
+            String noteheadText;
+            while (m_e.readNextStartElement()) {
+                if (m_e.name() == "display-text") {
+                    noteheadText = m_e.readText();
+                } else if (m_e.name() == "accidental-text") {
+                    m_e.skipCurrentElement();
+                } else {
+                    skipLogCurrElem();
+                }
+            }
+            if (noteheadText.size() == 1) {
+                headScheme = (noteheadText == u"H")
+                                ? NoteHeadScheme::HEAD_PITCHNAME_GERMAN : NoteHeadScheme::HEAD_PITCHNAME;
+            } else {
+                headScheme = NoteHeadScheme::HEAD_SOLFEGE;
+            }
         } else if (m_e.name() == "rest") {
             rest = true;
             measureRest = m_e.asciiAttribute("measure") == "yes";
