@@ -45,17 +45,17 @@ release:
 	      -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
 	      .. -G Xcode; \
 	xcodebuild -project ${XCODEPROJ} -target lrelease; \
-	$(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target ALL_BUILD $(FORMATTER_END); \
+	$(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target ALL_BUILD $(FORMATTER_END);
 
 debug:
 	mkdir build.debug; \
-      cd build.debug; \
-      cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
-            -DCMAKE_BUILD_TYPE=DEBUG \
-            -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" \
-            .. -G Xcode; 			       \
-      xcodebuild -project ${XCODEPROJ} -target lrelease; \
-      $(FORMATTER_START) xcodebuild-project ${XCODEPROJ} -configuration Debug -target ALL_BUILD $(FORMATTER_END); \
+    cd build.debug; \
+    cmake -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+          -DCMAKE_BUILD_TYPE=DEBUG \
+          -DCMAKE_BUILD_NUMBER="${BUILD_NUMBER}" \
+          .. -G Xcode; 			       \
+    xcodebuild -project ${XCODEPROJ} -target lrelease; \
+    $(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Debug -target ALL_BUILD $(FORMATTER_END);
 
 xcode:
 	mkdir build.xcode;              \
@@ -100,8 +100,8 @@ ci:
 	      -DMUSESCORE_REVISION="${MUSESCORE_REVISION}" \
 	      -DTELEMETRY_TRACK_ID="${TELEMETRY_TRACK_ID}" \
 	      .. -G Xcode; \
-	xcodebuild -UseModernBuildSystem=NO -project ${XCODEPROJ} -target lrelease; \
-	$(FORMATTER_START) xcodebuild -UseModernBuildSystem=NO -project ${XCODEPROJ} -configuration Release -target install $(FORMATTER_END);  
+	xcodebuild -project ${XCODEPROJ} -target lrelease; \
+	$(FORMATTER_START) xcodebuild -project ${XCODEPROJ} -configuration Release -target install $(FORMATTER_END);
 
 #
 # clean out of source build
