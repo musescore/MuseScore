@@ -23,6 +23,5 @@ add_library (qtsingleapp STATIC
     )
 
 if (BUILD_PCH)
-    target_link_libraries(qtsingleapp global)
-    target_precompile_headers(qtsingleapp REUSE_FROM global)
+    target_use_pch(qtsingleapp)
 endif (BUILD_PCH)

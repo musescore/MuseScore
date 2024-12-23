@@ -103,6 +103,5 @@ if (NOT APPLE AND NOT MINGW AND NOT MSVC AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 endif (NOT APPLE AND NOT MINGW AND NOT MSVC AND CMAKE_BUILD_TYPE MATCHES "DEBUG")
 
 if (BUILD_PCH)
-    target_link_libraries(libmscore global)
-    target_precompile_headers(libmscore REUSE_FROM global)
+    target_use_pch(libmscore)
 endif (BUILD_PCH)

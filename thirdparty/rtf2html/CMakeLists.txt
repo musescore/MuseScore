@@ -32,6 +32,5 @@ add_library (rtf2html STATIC
     )
 
 if (BUILD_PCH)
-    target_link_libraries(rtf2html global)
-    target_precompile_headers(rtf2html REUSE_FROM global)
+    target_use_pch(rtf2html)
 endif (BUILD_PCH)

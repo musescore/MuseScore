@@ -39,6 +39,5 @@ add_library (effects STATIC
       )
 
 if (BUILD_PCH)
-    target_link_libraries(effects global)
-    target_precompile_headers(effects REUSE_FROM global)
+    target_use_pch(effects)
 endif (BUILD_PCH)

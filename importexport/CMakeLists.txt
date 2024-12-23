@@ -50,6 +50,5 @@ target_link_libraries(${MODULE}
     )
 
 if (BUILD_PCH)
-    target_link_libraries(${MODULE} global)
-    target_precompile_headers(${MODULE} REUSE_FROM global)
+    target_use_pch(${MODULE})
 endif (BUILD_PCH)

@@ -26,6 +26,5 @@ if (MSVC)
 endif (MSVC)
 
 if (BUILD_PCH)
-    target_link_libraries(qzip global)
-    target_precompile_headers(qzip REUSE_FROM global)
+    target_use_pch(qzip)
 endif (BUILD_PCH)

@@ -374,6 +374,13 @@ if (BUILD_FOR_WINSTORE)
   set(FOR_WINSTORE 1)
 endif(BUILD_FOR_WINSTORE)
 
+#
+# Precompiled header
+#
+if (BUILD_PCH)
+      include (CreatePrecompiledHeader)
+endif (BUILD_PCH)
+
 if (USE_ZITA_REVERB)
     add_definitions(-DZITA_REVERB)
 endif(USE_ZITA_REVERB)
@@ -773,25 +780,12 @@ if (OMR)
  endif (NOT USE_SYSTEM_POPPLER)
 endif (OMR)
 
-## 
-## `global` target
-##
-
-add_subdirectory(global)
-
-##
-## Precompiled header
-##
-
-if (BUILD_PCH)
-    target_precompile_headers(global PRIVATE ${PROJECT_SOURCE_DIR}/build/pch.h)
-endif (BUILD_PCH)
-
 if (BUILD_TELEMETRY_MODULE)
       add_subdirectory(telemetry)
       add_subdirectory(thirdparty/qt-google-analytics)
 endif (BUILD_TELEMETRY_MODULE)
 
+add_subdirectory(global)
 add_subdirectory(importexport)
 add_subdirectory(mscore)
 add_subdirectory(main)

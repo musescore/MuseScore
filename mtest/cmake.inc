@@ -102,8 +102,7 @@ else(APPLE)
 endif(APPLE)
 
 if (BUILD_PCH)
-      target_link_libraries(${TARGET} global)
-      target_precompile_headers(${TARGET} REUSE_FROM global)
+      target_use_pch(${TARGET})
 endif (BUILD_PCH)
 
 add_test(${TARGET} ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}  -xunitxml -o result.xml)

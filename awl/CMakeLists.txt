@@ -66,9 +66,6 @@ add_library (awlplugin SHARED
 set_target_properties(awlplugin PROPERTIES EXCLUDE_FROM_ALL 1)
 
 if (BUILD_PCH)
-    target_link_libraries(awl global)
-    target_precompile_headers(awl REUSE_FROM global)
-
-    target_link_libraries(awlplugin global)
-    target_precompile_headers(awlplugin REUSE_FROM global)
+    target_use_pch(awl)
+    target_use_pch(awlplugin)
 endif (BUILD_PCH)

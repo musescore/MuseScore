@@ -27,6 +27,5 @@ else (MSVC OR MINGW)
 endif (MSVC OR MINGW)
 
 if (BUILD_PCH)
-    target_link_libraries(audio global)
-    target_precompile_headers(audiofile REUSE_FROM global)
+    target_use_pch(audiofile)
 endif (BUILD_PCH)

@@ -48,7 +48,6 @@ if (NOT MINGW AND NOT APPLE AND NOT MSVC)
       )
 
    if (BUILD_PCH)
-         target_link_libraries(bww2mxml global)
-         target_precompile_headers(bww2mxml REUSE_FROM global)
+         target_use_pch(bww2mxml)
    endif (BUILD_PCH)
 endif (NOT MINGW AND NOT APPLE AND NOT MSVC)

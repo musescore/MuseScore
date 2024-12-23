@@ -29,6 +29,5 @@ add_library (omr STATIC
       )
       
 if (BUILD_PCH)
-      target_link_libraries(omr global)
-      target_precompile_headers(omr REUSE_FROM global)
+      target_use_pch(omr)
 endif (BUILD_PCH)

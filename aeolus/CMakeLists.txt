@@ -35,8 +35,7 @@ add_library (aeolus STATIC
       )
 
 if (BUILD_PCH)
-    target_link_libraries(aeolus global)
-    target_precompile_headers(aeolus REUSE_FROM global)
+    target_use_pch(aeolus)
 endif (BUILD_PCH)
 
 install(

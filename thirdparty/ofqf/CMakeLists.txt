@@ -29,6 +29,5 @@ add_library(ofqf STATIC
     )
 
 if (BUILD_PCH)
-    target_link_libraries(ofqf global)
-    target_precompile_headers(ofqf REUSE_FROM global)
+    target_use_pch(ofqf)
 endif (BUILD_PCH)

@@ -10,8 +10,3 @@ add_library (beatroot STATIC
       AgentList.cpp
       Agent.cpp
   )
-
-if (BUILD_PCH)
-    target_link_libraries(beatroot global)
-    target_precompile_headers(beatroot REUSE_FROM global)
-endif (BUILD_PCH)

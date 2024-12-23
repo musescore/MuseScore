@@ -223,15 +223,8 @@ subdirs(omr)
 endif (OMR)
 
 if (BUILD_PCH)
-      target_link_libraries(testResources global)
-      target_precompile_headers(testResources REUSE_FROM global)
-
-      target_link_libraries(testutils global)
-      target_precompile_headers(testutils REUSE_FROM global)
-
-      target_link_libraries(testutils_mscoreapp global)
-      target_precompile_headers(testutils_mscoreapp REUSE_FROM global)
-
-      target_link_libraries(mtest global)
-      target_precompile_headers(mtest REUSE_FROM global)
+      target_use_pch(testResources)
+      target_use_pch(testutils)
+      target_use_pch(testutils_mscoreapp)
+      target_use_pch(mtest)
 endif (BUILD_PCH)

@@ -547,6 +547,5 @@ endif (MSCORE_OUTPUT_NAME)
 set (MSCORE_EXECUTABLE_NAME "${MSCORE_EXECUTABLE_NAME}" PARENT_SCOPE)
 
 if (BUILD_PCH)
-    target_link_libraries(mscore global)
-    target_precompile_headers(mscore REUSE_FROM global)
+    target_use_pch(mscore)
 endif (BUILD_PCH)

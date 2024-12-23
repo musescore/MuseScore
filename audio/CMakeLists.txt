@@ -43,6 +43,5 @@ target_link_libraries (${MODULE}
       )
 
 if (BUILD_PCH)
-    target_link_libraries(audio global)
-    target_precompile_headers(audio REUSE_FROM global)
+    target_use_pch(${MODULE})
 endif (BUILD_PCH)

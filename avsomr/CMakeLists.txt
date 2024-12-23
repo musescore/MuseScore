@@ -59,6 +59,5 @@ target_include_directories(avsomr
    )
 
 if (BUILD_PCH)
-   target_link_libraries(avsomr global)
-   target_precompile_headers(avsomr REUSE_FROM global)
+   target_use_pch(avsomr)
 endif (BUILD_PCH)
