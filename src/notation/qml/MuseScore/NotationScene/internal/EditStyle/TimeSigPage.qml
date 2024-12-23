@@ -40,30 +40,30 @@ Rectangle {
 
         StyledTextLabel {
             horizontalAlignment: Text.AlignLeft
-            text: qsTrc("notation", "Position:")
+            text: qsTrc("notation/editstyle/timesignatures", "Position:")
         }
 
         RoundedRadioButton {
-            text: qsTrc("notation", "On all staves")
+            text: qsTrc("notation/editstyle/timesignatures", "On all staves")
             checked: model.timeSigPlacement.value === 0
             onToggled: model.timeSigPlacement.value = 0
         }
 
         RoundedRadioButton {
-            text: qsTrc("notation", "Above staves")
+            text: qsTrc("notation/editstyle/timesignatures", "Above staves")
             checked: model.timeSigPlacement.value === 1
             onToggled: model.timeSigPlacement.value = 1
         }
 
         RoundedRadioButton {
-            text: qsTrc("notation", "Across staves")
+            text: qsTrc("notation/editstyle/timesignatures", "Across staves")
             checked: model.timeSigPlacement.value === 2
             onToggled: model.timeSigPlacement.value = 2
         }
 
         FlatButton {
             visible: model.timeSigPlacement.value !== 0
-            text: qsTrc("notation", "Edit system object staves…")
+            text: qsTrc("notation/editstyle/timesignatures", "Edit system object staves…")
             //onClicked:
         }
 
@@ -71,7 +71,7 @@ Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            title: qsTrc("notation", "Style")
+            title: qsTrc("notation/editstyle/timesignatures", "Style")
 
             ColumnLayout {
                 Layout.fillWidth: true
@@ -89,23 +89,24 @@ Rectangle {
 
                     StyledTextLabel {
                         horizontalAlignment: Text.AlignLeft
-                        text: qsTrc("notation", "Font style:")
+                        text: qsTrc("notation/editstyle/timesignatures", "Font style:")
                     }
 
                     RoundedRadioButton {
-                        text: qsTrc("notation", "Standard")
+                        text: qsTrc("notation/editstyle/timesignatures", "Standard")
                         checked: parent.placementStyle.value === 0
                         onToggled: parent.placementStyle.value = 0
                     }
 
                     RoundedRadioButton {
-                        text: qsTrc("notation", "Narrow")
+                        text: qsTrc("notation/editstyle/timesignatures", "Narrow")
                         checked: parent.placementStyle.value === 1
                         onToggled: parent.placementStyle.value = 1
                     }
 
                     RoundedRadioButton {
-                        text: qsTrc("notation", "Large sans-serif")
+                        //: Means: whether to use a sans-serif font for large time signatures
+                        text: qsTrc("notation/editstyle/timesignatures", "Narrow sans-serif")
                         checked: parent.placementStyle.value === 2
                         onToggled: parent.placementStyle.value = 2
                     }
@@ -118,17 +119,17 @@ Rectangle {
                     spacing: 8
                     StyledTextLabel {
                         horizontalAlignment: Text.AlignLeft
-                        text: qsTrc("notation", "Alignment with barlines:")
+                        text: qsTrc("notation/editstyle/timesignatures", "Alignment with barlines:")
                     }
 
                     RoundedRadioButton {
-                        text: qsTrc("notation", "Centered")
+                        text: qsTrc("notation/editstyle/timesignatures", "Centered")
                         checked: model.timeSigCenterOnBarline.value === true
                         onToggled: model.timeSigCenterOnBarline.value = true
                     }
 
                     RoundedRadioButton {
-                        text: qsTrc("notation", "Left-aligned")
+                        text: qsTrc("notation/editstyle/timesignatures", "Left-aligned")
                         checked: model.timeSigCenterOnBarline.value === false
                         onToggled: model.timeSigCenterOnBarline.value = false
                     }
@@ -142,17 +143,17 @@ Rectangle {
                     spacing: 8
                     StyledTextLabel {
                         horizontalAlignment: Text.AlignLeft
-                        text: qsTrc("notation", "Cautionary time signature at the end of the system:")
+                        text: qsTrc("notation/editstyle/timesignatures", "Cautionary time signature at the end of the system:")
                     }
 
                     RoundedRadioButton {
-                        text: qsTrc("notation", "Hang into page margin")
+                        text: qsTrc("notation/editstyle/timesignatures", "Hang into page margin")
                         checked: model.timeSigHangIntoMargin.value === true
                         onToggled: model.timeSigHangIntoMargin.value = true
                     }
 
                     RoundedRadioButton {
-                        text: qsTrc("notation", "Align within page margin")
+                        text: qsTrc("notation/editstyle/timesignatures", "Align within page margin")
                         checked: model.timeSigHangIntoMargin.value === false
                         onToggled: model.timeSigHangIntoMargin.value = false
                     }
@@ -165,17 +166,17 @@ Rectangle {
                     spacing: 8
                     StyledTextLabel {
                         horizontalAlignment: Text.AlignLeft
-                        text: qsTrc("notation", "Vertical alignment with staves:")
+                        text: qsTrc("notation/editstyle/timesignatures", "Vertical alignment with staves:")
                     }
 
                     RoundedRadioButton {
-                        text: qsTrc("notation", "Align to top staff")
+                        text: qsTrc("notation/editstyle/timesignatures", "Align to top staff")
                         checked: model.timeSigCenterAcrossStaveGroup.value === false
                         onToggled: model.timeSigCenterAcrossStaveGroup.value = false
                     }
 
                     RoundedRadioButton {
-                        text: qsTrc("notation", "Center across stave group")
+                        text: qsTrc("notation/editstyle/timesignatures", "Center across stave group")
                         checked: model.timeSigCenterAcrossStaveGroup.value === true
                         onToggled: model.timeSigCenterAcrossStaveGroup.value = true
                     }
@@ -189,7 +190,7 @@ Rectangle {
 
                     StyledTextLabel {
                         horizontalAlignment: Text.AlignLeft
-                        text: qsTrc("notation", "Scale:")
+                        text: qsTrc("notation/editstyle/timesignatures", "Scale:")
                     }
 
                     RowLayout {
@@ -234,7 +235,7 @@ Rectangle {
 
                     StyledTextLabel {
                         horizontalAlignment: Text.AlignLeft
-                        text: qsTrc("notation", "Number gap:")
+                        text: qsTrc("notation/editstyle/timesignatures", "Number gap:")
                     }
 
                     IncrementalPropertyControl {
@@ -262,7 +263,7 @@ Rectangle {
 
                     StyledTextLabel {
                         horizontalAlignment: Text.AlignLeft
-                        text: qsTrc("notation", "Vertical offset:")
+                        text: qsTrc("notation/editstyle/timesignatures", "Vertical offset:")
                     }
 
                     IncrementalPropertyControl {
