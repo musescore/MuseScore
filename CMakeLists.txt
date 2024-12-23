@@ -17,8 +17,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-# Minimum tested, report if it works with older
-CMAKE_MINIMUM_REQUIRED(VERSION 3.5.0)
+cmake_minimum_required(VERSION 3.16)
 
 project(mscore)
 
@@ -27,32 +26,10 @@ include(build/functions.cmake) # library of CMake functions ("fn__" namespace)
 # Print Qt version or fail the build if Qt (qmake) is not in PATH.
 fn__require_program(QMAKE Qt --version "https://musescore.org/en/handbook/developers-handbook/compilation" qmake)
 
-# Libraries linked via full path no longer produce linker search paths.
-cmake_policy(SET CMP0003 NEW)
-
-# Apparently needed on Mac only (?)
-if (APPLE)
-    # Issue no warning non-existent target argument to get_target_property()
-    # and set the result variable to a -NOTFOUND value rather than issuing a FATAL_ERROR 40
-    if(POLICY CMP0045)
-        cmake_policy(SET CMP0045 OLD)
-    endif(POLICY CMP0045)
-
-    # Silently ignore non-existent dependencies (mops1, mops2)
-    if(POLICY CMP0046)
-        #cmake_policy(SET CMP0046 OLD)
-    endif(POLICY CMP0046)
-
-    # Supress "The ``exec_program()`` command should not be called."
-    if(POLICY CMP0153)
-        cmake_policy(SET CMP0153 OLD)
-    endif(POLICY CMP0153)
-endif (APPLE)
-
-# RPATH settings on macOS do not affect install_name
-if(POLICY CMP0068)
-      cmake_policy(SET CMP0068 NEW)
-endif(POLICY CMP0068)
+# Supress "The ``exec_program()`` command should not be called."
+if(POLICY CMP0153)
+      cmake_policy(SET CMP0153 OLD)
+endif(POLICY CMP0153)
 
 # Don't process generated source files with AUTOMOC
 if(POLICY CMP0071)
@@ -206,10 +183,6 @@ else(BUILD_CRASH_REPORTER)
 endif(BUILD_CRASH_REPORTER)
 
 if (APPLE)
-      set (CMAKE_CXX_COMPILER   clang++)
-      set (CMAKE_CXX_COMPILER_ID "Clang")
-      set(CMAKE_OSX_ARCHITECTURES x86_64)
-
       set(MACOSX_DEPLOYMENT_TARGET 10.13)
       set(CMAKE_OSX_DEPLOYMENT_TARGET 10.13)
 
