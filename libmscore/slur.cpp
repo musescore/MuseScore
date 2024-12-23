@@ -10,17 +10,16 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#include "articulation.h"
+#include "chord.h"
 #include "measure.h"
+#include "navigate.h"
+#include "part.h"
 #include "score.h"
+#include "slur.h"
+#include "stem.h"
 #include "system.h"
 #include "undo.h"
-#include "chord.h"
-#include "stem.h"
-#include "slur.h"
-#include "tie.h"
-#include "part.h"
-#include "navigate.h"
-#include "articulation.h"
 
 namespace Ms {
 
@@ -141,7 +140,12 @@ bool SlurSegment::edit(EditData& ed)
             int endTrack   = part->endTrack();
             cr = searchCR(e->segment(), startTrack, endTrack);
             }
-      if (cr && cr != e1)
+      if (cr && cr != e1) {
+            if (cr->staff() != e->staff() && (cr->staffType()->isTabStaff() || e->staffType()->isTabStaff()))
+                  return false; // Cross-staff slurs don't make sense for TAB staves
+            if (cr->staff()->isLinked(e->staff()))
+                  return false; // Don't allow slur to cross into staff that's linked to this
+            }
             changeAnchor(ed, cr);
       return true;
       }
@@ -152,7 +156,7 @@ bool SlurSegment::edit(EditData& ed)
 
 void SlurSegment::changeAnchor(EditData& ed, Element* element)
       {
-      ChordRest* cr = element->isChordRest() ? toChordRest(element) : nullptr;
+      ChordRest* cr = (element && element->isChordRest()) ? toChordRest(element) : nullptr;
       ChordRest* scr = spanner()->startCR();
       ChordRest* ecr = spanner()->endCR();
       if (!cr || !scr || !ecr)
@@ -215,8 +219,10 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
                                     }
                               }
                         }
-                  score()->undo(new ChangeStartEndSpanner(sp, se, ee));
-                  sp->layout();
+                  if (se && ee) {
+                        score()->undo(new ChangeStartEndSpanner(sp, se, ee));
+                        sp->layout();
+                        }
                   }
             }
 
