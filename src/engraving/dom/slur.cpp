@@ -151,6 +151,12 @@ bool SlurSegment::edit(EditData& ed)
         return false;
     }
     if (cr && cr != e1) {
+        if (cr->staff() != e->staff() && (cr->staffType()->isTabStaff() || e->staffType()->isTabStaff())) {
+            return false; // Cross-staff slurs don't make sense for TAB staves
+        }
+        if (cr->staff()->isLinked(e->staff())) {
+            return false; // Don't allow slur to cross into staff that's linked to this
+        }
         changeAnchor(ed, cr);
     }
     return true;
@@ -224,8 +230,10 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
                     }
                 }
             }
-            score()->undo(new ChangeStartEndSpanner(sp, se, ee));
-            renderer()->layoutItem(sp);
+            if (se && ee) {
+                score()->undo(new ChangeStartEndSpanner(sp, se, ee));
+                renderer()->layoutItem(sp);
+            }
         }
     }
 
