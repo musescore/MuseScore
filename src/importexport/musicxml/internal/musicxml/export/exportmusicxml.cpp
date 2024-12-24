@@ -3930,7 +3930,7 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
         xml.tagRaw(noteheadTagname, "other");
     }
 
-    if (note->headScheme() == NoteHeadScheme::HEAD_PITCHNAME 
+    if (note->headScheme() == NoteHeadScheme::HEAD_PITCHNAME
         || note->headScheme() == NoteHeadScheme::HEAD_PITCHNAME_GERMAN
         || note->headScheme() == NoteHeadScheme::HEAD_SOLFEGE
         || note->headScheme() == NoteHeadScheme::HEAD_SOLFEGE_FIXED) {
