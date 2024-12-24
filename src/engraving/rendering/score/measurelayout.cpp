@@ -2216,8 +2216,11 @@ void MeasureLayout::layoutTimeTickAnchors(Measure* m, LayoutContext& ctx)
         Fraction thisDuration = segment.ticks();
         Fraction relativeTick = segment.rtick() - refCRSeg->rtick();
 
-        Segment* nextCRSeg = m->findSegmentR(SegmentType::ChordRest, refCRSeg->rtick() + refCRSeg->ticks());
-        double width = nextCRSeg ? nextCRSeg->x() - refCRSeg->x() : refCRSeg->width();
+        Segment* nextSeg = m->findSegmentR(SegmentType::ChordRest, refCRSeg->rtick() + refCRSeg->ticks());
+        if (!nextSeg) {
+            nextSeg = m->findSegmentR(SegmentType::BarLineType, refCRSeg->rtick() + refCRSeg->ticks());
+        }
+        double width = nextSeg ? nextSeg->x() - refCRSeg->x() : refCRSeg->width();
 
         double relativeX = width * (relativeTick.toDouble() / refCRSeg->ticks().toDouble());
         double relativeWidth = width * (thisDuration.toDouble() / refSegDuration.toDouble());

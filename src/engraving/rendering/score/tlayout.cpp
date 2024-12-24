@@ -1950,11 +1950,14 @@ void TLayout::layoutDynamicToEndOfPrevious(const Dynamic* item, TextBase::Layout
 {
     Segment* curSegment = item->segment();
     Segment* leftMostSegment = curSegment;
+    Segment* prevSeg = curSegment;
     while (true) {
-        Segment* prevSeg = leftMostSegment->prev1enabled();
-        if (prevSeg && prevSeg->tick() == leftMostSegment->tick()) {
+        prevSeg = prevSeg->prev1enabled();
+        if (!prevSeg || prevSeg->tick() != curSegment->tick()) {
+            break;
+        }
+        if (prevSeg->isActive() && prevSeg->hasElements(item->staffIdx())) {
             leftMostSegment = prevSeg;
-        } else {
             break;
         }
     }
