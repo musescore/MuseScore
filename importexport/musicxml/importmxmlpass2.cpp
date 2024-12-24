@@ -6662,6 +6662,30 @@ void MusicXMLParserPass2::duration(Fraction& dura)
       //qDebug("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
       }
 
+static FiguredBassItem::Modifier MusicXML2Modifier(const QString prefix)
+      {
+      if (prefix == "sharp")
+            return FiguredBassItem::Modifier::SHARP;
+      else if (prefix == "flat")
+            return FiguredBassItem::Modifier::FLAT;
+      else if (prefix == "natural")
+            return FiguredBassItem::Modifier::NATURAL;
+      else if (prefix == "double-sharp")
+            return FiguredBassItem::Modifier::DOUBLESHARP;
+      else if (prefix == "flat-flat")
+            return FiguredBassItem::Modifier::DOUBLEFLAT;
+      else if (prefix == "sharp-sharp")
+            return FiguredBassItem::Modifier::DOUBLESHARP;
+      else if (prefix == "cross")
+            return FiguredBassItem::Modifier::CROSS;
+      else if (prefix == "backslash")
+            return FiguredBassItem::Modifier::BACKSLASH;
+      else if (prefix == "slash")
+            return FiguredBassItem::Modifier::SLASH;
+      else
+            return FiguredBassItem::Modifier::NONE;
+      }
+
 //---------------------------------------------------------
 //   figure
 //---------------------------------------------------------
@@ -6702,9 +6726,9 @@ FiguredBassItem* MusicXMLParserPass2::figure(const int idx, const bool paren)
                         _logger->logError(QString("incorrect figure-number '%1'").arg(val), &_e);
                   }
             else if (_e.name() == "prefix")
-                  fgi->setPrefix(fgi->MusicXML2Modifier(_e.readElementText()));
+                  fgi->setPrefix(MusicXML2Modifier(_e.readElementText()));
             else if (_e.name() == "suffix")
-                  fgi->setSuffix(fgi->MusicXML2Modifier(_e.readElementText()));
+                  fgi->setSuffix(MusicXML2Modifier(_e.readElementText()));
             else
                   skipLogCurrElem();
             }

@@ -10,17 +10,17 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "fret.h"
-#include "measure.h"
-#include "system.h"
-#include "score.h"
-#include "stringdata.h"
 #include "chord.h"
-#include "note.h"
-#include "segment.h"
-#include "mscore.h"
+#include "fret.h"
 #include "harmony.h"
+#include "measure.h"
+#include "mscore.h"
+#include "note.h"
+#include "score.h"
+#include "segment.h"
 #include "staff.h"
+#include "stringdata.h"
+#include "system.h"
 #include "undo.h"
 
 namespace Ms {
@@ -1277,86 +1277,6 @@ void FretDiagram::scanElements(void* data, void (*func)(void*, Element*), bool a
             func(data, _harmony);
       }
 
-//---------------------------------------------------------
-//   Write MusicXML
-//---------------------------------------------------------
-
-void FretDiagram::writeMusicXML(XmlWriter& xml) const
-      {
-      qDebug("FretDiagram::writeMusicXML() this %p harmony %p", this, _harmony);
-      xml.stag("frame");
-      xml.tag("frame-strings", _strings);
-      xml.tag("frame-frets", frets());
-      if (fretOffset() > 0)
-            xml.tag("first-fret", fretOffset() + 1);
-
-      for (int i = 0; i < _strings; ++i) {
-            const int mxmlString = _strings - i;
-
-            std::vector<int> bStarts;
-            std::vector<int> bEnds;
-            for (auto const& j : _barres) {
-                  FretItem::Barre b = j.second;
-                  const int fret = j.first;
-                  int mxmlFret = fret + fretOffset();
-                  if (!b.exists())
-                        continue;
-
-                  if (b.startString == i)
-                        bStarts.push_back(mxmlFret);
-                  else if (b.endString == i || (b.endString == -1 && mxmlString == 1))
-                        bEnds.push_back(mxmlFret);
-                  }
-
-            if (marker(i).exists() && marker(i).mtype == FretMarkerType::CIRCLE) {
-                  xml.stag("frame-note");
-                  xml.tag("string", mxmlString);
-                  xml.tag("fret", "0");
-                  xml.etag();
-                  }
-
-            // Markers may exists alongside with dots
-            // Write dots
-            for (auto const& d : dot(i)) {
-                  if (!d.exists() || d.dtype == FretDotType::CROSS)
-                        continue;
-                  xml.stag("frame-note");
-                  xml.tag("string", mxmlString);
-                  xml.tag("fret", d.fret + fretOffset());
-                  // TODO: write fingerings
-
-                  // Also write barre if it starts at this dot
-                  if (std::find(bStarts.begin(), bStarts.end(), d.fret) != bStarts.end()) {
-                        xml.tagE("barre type=\"start\"");
-                        bStarts.erase(std::remove(bStarts.begin(), bStarts.end(), d.fret), bStarts.end());
-                        }
-                  if (std::find(bEnds.begin(), bEnds.end(), d.fret) != bEnds.end()) {
-                        xml.tagE("barre type=\"stop\"");
-                        bEnds.erase(std::remove(bEnds.begin(), bEnds.end(), d.fret), bEnds.end());
-                        }
-                  xml.etag();
-                  }
-
-            // Write unwritten barres
-            for (int j : bStarts) {
-                  xml.stag("frame-note");
-                  xml.tag("string", mxmlString);
-                  xml.tag("fret", j);
-                  xml.tagE("barre type=\"start\"");
-                  xml.etag();
-                  }
-
-            for (int j : bEnds) {
-                  xml.stag("frame-note");
-                  xml.tag("string", mxmlString);
-                  xml.tag("fret", j);
-                  xml.tagE("barre type=\"stop\"");
-                  xml.etag();
-                  }
-            }
-
-      xml.etag();
-      }
 
 //---------------------------------------------------------
 //   getProperty

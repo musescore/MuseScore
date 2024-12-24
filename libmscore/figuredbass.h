@@ -13,7 +13,7 @@
 #ifndef __FIGUREDBASS_H__
 #define __FIGUREDBASS_H__
 
-#include "text.h"
+#include "textbase.h"
 
 namespace Ms {
 
@@ -139,8 +139,6 @@ class FiguredBassItem final : public Element {
       int               parsePrefixSuffix(QString& str, bool bPrefix);
 
       void              setDisplayText(const QString& s)    { _displayText = s;       }
-      // read / write MusicXML support
-      QString           Modifier2MusicXML(FiguredBassItem::Modifier prefix) const;
 
    public:
       FiguredBassItem(Score * s = 0, int line = 0);
@@ -148,8 +146,6 @@ class FiguredBassItem final : public Element {
       ~FiguredBassItem();
 
       FiguredBassItem &operator=(const FiguredBassItem&) = delete;
-
-      FiguredBassItem::Modifier MusicXML2Modifier(const QString prefix) const;
 
       // standard re-implemented virtual functions
       FiguredBassItem*  clone() const override  { return new FiguredBassItem(*this); }
@@ -159,8 +155,6 @@ class FiguredBassItem final : public Element {
       void              read(XmlReader&) override;
       void              write(XmlWriter& xml) const override;
 
-      // read / write MusicXML
-      void              writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick) const;
       bool              startsWithParenthesis() const;
 
       // specific API
@@ -230,14 +224,13 @@ struct FiguredBassFont {
 //---------------------------------------------------------
 
 class FiguredBass final : public TextBase {
-      std::vector<FiguredBassItem*> items;      // the individual lines of the F.B.
+      std::vector<FiguredBassItem*> _items;      // the individual lines of the F.B.
       QVector<qreal>    _lineLengths;           // lengths of duration indicator lines (in raster units)
       bool              _onNote;                // true if this element is on a staff note | false if it is betweee notes
       Fraction          _ticks;                 // the duration (used for cont. lines and for multiple F.B.
                                                 // under the same note)
       qreal             _printedLineLength;     // the length of lines actually printed (i.e. continuation lines)
       void              layoutLines();
-      bool              hasParentheses() const; // read / write MusicXML support
 
       Sid getPropertyStyle(Pid) const override;
 
@@ -267,29 +260,26 @@ class FiguredBass final : public TextBase {
       void      startEdit(EditData&) override;
       void      write(XmlWriter& xml) const override;
 
-      // read / write MusicXML
-      void              writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const;
-
 //DEBUG
 //Q_INVOKABLE Ms::FiguredBassItem* addItem();
 
       // getters / setters / properties
 //      void qmlItemsAppend(QDeclarativeListProperty<FiguredBassItem> *list, FiguredBassItem * pItem)
 //                                                {     list->append(pItem);
-//                                                      items.append(&pItem);
+//                                                      _items.append(&pItem);
 //                                                }
 //      QDeclarativeListProperty<FiguredBassItem> qmlItems()
 //                                                {     QList<FiguredBassItem*> list;
-//                                                      foreach(FiguredBassItem item, items)
+//                                                      foreach(FiguredBassItem item, _items)
 //                                                            list.append(&item);
-//                                                      return QDeclarativeListProperty<FiguredBassItem>(this, &items, qmlItemsAppend);
+//                                                      return QDeclarativeListProperty<FiguredBassItem>(this, &_items, qmlItemsAppend);
 //                                                }
       qreal             lineLength(int idx) const     {   if(_lineLengths.size() > idx)
                                                             return _lineLengths.at(idx);
                                                           return 0;   }
       qreal             printedLineLength() const     { return _printedLineLength; }
       bool              onNote() const          { return _onNote; }
-      size_t            numOfItems() const      { return items.size(); }
+      size_t            numOfItems() const      { return _items.size(); }
       void              setOnNote(bool val)     { _onNote = val;  }
       Segment *         segment() const         { return (Segment*)(parent()); }
       Fraction          ticks() const           { return _ticks;  }
@@ -302,7 +292,9 @@ class FiguredBass final : public TextBase {
       bool      setProperty(Pid propertyId, const QVariant&) override;
       QVariant  propertyDefault(Pid) const override;
 
-      void appendItem(FiguredBassItem* item) {  items.push_back(item); }
+      void appendItem(FiguredBassItem* item) {  _items.push_back(item); }
+      const std::vector<FiguredBassItem*>& items() const { return _items; }
+      bool hasParentheses() const; // read / write MusicXML support
       };
 
 

@@ -792,166 +792,6 @@ void FiguredBassItem::undoSetParenth5(Parenthesis par)
       }
 
 //---------------------------------------------------------
-//
-//    MusicXML I/O
-//
-//---------------------------------------------------------
-
-//---------------------------------------------------------
-//   Convert MusicXML prefix/suffix to Modifier
-//---------------------------------------------------------
-
-FiguredBassItem::Modifier FiguredBassItem::MusicXML2Modifier(const QString prefix) const
-      {
-      if (prefix == "sharp")
-            return Modifier::SHARP;
-      else if (prefix == "flat")
-            return Modifier::FLAT;
-      else if (prefix == "natural")
-            return Modifier::NATURAL;
-      else if (prefix == "double-sharp")
-            return Modifier::DOUBLESHARP;
-      else if (prefix == "flat-flat")
-            return Modifier::DOUBLEFLAT;
-      else if (prefix == "sharp-sharp")
-            return Modifier::DOUBLESHARP;
-      else if (prefix == "cross")
-            return Modifier::CROSS;
-      else if (prefix == "backslash")
-            return Modifier::BACKSLASH;
-      else if (prefix == "slash")
-            return Modifier::SLASH;
-      else
-            return Modifier::NONE;
-      }
-
-//---------------------------------------------------------
-//   Convert Modifier to MusicXML prefix/suffix
-//---------------------------------------------------------
-
-QString FiguredBassItem::Modifier2MusicXML(FiguredBassItem::Modifier prefix) const
-      {
-      switch (prefix) {
-            case Modifier::NONE:        return "";
-            case Modifier::DOUBLEFLAT:  return "flat-flat";
-            case Modifier::FLAT:        return "flat";
-            case Modifier::NATURAL:     return "natural";
-            case Modifier::SHARP:       return "sharp";
-            case Modifier::DOUBLESHARP: return "double-sharp";
-            case Modifier::CROSS:       return "cross";
-            case Modifier::BACKSLASH:   return "backslash";
-            case Modifier::SLASH:       return "slash";
-            case Modifier::NUMOF:       return ""; // prevent gcc "‘FBINumOfAccid’ not handled in switch" warning
-            }
-      return "";
-      }
-
-//---------------------------------------------------------
-//   Read MusicXML
-//
-// Set the FiguredBassItem state based on the MusicXML <figure> node de.
-// In MusicXML, parentheses is set to "yes" or "no" for the figured-bass
-// node instead of for each individual <figure> node.
-//---------------------------------------------------------
-
-#if 0
-void FiguredBassItem::readMusicXML(XmlReader& e, bool paren)
-      {
-      // read the <figure> node de
-      while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-            if (tag == "figure-number") {
-                  // MusicXML spec states figure-number is a number
-                  // MuseScore can only handle single digit
-                  int iVal = e.readInt();
-                  if (1 <= iVal && iVal <= 9)
-                        _digit = iVal;
-                  }
-            else if (tag == "prefix")
-                  _prefix = MusicXML2Modifier(e.readElementText());
-            else if (tag == "suffix")
-                  _suffix = MusicXML2Modifier(e.readElementText());
-            else
-                  e.unknown();
-            }
-      // set parentheses
-      if (paren) {
-            // parenthesis open
-            if (_prefix != Modifier::NONE)
-                  parenth[0] = Parenthesis::ROUNDOPEN; // before prefix
-            else if (_digit != FBIDigitNone)
-                  parenth[1] = Parenthesis::ROUNDOPEN; // before digit
-            else if (_suffix != Modifier::NONE)
-                  parenth[2] = Parenthesis::ROUNDOPEN; // before suffix
-            // parenthesis close
-            if (_suffix != Modifier::NONE)
-                  parenth[3] = Parenthesis::ROUNDCLOSED; // after suffix
-            else if (_digit != FBIDigitNone)
-                  parenth[2] = Parenthesis::ROUNDCLOSED; // after digit
-            else if (_prefix != Modifier::NONE)
-                  parenth[1] = Parenthesis::ROUNDCLOSED; // after prefix
-            }
-      }
-#endif
-
-//---------------------------------------------------------
-//   Write MusicXML
-//
-// Writes the portion within the <figure> tag.
-//
-// NOTE: Both MuseScore and MusicXML provide two ways of altering the (temporal) length of a
-// figured bass object: extension lines and duration. The convention is that an EXTENSION is
-// used if the figure lasts LONGER than the note (i.e., it "extends" to the following notes),
-// whereas DURATION is used if the figure lasts SHORTER than the note (e.g., when notating a
-// figure change under a note). However, MuseScore does not restrict durations in this way,
-// allowing them to act as extensions themselves. As a result, a few more branches are
-// required in the decision tree to handle everything correctly.
-//---------------------------------------------------------
-
-void FiguredBassItem::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick) const
-      {
-      xml.stag("figure");
-
-      // The first figure of each group is the "original" figure. Practically, it is one inserted manually
-      // by the user, rather than automatically by the "duration" extend method.
-      if (isOriginalFigure) {
-            QString strPrefix = Modifier2MusicXML(_prefix);
-            if (strPrefix != "")
-                  xml.tag("prefix", strPrefix);
-            if (_digit != FBIDigitNone)
-                  xml.tag("figure-number", _digit);
-            QString strSuffix = Modifier2MusicXML(_suffix);
-            if (strSuffix != "")
-                  xml.tag("suffix", strSuffix);
-
-            // Check if the figure ends before or at the same time as the current note. Otherwise, the figure
-            // extends to the next note, and so carries an extension type "start" by definition.
-            if (fbEndTick <= crEndTick) {
-                  if (_contLine == ContLine::SIMPLE)
-                        xml.tagE("extend type=\"stop\" ");
-                  else if (_contLine == ContLine::EXTENDED) {
-                        bool hasFigure = (strPrefix != "" || _digit != FBIDigitNone || strSuffix != "");
-                        if (hasFigure)
-                              xml.tagE("extend type=\"start\" ");
-                        else
-                              xml.tagE("extend type=\"continue\" ");
-                        }
-                  }
-            else
-                  xml.tagE("extend type=\"start\" ");
-            }
-      // If the figure is not "original", it must have been created using the "duration" feature of figured bass.
-      // In other words, the original figure belongs to a previous note rather than the current note.
-      else {
-            if (crEndTick < fbEndTick)
-                  xml.tagE("extend type=\"continue\" ");
-            else
-                  xml.tagE("extend type=\"stop\" ");
-            }
-      xml.etag();
-      }
-
-//---------------------------------------------------------
 //   startsWithParenthesis
 //---------------------------------------------------------
 
@@ -999,8 +839,8 @@ FiguredBass::FiguredBass(Score* s)
       setElementStyle(st);
 #endif
       setTicks(Fraction(0,1));
-      qDeleteAll(items);
-      items.clear();
+      qDeleteAll(_items);
+      _items.clear();
       }
 
 FiguredBass::FiguredBass(const FiguredBass& fb)
@@ -1008,17 +848,17 @@ FiguredBass::FiguredBass(const FiguredBass& fb)
       {
       setOnNote(fb.onNote());
       setTicks(fb.ticks());
-      for (auto i : fb.items) {     // deep copy is needed
+      for (auto i : fb._items) {     // deep copy is needed
             FiguredBassItem* fbi = new FiguredBassItem(*i);
             fbi->setParent(this);
-            items.push_back(fbi);
+            _items.push_back(fbi);
             }
-//      items = fb.items;
+//      _items = fb._items;
       }
 
 FiguredBass::~FiguredBass()
       {
-      for (FiguredBassItem* item : items)
+      for (FiguredBassItem* item : _items)
             delete item;
       }
 
@@ -1051,13 +891,13 @@ void FiguredBass::write(XmlWriter& xml) const
       if (ticks().isNotZero())
             xml.tag("ticks", ticks());
       // if unparseable items, write full text data
-      if (items.size() < 1)
+      if (_items.size() < 1)
             TextBase::writeProperties(xml, true);
       else {
 //            if (textStyleType() != StyledPropertyListIdx::FIGURED_BASS)
 //                  // if all items parsed and not unstiled, we simply have a special style: write it
 //                  xml.tag("style", textStyle().name());
-            for (FiguredBassItem* item : items)
+            for (FiguredBassItem* item : _items)
                   item->write(xml);
             for (const StyledProperty& spp : *_elementStyle)
                   writeProperty(xml, spp.pid);
@@ -1085,7 +925,7 @@ void FiguredBass::read(XmlReader& e)
                   pItem->setTrack(track());
                   pItem->setParent(this);
                   pItem->read(e);
-                  items.push_back(pItem);
+                  _items.push_back(pItem);
                   // add item normalized text
                   if(!normalizedText.isEmpty())
                         normalizedText.append('\n');
@@ -1097,7 +937,7 @@ void FiguredBass::read(XmlReader& e)
                   e.unknown();
             }
       // if items could be parsed set normalized text
-      if (items.size() > 0)
+      if (_items.size() > 0)
             setXmlText(normalizedText);      // this is the text to show while editing
       }
 
@@ -1127,11 +967,11 @@ void FiguredBass::layout()
       // if element could be parsed into items, layout each element
       // Items list will be empty in edit mode (see FiguredBass::startEdit).
       // TODO: consider disabling specific layout in case text style is changed (tid() != Tid::FIGURED_BASS).
-      if (items.size() > 0) {
+      if (_items.size() > 0) {
             layoutLines();
             bbox().setRect(0, 0, _lineLengths.at(0), 0);
             // layout each item and enlarge bbox to include items bboxes
-            for (FiguredBassItem* item : items) {
+            for (FiguredBassItem* item : _items) {
                   item->layout();
                   addbbox(item->bbox().translated(item->pos()));
                   }
@@ -1268,10 +1108,10 @@ void FiguredBass::draw(QPainter* painter) const
 //            TextBase::draw(painter);
 //      else
             {                                                // not edit mode:
-            if (items.size() < 1)                           // if not parseable into f.b. items
+            if (_items.size() < 1)                           // if not parseable into f.b. items
                   TextBase::draw(painter);                      // draw as standard text
             else
-                  for (FiguredBassItem* item : items) {     // if parseable into f.b. items
+                  for (FiguredBassItem* item : _items) {     // if parseable into f.b. items
                         painter->translate(item->pos());    // draw each item in its proper position
                         item->draw(painter);
                         painter->translate(-item->pos());
@@ -1290,8 +1130,8 @@ void FiguredBass::draw(QPainter* painter) const
 
 void FiguredBass::startEdit(EditData& ed)
       {
-      qDeleteAll(items);
-      items.clear();
+      qDeleteAll(_items);
+      _items.clear();
       layout1(); // re-layout without F.B.-specific formatting.
       TextBase::startEdit(ed);
       }
@@ -1313,15 +1153,15 @@ void FiguredBass::endEdit(EditData& ed)
 #else
       QStringList list = txt.split('\n', QString::SkipEmptyParts);
 #endif
-      qDeleteAll(items);
-      items.clear();
+      qDeleteAll(_items);
+      _items.clear();
       QString normalizedText = QString();
       idx = 0;
       for (QString str : qAsConst(list)) {
             FiguredBassItem* pItem = new FiguredBassItem(score(), idx++);
             if(!pItem->parse(str)) {            // if any item fails parsing
-                  qDeleteAll(items);
-                  items.clear();                // clear item list
+                  qDeleteAll(_items);
+                  _items.clear();                // clear item list
                   score()->startCmd();
                   triggerLayout();
                   score()->endCmd();
@@ -1330,7 +1170,7 @@ void FiguredBass::endEdit(EditData& ed)
                   }
             pItem->setTrack(track());
             pItem->setParent(this);
-            items.push_back(pItem);
+            _items.push_back(pItem);
 
             // add item normalized text
             if(!normalizedText.isEmpty())
@@ -1338,7 +1178,7 @@ void FiguredBass::endEdit(EditData& ed)
             normalizedText.append(pItem->normalizedText());
             }
       // if all items parsed and text is styled, replaced entered text with normalized text
-      if (items.size())
+      if (_items.size())
             setXmlText(normalizedText);
 
       score()->startCmd();
@@ -1355,7 +1195,7 @@ void FiguredBass::endEdit(EditData& ed)
 void FiguredBass::setSelected(bool flag)
       {
       Element::setSelected(flag);
-      for(FiguredBassItem* item : items) {
+      for(FiguredBassItem* item : _items) {
             item->setSelected(flag);
             }
       }
@@ -1363,7 +1203,7 @@ void FiguredBass::setSelected(bool flag)
 void FiguredBass::setVisible(bool flag)
       {
       Element::setVisible(flag);
-      for(FiguredBassItem* item : items) {
+      for(FiguredBassItem* item : _items) {
             item->setVisible(flag);
             }
       }
@@ -1411,7 +1251,7 @@ FiguredBass* FiguredBass::nextFiguredBass() const
 qreal FiguredBass::additionalContLineX(qreal pagePosY) const
 {
       QPointF pgPos = pagePos();
-      for (FiguredBassItem* fbi : items)
+      for (FiguredBassItem* fbi : _items)
             // if item has cont.line but nothing before it
             // and item Y coord near enough to pagePosY
             if(fbi->contLine() != FiguredBassItem::ContLine::NONE
@@ -1451,11 +1291,11 @@ QVariant FiguredBass::propertyDefault(Pid id) const
 /*
 FiguredBassItem * FiguredBass::addItem()
       {
-      int line = items.size();
+      int line = _items.size();
       FiguredBassItem* fib = new FiguredBassItem(score(), line);
       // tell QML not to garbage collect this item
       QQmlEngine::setObjectOwnership(fib, QQmlEngine::CppOwnership);
-      items.push_back(fib);
+      _items.push_back(fib);
       return fib;
       }
 */
@@ -1721,33 +1561,10 @@ bool FiguredBass::fontData(int nIdx, QString * pFamily, QString * pDisplayName,
 
 bool FiguredBass::hasParentheses() const
       {
-      for (FiguredBassItem* item : items)
+      for (FiguredBassItem* item : _items)
             if (item->startsWithParenthesis())
                   return true;
       return false;
-      }
-
-//---------------------------------------------------------
-//   Write MusicXML
-//---------------------------------------------------------
-
-void FiguredBass::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int duration) const
-      {
-      QString stag = "figured-bass";
-      if (hasParentheses())
-            stag += " parentheses=\"yes\"";
-      if (placeAbove())
-            stag += " placement=\"above\"";
-      if (color() != MScore::defaultColor)
-            stag += QString(" color=\"%1\"").arg(color().name().toUpper());
-      if (!visible())
-            stag += " print-object=\"no\"";
-      xml.stag(stag);
-      for(FiguredBassItem* item : items)
-            item->writeMusicXML(xml, isOriginalFigure, crEndTick, fbEndTick);
-      if (writeDuration)
-            xml.tag("duration", duration);
-      xml.etag();
       }
 
 //---------------------------------------------------------
