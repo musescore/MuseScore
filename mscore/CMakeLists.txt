@@ -33,10 +33,6 @@ endfunction(prepend_to_list_items)
 add_subdirectory(widgets)
 prepend_to_list_items(WIDGETS_SOURCE_FILES "widgets/" WIDGETS_SOURCE_FILES)
 
-# This is not needed for MSVC compilation
-if (NOT MSVC)
-   include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
-endif (NOT MSVC)
 include (${PROJECT_SOURCE_DIR}/build/CopyFilesMacros.cmake)
 
 include_directories(
@@ -146,28 +142,15 @@ if (APPLE)
          cocoabridge STATIC
          macos/cocoabridge.mm
          )
-      set_target_properties (
-         cocoabridge
-         PROPERTIES
-         COMPILE_FLAGS "-g -Wall -Wextra -Winvalid-pch  -include ${PROJECT_SOURCE_DIR}/all.h"
-         )
 else (APPLE)
       set(INCS "")
       set(COCOABRIDGE "")
       set(MAC_SPARKLE_FILES  "")
 endif (APPLE)
 
-if (NOT MSVC)
-   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
-else (NOT MSVC)
-   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
-endif (NOT MSVC)
-
 add_library(mscoreapp STATIC
       ${qrc_files}
       ${ui_headers}
-      ${_all_h_file}
-      ${PCH}
       ${INCS}
 
       abstractdialog.h accessibletoolbutton.h albummanager.h
@@ -356,13 +339,13 @@ if (MINGW)
    if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
      set_target_properties( mscoreapp
         PROPERTIES
-           COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
+           COMPILE_FLAGS "-g -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
            LINK_FLAGS "-mwindows -mconsole -L ${QT_INSTALL_LIBS}"
         )
    else(CMAKE_BUILD_TYPE MATCHES "DEBUG")
      set_target_properties( mscoreapp
           PROPERTIES
-             COMPILE_FLAGS "${PCH_INCLUDE} -Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
+             COMPILE_FLAGS "-Wall -Wextra -Winvalid-pch ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
              LINK_FLAGS "-Wl,-S -mwindows -L ${QT_INSTALL_LIBS}"
           )
    endif(CMAKE_BUILD_TYPE MATCHES "DEBUG")
@@ -426,7 +409,7 @@ else (MINGW)
       set_target_properties (
          mscoreapp
          PROPERTIES
-            COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wno-overloaded-virtual -Winvalid-pch"
+            COMPILE_FLAGS "-g -Wall -Wno-overloaded-virtual -Winvalid-pch"
          )
 
       if (OMR)
@@ -455,7 +438,6 @@ else (MINGW)
            PROPERTIES
               LINK_FLAGS "-stdlib=libc++"
            )
-        xcode_pch(mscoreapp all)
       else (APPLE)
         #### PACKAGING for Linux and BSD based systems (more in top-level CMakeLists.txt) ####
       endif (APPLE)
@@ -471,13 +453,13 @@ else (MINGW)
       if(CMAKE_BUILD_TYPE MATCHES "REL*")
         set_target_properties( mscoreapp
            PROPERTIES
-              COMPILE_FLAGS "${PCH_INCLUDE} ${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
+              COMPILE_FLAGS "${QT_DEFINITIONS} -DQT_SVG_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB"
               LINK_FLAGS    "/LIBPATH:${QT_INSTALL_LIBS} ${all_library_paths}"
            )
       else(CMAKE_BUILD_TYPE MATCHES "REL*")
         set_target_properties( mscoreapp
            PROPERTIES
-              COMPILE_FLAGS "${PCH_INCLUDE} ${QT_DEFINITIONS} /DQT_SVG_LIB /DQT_GUI_LIB /DQT_XML_LIB /DQT_CORE_LIB"
+              COMPILE_FLAGS "${QT_DEFINITIONS} /DQT_SVG_LIB /DQT_GUI_LIB /DQT_XML_LIB /DQT_CORE_LIB"
               LINK_FLAGS    "/LIBPATH:${QT_INSTALL_LIBS} ${all_library_paths}"
            )
       endif(CMAKE_BUILD_TYPE MATCHES "REL*")
@@ -498,21 +480,12 @@ else (MINGW)
          endif (OCR)
       endif (OMR)
 
-      # Use pre-compiled headers
-      vstudio_pch( mscoreapp )
-
       if (WIN_SPARKLE_ENABLED)
             target_link_libraries(mscoreapp winsparkledll)
       endif (WIN_SPARKLE_ENABLED)
 
    endif ( NOT MSVC )
 endif (MINGW)
-
-# MSVC does not depend on mops1 & mops2 for PCH
-if (NOT MSVC)
-   ADD_DEPENDENCIES(mscoreapp mops1)
-   ADD_DEPENDENCIES(mscoreapp mops2)
-endif (NOT MSVC)
 
 add_library(
       inspectorplugin SHARED
@@ -537,14 +510,14 @@ if (NOT MSVC)
    set_target_properties(inspectorplugin
       PROPERTIES
       COMPILE_FLAGS
-         "-fPIC -D_GNU_SOURCE -D_REENTRANT -DHAVE_CONFIG_H -DQT_PLUGIN -DQT_SVG_LIB -DQT_SHARED -DQT_NO_DEBUG -include ${PROJECT_SOURCE_DIR}/all.h"
+         "-fPIC -D_GNU_SOURCE -D_REENTRANT -DHAVE_CONFIG_H -DQT_PLUGIN -DQT_SVG_LIB -DQT_SHARED -DQT_NO_DEBUG"
       )
 else (NOT MSVC)
    # x86 architecture does not support position-independent code, the -fPIC option is not relevant for this processor.
    set_target_properties (
       inspectorplugin
       PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} -D_GNU_SOURCE -D_REENTRANT -DHAVE_CONFIG_H -DQT_PLUGIN -DQT_SVG_LIB -DQT_SHARED -DQT_NO_DEBUG"
+         COMPILE_FLAGS "-D_GNU_SOURCE -D_REENTRANT -DHAVE_CONFIG_H -DQT_PLUGIN -DQT_SVG_LIB -DQT_SHARED -DQT_NO_DEBUG"
       )
 endif (NOT MSVC)
 
@@ -557,3 +530,12 @@ endif (NOT MSVC)
 
 target_link_libraries (inspectorplugin ${QT_LIBRARIES})
 set_target_properties(inspectorplugin PROPERTIES EXCLUDE_FROM_ALL 1)
+
+if (BUILD_PCH)
+      target_use_pch(mscoreapp)
+      target_use_pch(inspectorplugin)
+
+      if (APPLE)
+            target_use_pch(cocoabridge)
+      endif (APPLE)
+endif (BUILD_PCH)

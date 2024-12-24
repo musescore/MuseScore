@@ -20,19 +20,7 @@
 #ifndef __ALLQT_H__
 #define __ALLQT_H__
 
-#ifndef NDEBUG
-#define ABORTN(n) { static int k = 0; ++k; if (k == n) abort(); }
-#else
-#define ABORTN(a)
-#endif
-
 #if defined __cplusplus
-
-#if (defined (_MSCVER) || defined (_MSC_VER))
-   // Define to opt-in to deprecated features (bind2nd, mem_fun) removed in VS2017 c++17 mode.
-   #undef _HAS_AUTO_PTR_ETC
-   #define _HAS_AUTO_PTR_ETC 1
-#endif
 
 #include <stdio.h>
 #include <limits.h>
@@ -227,4 +215,3 @@
 #endif  // __cplusplus
 
 #endif
-

@@ -17,14 +17,11 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
-
 if (APPLE)
         file(GLOB_RECURSE INCS "*.h")
 else (APPLE)
         set(INCS "")
 endif (APPLE)
-
 
 QT5_WRAP_UI (aeolusUi aeolus_gui.ui)
 
@@ -34,33 +31,15 @@ add_library (aeolus STATIC
       asection.cpp division.cpp rankwave.cpp
       rngen.cpp exp2ap.cpp
       aeolusgui.cpp sparm.cpp
-      ${PROJECT_BINARY_DIR}/all.h
-      ${PCH}
       ${INCS}
       )
 
-if (NOT MSVC)
-   set_target_properties (
-      aeolus
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
-      )
-else (NOT MSVC)
-   set_target_properties (
-      aeolus
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} ${PCH_FORCE_USE}"
-      )
-endif (NOT MSVC)   
+if (BUILD_PCH)
+    target_use_pch(aeolus)
+endif (BUILD_PCH)
 
-install(DIRECTORY
-      stops
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound/aeolus
-         PATTERN .svn EXCLUDE
-      )
-
-xcode_pch(aeolus all)
-
-ADD_DEPENDENCIES(aeolus mops1)
-ADD_DEPENDENCIES(aeolus mops2)
-
+install(
+   DIRECTORY stops
+   DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}sound/aeolus
+   PATTERN .svn EXCLUDE
+   )

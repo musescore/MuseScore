@@ -12,7 +12,7 @@
 
 set(TARGET tst_compat114)
 
-include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
+include(${PROJECT_SOURCE_DIR}/mtest/CreateMtestTarget.cmake)
 
 get_target_property(
       MTEST_INSTALL_DESTINATION_DIR

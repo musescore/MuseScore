@@ -10,8 +10,6 @@
 #  the file LICENSE.GPL
 #=============================================================================
 
-include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
-
 if (APPLE)
       file(GLOB_RECURSE INCS "*.h")
 else (APPLE)
@@ -26,17 +24,9 @@ QT5_WRAP_UI (ui_headers
       compressor/compressor_gui.ui
       )
 
-if (NOT MSVC)
-   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
-else (NOT MSVC)
-   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
-endif (NOT MSVC)
-
 add_library (effects STATIC
       ${ui_headers}
       ${qrc_effects_files}
-      ${_all_h_file}
-      ${PCH}
       effect.cpp
       effectgui.cpp
       noeffect/noeffect.cpp
@@ -48,28 +38,6 @@ add_library (effects STATIC
       ${INCS}
       )
 
-if (NOT MSVC)
-   set_target_properties (
-      effects
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
-      )
-else (NOT MSVC)
-   set_target_properties (
-      effects
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE}"
-      )
-endif (NOT MSVC)   
-
-xcode_pch(effects all)
-
-# Use MSVC pre-compiled headers
-vstudio_pch( effects )
-
-# MSVC does not depend on mops1 & mops2 for PCH
-if (NOT MSVC)
-   ADD_DEPENDENCIES(effects mops1)
-   ADD_DEPENDENCIES(effects mops2)
-endif (NOT MSVC)   
-
+if (BUILD_PCH)
+    target_use_pch(effects)
+endif (BUILD_PCH)

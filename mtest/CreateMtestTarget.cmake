@@ -24,11 +24,6 @@ else (MTEST_LINK_MSCOREAPP)
 endif (MTEST_LINK_MSCOREAPP)
 
 if (MSVC)
-      set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
-      target_sources(${TARGET} PRIVATE
-            ${_all_h_file}
-            ${PCH}
-            )
       include(FindStaticLibrary)
 endif (MSVC)
 
@@ -84,7 +79,7 @@ set_target_properties (
       ${TARGET}
       PROPERTIES
       AUTOMOC true
-      COMPILE_FLAGS "-include all.h -D QT_GUI_LIB -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\" -g -Wall -Wextra"
+      COMPILE_FLAGS "-D QT_GUI_LIB -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\" -g -Wall -Wextra"
       LINK_FLAGS    "-g -stdlib=libc++"
       )
 else(APPLE)
@@ -93,26 +88,22 @@ else(APPLE)
                   ${TARGET}
                   PROPERTIES
                   AUTOMOC true
-                  COMPILE_FLAGS "/Zi ${PCH_INCLUDE} /D QT_GUI_LIB  /D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\""
+                  COMPILE_FLAGS "/Zi /D QT_GUI_LIB  /D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\""
                   )
       else (MSVC)
             set_target_properties (
                   ${TARGET}
                   PROPERTIES
                   AUTOMOC true
-                  COMPILE_FLAGS "-include all.h -D QT_GUI_LIB -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\" -g -Wall -Wextra"
+                  COMPILE_FLAGS "-D QT_GUI_LIB -D TESTROOT=\\\"${PROJECT_SOURCE_DIR}\\\" -g -Wall -Wextra"
                   LINK_FLAGS    "-g"
                   )
       endif (MSVC)
 endif(APPLE)
 
-if (APPLE AND (CMAKE_VERSION VERSION_LESS "3.5.0"))
-set_target_properties (
-      ${TARGET}
-      PROPERTIES
-      COMPILE_FLAGS "-include all.h -D QT_GUI_LIB -D TESTROOT=\\\\\"${PROJECT_SOURCE_DIR}\\\\\" -g -Wall -Wextra"
-      )
-endif (APPLE AND (CMAKE_VERSION VERSION_LESS "3.5.0"))
+if (BUILD_PCH)
+      target_use_pch(${TARGET})
+endif (BUILD_PCH)
 
 add_test(${TARGET} ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}  -xunitxml -o result.xml)
 

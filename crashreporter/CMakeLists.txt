@@ -21,7 +21,6 @@ QT5_WRAP_UI(ui_headers crashreporter.ui)
 
 add_executable(mscore-crash-reporter
       ${ui_headers}
-      ${_all_h_file}
       crashreporter.h
       crashreporter.cpp
       )

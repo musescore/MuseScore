@@ -12,4 +12,4 @@
 
 set(TARGET tst_ove_ove3)
 
-include(${PROJECT_SOURCE_DIR}/mtest/cmake.inc)
+include(${PROJECT_SOURCE_DIR}/mtest/CreateMtestTarget.cmake)

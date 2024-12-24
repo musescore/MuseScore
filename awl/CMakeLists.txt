@@ -17,16 +17,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
-
-if (NOT MSVC)
-   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
-else (NOT MSVC)
-   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
-endif (NOT MSVC)
-
-add_library (
-      awl STATIC
+add_library (awl STATIC
       aslider.cpp
       knob.cpp
       panknob.cpp
@@ -47,33 +38,8 @@ add_library (
       poslabel.h slider.h styledslider.h
       utils.h volknob.h volslider.h
       )
-if (NOT MSVC)
-   set_target_properties (
-      awl
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
-      )
-else (NOT MSVC)
-   set_target_properties (
-      awl
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE}"
-      )
-endif (NOT MSVC)   
 
-xcode_pch(awl all)
-
-# Use MSVC pre-compiled headers
-vstudio_pch( awl )
-
-# MSVC does not depend on mops1 & mops2 for PCH
-if (NOT MSVC)
-   ADD_DEPENDENCIES(awl mops1 mops2)
-endif (NOT MSVC)
-
-add_library (
-      awlplugin SHARED
-      ${_all_h_file}
+add_library (awlplugin SHARED
       awlplugin.cpp
       aslider.cpp
       knob.cpp
@@ -91,26 +57,6 @@ add_library (
       utils.cpp
       )
 
-##  "-D_GNU_SOURCE -D_REENTRANT -DHAVE_CONFIG_H -DQT_PLUGIN -DQT_SHARED -DQT_NO_DEBUG -include ${PROJECT_SOURCE_DIR}/all.h"
-
-#
-# We cannot use our precompiled headers because of -fPIC
-#
-if (NOT MSVC)
-   set_target_properties(awlplugin
-      PROPERTIES
-      COMPILE_FLAGS
-         "-fPIC -D_GNU_SOURCE -D_REENTRANT -DHAVE_CONFIG_H -DQT_PLUGIN -DQT_SHARED -DQT_NO_DEBUG -include ${PROJECT_SOURCE_DIR}/all.h"
-      )
-else (NOT MSVC)
-   # x86 architecture does not support position-independent code, the -fPIC option is not relevant for this processor.
-   set_target_properties (
-      awlplugin
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} -D_GNU_SOURCE -D_REENTRANT -DHAVE_CONFIG_H -DQT_PLUGIN -DQT_SHARED -DQT_NO_DEBUG"
-      )
-endif (NOT MSVC)   
-
 # Don't install awlplugin on default
 #install( TARGETS awlplugin DESTINATION ${designerPlugins}/plugins/designer/ )
 
@@ -119,3 +65,7 @@ endif (NOT MSVC)
 
 set_target_properties(awlplugin PROPERTIES EXCLUDE_FROM_ALL 1)
 
+if (BUILD_PCH)
+    target_use_pch(awl)
+    target_use_pch(awlplugin)
+endif (BUILD_PCH)

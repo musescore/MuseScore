@@ -11,7 +11,6 @@
 //=============================================================================
 
 #include <stdio.h>
-#include "all.h"
 
 static QFile logFile;
 static int processed = 0;
@@ -152,4 +151,3 @@ int main(int argc, char* argv[])
       printf("================\n");
       return 0;
       }
-

@@ -17,22 +17,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-include (${PROJECT_SOURCE_DIR}/build/gch.cmake)
-
-include_directories(
-      ${PROJECT_SOURCE_DIR}
-      )
-
-if (NOT MSVC)
-   set(_all_h_file "${PROJECT_BINARY_DIR}/all.h")
-else (NOT MSVC)
-   set(_all_h_file "${PROJECT_SOURCE_DIR}/all.h")
-endif (NOT MSVC)
-
-add_library (
-      avsomr STATIC
-      ${_all_h_file}
-      ${PCH}
+add_library (avsomr STATIC
       avsimport.cpp
       avslog.h
       ret.cpp
@@ -68,28 +53,11 @@ add_library (
       ui/setupavsomrview.h
       )
 
-if (NOT MSVC)
-   set_target_properties (
-      avsomr
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE} -g -Wall -Wextra -Winvalid-pch"
-      )
-else (NOT MSVC)
-   set_target_properties (
-      avsomr
-      PROPERTIES
-         COMPILE_FLAGS "${PCH_INCLUDE}"
-      )
-endif (NOT MSVC)   
+target_include_directories(avsomr
+   PRIVATE
+      ${PROJECT_SOURCE_DIR}
+   )
 
-xcode_pch(avsomr all)
-
-# Use MSVC pre-compiled headers
-vstudio_pch( avsomr )
-
-# MSVC does not depend on mops1 & mops2 for PCH
-if (NOT MSVC)
-   ADD_DEPENDENCIES(avsomr mops1)
-   ADD_DEPENDENCIES(avsomr mops2)
-endif (NOT MSVC)   
-
+if (BUILD_PCH)
+   target_use_pch(avsomr)
+endif (BUILD_PCH)
