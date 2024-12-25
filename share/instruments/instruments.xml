@@ -8657,7 +8657,6 @@
             <name>Vocals</name>
             <Instrument id="voice">
                   <family>voices</family>
-                  <!--don't remove this 'instrument', it is used in ...mscore/noteGroups.cpp to generate the time sig dialog of the master palette-->
                   <longName>Voice</longName>
                   <shortName>Vo.</shortName>
                   <description>Voice</description>
