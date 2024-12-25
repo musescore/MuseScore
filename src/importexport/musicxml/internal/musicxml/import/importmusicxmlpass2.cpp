@@ -6637,7 +6637,7 @@ Note* MusicXmlParserPass2::note(const String& partId,
                 headScheme = (noteheadText == u"H")
                              ? NoteHeadScheme::HEAD_PITCHNAME_GERMAN : NoteHeadScheme::HEAD_PITCHNAME;
             } else {
-                headScheme = NoteHeadScheme::HEAD_SOLFEGE;
+                headScheme = NoteHeadScheme::HEAD_SOLFEGE_FIXED;
             }
         } else if (m_e.name() == "rest") {
             rest = true;
