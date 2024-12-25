@@ -115,6 +115,8 @@ private:
     void goToLastControl();
     void goToNextRowControl();
     void goToPrevRowControl();
+    bool activateSearchControl(INavigationSection* activeSec);
+    void goToSearchControl();
 
     void goToControl(MoveDirection direction, INavigationPanel* activePanel = nullptr);
 

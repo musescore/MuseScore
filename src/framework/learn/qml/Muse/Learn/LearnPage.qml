@@ -110,7 +110,7 @@ FocusScope {
 
             Layout.preferredWidth: 220
 
-            navigation.name: "LearnSearch"
+            navigation.name: "SearchControl"
             navigation.panel: navSearchPanel
             navigation.order: 1
 
