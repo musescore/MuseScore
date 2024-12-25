@@ -14,7 +14,7 @@ on:
     inputs:
       platforms:
         description: 'Platforms to build:'
-        default: 'windows_x64 windows_x32 windows_portable'
+        default: 'windows_x64 windows_x32' # no windows_portable :-(
         required: true
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
@@ -28,7 +28,7 @@ on:
     inputs:
       platforms:
         description: 'Platforms to build:'
-        default: 'windows_x64 windows_x32 windows_portable'
+        default: 'windows_x64 windows_x32' # no windows_portable :-(
         type: string
         required: true
       build_mode:
