@@ -6054,6 +6054,11 @@ static void writeMusicXML(const FiguredBass* item, XmlWriter& xml, bool isOrigin
       QString stag = "figured-bass";
       if (item->hasParentheses())
             stag += " parentheses=\"yes\"";
+      if (item->placeAbove())
+            stag += " placement=\"above\"";
+      stag += color2xml(item);
+      if (!item->visible())
+            stag += " print-object=\"no\"";
       xml.stag(stag);
       for (FiguredBassItem* fbItem : item->items())
             writeMusicXML(fbItem, xml, isOriginalFigure, crEndTick, fbEndTick);
