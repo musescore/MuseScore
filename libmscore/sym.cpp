@@ -6676,7 +6676,7 @@ void ScoreFont::scanUserFonts(const QString& path, bool system)
             QString s(f._fontPath + f._filename);
             if (-1 == QFontDatabase::addApplicationFont(s)) {
                   if (!MScore::testMode)
-                        qDebug("Mscore: fatal error: cannot load external font <%s>", qPrintable(s));
+                        qDebug("Mscore: fatal error: cannot load font <%s>", qPrintable(s));
                   if (!MScore::debugMode && !MScore::testMode)
                         exit(-1);
                   }
