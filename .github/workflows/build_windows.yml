@@ -14,7 +14,7 @@ on:
     inputs:
       platforms:
         description: 'Platforms to build:'
-        default: 'windows_x64 windows_x32' # no windows_portable :-(
+        default: 'windows_x64 windows_x32 windows_portable'
         required: true
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
@@ -28,7 +28,7 @@ on:
     inputs:
       platforms:
         description: 'Platforms to build:'
-        default: 'windows_x64 windows_x32' # no windows_portable :-(
+        default: 'windows_x64 windows_x32 windows_portable'
         type: string
         required: true
       build_mode:
@@ -256,6 +256,7 @@ jobs:
   windows_portable:
     # Disable on pull_request
     if: |
+      github.event_name != 'schelule' &&
       github.event_name != 'pull_request' &&
       (github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_portable'))
     runs-on: windows-2022
