@@ -29,7 +29,7 @@ std::vector<double> beatTrack(const AgentParameters &params,
       int count = 0;
       double beatTime = -1;
       if (!beats.empty()) {
-            count = beats.size() - 1;
+            count = static_cast<int>(beats.size()) - 1;
             EventList::const_iterator itr = beats.end();
             --itr;
             beatTime = itr->time;
