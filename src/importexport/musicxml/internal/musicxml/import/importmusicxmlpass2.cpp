@@ -8163,7 +8163,18 @@ void MusicXmlParserNotations::technical()
 
 void MusicXmlParserNotations::otherTechnical()
 {
-    String text = m_e.readText();
+    const String smufl = m_e.attribute("smufl");
+
+    if (!smufl.empty()) {
+        SymId id = SymNames::symIdByName(smufl, SymId::noSym);
+        Notation notation = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
+                                                             m_e.attributes(), u"technical", id);
+        m_notations.push_back(notation);
+        m_e.skipCurrentElement();
+        return;
+    }
+
+    const String text = m_e.readText();
 
     if (text == u"z") {
         // Buzz roll
