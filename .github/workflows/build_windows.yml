@@ -256,7 +256,6 @@ jobs:
   windows_portable:
     # Disable on pull_request
     if: |
-      github.event_name != 'schelule' &&
       github.event_name != 'pull_request' &&
       (github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_portable'))
     runs-on: windows-2022
@@ -293,6 +292,7 @@ jobs:
 
         DO_CHECKSUM='true'
         if [ "$BUILD_MODE" == "devel" ]; then DO_CHECKSUM='false'; fi
+        if [ "$BUILD_MODE" == "nightly" ]; then DO_CHECKSUM='false'; fi
 
         DO_APPCAST='true'
         if [ "$BUILD_MODE" == "devel" ]; then DO_APPCAST='false'; fi
