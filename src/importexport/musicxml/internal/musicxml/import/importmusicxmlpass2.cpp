@@ -8241,7 +8241,7 @@ void MusicXmlParserNotations::harmonMute()
 }
 
 //---------------------------------------------------------
-//   harmonMute
+//   hole
 //---------------------------------------------------------
 
 /**
@@ -8253,10 +8253,9 @@ void MusicXmlParserNotations::hole()
     engraving::SymId hole = SymId::noSym;
     const std::vector<XmlStreamReader::Attribute> attributes = m_e.attributes();
     while (m_e.readNextStartElement()) {
-        String name = String::fromAscii(m_e.name().ascii());
-        if (name == "hole-closed") {
+        if (m_e.name() == "hole-closed") {
             const String location = m_e.attribute("location");
-            String value = m_e.readText();
+            const String value = m_e.readText();
             if (value == "yes") {
                 hole = SymId::windClosedHole;
             } else if (value == "no") {

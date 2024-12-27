@@ -3343,6 +3343,12 @@ static String symIdToTechn(const SymId sid)
     case SymId::brassHarmonMuteStemOpen:
         return u"harmon-mute";
         break;
+    case SymId::windClosedHole:
+    case SymId::windHalfClosedHole1:
+    case SymId::windHalfClosedHole2:
+    case SymId::windHalfClosedHole3:
+    case SymId::windOpenHole:
+        return u"hole";
     case SymId::guitarGolpe:
         return u"golpe";
         break;
@@ -3604,6 +3610,24 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                     break;
                 }
                 m_xml.tag("harmon-closed", location, harmonClosedValue);
+                m_xml.endElement();
+            } else if (mxmlTechn.startsWith(u"hole")) {
+                m_xml.startElementRaw(mxmlTechn);
+                XmlWriter::Attributes location = {};
+                String holeClosedValue;
+                switch (sid) {
+                case SymId::windClosedHole:
+                    holeClosedValue = u"yes";
+                    break;
+                case SymId::windOpenHole:
+                    holeClosedValue = u"no";
+                    break;
+                default:
+                    holeClosedValue = u"half";
+                    location = { { "location", (sid == SymId::windHalfClosedHole1) ? "right" : "bottom" } };
+                    break;
+                }
+                m_xml.tag("hole-closed", location, holeClosedValue);
                 m_xml.endElement();
             } else {
                 m_xml.tagRaw(mxmlTechn);
