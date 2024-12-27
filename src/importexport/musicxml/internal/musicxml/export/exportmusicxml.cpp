@@ -3488,6 +3488,7 @@ static void writeBreathMark(const Breath* const breath, XmlWriter& xml, Notation
             }
         }
         tagName += color2xml(breath);
+        tagName += ExportMusicXml::positioningAttributes(breath);
         if (breath->placement() == PlacementV::BELOW) {
             tagName += u" placement=\"below\"";
         } else if (ExportMusicXml::configuration()->exportMu3Compat()) {
@@ -4086,6 +4087,7 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
                 attr += fontStyleToXML(static_cast<FontStyle>(f->getProperty(Pid::FONT_STYLE).toInt()), false);
             }
             attr += color2xml(f);
+            attr += ExportMusicXml::positioningAttributes(f);
 
             if (f->textStyleType() == TextStyleType::RH_GUITAR_FINGERING) {
                 xml.tagRaw(u"pluck" + attr, t);
