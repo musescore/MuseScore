@@ -41,19 +41,6 @@ if (MSVC)
    set (MINGW false)
 endif (MSVC)
 
-# We need this early, before FindQt5
-option(BUILD_WEBENGINE "Built in webengine support" OFF)
-
-if (BUILD_WEBENGINE)
-   if (MINGW OR MSVC)
-      SET (USE_WEBENGINE 0)
-   else (MINGW OR MSVC)
-      SET (USE_WEBENGINE 1)
-   endif(MINGW OR MSVC)
-else (BUILD_WEBENGINE)
-   SET (USE_WEBENGINE 0)
-endif (BUILD_WEBENGINE)
-
 set(SCRIPT_INTERFACE  TRUE)
 #  Look for Qt5
 if (SCRIPT_INTERFACE)

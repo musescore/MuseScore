@@ -1,9 +1,9 @@
 .\" New manual page for MuseScore 3
-.\" Copyright (c) 2018, 2019, 2020, 2021, 2022
+.\" Copyright (c) 2018, 2019, 2020, 2021, 2022, 2025
 .\"	mirabilos <m@mirbsd.org>
 .\" Published under the same terms as MuseScore itself.
 .\"-
-.Dd August 05, 2022
+.Dd December 27, 2025
 .Dt @MAN_MSCORE_UPPER@ 1
 .Os MuseScore
 .Sh NAME@Variables_substituted_by_CMAKE_on_installation@
@@ -43,7 +43,6 @@
 .Op Fl \-no\-fallback\-font
 .Op Fl \-no\-midi
 .Op Fl \-no\-synthesizer
-.Op Fl \-no\-webview
 .Op Fl \-raw\-diff
 .Op Fl \-revert\-settings
 .Op Fl \-run\-test\-script
@@ -245,8 +244,6 @@ Set test mode flag for all files
 .It Fl v | \-version
 Display the name and version of the application
 without starting the graphical user interface
-.It Fl w | \-no\-webview
-Disable the web view component in the Start Centre
 .It Fl x | Fl \-gui\-scaling Ar factor
 Scale the score display and other GUI elements by the specified
 .Ar factor ;

@@ -16,10 +16,6 @@
 #include "libmscore/score.h"
 #include "preferences.h"
 
-#ifdef USE_WEBENGINE
-#include <QWebEngineCookieStore>
-#endif
-
 namespace Ms {
 
 extern QString dataPath;
@@ -135,13 +131,7 @@ QUrl ApiInfo::getUpdateScoreInfoUrl(const QString& scoreId, const QString& acces
       QUrlQuery query;
       query.addQueryItem("id", scoreId);
       query.addQueryItem("newScore", QString::number(newScore));
-
-#ifdef USE_WEBENGINE
-      query.addQueryItem("_token", accessToken);
-#else
       Q_UNUSED(accessToken); // we'll be redirected to a browser, don't put access token there
-#endif
-
       url.setQuery(query);
 
       return url;
@@ -331,81 +321,9 @@ void LoginManager::onTryLoginError(const QString& error)
       disconnect(this, SIGNAL(getUserError(QString)), this, SLOT(onTryLoginError(QString)));
       connect(this, SIGNAL(loginSuccess()), this, SLOT(tryLogin()));
       logout();
-#ifdef USE_WEBENGINE
-      loginInteractive();
-#else
       mscore->showLoginDialog();
-#endif
       }
 /*------- END - TRY LOGIN ROUTINES ----------------------------*/
-
-//---------------------------------------------------------
-//   clearHttpCacheOnRenderFinish
-//---------------------------------------------------------
-
-#ifdef USE_WEBENGINE
-static void clearHttpCacheOnRenderFinish(QWebEngineView* webView)
-      {
-      QWebEnginePage* page = webView->page();
-      QWebEngineProfile* profile = page->profile();
-
-      // workaround for the crashes sometimes happening in Chromium on macOS with Qt 5.12
-      QObject::connect(webView, &QWebEngineView::renderProcessTerminated, webView, [profile, webView](QWebEnginePage::RenderProcessTerminationStatus terminationStatus, int exitCode)
-            {
-            qDebug() << "Login page loading terminated" << terminationStatus << " " << exitCode;
-            profile->clearHttpCache();
-            webView->show();
-            });
-      }
-#endif
-//---------------------------------------------------------
-//   loginInteractive
-//---------------------------------------------------------
-
-#ifdef USE_WEBENGINE
-void LoginManager::loginInteractive()
-      {
-#if defined(WIN_PORTABLE)
-      QWebEngineProfile* defaultProfile = QWebEngineProfile::defaultProfile();
-      defaultProfile->setCachePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
-      defaultProfile->setPersistentStoragePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
-#endif
-      QWebEngineView* webView = new QWebEngineView;
-      webView->setWindowModality(Qt::ApplicationModal);
-      webView->setAttribute(Qt::WA_DeleteOnClose);
-
-      QWebEnginePage* page = webView->page();
-      QWebEngineProfile* profile = page->profile();
-      // TODO: logout in editor does not log out in web view
-      profile->setPersistentCookiesPolicy(QWebEngineProfile::NoPersistentCookies);
-#if defined(WIN_PORTABLE)
-      profile->setCachePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
-      profile->setPersistentStoragePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
-#endif
-      profile->setRequestInterceptor(new ApiWebEngineRequestInterceptor(profile));
-
-      clearHttpCacheOnRenderFinish(webView);
-
-      connect(page, &QWebEnginePage::loadFinished, this, [this, page, webView](bool ok) {
-            if (!ok)
-                  return;
-            constexpr QUrl::FormattingOptions cmpOpt = QUrl::RemoveQuery | QUrl::RemoveFragment | QUrl::StripTrailingSlash;
-            if (!page->url().matches(ApiInfo::loginSuccessUrl, cmpOpt))
-                  return;
-
-            page->runJavaScript("JSON.stringify(muGetAuthInfo())", [this, page, webView](const QVariant& v) {
-                  onLoginReply(nullptr, HTTP_OK, QJsonDocument::fromJson(v.toString().toUtf8()).object());
-                  // We have retrieved an access token, do not remain logged
-                  // in with web view profile.
-                  page->profile()->cookieStore()->deleteAllCookies();
-                  webView->close();
-                  });
-            });
-
-      webView->load(ApiInfo::loginUrl);
-      webView->show();
-      }
-#endif
 
 //---------------------------------------------------------
 //   login
@@ -844,35 +762,7 @@ bool LoginManager::syncUpload(const QString& path, int nid, const QString& title
 void LoginManager::updateScoreData(const QString& nid, bool newScore)
       {
       const QUrl url(ApiInfo::getUpdateScoreInfoUrl(nid, _accessToken, newScore, _updateScoreDataPath));
-#ifdef USE_WEBENGINE
-#if defined(WIN_PORTABLE)
-      QWebEngineProfile* defaultProfile = QWebEngineProfile::defaultProfile();
-      defaultProfile->setCachePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
-      defaultProfile->setPersistentStoragePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
-#endif
-      QWebEngineView* webView = new QWebEngineView;
-      webView->setWindowModality(Qt::ApplicationModal);
-      webView->setAttribute(Qt::WA_DeleteOnClose);
-
-      QWebEnginePage* page = webView->page();
-      QWebEngineProfile* profile = page->profile();
-
-      profile->setPersistentCookiesPolicy(QWebEngineProfile::NoPersistentCookies);
-#if defined(WIN_PORTABLE)
-      profile->setCachePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
-      profile->setPersistentStoragePath(QDir::cleanPath(QString("%1/../../../Data/settings/QWebEngine").arg(QCoreApplication::applicationDirPath())));
-#endif
-      profile->setRequestInterceptor(new ApiWebEngineRequestInterceptor(profile));
-
-      connect(page, &QWebEnginePage::windowCloseRequested, webView, &QWebEngineView::close);
-
-      clearHttpCacheOnRenderFinish(webView);
-
-      webView->load(url);
-      webView->show();
-#else
       QDesktopServices::openUrl(url);
-#endif
       }
 
 //---------------------------------------------------------
@@ -975,20 +865,4 @@ void ApiRequest::executeRequest(QNetworkAccessManager* networkManager)
       _reply->setParent(this);
       connect(_reply, &QNetworkReply::finished, this, [this]() { emit replyFinished(this); });
       }
-
-//---------------------------------------------------------
-//   ApiWebEngineRequestInterceptor::interceptRequest
-//    Sets the appropriate API headers for requests to
-//    musescore.com
-//---------------------------------------------------------
-
-#ifdef USE_WEBENGINE
-void ApiWebEngineRequestInterceptor::interceptRequest(QWebEngineUrlRequestInfo& request)
-      {
-      const ApiInfo& apiInfo = ApiInfo::instance();
-      request.setHttpHeader("User-Agent", apiInfo.userAgent);
-      request.setHttpHeader(apiInfo.clientIdHeader, apiInfo.clientId);
-      request.setHttpHeader(apiInfo.apiKeyHeader, apiInfo.apiKey);
-      }
-#endif
 }

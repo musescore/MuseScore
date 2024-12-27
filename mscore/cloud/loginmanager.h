@@ -100,9 +100,6 @@ class LoginManager : public QObject
    public:
       LoginManager(QAction* uploadAudioMenuAction, QObject* parent = 0);
       void login(QString login, QString password);
-#ifdef USE_WEBENGINE
-      void loginInteractive();
-#endif
       void upload(const QString& path, int nid, const QString& title);
       void updateScoreData(const QString& nid, bool newScore);
       bool hasAccessToken();

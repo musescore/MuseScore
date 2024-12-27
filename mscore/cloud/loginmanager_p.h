@@ -122,20 +122,6 @@ class ApiRequest : public QObject
       };
 
 //---------------------------------------------------------
-//   ApiWebEngineRequestInterceptor
-//---------------------------------------------------------
-
-#ifdef USE_WEBENGINE
-class ApiWebEngineRequestInterceptor : public QWebEngineUrlRequestInterceptor
-      {
-      Q_OBJECT
-   public:
-      ApiWebEngineRequestInterceptor(QObject* parent) : QWebEngineUrlRequestInterceptor(parent) {}
-      void interceptRequest(QWebEngineUrlRequestInfo& info) override;
-      };
-#endif
-
-//---------------------------------------------------------
 //   AsyncWait
 //---------------------------------------------------------
 

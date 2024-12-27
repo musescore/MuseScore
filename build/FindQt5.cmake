@@ -19,14 +19,6 @@ set(_components
     LinguistTools
     Help
   )
-if (USE_WEBENGINE)
-  set(_components
-    ${_components}
-    WebEngine
-    WebEngineCore
-    WebEngineWidgets
-	)
-endif(USE_WEBENGINE)
 
 if (WIN32)
     set(_components
