@@ -1356,7 +1356,7 @@ static bool convertArticulationToSymId(const String& mxmlName, SymId& id)
         { u"stopped",                SymId::brassMuteClosed },
         { u"snap-pizzicato",         SymId::pluckedSnapPizzicatoAbove },
         { u"heel",                   SymId::keyboardPedalHeel1 },
-        { u"toe",                    SymId::keyboardPedalToe1 },
+        { u"toe",                    SymId::keyboardPedalToe2 },
         { u"fingernails",            SymId::pluckedWithFingernails },
         { u"brass-bend",             SymId::brassBend },
         { u"flip",                   SymId::brassFlip },
