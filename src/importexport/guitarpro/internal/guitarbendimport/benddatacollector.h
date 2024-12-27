@@ -55,7 +55,6 @@ public:
     };
 
 private:
-    // todo: here storing 1 note for "track+tick". TODO: adapt for chord
-    std::unordered_map<mu::engraving::track_idx_t, std::map<int, ImportedBendInfo> > m_bendInfoForNote;
+    std::unordered_map<mu::engraving::track_idx_t, std::map<int, std::unordered_map<int /*pitch*/, ImportedBendInfo> > > m_bendInfoForNote;
 };
 } // mu::iex::guitarpro

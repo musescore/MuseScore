@@ -31,15 +31,19 @@ class Chord;
 
 namespace mu::iex::guitarpro {
 struct BendDataContext {
-    struct BendData {
-        mu::engraving::Fraction startTick;
+    struct BendNoteData {
         double startFactor = 0.0;
         double endFactor = 1.0;
         int quarterTones = 0;
         mu::engraving::GuitarBendType type = mu::engraving::GuitarBendType::BEND;
     };
 
+    struct BendChordData {
+        mu::engraving::Fraction startTick;
+        std::map<int /* pitch */, BendNoteData> noteDataByPitch;
+    };
+
     std::unordered_map<mu::engraving::track_idx_t, std::map<int, std::vector<mu::engraving::Fraction> > > bendChordDurations;
-    std::unordered_map<mu::engraving::track_idx_t, std::map<int, BendData> > bendDataByEndTick;
+    std::unordered_map<mu::engraving::track_idx_t, std::map<int, BendChordData> > bendDataByEndTick;
 };
 } // mu::iex::guitarpro
