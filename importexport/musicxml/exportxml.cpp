@@ -3106,6 +3106,42 @@ static QString symIdToTechn(const SymId sid)
             case SymId::guitarGolpe:
                   return "golpe";
                   break;
+            case SymId::handbellsBelltree:
+                  return "belltree";
+                  break;
+            case SymId::handbellsDamp3:
+                  return "damp";
+                  break;
+            case SymId::handbellsEcho1:
+                  return "echo";
+                  break;
+            case SymId::handbellsGyro:
+                  return "gyro";
+                  break;
+            case SymId::handbellsHandMartellato:
+                  return "hand martellato";
+                  break;
+            case SymId::handbellsMalletLft:
+                  return "mallet lift";
+                  break;
+            case SymId::handbellsMalletBellOnTable:
+                  return "mallet table";
+                  break;
+            case SymId::handbellsMartellato:
+                  return "martellato";
+                  break;
+            case SymId::handbellsMartellatoLift:
+                  return "martellato lift";
+                  break;
+            case SymId::handbellsMutedMartellato:
+                  return "muted martellato";
+                  break;
+            case SymId::handbellsPluckLift:
+                  return "pluck lift";
+                  break;
+            case SymId::handbellsSwing:
+                  return "swing";
+                  break;
             default:
                   ; // nothing
                   break;
@@ -3337,6 +3373,15 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         _xml.stag(mxmlTechn);
                         _xml.tagE("natural");
                         _xml.etag();
+                        }
+                  else if (QString(Sym::id2name(sid)).startsWith("handbells")) {
+                        QString handbell = "handbell";
+                        handbell += color2xml(a);
+                        handbell += positioningAttributes(a);
+                        if (!placement.isEmpty()) {
+                              handbell += QString(" placement=\"%1\"").arg(placement);
+                              }
+                        _xml.tag(handbell, symIdToTechn(sid));
                         }
                   else if (mxmlTechn.startsWith("harmon")) {
                         _xml.stag(mxmlTechn);

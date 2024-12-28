@@ -1310,6 +1310,19 @@ static bool convertArticulationToSymId(const QString& mxmlName, SymId& id)
       map["smear"]                  = SymId::brassSmear ;
       map["open"]                   = SymId::brassMuteOpen;
 
+      map["belltree"]               = SymId::handbellsBelltree;
+      map["damp"]                   = SymId::handbellsDamp3;
+      map["echo"]                   = SymId::handbellsEcho1;
+      map["gyro"]                   = SymId::handbellsGyro;
+      map["hand martellato"]        = SymId::handbellsHandMartellato;
+      map["mallet lift"]            = SymId::handbellsMalletLft;
+      map["mallet table"]           = SymId::handbellsMalletBellOnTable;
+      map["martellato"]             = SymId::handbellsMartellato;
+      map["martellato lift"]        = SymId::handbellsMartellatoLift;
+      map["muted martellato"]       = SymId::handbellsMutedMartellato;
+      map["pluck lift"]             = SymId::handbellsPluckLift;
+      map["swing"]                  = SymId::handbellsSwing;
+
       if (map.contains(mxmlName)) {
             id = map.value(mxmlName);
             return true;
@@ -7762,12 +7775,18 @@ void MusicXMLParserNotations::technical()
                   }
             else if (_e.name() == "harmonic")
                   harmonic();
+            else if (_e.name() == "handbell") {
+                  const QXmlStreamAttributes attributes = _e.attributes();
+                  convertArticulationToSymId(_e.readElementText(), id);
+                  _notations.push_back(Notation::notationWithAttributes(_e.name().toString(),
+                                                                        attributes, "technical", id));
+                  }
             else if (_e.name() == "harmon-mute")
                   harmonMute();
             else if (_e.name() == "hole")
                   hole();
             else if (_e.name() == "other-technical")
-                otherTechnical();
+                  otherTechnical();
             else
                   skipLogCurrElem();
             }

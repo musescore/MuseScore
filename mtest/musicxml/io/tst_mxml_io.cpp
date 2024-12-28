@@ -151,6 +151,7 @@ private slots:
       void grace2() { mxmlIoTest("testGrace2"); }
       void grace3() { mxmlIoTest("testGrace3"); }
       void hairpinDynamics() { mxmlMscxExportTestRef("testHairpinDynamics"); }
+      void handbells() { mxmlIoTest("testHandbells"); }
       void harmony1() { mxmlIoTest("testHarmony1"); }
       void harmony2() { mxmlIoTest("testHarmony2"); }
       void harmony3() { mxmlIoTest("testHarmony3"); }
