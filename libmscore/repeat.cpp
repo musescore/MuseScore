@@ -10,13 +10,11 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "repeat.h"
-#include "sym.h"
-#include "score.h"
-#include "system.h"
 #include "measure.h"
-#include "mscore.h"
+#include "repeat.h"
+#include "score.h"
 #include "staff.h"
+#include "system.h"
 
 namespace Ms {
 

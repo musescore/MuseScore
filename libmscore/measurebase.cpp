@@ -10,19 +10,18 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "measurebase.h"
+#include "layoutbreak.h"
 #include "measure.h"
+#include "measurebase.h"
+#include "note.h"
 #include "staff.h"
 #include "score.h"
-#include "chord.h"
-#include "note.h"
-#include "layoutbreak.h"
-#include "image.h"
 #include "segment.h"
+#include "staff.h"
+#include "stafftypechange.h"
+#include "system.h"
 #include "tempo.h"
 #include "xml.h"
-#include "system.h"
-#include "stafftypechange.h"
 
 namespace Ms {
 
@@ -204,13 +203,13 @@ void MeasureBase::remove(Element* el)
 
 Measure* MeasureBase::nextMeasure() const
       {
-      MeasureBase* m = _next;
-      for (;;) {
-            if (m == 0 || m->isMeasure())
-                  break;
-            m = m->_next;
+      MeasureBase* m = next();
+      while (m) {
+            if (m->isMeasure())
+                  return toMeasure(m);
+            m = m->next();
             }
-      return toMeasure(m);
+      return nullptr;
       }
 
 //---------------------------------------------------------
@@ -237,7 +236,7 @@ Measure* MeasureBase::prevMeasure() const
                   return toMeasure(m);
             m = m->prev();
             }
-      return 0;
+      return nullptr;
       }
 
 //---------------------------------------------------------
@@ -331,7 +330,7 @@ void MeasureBase::layout()
 MeasureBase* MeasureBase::top() const
       {
       const MeasureBase* mb = this;
-      while (mb->parent()) {
+      while (mb && mb->parent()) {
             if (mb->parent()->isMeasureBase())
                   mb = toMeasureBase(mb->parent());
             else
