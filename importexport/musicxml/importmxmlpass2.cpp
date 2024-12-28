@@ -1303,7 +1303,7 @@ static bool convertArticulationToSymId(const QString& mxmlName, SymId& id)
       map["stopped"]                = SymId::brassMuteClosed;
       map["snap-pizzicato"]         = SymId::pluckedSnapPizzicatoAbove;
       map["heal"]                   = SymId::keyboardPedalHeel1 ;
-      map["toe"]                    = SymId::keyboardPedalToe1 ;
+      map["toe"]                    = SymId::keyboardPedalToe2 ;
       map["fingernails"]            = SymId::pluckedWithFingernails  ;
       map["brass-bend"]             = SymId::brassBend ;
       map["flip"]                   = SymId::brassFlip;
@@ -7593,7 +7593,7 @@ void MusicXMLParserNotations::dynamics()
 void MusicXMLParserNotations::articulations()
       {
       while (_e.readNextStartElement()) {
-            SymId id { SymId::noSym };
+            SymId id = SymId::noSym;
             if (convertArticulationToSymId(_e.name().toString(), id)) {
                   if (_e.name() == "detached-legato") {
                         _notations.push_back(Notation::notationWithAttributes("tenuto",
@@ -7650,6 +7650,16 @@ void MusicXMLParserNotations::articulations()
                   _notations.push_back(artic);
                   _e.skipCurrentElement();  // skip but don't log
                   }
+            else if (_e.name() == "other-articulation") {
+                  const QString smufl = _e.attributes().value("smufl").toString();
+
+                  if (!smufl.isEmpty()) {
+                        Notation artic = Notation::notationWithAttributes(_e.name().toString(),
+                                                                               _e.attributes(), "articulations", id);
+                        _notations.push_back(artic);
+                        }
+                  _e.skipCurrentElement();  // skip but don't log
+                  }
             else {
                   skipLogCurrElem();
                   }
@@ -7669,7 +7679,7 @@ void MusicXMLParserNotations::ornaments()
       bool trillMark = false;
       // <trill-mark placement="above"/>
       while (_e.readNextStartElement()) {
-            SymId id { SymId::noSym };
+            SymId id = SymId::noSym;
             if (convertArticulationToSymId(_e.name().toString(), id)) {
                   Notation notation = Notation::notationWithAttributes(_e.name().toString(),
                                                                        _e.attributes(), "ornaments", id);
@@ -7737,7 +7747,7 @@ void MusicXMLParserNotations::ornaments()
 void MusicXMLParserNotations::technical()
       {
       while (_e.readNextStartElement()) {
-            SymId id { SymId::noSym };
+            SymId id = SymId::noSym;
             if (convertArticulationToSymId(_e.name().toString(), id)) {
                   Notation notation = Notation::notationWithAttributes(_e.name().toString(),
                                                                        _e.attributes(), "technical", id);
@@ -7754,6 +7764,8 @@ void MusicXMLParserNotations::technical()
                   harmonic();
             else if (_e.name() == "harmon-mute")
                   harmonMute();
+            else if (_e.name() == "hole")
+                  hole();
             else if (_e.name() == "other-technical")
                 otherTechnical();
             else
@@ -7764,7 +7776,18 @@ void MusicXMLParserNotations::technical()
 
 void MusicXMLParserNotations::otherTechnical()
       {
-      QString text = _e.readElementText();
+      const QString smufl = _e.attributes().value("smufl").toString();
+
+      if (!smufl.isEmpty()) {
+            SymId id = Sym::name2id(smufl);
+            Notation notation = Notation::notationWithAttributes(_e.name().toString(),
+                                                               _e.attributes(), "technical", id);
+            _notations.push_back(notation);
+            _e.skipCurrentElement();
+            return;
+            }
+
+      const QString text = _e.readElementText();
 
       if (text == "z") {
             // Buzz roll
@@ -7837,6 +7860,43 @@ void MusicXMLParserNotations::harmonMute()
                   _e.skipCurrentElement();
             }
       _notations.push_back(Notation::notationWithAttributes("harmon-closed", _e.attributes(), "technical", mute));
+      }
+
+//---------------------------------------------------------
+//   hole
+//---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/note/notations/technical/hole node.
+ */
+
+void MusicXMLParserNotations::hole()
+      {
+      SymId hole = SymId::noSym;
+      const QXmlStreamAttributes attributes = _e.attributes();
+      while (_e.readNextStartElement()) {
+            if (_e.name() == "hole-closed") {
+                  const QString location = _e.attributes().value("location").toString();
+                  const QString value = _e.readElementText();
+                  if (value == "yes")
+                        hole = SymId::windClosedHole;
+                  else if (value == "no")
+                        hole = SymId::windOpenHole;
+                  else if (value == "half") {
+                        if (location == "bottom")
+                              hole = SymId::windHalfClosedHole2;
+                        else if (location == "right")
+                              hole = SymId::windHalfClosedHole1;
+                        else {
+                              _logger->logError(QString("unsupported hole-closed location '%1'").arg(location), &_e);
+                              hole = SymId::windHalfClosedHole3;
+                              }
+                        }
+                  }
+            else
+                  _e.skipCurrentElement();
+            }
+      _notations.push_back(Notation::notationWithAttributes("hole-closed", attributes, "technical", hole));
       }
 
 //---------------------------------------------------------

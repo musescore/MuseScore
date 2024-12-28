@@ -164,6 +164,7 @@ private slots:
       void hello() { mxmlIoTest("testHello"); }
       void helloReadCompr() { mxmlReadTestCompr("testHello"); }
       void helloReadWriteCompr() { mxmlReadWriteTestCompr("testHello"); }
+      void holes() { mxmlIoTest("testHoles"); }
       void implicitMeasure1() { mxmlIoTest("testImplicitMeasure1"); }
       void incompleteTuplet() { mxmlIoTestRef("testIncompleteTuplet"); }
       void incorrectStaffNumber1() { mxmlIoTestRef("testIncorrectStaffNumber1"); }
