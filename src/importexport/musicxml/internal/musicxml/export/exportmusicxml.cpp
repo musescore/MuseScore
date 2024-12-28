@@ -404,7 +404,6 @@ public:
     static String fermataPosition(const Fermata* const fermata);
 
 private:
-
     int findBracket(const TextLineBase* tl) const;
     int findDashes(const TextLineBase* tl) const;
     int findHairpin(const Hairpin* tl) const;
@@ -3346,40 +3345,40 @@ static String symIdToTechn(const SymId sid)
     case SymId::guitarGolpe:
         return u"golpe";
         break;
-    case SymId::handbellsBelltree: 
+    case SymId::handbellsBelltree:
         return u"belltree";
         break;
-    case SymId::handbellsDamp3: 
+    case SymId::handbellsDamp3:
         return u"damp";
         break;
-    case SymId::handbellsEcho1: 
+    case SymId::handbellsEcho1:
         return u"echo";
         break;
-    case SymId::handbellsGyro: 
+    case SymId::handbellsGyro:
         return u"gyro";
         break;
-    case SymId::handbellsHandMartellato: 
+    case SymId::handbellsHandMartellato:
         return u"hand martellato";
         break;
-    case SymId::handbellsMalletLft: 
+    case SymId::handbellsMalletLft:
         return u"mallet lift";
         break;
-    case SymId::handbellsMalletBellOnTable: 
+    case SymId::handbellsMalletBellOnTable:
         return u"mallet table";
         break;
-    case SymId::handbellsMartellato: 
+    case SymId::handbellsMartellato:
         return u"martellato";
         break;
-    case SymId::handbellsMartellatoLift: 
+    case SymId::handbellsMartellatoLift:
         return u"martellato lift";
         break;
-    case SymId::handbellsMutedMartellato: 
+    case SymId::handbellsMutedMartellato:
         return u"muted martellato";
         break;
-    case SymId::handbellsPluckLift: 
+    case SymId::handbellsPluckLift:
         return u"pluck lift";
         break;
-    case SymId::handbellsSwing: 
+    case SymId::handbellsSwing:
         return u"swing";
         break;
     default:
