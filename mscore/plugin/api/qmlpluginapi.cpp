@@ -10,22 +10,22 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
-#include "qmlpluginapi.h"
+#include <QQmlEngine>
+
 #include "cursor.h"
 #include "elements.h"
 #include "fraction.h"
 #include "instrument.h"
-#include "score.h"
-#include "part.h"
-#include "util.h"
-#include "selection.h"
-#include "tie.h"
-
-#include "shortcut.h"
 #include "musescore.h"
-#include "libmscore/musescoreCore.h"
+#include "part.h"
+#include "qmlpluginapi.h"
+#include "score.h"
+#include "selection.h"
+#include "shortcut.h"
+#include "tie.h"
+#include "util.h"
 
-#include <QQmlEngine>
+#include "libmscore/musescoreCore.h"
 
 namespace Ms {
 namespace PluginAPI {
@@ -113,10 +113,14 @@ bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
 
 Score* PluginAPI::readScore(const QString& name, bool noninteractive)
       {
+      bool oldIgnoreWarnings = ignoreWarnings;
+      ignoreWarnings = noninteractive;
       Ms::Score* score = msc()->openScore(name, !noninteractive);
-      if (score) {
-            if (noninteractive)
-                  score->setCreated(false);
+      ignoreWarnings = oldIgnoreWarnings;
+      if (score && noninteractive) {
+            score->setCreated(false);
+            if (score->dirty()) // seems to happen when 'importing' Mu4 scores
+                  score->undoStack()->setClean();
             }
       return wrap<Score>(score, Ownership::SCORE);
       }
@@ -301,6 +305,7 @@ void PluginAPI::registerQmlTypes()
       qmlRegisterType<ScoreView>("MuseScore", 3, 0, "ScoreView");
 
       qmlRegisterType<Cursor>("MuseScore", 3, 0, "Cursor");
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
       qmlRegisterType<ScoreElement>();
       qmlRegisterType<Score>();
       qmlRegisterType<Element>();
@@ -316,6 +321,23 @@ void PluginAPI::registerQmlTypes()
       qmlRegisterType<Excerpt>();
       qmlRegisterType<Selection>();
       qmlRegisterType<Tie>();
+#else
+      qmlRegisterAnonymousType<ScoreElement>("MuseScore", 3);
+      qmlRegisterAnonymousType<Score>("MuseScore", 3);
+      qmlRegisterAnonymousType<Element>("MuseScore", 3);
+      qmlRegisterAnonymousType<Chord>("MuseScore", 3);
+      qmlRegisterAnonymousType<Note>("MuseScore", 3);
+      qmlRegisterAnonymousType<Segment>("MuseScore", 3);
+      qmlRegisterAnonymousType<Measure>("MuseScore", 3);
+      qmlRegisterAnonymousType<Part>("MuseScore", 3);
+      qmlRegisterAnonymousType<Staff>("MuseScore", 3);
+      qmlRegisterAnonymousType<Instrument>("MuseScore", 3);
+      qmlRegisterAnonymousType<Channel>("MuseScore", 3);
+      qmlRegisterAnonymousType<StringData>("MuseScore", 3);
+      qmlRegisterAnonymousType<Excerpt>("MuseScore", 3);
+      qmlRegisterAnonymousType<Selection>("MuseScore", 3);
+      qmlRegisterAnonymousType<Tie>("MuseScore", 3);
+#endif
       qmlRegisterType<PlayEvent>("MuseScore", 3, 0, "PlayEvent");
       //qmlRegisterType<Hook>();
       //qmlRegisterType<Stem>();
@@ -351,7 +373,11 @@ void PluginAPI::registerQmlTypes()
       qmlRegisterType<SlurTie>();
       qmlRegisterType<Spanner>();
 #endif
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
       qmlRegisterType<FractionWrapper>();
+#else
+      qmlRegisterAnonymousType<FractionWrapper>("MuseScore", 3);
+#endif
       qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
 
       qmlTypesRegistered = true;
