@@ -7837,6 +7837,7 @@ void MusicXMLParserNotations::harmonic()
 void MusicXMLParserNotations::harmonMute()
       {
       SymId mute = SymId::brassHarmonMuteClosed;
+      const QXmlStreamAttributes attributes = _e.attributes();
       while (_e.readNextStartElement()) {
             QString name = _e.name().toString();
             if (name == "harmon-closed") {
@@ -7859,7 +7860,7 @@ void MusicXMLParserNotations::harmonMute()
                   } else
                   _e.skipCurrentElement();
             }
-      _notations.push_back(Notation::notationWithAttributes("harmon-closed", _e.attributes(), "technical", mute));
+      _notations.push_back(Notation::notationWithAttributes("harmon-closed", attributes, "technical", mute));
       }
 
 //---------------------------------------------------------
