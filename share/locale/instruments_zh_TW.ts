@@ -6,7 +6,7 @@
         <source>Wind section notated on a grand staff.</source>
         <comment>winds description</comment>
         <extracomment>description for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>在大譜表上記譜的木管段</translation>
+        <translation>在大譜表上記譜的木管分部</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="208"/>
@@ -5844,7 +5844,7 @@
         <source>Brass section notated on a grand staff.</source>
         <comment>brass description</comment>
         <extracomment>description for Brass; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>在大譜表上記譜的銅管段。</translation>
+        <translation>在大譜表上記譜的銅管分部</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2082"/>
@@ -18031,7 +18031,7 @@
         <source>String section notated on a grand staff.</source>
         <comment>strings description</comment>
         <extracomment>description for Strings; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>在大譜表上記譜的弦樂段。</translation>
+        <translation>在大譜表上記譜的弦樂分部</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5928"/>
@@ -18157,14 +18157,14 @@
         <source>Violin section.</source>
         <comment>violins description</comment>
         <extracomment>description for Violins (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>小提琴段。</translation>
+        <translation>小提琴分部</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5967"/>
         <source>Violins (section)</source>
         <comment>violins trackName</comment>
         <extracomment>trackName for Violins (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>小提琴（段）</translation>
+        <translation>小提琴（分部）</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5969"/>
@@ -18255,14 +18255,14 @@
         <source>Viola section.</source>
         <comment>violas description</comment>
         <extracomment>description for Violas (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>中提琴段。</translation>
+        <translation>中提琴分部</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5997"/>
         <source>Violas (section)</source>
         <comment>violas trackName</comment>
         <extracomment>trackName for Violas (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>中提琴（段）</translation>
+        <translation>中提琴（分部）</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5999"/>
@@ -18353,14 +18353,14 @@
         <source>Violoncello section.</source>
         <comment>violoncellos description</comment>
         <extracomment>description for Violoncellos (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>大提琴段。</translation>
+        <translation>大提琴分部</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6027"/>
         <source>Violoncellos (section)</source>
         <comment>violoncellos trackName</comment>
         <extracomment>trackName for Violoncellos (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>大提琴（段）</translation>
+        <translation>大提琴（分部）</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6029"/>
@@ -18451,14 +18451,14 @@
         <source>Contrabass (double bass) section.</source>
         <comment>contrabasses description</comment>
         <extracomment>description for Contrabasses (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>低音提琴段。</translation>
+        <translation>低音提琴分部</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6057"/>
         <source>Contrabasses (section)</source>
         <comment>contrabasses trackName</comment>
         <extracomment>trackName for Contrabasses (section); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>低音提琴（段）</translation>
+        <translation>低音提琴（分部）</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6059"/>

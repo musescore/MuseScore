@@ -6985,7 +6985,7 @@
         <source>Baritone Horn (treble clef)</source>
         <comment>baritone-horn-treble trackName</comment>
         <extracomment>trackName for Baritone Horn (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bariton-hoon (vioolsleutel)</translation>
+        <translation>Bariton-hoorn (vioolsleutel)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2433"/>

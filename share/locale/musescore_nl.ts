@@ -10604,7 +10604,7 @@ Gepubliceerd onder de &lt;a href=&quot;%1&quot;&gt;GNU General Public License ve
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="81"/>
         <source>In order to protect your privacy, MuseScore Studio does not collect any personal information. See our &lt;a href=&quot;%1&quot;&gt;Privacy Policy&lt;/a&gt; for more info.</source>
-        <translation>Om je privacy te beschermen verzamelt MuseScore Studio geen persoonlijke gegevens. Zie ons &lt;a href=&quot;%1&quot;&gt;privacybeleid&lt;/a&gt; voor meer informatie.</translation>
+        <translation>Om uw privacy te beschermen verzamelt MuseScore Studio geen persoonlijke gegevens. Zie ons &lt;a href=&quot;%1&quot;&gt;privacybeleid&lt;/a&gt; voor meer informatie.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="102"/>
@@ -11595,7 +11595,7 @@ Gepubliceerd onder de &lt;a href=&quot;%1&quot;&gt;GNU General Public License ve
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="68"/>
         <source>You are not signed in</source>
-        <translation>Je bent niet ingelogd</translation>
+        <translation>U bent niet ingelogd</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/RequireAuthorizationDialog.qml" line="77"/>
@@ -11622,7 +11622,7 @@ Gepubliceerd onder de &lt;a href=&quot;%1&quot;&gt;GNU General Public License ve
     <message>
         <location filename="../../src/framework/cloud/internal/oauthhttpserverreplyhandler.cpp" line="184"/>
         <source>Sign in successful! You’re good to go back to MuseScore Studio.</source>
-        <translation>Succesvol ingelogd! Je kunt nu terug gaan naar MuseScore Studio.</translation>
+        <translation>Succesvol ingelogd! U kunt nu terug gaan naar MuseScore Studio.</translation>
     </message>
 </context>
 <context>
@@ -11635,7 +11635,7 @@ Gepubliceerd onder de &lt;a href=&quot;%1&quot;&gt;GNU General Public License ve
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="38"/>
         <source>This will create a .zip file with information about your MuseScore Studio setup to help developers diagnose any problems you are having. You can inspect the contents of this file before sending it to anyone.</source>
-        <translation>Dit maakt een .zip-bestand aan met daarin informatie over je MuseScore Studio-instellingen, om ontwikkelaars te helpen bij het onderzoeken van problemen die je ervaart. Je kunt de inhoud van dit bestand bekijken voordat je het naar iemand opstuurt.</translation>
+        <translation>Dit maakt een .zip-bestand aan met daarin informatie over uw MuseScore Studio-instellingen, om ontwikkelaars te helpen bij het onderzoeken van problemen die u ervaart. U kunt de inhoud van dit bestand bekijken voordat u het naar iemand opstuurt.</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="52"/>
@@ -27236,7 +27236,7 @@ is mislukt.</translation>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="678"/>
         <source>Are you sure you want to change this sound?</source>
-        <translation>Weet je zeker dat je dit geluid wilt wijzigen</translation>
+        <translation>Weet u zeker dat u dit geluid wilt wijzigen?</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="679"/>
@@ -27346,7 +27346,7 @@ is mislukt.</translation>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="157"/>
         <source>Are you sure you want to change sounds?</source>
-        <translation>Weet je zeker dat je het geluid wilt wijzigen?</translation>
+        <translation>Weet u zeker dat u het geluid wilt wijzigen?</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/soundprofilesmodel.cpp" line="158"/>
@@ -27790,22 +27790,22 @@ is mislukt.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="162"/>
         <source>Publish your finished scores on MuseScore.com</source>
-        <translation>Publiceer je voltooide partituren op MuseScore.com</translation>
+        <translation>Publiceer uw voltooide partituren op MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="187"/>
         <source>Create a portfolio to showcase your music</source>
-        <translation>Bouw een portfolio op en laat je muziek zien aan de wereld</translation>
+        <translation>Bouw een portfolio op en laat uw muziek zien aan de wereld</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="188"/>
         <source>Gain followers and receive score comments and ratings</source>
-        <translation>Krijg volgers en ontvang commentaar en beoordelingen op je partituren</translation>
+        <translation>Krijg volgers en ontvang commentaar en beoordelingen op uw partituren</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="189"/>
         <source>Share your projects and collaborate with other musicians</source>
-        <translation>Deel je projecten en werk samen met andere muzikanten</translation>
+        <translation>Deel uw projecten en werk samen met andere muzikanten</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="223"/>
@@ -28948,7 +28948,7 @@ is mislukt.</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="351"/>
         <source>All saved changes will be publicly visible on MuseScore.com. If you want to make frequent changes, we recommend saving this score privately until you’re ready to share it to the world.</source>
-        <translation>Alle opgeslagen wijzigingen zijn openbaar zichtbaar op MuseScore.com. Als je regelmatig wijzigingen wilt aanbrengen, raden we je aan deze partituur privé op te slaan totdat je klaar bent om deze aan de wereld te laten zien.</translation>
+        <translation>Alle opgeslagen wijzigingen zijn openbaar zichtbaar op MuseScore.com. Als u regelmatig wijzigingen wilt aanbrengen, raden we u aan deze partituur privé op te slaan totdat u klaar bent om deze aan de wereld te laten zien.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="350"/>
@@ -28986,7 +28986,7 @@ is mislukt.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="87"/>
         <source>This could take a few minutes each time you save, depending on the size of your score. These settings can always be changed in Preferences.</source>
-        <translation>Dit kan enkele minuten duren elke keer dat je opslaat, afhankelijk van de grootte van je partituur. Deze instellingen kunnen altijd worden gewijzigd in Voorkeuren.</translation>
+        <translation>Dit kan enkele minuten duren elke keer dat u opslaat, afhankelijk van de grootte van de partituur. Deze instellingen kunnen altijd worden gewijzigd in Voorkeuren.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="427"/>
@@ -29002,7 +29002,7 @@ is mislukt.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1367"/>
         <source>All saved changes will now update to the cloud. You can manage this file in the score manager on musescore.com.</source>
-        <translation>Alle opgeslagen wijzigingen zullen nu naar de cloud geüpdatet worden. Je kunt dit bestand beheren in de partituur beheerder op MuseScore.com.</translation>
+        <translation>Alle opgeslagen wijzigingen zullen nu naar de cloud geüpdatet worden. U kunt dit bestand beheren in de partituur beheerder op MuseScore.com.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1592"/>
@@ -29111,7 +29111,7 @@ is mislukt.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1442"/>
         <source>Your changes will be saved to a local file until the connection resumes.</source>
-        <translation>Je wijzigingen worden opgeslagen in een lokaal bestand totdat de verbinding wordt hervat.</translation>
+        <translation>Uw wijzigingen worden opgeslagen in een lokaal bestand totdat de verbinding wordt hervat.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="391"/>
@@ -29769,12 +29769,12 @@ is mislukt.</translation>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="140"/>
         <source>You already have the latest version of MuseScore Studio. Please visit &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; for news on what’s coming next.</source>
-        <translation>Je hebt al de nieuwste versie van MuseScore Studio. Houd &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; in de gaten voor nieuws over wat eraan zit te komen.</translation>
+        <translation>U heeft reeds de nieuwste versie van MuseScore Studio. Houd &lt;a href=&quot;%1&quot;&gt;musescore.org&lt;/a&gt; in de gaten voor nieuws over wat eraan zit te komen.</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="147"/>
         <source>You’re up to date!</source>
-        <translation>Je bent helemaal bij!</translation>
+        <translation>U bent helemaal up-to-date!</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="176"/>
@@ -29789,7 +29789,7 @@ is mislukt.</translation>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="193"/>
         <source>MuseScore Studio needs to close to complete the installation. If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.</source>
-        <translation>MuseScore Studio moet worden afgesloten om de installatie te voltooien. Als je niet-opgeslagen wijzigingen hebt, zal je worden gevraagd die op te slaan voordat MuseScore Studio wordt afgesloten.</translation>
+        <translation>MuseScore Studio moet worden afgesloten om de installatie te voltooien. Als u niet-opgeslagen wijzigingen hebt, zult u worden gevraagd die op te slaan voordat MuseScore Studio wordt afgesloten.</translation>
     </message>
     <message>
         <location filename="../../src/framework/update/internal/updatescenario.cpp" line="198"/>
