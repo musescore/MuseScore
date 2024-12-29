@@ -9071,7 +9071,7 @@ altura del texto):</translation>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="101"/>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="102"/>
         <source>Play chord symbols</source>
-        <translation>Ejecutar símbolos de acorde</translation>
+        <translation>Reproducir símbolos de acorde</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="109"/>
@@ -9793,7 +9793,7 @@ altura del texto):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1815"/>
         <source>Toggle turn with slash</source>
-        <translation>Alternar grupeto ascendente</translation>
+        <translation>Alternar grupeto invertido (barra)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1816"/>
@@ -11041,7 +11041,7 @@ biblioteca de sonidos Muse Sounds</translation>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="99"/>
         <source>Play chord symbol when editing</source>
-        <translation>Ejecutar Símbolos de Acordes mientras se edita</translation>
+        <translation>Reproducir símbolos de acordes mientras se edita</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="31"/>
@@ -17652,7 +17652,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5306"/>
         <source>Short trill</source>
-        <translation>Trino corto</translation>
+        <translation>Mordente superior</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5311"/>
@@ -17672,17 +17672,17 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5314"/>
         <source>Turn</source>
-        <translation>Grupeto superior</translation>
+        <translation>Grupeto</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5315"/>
         <source>Inverted turn</source>
-        <translation>Vuelta Invertida</translation>
+        <translation>Grupeto invertido</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5316"/>
         <source>Turn with slash</source>
-        <translation>Grupeto barrado</translation>
+        <translation>Grupeto invertido (barra)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5614"/>
@@ -19460,7 +19460,7 @@ anacrusa</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="100"/>
         <source>Play</source>
-        <translation>Ejecutar</translation>
+        <translation>Reproducir</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="123"/>
