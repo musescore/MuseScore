@@ -2698,6 +2698,8 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         TRead::read(ss, e, ctx);
         ch->add(ss);
     } else if (TRead::readProperty(ch, tag, e, ctx, Pid::STEM_DIRECTION)) {
+    } else if (tag == "hookReverse") {
+        ch->setHookReversed(e.readBool());
     } else if (tag == "noStem") {
         ch->setNoStem(e.readInt());
     } else if (tag == "showStemSlash") {

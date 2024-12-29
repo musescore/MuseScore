@@ -283,6 +283,9 @@ public:
 
     Note* firstGraceOrNote();
 
+    bool hookIsReversed() const { return hook() ? m_hookIsReversed : false; }
+    void setHookReversed(bool v) { m_hookIsReversed = v; }
+
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
 #endif
@@ -354,6 +357,7 @@ private:
 
     Stem* m_stem = nullptr;
     Hook* m_hook = nullptr;
+    bool m_hookIsReversed = false;
     StemSlash* m_stemSlash = nullptr;     // for grace notes
     bool m_showStemSlash = false;
 

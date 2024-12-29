@@ -1933,7 +1933,14 @@ void TDraw::draw(const Hook* item, Painter* painter)
     }
 
     painter->setPen(item->curColor());
-    item->drawSymbol(item->sym(), painter);
+    if (item->chord()->hookIsReversed()) {
+        double scale = 1.0;
+        double dx = item->chord()->hook()->width() + (1.5 * item->chord()->stem()->lineWidthMag());
+        PointF offset = PointF(-dx, 0.0);
+        item->drawSymbolReversed(item->sym(), painter, offset, scale);
+    } else {
+        item->drawSymbol(item->sym(), painter);
+    }
 }
 
 void TDraw::draw(const Image* item, Painter* painter)

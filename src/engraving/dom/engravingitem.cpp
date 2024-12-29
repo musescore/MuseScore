@@ -1725,6 +1725,11 @@ void EngravingItem::undoAddElement(EngravingItem* element, bool addToLinkedStave
 //   drawSymbol
 //---------------------------------------------------------
 
+void EngravingItem::drawSymbolReversed(SymId id, Painter* p, const PointF& o, double scale) const
+{
+    score()->engravingFont()->drawReversed(id, p, magS() * scale, o);
+}
+
 void EngravingItem::drawSymbol(SymId id, Painter* p, const PointF& o, double scale) const
 {
     score()->engravingFont()->draw(id, p, magS() * scale, o);

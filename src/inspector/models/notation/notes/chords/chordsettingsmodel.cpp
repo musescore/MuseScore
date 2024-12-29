@@ -55,6 +55,7 @@ void ChordSettingsModel::requestElements()
 void ChordSettingsModel::loadProperties()
 {
     loadPropertyItem(m_isStemless);
+    loadPropertyItem(m_isHookReversed);
     loadPropertyItem(m_showStemSlash);
     loadPropertyItem(m_combineVoice);
     updateShowStemSlashVisible();
@@ -64,6 +65,7 @@ void ChordSettingsModel::loadProperties()
 void ChordSettingsModel::resetProperties()
 {
     m_isStemless->resetToDefault();
+    m_isHookReversed->resetToDefault();
     m_showStemSlash->resetToDefault();
     updateShowStemSlashEnabled();
 }
@@ -71,6 +73,11 @@ void ChordSettingsModel::resetProperties()
 PropertyItem* ChordSettingsModel::isStemless() const
 {
     return m_isStemless;
+}
+
+PropertyItem* ChordSettingsModel::isReversedHook() const
+{
+    return m_isHookReversed;
 }
 
 PropertyItem* ChordSettingsModel::showStemSlash() const

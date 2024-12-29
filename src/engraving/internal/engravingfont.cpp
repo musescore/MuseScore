@@ -747,6 +747,15 @@ PointF EngravingFont::smuflAnchor(SymId symId, SmuflAnchorId anchorId, double ma
 // Draw
 // =============================================
 
+void EngravingFont::drawReversed(SymId id, Painter* painter, double mag, const PointF& pos) const
+{
+    double worldScale = painter->worldTransform().m11();
+    painter->save();
+    painter->scale(-1.0, +1.0);
+    draw(id, painter, SizeF(mag, mag), pos, worldScale);
+    painter->restore();
+}
+
 void EngravingFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF& pos, const double angle) const
 {
     const Sym& sym = this->sym(id);
