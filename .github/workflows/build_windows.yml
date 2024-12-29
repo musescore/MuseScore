@@ -296,7 +296,7 @@ jobs:
 
         DO_APPCAST='true'
         if [ "$BUILD_MODE" == "devel" ]; then DO_APPCAST='false'; fi
-        if [ "$BUILD_MODE" == "nightly" ]; then DO_CHECKSUM='false'; fi
+        if [ "$BUILD_MODE" == "nightly" ]; then DO_APPCAST='false'; fi
 
         DO_BUILD='false'
         if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then
