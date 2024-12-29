@@ -2895,6 +2895,7 @@ void TRead::read(GuitarBend* g, XmlReader& e, ReadContext& ctx)
             TRead::read(hold, e, ctx);
             hold->setParent(g);
             g->setHoldLine(hold);
+        } else if (TRead::readProperty(g, tag, e, ctx, Pid::COLOR)) {
         } else if (TRead::readProperty(g, tag, e, ctx, Pid::DIRECTION)) {
         } else if (TRead::readProperty(g, tag, e, ctx, Pid::BEND_SHOW_HOLD_LINE)) {
         } else if (TRead::readProperty(g, tag, e, ctx, Pid::BEND_START_TIME_FACTOR)) {
