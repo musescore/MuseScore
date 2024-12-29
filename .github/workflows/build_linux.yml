@@ -32,9 +32,6 @@ on:
         default: 'off'
         type: string
 
-env:
-  CURRENT_RELEASE_BRANCH: 3.x
- 
 jobs:
   linux_x64:
     runs-on: ubuntu-20.04
@@ -65,7 +62,6 @@ jobs:
         fi
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
-        if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\?' '_' <<<"Mu3.7_${BUILD_NUMBER}_Lin${ADD_INFO}")"
 
