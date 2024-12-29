@@ -4660,7 +4660,7 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
             Segment* seg = findSegmentR(SegmentType::ChordRest, Fraction(0,1));
             const int nstaves = score()->nstaves();
             for (int st = 0; st < nstaves; ++st) {
-                  Rest* mmRest = toRest(seg->element(staff2track(st)));
+                  Rest* mmRest = seg->element(staff2track(st))->isRest() ? toRest(seg->element(staff2track(st))) : nullptr;
                   if (mmRest) {
                         mmRest->rxpos() = 0;
                         mmRest->layoutMMRest(score()->styleP(Sid::minMMRestWidth) * mag());
