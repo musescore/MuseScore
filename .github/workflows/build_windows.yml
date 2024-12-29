@@ -75,9 +75,6 @@ jobs:
           fi
         fi
 
-        DO_CHECKSUM='true'
-        if [ "$BUILD_MODE" == "devel" ]; then DO_CHECKSUM='false'; fi
-
         DO_APPCAST='true'
         if [ "$BUILD_MODE" == "devel" ]; then DO_APPCAST='false'; fi
 
@@ -92,8 +89,6 @@ jobs:
         echo "BUILD_NUMBER: $BUILD_NUMBER"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
-        echo "DO_CHECKSUM=$DO_CHECKSUM" >> $GITHUB_ENV
-        echo "DO_CHECKSUM: $DO_CHECKSUM"
         echo "DO_APPCAST=$DO_APPCAST" >> $GITHUB_ENV
         echo "DO_APPCAST: $DO_APPCAST"
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
@@ -116,7 +111,6 @@ jobs:
         IF ${{ env.BUILD_MODE }} == stable ( SET GUID=${{ secrets.WIN_MSI_STABLE_GUID }} ) ELSE ( SET GUID=${{ secrets.WIN_MSI_TESTING_GUID }} )
         build\ci\windows\package.bat --signsecret %S_S% --signpass %S_P% --guid %GUID%
     - name: Checksum
-      if: env.DO_CHECKSUM == 'true'
       run: |
         bash ./build/ci/tools/checksum.sh
     - name: Publish to OSUOSL
@@ -168,9 +162,6 @@ jobs:
           fi
         fi
 
-        DO_CHECKSUM='true'
-        if [ "$BUILD_MODE" == "devel" ]; then DO_CHECKSUM='false'; fi
-
         DO_APPCAST='true'
         if [ "$BUILD_MODE" == "devel" ]; then DO_APPCAST='false'; fi
 
@@ -185,8 +176,6 @@ jobs:
         echo "BUILD_NUMBER: $BUILD_NUMBER"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
-        echo "DO_CHECKSUM=$DO_CHECKSUM" >> $GITHUB_ENV
-        echo "DO_CHECKSUM: $DO_CHECKSUM"
         echo "DO_APPCAST=$DO_APPCAST" >> $GITHUB_ENV
         echo "DO_APPCAST: $DO_APPCAST"
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
@@ -209,7 +198,6 @@ jobs:
         IF ${{ env.BUILD_MODE }} == stable ( SET GUID=${{ secrets.WIN_MSI_STABLE_GUID }} ) ELSE ( SET GUID=${{ secrets.WIN_MSI_TESTING_GUID }} )
         build\ci\windows\package.bat -b 32 --signsecret %S_S% --signpass %S_P% --guid %GUID%
     - name: Checksum
-      if: env.DO_CHECKSUM == 'true'
       run: |
         bash ./build/ci/tools/checksum.sh
     - name: Publish to OSUOSL
@@ -264,10 +252,6 @@ jobs:
           fi
         fi
 
-        DO_CHECKSUM='true'
-        if [ "$BUILD_MODE" == "devel" ]; then DO_CHECKSUM='false'; fi
-        if [ "$BUILD_MODE" == "nightly" ]; then DO_CHECKSUM='false'; fi
-
         DO_APPCAST='true'
         if [ "$BUILD_MODE" == "devel" ]; then DO_APPCAST='false'; fi
         if [ "$BUILD_MODE" == "nightly" ]; then DO_APPCAST='false'; fi
@@ -284,8 +268,6 @@ jobs:
         echo "BUILD_NUMBER: $BUILD_NUMBER"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
-        echo "DO_CHECKSUM=$DO_CHECKSUM" >> $GITHUB_ENV
-        echo "DO_CHECKSUM: $DO_CHECKSUM"
         echo "DO_APPCAST=$DO_APPCAST" >> $GITHUB_ENV
         echo "DO_APPCAST: $DO_APPCAST"
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
@@ -308,7 +290,6 @@ jobs:
         build\ci\windows\package.bat -b 32 --portable ON --signsecret %S_S% --signpass %S_P%
     - name: Checksum
       shell: bash
-      if: env.DO_CHECKSUM == 'true'
       run: |
         bash ./build/ci/tools/checksum.sh
     - name: Publish to OSUOSL
