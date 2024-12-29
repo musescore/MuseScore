@@ -55,13 +55,19 @@ IF %BUILD_MODE% == stable  ( SET PACKAGE_TYPE="msi") ELSE (
     GOTO END_ERROR
 )))))
 
-SET NEED_SIGN=OFF 
-IF %PACKAGE_TYPE% == "msi"      ( SET NEED_SIGN=ON) 
-IF %PACKAGE_TYPE% == "portable" ( SET NEED_SIGN=ON) 
-
 SET DO_SIGN=OFF
-IF %NEED_SIGN% == ON ( 
+IF %PACKAGE_TYPE% == "msi" ( 
     SET DO_SIGN=ON
+)
+IF %PACKAGE_TYPE% == "portable" ( 
+    IF %BUILD_MODE% == testing (
+        SET DO_SIGN=ON
+    )
+    IF %BUILD_MODE% == stable (
+        SET DO_SIGN=ON
+    )
+)
+IF %DO_SIGN% == ON (
     IF %SIGN_CERTIFICATE_ENCRYPT_SECRET% == "" ( 
         SET DO_SIGN=OFF
         ECHO "warning: not set SIGN_CERTIFICATE_ENCRYPT_SECRET"
