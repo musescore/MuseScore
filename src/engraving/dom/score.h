@@ -441,7 +441,8 @@ public:
     void undoChangeTuning(Note*, double);
     void undoChangeUserMirror(Note*, DirectionH);
     void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent);
-    void undoChangeClef(Staff* ostaff, EngravingItem*, ClefType st, bool forInstrumentChange = false, Clef* clefToRelink = nullptr, bool ctrlModifier = false);
+    void undoChangeClef(Staff* ostaff, EngravingItem*, ClefType st, bool forInstrumentChange = false, Clef* clefToRelink = nullptr,
+                        bool ctrlModifier = false);
     bool undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyValue& propValue,
                              PropertyFlags propFlags = PropertyFlags::NOSTYLE);
     void undoPropertyChanged(EngravingObject*, Pid, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE);
