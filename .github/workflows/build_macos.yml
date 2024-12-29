@@ -79,8 +79,6 @@ jobs:
           fi
         fi
 
-        DO_BUILD='true'
-
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
@@ -91,8 +89,6 @@ jobs:
         echo "BUILD_MODE: $BUILD_MODE"
         echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
         echo "BUILD_NUMBER: $BUILD_NUMBER"
-        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
-        echo "DO_BUILD: $DO_BUILD"
         echo "DO_NOTARIZE=$DO_NOTARIZE" >> $GITHUB_ENV
         echo "DO_NOTARIZE: $DO_NOTARIZE"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
@@ -101,22 +97,18 @@ jobs:
         echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
     - name: Free disk space
-      if: env.DO_BUILD == 'true'
       run: |
         sudo rm -rf "/Applications/Visual Studio.app"
         sudo rm -rf "/Applications/Visual Studio 2019.app"
         sudo rm -rf "/Users/runner/Library/Android/sdk"
     - name: Setup environment
-      if: env.DO_BUILD == 'true'
       run: |
         bash ./build/ci/macos/setup.sh
     - name: Build
-      if: env.DO_BUILD == 'true'
       run: |
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
         bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID
     - name: Package
-      if: env.DO_BUILD == 'true'
       run: |
         S_S="${{ secrets.MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET }}"; if [ -z "$S_S" ]; then S_S="''"; fi
         S_P="${{ secrets.MAC_SIGN_CERTIFICATE_PASSWORD }}"; if [ -z "$S_P" ]; then S_P="''"; fi
@@ -128,7 +120,6 @@ jobs:
         PW=${{ secrets.APPLE_PASSWORD }}; if [ -z "$PW" ]; then PW="''"; fi
         bash ./build/ci/macos/notarize.sh -u $USER -p $PW
     - name: Checksum
-      if: env.DO_BUILD == 'true'
       run: |
         bash ./build/ci/tools/checksum.sh
     - name: Publish package
@@ -136,11 +127,11 @@ jobs:
       run: |
         sudo bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os macos -v 3
     - name: AppCast
-      if: env.DO_BUILD == 'true'
+      if: env.DO_APPCAST == 'true'
       run: |
         bash ./build/ci/tools/sparkle_appcast_gen.sh -p macos
     - name: Upload artifacts on GitHub
-      if: env.DO_BUILD == 'true'
+      if: ${{ always() }}
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}

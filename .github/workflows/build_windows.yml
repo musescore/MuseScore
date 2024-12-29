@@ -84,8 +84,6 @@ jobs:
         DO_APPCAST='true'
         if [ "$BUILD_MODE" == "devel" ]; then DO_APPCAST='false'; fi
 
-        DO_BUILD='true'
-
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
@@ -96,8 +94,6 @@ jobs:
         echo "BUILD_MODE: $BUILD_MODE"
         echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
         echo "BUILD_NUMBER: $BUILD_NUMBER"
-        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
-        echo "DO_BUILD: $DO_BUILD"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
         echo "DO_CHECKSUM=$DO_CHECKSUM" >> $GITHUB_ENV
@@ -108,18 +104,15 @@ jobs:
         echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
     - name: Setup environment
-      if: env.DO_BUILD == 'true'
       run: |
         build\ci\windows\setup.bat
     - name: Build
-      if: env.DO_BUILD == 'true'
       shell: cmd
       run: |
         IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="''" )
         IF ${{ secrets.SENTRY_SERVER_MU3_KEY != 0 }} == true ( SET C_KEY=${{ secrets.SENTRY_SERVER_MU3_KEY }} ) ELSE ( SET C_KEY="''" )
         build\ci\windows\build.bat -n ${{ github.run_id }} --telemetry %T_ID% --sentrykey %C_KEY%
     - name: Package
-      if: env.DO_BUILD == 'true'
       shell: cmd
       run: |
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="''" )
@@ -185,13 +178,6 @@ jobs:
         DO_APPCAST='true'
         if [ "$BUILD_MODE" == "devel" ]; then DO_APPCAST='false'; fi
 
-        #DO_BUILD='false'
-        #if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then
-          #DO_BUILD='true'
-        #fi
-        #echo "!! ATTENTION !! Windows x32 build run only for 'testing' and 'stable', and SKIP for 'pull requests' and nightly"
-        DO_BUILD='true'
-
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
@@ -202,8 +188,6 @@ jobs:
         echo "BUILD_MODE: $BUILD_MODE"
         echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
         echo "BUILD_NUMBER: $BUILD_NUMBER"
-        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
-        echo "DO_BUILD: $DO_BUILD"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
         echo "DO_CHECKSUM=$DO_CHECKSUM" >> $GITHUB_ENV
@@ -214,18 +198,15 @@ jobs:
         echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
     - name: Setup environment
-      if: env.DO_BUILD == 'true'
       run: |
         build\ci\windows\setup.bat -b 32
     - name: Build
-      if: env.DO_BUILD == 'true'
       shell: cmd
       run: |
         IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="''" )
         IF ${{ secrets.SENTRY_SERVER_MU3_KEY != 0 }} == true ( SET C_KEY=${{ secrets.SENTRY_SERVER_MU3_KEY }} ) ELSE ( SET C_KEY="''" )
         build\ci\windows\build.bat -b 32 -n ${{ github.run_id }} --telemetry %T_ID% --sentrykey %C_KEY%
     - name: Package
-      if: env.DO_BUILD == 'true'
       shell: cmd
       run: |
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="''" )
@@ -247,7 +228,7 @@ jobs:
       run: |
         bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows
     - name: Upload artifacts on GitHub
-      if: env.DO_BUILD == 'true'
+      if: ${{ always() }}
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
@@ -295,12 +276,6 @@ jobs:
         if [ "$BUILD_MODE" == "devel" ]; then DO_APPCAST='false'; fi
         if [ "$BUILD_MODE" == "nightly" ]; then DO_APPCAST='false'; fi
 
-        DO_BUILD='false'
-        if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then
-          DO_BUILD='true'
-        fi
-        echo "!! ATTENTION !! Windows portable build run only for 'testing' and 'stable', and SKIP for 'pull requests' and nightly"
-
         DO_PUBLISH='false'
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${CURRENT_RELEASE_BRANCH}"; fi
@@ -312,8 +287,6 @@ jobs:
         echo "BUILD_MODE=$BUILD_MODE"
         echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
         echo "BUILD_NUMBER: $BUILD_NUMBER"
-        echo "DO_BUILD=$DO_BUILD" >> $GITHUB_ENV
-        echo "DO_BUILD: $DO_BUILD"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
         echo "DO_CHECKSUM=$DO_CHECKSUM" >> $GITHUB_ENV
@@ -324,18 +297,15 @@ jobs:
         echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
     - name: Setup environment
-      if: env.DO_BUILD == 'true'
       run: |
         build\ci\windows\setup.bat -b 32 --portable ON
     - name: Build
-      if: env.DO_BUILD == 'true'
       shell: cmd
       run: |
         IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="''" )
         IF ${{ secrets.SENTRY_SERVER_MU3_KEY != 0 }} == true ( SET C_KEY=${{ secrets.SENTRY_SERVER_MU3_KEY }} ) ELSE ( SET C_KEY="''" )
         build\ci\windows\build.bat -b 32 --portable ON -n ${{ github.run_id }} --telemetry %T_ID% --sentrykey %C_KEY%
     - name: Package
-      if: env.DO_BUILD == 'true'
       shell: cmd
       run: |
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="''" )
@@ -357,7 +327,7 @@ jobs:
       run: |
         bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows
     - name: Upload artifacts on GitHub
-      if: env.DO_BUILD == 'true'
+      if: ${{ always() }}
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
