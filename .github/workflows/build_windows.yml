@@ -5,9 +5,6 @@ on:
     branches:
     - 3.x
   pull_request:
-    branches:
-    - 3.x
-
   schedule:
     - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
   workflow_dispatch:
@@ -76,18 +73,16 @@ jobs:
         fi
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
-        if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"
+        fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Win64${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
-        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
-        echo "BUILD_MODE: $BUILD_MODE"
-        echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
-        echo "BUILD_NUMBER: $BUILD_NUMBER"
-        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
-        echo "DO_PUBLISH: $DO_PUBLISH"
-        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
-        echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
+        echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
+        echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
+        echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
     - name: Setup environment
       run: |
@@ -158,18 +153,16 @@ jobs:
         fi
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
-        if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"
+        fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Win32${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
-        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
-        echo "BUILD_MODE: $BUILD_MODE"
-        echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
-        echo "BUILD_NUMBER: $BUILD_NUMBER"
-        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
-        echo "DO_PUBLISH: $DO_PUBLISH"
-        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
-        echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
+        echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
+        echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
+        echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
     - name: Setup environment
       run: |
@@ -242,20 +235,17 @@ jobs:
           fi
         fi
 
-        DO_PUBLISH='false'
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
-        if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"
+        fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_WinPortable${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
-        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
-        echo "BUILD_MODE=$BUILD_MODE"
-        echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
-        echo "BUILD_NUMBER: $BUILD_NUMBER"
-        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
-        echo "DO_PUBLISH: $DO_PUBLISH"
-        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
-        echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
+        echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
+        echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
+        echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
     - name: Setup environment
       run: |

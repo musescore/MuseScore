@@ -5,9 +5,6 @@ on:
     branches:
     - 3.x
   pull_request:
-    branches:
-    - 3.x
-
   schedule:
     - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
   workflow_dispatch:
@@ -79,20 +76,17 @@ jobs:
         fi
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
-        if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"
+        fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\?' '_' <<<"Mu3.7_${BUILD_NUMBER}_Mac${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
-        echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
-        echo "BUILD_MODE: $BUILD_MODE"
-        echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
-        echo "BUILD_NUMBER: $BUILD_NUMBER"
-        echo "DO_NOTARIZE=$DO_NOTARIZE" >> $GITHUB_ENV
-        echo "DO_NOTARIZE: $DO_NOTARIZE"
-        echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
-        echo "DO_PUBLISH: $DO_PUBLISH"
-        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
-        echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
+        echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
+        echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
+        echo "DO_NOTARIZE=$DO_NOTARIZE" | tee -a $GITHUB_ENV
+        echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
     - name: Free disk space
       run: |
@@ -114,8 +108,8 @@ jobs:
     - name: Notarize
       if: env.DO_NOTARIZE == 'true'
       run: |
-        USER=${{ secrets.APPLE_USERNAME }}; if [ -z "$USER" ]; then USER="''"; fi
-        PW=${{ secrets.APPLE_PASSWORD }}; if [ -z "$PW" ]; then PW="''"; fi
+        USER=${{ secrets.APPLE_USERNAME }}; if [ -z "$USER" ]; then USER=""; fi
+        PW=${{ secrets.APPLE_PASSWORD }}; if [ -z "$PW" ]; then PW=""; fi
         bash ./build/ci/macos/notarize.sh -u $USER -p $PW
     - name: Checksum
       run: |
