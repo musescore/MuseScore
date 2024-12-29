@@ -50,28 +50,11 @@ StyledPopupView {
         StyledTextLabel {
             Layout.fillWidth: true
             text: qsTrc("playback", "Speed")
-            font: ui.theme.bodyBoldFont
             horizontalAlignment: Text.AlignLeft
         }
 
         RowLayout {
             spacing: 12
-
-            StyledSlider {
-                Layout.preferredWidth: 200
-                Layout.preferredHeight: 30
-
-                value: root.playbackModel.tempoMultiplier
-                from: 0.1
-                to: 3.0
-                stepSize: 0.05
-
-                fillBackground: false
-
-                onMoved: {
-                    root.playbackModel.tempoMultiplier = value
-                }
-            }
 
             IncrementalPropertyControl {
                 Layout.preferredWidth: 76
@@ -88,6 +71,22 @@ StyledPopupView {
 
                 onValueEdited: function(newValue) {
                     root.playbackModel.tempoMultiplier = newValue / 100
+                }
+            }
+
+            StyledSlider {
+                Layout.preferredWidth: 200
+                Layout.preferredHeight: 30
+
+                value: root.playbackModel.tempoMultiplier
+                from: 0.1
+                to: 3.0
+                stepSize: 0.05
+
+                fillBackground: false
+
+                onMoved: {
+                    root.playbackModel.tempoMultiplier = value
                 }
             }
         }
