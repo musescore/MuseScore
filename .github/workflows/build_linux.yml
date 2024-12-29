@@ -43,10 +43,10 @@ jobs:
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
       run: |
-        sudo bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
+        bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
 
-        sudo bash ./build/ci/tools/make_build_number.sh
+        bash ./build/ci/tools/make_build_number.sh
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_PUBLISH='false'
@@ -72,21 +72,21 @@ jobs:
 
     - name: Setup environment
       run: |
-        sudo bash ./build/ci/linux/setup.sh
+        bash ./build/ci/linux/setup.sh
     - name: Build
       run: |
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
-        sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID
+        bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID
     - name: Package
       run: |
-        sudo bash ./build/ci/linux/package.sh
+        bash ./build/ci/linux/package.sh
     - name: Checksum
       run: |
-        sudo bash ./build/ci/tools/checksum.sh
+        bash ./build/ci/tools/checksum.sh
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
       run: |
-        sudo bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux -v 3
+        bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux -v 3
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
       uses: actions/upload-artifact@v4
@@ -109,11 +109,10 @@ jobs:
         sudo rm -rf /usr/local/lib/android
     - name: Setup environment
       run: |
-        sudo bash ./build/ci/linux/setup.sh
+        bash ./build/ci/linux/setup.sh
     - name: Build
       run: |
         mkdir -p build.artifacts/env
-        #sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --build_mode mtests
         ./build/ci/linux/build.sh -n ${{ github.run_id }} --build_mode mtests
     - name: Run mtests
       run: |

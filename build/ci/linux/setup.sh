@@ -71,8 +71,8 @@ apt_packages_runtime=(
   libdrm-dev
   )
 
-apt-get update # no package lists in Docker image
-apt-get install -y --no-install-recommends \
+sudo apt-get update # no package lists in Docker image
+sudo apt-get install -y --no-install-recommends \
   "${apt_packages_basic[@]}" \
   "${apt_packages_standard[@]}" \
   "${apt_packages_runtime[@]}"
@@ -107,8 +107,8 @@ echo export QML2_IMPORT_PATH="${qt_path}/qml" >> ${ENV_FILE}
 # COMPILER
 
 gcc_version="7"
-apt-get install -y --no-install-recommends "g++-${gcc_version}"
-update-alternatives \
+sudo apt-get install -y --no-install-recommends "g++-${gcc_version}"
+sudo update-alternatives \
   --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
   --slave /usr/bin/g++ g++ "/usr/bin/g++-${gcc_version}"
 
@@ -139,10 +139,9 @@ cmake --version
 chmod +x "${ENV_FILE}"
 
 # # tidy up (reduce size of Docker image)
-# apt-get clean autoclean
-# apt-get autoremove --purge -y
-# rm -rf /tmp/* /var/{cache,log,backups}/* /var/lib/apt/*
+# sudo apt-get clean autoclean
+# sudo apt-get autoremove --purge -y
+# sudo rm -rf /tmp/* /var/{cache,log,backups}/* /var/lib/apt/*
 
 df -h .
 echo "Setup script done"
-

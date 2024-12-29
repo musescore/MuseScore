@@ -37,7 +37,7 @@ echo export PATH="${QT_PATH}/bin:\${PATH}" >> ${ENV_FILE}
 lrelease -version
 
 echo "Install transifex-client" 
-apt install python3-setuptools
+sudo apt-get install python3-setuptools
 pip3 install transifex-client
 
 cat >~/.transifexrc <<EOL

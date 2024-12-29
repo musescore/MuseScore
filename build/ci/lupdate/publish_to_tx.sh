@@ -15,7 +15,7 @@ done
 if [ -z "$TRANSIFEX_USER" ]; then echo "error: not set TRANSIFEX_USER"; exit 1; fi
 if [ -z "$TRANSIFEX_PASSWORD" ]; then echo "error: not set TRANSIFEX_PASSWORD"; exit 1; fi
 
-apt install python3-setuptools
+sudo apt-get install python3-setuptools
 pip3 install transifex-client
 
 cat > ~/.transifexrc <<EOL

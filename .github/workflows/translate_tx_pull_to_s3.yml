@@ -34,12 +34,12 @@ jobs:
     - name: Setup environment
       if: env.DO_RUN == 'true'
       run: |
-        sudo bash ./build/ci/tx2s3/setup.sh --tx_user ${{ secrets.TRANSIFEX_USER }} --tx_password ${{ secrets.TRANSIFEX_PASSWORD }} --s3_key ${{ secrets.S3_KEY }} --s3_secret ${{ secrets.S3_SECRET }}
+        bash ./build/ci/tx2s3/setup.sh --tx_user ${{ secrets.TRANSIFEX_USER }} --tx_password ${{ secrets.TRANSIFEX_PASSWORD }} --s3_key ${{ secrets.S3_KEY }} --s3_secret ${{ secrets.S3_SECRET }}
     
     - name: Run tx2s3
       if: env.DO_RUN == 'true'
       run: |
-        sudo bash ./build/ci/tx2s3/tx2s3.sh
+        bash ./build/ci/tx2s3/tx2s3.sh
         
     - name: Upload artifacts on GitHub
       if: env.DO_RUN == 'true'

@@ -36,14 +36,14 @@ jobs:
   
     - name: Setup environment
       run: |
-        sudo bash ./build/ci/lupdate/setup.sh 
+        bash ./build/ci/lupdate/setup.sh 
     - name: Run lupdate
       run: |
-        sudo bash ./build/ci/lupdate/run_lupdate.sh
+        bash ./build/ci/lupdate/run_lupdate.sh
     - name: Publish to Transifex
       if: env.DO_PUBLISH == 'true'
       run: |
-        sudo bash ./build/ci/lupdate/publish_to_tx.sh -u ${{ secrets.TRANSIFEX_USER }} -p ${{ secrets.TRANSIFEX_PASSWORD }}
+        bash ./build/ci/lupdate/publish_to_tx.sh -u ${{ secrets.TRANSIFEX_USER }} -p ${{ secrets.TRANSIFEX_PASSWORD }}
     - name: Upload artifacts on GitHub
       uses: actions/upload-artifact@v4
       with:

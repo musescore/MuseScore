@@ -34,7 +34,7 @@ jobs:
     - name: Setup the environment
       if: contains( env.found, '1')
       run: |
-        sudo bash ./build/ci/linux/setup.sh
+        bash ./build/ci/linux/setup.sh
     - name: Build
       if: contains( env.found, '1')
       run: |
