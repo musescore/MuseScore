@@ -2363,14 +2363,15 @@ void TLayout::layoutFiguredBass(const FiguredBass* item, FiguredBass::LayoutData
     // Items list will be empty in edit mode (see FiguredBass::startEdit).
     // TODO: consider disabling specific layout in case text style is changed (tid() != TextStyleName::FIGURED_BASS).
     if (item->items().size() > 0) {
+        Shape shape;
         layoutLines(item, ldata, ctx);
-        ldata->setBbox(0, 0, ldata->lineLength(0), 0);
         // layout each item and enlarge bbox to include items bboxes
         for (FiguredBassItem* fit : item->items()) {
             FiguredBassItem::LayoutData* fildata = fit->mutldata();
             layoutFiguredBassItem(fit, fildata, ctx);
-            ldata->addBbox(fildata->bbox().translated(fit->pos()));
+            shape.add(fildata->bbox().translated(fit->pos()));
         }
+        ldata->setShape(shape);
     }
 }
 

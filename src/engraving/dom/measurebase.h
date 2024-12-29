@@ -184,6 +184,7 @@ public:
     bool isBefore(const MeasureBase* other) const;
     bool isBeforeOrEqual(const MeasureBase* other) const { return other == this || isBefore(other); }
     bool isAfter(const MeasureBase* other) const { return !isBeforeOrEqual(other); }
+    bool isAfterOrEqual(const MeasureBase* other) const { return !isBefore(other); }
 
     const SystemLock* systemLock() const;
     bool isStartOfSystemLock() const;
