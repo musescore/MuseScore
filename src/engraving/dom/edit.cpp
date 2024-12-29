@@ -5300,7 +5300,7 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
 //    create a clef before element e
 //---------------------------------------------------------
 
-void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool forInstrumentChange, Clef* clefToRelink)
+void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool forInstrumentChange, Clef* clefToRelink, bool ctrlModifier)
 {
     IF_ASSERT_FAILED(ostaff && e) {
         return;
@@ -5328,7 +5328,7 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
     } else if (e->rtick() == Fraction(0, 1)) {
         Measure* curMeasure = e->findMeasure();
         Measure* prevMeasure = curMeasure ? curMeasure->prevMeasure() : nullptr;
-        if (prevMeasure && !prevMeasure->sectionBreak()) {
+        if (!ctrlModifier && prevMeasure && !prevMeasure->sectionBreak()) {
             moveClef = true;
         }
     }
