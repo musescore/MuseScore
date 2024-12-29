@@ -120,14 +120,13 @@ jobs:
     - name: Checksum
       run: |
         bash ./build/ci/tools/checksum.sh
-    - name: Publish package
+    - name: AppCast
+      run: |
+        bash ./build/ci/tools/sparkle_appcast_gen.sh -p macos
+    - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
       run: |
         sudo bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os macos -v 3
-    - name: AppCast
-      if: env.DO_APPCAST == 'true'
-      run: |
-        bash ./build/ci/tools/sparkle_appcast_gen.sh -p macos
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
       uses: actions/upload-artifact@v4

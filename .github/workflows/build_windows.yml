@@ -75,9 +75,6 @@ jobs:
           fi
         fi
 
-        DO_APPCAST='true'
-        if [ "$BUILD_MODE" == "devel" ]; then DO_APPCAST='false'; fi
-
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Win64${ADD_INFO}")"
@@ -89,8 +86,6 @@ jobs:
         echo "BUILD_NUMBER: $BUILD_NUMBER"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
-        echo "DO_APPCAST=$DO_APPCAST" >> $GITHUB_ENV
-        echo "DO_APPCAST: $DO_APPCAST"
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
@@ -111,18 +106,18 @@ jobs:
         IF ${{ env.BUILD_MODE }} == stable ( SET GUID=${{ secrets.WIN_MSI_STABLE_GUID }} ) ELSE ( SET GUID=${{ secrets.WIN_MSI_TESTING_GUID }} )
         build\ci\windows\package.bat --signsecret %S_S% --signpass %S_P% --guid %GUID%
     - name: Checksum
+      shell: bash
       run: |
         bash ./build/ci/tools/checksum.sh
+    - name: AppCast
+      shell: bash
+      run: |
+        bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
       shell: bash
       run: |
         bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 3
-    - name: AppCast
-      if: env.DO_APPCAST == 'true'
-      shell: bash
-      run: |
-        bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
       uses: actions/upload-artifact@v4
@@ -162,9 +157,6 @@ jobs:
           fi
         fi
 
-        DO_APPCAST='true'
-        if [ "$BUILD_MODE" == "devel" ]; then DO_APPCAST='false'; fi
-
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Win32${ADD_INFO}")"
@@ -176,8 +168,6 @@ jobs:
         echo "BUILD_NUMBER: $BUILD_NUMBER"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
-        echo "DO_APPCAST=$DO_APPCAST" >> $GITHUB_ENV
-        echo "DO_APPCAST: $DO_APPCAST"
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
@@ -198,18 +188,18 @@ jobs:
         IF ${{ env.BUILD_MODE }} == stable ( SET GUID=${{ secrets.WIN_MSI_STABLE_GUID }} ) ELSE ( SET GUID=${{ secrets.WIN_MSI_TESTING_GUID }} )
         build\ci\windows\package.bat -b 32 --signsecret %S_S% --signpass %S_P% --guid %GUID%
     - name: Checksum
+      shell: bash
       run: |
         bash ./build/ci/tools/checksum.sh
+    - name: AppCast
+      shell: bash
+      run: |
+        bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
       shell: bash
       run: |
         bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 3
-    - name: AppCast
-      if: env.DO_APPCAST == 'true'
-      shell: bash
-      run: |
-        bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
       uses: actions/upload-artifact@v4
@@ -252,10 +242,6 @@ jobs:
           fi
         fi
 
-        DO_APPCAST='true'
-        if [ "$BUILD_MODE" == "devel" ]; then DO_APPCAST='false'; fi
-        if [ "$BUILD_MODE" == "nightly" ]; then DO_APPCAST='false'; fi
-
         DO_PUBLISH='false'
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
@@ -268,8 +254,6 @@ jobs:
         echo "BUILD_NUMBER: $BUILD_NUMBER"
         echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
         echo "DO_PUBLISH: $DO_PUBLISH"
-        echo "DO_APPCAST=$DO_APPCAST" >> $GITHUB_ENV
-        echo "DO_APPCAST: $DO_APPCAST"
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
@@ -292,16 +276,15 @@ jobs:
       shell: bash
       run: |
         bash ./build/ci/tools/checksum.sh
+    - name: AppCast
+      shell: bash
+      run: |
+        bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
       shell: bash
       run: |
         bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 3
-    - name: AppCast
-      if: env.DO_APPCAST == 'true'
-      shell: bash
-      run: |
-        bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
       uses: actions/upload-artifact@v4
