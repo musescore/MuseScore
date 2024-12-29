@@ -45,7 +45,7 @@ jobs:
         access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v4
-    - name: "Configure workflow"
+    - name: Configure workflow
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
       run: |
@@ -61,9 +61,9 @@ jobs:
         if [[ "${{ inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
-            echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled"
+            echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is empty; not publishing to OSUOSL"
             DO_PUBLISH='false'
-          fi  
+          fi
         fi
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
@@ -100,7 +100,7 @@ jobs:
       if: env.DO_BUILD == 'true'
       run: |
         sudo bash ./build/ci/tools/checksum.sh
-    - name: Publish package
+    - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
       run: |
         sudo bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux -v 3
@@ -128,7 +128,7 @@ jobs:
         mkdir -p build.artifacts/env
         #sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --build_mode mtests
         ./build/ci/linux/build.sh -n ${{ github.run_id }} --build_mode mtests
-    - name: Run mtests 
+    - name: Run mtests
       run: |
         # At moment build and run mtests consume 13.4 Gb of the disk.
         # After left too little free space.

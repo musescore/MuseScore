@@ -47,7 +47,7 @@ env:
 
 jobs:
   windows_x64:
-    if: ${{ github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_x64') }}
+    if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_x64')
     runs-on: windows-2022
     steps:
     - name: Cancel Previous Runs
@@ -58,7 +58,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: 'true'
-    - name: "Configure workflow"
+    - name: Configure workflow
       shell: bash
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
@@ -73,7 +73,7 @@ jobs:
         if [[ "${{ inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
-            echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled"
+            echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is empty; not publishing to OSUOSL"
             DO_PUBLISH='false'
           fi
         fi
@@ -124,13 +124,13 @@ jobs:
       run: |
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="''" )
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="''" )
-        IF ${{ env.BUILD_MODE }} == stable( SET GUID=${{ secrets.WIN_MSI_STABLE_GUID }} ) ELSE ( SET GUID=${{ secrets.WIN_MSI_TESTING_GUID }} )
+        IF ${{ env.BUILD_MODE }} == stable ( SET GUID=${{ secrets.WIN_MSI_STABLE_GUID }} ) ELSE ( SET GUID=${{ secrets.WIN_MSI_TESTING_GUID }} )
         build\ci\windows\package.bat --signsecret %S_S% --signpass %S_P% --guid %GUID%
     - name: Checksum
       if: env.DO_CHECKSUM == 'true'
       run: |
         bash ./build/ci/tools/checksum.sh
-    - name: Publish package
+    - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
       shell: bash
       run: |
@@ -148,7 +148,7 @@ jobs:
         path: build.artifacts\
 
   windows_x32:
-    if: ${{ github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_x32') }}
+    if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_x32')
     runs-on: windows-2022
     steps:
     - name: Cancel Previous Runs
@@ -159,7 +159,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: 'true'
-    - name: "Configure workflow"
+    - name: Configure workflow
       shell: bash
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
@@ -174,7 +174,7 @@ jobs:
         if [[ "${{ inputs.publish }}" == "on" || "$BUILD_MODE" == "nightly" ]]; then
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
-            echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled"
+            echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is empty; not publishing to OSUOSL"
             DO_PUBLISH='false'
           fi
         fi
@@ -236,7 +236,7 @@ jobs:
       if: env.DO_CHECKSUM == 'true'
       run: |
         bash ./build/ci/tools/checksum.sh
-    - name: Publish package
+    - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
       shell: bash
       run: |
@@ -267,11 +267,8 @@ jobs:
     - name: Clone repository
       uses: actions/checkout@v4
       with:
-        fetch-depth: 3
-    - name: Fetch submodules
-      run: |
-        git submodule update --init --recursive
-    - name: "Configure workflow"
+        submodules: 'true'
+    - name: Configure workflow
       shell: bash
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
@@ -285,7 +282,7 @@ jobs:
         if [ "${{ inputs.publish }}" == "on" ]; then
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
-            echo "warning: not set OSUOSL_SSH_ENCRYPT_SECRET, publish disabled"
+            echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is empty; not publishing to OSUOSL"
             DO_PUBLISH='false'
           fi
         fi
@@ -349,7 +346,7 @@ jobs:
       if: env.DO_CHECKSUM == 'true'
       run: |
         bash ./build/ci/tools/checksum.sh
-    - name: Publish package
+    - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
       shell: bash
       run: |
