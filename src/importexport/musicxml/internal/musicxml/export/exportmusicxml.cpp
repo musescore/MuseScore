@@ -476,7 +476,7 @@ private:
 static std::string fractionToStdString(const Fraction& f)
 {
     if (!f.isValid()) {
-        return u"<invalid>";
+        return "<invalid>";
     }
     String res { f.toString() };
     res += String(u" (%1)").arg(String::number(f.ticks()));
