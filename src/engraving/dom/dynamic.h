@@ -140,6 +140,8 @@ private:
     void moveSnappedItems(Segment* newSeg, Fraction tickDiff) const;
     bool nudge(const EditData& ed);
 
+    std::pair<DynamicType, String> parseDynamicText(const String&) const;
+
     DynamicType m_dynamicType = DynamicType::OTHER;
     bool m_playDynamic = true;
 

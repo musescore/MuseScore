@@ -71,7 +71,9 @@ TEST_F(Engraving_TextBaseTests, dynamicAddTextBefore)
     Dynamic* dynamic = addDynamic(score);
     EditData ed;
     dynamic->startEdit(ed);
+    score->startCmd(TranslatableString::untranslatable("Edit dynamic text (test)"));
     score->undo(new InsertText(dynamic->cursor(), String(u"poco ")), &ed);
+    score->endCmd();
     dynamic->endEdit(ed);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"dynamicAddTextBefore.mscx", TEXTBASE_DATA_DIR + u"dynamicAddTextBefore-ref.mscx"));
 }
@@ -83,8 +85,10 @@ TEST_F(Engraving_TextBaseTests, dynamicAddTextAfter)
     EditData ed;
     ed.s = String(u" ma non troppo");
     dynamic->startEdit(ed);
+    score->startCmd(TranslatableString::untranslatable("Edit dynamic text (test)"));
     dynamic->cursor()->moveCursorToEnd();
     dynamic->edit(ed);
+    score->endCmd();
     dynamic->endEdit(ed);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"dynamicAddTextAfter.mscx", TEXTBASE_DATA_DIR + u"dynamicAddTextAfter-ref.mscx"));
 }
@@ -95,8 +99,10 @@ TEST_F(Engraving_TextBaseTests, dynamicAddTextNoItalic)
     Dynamic* dynamic = addDynamic(score);
     EditData ed;
     dynamic->startEdit(ed);
+    score->startCmd(TranslatableString::untranslatable("Edit dynamic text (test)"));
     dynamic->setProperty(Pid::FONT_STYLE, PropertyValue::fromValue(0));
     score->undo(new InsertText(dynamic->cursor(), String(u"moderately ")), &ed);
+    score->endCmd();
     dynamic->endEdit(ed);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"dynamicAddTextNoItalic.mscx", TEXTBASE_DATA_DIR + u"dynamicAddTextNoItalic-ref.mscx"));
 }
