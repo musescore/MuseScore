@@ -5,7 +5,7 @@ on:
     inputs:
       platforms:
         description: 'Platforms to build:'
-        default: 'linux_x64 macos windows_x64 windows_x32 windows_portable'
+        default: 'linux_x64 macos windows_x64 windows_x32 windows_x32_portable windows_x64_portable'
         required: true
       release_type:
         description: 'Release type: alpha, beta, rc, stable, or any label with chars A-Za-z0-9._ for testing'

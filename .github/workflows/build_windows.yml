@@ -11,7 +11,7 @@ on:
     inputs:
       platforms:
         description: 'Platforms to build:'
-        default: 'windows_x64 windows_x32 windows_portable'
+        default: 'windows_x64 windows_x32 windows_portable_x32 windows_portable_x64'
         required: true
       build_mode:
         description: 'Build mode: devel, nightly, testing, stable'
@@ -25,7 +25,7 @@ on:
     inputs:
       platforms:
         description: 'Platforms to build:'
-        default: 'windows_x64 windows_x32 windows_portable'
+        default: 'windows_x64 windows_x32 windows_portable_x32 windows_portable_x64'
         type: string
         required: true
       build_mode:
@@ -200,11 +200,11 @@ jobs:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\
 
-  windows_portable:
+  windows_portable_x32:
     # Disable on pull_request
     if: |
       github.event_name != 'pull_request' &&
-      (github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_portable'))
+      (github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_portable_x32'))
     runs-on: windows-2022
     steps:
     - name: Cancel Previous Runs
@@ -239,7 +239,7 @@ jobs:
         if [ "${{ github.event_name }}" == "pull_request" ]; then
           ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"
         fi
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_WinPortable${ADD_INFO}")"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Win32Portable${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
@@ -262,6 +262,88 @@ jobs:
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="''" )
         IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="''" )
         build\ci\windows\package.bat -b 32 --portable ON --signsecret %S_S% --signpass %S_P%
+    - name: Checksum
+      shell: bash
+      run: |
+        bash ./build/ci/tools/checksum.sh
+    - name: AppCast
+      shell: bash
+      run: |
+        bash ./build/ci/tools/sparkle_appcast_gen.sh -p windows
+    - name: Publish to OSUOSL
+      if: env.DO_PUBLISH == 'true'
+      shell: bash
+      run: |
+        bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os windows -v 3
+    - name: Upload artifacts on GitHub
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.UPLOAD_ARTIFACT_NAME }}
+        path: build.artifacts\
+
+  windows_portable_x64:
+    # Disable on pull_request
+    if: |
+      github.event_name != 'pull_request' &&
+      (github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'windows_portable_x64'))
+    runs-on: windows-2022
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.12.1
+      with:
+        access_token: ${{ github.token }}
+    - name: Clone repository
+      uses: actions/checkout@v4
+      with:
+        submodules: 'true'
+    - name: Configure workflow
+      shell: bash
+      env:
+        pull_request_title: ${{ github.event.pull_request.title }}
+      run: |
+        bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
+        BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+
+        bash ./build/ci/tools/make_build_number.sh
+        BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
+
+        DO_PUBLISH='false'
+        if [[ "${{ inputs.publish }}" == "on" || ("${{ github.event_name }}" == "schedule" && "$BUILD_MODE" == "nightly") ]]; then
+          DO_PUBLISH='true'
+          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
+            echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is empty; not publishing to OSUOSL"
+            DO_PUBLISH='false'
+          fi
+        fi
+
+        ADD_INFO="_${GITHUB_REF#refs/heads/}"
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"
+        fi
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Win64Portable${ADD_INFO}")"
+
+        echo "github.repository: ${{ github.repository }}"
+        echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
+        echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
+        echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
+
+    - name: Setup environment
+      run: |
+        build\ci\windows\setup.bat --portable ON
+    - name: Build
+      shell: cmd
+      run: |
+        IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="''" )
+        IF ${{ secrets.SENTRY_SERVER_MU3_KEY != 0 }} == true ( SET C_KEY=${{ secrets.SENTRY_SERVER_MU3_KEY }} ) ELSE ( SET C_KEY="''" )
+        build\ci\windows\build.bat --portable ON -n ${{ github.run_id }} --telemetry %T_ID% --sentrykey %C_KEY%
+    - name: Package
+      shell: cmd
+      run: |
+        IF ${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET != 0 }} == true ( SET S_S=${{ secrets.WIN_SIGN_CERTIFICATE_ENCRYPT_SECRET }} ) ELSE ( SET S_S="''" )
+        IF ${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD != 0 }} == true ( SET S_P=${{ secrets.WIN_SIGN_CERTIFICATE_PASSWORD }} ) ELSE ( SET S_P="''" )
+        build\ci\windows\package.bat --portable ON --signsecret %S_S% --signpass %S_P%
     - name: Checksum
       shell: bash
       run: |

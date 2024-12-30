@@ -69,7 +69,7 @@ ECHO "=== Installing PortableApps.com Tools ==="
 CALL "wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/portableappslauncher.zip" -O %TEMP_DIR%\portableappslauncher.zip
 CALL "7z" x -y %TEMP_DIR%\portableappslauncher.zip "-oC:\portableappslauncher"
 
-:: portableappslauncher is a vanilla installation of PortableApps.com Installer https://portableapps.com/apps/development/portableapps.com_launcher
+:: portableappsinstaller is a vanilla installation of PortableApps.com Installer https://portableapps.com/apps/development/portableapps.com_installer
 CALL "wget.exe" --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/portableappsinstaller.zip" -O %TEMP_DIR%\portableappsinstaller.zip
 CALL "7z" x -y %TEMP_DIR%\portableappsinstaller.zip "-oC:\portableappsinstaller"
 )
