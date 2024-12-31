@@ -126,6 +126,8 @@ class Page;
 class PalmMute;
 class PalmMuteSegment;
 class Part;
+class PartialLyricsLine;
+class PartialLyricsLineSegment;
 class PartialTie;
 class PartialTieSegment;
 class Pedal;
@@ -422,8 +424,8 @@ public:
     CONVERT(FSymbol,       FSYMBOL)
     CONVERT(Fingering,     FINGERING)
     CONVERT(NoteHead,      NOTEHEAD)
-    CONVERT(LyricsLine,    LYRICSLINE)
-    CONVERT(LyricsLineSegment, LYRICSLINE_SEGMENT)
+    CONVERT(PartialLyricsLine,    PARTIAL_LYRICSLINE)
+    CONVERT(PartialLyricsLineSegment, PARTIAL_LYRICSLINE_SEGMENT)
     CONVERT(FiguredBass,   FIGURED_BASS)
     CONVERT(FiguredBassItem, FIGURED_BASS_ITEM)
     CONVERT(StaffState,    STAFF_STATE)
@@ -526,6 +528,13 @@ public:
                || isTextLine()
                || isVolta()
         ;
+    }
+
+    bool isLyricsLine() const { return type() == ElementType::LYRICSLINE || type() == ElementType::PARTIAL_LYRICSLINE; }
+
+    bool isLyricsLineSegment() const
+    {
+        return type() == ElementType::LYRICSLINE_SEGMENT || type() == ElementType::PARTIAL_LYRICSLINE_SEGMENT;
     }
 
     bool isSLine() const
@@ -857,5 +866,7 @@ CONVERT(SoundFlag)
 CONVERT(TimeTickAnchor)
 CONVERT(LaissezVib)
 CONVERT(PartialTie)
+CONVERT(PartialLyricsLine)
+CONVERT(PartialLyricsLineSegment)
 #undef CONVERT
 }

@@ -30,6 +30,8 @@
 #include "chord.h"
 #include "chordrest.h"
 #include "clef.h"
+#include "dom/masterscore.h"
+#include "dom/repeatlist.h"
 #include "keysig.h"
 #include "measure.h"
 #include "note.h"
@@ -1413,5 +1415,73 @@ InstrumentTrackId makeInstrumentTrackId(const EngravingItem* item)
     };
 
     return trackId;
+}
+
+std::vector<Measure*> findFollowingRepeatMeasures(const Measure* measure)
+{
+    const MasterScore* master = measure->masterScore();
+    const Score* score = measure->score();
+
+    const MeasureBase* masterMeasureBase = master->measure(measure->index());
+    const Measure* masterMeasure = masterMeasureBase && masterMeasureBase->isMeasure() ? toMeasure(masterMeasureBase) : nullptr;
+
+    const RepeatList& repeatList = master->repeatList(true, false);
+
+    std::vector<Measure*> measures;
+
+    for (auto it = repeatList.begin(); it != repeatList.end(); it++) {
+        const RepeatSegment* rs = *it;
+        const auto nextSegIt = std::next(it);
+        if (!rs->endsWithMeasure(masterMeasure) || nextSegIt == repeatList.end()) {
+            continue;
+        }
+
+        // Get next segment
+        const RepeatSegment* nextSeg = *nextSegIt;
+        const Measure* firstMasterMeasure = nextSeg->firstMeasure();
+        MeasureBase* firstMeasureBase = firstMasterMeasure ? score->measure(firstMasterMeasure->index()) : nullptr;
+        Measure* firstMeasure = firstMeasureBase && firstMeasureBase->isMeasure() ? toMeasure(firstMeasureBase) : nullptr;
+        if (!firstMeasure) {
+            continue;
+        }
+
+        measures.push_back(firstMeasure);
+    }
+
+    return measures;
+}
+
+std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure)
+{
+    const MasterScore* master = measure->masterScore();
+    const Score* score = measure->score();
+
+    const MeasureBase* masterMeasureBase = master->measure(measure->index());
+    const Measure* masterMeasure = masterMeasureBase && masterMeasureBase->isMeasure() ? toMeasure(masterMeasureBase) : nullptr;
+
+    const RepeatList& repeatList = master->repeatList(true, false);
+
+    std::vector<Measure*> measures;
+
+    for (auto it = repeatList.begin(); it != repeatList.end(); it++) {
+        const RepeatSegment* rs = *it;
+        const auto prevSegIt = std::prev(it);
+        if (!rs->startsWithMeasure(masterMeasure) || prevSegIt == repeatList.end()) {
+            continue;
+        }
+
+        // Get next segment
+        const RepeatSegment* prevSeg = *prevSegIt;
+        const Measure* lastMasterMeasure = prevSeg->lastMeasure();
+        MeasureBase* lastMeasureBase = lastMasterMeasure ? score->measure(lastMasterMeasure->index()) : nullptr;
+        Measure* lastMeasure = lastMeasureBase && lastMeasureBase->isMeasure() ? toMeasure(lastMeasureBase) : nullptr;
+        if (!lastMeasure) {
+            continue;
+        }
+
+        measures.push_back(lastMeasure);
+    }
+
+    return measures;
 }
 }

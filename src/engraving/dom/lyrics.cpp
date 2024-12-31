@@ -88,11 +88,6 @@ TranslatableString Lyrics::subtypeUserName() const
 
 void Lyrics::add(EngravingItem* el)
 {
-//      el->setParent(this);
-//      if (el->type() == ElementType::LINE)
-//            _separator.append((Line*)el);           // ignore! Internally managed
-//            ;
-//      else
     LOGD("Lyrics::add: unknown element %s", el->typeName());
 }
 
@@ -559,9 +554,9 @@ void Lyrics::removeInvalidSegments()
         m_separator = nullptr;
         setAlign(propertyDefault(Pid::ALIGN).value<Align>());
         if (m_syllabic == LyricsSyllabic::BEGIN || m_syllabic == LyricsSyllabic::SINGLE) {
-            m_syllabic = LyricsSyllabic::SINGLE;
+            undoChangeProperty(Pid::SYLLABIC, int(LyricsSyllabic::SINGLE));
         } else {
-            m_syllabic = LyricsSyllabic::END;
+            undoChangeProperty(Pid::SYLLABIC, int(LyricsSyllabic::END));
         }
     }
 }

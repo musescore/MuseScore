@@ -270,6 +270,7 @@ public:
     static void read(Page* p, XmlReader& xml, ReadContext& ctx);
     static void read(PalmMute* p, XmlReader& xml, ReadContext& ctx);
     static void read(Part* p, XmlReader& xml, ReadContext& ctx);
+    static void read(PartialLyricsLine* p, XmlReader& xml, ReadContext& ctx);
     static void read(PartialTie* p, XmlReader& xml, ReadContext& ctx);
     static void read(Pedal* p, XmlReader& xml, ReadContext& ctx);
     static void read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx);

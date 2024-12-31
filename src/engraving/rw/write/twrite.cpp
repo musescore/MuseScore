@@ -283,6 +283,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
         break;
     case ElementType::PALM_MUTE:    write(item_cast<const PalmMute*>(item), xml, ctx);
         break;
+    case ElementType::PARTIAL_LYRICSLINE:  write(item_cast<const PartialLyricsLine*>(item), xml, ctx);
+        break;
     case ElementType::PARTIAL_TIE:  write(item_cast<const PartialTie*>(item), xml, ctx);
         break;
     case ElementType::PEDAL:        write(item_cast<const Pedal*>(item), xml, ctx);
@@ -2437,6 +2439,18 @@ void TWrite::write(const PartialTie* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::TIE_PLACEMENT);
     writeProperty(item, xml, Pid::PARTIAL_SPANNER_DIRECTION);
     writeProperties(static_cast<const SlurTie*>(item), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const PartialLyricsLine* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::VERSE);
+    xml.tag("isEndMelisma", item->isEndMelisma());
+    writeItemProperties(item, xml, ctx);
     xml.endElement();
 }
 

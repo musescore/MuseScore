@@ -318,6 +318,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::LYRICSLINE_SEGMENT: layoutLyricsLineSegment(item_cast<LyricsLineSegment*>(item), ctx);
         break;
+    case ElementType::PARTIAL_LYRICSLINE_SEGMENT: layoutLyricsLineSegment(item_cast<LyricsLineSegment*>(item), ctx);
+        break;
     case ElementType::MARKER:
         layoutMarker(item_cast<const Marker*>(item), static_cast<Marker::LayoutData*>(ldata));
         break;
@@ -6821,7 +6823,7 @@ SpannerSegment* TLayout::layoutSystemSLine(SLine* line, System* system, LayoutCo
 SpannerSegment* TLayout::layoutSystem(LyricsLine* line, System* system, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(line);
-    if (!line->lyrics()) {
+    if (!line->isPartialLyricsLine() && !line->lyrics()) {
         return nullptr;
     }
 
@@ -6849,7 +6851,7 @@ SpannerSegment* TLayout::layoutSystem(LyricsLine* line, System* system, LayoutCo
     lineSegm->setSpannerSegmentType(sst);
 
     TLayout::layoutLyricsLineSegment(lineSegm, ctx);
-    if (!line->lyrics()) {
+    if (!line->isPartialLyricsLine() && !line->lyrics()) {
         // this line could have been removed in the process of laying out surrounding lyrics
         return nullptr;
     }

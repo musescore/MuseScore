@@ -872,6 +872,17 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         }
 
         int no = static_cast<int>(chordRest->lyrics().size());
+        const auto& spanners = spannerMap().findOverlapping(chordRest->tick().ticks(), chordRest->endTick().ticks());
+        for (auto& spanner : spanners) {
+            if (!spanner.value->isPartialLyricsLine() || spanner.start != chordRest->tick().ticks()) {
+                continue;
+            }
+            const PartialLyricsLine* line = toPartialLyricsLine(spanner.value);
+
+            no = std::max(no, line->no() + 1);
+        }
+
+        // Also check how many partial lines there are
         Lyrics* lyrics = Factory::createLyrics(chordRest);
         lyrics->setTrack(chordRest->track());
         lyrics->setParent(chordRest);
@@ -2894,6 +2905,7 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::LAISSEZ_VIB_SEGMENT:
     case ElementType::PARTIAL_TIE_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
+    case ElementType::PARTIAL_LYRICSLINE_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
     case ElementType::NOTELINE_SEGMENT:
@@ -6069,6 +6081,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::VIBRATO
             && et != ElementType::TEXTLINE
             && et != ElementType::PEDAL
+            && et != ElementType::PARTIAL_LYRICSLINE
             && et != ElementType::BREATH
             && et != ElementType::DYNAMIC
             && et != ElementType::EXPRESSION
@@ -6134,6 +6147,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             ElementType::TEXTLINE,
             ElementType::PEDAL,
             ElementType::LYRICS,
+            ElementType::PARTIAL_LYRICSLINE,
             ElementType::CLEF,
             ElementType::AMBITUS
         };
@@ -6167,6 +6181,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 case ElementType::DYNAMIC:
                 case ElementType::EXPRESSION:
                 case ElementType::LYRICS:                       // not normally segment-attached
+                case ElementType::PARTIAL_LYRICSLINE:
                     continue;
                 default:
                     break;
@@ -6336,7 +6351,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                    || element->isTrill()
                    || element->isVibrato()
                    || element->isTextLine()
-                   || element->isPedal()) {
+                   || element->isPedal()
+                   || element->isPartialLyricsLine()) {
             Spanner* sp   = toSpanner(element);
             Spanner* nsp  = toSpanner(ne);
             track_idx_t tr2 = sp->effectiveTrack2();
@@ -7192,9 +7208,23 @@ void Score::undoRemoveStaleTieJumpPoints()
     for (Segment* s = m->first(st); s; s = s->next1(st)) {
         for (track_idx_t i = 0; i < tracks; ++i) {
             EngravingItem* e = s->element(i);
-            if (e == 0 || !e->isChord()) {
+            if (e == 0 || !e->isChordRest()) {
                 continue;
             }
+
+            // Remove invalid lyrics dashes
+            for (Lyrics* lyrics : toChordRest(e)->lyrics()) {
+                LyricsLine* separator = lyrics->separator();
+                if ((lyrics->syllabic() == LyricsSyllabic::BEGIN || lyrics->syllabic() == LyricsSyllabic::MIDDLE) && separator
+                    && !separator->nextLyrics() && !separator->isEndMelisma()) {
+                    lyrics->setNeedRemoveInvalidSegments();
+                }
+            }
+
+            if (!e->isChord()) {
+                continue;
+            }
+
             Chord* c = toChord(e);
             for (Note* n : c->notes()) {
                 if (!n->tieFor()) {

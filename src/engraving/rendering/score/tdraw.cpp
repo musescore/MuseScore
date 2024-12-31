@@ -277,6 +277,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
         break;
     case ElementType::LYRICSLINE_SEGMENT: draw(item_cast<const LyricsLineSegment*>(item), painter);
         break;
+    case ElementType::PARTIAL_LYRICSLINE_SEGMENT: draw(item_cast<const LyricsLineSegment*>(item), painter);
+        break;
 
     case ElementType::MARKER:       draw(item_cast<const Marker*>(item), painter);
         break;
@@ -2121,7 +2123,7 @@ void TDraw::draw(const LyricsLineSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    Pen pen(item->lyricsLine()->lyrics()->curColor());
+    Pen pen(item->curColor());
     pen.setWidthF(item->absoluteFromSpatium(item->lineWidth()));
     pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setPen(pen);

@@ -477,6 +477,7 @@ void System::add(EngravingItem* el)
     case ElementType::PARTIAL_TIE_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
+    case ElementType::PARTIAL_LYRICSLINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
     case ElementType::NOTELINE_SEGMENT:
     case ElementType::LET_RING_SEGMENT:
@@ -559,6 +560,7 @@ void System::remove(EngravingItem* el)
     case ElementType::PARTIAL_TIE_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
+    case ElementType::PARTIAL_LYRICSLINE_SEGMENT:
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
     case ElementType::NOTELINE_SEGMENT:
