@@ -586,6 +586,11 @@ void ChordRest::remove(EngravingItem* e)
         }
     }
     break;
+    // case ElementType::PARTIAL_LYRICSLINE: {
+    //     e->resetExplicitParent();
+    //     score()->undoRemoveElement()
+    // }
+    // break;
     default:
         ASSERT_X(u"ChordRest::remove: unknown element " + String::fromAscii(e->typeName()));
     }

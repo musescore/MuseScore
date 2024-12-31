@@ -217,12 +217,9 @@ Tie::Tie(const ElementType& type, EngravingItem* parent)
 
 void Tie::updatePossibleJumpPoints()
 {
-    MasterScore* master = masterScore();
     const Note* note = toNote(parentItem());
     const Chord* chord = note->chord();
     const Measure* measure = chord->measure();
-    const MeasureBase* masterMeasureBase = master->measure(measure->index());
-    const Measure* masterMeasure = masterMeasureBase && masterMeasureBase->isMeasure() ? toMeasure(masterMeasureBase) : nullptr;
     if (!tieJumpPoints()) {
         return;
     }
@@ -245,22 +242,8 @@ void Tie::updatePossibleJumpPoints()
         jumpPointIdx++;
     }
 
-    // Get following notes by taking repeats
-    const RepeatList& repeatList = master->repeatList(true, false);
-
-    for (auto it = repeatList.begin(); it != repeatList.end(); it++) {
-        const RepeatSegment* rs = *it;
-        const auto nextSegIt = std::next(it);
-        if (!rs->endsWithMeasure(masterMeasure) || nextSegIt == repeatList.end()) {
-            continue;
-        }
-
-        // Get next segment
-        const RepeatSegment* nextSeg = *nextSegIt;
-        const Measure* firstMasterMeasure = nextSeg->firstMeasure();
-        const MeasureBase* firstMeasureBase = firstMasterMeasure ? score()->measure(firstMasterMeasure->index()) : nullptr;
-        const Measure* firstMeasure = firstMeasureBase && firstMeasureBase->isMeasure() ? toMeasure(firstMeasureBase) : nullptr;
-        const Segment* firstCrSeg = firstMeasure ? firstMeasure->first(SegmentType::ChordRest) : nullptr;
+    for (Measure* jumpMeasure : findFollowingRepeatMeasures(measure)) {
+        const Segment* firstCrSeg = jumpMeasure ? jumpMeasure->first(SegmentType::ChordRest) : nullptr;
         if (!firstCrSeg) {
             continue;
         }

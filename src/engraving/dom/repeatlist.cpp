@@ -99,6 +99,15 @@ bool RepeatSegment::endsWithMeasure(Measure const* const m) const
     return m_measureList.back() == m;
 }
 
+bool RepeatSegment::startsWithMeasure(const Measure* const m) const
+{
+    if (m_measureList.empty()) {
+        return false;
+    }
+
+    return m_measureList.front() == m;
+}
+
 bool RepeatSegment::isEmpty() const
 {
     return m_measureList.empty();

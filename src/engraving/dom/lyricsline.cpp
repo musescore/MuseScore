@@ -22,16 +22,14 @@
 
 #include "lyrics.h"
 
-#include "draw/types/pen.h"
-
-#include "chord.h"
 #include "chordrest.h"
 #include "measure.h"
+#include "navigate.h"
 #include "note.h"
 #include "score.h"
 #include "segment.h"
-#include "stafftype.h"
 #include "system.h"
+#include "utils.h"
 
 using namespace mu;
 
@@ -42,6 +40,16 @@ namespace mu::engraving {
 
 LyricsLine::LyricsLine(EngravingItem* parent)
     : SLine(ElementType::LYRICSLINE, parent, ElementFlag::NOT_SELECTABLE)
+{
+    setGenerated(true);             // no need to save it, as it can be re-generated
+    setDiagonal(false);
+    setLineWidth(style().styleS(Sid::lyricsDashLineThickness));
+    setAnchor(Spanner::Anchor::SEGMENT);
+    m_nextLyrics = 0;
+}
+
+LyricsLine::LyricsLine(const ElementType& type, EngravingItem* parent, ElementFlags f)
+    : SLine(type, parent, f)
 {
     setGenerated(true);             // no need to save it, as it can be re-generated
     setDiagonal(false);
@@ -142,13 +150,140 @@ LyricsLineSegment::LyricsLineSegment(LyricsLine* sp, System* parent)
     setGenerated(true);
 }
 
+LyricsLineSegment::LyricsLineSegment(const ElementType& type, LyricsLine* sp, System* parent, ElementFlags f)
+    : LineSegment(type, sp, parent, f)
+{
+    setGenerated(true);
+}
+
 double LyricsLineSegment::baseLineShift() const
 {
     if (lyricsLine()->isEndMelisma()) {
         return -0.5 * absoluteFromSpatium(lineWidth());
     }
 
-    Lyrics* lyrics = lyricsLine()->lyrics();
-    return -style().styleD(Sid::lyricsDashYposRatio) * lyrics->fontMetrics().xHeight();
+    Lyrics* segLyrics = lyrics();
+    return -style().styleD(Sid::lyricsDashYposRatio) * segLyrics->fontMetrics().xHeight();
+}
+
+//=========================================================
+//   PartialLyricsLine
+//=========================================================
+PartialLyricsLine::PartialLyricsLine(EngravingItem* parent)
+    : LyricsLine(ElementType::PARTIAL_LYRICSLINE, parent)
+{
+    setGenerated(false);
+}
+
+PartialLyricsLine::PartialLyricsLine(const PartialLyricsLine& other)
+    : LyricsLine(other)
+{
+    m_isEndMelisma = other.m_isEndMelisma;
+}
+
+LineSegment* PartialLyricsLine::createLineSegment(System* parent)
+{
+    PartialLyricsLineSegment* seg = new PartialLyricsLineSegment(this, parent);
+    seg->setTrack(track());
+    seg->setColor(color());
+    return seg;
+}
+
+PropertyValue PartialLyricsLine::getProperty(Pid propertyId) const
+{
+    switch (propertyId) {
+    case Pid::VERSE:
+        return _no;
+    default:
+        return LyricsLine::getProperty(propertyId);
+    }
+}
+
+bool PartialLyricsLine::setProperty(Pid propertyId, const PropertyValue& val)
+{
+    switch (propertyId) {
+    case Pid::VERSE:
+        setNo(val.toInt());
+        break;
+    default:
+        return LyricsLine::setProperty(propertyId, val);
+    }
+
+    return true;
+}
+
+PropertyValue PartialLyricsLine::propertyDefault(Pid propertyId) const
+{
+    switch (propertyId) {
+    case Pid::VERSE:
+        return 0;
+    default:
+        return LyricsLine::propertyDefault(propertyId);
+    }
+}
+
+void PartialLyricsLine::doComputeEndElement()
+{
+    LyricsLine::doComputeEndElement();
+
+    if (startElement() && endElement() && startElement()->tick() > endElement()->tick()) {
+        setEndElement(startElement());
+    }
+}
+
+//=========================================================
+//   PartialLyricsLineSegment
+//=========================================================
+
+PartialLyricsLineSegment::PartialLyricsLineSegment(PartialLyricsLine* line, System* parent)
+    : LyricsLineSegment(ElementType::PARTIAL_LYRICSLINE_SEGMENT, line, parent, ElementFlag::ON_STAFF)
+{
+    setGenerated(false);
+}
+
+double PartialLyricsLineSegment::lineSpacing() const
+{
+    const Lyrics* prevLyrics = lyricsLine()->findLyricsInPreviousRepeatSeg();
+    if (prevLyrics) {
+        return prevLyrics->lineSpacing();
+    }
+
+    const Lyrics* nextLyrics = lyricsLine()->nextLyrics();
+    if (nextLyrics) {
+        return lyricsLine()->nextLyrics()->lineSpacing();
+    }
+
+    return 0.0;
+}
+
+double PartialLyricsLineSegment::baseLineShift() const
+{
+    if (lyricsLine()->isEndMelisma()) {
+        return -0.5 * absoluteFromSpatium(lineWidth());
+    }
+
+    const Lyrics* prevLyrics = lyricsLine()->findLyricsInPreviousRepeatSeg();
+    if (prevLyrics) {
+        return -style().styleD(Sid::lyricsDashYposRatio) * prevLyrics->fontMetrics().xHeight();
+    }
+
+    return 0.0;
+}
+
+Lyrics* PartialLyricsLine::findLyricsInPreviousRepeatSeg()
+{
+    const std::vector<Measure*> measures = findPreviousRepeatMeasures(findStartMeasure());
+
+    for (const Measure* measure : measures) {
+        Lyrics* prev = prevLyrics(measure->last(SegmentType::ChordRest), staffIdx(), no(), placement());
+
+        if (!prev) {
+            continue;
+        }
+
+        return prev;
+    }
+
+    return nullptr;
 }
 }

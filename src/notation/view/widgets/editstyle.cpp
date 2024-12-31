@@ -1639,7 +1639,9 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
 
     case ElementType::LYRICS:
     case ElementType::LYRICSLINE:
+    case ElementType::PARTIAL_LYRICSLINE:
     case ElementType::LYRICSLINE_SEGMENT:
+    case ElementType::PARTIAL_LYRICSLINE_SEGMENT:
         return "lyrics";
 
     case ElementType::EXPRESSION:

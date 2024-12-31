@@ -263,6 +263,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
         break;
     case ElementType::PALM_MUTE: read(item_cast<PalmMute*>(item), xml, ctx);
         break;
+    case ElementType::PARTIAL_LYRICSLINE: read(item_cast<PartialLyricsLine*>(item), xml, ctx);
+        break;
     case ElementType::PARTIAL_TIE: read(item_cast<PartialTie*>(item), xml, ctx);
         break;
     case ElementType::PEDAL: read(item_cast<Pedal*>(item), xml, ctx);
@@ -3764,6 +3766,19 @@ void TRead::read(Part* p, XmlReader& e, ReadContext& ctx)
 
     if (p->partName().isEmpty()) {
         p->setPartName(p->instrument()->trackName());
+    }
+}
+
+void TRead::read(PartialLyricsLine* p, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+        if (tag == "isEndMelisma") {
+            p->setIsEndMelisma(xml.readBool());
+        } else if (TRead::readProperty(p, tag, xml, ctx, Pid::VERSE)) {
+        } else if (!readItemProperties(p, xml, ctx)) {
+            xml.unknown();
+        }
     }
 }
 
