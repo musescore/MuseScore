@@ -192,7 +192,9 @@ enum KeyboardKey {
     Key_BraceRight = 0x7d,
     Key_AsciiTilde = 0x7e,
 
+    Key_nobreakspace = 0x0a0,
     Key_periodcentered = 0x0b7,
+    Key_ydiaeresis = 0x0ff,
 };
 
 enum MouseButton {
