@@ -326,11 +326,14 @@ void ApplicationActionController::revertToFactorySettings()
                                                  "The list of recent scores will also be cleared.\n\n"
                                                  "This action will not delete any of your scores.");
 
+    IInteractive::ButtonData cancelBtn = interactive()->buttonData(IInteractive::Button::Cancel);
+    cancelBtn.accent = true;
+
     int revertBtn = int(IInteractive::Button::Apply);
     IInteractive::Result result = interactive()->warning(title, question,
-                                                         { interactive()->buttonData(IInteractive::Button::Cancel),
-                                                           IInteractive::ButtonData(revertBtn, muse::trc("appshell", "Revert"), true) },
-                                                         revertBtn);
+                                                         { cancelBtn,
+                                                           IInteractive::ButtonData(revertBtn, muse::trc("appshell", "Revert")) },
+                                                         cancelBtn.btn);
 
     if (result.standardButton() == IInteractive::Button::Cancel) {
         return;
