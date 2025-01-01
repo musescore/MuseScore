@@ -333,7 +333,8 @@ void ApplicationActionController::revertToFactorySettings()
     IInteractive::Result result = interactive()->warning(title, question,
                                                          { cancelBtn,
                                                            IInteractive::ButtonData(revertBtn, muse::trc("appshell", "Revert")) },
-                                                         cancelBtn.btn);
+                                                         cancelBtn.btn, { muse::IInteractive::Option::WithIcon },
+                                                         muse::trc("appshell", "Revert to factory settings"));
 
     if (result.standardButton() == IInteractive::Button::Cancel) {
         return;
