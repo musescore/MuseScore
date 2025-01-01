@@ -6715,15 +6715,19 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
 
                   // Staff layout elements.
                   for (int staffIdx = (firstStaffOfPart == 0) ? 1 : 0; staffIdx < nrStavesInPart; staffIdx++) {
-
                         // calculate distance between this and previous staff using the bounding boxes
                         const int staffNr = firstStaffOfPart + staffIdx;
-                        const QRectF& prevBbox = system->staff(staffNr - 1)->bbox();
+                        const int prevStaffNr = system->prevVisibleStaff(staffNr);
+                        if (prevStaffNr == -1)
+                              continue;
+                        const QRectF& prevBbox = system->staff(prevStaffNr)->bbox();
                         const qreal staffDist = system->staff(staffNr)->bbox().y() - prevBbox.y() - prevBbox.height();
 
-                        _xml.stag(QString("staff-layout number=\"%1\"").arg(staffIdx + 1));
-                        _xml.tag("staff-distance", QString("%1").arg(QString::number(getTenthsFromDots(staffDist),'f',2)));
-                        _xml.etag();
+                        if (staffDist > 0) {
+                              _xml.stag(QString("staff-layout number=\"%1\"").arg(staffIdx + 1));
+                              _xml.tag("staff-distance", QString("%1").arg(QString::number(getTenthsFromDots(staffDist),'f',2)));
+                              _xml.etag();
+                              }
                         }
 
                   _xml.etag();
