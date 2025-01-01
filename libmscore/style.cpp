@@ -3053,8 +3053,6 @@ void MStyle::load(XmlReader& e, int mscVersion)
                   }
             else if (tag == "lyricsDashMaxLegth")                                 // pre-3.6 typo, now: "lyricsDashMaxLength"
                   set(Sid::lyricsDashMaxLength, Spatium(e.readDouble()));
-            else if (tag == "dontHidStavesInFirstSystem")                         // pre-3.6.3/4.0 typo, now "dontHideStavesInFirstSystem"
-                  set(Sid::dontHideStavesInFirstSystem, e.readBool());
             else if (tag == "ottavaHook") {                                       // obsolete, for 3.0dev bw. compatibility, should be removed in final release
                   qreal y = qAbs(e.readDouble());
                   set(Sid::ottavaHookAbove, y);
@@ -3118,6 +3116,8 @@ bool MStyle::readProperties400(XmlReader& e, int mscVersion)
             e.skipCurrentElement();
       //else if (tag == "lyricsMinBottomDistance")                                // 2 -> 1.5, Mu4's default seems better, so let's pass
       //     return false;
+      else if (tag == "dontHideStavesInFirstSystem")                              // pre-4.x typo
+            set(Sid::dontHideStavesInFirstSystem, e.readBool());
       else if (tag == "lyricsDashLineThickness") {                                // 0.15 -> 0.1
             qreal lyricsDashLineThickness = e.readDouble();
             if (!qFuzzyCompare(lyricsDashLineThickness, 0.1))                     // Changed from 4.x default
