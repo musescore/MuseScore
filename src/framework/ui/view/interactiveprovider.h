@@ -71,7 +71,7 @@ public:
 
     RetVal<Val> warning(const std::string& title, const IInteractive::Text& text, const std::string& detailedText = {},
                         const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
-                        const IInteractive::Options& options = {}, const std::string & dialogTitle = "") override;
+                        const IInteractive::Options& options = {}, const std::string& dialogTitle = "") override;
 
     RetVal<Val> error(const std::string& title, const IInteractive::Text& text, const std::string& detailedText = {},
                       const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
