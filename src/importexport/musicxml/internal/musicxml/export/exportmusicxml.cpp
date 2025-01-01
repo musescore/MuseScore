@@ -8582,13 +8582,13 @@ static void writeMusicXml(const FretDiagram* item, XmlWriter& xml)
     }
 
     for (int i = 0; i < item->strings(); ++i) {
-        int mxmlString = item->strings() - i;
+        const int mxmlString = item->strings() - i;
 
         std::vector<int> bStarts;
         std::vector<int> bEnds;
         for (auto const& j : item->barres()) {
             FretItem::Barre b = j.second;
-            int fret = j.first;
+            const int fret = j.first;
             if (!b.exists()) {
                 continue;
             }
@@ -8609,7 +8609,7 @@ static void writeMusicXml(const FretDiagram* item, XmlWriter& xml)
         // Markers may exists alongside with dots
         // Write dots
         for (auto const& d : item->dot(i)) {
-            if (!d.exists()) {
+            if (!d.exists() || d.dtype == FretDotType::CROSS) {
                 continue;
             }
             xml.startElement("frame-note");
