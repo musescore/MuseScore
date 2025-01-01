@@ -102,35 +102,39 @@ void InteractiveProvider::raiseWindowInStack(QObject* newActiveWindow)
 
 RetVal<Val> InteractiveProvider::question(const std::string& title, const IInteractive::Text& text,
                                           const IInteractive::ButtonDatas& buttons, int defBtn,
-                                          const IInteractive::Options& options)
+                                          const IInteractive::Options& options,
+                                          const std::string& dialogTitle)
 {
-    return openStandardDialog("QUESTION", title, text, {}, buttons, defBtn, options);
+    return openStandardDialog("QUESTION", title, text, {}, buttons, defBtn, options, dialogTitle);
 }
 
 RetVal<Val> InteractiveProvider::info(const std::string& title, const IInteractive::Text& text,
                                       const IInteractive::ButtonDatas& buttons,
                                       int defBtn,
-                                      const IInteractive::Options& options)
+                                      const IInteractive::Options& options,
+                                      const std::string& dialogTitle)
 {
-    return openStandardDialog("INFO", title, text, {}, buttons, defBtn, options);
+    return openStandardDialog("INFO", title, text, {}, buttons, defBtn, options, dialogTitle);
 }
 
 RetVal<Val> InteractiveProvider::warning(const std::string& title, const IInteractive::Text& text,
                                          const std::string& detailedText,
                                          const IInteractive::ButtonDatas& buttons,
                                          int defBtn,
-                                         const IInteractive::Options& options)
+                                         const IInteractive::Options& options,
+                                         const std::string& dialogTitle)
 {
-    return openStandardDialog("WARNING", title, text, detailedText, buttons, defBtn, options);
+    return openStandardDialog("WARNING", title, text, detailedText, buttons, defBtn, options, dialogTitle);
 }
 
 RetVal<Val> InteractiveProvider::error(const std::string& title, const IInteractive::Text& text,
                                        const std::string& detailedText,
                                        const IInteractive::ButtonDatas& buttons,
                                        int defBtn,
-                                       const IInteractive::Options& options)
+                                       const IInteractive::Options& options,
+                                       const std::string& dialogTitle)
 {
-    return openStandardDialog("ERROR", title, text, detailedText, buttons, defBtn, options);
+    return openStandardDialog("ERROR", title, text, detailedText, buttons, defBtn, options, dialogTitle);
 }
 
 Ret InteractiveProvider::showProgress(const std::string& title, Progress* progress)
@@ -426,7 +430,8 @@ void InteractiveProvider::fillData(QObject* object, const UriQuery& q) const
 void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QString& type, const std::string& title,
                                                  const IInteractive::Text& text, const std::string& detailedText,
                                                  const IInteractive::ButtonDatas& buttons, int defBtn,
-                                                 const IInteractive::Options& options) const
+                                                 const IInteractive::Options& options,
+                                                 const std::string& dialogTitle) const
 {
     auto format = [](IInteractive::TextFormat f) {
         switch (f) {
@@ -444,6 +449,7 @@ void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QStr
     params["detailedText"] = QString::fromStdString(detailedText);
     params["textFormat"] = format(text.format);
     params["defaultButtonId"] = defBtn;
+    params["dialogTitle"] = QString::fromStdString(dialogTitle);
 
     QVariantList buttonsList;
     QVariantList customButtonsList;
@@ -720,12 +726,13 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openQml(const UriQuer
 RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const std::string& title, const IInteractive::Text& text,
                                                     const std::string& detailedText,
                                                     const IInteractive::ButtonDatas& buttons, int defBtn,
-                                                    const IInteractive::Options& options)
+                                                    const IInteractive::Options& options,
+                                                    const std::string& dialogTitle /* the title in the titlebar */)
 {
     notifyAboutCurrentUriWillBeChanged();
 
     QmlLaunchData* data = new QmlLaunchData();
-    fillStandardDialogData(data, type, title, text, detailedText, buttons, defBtn, options);
+    fillStandardDialogData(data, type, title, text, detailedText, buttons, defBtn, options, dialogTitle);
 
     emit fireOpenStandardDialog(data);
 
