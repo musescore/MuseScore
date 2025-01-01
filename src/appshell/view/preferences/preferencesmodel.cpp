@@ -216,7 +216,7 @@ bool PreferencesModel::askForConfirmationOfPreferencesReset()
 
     muse::IInteractive::ButtonData cancelBtn = interactive()->buttonData(muse::IInteractive::Button::Cancel);
     muse::IInteractive::ButtonData resetBtn = interactive()->buttonData(muse::IInteractive::Button::Reset);
-    resetBtn.accent = true;
+    cancelBtn.accent = true;
 
     muse::IInteractive::Result result = interactive()->warning(title, question, { cancelBtn, resetBtn }, cancelBtn.btn);
     return result.standardButton() == muse::IInteractive::Button::Reset;
