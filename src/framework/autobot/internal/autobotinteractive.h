@@ -58,8 +58,7 @@ public:
                    const Options& options = {}, const std::string& dialogTitle = "") const override;
 
     Result warning(const std::string& title, const Text& text, const std::string& detailedText, const ButtonDatas& buttons = {},
-                   int defBtn = int(Button::NoButton), const Options& options = {},
-                   const std::string& dialogTitle = "") const override;
+                   int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") const override;
 
     // error
     Result error(const std::string& title, const std::string& text, const Buttons& buttons = {}, const Button& def = Button::NoButton,
@@ -69,8 +68,7 @@ public:
                  const Options& options = {}, const std::string& dialogTitle = "") const override;
 
     Result error(const std::string& title, const Text& text, const std::string& detailedText, const ButtonDatas& buttons = {},
-                 int defBtn = int(Button::NoButton), const Options& options = {},
-                 const std::string& dialogTitle = "") const override;
+                 int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") const override;
 
     // progress
     Ret showProgress(const std::string& title, Progress* progress) const override;
