@@ -19,8 +19,6 @@
 */
 
 #include "element.h"
-#include "spatium.h"
-#include "symbol.h"
 #include "skyline.h"
 
 namespace Ms {
@@ -202,6 +200,7 @@ public:
       void setDistance(qreal d) { _distance = d; }
 
       int firstSysStaffOfPart(const Part* part) const;
+      int prevVisibleStaff(int startStaffIdx) const;
       int firstVisibleSysStaffOfPart(const Part* part) const;
       int lastSysStaffOfPart(const Part* part) const;
       int lastVisibleSysStaffOfPart(const Part* part) const;

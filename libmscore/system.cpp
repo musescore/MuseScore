@@ -628,6 +628,25 @@ int System::nextVisibleStaff(int staffIdx) const
       return i;
       }
 
+int System::prevVisibleStaff(int startStaffIdx) const
+      {
+      if (startStaffIdx == 0)
+            return -1;
+
+      for (int i = startStaffIdx - 1;; --i) {
+            Staff* s = score()->staff(i);
+            SysStaff* ss = _staves[i];
+
+            if (s->show() && ss->show())
+                  return i;
+
+            if (i == 0)
+                  break;
+            }
+
+      return -1;
+      }
+
 //---------------------------------------------------------
 //   firstVisibleStaff
 //---------------------------------------------------------
