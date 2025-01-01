@@ -919,8 +919,13 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
     } else if (item->stem() && (item->stem()->isUserModified() || !item->stem()->userLength().isZero())) {
         write(item->stem(), xml, ctx);
     }
-    if (item->hook() && item->hook()->isUserModified()) {
-        write(item->hook(), xml, ctx);
+    if (item->hook()) {
+        if (item->hook()->isUserModified()) {
+            write(item->hook(), xml, ctx);
+        }
+        if (item->hookIsReversed()) {
+            writeProperty(item, xml, Pid::HOOK_REVERSED);
+        }
     }
     if (item->showStemSlash() && item->isUserModified()) {
         xml.tag("showStemSlash", item->showStemSlash());

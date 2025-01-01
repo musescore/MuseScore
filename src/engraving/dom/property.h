@@ -96,6 +96,7 @@ enum class Pid {
     DIRECTION,
     STEM_DIRECTION,
     NO_STEM,
+    HOOK_REVERSED,
     SLUR_DIRECTION,
     LEADING_SPACE,
     MIRROR_HEAD,

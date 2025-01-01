@@ -5356,7 +5356,7 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
         }
     }
 
-    double lineWidthCorrection = item->lineWidthMag() * 0.5;
+    double lineWidthCorrection = !item->chord()->hookIsReversed() ? item->lineWidthMag() * 0.5 : -item->chord()->hook()->width();
     double lineX = isTabStaff ? 0.0 : _up * lineWidthCorrection;
 
     LineF line = LineF(lineX, y1, lineX, y2);
