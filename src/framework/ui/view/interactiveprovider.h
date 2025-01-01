@@ -62,18 +62,20 @@ public:
     explicit InteractiveProvider(const modularity::ContextPtr& iocCtx);
 
     RetVal<Val> question(const std::string& title, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
-                         int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {}) override;
+                         int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {},
+                         const std::string& dialogTitle = "") override;
 
     RetVal<Val> info(const std::string& title, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
-                     int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {}) override;
+                     int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {},
+                     const std::string& dialogTitle = "") override;
 
     RetVal<Val> warning(const std::string& title, const IInteractive::Text& text, const std::string& detailedText = {},
                         const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
-                        const IInteractive::Options& options = {}) override;
+                        const IInteractive::Options& options = {}, const std::string & dialogTitle = "") override;
 
     RetVal<Val> error(const std::string& title, const IInteractive::Text& text, const std::string& detailedText = {},
                       const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
-                      const IInteractive::Options& options = {}) override;
+                      const IInteractive::Options& options = {}, const std::string& dialogTitle = "") override;
 
     Ret showProgress(const std::string& title, Progress* progress) override;
 
@@ -144,7 +146,7 @@ private:
     void fillData(QObject* object, const UriQuery& q) const;
     void fillStandardDialogData(QmlLaunchData* data, const QString& type, const std::string& title, const IInteractive::Text& text,
                                 const std::string& detailedText, const IInteractive::ButtonDatas& buttons, int defBtn,
-                                const IInteractive::Options& options) const;
+                                const IInteractive::Options& options, const std::string& dialogTitle) const;
     void fillFileDialogData(QmlLaunchData* data, FileDialogType type, const std::string& title, const io::path_t& path,
                             const std::vector<std::string>& filter = {}, bool confirmOverwrite = true) const;
 
@@ -156,7 +158,8 @@ private:
     RetVal<OpenData> openQml(const UriQuery& q);
     RetVal<Val> openStandardDialog(const QString& type, const std::string& title, const IInteractive::Text& text,
                                    const std::string& detailedText = {}, const IInteractive::ButtonDatas& buttons = {},
-                                   int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {});
+                                   int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {},
+                                   const std::string& dialogTitle = "");
 
     RetVal<io::path_t> openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
                                       const std::vector<std::string>& filter = {}, bool confirmOverwrite = true);
