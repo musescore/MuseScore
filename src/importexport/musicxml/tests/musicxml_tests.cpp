@@ -661,6 +661,9 @@ TEST_F(MusicXml_Tests, DISABLED_graceAfter4) {
 TEST_F(MusicXml_Tests, graceFermata) {
     musicXmlIoTest("testGraceFermata");
 }
+TEST_F(MusicXml_Tests, guitarBends) {
+    musicXmlMscxExportTestRef("testGuitarBends");
+}
 TEST_F(MusicXml_Tests, harpPedals) {
     musicXmlMscxExportTestRef("testHarpPedals");
 }
