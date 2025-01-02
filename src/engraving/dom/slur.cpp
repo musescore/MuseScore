@@ -136,6 +136,7 @@ bool SlurSegment::edit(EditData& ed)
     const bool altMod = ed.modifiers & AltModifier;
     const bool shiftMod = ed.modifiers & ShiftModifier;
     const bool extendToBarLine = shiftMod && altMod;
+    const bool isPartialSlur = sl->isIncoming() || sl->isOutgoing();
 
     if (ed.key == Key_Left) {
         if (extendToBarLine) {
@@ -150,7 +151,14 @@ bool SlurSegment::edit(EditData& ed)
                 sl->undoSetOutgoing(false);
             }
         } else {
-            cr = prevChordRest(e);
+            if (start && sl->isIncoming()) {
+                sl->undoSetIncoming(false);
+                cr = prevChordRest(e);
+            } else if (!start && sl->isOutgoing()) {
+                sl->undoSetOutgoing(false);
+            } else {
+                cr = prevChordRest(e);
+            }
         }
     } else if (ed.key == Key_Right) {
         if (extendToBarLine) {
@@ -165,7 +173,14 @@ bool SlurSegment::edit(EditData& ed)
                 sl->undoSetOutgoing(true);
             }
         } else {
-            cr = nextChordRest(e);
+            if (start && sl->isIncoming()) {
+                sl->undoSetIncoming(false);
+            } else if (!start && sl->isOutgoing()) {
+                sl->undoSetOutgoing(false);
+                cr = nextChordRest(e);
+            } else {
+                cr = nextChordRest(e);
+            }
         }
     } else if (ed.key == Key_Up) {
         Part* part     = e->part();
@@ -180,7 +195,7 @@ bool SlurSegment::edit(EditData& ed)
     } else {
         return false;
     }
-    if (cr && cr != e1) {
+    if (cr && (cr != e1 || isPartialSlur)) {
         if (cr->staff() != e->staff() && (cr->staffType()->isTabStaff() || e->staffType()->isTabStaff())) {
             return false; // Cross-staff slurs don't make sense for TAB staves
         }

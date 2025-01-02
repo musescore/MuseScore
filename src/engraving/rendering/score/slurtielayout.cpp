@@ -111,8 +111,8 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
     p2 = sPos.p2;
     bool constrainLeftAnchor = false;
 
-    const bool incomingPartialSlur = item->partialSpannerDirection() == PartialSpannerDirection::INCOMING;
-    const bool outgoingPartialSlur = item->partialSpannerDirection() == PartialSpannerDirection::OUTGOING;
+    const bool incomingPartialSlur = item->isIncoming();
+    const bool outgoingPartialSlur = item->isOutgoing();
 
     // start anchor, either on the start chordrest or at the beginning of the system
     if ((sst == SpannerSegmentType::SINGLE || sst == SpannerSegmentType::BEGIN) && !incomingPartialSlur) {
