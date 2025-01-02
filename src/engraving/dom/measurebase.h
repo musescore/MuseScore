@@ -182,6 +182,7 @@ public:
     int measureIndex() const;
 
     bool isBefore(const EngravingItem* other) const override;
+    bool isBefore(const MeasureBase* other) const;
     bool isBeforeOrEqual(const MeasureBase* other) const { return other == this || isBefore(other); }
     bool isAfter(const MeasureBase* other) const { return !isBeforeOrEqual(other); }
 

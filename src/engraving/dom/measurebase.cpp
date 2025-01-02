@@ -696,21 +696,25 @@ int MeasureBase::measureIndex() const
 
 bool MeasureBase::isBefore(const EngravingItem* other) const
 {
-    if (!other->isMeasureBase()) {
-        return EngravingItem::isBefore(other);
+    if (other->isMeasureBase()) {
+        const MeasureBase* otherMb = toMeasureBase(other);
+        return isBefore(otherMb);
     }
 
-    const MeasureBase* otherMb = toMeasureBase(other);
+    return EngravingItem::isBefore(other);
+}
 
-    Fraction otherTick = otherMb->tick();
+bool MeasureBase::isBefore(const MeasureBase* other) const
+{
+    Fraction otherTick = other->tick();
     if (otherTick != m_tick) {
         return m_tick < otherTick;
     }
 
-    bool otherIsMMRest = otherMb->isMeasure() && toMeasure(otherMb)->isMMRest();
+    bool otherIsMMRest = other->isMeasure() && toMeasure(other)->isMMRest();
     for (const MeasureBase* mb = otherIsMMRest ? nextMM() : next(); mb && mb->tick() == m_tick;
          mb = otherIsMMRest ? mb->nextMM() : mb->next()) {
-        if (mb == otherMb) {
+        if (mb == other) {
             return true;
         }
     }
