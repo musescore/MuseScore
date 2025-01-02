@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0+basic">
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.1+basic">
    <meiHead>
       <fileDesc>
          <titleStmt>
@@ -52,7 +52,7 @@
                            <note xml:id="n912k7" dur="1" pname="d" oct="4" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="r1275fyx" type="mscore-jump-dc-al-double-coda" func="daCapo" tstamp="0.000000">D.C. al Doppia Coda</repeatMark>
+                     <repeatMark xml:id="r1275fyx" type="mscore-jump-dc-al-double-coda" func="daCapo" tstamp="0">D.C. al Doppia Coda</repeatMark>
                   </measure>
                   <measure xml:id="m19nftig" n="3">
                      <staff xml:id="m3s1" n="1">
@@ -74,7 +74,7 @@
                            <note xml:id="no6otrq" dur="1" pname="c" oct="4" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="r1mdylt7" func="segno" tstamp="0.000000" />
+                     <repeatMark xml:id="r1mdylt7" func="segno" tstamp="0" />
                   </measure>
                   <measure xml:id="md370gx" n="6">
                      <staff xml:id="m6s1" n="1">
@@ -89,7 +89,7 @@
                            <note xml:id="nomf9x9" dur="1" pname="g" oct="4" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="r1uhpszs" type="mscore-marker-to-coda" func="coda" tstamp="0.000000">To Coda</repeatMark>
+                     <repeatMark xml:id="r1uhpszs" type="mscore-marker-to-coda" func="coda" tstamp="0">To Coda</repeatMark>
                   </measure>
                   <measure xml:id="m16isenw" n="8">
                      <staff xml:id="m8s1" n="1">
@@ -104,7 +104,7 @@
                            <note xml:id="nxtfrph" dur="1" pname="c" oct="5" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="rvl0b39" type="mscore-jump-ds-al-coda" func="dalSegno" tstamp="0.000000">D.S. al Coda</repeatMark>
+                     <repeatMark xml:id="rvl0b39" type="mscore-jump-ds-al-coda" func="dalSegno" tstamp="0">D.S. al Coda</repeatMark>
                   </measure>
                   <measure xml:id="m13tc1db" n="10">
                      <staff xml:id="m10s1" n="1">
@@ -119,7 +119,7 @@
                            <note xml:id="n160z06z" dur="1" pname="d" oct="5" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="r10or82b" func="coda" tstamp="0.000000" />
+                     <repeatMark xml:id="r10or82b" func="coda" tstamp="0" />
                   </measure>
                   <measure xml:id="m8fddfg" right="end" n="12">
                      <staff xml:id="m12s1" n="1">
