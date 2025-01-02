@@ -1440,7 +1440,7 @@ void MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, La
         //  This flag is later used to set a double end bar line and to actually
         //  create the courtesy key sig.
 
-        if (nm && !m->sectionBreak()) {
+        if (nm && !m->isFinalMeasureOfSection()) {
             //  Don't change barlines at the end of a section break,
             //  and don't create courtesy key/time signatures.
             bool hasKeySig = false;
