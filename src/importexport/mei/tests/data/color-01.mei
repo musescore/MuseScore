@@ -83,8 +83,8 @@
                   <measure xml:id="m1yzrkkj" n="3">
                      <staff xml:id="m3s1" n="1">
                         <layer xml:id="m3s1l1" n="1">
-                           <note xml:id="nx5z8ek" dur="4" pname="c" oct="5" oct.ges="6" />
-                           <note xml:id="n1p30nx0" dur="4" pname="c" oct="5" oct.ges="6" />
+                           <note xml:id="nx5z8ek" oct.ges="6" dur="4" pname="c" oct="5" />
+                           <note xml:id="n1p30nx0" oct.ges="6" dur="4" pname="c" oct="5" />
                            <note xml:id="n56bk5e" dur="4" pname="c" oct="5" />
                            <note xml:id="n12667r3" dur="4" pname="c" oct="5" />
                         </layer>
