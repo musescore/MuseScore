@@ -24,6 +24,9 @@
 
 #include "translation.h"
 
+#include "serialization/json.h"
+#include "io/file.h"
+
 #include "chord.h"
 #include "factory.h"
 #include "harmony.h"
@@ -35,6 +38,7 @@
 #include "stringdata.h"
 #include "system.h"
 #include "undo.h"
+#include "rw/read410/tread.h"
 
 #include "log.h"
 
@@ -65,6 +69,8 @@ static const ElementStyle fretStyle {
 //---------------------------------------------------------
 //   FretDiagram
 //---------------------------------------------------------
+
+std::map<String, String> FretDiagram::s_harmonyToDiagramMap;
 
 FretDiagram::FretDiagram(Segment* parent)
     : EngravingItem(ElementType::FRET_DIAGRAM, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
@@ -127,48 +133,79 @@ EngravingItem* FretDiagram::linkedClone()
 std::shared_ptr<FretDiagram> FretDiagram::createFromString(Score* score, const String& s)
 {
     auto fd = Factory::makeFretDiagram(score->dummy()->segment());
-    int strings = static_cast<int>(s.size());
 
-    fd->setStrings(strings);
-    fd->setFrets(4);
-    fd->setPropertyFlags(Pid::FRET_STRINGS, PropertyFlags::UNSTYLED);
-    fd->setPropertyFlags(Pid::FRET_FRETS,   PropertyFlags::UNSTYLED);
-    int offset = 0;
-    int barreString = -1;
-    std::vector<std::pair<int, int> > dotsToAdd;
+    applyDiagramPattern(fd.get(), s);
 
-    for (int i = 0; i < strings; i++) {
-        Char c = s.at(i);
-        if (c == 'X' || c == 'O') {
-            FretMarkerType mt = (c == 'X' ? FretMarkerType::CROSS : FretMarkerType::CIRCLE);
-            fd->setMarker(i, mt);
-        } else if (c == '-' && barreString == -1) {
-            barreString = i;
-        } else {
-            int fret = c.digitValue();
-            if (fret != -1) {
-                dotsToAdd.push_back(std::make_pair(i, fret));
-                if (fret - 3 > 0 && offset < fret - 3) {
-                    offset = fret - 3;
+    return fd;
+}
+
+void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath)
+{
+    muse::io::File file(filePath);
+    if (!file.open()) {
+        LOGE() << file.errorString();
+        return;
+    }
+
+    XmlReader reader(&file);
+
+    while (reader.readNextStartElement()) {
+        if (reader.name() != "Data") {
+            break;
+        }
+        while (reader.readNextStartElement()) {
+            if (reader.name() == "HarmonyToDiagram") {
+                String harmony;
+                String diagram;
+                while (reader.readNextStartElement()) {
+                    if (reader.name() == "Harmony") {
+                        while (reader.readNextStartElement()) {
+                            if (reader.name() == "name") {
+                                harmony = reader.readText();
+                            } else {
+                                reader.unknown();
+                            }
+                        }
+                    } else if (reader.name() == "FretDiagram") {
+                        diagram = reader.readBody();
+                        reader.skipCurrentElement();
+                    } else {
+                        reader.unknown();
+                    }
                 }
+
+                if (!harmony.isEmpty() && !diagram.isEmpty()) {
+                    s_harmonyToDiagramMap.insert({ harmony, diagram });
+                }
+                harmony.clear();
+                diagram.clear();
+            } else {
+                reader.unknown();
             }
         }
     }
+}
 
-    if (offset > 0) {
-        fd->setFretOffset(offset);
+void FretDiagram::updateDiagram(const String& harmonyName)
+{
+    String harmonyNameLower = harmonyName.toLower();
+
+    auto it = std::find_if(s_harmonyToDiagramMap.cbegin(), s_harmonyToDiagramMap.cend(), [&harmonyNameLower](const auto& pair){
+        return pair.first.toLower() == harmonyNameLower;
+    });
+
+    if (it == s_harmonyToDiagramMap.cend()) {
+        return;
     }
 
-    for (std::pair<int, int> d : dotsToAdd) {
-        fd->setDot(d.first, d.second - offset, true);
-    }
+    clear();
 
-    // This assumes that any barre goes to the end of the fret
-    if (barreString >= 0) {
-        fd->setBarre(barreString, -1, 1);
-    }
+    read410::ReadContext ctx;
+    XmlReader reader(it->second.toUtf8());
 
-    return fd;
+    read410::TRead::read(this, reader, ctx);
+
+    triggerLayout();
 }
 
 //---------------------------------------------------------
@@ -529,12 +566,65 @@ void FretDiagram::removeDotsMarkers(int ss, int es, int fret)
     }
 }
 
+void FretDiagram::applyDiagramPattern(FretDiagram* diagram, const String& pattern)
+{
+    diagram->clear();
+
+    int strings = static_cast<int>(pattern.size());
+
+    diagram->setStrings(strings);
+    diagram->setFrets(4);
+    diagram->setPropertyFlags(Pid::FRET_STRINGS, PropertyFlags::UNSTYLED);
+    diagram->setPropertyFlags(Pid::FRET_FRETS,   PropertyFlags::UNSTYLED);
+    int offset = 0;
+    int barreString = -1;
+    std::vector<std::pair<int, int> > dotsToAdd;
+
+    for (int i = 0; i < strings; i++) {
+        Char c = pattern.at(i);
+        if (c == 'X' || c == 'O') {
+            FretMarkerType mt = (c == 'X' ? FretMarkerType::CROSS : FretMarkerType::CIRCLE);
+            diagram->setMarker(i, mt);
+        } else if (c == '-' && barreString == -1) {
+            barreString = i;
+        } else {
+            int fret = c.digitValue();
+            if (fret != -1) {
+                dotsToAdd.push_back(std::make_pair(i, fret));
+                if (fret - 3 > 0 && offset < fret - 3) {
+                    offset = fret - 3;
+                }
+            }
+        }
+    }
+
+    if (offset > 0) {
+        diagram->setFretOffset(offset);
+    }
+
+    for (std::pair<int, int> d : dotsToAdd) {
+        diagram->setDot(d.first, d.second - offset, true);
+    }
+
+    // This assumes that any barre goes to the end of the fret
+    if (barreString >= 0) {
+        diagram->setBarre(barreString, -1, 1);
+    }
+}
+
 //---------------------------------------------------------
 //   clear
 //---------------------------------------------------------
 
 void FretDiagram::clear()
 {
+    m_strings = 6;
+    m_frets = 4;
+    m_fretOffset = 0;
+    m_maxFrets = 24;
+    m_showNut = true;
+    m_orientation = Orientation::VERTICAL;
+
     m_barres.clear();
     m_dots.clear();
     m_markers.clear();
