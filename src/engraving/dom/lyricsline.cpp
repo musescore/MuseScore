@@ -22,7 +22,9 @@
 
 #include "lyrics.h"
 
+#include "chord.h"
 #include "chordrest.h"
+#include "factory.h"
 #include "measure.h"
 #include "navigate.h"
 #include "note.h"
@@ -209,6 +211,8 @@ bool PartialLyricsLine::setProperty(Pid propertyId, const PropertyValue& val)
         return LyricsLine::setProperty(propertyId, val);
     }
 
+    triggerLayout();
+
     return true;
 }
 
@@ -219,6 +223,16 @@ PropertyValue PartialLyricsLine::propertyDefault(Pid propertyId) const
         return 0;
     default:
         return LyricsLine::propertyDefault(propertyId);
+    }
+}
+
+Sid PartialLyricsLine::getPropertyStyle(Pid propertyId) const
+{
+    switch (propertyId) {
+    case Pid::PLACEMENT:
+        return Sid::lyricsPlacement;
+    default:
+        return LyricsLine::getPropertyStyle(propertyId);
     }
 }
 
@@ -235,25 +249,28 @@ void PartialLyricsLine::doComputeEndElement()
 //   PartialLyricsLineSegment
 //=========================================================
 
+static const ElementStyle partialLyricsLineSegmentElementStyle {
+    { Sid::lyricsPlacement, Pid::PLACEMENT },
+    { Sid::lyricsPosBelow, Pid::OFFSET },
+    { Sid::lyricsMinTopDistance, Pid::MIN_DISTANCE },
+};
+
 PartialLyricsLineSegment::PartialLyricsLineSegment(PartialLyricsLine* line, System* parent)
     : LyricsLineSegment(ElementType::PARTIAL_LYRICSLINE_SEGMENT, line, parent, ElementFlag::ON_STAFF)
 {
     setGenerated(false);
+    initElementStyle(&partialLyricsLineSegmentElementStyle);
 }
 
 double PartialLyricsLineSegment::lineSpacing() const
 {
-    const Lyrics* prevLyrics = lyricsLine()->findLyricsInPreviousRepeatSeg();
-    if (prevLyrics) {
-        return prevLyrics->lineSpacing();
+    const Lyrics* lyrics = lyricsLine()->findAdjacentLyricsOrDefault();
+
+    if (!lyrics) {
+        return 0.0;
     }
 
-    const Lyrics* nextLyrics = lyricsLine()->nextLyrics();
-    if (nextLyrics) {
-        return lyricsLine()->nextLyrics()->lineSpacing();
-    }
-
-    return 0.0;
+    return lyrics->lineSpacing();
 }
 
 double PartialLyricsLineSegment::baseLineShift() const
@@ -262,20 +279,30 @@ double PartialLyricsLineSegment::baseLineShift() const
         return -0.5 * absoluteFromSpatium(lineWidth());
     }
 
-    const Lyrics* prevLyrics = lyricsLine()->findLyricsInPreviousRepeatSeg();
-    if (prevLyrics) {
-        return -style().styleD(Sid::lyricsDashYposRatio) * prevLyrics->fontMetrics().xHeight();
+    const Lyrics* lyrics = lyricsLine()->findAdjacentLyricsOrDefault();
+    if (!lyrics) {
+        return 0.0;
     }
 
-    return 0.0;
+    return -style().styleD(Sid::lyricsDashYposRatio) * lyrics->fontMetrics().xHeight();
 }
 
-Lyrics* PartialLyricsLine::findLyricsInPreviousRepeatSeg()
+EngravingItem* PartialLyricsLineSegment::propertyDelegate(Pid pid)
+{
+    switch (pid) {
+    case Pid::VERSE:
+        return lyricsLine();
+    default:
+        return LyricsLineSegment::propertyDelegate(pid);
+    }
+}
+
+Lyrics* PartialLyricsLine::findLyricsInPreviousRepeatSeg() const
 {
     const std::vector<Measure*> measures = findPreviousRepeatMeasures(findStartMeasure());
 
     for (const Measure* measure : measures) {
-        Lyrics* prev = prevLyrics(measure->last(SegmentType::ChordRest), staffIdx(), no(), placement());
+        Lyrics* prev = lastLyricsInMeasure(measure->last(SegmentType::ChordRest), staffIdx(), no(), placement());
 
         if (!prev) {
             continue;
@@ -285,5 +312,23 @@ Lyrics* PartialLyricsLine::findLyricsInPreviousRepeatSeg()
     }
 
     return nullptr;
+}
+
+Lyrics* PartialLyricsLine::findAdjacentLyricsOrDefault() const
+{
+    Lyrics* prev = findLyricsInPreviousRepeatSeg();
+    if (prev) {
+        return prev;
+    }
+
+    Lyrics* next = nextLyrics();
+    if (next) {
+        return next;
+    }
+
+    // If there are no adjacent lyrics, create dummy lyrics using the odd lyrics text style to get font information
+    Lyrics* dummyLyr = Factory::createLyrics(toChordRest(score()->dummy()->chord()));
+    dummyLyr->setTextStyleType(TextStyleType::LYRICS_ODD);
+    return dummyLyr;
 }
 }

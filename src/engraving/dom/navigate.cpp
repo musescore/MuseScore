@@ -1055,19 +1055,19 @@ EngravingItem* Score::prevElement()
 //    - currently used to determine the first lyric of a melisma
 //---------------------------------------------------------
 
-Lyrics* prevLyrics(const Segment* seg, const staff_idx_t staffIdx, const int no, const PlacementV& placement)
+Lyrics* lastLyricsInMeasure(const Segment* seg, const staff_idx_t staffIdx, const int no, const PlacementV& placement)
 {
-    const Segment* prevSegment = seg;
-    while ((prevSegment = prevSegment->prev1(mu::engraving::SegmentType::ChordRest))) {
+    while (seg) {
         const track_idx_t strack = staffIdx * VOICES;
         const track_idx_t etrack = strack + VOICES;
         for (track_idx_t track = strack; track < etrack; ++track) {
-            EngravingItem* el = prevSegment->element(track);
+            EngravingItem* el = seg->element(track);
             Lyrics* prevLyrics = el && el->isChord() ? toChordRest(el)->lyrics(no, placement) : nullptr;
             if (prevLyrics) {
                 return prevLyrics;
             }
         }
+        seg = seg->prev1(mu::engraving::SegmentType::ChordRest);
     }
     return nullptr;
 }
@@ -1078,7 +1078,18 @@ Lyrics* prevLyrics(const Lyrics* lyrics)
     if (!seg) {
         return nullptr;
     }
-    return prevLyrics(seg, lyrics->staffIdx(), lyrics->no(), lyrics->placement());
+    while ((seg = seg->prev1(mu::engraving::SegmentType::ChordRest))) {
+        const track_idx_t strack = lyrics->staffIdx() * VOICES;
+        const track_idx_t etrack = strack + VOICES;
+        for (track_idx_t track = strack; track < etrack; ++track) {
+            EngravingItem* el = seg->element(track);
+            Lyrics* prevLyrics = el && el->isChord() ? toChordRest(el)->lyrics(lyrics->no(), lyrics->placement()) : nullptr;
+            if (prevLyrics) {
+                return prevLyrics;
+            }
+        }
+    }
+    return nullptr;
 }
 
 Lyrics* nextLyrics(const Lyrics* lyrics)
