@@ -706,6 +706,9 @@ TEST_F(MusicXml_Tests, helloReadCompr) {
 TEST_F(MusicXml_Tests, helloReadWriteCompr) {
     musicXmlReadWriteTestCompr("testHello");
 }
+TEST_F(MusicXml_Tests, holes) {
+    musicXmlIoTest("testHoles");
+}
 TEST_F(MusicXml_Tests, implicitMeasure1) {
     musicXmlIoTest("testImplicitMeasure1");
 }
