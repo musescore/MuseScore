@@ -32,6 +32,10 @@ Row {
 
     property font font: ui.theme.largeBodyFont
 
+    property NavigationPanel navigationPanel: null
+    property int navigationOrderStart: 0
+    readonly property int navigationOrderEnd: millisecondsField.navigation.order
+
     signal timeEdited(var newTime)
 
     spacing: 0
@@ -45,6 +49,11 @@ Row {
         value: root.time.getHours()
 
         font: root.font
+
+        navigation.panel: root.navigationPanel
+        navigation.order: root.navigationOrderStart
+        navigation.name: "hours"
+        accessible.name: qsTrc("global", "Hours")
 
         onValueEdited: function(newValue) {
             var newTime = root.time
@@ -68,6 +77,11 @@ Row {
         displayedNumberLength: 2
         font: root.font
 
+        navigation.panel: root.navigationPanel
+        navigation.order: root.navigationOrderStart + 1
+        navigation.name: "minutes"
+        accessible.name: qsTrc("global", "Minutes")
+
         onValueEdited: function(newValue) {
             var newTime = root.time
             newTime.setMinutes(newValue)
@@ -89,6 +103,11 @@ Row {
 
         displayedNumberLength: 2
         font: root.font
+
+        navigation.panel: root.navigationPanel
+        navigation.order: root.navigationOrderStart + 2
+        navigation.name: "seconds"
+        accessible.name: qsTrc("global", "Seconds")
 
         onValueEdited: function(newValue) {
             var newTime = root.time
@@ -113,6 +132,11 @@ Row {
         value: root.time.getMilliseconds() / precision
 
         font: root.font
+
+        navigation.panel: root.navigationPanel
+        navigation.order: root.navigationOrderStart + 3
+        navigation.name: "milliseconds"
+        accessible.name: qsTrc("global", "Milliseconds")
 
         onValueEdited: function(newValue) {
             var newTime = root.time
