@@ -25,4 +25,6 @@ In [MuseScore source](https://github.com/musescore/MuseScore)
 
 * Add the language in build/ci/tx2s3/languages.json
 
+* Add the language code in build/MacISXBundleInfo.plist.in
+
 * Finally create a PR
