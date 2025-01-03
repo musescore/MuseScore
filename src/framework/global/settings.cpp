@@ -114,6 +114,10 @@ void Settings::reset(bool keepDefaultSettings, bool notifyAboutChanges)
     }
 
     for (auto it = m_items.begin(); it != m_items.end(); ++it) {
+        if (it->second.value == it->second.defaultValue) {
+            continue;
+        }
+
         it->second.value = it->second.defaultValue;
 
         Channel<Val>& channel = findChannel(it->first);
