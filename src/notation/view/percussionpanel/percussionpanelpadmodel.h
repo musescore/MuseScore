@@ -43,6 +43,8 @@ class PercussionPanelPadModel : public QObject, public muse::async::Asyncable
 
     Q_PROPERTY(QVariant notationPreviewItem READ notationPreviewItemVariant NOTIFY notationPreviewItemChanged)
 
+    Q_PROPERTY(QList<QVariantMap> footerContextMenuItems READ footerContextMenuItems CONSTANT)
+
 public:
     explicit PercussionPanelPadModel(QObject* parent = nullptr);
 
@@ -62,8 +64,19 @@ public:
 
     const QVariant notationPreviewItemVariant() const;
 
+    QList<QVariantMap> footerContextMenuItems() const;
+    Q_INVOKABLE void handleMenuItem(const QString& itemId);
+
     Q_INVOKABLE void triggerPad();
-    muse::async::Notification padTriggered() const { return m_triggeredNotification; }
+
+    enum class PadAction {
+        TRIGGER,
+        DUPLICATE,
+        DELETE,
+        DEFINE_SHORTCUT,
+    };
+
+    muse::async::Channel<PadAction> padActionTriggered() const { return m_padActionTriggered; }
 
 signals:
     void padNameChanged();
@@ -81,6 +94,6 @@ private:
 
     mu::engraving::ElementPtr m_notationPreviewItem;
 
-    muse::async::Notification m_triggeredNotification;
+    muse::async::Channel<PadAction> m_padActionTriggered;
 };
 }

@@ -207,11 +207,11 @@ public:
     muse::async::Notification autoShowPercussionPanelChanged() const override;
 
     bool showPercussionPanelPadSwapDialog() const override;
-    void setShowPercussionPanelPadSwapDialog(bool show);
+    void setShowPercussionPanelPadSwapDialog(bool show) override;
     muse::async::Notification showPercussionPanelPadSwapDialogChanged() const override;
 
     bool percussionPanelMoveMidiNotesAndShortcuts() const override;
-    void setPercussionPanelMoveMidiNotesAndShortcuts(bool move);
+    void setPercussionPanelMoveMidiNotesAndShortcuts(bool move) override;
     muse::async::Notification percussionPanelMoveMidiNotesAndShortcutsChanged() const override;
 
     muse::io::path_t styleFileImportPath() const override;
