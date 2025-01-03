@@ -3451,9 +3451,9 @@ void Score::cmdInsertClef(ClefType type)
 //    insert clef before cr
 //---------------------------------------------------------
 
-void Score::cmdInsertClef(Clef* clef, ChordRest* cr)
+void Score::cmdInsertClef(Clef* clef, ChordRest* cr, bool ctrlModifier)
 {
-    undoChangeClef(cr->staff(), cr, clef->clefType());
+    undoChangeClef(cr->staff(), cr, clef->clefType(), /*instrumentChange*/ false, /*clefToRelink*/ nullptr, ctrlModifier);
     delete clef;
 }
 
