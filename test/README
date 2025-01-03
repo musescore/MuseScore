@@ -6,13 +6,6 @@ iotest      read *.msc files, save files and compare
 rendertest  renders misc *.xml files with lilypond and mscore
             and puts up *.html pages
 
-All MusicXML files starting with a number are from Reinhold Kainhofer from
-the Lilypond project (used in rendertest)
-I did some changes to the files to better fit for MuseScore:
-      12b-Tuplets-Finale
-            commented out "<rights>Public domain</rights>" which expands each
-            score snippet to full page
-
 -------------------------------------------------
       *.mscz files
 -------------------------------------------------
@@ -118,42 +111,6 @@ midi1.mid	single track, single voice
 midi2.mid	single track, simple chords
 midi3.mid   single track, rests
 midi4.mid   single track, overlapping notes
-
--------------------------------------------------
-      MusicXML testfiles
--------------------------------------------------
-
-testAccidentals1.xml     accidentals sharp, flat, double sharp, double flat and natural
-testAccidentals2.xml     all supported accidentals including editorial
-testBarStyles.xml        bar styles light-light, light-heavy, heavy-light plus repeats
-testDCalCoda.xml         a single da capo al coda
-testDCalFine.xml         a single da capo al fine
-testDalSegno.xml         a single dal segno
-testDirections1.xml      all supported direction types
-testDynamics1.xml        the "dynamics" directions from ppp to fff
-testDynamics2.xml        dynamics in a multi-part (voice and a piano) score
-testHarmony1.xml         several (simple) harmony elements
-testHarmony2.xml         several (more complex) harmony elements
-testHello.xml            Recordare's "Hello World"
-testHello.mxl            Recordare's "Hello World" (compressed MusicXML)
-testImplicitMeasure1.xml pickup measure
-testKeysig1.xml          change keysig from none to G major
-testLines1.xml           ottava, pedal and trill lines
-testMetaData.xml         meta-data plus regular text such as title and composer
-testMultiMeasureRest.xml two multi-measure rests and a normal rest measure
-testNotesAttributes1.xml most note attributes supported by MusicXML import/export
-testNotesAttributes2.xml most note attributes supported by MusicXML import/export
-testNotesRests1.xml      all note and rest types, including some dotted
-testSystemBrackets1.xml  system brackets (single staff parts)
-testSystemBrackets2.xml  system brackets in a two piano piece
-testTimesig1.xml         all supported simple time signatures
-testTimesig3.xml         the more difficult time signatures
-testTremolo.xml          tremolo
-testVoicePiano1.xml      score with both a voice and a piano part
-testVolta1.xml           simple (one-measure) volta's
-testWedge1.xml           crescendo and diminuendo wedges
-testWords1.xml           the "words" direction
-test98.xml               9/8 time signature with dotted rests
 
 -------------------------------------------------
       MuseData
